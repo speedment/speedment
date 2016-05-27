@@ -20,7 +20,7 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.Enum;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
-import static java.util.Objects.requireNonNull;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -51,7 +51,7 @@ public final class EnumView extends ClassOrInterfaceView<Enum> {
      */
 	@Override
 	protected String renderSupertype(Generator gen, Enum model) {
-		return EMPTY;
+		return "";
 	}
 
     /**
@@ -59,17 +59,16 @@ public final class EnumView extends ClassOrInterfaceView<Enum> {
      */
 	@Override
 	protected String onBeforeFields(Generator gen, Enum model) {
-        requireNonNull(gen);
-        requireNonNull(model);
+        requireNonNulls(gen, model);
         
 		return model.getConstants().stream()
 			.map(c -> gen.on(c).get()).collect(
 				joinIfNotEmpty(
 					(!model.getConstants().isEmpty()
 					&& !model.getConstants().get(0).getValues().isEmpty())
-					? cnl() : COMMA_SPACE, 
-					EMPTY, 
-					SC
+                        ? "," + nl() : ", ", 
+					"", 
+					";"
 				)
 			);
 	}
@@ -79,8 +78,7 @@ public final class EnumView extends ClassOrInterfaceView<Enum> {
      */
     @Override
     protected String renderConstructors(Generator gen, Enum model) {
-        requireNonNull(gen);
-        requireNonNull(model);
+        requireNonNulls(gen, model);
         
         return gen.onEach(model.getConstructors())
             .collect(joining(dnl()));

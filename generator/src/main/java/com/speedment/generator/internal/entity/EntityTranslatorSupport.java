@@ -30,7 +30,6 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.exception.SpeedmentException;
-import static com.speedment.common.codegen.internal.util.Formatting.DOT;
 import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.runtime.internal.field.ComparableFieldImpl;
 import com.speedment.runtime.internal.field.ComparableForeignKeyFieldImpl;
@@ -73,8 +72,8 @@ public final class EntityTranslatorSupport {
         requireNonNull(javaLanguageNamer);
         final Project project = ancestor(table, Project.class).get();
 
-        return Type.of(javaLanguageNamer.findPackageName(project) + DOT
-            + relativeName(table, Project.class, JAVA_NAME, javaLanguageNamer::javaPackageName) + DOT
+        return Type.of(javaLanguageNamer.findPackageName(project) + "."
+            + relativeName(table, Project.class, JAVA_NAME, javaLanguageNamer::javaPackageName) + "."
             + javaLanguageNamer.javaTypeName(table.getJavaName())
         );
     }

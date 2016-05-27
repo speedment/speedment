@@ -23,7 +23,7 @@ import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Type;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
-import static java.util.Objects.requireNonNull;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import java.util.Optional;
 
 /**
@@ -33,23 +33,20 @@ import java.util.Optional;
  */
 public final class ImportView implements Transform<Import, String> {
 
-    private final static String IMPORT_STRING = "import ";
-
     /**
      * {@inheritDoc}
      */
     @Override
     public Optional<String> transform(Generator gen, Import model) {
-        requireNonNull(gen);
-        requireNonNull(model);
+        requireNonNulls(gen, model);
 
         if (shouldImport(gen, model.getType())) {
             return Optional.of(
-                IMPORT_STRING
-                + gen.onEach(model.getModifiers()).collect(joinIfNotEmpty(SPACE, EMPTY, SPACE))
+                "import "
+                + gen.onEach(model.getModifiers()).collect(joinIfNotEmpty(" ", "", " "))
                 + model.getType().getName()
-                + model.getStaticMember().map(str -> DOT + str).orElse(EMPTY)
-                + SC
+                + model.getStaticMember().map(str -> "." + str).orElse("")
+                + ";"
             ).filter(x -> {
                 gen.getDependencyMgr().load(model.getType().getName());
                 return true;

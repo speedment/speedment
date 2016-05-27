@@ -25,16 +25,9 @@ import com.speedment.common.codegen.model.Type;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.OPTIONAL;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
 import java.util.Collection;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -45,27 +38,6 @@ import static java.util.Objects.requireNonNull;
  */
 public final class SetGetAdd implements Consumer<Class> {
     
-	private final static String 
-		SET = "set",
-		GET = "get",
-		THIS = "this.",
-		ASSIGN = " = ",
-		OPTIONAL_OF = "Optional.of(",
-		RETURN = "return",
-		RETURN_THIS = RETURN + " this",
-		ADD = "add",
-		ADD_TO = ".add(",
-		THE = "the ",
-		G = "G", S = "S", Y = "y",
-		ETS_THE = "ets the ",
-		ADDS_THE_SPECIFIED = "Adds the specified ",
-        TO_THIS = " to this ",
-		PARAM = "param",
-		THE_NEW_VALUE = "the new value.",
-		A_REFERENCE_TO_THIS = "a reference to this object.",
-		OF_THIS = " of this ",
-		BRACKETS = BS + BE;
-	
 	private final BiPredicate<Field, Method> onlyInclude;
 	
     /**
@@ -111,35 +83,35 @@ public final class SetGetAdd implements Consumer<Class> {
 				f.final_();
 				
 				final Field param = Field.of(singular(f.getName()), f.getType().getGenerics().get(0).getUpperBounds().get(0));
-				final Method add = Method.of(ADD, Type.of(model.getName()))
+				final Method add = Method.of("add", Type.of(model.getName()))
 					.set(Javadoc.of()
-						.setText(ADDS_THE_SPECIFIED + lcfirst(shortName(param.getType().getName())) + TO_THIS + shortName(model.getName()) + DOT)
-						.add(JavadocTag.of(PARAM, param.getName(), THE_NEW_VALUE))
-						.add(JavadocTag.of(RETURN, A_REFERENCE_TO_THIS))
+						.setText("Adds the specified " + lcfirst(shortName(param.getType().getName())) + " to this " + shortName(model.getName()) + ".")
+						.add(JavadocTag.of("param", param.getName(), "the new value"))
+						.add(JavadocTag.of("return", "a reference to this object"))
 					).public_()
 					.add(param)
-					.add(THIS + f.getName() + ADD_TO + param.getName() + PE + SC)
-					.add(RETURN_THIS + SC);
+					.add("this." + f.getName() + ".add(" + param.getName() + ");")
+					.add("return this;");
 				
 				if (onlyInclude.test(f, add)) {
 					model.add(add);
 				}
 			} else {
-				final Method set = Method.of(SET + ucfirst(f.getName()), Type.of(model.getName()))
+				final Method set = Method.of("set" + ucfirst(f.getName()), Type.of(model.getName()))
 					.set(Javadoc.of()
-						.setText(S + ETS_THE + f.getName() + OF_THIS + shortName(model.getName()) + DOT)
-						.add(JavadocTag.of(PARAM, f.getName(), THE_NEW_VALUE))
-						.add(JavadocTag.of(RETURN, A_REFERENCE_TO_THIS))
+						.setText("Sets the " + f.getName() + " of this " + shortName(model.getName()) + ".")
+						.add(JavadocTag.of("param", f.getName(), "the new value"))
+						.add(JavadocTag.of("return", "a reference to this object"))
 					).public_();
                 
 				if (isOptional(f.getType())) {
 					set.add(Field.of(f.getName(), f.getType().getGenerics().get(0).getUpperBounds().get(0)))
-						.add(THIS + f.getName() + ASSIGN + OPTIONAL_OF + f.getName() + PE + SC)
-						.add(RETURN_THIS + SC);
+						.add("this." + f.getName() + " = Optional.of(" + f.getName() + ");")
+						.add("return this;");
 				} else {
 					set.add(Field.of(f.getName(), f.getType()))
-						.add(THIS + f.getName() + ASSIGN + f.getName() + SC)
-						.add(RETURN_THIS + SC);
+						.add("this." + f.getName() + " = " + f.getName() + ";")
+						.add("return this;");
 				}
 				
 				if (onlyInclude.test(f, set)) {
@@ -147,12 +119,12 @@ public final class SetGetAdd implements Consumer<Class> {
 				}
 			}
 			
-			final Method get = Method.of(GET + ucfirst(f.getName()), f.getType())
+			final Method get = Method.of("get" + ucfirst(f.getName()), f.getType())
 				.set(Javadoc.of()
-					.setText(G + ETS_THE + f.getName() + OF_THIS + shortName(model.getName()) + DOT)
-					.add(JavadocTag.of(RETURN, THE + f.getName() + DOT))
+					.setText("Gets the " + f.getName() + " of this " + shortName(model.getName()) + ".")
+					.add(JavadocTag.of("return", "the " + f.getName()))
 				).public_()
-				.add(RETURN_THIS + DOT + f.getName() + SC);
+				.add("return this." + f.getName() + ";");
 			
 			if (onlyInclude.test(f, get)) {
 				model.add(get);
@@ -194,7 +166,7 @@ public final class SetGetAdd implements Consumer<Class> {
      */
 	private String singular(String word) {
 		if (requireNonNull(word).endsWith("ies")) {
-			return word.substring(0, word.length() - 3) + Y;
+			return word.substring(0, word.length() - 3) + "y";
 		} else if (word.endsWith("s")) {
 			return word.substring(0, word.length() - 1);
 		} else {

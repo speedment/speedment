@@ -19,7 +19,6 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasFields;
-import static com.speedment.common.codegen.internal.util.Formatting.EMPTY;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 
 /**
@@ -63,7 +62,7 @@ public interface HasFieldsView<M extends HasFields<M>> extends Transform<M, Stri
      * @return  the field prefix
      */
     default String fieldPrefix() {
-        return EMPTY;
+        return "";
     }
     
     /**
@@ -72,6 +71,6 @@ public interface HasFieldsView<M extends HasFields<M>> extends Transform<M, Stri
      * @return  the field suffix
      */
     default String fieldSuffix() {
-        return EMPTY;
+        return "";
     }
 }

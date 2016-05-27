@@ -20,7 +20,6 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasJavadoc;
 import com.speedment.common.codegen.model.trait.HasJavadocTags;
-import static com.speedment.common.codegen.internal.util.Formatting.EMPTY;
 import java.util.stream.Stream;
 
 /**
@@ -49,7 +48,7 @@ public interface HasJavadocTagsView<M extends HasJavadocTags<M>> {
             return stream;
         } else {
             return Stream.concat(
-                Stream.of(EMPTY), // to get an empty line before the tags...
+                Stream.of(" "), // to get an empty line before the tags...
                 stream
             );
         }

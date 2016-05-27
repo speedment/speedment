@@ -19,8 +19,6 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasModifiers;
-import static com.speedment.common.codegen.internal.util.Formatting.EMPTY;
-import static com.speedment.common.codegen.internal.util.Formatting.SPACE;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import com.speedment.common.codegen.model.modifier.Modifier;
 import java.util.Set;
@@ -59,6 +57,6 @@ public interface HasModifiersView<M extends HasModifiers<M>> extends
             modifiers.retainAll(model.getModifiers());
         }
         
-        return gen.onEach(modifiers).collect(joinIfNotEmpty(SPACE, EMPTY, SPACE));
+        return gen.onEach(modifiers).collect(joinIfNotEmpty(" ", "", " "));
     }
 }

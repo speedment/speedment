@@ -19,8 +19,6 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasType;
-import static com.speedment.common.codegen.internal.util.Formatting.EMPTY;
-import static com.speedment.common.codegen.internal.util.Formatting.SPACE;
 
 /**
  * A trait with the functionality to render models with the trait 
@@ -41,7 +39,7 @@ public interface HasTypeView<M extends HasType<M>> extends Transform<M, String> 
      */
     default String renderType(Generator gen, M model) {
         return gen.on(model.getType())
-            .map(s -> s + SPACE)
-            .orElse(EMPTY);
+            .map(s -> s + " ")
+            .orElse("");
     }
 }

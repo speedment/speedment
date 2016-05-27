@@ -19,10 +19,9 @@ package com.speedment.common.codegen.internal.java.view;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.Generic;
-import static com.speedment.common.codegen.internal.util.Formatting.*;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import java.util.Optional;
-import static java.util.Objects.requireNonNull;
 
 /**
  * Transforms from a {@link Generic} to java code.
@@ -30,31 +29,26 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  */
 public final class GenericView implements Transform<Generic, String> {
-    
-	private final static String 
-			EXTENDS_STRING = " extends ", 
-			SUPER_STRING = " super ";
 
     /**
      * {@inheritDoc}
      */
 	@Override
 	public Optional<String> transform(Generator gen, Generic model) {
-        requireNonNull(gen);
-        requireNonNull(model);
+        requireNonNulls(gen, model);
         
 		if (!model.getLowerBound().isPresent() 
 		&&   model.getUpperBounds().isEmpty()) {
 			return Optional.empty();
 		} else {
 			return Optional.of(
-				model.getLowerBound().orElse(EMPTY) +
-				gen.onEach(model.getUpperBounds()).collect(joinIfNotEmpty(AND, 
+				model.getLowerBound().orElse("") +
+				gen.onEach(model.getUpperBounds()).collect(joinIfNotEmpty("&", 
 						model.getLowerBound().isPresent() ? 
 							model.getBoundType() == Generic.BoundType.EXTENDS ?
-							EXTENDS_STRING : SUPER_STRING
-						: EMPTY, 
-						EMPTY
+							" extends " : " super "
+						: "", 
+						""
 					)
 				)
 			);

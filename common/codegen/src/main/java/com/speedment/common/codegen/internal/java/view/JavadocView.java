@@ -23,7 +23,7 @@ import com.speedment.common.codegen.internal.java.view.trait.HasJavadocTagsView;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
 import com.speedment.common.codegen.internal.util.TextUtil;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
-import static java.util.Objects.requireNonNull;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import java.util.Optional;
 
 /**
@@ -35,22 +35,21 @@ public final class JavadocView implements Transform<Javadoc, String>,
     HasJavadocTagsView<Javadoc> {
     
 	private final static String
-		JAVADOC_DELIMITER = nl() + SPACE + STAR + SPACE,
-		JAVADOC_PREFIX = SLASH + STAR + STAR + nl() + SPACE + STAR + SPACE,
-		JAVADOC_SUFFIX = nl() + SPACE + STAR + SLASH;
+		JAVADOC_DELIMITER = nl() + " * ",
+		JAVADOC_PREFIX    = "/**" + nl() + " * ",
+		JAVADOC_SUFFIX    = nl() + " */";
 	
     /**
      * {@inheritDoc}
      */
 	@Override
 	public Optional<String> transform(Generator gen, Javadoc model) {
-        requireNonNull(gen);
-        requireNonNull(model);
+        requireNonNulls(gen, model);
         
         final String formattedText = TextUtil.formatJavaDocBox(model.getText()) + 
             renderJavadocTags(gen, model)
                 .map(TextUtil::formatJavaDocBox)
-                .collect(joinIfNotEmpty(nl(), nl(), EMPTY));
+                .collect(joinIfNotEmpty(nl(), nl(), ""));
         
 		return Optional.of(
             JAVADOC_PREFIX + 

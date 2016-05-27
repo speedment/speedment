@@ -31,7 +31,7 @@ import com.speedment.common.codegen.internal.java.view.trait.HasModifiersView;
 import com.speedment.common.codegen.internal.java.view.trait.HasNameView;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
-import static java.util.Objects.requireNonNull;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import java.util.Optional;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
@@ -58,11 +58,11 @@ abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements Tr
         HasFieldsView<M> {
     
 	protected final static String
-		CLASS_STRING = "class ",
-		INTERFACE_STRING = "interface ",
-		ENUM_STRING = "enum ",
+		CLASS_STRING      = "class ",
+		INTERFACE_STRING  = "interface ",
+		ENUM_STRING       = "enum ",
 		IMPLEMENTS_STRING = "implements ",
-		EXTENDS_STRING = "extends ";
+		EXTENDS_STRING    = "extends ";
 
     /**
      * A hook that is executed just before the 'fields' part of the class code.
@@ -72,7 +72,7 @@ abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements Tr
      * @return       code to be inserted before the fields
      */
 	protected String onBeforeFields(Generator gen, M model) {
-		return EMPTY;
+		return "";
 	}
 
     /**
@@ -88,7 +88,7 @@ abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements Tr
      */
     @Override
     public String fieldSuffix() {
-        return SC;
+        return ";";
     }
 	
     /**
@@ -126,8 +126,7 @@ abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements Tr
      */
 	@Override
 	public Optional<String> transform(Generator gen, M model) {
-        requireNonNull(gen);
-        requireNonNull(model);
+        requireNonNulls(gen, model);
         
 		return Optional.of(renderJavadoc(gen, model) +
             renderAnnotations(gen, model) +
@@ -161,6 +160,7 @@ abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements Tr
      */
 	private String separate(Object... strings) {
         requireNonNullElements(strings);
+        
 		return Stream.of(strings)
 			.map(Object::toString)
 			.filter(s -> s.length() > 0)

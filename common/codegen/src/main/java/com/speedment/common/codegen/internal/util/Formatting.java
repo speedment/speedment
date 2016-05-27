@@ -26,7 +26,8 @@ import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 
 /**
- *
+ * Common formatting methods used when generating code.
+ * 
  * @author Emil Forslund
  */
 public final class Formatting {
@@ -76,9 +77,9 @@ public final class Formatting {
         if (input == null) {
             return null;
         } else if (input.length() == 0) {
-            return EMPTY;
+            return "";
         } else {
-            return String.join(EMPTY,
+            return String.join("",
                 callback.apply(input.charAt(0)),
                 input.subSequence(1, input.length())
             );
@@ -109,7 +110,7 @@ public final class Formatting {
      * @return The text with a '{\n' before and a '\n}' afterwards.
      */
     public static String block(String text) {
-        return BS + nl + indent(text) + nl + BE;
+        return "{" + nl + indent(text) + nl + "}";
     }
 	
 	/**
@@ -124,7 +125,7 @@ public final class Formatting {
         requireNonNullElements(rows);
         return block(
 			Arrays.stream(rows).collect(joining(
-				nl(), row + nl(), EMPTY)
+				nl(), row + nl(), "")
 			)
 		);
     }
@@ -147,7 +148,7 @@ public final class Formatting {
      * @return The indented text.
      */
     public static String indent(String text) {
-        return tab + text.replaceAll("\\r?\\n", nltab);
+        return tab + text.replaceAll("\\r?\\n", nl + tab);
     }
     
     /**
@@ -159,7 +160,7 @@ public final class Formatting {
      * @return The indented text.
      */
     public static String indent(String... text) {
-        return tab + String.join(nl(), text).replaceAll("\\r?\\n", nltab);
+        return tab + String.join(nl(), text).replaceAll("\\r?\\n", nl + tab);
     }
     
     /**
@@ -213,32 +214,8 @@ public final class Formatting {
      * @param nl The new character to use.
      */
     public static void nl(String nl) {
-        Formatting.nl = nl;
+        Formatting.nl  = nl;
         Formatting.dnl = nl + nl;
-        Formatting.nltab = nl + tab;
-        Formatting.scnl = SC + nl;
-        Formatting.scdnl = SC + dnl;
-		Formatting.cnl = COMMA + nl; 
-    }
-
-    /**
-     * Returns a semicolon followed by a new line character as defined by the
-     * <code>nl(String)</code> function.
-     *
-     * @return A semicolon (;) followed by a new line.
-     */
-    public static String scnl() {
-        return scnl;
-    }
-
-    /**
-     * Returns a semicolon followed by two new lines character as defined by the
-     * <code>nl(String)</code> function.
-     *
-     * @return A semicolon (;) followed by two new new lines.
-     */
-    public static String scdnl() {
-        return scdnl;
     }
 
     /**
@@ -248,16 +225,6 @@ public final class Formatting {
      */
     public static String dnl() {
         return dnl;
-    }
-	
-	/**
-     * Returns a comma followed by a new-line-character as defined in 
-	 * <code>nl(String)</code>.
-     *
-     * @return Comma followed by new line.
-     */
-    public static String cnl() {
-        return cnl;
     }
 
     /**
@@ -278,7 +245,6 @@ public final class Formatting {
      */
     public static void tab(String tab) {
         Formatting.tab = tab;
-        Formatting.nltab = nl + tab;
     }
 
     /**
@@ -289,9 +255,9 @@ public final class Formatting {
      * @return The name part.
      */
     public static String shortName(String longName) {
-        final String temp = longName.replace(DOLLAR, DOT);
-        if (temp.contains(DOT)) {
-            return temp.substring(temp.lastIndexOf(DOT) + 1);
+        final String temp = longName.replace("$", ".");
+        if (temp.contains(".")) {
+            return temp.substring(temp.lastIndexOf(".") + 1);
         } else {
             return temp;
         }
@@ -305,9 +271,9 @@ public final class Formatting {
      * @return The package part.
      */
     public static Optional<String> packageName(String longName) {
-		if (longName.contains(DOT)) {
+		if (longName.contains(".")) {
 			return Optional.of(longName.substring(0,
-				longName.lastIndexOf(DOT)
+				longName.lastIndexOf(".")
 			));
 		} else {
 			return Optional.empty();
@@ -330,36 +296,11 @@ public final class Formatting {
         return longName.replace('.', '/') + ".java";
 	}
 
-    private static String nl = "\n",
-            dnl = "\n\n",
-            tab = "\t",
-            nltab = "\n\t",
-            scnl = ";\n",
-            scdnl = ";\n\n",
-			cnl = ",\n";
+    private static String 
+        nl = "\n",
+        dnl = "\n\n",
+        tab = "\t";
 
-    public final static String BS = "{",
-            BE = "}",
-            PS = "(",
-            PE = ")",
-            AS = "[",
-            AE = "]",
-            SS = "<",
-            SE = ">",
-            SPACE = " ",
-            EMPTY = "",
-            COMMA = ",",
-            COMMA_SPACE = ", ",
-            SC = ";",
-            DOT = ".",
-            AT = "@",
-			EQUALS = "=",
-			AND = "&",
-			STAR = "*",
-			SLASH = "/",
-			H = "\"",
-            DOLLAR = "$";
-    
     /**
      * Utility classes should not be instantiated.
      */

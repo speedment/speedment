@@ -19,8 +19,6 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasThrows;
-import static com.speedment.common.codegen.internal.util.Formatting.COMMA_SPACE;
-import static com.speedment.common.codegen.internal.util.Formatting.EMPTY;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 
 /**
@@ -43,6 +41,6 @@ public interface HasThrowsView<M extends HasThrows<M>> extends
      */
     default String renderThrows(Generator gen, M model) {
         return gen.onEach(model.getExceptions())
-            .collect(joinIfNotEmpty(COMMA_SPACE, "throws ", EMPTY));
+            .collect(joinIfNotEmpty(", ", "throws ", ""));
     }
 }

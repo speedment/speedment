@@ -19,7 +19,6 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasImports;
-import static com.speedment.common.codegen.internal.util.Formatting.EMPTY;
 import static com.speedment.common.codegen.internal.util.Formatting.dnl;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
@@ -46,6 +45,6 @@ public interface HasImportsView<M extends HasImports<M>> extends
     default String renderImports(Generator gen, M model) {
         return gen.onEach(model.getImports())
             .distinct().sorted()
-            .collect(joinIfNotEmpty(nl(), EMPTY, dnl()));
+            .collect(joinIfNotEmpty(nl(), " ", dnl()));
     }
 }

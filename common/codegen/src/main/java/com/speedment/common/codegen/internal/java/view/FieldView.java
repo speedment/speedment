@@ -25,8 +25,7 @@ import com.speedment.common.codegen.internal.java.view.trait.HasModifiersView;
 import com.speedment.common.codegen.internal.java.view.trait.HasNameView;
 import com.speedment.common.codegen.internal.java.view.trait.HasTypeView;
 import com.speedment.common.codegen.internal.java.view.trait.HasValueView;
-import static com.speedment.common.codegen.internal.util.Formatting.SPACE;
-import static java.util.Objects.requireNonNull;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import java.util.Optional;
 
 /**
@@ -43,8 +42,7 @@ public final class FieldView implements Transform<Field, String>, HasNameView<Fi
      */
 	@Override
 	public Optional<String> transform(Generator gen, Field model) {
-        requireNonNull(gen);
-        requireNonNull(model);
+        requireNonNulls(gen, model);
         
 		return Optional.of(
 			renderJavadoc(gen, model) +
@@ -61,6 +59,6 @@ public final class FieldView implements Transform<Field, String>, HasNameView<Fi
      */
     @Override
     public String annotationSeparator() {
-        return SPACE;
+        return " ";
     }
 }

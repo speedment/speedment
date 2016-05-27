@@ -19,28 +19,28 @@ package com.speedment.common.codegen.internal.java.view;
 import com.speedment.common.codegen.DependencyManager;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
+import com.speedment.common.codegen.internal.java.view.trait.HasGenericsView;
 import com.speedment.common.codegen.model.Type;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import static java.util.Objects.requireNonNull;
 
 /**
  * Transforms from a {@link Type} to java code.
  * 
  * @author Emil Forslund
  */
-public final class TypeView implements Transform<Type, String> {
+public final class TypeView implements Transform<Type, String>,
+        HasGenericsView<Type> {
     
     /**
      * {@inheritDoc}
      */
 	@Override
 	public Optional<String> transform(Generator gen, Type model) {
-        requireNonNull(gen);
-        requireNonNull(model);
+        requireNonNulls(gen, model);
         
 		if (shouldUseShortName(gen, model)) {
 			return renderName(gen, model, shortName(model.getName()));
@@ -58,24 +58,15 @@ public final class TypeView implements Transform<Type, String> {
      * @return       the generated name
      */
 	private Optional<String> renderName(Generator gen, Type model, String name) {
-        requireNonNull(gen);
-        requireNonNull(model);
-        requireNonNull(name);
+        requireNonNulls(gen, model, name);
         
 		return Optional.of(
-			name.replace(DOLLAR, DOT) + gen.onEach(model.getGenerics()).collect(
-				joinIfNotEmpty(
-					COMMA_SPACE, 
-					SS, 
-					SE
-				)
-			) + 
-			(model.getArrayDimension() > 0 ?
-				Collections.nCopies(
-					model.getArrayDimension(), 
-					(AS + AE)
-				).stream().collect(Collectors.joining())
-				: EMPTY
+			name.replace("$", ".") + 
+            renderGenerics(gen, model) + 
+			(model.getArrayDimension() > 0 
+                ? Collections.nCopies(model.getArrayDimension(), "[]")
+                    .stream().collect(Collectors.joining())
+				: ""
 			)
 		);
 	}
@@ -88,8 +79,7 @@ public final class TypeView implements Transform<Type, String> {
      * @return      {@code true} if the short name should be used.
      */
     private boolean shouldUseShortName(Generator gen, Type type) {
-        requireNonNull(gen);
-        requireNonNull(type);
+        requireNonNulls(gen, type);
         
         final DependencyManager mgr = gen.getDependencyMgr();
         

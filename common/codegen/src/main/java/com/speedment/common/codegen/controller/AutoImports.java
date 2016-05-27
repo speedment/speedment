@@ -30,10 +30,8 @@ import com.speedment.common.codegen.model.trait.HasSupertype;
 import com.speedment.common.codegen.model.trait.HasThrows;
 import com.speedment.common.codegen.model.trait.HasType;
 import com.speedment.common.codegen.internal.model.ImportImpl;
-import static com.speedment.common.codegen.internal.util.Formatting.DOT;
 import java.util.HashMap;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 import static java.util.Objects.requireNonNull;
 
@@ -174,7 +172,7 @@ public final class AutoImports implements Consumer<File> {
         
 		final String name = type.getName();
 
-		if (name.contains(DOT)) {
+		if (name.contains(".")) {
 			if (!mgr.isIgnored(name)) {
 				types.put(name, type);
 			}

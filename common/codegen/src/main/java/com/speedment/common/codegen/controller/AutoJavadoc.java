@@ -27,9 +27,6 @@ import com.speedment.common.codegen.model.trait.HasGenerics;
 import com.speedment.common.codegen.model.trait.HasJavadoc;
 import com.speedment.common.codegen.model.trait.HasMethods;
 import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.*;
-import static com.speedment.common.codegen.internal.util.Formatting.SE;
-import static com.speedment.common.codegen.internal.util.Formatting.SS;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 import static java.util.Objects.requireNonNull;
 
@@ -79,7 +76,7 @@ public final class AutoJavadoc<T extends HasJavadoc<?>> implements Consumer<T> {
             // Add @param for each type variable.
 			((HasGenerics<?>) model).getGenerics().forEach(g -> 
 				g.getLowerBound().ifPresent(t -> addTag(doc, 
-					PARAM.setValue(SS + t + SE)
+					PARAM.setValue("<" + t + ">")
 				))
 			);
 		}

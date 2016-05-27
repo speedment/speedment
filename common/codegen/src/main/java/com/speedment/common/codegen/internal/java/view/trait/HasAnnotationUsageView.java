@@ -19,7 +19,6 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasAnnotationUsage;
-import static com.speedment.common.codegen.internal.util.Formatting.EMPTY;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
 
@@ -55,7 +54,7 @@ public interface HasAnnotationUsageView<M extends HasAnnotationUsage<M>> extends
         return gen.onEach(model.getAnnotations())
             .collect(joinIfNotEmpty(
                 annotationSeparator(), 
-                EMPTY, 
+                "", 
                 annotationSeparator()
             ));
     }

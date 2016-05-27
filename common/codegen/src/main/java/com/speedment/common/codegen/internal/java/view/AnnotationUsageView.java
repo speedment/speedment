@@ -20,7 +20,6 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import com.speedment.common.codegen.model.AnnotationUsage;
-import static com.speedment.common.codegen.internal.util.Formatting.*;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -31,10 +30,6 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  */
 public final class AnnotationUsageView implements Transform<AnnotationUsage, String> {
-
-    private final static String 
-        PSTART = "(",
-        EQUALS = " = ";
 
     /**
      * {@inheritDoc}
@@ -50,21 +45,17 @@ public final class AnnotationUsageView implements Transform<AnnotationUsage, Str
             : Stream.empty();
 
         return Optional.of(
-                AT + gen.on(model.getType()).get()
+                "@" + gen.on(model.getType()).get()
                 + Stream.of(
                     model.getValues().stream()
                         .map(e -> e.getKey() + 
                             gen.on(e.getValue())
-                                .map(s -> EQUALS + s)
-                                .orElse(EMPTY)
+                                .map(s -> " = " + s)
+                                .orElse("")
                         ),
                     valueStream
                 ).flatMap(s -> s).collect(
-                joinIfNotEmpty(
-                    COMMA + SPACE,
-                    PSTART,
-                    PE
-                )
+                joinIfNotEmpty(", ", "(", ")")
         )
         );
     }

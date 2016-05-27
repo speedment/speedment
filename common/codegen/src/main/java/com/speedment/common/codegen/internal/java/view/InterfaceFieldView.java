@@ -23,10 +23,9 @@ import com.speedment.common.codegen.internal.java.view.trait.HasJavadocView;
 import com.speedment.common.codegen.internal.java.view.trait.HasModifiersView;
 import com.speedment.common.codegen.internal.java.view.trait.HasNameView;
 import com.speedment.common.codegen.internal.java.view.trait.HasTypeView;
-import static com.speedment.common.codegen.internal.util.Formatting.SPACE;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.common.codegen.model.InterfaceField;
 import static com.speedment.common.codegen.model.modifier.Modifier.FINAL;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 
 /**
@@ -46,8 +45,7 @@ public final class InterfaceFieldView implements Transform<InterfaceField, Strin
      */
 	@Override
 	public Optional<String> transform(Generator gen, InterfaceField model) {
-        requireNonNull(gen);
-        requireNonNull(model);
+        requireNonNulls(gen, model);
         
 		return Optional.of(
             renderJavadoc(gen, model) +
@@ -63,6 +61,6 @@ public final class InterfaceFieldView implements Transform<InterfaceField, Strin
      */
     @Override
     public String annotationSeparator() {
-        return SPACE;
+        return " ";
     }
 }

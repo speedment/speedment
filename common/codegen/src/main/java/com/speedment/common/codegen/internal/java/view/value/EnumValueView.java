@@ -19,8 +19,7 @@ package com.speedment.common.codegen.internal.java.view.value;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.internal.model.value.EnumValue;
-import static com.speedment.common.codegen.internal.util.Formatting.*;
-import static java.util.Objects.requireNonNull;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import java.util.Optional;
 
 /**
@@ -35,11 +34,10 @@ public final class EnumValueView implements Transform<EnumValue, String> {
      */
 	@Override
 	public Optional<String> transform(Generator gen, EnumValue model) {
-        requireNonNull(gen);
-        requireNonNull(model);
+        requireNonNulls(gen, model);
         
 		return Optional.of(
-			gen.on(model.getType()).orElse(EMPTY) + DOT +
+			gen.on(model.getType()).orElse("") + "." +
 			model.getValue()
 		);
 	}

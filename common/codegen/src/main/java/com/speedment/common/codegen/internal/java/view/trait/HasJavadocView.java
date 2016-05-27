@@ -19,7 +19,6 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasJavadoc;
-import static com.speedment.common.codegen.internal.util.Formatting.EMPTY;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
 
 /**
@@ -43,7 +42,7 @@ public interface HasJavadocView<M extends HasJavadoc<M>> extends
      */
     default String renderJavadoc(Generator gen, M model) {
         return gen.on(model.getJavadoc())
-            .map(jd -> jd + nl())
-            .orElse(EMPTY);
+            .map(doc -> doc + nl())
+            .orElse(" ");
     }
 }

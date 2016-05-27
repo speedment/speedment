@@ -23,7 +23,7 @@ import com.speedment.common.codegen.internal.java.view.trait.HasAnnotationUsageV
 import com.speedment.common.codegen.internal.java.view.trait.HasJavadocView;
 import com.speedment.common.codegen.internal.java.view.trait.HasNameView;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
-import static java.util.Objects.requireNonNull;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import java.util.Optional;
 import static java.util.stream.Collectors.joining;
 
@@ -37,31 +37,27 @@ public final class AnnotationView implements Transform<Annotation, String>,
         HasAnnotationUsageView<Annotation>,
         HasNameView<Annotation> {
 
-    private final static String INTERFACE_STRING = "@interface ",
-        DEFAULT_STRING = " default ";
-
     /**
      * {@inheritDoc}
      */
     @Override
     public Optional<String> transform(Generator gen, Annotation model) {
-        requireNonNull(gen);
-        requireNonNull(model);
+        requireNonNulls(gen, model);
 
         return Optional.of(
             renderAnnotations(gen, model)
             + renderAnnotations(gen, model)
-            + INTERFACE_STRING
+            + "@interface "
             + renderName(gen, model)
             + block(
                 model.getFields().stream().map(f
                     -> // Field javadoc (optional)
                     renderJavadoc(gen, model)
                     + // Field declaration
-                    gen.on(f.getType()) + SPACE + f.getName() + PS + PE
+                    gen.on(f.getType()) + " " + f.getName() + "()"
                     + // Default value (optional)
-                    ifelse(gen.on(f.getValue()), v -> (DEFAULT_STRING + v), EMPTY)
-                    + SC
+                    ifelse(gen.on(f.getValue()), v -> " default " + v, "")
+                    + ";"
                 ).collect(joining(dnl()))
             )
         );

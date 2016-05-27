@@ -24,8 +24,7 @@ package com.speedment.common.codegen.internal.java.view.value;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.internal.model.value.TextValue;
-import static com.speedment.common.codegen.internal.util.Formatting.*;
-import static java.util.Objects.requireNonNull;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import java.util.Optional;
 
 /**
@@ -40,9 +39,8 @@ public final class TextValueView implements Transform<TextValue, String> {
      */
 	@Override
 	public Optional<String> transform(Generator gen, TextValue model) {
-        requireNonNull(gen);
-        requireNonNull(model);
+        requireNonNulls(gen, model);
         
-		return Optional.of(H + model.getValue() + H);
+		return Optional.of("\"" + model.getValue() + "\"");
 	}
 }

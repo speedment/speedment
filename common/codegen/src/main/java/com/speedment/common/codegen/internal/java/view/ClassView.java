@@ -54,9 +54,9 @@ public final class ClassView extends ClassOrInterfaceView<Class> {
         requireNonNull(model);
         
 		if (model.getSupertype().isPresent()) {
-			return EXTENDS_STRING + gen.on(model.getSupertype().get()).orElse(EMPTY) + SPACE;
+			return EXTENDS_STRING + gen.on(model.getSupertype().get()).orElse("") + " ";
 		} else {
-			return EMPTY;
+			return "";
 		}
 	}
 

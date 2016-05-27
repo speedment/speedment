@@ -19,8 +19,6 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasImplements;
-import static com.speedment.common.codegen.internal.util.Formatting.COMMA_SPACE;
-import static com.speedment.common.codegen.internal.util.Formatting.SPACE;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 
 /**
@@ -56,9 +54,9 @@ public interface HasImplementsView<M extends HasImplements<M>> extends
     default String renderInterfaces(Generator gen, M model) {
         return gen.onEach(model.getInterfaces()).collect(
             joinIfNotEmpty(
-                COMMA_SPACE, 
+                ", ", 
                 extendsOrImplementsInterfaces(), 
-                SPACE
+                " "
             )
         );
     }

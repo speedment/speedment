@@ -19,8 +19,7 @@ package com.speedment.common.codegen.internal.java.view.value;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.internal.model.value.ArrayValue;
-import static com.speedment.common.codegen.internal.util.Formatting.*;
-import static java.util.Objects.requireNonNull;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -36,16 +35,11 @@ public final class ArrayValueView implements Transform<ArrayValue, String> {
      */
 	@Override
 	public Optional<String> transform(Generator gen, ArrayValue model) {
-        requireNonNull(gen);
-        requireNonNull(model);
+        requireNonNulls(gen, model);
         
 		return Optional.of(
 			gen.onEach(model.getValue()).collect(
-				Collectors.joining(
-					COMMA_SPACE, 
-					BS, 
-					BE
-				)
+				Collectors.joining(", ", "{", "}")
 			)
 		);
 	}

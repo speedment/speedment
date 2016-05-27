@@ -39,9 +39,9 @@ public final class JavadocTagView implements Transform<JavadocTag, String> {
         requireNonNull(model);
         
 		return Optional.of(
-			AT + model.getName() + 
-			ifelse(model.getValue(), s -> SPACE + s, EMPTY) + SPACE +
-			model.getText().orElse(EMPTY)
+			"@" + model.getName() + 
+			ifelse(model.getValue(), s -> " " + s, "") + " " +
+			model.getText().orElse("")
 		);
 	}
 }

@@ -19,10 +19,6 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasGenerics;
-import static com.speedment.common.codegen.internal.util.Formatting.COMMA_SPACE;
-import static com.speedment.common.codegen.internal.util.Formatting.SE;
-import static com.speedment.common.codegen.internal.util.Formatting.SPACE;
-import static com.speedment.common.codegen.internal.util.Formatting.SS;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 
 /**
@@ -45,6 +41,6 @@ public interface HasGenericsView<M extends HasGenerics<M>> extends
      */
     default String renderGenerics(Generator gen, M model) {
         return gen.onEach(model.getGenerics())
-            .collect(joinIfNotEmpty(COMMA_SPACE, SS, SE + SPACE));
+            .collect(joinIfNotEmpty(", ", "<", "> "));
     }
 }

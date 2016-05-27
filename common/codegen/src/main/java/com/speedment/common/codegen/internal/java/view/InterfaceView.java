@@ -20,8 +20,6 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.internal.model.InterfaceMethodImpl;
-import com.speedment.common.codegen.internal.util.Formatting;
-import static com.speedment.common.codegen.internal.util.Formatting.EMPTY;
 
 /**
  * Transforms from an {@link Interface} to java code.
@@ -51,7 +49,7 @@ public final class InterfaceView extends ClassOrInterfaceView<Interface> {
      */
 	@Override
 	protected String renderSupertype(Generator gen, Interface model) {
-		return Formatting.EMPTY;
+		return "";
 	}
 
     /**
@@ -67,6 +65,6 @@ public final class InterfaceView extends ClassOrInterfaceView<Interface> {
      */
     @Override
     protected String renderConstructors(Generator gen, Interface model) {
-        return EMPTY;
+        return "";
     }
 }

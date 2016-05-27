@@ -20,8 +20,7 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import com.speedment.common.codegen.model.EnumConstant;
-import static com.speedment.common.codegen.internal.util.Formatting.*;
-import static java.util.Objects.requireNonNull;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import java.util.Optional;
 
 /**
@@ -36,18 +35,13 @@ public final class EnumConstantView implements Transform<EnumConstant, String> {
      */
 	@Override
 	public Optional<String> transform(Generator gen, EnumConstant model) {
-        requireNonNull(gen);
-        requireNonNull(model);
+        requireNonNulls(gen, model);
         
 		return Optional.of(
 			model.getName() + 
-			(model.getValues().isEmpty() ? EMPTY : SPACE) +
+			(model.getValues().isEmpty() ? "" : " ") +
 			gen.onEach(model.getValues()).collect(
-				joinIfNotEmpty(
-					COMMA_SPACE, 
-					PS, 
-					PE
-				)
+				joinIfNotEmpty(", ", "(", ")")
 			)
 		);
 	}

@@ -23,7 +23,7 @@ import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.trait.HasName;
 import com.speedment.common.codegen.internal.util.Formatting;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
-import static java.util.Objects.requireNonNull;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,28 +33,25 @@ import java.util.stream.Collectors;
  * @author Emil Forslund
  */
 public final class ConstructorView implements Transform<Constructor, String> {
-    
-    private final static String THROWS = "throws ";
 
     /**
      * {@inheritDoc}
      */
 	@Override
 	public Optional<String> transform(Generator gen, Constructor model) {
-        requireNonNull(gen);
-        requireNonNull(model);
+        requireNonNulls(gen, model);
         
 		return Optional.of(
-			ifelse(gen.on(model.getJavadoc()), s -> s + nl(), EMPTY) +
-			gen.onEach(model.getModifiers()).collect(joinIfNotEmpty(SPACE, EMPTY, SPACE)) +
+			ifelse(gen.on(model.getJavadoc()), s -> s + nl(), "") +
+			gen.onEach(model.getModifiers()).collect(joinIfNotEmpty(" ", "", " ")) +
 			renderName(gen, model)
                 .orElseThrow(() -> new UnsupportedOperationException(
                     "Could not find a nameable parent of constructor."
                 )) +
 			gen.onEach(model.getFields()).collect(
-				Collectors.joining(COMMA_SPACE, PS, PE)
-			) + SPACE + 
-            gen.onEach(model.getExceptions()).collect(joinIfNotEmpty(COMMA_SPACE, THROWS, SPACE)) +
+				Collectors.joining(", ", "(", ")")
+			) + " " + 
+            gen.onEach(model.getExceptions()).collect(joinIfNotEmpty(", ", "throws ", "")) +
             block(
 				model.getCode().stream().collect(
 					Collectors.joining(nl())
@@ -72,8 +69,7 @@ public final class ConstructorView implements Transform<Constructor, String> {
      * @return       the rendered name
      */
 	private static Optional<String> renderName(Generator gen, Constructor model) {
-        requireNonNull(gen);
-        requireNonNull(model);
+        requireNonNulls(gen, model);
 
         return gen.getRenderStack()
             .fromTop(HasName.class)

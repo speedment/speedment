@@ -19,9 +19,6 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasValue;
-import static com.speedment.common.codegen.internal.util.Formatting.EMPTY;
-import static com.speedment.common.codegen.internal.util.Formatting.EQUALS;
-import static com.speedment.common.codegen.internal.util.Formatting.SPACE;
 import static com.speedment.common.codegen.internal.util.Formatting.ifelse;
 
 /**
@@ -43,8 +40,8 @@ public interface HasValueView<M extends HasValue<M>> extends Transform<M, String
      */
     default String renderValue(Generator gen, M model) {
         return ifelse(model.getValue(), 
-			v -> SPACE + EQUALS + SPACE + gen.on(v).orElse(EMPTY), 
-            EMPTY
+			v -> " = " + gen.on(v).orElse(""), 
+            ""
         );
     }
 }

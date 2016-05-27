@@ -52,8 +52,8 @@ public final class FileView implements Transform<File, String>,
         mgr.clearDependencies();
         
         final String pack = fileToClassName(model.getName())
-                                .flatMap(Formatting::packageName)
-                                .orElse(EMPTY);
+            .flatMap(Formatting::packageName)
+            .orElse("");
         
         mgr.setCurrentPackage(pack);
 
@@ -87,10 +87,10 @@ public final class FileView implements Transform<File, String>,
 		if (name.isPresent()) {
 			final Optional<String> pack = packageName(name.get());
 			if (pack.isPresent()) {
-				return PACKAGE_STRING + pack.get() + scdnl();
+				return PACKAGE_STRING + pack.get() + ";" + dnl();
 			}
 		}
 		
-		return EMPTY;
+		return "";
 	}
 }
