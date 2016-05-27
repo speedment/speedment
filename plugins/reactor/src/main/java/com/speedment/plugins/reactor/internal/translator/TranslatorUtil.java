@@ -18,10 +18,10 @@ package com.speedment.plugins.reactor.internal.translator;
 
 import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.TranslatorSupport;
-import com.speedment.plugins.reactor.component.ReactorPlugin;
+import com.speedment.plugins.reactor.component.ReactorComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
-import static com.speedment.plugins.reactor.component.ReactorPluginUtil.validMergingColumns;
+import static com.speedment.plugins.reactor.component.ReactorComponentUtil.validMergingColumns;
 
 /**
  * Utility methods that are used by several translators in this package but that
@@ -33,7 +33,7 @@ import static com.speedment.plugins.reactor.component.ReactorPluginUtil.validMer
 final class TranslatorUtil {
     
     static Column mergingColumn(Table table) {
-        return table.getAsString(ReactorPlugin.MERGE_ON)
+        return table.getAsString(ReactorComponent.MERGE_ON)
             .flatMap(str -> table.columns()
                 .filter(col -> col.getName().equals(str))
                 .findAny()

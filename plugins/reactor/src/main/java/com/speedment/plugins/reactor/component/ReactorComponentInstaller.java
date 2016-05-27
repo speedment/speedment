@@ -38,11 +38,11 @@ import com.speedment.runtime.component.ComponentConstructor;
  * @author Emil Forslund
  * @since  1.1.0
  */
-public final class ReactorPluginInstaller 
-    implements ComponentConstructor<ReactorPlugin> {
+public final class ReactorComponentInstaller 
+    implements ComponentConstructor<ReactorComponent> {
 
     @Override
-    public ReactorPlugin create(Speedment speedment) {
-        return new ReactorPlugin(speedment);
+    public ReactorComponent create(Speedment speedment) {
+        return new ReactorComponent(speedment);
     }
 }

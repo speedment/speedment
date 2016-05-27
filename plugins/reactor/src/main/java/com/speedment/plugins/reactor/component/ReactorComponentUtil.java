@@ -29,7 +29,7 @@ import static java.util.stream.Collectors.toList;
  * @author Emil Forslund
  * @since  1.1.0
  */
-public final class ReactorPluginUtil {
+public final class ReactorComponentUtil {
 
     public static List<Column> validMergingColumns(Table table) {
         return table.columns()
@@ -58,5 +58,5 @@ public final class ReactorPluginUtil {
             .collect(toList());
     }
     
-    private ReactorPluginUtil() {}
+    private ReactorComponentUtil() {}
 }

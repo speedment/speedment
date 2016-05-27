@@ -18,7 +18,7 @@ package com.speedment.plugins.reactor.component;
 
 import com.speedment.generator.StandardTranslatorKey;
 import com.speedment.generator.component.CodeGenerationComponent;
-import static com.speedment.plugins.reactor.component.ReactorPluginUtil.validMergingColumns;
+import static com.speedment.plugins.reactor.component.ReactorComponentUtil.validMergingColumns;
 import com.speedment.plugins.reactor.internal.translator.GeneratedApplicationDecorator;
 import com.speedment.plugins.reactor.internal.translator.GeneratedViewImplTranslator;
 import com.speedment.plugins.reactor.internal.translator.GeneratedViewTranslator;
@@ -44,17 +44,18 @@ import static java.util.stream.Collectors.toList;
 import javafx.scene.control.TreeItem;
 import javafx.util.StringConverter;
 import static javafx.collections.FXCollections.observableList;
+import static javafx.collections.FXCollections.observableList;
 
 /**
  *
  * @author Emil Forslund
  * @since  1.1.0
  */
-public final class ReactorPlugin extends AbstractComponent {
+public final class ReactorComponent extends AbstractComponent {
     
     public final static String MERGE_ON = "mergeOn";
 
-    public ReactorPlugin(Speedment speedment) {
+    public ReactorComponent(Speedment speedment) {
         super(speedment);
     }
 
@@ -115,7 +116,7 @@ public final class ReactorPlugin extends AbstractComponent {
 
     @Override
     public Class<? extends Component> getComponentClass() {
-        return ReactorPlugin.class;
+        return ReactorComponent.class;
     }
 
     @Override
@@ -127,6 +128,6 @@ public final class ReactorPlugin extends AbstractComponent {
 
     @Override
     public Component defaultCopy(Speedment speedment) {
-        return new ReactorPlugin(speedment);
+        return new ReactorComponent(speedment);
     }
 }
