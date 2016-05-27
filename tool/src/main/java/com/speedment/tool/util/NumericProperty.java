@@ -23,8 +23,10 @@ import javafx.beans.property.LongProperty;
 import javafx.beans.property.Property;
 
 /**
- *
- * @author Emil Forslund
+ * A type of {@link Property} that holds values that implement {@link Number}.
+ * 
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
 public interface NumericProperty extends Property<Number> {
     IntegerProperty asIntegerProperty();

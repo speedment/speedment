@@ -24,8 +24,9 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.TransformationList;
 
 /**
- *
- * @author Emil
+ * A list 
+ * 
+ * @author        Emil Forslund
  * @param <FROM>  the type to map from
  * @param <TO>    the type to map to
  */
@@ -99,7 +100,7 @@ public final class MappedList<FROM, TO> extends TransformationList<TO, FROM> {
             @Override
             public List<TO> getRemoved() {
                 ArrayList<TO> res = new ArrayList<>(c.getRemovedSize());
-                for(FROM e: c.getRemoved()) {
+                for (final FROM e : c.getRemoved()) {
                     res.add(mapper.apply(e));
                 }
                 return res;
