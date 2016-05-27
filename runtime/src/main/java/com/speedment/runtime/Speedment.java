@@ -107,6 +107,12 @@ public interface Speedment {
      * @return a new Stream of all installed Components
      */
     Stream<Component> components();
+    
+    /**
+     * Starts the Speedment instance and allocates any resources. The Speedment
+     * instance must not be called before this method has been executed.
+     */
+    void start();
 
     /**
      * Stops the Speedment instance and deallocates any allocated resources.

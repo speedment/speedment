@@ -212,6 +212,11 @@ public abstract class AbstractSpeedment extends DefaultClassMapper<Component> im
     public final Stream<Component> components() {
         return super.stream().map(Map.Entry::getValue);
     }
+    
+    @Override
+    public void start() {
+        // do nothing yet!
+    }
 
     @Override
     public void stop() {
