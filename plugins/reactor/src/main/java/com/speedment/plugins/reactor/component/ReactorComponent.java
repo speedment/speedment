@@ -19,6 +19,7 @@ package com.speedment.plugins.reactor.component;
 import com.speedment.generator.StandardTranslatorKey;
 import com.speedment.generator.component.CodeGenerationComponent;
 import static com.speedment.plugins.reactor.component.ReactorComponentUtil.validMergingColumns;
+import com.speedment.plugins.reactor.internal.translator.GeneratedApplicationDecorator;
 import com.speedment.plugins.reactor.internal.translator.GeneratedApplicationImplDecorator;
 import com.speedment.plugins.reactor.internal.translator.GeneratedViewImplTranslator;
 import com.speedment.plugins.reactor.internal.translator.GeneratedViewTranslator;
@@ -43,8 +44,6 @@ import com.speedment.tool.property.ChoicePropertyItem;
 import com.speedment.tool.util.IdentityStringConverter;
 import static java.util.stream.Collectors.toList;
 import javafx.scene.control.TreeItem;
-import javafx.util.StringConverter;
-import static javafx.collections.FXCollections.observableList;
 import static javafx.collections.FXCollections.observableList;
 
 /**
@@ -65,6 +64,7 @@ public final class ReactorComponent extends AbstractComponent {
         super.onResolve();
         
         final CodeGenerationComponent code = getSpeedment().get(CodeGenerationComponent.class);
+        code.add(Project.class, StandardTranslatorKey.GENERATED_APPLICATION, new GeneratedApplicationDecorator());
         code.add(Project.class, StandardTranslatorKey.GENERATED_APPLICATION_IMPL, new GeneratedApplicationImplDecorator());
         
         code.put(Table.class, ReactorTranslatorKey.ENTITY_VIEW, ViewTranslator::new);

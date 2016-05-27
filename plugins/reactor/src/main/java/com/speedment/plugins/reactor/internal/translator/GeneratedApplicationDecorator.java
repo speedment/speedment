@@ -42,11 +42,11 @@ public final class GeneratedApplicationDecorator implements TranslatorDecorator<
                 intrf.add(Method.of("viewOf", Type.of(MaterializedView.class)
                     .add(generic)
                     .add(Generic.of().add(WILDCARD))
-                )).add(generic)
+                ).add(generic)
                     .add(Field.of(
                         "entityType", 
                         Type.of(Class.class).add(generic)
-                    ));
+                    )));
             });
         });
     }

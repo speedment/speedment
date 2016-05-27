@@ -22,8 +22,8 @@ import static com.speedment.common.codegen.internal.model.constant.DefaultType.V
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.WILDCARD;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
-import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import com.speedment.common.codegen.model.Class;
+import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.Generic;
 import static com.speedment.common.codegen.model.Generic.BoundType.EXTENDS;
@@ -45,11 +45,12 @@ import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.ComparableField;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
 
 /**
  *
@@ -137,7 +138,7 @@ public final class GeneratedApplicationImplDecorator implements TranslatorDecora
                 
                 // Set '_reactors' in constructor.
                 file.add(Import.of(Type.of(LinkedList.class)));
-                clazz.getConstructors().forEach(constr -> {
+                getOrCreate(clazz).forEach(constr -> {
                     constr.add("this._reactors = new LinkedList<>();");
                 });
                 
@@ -150,21 +151,21 @@ public final class GeneratedApplicationImplDecorator implements TranslatorDecora
                     .flatMap(Schema::tables)
                     .filter(Table::isEnabled)
                     .forEachOrdered(table -> {
-                        final TranslatorSupport support = new TranslatorSupport(speedment, table);
+                        final TranslatorSupport<Table> support = new TranslatorSupport<>(speedment, table);
                         final String viewName     = support.variableName() + "View";
                         final String viewTypeName = support.typeName() + "View";
                         final Type viewType       = Type.of(support.basePackageName() + "." + viewTypeName);
                         
                         // Import required classes.
                         file.add(Import.of(Type.of(support.basePackageName() + "." + viewTypeName + "Impl")));
-                        file.add(Import.of(support.entityImplType()));
+                        file.add(Import.of(support.entityType()));
                         
                         // Add view field.
                         clazz.add(Field.of(viewName, viewType).private_().final_());
                         
                         // Assign it in the constructor.
-                        clazz.getConstructors().forEach(constr -> {
-                            constr.add("this." + viewName + " = new " + viewTypeName + "Impl<>();");
+                        getOrCreate(clazz).forEach(constr -> {
+                            constr.add("this." + viewName + " = new " + viewTypeName + "Impl();");
                         });
                         
                         // Add if statement for the 'viewOf()'-method
@@ -197,10 +198,12 @@ public final class GeneratedApplicationImplDecorator implements TranslatorDecora
                 
                 // Generate the 'viewOf' method
                 final Generic generic = Generic.of().setLowerBound("ENTITY");
-                getOrCreate(clazz, "viewOf", Type.of(MaterializedView.class)
+                clazz.add(Method.of("viewOf", Type.of(MaterializedView.class)
                     .add(generic)
                     .add(Generic.of().add(WILDCARD))
                 ).add(generic)
+                    .public_()
+                    .add(OVERRIDE)
                     .add(Field.of(
                         "entityType", 
                         Type.of(java.lang.Class.class).add(generic)
@@ -214,16 +217,8 @@ public final class GeneratedApplicationImplDecorator implements TranslatorDecora
                         "\n);",
                         "",
                         "return view;"
-                    );
-                
-                // Generate the 'start' method
-                getOrCreate(clazz, "start").add("_reactors.forEach(Reactor::stop);");
-                
-                /*
-                newReactor(AccountEvent.class, AccountEvent.ID, accountEventView);
-                newReactor(BookEvent.class, BookEvent.ID, bookEventView);
-                newReactor(UserEvent.class, UserEvent.ID, userEventView);
-                */
+                    )
+                );
 
                 // Generate the 'stop' method
                 getOrCreate(clazz, "stop").add("_reactors.forEach(Reactor::stop);");
@@ -253,62 +248,25 @@ public final class GeneratedApplicationImplDecorator implements TranslatorDecora
                     .call(() -> file.add(Import.of(Type.of(Consumer.class))))
                     .add(
                         "final Consumer<List<E>> con = view;",
-                        "_reactors.add(Reactor.builder(speedment.managerOf(entityType), field)",
+                        "_reactors.add(Reactor.builder(managerOf(entityType), field)",
                         "    .withListener(con)",
                         "    .build());"
                     )
                 );
-                
-                // This should be done for every view:
-//                DocumentDbUtil.traverseOver(project, Table.class).forEach(table -> {
-//                    final TranslatorSupport<Table> tableSupport = 
-//                        new TranslatorSupport<>(translator.getSupport().speedment(), table);
-//                    
-//                    System.out.println("...Decorating table " + table.getName() + "...");
-//                
-//                    final String tableTypeName = tableSupport.typeName(table);
-//
-//                    // Generate fields for every materialized view.
-//                    final String viewName = tableSupport.variableName() + "View";
-//                    final Type viewType = Type.of(tableSupport.basePackageName() + "." + 
-//                        tableTypeName + "View");
-//
-//                    clazz.add(Field.of(viewName, viewType)
-//                        .protected_().final_()
-//                    );
-//
-//                    // Set the views in the constructor
-//                    clazz.getConstructors().forEach(constr -> {
-//                        constr.add("this." + viewName + " = new " + shortName(viewType.getName()) + "Impl();");
-//                    });
-//                    
-//                    file.add(Import.of(Type.of(tableSupport.basePackageName() + "." + 
-//                        tableTypeName + "ViewImpl")));
-//
-//                    // Find the name of the primary key field.
-//                    final String pkName = table.primaryKeyColumns()
-//                        .map(PrimaryKeyColumn::findColumn)
-//                        .filter(Optional::isPresent)
-//                        .map(Optional::get)
-//                        .map(Column::getJavaName)
-//                        .map(translator.getNamer()::javaStaticFieldName)
-//                        .findFirst()
-//                        .orElseThrow(() -> new SpeedmentException(
-//                            "Error generating code. Table '" + table.getName() + 
-//                            "' does not appear to have a valid primary key."
-//                        ));
-//
-//                    // Call 'newReactor' in the 'onLoad'-method for every view
-//                    getOrCreate(clazz, "onLoad")
-//                        .add("newReactor(" + tableTypeName + ".class, " +
-//                            tableTypeName + "." + pkName + ", " + viewName + ");"
-//                        );
-//                    
-//                    file.add(Import.of(Type.of(tableSupport.basePackageName() + "." + 
-//                        tableTypeName)));
-//                });
             });
         });
+    }
+    
+    private static Stream<Constructor> getOrCreate(Class clazz) {
+        final List<Constructor> constructors = clazz.getConstructors();
+        
+        if (constructors.isEmpty()) {
+            final Constructor constr = Constructor.of().protected_();
+            clazz.add(constr);
+            return Stream.of(constr);
+        }
+        
+        return constructors.stream();
     }
 
     private static Method getOrCreate(Class clazz, String methodName) {
@@ -321,11 +279,9 @@ public final class GeneratedApplicationImplDecorator implements TranslatorDecora
             .findAny().orElseGet(() -> {
                 final Method method = Method.of(methodName, returnType)
                     .public_()
-                    .add(OVERRIDE)
-                    .add("super." + methodName + "();");
-
+                    .add(OVERRIDE);
+                
                 clazz.add(method);
-
                 return method;
             });
     }
