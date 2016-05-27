@@ -26,7 +26,9 @@ import static com.speedment.common.codegen.internal.util.Formatting.EMPTY;
 import static com.speedment.common.codegen.internal.util.Formatting.PE;
 import static com.speedment.common.codegen.internal.util.Formatting.PS;
 import static com.speedment.common.codegen.internal.util.Formatting.SC;
+import static com.speedment.common.codegen.internal.util.Formatting.SE;
 import static com.speedment.common.codegen.internal.util.Formatting.SPACE;
+import static com.speedment.common.codegen.internal.util.Formatting.SS;
 import static com.speedment.common.codegen.internal.util.Formatting.block;
 import static com.speedment.common.codegen.internal.util.Formatting.ifelse;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
@@ -58,6 +60,8 @@ public final class InterfaceMethodView implements Transform<InterfaceMethod, Str
 			// The only modifiers allowed are default and static
 			(model.getModifiers().contains(DEFAULT) ? gen.on(DEFAULT).orElse(EMPTY) + SPACE : EMPTY) +
 			(model.getModifiers().contains(STATIC) ? gen.on(STATIC).orElse(EMPTY) + SPACE : EMPTY) +
+            
+            gen.onEach(model.getGenerics()).collect(joinIfNotEmpty(SPACE, SS, SE + SPACE)) +
 			
 			gen.on(model.getType()).orElse(EMPTY) + SPACE +
 			model.getName() +
