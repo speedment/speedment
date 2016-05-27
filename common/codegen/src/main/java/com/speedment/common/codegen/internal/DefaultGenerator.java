@@ -22,9 +22,6 @@ import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.RenderStack;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.TransformFactory;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
-import java.util.Arrays;
-import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Function;
@@ -38,7 +35,7 @@ import java.util.stream.Stream;
 public class DefaultGenerator implements Generator {
     
 	private final DependencyManager mgr;
-	private final List<TransformFactory> factories;
+	private final TransformFactory factory;
 	private final DefaultRenderStack renderStack;
 	
 	/**
@@ -46,21 +43,21 @@ public class DefaultGenerator implements Generator {
      * {@link DefaultDependencyManager} with no parameters to handle any 
      * dependencies.
      * 
-	 * @param factories  the factories to use
+	 * @param factory  the factory to use
 	 */
-	public DefaultGenerator(TransformFactory... factories) {
-		this(new DefaultDependencyManager(), requireNonNullElements(factories));
+	public DefaultGenerator(TransformFactory factory) {
+		this(new DefaultDependencyManager(), factory);
 	}
 	
 	/**
 	 * Creates a new generator.
      * 
-	 * @param mgr        the dependency manager to use
-	 * @param factories  the factories to use 
+	 * @param mgr      the dependency manager to use
+	 * @param factory  the factory to use 
 	 */
-	public DefaultGenerator(DependencyManager mgr, TransformFactory... factories) {
-		this.factories = Arrays.asList(requireNonNullElements(factories));
-		this.mgr = requireNonNull(mgr);
+	public DefaultGenerator(DependencyManager mgr, TransformFactory factory) {
+		this.factory     = requireNonNull(factory);
+		this.mgr         = requireNonNull(mgr);
 		this.renderStack = new DefaultRenderStack();
 	}
 	
@@ -95,15 +92,14 @@ public class DefaultGenerator implements Generator {
             );
         }
 
-        return factories.stream().flatMap(factory ->
-            BridgeTransform.create(factory, from.getClass(), to)
-                .map(t -> (Transform<A, B>) t)
-                .map(t -> transform(t, from, factory))
-                .filter(Optional::isPresent)
-                .map((Function<Optional<Meta<A, B>>, Meta<A, B>>) Optional::get)
-        );
+        return BridgeTransform.create(factory, from.getClass(), to)
+            .map(t -> (Transform<A, B>) t)
+            .map(t -> transform(t, from, factory))
+            .filter(Optional::isPresent)
+            .map((Function<Optional<Meta<A, B>>, Meta<A, B>>) Optional::get)
+        ;
     }
-
+    
     /**
      * {@inheritDoc}
      */

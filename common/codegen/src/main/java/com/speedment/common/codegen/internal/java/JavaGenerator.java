@@ -19,7 +19,6 @@ package com.speedment.common.codegen.internal.java;
 import com.speedment.common.codegen.TransformFactory;
 import com.speedment.common.codegen.internal.DefaultDependencyManager;
 import com.speedment.common.codegen.internal.DefaultGenerator;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -64,10 +63,10 @@ public class JavaGenerator extends DefaultGenerator {
      * Warning! If you use this constructor, no transforms will be installed
      * by default!
      * 
-     * @param factories  an array of the factories to use
+     * @param factory  the transform factory to use
      */
-	public JavaGenerator(TransformFactory... factories) {
-		super(new DefaultDependencyManager(IGNORED), requireNonNullElements(factories));
+	public JavaGenerator(TransformFactory factory) {
+		super(new DefaultDependencyManager(IGNORED), factory);
 	}
 
     private static Pattern[] compileAll(String... regexp) {
