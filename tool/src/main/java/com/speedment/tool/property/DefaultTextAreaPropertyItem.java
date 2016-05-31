@@ -16,8 +16,7 @@
  */
 package com.speedment.tool.property;
 
-import static com.speedment.internal.ui.property.AbstractPropertyItem.defaultDecorator;
-import com.speedment.internal.ui.property.DefaultTextAreaPropertyItem.DefaultTextAreaPropertyEditor;
+import com.speedment.tool.property.DefaultTextAreaPropertyItem.DefaultTextAreaPropertyEditor;
 import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;

@@ -37,9 +37,6 @@ import static com.speedment.common.codegen.internal.model.constant.DefaultAnnota
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.OBJECT;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.VOID;
 import com.speedment.common.codegen.internal.model.value.ReferenceValue;
-import static com.speedment.common.codegen.internal.util.Formatting.block;
-import static com.speedment.common.codegen.internal.util.Formatting.indent;
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import com.speedment.runtime.internal.util.sql.ResultSetUtil;
@@ -58,6 +55,9 @@ import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.internal.manager.sql.AbstractSqlManager;
 import com.speedment.runtime.util.tuple.Tuples;
+import static com.speedment.common.codegen.internal.util.Formatting.block;
+import static com.speedment.common.codegen.internal.util.Formatting.indent;
+import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -74,7 +74,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         PRIMARY_KEYS_FIELDS_METHOD     = "primaryKeyFields",
         GET_METHOD                     = "get",
         SET_METHOD                     = "set",
-        SPEEDMENT                      = "speedment",
+        SPEEDMENT_VARIABLE_NAME        = "speedment",
         PRIMARY_KEY_CLASSES            = "PRIMARY_KEY_CLASSES";
 
     public GeneratedEntityManagerImplTranslator(Speedment speedment, Generator gen, Table table) {

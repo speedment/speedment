@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.property;
 
-import static com.speedment.internal.ui.property.AbstractPropertyItem.defaultDecorator;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import javafx.beans.property.SimpleStringProperty;

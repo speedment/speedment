@@ -16,8 +16,7 @@
  */
 package com.speedment.tool.property;
 
-import static com.speedment.internal.ui.property.AbstractPropertyItem.defaultDecorator;
-import com.speedment.internal.ui.property.DefaultStringPropertyItem.DefaultStringPropertyEditor;
+import com.speedment.tool.property.DefaultStringPropertyItem.DefaultStringPropertyEditor;
 import java.util.Objects;
 import java.util.function.Consumer;
 import javafx.beans.property.SimpleStringProperty;

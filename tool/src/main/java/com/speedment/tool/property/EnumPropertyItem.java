@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.property;
 
-import static com.speedment.internal.ui.property.AbstractPropertyItem.defaultDecorator;
 import java.util.Arrays;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
