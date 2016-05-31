@@ -42,10 +42,10 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
     private final ObservableStringValue defaultValue;
 
     public DefaultStringPropertyItem(
-        StringProperty value,
-        ObservableStringValue defaultValue,
-        String name,
-        String description) {
+            StringProperty value,
+            ObservableStringValue defaultValue,
+            String name,
+            String description) {
 
         super(value, name, description, defaultDecorator());
         this.textProperty = value;
@@ -53,11 +53,11 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
     }
 
     public DefaultStringPropertyItem(
-        StringProperty value,
-        ObservableStringValue defaultValue,
-        String name,
-        String description,
-        Consumer<DefaultStringPropertyEditor> decorator) {
+            StringProperty value,
+            ObservableStringValue defaultValue,
+            String name,
+            String description,
+            Consumer<DefaultStringPropertyEditor> decorator) {
 
         super(value, name, description, decorator);
         this.textProperty = value;
@@ -82,8 +82,7 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
 
         @Override
         protected ObservableValue<String> getObservableValue() {
-            //return getEditor().text.textProperty();
-            return new SimpleStringProperty(); // Hack to avoid round trip error
+            return getEditor().text.textProperty();
         }
 
         @Override
@@ -105,16 +104,14 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
         private DefaultStringNode(final StringProperty textProperty, final ObservableStringValue defaultValue) {
             this.textProperty = requireNonNull(textProperty); // Avoid Garbage Collection
             this.defaultValue = requireNonNull(defaultValue); // Avoid Garbage Collection
-            auto = new CheckBox("Auto");
-            text = new TextField();
-            enteredValue = new SimpleStringProperty();
+            this.auto         = new CheckBox("Auto");
+            this.text         = new TextField();
+            this.enteredValue = new SimpleStringProperty();
             init();
         }
 
         private void init() {
-
             final boolean sameAsDefault = isSameAsDefaultValue(textProperty);
-
             auto.selectedProperty().setValue(sameAsDefault);
 
             if (sameAsDefault) {
@@ -122,7 +119,7 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
                 text.textProperty().bind(defaultValue);
             } else {
                 enteredValue.setValue(textProperty.get());
-                text.textProperty().setValue(textProperty.get()); ///
+                text.textProperty().setValue(textProperty.get());
             }
 
             text.disableProperty().bind(auto.selectedProperty());
@@ -165,6 +162,5 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
         private boolean isSameAsDefaultValue(StringProperty stringProperty) {
             return stringProperty.isEmpty().get() || Objects.equals(stringProperty.get(), defaultValue.get());
         }
-
     }
 }
