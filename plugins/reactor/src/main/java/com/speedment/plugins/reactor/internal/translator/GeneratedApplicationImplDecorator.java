@@ -49,8 +49,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 
 /**
  *
@@ -59,73 +60,14 @@ import java.util.stream.Stream;
  */
 public final class GeneratedApplicationImplDecorator implements TranslatorDecorator<Project, Class> {
     
-    /*
-    private final List<Reactor<?, ?>> _reactors;
-    private final AccountEventView accountEventView;
-    private final BookEventView bookEventView;
-    private final UserEventView userEventView;
-    
-    public GeneratedLibraryApplicationImpl() {
-        _reactors = new CopyOnWriteArrayList<>();
-        
-        accountEventView = new AccountEventViewImpl();
-        bookEventView = new BookEventViewImpl();
-        userEventView = new UserEventViewImpl();
-    }
-    
-    @Override
-    public AbstractApplicationBuilder<?, ?> newApplicationBuilder() {
-        return new LibraryApplicationBuilder();
-    }
-
-    @Override
-    public <ENTITY> MaterializedView<ENTITY, ?> viewOf(Class<ENTITY> entityType) {
-        final MaterializedView<ENTITY, ?> view;
-        
-        if (entityType == AccountEvent.class) {
-            view = (MaterializedView<ENTITY, ?>) accountEventView;
-        } else if (entityType == BookEventView.class) {
-            view = (MaterializedView<ENTITY, ?>) bookEventView;
-        } else if (entityType == UserEventView.class) {
-            view = (MaterializedView<ENTITY, ?>) userEventView;
-        } else throw new UnsupportedOperationException(
-            "Unknown entiy type '" + entityType.getSimpleName() + "'."
-        );
-        
-        return view;
-    }
-    
-    @Override
-    public void start() {
-        newReactor(AccountEvent.class, AccountEvent.ID, accountEventView);
-        newReactor(BookEvent.class, BookEvent.ID, bookEventView);
-        newReactor(UserEvent.class, UserEvent.ID, userEventView);
-    }
-    
-    @Override
-    public void stop() {
-        super.stop();
-        _reactors.forEach(Reactor::stop);
-    }
-    
-    private <E, T extends Comparable<T>> void newReactor(Class<E> entityType, ComparableField<E, ?, T> field, MaterializedView<E, T> view) {
-        final Consumer<List<E>> con = view;
-        _reactors.add(Reactor.builder(managerOf(entityType), field)
-            .withListener(con)
-            .build());
-    }
-    */
-
     @Override
     public void apply(JavaClassTranslator<Project, Class> translator) {
         final Speedment speedment = translator.getSupport().speedment();
         
         translator.onMake((file, builder) -> {
-            System.out.println("Decorating...");
             
             // This should be done once:
             builder.forEveryProject(POST_MAKE, (clazz, project) -> {
-                System.out.println("...Decorating project " + project.getName() + "...");
                 
                 // Generate new field '_reactors'
                 clazz.add(Field.of("_reactors", 
