@@ -101,7 +101,7 @@ public final class DefaultIntegerPropertyItem extends AbstractPropertyItem<Numbe
 
         private DefaultIntegerNode(IntegerProperty valueProperty, IntegerBinding defaultValue) {
             this.auto = new CheckBox("Auto");
-            this.spinner = new Spinner<>(Integer.MAX_VALUE, Integer.MAX_VALUE, defaultValue.get(), 1);
+            this.spinner = new Spinner<>(Integer.MIN_VALUE, Integer.MAX_VALUE, defaultValue.get(), 1);
 
             final boolean isAutoByDefault = valueProperty.get() == defaultValue.get();
 
