@@ -18,6 +18,8 @@ package com.speedment.plugins.reactor.internal.translator;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.Class;
+import com.speedment.common.codegen.model.Constructor;
+import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
@@ -55,7 +57,12 @@ public final class ViewImplTranslator extends DefaultJavaClassTranslator<Table, 
                         getNamer().javaTypeName(getDocument().getJavaName()) + 
                         "ViewImpl"
                     ))
-                    .add(Type.of(getSupport().entityName() + "View"));
+                    .add(Type.of(getSupport().entityName() + "View"))
+                    .add(Constructor.of()
+                        .public_()
+                        .add(Field.of("app", Type.of(Speedment.class)))
+                        .add("super(app);")
+                    );
             }).build();
     }
 

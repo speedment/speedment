@@ -337,19 +337,9 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
 
     public static String[] generateNewEmptyEntityBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
         file.add(Import.of(support.entityImplType()));
-        file.add(Import.of(Type.of(Speedment.class)));
-
-        final List<String> rows = new LinkedList<>();
-        rows.add("return new " + support.entityImplName() + "() {");
-        rows.add(indent(
-            "@Override",
-            "protected " + Speedment.class.getSimpleName() + " speedment() {", indent(
-                "return " + SPEEDMENT_VARIABLE_NAME + ";"
-            ), "}"
-        ));
-        rows.add("};");
-
-        return rows.toArray(new String[rows.size()]);
+        return new String[] {
+            "return new " + support.entityImplName() + "();"
+        };
     }
 
     private static enum Primitive {
@@ -398,14 +388,8 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         final String entityName = "copy";
         final Method result = Method.of("newCopyOf", getSupport().entityType()).public_().add(OVERRIDE)
             .add(Field.of(varName, getSupport().entityType()))
-            .add(
-                "final " + getSupport().entityName() + " " + entityName + " = new " + getSupport().entityImplName() + "() {", indent(
-                    "@Override",
-                    "protected final " + Speedment.class.getSimpleName() + " speedment() {", indent(
-                        "return speedment;"
-                    ), "}"
-                ), "};",
-                ""
+            .add("final " + getSupport().entityName() + " " + entityName + 
+                " = new " + getSupport().entityImplName() + "();"
             );
 
         columns().forEachOrdered(c -> {

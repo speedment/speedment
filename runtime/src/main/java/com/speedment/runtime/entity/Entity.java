@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.entity;
 
+import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.exception.SpeedmentException;
@@ -31,15 +32,16 @@ import java.util.function.Consumer;
  * @author  Per Minborg
  * @since   2.1
  */
-@Api(version = "2.3")
+@Api(version = "2.4")
 public interface Entity<ENTITY> {
 
     /**
      * Creates and returns a new copy of this entity.
      *
-     * @return Creates and returns a new copy of this entity
+     * @param speedment  the speedment instance
+     * @return           creates and returns a new copy of this entity
      */
-    ENTITY copy();
+    ENTITY copy(Speedment speedment);
 
     /**
      * Persists this entity to the underlying database and returns a potentially
@@ -57,11 +59,12 @@ public interface Entity<ENTITY> {
      * modification that the underlying database imposed on the persisted
      * entity.
      *
-     * @return an entity reflecting the result of the persisted entity
-     * @throws SpeedmentException if the underlying database throws an exception
-     * (e.g. SQLException)
+     * @param speedment            the speedment instance
+     * @return                     an entity reflecting the result of the persisted entity
+     * @throws SpeedmentException  if the underlying database throws an exception
+     *                             (e.g. SQLException)
      */
-    ENTITY persist() throws SpeedmentException;
+    ENTITY persist(Speedment speedment) throws SpeedmentException;
 
     /**
      * Updates this entity in the underlying database and returns a potentially
@@ -81,11 +84,12 @@ public interface Entity<ENTITY> {
      * <p>
      * Entities are uniquely identified by their primary key(s).
      *
-     * @return an entity reflecting the result of the updated entity
-     * @throws SpeedmentException if the underlying database throws an exception
-     * (e.g. SQLException)
+     * @param speedment            the speedment instance
+     * @return                     an entity reflecting the result of the updated entity
+     * @throws SpeedmentException  if the underlying database throws an exception
+     *                             (e.g. SQLException)
      */
-    ENTITY update() throws SpeedmentException;
+    ENTITY update(Speedment speedment) throws SpeedmentException;
 
     /**
      * Removes the provided entity from the underlying database and returns this
@@ -94,11 +98,12 @@ public interface Entity<ENTITY> {
      * <p>
      * Entities are uniquely identified by their primary key(s).
      *
-     * @return the provided entity instance
-     * @throws SpeedmentException if the underlying database throws an exception
-     * (e.g. SQLException)
+     * @param speedment            the speedment instance
+     * @return                     the provided entity instance
+     * @throws SpeedmentException  if the underlying database throws an exception
+     *                             (e.g. SQLException)
      */
-    ENTITY remove() throws SpeedmentException;
+    ENTITY remove(Speedment speedment) throws SpeedmentException;
 
     /**
      * Persists this entity to the underlying database and returns a potentially
@@ -120,12 +125,13 @@ public interface Entity<ENTITY> {
      * meta data regarding the underlying database transaction, after the
      * persistence was attempted.
      *
-     * @param consumer callback
-     * @return an entity reflecting the result of the persisted entity
-     * @throws SpeedmentException if the underlying database throws an exception
-     * (e.g. SQLException)
+     * @param speedment            the speedment instance
+     * @param consumer             callback
+     * @return                     an entity reflecting the result of the persisted entity
+     * @throws SpeedmentException  if the underlying database throws an exception
+     *                             (e.g. SQLException)
      */
-    ENTITY persist(Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
+    ENTITY persist(Speedment speedment, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
 
     /**
      * Updates this entity in the underlying database and returns a potentially
@@ -149,12 +155,13 @@ public interface Entity<ENTITY> {
      * meta data regarding the underlying database transaction, after the update
      * was attempted.
      *
-     * @param consumer callback
-     * @return an entity reflecting the result of the updated entity
-     * @throws SpeedmentException if the underlying database throws an exception
-     * (e.g. SQLException)
+     * @param speedment            the speedment instance
+     * @param consumer             callback
+     * @return                     an entity reflecting the result of the updated entity
+     * @throws SpeedmentException  if the underlying database throws an exception
+     *                             (e.g. SQLException)
      */
-    ENTITY update(Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
+    ENTITY update(Speedment speedment, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
 
     /**
      * Removes the provided entity from the underlying database and returns this
@@ -167,10 +174,11 @@ public interface Entity<ENTITY> {
      * meta data regarding the underlying database transaction, after the
      * removal was attempted.
      *
-     * @param consumer callback
-     * @return the provided entity instance
-     * @throws SpeedmentException if the underlying database throws an exception
-     * (e.g. SQLException)
+     * @param speedment            the speedment instance
+     * @param consumer             callback
+     * @return                     the provided entity instance
+     * @throws SpeedmentException  if the underlying database throws an exception
+     *                             (e.g. SQLException)
      */
-    ENTITY remove(Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
+    ENTITY remove(Speedment speedment, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
 }

@@ -41,11 +41,11 @@ import java.util.stream.Stream;
  * A Manager must be thread safe and be able to handle several reading and
  * writing threads at the same time.
  *
- * @author Per Minborg
- * @author Emil Forslund
- * @param <ENTITY> Entity type for this Manager
+ * @author          Per Minborg
+ * @author          Emil Forslund
+ * @param <ENTITY>  entity type for this Manager
  */
-@Api(version = "2.3")
+@Api(version = "2.4")
 public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>>, HasCreateFromConnectionMethods {
 
     // Entity Inspection

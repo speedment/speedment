@@ -50,8 +50,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 
 /**
  *
@@ -107,7 +105,7 @@ public final class GeneratedApplicationImplDecorator implements TranslatorDecora
                         
                         // Assign it in the constructor.
                         getOrCreate(clazz).forEach(constr -> {
-                            constr.add("this." + viewName + " = new " + viewTypeName + "Impl();");
+                            constr.add("this." + viewName + " = new " + viewTypeName + "Impl(this);");
                         });
                         
                         // Add if statement for the 'viewOf()'-method

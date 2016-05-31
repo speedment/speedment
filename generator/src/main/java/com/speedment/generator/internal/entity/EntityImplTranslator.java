@@ -37,7 +37,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
     @Override
     protected Class makeCodeGenModel(File file) {
         return newBuilder(file, getSupport().entityImplName()).build()
-            .public_().abstract_()
+            .public_().final_()
             .add(getSupport().entityType())
             .setSupertype(getSupport().generatedEntityImplType());
     }

@@ -25,21 +25,17 @@ import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 
 /**
- *
- * @author pemi
+ * Abstract base class that makes it easier to implements the {@link Entity}
+ * interface.
+ * 
  * @param <ENTITY> the entity type
+ * 
+ * @author  Per Minborg
+ * @author  Emil Forslund
+ * @since   2.1.0
  */
 public abstract class AbstractBaseEntity<ENTITY> implements Entity<ENTITY> {
 
-    /**
-     * Returns the Speedment instance. This method will be implemented by the
-     * instantiating class using an anonymous class and should therefore not be
-     * implemented in named child classes.
-     * 
-     * @return  the {@link Speedment} instance
-     */
-    protected abstract Speedment speedment();
-    
     /**
      * The main interface for this entity type.
      * 
@@ -48,50 +44,51 @@ public abstract class AbstractBaseEntity<ENTITY> implements Entity<ENTITY> {
     protected abstract Class<ENTITY> entityClass();
 
     @Override
-    public ENTITY persist() throws SpeedmentException {
-        return manager_().persist(selfAsEntity());
+    public ENTITY persist(Speedment speedment) throws SpeedmentException {
+        return manager_(speedment).persist(selfAsEntity());
     }
 
     @Override
-    public ENTITY update() throws SpeedmentException {
-        return manager_().update(selfAsEntity());
+    public ENTITY update(Speedment speedment) throws SpeedmentException {
+        return manager_(speedment).update(selfAsEntity());
     }
 
     @Override
-    public ENTITY remove() throws SpeedmentException {
-        return manager_().remove(selfAsEntity());
+    public ENTITY remove(Speedment speedment) throws SpeedmentException {
+        return manager_(speedment).remove(selfAsEntity());
     }
 
     @Override
-    public ENTITY persist(Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException {
-        return manager_().persist(selfAsEntity(), consumer);
+    public ENTITY persist(Speedment speedment, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException {
+        return manager_(speedment).persist(selfAsEntity(), consumer);
     }
 
     @Override
-    public ENTITY update(Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException {
-        return manager_().update(selfAsEntity(), consumer);
+    public ENTITY update(Speedment speedment, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException {
+        return manager_(speedment).update(selfAsEntity(), consumer);
     }
 
     @Override
-    public ENTITY remove(Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException {
-        return manager_().remove(selfAsEntity(), consumer);
+    public ENTITY remove(Speedment speedment, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException {
+        return manager_(speedment).remove(selfAsEntity(), consumer);
     }
 
     @Override
-    public ENTITY copy() {
-        return manager_().newCopyOf(selfAsEntity());
+    public ENTITY copy(Speedment speedment) {
+        return manager_(speedment).newCopyOf(selfAsEntity());
     }
 
-    protected Manager<ENTITY> manager_() {
-        return managerOf_(entityClass());
+    protected Manager<ENTITY> manager_(Speedment speedment) {
+        return managerOf_(speedment, entityClass());
     }
 
-    protected <T> Manager<T> managerOf_(Class<T> entityClass) {
-        return speedment().managerOf(requireNonNull(entityClass));
+    protected <T> Manager<T> managerOf_(Speedment speedment, Class<T> entityClass) {
+        return speedment.managerOf(requireNonNull(entityClass));
     }
     
-    @SuppressWarnings("unchecked")
     private ENTITY selfAsEntity() {
-        return (ENTITY) this;
+        @SuppressWarnings("unchecked")
+        final ENTITY self = (ENTITY) this;
+        return self;
     }
 }

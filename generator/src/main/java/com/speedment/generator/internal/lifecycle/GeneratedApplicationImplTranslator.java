@@ -72,7 +72,8 @@ public final class GeneratedApplicationImplTranslator extends DefaultJavaClassTr
                             .add(Generic.of(WILDCARD))
                         )
                         .public_().add(OVERRIDE)
-                        .add("return new " + getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationBuilder();"));
+                        .add("return new " + getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationBuilder();")
+                    );
             }).build();
     }
     

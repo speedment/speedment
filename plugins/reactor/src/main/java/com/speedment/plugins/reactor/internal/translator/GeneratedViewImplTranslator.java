@@ -27,6 +27,7 @@ import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Generic;
+import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
@@ -35,6 +36,7 @@ import static com.speedment.plugins.reactor.internal.translator.TranslatorUtil.m
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
+import java.util.Objects;
 
 /**
  *
@@ -65,15 +67,22 @@ public final class GeneratedViewImplTranslator extends DefaultJavaClassTranslato
     protected Class makeCodeGenModel(File file) {
         return newBuilder(file, getClassOrInterfaceName())
             .forEveryTable((clazz, table) -> {
+                file.add(Import.of(Type.of(Objects.class)).static_().setStaticMember("requireNonNull"));
+                
                 clazz.public_().abstract_()
                     .setSupertype(Type.of(MaterializedViewImpl.class)
                         .add(Generic.of().add(getSupport().entityType()))
                         .add(Generic.of().add(mergingColumnType(table)))
                     )
                     .add(Type.of("Generated" + getSupport().entityName() + "View"))
-                    .add(Constructor.of().public_().add(
-                        "super(" + TranslatorUtil.mergingColumnField(table, getSupport()) + ");"
-                    ))
+                    .add(Field.of("app", Type.of(Speedment.class)).protected_().final_())
+                    .add(Constructor.of().public_()
+                        .add(Field.of("app", Type.of(Speedment.class)))
+                        .add(
+                            "super(" + TranslatorUtil.mergingColumnField(table, getSupport()) + ");",
+                            "this.app = requireNonNull(app);"
+                        )
+                    )
                     .add(merge());
             }).build();
     }
@@ -97,7 +106,7 @@ public final class GeneratedViewImplTranslator extends DefaultJavaClassTranslato
                 "if (existing == null) " + block(
                     "return loaded;"
                 ) + " else " + block(
-                    "final " + typeName + " " + varName + " = loaded.copy();",
+                    "final " + typeName + " " + varName + " = loaded.copy(app);",
                     getSupport().tableOrThrow()
                         .columns()
                         .filter(Column::isNullable)
