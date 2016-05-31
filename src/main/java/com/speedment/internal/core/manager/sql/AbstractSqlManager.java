@@ -24,6 +24,7 @@ import com.speedment.config.db.Project;
 import com.speedment.config.db.Table;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.config.db.parameters.DbmsType;
+import com.speedment.config.db.trait.HasEnabled;
 import com.speedment.db.AsynchronousQueryResult;
 import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.db.DbmsHandler;
@@ -259,6 +260,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     protected String sqlColumnList(Function<String, String> postMapper) {
         requireNonNull(postMapper);
         return getTable().columns()
+            .filter(HasEnabled::isEnabled)
             .map(naming()::fullNameOf)
             .map(postMapper)
             .collect(joining(","));
