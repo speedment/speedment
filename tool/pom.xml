@@ -100,25 +100,6 @@
             <artifactId>generator</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
-        <!-- LICENSE INFORMATION
-        Gson:2.5
-        Apache 2 License
-        https://github.com/google/gson
-        2016-01-05
-        emifor
-        -
-        Gson:2.6.2
-        Apache 2 License
-        https://github.com/google/gson
-        2016-04-05
-        emifor
-        -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>${gson.version}</version>
-        </dependency>
         	
         <!-- LICENSE INFORMATION
         Silk:1.3
