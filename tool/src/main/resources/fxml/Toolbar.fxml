@@ -43,7 +43,7 @@
                 <Insets bottom="8.0" left="12.0" right="12.0" top="8.0" />
             </padding>
         </Button>
-        <Button fx:id="buttonGenerate" alignment="CENTER" defaultButton="true" graphicTextGap="10.0" layoutX="50.0" layoutY="10.0" mnemonicParsing="false" text="Generate" textAlignment="CENTER">
+        <Button fx:id="buttonGenerate" alignment="CENTER" graphicTextGap="10.0" layoutX="50.0" layoutY="10.0" mnemonicParsing="false" text="Generate" textAlignment="CENTER">
             <padding>
                 <Insets bottom="8.0" left="12.0" right="12.0" top="8.0" />
             </padding>
