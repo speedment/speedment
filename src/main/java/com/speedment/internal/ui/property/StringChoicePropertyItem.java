@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.property;
 
+import static com.speedment.internal.ui.property.AbstractPropertyItem.defaultDecorator;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 import javafx.beans.property.StringProperty;
@@ -29,16 +30,16 @@ import org.controlsfx.property.editor.PropertyEditor;
  *
  * @author Emil Forslund
  */
-public final class StringChoicePropertyItem extends AbstractPropertyItem<String, StringProperty> {
+public final class StringChoicePropertyItem extends AbstractPropertyItem<String, StringProperty, PropertyEditor<String>> {
     
     private final ObservableList<String> alternatives;
     
     public StringChoicePropertyItem(ObservableList<String> alternatives, StringProperty property, String name, String description) {
-        super(property, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
+        super(property, name, description, defaultDecorator());
         this.alternatives = requireNonNull(alternatives);
     }
 
-    public StringChoicePropertyItem(ObservableList<String> alternatives, StringProperty property, String name, String description, Consumer<PropertyEditor<?>> decorator) {
+    public StringChoicePropertyItem(ObservableList<String> alternatives, StringProperty property, String name, String description, Consumer<PropertyEditor<String>> decorator) {
         super(property, name, description, decorator);
         this.alternatives = requireNonNull(alternatives);
     }
@@ -53,7 +54,7 @@ public final class StringChoicePropertyItem extends AbstractPropertyItem<String,
         return createChoiceEditor(this, alternatives);
     }
     
-    private static <T> PropertyEditor<T> createChoiceEditor(AbstractPropertyItem<String, StringProperty> property, ObservableList<T> choices) {
+    private static <T> PropertyEditor<T> createChoiceEditor(AbstractPropertyItem<String, StringProperty, PropertyEditor<String>> property, ObservableList<T> choices) {
         return new AbstractPropertyEditor<T, ComboBox<T>>(property, new ComboBox<>(choices)) {
             
             @Override 

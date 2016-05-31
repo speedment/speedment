@@ -16,8 +16,9 @@
  */
 package com.speedment.internal.ui.property;
 
+import static com.speedment.internal.ui.property.AbstractPropertyItem.defaultDecorator;
+import com.speedment.internal.ui.property.DefaultStringPropertyItem.DefaultStringPropertyEditor;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -29,16 +30,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
-import org.controlsfx.property.editor.PropertyEditor;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class DefaultStringPropertyItem extends AbstractPropertyItem<String, StringProperty> {
+public final class DefaultStringPropertyItem extends AbstractPropertyItem<String, StringProperty, DefaultStringPropertyEditor> {
 
     private final StringProperty textProperty;
     private final ObservableStringValue defaultValue;
@@ -49,7 +47,7 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
         String name,
         String description) {
 
-        super(value, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
+        super(value, name, description, defaultDecorator());
         this.textProperty = value;
         this.defaultValue = defaultValue;
     }
@@ -59,7 +57,7 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
         ObservableStringValue defaultValue,
         String name,
         String description,
-        Consumer<PropertyEditor<?>> decorator) {
+        Consumer<DefaultStringPropertyEditor> decorator) {
 
         super(value, name, description, decorator);
         this.textProperty = value;
@@ -72,11 +70,11 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
     }
 
     @Override
-    protected PropertyEditor<?> createUndecoratedEditor() {
+    protected DefaultStringPropertyEditor createUndecoratedEditor() {
         return new DefaultStringPropertyEditor(this);
     }
 
-    private final static class DefaultStringPropertyEditor extends AbstractPropertyEditor<String, DefaultStringNode> {
+    public final static class DefaultStringPropertyEditor extends AbstractPropertyEditor<String, DefaultStringNode> {
 
         private DefaultStringPropertyEditor(DefaultStringPropertyItem item) {
             super(item, new DefaultStringNode(item.textProperty, item.defaultValue));

@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.property;
 
+import static com.speedment.internal.ui.property.AbstractPropertyItem.defaultDecorator;
 import java.util.Arrays;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
@@ -28,12 +29,12 @@ import org.controlsfx.property.editor.PropertyEditor;
  * @author Emil Forslund
  * @param <E> the enum type
  */
-public final class EnumPropertyItem<E extends Enum<E>> extends AbstractPropertyItem<E, Property<E>> {
+public final class EnumPropertyItem<E extends Enum<E>> extends AbstractPropertyItem<E, Property<E>, PropertyEditor<?>> {
     
     private final Class<E> enumType;
     
     public EnumPropertyItem(Class<E> enumType, Property<E> property, String name, String description) {
-        super(property, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
+        super(property, name, description, defaultDecorator());
         this.enumType = requireNonNull(enumType);
     }
 

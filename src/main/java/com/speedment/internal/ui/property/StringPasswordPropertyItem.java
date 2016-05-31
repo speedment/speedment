@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.property;
 
+import static com.speedment.internal.ui.property.AbstractPropertyItem.defaultDecorator;
 import com.speedment.internal.ui.util.EditorsUtil;
 import java.util.function.Consumer;
 import javafx.beans.property.StringProperty;
@@ -25,10 +26,10 @@ import org.controlsfx.property.editor.PropertyEditor;
  *
  * @author Emil Forslund
  */
-public final class StringPasswordPropertyItem extends AbstractPropertyItem<String, StringProperty> {
+public final class StringPasswordPropertyItem extends AbstractPropertyItem<String, StringProperty, PropertyEditor<?>> {
 
     public StringPasswordPropertyItem(StringProperty value, String name, String description) {
-        super(value, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
+        super(value, name, description, defaultDecorator());
     }
     
     public StringPasswordPropertyItem(StringProperty value, String name, String description, Consumer<PropertyEditor<?>> decorator) {

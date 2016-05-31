@@ -30,20 +30,20 @@ import org.controlsfx.property.editor.PropertyEditor;
  *
  * @author Emil Forslund
  */
-public final class ChoicePropertyItem<T> extends AbstractPropertyItem<T, Property<T>> {
+public final class ChoicePropertyItem<T> extends AbstractPropertyItem<T, Property<T>, PropertyEditor<T>> {
     
     private final ObservableList<T> alternatives;
     private final StringConverter<T> converter;
     private final Class<T> type;
     
     public ChoicePropertyItem(ObservableList<T> alternatives, Property<T> property, StringConverter<T> converter, Class<T> type, String name, String description) {
-        super(property, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
+        super(property, name, description, defaultDecorator());
         this.alternatives = requireNonNull(alternatives);
         this.converter    = requireNonNull(converter);
         this.type         = requireNonNull(type);
     }
 
-    public ChoicePropertyItem(ObservableList<T> alternatives, Property<T> property, StringConverter<T> converter, Class<T> type, String name, String description, Consumer<PropertyEditor<?>> decorator) {
+    public ChoicePropertyItem(ObservableList<T> alternatives, Property<T> property, StringConverter<T> converter, Class<T> type, String name, String description, Consumer<PropertyEditor<T>> decorator) {
         super(property, name, description, decorator);
         this.alternatives = requireNonNull(alternatives);
         this.converter    = requireNonNull(converter);
@@ -60,7 +60,7 @@ public final class ChoicePropertyItem<T> extends AbstractPropertyItem<T, Propert
         return createChoiceEditor(this, alternatives, converter);
     }
     
-    private static <T> PropertyEditor<T> createChoiceEditor(AbstractPropertyItem<T, Property<T>> item, ObservableList<T> alternatives, StringConverter<T> converter) {
+    private static <T> PropertyEditor<T> createChoiceEditor(AbstractPropertyItem<T, Property<T>, PropertyEditor<T>> item, ObservableList<T> alternatives, StringConverter<T> converter) {
         final ComboBox<T> comboBox = new ComboBox<>(alternatives);
         comboBox.setConverter(converter);
         

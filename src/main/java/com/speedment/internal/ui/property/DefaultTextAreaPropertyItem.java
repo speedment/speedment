@@ -16,6 +16,8 @@
  */
 package com.speedment.internal.ui.property;
 
+import static com.speedment.internal.ui.property.AbstractPropertyItem.defaultDecorator;
+import com.speedment.internal.ui.property.DefaultTextAreaPropertyItem.DefaultTextAreaPropertyEditor;
 import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
@@ -30,13 +32,12 @@ import javafx.scene.layout.HBox;
 import static javafx.scene.layout.HBox.setHgrow;
 import javafx.scene.layout.Priority;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
-import org.controlsfx.property.editor.PropertyEditor;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class DefaultTextAreaPropertyItem extends AbstractPropertyItem<String, StringProperty> {
+public final class DefaultTextAreaPropertyItem extends AbstractPropertyItem<String, StringProperty, DefaultTextAreaPropertyEditor> {
     
     private final StringProperty textProperty;
     private final ObservableStringValue defaultValue;
@@ -47,7 +48,7 @@ public final class DefaultTextAreaPropertyItem extends AbstractPropertyItem<Stri
             String name, 
             String description) {
         
-        super(value, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
+        super(value, name, description, defaultDecorator());
         this.textProperty = value;
         this.defaultValue = defaultValue;
     }
@@ -57,7 +58,7 @@ public final class DefaultTextAreaPropertyItem extends AbstractPropertyItem<Stri
             ObservableStringValue defaultValue, 
             String name, 
             String description, 
-            Consumer<PropertyEditor<?>> decorator) {
+            Consumer<DefaultTextAreaPropertyEditor> decorator) {
         
         super(value, name, description, decorator);
         this.textProperty = value;
@@ -70,11 +71,11 @@ public final class DefaultTextAreaPropertyItem extends AbstractPropertyItem<Stri
     }
 
     @Override
-    protected PropertyEditor<?> createUndecoratedEditor() {
+    protected DefaultTextAreaPropertyEditor createUndecoratedEditor() {
         return new DefaultTextAreaPropertyEditor(this);
     }
     
-    private final static class DefaultTextAreaPropertyEditor extends AbstractPropertyEditor<String, DefaultTextAreaNode> {
+    public final static class DefaultTextAreaPropertyEditor extends AbstractPropertyEditor<String, DefaultTextAreaNode> {
 
         private DefaultTextAreaPropertyEditor(DefaultTextAreaPropertyItem item) {
             super(item, new DefaultTextAreaNode(item.textProperty, item.defaultValue));

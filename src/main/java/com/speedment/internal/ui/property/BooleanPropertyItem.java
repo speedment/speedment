@@ -25,10 +25,10 @@ import org.controlsfx.property.editor.PropertyEditor;
  *
  * @author Emil Forslund
  */
-public final class BooleanPropertyItem extends AbstractPropertyItem<Boolean, BooleanProperty> {
+public final class BooleanPropertyItem extends AbstractPropertyItem<Boolean, BooleanProperty, PropertyEditor<?>> {
 
     public BooleanPropertyItem(BooleanProperty value, String name, String description) {
-        super(value, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
+        super(value, name, description, defaultDecorator());
     }
     
     public BooleanPropertyItem(BooleanProperty value, String name, String description, Consumer<PropertyEditor<?>> decorator) {
