@@ -40,6 +40,7 @@
     
     <modules>
         <module>json-stream</module>
+		<module>reactor</module>
         <module>spring-generator</module>
     </modules>
     

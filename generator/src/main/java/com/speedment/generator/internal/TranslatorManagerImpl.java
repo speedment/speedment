@@ -32,6 +32,7 @@ import com.speedment.common.codegen.internal.util.Formatting;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
+import com.speedment.generator.event.FileGenerated;
 import com.speedment.runtime.internal.util.Statistics;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import java.io.IOException;
@@ -60,6 +61,11 @@ public class TranslatorManagerImpl implements TranslatorManager {
 
     public TranslatorManagerImpl(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
+    }
+
+    @Override
+    public Speedment speedment() {
+        return speedment;
     }
 
     @Override
