@@ -81,12 +81,11 @@ public interface Speedment {
      * Puts a new Component in the Speedment platform and returns the previous
      * Component (if any) with the same interface class.
      *
-     * @param <R> The Component type
      * @param item the new Component to put
      * @return the previous Component registered using that interface class, or
      * null of no one existed before
      */
-    <R extends Component> R put(R item);
+    Component put(Component item);
 
     //Component put(Component item);
     /**

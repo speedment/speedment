@@ -19,10 +19,13 @@ package com.speedment.internal.ui.property;
 import static com.speedment.internal.ui.property.AbstractPropertyItem.defaultDecorator;
 import com.speedment.internal.ui.property.DefaultIntegerPropertyItem.DefaultIntegerPropertyEditor;
 import com.speedment.internal.ui.util.ObservableUtil;
+import com.speedment.internal.ui.util.SimpleNumericProperty;
 import java.util.Objects;
 import java.util.function.Consumer;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
@@ -93,6 +96,7 @@ public final class DefaultIntegerPropertyItem extends AbstractPropertyItem<Numbe
 
     public final static class DefaultIntegerNode extends HBox {
 
+        private final Property<Number> spinnerValue;
         private final IntegerProperty enteredValue;
         private final CheckBox auto;
         private final Spinner<Integer> spinner;
@@ -101,16 +105,12 @@ public final class DefaultIntegerPropertyItem extends AbstractPropertyItem<Numbe
 
         private DefaultIntegerNode(IntegerProperty valueProperty, IntegerBinding defaultValue) {
             this.auto = new CheckBox("Auto");
-            this.spinner = new Spinner<>(Integer.MIN_VALUE, Integer.MAX_VALUE, defaultValue.get(), 1);
+            this.spinner = new Spinner<>(Integer.MIN_VALUE, Integer.MAX_VALUE, 0, 1);
 
             final boolean isAutoByDefault = valueProperty.get() == defaultValue.get();
 
             this.enteredValue = new SimpleIntegerProperty(valueProperty.get());
             this.auto.selectedProperty().setValue(isAutoByDefault);
-
-            if (isAutoByDefault) {
-                ObservableUtil.bind(spinner.getValueFactory().valueProperty(), defaultValue);
-            }
 
             this.spinner.disableProperty().bind(auto.selectedProperty());
             this.spinner.setEditable(true);
@@ -131,19 +131,57 @@ public final class DefaultIntegerPropertyItem extends AbstractPropertyItem<Numbe
                     return sci.toString(value);
                 }
             };
+            
+            final StringConverter<Number> sci3 = new StringConverter<Number>() {
+                @Override
+                public Number fromString(String value) {
+                    try {
+                        return sci.fromString(value);
+                    } catch (final NumberFormatException nfe) {
+                        return 0;
+                    }
+                }
+
+                @Override
+                public String toString(Number value) {
+                    return value == null ? null : sci.toString(value.intValue());
+                }
+            };
+            
             this.spinner.getValueFactory().setConverter(sci2);
+            
+            this.spinnerValue = new SimpleNumericProperty(
+                isAutoByDefault 
+                    ? defaultValue.get() 
+                    : valueProperty.get()
+            );
+            Bindings.bindBidirectional(
+                this.spinner.getEditor().textProperty(), 
+                spinnerValue, 
+                sci3
+            );
+
+            
+            this.spinnerValue.addListener((ob, o, v) -> {
+                System.out.println("New value: " + v);
+            });
 
             this.auto.selectedProperty().addListener((ob, o, isAuto) -> {
-                spinner.getValueFactory().valueProperty().unbind();
-
                 if (isAuto) {
-                    enteredValue.setValue(spinner.getValue());
-                    ObservableUtil.bind(spinner.getValueFactory().valueProperty(), defaultValue);
+                    enteredValue.setValue(spinnerValue.getValue());
+                    spinnerValue.setValue(defaultValue.getValue());
+                    //ObservableUtil.bind(spinner.getValueFactory().valueProperty(), defaultValue);
                 } else if (Objects.equals(
                     defaultValue.getValue(),
-                    spinner.getValue()
+                    spinnerValue.getValue()
                 )) {
-                    spinner.getValueFactory().valueProperty().setValue(enteredValue.get());
+                    spinnerValue.setValue(enteredValue.get());
+                }
+            });
+            
+            defaultValue.addListener((ob, o, n) -> {
+                if (auto.isSelected()) {
+                    spinnerValue.setValue(n);
                 }
             });
 
@@ -155,11 +193,12 @@ public final class DefaultIntegerPropertyItem extends AbstractPropertyItem<Numbe
             setHgrow(spinner, Priority.ALWAYS);
             setHgrow(auto, Priority.SOMETIMES);
             setSpacing(SPACING);
+            
+            valueProperty.bindBidirectional(spinnerValue);
         }
 
         private void setValue(Integer value) {
-            spinner.getValueFactory().valueProperty().unbind();
-            spinner.getValueFactory().valueProperty().setValue(value);
+            spinnerValue.setValue(value);
         }
     }
 }
