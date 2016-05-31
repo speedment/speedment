@@ -172,7 +172,11 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
                     portProperty(),
                     defaultPortProperty(speedment),
                     "Port",                  
-                    "The port of the database on the database host."
+                    "The port of the database on the database host.",
+                    editor -> {
+                        editor.setMin(0); 
+                        editor.setMax(65536);
+                    }
                 ),
                 new DefaultStringPropertyItem(
                     usernameProperty(),

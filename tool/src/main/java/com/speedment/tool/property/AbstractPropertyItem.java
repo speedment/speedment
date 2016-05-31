@@ -30,26 +30,28 @@ import org.controlsfx.property.editor.PropertyEditor;
  * @param <T> the type of the value
  * @param <PROPERTY> the type of the property implementation
  */
-public abstract class AbstractPropertyItem<T, PROPERTY extends ObservableValue<T> & WritableValue<T>> implements PropertySheet.Item {
+public abstract class AbstractPropertyItem<T, PROPERTY extends ObservableValue<T> & WritableValue<T>, EDITOR extends PropertyEditor<?>> implements PropertySheet.Item {
     
-    protected final static Consumer<PropertyEditor<?>> DEFAULT_DECORATOR = editor -> {};
+    protected static <EDITOR extends PropertyEditor<?>> Consumer<EDITOR> defaultDecorator() { 
+        return  editor -> {};
+    }
     
     private final PROPERTY property;
     private final String name;
     private final String description;
-    private final Consumer<PropertyEditor<?>> decorator;
+    private final Consumer<EDITOR> decorator;
     
-    protected AbstractPropertyItem(PROPERTY property, String name, String description, Consumer<PropertyEditor<?>> decorator) {
+    protected AbstractPropertyItem(PROPERTY property, String name, String description, Consumer<EDITOR> decorator) {
         this.property    = requireNonNull(property);
         this.name        = requireNonNull(name);
         this.description = requireNonNull(description);
         this.decorator   = requireNonNull(decorator);
     }
     
-    protected abstract PropertyEditor<?> createUndecoratedEditor();
+    protected abstract EDITOR createUndecoratedEditor();
     
-    public final PropertyEditor<?> createEditor() {
-        final PropertyEditor<?> editor = createUndecoratedEditor();
+    public final EDITOR createEditor() {
+        final EDITOR editor = createUndecoratedEditor();
         decorator.accept(editor);
         return editor;
     }

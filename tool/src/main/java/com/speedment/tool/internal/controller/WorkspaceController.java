@@ -84,9 +84,9 @@ public final class WorkspaceController implements Initializable {
         sheet.setModeSwitcherVisible(false);
         sheet.setSearchBoxVisible(false);
         sheet.setPropertyEditorFactory(item -> {
-            if (item instanceof AbstractPropertyItem<?, ?>) {
+            if (item instanceof AbstractPropertyItem<?, ?, ?>) {
                 @SuppressWarnings("unchecked")
-                final AbstractPropertyItem<?, ?> casted = (AbstractPropertyItem<?, ?>) item;
+                final AbstractPropertyItem<?, ?, ?> casted = (AbstractPropertyItem<?, ?, ?>) item;
                 return casted.createEditor();
             } else throw new SpeedmentException(
                 "Unknown property item type '" + item.getClass() + "'."

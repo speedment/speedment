@@ -25,10 +25,10 @@ import org.controlsfx.property.editor.PropertyEditor;
  *
  * @author Emil Forslund
  */
-public final class StringPasswordPropertyItem extends AbstractPropertyItem<String, StringProperty> {
+public final class StringPasswordPropertyItem extends AbstractPropertyItem<String, StringProperty, PropertyEditor<?>> {
 
     public StringPasswordPropertyItem(StringProperty value, String name, String description) {
-        super(value, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
+        super(value, name, description, defaultDecorator());
     }
     
     public StringPasswordPropertyItem(StringProperty value, String name, String description, Consumer<PropertyEditor<?>> decorator) {

@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.property;
 
+import com.speedment.tool.property.DefaultIntegerPropertyItem.DefaultIntegerPropertyEditor;
 import com.speedment.tool.util.ObservableUtil;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -26,28 +27,28 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.util.StringConverter;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
-import org.controlsfx.property.editor.PropertyEditor;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class DefaultIntegerPropertyItem extends AbstractPropertyItem<Number, IntegerProperty> {
-    
+public final class DefaultIntegerPropertyItem extends AbstractPropertyItem<Number, IntegerProperty, DefaultIntegerPropertyEditor> {
+
     private final IntegerProperty valueProperty;
     private final IntegerBinding defaultValue;
-    
+
     public DefaultIntegerPropertyItem(IntegerProperty value, IntegerBinding defaultValue, String name, String description) {
-        super(value, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
+        super(value, name, description, defaultDecorator());
         this.valueProperty = value;
         this.defaultValue = defaultValue;
     }
-    
-    public DefaultIntegerPropertyItem(IntegerProperty value, IntegerBinding defaultValue, String name, String description, Consumer<PropertyEditor<?>> decorator) {
+
+    public DefaultIntegerPropertyItem(IntegerProperty value, IntegerBinding defaultValue, String name, String description, Consumer<DefaultIntegerPropertyEditor> decorator) {
         super(value, name, description, decorator);
         this.valueProperty = value;
         this.defaultValue = defaultValue;
@@ -59,16 +60,16 @@ public final class DefaultIntegerPropertyItem extends AbstractPropertyItem<Numbe
     }
 
     @Override
-    protected PropertyEditor<?> createUndecoratedEditor() {
+    protected DefaultIntegerPropertyEditor createUndecoratedEditor() {
         return new DefaultIntegerPropertyEditor(this);
     }
-    
-    private final static class DefaultIntegerPropertyEditor extends AbstractPropertyEditor<Integer, DefaultIntegerNode> {
+
+    public final static class DefaultIntegerPropertyEditor extends AbstractPropertyEditor<Integer, DefaultIntegerNode> {
 
         private DefaultIntegerPropertyEditor(DefaultIntegerPropertyItem item) {
             super(item, new DefaultIntegerNode(item.valueProperty, item.defaultValue));
         }
-        
+
         @Override
         protected ObservableValue<Integer> getObservableValue() {
             return super.getEditor().spinner.getValueFactory().valueProperty();
@@ -78,33 +79,42 @@ public final class DefaultIntegerPropertyItem extends AbstractPropertyItem<Numbe
         public void setValue(Integer value) {
             super.getEditor().setValue(value);
         }
+
+        public void setMin(int min) {
+            ((IntegerSpinnerValueFactory) super.getEditor().spinner.getValueFactory()).setMin(min);
+        }
+
+        public void setMax(int max) {
+            ((IntegerSpinnerValueFactory) super.getEditor().spinner.getValueFactory()).setMax(max);
+        }
+
     }
-    
+
     private final static class DefaultIntegerNode extends HBox {
-        
+
         private final IntegerProperty enteredValue;
         private final CheckBox auto;
         private final Spinner<Integer> spinner;
-        
+
         private final static double SPACING = 8.0d;
-        
+
         private DefaultIntegerNode(IntegerProperty valueProperty, IntegerBinding defaultValue) {
-            this.auto    = new CheckBox("Auto");
-            this.spinner = new Spinner<>(0, Short.MAX_VALUE, defaultValue.get(), 1);
-            
+            this.auto = new CheckBox("Auto");
+            this.spinner = new Spinner<>(Integer.MIN_VALUE, Integer.MAX_VALUE, defaultValue.get(), 1);
+
             final boolean isAutoByDefault = valueProperty.get() == defaultValue.get();
-            
+
             this.enteredValue = new SimpleIntegerProperty(valueProperty.get());
             this.auto.selectedProperty().setValue(isAutoByDefault);
-            
+
             if (isAutoByDefault) {
                 ObservableUtil.bind(spinner.getValueFactory().valueProperty(), defaultValue);
             }
-            
+
             this.spinner.disableProperty().bind(auto.selectedProperty());
             this.spinner.setEditable(true);
-            
-            final StringConverter<Integer> sci  = spinner.getValueFactory().getConverter();
+
+            final StringConverter<Integer> sci = spinner.getValueFactory().getConverter();
             final StringConverter<Integer> sci2 = new StringConverter<Integer>() {
                 @Override
                 public Integer fromString(String value) {
@@ -117,29 +127,27 @@ public final class DefaultIntegerPropertyItem extends AbstractPropertyItem<Numbe
 
                 @Override
                 public String toString(Integer value) {
-                   return sci.toString(value);
+                    return sci.toString(value);
                 }
             };
             this.spinner.getValueFactory().setConverter(sci2);
 
             this.auto.selectedProperty().addListener((ob, o, isAuto) -> {
                 spinner.getValueFactory().valueProperty().unbind();
-                
+
                 if (isAuto) {
                     enteredValue.setValue(spinner.getValue());
                     ObservableUtil.bind(spinner.getValueFactory().valueProperty(), defaultValue);
-                } else {
-                    if (Objects.equals(
-                        defaultValue.getValue(), 
-                        spinner.getValue()
-                    )) {
-                        spinner.getValueFactory().valueProperty().setValue(enteredValue.get());
-                    }
+                } else if (Objects.equals(
+                    defaultValue.getValue(),
+                    spinner.getValue()
+                )) {
+                    spinner.getValueFactory().valueProperty().setValue(enteredValue.get());
                 }
             });
-            
+
             super.getChildren().addAll(auto, spinner);
-            
+
             setAlignment(Pos.CENTER_LEFT);
             auto.setAlignment(Pos.CENTER_LEFT);
 
@@ -147,7 +155,7 @@ public final class DefaultIntegerPropertyItem extends AbstractPropertyItem<Numbe
             setHgrow(auto, Priority.SOMETIMES);
             setSpacing(SPACING);
         }
-        
+
         private void setValue(Integer value) {
             spinner.getValueFactory().valueProperty().unbind();
             spinner.getValueFactory().valueProperty().setValue(value);

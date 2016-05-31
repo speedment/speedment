@@ -259,6 +259,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     protected String sqlColumnList(Function<String, String> postMapper) {
         requireNonNull(postMapper);
         return getTable().columns()
+            .filter(Column::isEnabled)
             .map(naming()::fullNameOf)
             .map(postMapper)
             .collect(joining(","));
@@ -539,5 +540,4 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
         return dbmsHandler().createStruct(typeName, attributes);
     }
-
 }

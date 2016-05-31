@@ -27,10 +27,10 @@ import org.controlsfx.property.editor.PropertyEditor;
  * 
  * @author Emil Forslund
  */
-public final class StringAreaPropertyItem extends AbstractPropertyItem<String, StringProperty> {
+public final class StringAreaPropertyItem extends AbstractPropertyItem<String, StringProperty, PropertyEditor<?>> {
 
     public StringAreaPropertyItem(StringProperty value, String name, String description) {
-        super(value, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
+        super(value, name, description, defaultDecorator());
     }
     
     public StringAreaPropertyItem(StringProperty value, String name, String description, Consumer<PropertyEditor<?>> decorator) {
