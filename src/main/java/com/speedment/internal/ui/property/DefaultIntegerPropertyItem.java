@@ -91,7 +91,7 @@ public final class DefaultIntegerPropertyItem extends AbstractPropertyItem<Numbe
 
     }
 
-    private final static class DefaultIntegerNode extends HBox {
+    public final static class DefaultIntegerNode extends HBox {
 
         private final IntegerProperty enteredValue;
         private final CheckBox auto;
