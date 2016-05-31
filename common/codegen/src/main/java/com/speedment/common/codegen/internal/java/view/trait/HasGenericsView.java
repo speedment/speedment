@@ -33,6 +33,17 @@ public interface HasGenericsView<M extends HasGenerics<M>> extends
     Transform<M, String> {
     
     /**
+     * A trailing suffix that is to be appended to the generics if it is rendered.
+     * <p>
+     * The default value is a single space (" ").
+     * 
+     * @return  the suffix
+     */
+    default String genericsSuffix() {
+        return " ";
+    }
+    
+    /**
      * Render the generics-part of the model followed by a space character.
      * 
      * @param gen    the generator
@@ -41,6 +52,6 @@ public interface HasGenericsView<M extends HasGenerics<M>> extends
      */
     default String renderGenerics(Generator gen, M model) {
         return gen.onEach(model.getGenerics())
-            .collect(joinIfNotEmpty(", ", "<", ">"));
+            .collect(joinIfNotEmpty(", ", "<", ">" + genericsSuffix()));
     }
 }

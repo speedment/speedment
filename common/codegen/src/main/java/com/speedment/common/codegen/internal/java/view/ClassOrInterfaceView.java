@@ -90,6 +90,14 @@ abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements Tr
     public String fieldSuffix() {
         return ";";
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String nameSuffix() {
+        return " ";
+    }
 	
     /**
      * Returns the declaration type of this model. This can be either 'class',
@@ -134,7 +142,6 @@ abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements Tr
             renderDeclarationType() + 
             renderName(gen, model) + 
             renderGenerics(gen, model) +
-            (model.getGenerics().isEmpty() ? " " : "") +
             renderSupertype(gen, model) +
 			renderInterfaces(gen, model) +
                 

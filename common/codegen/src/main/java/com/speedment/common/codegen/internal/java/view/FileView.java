@@ -25,7 +25,7 @@ import com.speedment.common.codegen.internal.java.view.trait.HasImportsView;
 import com.speedment.common.codegen.internal.java.view.trait.HasJavadocView;
 import com.speedment.common.codegen.internal.util.Formatting;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
-import static java.util.Objects.requireNonNull;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import java.util.Optional;
 
 /**
@@ -38,15 +38,12 @@ public final class FileView implements Transform<File, String>,
         HasJavadocView<File>, 
         HasClassesView<File> {
     
-	private final static String PACKAGE_STRING = "package ";
-
     /**
      * {@inheritDoc}
      */
 	@Override
 	public Optional<String> transform(Generator gen, File model) {
-        requireNonNull(gen);
-        requireNonNull(model);
+        requireNonNulls(gen, model);
         
 		final DependencyManager mgr = gen.getDependencyMgr();
         mgr.clearDependencies();
@@ -87,7 +84,7 @@ public final class FileView implements Transform<File, String>,
 		if (name.isPresent()) {
 			final Optional<String> pack = packageName(name.get());
 			if (pack.isPresent()) {
-				return PACKAGE_STRING + pack.get() + ";" + dnl();
+				return "package " + pack.get() + ";" + dnl();
 			}
 		}
 		

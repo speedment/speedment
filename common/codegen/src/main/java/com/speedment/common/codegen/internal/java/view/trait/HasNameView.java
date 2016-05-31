@@ -31,6 +31,18 @@ import com.speedment.common.codegen.model.trait.HasName;
 public interface HasNameView<M extends HasName<M>> extends Transform<M, String> {
     
     /**
+     * Returns the trailing suffix that should be appended after the name if
+     * one is rendered.
+     * <p>
+     * The default value is an empty string ("").
+     * 
+     * @return  the trailing name suffix
+     */
+    default String nameSuffix() {
+        return "";
+    }
+    
+    /**
      * Render the name of the model.
      * 
      * @param gen    the generator
@@ -38,6 +50,6 @@ public interface HasNameView<M extends HasName<M>> extends Transform<M, String> 
      * @return       the generated code
      */
     default String renderName(Generator gen, M model) {
-        return model.getName();
+        return model.getName() + nameSuffix();
     }
 }

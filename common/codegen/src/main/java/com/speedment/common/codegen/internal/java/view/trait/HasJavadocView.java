@@ -43,6 +43,6 @@ public interface HasJavadocView<M extends HasJavadoc<M>> extends
     default String renderJavadoc(Generator gen, M model) {
         return gen.on(model.getJavadoc())
             .map(doc -> doc + nl())
-            .orElse(" ");
+            .orElse("");
     }
 }

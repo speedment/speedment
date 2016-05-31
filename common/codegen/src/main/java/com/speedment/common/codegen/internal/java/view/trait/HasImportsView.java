@@ -45,6 +45,6 @@ public interface HasImportsView<M extends HasImports<M>> extends
     default String renderImports(Generator gen, M model) {
         return gen.onEach(model.getImports())
             .distinct().sorted()
-            .collect(joinIfNotEmpty(nl(), " ", dnl()));
+            .collect(joinIfNotEmpty(nl(), "", dnl()));
     }
 }

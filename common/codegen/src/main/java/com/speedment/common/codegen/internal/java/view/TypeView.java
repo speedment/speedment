@@ -48,6 +48,14 @@ public final class TypeView implements Transform<Type, String>,
 			return renderName(gen, model, model.getName());
 		}
 	}
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String genericsSuffix() {
+        return "";
+    }
     
     /**
      * Renders the full name of the type with generics and array dimension. 
