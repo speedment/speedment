@@ -60,5 +60,4 @@ public abstract class AbstractManager<ENTITY> extends AbstractLifecycle<Manager<
     public Speedment speedment() {
         return speedment;
     }
-    
 }

@@ -16,7 +16,6 @@
  */
 package com.speedment.generator.internal.entity;
 
-import com.speedment.runtime.internal.entity.AbstractBaseEntity;
 import com.speedment.runtime.Speedment;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.Class;
@@ -39,6 +38,7 @@ import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
+import com.speedment.runtime.internal.entity.AbstractEntity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -192,7 +192,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
             .build()
             .public_()
             .abstract_()
-            .setSupertype(Type.of(AbstractBaseEntity.class).add(Generic.of().add(getSupport().entityType())))
+            .setSupertype(Type.of(AbstractEntity.class).add(Generic.of().add(getSupport().entityType())))
             .add(getSupport().entityType())
             .add(Constructor.of().protected_());
 

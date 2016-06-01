@@ -16,12 +16,15 @@
  */
 package com.speedment.plugins.json;
 
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.field.trait.ReferenceForeignKeyFieldTrait;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
 import com.speedment.runtime.manager.Manager;
-import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
@@ -66,29 +69,30 @@ import java.util.stream.Stream;
 public final class JsonEncoder<ENTITY> {
 
     protected final Map<String, Function<ENTITY, String>> getters;
+    private final Speedment speedment;
 
     /**
      * Constructs an empty JsonEncoder with no fields added to the output
      * renderer.
      */
-    private JsonEncoder() {
+    private JsonEncoder(Speedment speedment) {
         this.getters = new LinkedHashMap<>();
+        this.speedment = requireNonNull(speedment);
     }
 
     // Fields
     public <D, T, I extends FieldTrait & ReferenceFieldTrait<ENTITY, D, T>> JsonEncoder<ENTITY> put(I field) {
         requireNonNull(field);
-        final String columnName = jsonField((FieldTrait) field);
+        final String columnName = jsonField(speedment, field.getIdentifier());
         final Function<ENTITY, T> getter = ((ReferenceFieldTrait<ENTITY, D, T>) field).getter(); // Workaround bugg
         return put(columnName, getter);
     }
 
     // Foreign key fields.
     public <D, T, FK_ENTITY, I extends FieldTrait & ReferenceFieldTrait<ENTITY, D, T> & ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY>>
-        JsonEncoder<ENTITY> put(I field, JsonEncoder<FK_ENTITY> builder) {
-        requireNonNull(field);
-        requireNonNull(builder);
-        final String columnName = jsonField((FieldTrait) field);
+            JsonEncoder<ENTITY> put(I field, JsonEncoder<FK_ENTITY> builder) {
+        requireNonNulls(field, builder);
+        final String columnName = jsonField(speedment, field.getIdentifier());
         final ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY> fkField = (ReferenceForeignKeyFieldTrait< ENTITY, D, FK_ENTITY>) field; // Workaround bugg
         return put(columnName, fkField::findFrom, builder);
     }
@@ -136,7 +140,7 @@ public final class JsonEncoder<ENTITY> {
     
     public JsonEncoder<ENTITY> remove(FieldTrait field) {
         requireNonNull(field);
-        getters.remove(jsonField(field));
+        getters.remove(jsonField(speedment, field.getIdentifier()));
         return this;
     }
 
@@ -148,12 +152,12 @@ public final class JsonEncoder<ENTITY> {
             + "}";
     }
 
-    protected String jsonField(FieldTrait field) {
-        requireNonNull(field);
-        return formatFieldName(field.getIdentifier().columnName());
+    protected static String jsonField(Speedment speedment, FieldIdentifier<?> identifier) {
+        requireNonNulls(speedment, identifier);
+        return referencedColumn(speedment, identifier).getJavaName();
     }
 
-    protected static String jsonValue(Object in) {
+    public static String jsonValue(Object in) {
         // in is nullable, a field can certainly be null
         final String value;
 
@@ -186,7 +190,7 @@ public final class JsonEncoder<ENTITY> {
      * @return a new JsonEncoder with no fields added to the renderer
      */
     public static <ENTITY> JsonEncoder<ENTITY> noneOf(Manager<ENTITY> manager) {
-        return new JsonEncoder<>();
+        return new JsonEncoder<>(manager.speedment());
     }
 
     /**
@@ -207,16 +211,13 @@ public final class JsonEncoder<ENTITY> {
         manager.fields()
             .filter(ReferenceFieldTrait.class::isInstance)
             .map(f -> castReferenceFieldTrait(manager, f))
-            .forEachOrdered(f
-                -> {
-                @SuppressWarnings("unchecked")
-                final FieldIdentifier<ENTITY> fi = f.getIdentifier();
+            .map(ReferenceFieldTrait::getIdentifier)
+            .forEachOrdered(fi -> {
                 formatter.put(
-                    formatFieldName(f.getIdentifier().columnName()),
+                    jsonField(manager.speedment(), fi),
                     entity -> manager.get(entity, fi)
                 );
-            }
-            );
+            });
 
         return formatter;
     }
@@ -247,40 +248,20 @@ public final class JsonEncoder<ENTITY> {
             .filter(ReferenceFieldTrait.class::isInstance)
             .map(f -> castReferenceFieldTrait(manager, f))
             .filter(f -> fieldNames.contains(f.getIdentifier().columnName()))
-            .forEachOrdered(f
+            .map(ReferenceFieldTrait::getIdentifier)
+            .forEachOrdered(fi
                 -> formatter.put(
-                    formatFieldName(f.getIdentifier().columnName()),
-                    entity -> manager.get(entity, f.getIdentifier())
+                    jsonField(manager.speedment(), fi),
+                    entity -> manager.get(entity, fi)
                 )
             );
 
         return formatter;
     }
-    
+
     private static <ENTITY> ReferenceFieldTrait<ENTITY, ?, ?> castReferenceFieldTrait(Manager<ENTITY> mgr, FieldTrait f) {
         @SuppressWarnings("unchecked")
         final ReferenceFieldTrait<ENTITY, ?, ?> result = (ReferenceFieldTrait<ENTITY, ?, ?>) f;
         return result;
-    }
-
-    private static String formatFieldName(String externalName) {
-        final StringBuilder sb = new StringBuilder(externalName);
-
-        int startIndex = 0;
-        for (int i = 0; i < externalName.length(); i++) {
-            if (Character.isAlphabetic(sb.charAt(i))) {
-                // Skip over any non alphabetic characers like "_"
-                startIndex = i;
-                break;
-            }
-        }
-
-        if (sb.length() > startIndex) {
-            sb.replace(
-                startIndex, startIndex + 1, 
-                String.valueOf(sb.charAt(startIndex)).toLowerCase()
-            );
-        }
-        return sb.toString();
     }
 }
