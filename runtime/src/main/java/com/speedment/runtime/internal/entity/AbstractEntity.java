@@ -32,7 +32,7 @@ import static java.util.Objects.requireNonNull;
  * @author  Emil Forslund
  * @since   2.1.0
  */
-public abstract class AbstractBaseEntity<ENTITY> implements Entity<ENTITY> {
+public abstract class AbstractEntity<ENTITY> implements Entity<ENTITY> {
 
     /**
      * The main interface for this entity type.
