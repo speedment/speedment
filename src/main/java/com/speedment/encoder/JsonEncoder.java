@@ -145,7 +145,7 @@ public final class JsonEncoder<ENTITY> implements Encoder<ENTITY, JsonEncoder<EN
         return referencedColumn(speedment, identifier).getJavaName();
     }
 
-    protected static String jsonValue(Object in) {
+    public static String jsonValue(Object in) {
         // in is nullable, a field can certainly be null
         final String value;
 
