@@ -53,6 +53,7 @@ import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import static com.speedment.internal.util.Cast.castOrFail;
 import static com.speedment.internal.util.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import com.speedment.license.License;
 import com.speedment.manager.Manager;
 import java.util.Map.Entry;
 import static java.util.Objects.requireNonNull;
@@ -178,11 +179,26 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     }
 
     @Override
+    protected <T extends Component> T put(T newItem, Function<Component, Class<?>> keyMapper) {
+        info("Added   ", newItem);
+        final T old = super.put(newItem, keyMapper);
+        if (old != null) {
+            info("Removed ", old);
+        }
+        return old;
+    }
+
+    @Override
     public void stop() {
-        stream()
-            .map(Entry::getValue)
-            .peek(c -> LOGGER.info("Stopping " + c.getComponentClass() + " (" + c.getClass().getSimpleName() + ") " + c.asSoftware().getName()))
+        components()
+            .peek(c -> info("Stopping ", c))
             .forEach(Component::stop);
+    }
+
+    private void info(String prefix, Component c) {
+        LOGGER.info(prefix + c.getComponentClass().getSimpleName() + " (" + c.getClass().getSimpleName() + ",  " + c.asSoftware().getVersion() + ") "
+            + (c.asSoftware().getLicense().getType() == License.Type.PROPRIETARY ? "Enterprise" : "")
+        );
     }
 
     public void setUnmodifiable() {
