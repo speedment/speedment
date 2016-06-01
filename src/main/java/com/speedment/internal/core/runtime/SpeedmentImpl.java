@@ -49,6 +49,7 @@ import com.speedment.internal.core.platform.component.impl.ProjectComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ResultSetMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.TypeMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.UserInterfaceComponentImpl;
+import com.speedment.internal.logging.Level;
 import com.speedment.internal.logging.Logger;
 import com.speedment.internal.logging.LoggerManager;
 import static com.speedment.internal.util.Cast.castOrFail;
@@ -63,8 +64,7 @@ import java.util.stream.Stream;
 
 final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speedment {
 
-    private static final Logger LOGGER = LoggerManager.getLogger(SpeedmentImpl.class);
-
+    private final Logger logger;
     private boolean unmodifiable;
     private ManagerComponent managerComponent;
     private ProjectComponent projectComponent;
@@ -82,6 +82,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     private DocumentPropertyComponent documentPropertyComponent;
 
     SpeedmentImpl() {
+        logger = LoggerManager.getLogger(SpeedmentImpl.class);
         put(ManagerComponentImpl::new);
         put(ProjectComponentImpl::new);
         put(PrimaryKeyFactoryComponentImpl::new);
@@ -180,10 +181,10 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
 
     @Override
     protected <T extends Component> T put(T newItem, Function<Component, Class<?>> keyMapper) {
-        info("Added   ", newItem);
+        log("Added   ", newItem);
         final T old = super.put(newItem, keyMapper);
         if (old != null) {
-            info("Removed ", old);
+            log("Removed ", old);
         }
         return old;
     }
@@ -191,12 +192,12 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     @Override
     public void stop() {
         components()
-            .peek(c -> info("Stopping ", c))
+            .peek(c -> log("Stopping ", c))
             .forEach(Component::stop);
     }
 
-    private void info(String prefix, Component c) {
-        LOGGER.info(prefix + c.getComponentClass().getSimpleName() + " (" + c.getClass().getSimpleName() + ",  " + c.asSoftware().getVersion() + ") "
+    private void log(String prefix, Component c) {
+        logger.debug(prefix + c.getComponentClass().getSimpleName() + " (" + c.getClass().getSimpleName() + ",  " + c.asSoftware().getVersion() + ") "
             + (c.asSoftware().getLicense().getType() == License.Type.PROPRIETARY ? "Enterprise" : "")
         );
     }
@@ -293,6 +294,11 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
             .map(Component::asSoftware)
             .map(s -> s.getName() + "-" + s.getVersion())
             .collect(joining(", ", "[", "]"));
+    }
+
+    @Override
+    public void setLogLevel(Level level) {
+        logger.setLevel(requireNonNull(level));
     }
 
     private ComponentConstructor<?> componentConstructor(Component component) {

@@ -33,6 +33,7 @@ import com.speedment.component.UserInterfaceComponent;
 import com.speedment.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.component.resultset.ResultSetMapperComponent;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.logging.Level;
 import com.speedment.manager.Manager;
 import java.util.stream.Stream;
 
@@ -127,6 +128,13 @@ public interface Speedment {
      * @return the new instance
      */
     Speedment copyWithSameTypeOfComponents();
+
+    /**
+     * Sets the log level for this speedment instance.
+     *
+     * @param level new log level to use
+     */
+    void setLogLevel(Level level);
 
     default EntityManager getEntityManager() {
         return get(EntityManager.class);
