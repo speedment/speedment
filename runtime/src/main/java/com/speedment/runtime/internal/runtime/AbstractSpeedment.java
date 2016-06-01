@@ -16,6 +16,9 @@
  */
 package com.speedment.runtime.internal.runtime;
 
+import com.speedment.common.logger.Level;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.component.ComponentConstructor;
@@ -47,6 +50,7 @@ import com.speedment.runtime.internal.component.TypeMapperComponentImpl;
 import static com.speedment.runtime.internal.util.Cast.castOrFail;
 import com.speedment.runtime.internal.util.DefaultClassMapper;
 import static com.speedment.runtime.internal.util.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import com.speedment.runtime.license.License;
 import com.speedment.runtime.manager.Manager;
 import java.util.Map;
 import java.util.function.Function;
@@ -61,6 +65,7 @@ import static java.util.stream.Collectors.joining;
  */
 public abstract class AbstractSpeedment extends DefaultClassMapper<Component> implements Speedment {
 
+    private final Logger logger;
     private boolean unmodifiable;
     private ManagerComponent managerComponent;
     private ProjectComponent projectComponent;
@@ -76,6 +81,7 @@ public abstract class AbstractSpeedment extends DefaultClassMapper<Component> im
     private InfoComponent infoComponent;
     
     protected AbstractSpeedment() {
+        logger = LoggerManager.getLogger(AbstractSpeedment.class);
         initComponents();
     }
     
@@ -220,7 +226,9 @@ public abstract class AbstractSpeedment extends DefaultClassMapper<Component> im
 
     @Override
     public void stop() {
-        // do nothing yet!
+        components()
+            .peek(c -> log("Stopping ", c))
+            .forEach(Component::stop);
     }
 
     @Override
@@ -235,6 +243,11 @@ public abstract class AbstractSpeedment extends DefaultClassMapper<Component> im
     }
     
     @Override
+    public void setLogLevel(Level level) {
+        logger.setLevel(requireNonNull(level));
+    }
+    
+    @Override
     public String toString() {
         return getClass().getSimpleName() + " " + 
             components()
@@ -244,6 +257,16 @@ public abstract class AbstractSpeedment extends DefaultClassMapper<Component> im
     }
     
     protected abstract AbstractApplicationBuilder<?, ?> newApplicationBuilder();
+    
+    @Override
+    protected <T extends Component> T put(T newItem, Function<Component, Class<?>> keyMapper) {
+        log("Added   ", newItem);
+        final T old = super.put(newItem, keyMapper);
+        if (old != null) {
+            log("Removed ", old);
+        }
+        return old;
+    }
 
     private void initComponents() {
         put(ManagerComponentImpl::new);
@@ -267,5 +290,11 @@ public abstract class AbstractSpeedment extends DefaultClassMapper<Component> im
     
     private ComponentConstructor<?> componentConstructor(Component component) {
         return s -> component.defaultCopy(s);
+    }
+    
+    private void log(String prefix, Component c) {
+        logger.debug(prefix + c.getComponentClass().getSimpleName() + " (" + c.getClass().getSimpleName() + ",  " + c.asSoftware().getVersion() + ") "
+            + (c.asSoftware().getLicense().getType() == License.Type.PROPRIETARY ? "Enterprise" : "")
+        );
     }
 }

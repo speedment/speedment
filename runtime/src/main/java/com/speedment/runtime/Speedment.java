@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime;
 
+import com.speedment.common.logger.Level;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.component.DbmsHandlerComponent;
@@ -129,6 +130,13 @@ public interface Speedment {
      */
     Speedment copyWithSameTypeOfComponents();
 
+    /**
+     * Sets the log level for this speedment instance.
+     *
+     * @param level  new log level to use
+     */
+    void setLogLevel(Level level);
+    
     /**
      * A shortcut for {@code get(EntityManager.class)}.
      * 
