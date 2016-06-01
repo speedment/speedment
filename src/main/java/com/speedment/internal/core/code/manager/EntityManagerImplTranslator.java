@@ -39,14 +39,16 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
 
     @Override
     protected Class makeCodeGenModel(File file) {
-        return newBuilder(file, getSupport().managerImplName()).build()
-            .public_().final_()
-            .setSupertype(getSupport().generatedManagerImplType())
-            .add(getSupport().managerType())
-            .add(Constructor.of().public_()
-                .add(Field.of("speedment", Type.of(Speedment.class)))
-                .add("super(speedment);")
-            );
+        return newBuilder(file, getSupport().managerImplName())
+            .forEveryTable((clazz, table) -> {
+                clazz.public_().final_()
+                    .setSupertype(getSupport().generatedManagerImplType())
+                    .add(getSupport().managerType())
+                    .add(Constructor.of().public_()
+                        .add(Field.of("speedment", Type.of(Speedment.class)))
+                        .add("super(speedment);")
+                    );
+            }).build();
     }
     
     @Override

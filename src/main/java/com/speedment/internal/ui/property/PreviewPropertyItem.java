@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.property;
 
+import static com.speedment.internal.ui.property.AbstractPropertyItem.defaultDecorator;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import javafx.beans.property.SimpleStringProperty;
@@ -34,12 +35,12 @@ import org.controlsfx.property.editor.PropertyEditor;
  *
  * @author Emil Forslund
  */
-public final class PreviewPropertyItem extends AbstractPropertyItem<String, StringProperty> {
+public final class PreviewPropertyItem extends AbstractPropertyItem<String, StringProperty, PropertyEditor<?>> {
     
     private final ObservableStringValue preview;
     
     public PreviewPropertyItem(ObservableStringValue preview, String name, String description) {
-        super(wrap(preview), name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
+        super(wrap(preview), name, description, defaultDecorator());
         this.preview = preview;
     }
     

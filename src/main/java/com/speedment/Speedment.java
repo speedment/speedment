@@ -33,6 +33,7 @@ import com.speedment.component.UserInterfaceComponent;
 import com.speedment.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.component.resultset.ResultSetMapperComponent;
 import com.speedment.exception.SpeedmentException;
+import com.speedment.internal.logging.Level;
 import com.speedment.manager.Manager;
 import java.util.stream.Stream;
 
@@ -68,7 +69,7 @@ public interface Speedment {
      * <li>{@link com.speedment.component.TypeMapperComponent TypeMapperComponent}</li>
      * <li>{@link com.speedment.component.PasswordComponent PasswordComponent}</li>
      * <li>{@link com.speedment.component.UserInterfaceComponent UserInterfaceComponent}</li>
-     * 
+     *
      * </ul>
      *
      * @param <R> The intended return type
@@ -87,6 +88,7 @@ public interface Speedment {
      */
     Component put(Component item);
 
+    //Component put(Component item);
     /**
      * Obtains and returns the currently associated {@link Manager}
      * implementation for the given Entity interface Class. If no Manager exists
@@ -97,7 +99,7 @@ public interface Speedment {
      * <p>
      * {@code get(ManagerComponent.class).managerOf(entityClass) }
      *
-     * @param <ENTITY>  the Entity interface type
+     * @param <ENTITY> the Entity interface type
      * @param entityClass the Entity interface {@code Class}
      * @return the currently associated {@link Manager} implementation for the
      * given Entity interface Class
@@ -118,14 +120,21 @@ public interface Speedment {
      * any more.
      */
     void stop();
-    
+
     /**
      * Creates a new speedment instance and loads a new instance of each
      * component that this speedment instance has.
-     * 
-     * @return  the new instance
+     *
+     * @return the new instance
      */
     Speedment copyWithSameTypeOfComponents();
+
+    /**
+     * Sets the log level for this speedment instance.
+     *
+     * @param level new log level to use
+     */
+    void setLogLevel(Level level);
 
     default EntityManager getEntityManager() {
         return get(EntityManager.class);
@@ -162,23 +171,23 @@ public interface Speedment {
     default TypeMapperComponent getTypeMapperComponent() {
         return get(TypeMapperComponent.class);
     }
-    
+
     default EventComponent getEventComponent() {
         return get(EventComponent.class);
     }
-    
+
     default UserInterfaceComponent getUserInterfaceComponent() {
         return get(UserInterfaceComponent.class);
     }
-    
+
     default PasswordComponent getPasswordComponent() {
         return get(PasswordComponent.class);
     }
-    
+
     default CodeGenerationComponent getCodeGenerationComponent() {
         return get(CodeGenerationComponent.class);
     }
-    
+
     default DocumentPropertyComponent getDocumentPropertyComponent() {
         return get(DocumentPropertyComponent.class);
     }

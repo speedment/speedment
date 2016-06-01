@@ -19,6 +19,7 @@ package com.speedment.internal.ui.property;
 import com.speedment.Speedment;
 import com.speedment.config.db.mapper.TypeMapper;
 import com.speedment.exception.SpeedmentException;
+import static com.speedment.internal.ui.property.AbstractPropertyItem.defaultDecorator;
 import com.speedment.internal.ui.util.EditorsUtil;
 import static java.util.Comparator.comparing;
 import java.util.List;
@@ -32,13 +33,13 @@ import org.controlsfx.property.editor.PropertyEditor;
  *
  * @author Emil Forslund
  */
-public final class TypeMapperPropertyItem extends AbstractPropertyItem<String, StringProperty> {
+public final class TypeMapperPropertyItem extends AbstractPropertyItem<String, StringProperty, PropertyEditor<?>> {
     
     private final Speedment speedment;
     private final Class<?> type;
     
     public TypeMapperPropertyItem(Speedment speedment, Class<?> type, StringProperty property, String name, String description) {
-        this(speedment, type, property, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
+        this(speedment, type, property, name, description, defaultDecorator());
     }
 
     public TypeMapperPropertyItem(Speedment speedment, Class<?> type, StringProperty property, String name, String description, Consumer<PropertyEditor<?>> decorator) {

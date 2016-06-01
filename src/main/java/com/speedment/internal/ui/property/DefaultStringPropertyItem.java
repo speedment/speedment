@@ -16,8 +16,9 @@
  */
 package com.speedment.internal.ui.property;
 
+import static com.speedment.internal.ui.property.AbstractPropertyItem.defaultDecorator;
+import com.speedment.internal.ui.property.DefaultStringPropertyItem.DefaultStringPropertyEditor;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -29,37 +30,34 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
-import org.controlsfx.property.editor.PropertyEditor;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class DefaultStringPropertyItem extends AbstractPropertyItem<String, StringProperty> {
+public final class DefaultStringPropertyItem extends AbstractPropertyItem<String, StringProperty, DefaultStringPropertyEditor> {
 
     private final StringProperty textProperty;
     private final ObservableStringValue defaultValue;
 
     public DefaultStringPropertyItem(
-        StringProperty value,
-        ObservableStringValue defaultValue,
-        String name,
-        String description) {
+            StringProperty value,
+            ObservableStringValue defaultValue,
+            String name,
+            String description) {
 
-        super(value, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
+        super(value, name, description, defaultDecorator());
         this.textProperty = value;
         this.defaultValue = defaultValue;
     }
 
     public DefaultStringPropertyItem(
-        StringProperty value,
-        ObservableStringValue defaultValue,
-        String name,
-        String description,
-        Consumer<PropertyEditor<?>> decorator) {
+            StringProperty value,
+            ObservableStringValue defaultValue,
+            String name,
+            String description,
+            Consumer<DefaultStringPropertyEditor> decorator) {
 
         super(value, name, description, decorator);
         this.textProperty = value;
@@ -72,11 +70,11 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
     }
 
     @Override
-    protected PropertyEditor<?> createUndecoratedEditor() {
+    protected DefaultStringPropertyEditor createUndecoratedEditor() {
         return new DefaultStringPropertyEditor(this);
     }
 
-    private final static class DefaultStringPropertyEditor extends AbstractPropertyEditor<String, DefaultStringNode> {
+    public final static class DefaultStringPropertyEditor extends AbstractPropertyEditor<String, DefaultStringNode> {
 
         private DefaultStringPropertyEditor(DefaultStringPropertyItem item) {
             super(item, new DefaultStringNode(item.textProperty, item.defaultValue));
@@ -84,8 +82,7 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
 
         @Override
         protected ObservableValue<String> getObservableValue() {
-            //return getEditor().text.textProperty();
-            return new SimpleStringProperty(); // Hack to avoid round trip error
+            return getEditor().text.textProperty();
         }
 
         @Override
@@ -107,16 +104,14 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
         private DefaultStringNode(final StringProperty textProperty, final ObservableStringValue defaultValue) {
             this.textProperty = requireNonNull(textProperty); // Avoid Garbage Collection
             this.defaultValue = requireNonNull(defaultValue); // Avoid Garbage Collection
-            auto = new CheckBox("Auto");
-            text = new TextField();
-            enteredValue = new SimpleStringProperty();
+            this.auto         = new CheckBox("Auto");
+            this.text         = new TextField();
+            this.enteredValue = new SimpleStringProperty();
             init();
         }
 
         private void init() {
-
             final boolean sameAsDefault = isSameAsDefaultValue(textProperty);
-
             auto.selectedProperty().setValue(sameAsDefault);
 
             if (sameAsDefault) {
@@ -124,7 +119,7 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
                 text.textProperty().bind(defaultValue);
             } else {
                 enteredValue.setValue(textProperty.get());
-                text.textProperty().setValue(textProperty.get()); ///
+                text.textProperty().setValue(textProperty.get());
             }
 
             text.disableProperty().bind(auto.selectedProperty());
@@ -167,6 +162,5 @@ public final class DefaultStringPropertyItem extends AbstractPropertyItem<String
         private boolean isSameAsDefaultValue(StringProperty stringProperty) {
             return stringProperty.isEmpty().get() || Objects.equals(stringProperty.get(), defaultValue.get());
         }
-
     }
 }

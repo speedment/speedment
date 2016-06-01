@@ -35,7 +35,6 @@ import static com.speedment.internal.codegen.model.constant.DefaultAnnotationUsa
 import static com.speedment.internal.codegen.model.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.internal.codegen.model.constant.DefaultType.VOID;
 import com.speedment.internal.core.code.DefaultJavaClassTranslator;
-import static com.speedment.internal.core.code.DefaultJavaClassTranslator.GENERATED_JAVADOC_MESSAGE;
 import static com.speedment.internal.core.code.lifecycle.GeneratedSpeedmentApplicationMetadataTranslator.METADATA;
 import com.speedment.internal.core.runtime.SpeedmentApplicationLifecycle;
 import com.speedment.stream.MapStream;
@@ -120,7 +119,7 @@ public final class GeneratedSpeedmentApplicationTranslator extends DefaultJavaCl
     @Override
     protected Javadoc getJavaDoc() {
         final String owner = getSpeedment().getUserInterfaceComponent().getBrand().title();
-        return new JavadocImpl(getJavadocRepresentText() + GENERATED_JAVADOC_MESSAGE)
+        return new JavadocImpl(getJavadocRepresentText() + getGeneratedJavadocMessage())
             .add(AUTHOR.setValue(owner));
     }
     

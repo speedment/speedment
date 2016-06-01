@@ -22,6 +22,7 @@ import com.speedment.field.trait.ComparableFieldTrait;
 import com.speedment.field.trait.FieldTrait;
 import com.speedment.field.trait.ReferenceFieldTrait;
 import com.speedment.internal.core.runtime.AbstractLifecycle;
+import com.speedment.internal.util.Lazy;
 import com.speedment.manager.Manager;
 import com.speedment.stream.StreamDecorator;
 import static java.util.Objects.requireNonNull;
@@ -36,18 +37,17 @@ import java.util.stream.Stream;
 public abstract class AbstractManager<ENTITY> extends AbstractLifecycle<Manager<ENTITY>> implements Manager<ENTITY> {
 
     protected final Speedment speedment;
-
-    private final JsonEncoder<ENTITY> sharedJasonFormatter;
+    private final Lazy<JsonEncoder<ENTITY>> encoder;
 
     protected AbstractManager(Speedment speedment) {
         this.speedment = requireNonNull(speedment);
-        sharedJasonFormatter = JsonEncoder.allOf(this);
+        this.encoder   = Lazy.create();
     }
 
     @Override
     public String toJson(ENTITY entity) {
         requireNonNull(entity);
-        return sharedJasonFormatter.apply(entity);
+        return encoder.getOrCompute(() -> JsonEncoder.allOf(this)).apply(entity);
     }
 
     @Override

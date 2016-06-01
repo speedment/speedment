@@ -16,6 +16,7 @@
  */
 package com.speedment.internal.ui.property;
 
+import static com.speedment.internal.ui.property.AbstractPropertyItem.defaultDecorator;
 import java.util.function.Consumer;
 import javafx.beans.property.IntegerProperty;
 import org.controlsfx.property.editor.Editors;
@@ -25,10 +26,10 @@ import org.controlsfx.property.editor.PropertyEditor;
  *
  * @author Emil Forslund
  */
-public final class IntegerPropertyItem extends AbstractPropertyItem<Number, IntegerProperty> {
+public final class IntegerPropertyItem extends AbstractPropertyItem<Number, IntegerProperty, PropertyEditor<?>> {
 
     public IntegerPropertyItem(IntegerProperty value, String name, String description) {
-        super(value, name, description, AbstractPropertyItem.DEFAULT_DECORATOR);
+        super(value, name, description, defaultDecorator());
     }
     
     public IntegerPropertyItem(IntegerProperty value, String name, String description, Consumer<PropertyEditor<?>> decorator) {

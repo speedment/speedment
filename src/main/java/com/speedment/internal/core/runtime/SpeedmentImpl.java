@@ -49,8 +49,12 @@ import com.speedment.internal.core.platform.component.impl.ProjectComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ResultSetMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.TypeMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.UserInterfaceComponentImpl;
+import com.speedment.internal.logging.Level;
+import com.speedment.internal.logging.Logger;
+import com.speedment.internal.logging.LoggerManager;
 import static com.speedment.internal.util.Cast.castOrFail;
 import static com.speedment.internal.util.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import com.speedment.license.License;
 import com.speedment.manager.Manager;
 import java.util.Map.Entry;
 import static java.util.Objects.requireNonNull;
@@ -60,6 +64,7 @@ import java.util.stream.Stream;
 
 final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speedment {
 
+    private final Logger logger;
     private boolean unmodifiable;
     private ManagerComponent managerComponent;
     private ProjectComponent projectComponent;
@@ -77,6 +82,7 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     private DocumentPropertyComponent documentPropertyComponent;
 
     SpeedmentImpl() {
+        logger = LoggerManager.getLogger(SpeedmentImpl.class);
         put(ManagerComponentImpl::new);
         put(ProjectComponentImpl::new);
         put(PrimaryKeyFactoryComponentImpl::new);
@@ -100,8 +106,8 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
             return requireNonNull(super.get(iface));
         } catch (final NullPointerException ex) {
             throw new SpeedmentException(
-                "The specified component '" + iface.getSimpleName() + "' has " +
-                "not been installed in the Speedment platform.", ex
+                "The specified component '" + iface.getSimpleName() + "' has "
+                + "not been installed in the Speedment platform.", ex
             );
         }
     }
@@ -174,8 +180,26 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
     }
 
     @Override
+    protected <T extends Component> T put(T newItem, Function<Component, Class<?>> keyMapper) {
+        log("Added   ", newItem);
+        final T old = super.put(newItem, keyMapper);
+        if (old != null) {
+            log("Removed ", old);
+        }
+        return old;
+    }
+
+    @Override
     public void stop() {
-        // do nothing yet!
+        components()
+            .peek(c -> log("Stopping ", c))
+            .forEach(Component::stop);
+    }
+
+    private void log(String prefix, Component c) {
+        logger.debug(prefix + c.getComponentClass().getSimpleName() + " (" + c.getClass().getSimpleName() + ",  " + c.asSoftware().getVersion() + ") "
+            + (c.asSoftware().getLicense().getType() == License.Type.PROPRIETARY ? "Enterprise" : "")
+        );
     }
 
     public void setUnmodifiable() {
@@ -257,25 +281,30 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         final SpeedmentApplicationLifecycle<?> lifecycle = new DefaultSpeedmentApplicationLifecycle();
 
         stream().map(Entry::getValue)
-                .map(this::componentConstructor)
-                .forEach(lifecycle::with);
+            .map(this::componentConstructor)
+            .forEach(lifecycle::with);
 
         return lifecycle.build();
     }
-    
+
     @Override
     public String toString() {
-        return SpeedmentImpl.class.getSimpleName() + " " + 
-            components()
-                .map(Component::asSoftware)
-                .map(s -> s.getName() + "-" + s.getVersion())
-                .collect(joining(", ", "[", "]"));
+        return SpeedmentImpl.class.getSimpleName() + " "
+            + components()
+            .map(Component::asSoftware)
+            .map(s -> s.getName() + "-" + s.getVersion())
+            .collect(joining(", ", "[", "]"));
     }
 
-    private  ComponentConstructor<?> componentConstructor(Component component) {
-        
+    @Override
+    public void setLogLevel(Level level) {
+        logger.setLevel(requireNonNull(level));
+    }
+
+    private ComponentConstructor<?> componentConstructor(Component component) {
+
         return s -> component.defaultCopy(s);
-        
+
 //        @SuppressWarnings("unchecked")
 //        final Class<T> clazz = (Class<T>)component.getClass();
 //        return s -> {

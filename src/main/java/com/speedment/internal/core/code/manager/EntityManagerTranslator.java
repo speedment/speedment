@@ -36,8 +36,10 @@ public final class EntityManagerTranslator extends EntityAndManagerTranslator<In
 
     @Override
     protected Interface makeCodeGenModel(File file) {
-        return newBuilder(file, getSupport().managerName()).build()
-            .public_().add(getSupport().generatedManagerType());
+        return newBuilder(file, getSupport().managerName())
+            .forEveryTable((intf, table) -> {
+                intf.public_().add(getSupport().generatedManagerType());
+            }).build();
     }
     
     @Override
