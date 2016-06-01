@@ -18,11 +18,9 @@ package com.speedment.runtime.internal.entity;
 
 import com.speedment.runtime.entity.Entity;
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.manager.Manager;
 import static java.util.Objects.requireNonNull;
-import java.util.function.Consumer;
 
 /**
  * Abstract base class that makes it easier to implements the {@link Entity}
@@ -56,21 +54,6 @@ public abstract class AbstractBaseEntity<ENTITY> implements Entity<ENTITY> {
     @Override
     public ENTITY remove(Speedment speedment) throws SpeedmentException {
         return manager_(speedment).remove(selfAsEntity());
-    }
-
-    @Override
-    public ENTITY persist(Speedment speedment, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException {
-        return manager_(speedment).persist(selfAsEntity(), consumer);
-    }
-
-    @Override
-    public ENTITY update(Speedment speedment, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException {
-        return manager_(speedment).update(selfAsEntity(), consumer);
-    }
-
-    @Override
-    public ENTITY remove(Speedment speedment, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException {
-        return manager_(speedment).remove(selfAsEntity(), consumer);
     }
 
     @Override

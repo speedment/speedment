@@ -18,9 +18,7 @@ package com.speedment.runtime.entity;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.exception.SpeedmentException;
-import java.util.function.Consumer;
 
 /**
  * This interface contains the common methods that are the same for all
@@ -104,81 +102,4 @@ public interface Entity<ENTITY> {
      *                             (e.g. SQLException)
      */
     ENTITY remove(Speedment speedment) throws SpeedmentException;
-
-    /**
-     * Persists this entity to the underlying database and returns a potentially
-     * updated entity. If the persistence fails for any reason, an unchecked
-     * {@link SpeedmentException} is thrown.
-     * <p>
-     * It is unspecified if the returned updated entity is this entity instance
-     * or another entity instance. It is erroneous to assume either, so you
-     * should use only the returned entity after the method has been called.
-     * However, it is guaranteed that this entity is untouched if an exception
-     * is thrown.
-     * <p>
-     *      * The fields of returned entity instance may differ from this entity's
-     * fields due to auto generated column(s) or because of any other
-     * modification that the underlying database imposed on the persisted
-     * entity.
-     * <p>
-     * The {@link MetaResult} {@link Consumer} provided will be called, with
-     * meta data regarding the underlying database transaction, after the
-     * persistence was attempted.
-     *
-     * @param speedment            the speedment instance
-     * @param consumer             callback
-     * @return                     an entity reflecting the result of the persisted entity
-     * @throws SpeedmentException  if the underlying database throws an exception
-     *                             (e.g. SQLException)
-     */
-    ENTITY persist(Speedment speedment, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
-
-    /**
-     * Updates this entity in the underlying database and returns a potentially
-     * updated entity. If the update fails for any reason, an unchecked
-     * {@link SpeedmentException} is thrown.
-     * <p>
-     * It is unspecified if the returned updated entity is the same as this
-     * entity instance or another entity instance. It is erroneous to assume
-     * either, so you should use only the returned entity after the method has
-     * been called. However, it is guaranteed that this entity is untouched if
-     * an exception is thrown.
-     * <p>
-     * The fields of returned entity instance may differ from the provided
-     * entity fields due to auto generated column(s) or because of any other
-     * modification that the underlying database imposed on the persisted
-     * entity.
-     * <p>
-     * Entities are uniquely identified by their primary key(s).
-     * <p>
-     * The {@link MetaResult} {@link Consumer} provided will be called, with
-     * meta data regarding the underlying database transaction, after the update
-     * was attempted.
-     *
-     * @param speedment            the speedment instance
-     * @param consumer             callback
-     * @return                     an entity reflecting the result of the updated entity
-     * @throws SpeedmentException  if the underlying database throws an exception
-     *                             (e.g. SQLException)
-     */
-    ENTITY update(Speedment speedment, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
-
-    /**
-     * Removes the provided entity from the underlying database and returns this
-     * entity instance. If the deletion fails for any reason, an unchecked
-     * {@link SpeedmentException} is thrown.
-     * <p>
-     * Entities are uniquely identified by their primary key(s).
-     * <p>
-     * The {@link MetaResult} {@link Consumer} provided will be called, with
-     * meta data regarding the underlying database transaction, after the
-     * removal was attempted.
-     *
-     * @param speedment            the speedment instance
-     * @param consumer             callback
-     * @return                     the provided entity instance
-     * @throws SpeedmentException  if the underlying database throws an exception
-     *                             (e.g. SQLException)
-     */
-    ENTITY remove(Speedment speedment, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
 }
