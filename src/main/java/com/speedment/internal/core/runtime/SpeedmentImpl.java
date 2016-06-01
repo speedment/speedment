@@ -49,6 +49,8 @@ import com.speedment.internal.core.platform.component.impl.ProjectComponentImpl;
 import com.speedment.internal.core.platform.component.impl.ResultSetMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.TypeMapperComponentImpl;
 import com.speedment.internal.core.platform.component.impl.UserInterfaceComponentImpl;
+import com.speedment.internal.logging.Logger;
+import com.speedment.internal.logging.LoggerManager;
 import static com.speedment.internal.util.Cast.castOrFail;
 import static com.speedment.internal.util.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import com.speedment.manager.Manager;
@@ -59,6 +61,8 @@ import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 
 final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speedment {
+
+    private static final Logger LOGGER = LoggerManager.getLogger(SpeedmentImpl.class);
 
     private boolean unmodifiable;
     private ManagerComponent managerComponent;
@@ -100,8 +104,8 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
             return requireNonNull(super.get(iface));
         } catch (final NullPointerException ex) {
             throw new SpeedmentException(
-                "The specified component '" + iface.getSimpleName() + "' has " +
-                "not been installed in the Speedment platform.", ex
+                "The specified component '" + iface.getSimpleName() + "' has "
+                + "not been installed in the Speedment platform.", ex
             );
         }
     }
@@ -175,7 +179,10 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
 
     @Override
     public void stop() {
-        // do nothing yet!
+        stream()
+            .map(Entry::getValue)
+            .peek(c -> LOGGER.info("Stopping " + c.getComponentClass() + " (" + c.getClass().getSimpleName() + ") " + c.asSoftware().getName()))
+            .forEach(Component::stop);
     }
 
     public void setUnmodifiable() {
@@ -257,25 +264,25 @@ final class SpeedmentImpl extends DefaultClassMapper<Component> implements Speed
         final SpeedmentApplicationLifecycle<?> lifecycle = new DefaultSpeedmentApplicationLifecycle();
 
         stream().map(Entry::getValue)
-                .map(this::componentConstructor)
-                .forEach(lifecycle::with);
+            .map(this::componentConstructor)
+            .forEach(lifecycle::with);
 
         return lifecycle.build();
     }
-    
+
     @Override
     public String toString() {
-        return SpeedmentImpl.class.getSimpleName() + " " + 
-            components()
-                .map(Component::asSoftware)
-                .map(s -> s.getName() + "-" + s.getVersion())
-                .collect(joining(", ", "[", "]"));
+        return SpeedmentImpl.class.getSimpleName() + " "
+            + components()
+            .map(Component::asSoftware)
+            .map(s -> s.getName() + "-" + s.getVersion())
+            .collect(joining(", ", "[", "]"));
     }
 
-    private  ComponentConstructor<?> componentConstructor(Component component) {
-        
+    private ComponentConstructor<?> componentConstructor(Component component) {
+
         return s -> component.defaultCopy(s);
-        
+
 //        @SuppressWarnings("unchecked")
 //        final Class<T> clazz = (Class<T>)component.getClass();
 //        return s -> {
