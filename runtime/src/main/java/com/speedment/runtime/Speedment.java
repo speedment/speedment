@@ -33,6 +33,7 @@ import com.speedment.runtime.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.manager.Manager;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -49,7 +50,8 @@ import java.util.stream.Stream;
 public interface Speedment {
 
     /**
-     * Gets a {@link Speedment} {@link Component} based on its interface class.
+     * Gets a {@link Speedment} {@link Component} based on its interface class. If it does not 
+     * exist, an exception is thrown.
      * <p>
      * The supported standard interfaces types are:
      * <ul>
@@ -71,7 +73,17 @@ public interface Speedment {
      * @param interfaceClass The interface class of the intended return type
      * @return The currently mapped instance
      */
-    <R extends Component> R get(Class<R> interfaceClass);
+    <R extends Component> R getOrThrow(Class<R> interfaceClass) throws SpeedmentException;
+    
+    /**
+     * Gets a {@link Speedment} {@link Component} based on its interface class. If it does not 
+     * exist, an empty {@code Optional} is returned.
+     *
+     * @param <R> The intended return type
+     * @param interfaceClass The interface class of the intended return type
+     * @return The currently mapped instance
+     */
+    <R extends Component> Optional<R> get(Class<R> interfaceClass);
 
     /**
      * Puts a new Component in the Speedment platform and returns the previous
@@ -143,7 +155,7 @@ public interface Speedment {
      * @return  the {@link EntityManager}
      */
     default EntityManager getEntityManager() {
-        return get(EntityManager.class);
+        return getOrThrow(EntityManager.class);
     }
 
     /**
@@ -152,7 +164,7 @@ public interface Speedment {
      * @return  the {@link DbmsHandlerComponent}
      */
     default DbmsHandlerComponent getDbmsHandlerComponent() {
-        return get(DbmsHandlerComponent.class);
+        return getOrThrow(DbmsHandlerComponent.class);
     }
 
     /**
@@ -161,7 +173,7 @@ public interface Speedment {
      * @return  the {@link ManagerComponent}
      */
     default ManagerComponent getManagerComponent() {
-        return get(ManagerComponent.class);
+        return getOrThrow(ManagerComponent.class);
     }
 
     /**
@@ -170,7 +182,7 @@ public interface Speedment {
      * @return  the {@link PrimaryKeyFactoryComponent}
      */
     default PrimaryKeyFactoryComponent getPrimaryKeyFactoryComponent() {
-        return get(PrimaryKeyFactoryComponent.class);
+        return getOrThrow(PrimaryKeyFactoryComponent.class);
     }
 
     /**
@@ -179,7 +191,7 @@ public interface Speedment {
      * @return  the {@link ProjectComponent}
      */
     default ProjectComponent getProjectComponent() {
-        return get(ProjectComponent.class);
+        return getOrThrow(ProjectComponent.class);
     }
 
     /**
@@ -188,7 +200,7 @@ public interface Speedment {
      * @return  the {@link ResultSetMapperComponent}
      */
     default ResultSetMapperComponent getResultSetMapperComponent() {
-        return get(ResultSetMapperComponent.class);
+        return getOrThrow(ResultSetMapperComponent.class);
     }
 
     /**
@@ -197,7 +209,7 @@ public interface Speedment {
      * @return  the {@link ConnectionPoolComponent}
      */
     default ConnectionPoolComponent getConnectionPoolComponent() {
-        return get(ConnectionPoolComponent.class);
+        return getOrThrow(ConnectionPoolComponent.class);
     }
 
     /**
@@ -206,7 +218,7 @@ public interface Speedment {
      * @return  the {@link StreamSupplierComponent}
      */
     default StreamSupplierComponent getStreamSupplierComponent() {
-        return get(StreamSupplierComponent.class);
+        return getOrThrow(StreamSupplierComponent.class);
     }
 
     /**
@@ -215,7 +227,7 @@ public interface Speedment {
      * @return  the {@link TypeMapperComponent}
      */
     default TypeMapperComponent getTypeMapperComponent() {
-        return get(TypeMapperComponent.class);
+        return getOrThrow(TypeMapperComponent.class);
     }
 
     /**
@@ -224,7 +236,7 @@ public interface Speedment {
      * @return  the {@link EventComponent}
      */
     default EventComponent getEventComponent() {
-        return get(EventComponent.class);
+        return getOrThrow(EventComponent.class);
     }
     
     /**
@@ -233,7 +245,7 @@ public interface Speedment {
      * @return  the {@link PasswordComponent}
      */
     default PasswordComponent getPasswordComponent() {
-        return get(PasswordComponent.class);
+        return getOrThrow(PasswordComponent.class);
     }
     
     /**
@@ -242,6 +254,6 @@ public interface Speedment {
      * @return  the {@link InfoComponent}
      */
     default InfoComponent getInfoComponent() {
-        return get(InfoComponent.class);
+        return getOrThrow(InfoComponent.class);
     }
 }

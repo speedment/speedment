@@ -57,7 +57,7 @@ public final class ToolbarController implements Initializable {
         buttonGenerate.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.PLAY_CIRCLE, ICON_SIZE));
 
         final Brand uiBrand = session.getSpeedment()
-            .get(UserInterfaceComponent.class)
+            .getOrThrow(UserInterfaceComponent.class)
             .getBrand();
         
         uiBrand.logoLarge()

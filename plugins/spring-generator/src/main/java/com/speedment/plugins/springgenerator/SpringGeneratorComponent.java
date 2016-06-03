@@ -46,7 +46,7 @@ public final class SpringGeneratorComponent extends AbstractComponent {
     @Override
     public void onResolve() {
         final CodeGenerationComponent code = 
-            getSpeedment().get(CodeGenerationComponent.class);
+            getSpeedment().getOrThrow(CodeGenerationComponent.class);
         
         code.put(Project.class, 
             SpringTranslatorKey.CONFIGURATION, 

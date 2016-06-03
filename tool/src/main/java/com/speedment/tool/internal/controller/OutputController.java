@@ -45,7 +45,7 @@ public final class OutputController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         Bindings.bindContent(
             output.getChildren(), 
-            session.getSpeedment().get(UserInterfaceComponent.class).getOutputMessages()
+            session.getSpeedment().getOrThrow(UserInterfaceComponent.class).getOutputMessages()
         );
     }
     

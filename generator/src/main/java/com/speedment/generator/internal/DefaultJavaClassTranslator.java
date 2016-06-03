@@ -104,7 +104,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
         this.generator = requireNonNull(generator);
         this.document = requireNonNull(document);
         this.mainModelConstructor = requireNonNull(constructor);
-        this.javaLanguageNamer = speedment.get(CodeGenerationComponent.class).javaLanguageNamer();
+        this.javaLanguageNamer = speedment.getOrThrow(CodeGenerationComponent.class).javaLanguageNamer();
         this.listeners = new CopyOnWriteArrayList<>();
         this.support = new TranslatorSupport<>(speedment, document);
     }

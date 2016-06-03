@@ -57,7 +57,7 @@ public class NotificationAreaController implements Initializable {
         animator.observe(notificationArea.getChildren());
         
         final ObservableList<Notification> notifications = session.getSpeedment()
-                .get(UserInterfaceComponent.class)
+                .getOrThrow(UserInterfaceComponent.class)
                 .getNotifications();
         
         notifications.addListener((ListChangeListener.Change<? extends Notification> change) -> {

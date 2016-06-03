@@ -297,7 +297,7 @@ public final class ComponentsController implements Initializable {
         });
         
         final UserInterfaceComponent ui = session.getSpeedment()
-            .get(UserInterfaceComponent.class);
+            .getOrThrow(UserInterfaceComponent.class);
         
         final Brand brand = ui.getBrand();
         final Scene scene = new Scene(root);

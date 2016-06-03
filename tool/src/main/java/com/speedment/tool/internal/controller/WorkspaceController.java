@@ -53,7 +53,7 @@ public final class WorkspaceController implements Initializable {
         this.properties = FXCollections.observableArrayList();
         
         final UserInterfaceComponent ui = session.getSpeedment()
-            .get(UserInterfaceComponent.class);
+            .getOrThrow(UserInterfaceComponent.class);
         
         ui.getSelectedTreeItems()
             .addListener((ListChangeListener.Change<? extends TreeItem<DocumentProperty>> change) -> {
@@ -96,7 +96,7 @@ public final class WorkspaceController implements Initializable {
         workspace.setContent(sheet);
         
         Bindings.bindContentBidirectional(
-            session.getSpeedment().get(UserInterfaceComponent.class).getProperties(), 
+            session.getSpeedment().getOrThrow(UserInterfaceComponent.class).getProperties(), 
             properties
         );
     }

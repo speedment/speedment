@@ -63,7 +63,7 @@ public abstract class DefaultClassMapper<V> implements ClassMapper<V> {
 
     @SuppressWarnings("unchecked") // Must be same type!
     @Override
-    public <R extends V> R get(Class<R> clazz) {
+    public <R extends V> R getOrThrow(Class<R> clazz) {
         requireNonNull(clazz);
         return (R) map.get(clazz);
     }

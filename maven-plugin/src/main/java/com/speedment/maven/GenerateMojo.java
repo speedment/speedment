@@ -53,7 +53,7 @@ public final class GenerateMojo extends AbstractSpeedmentMojo {
                 final Project p = DocumentTranscoder.load(configFile.toPath());
                 final Project immutableProject = ImmutableProject.wrap(p);
                 speedment.getProjectComponent().setProject(immutableProject);
-                speedment.get(CodeGenerationComponent.class)
+                speedment.getOrThrow(CodeGenerationComponent.class)
                     .getTranslatorManager()
                     .accept(immutableProject);
             } catch (SpeedmentException ex) {

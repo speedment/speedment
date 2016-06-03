@@ -89,7 +89,7 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
     }
 
     public StringBinding defaultPackageNameProperty(Speedment speedment) {
-        final JavaLanguageNamer namer = speedment.get(CodeGenerationComponent.class).javaLanguageNamer();
+        final JavaLanguageNamer namer = speedment.getOrThrow(CodeGenerationComponent.class).javaLanguageNamer();
         return Bindings.createStringBinding(
             () -> Project.DEFAULT_PACKAGE_NAME + namer.javaPackageName(getCompanyName()),
             companyNameProperty()

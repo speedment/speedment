@@ -65,7 +65,7 @@ public class DocumentPropertyComponentImplTest {
             .withCheckDatabaseConnectivity(false)
             .withValidateRuntimeConfig(false)
             .build();
-        component = speedment.get(DocumentPropertyComponent.class);
+        component = speedment.getOrThrow(DocumentPropertyComponent.class);
     }
 
     @Test

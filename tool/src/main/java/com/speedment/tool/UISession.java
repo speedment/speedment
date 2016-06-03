@@ -157,9 +157,9 @@ public final class UISession {
         this.defaultConfigLocation = requireNonNull(defaultConfigLocation);
         this.project = new ProjectProperty();
         this.propertySheetFactory = new PropertySheetFactory();
-        this.notifications = speedment.get(UserInterfaceComponent.class).getNotifications();
+        this.notifications = speedment.getOrThrow(UserInterfaceComponent.class).getNotifications();
 
-        speedment.get(UserInterfaceComponent.class).setUISession(this);
+        speedment.getOrThrow(UserInterfaceComponent.class).setUISession(this);
 
         if (project != null) {
             this.project.merge(speedment, project);
@@ -293,10 +293,10 @@ public final class UISession {
             saveConfigFile(currentlyOpenFile);
 
             final Stopwatch stopwatch = Stopwatch.createStarted();
-            log(info("Generating classes " + speedment.get(CodeGenerationComponent.class).javaLanguageNamer().findPackageName(project) + "." + project.getName() + ".*"));
+            log(info("Generating classes " + speedment.getOrThrow(CodeGenerationComponent.class).javaLanguageNamer().findPackageName(project) + "." + project.getName() + ".*"));
             log(info("Target directory is " + project.getPackageLocation()));
 
-            final TranslatorManager instance = speedment.get(CodeGenerationComponent.class).getTranslatorManager();
+            final TranslatorManager instance = speedment.getOrThrow(CodeGenerationComponent.class).getTranslatorManager();
 
             final Project immutableProject = ImmutableProject.wrap(project);
             speedment.getProjectComponent().setProject(immutableProject);
@@ -431,7 +431,7 @@ public final class UISession {
         final Scene scene = alert.getDialogPane().getScene();
 
         speedment
-            .get(UserInterfaceComponent.class)
+            .getOrThrow(UserInterfaceComponent.class)
             .stylesheetFiles()
             .forEachOrdered(scene.getStylesheets()::add);
 
@@ -483,7 +483,7 @@ public final class UISession {
         Brand.apply(this, scene);
 
         speedment
-            .get(UserInterfaceComponent.class)
+            .getOrThrow(UserInterfaceComponent.class)
             .stylesheetFiles()
             .forEachOrdered(scene.getStylesheets()::add);
 
@@ -507,7 +507,7 @@ public final class UISession {
         Brand.apply(this, scene);
 
         speedment
-            .get(UserInterfaceComponent.class)
+            .getOrThrow(UserInterfaceComponent.class)
             .stylesheetFiles()
             .forEachOrdered(scene.getStylesheets()::add);
 
@@ -841,11 +841,11 @@ public final class UISession {
     }
 
     public void clearLog() {
-        speedment.get(UserInterfaceComponent.class).getOutputMessages().clear();
+        speedment.getOrThrow(UserInterfaceComponent.class).getOutputMessages().clear();
     }
 
     public void log(Label line) {
-        speedment.get(UserInterfaceComponent.class).getOutputMessages().add(line);
+        speedment.getOrThrow(UserInterfaceComponent.class).getOutputMessages().add(line);
     }
 
     @SuppressWarnings("unchecked")

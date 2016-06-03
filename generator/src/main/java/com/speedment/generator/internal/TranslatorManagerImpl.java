@@ -32,7 +32,6 @@ import com.speedment.common.codegen.internal.util.Formatting;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
-import com.speedment.generator.event.FileGenerated;
 import com.speedment.runtime.internal.util.Statistics;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import java.io.IOException;
@@ -82,7 +81,7 @@ public class TranslatorManagerImpl implements TranslatorManager {
 
         speedment.getEventComponent().notify(new BeforeGenerate(project, gen, this));
 
-        final CodeGenerationComponent cgc = speedment.get(CodeGenerationComponent.class);
+        final CodeGenerationComponent cgc = speedment.getOrThrow(CodeGenerationComponent.class);
 
         cgc.translators(project)
             .forEachOrdered(t -> {

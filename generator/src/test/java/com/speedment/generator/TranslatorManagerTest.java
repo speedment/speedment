@@ -16,9 +16,6 @@
  */
 package com.speedment.generator;
 
-import com.speedment.generator.StandardTranslatorKey;
-import com.speedment.generator.Translator;
-import com.speedment.generator.TranslatorManager;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.common.codegen.Meta;
@@ -54,13 +51,13 @@ public class TranslatorManagerTest extends SimpleModel {
     @Test
     public void testPreview() {
 
-        final Translator<Table, Interface> translator = speedment.get(CodeGenerationComponent.class)
+        final Translator<Table, Interface> translator = speedment.getOrThrow(CodeGenerationComponent.class)
             .findTranslator(table, StandardTranslatorKey.GENERATED_ENTITY);
 
         final String code = translator.toCode();
         //System.out.println(code);
 
-        final JavaLanguageNamer javaLanguageNamer = speedment.get(CodeGenerationComponent.class).javaLanguageNamer();
+        final JavaLanguageNamer javaLanguageNamer = speedment.getOrThrow(CodeGenerationComponent.class).javaLanguageNamer();
 
         assertTrue(code.contains(javaLanguageNamer.javaVariableName(table.getName())));
         assertTrue(code.contains(javaLanguageNamer.javaTypeName(table.getName())));

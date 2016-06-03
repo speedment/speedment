@@ -42,14 +42,14 @@ public interface ClassMapper<V> {
     V put(V item);
 
     /**
-     * Puts a new mapping and returns the mapping for the given class, or null
-     * if no mapping exists.
+     * Puts a new mapping and returns the mapping for the given class, or throws 
+     * an exception if no mapping exists.
      *
      * @param <R> The class type
      * @param clazz the class to use
      * @return the mapping for the given class, or null if no mapping exists
      */
-    public <R extends V> R get(Class<R> clazz);
+    public <R extends V> R getOrThrow(Class<R> clazz);
 
     /**
      * Returns a {@link Stream} of all mappings that exists.

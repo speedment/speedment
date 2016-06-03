@@ -56,6 +56,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -86,16 +87,18 @@ public abstract class AbstractSpeedment extends DefaultClassMapper<Component> im
     }
     
     @Override
-    public <R extends Component> R get(Class<R> iface) {
+    public <R extends Component> R getOrThrow(Class<R> iface) throws SpeedmentException {
         requireNonNull(iface);
-        try {
-            return requireNonNull(super.get(iface));
-        } catch (final NullPointerException ex) {
-            throw new SpeedmentException(
-                "The specified component '" + iface.getSimpleName() + "' has " +
-                "not been installed in the platform.", ex
-            );
-        }
+        return get(iface).orElseThrow(() -> new SpeedmentException(
+            "The specified component '" + iface.getSimpleName() + "' has " +
+            "not been installed in the platform."
+        ));
+    }
+    
+    @Override
+    public <R extends Component> Optional<R> get(Class<R> iface) {
+        requireNonNull(iface);
+        return Optional.ofNullable(super.getOrThrow(iface));
     }
     
     protected final void setUnmodifiable() { // TODO Can we do this in some better way?

@@ -74,7 +74,7 @@ public interface Brand {
     static void apply(UISession session, Scene scene) {
         final Stage stage = session.getStage();
         final Brand brand = session.getSpeedment()
-            .get(UserInterfaceComponent.class)
+            .getOrThrow(UserInterfaceComponent.class)
             .getBrand();
 
         stage.setTitle(session.getSpeedment().getInfoComponent().title());
@@ -91,7 +91,7 @@ public interface Brand {
             });
 
         session.getSpeedment()
-            .get(UserInterfaceComponent.class)
+            .getOrThrow(UserInterfaceComponent.class)
             .stylesheetFiles()
             .forEachOrdered(scene.getStylesheets()::add);
     }

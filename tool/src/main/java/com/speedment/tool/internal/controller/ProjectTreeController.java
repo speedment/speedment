@@ -73,7 +73,7 @@ public final class ProjectTreeController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        final UserInterfaceComponent ui = session.getSpeedment().get(UserInterfaceComponent.class);
+        final UserInterfaceComponent ui = session.getSpeedment().getOrThrow(UserInterfaceComponent.class);
         
         ui.installContextMenu(ProjectProperty.class,    this::createDefaultContextMenu);
         ui.installContextMenu(DbmsProperty.class,       this::createDefaultContextMenu);
@@ -88,7 +88,7 @@ public final class ProjectTreeController implements Initializable {
     private void prepareTree(ProjectProperty project) {
         requireNonNull(project);
         
-        final UserInterfaceComponent ui = session.getSpeedment().get(UserInterfaceComponent.class);
+        final UserInterfaceComponent ui = session.getSpeedment().getOrThrow(UserInterfaceComponent.class);
         final EventComponent events     = session.getSpeedment().getEventComponent();
         
         events.notify(new ProjectLoaded(project));

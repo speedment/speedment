@@ -256,7 +256,7 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         final JavaLanguageNamer namer = new DefaultApplicationBuilder()
             .with(CodeGenerationComponentImpl::new)
             .build()
-            .get(CodeGenerationComponent.class)
+            .getOrThrow(CodeGenerationComponent.class)
             .javaLanguageNamer();
 
         assertEquals("Check project java name: ", "project", DocumentUtil.relativeName(project, Project.class, JAVA_NAME, ".", namer::javaPackageName));

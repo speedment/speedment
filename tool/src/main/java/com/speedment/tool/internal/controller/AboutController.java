@@ -68,7 +68,7 @@ public final class AboutController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         final InfoComponent info = session.getSpeedment().getInfoComponent();
-        final Brand brand = session.getSpeedment().get(UserInterfaceComponent.class).getBrand();
+        final Brand brand = session.getSpeedment().getOrThrow(UserInterfaceComponent.class).getBrand();
         brand.logoLarge().map(Image::new).ifPresent(titleImage::setImage);
         
         license.setText(license.getText().replace("{title}", info.title()));
@@ -104,11 +104,11 @@ public final class AboutController implements Initializable {
         });
         
         final InfoComponent info = session.getSpeedment().getInfoComponent();
-        final Brand brand = session.getSpeedment().get(UserInterfaceComponent.class).getBrand();
+        final Brand brand = session.getSpeedment().getOrThrow(UserInterfaceComponent.class).getBrand();
         
         final Scene scene  = new Scene(root);
         session.getSpeedment()
-            .get(UserInterfaceComponent.class)
+            .getOrThrow(UserInterfaceComponent.class)
             .stylesheetFiles()
             .forEachOrdered(scene.getStylesheets()::add);
         

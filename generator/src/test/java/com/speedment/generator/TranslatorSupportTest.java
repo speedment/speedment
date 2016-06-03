@@ -21,7 +21,6 @@
  */
 package com.speedment.generator;
 
-import com.speedment.generator.TranslatorSupport;
 import com.speedment.runtime.config.Table;
 import com.speedment.generator.component.CodeGenerationComponent;
 import java.util.Optional;
@@ -70,7 +69,7 @@ public class TranslatorSupportTest extends SimpleModel {
 
     @Test
     public void testNamer() {
-        assertEquals(speedment.get(CodeGenerationComponent.class).javaLanguageNamer(), instance.namer());
+        assertEquals(speedment.getOrThrow(CodeGenerationComponent.class).javaLanguageNamer(), instance.namer());
     }
 
     @Test

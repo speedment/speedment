@@ -63,7 +63,7 @@ public final class ReactorComponent extends AbstractComponent {
     public void onResolve() {
         super.onResolve();
         
-        final CodeGenerationComponent code = getSpeedment().get(CodeGenerationComponent.class);
+        final CodeGenerationComponent code = getSpeedment().getOrThrow(CodeGenerationComponent.class);
         code.add(Project.class, StandardTranslatorKey.GENERATED_APPLICATION, new GeneratedApplicationDecorator());
         code.add(Project.class, StandardTranslatorKey.GENERATED_APPLICATION_IMPL, new GeneratedApplicationImplDecorator());
         
@@ -72,7 +72,7 @@ public final class ReactorComponent extends AbstractComponent {
         code.put(Table.class, ReactorTranslatorKey.GENERATED_ENTITY_VIEW, GeneratedViewTranslator::new);
         code.put(Table.class, ReactorTranslatorKey.GENERATED_ENTITY_VIEW_IMPL, GeneratedViewImplTranslator::new);
         
-        final UserInterfaceComponent ui = getSpeedment().get(UserInterfaceComponent.class);
+        final UserInterfaceComponent ui = getSpeedment().getOrThrow(UserInterfaceComponent.class);
         final EventComponent events = getSpeedment().getEventComponent();
         
         events.on(TreeSelectionChange.class, ev -> {

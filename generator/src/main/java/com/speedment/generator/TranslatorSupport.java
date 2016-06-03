@@ -69,7 +69,7 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
     }
     
     public JavaLanguageNamer namer() {
-        return speedment.get(CodeGenerationComponent.class).javaLanguageNamer();
+        return speedment.getOrThrow(CodeGenerationComponent.class).javaLanguageNamer();
     }
     
     protected DOC document() {

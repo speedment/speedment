@@ -42,7 +42,7 @@ public final class BrandUtil {
     
     public static void applyBrandToStage(Speedment speedment, Stage stage) {
         final InfoComponent info = speedment.getInfoComponent();
-        final UserInterfaceComponent ui = speedment.get(UserInterfaceComponent.class);
+        final UserInterfaceComponent ui = speedment.getOrThrow(UserInterfaceComponent.class);
         final Brand brand = ui.getBrand();
         
         stage.setTitle(info.title());
@@ -52,7 +52,7 @@ public final class BrandUtil {
     }
     
     public static void applyBrandToScene(Speedment speedment, Scene scene) {
-        final UserInterfaceComponent ui = speedment.get(UserInterfaceComponent.class);
+        final UserInterfaceComponent ui = speedment.getOrThrow(UserInterfaceComponent.class);
         ui.stylesheetFiles()
             .forEachOrdered(scene.getStylesheets()::add);
     }
