@@ -56,8 +56,7 @@ public final class GeneratedEntityManagerTranslator extends EntityAndManagerTran
                     .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
                     .add(Method.of("getTable", Type.of(Table.class)).default_().add(OVERRIDE)
                         .add("return speedment()"
-                            + ".get(" + ProjectComponent.class.getSimpleName()
-                            + ".class).getProject().findTableByName(\""
+                            + ".getProjectComponent().getProject().findTableByName(\""
                             + relativeName(getSupport().tableOrThrow(), Dbms.class, DATABASE_NAME) + "\");"
                         )
                     )
