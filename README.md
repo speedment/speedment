@@ -167,7 +167,7 @@ To set which database connector you want to use to communicate with your databas
 #### MySQL
 ```xml
 <properties>
-    <speedment.version>2.3.3</speedment.version>
+    <speedment.version>2.4.0</speedment.version>
 	<db.groupId>mysql</db.groupId>
 	<db.artifactId>mysql-connector-java</db.artifactId>
 	<db.version>5.1.38</db.version>
@@ -177,7 +177,7 @@ To set which database connector you want to use to communicate with your databas
 #### PostgreSQL
 ```xml
 <properties>
-    <speedment.version>2.3.3</speedment.version>
+    <speedment.version>2.4.0</speedment.version>
 	<db.groupId>org.postgresql</db.groupId>
 	<db.artifactId>postgresql</db.artifactId>
 	<db.version>9.4-1206-jdbc4</db.version>
@@ -187,7 +187,7 @@ To set which database connector you want to use to communicate with your databas
 #### MariaDB
 ```xml
 <properties>
-    <speedment.version>2.3.3</speedment.version>
+    <speedment.version>2.4.0</speedment.version>
 	<db.groupId>org.mariadb.jdbc</db.groupId>
 	<db.artifactId>mariadb-java-client</db.artifactId>
 	<db.version>1.4.0</db.version>
