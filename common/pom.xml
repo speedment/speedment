@@ -38,8 +38,10 @@
     </description>
 	
     <modules>
+        <module>json</module>
         <module>logger</module>
         <module>mapstream</module>
         <module>codegen</module>
+        <module>codegenxml</module>
     </modules>
 </project>

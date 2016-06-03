@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.util.json;
+package com.speedment.common.json;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * A special form of exception that is thrown when parsing of a json file fails.
  * 
  * @author Emil Forslund
- * @since  2.4.0
+ * @since  1.0.0
  */
 public final class JsonSyntaxException extends RuntimeException {
 

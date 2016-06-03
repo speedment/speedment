@@ -16,11 +16,11 @@
  */
 package com.speedment.runtime.internal.util.document;
 
+import com.speedment.common.json.Json;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.config.ProjectImpl;
-import com.speedment.runtime.internal.util.json.Json;
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

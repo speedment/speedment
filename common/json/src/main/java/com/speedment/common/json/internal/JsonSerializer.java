@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.util.json;
+package com.speedment.common.json.internal;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -26,22 +26,22 @@ import static java.util.Objects.requireNonNull;
  * An internal class that can serialize java objects into JSON code.
  * 
  * @author Emil Forslund
- * @since  2.4.0
+ * @since  1.0.0
  */
-final class JsonSerializer {
+public final class JsonSerializer {
     
     private final OutputStream out;
     private final boolean pretty;
     private final int tabSize;
     private int level = 0;
     
-    JsonSerializer(OutputStream out, boolean pretty) {
+    public JsonSerializer(OutputStream out, boolean pretty) {
         this.out     = requireNonNull(out);
         this.pretty  = pretty;
         this.tabSize = pretty ? PRETTY_TAB_SIZE : 0;
     }
     
-    void print(Object unknown) throws IOException {
+    public void print(Object unknown) throws IOException {
         if (unknown == null) {
             printNull();
         } else {

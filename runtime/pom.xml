@@ -87,6 +87,12 @@
         </dependency>
         
         <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>json</artifactId>
+            <version>${json.version}</version>
+        </dependency>
+        
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>

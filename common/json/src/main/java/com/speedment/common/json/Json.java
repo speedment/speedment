@@ -14,10 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.util.json;
+package com.speedment.common.json;
 
-import com.speedment.runtime.exception.SpeedmentException;
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
+import com.speedment.common.json.internal.JsonDeserializer;
+import com.speedment.common.json.internal.JsonSerializer;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -31,7 +31,7 @@ import java.nio.charset.StandardCharsets;
  * JSON is parsed using the {@code RFC 7159} specification.
  * 
  * @author Emil Forslund
- * @since  2.4.0
+ * @since  1.0.0
  */
 public final class Json {
     
@@ -63,7 +63,7 @@ public final class Json {
             toJson(object, out);
             return new String(out.toByteArray(), StandardCharsets.UTF_8);
         } catch (final IOException ex) {
-            throw new SpeedmentException(
+            throw new RuntimeException(
                 "Error in internal toString()-stream.", ex
             );
         }
@@ -149,7 +149,5 @@ public final class Json {
     /**
      * Utility classes should never be instantiated.
      */
-    private Json() {
-        instanceNotAllowed(getClass());
-    }
+    private Json() {}
 }

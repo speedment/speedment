@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.util.json;
+package com.speedment.common.json.internal;
 
+import com.speedment.common.json.JsonSyntaxException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -38,9 +39,9 @@ import java.util.function.Consumer;
  * have errors.
  * 
  * @author Emil Forslund
- * @since  2.4.0
+ * @since  1.0.0
  */
-final class JsonDeserializer implements AutoCloseable {
+public final class JsonDeserializer implements AutoCloseable {
     
     private final static String ENCODING = "UTF-8";
     private final static int TAB_SIZE = 4;
@@ -51,7 +52,7 @@ final class JsonDeserializer implements AutoCloseable {
     
     private int character;
     
-    JsonDeserializer(InputStream in) throws UnsupportedEncodingException {
+    public JsonDeserializer(InputStream in) throws UnsupportedEncodingException {
         reader = new InputStreamReader(in, ENCODING);
         row = new AtomicLong(0);
         col = new AtomicLong(0);
@@ -63,7 +64,7 @@ final class JsonDeserializer implements AutoCloseable {
         NOT_DECIDED
     }
     
-    Object get() throws IOException {
+    public Object get() throws IOException {
         switch (nextNonBlankspace()) {
             case 0x7B : // { (begin parsing object)
                 return parseObject();
