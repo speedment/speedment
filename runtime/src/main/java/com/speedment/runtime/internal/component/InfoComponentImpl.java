@@ -31,6 +31,11 @@ public final class InfoComponentImpl extends InternalOpenSourceComponent
     public InfoComponentImpl(Speedment speedment) {
         super(speedment);
     }
+    
+    @Override
+    protected String getDescription() {
+        return "Sets the name, description and version of Speedment to show in the UI.";
+    }
 
     @Override
     public String title() {

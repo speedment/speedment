@@ -20,6 +20,7 @@ import com.speedment.runtime.license.License;
 import com.speedment.runtime.license.Software;
 import java.util.Objects;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -30,18 +31,23 @@ public abstract class AbstractSoftware implements Software {
     
     private final String name;
     private final String version;
+    private final String description; // Can be null.
     private final License license;
     private final boolean internal;
     
     public static Software with(String name, String version, License license, Software... dependencies) {
-        return with(name, version, license, false, dependencies);
+        return with(name, version, null, license, false, dependencies);
     }
     
-    public static Software with(String name, String version, License license, boolean internal, Software... dependencies) {
+    public static Software with(String name, String version, String description, License license, Software... dependencies) {
+        return with(name, version, description, license, false, dependencies);
+    }
+    
+    public static Software with(String name, String version, String description, License license, boolean internal, Software... dependencies) {
         if (dependencies.length == 0) {
-            return new SoftwareLeaf(name, version, license, internal);
+            return new SoftwareLeaf(name, version, description, license, internal);
         } else {
-            return new SoftwareBranch(name, version, license, internal, dependencies);
+            return new SoftwareBranch(name, version, description, license, internal, dependencies);
         }
     }
 
@@ -53,6 +59,11 @@ public abstract class AbstractSoftware implements Software {
     @Override
     public final String getVersion() {
         return version;
+    }
+
+    @Override
+    public Optional<String> getDescription() {
+        return Optional.ofNullable(description);
     }
 
     @Override
@@ -88,19 +99,20 @@ public abstract class AbstractSoftware implements Software {
             && Objects.equals(this.license, that.license);
     }
     
-    private AbstractSoftware(String name, String version, License license, boolean internal) {
-        this.name     = requireNonNull(name);
-        this.version  = requireNonNull(version);
-        this.license  = requireNonNull(license);
-        this.internal = internal;
+    private AbstractSoftware(String name, String version, String description, License license, boolean internal) {
+        this.name        = requireNonNull(name);
+        this.version     = requireNonNull(version);
+        this.description = description;
+        this.license     = requireNonNull(license);
+        this.internal    = internal;
     }
     
     private final static class SoftwareBranch extends AbstractSoftware {
         
         private final Software[] dependencies;
 
-        private SoftwareBranch(String name, String version, License license, boolean internal, Software... dependencies) {
-            super(name, version, license, internal);
+        private SoftwareBranch(String name, String version, String description, License license, boolean internal, Software... dependencies) {
+            super(name, version, description, license, internal);
             this.dependencies = requireNonNull(dependencies);
         }
 
@@ -113,8 +125,8 @@ public abstract class AbstractSoftware implements Software {
     
     private final static class SoftwareLeaf extends AbstractSoftware {
 
-        private SoftwareLeaf(String name, String version, License license, boolean internal) {
-            super(name, version, license, internal);
+        private SoftwareLeaf(String name, String version, String description, License license, boolean internal) {
+            super(name, version, description, license, internal);
         }
 
         @Override

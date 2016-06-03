@@ -80,6 +80,11 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
             "/images/speedment_open_source_small.png"
         );
     }
+    
+    @Override
+    protected String getDescription() {
+        return "Allows various parts of the user interface to communicate with each other.";
+    }
 
     @Override
     public ObservableList<PropertySheet.Item> getProperties() {

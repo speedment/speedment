@@ -45,8 +45,10 @@ public abstract class InternalOpenSourceComponent extends AbstractComponent {
     }
     
     protected String getTitle() {
-        return getClass().getSimpleName();
+        return getComponentClass().getSimpleName();
     }
+    
+    protected abstract String getDescription();
     
     protected String getVersion() {
         return SpeedmentVersion.getImplementationVersion();
@@ -63,6 +65,7 @@ public abstract class InternalOpenSourceComponent extends AbstractComponent {
     private final transient Software info = AbstractSoftware.with(
         getTitle(),
         getVersion(),
+        getDescription(),
         getLicense(),
         isInternal(),
         getDependencies().toArray(Software[]::new)

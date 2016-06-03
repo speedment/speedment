@@ -123,6 +123,12 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
         install(UUIDIdentityMapper::new);
 
     }
+    
+    @Override
+    protected String getDescription() {
+        return "Holds all the type mappers that have been installed into the Speedment Platform. " + 
+            "A Type Mapper is used to convert between database types and java types.";
+    }
 
     @Override
     public void install(Supplier<TypeMapper<?, ?>> typeMapperConstructor) {

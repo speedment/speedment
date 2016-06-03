@@ -47,6 +47,11 @@ public final class ResultSetMapperComponentImpl extends InternalOpenSourceCompon
     public ResultSetMapperComponentImpl(Speedment speedment, ResultSetMapperComponentImpl template) {
         this(speedment);
     }
+    
+    @Override
+    protected String getDescription() {
+        return "Maps JDBC result-sets to Speedment entities.";
+    }
 
     public ResultSetMapping<?> put(ResultSetMapping<?> item) {
         requireNonNull(item);

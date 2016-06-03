@@ -18,6 +18,7 @@ package com.speedment.runtime.license;
 
 import com.speedment.runtime.annotation.Api;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -48,6 +49,18 @@ public interface Software {
      * @return  the version
      */
     String getVersion();
+    
+    /**
+     * A short description of what the component does that can be used 
+     * to illustrate it in for an example the user interface.
+     * <p>
+     * By default this is an empty {@code Optional}.
+     * 
+     * @return  the description or an empty {@code Optional}
+     */
+    default Optional<String> getDescription() {
+        return Optional.empty();
+    }
     
     /**
      * The license of this software.

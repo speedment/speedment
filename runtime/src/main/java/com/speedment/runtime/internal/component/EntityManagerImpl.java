@@ -37,6 +37,12 @@ public final class EntityManagerImpl extends InternalOpenSourceComponent impleme
     }
 
     @Override
+    protected String getDescription() {
+        return "Handles persistence for any Entity. This Component provides an interface similar " + 
+            "to JPA but is not used for any other purpose.";
+    }
+
+    @Override
     public <ENTITY> void persist(ENTITY entity) throws SpeedmentException {
         requireNonNull(entity);
         managerOf(entity).persist(entity);

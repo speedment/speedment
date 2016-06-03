@@ -64,6 +64,11 @@ public class ConnectionPoolComponentImpl extends InternalOpenSourceComponent imp
     private ConnectionPoolComponentImpl(Speedment speedment, ConnectionPoolComponentImpl template) {
         this(speedment);
     }
+    
+    @Override
+    protected String getDescription() {
+        return "Allows connections to the database to be recycled.";
+    }
 
     @Override
     public PoolableConnection getConnection(String uri, String user, String password) throws SQLException {

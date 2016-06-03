@@ -33,7 +33,6 @@ import com.speedment.runtime.config.mapper.identity.StringIdentityMapper;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.internal.config.dbms.StandardDbmsType;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
-import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 import org.junit.Before;
 import static java.util.stream.Collectors.joining;

@@ -41,6 +41,11 @@ public final class ManagerComponentImpl extends InternalOpenSourceComponent impl
         managersByEntity = new ConcurrentHashMap<>();
         tableMap         = new ConcurrentHashMap<>();
     }
+    
+    @Override
+    protected String getDescription() {
+        return "Holds the manager instances used to communicate with various database tables.";
+    }
 
     @Override
     public <ENTITY> void put(Manager<ENTITY> manager) {

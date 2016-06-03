@@ -81,6 +81,11 @@ public final class PrimaryKeyFactoryComponentImpl extends InternalOpenSourceComp
         System.arraycopy(restOfTheKeys, 0, keys, 5, restOfTheKeys.length);
         return makeHelper(keys);
     }
+    
+    @Override
+    protected String getDescription() {
+        return "Factory used to produce primary key instances.";
+    }
 
     @Override
     public Class<PrimaryKeyFactoryComponent> getComponentClass() {

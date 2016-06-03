@@ -99,6 +99,11 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
     private CodeGenerationComponentImpl(Speedment speedment, CodeGenerationComponentImpl template) {
         this(speedment);
     }
+    
+    @Override
+    protected String getDescription() {
+        return "Generates java code for a project based on a model tree.";
+    }
 
     @Override
     public Generator getGenerator() {

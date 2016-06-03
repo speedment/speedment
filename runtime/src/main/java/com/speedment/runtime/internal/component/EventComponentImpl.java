@@ -57,6 +57,12 @@ public final class EventComponentImpl extends InternalOpenSourceComponent implem
     public EventComponentImpl(Speedment speedment, EventComponentImpl template) {
         this(speedment);
     }
+    
+    @Override
+    protected String getDescription() {
+        return "An event bus that can be used by Speedment plugins to " + 
+            "attach logic on various channels.";
+    }
 
     @Override
     public void notify(Event event) {

@@ -32,6 +32,12 @@ public final class ProjectComponentImpl extends InternalOpenSourceComponent impl
     public ProjectComponentImpl(Speedment speedment) {
         super(speedment);
     }
+    
+    @Override
+    protected String getDescription() {
+        return "Holds a reference to the project node where all the project-specific " + 
+            "configuration data is stored.";
+    }
 
     @Override
     public Project getProject() {

@@ -31,6 +31,12 @@ public class NativeStreamSupplierComponentImpl extends InternalOpenSourceCompone
     public NativeStreamSupplierComponentImpl(Speedment speedment) {
         super(speedment);
     }
+    
+    @Override
+    protected String getDescription() {
+        return "The default stream supplier that is used to establish a stream of entities " + 
+            "from the database.";
+    }
 
     @Override
     public <ENTITY> Stream<ENTITY> stream(Class<ENTITY> entityClass, StreamDecorator decorator) {

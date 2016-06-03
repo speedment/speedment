@@ -52,7 +52,10 @@ public final class DbmsHandlerComponentImpl extends InternalOpenSourceComponent 
         this.map = new ConcurrentHashMap<>(template.map);
     }
     
-    
+    @Override
+    protected String getDescription() {
+        return "Holds references to the various database managers that is currently supported.";
+    }
 
     @Override
     public Class<DbmsHandlerComponent> getComponentClass() {

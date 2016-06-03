@@ -80,6 +80,12 @@ public final class DocumentPropertyComponentImpl extends InternalOpenSourceCompo
     }
     
     @Override
+    protected String getDescription() {
+        return "Determines which implementations should be used for the " + 
+            "observable version of the document configuration tree.";
+    }
+    
+    @Override
     public <PARENT extends DocumentProperty> void setConstructor(Constructor<PARENT> constructor, List<String> keyPath) {
         root.find(keyPath).set(constructor);
     }

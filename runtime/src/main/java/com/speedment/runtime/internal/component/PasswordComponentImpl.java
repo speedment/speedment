@@ -37,6 +37,11 @@ public final class PasswordComponentImpl extends InternalOpenSourceComponent imp
         super(speedment);
         this.passwords = new ConcurrentHashMap<>();
     }
+    
+    @Override
+    protected String getDescription() {
+        return "Holds the database password under this session.";
+    }
 
     @Override
     public Class<? extends Component> getComponentClass() {
