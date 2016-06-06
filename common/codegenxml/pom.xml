@@ -40,17 +40,46 @@
         <codegen.version>2.4.1-SNAPSHOT</codegen.version>
     </properties>
     
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Bundle-Vendor>Speedment, Inc.</Bundle-Vendor>
+                        <Bundle-Description>
+                            An XML module for CodeGen that makes it easy to 
+                            generate XML-code in an object-oritented way.
+                        </Bundle-Description>
+                        <Import-Package>
+                            org.osgi.framework,
+                            *;resolution:=optional 
+                        </Import-Package>
+                        <Export-Package>
+                            com.speedment.common.codegenxml,
+                            com.speedment.common.codegenxml.trait
+                        </Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>                            
+        </plugins>
+    </build>
+    
     <dependencies>
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>codegen</artifactId>
             <version>${codegen.version}</version>
         </dependency>
+        
+        <!-- Test Dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
