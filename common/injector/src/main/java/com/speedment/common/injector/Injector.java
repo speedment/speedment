@@ -2,12 +2,9 @@ package com.speedment.common.injector;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.Injectable;
-import com.speedment.common.injector.annotation.StateAfter;
-import com.speedment.common.injector.annotation.StateBefore;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.internal.InjectorImpl;
 import com.speedment.common.injector.platform.State;
-import java.util.Optional;
 
 /**
  * The factory used to produce instances of classes with

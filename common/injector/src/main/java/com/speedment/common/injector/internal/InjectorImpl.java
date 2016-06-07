@@ -3,8 +3,6 @@ package com.speedment.common.injector.internal;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.Injectable;
-import com.speedment.common.injector.annotation.StateAfter;
-import com.speedment.common.injector.annotation.StateBefore;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.platform.State;
 import java.lang.reflect.Constructor;
@@ -13,13 +11,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import static java.util.Collections.unmodifiableSet;
 import java.util.Comparator;
-import static java.util.Comparator.comparing;
 import java.util.HashSet;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+import com.speedment.common.injector.annotation.RequireState;
+import com.speedment.common.injector.annotation.ResultingState;
+import static java.util.Comparator.comparing;
+import static java.util.Objects.requireNonNull;
 
 /**
  * The default implementation of the {@link Injector} interface.
@@ -191,16 +191,16 @@ public final class InjectorImpl implements Injector {
         }
         
         private final static Comparator<Method>
-            STATE_AFTER_COMPARATOR = comparing(m -> m.getAnnotation(StateAfter.class).value());
+            STATE_AFTER_COMPARATOR = comparing(m -> m.getAnnotation(ResultingState.class).value());
         
         private void ensureState(State desiredState) {
             if (currentState.ordinal() < desiredState.ordinal()) {
                 traverseMethods(instance.getClass())
                     .filter(m -> 
-                        !m.isAnnotationPresent(StateBefore.class) 
-                        || m.getAnnotation(StateBefore.class)
+                        !m.isAnnotationPresent(RequireState.class) 
+                        || m.getAnnotation(RequireState.class)
                             .value().compareTo(currentState) <= 0
-                    ).filter(m -> m.isAnnotationPresent(StateAfter.class))
+                    ).filter(m -> m.isAnnotationPresent(ResultingState.class))
                     .sorted(STATE_AFTER_COMPARATOR)
                     .forEachOrdered(m -> {
                         m.setAccessible(true);

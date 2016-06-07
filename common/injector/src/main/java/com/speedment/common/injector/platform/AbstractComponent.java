@@ -1,8 +1,8 @@
 package com.speedment.common.injector.platform;
 
 import com.speedment.common.injector.annotation.Injectable;
-import com.speedment.common.injector.annotation.StateAfter;
-import com.speedment.common.injector.annotation.StateBefore;
+import com.speedment.common.injector.annotation.RequireState;
+import com.speedment.common.injector.annotation.ResultingState;
 
 /**
  * An optional abstract base class that required the instance to 
@@ -16,20 +16,20 @@ import com.speedment.common.injector.annotation.StateBefore;
 @Injectable
 public abstract class AbstractComponent {
     
-    @StateBefore(State.CREATED)
-    @StateAfter(State.INIITIALIZED)
+    @RequireState(State.CREATED)
+    @ResultingState(State.INIITIALIZED)
     protected abstract void onInitialize();
     
-    @StateBefore(State.INIITIALIZED)
-    @StateAfter(State.RESOLVED)
+    @RequireState(State.INIITIALIZED)
+    @ResultingState(State.RESOLVED)
     protected abstract void onResolve();
     
-    @StateBefore(State.RESOLVED)
-    @StateAfter(State.STARTED)
+    @RequireState(State.RESOLVED)
+    @ResultingState(State.STARTED)
     protected abstract void onStart();
     
-    @StateBefore(State.STARTED)
-    @StateAfter(State.STOPPED)
+    @RequireState(State.STARTED)
+    @ResultingState(State.STOPPED)
     protected abstract void onStop();
     
 }

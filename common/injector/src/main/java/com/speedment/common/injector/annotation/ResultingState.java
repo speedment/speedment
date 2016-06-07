@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface StateAfter {
+public @interface ResultingState {
     
     /**
      * The state that this injectable will be in once this annoted
