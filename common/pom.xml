@@ -43,5 +43,6 @@
         <module>mapstream</module>
         <module>codegen</module>
         <module>codegenxml</module>
+        <module>injector</module>
     </modules>
 </project>
