@@ -9,7 +9,11 @@ import java.util.stream.Stream;
  */
 public interface DependencyGraph {
     
-    DependencyNode getOrCreate(Class<?> clazz) throws CyclicReferenceException;
+    DependencyNode get(Class<?> clazz) throws CyclicReferenceException;
+    
+    DependencyNode getOrCreate(Class<?> clazz);
+    
+    DependencyGraph inject() throws CyclicReferenceException;
     
     Stream<DependencyNode> nodes();
     

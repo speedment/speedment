@@ -13,12 +13,11 @@ import static com.speedment.common.injector.internal.util.ReflectionUtil.travers
 import com.speedment.common.injector.State;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import static java.util.Collections.newSetFromMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 import static java.util.stream.Collectors.joining;
 
@@ -32,71 +31,54 @@ public final class DependencyGraphImpl implements DependencyGraph {
     
     private final static State[] STATES = State.values();
     private final Map<Class<?>, DependencyNode> nodes;
-    private final Set<Class<?>> stack;
     
-    public static DependencyGraph create(Set<Class<?>> injectables) {
+    public static DependencyGraph create(Set<Class<?>> injectables) throws CyclicReferenceException {
         final DependencyGraphImpl graph = new DependencyGraphImpl();
         injectables.forEach(graph::getOrCreate);
-        return graph;
+        return graph.inject();
     }
     
     private DependencyGraphImpl() {
         nodes = new ConcurrentHashMap<>();
-        stack = newSetFromMap(new ConcurrentHashMap<>());
     }
 
     @Override
-    public DependencyNode getOrCreate(Class<?> clazz) throws CyclicReferenceException {
-        if (stack.add(clazz)) {
-            try {
-                return nodes.computeIfAbsent(clazz, c -> {
-                    final DependencyNode node = new DependencyNodeImpl(clazz);
+    public DependencyNode get(Class<?> clazz) throws CyclicReferenceException {
+        return Optional.ofNullable(nodes.get(clazz))
+            .orElseThrow(() -> new CyclicReferenceException(clazz));
+    }
 
-                    // Go through all the member variables with the '@Inject'-annotation in the 
-                    // class and add edges to them in the dependency graph.
-                    traverseFields(clazz)
-                        .filter(f -> f.isAnnotationPresent(Inject.class))
-                        .forEach(f -> {
-                            final Inject inject = f.getAnnotation(Inject.class);
-                            final Class<?> type = f.getType();
-                            final State state   = inject.value();
+    @Override
+    public DependencyNode getOrCreate(Class<?> clazz) {
+        return nodes.computeIfAbsent(clazz, DependencyNodeImpl::new);
+    }
 
-                            try {
-                                node.getDependencies().add(
-                                    new DependencyImpl(getOrCreate(type), state)
-                                );
-                            } catch (final CyclicReferenceException ex) {
-                                throw new CyclicReferenceException(clazz, ex);
-                            }
-                        });
-                    
-                    // Go through all the methods with the '@Execute'-annotation in the class and
-                    // add them to the executors set.
-                    traverseMethods(clazz)
-                        .filter(m -> m.isAnnotationPresent(Execute.class))
-                        .forEach(m -> {
-                            node.getExecutions().add(createExecution(clazz, m, State.STARTED));
-                        });
-                    
-                    // Go through all the methods with the '@ExecuteBefore'-annotation in the class 
-                    // and add them to the executors set.
-                    traverseMethods(clazz)
-                        .filter(m -> m.isAnnotationPresent(ExecuteBefore.class))
-                        .forEach(m -> {
-                            final ExecuteBefore execute = m.getAnnotation(ExecuteBefore.class);
-                            node.getExecutions().add(createExecution(clazz, m, execute.value()));
-                        });
+    @Override
+    public DependencyGraph inject() {
+        nodes.forEach((clazz, node) -> {
+            // Go through all the member variables with the '@Inject'-annotation in the 
+            // class and add edges to them in the dependency graph.
+            addDependenciesTo(clazz, node.getDependencies());
 
-                    // Add the node to the map of nodes.
-                    nodes.put(clazz, node);
-                    return node;
+            // Go through all the methods with the '@Execute'-annotation in the class and
+            // add them to the executors set.
+            traverseMethods(clazz)
+                .filter(m -> m.isAnnotationPresent(Execute.class))
+                .forEach(m -> {
+                    node.getExecutions().add(createExecution(clazz, m, State.STARTED));
                 });
-            } finally {
-                stack.remove(clazz);
-            }
-        } else {
-            throw new CyclicReferenceException(clazz);
-        }
+
+            // Go through all the methods with the '@ExecuteBefore'-annotation in the class 
+            // and add them to the executors set.
+            traverseMethods(clazz)
+                .filter(m -> m.isAnnotationPresent(ExecuteBefore.class))
+                .forEach(m -> {
+                    final ExecuteBefore execute = m.getAnnotation(ExecuteBefore.class);
+                    node.getExecutions().add(createExecution(clazz, m, execute.value()));
+                });
+        });
+        
+        return this;
     }
 
     @Override
@@ -113,8 +95,27 @@ public final class DependencyGraphImpl implements DependencyGraph {
             ")";
     }
     
-    private Execution createExecution(Class<?> clazz, Method m, State executeBefore) {
+    private void addDependenciesTo(Class<?> clazz, Set<Dependency> dependencies) {
+        traverseFields(clazz)
+            .filter(f -> f.isAnnotationPresent(Inject.class))
+            .forEach(f -> {
 
+                final Inject inject = f.getAnnotation(Inject.class);
+                final Class<?> type = f.getType();
+                final State state   = inject.value();
+
+                try {
+                    dependencies.add(
+                        new DependencyImpl(get(type), state)
+                    );
+                } catch (final CyclicReferenceException ex) {
+                    throw new CyclicReferenceException(clazz, ex);
+                }
+            });
+    }
+    
+    private Execution createExecution(Class<?> clazz, Method m, State executeBefore) {
+     
         // Make sure all the methods parameters are annoted with the 
         // '@Inject'-annotation.
         if (Stream.of(m.getParameters())
@@ -141,6 +142,8 @@ public final class DependencyGraphImpl implements DependencyGraph {
                 throw new CyclicReferenceException(clazz, ex);
             }
         }
+        
+        addDependenciesTo(clazz, dependencies);
 
         return new ExecutionImpl(executeBefore, m, dependencies);
     }

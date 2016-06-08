@@ -10,12 +10,14 @@ public enum State {
 
     /**
      * The {@link Injectable} has been created but it has not been exposed anywhere yet.
+     *//**
+     * The {@link Injectable} has been created but it has not been exposed anywhere yet.
      */
     CREATED,
     /**
      * The {@link Injectable} has been initialized.
      */
-    INIITIALIZED,
+    INITIALIZED,
     /**
      * The {@link Injectable} has been initialized and resolved.
      */

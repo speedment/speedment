@@ -8,8 +8,6 @@ import static java.util.Collections.newSetFromMap;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import static java.util.Objects.requireNonNull;
-import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -57,15 +55,13 @@ public final class DependencyNodeImpl implements DependencyNode {
 
     @Override
     public boolean canBe(State state) {
-        // Make sure all dependencies of this node as well as all the dependencies
-        // of the executions have been satisfied.
-        return Stream.concat(
-            dependencies.stream(),
+        // Make sure all dependencies of the executions have been satisfied.
+        return 
             executions.stream()
                 .filter(e -> e.getState().ordinal() <= state.ordinal())
                 .flatMap(e -> e.getDependencies().stream())
-        ).map(Dependency::getNode)
-            .allMatch(node -> node.is(state));
+                .map(Dependency::getNode)
+                .allMatch(node -> node.is(state));
     }
 
     @Override

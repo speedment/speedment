@@ -2,7 +2,6 @@ package com.speedment.common.injector.internal;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.Injectable;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.internal.dependency.DependencyGraph;
 import com.speedment.common.injector.internal.dependency.DependencyNode;
@@ -13,15 +12,15 @@ import com.speedment.common.injector.State;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
-import static java.util.Collections.unmodifiableMap;
-import java.util.HashMap;
+import static java.util.Collections.unmodifiableList;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.atomic.AtomicBoolean;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -33,25 +32,27 @@ import static java.util.stream.Collectors.joining;
 public final class InjectorImpl implements Injector {
     
     private final static State[] STATES = State.values();
-    private final Map<Class<?>, Object> instances;
+    private final List<Object> instances;
     
-    private InjectorImpl(Map<Class<?>, Object> instances) {
-        this.instances = unmodifiableMap(instances);
+    private InjectorImpl(List<Object> instances) {
+        this.instances = requireNonNull(instances);
     }
     
     @Override
     public <T> T get(Class<T> type) throws IllegalArgumentException {
-        @SuppressWarnings("unchecked")
-        final T result = (T) instances.get(type);
-        
-        if (result == null) {
-            throw new IllegalArgumentException(
-                "No component of type '" + type + 
-                "' have been installed in the injector."
-            );
+        return findIn(type, instances);
+    }
+    
+    private static <T> T findIn(Class<T> type, List<Object> instances) {
+        for (final Object inst : instances) {
+            if (type.isAssignableFrom(inst.getClass())) {
+                return type.cast(inst);
+            }
         }
-        
-        return result;
+
+        throw new IllegalArgumentException(
+            "Could not find any installed implementation of " + type.getName() + "."
+        );
     }
     
     public static Injector.Builder builder() {
@@ -67,48 +68,30 @@ public final class InjectorImpl implements Injector {
         }
 
         @Override
-        public Builder canInject(Class<?> injectableType) {
-            requireNonNull(injectableType);
-            
-            if (!injectableType.isAnnotationPresent(Injectable.class)) {
-                throw new IllegalArgumentException(
-                    "The specified class '" + injectableType.getName() + 
-                    "' does not have the " + Injectable.class.getSimpleName() + "-annotation."
-                );
-            }
-            
-            injectables.add(injectableType);
+        public Builder canInject(Class<?>... injectableTypes) {
+            requireNonNull(injectableTypes);
+            Stream.of(injectableTypes).forEach(injectables::add);
             return this;
         }
 
         @Override
-        public Injector build() throws InstantiationException {
+        public Injector build() throws InstantiationException, NoDefaultConstructorException {
             final DependencyGraph graph = DependencyGraphImpl.create(injectables);
-            final Map<Class<?>, Object> instances = new HashMap<>();
+            final LinkedList<Object> instances = new LinkedList<>();
             
             // Create an instance of every injectable type
             for (final Class<?> injectable : injectables) {
-                instances.put(injectable, newInstance(injectable));
+                instances.addFirst(newInstance(injectable));
             }
             
             // Set the auto-injected fields
-            instances.forEach((clazz, instance) -> {
-                final Set<Field> fields = traverseFields(clazz)
+            instances.forEach(instance -> {
+                final Set<Field> fields = traverseFields(instance.getClass())
                     .filter(f -> f.isAnnotationPresent(Inject.class))
                     .collect(toSet());
 
                 for (final Field field : fields) {
-                    final Object value = instances.get(field.getType());
-
-                    if (value == null) {
-                        throw new UnsupportedOperationException(
-                            "A field '" + field.getName() + 
-                            "' in class '" + clazz.getName() + 
-                            "' of type '" + field.getType() + 
-                            "' was annoted with '@" + Inject.class.getSimpleName() + 
-                            "' but it was not listed as an injectable."
-                        );
-                    }
+                    final Object value = findIn(field.getType(), instances);
 
                     field.setAccessible(true);
 
@@ -117,7 +100,7 @@ public final class InjectorImpl implements Injector {
                     } catch (final IllegalAccessException ex) {
                         throw new RuntimeException(
                             "Could not access field '" + field.getName() + 
-                            "' in class '" + clazz.getName() + 
+                            "' in class '" + value.getClass().getName() + 
                             "' of type '" + field.getType() + 
                             "'.", ex
                         );
@@ -125,7 +108,6 @@ public final class InjectorImpl implements Injector {
                 }
             });
             
-            System.out.println("Configuring platform.");
             final AtomicBoolean hasAnythingChanged = new AtomicBoolean();
 
             // Loop until all nodes have been started.
@@ -144,8 +126,10 @@ public final class InjectorImpl implements Injector {
                         // Check if all its dependencies have been satisfied.
                         if (n.canBe(state)) {
                             
+                            printLine();
+                            
                             // Retreive the instance for that node
-                            final Object instance = instances.get(n.getRepresentedType());
+                            final Object instance = findIn(n.getRepresentedType(), instances);
 
                             // Execute all the executions for the next step.
                             n.getExecutions().stream()
@@ -153,11 +137,19 @@ public final class InjectorImpl implements Injector {
                                 .map(Execution::getMethod)
                                 .forEach(m -> {
                                     final Object[] params = Stream.of(m.getParameters())
-                                        .map(p -> instances.get(p.getType()))
+                                        .map(p -> findIn(p.getType(), instances))
                                         .toArray(Object[]::new);
 
                                     m.setAccessible(true);
-                                    System.out.println("... Executing " + n.getRepresentedType().getSimpleName() + "#" + m.getName() + "(" + Stream.of(m.getParameters()).map(p -> p.getType().getSimpleName().substring(0, 1)).collect(joining(", ")) + ")");
+                                    
+                                    final String shortMethodName = 
+                                        n.getRepresentedType().getSimpleName() + "#" + 
+                                        m.getName() + "(" + 
+                                        Stream.of(m.getParameters())
+                                            .map(p -> p.getType().getSimpleName().substring(0, 1))
+                                            .collect(joining(", ")) + ")";
+                                    
+                                    System.out.printf("| -> %-76s |%n", shortMethodName);
 
                                     try {
                                         m.invoke(instance, params);
@@ -173,7 +165,7 @@ public final class InjectorImpl implements Injector {
                             n.setState(state);
                             hasAnythingChanged.set(true);
 
-                            System.out.printf("%32s has been %s.", 
+                            System.out.printf("| %-66s %12s |%n", 
                                 n.getRepresentedType().getSimpleName(), 
                                 state.name()
                             );
@@ -187,8 +179,11 @@ public final class InjectorImpl implements Injector {
                 }
             }
             
-            System.out.println("All " + instances.size() + " components have been configured!");
-            return new InjectorImpl(unmodifiableMap(instances));
+            printLine();
+            System.out.printf("| %-79s |%n", "All " + instances.size() + " components have been configured!");
+            printLine();
+            
+            return new InjectorImpl(unmodifiableList(instances));
         }
         
         private static <T> T newInstance(Class<T> type) throws InstantiationException, NoDefaultConstructorException {
@@ -206,6 +201,10 @@ public final class InjectorImpl implements Injector {
                 
                 throw new RuntimeException(ex);
             }
+        }
+        
+        private static void printLine() {
+            System.out.println("+---------------------------------------------------------------------------------+");
         }
     }
 }

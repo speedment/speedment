@@ -1,7 +1,6 @@
 package com.speedment.common.injector;
 
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.Injectable;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.internal.InjectorImpl;
 
@@ -17,9 +16,8 @@ import com.speedment.common.injector.internal.InjectorImpl;
  * @since   1.0.0
  * 
  * @see Inject
- * @see Injectable
- * @see StateBefore
- * @see StateAfter
+ * @see Execute
+ * @see ExecuteBefore
  */
 public interface Injector {
 
@@ -53,18 +51,18 @@ public interface Injector {
     interface Builder {
         
         /**
-         * Appends an class with the {@link Injectable} annotation
-         * to the builder. Classes can be appended in any order. The
-         * final injection order will be determined once the 
+         * Appends one or multiple classes that can be automatically dependency 
+         * injected into other classes to the builder. Classes can be appended in 
+         * any order. The final injection order will be determined once the 
          * {@link #build()}-method is called.
          * 
-         * @param injectableType  the type that should be injectable
-         * @return                a reference to this builder
+         * @param injectableTypes  the types that should be injectable
+         * @return                 a reference to this builder
          * 
          * @throws NoDefaultConstructorException  if the specified type does not 
          *                                        have a default constructor.
          */
-        Builder canInject(Class<?> injectableType) throws NoDefaultConstructorException;
+        Builder canInject(Class<?>... injectableTypes) throws NoDefaultConstructorException;
         
         /**
          * Builds the {@link Injector} instance, organizing the 
@@ -72,11 +70,9 @@ public interface Injector {
          * 
          * @return  the built instance
          * 
-         * @throws NoDefaultConstructorException  if the specified type does not 
-         *                                        have a default constructor.
-         * @throws InstantiationException         if one of the injectables 
-         *                                        can not be instantiated.
+         * @throws InstantiationException  if one of the injectables can not 
+         *                                 be instantiated.
          */
-        Injector build() throws InstantiationException, NoDefaultConstructorException;
+        Injector build() throws InstantiationException;
     }
 }
