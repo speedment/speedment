@@ -1,6 +1,6 @@
 package com.speedment.common.injector.internal.dependency;
 
-import com.speedment.common.injector.platform.State;
+import com.speedment.common.injector.State;
 import java.util.Set;
 
 /**
@@ -14,6 +14,14 @@ public interface DependencyNode {
     
     Set<Dependency> getDependencies();
     
+    Set<Execution> getExecutions();
+    
     State getCurrentState();
+    
+    void setState(State newState);
+    
+    boolean canBe(State state);
+    
+    boolean is(State state);
     
 }

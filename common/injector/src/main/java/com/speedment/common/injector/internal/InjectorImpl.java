@@ -4,22 +4,25 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.Injectable;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
-import com.speedment.common.injector.platform.State;
+import com.speedment.common.injector.internal.dependency.DependencyGraph;
+import com.speedment.common.injector.internal.dependency.DependencyNode;
+import com.speedment.common.injector.internal.dependency.Execution;
+import com.speedment.common.injector.internal.dependency.impl.DependencyGraphImpl;
+import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
+import com.speedment.common.injector.State;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import static java.util.Collections.unmodifiableSet;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Map;
+import static java.util.Collections.unmodifiableMap;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
-import com.speedment.common.injector.annotation.RequireState;
-import com.speedment.common.injector.annotation.ResultingState;
-import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
+import java.util.concurrent.atomic.AtomicBoolean;
+import static java.util.stream.Collectors.joining;
 
 /**
  * The default implementation of the {@link Injector} interface.
@@ -29,126 +32,30 @@ import static java.util.Objects.requireNonNull;
  */
 public final class InjectorImpl implements Injector {
     
-    private final Set<Class<?>> injectables; // Immutable
-    private final Map<Class<?>, Component> instances;
+    private final static State[] STATES = State.values();
+    private final Map<Class<?>, Object> instances;
+    
+    private InjectorImpl(Map<Class<?>, Object> instances) {
+        this.instances = unmodifiableMap(instances);
+    }
+    
+    @Override
+    public <T> T get(Class<T> type) throws IllegalArgumentException {
+        @SuppressWarnings("unchecked")
+        final T result = (T) instances.get(type);
+        
+        if (result == null) {
+            throw new IllegalArgumentException(
+                "No component of type '" + type + 
+                "' have been installed in the injector."
+            );
+        }
+        
+        return result;
+    }
     
     public static Injector.Builder builder() {
         return new Builder();
-    }
-    
-    private InjectorImpl(Set<Class<?>> injectables) {
-        this.injectables = requireNonNull(injectables);
-        this.instances   = new ConcurrentHashMap<>();
-    }
-    
-    @Override
-    public Object newInstance(String className) throws 
-            IllegalStateException, 
-            ClassNotFoundException {
-        
-        final Class<?> clazz = getClass().getClassLoader().loadClass(className);
-        return newInstance(clazz);
-    }
-
-    @Override
-    public <T> T newInstance(Class<T> type) throws 
-            NoDefaultConstructorException, 
-            IllegalStateException {
-        
-        try {
-            final Constructor<T> constr = type.getDeclaredConstructor();
-            constr.setAccessible(true);
-            final T instance = constr.newInstance();
-            
-            // Set all fields with the @Inject-annotation
-            traverseFields(type)
-                .filter(f -> f.isAnnotationPresent(Inject.class))
-                .forEach(f -> {
-                    final Inject inject     = f.getAnnotation(Inject.class);
-                    final Class<?> injected = f.getType();
-                    final State state       = inject.value();
-                    
-                    final Object value = getOrThrow(injected, state);
-                    
-                    f.setAccessible(true);
-                    
-                    try {
-                        f.set(instance, value);
-                    } catch (final IllegalAccessException ex) {
-                        throw new RuntimeException(ex);
-                    }
-                });
-            
-            return instance;
-        } catch (final NoSuchMethodException ex) {
-            throw new NoDefaultConstructorException(
-                "A default constructor is required to instantiate '" + 
-                type.getName() + "'.", ex
-            );
-        } catch (final InstantiationException 
-                     | IllegalAccessException 
-                     | InvocationTargetException ex) {
-            
-            throw new RuntimeException(ex);
-        }
-    }
-
-    @Override
-    public <T> T getOrThrow(Class<T> type, State state) throws 
-            NullPointerException, 
-            IllegalArgumentException,
-            NoDefaultConstructorException, 
-            IllegalStateException {
-        
-        final Class<? extends T> injectable = injectables.stream()
-            .filter(type::isAssignableFrom)
-            .map(c -> (Class<? extends T>) c)
-            .findAny()
-            .orElseThrow(() -> new IllegalArgumentException(
-                "Could not find any installed injectable that implements '" + 
-                type.getName() + "'."
-            ));
-        
-        // TODO: What happends when this recurses?
-        @SuppressWarnings("unchecked")
-        final Component entry = instances.computeIfAbsent(injectable, this::newEntry);
-        entry.ensureState(state);
-        
-        @SuppressWarnings("unchecked")
-        final T instance = (T) entry.getInstance();
-        return instance;
-    }
-    
-    private <T> Component newEntry(Class<T> type) throws
-            NoDefaultConstructorException, 
-            IllegalStateException {
-        return new Component(newInstance(type));
-    }
-
-    private static Stream<Field> traverseFields(Class<?> clazz) {
-        final Class<?> parent = clazz.getSuperclass();
-        final Stream<Field> inherited;
-        
-        if (parent != null) {
-            inherited = traverseFields(parent);
-        } else {
-            inherited = Stream.empty();
-        }
-        
-        return Stream.concat(inherited, Stream.of(clazz.getDeclaredFields()));
-    }
-    
-    private static Stream<Method> traverseMethods(Class<?> clazz) {
-        final Class<?> parent = clazz.getSuperclass();
-        final Stream<Method> inherited;
-        
-        if (parent != null) {
-            inherited = traverseMethods(parent);
-        } else {
-            inherited = Stream.empty();
-        }
-        
-        return Stream.concat(inherited, Stream.of(clazz.getDeclaredMethods()));
     }
     
     private final static class Builder implements Injector.Builder {
@@ -175,52 +82,130 @@ public final class InjectorImpl implements Injector {
         }
 
         @Override
-        public Injector build() {
-            return new InjectorImpl(unmodifiableSet(injectables));
-        }
-    }
-    
-    private final static class Component {
-        
-        private final Object instance;
-        private State currentState;
-        
-        private Component(Object instantiated) {
-            this.currentState = State.CREATED;
-            this.instance = requireNonNull(instantiated);
-        }
-        
-        private final static Comparator<Method>
-            STATE_AFTER_COMPARATOR = comparing(m -> m.getAnnotation(ResultingState.class).value());
-        
-        private void ensureState(State desiredState) {
-            if (currentState.ordinal() < desiredState.ordinal()) {
-                traverseMethods(instance.getClass())
-                    .filter(m -> 
-                        !m.isAnnotationPresent(RequireState.class) 
-                        || m.getAnnotation(RequireState.class)
-                            .value().compareTo(currentState) <= 0
-                    ).filter(m -> m.isAnnotationPresent(ResultingState.class))
-                    .sorted(STATE_AFTER_COMPARATOR)
-                    .forEachOrdered(m -> {
-                        m.setAccessible(true);
+        public Injector build() throws InstantiationException {
+            final DependencyGraph graph = DependencyGraphImpl.create(injectables);
+            final Map<Class<?>, Object> instances = new HashMap<>();
+            
+            // Create an instance of every injectable type
+            for (final Class<?> injectable : injectables) {
+                instances.put(injectable, newInstance(injectable));
+            }
+            
+            // Set the auto-injected fields
+            instances.forEach((clazz, instance) -> {
+                final Set<Field> fields = traverseFields(clazz)
+                    .filter(f -> f.isAnnotationPresent(Inject.class))
+                    .collect(toSet());
+
+                for (final Field field : fields) {
+                    final Object value = instances.get(field.getType());
+
+                    if (value == null) {
+                        throw new UnsupportedOperationException(
+                            "A field '" + field.getName() + 
+                            "' in class '" + clazz.getName() + 
+                            "' of type '" + field.getType() + 
+                            "' was annoted with '@" + Inject.class.getSimpleName() + 
+                            "' but it was not listed as an injectable."
+                        );
+                    }
+
+                    field.setAccessible(true);
+
+                    try {
+                        field.set(instance, value);
+                    } catch (final IllegalAccessException ex) {
+                        throw new RuntimeException(
+                            "Could not access field '" + field.getName() + 
+                            "' in class '" + clazz.getName() + 
+                            "' of type '" + field.getType() + 
+                            "'.", ex
+                        );
+                    }
+                }
+            });
+            
+            System.out.println("Configuring platform.");
+            final AtomicBoolean hasAnythingChanged = new AtomicBoolean();
+
+            // Loop until all nodes have been started.
+            Set<DependencyNode> unfinished;
+            while (!(unfinished = graph.nodes()
+                    .filter(n -> n.getCurrentState() != State.STARTED)
+                    .collect(toSet())).isEmpty()) {
+                
+                hasAnythingChanged.set(false);
+
+                unfinished.stream()
+                    .forEach(n -> {
+                        // Determine the next state of this node.
+                        final State state = STATES[n.getCurrentState().ordinal() + 1];
                         
-                        try {
-                            m.invoke(instance);
-                        } catch (final IllegalAccessException 
-                                     | IllegalArgumentException 
-                                     | InvocationTargetException ex) {
+                        // Check if all its dependencies have been satisfied.
+                        if (n.canBe(state)) {
                             
-                            throw new RuntimeException(ex);
+                            // Retreive the instance for that node
+                            final Object instance = instances.get(n.getRepresentedType());
+
+                            // Execute all the executions for the next step.
+                            n.getExecutions().stream()
+                                .filter(e -> e.getState() == state)
+                                .map(Execution::getMethod)
+                                .forEach(m -> {
+                                    final Object[] params = Stream.of(m.getParameters())
+                                        .map(p -> instances.get(p.getType()))
+                                        .toArray(Object[]::new);
+
+                                    m.setAccessible(true);
+                                    System.out.println("... Executing " + n.getRepresentedType().getSimpleName() + "#" + m.getName() + "(" + Stream.of(m.getParameters()).map(p -> p.getType().getSimpleName().substring(0, 1)).collect(joining(", ")) + ")");
+
+                                    try {
+                                        m.invoke(instance, params);
+                                    } catch (final IllegalAccessException 
+                                                 | IllegalArgumentException 
+                                                 | InvocationTargetException ex) {
+
+                                        throw new RuntimeException(ex);
+                                    }
+                                });
+
+                            // Update its state to the new state.
+                            n.setState(state);
+                            hasAnythingChanged.set(true);
+
+                            System.out.printf("%32s has been %s.", 
+                                n.getRepresentedType().getSimpleName(), 
+                                state.name()
+                            );
                         }
                     });
                 
-                currentState = desiredState;
+                if (!hasAnythingChanged.get()) {
+                    throw new IllegalStateException(
+                        "Injector appears to be stuck in an infinite loop."
+                    );
+                }
             }
+            
+            System.out.println("All " + instances.size() + " components have been configured!");
+            return new InjectorImpl(unmodifiableMap(instances));
         }
         
-        Object getInstance() {
-            return instance;
+        private static <T> T newInstance(Class<T> type) throws InstantiationException, NoDefaultConstructorException {
+            try {
+                final Constructor<T> constr = type.getConstructor();
+                constr.setAccessible(true);
+                return constr.newInstance();
+                
+            } catch (final NoSuchMethodException ex) {
+                throw new NoDefaultConstructorException(ex);
+                
+            } catch (final IllegalAccessException 
+                         | IllegalArgumentException 
+                         | InvocationTargetException ex) {
+                
+                throw new RuntimeException(ex);
+            }
         }
     }
 }

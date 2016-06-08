@@ -1,4 +1,4 @@
-package com.speedment.common.injector.platform;
+package com.speedment.common.injector;
 
 /**
  * The state of an injectable instance.

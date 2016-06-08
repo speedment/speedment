@@ -1,6 +1,6 @@
 package com.speedment.common.injector.annotation;
 
-import com.speedment.common.injector.platform.State;
+import com.speedment.common.injector.State;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

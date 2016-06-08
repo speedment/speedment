@@ -4,7 +4,6 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.Injectable;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.internal.InjectorImpl;
-import com.speedment.common.injector.platform.State;
 
 /**
  * The factory used to produce instances of classes with
@@ -23,57 +22,20 @@ import com.speedment.common.injector.platform.State;
  * @see StateAfter
  */
 public interface Injector {
-    
-    /**
-     * Creates a new instance of the specified class, injecting all its
-     * {@link Inject} fields automatically. The class is determined using
-     * the default class loader.
-     * 
-     * @param className  the fully qualified name of the class to instantiate
-     * @return           the created instance
-     * 
-     * @throws ClassNotFoundException         if the class could not be found on the class path
-     * @throws NoDefaultConstructorException  if it does not have a default constructor
-     * @throws IllegalStateException          if a cyclic-dependency makes it impossible
-     */
-    Object newInstance(String className) throws IllegalStateException, ClassNotFoundException;
-    
-    /**
-     * Creates a new instance of the specified class, injecting all its
-     * {@link Inject} fields automatically.
-     * 
-     * @param <T>   the type to instantiate
-     * @param type  the type to instantiate
-     * @return      the created instance
-     * 
-     * @throws NoDefaultConstructorException  if it does not have a default constructor
-     * @throws IllegalStateException          if a cyclic-dependency makes it impossible
-     */
-    <T> T newInstance(Class<T> type) throws NoDefaultConstructorException, IllegalStateException;
 
     /**
      * Returns the instance associated with the specified class signature.
-     * If it has not been resolved yet, it is resolved by injecting its
-     * dependencies recursively.
      * <p>
-     * If the specified type could not be found, a 
-     * {@code NullPointerException} is thrown.
+     * If the specified type could not be found, an
+     * {@code IllegalArgumentException} is thrown.
      * 
-     * @param <T>    the class signature of the injectable type
-     * @param type   the expected type
-     * @param state  the (minimal) state that the result must be in
-     * @return       the automatically resolved instance
+     * @param <T>   the class signature of the injectable type
+     * @param type  the expected type
+     * @return      the automatically resolved instance
      * 
-     * @throws NullPointerException           if it could not be found
-     * @throws IllegalArgumentException       if it is missing the {@link Injectable} annotation
-     * @throws NoDefaultConstructorException  if it does not have a default constructor
-     * @throws IllegalStateException          if a cyclic-dependency makes it impossible to resolve
+     * @throws IllegalArgumentException  if it could not be found
      */
-    <T> T getOrThrow(Class<T> type, State state) throws 
-            NullPointerException, 
-            IllegalArgumentException,
-            NoDefaultConstructorException, 
-            IllegalStateException;
+    <T> T get(Class<T> type) throws IllegalArgumentException;
     
     /**
      * Returns a new builder for the {@link Injector} interface that uses the default
@@ -98,15 +60,23 @@ public interface Injector {
          * 
          * @param injectableType  the type that should be injectable
          * @return                a reference to this builder
+         * 
+         * @throws NoDefaultConstructorException  if the specified type does not 
+         *                                        have a default constructor.
          */
-        Builder canInject(Class<?> injectableType);
+        Builder canInject(Class<?> injectableType) throws NoDefaultConstructorException;
         
         /**
          * Builds the {@link Injector} instance, organizing the 
          * injectable instances based on their internal dependencies.
          * 
          * @return  the built instance
+         * 
+         * @throws NoDefaultConstructorException  if the specified type does not 
+         *                                        have a default constructor.
+         * @throws InstantiationException         if one of the injectables 
+         *                                        can not be instantiated.
          */
-        Injector build();
+        Injector build() throws InstantiationException, NoDefaultConstructorException;
     }
 }

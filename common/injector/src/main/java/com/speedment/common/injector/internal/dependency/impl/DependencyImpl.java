@@ -2,7 +2,8 @@ package com.speedment.common.injector.internal.dependency.impl;
 
 import com.speedment.common.injector.internal.dependency.Dependency;
 import com.speedment.common.injector.internal.dependency.DependencyNode;
-import com.speedment.common.injector.platform.State;
+import com.speedment.common.injector.State;
+import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -12,21 +13,21 @@ import static java.util.Objects.requireNonNull;
  */
 public final class DependencyImpl implements Dependency {
     
-    private final DependencyNode dependingOn;
-    private final State dependedState;
+    private final DependencyNode requiredType;
+    private final State requiredState;
     
-    public DependencyImpl(DependencyNode dependingOn, State dependedState) {
-        this.dependingOn   = requireNonNull(dependingOn);
-        this.dependedState = requireNonNull(dependedState);
+    public DependencyImpl(DependencyNode requiredType, State requiredState) {
+        this.requiredType  = requireNonNull(requiredType);
+        this.requiredState = requireNonNull(requiredState);
     }
 
     @Override
-    public DependencyNode getDependingOn() {
-        return dependingOn;
+    public DependencyNode getNode() {
+        return requiredType;
     }
 
     @Override
-    public State getDependedState() {
-        return dependedState;
+    public State getRequiredState() {
+        return requiredState;
     }
 }

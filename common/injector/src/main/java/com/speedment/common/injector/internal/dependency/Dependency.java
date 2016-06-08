@@ -1,6 +1,6 @@
 package com.speedment.common.injector.internal.dependency;
 
-import com.speedment.common.injector.platform.State;
+import com.speedment.common.injector.State;
 
 /**
  *
@@ -8,7 +8,7 @@ import com.speedment.common.injector.platform.State;
  */
 public interface Dependency {
     
-    DependencyNode getDependingOn();
+    DependencyNode getNode();
     
-    State getDependedState();
+    State getRequiredState();
 }
