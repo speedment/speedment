@@ -32,11 +32,13 @@ import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mapper.identity.StringIdentityMapper;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
-import com.speedment.runtime.internal.config.dbms.StandardDbmsType;
+import com.speedment.runtime.internal.config.dbms.StandardDbmsTypes;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 import org.junit.Before;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -105,9 +107,8 @@ public abstract class SimpleModel {
             + objectWithKey("config",
                 name("myProject"),
                 array(Project.DBMSES,
-                    object(
-                        name("myDbms"),
-                        dbTypeName(StandardDbmsType.defaultType().getName()),
+                    object(name("myDbms"),
+                        dbTypeName(StandardDbmsTypes.defaultType().getName()),
                         array(Dbms.SCHEMAS,
                             object(
                                 name(SCHEMA_NAME),

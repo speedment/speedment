@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.config;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mutator.DbmsMutator;
 import com.speedment.runtime.config.mutator.DocumentMutator;
@@ -29,9 +28,6 @@ import com.speedment.runtime.config.trait.HasMutator;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.config.dbms.StandardDbmsType;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.Stream;
@@ -71,7 +67,11 @@ public interface Dbms extends
      * @return  the type name
      */
     default String getTypeName() {
-        return getAsString(TYPE_NAME).orElse(StandardDbmsType.defaultType().getName());
+        return getAsString(TYPE_NAME).orElseThrow(() -> new SpeedmentException(
+            "Every " + Dbms.class.getSimpleName() + 
+            " document is required to have the '" + 
+            TYPE_NAME + "' attribute."
+        ));
     }
     
     /**
@@ -96,22 +96,6 @@ public interface Dbms extends
     }
     
     /**
-     * Returns the default port for the current database type.
-     * <p>
-     * Warning, this method does not take a custom port set in the 
-     * {@link #PORT} property into consideration. For the actual
-     * port to use, call {@link #getPort()}.
-     * 
-     * @param speedment            the {@link Speedment} instance
-     * @return                     the default port
-     * @throws SpeedmentException  if the {@link DbmsType} couldn't be found
-     */
-    default int defaultPort(Speedment speedment) throws SpeedmentException {
-        return dbmsTypeOf(speedment, this)
-            .getDefaultPort();
-    }
-    
-    /**
      * Returns the explicit connection URL to use for this {@code Dbms} if the
      * user has specified one, or an empty {@code Optional} if one should be
      * generated automatically by the {@link DbmsType}.
@@ -120,25 +104,6 @@ public interface Dbms extends
      */
     default Optional<String> getConnectionUrl() {
         return getAsString(CONNECTION_URL);
-    }
-    
-    /**
-     * Creates a default connection URL for this {@code Dbms} by looking up the
-     * {@link DbmsType} and using its 
-     * {@link DbmsType#getConnectionUrlGenerator()} to produce a default value.
-     * <p>
-     * Warning, this method does not take a custom connection URL set in the 
-     * {@link #CONNECTION_URL} property into consideration. For the actual
-     * connection URL to use, call 
-     * {@link DocumentDbUtil#findConnectionUrl(Speedment, Dbms)}.
-     * 
-     * @param speedment  the {@link Speedment} instance
-     * @return  the default connection URL to use if an explicit one is not set
-     * @throws SpeedmentException  if the {@link DbmsType} couldn't be found
-     */
-    default String defaultConnectionUrl(Speedment speedment) throws SpeedmentException {
-        return dbmsTypeOf(speedment, this)
-            .getConnectionUrlGenerator().from(this);
     }
     
     /**

@@ -38,7 +38,7 @@ public interface PoolableConnection extends Connection {
 
     String getUser();
 
-    String getPassword();
+    char[] getPassword();
 
     String getUri();
 

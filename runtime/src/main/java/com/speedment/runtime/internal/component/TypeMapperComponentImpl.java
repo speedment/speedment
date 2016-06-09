@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.internal.component;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.TypeMapperComponent;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mapper.bigdecimal.BigDecimalToDouble;
@@ -61,8 +60,8 @@ import java.util.stream.Stream;
 
 /**
  *
- * @author Emil Forslund
- * @since 2.2
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
 public final class TypeMapperComponentImpl extends InternalOpenSourceComponent implements TypeMapperComponent {
 
@@ -70,11 +69,8 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
 
     /**
      * Constructs the component.
-     *
-     * @param speedment the speedment instance
      */
-    public TypeMapperComponentImpl(Speedment speedment) {
-        super(speedment);
+    public TypeMapperComponentImpl() {
         this.mappers = new ConcurrentHashMap<>();
 
         // Identity mappers
@@ -150,10 +146,4 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
     public Stream<Software> getDependencies() {
         return Stream.empty();
     }
-
-    @Override
-    public TypeMapperComponent defaultCopy(Speedment speedment) {
-        return new TypeMapperComponentImpl(speedment);
-    }
-
 }

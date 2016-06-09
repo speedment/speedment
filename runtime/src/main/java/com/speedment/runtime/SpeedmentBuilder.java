@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime;
 
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.trait.HasEnabled;
@@ -35,13 +36,13 @@ import java.util.function.Consumer;
 public interface SpeedmentBuilder<APP extends Speedment, BUILDER extends SpeedmentBuilder<APP, BUILDER>> {
     
     /**
-     * Configures a parameter for the named ConfigEntity of a certain class. The
+     * Configures a parameter for the named {@link Document} of a certain class. The
      * consumer will then be applied after the configuration has been read and
      * after the System properties have been applied.
      *
-     * @param <C>       the type of ConfigEntity that is to be used
-     * @param type      the class of the type of ConfigEntity that is to be used
-     * @param name      the fully qualified name of the ConfigEntity.
+     * @param <C>       the type of {@link Document} that is to be used
+     * @param type      the class of the type of {@link Document} that is to be used
+     * @param name      the fully qualified name of the {@link Document}.
      * @param consumer  the consumer to apply
      * @return          this instance
      */
@@ -50,25 +51,25 @@ public interface SpeedmentBuilder<APP extends Speedment, BUILDER extends Speedme
     }
 
     /**
-     * Configures a parameter for the named ConfigEntity of a certain class. The
+     * Configures a parameter for the named {@link Document} of a certain class. The
      * consumer will then be applied after the configuration has been read and
      * after the System properties have been applied.
      *
-     * @param <C>       the type of ConfigEntity that is to be used
-     * @param type      the class of the type of ConfigEntity that is to be used
-     * @param name      the fully qualified name of the ConfigEntity.
+     * @param <C>       the type of {@link Document} that is to be used
+     * @param type      the class of the type of {@link Document} that is to be used
+     * @param name      the fully qualified name of the {@link Document}.
      * @param consumer  the consumer to apply
      * @return          this instance
      */
-    <C extends Document & HasEnabled> BUILDER with(Class<C> type, String name, BiConsumer<APP, C> consumer);
+    <C extends Document & HasEnabled> BUILDER with(Class<C> type, String name, BiConsumer<Injector, C> consumer);
     
     /**
-     * Configures a parameter for all ConfigEntity of a certain class. The
+     * Configures a parameter for all {@link Document} of a certain class. The
      * consumer will then be applied after the configuration has been read and
      * after the System properties have been applied.
      *
-     * @param <C>       the type of ConfigEntity that is to be used
-     * @param type      the class of the type of ConfigEntity that is to be used
+     * @param <C>       the type of {@link Document} that is to be used
+     * @param type      the class of the type of {@link Document} that is to be used
      * @param consumer  the consumer to apply
      * @return          this instance
      */
@@ -77,16 +78,16 @@ public interface SpeedmentBuilder<APP extends Speedment, BUILDER extends Speedme
     }
     
     /**
-     * Configures a parameter for all ConfigEntity of a certain class. The
+     * Configures a parameter for all {@link Document} of a certain class. The
      * consumer will then be applied after the configuration has been read and
      * after the System properties have been applied.
      *
-     * @param <C>       the type of ConfigEntity that is to be used
-     * @param type      the class of the type of ConfigEntity that is to be used
+     * @param <C>       the type of {@link Document} that is to be used
+     * @param type      the class of the type of {@link Document} that is to be used
      * @param consumer  the consumer to apply
      * @return          this instance
      */
-    <C extends Document & HasEnabled> BUILDER with(Class<C> type, BiConsumer<APP, C> consumer);
+    <C extends Document & HasEnabled> BUILDER with(Class<C> type, BiConsumer<Injector, C> consumer);
     
     /**
      * Configures a password for all dbmses in this project. The password will

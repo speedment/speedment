@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.internal.component;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.component.PasswordComponent;
 import com.speedment.runtime.license.Software;
@@ -33,8 +32,7 @@ public final class PasswordComponentImpl extends InternalOpenSourceComponent imp
 
     private final transient Map<String, char[]> passwords;
 
-    public PasswordComponentImpl(Speedment speedment) {
-        super(speedment);
+    public PasswordComponentImpl() {
         this.passwords = new ConcurrentHashMap<>();
     }
     
@@ -62,10 +60,4 @@ public final class PasswordComponentImpl extends InternalOpenSourceComponent imp
     public Stream<Software> getDependencies() {
         return Stream.empty();
     }
-
-    @Override
-    public PasswordComponent defaultCopy(Speedment speedment) {
-        return new PasswordComponentImpl(speedment);
-    }
-
 }

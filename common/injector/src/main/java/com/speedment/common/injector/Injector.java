@@ -1,5 +1,23 @@
+/**
+ *
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); You may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
 package com.speedment.common.injector;
 
+import com.speedment.common.injector.annotation.Execute;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.internal.InjectorImpl;
@@ -34,6 +52,25 @@ public interface Injector {
      * @throws IllegalArgumentException  if it could not be found
      */
     <T> T get(Class<T> type) throws IllegalArgumentException;
+    
+    /**
+     * Create a new instance of the specified type, injecting all the
+     * fields with the {@link Inject}-annotations.
+     * 
+     * @param <T>   the type to create
+     * @param type  the type to create
+     * @return      the instance created
+     * 
+     * @throws InstantiationException    if the class could not be instantiated
+     * @throws IllegalArgumentException  if the class does not have a default constructor
+     */
+    <T> T newInstance(Class<T> type) throws InstantiationException, IllegalArgumentException;
+    
+    /**
+     * Stop all installed componenets by calling their 
+     * {@code @ExecuteBefore(STOPPED)}-methods in the correct order.
+     */
+    void stop();
     
     /**
      * Returns a new builder for the {@link Injector} interface that uses the default

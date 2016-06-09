@@ -16,7 +16,12 @@
  */
 package com.speedment.runtime.internal.manager.sql;
 
-import com.speedment.runtime.Speedment;
+import static com.speedment.common.injector.State.RESOLVED;
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.runtime.component.DbmsHandlerComponent;
+import com.speedment.runtime.component.ProjectComponent;
+import com.speedment.runtime.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.PrimaryKeyColumn;
@@ -26,12 +31,12 @@ import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.db.AsynchronousQueryResult;
 import com.speedment.runtime.db.DatabaseNamingConvention;
-import com.speedment.runtime.db.DbmsHandler;
 import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.db.SqlFunction;
 import com.speedment.runtime.db.SqlRunnable;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
+import com.speedment.runtime.db.DbmsOperationHandler;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.internal.manager.AbstractManager;
@@ -42,21 +47,17 @@ import com.speedment.runtime.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.runtime.internal.util.LazyString;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.findDbmsType;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.isSame;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.ancestor;
 import com.speedment.runtime.stream.StreamDecorator;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.NClob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLXML;
-import java.sql.Struct;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
@@ -74,9 +75,9 @@ import java.util.stream.Stream;
 
 /**
  *
- * @author pemi
- *
- * @param <ENTITY> Entity type for this Manager
+ * @param <ENTITY>  entity type for this Manager
+ * 
+ * @author Per Minborg
  */
 public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY> implements SqlManager<ENTITY> {
 
@@ -87,33 +88,43 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     private final boolean hasPrimaryKeyColumns;
 
     private SqlFunction<ResultSet, ENTITY> entityMapper;
+    
+    private @Inject ResultSetMapperComponent resultSetMapperComponent;
+    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
+    private @Inject ProjectComponent projectComponent;
 
-    protected AbstractSqlManager(Speedment speedment) {
-        super(speedment);
-        this.sqlColumnList = LazyString.create();
+    protected AbstractSqlManager() {
+        this.sqlColumnList     = LazyString.create();
         this.sqlTableReference = LazyString.create();
-        this.sqlSelect = LazyString.create();
+        this.sqlSelect         = LazyString.create();
+        this.fieldTraitMap     = new HashMap<>();
 
+        this.hasPrimaryKeyColumns = primaryKeyFields().findAny().isPresent();
+    }
+    
+    @ExecuteBefore(RESOLVED)
+    void createFieldTraitMap() {
+        final Project project = projectComponent.getProject();
         final Table thisTable = getTable();
-
+        
         // Only include fields that point towards a column in this table.
         // In the future we might add fields that reference columns in foreign
         // tables.
-        this.fieldTraitMap = fields()
-            .filter(f
-                -> f.findColumn(speedment)
-                .map(c -> c.getParent())
-                .map(t -> isSame(thisTable, t.get()))
-                .orElse(false)
-            )
-            .collect(Collectors.toMap(f -> f.getIdentifier().columnName(), identity()));
-
-        this.hasPrimaryKeyColumns = primaryKeyFields().findAny().isPresent();
+        fieldTraitMap.putAll(
+            fields()
+                .filter(f
+                    -> f.findColumn(project)
+                    .map(c -> c.getParent())
+                    .map(t -> isSame(thisTable, t.get()))
+                    .orElse(false)
+                )
+                .collect(Collectors.toMap(f -> f.getIdentifier().columnName(), identity()))
+        );
     }
 
     @Override
     public Stream<ENTITY> nativeStream(StreamDecorator decorator) {
-        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = decorator.apply(dbmsHandler().executeQueryAsync(sqlSelect(), Collections.emptyList(), entityMapper.unWrap()));
+        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = decorator.apply(dbmsHandler().executeQueryAsync(getDbms(), sqlSelect(), Collections.emptyList(), entityMapper.unWrap()));
         final SqlStreamTerminator<ENTITY> terminator = new SqlStreamTerminator<>(this, asynchronousQueryResult, decorator);
         final Supplier<BaseStream<?, ?>> initialSupplier = () -> decorator.applyOnInitial(asynchronousQueryResult.stream());
         final Stream<ENTITY> result = decorator.applyOnFinal(new ReferenceStreamBuilder<>(new PipelineImpl<>(initialSupplier), terminator));
@@ -126,7 +137,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     public <T> Stream<T> synchronousStreamOf(String sql, List<Object> values, SqlFunction<ResultSet, T> rsMapper) {
         requireNonNulls(sql, values, rsMapper);
-        return dbmsHandler().executeQuery(sql, values, rsMapper);
+        return dbmsHandler().executeQuery(getDbms(), sql, values, rsMapper);
     }
 
     /**
@@ -218,7 +229,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
      * @return the current dbms type
      */
     protected final DbmsType getDbmsType() {
-        return dbmsTypeOf(speedment, getDbms());
+        return dbmsTypeOf(dbmsHandlerComponent, getDbms());
     }
 
     /**
@@ -226,8 +237,8 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
      *
      * @return the current dbms handler
      */
-    protected final DbmsHandler dbmsHandler() {
-        return speedment.getDbmsHandlerComponent().get(getDbms());
+    protected final DbmsOperationHandler dbmsHandler() {
+        return findDbmsType(dbmsHandlerComponent, getDbms()).getOperationHandler();
     }
 
     /**
@@ -317,7 +328,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         // TODO: Make autoinc part of FieldTrait
         @SuppressWarnings("unchecked")
         final List<F> generatedFields = fields()
-            .filter(f -> DocumentDbUtil.referencedColumn(speedment, f.getIdentifier()).isAutoIncrement())
+            .filter(f -> DocumentDbUtil.referencedColumn(projectComponent.getProject(), f.getIdentifier()).isAutoIncrement())
             .filter(ReferenceFieldTrait.class::isInstance)
             .map(f -> (F) f)
             .collect(toList());
@@ -331,8 +342,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
                         .forEach(f -> {
 
                             // Cast from Long to the column target type
-                            final Object val = speedment
-                                .getResultSetMapperComponent()
+                            final Object val = resultSetMapperComponent
                                 .apply(f.typeMapper().getJavaType())
                                 .parse(l.get(cnt.getAndIncrement()));
 
@@ -453,7 +463,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     ) throws SpeedmentException {
         executeHelper(sql, values, listener,
             () -> dbmsHandler().executeInsert(
-                sql, values, generatedFields, generatedKeyconsumer.apply(entity)
+                getDbms(), sql, values, generatedFields, generatedKeyconsumer.apply(entity)
             )
         );
     }
@@ -463,7 +473,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         final List<Object> values,
         final Optional<Consumer<MetaResult<ENTITY>>> listener
     ) throws SpeedmentException {
-        executeHelper(sql, values, listener, () -> dbmsHandler().executeUpdate(sql, values));
+        executeHelper(sql, values, listener, () -> dbmsHandler().executeUpdate(getDbms(), sql, values));
     }
 
     private void executeDelete(
@@ -471,14 +481,14 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         final List<Object> values,
         final Optional<Consumer<MetaResult<ENTITY>>> listener
     ) throws SpeedmentException {
-        executeHelper(sql, values, listener, () -> dbmsHandler().executeDelete(sql, values));
+        executeHelper(sql, values, listener, () -> dbmsHandler().executeDelete(getDbms(), sql, values));
     }
 
     private void executeHelper(
-        final String sql,
-        final List<Object> values,
-        final Optional<Consumer<MetaResult<ENTITY>>> listener,
-        final SqlRunnable action
+        String sql,
+        List<Object> values,
+        Optional<Consumer<MetaResult<ENTITY>>> listener,
+        SqlRunnable action
     ) throws SpeedmentException {
         requireNonNulls(sql, values, listener, action);
 
@@ -509,35 +519,5 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
                 + "update() and remove() requires at least one primary key."
             );
         }
-    }
-
-    @Override
-    public Clob createClob() throws SQLException {
-        return dbmsHandler().createClob();
-    }
-
-    @Override
-    public Blob createBlob() throws SQLException {
-        return dbmsHandler().createBlob();
-    }
-
-    @Override
-    public NClob createNClob() throws SQLException {
-        return dbmsHandler().createNClob();
-    }
-
-    @Override
-    public SQLXML createSQLXML() throws SQLException {
-        return dbmsHandler().createSQLXML();
-    }
-
-    @Override
-    public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
-        return dbmsHandler().createArrayOf(typeName, elements);
-    }
-
-    @Override
-    public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
-        return dbmsHandler().createStruct(typeName, attributes);
     }
 }

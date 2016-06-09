@@ -16,13 +16,10 @@
  */
 package com.speedment.runtime.manager;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.component.Lifecyclable;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.db.MetaResult;
-import com.speedment.runtime.db.trait.HasCreateFromConnectionMethods;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.field.trait.ComparableFieldTrait;
@@ -46,7 +43,7 @@ import java.util.stream.Stream;
  * @param <ENTITY>  entity type for this Manager
  */
 @Api(version = "2.4")
-public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>>, HasCreateFromConnectionMethods {
+public interface Manager<ENTITY> {
 
     // Entity Inspection
     /**
@@ -450,11 +447,4 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>>, HasCreat
     ENTITY update(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
 
     ENTITY remove(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException;
-
-    /**
-     * Returns the {@link Speedment} instance for this Manager.
-     *
-     * @return the {@link Speedment} instance for this Manager
-     */
-    Speedment speedment();
 }

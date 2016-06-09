@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.internal.component;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
@@ -36,8 +35,7 @@ public final class ManagerComponentImpl extends InternalOpenSourceComponent impl
     private final Map<Class<?>, Manager<?>> managersByEntity;
     private final Map<Table, Manager<?>> tableMap;
 
-    public ManagerComponentImpl(Speedment speedment) {
-        super(speedment);
+    public ManagerComponentImpl() {
         managersByEntity = new ConcurrentHashMap<>();
         tableMap         = new ConcurrentHashMap<>();
     }
@@ -58,11 +56,14 @@ public final class ManagerComponentImpl extends InternalOpenSourceComponent impl
     @SuppressWarnings("unchecked")
     public <E> Manager<E> managerOf(Class<E> entityClass) throws SpeedmentException {
         requireNonNull(entityClass);
+        
         @SuppressWarnings("unchecked")
         final Manager<E> manager = (Manager<E>) managersByEntity.get(entityClass);
+        
         if (manager == null) {
             throw new SpeedmentException("No manager exists for " + entityClass);
         }
+        
         return manager;
     }
 
@@ -81,10 +82,5 @@ public final class ManagerComponentImpl extends InternalOpenSourceComponent impl
     @Override
     public Stream<Software> getDependencies() {
         return Stream.empty();
-    }
-
-    @Override
-    public ManagerComponent defaultCopy(Speedment speedment) {
-        return new ManagerComponentImpl(speedment);
     }
 }

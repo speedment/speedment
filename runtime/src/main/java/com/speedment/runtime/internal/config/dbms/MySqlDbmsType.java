@@ -16,12 +16,17 @@
  */
 package com.speedment.runtime.internal.config.dbms;
 
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.RequiresInjectable;
 import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.db.ConnectionUrlGenerator;
 import com.speedment.runtime.db.DatabaseNamingConvention;
+import com.speedment.runtime.db.DbmsMetadataHandler;
+import com.speedment.runtime.db.DbmsOperationHandler;
+import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
 import com.speedment.runtime.internal.db.AbstractDatabaseNamingConvention;
-import com.speedment.runtime.internal.db.MySqlDbmsHandler;
+import com.speedment.runtime.internal.db.mysql.MySqlDbmsMetadataHandler;
+import com.speedment.runtime.internal.db.mysql.MySqlDbmsOperationHandler;
 import com.speedment.runtime.internal.manager.sql.MySqlSpeedmentPredicateView;
 import java.util.Collections;
 import java.util.Set;
@@ -35,26 +40,78 @@ import java.util.stream.Stream;
  * @author  Per Minborg
  * @author  Emil Forslund
  */
-public final class MySqlDbmsType {
+@RequiresInjectable({
+    MySqlDbmsMetadataHandler.class,
+    MySqlDbmsOperationHandler.class
+})
+public final class MySqlDbmsType extends AbstractDbmsType {
     
-    private final static DatabaseNamingConvention NAMER = new MySqlNamingConvention();
-
-    public static final DbmsType INSTANCE = DbmsType.builder()
-        // Mandatory parameters
-        .withName("MySQL")
-        .withDriverManagerName("MySQL-AB JDBC Driver")
-        .withDefaultPort(3306)
-        .withDbmsNameMeaning("Just a name")
-        .withDriverName("com.mysql.jdbc.Driver")
-        .withDatabaseNamingConvention(NAMER)
-        .withDbmsMapper(MySqlDbmsHandler::new)
-        .withConnectionUrlGenerator(new MySqlConnectionUrlGenerator())
-        .withSpeedmentPredicateView(new MySqlSpeedmentPredicateView(NAMER))
-
-        // Optional parameters
-        .withInitialQuery("select version() as `MySQL version`")
-        .build();
+    private final MySqlNamingConvention namingConvention;
+    private final MySqlConnectionUrlGenerator connectionUrlGenerator;
     
+    private @Inject MySqlDbmsMetadataHandler metadataHandler;
+    private @Inject MySqlDbmsOperationHandler operationHandler;
+    
+    private MySqlDbmsType() {
+        namingConvention       = new MySqlNamingConvention();
+        connectionUrlGenerator = new MySqlConnectionUrlGenerator();
+    }
+    
+    @Override
+    public String getName() {
+        return "MySQL";
+    }
+
+    @Override
+    public String getDriverManagerName() {
+        return "MySQL-AB JDBC Driver";
+    }
+
+    @Override
+    public int getDefaultPort() {
+        return 3306;
+    }
+
+    @Override
+    public String getDbmsNameMeaning() {
+        return "Just a name";
+    }
+
+    @Override
+    public String getDriverName() {
+        return "com.mysql.jdbc.Driver";
+    }
+
+    @Override
+    public DatabaseNamingConvention getDatabaseNamingConvention() {
+        return namingConvention;
+    }
+
+    @Override
+    public DbmsMetadataHandler getMetadataHandler() {
+        return metadataHandler;
+    }
+
+    @Override
+    public DbmsOperationHandler getOperationHandler() {
+        return operationHandler;
+    }
+
+    @Override
+    public ConnectionUrlGenerator getConnectionUrlGenerator() {
+        return connectionUrlGenerator;
+    }
+
+    @Override
+    public SpeedmentPredicateView getSpeedmentPredicateView() {
+        return new MySqlSpeedmentPredicateView(namingConvention);
+    }
+
+    @Override
+    public String getInitialQuery() {
+        return "select version() as `MySQL version`";
+    }
+
     private final static class MySqlNamingConvention extends AbstractDatabaseNamingConvention {
 
         private final static String 

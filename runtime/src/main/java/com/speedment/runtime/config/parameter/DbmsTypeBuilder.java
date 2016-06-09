@@ -14,26 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.runtime.config.parameter;
 
-import com.speedment.runtime.Speedment;
-import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.db.ConnectionUrlGenerator;
 import com.speedment.runtime.db.DatabaseNamingConvention;
-import com.speedment.runtime.db.DbmsHandler;
+import com.speedment.runtime.db.DbmsMetadataHandler;
+import com.speedment.runtime.db.DbmsOperationHandler;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
 import java.util.Set;
-import java.util.function.BiFunction;
 
 /**
  *
  * @author Per Minborg
+ * @author Emil Forslund
  */
 public interface DbmsTypeBuilder {
 
@@ -44,7 +38,8 @@ public interface DbmsTypeBuilder {
         WithDbmsNameMeaning,
         WithDriverName,
         WithDatabaseNamingConvention,
-        WithDbmsMapper,
+        WithMetadataHandler,
+        WithOperationHandler,
         WithConnectionUrlGenerator,
         WithSpeedmentPredicateView,
         Optionals {
@@ -127,22 +122,31 @@ public interface DbmsTypeBuilder {
          * @param namingConvention the naming convention for this dbms type
          * @return a builder
          */
-        WithDbmsMapper withDatabaseNamingConvention(DatabaseNamingConvention namingConvention);
+        WithMetadataHandler withDatabaseNamingConvention(DatabaseNamingConvention namingConvention);
     }
 
     @FunctionalInterface
-    public interface WithDbmsMapper {
+    public interface WithMetadataHandler {
 
         /**
-         * Enters the DbmsHandler constructor that are to be used with this
-         * database type. The DbmsHandler is responsible for communicating with
-         * the database in terms of meta data.
+         * Enters the implementation type of the {@link DbmsMetadataHandler}.
          *
-         * @param mapper to use as constructor of new DbmsHandler instances for
-         * this database type.
-         * @return a builder
+         * @param implType  the implementation type of the {@link DbmsMetadataHandler}
+         * @return          a builder
          */
-        WithConnectionUrlGenerator withDbmsMapper(BiFunction<Speedment, Dbms, DbmsHandler> mapper);
+        WithOperationHandler withMetadataHandler(Class<? extends DbmsMetadataHandler> implType);
+    }
+    
+    @FunctionalInterface
+    public interface WithOperationHandler {
+
+        /**
+         * Enters the implementation type of the {@link DbmsOperationHandler}.
+         *
+         * @param implType  the implementation type of the {@link DbmsOperationHandler}
+         * @return          a builder
+         */
+        WithConnectionUrlGenerator withOperationHandler(Class<? extends DbmsOperationHandler> implType);
     }
 
     @FunctionalInterface

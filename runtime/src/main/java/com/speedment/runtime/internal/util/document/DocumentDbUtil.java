@@ -17,6 +17,7 @@
 package com.speedment.runtime.internal.util.document;
 
 import com.speedment.runtime.Speedment;
+import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
@@ -43,14 +44,14 @@ import java.util.stream.Stream;
  */
 public final class DocumentDbUtil {
 
-    public static DbmsType dbmsTypeOf(Speedment speedment, Dbms dbms) {
+    public static DbmsType dbmsTypeOf(DbmsHandlerComponent handler, Dbms dbms) {
         final String typeName = dbms.getTypeName();
-        return speedment.getDbmsHandlerComponent().findByName(typeName)
+        return handler.findByName(typeName)
             .orElseThrow(() -> new SpeedmentException(
                 "Unable to find the database type "
                 + typeName
                 + ". The installed types are: "
-                + speedment.getDbmsHandlerComponent().supportedDbmsTypes()
+                + handler.supportedDbmsTypes()
                     .map(DbmsType::getName)
                     .collect(joining(", "))
             ));
@@ -196,14 +197,33 @@ public final class DocumentDbUtil {
      * {@link DocumentDbUtil#dbmsTypeOf(Speedment, Dbms)}, a 
      * {@code SpeedmentException} will be thrown.
      * 
-     * @param speedment            the speedment instance
+     * @param dbmsHandlerComponent the dbms handler component instance
      * @param dbms                 the database manager
      * @return                     the connection URL to use
      * @throws SpeedmentException  if the {@link DbmsType} couldn't be found
      */
-    public static String findConnectionUrl(Speedment speedment, Dbms dbms) throws SpeedmentException {
+    public static String findConnectionUrl(DbmsHandlerComponent dbmsHandlerComponent, Dbms dbms) 
+            throws SpeedmentException {
+        
+        final DbmsType type = findDbmsType(dbmsHandlerComponent, dbms);
+        
         return dbms.getConnectionUrl()
-            .orElseGet(() -> dbms.defaultConnectionUrl(speedment));
+            .orElseGet(() -> type.getConnectionUrlGenerator().from(dbms));
+    }
+    
+    /**
+     * Locates the {@link DbmsType} corresponding to the specified {@link Dbms},
+     * or throws a {@code SpeedmentException} if it can not be found.
+     * 
+     * @param dbmsHandlerComponent  the handler to look in
+     * @param dbms                  the dbms to look for
+     * @return                      the dbms type of that dbms
+     */
+    public static DbmsType findDbmsType(DbmsHandlerComponent dbmsHandlerComponent, Dbms dbms) {
+        return dbmsHandlerComponent.findByName(dbms.getTypeName())
+            .orElseThrow(() -> new SpeedmentException(
+                "Could not find any installed DbmsType named '" + dbms.getTypeName() + "'."
+            ));
     }
     
     /**
@@ -237,24 +257,24 @@ public final class DocumentDbUtil {
             );
     }
     
-    public static Column referencedColumn(Speedment speedment, FieldIdentifier<?> identifier) {
-        return referencedColumn(speedment, identifier.dbmsName(), identifier.schemaName(), identifier.tableName(), identifier.columnName());
+    public static Column referencedColumn(Project project, FieldIdentifier<?> identifier) {
+        return referencedColumn(project, identifier.dbmsName(), identifier.schemaName(), identifier.tableName(), identifier.columnName());
     }
     
-    public static Table referencedTable(Speedment speedment, FieldIdentifier<?> identifier) {
-        return referencedTable(speedment, identifier.dbmsName(), identifier.schemaName(), identifier.tableName());
+    public static Table referencedTable(Project project, FieldIdentifier<?> identifier) {
+        return referencedTable(project, identifier.dbmsName(), identifier.schemaName(), identifier.tableName());
     }
     
-    public static Schema referencedSchema(Speedment speedment, FieldIdentifier<?> identifier) {
-        return referencedSchema(speedment, identifier.dbmsName(), identifier.schemaName());
+    public static Schema referencedSchema(Project project, FieldIdentifier<?> identifier) {
+        return referencedSchema(project, identifier.dbmsName(), identifier.schemaName());
     }
     
-    public static Dbms referencedDbms(Speedment speedment, FieldIdentifier<?> identifier) {
-        return referencedDbms(speedment, identifier.dbmsName());
+    public static Dbms referencedDbms(Project project, FieldIdentifier<?> identifier) {
+        return referencedDbms(project, identifier.dbmsName());
     }
     
-    public static Column referencedColumn(Speedment speedment, String dbmsName, String schemaName, String tableName, String columnName) {
-        return referencedTable(speedment, dbmsName, schemaName, tableName)
+    public static Column referencedColumn(Project project, String dbmsName, String schemaName, String tableName, String columnName) {
+        return referencedTable(project, dbmsName, schemaName, tableName)
             .columns().filter(column -> columnName.equals(column.getName()))
             .findAny().orElseThrow(() -> new SpeedmentException(
                 "Could not find referenced " + Column.class.getSimpleName() + 
@@ -262,8 +282,8 @@ public final class DocumentDbUtil {
             ));
     }
     
-    public static Table referencedTable(Speedment speedment, String dbmsName, String schemaName, String tableName) {
-        return referencedSchema(speedment, dbmsName, schemaName)
+    public static Table referencedTable(Project project, String dbmsName, String schemaName, String tableName) {
+        return referencedSchema(project, dbmsName, schemaName)
             .tables().filter(table -> tableName.equals(table.getName()))
             .findAny().orElseThrow(() -> new SpeedmentException(
                 "Could not find referenced " + Table.class.getSimpleName() + 
@@ -271,8 +291,8 @@ public final class DocumentDbUtil {
             ));
     }
     
-    public static Schema referencedSchema(Speedment speedment, String dbmsName, String schemaName) {
-        return referencedDbms(speedment, dbmsName)
+    public static Schema referencedSchema(Project project, String dbmsName, String schemaName) {
+        return referencedDbms(project, dbmsName)
             .schemas().filter(schema -> schemaName.equals(schema.getName()))
             .findAny().orElseThrow(() -> new SpeedmentException(
                 "Could not find referenced " + Schema.class.getSimpleName() + 
@@ -280,8 +300,8 @@ public final class DocumentDbUtil {
             ));
     }
     
-    public static Dbms referencedDbms(Speedment speedment, String dbmsName) {
-        return speedment.getProjectComponent().getProject()
+    public static Dbms referencedDbms(Project project, String dbmsName) {
+        return project
             .dbmses().filter(dbms -> dbmsName.equals(dbms.getName()))
             .findAny().orElseThrow(() -> new SpeedmentException(
                 "Could not find referenced " + Dbms.class.getSimpleName() + 

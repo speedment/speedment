@@ -17,9 +17,7 @@
 package com.speedment.runtime.component;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.parameter.DbmsType;
-import com.speedment.runtime.db.DbmsHandler;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -65,21 +63,4 @@ public interface DbmsHandlerComponent extends Component {
      * @return the {@link DbmsType} found or {@code empty}
      */
     Optional<DbmsType> findByName(String dbmsTypeName);
-
-    /**
-     * Creates and returns a new DbmsHandler for the given Dbms.
-     *
-     * @param dbms the dbms to use
-     * @return a new DbmsHandler for the given dbms
-     */
-    DbmsHandler make(Dbms dbms);
-
-    /**
-     * Gets the DbmsHandler for the given Dbms. If no DbmsHandler can be found,
-     * a new DbmsHandler is created using the make() method.
-     *
-     * @param dbms dbms the dbms to use
-     * @return the DbmsHandler for the given dbms
-     */
-    DbmsHandler get(Dbms dbms);
 }

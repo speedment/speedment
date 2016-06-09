@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.internal.component;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.component.resultset.ResultSetMapping;
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.internal.runtime.typemapping.StandardJavaTypeMapping;
 import com.speedment.runtime.license.Software;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import com.speedment.runtime.util.tuple.Tuple2;
 import com.speedment.runtime.util.tuple.Tuples;
 import java.util.Map;
@@ -37,17 +37,12 @@ public final class ResultSetMapperComponentImpl extends InternalOpenSourceCompon
     private final Map<Class<?>, ResultSetMapping<?>> map;
     private final Map<DbmsType, Map<Class<?>, ResultSetMapping<?>>> dbmsTypeMap;
 
-    public ResultSetMapperComponentImpl(Speedment speedment) {
-        super(speedment);
+    public ResultSetMapperComponentImpl() {
         map = newConcurrentMap();
         dbmsTypeMap = newConcurrentMap();
         StandardJavaTypeMapping.stream().forEach(this::put);
     }
 
-    public ResultSetMapperComponentImpl(Speedment speedment, ResultSetMapperComponentImpl template) {
-        this(speedment);
-    }
-    
     @Override
     protected String getDescription() {
         return "Maps JDBC result-sets to Speedment entities.";
@@ -59,15 +54,13 @@ public final class ResultSetMapperComponentImpl extends InternalOpenSourceCompon
     }
 
     public ResultSetMapping<?> put(DbmsType dbmsType, ResultSetMapping<?> item) {
-        requireNonNull(dbmsType);
-        requireNonNull(item);
+        requireNonNulls(dbmsType, item);
         return dbmsTypeMap.computeIfAbsent(dbmsType, k -> new ConcurrentHashMap<>()).put(item.getJavaClass(), item);
     }
 
     @Override
     public <T> ResultSetMapping<T> apply(DbmsType dbmsType, Class<T> javaClass) {
-        requireNonNull(dbmsType);
-        requireNonNull(javaClass);
+        requireNonNulls(dbmsType, javaClass);
         return getFromMapOrThrow(dbmsTypeMap.getOrDefault(dbmsType, map), javaClass, () -> dbmsType + ", " + javaClass.getName());
     }
 
@@ -82,16 +75,9 @@ public final class ResultSetMapperComponentImpl extends InternalOpenSourceCompon
         return Stream.empty();
     }
 
-    @Override
-    public ResultSetMapperComponent defaultCopy(Speedment speedment) {
-        return new ResultSetMapperComponentImpl(speedment, this);
-    }
-
     @SuppressWarnings("unchecked")
     private <T> ResultSetMapping<T> getFromMapOrThrow(Map<Class<?>, ResultSetMapping<?>> map, Class<T> javaClass, Supplier<String> throwMessageSupplier) {
-        requireNonNull(map);
-        requireNonNull(javaClass);
-        requireNonNull(throwMessageSupplier);
+        requireNonNulls(map, javaClass, throwMessageSupplier);
         return Optional.ofNullable((ResultSetMapping<T>) map.get(javaClass))
             .orElseThrow(() -> new NullPointerException("The " + ResultSetMapperComponent.class.getSimpleName() + " does not have a mapping for " + throwMessageSupplier.get()));
     }

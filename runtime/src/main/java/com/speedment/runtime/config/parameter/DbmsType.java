@@ -16,18 +16,16 @@
  */
 package com.speedment.runtime.config.parameter;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.parameter.DbmsTypeBuilder.WithDbmsNameMeaning;
 import com.speedment.runtime.config.parameter.DbmsTypeBuilder.WithName;
 import com.speedment.runtime.db.ConnectionUrlGenerator;
 import com.speedment.runtime.db.DatabaseNamingConvention;
-import com.speedment.runtime.db.DbmsHandler;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;
-import com.speedment.runtime.internal.config.dbms.DbmsTypeImpl;
 import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
 import static com.speedment.common.mapstream.MapStream.comparing;
+import com.speedment.runtime.db.DbmsMetadataHandler;
+import com.speedment.runtime.db.DbmsOperationHandler;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
@@ -123,16 +121,26 @@ public interface DbmsType {
     DatabaseNamingConvention getDatabaseNamingConvention();
 
     /**
-     * Creates and returns a new {@code DbmsHandler} instance for the given
-     * database.
-     *
-     * @param speedment instance to use
-     * @param dbms the Dbms configuration to use
-     * @return a new {@code DbmsHandler} instance for the given database
+     * Returns the handler responsible for loading the metadata when 
+     * running this type of database.
+     * 
+     * @return the {@link DbmsMetadataHandler}
      */
-    DbmsHandler makeDbmsHandler(Speedment speedment, Dbms dbms);
+    DbmsMetadataHandler getMetadataHandler();
+    
+    /**
+     * Returns the handler responsible for running queries to databases 
+     * of this type.
+     * 
+     * @return the implementation type of the {@link DbmsOperationHandler}
+     */
+    DbmsOperationHandler getOperationHandler();
 
-    // TODO: Improve javadoc in this file.
+    /**
+     * Returns the result set table schema.
+     * 
+     * @return  the result set table schema.
+     */
     String getResultSetTableSchema();
 
     /**
@@ -169,18 +177,4 @@ public interface DbmsType {
      * database during speedment startup
      */
     String getInitialQuery();
-
-    /**
-     * Creates and returns a new DbmsType builder. The builder is initialized
-     * with default values for some optional parameters.
-     *
-     * @return a new DbmsType builder
-     */
-    public static WithName builder() {
-        return DbmsTypeImpl.builder();
-    }
-
-    public static WithDbmsNameMeaning builder(String name, String driverManagerName, int defaultPort) {
-        return builder().withName(name).withDriverManagerName(driverManagerName).withDefaultPort(defaultPort);
-    }
 }

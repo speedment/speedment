@@ -16,7 +16,8 @@
  */
 package com.speedment.runtime.internal.component;
 
-import com.speedment.runtime.Speedment;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.component.StreamSupplierComponent;
 import com.speedment.runtime.license.Software;
 import com.speedment.runtime.stream.StreamDecorator;
@@ -24,13 +25,11 @@ import java.util.stream.Stream;
 
 /**
  *
- * @author pemi
+ * @author Per Minborg
  */
 public class NativeStreamSupplierComponentImpl extends InternalOpenSourceComponent implements StreamSupplierComponent {
 
-    public NativeStreamSupplierComponentImpl(Speedment speedment) {
-        super(speedment);
-    }
+    private @Inject ManagerComponent managerComponent;
     
     @Override
     protected String getDescription() {
@@ -40,17 +39,11 @@ public class NativeStreamSupplierComponentImpl extends InternalOpenSourceCompone
 
     @Override
     public <ENTITY> Stream<ENTITY> stream(Class<ENTITY> entityClass, StreamDecorator decorator) {
-        return getSpeedment().managerOf(entityClass).nativeStream(decorator);
+        return managerComponent.managerOf(entityClass).nativeStream(decorator);
     }
 
     @Override
     public Stream<Software> getDependencies() {
         return Stream.empty();
     }
-
-    @Override
-    public StreamSupplierComponent defaultCopy(Speedment speedment) {
-        return new NativeStreamSupplierComponentImpl(speedment);
-    }
-
 }

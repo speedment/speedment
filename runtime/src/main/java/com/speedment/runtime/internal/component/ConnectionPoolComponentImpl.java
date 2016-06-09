@@ -16,12 +16,18 @@
  */
 package com.speedment.runtime.internal.component;
 
-import com.speedment.runtime.Speedment;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.component.connectionpool.PoolableConnection;
 import com.speedment.runtime.internal.pool.PoolableConnectionImpl;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
+import com.speedment.runtime.component.DbmsHandlerComponent;
+import com.speedment.runtime.component.PasswordComponent;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.exception.SpeedmentException;
+import static com.speedment.runtime.internal.stream.OptionalUtil.unwrap;
+import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.license.Software;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -38,7 +44,7 @@ import java.util.stream.Stream;
 /**
  * A fully concurrent implementation of a connection pool.
  *
- * @author pemi
+ * @author Per Minborg
  */
 public class ConnectionPoolComponentImpl extends InternalOpenSourceComponent implements ConnectionPoolComponent {
 
@@ -52,6 +58,9 @@ public class ConnectionPoolComponentImpl extends InternalOpenSourceComponent imp
 
     private final Map<Long, PoolableConnection> leasedConnections;
     private final Map<String, Deque<PoolableConnection>> pools;
+    
+    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
+    private @Inject PasswordComponent passwordComponent;
 
     public ConnectionPoolComponentImpl() {
         maxAge = DEFAULT_MAX_AGE;
@@ -64,9 +73,19 @@ public class ConnectionPoolComponentImpl extends InternalOpenSourceComponent imp
     protected String getDescription() {
         return "Allows connections to the database to be recycled.";
     }
+    
+    @Override
+    public PoolableConnection getConnection(Dbms dbms) {
+        
+        final String uri      = DocumentDbUtil.findConnectionUrl(dbmsHandlerComponent, dbms);
+        final String username = unwrap(dbms.getUsername());
+        final char[] password = unwrap(passwordComponent.get(dbms));
+
+        return getConnection(uri, username, password);
+    }
 
     @Override
-    public PoolableConnection getConnection(String uri, String user, String password) throws SQLException {
+    public PoolableConnection getConnection(String uri, String user, char[] password) {
         requireNonNull(uri);
         // user nullable
         // password nullable
@@ -80,14 +99,36 @@ public class ConnectionPoolComponentImpl extends InternalOpenSourceComponent imp
         } else {
             final Connection newRawConnection = newConnection(uri, user, password);
             final PoolableConnection newConnection = new PoolableConnectionImpl(uri, user, password, newRawConnection, System.currentTimeMillis() + getMaxAge());
-//            getLogger().info("Created connection " + newConnection.getId() + " (" + leasedConnections.size() + ")");
             newConnection.setOnClose(() -> returnConnection(newConnection));
             logger.debug("New Connection:" + newConnection);
             return lease(newConnection);
         }
-
     }
 
+    @Override
+    public Connection newConnection(Dbms dbms) {
+        
+        final String uri      = DocumentDbUtil.findConnectionUrl(dbmsHandlerComponent, dbms);
+        final String username = unwrap(dbms.getUsername());
+        final char[] password = unwrap(passwordComponent.get(dbms));
+        
+        return newConnection(uri, username, password);
+    }
+
+    @Override
+    public Connection newConnection(String uri, String username, char[] password) {
+        try {
+            return DriverManager.getConnection(uri, username, charsToString(password));
+        } catch (final SQLException ex) {
+            final String msg = "Unable to get connection using url \"" + uri + 
+                "\", user = \"" + username +
+                "\", password = \"********\".";
+
+            logger.error(ex, msg);
+            throw new SpeedmentException(msg, ex);
+        }
+    }
+    
     @Override
     public void returnConnection(PoolableConnection connection) {
         requireNonNull(connection);
@@ -105,10 +146,9 @@ public class ConnectionPoolComponentImpl extends InternalOpenSourceComponent imp
             }
         }
     }
-
-    @Override
-    public Connection newConnection(String uri, String user, String password) throws SQLException {
-        return DriverManager.getConnection(uri, user, password);
+    
+    private String charsToString(char[] chars) {
+        return chars == null ? "null" : new String(chars);
     }
 
     private void discard(PoolableConnection connection) {
@@ -116,7 +156,6 @@ public class ConnectionPoolComponentImpl extends InternalOpenSourceComponent imp
         logger.debug("Discard:" + connection);
         try {
             connection.rawClose();
-//            getLogger().info("Discarded connection " + connection.getId() + " (" + leasedConnections.size() + ")");
         } catch (SQLException sqle) {
             getLogger().error(sqle, "Error closing a connection.");
         }
@@ -157,11 +196,11 @@ public class ConnectionPoolComponentImpl extends InternalOpenSourceComponent imp
         return makeKey(connection.getUri(), connection.getUser(), connection.getPassword());
     }
 
-    private String makeKey(String uri, String user, String password) {
+    private String makeKey(String uri, String user, char[] password) {
         requireNonNull(uri);
         // user nullable
         // password nullable
-        return uri + Objects.toString(user) + Objects.toString(password);
+        return uri + Objects.toString(user) + ((password == null) ? "null" : new String(password));
     }
 
     private Deque<PoolableConnection> acquireDeque(String key) {
@@ -211,10 +250,4 @@ public class ConnectionPoolComponentImpl extends InternalOpenSourceComponent imp
     public Stream<Software> getDependencies() {
         return Stream.empty();
     }
-
-    @Override
-    public ConnectionPoolComponent defaultCopy(Speedment speedment) {
-        return new ConnectionPoolComponentImpl();
-    }
-
 }

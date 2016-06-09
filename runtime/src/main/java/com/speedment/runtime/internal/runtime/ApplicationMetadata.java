@@ -21,7 +21,7 @@ package com.speedment.runtime.internal.runtime;
  * configuration meta data. For example, in a form of a json file
  *
  * @author pemi
- * @since 2.0
+ * @since  2.0
  */
 public interface ApplicationMetadata {
 

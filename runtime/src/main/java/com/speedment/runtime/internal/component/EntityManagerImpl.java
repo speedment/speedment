@@ -16,12 +16,13 @@
  */
 package com.speedment.runtime.internal.component;
 
-import com.speedment.runtime.Speedment;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.EntityManager;
 import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.license.Software;
 import com.speedment.runtime.manager.Manager;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -32,10 +33,8 @@ import java.util.stream.Stream;
  */
 public final class EntityManagerImpl extends InternalOpenSourceComponent implements EntityManager {
 
-    public EntityManagerImpl(Speedment speedment) {
-        super(speedment);
-    }
-
+    private @Inject ManagerComponent managerComponent;
+    
     @Override
     protected String getDescription() {
         return "Handles persistence for any Entity. This Component provides an interface similar " + 
@@ -65,16 +64,12 @@ public final class EntityManagerImpl extends InternalOpenSourceComponent impleme
         return Stream.empty();
     }
 
-    @Override
-    public EntityManager defaultCopy(Speedment speedment) {
-        return new EntityManagerImpl(speedment);
-    }
-
     private <ENTITY> Manager<ENTITY> managerOf(ENTITY entity) {
         requireNonNull(entity);
-        final ManagerComponent managerComponent = getSpeedment().getManagerComponent();
+        
         @SuppressWarnings("rawtypes")
         final Optional<Manager> manager = managerOf(entity.getClass(), managerComponent);
+        
         if (manager.isPresent()) {
             @SuppressWarnings("unchecked")
             final Manager<ENTITY> result = (Manager<ENTITY>) manager.get();
@@ -85,12 +80,13 @@ public final class EntityManagerImpl extends InternalOpenSourceComponent impleme
 
     @SuppressWarnings("rawtypes")
     private static Optional<Manager> managerOf(Class<?> entityInterface, ManagerComponent managerComponent) {
-        requireNonNull(entityInterface);
-        requireNonNull(managerComponent);
+        requireNonNulls(entityInterface, managerComponent);
+        
         final Manager manager = managerComponent.managerOf(entityInterface);
         if (manager != null) {
             return Optional.of(manager);
         }
+        
         for (final Class<?> parentEntityInterface : entityInterface.getInterfaces()) {
             // Recuresively explore...
             final Optional<Manager> parentManager = managerOf(parentEntityInterface, managerComponent);
@@ -98,6 +94,7 @@ public final class EntityManagerImpl extends InternalOpenSourceComponent impleme
                 return parentManager;
             }
         }
+        
         return Optional.empty();
     }
 

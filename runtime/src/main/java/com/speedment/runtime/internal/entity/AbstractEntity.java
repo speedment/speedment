@@ -17,10 +17,8 @@
 package com.speedment.runtime.internal.entity;
 
 import com.speedment.runtime.entity.Entity;
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.manager.Manager;
-import static java.util.Objects.requireNonNull;
 
 /**
  * Abstract base class that makes it easier to implements the {@link Entity}
@@ -42,31 +40,23 @@ public abstract class AbstractEntity<ENTITY> implements Entity<ENTITY> {
     protected abstract Class<ENTITY> entityClass();
 
     @Override
-    public ENTITY persist(Speedment speedment) throws SpeedmentException {
-        return manager_(speedment).persist(selfAsEntity());
+    public ENTITY persist(Manager<ENTITY> manager) throws SpeedmentException {
+        return manager.persist(selfAsEntity());
     }
 
     @Override
-    public ENTITY update(Speedment speedment) throws SpeedmentException {
-        return manager_(speedment).update(selfAsEntity());
+    public ENTITY update(Manager<ENTITY> manager) throws SpeedmentException {
+        return manager.update(selfAsEntity());
     }
 
     @Override
-    public ENTITY remove(Speedment speedment) throws SpeedmentException {
-        return manager_(speedment).remove(selfAsEntity());
+    public ENTITY remove(Manager<ENTITY> manager) throws SpeedmentException {
+        return manager.remove(selfAsEntity());
     }
 
     @Override
-    public ENTITY copy(Speedment speedment) {
-        return manager_(speedment).newCopyOf(selfAsEntity());
-    }
-
-    protected Manager<ENTITY> manager_(Speedment speedment) {
-        return managerOf_(speedment, entityClass());
-    }
-
-    protected <T> Manager<T> managerOf_(Speedment speedment, Class<T> entityClass) {
-        return speedment.managerOf(requireNonNull(entityClass));
+    public ENTITY copy(Manager<ENTITY> manager) {
+        return manager.newCopyOf(selfAsEntity());
     }
     
     private ENTITY selfAsEntity() {

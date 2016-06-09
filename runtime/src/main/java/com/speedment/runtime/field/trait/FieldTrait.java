@@ -19,6 +19,7 @@ package com.speedment.runtime.field.trait;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import java.util.Optional;
 
@@ -49,8 +50,8 @@ public interface FieldTrait {
      * Locates the column that this field is referencing by using the specified
      * {@link Speedment} instance.
      * 
-     * @param speedment  the speedment instance
-     * @return           the column
+     * @param project  the project instance
+     * @return         the column
      */
-    Optional<Column> findColumn(Speedment speedment);
+    Optional<Column> findColumn(Project project);
 }

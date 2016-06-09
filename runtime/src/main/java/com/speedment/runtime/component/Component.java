@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.component;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.license.Software;
 
@@ -28,7 +27,7 @@ import com.speedment.runtime.license.Software;
  * @author Emil Forslund
  * @since 2.0
  */
-@Api(version = "2.3")
+@Api(version = "2.4")
 public interface Component {
 
     /**
@@ -37,13 +36,6 @@ public interface Component {
      * @return the interface class
      */
     Class<? extends Component> getComponentClass();
-
-    /**
-     * Returns the Speedment platform.
-     *
-     * @return the Speedment platform
-     */
-    Speedment getSpeedment();
 
     /**
      * Returns information about this components title, version, license and any
@@ -59,13 +51,4 @@ public interface Component {
      * @return {@code true} if this is an internal component
      */
     boolean isInternal();
-
-    /**
-     * Creates and returns a default copy of this component. The new component
-     * is initialized to its default state.
-     *
-     * @param speedment instance to use
-     * @return a default copy of this component
-     */
-    Component defaultCopy(Speedment speedment);
 }

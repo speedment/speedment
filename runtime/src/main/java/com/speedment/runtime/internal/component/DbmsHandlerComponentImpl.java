@@ -16,40 +16,28 @@
  */
 package com.speedment.runtime.internal.component;
 
-import com.speedment.runtime.Speedment;
+import com.speedment.common.injector.annotation.RequiresInjectable;
 import com.speedment.runtime.component.DbmsHandlerComponent;
-import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.parameter.DbmsType;
-import com.speedment.runtime.db.DbmsHandler;
-import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.config.dbms.StandardDbmsType;
+import com.speedment.runtime.internal.config.dbms.StandardDbmsTypes;
 import com.speedment.runtime.license.Software;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author pemi
+ * @author Per Minborg
  */
+@RequiresInjectable(StandardDbmsTypes.class)
 public final class DbmsHandlerComponentImpl extends InternalOpenSourceComponent implements DbmsHandlerComponent {
 
     private final Map<String, DbmsType> dbmsTypes;
-    private final Map<Dbms, DbmsHandler> map;
 
-    public DbmsHandlerComponentImpl(Speedment speedment) {
-        super(speedment);
+    public DbmsHandlerComponentImpl() {
         this.dbmsTypes = new ConcurrentHashMap<>();
-        this.map = new ConcurrentHashMap<>();
-        StandardDbmsType.stream().forEach(this::install);
-    }
-
-    public DbmsHandlerComponentImpl(Speedment speedment, DbmsHandlerComponentImpl template) {
-        super(speedment);
-        this.dbmsTypes = new ConcurrentHashMap<>(template.dbmsTypes);
-        this.map = new ConcurrentHashMap<>(template.map);
     }
     
     @Override
@@ -60,25 +48,6 @@ public final class DbmsHandlerComponentImpl extends InternalOpenSourceComponent 
     @Override
     public Class<DbmsHandlerComponent> getComponentClass() {
         return DbmsHandlerComponent.class;
-    }
-
-    @Override
-    public DbmsHandler make(final Dbms dbms) {
-        requireNonNull(dbms);
-        
-        final String dbmsTypeName = dbms.getTypeName();
-        final DbmsType dbmsType = findByName(dbmsTypeName)
-            .orElseThrow(() -> new SpeedmentException(
-                "Unable to find a DbmsType with name "+dbmsTypeName
-            ));
-        
-        return dbmsType.makeDbmsHandler(getSpeedment(), dbms);
-    }
-
-    @Override
-    public DbmsHandler get(Dbms dbms) {
-        requireNonNull(dbms);
-        return map.computeIfAbsent(dbms, this::make);
     }
 
     @Override
@@ -106,10 +75,4 @@ public final class DbmsHandlerComponentImpl extends InternalOpenSourceComponent 
     public Stream<Software> getDependencies() {
         return Stream.empty();
     }
-
-    @Override
-    public DbmsHandlerComponentImpl defaultCopy(Speedment speedment) {
-        return new DbmsHandlerComponentImpl(speedment, this);
-    } 
-    
 }

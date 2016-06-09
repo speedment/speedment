@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.internal.component;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.EventComponent;
 import com.speedment.runtime.event.DefaultEvent;
 import com.speedment.runtime.event.Event;
@@ -39,9 +38,7 @@ public final class EventComponentImpl extends InternalOpenSourceComponent implem
     private final Map<Class<? extends Event>, Set<Consumer<Event>>> otherEventListeners;
     private final Set<Consumer<Event>> anyEventListeners;
 
-    public EventComponentImpl(Speedment speedment) {
-        super(speedment);
-        
+    public EventComponentImpl() {
         final EnumMap<DefaultEvent, Set<Consumer<DefaultEvent>>> defaultListeners = 
             new EnumMap<>(DefaultEvent.class);
         
@@ -52,10 +49,6 @@ public final class EventComponentImpl extends InternalOpenSourceComponent implem
         defaultEventListeners = Collections.unmodifiableMap(defaultListeners);
         otherEventListeners   = new ConcurrentHashMap<>();
         anyEventListeners     = Collections.newSetFromMap(new ConcurrentHashMap<>());
-    }
-
-    public EventComponentImpl(Speedment speedment, EventComponentImpl template) {
-        this(speedment);
     }
     
     @Override
@@ -95,11 +88,6 @@ public final class EventComponentImpl extends InternalOpenSourceComponent implem
     @Override
     public Stream<Software> getDependencies() {
         return Stream.empty();
-    }
-
-    @Override
-    public EventComponent defaultCopy(Speedment speedment) {
-        return new EventComponentImpl(speedment, this);
     }
 
     private <E extends Event> Set<Consumer<Event>> listeners(Class<E> event) {

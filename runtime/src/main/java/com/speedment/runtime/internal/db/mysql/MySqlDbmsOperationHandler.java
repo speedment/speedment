@@ -14,30 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.injector.internal.dependency;
+package com.speedment.runtime.internal.db.mysql;
 
-import com.speedment.common.injector.State;
-import java.util.Set;
+import com.speedment.runtime.internal.db.AbstractDbmsOperationHandler;
 
 /**
  *
  * @author  Emil Forslund
- * @since   1.0.0
+ * @since   2.4.0
  */
-public interface DependencyNode {
-    
-    Class<?> getRepresentedType();
-    
-    Set<Dependency> getDependencies();
-    
-    Set<Execution> getExecutions();
-    
-    State getCurrentState();
-    
-    void setState(State newState);
-    
-    boolean canBe(State state);
-    
-    boolean is(State state);
+public final class MySqlDbmsOperationHandler extends AbstractDbmsOperationHandler {
     
 }

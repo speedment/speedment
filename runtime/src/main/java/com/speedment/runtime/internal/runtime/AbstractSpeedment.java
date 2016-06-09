@@ -17,7 +17,28 @@
 package com.speedment.runtime.internal.runtime;
 
 import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.RequiresInjectable;
 import com.speedment.runtime.Speedment;
+import com.speedment.runtime.component.Component;
+import com.speedment.runtime.component.ManagerComponent;
+import com.speedment.runtime.component.ProjectComponent;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.exception.SpeedmentException;
+import com.speedment.runtime.internal.component.ConnectionPoolComponentImpl;
+import com.speedment.runtime.internal.component.DbmsHandlerComponentImpl;
+import com.speedment.runtime.internal.component.EntityManagerImpl;
+import com.speedment.runtime.internal.component.EventComponentImpl;
+import com.speedment.runtime.internal.component.InfoComponentImpl;
+import com.speedment.runtime.internal.component.ManagerComponentImpl;
+import com.speedment.runtime.internal.component.NativeStreamSupplierComponentImpl;
+import com.speedment.runtime.internal.component.PasswordComponentImpl;
+import com.speedment.runtime.internal.component.PrimaryKeyFactoryComponentImpl;
+import com.speedment.runtime.internal.component.ProjectComponentImpl;
+import com.speedment.runtime.internal.component.ResultSetMapperComponentImpl;
+import com.speedment.runtime.internal.component.TypeMapperComponentImpl;
+import com.speedment.runtime.internal.config.dbms.StandardDbmsTypes;
+import com.speedment.runtime.manager.Manager;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -26,27 +47,58 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  2.4.0
  */
+@RequiresInjectable({
+    ConnectionPoolComponentImpl.class,
+    DbmsHandlerComponentImpl.class,
+    EntityManagerImpl.class,
+    EventComponentImpl.class,
+    InfoComponentImpl.class,
+    ManagerComponentImpl.class,
+    NativeStreamSupplierComponentImpl.class,
+    PasswordComponentImpl.class,
+    PrimaryKeyFactoryComponentImpl.class,
+    ProjectComponentImpl.class,
+    ResultSetMapperComponentImpl.class,
+    TypeMapperComponentImpl.class,
+    StandardDbmsTypes.class
+})
 public abstract class AbstractSpeedment implements Speedment {
     
-    private final Injector injector;
-
-    protected AbstractSpeedment(Injector injector) {
+    private @Inject ManagerComponent managerComponent;
+    private @Inject ProjectComponent projectComponent;
+    private Injector injector;
+    
+    protected AbstractSpeedment() {}
+    
+    void setInjector(Injector injector) {
         this.injector = requireNonNull(injector);
     }
 
     @Override
-    public void start() {
-        // do nothing yet!
+    public <ENTITY> Manager<ENTITY> managerOf(Class<ENTITY> entityClass) throws SpeedmentException {
+        return managerComponent.managerOf(entityClass);
+    }
+
+    @Override
+    public <C extends Component> C getOrThrow(Class<C> componentClass) throws SpeedmentException {
+        try {
+            return injector.get(componentClass);
+        } catch (final IllegalArgumentException ex) {
+            throw new SpeedmentException(
+                "Specified component '" + componentClass.getSimpleName() + 
+                "' is not installed in the platform.", ex
+            );
+        }
+    }
+
+    @Override
+    public Project project() {
+        return projectComponent.getProject();
     }
 
     @Override
     public void stop() {
-        // do nothing yet!
-    }
-
-    @Override
-    public final Injector injector() {
-        return injector;
+        injector.stop();
     }
     
     protected abstract AbstractApplicationBuilder<?, ?> newApplicationBuilder();

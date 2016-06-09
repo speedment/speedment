@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.internal.component;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.PrimaryKeyFactoryComponent;
 import com.speedment.runtime.license.Software;
 import java.util.AbstractList;
@@ -36,13 +35,9 @@ import java.util.stream.Stream;
 
 /**
  *
- * @author pemi
+ * @author Per Minborg
  */
 public final class PrimaryKeyFactoryComponentImpl extends InternalOpenSourceComponent implements PrimaryKeyFactoryComponent {
-
-    public PrimaryKeyFactoryComponentImpl(Speedment speedment) {
-        super(speedment);
-    }
 
     @Override
     public <K0, K1> List<?> make(K0 k0, K1 k1) {
@@ -181,16 +176,16 @@ public final class PrimaryKeyFactoryComponentImpl extends InternalOpenSourceComp
 
         @Override
         public int indexOf(Object o) {
-            E[] a = this.a;
+            E[] es = this.a;
             if (o == null) {
-                for (int i = 0; i < a.length; i++) {
-                    if (a[i] == null) {
+                for (int i = 0; i < es.length; i++) {
+                    if (es[i] == null) {
                         return i;
                     }
                 }
             } else {
-                for (int i = 0; i < a.length; i++) {
-                    if (o.equals(a[i])) {
+                for (int i = 0; i < es.length; i++) {
+                    if (o.equals(es[i])) {
                         return i;
                     }
                 }
@@ -237,10 +232,4 @@ public final class PrimaryKeyFactoryComponentImpl extends InternalOpenSourceComp
         }
 
     }
-
-    @Override
-    public PrimaryKeyFactoryComponent defaultCopy(Speedment speedment) {
-        return new PrimaryKeyFactoryComponentImpl(speedment);
-    }
-
 }

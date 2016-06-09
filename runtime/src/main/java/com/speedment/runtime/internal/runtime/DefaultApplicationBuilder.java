@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.internal.runtime;
 
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.exception.SpeedmentException;
 import java.io.File;
@@ -32,6 +33,10 @@ public final class DefaultApplicationBuilder extends
 
     private final ApplicationMetadata metadata; // Can be null.
 
+    /**
+     * Constructs a new DefaultApplicationBuilder with an empty
+     * domain model.
+     */
     public DefaultApplicationBuilder() {
         this((File) null);
     }
@@ -40,22 +45,28 @@ public final class DefaultApplicationBuilder extends
      * Constructs a new DefaultApplicationBuilder from the UTF-8
      * encoded configuration file.
      *
-     * @param configFile UTF-8 encoded configuration file
+     * @param configFile  UTF-8 encoded configuration file
      */
     public DefaultApplicationBuilder(File configFile) {
         this(loadMetadataFrom(configFile));
     }
     
+    /**
+     * Constructs a new DefaultApplicationBuilder from the specified
+     * json string.
+     *
+     * @param json  json encoded domain model
+     */
     public DefaultApplicationBuilder(String json) {
-        super(new SpeedmentImpl());
+        super(SpeedmentImpl.class);
         if (json == null) metadata = null;
         else metadata = () -> json;
     }
 
     @Override
-    public void onLoad() {
-        super.onLoad();
-        loadAndSetProject();
+    protected Speedment build(Injector injector) {
+        loadAndSetProject(injector);
+        return injector.get(Speedment.class);
     }
 
     @Override
@@ -64,7 +75,7 @@ public final class DefaultApplicationBuilder extends
     }
 
     @Override
-    protected void printWelcomeMessage() {}
+    protected void printWelcomeMessage(Injector injector) {}
 
     private static String loadMetadataFrom(File configFile) {
         if (configFile != null) {

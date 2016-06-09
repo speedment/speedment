@@ -52,11 +52,7 @@ public class PrimaryKeyFactoryComponentImplTest {
 
     @Before
     public void setUp() {
-        final Speedment speedment = new DefaultApplicationBuilder()
-            .withCheckDatabaseConnectivity(false)
-            .withValidateRuntimeConfig(false)
-            .build();
-        instance = new PrimaryKeyFactoryComponentImpl(speedment);
+        instance = new PrimaryKeyFactoryComponentImpl();
     }
 
     @Test

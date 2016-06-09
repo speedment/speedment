@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.internal.component;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.SpeedmentVersion;
 import com.speedment.runtime.internal.license.AbstractSoftware;
 import com.speedment.runtime.internal.license.OpenSourceLicense;

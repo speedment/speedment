@@ -16,23 +16,14 @@
  */
 package com.speedment.runtime.internal.component;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Project;
-import com.speedment.runtime.internal.license.AbstractSoftware;
-import com.speedment.runtime.internal.license.OpenSourceLicense;
-import com.speedment.runtime.license.Software;
 import static java.util.Objects.requireNonNull;
-import java.util.stream.Stream;
 
 public final class ProjectComponentImpl extends InternalOpenSourceComponent implements ProjectComponent {
 
     private Project project;
 
-    public ProjectComponentImpl(Speedment speedment) {
-        super(speedment);
-    }
-    
     @Override
     protected String getDescription() {
         return "Holds a reference to the project node where all the project-specific " + 
@@ -48,19 +39,4 @@ public final class ProjectComponentImpl extends InternalOpenSourceComponent impl
     public void setProject(Project project) {
         this.project = requireNonNull(project);
     }
-
-    @Override
-    public Stream<Software> getDependencies() {
-        return Stream.of(DEPENDENCIES);
-    }
-
-    private final static Software[] DEPENDENCIES = {
-        AbstractSoftware.with("Gson", "2.6.2", OpenSourceLicense.APACHE_2)
-    };
-
-    @Override
-    public ProjectComponent defaultCopy(Speedment speedment) {
-        return new ProjectComponentImpl(speedment);
-    }
-
 }

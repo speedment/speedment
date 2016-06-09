@@ -16,8 +16,6 @@
  */
 package com.speedment.runtime.internal.component;
 
-import com.speedment.runtime.Speedment;
-import com.speedment.runtime.component.Component;
 import com.speedment.runtime.component.InfoComponent;
 
 /**
@@ -28,10 +26,6 @@ import com.speedment.runtime.component.InfoComponent;
 public final class InfoComponentImpl extends InternalOpenSourceComponent 
     implements InfoComponent {
 
-    public InfoComponentImpl(Speedment speedment) {
-        super(speedment);
-    }
-    
     @Override
     protected String getDescription() {
         return "Sets the name, description and version of Speedment to show in the UI.";
@@ -50,10 +44,5 @@ public final class InfoComponentImpl extends InternalOpenSourceComponent
     @Override
     public String version() {
         return "2.4.0";
-    }
-
-    @Override
-    public Component defaultCopy(Speedment speedment) {
-        return new InfoComponentImpl(speedment);
     }
 }

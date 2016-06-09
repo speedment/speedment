@@ -22,26 +22,20 @@ import com.speedment.runtime.SpeedmentVersion;
 import static com.speedment.runtime.SpeedmentVersion.getImplementationVendor;
 import static com.speedment.runtime.SpeedmentVersion.getSpecificationVersion;
 import com.speedment.runtime.component.Component;
-import com.speedment.runtime.component.DbmsHandlerComponent;
-import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasName;
-import com.speedment.runtime.db.DbmsHandler;
-import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.config.ProjectImpl;
-import com.speedment.runtime.internal.config.immutable.ImmutableProject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.SpeedmentBuilder;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.component.PasswordComponent;
 import com.speedment.runtime.component.ProjectComponent;
-import com.speedment.runtime.internal.component.StandardComponents;
+import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.internal.util.document.DocumentTranscoder;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
@@ -49,15 +43,12 @@ import com.speedment.runtime.manager.Manager;
 import com.speedment.runtime.util.tuple.Tuple2;
 import com.speedment.runtime.util.tuple.Tuple3;
 import com.speedment.runtime.util.tuple.Tuples;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
-import static java.util.stream.Collectors.toList;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import java.util.ArrayList;
 import static java.util.Objects.requireNonNull;
 import java.util.function.BiConsumer;
 
@@ -69,8 +60,8 @@ import java.util.function.BiConsumer;
  * @param <BUILDER>  the (self) type of the AbstractApplicationBuilder
  * 
  * @author  Per Minborg
- * @since   2.0
- *
+ * @author  Emil Forslund
+ * @since   2.0.0
  */
 public abstract class AbstractApplicationBuilder<
         APP extends Speedment,
@@ -79,9 +70,8 @@ public abstract class AbstractApplicationBuilder<
 
     private final static Logger LOGGER = LoggerManager.getLogger(AbstractApplicationBuilder.class);
 
-    private final List<Tuple3<Class<? extends Document>, String, BiConsumer<APP, ? extends Document>>> withsNamed;
-    private final List<Tuple2<Class<? extends Document>, BiConsumer<APP, ? extends Document>>> withsAll;
-    private final Class<? extends APP> applicationImplClass;
+    private final List<Tuple3<Class<? extends Document>, String, BiConsumer<Injector, ? extends Document>>> withsNamed;
+    private final List<Tuple2<Class<? extends Document>, BiConsumer<Injector, ? extends Document>>> withsAll;
     private final Injector.Builder injector;
 
     private ApplicationMetadata speedmentApplicationMetadata;
@@ -89,13 +79,11 @@ public abstract class AbstractApplicationBuilder<
     private boolean validateRuntimeConfig;
 
     protected AbstractApplicationBuilder(Class<? extends APP> applicationImplClass) {
-        this.applicationImplClass = requireNonNull(applicationImplClass);
         this.injector = Injector.builder()
-            .canInject(StandardComponents.get())
             .canInject(applicationImplClass);
         
-        withsNamed = newList();
-        withsAll   = newList();
+        withsNamed = new ArrayList<>();
+        withsAll   = new ArrayList<>();
     }
     
     protected final BUILDER self() {
@@ -105,14 +93,14 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public <C extends Document & HasEnabled> BUILDER with(Class<C> type, String name, BiConsumer<APP, C> consumer) {
+    public <C extends Document & HasEnabled> BUILDER with(Class<C> type, String name, BiConsumer<Injector, C> consumer) {
         requireNonNulls(type, name, consumer);
         withsNamed.add(Tuples.of(type, name, consumer));
         return self();
     }
 
     @Override
-    public <C extends Document & HasEnabled> BUILDER with(Class<C> type, BiConsumer<APP, C> consumer) {
+    public <C extends Document & HasEnabled> BUILDER with(Class<C> type, BiConsumer<Injector, C> consumer) {
         requireNonNulls(type, consumer);
         withsAll.add(Tuples.of(type, consumer));
         return self();
@@ -121,14 +109,14 @@ public abstract class AbstractApplicationBuilder<
     @Override
     public BUILDER withPassword(char[] password) {
         // password nullable
-        with(Dbms.class, (app, dbms) -> app.injector().get(PasswordComponent.class).put(dbms, password));
+        with(Dbms.class, (inj, dbms) -> inj.get(PasswordComponent.class).put(dbms, password));
         return self();
     }
 
     @Override
     public BUILDER withPassword(String dbmsName, char[] password) {
         // password nullable
-        with(Dbms.class, dbmsName, (app, dbms) -> app.injector().get(PasswordComponent.class).put(dbms, password));
+        with(Dbms.class, dbmsName, (inj, dbms) -> inj.get(PasswordComponent.class).put(dbms, password));
         return self();
     }
 
@@ -236,8 +224,31 @@ public abstract class AbstractApplicationBuilder<
         return self();
     }
 
+    @Override
+    public final APP build() {
+        final Injector inj;
+        
+        try {
+            inj = injector.build();
+        } catch (final InstantiationException ex) {
+            throw new SpeedmentException("Error in dependency injection.", ex);
+        }
+        
+        return build(inj);
+    }
+    
+    /**
+     * Builds the application using the specified injector.
+     * 
+     * @param injector  the injector to use
+     * @return          the built instance.
+     */
+    protected abstract APP build(Injector injector);
+
     /**
      * Builds up the complete Project meta data tree.
+     * 
+     * @param injector  the injector to use
      */
     protected void loadAndSetProject(Injector injector) {
         final ApplicationMetadata meta = getSpeedmentApplicationMetadata();
@@ -251,15 +262,18 @@ public abstract class AbstractApplicationBuilder<
             project = new ProjectImpl(data);
         }
 
-        // Apply overidden item (if any) for all ConfigEntities of a given class
+        // Apply overidden item (if any) for all Documents of a given class
         withsAll.forEach(t2 -> {
             final Class<? extends Document> clazz = t2.get0();
+            
             @SuppressWarnings("unchecked")
-            final Consumer<Document> consumer = (Consumer<Document>) t2.get1();
+            final BiConsumer<Injector, Document> consumer = 
+                (BiConsumer<Injector, Document>) t2.get1();
+            
             DocumentDbUtil.traverseOver(project)
                 .filter(clazz::isInstance)
                 .map(Document.class::cast)
-                .forEachOrdered(consumer::accept);
+                .forEachOrdered(doc -> consumer.accept(injector, doc));
         });
 
         // Apply a named overidden item (if any) for all Entities of a given class
@@ -268,19 +282,25 @@ public abstract class AbstractApplicationBuilder<
             final String name = t3.get1();
 
             @SuppressWarnings("unchecked")
-            final Consumer<Document> consumer = (Consumer<Document>) t3.get2();
+            final BiConsumer<Injector, Document> consumer = 
+                (BiConsumer<Injector, Document>) t3.get2();
 
             DocumentDbUtil.traverseOver(project)
                 .filter(clazz::isInstance)
                 .filter(HasName.class::isInstance)
                 .map(HasName.class::cast)
                 .filter(c -> name.equals(relativeName(c, Project.class, DATABASE_NAME)))
-                .forEachOrdered(consumer::accept);
+                .forEachOrdered(doc -> consumer.accept(injector, doc));
         });
 
         injector.get(ProjectComponent.class).setProject(project);
     }
     
+    /**
+     * Prints a welcome message to the output channel.
+     * 
+     * @param injector  the injector to use
+     */
     protected void printWelcomeMessage(Injector injector) {
         
         final InfoComponent info = injector.get(InfoComponent.class);
@@ -321,14 +341,21 @@ public abstract class AbstractApplicationBuilder<
      * Sets the SpeedmentApplicationMetadata. The meta data describes the layout
      * of the Project (i.e. Dbms:es, Schemas, Tables, Columns etc)
      *
-     * @param speedmentApplicationMetadata to use
-     * @return this instance
+     * @param metadata  to use
+     * @return          a reference to this instance
      */
-    protected BUILDER setSpeedmentApplicationMetadata(ApplicationMetadata speedmentApplicationMetadata) {
-        this.speedmentApplicationMetadata = requireNonNull(speedmentApplicationMetadata);
+    protected BUILDER setSpeedmentApplicationMetadata(ApplicationMetadata metadata) {
+        this.speedmentApplicationMetadata = requireNonNull(metadata);
         return self();
     }
 
+    /**
+     * Returns the application metadata that will be used to build the application
+     * class. The meta data describes the layout
+     * of the Project (i.e. Dbms:es, Schemas, Tables, Columns etc)
+     * 
+     * @return  the application metadata.
+     */
     protected ApplicationMetadata getSpeedmentApplicationMetadata() {
         return speedmentApplicationMetadata;
     }

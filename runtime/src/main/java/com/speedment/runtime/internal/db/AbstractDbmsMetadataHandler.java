@@ -16,10 +16,17 @@
  */
 package com.speedment.runtime.internal.db;
 
-import com.speedment.runtime.Speedment;
-import com.speedment.runtime.config.Document;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.RequiresInjectable;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
+import com.speedment.runtime.component.DbmsHandlerComponent;
+import com.speedment.runtime.component.ProjectComponent;
+import com.speedment.runtime.component.TypeMapperComponent;
+import com.speedment.runtime.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;
 import com.speedment.runtime.config.Index;
@@ -35,87 +42,62 @@ import com.speedment.runtime.config.parameter.OrderType;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
-import com.speedment.runtime.db.AsynchronousQueryResult;
 import com.speedment.runtime.db.DatabaseNamingConvention;
-import com.speedment.runtime.db.DbmsHandler;
-import com.speedment.runtime.db.SqlFunction;
+import com.speedment.runtime.db.DbmsMetadataHandler;
 import com.speedment.runtime.db.SqlPredicate;
 import com.speedment.runtime.db.SqlSupplier;
 import com.speedment.runtime.db.metadata.ColumnMetaData;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.internal.config.ProjectImpl;
-import com.speedment.runtime.internal.manager.sql.SqlDeleteStatement;
-import com.speedment.runtime.internal.manager.sql.SqlInsertStatement;
-import com.speedment.runtime.internal.manager.sql.SqlStatement;
-import com.speedment.runtime.internal.manager.sql.SqlUpdateStatement;
-import com.speedment.runtime.internal.runtime.typemapping.StandardJavaTypeMapping;
-import static com.speedment.runtime.internal.stream.OptionalUtil.unwrap;
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
+import static com.speedment.runtime.internal.db.AbstractDbmsOperationHandler.SHOW_METADATA;
 import static com.speedment.runtime.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import com.speedment.runtime.util.ProgressMeasure;
-import java.math.BigDecimal;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.NClob;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.sql.SQLXML;
-import java.sql.Statement;
-import java.sql.Struct;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.*;
-import static java.util.Collections.singletonList;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.*;
-import java.util.stream.Stream;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  *
- * @author Per Minborg
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @author  Per Minborg
+ * @since   2.4.0
  */
-public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
-
-    private final static Logger LOGGER = LoggerManager.getLogger(AbstractRelationalDbmsHandler.class);
-
-    protected static final Class<?> DEFAULT_MAPPING = Object.class;
-    protected static final String YES = "YES";
-
-    private final static String PASSWORD_PROTECTED = "********";
-    public static final boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
-
-    protected final Speedment speedment;
-    protected final Dbms dbms; // No not use for metadata reads.
-    protected final Map<String, Class<?>> javaTypeMap;
-
-    public AbstractRelationalDbmsHandler(Speedment speedment, Dbms dbms) {
-        this.speedment = requireNonNull(speedment);
-        this.dbms = requireNonNull(dbms);
-        javaTypeMap = newCaseInsensitiveMap();
-        setupJavaTypeMap();
-        assertJavaTypesKnown();
-    }
-
+@RequiresInjectable(JavaTypeMap.class)
+public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler {
+    
+    private final static Logger LOGGER = LoggerManager.getLogger(AbstractDbmsMetadataHandler.class);
+    private final static Class<?> DEFAULT_MAPPING = Object.class;
+    
+    private @Inject ConnectionPoolComponent connectionPoolComponent;
+    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
+    private @Inject TypeMapperComponent typeMapperComponent;
+    private @Inject ProjectComponent projectComponent;
+    private @Inject JavaTypeMap javaTypeMap;
+    
+    protected AbstractDbmsMetadataHandler() {}
+    
     @Override
     public CompletableFuture<Project> readSchemaMetadata(
+        Dbms dbms,
         ProgressMeasure progress,
         Predicate<String> filterCriteria) {
 
@@ -123,12 +105,12 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         // Create a deep copy of the project document.
         final Project projectCopy = DocumentUtil.deepCopy(
-            this.dbms.getParentOrThrow(), ProjectImpl::new
+            projectComponent.getProject(), ProjectImpl::new
         );
 
         // Locate the dbms in the copy.
         final Dbms dbmsCopy = projectCopy.dbmses()
-            .filter(d -> d.getName().equals(this.dbms.getName()))
+            .filter(d -> d.getName().equals(dbms.getName()))
             .findAny().orElseThrow(() -> new SpeedmentException(
                 "Could not find Dbms document in copy."
             ));
@@ -149,7 +131,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         requireNonNulls(project, dbms, filterCriteria, progress);
 
-        final DbmsType dbmsType = dbmsTypeOf(speedment, dbms);
+        final DbmsType dbmsType = dbmsTypeOf(dbmsHandlerComponent, dbms);
         final String action = actionName(dbms);
 
         LOGGER.info(action);
@@ -179,7 +161,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         // Task that downloads the schemas from the database
         final CompletableFuture<Void> schemasTask = CompletableFuture.runAsync(() -> {
-            try (final Connection connection = getConnection(dbms)) {
+            try (final Connection connection = connectionPoolComponent.getConnection(dbms)) {
                 try (final ResultSet rs = connection.getMetaData().getSchemas(null, null)) {
                     while (rs.next()) {
 
@@ -217,7 +199,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         // Task that downloads the catalogs from the database
         final CompletableFuture<Void> catalogsTask = CompletableFuture.runAsync(() -> {
-            try (final Connection connection = getConnection(dbms)) {
+            try (final Connection connection = connectionPoolComponent.getConnection(dbms)) {
                 try (final ResultSet catalogResultSet = connection.getMetaData().getCatalogs()) {
                     while (catalogResultSet.next()) {
                         final String schemaName = catalogResultSet.getString(1);
@@ -282,7 +264,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         LOGGER.info(action);
         progressListener.setCurrentAction(action);
 
-        try (final Connection connection = getConnection(dbms)) {
+        try (final Connection connection = connectionPoolComponent.getConnection(dbms)) {
             try (final ResultSet rsTable = connection.getMetaData().getTables(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), null, new String[]{"TABLE"})) {
 
                 if (SHOW_METADATA) {
@@ -315,7 +297,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
         return CompletableFuture.allOf(
             schema.tables().map(table -> sqlTypeMapping.thenAcceptAsync(mapping -> {
-                try (final Connection connection = getConnection(dbms)) {
+                try (final Connection connection = connectionPoolComponent.getConnection(dbms)) {
                     progressListener.setCurrentAction(actionName(table));
                     columns(connection, mapping, table, progressListener);
                     indexes(connection, table, progressListener);
@@ -342,7 +324,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 null
             );
 
-        final TableChildMutator<Column, ResultSet> mutator = (column, rs) -> {
+        final AbstractDbmsOperationHandler.TableChildMutator<Column, ResultSet> mutator = (column, rs) -> {
 
             final ColumnMetaData md = ColumnMetaData.of(rs);
 
@@ -369,7 +351,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
 
             column.mutator().setNullable(nullable);
 
-            final Class<?> lookupJdbcClass = lookupJdbcClass(sqlTypeMapping, md);
+            final Class<?> lookupJdbcClass = javaTypeMap.findJdbcType(sqlTypeMapping, md);
 
             final Class<?> selectedJdbcClass;
             if (lookupJdbcClass != null) {
@@ -380,7 +362,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 LOGGER.warn("Unable to determine mapping for table " + table.getName() + ", column " + column.getName() + ". Fall-back to JDBC-type " + selectedJdbcClass.getSimpleName());
             }
 
-            final TypeMapper<?, ?> typeMapper = speedment.getTypeMapperComponent().stream()
+            final TypeMapper<?, ?> typeMapper = typeMapperComponent.stream()
                 .filter(tm -> Objects.equals(selectedJdbcClass, tm.getDatabaseType()))
                 .filter(tm -> Objects.equals(selectedJdbcClass, tm.getJavaType()))
                 .findFirst().orElseThrow(() -> new SpeedmentException(
@@ -409,7 +391,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 metaDataTableNameForPrimaryKeys(table)
             );
 
-        final TableChildMutator<PrimaryKeyColumn, ResultSet> mutator = (primaryKeyColumn, rs) -> {
+        final AbstractDbmsOperationHandler.TableChildMutator<PrimaryKeyColumn, ResultSet> mutator = (primaryKeyColumn, rs) -> {
             primaryKeyColumn.mutator().setName(rs.getString("COLUMN_NAME"));
             primaryKeyColumn.mutator().setOrdinalPosition(rs.getInt("KEY_SEQ"));
         };
@@ -430,7 +412,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 false
             );
 
-        final TableChildMutator<Index, ResultSet> mutator = (index, rs) -> {
+        final AbstractDbmsOperationHandler.TableChildMutator<Index, ResultSet> mutator = (index, rs) -> {
             final String indexName = rs.getString("INDEX_NAME");
             final boolean unique = !rs.getBoolean("NON_UNIQUE");
 
@@ -471,7 +453,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 metaDataTableNameForForeignKeys(table)
             );
 
-        final TableChildMutator<ForeignKey, ResultSet> mutator = (foreignKey, rs) -> {
+        final AbstractDbmsOperationHandler.TableChildMutator<ForeignKey, ResultSet> mutator = (foreignKey, rs) -> {
 
             final String foreignKeyName = rs.getString("FK_NAME");
             foreignKey.mutator().setName(foreignKeyName);
@@ -490,7 +472,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     protected <T> void tableChilds(
         Supplier<T> childSupplier,
         SqlSupplier<ResultSet> resultSetSupplier,
-        TableChildMutator<T, ResultSet> resultSetMutator,
+        AbstractDbmsOperationHandler.TableChildMutator<T, ResultSet> resultSetMutator,
         ProgressMeasure progressListener
     ) {
         tableChilds(childSupplier, resultSetSupplier, resultSetMutator, rs -> true, progressListener);
@@ -499,7 +481,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     protected <T> void tableChilds(
         Supplier<T> childSupplier,
         SqlSupplier<ResultSet> resultSetSupplier,
-        TableChildMutator<T, ResultSet> resultSetMutator,
+        AbstractDbmsOperationHandler.TableChildMutator<T, ResultSet> resultSetMutator,
         SqlPredicate<ResultSet> filter,
         ProgressMeasure progressListener
     ) {
@@ -549,34 +531,10 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         final String isAutoIncrementString = md.getIsAutoincrement();
         final String isGeneratedColumnString = md.getIsGeneratedcolumn();
 
-        if (YES.equalsIgnoreCase(isAutoIncrementString) || YES.equalsIgnoreCase(isGeneratedColumnString)) {
+        if ("YES".equalsIgnoreCase(isAutoIncrementString) 
+        ||  "YES".equalsIgnoreCase(isGeneratedColumnString)) {
             column.mutator().setAutoIncrement(true);
         }
-    }
-
-    /**
-     * Looks up a column {@code TYPE_NAME} and returns a mapped Class (e.g.
-     * {@code Timestamp} or {@code String}).
-     *
-     * @param sqlTypeMapping  the type mappings to use
-     * @param md that contains column metadata (per connection.getMetaData().getColumns(...))
-     * @return the mapped Class
-     */
-    protected Class<?> lookupJdbcClass(Map<String, Class<?>> sqlTypeMapping, ColumnMetaData md) {
-        requireNonNull(md);
-
-        // Firstly, try  md.getTypeName()
-        Class<?> result = sqlTypeMapping.get(md.getTypeName());
-        if (result == null) {
-            final int type = md.getDataType(); // Type (int) according to java.sql.Types (e.g. 4) that we got from the ColumnMetaData
-            final Optional<String> oTypeName = TypeInfoMetaData.lookupJavaSqlType(type); // Variable name (String) according to java.sql.Types (e.g. INTEGER)       
-            if (oTypeName.isPresent()) {
-                final String typeName = oTypeName.get();
-                // Secondly, try the corresponding name using md.getDataType() and then lookup java.sql.Types name
-                result = sqlTypeMapping.get(typeName);
-            }
-        }
-        return result;
     }
 
     /**
@@ -650,191 +608,12 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
     protected String metaDataTableNameForForeignKeys(Table table) {
         return table.getName();
     }
-
-    @Override
-    public <T> Stream<T> executeQuery(String sql, List<?> values, SqlFunction<ResultSet, T> rsMapper) {
-        requireNonNulls(sql, values, rsMapper);
-
-        try (
-            final Connection connection = getConnection(dbms);
-            final PreparedStatement ps = connection.prepareStatement(sql)) {
-            int i = 1;
-            for (final Object o : values) {
-                ps.setObject(i++, o);
-            }
-            try (final ResultSet rs = ps.executeQuery()) {
-
-                // Todo: Make a transparent stream with closeHandler added.
-                final Stream.Builder<T> streamBuilder = Stream.builder();
-                while (rs.next()) {
-                    streamBuilder.add(rsMapper.apply(rs));
-                }
-                return streamBuilder.build();
-            }
-        } catch (SQLException sqle) {
-            LOGGER.error(sqle, "Error querying " + sql);
-            throw new SpeedmentException(sqle);
-        }
-    }
-
-    @Override
-    public <T> AsynchronousQueryResult<T> executeQueryAsync(
-        String sql, List<?> values, Function<ResultSet, T> rsMapper) {
-
-        return new AsynchronousQueryResultImpl<>(
-            Objects.requireNonNull(sql),
-            Objects.requireNonNull(values),
-            Objects.requireNonNull(rsMapper),
-            () -> getConnection(dbms)
-        );
-    }
-
-    @Override
-    public <F extends FieldTrait & ReferenceFieldTrait<?, ?, ?>> void executeInsert(String sql, List<?> values, List<F> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
-        final SqlInsertStatement sqlUpdateStatement = new SqlInsertStatement(sql, values, generatedKeyFields, generatedKeyConsumer);
-        execute(singletonList(sqlUpdateStatement));
-    }
-
-    @Override
-    public void executeUpdate(String sql, List<?> values) throws SQLException {
-        final SqlUpdateStatement sqlUpdateStatement = new SqlUpdateStatement(sql, values);
-        execute(singletonList(sqlUpdateStatement));
-    }
-
-    @Override
-    public void executeDelete(String sql, List<?> values) throws SQLException {
-        final SqlDeleteStatement sqlDeleteStatement = new SqlDeleteStatement(sql, values);
-        execute(singletonList(sqlDeleteStatement));
-    }
-
-    protected void execute(List<? extends SqlStatement> sqlStatementList) throws SQLException {
-        requireNonNull(sqlStatementList);
-        int retryCount = 5;
-        boolean transactionCompleted = false;
-
-        do {
-            SqlStatement lastSqlStatement = null;
-            Connection conn = null;
-            try {
-                conn = getConnection(dbms);
-                conn.setAutoCommit(false);
-                for (final SqlStatement sqlStatement : sqlStatementList) {
-                    lastSqlStatement = sqlStatement;
-                    switch (sqlStatement.getType()) {
-                        case INSERT: {
-                            final SqlInsertStatement s = (SqlInsertStatement) sqlStatement;
-                            handleSqlStatement(conn, s);
-                            break;
-                        }
-                        case UPDATE: {
-                            final SqlUpdateStatement s = (SqlUpdateStatement) sqlStatement;
-                            handleSqlStatement(conn, s);
-                            break;
-                        }
-                        case DELETE: {
-                            final SqlDeleteStatement s = (SqlDeleteStatement) sqlStatement;
-                            handleSqlStatement(conn, s);
-                            break;
-                        }
-                    }
-
-                }
-                conn.commit();
-                conn.close();
-                transactionCompleted = true;
-                conn = null;
-            } catch (SQLException sqlEx) {
-                LOGGER.error("SqlStatementList: " + sqlStatementList);
-                LOGGER.error("SQL: " + lastSqlStatement);
-                LOGGER.error(sqlEx, sqlEx.getMessage());
-                final String sqlState = sqlEx.getSQLState();
-
-                if ("08S01".equals(sqlState) || "40001".equals(sqlState)) {
-                    retryCount--;
-                } else {
-                    retryCount = 0;
-                    throw sqlEx; // Finally will be executed...
-                }
-            } finally {
-
-                if (!transactionCompleted) {
-                    try {
-                        // If we got here, and conn is not null, the
-                        // transaction should be rolled back, as not
-                        // all work has been done
-                        if (conn != null) {
-                            try {
-                                conn.rollback();
-                            } finally {
-                                conn.close();
-                            }
-                        }
-                    } catch (SQLException sqlEx) {
-                        //
-                        // If we got an exception here, something
-                        // pretty serious is going on, so we better
-                        // pass it up the stack, rather than just
-                        // logging it. . .
-                        LOGGER.error(sqlEx, "Rollback error! connection:" + sqlEx.getMessage());
-                        throw sqlEx;
-                    }
-                }
-            }
-        } while (!transactionCompleted && (retryCount > 0));
-
-        if (transactionCompleted) {
-            postSuccessfulTransaction(sqlStatementList);
-        }
-    }
-
-    protected void handleSqlStatement(final Connection conn, final SqlInsertStatement sqlStatement) throws SQLException {
-        try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.RETURN_GENERATED_KEYS)) {
-            int i = 1;
-            for (Object o : sqlStatement.getValues()) {
-                ps.setObject(i++, o);
-            }
-            ps.executeUpdate();
-
-            try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
-                while (generatedKeys.next()) {
-                    sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
-                }
-            }
-        }
-    }
-
-    protected void handleSqlStatement(final Connection conn, final SqlUpdateStatement sqlStatement) throws SQLException {
-        handleSqlStatementHelper(conn, sqlStatement);
-    }
-
-    protected void handleSqlStatement(final Connection conn, final SqlDeleteStatement sqlStatement) throws SQLException {
-        handleSqlStatementHelper(conn, sqlStatement);
-    }
-
-    private void handleSqlStatementHelper(final Connection conn, final SqlStatement sqlStatement) throws SQLException {
-        try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.NO_GENERATED_KEYS)) {
-            int i = 1;
-            for (Object o : sqlStatement.getValues()) {
-                ps.setObject(i++, o);
-            }
-            ps.executeUpdate();
-        }
-    }
-
-    protected void postSuccessfulTransaction(List<? extends SqlStatement> sqlStatementList) {
-        for (final SqlStatement sqlStatement : sqlStatementList) {
-            if (sqlStatement instanceof SqlInsertStatement) {
-                final SqlInsertStatement us = (SqlInsertStatement) sqlStatement;
-                us.acceptGeneratedKeys();
-            }
-        }
-    }
-
+    
     protected Map<String, Class<?>> readTypeMapFromDB(Dbms dbms) throws SQLException {
         requireNonNull(dbms);
 
         final List<TypeInfoMetaData> typeInfoMetaDataList = new ArrayList<>();
-        try (final Connection connection = getConnection(dbms)) {
+        try (final Connection connection = connectionPoolComponent.getConnection(dbms)) {
             try (final ResultSet rs = connection.getMetaData().getTypeInfo()) {
                 while (rs.next()) {
                     final TypeInfoMetaData typeInfo = TypeInfoMetaData.of(rs);
@@ -886,169 +665,13 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
         return result;
     }
 
-    // Todo: Use DataSource instead: http://docs.oracle.com/javase/tutorial/jdbc/basics/sqldatasources.html
-    private Connection getConnection(Dbms dbms) {
-        final String url = DocumentDbUtil.findConnectionUrl(speedment, dbms);
-        final String user = unwrap(dbms.getUsername());
-        final char[] password = unwrap(speedment.getPasswordComponent().get(dbms));
-
-        final Connection conn;
-        try {
-            conn = speedment.getConnectionPoolComponent()
-                .getConnection(url, user, password == null ? null : new String(password));
-        } catch (final SQLException ex) {
-            final String msg
-                = "Unable to get connection for " + dbms
-                + " using url \"" + url + "\", user = " + user
-                + ", password = " + PASSWORD_PROTECTED;
-
-            LOGGER.error(ex, msg);
-            throw new SpeedmentException(msg, ex);
-        }
-
-        return conn;
-    }
-
-    @FunctionalInterface
-    protected interface TableChildMutator<T, U> {
-
-        void mutate(T t, U u) throws SQLException;
-    }
-
     private <P extends HasName, D extends Document & HasName & HasMainInterface & HasParent<P>> String actionName(D doc) {
-        return doc.mainInterface().getSimpleName() + " " + doc.getName() + " in " + doc.getParentOrThrow().getName();
-        //return "Read " + doc.mainInterface().getSimpleName() + " " + doc.getParentOrThrow().getName() + "." + doc.getName();
+        return new StringBuilder()
+            .append(doc.mainInterface().getSimpleName())
+            .append(" ")
+            .append(doc.getName())
+            .append(" in ")
+            .append(doc.getParentOrThrow().getName())
+            .toString();
     }
-
-    protected String encloseField(Dbms dbms, String fieldName) {
-        return dbmsTypeOf(speedment, dbms).getDatabaseNamingConvention().encloseField(fieldName);
-    }
-
-    @Override
-    public String getDbmsInfoString() throws SQLException {
-        try (final Connection conn = getConnection(dbms)) {
-            final DatabaseMetaData md = conn.getMetaData();
-            return new StringBuilder()
-                .append(md.getDatabaseProductName())
-                .append(", ")
-                .append(md.getDatabaseProductVersion())
-                .append(", ")
-                .append(md.getDriverName())
-                .append(" ")
-                .append(md.getDriverVersion())
-                .append(", JDBC version ")
-                .append(md.getJDBCMajorVersion())
-                .append(".")
-                .append(md.getJDBCMinorVersion())
-                .toString();
-        }
-    }
-
-    /**
-     * Sets up the java type map for this database type
-     */
-    protected void setupJavaTypeMap() {
-
-        http://docs.oracle.com/javase/1.5.0/docs/guide/jdbc/getstart/mapping.html
-
-        javaTypeMap.put("CHAR", String.class);
-        javaTypeMap.put("VARCHAR", String.class);
-        javaTypeMap.put("LONGVARCHAR", String.class);
-        javaTypeMap.put("LONGVARCHAR", String.class);
-        javaTypeMap.put("NUMERIC", BigDecimal.class);
-        javaTypeMap.put("DECIMAL", BigDecimal.class);
-        javaTypeMap.put("BIT", Integer.class); ///
-        javaTypeMap.put("TINYINT", Byte.class);
-        javaTypeMap.put("SMALLINT", Short.class);
-        javaTypeMap.put("INTEGER", Integer.class);
-        javaTypeMap.put("BIGINT", Long.class);
-        javaTypeMap.put("REAL", Float.class);
-        javaTypeMap.put("FLOAT", Double.class);
-        javaTypeMap.put("DOUBLE", Double.class);
-        //put("BINARY", BYTE_ARRAY_MAPPING);
-        //put("VARBINARY", BYTE_ARRAY_MAPPING);
-        //put("LONGVARBINARY", BYTE_ARRAY_MAPPING);
-        javaTypeMap.put("DATE", java.sql.Date.class);
-        javaTypeMap.put("TIME", Time.class);
-        javaTypeMap.put("TIMESTAMP", Timestamp.class);
-        javaTypeMap.put("CLOB", Clob.class);
-        javaTypeMap.put("BLOB", Blob.class);
-        //put("ARRAY", ARRAY_MAPPING);
-        javaTypeMap.put("BOOLEAN", Boolean.class);
-        javaTypeMap.put("BOOL", Boolean.class); // Added
-
-        //MySQL Specific mappings
-        javaTypeMap.put("YEAR", Integer.class);
-
-        //PostgreSQL specific mappings
-        javaTypeMap.put("UUID", UUID.class);
-        //TODO: Add postgresql specific type mappings
-
-        addCustomJavaTypeMap();
-    }
-
-    /**
-     * Adds custom java type mapping for this dbms type
-     */
-    protected void addCustomJavaTypeMap() {
-    }
-
-    protected void assertJavaTypesKnown() {
-        final Map<String, Class<?>> unmapped = new LinkedHashMap<>();
-        for (final Entry<String, Class<?>> entry : javaTypeMap.entrySet()) {
-            final String key = entry.getKey();
-            final Class<?> clazz = entry.getValue();
-            if (!StandardJavaTypeMapping.stream().anyMatch(jtm -> jtm.getJavaClass().equals(clazz))) {
-                unmapped.put(key, clazz);
-            }
-        }
-        if (!unmapped.isEmpty()) {
-            throw new SpeedmentException("There are mappings that have no " + StandardJavaTypeMapping.class.getSimpleName() + " " + unmapped);
-        }
-    }
-
-    private static String normalize(String string) {
-        return string.toUpperCase();
-    }
-
-    @Override
-    public Clob createClob() throws SQLException {
-        return applyOnConnection(Connection::createClob);
-    }
-
-    @Override
-    public Blob createBlob() throws SQLException {
-        return applyOnConnection(Connection::createBlob);
-    }
-
-    @Override
-    public NClob createNClob() throws SQLException {
-        return applyOnConnection(Connection::createNClob);
-    }
-
-    @Override
-    public SQLXML createSQLXML() throws SQLException {
-        return applyOnConnection(Connection::createSQLXML);
-    }
-
-    @Override
-    public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
-        try (final Connection connection = getConnection(dbms)) {
-            return connection.createArrayOf(typeName, elements);
-        }
-    }
-
-    @Override
-    public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
-        try (final Connection connection = getConnection(dbms)) {
-            return connection.createStruct(typeName, attributes);
-        }
-    }
-
-    private <T> T applyOnConnection(SqlFunction<Connection, T> mapper) throws SQLException {
-        try (final Connection c = getConnection(dbms)) {
-            return mapper.apply(c);
-        }
-    }
-
 }

@@ -16,22 +16,22 @@
  */
 package com.speedment.runtime.event;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.component.EventComponent;
 
 /**
  *
- * @author Emil Forslund
- * @since 2.3
+ * @author  Emil Forslund
+ * @since   2.3
  */
-@Api(version="2.3")
+@Api(version="2.4")
 public interface Event {
     
     default String name() {
         return getClass().getSimpleName();
     }
     
-    default void publish(Speedment speedment) {
-        speedment.getEventComponent().notify(this);
+    default void publish(EventComponent eventComponent) {
+        eventComponent.notify(this);
     }
 }

@@ -16,14 +16,15 @@
  */
 package com.speedment.runtime.internal.config.dbms;
 
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.RequiresInjectable;
 import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.db.ConnectionUrlGenerator;
 import com.speedment.runtime.db.DatabaseNamingConvention;
+import com.speedment.runtime.db.DbmsMetadataHandler;
+import com.speedment.runtime.db.DbmsOperationHandler;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;
-import static com.speedment.runtime.db.metadata.TypeInfoMetaData.of;
 import com.speedment.runtime.internal.db.AbstractDatabaseNamingConvention;
-import com.speedment.runtime.internal.db.PostgresDbmsHandler;
 import com.speedment.runtime.internal.manager.sql.PostgresSpeedmentPredicateView;
 import java.util.Collections;
 import java.util.Optional;
@@ -31,33 +32,102 @@ import java.util.Set;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
+import static com.speedment.runtime.db.metadata.TypeInfoMetaData.of;
+import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
+import com.speedment.runtime.internal.db.postgresql.PostgresqlDbmsMetadataHandler;
+import com.speedment.runtime.internal.db.postgresql.PostgresqlDbmsOperationHandler;
 
 /**
  * Created by fdirlikl on 11/13/2015.
  *
- * @author Fatih Dirlikli
- * @author Per Minborg
+ * @author  Fatih Dirlikli
+ * @author  Per Minborg
+ * @author  Emil Forslund
  */
-public final class PostgresDbmsType {
+@RequiresInjectable({
+    PostgresqlDbmsMetadataHandler.class,
+    PostgresqlDbmsOperationHandler.class
+})
+public final class PostgresDbmsType extends AbstractDbmsType {
 
-    private final static DatabaseNamingConvention NAMER = new PostgresNamingConvention();
+    private final PostgresNamingConvention namingConvention;
+    private final PostgresConnectionUrlGenerator connectionUrlGenerator;
+    
+    private @Inject PostgresqlDbmsMetadataHandler metadataHandler;
+    private @Inject PostgresqlDbmsOperationHandler operationHandler;
+    
+    private PostgresDbmsType() {
+        namingConvention       = new PostgresNamingConvention();
+        connectionUrlGenerator = new PostgresConnectionUrlGenerator();
+    }
+    
+    @Override
+    public String getName() {
+        return "PostgreSQL";
+    }
 
-    public static final DbmsType INSTANCE = DbmsType.builder()
-        // Mandatory parameters
-        .withName("PostgreSQL")
-        .withDriverManagerName("PostgreSQL JDBC Driver")
-        .withDefaultPort(5432)
-        .withDbmsNameMeaning("Database name")
-        .withDriverName("org.postgresql.Driver")
-        .withDatabaseNamingConvention(NAMER)
-        .withDbmsMapper(PostgresDbmsHandler::new)
-        .withConnectionUrlGenerator(new PostgresConnectionUrlGenerator())
-        .withSpeedmentPredicateView(new PostgresSpeedmentPredicateView(NAMER))
-        // Optional parameters
-        .withInitialQuery("select version() as \"PostgreSQL version\"")
-        .withResultSetTableSchema("TABLE_SCHEM")
-        .withDataTypes(dataTypes())
-        .build();
+    @Override
+    public String getDriverManagerName() {
+        return "PostgreSQL JDBC Driver";
+    }
+
+    @Override
+    public int getDefaultPort() {
+        return 5432;
+    }
+
+    @Override
+    public String getDbmsNameMeaning() {
+        return "Just a name";
+    }
+
+    @Override
+    public String getDriverName() {
+        return "org.postgresql.Driver";
+    }
+
+    @Override
+    public DatabaseNamingConvention getDatabaseNamingConvention() {
+        return namingConvention;
+    }
+
+    @Override
+    public DbmsMetadataHandler getMetadataHandler() {
+        return metadataHandler;
+    }
+
+    @Override
+    public DbmsOperationHandler getOperationHandler() {
+        return operationHandler;
+    }
+
+    @Override
+    public ConnectionUrlGenerator getConnectionUrlGenerator() {
+        return connectionUrlGenerator;
+    }
+
+    @Override
+    public SpeedmentPredicateView getSpeedmentPredicateView() {
+        return new PostgresSpeedmentPredicateView(namingConvention);
+    }
+
+    @Override
+    public String getResultSetTableSchema() {
+        return "TABLE_SCHEMA";
+    }
+    
+    @Override
+    public String getInitialQuery() {
+        return "select version() as \"PostgreSQL version\"";
+    }
+
+    @Override
+    public Set<TypeInfoMetaData> getDataTypes() {
+        return Stream.concat(
+            super.getDataTypes().stream(),
+            dataTypes()
+        ).collect(toSet());
+    }
 
     private final static class PostgresNamingConvention extends AbstractDatabaseNamingConvention {
 
@@ -121,7 +191,7 @@ public final class PostgresDbmsType {
         }
     }
 
-    private static final Set<TypeInfoMetaData> dataTypes() {
+    private static Stream<TypeInfoMetaData> dataTypes() {
 
         return Stream.of(
             of("bool", -7, 0, 0, (short) 1, true),
@@ -448,6 +518,6 @@ public final class PostgresDbmsType {
             of("_pg_user_mappings", 2002, 0, 0, (short) 1, true),
             of("user_mapping_options", 2002, 0, 0, (short) 1, true),
             of("user_mappings", 2002, 0, 0, (short) 1, true)
-        ).collect(toSet());
+        );
     }
 }

@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.internal.util.testing;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.exception.SpeedmentException;
@@ -27,13 +26,6 @@ import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.manager.Manager;
 import com.speedment.runtime.stream.StreamDecorator;
 import com.speedment.runtime.util.tuple.Tuple;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.NClob;
-import java.sql.SQLException;
-import java.sql.SQLXML;
-import java.sql.Struct;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
@@ -203,71 +195,6 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public Manager<ENTITY> initialize() {
-        return inner.initialize();
-    }
-
-    @Override
-    public Manager<ENTITY> load() {
-        return inner.load();
-    }
-
-    @Override
-    public Manager<ENTITY> resolve() {
-        return inner.resolve();
-    }
-
-    @Override
-    public Manager<ENTITY> start() {
-        return inner.start();
-    }
-
-    @Override
-    public Manager<ENTITY> stop() {
-        return inner.stop();
-    }
-
-    @Override
-    public State getState() {
-        return inner.getState();
-    }
-
-    @Override
-    public void setState(State state) {
-        inner.setState(state);
-    }
-
-    @Override
-    public boolean isInitialized() {
-        return inner.isInitialized();
-    }
-
-    @Override
-    public boolean isLoaded() {
-        return inner.isLoaded();
-    }
-
-    @Override
-    public boolean isResolved() {
-        return inner.isResolved();
-    }
-
-    @Override
-    public boolean isStarted() {
-        return inner.isStarted();
-    }
-
-    @Override
-    public boolean isStopped() {
-        return inner.isStopped();
-    }
-
-    @Override
-    public Speedment speedment() {
-        return inner.speedment();
-    }
-
-    @Override
     public Stream<FieldTrait> fields() {
         return inner.fields();
     }
@@ -278,38 +205,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public Clob createClob() throws SQLException {
-        return inner.createClob();
-    }
-
-    @Override
-    public Blob createBlob() throws SQLException {
-        return inner.createBlob();
-    }
-
-    @Override
-    public NClob createNClob() throws SQLException {
-        return createNClob();
-    }
-
-    @Override
-    public SQLXML createSQLXML() throws SQLException {
-        return createSQLXML();
-    }
-
-    @Override
-    public Array createArrayOf(String typeName, Object[] elements) throws SQLException {
-        return inner.createArrayOf(typeName, elements);
-    }
-
-    @Override
-    public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
-        return inner.createStruct(typeName, attributes);
-    }
-
-    @Override
     public ENTITY newCopyOf(ENTITY source) {
         return inner.newCopyOf(source);
     }
-
 }

@@ -16,34 +16,33 @@
  */
 package com.speedment.common.injector.annotation;
 
-import com.speedment.common.injector.State;
+import com.speedment.common.injector.Injector;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotes that the method should be executed as part of the
- * platform initialization. The annoted method can only take 
- * parameters with the @{@link Inject}-annotation.
+ * Annotes that this type requires a number of classes to be
+ * automatically injectable. All the specified types must be
+ * concrete classes with a default constructor.
  * <p>
- * This method must be executed before this component can be
- * considered to be in the specified state.
+ * This annotatation will only be parsed if the class that it
+ * is located on is installed in the {@link Injector}.
  * 
  * @author  Emil Forslund
  * @since   1.0.0
- * 
- * @see  Execute
  */
-@Target(ElementType.METHOD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ExecuteBefore {
+public @interface RequiresInjectable {
     
     /**
-     * The state before which this annoted method must be
-     * executed.
+     * Implementation types that can be automatically dependency
+     * injected.
      * 
-     * @return  the state
+     * @return  implementation types that are injectable
      */
-    State value();
+    Class<?>[] value();
+    
 }

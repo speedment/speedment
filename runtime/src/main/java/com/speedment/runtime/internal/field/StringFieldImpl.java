@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.internal.field;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.field.Inclusion;
@@ -81,8 +81,8 @@ public class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> {
     }
 
     @Override
-    public Optional<Column> findColumn(Speedment speedment) {
-        return Optional.of(DocumentDbUtil.referencedColumn(speedment, getIdentifier()));
+    public Optional<Column> findColumn(Project project) {
+        return Optional.of(DocumentDbUtil.referencedColumn(project, getIdentifier()));
     }
 
     @Override

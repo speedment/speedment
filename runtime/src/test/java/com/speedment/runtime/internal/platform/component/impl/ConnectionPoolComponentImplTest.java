@@ -75,17 +75,11 @@ public class ConnectionPoolComponentImplTest {
 
     @Before
     public void setUp() {
-        final Speedment speedment = new DefaultApplicationBuilder()
-            .withCheckDatabaseConnectivity(false)
-            .withValidateRuntimeConfig(false)
-            .build();
-        instance = new ConnectionPoolComponentImpl(speedment) {
-
+        instance = new ConnectionPoolComponentImpl() {
             @Override
-            public Connection newConnection(String uri, String user, String password) throws SQLException {
+            public Connection newConnection(String uri, String user, char[] password) {
                 return new DummyConnectionImpl(uri, user, password);
             }
-
         };
     }
 
@@ -102,7 +96,7 @@ public class ConnectionPoolComponentImplTest {
     public void testGetConnection() throws Exception {
         String uri = "thecooldatabase";
         String user = "tryggve";
-        String password = "arne";
+        char[] password = "arne".toCharArray();
         final PoolableConnection result = instance.getConnection(uri, user, password);
         assertNotNull(result);
     }
@@ -116,7 +110,7 @@ public class ConnectionPoolComponentImplTest {
     public void testReturnConnection() throws Exception {
         String uri = "thecooldatabase";
         String user = "tryggve";
-        String password = "arne";
+        char[] password = "arne".toCharArray();
         final PoolableConnection connection = instance.getConnection(uri, user, password);
         instance.returnConnection(connection);
     }
@@ -130,7 +124,7 @@ public class ConnectionPoolComponentImplTest {
     public void testNewConnection() throws Exception {
         String uri = "someurl";
         String user = "a";
-        String password = "b";
+        char[] password = "b".toCharArray();
         Connection result = instance.newConnection(uri, user, password);
         assertNotNull(result);
         assertFalse(result.isClosed());
@@ -173,7 +167,7 @@ public class ConnectionPoolComponentImplTest {
     public void testLeak() throws Exception {
         String uri = "thecooldatabase";
         String user = "tryggve";
-        String password = "arne";
+        char[] password = "arne".toCharArray();
 
         for (int i = 0; i < 100; i++) {
             final PoolableConnection connection = instance.getConnection(uri, user, password);
@@ -187,7 +181,7 @@ public class ConnectionPoolComponentImplTest {
     public void testMaxOutAndReturn() throws Exception {
         String uri = "thecooldatabase";
         String user = "tryggve";
-        String password = "arne";
+        char[] password = "arne".toCharArray();
         instance.setMaxAge(60 * 60_000);
         instance.setMaxRetainSize(10);
         long maxAge = instance.getMaxAge();
@@ -222,11 +216,11 @@ public class ConnectionPoolComponentImplTest {
 
         final String uri;
         final String user;
-        final String password;
+        final char[] password;
 
         private boolean closed;
 
-        public DummyConnectionImpl(String uri, String user, String password) {
+        public DummyConnectionImpl(String uri, String user, char[] password) {
             this.uri = uri;
             this.user = user;
             this.password = password;

@@ -19,6 +19,7 @@ package com.speedment.runtime.entity;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.exception.SpeedmentException;
+import com.speedment.runtime.manager.Manager;
 
 /**
  * This interface contains the common methods that are the same for all
@@ -36,10 +37,10 @@ public interface Entity<ENTITY> {
     /**
      * Creates and returns a new copy of this entity.
      *
-     * @param speedment  the speedment instance
-     * @return           creates and returns a new copy of this entity
+     * @param manager  the manager for this entity
+     * @return         creates and returns a new copy of this entity
      */
-    ENTITY copy(Speedment speedment);
+    ENTITY copy(Manager<ENTITY> manager);
 
     /**
      * Persists this entity to the underlying database and returns a potentially
@@ -57,12 +58,12 @@ public interface Entity<ENTITY> {
      * modification that the underlying database imposed on the persisted
      * entity.
      *
-     * @param speedment            the speedment instance
+     * @param manager              the manager for this entity
      * @return                     an entity reflecting the result of the persisted entity
      * @throws SpeedmentException  if the underlying database throws an exception
      *                             (e.g. SQLException)
      */
-    ENTITY persist(Speedment speedment) throws SpeedmentException;
+    ENTITY persist(Manager<ENTITY> manager) throws SpeedmentException;
 
     /**
      * Updates this entity in the underlying database and returns a potentially
@@ -82,12 +83,12 @@ public interface Entity<ENTITY> {
      * <p>
      * Entities are uniquely identified by their primary key(s).
      *
-     * @param speedment            the speedment instance
+     * @param manager              the manager for this entity
      * @return                     an entity reflecting the result of the updated entity
      * @throws SpeedmentException  if the underlying database throws an exception
      *                             (e.g. SQLException)
      */
-    ENTITY update(Speedment speedment) throws SpeedmentException;
+    ENTITY update(Manager<ENTITY> manager) throws SpeedmentException;
 
     /**
      * Removes the provided entity from the underlying database and returns this
@@ -96,10 +97,10 @@ public interface Entity<ENTITY> {
      * <p>
      * Entities are uniquely identified by their primary key(s).
      *
-     * @param speedment            the speedment instance
+     * @param manager              the manager for this entity
      * @return                     the provided entity instance
      * @throws SpeedmentException  if the underlying database throws an exception
      *                             (e.g. SQLException)
      */
-    ENTITY remove(Speedment speedment) throws SpeedmentException;
+    ENTITY remove(Manager<ENTITY> manager) throws SpeedmentException;
 }

@@ -31,7 +31,6 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mapper.identity.StringIdentityMapper;
 import com.speedment.runtime.config.trait.HasName;
-import com.speedment.runtime.internal.config.dbms.StandardDbmsType;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
 import java.util.stream.Stream;
 import org.junit.Before;
@@ -103,9 +102,8 @@ public abstract class SimpleModel {
             + objectWithKey("config",
                 name("myProject"),
                 array(Project.DBMSES,
-                    object(
-                        name("myDbms"),
-                        dbTypeName(StandardDbmsType.defaultType().getName()),
+                    object(name("myDbms"),
+                        dbTypeName("MySQL"),
                         array(Dbms.SCHEMAS,
                             object(
                                 name(SCHEMA_NAME),
@@ -152,8 +150,8 @@ public abstract class SimpleModel {
             .withCheckDatabaseConnectivity(false)
             .withValidateRuntimeConfig(false)
             .build();
-
-        project = speedment.getProjectComponent().getProject();
+        
+        project = speedment.project();
         dbms = project.dbmses().findAny().get();
         schema = dbms.schemas().findAny().get();
         table = schema.tables().filter(t -> TABLE_NAME.equals(t.getName())).findAny().get();

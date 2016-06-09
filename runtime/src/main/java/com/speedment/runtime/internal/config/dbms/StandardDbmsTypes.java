@@ -16,32 +16,32 @@
  */
 package com.speedment.runtime.internal.config.dbms;
 
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.RequiresInjectable;
 import com.speedment.runtime.config.parameter.DbmsType;
-import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  *
- * @author pemi
+ * @author  Per Minborg
+ * @author  Emil Forslund
  */
-public final class StandardDbmsType {
-
-    private static final DbmsType MYSQL    = MySqlDbmsType.INSTANCE;
-    private static final DbmsType MARIADB  = MariaDbDbmsType.INSTANCE;
-    private static final DbmsType POSTGRES = PostgresDbmsType.INSTANCE;
-
-    private final static List<DbmsType> STANDARD_TYPES = Stream.of(
-        MYSQL,
-        MARIADB,
-        POSTGRES
-    ).collect(Collectors.toList());
-
-    public static Stream<DbmsType> stream() {
-        return STANDARD_TYPES.stream();
+@RequiresInjectable({
+    MySqlDbmsType.class,
+    MariaDbDbmsType.class,
+    PostgresDbmsType.class
+})
+public final class StandardDbmsTypes {
+    
+    private @Inject MySqlDbmsType mysql;
+    private @Inject MariaDbDbmsType mariadb;
+    private @Inject PostgresDbmsType postgresql;
+    
+    public Stream<DbmsType> stream() {
+        return Stream.of(mysql, mariadb, postgresql);
     }
 
-    public static DbmsType defaultType() {
-        return MYSQL; 
+    public DbmsType defaultType() {
+        return mysql; 
     }
 }

@@ -16,9 +16,11 @@
  */
 package com.speedment.runtime;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.exception.SpeedmentException;
+import com.speedment.runtime.manager.Manager;
 
 /**
  * The {@code Platform} class acts as a generic holder of different system
@@ -36,10 +38,41 @@ import com.speedment.runtime.component.Component;
 public interface Speedment {
     
     /**
-     * Starts the Speedment instance and allocates any resources. The Speedment
-     * instance must not be called before this method has been executed.
+     * Obtains and returns the currently associated {@link Manager}
+     * implementation for the given Entity interface Class. If no Manager exists
+     * for the given entityClass, a SpeedmentException will be thrown.
+     * <p>
+     * N.B.This conveniency method is a pure delegator to the ManagerComponent
+     * and is exactly equivalent to the code:
+     * <p>
+     * {@code get(ManagerComponent.class).managerOf(entityClass) }
+     *
+     * @param <ENTITY> the Entity interface type
+     * @param entityClass the Entity interface {@code Class}
+     * @return the currently associated {@link Manager} implementation for the
+     * given Entity interface Class
+     * @throws SpeedmentException if no Manager exists for the given entityClass
      */
-    void start();
+    <ENTITY> Manager<ENTITY> managerOf(Class<ENTITY> entityClass) throws SpeedmentException;
+    
+    /**
+     * Returns the specified component from the platform, or if it does not
+     * exist, throws a {@code SpeedmentException}.
+     * 
+     * @param <C>             the component interface type
+     * @param componentClass  the component interface class
+     * @return                the component
+     * 
+     * @throws SpeedmentException  if it was not installed
+     */
+    <C extends Component> C getOrThrow(Class<C> componentClass) throws SpeedmentException;
+    
+    /**
+     * Returns the project node.
+     * 
+     * @return  the project.
+     */
+    Project project();
 
     /**
      * Stops the Speedment instance and deallocates any allocated resources.
@@ -47,11 +80,4 @@ public interface Speedment {
      * any more.
      */
     void stop();
-    
-    /**
-     * Returns the Injector that holds the Speedment platform.
-     * 
-     * @return  the injector
-     */
-    Injector injector();
 }

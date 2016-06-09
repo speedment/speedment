@@ -18,8 +18,8 @@ package com.speedment.runtime.component.connectionpool;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
+import com.speedment.runtime.config.Dbms;
 import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * This Component interface is used for holding the connection pool that is
@@ -41,15 +41,45 @@ public interface ConnectionPoolComponent extends Component {
      * connection is not present in the connection pool, a new one will be
      * created.
      *
-     * @param uri the connection URI for the connector
-     * @param user the user for the connector
-     * @param password the password for the connector
-     * @return a {@link PoolableConnection} from this connection pool
-     * @throws java.sql.SQLException if a connection can neither be obtained
-     * from the pool nor created.
+     * @param uri       the connection URI for the connector
+     * @param username  the user for the connector
+     * @param password  the password for the connector
+     * @return          a {@link PoolableConnection} from this connection pool
      */
-    PoolableConnection getConnection(String uri, String user, String password) throws SQLException;
+    PoolableConnection getConnection(String uri, String username, char[] password);
+    
+    /**
+     * Returns a {link PoolableConnection} from this connection pool. If a
+     * connection is not present in the connection pool, a new one will be
+     * created.
+     *
+     * @param dbms  the dbms to connect to
+     * @return      a {@link PoolableConnection} from this connection pool
+     */
+    PoolableConnection getConnection(Dbms dbms);
 
+    /**
+     * Creates and returns a new {@link Connection} for the given parameters.
+     * This method is called whenever the pool needs to allocate a new
+     * Connection.
+     *
+     * @param uri       the connection URI for the connector
+     * @param username  the user for the connector
+     * @param password  the password for the connector
+     * @return          a new {@link Connection} for the given parameters
+     */
+    Connection newConnection(String uri, String username, char[] password);
+    
+    /**
+     * Creates and returns a new {@link Connection} for the given parameters.
+     * This method is called whenever the pool needs to allocate a new
+     * Connection.
+     *
+     * @param dbms  the dbms to connect to
+     * @return      a new {@link Connection} for the given parameters
+     */
+    Connection newConnection(Dbms dbms);
+    
     /**
      * Returns a {@link PoolableConnection} to the pool. If the
      * PoolableConnection has expired or has a closed underlying connection, it
@@ -58,19 +88,6 @@ public interface ConnectionPoolComponent extends Component {
      * @param connection to return to the pool
      */
     void returnConnection(PoolableConnection connection);
-
-    /**
-     * Creates and returns a new {@link Connection} for the given parameters.
-     * This method is called whenever the pool needs to allocate a new
-     * Connection.
-     *
-     * @param uri the connection URI for the connector
-     * @param user the user for the connector
-     * @param password the password for the connector
-     * @return a new {@link Connection} for the given parameters
-     * @throws SQLException if a new connection cannot be created
-     */
-    Connection newConnection(String uri, String user, String password) throws SQLException;
 
     /**
      * Returns the current number of idle connections in the pool.

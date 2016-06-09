@@ -16,11 +16,14 @@
  */
 package com.speedment.runtime.internal.manager;
 
-import com.speedment.runtime.Speedment;
+import static com.speedment.common.injector.State.RESOLVED;
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.runtime.component.ManagerComponent;
+import com.speedment.runtime.component.StreamSupplierComponent;
 import com.speedment.runtime.field.trait.ComparableFieldTrait;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
-import com.speedment.runtime.internal.runtime.AbstractLifecycle;
 import com.speedment.runtime.manager.Manager;
 import com.speedment.runtime.stream.StreamDecorator;
 import static java.util.Objects.requireNonNull;
@@ -32,17 +35,20 @@ import java.util.stream.Stream;
  * @author          Emil Forslund
  * @param <ENTITY>  entity type for this Manager
  */
-public abstract class AbstractManager<ENTITY> extends AbstractLifecycle<Manager<ENTITY>> implements Manager<ENTITY> {
+public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
-    protected final Speedment speedment;
+    private @Inject StreamSupplierComponent streamSupplierComponent;
 
-    protected AbstractManager(Speedment speedment) {
-        this.speedment = requireNonNull(speedment);
+    protected AbstractManager() {}
+    
+    @ExecuteBefore(RESOLVED)
+    void install(@Inject ManagerComponent managerComponent) {
+        managerComponent.put(this);
     }
 
     @Override
     public Stream<ENTITY> stream(StreamDecorator decorator) {
-        return speedment.getStreamSupplierComponent()
+        return streamSupplierComponent
                 .stream(getEntityClass(), decorator);
     }
 
@@ -52,12 +58,7 @@ public abstract class AbstractManager<ENTITY> extends AbstractLifecycle<Manager<
     Optional<ENTITY> findAny(F field, V value) {
         
         requireNonNull(field);
-        return speedment.getStreamSupplierComponent()
+        return streamSupplierComponent
                 .findAny(getEntityClass(), field, value);
-    }
-
-    @Override
-    public Speedment speedment() {
-        return speedment;
     }
 }

@@ -19,8 +19,8 @@ package com.speedment.runtime.internal.pool;
 import com.speedment.runtime.component.connectionpool.PoolableConnection;
 import java.sql.Connection;
 import java.sql.SQLException;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.atomic.AtomicLong;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -30,21 +30,21 @@ public final class PoolableConnectionImpl extends PoolableConnectionDelegator im
 
     private static final AtomicLong ID_GENERATOR = new AtomicLong();
     private final long id;
-    private final String user;
-    private final String password;
+    private final String username;
+    private final char[] password;
     private final String uri;
     private final long created;
     private final long expires;
     private Runnable onClose;
 
-    public PoolableConnectionImpl(String uri, String user, String password, Connection connection, long expires) {
+    public PoolableConnectionImpl(String uri, String username, char[] password, Connection connection, long expires) {
         super(connection);
-        this.id = ID_GENERATOR.getAndIncrement();
-        this.uri = requireNonNull(uri);
-        this.user = user; // Nullable
+        this.id       = ID_GENERATOR.getAndIncrement();
+        this.uri      = requireNonNull(uri);
+        this.username = username; // Nullable
         this.password = password; //nullable
-        this.created = System.currentTimeMillis();
-        this.expires = expires;
+        this.created  = System.currentTimeMillis();
+        this.expires  = expires;
     }
 
     @Override
@@ -84,11 +84,11 @@ public final class PoolableConnectionImpl extends PoolableConnectionDelegator im
 
     @Override
     public String getUser() {
-        return user;
+        return username;
     }
 
     @Override
-    public String getPassword() {
+    public char[] getPassword() {
         return password;
     }
 
@@ -96,5 +96,4 @@ public final class PoolableConnectionImpl extends PoolableConnectionDelegator im
     public long getExpires() {
         return expires;
     }
-
 }
