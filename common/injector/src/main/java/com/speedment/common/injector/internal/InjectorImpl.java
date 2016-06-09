@@ -197,6 +197,9 @@ public final class InjectorImpl implements Injector {
                 instances.addFirst(newInstance(injectable));
             }
             
+            // Build the Injector
+            final Injector injector = new InjectorImpl(unmodifiableList(instances));
+            
             // Set the auto-injected fields
             instances.forEach(instance -> {
                 final Set<Field> fields = traverseFields(instance.getClass())
@@ -204,7 +207,13 @@ public final class InjectorImpl implements Injector {
                     .collect(toSet());
 
                 for (final Field field : fields) {
-                    final Object value = findIn(field.getType(), instances);
+                    final Object value;
+                    
+                    if (Inject.class.isAssignableFrom(field.getType())) {
+                        value = injector;
+                    } else {
+                        value = findIn(field.getType(), instances);
+                    }
 
                     field.setAccessible(true);
 
@@ -296,7 +305,7 @@ public final class InjectorImpl implements Injector {
             System.out.printf("| %-79s |%n", "All " + instances.size() + " components have been configured!");
             printLine();
             
-            return new InjectorImpl(unmodifiableList(instances));
+            return injector;
         }
         
         private static <T> T newInstance(Class<T> type) throws InstantiationException, NoDefaultConstructorException {
