@@ -45,6 +45,12 @@ import static java.util.stream.Collectors.toSet;
 import com.speedment.common.mapstream.MapStream;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

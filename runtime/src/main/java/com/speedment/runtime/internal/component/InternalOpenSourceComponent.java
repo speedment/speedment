@@ -30,9 +30,7 @@ import java.util.stream.Stream;
  */
 public abstract class InternalOpenSourceComponent extends AbstractComponent {
 
-    public InternalOpenSourceComponent(Speedment speedment) {
-        super(speedment);
-    }
+    protected InternalOpenSourceComponent() {}
     
     @Override
     public final boolean isInternal() {

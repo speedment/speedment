@@ -16,7 +16,16 @@
  */
 package com.speedment.runtime.internal.runtime;
 
+import com.speedment.common.injector.Injector;
+
 class SpeedmentImpl extends AbstractSpeedment {
+    
+    private final Injector injector;
+    
+    public SpeedmentImpl() {
+        injector = Injector.builder()
+            .canInject(injectableTypes)
+    }
 
     @Override
     protected AbstractApplicationBuilder<?, ?> newApplicationBuilder() {

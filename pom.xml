@@ -64,6 +64,7 @@
         <speedment.version>2.4.0-SNAPSHOT</speedment.version>
         <mapstream.version>2.3.3-SNAPSHOT</mapstream.version>
         <logger.version>1.0.1-SNAPSHOT</logger.version>
+        <injector.version>1.0.0-SNAPSHOT</injector.version>
         <json.version>1.0.0-SNAPSHOT</json.version>
     </properties>
     

@@ -29,7 +29,7 @@ import com.speedment.runtime.license.Software;
  * @since 2.0
  */
 @Api(version = "2.3")
-public interface Component extends Lifecyclable<Component> {
+public interface Component {
 
     /**
      * Returns the Component interface Class this Component implements.

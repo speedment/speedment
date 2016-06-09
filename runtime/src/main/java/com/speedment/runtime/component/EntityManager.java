@@ -21,10 +21,8 @@
  */
 package com.speedment.runtime.component;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.exception.SpeedmentException;
-import static java.util.Objects.requireNonNull;
 
 /**
  * An Entity Manager is be used to handle persistence for any Entity. This
@@ -70,16 +68,4 @@ public interface EntityManager extends Component {
      * @param entity to remove
      */
     <ENTITY> void remove(ENTITY entity) throws SpeedmentException;
-
-    /**
-     * Returns the default EntityManager from the Platform. This method is there
-     * for JPA compatibility.
-     *
-     * @param speedment instance to use
-     * @return the default EntityManager from the Platform
-     */
-    public static EntityManager get(Speedment speedment) {
-        requireNonNull(speedment);
-        return speedment.getEntityManager();
-    }
 }

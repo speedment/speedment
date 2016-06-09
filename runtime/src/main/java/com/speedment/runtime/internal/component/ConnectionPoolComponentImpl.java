@@ -53,16 +53,11 @@ public class ConnectionPoolComponentImpl extends InternalOpenSourceComponent imp
     private final Map<Long, PoolableConnection> leasedConnections;
     private final Map<String, Deque<PoolableConnection>> pools;
 
-    public ConnectionPoolComponentImpl(Speedment speedment) {
-        super(speedment);
+    public ConnectionPoolComponentImpl() {
         maxAge = DEFAULT_MAX_AGE;
         maxRetainSize = DEFAULT_MIN_POOL_SIZE_PER_DB;
         pools = new ConcurrentHashMap<>();
         leasedConnections = new ConcurrentHashMap<>();
-    }
-
-    private ConnectionPoolComponentImpl(Speedment speedment, ConnectionPoolComponentImpl template) {
-        this(speedment);
     }
     
     @Override
@@ -219,7 +214,7 @@ public class ConnectionPoolComponentImpl extends InternalOpenSourceComponent imp
 
     @Override
     public ConnectionPoolComponent defaultCopy(Speedment speedment) {
-        return new ConnectionPoolComponentImpl(speedment, this);
+        return new ConnectionPoolComponentImpl();
     }
 
 }

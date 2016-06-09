@@ -88,6 +88,12 @@
         
         <dependency>
             <groupId>com.speedment.common</groupId>
+            <artifactId>injector</artifactId>
+            <version>${injector.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
             <artifactId>json</artifactId>
             <version>${json.version}</version>
         </dependency>

@@ -16,35 +16,19 @@
  */
 package com.speedment.runtime.internal.component;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.Component;
-import com.speedment.runtime.internal.runtime.AbstractLifecycle;
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author  Per Minborg
  * @author  Emil Forslund
  */
-public abstract class AbstractComponent extends AbstractLifecycle<Component> implements Component {
+public abstract class AbstractComponent implements Component {
     
-    private final static Logger LOGGER = LoggerManager.getLogger(AbstractComponent.class);
+    protected AbstractComponent() {}
 
-    private final Speedment speedment;
-
-    public AbstractComponent(Speedment speedment) {
-        this.speedment = requireNonNull(speedment);
-    }
-    
     @Override
     public boolean isInternal() {
         return false;
-    }
-    
-    @Override
-    public Speedment getSpeedment() {
-        return speedment;
     }
 }

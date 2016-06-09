@@ -17,12 +17,11 @@
 package com.speedment.runtime;
 
 import com.speedment.runtime.component.Component;
-import com.speedment.runtime.component.ComponentConstructor;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.manager.Manager;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * Builder class for producing new {@link Speedment} instances.
@@ -34,6 +33,21 @@ import java.util.function.Function;
  * @since  2.4.0
  */
 public interface SpeedmentBuilder<APP extends Speedment, BUILDER extends SpeedmentBuilder<APP, BUILDER>> {
+    
+    /**
+     * Configures a parameter for the named ConfigEntity of a certain class. The
+     * consumer will then be applied after the configuration has been read and
+     * after the System properties have been applied.
+     *
+     * @param <C>       the type of ConfigEntity that is to be used
+     * @param type      the class of the type of ConfigEntity that is to be used
+     * @param name      the fully qualified name of the ConfigEntity.
+     * @param consumer  the consumer to apply
+     * @return          this instance
+     */
+    default <C extends Document & HasEnabled> BUILDER with(Class<C> type, String name, Consumer<C> consumer) {
+        return with(type, name, (app, t) -> consumer.accept(t));
+    }
 
     /**
      * Configures a parameter for the named ConfigEntity of a certain class. The
@@ -46,7 +60,7 @@ public interface SpeedmentBuilder<APP extends Speedment, BUILDER extends Speedme
      * @param consumer  the consumer to apply
      * @return          this instance
      */
-    <C extends Document & HasEnabled> BUILDER with(Class<C> type, String name, Consumer<C> consumer);
+    <C extends Document & HasEnabled> BUILDER with(Class<C> type, String name, BiConsumer<APP, C> consumer);
     
     /**
      * Configures a parameter for all ConfigEntity of a certain class. The
@@ -58,7 +72,21 @@ public interface SpeedmentBuilder<APP extends Speedment, BUILDER extends Speedme
      * @param consumer  the consumer to apply
      * @return          this instance
      */
-    <C extends Document & HasEnabled> BUILDER with(Class<C> type, Consumer<C> consumer);
+    default <C extends Document & HasEnabled> BUILDER with(Class<C> type, Consumer<C> consumer) {
+        return with(type, (app, t) -> consumer.accept(t));
+    }
+    
+    /**
+     * Configures a parameter for all ConfigEntity of a certain class. The
+     * consumer will then be applied after the configuration has been read and
+     * after the System properties have been applied.
+     *
+     * @param <C>       the type of ConfigEntity that is to be used
+     * @param type      the class of the type of ConfigEntity that is to be used
+     * @param consumer  the consumer to apply
+     * @return          this instance
+     */
+    <C extends Document & HasEnabled> BUILDER with(Class<C> type, BiConsumer<APP, C> consumer);
     
     /**
      * Configures a password for all dbmses in this project. The password will
@@ -230,28 +258,14 @@ public interface SpeedmentBuilder<APP extends Speedment, BUILDER extends Speedme
     
     /**
      * Adds a (and replaces any existing) {@link Component} to the Speedment
-     * runtime platform by applying the provided component constructor with the
-     * internal Speedment instance.
+     * runtime platform.
      *
-     * @param <C>  the component constructor type
+     * @param <C>  the component implementation type
      * 
-     * @param componentConstructor  to use when adding/replacing a component
-     * @return                      this instance
+     * @param componentClass  the component implementation type
+     * @return                this instance
      */
-    <C extends Component> BUILDER with(ComponentConstructor<C> componentConstructor);
-    
-    /**
-     * Adds a (and replaces any existing) {@link Component} to the Speedment
-     * runtime platform by first creating a new instance of the provided
-     * component constructor class and then applying the component constructor
-     * with the internal Speedment instance.
-     *
-     * @param <C>  the component constructor type
-     * 
-     * @param componentConstructorClass  to use when adding/replacing a component
-     * @return                           this instance
-     */
-    <C extends Component> BUILDER with(Class<ComponentConstructor<C>> componentConstructorClass);
+    <C extends Component> BUILDER with(Class<C> componentClass);
     
     /**
      * Sets if an initial database check shall be performed upon build(). The
@@ -277,15 +291,14 @@ public interface SpeedmentBuilder<APP extends Speedment, BUILDER extends Speedme
     <C extends Component> BUILDER withValidateRuntimeConfig(boolean validateRuntimeConfig);
     
     /**
-     * Adds a custom manager constructor, being called before build to replace
-     * an existing manager.
+     * Adds a custom manager.
      *
-     * @param <C>  the component type
+     * @param <M>  the manager type
      * 
-     * @param constructor  to add
-     * @return             this instance
+     * @param managerImplType  the manager implementation class
+     * @return                 this instance
      */
-    <C extends Component> BUILDER withManager(Function<Speedment, Manager<?>> constructor);
+    <M extends Manager<?>> BUILDER withManager(Class<M> managerImplType);
     
     /**
      * Builds this application.
