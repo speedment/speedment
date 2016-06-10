@@ -24,6 +24,8 @@ package com.speedment.common.injector.exception;
  * @since   1.0.0
  */
 public final class NoDefaultConstructorException extends RuntimeException {
+
+    private static final long serialVersionUID = 6432725938889199455L;
     
     public NoDefaultConstructorException() {}
     

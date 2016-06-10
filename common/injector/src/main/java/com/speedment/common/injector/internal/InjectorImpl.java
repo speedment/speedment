@@ -26,6 +26,7 @@ import com.speedment.common.injector.internal.dependency.impl.DependencyGraphImp
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.RequiresInjectable;
+import com.speedment.common.injector.internal.util.ReflectionUtil;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -57,13 +58,13 @@ public final class InjectorImpl implements Injector {
     
     @Override
     public <T> T get(Class<T> type) throws IllegalArgumentException {
-        return findIn(type, instances);
+        return findIn(type);
     }
 
     @Override
     public <T> T newInstance(Class<T> type) throws InstantiationException, IllegalArgumentException {
         final T instance = Builder.newInstance(type);
-        Builder.injectFields(instance, instances);
+        injectFields(instance);
         return instance;
     }
 
@@ -92,7 +93,7 @@ public final class InjectorImpl implements Injector {
                         printLine();
 
                         // Retreive the instance for that node
-                        final Object instance = findIn(n.getRepresentedType(), instances);
+                        final Object instance = findIn(n.getRepresentedType());
 
                         // Execute all the executions for the next step.
                         n.getExecutions().stream()
@@ -100,7 +101,7 @@ public final class InjectorImpl implements Injector {
                             .map(Execution::getMethod)
                             .forEach(m -> {
                                 final Object[] params = Stream.of(m.getParameters())
-                                    .map(p -> findIn(p.getType(), instances))
+                                    .map(p -> findIn(p.getType()))
                                     .toArray(Object[]::new);
 
                                 m.setAccessible(true);
@@ -143,7 +144,17 @@ public final class InjectorImpl implements Injector {
         }
     }
     
-    private static <T> T findIn(Class<T> type, List<Object> instances) {
+    private <T> T findIn(Class<T> type) {
+        return findIn(this, type, instances);
+    }
+    
+    private static <T> T findIn(Injector injector, Class<T> type, List<Object> instances) {
+        if (Injector.class.isAssignableFrom(type)) {
+            @SuppressWarnings("unchecked")
+            final T casted = (T) injector;
+            return casted;
+        }
+        
         for (final Object inst : instances) {
             if (type.isAssignableFrom(inst.getClass())) {
                 return type.cast(inst);
@@ -158,6 +169,29 @@ public final class InjectorImpl implements Injector {
     private static void printLine() {
         System.out.println("+---------------------------------------------------------------------------------+");
     }
+    
+    private <T> void injectFields(T instance) {
+            final Set<Field> fields = traverseFields(instance.getClass())
+                .filter(f -> f.isAnnotationPresent(Inject.class))
+                .collect(toSet());
+
+            for (final Field field : fields) {
+                final Object value = findIn(field.getType());
+
+                field.setAccessible(true);
+
+                try {
+                    field.set(instance, value);
+                } catch (final IllegalAccessException ex) {
+                    throw new RuntimeException(
+                        "Could not access field '" + field.getName() + 
+                        "' in class '" + value.getClass().getName() + 
+                        "' of type '" + field.getType() + 
+                        "'.", ex
+                    );
+                }
+            }
+        }
     
     public static Injector.Builder builder() {
         return new Builder();
@@ -179,9 +213,11 @@ public final class InjectorImpl implements Injector {
                 .forEach(type -> {
                     injectables.add(type);
                     
-                    if (type.isAnnotationPresent(RequiresInjectable.class)) {
-                        canInject(type.getAnnotation(RequiresInjectable.class).value());
-                    }
+                    ReflectionUtil.traverseAncestors(type)
+                        .filter(t -> t.isAnnotationPresent(RequiresInjectable.class))
+                        .map(t -> t.getAnnotation(RequiresInjectable.class))
+                        .map(RequiresInjectable::value)
+                        .forEach(this::canInject);
                 });
             
             return this;
@@ -212,7 +248,7 @@ public final class InjectorImpl implements Injector {
                     if (Inject.class.isAssignableFrom(field.getType())) {
                         value = injector;
                     } else {
-                        value = findIn(field.getType(), instances);
+                        value = findIn(injector, field.getType(), instances);
                     }
 
                     field.setAccessible(true);
@@ -251,7 +287,7 @@ public final class InjectorImpl implements Injector {
                             printLine();
                             
                             // Retreive the instance for that node
-                            final Object instance = findIn(n.getRepresentedType(), instances);
+                            final Object instance = findIn(injector, n.getRepresentedType(), instances);
 
                             // Execute all the executions for the next step.
                             n.getExecutions().stream()
@@ -259,7 +295,7 @@ public final class InjectorImpl implements Injector {
                                 .map(Execution::getMethod)
                                 .forEach(m -> {
                                     final Object[] params = Stream.of(m.getParameters())
-                                        .map(p -> findIn(p.getType(), instances))
+                                        .map(p -> findIn(injector, p.getType(), instances))
                                         .toArray(Object[]::new);
 
                                     m.setAccessible(true);
@@ -310,41 +346,20 @@ public final class InjectorImpl implements Injector {
         
         private static <T> T newInstance(Class<T> type) throws InstantiationException, NoDefaultConstructorException {
             try {
-                final Constructor<T> constr = type.getConstructor();
+                final Constructor<T> constr = type.getDeclaredConstructor();
                 constr.setAccessible(true);
                 return constr.newInstance();
                 
             } catch (final NoSuchMethodException ex) {
-                throw new NoDefaultConstructorException(ex);
+                throw new NoDefaultConstructorException(
+                    "Could not find any default constructor for class '" + type.getName() + "'.", ex
+                );
                 
             } catch (final IllegalAccessException 
                          | IllegalArgumentException 
                          | InvocationTargetException ex) {
                 
                 throw new RuntimeException(ex);
-            }
-        }
-        
-        private static <T> void injectFields(T instance, List<Object> instances) {
-            final Set<Field> fields = traverseFields(instance.getClass())
-                .filter(f -> f.isAnnotationPresent(Inject.class))
-                .collect(toSet());
-
-            for (final Field field : fields) {
-                final Object value = findIn(field.getType(), instances);
-
-                field.setAccessible(true);
-
-                try {
-                    field.set(instance, value);
-                } catch (final IllegalAccessException ex) {
-                    throw new RuntimeException(
-                        "Could not access field '" + field.getName() + 
-                        "' in class '" + value.getClass().getName() + 
-                        "' of type '" + field.getType() + 
-                        "'.", ex
-                    );
-                }
             }
         }
     }

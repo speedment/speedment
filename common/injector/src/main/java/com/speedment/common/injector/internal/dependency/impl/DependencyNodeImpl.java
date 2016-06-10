@@ -72,12 +72,11 @@ public final class DependencyNodeImpl implements DependencyNode {
     @Override
     public boolean canBe(State state) {
         // Make sure all dependencies of the executions have been satisfied.
-        return 
-            executions.stream()
-                .filter(e -> e.getState().ordinal() <= state.ordinal())
-                .flatMap(e -> e.getDependencies().stream())
-                .map(Dependency::getNode)
-                .allMatch(node -> node.is(state));
+        return executions.stream()
+            .filter(e -> e.getState().ordinal() <= state.ordinal())
+            .flatMap(e -> e.getDependencies().stream())
+            .map(Dependency::getNode)
+            .allMatch(node -> node.is(state));
     }
 
     @Override

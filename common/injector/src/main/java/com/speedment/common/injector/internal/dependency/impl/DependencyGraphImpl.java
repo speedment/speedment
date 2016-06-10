@@ -27,11 +27,11 @@ import com.speedment.common.injector.internal.dependency.Execution;
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseMethods;
 import com.speedment.common.injector.State;
+import com.speedment.common.injector.internal.InjectorImpl;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
@@ -45,23 +45,32 @@ import static java.util.stream.Collectors.joining;
  */
 public final class DependencyGraphImpl implements DependencyGraph {
     
-    private final static State[] STATES = State.values();
     private final Map<Class<?>, DependencyNode> nodes;
     
     public static DependencyGraph create(Set<Class<?>> injectables) throws CyclicReferenceException {
         final DependencyGraphImpl graph = new DependencyGraphImpl();
         injectables.forEach(graph::getOrCreate);
-        return graph.inject();
+        graph.inject();
+        return graph;
     }
     
     private DependencyGraphImpl() {
         nodes = new ConcurrentHashMap<>();
+        nodes.put(InjectorImpl.class, new InjectorDependencyNode());
     }
 
     @Override
-    public DependencyNode get(Class<?> clazz) throws CyclicReferenceException {
-        return Optional.ofNullable(nodes.get(clazz))
-            .orElseThrow(() -> new CyclicReferenceException(clazz));
+    public DependencyNode get(Class<?> clazz) throws IllegalArgumentException {
+        for (final Class<?> impl : nodes.keySet()) {
+            if (clazz.isAssignableFrom(impl)) {
+                return nodes.get(impl);
+            }
+        }
+        
+        throw new IllegalArgumentException(
+            "There is no implementation of '" + clazz + 
+            "' in the injection dependency graph."
+        );
     }
 
     @Override
@@ -124,8 +133,17 @@ public final class DependencyGraphImpl implements DependencyGraph {
                     dependencies.add(
                         new DependencyImpl(get(type), state)
                     );
-                } catch (final CyclicReferenceException ex) {
-                    throw new CyclicReferenceException(clazz, ex);
+                } catch (final IllegalArgumentException ex) {
+                    throw new IllegalStateException(
+                        "Class " + clazz.getSimpleName() + 
+                        " requested field " + type.getSimpleName() + 
+                        " to be injected, but it was not found. Available components: [" +
+                        nodes.keySet().stream()
+                            .map(Class::getSimpleName)
+                            .collect(joining(",\n    ", "\n    ", "\n")) +
+                        "].", 
+                        ex
+                    );
                 }
             });
     }
@@ -143,20 +161,29 @@ public final class DependencyGraphImpl implements DependencyGraph {
             );
         }
 
+        
         final Set<Dependency> dependencies = new HashSet<>();
-        for (int i = 0; i < m.getParameterCount(); i++) {
-            final Parameter p   = m.getParameters()[i];
-            final Inject inject = p.getAnnotation(Inject.class);
-            final Class<?> type = p.getType();
-            final State state   = inject.value();
+        try {
+            for (int i = 0; i < m.getParameterCount(); i++) {
+                final Parameter p   = m.getParameters()[i];
+                final Inject inject = p.getAnnotation(Inject.class);
+                final Class<?> type = p.getType();
+                final State state   = inject.value();
 
-            try {
-                dependencies.add(
-                    new DependencyImpl(getOrCreate(type), state)
-                );
-            } catch (final CyclicReferenceException ex) {
-                throw new CyclicReferenceException(clazz, ex);
+                try {
+                    dependencies.add(
+                        new DependencyImpl(get(type), state)
+                    );
+                } catch (final CyclicReferenceException ex) {
+                    throw new CyclicReferenceException(m.getDeclaringClass(), ex);
+                }
             }
+        } catch (final CyclicReferenceException ex) {
+            throw new IllegalStateException(
+                "Could not execute method " + methodName(m) + 
+                " since one of its dependencies had not been injected.",
+                ex
+            );
         }
         
         addDependenciesTo(clazz, dependencies);

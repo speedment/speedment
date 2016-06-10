@@ -53,5 +53,13 @@ public final class ReflectionUtil {
         return Stream.concat(inherited, Stream.of(clazz.getDeclaredMethods()));
     }
     
+    public static Stream<Class<?>> traverseAncestors(Class<?> clazz) {
+        if (clazz.getSuperclass() == null) {
+            return Stream.of(clazz);
+        } else {
+            return Stream.concat(Stream.of(clazz), traverseAncestors(clazz.getSuperclass()));
+        }
+    }
+    
     private ReflectionUtil() {}
 }

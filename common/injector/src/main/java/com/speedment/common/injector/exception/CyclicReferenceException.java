@@ -16,8 +16,9 @@
  */
 package com.speedment.common.injector.exception;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
 
@@ -31,13 +32,23 @@ public final class CyclicReferenceException extends RuntimeException {
     
     private final List<Class<?>> stack;
     
+    public CyclicReferenceException(Collection<Class<?>> stack) {
+        this.stack = new LinkedList<>(stack);
+    }
+    
+    public CyclicReferenceException(Collection<Class<?>> stack, Throwable thrw) {
+        super(thrw);
+        this.stack = new LinkedList<>(stack);
+    }
+    
     public CyclicReferenceException(Class<?> referencedClass) {
         this.stack = Collections.singletonList(referencedClass);
     }
     
     public CyclicReferenceException(Class<?> referencingClass, CyclicReferenceException cause) {
-        this.stack = new ArrayList<>(cause.stack);
-        this.stack.add(0, referencingClass);
+        final LinkedList<Class<?>> list = new LinkedList<>(cause.stack);
+        list.addFirst(referencingClass);
+        this.stack = list;
     }
 
     @Override
