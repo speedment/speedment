@@ -54,17 +54,15 @@ public interface Injector {
     <T> T get(Class<T> type) throws IllegalArgumentException;
     
     /**
-     * Create a new instance of the specified type, injecting all the
-     * fields with the {@link Inject}-annotations.
+     * Sets all the {@link Inject}-annoted fields in the specified instance.
+     * This method does <b>not</b> invoke any {@link Execute}-annoted methods
+     * since it is typically called after the platform has been constructed.
      * 
-     * @param <T>   the type to create
-     * @param type  the type to create
-     * @return      the instance created
-     * 
-     * @throws InstantiationException    if the class could not be instantiated
-     * @throws IllegalArgumentException  if the class does not have a default constructor
+     * @param <T>       the type to configure
+     * @param instance  the instance to configure (must not be null)
+     * @return          the instance created
      */
-    <T> T newInstance(Class<T> type) throws InstantiationException, IllegalArgumentException;
+    <T> T inject(T instance) throws IllegalArgumentException;
     
     /**
      * Stop all installed componenets by calling their 

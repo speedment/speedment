@@ -62,8 +62,7 @@ public final class InjectorImpl implements Injector {
     }
 
     @Override
-    public <T> T newInstance(Class<T> type) throws InstantiationException, IllegalArgumentException {
-        final T instance = Builder.newInstance(type);
+    public <T> T inject(T instance) {
         injectFields(instance);
         return instance;
     }
@@ -171,27 +170,33 @@ public final class InjectorImpl implements Injector {
     }
     
     private <T> void injectFields(T instance) {
-            final Set<Field> fields = traverseFields(instance.getClass())
-                .filter(f -> f.isAnnotationPresent(Inject.class))
-                .collect(toSet());
+        final Set<Field> fields = traverseFields(instance.getClass())
+            .filter(f -> f.isAnnotationPresent(Inject.class))
+            .collect(toSet());
 
-            for (final Field field : fields) {
-                final Object value = findIn(field.getType());
+        for (final Field field : fields) {
+            final Object value;
+            
+            if (Injector.class.isAssignableFrom(field.getType())) {
+                value = this;
+            } else {
+                value = findIn(field.getType());
+            }
 
-                field.setAccessible(true);
+            field.setAccessible(true);
 
-                try {
-                    field.set(instance, value);
-                } catch (final IllegalAccessException ex) {
-                    throw new RuntimeException(
-                        "Could not access field '" + field.getName() + 
-                        "' in class '" + value.getClass().getName() + 
-                        "' of type '" + field.getType() + 
-                        "'.", ex
-                    );
-                }
+            try {
+                field.set(instance, value);
+            } catch (final IllegalAccessException ex) {
+                throw new RuntimeException(
+                    "Could not access field '" + field.getName() + 
+                    "' in class '" + value.getClass().getName() + 
+                    "' of type '" + field.getType() + 
+                    "'.", ex
+                );
             }
         }
+    }
     
     public static Injector.Builder builder() {
         return new Builder();
