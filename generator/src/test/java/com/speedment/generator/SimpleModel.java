@@ -32,7 +32,6 @@ import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mapper.identity.StringIdentityMapper;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
-import com.speedment.runtime.internal.config.dbms.StandardDbmsTypes;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
 import java.util.stream.Stream;
 import org.junit.Before;

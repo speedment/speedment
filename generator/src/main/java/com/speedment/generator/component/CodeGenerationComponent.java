@@ -21,17 +21,11 @@ import com.speedment.generator.Translator;
 import com.speedment.generator.TranslatorConstructor;
 import com.speedment.generator.TranslatorDecorator;
 import com.speedment.generator.TranslatorKey;
-import com.speedment.generator.TranslatorManager;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.ClassOrInterface;
-import com.speedment.generator.util.JavaLanguageNamer;
-import com.speedment.common.mapstream.MapStream;
-import java.util.Set;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -48,20 +42,6 @@ public interface CodeGenerationComponent extends Component {
     default Class<CodeGenerationComponent> getComponentClass() {
         return CodeGenerationComponent.class;
     }
-
-    /**
-     * Returns the current {@link Generator}.
-     *
-     * @return the current {@link Generator}
-     */
-    Generator getGenerator();
-    
-    /**
-     * Returns the current {@link TranslatorManager}.
-     *
-     * @return the current {@link TranslatorManager}
-     */
-    TranslatorManager getTranslatorManager();
 
     /**
      * Puts a new {@code TranslatorConstructor} for the given class/key pair. If
@@ -196,15 +176,4 @@ public interface CodeGenerationComponent extends Component {
      */
     <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> Translator<DOC, T> 
     findTranslator(DOC document, Class<T> modelType, String key) throws SpeedmentException;
-
-    /**
-     * Returns the current {@link JavaLanguageNamer} used by Speedment.
-     *
-     * @return  the current {@link JavaLanguageNamer}
-     */
-    JavaLanguageNamer javaLanguageNamer();
-
-    void setJavaLanguageNamerSupplier(Supplier<? extends JavaLanguageNamer> supplier);
-
-    MapStream<Class<? extends HasMainInterface>, Set<String>> stream();
 }

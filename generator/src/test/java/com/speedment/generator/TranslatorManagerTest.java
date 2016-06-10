@@ -56,7 +56,7 @@ public class TranslatorManagerTest extends SimpleModel {
         final String code = translator.toCode();
         //System.out.println(code);
 
-        final JavaLanguageNamer javaLanguageNamer = speedment.getOrThrow(CodeGenerationComponent.class).javaLanguageNamer();
+        final JavaLanguageNamer javaLanguageNamer = speedment.getOrThrow(JavaLanguageNamer.class);
 
         assertTrue(code.contains(javaLanguageNamer.javaVariableName(table.getName())));
         assertTrue(code.contains(javaLanguageNamer.javaTypeName(table.getName())));

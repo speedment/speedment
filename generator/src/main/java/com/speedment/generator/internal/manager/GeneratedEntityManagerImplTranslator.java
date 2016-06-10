@@ -57,6 +57,7 @@ import com.speedment.runtime.util.tuple.Tuples;
 import static com.speedment.common.codegen.internal.util.Formatting.block;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
+import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import static java.util.stream.Collectors.joining;
@@ -80,6 +81,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
 
     private @Inject ResultSetMapperComponent resultSetMapperComponent;
     private @Inject DbmsHandlerComponent dbmsHandlerComponent;
+    private @Inject Injector injector;
     
     public GeneratedEntityManagerImplTranslator(Table table) {
         super(table, Class::of);
@@ -166,7 +168,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
 
     private String readFromResultSet(Column c, AtomicInteger position) {
 
-        final TranslatorSupport<Table> support = new TranslatorSupport<>(c.getParentOrThrow());
+        final TranslatorSupport<Table> support = injector.inject(new TranslatorSupport<>(c.getParentOrThrow()));
         final Dbms dbms = c.getParentOrThrow().getParentOrThrow().getParentOrThrow();
         
         final ResultSetMapping<?> mapping = resultSetMapperComponent.apply(

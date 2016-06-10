@@ -21,14 +21,12 @@ import static com.speedment.generator.StandardTranslatorKey.*;
 import com.speedment.generator.Translator;
 import com.speedment.generator.TranslatorConstructor;
 import com.speedment.generator.TranslatorDecorator;
-import com.speedment.generator.TranslatorManager;
 import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.internal.java.JavaGenerator;
 import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.injector.Injector;
@@ -47,7 +45,6 @@ import com.speedment.generator.internal.manager.EntityManagerTranslator;
 import com.speedment.generator.internal.manager.GeneratedEntityManagerImplTranslator;
 import com.speedment.generator.internal.manager.GeneratedEntityManagerTranslator;
 import com.speedment.generator.internal.util.DefaultJavaLanguageNamer;
-import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.runtime.license.Software;
 import com.speedment.common.mapstream.MapStream;
@@ -59,7 +56,6 @@ import com.speedment.generator.internal.lifecycle.GeneratedApplicationImplTransl
 import com.speedment.generator.internal.lifecycle.GeneratedApplicationTranslator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
@@ -74,9 +70,6 @@ import static java.util.Objects.requireNonNull;
 })
 public final class CodeGenerationComponentImpl extends InternalOpenSourceComponent implements CodeGenerationComponent {
 
-    private @Inject TranslatorManager translatorManager;
-    private @Inject JavaLanguageNamer javaLanguageNamer;
-    private @Inject Generator generator;
     private @Inject Injector injector;
     
     private final Map<Class<? extends HasMainInterface>, Map<String, TranslatorSettings<?, ?>>> map;
@@ -107,16 +100,6 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
     @Override
     protected String getDescription() {
         return "Generates java code for a project based on a model tree.";
-    }
-
-    @Override
-    public Generator getGenerator() {
-        return generator;
-    }
-
-    @Override
-    public TranslatorManager getTranslatorManager() {
-        return translatorManager;
     }
 
     @SuppressWarnings("unchecked")
@@ -176,22 +159,6 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
             .map(s -> (TranslatorSettings<DOC, ?>) s)
             .map(settings -> settings.createDecorated(document))
             .map(injector::inject);
-    }
-
-    @Override
-    public JavaLanguageNamer javaLanguageNamer() {
-        return javaLanguageNamer;
-    }
-
-    @Override
-    public void setJavaLanguageNamerSupplier(Supplier<? extends JavaLanguageNamer> supplier) {
-        javaLanguageNamer = supplier.get();
-    }
-
-    @Override
-    public MapStream<Class<? extends HasMainInterface>, Set<String>> stream() {
-        return MapStream.of(map)
-            .mapValue(Map::keySet);
     }
 
     @Override

@@ -170,6 +170,8 @@ public final class InjectorImpl implements Injector {
     }
     
     private <T> void injectFields(T instance) {
+        requireNonNull(instance);
+        
         final Set<Field> fields = traverseFields(instance.getClass())
             .filter(f -> f.isAnnotationPresent(Inject.class))
             .collect(toSet());

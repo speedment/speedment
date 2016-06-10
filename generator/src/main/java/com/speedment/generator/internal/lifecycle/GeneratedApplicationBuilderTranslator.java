@@ -32,6 +32,7 @@ import com.speedment.common.codegen.internal.model.JavadocImpl;
 import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.VOID;
+import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import static com.speedment.generator.internal.lifecycle.GeneratedMetadataTranslator.METADATA;
@@ -53,9 +54,8 @@ import static java.util.Objects.requireNonNull;
  */
 public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClassTranslator<Project, Class> {
     
-    private final String className = "Generated" + getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationBuilder";
-    
     private @Inject InfoComponent infoComponent;
+    private @Inject Injector injector;
     
     public GeneratedApplicationBuilderTranslator(Project doc) {
         super(doc, Class::of);
@@ -70,7 +70,7 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
     protected Class makeCodeGenModel(File file) {
         requireNonNull(file);
         
-        return newBuilder(file, className)
+        return newBuilder(file, getClassOrInterfaceName())
             .forEveryProject((clazz, project) -> {
                 
                 final Map<String, List<Table>> nameMap = traverseOver(project, Table.class)
@@ -93,7 +93,7 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
                 traverseOver(project, Table.class)
                     .filter(HasEnabled::test)
                     .forEachOrdered(t -> {
-                        final TranslatorSupport<Table> support = new TranslatorSupport<>(t);
+                        final TranslatorSupport<Table> support = injector.inject(new TranslatorSupport<>(t));
                         final Type managerType = support.managerImplType();
                         final String managerName = support.managerImplName();
                         if (ambigousNames.contains(t.getName())) {
@@ -147,7 +147,7 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
     
     @Override
     protected String getClassOrInterfaceName() {
-        return className;
+        return "Generated" + getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationBuilder";
     }
     
     private Type builderType() {

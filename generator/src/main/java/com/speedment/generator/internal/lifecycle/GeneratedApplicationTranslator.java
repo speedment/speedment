@@ -31,15 +31,13 @@ import com.speedment.runtime.internal.runtime.AbstractApplicationBuilder;
  */
 public final class GeneratedApplicationTranslator extends DefaultJavaClassTranslator<Project, Interface> {
 
-    private final String className = "Generated" + getSupport().typeName(getSupport().projectOrThrow()) + "Application";
-    
     public GeneratedApplicationTranslator(Project project) {
         super(project, Interface::of);
     }
 
     @Override
     protected String getClassOrInterfaceName() {
-        return className;
+        return "Generated" + getSupport().typeName(getSupport().projectOrThrow()) + "Application";
     }
 
     @Override
@@ -49,7 +47,7 @@ public final class GeneratedApplicationTranslator extends DefaultJavaClassTransl
 
     @Override
     protected Interface makeCodeGenModel(File file) {
-        return newBuilder(file, className)
+        return newBuilder(file, getClassOrInterfaceName())
             .forEveryProject((clazz, project) -> {
                 clazz.public_()
                     .add(Type.of(Speedment.class));

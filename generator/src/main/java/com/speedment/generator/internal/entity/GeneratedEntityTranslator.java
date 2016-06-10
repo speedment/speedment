@@ -40,6 +40,8 @@ import static com.speedment.common.codegen.internal.model.constant.DefaultType.S
 import com.speedment.common.codegen.internal.model.value.ReferenceValue;
 import com.speedment.common.codegen.internal.model.value.TextValue;
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
@@ -63,6 +65,7 @@ import static com.speedment.runtime.internal.util.document.DocumentUtil.relative
 public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<Interface> {
 
     public final static String IDENTIFIER_NAME = "Identifier";
+    private @Inject Injector injector;
     
     public GeneratedEntityTranslator(Table table) {
         super(table, Interface::of);
@@ -286,7 +289,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             final List<String> methodNames = fkStreamers.get(referencingTable);
             if (!methodNames.isEmpty()) {
                 final Method method = Method.of(EntityTranslatorSupport.FIND + EntityTranslatorSupport.pluralis(referencingTable,
-                    getNamer()), Type.of(Stream.class).add(Generic.of().add(new TranslatorSupport<>(referencingTable).entityType())));
+                    getNamer()), Type.of(Stream.class).add(Generic.of().add(injector.inject(new TranslatorSupport<>(referencingTable)).entityType())));
 
                 method.set(Javadoc.of(
                         "Creates and returns a <em>distinct</em> {@link Stream} of all " +
