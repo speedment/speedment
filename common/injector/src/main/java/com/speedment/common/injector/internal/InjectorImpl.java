@@ -30,8 +30,10 @@ import com.speedment.common.injector.internal.util.ReflectionUtil;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
 import static java.util.Collections.unmodifiableList;
-import java.util.HashSet;
+import static java.util.Collections.unmodifiableSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -50,10 +52,12 @@ import static java.util.stream.Collectors.joining;
 public final class InjectorImpl implements Injector {
     
     private final static State[] STATES = State.values();
+    private final Set<Class<?>> injectables;
     private final List<Object> instances;
     
-    private InjectorImpl(List<Object> instances) {
-        this.instances = requireNonNull(instances);
+    private InjectorImpl(Set<Class<?>> injectables, List<Object> instances) {
+        this.injectables = requireNonNull(injectables);
+        this.instances   = requireNonNull(instances);
     }
     
     @Override
@@ -69,7 +73,6 @@ public final class InjectorImpl implements Injector {
 
     @Override
     public void stop() {
-        final Set<Class<?>> injectables = instances.stream().map(Object::getClass).collect(toSet());
         final DependencyGraph graph = DependencyGraphImpl.create(injectables);
         
         final AtomicBoolean hasAnythingChanged = new AtomicBoolean();
@@ -142,6 +145,11 @@ public final class InjectorImpl implements Injector {
             }
         }
     }
+
+    @Override
+    public Injector.Builder newBuilder() {
+        return new Builder(injectables);
+    }
     
     private <T> T findIn(Class<T> type) {
         return findIn(this, type, instances);
@@ -209,7 +217,12 @@ public final class InjectorImpl implements Injector {
         private final Set<Class<?>> injectables;
         
         private Builder() {
-            injectables = new HashSet<>();
+            this(Collections.emptySet());
+        }
+        
+        private Builder(Set<Class<?>> injectables) {
+            requireNonNull(injectables);
+            this.injectables = new LinkedHashSet<>(injectables);
         }
 
         @Override
@@ -241,7 +254,10 @@ public final class InjectorImpl implements Injector {
             }
             
             // Build the Injector
-            final Injector injector = new InjectorImpl(unmodifiableList(instances));
+            final Injector injector = new InjectorImpl(
+                unmodifiableSet(new LinkedHashSet<>(injectables)),
+                unmodifiableList(instances)
+            );
             
             // Set the auto-injected fields
             instances.forEach(instance -> {

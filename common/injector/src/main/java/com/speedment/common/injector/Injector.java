@@ -71,6 +71,14 @@ public interface Injector {
     void stop();
     
     /**
+     * Returns a new Injector builder based on the classes installed into
+     * this one.
+     * 
+     * @return  the new injector builder
+     */
+    Builder newBuilder();
+    
+    /**
      * Returns a new builder for the {@link Injector} interface that uses the default
      * implementation.
      * 
