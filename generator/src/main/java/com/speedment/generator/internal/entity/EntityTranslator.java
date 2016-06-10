@@ -30,8 +30,8 @@ import com.speedment.generator.internal.EntityAndManagerTranslator;
  */
 public class EntityTranslator extends EntityAndManagerTranslator<Interface> {
 
-    public EntityTranslator(Speedment speedment, Generator gen, Table table) {
-        super(speedment, gen, table, Interface::of);
+    public EntityTranslator(Table table) {
+        super(table, Interface::of);
     }
 
     @Override

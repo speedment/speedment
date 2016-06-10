@@ -16,12 +16,10 @@
  */
 package com.speedment.generator.internal.lifecycle;
 
-import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.internal.runtime.AbstractApplicationBuilder;
 
@@ -34,12 +32,8 @@ public final class ApplicationBuilderTranslator extends DefaultJavaClassTranslat
 
     private final String className = getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationBuilder";
     
-    public ApplicationBuilderTranslator(
-            Speedment speedment, 
-            Generator generator, 
-            Project project) {
-        
-        super(speedment, generator, project, Class::of);
+    public ApplicationBuilderTranslator(Project project) {
+        super(project, Class::of);
     }
 
     @Override

@@ -55,13 +55,6 @@ public interface CodeGenerationComponent extends Component {
      * @return the current {@link Generator}
      */
     Generator getGenerator();
-
-    /**
-     * Sets the current {@link Generator}.
-     *
-     * @param generator to set
-     */
-    void setGenerator(Generator generator);
     
     /**
      * Returns the current {@link TranslatorManager}.
@@ -69,13 +62,6 @@ public interface CodeGenerationComponent extends Component {
      * @return the current {@link TranslatorManager}
      */
     TranslatorManager getTranslatorManager();
-
-    /**
-     * Sets the current {@link TranslatorManager}.
-     *
-     * @param manager  to set
-     */
-    void setTranslatorManager(TranslatorManager manager);
 
     /**
      * Puts a new {@code TranslatorConstructor} for the given class/key pair. If

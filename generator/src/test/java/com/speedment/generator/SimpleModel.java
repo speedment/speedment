@@ -34,11 +34,8 @@ import com.speedment.runtime.config.trait.HasName;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.runtime.internal.config.dbms.StandardDbmsTypes;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
-import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 import org.junit.Before;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -108,7 +105,7 @@ public abstract class SimpleModel {
                 name("myProject"),
                 array(Project.DBMSES,
                     object(name("myDbms"),
-                        dbTypeName(StandardDbmsTypes.defaultType().getName()),
+                        dbTypeName("MySQL"),
                         array(Dbms.SCHEMAS,
                             object(
                                 name(SCHEMA_NAME),
@@ -152,12 +149,12 @@ public abstract class SimpleModel {
             + "}";
 
         speedment = new DefaultApplicationBuilder(json)
-            .with(CodeGenerationComponentImpl::new)
+            .with(CodeGenerationComponentImpl.class)
             .withCheckDatabaseConnectivity(false)
             .withValidateRuntimeConfig(false)
             .build();
 
-        project = speedment.getProjectComponent().getProject();
+        project = speedment.project();
         dbms = project.dbmses().findAny().get();
         schema = dbms.schemas().findAny().get();
         table = schema.tables().filter(t -> TABLE_NAME.equals(t.getName())).findAny().get();

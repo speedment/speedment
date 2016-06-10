@@ -36,12 +36,10 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
         extends DefaultJavaClassTranslator<Table, T> {
 
     protected EntityAndManagerTranslator(
-            Speedment speedment,
-            Generator gen,
             Table table,
             Function<String, T> modelConstructor) {
 
-        super(speedment, gen, table, modelConstructor);
+        super(table, modelConstructor);
     }
 
     protected Type typeOfPK() {

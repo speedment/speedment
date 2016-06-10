@@ -14,18 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.generator.internal.entity;
+package com.speedment.generator.internal.util;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.common.codegen.Generator;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-import com.speedment.generator.internal.manager.EntityManagerTranslator;
+import com.speedment.common.codegen.model.Interface;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.JavaClassTranslator;
+import com.speedment.generator.StandardTranslatorKey;
+import com.speedment.generator.component.CodeGenerationComponent;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.ancestor;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -33,27 +35,25 @@ import static com.speedment.runtime.internal.util.document.DocumentUtil.ancestor
  */
 public final class FkHolder {
 
+    private @Inject CodeGenerationComponent codeGenerationComponent;
+    
     private final ForeignKey fk;
     private final ForeignKeyColumn fkc;
     private final Column column;
     private final Table table;
     private final Column foreignColumn;
     private final Table foreignTable;
-    private final EntityManagerTranslator emt;
-    private final EntityManagerTranslator foreignEmt;
 
-    FkHolder(Speedment speedment, Generator generator, ForeignKey fk) {
-        requireNonNulls(speedment, generator, fk);
+    public FkHolder(ForeignKey fk) {
+        requireNonNull(fk);
         
-        this.fk = fk;
+        this.fk  = fk;
         this.fkc = fk.foreignKeyColumns().findFirst().orElseThrow(this::noEnabledForeignKeyException);
         
-        column        = fkc.findColumn().orElseThrow(this::couldNotFindLocalColumnException);
-        table         = ancestor(column, Table.class).get();
-        foreignColumn = fkc.findForeignColumn().orElseThrow(this::foreignKeyWasNullException);
-        foreignTable  = fkc.findForeignTable().orElseThrow(this::foreignKeyWasNullException);
-        emt           = new EntityManagerTranslator(speedment, generator, getTable());
-        foreignEmt    = new EntityManagerTranslator(speedment, generator, getForeignTable());
+        this.column        = fkc.findColumn().orElseThrow(this::couldNotFindLocalColumnException);
+        this.table         = ancestor(column, Table.class).get();
+        this.foreignColumn = fkc.findForeignColumn().orElseThrow(this::foreignKeyWasNullException);
+        this.foreignTable  = fkc.findForeignTable().orElseThrow(this::foreignKeyWasNullException);
     }
 
     public Column getColumn() {
@@ -72,12 +72,20 @@ public final class FkHolder {
         return foreignTable;
     }
 
-    public EntityManagerTranslator getEmt() {
-        return emt;
+    public JavaClassTranslator<Table, Interface> getEmt() {
+        @SuppressWarnings("unchecked")
+        final JavaClassTranslator<Table, Interface> translator = 
+            (JavaClassTranslator<Table, Interface>)
+            codeGenerationComponent.findTranslator(getTable(), StandardTranslatorKey.MANAGER);
+        return translator;
     }
 
-    public EntityManagerTranslator getForeignEmt() {
-        return foreignEmt;
+    public JavaClassTranslator<Table, Interface> getForeignEmt() {
+        @SuppressWarnings("unchecked")
+        final JavaClassTranslator<Table, Interface> translator = 
+            (JavaClassTranslator<Table, Interface>)
+            codeGenerationComponent.findTranslator(getForeignTable(), StandardTranslatorKey.MANAGER);
+        return translator;
     }
 
     private IllegalStateException noEnabledForeignKeyException() {

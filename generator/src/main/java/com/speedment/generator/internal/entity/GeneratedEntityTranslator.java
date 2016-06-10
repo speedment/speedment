@@ -16,9 +16,9 @@
  */
 package com.speedment.generator.internal.entity;
 
-import com.speedment.runtime.Speedment;
+import com.speedment.generator.internal.util.FkHolder;
+import com.speedment.generator.internal.util.EntityTranslatorSupport;
 import com.speedment.generator.TranslatorSupport;
-import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.codegen.model.EnumConstant;
@@ -64,8 +64,8 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
 
     public final static String IDENTIFIER_NAME = "Identifier";
     
-    public GeneratedEntityTranslator(Speedment speedment, Generator gen, Table table) {
-        super(speedment, gen, table, Interface::of);
+    public GeneratedEntityTranslator(Table table) {
+        super(table, Interface::of);
     }
 
     @Override
@@ -209,7 +209,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             
             /*** Add streamers from back pointing FK:s ***/
             .forEveryForeignKeyReferencingThis((intrf, fk) -> {
-                final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
+                final FkHolder fu = new FkHolder(fk);
                 file.add(Import.of(fu.getEmt().getSupport().entityType()));
 
                 Import imp = Import.of(fu.getEmt().getSupport().entityType());
@@ -248,7 +248,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             /*** Add ordinary finders ***/
             .forEveryForeignKey((intrf, fk) -> {
 
-                final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
+                final FkHolder fu = new FkHolder(fk);
 
                 final Type returnType;
                 if (fu.getColumn().isNullable()) {
@@ -286,7 +286,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             final List<String> methodNames = fkStreamers.get(referencingTable);
             if (!methodNames.isEmpty()) {
                 final Method method = Method.of(EntityTranslatorSupport.FIND + EntityTranslatorSupport.pluralis(referencingTable,
-                    getNamer()), Type.of(Stream.class).add(Generic.of().add(new TranslatorSupport<>(getSpeedment(), referencingTable).entityType())));
+                    getNamer()), Type.of(Stream.class).add(Generic.of().add(new TranslatorSupport<>(referencingTable).entityType())));
 
                 method.set(Javadoc.of(
                         "Creates and returns a <em>distinct</em> {@link Stream} of all " +

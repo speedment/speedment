@@ -16,8 +16,6 @@
  */
 package com.speedment.generator.internal.lifecycle;
 
-import com.speedment.runtime.Speedment;
-import com.speedment.common.codegen.Generator;
 import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.WILDCARD;
 import com.speedment.common.codegen.model.File;
@@ -40,12 +38,8 @@ public final class GeneratedApplicationImplTranslator extends DefaultJavaClassTr
 
     private final String className = "Generated" + getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationImpl";
     
-    public GeneratedApplicationImplTranslator(
-            Speedment speedment, 
-            Generator generator, 
-            Project project) {
-        
-        super(speedment, generator, project, Class::of);
+    public GeneratedApplicationImplTranslator(Project project) {
+        super(project, Class::of);
     }
 
     @Override

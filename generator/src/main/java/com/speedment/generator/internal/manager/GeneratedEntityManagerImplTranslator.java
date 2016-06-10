@@ -18,7 +18,6 @@ package com.speedment.generator.internal.manager;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.generator.TranslatorSupport;
-import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Field;
@@ -58,6 +57,8 @@ import com.speedment.runtime.util.tuple.Tuples;
 import static com.speedment.common.codegen.internal.util.Formatting.block;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.runtime.component.DbmsHandlerComponent;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -77,8 +78,11 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         SPEEDMENT_VARIABLE_NAME        = "speedment",
         PRIMARY_KEY_CLASSES            = "PRIMARY_KEY_CLASSES";
 
-    public GeneratedEntityManagerImplTranslator(Speedment speedment, Generator gen, Table table) {
-        super(speedment, gen, table, Class::of);
+    private @Inject ResultSetMapperComponent resultSetMapperComponent;
+    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
+    
+    public GeneratedEntityManagerImplTranslator(Table table) {
+        super(table, Class::of);
     }
 
     @Override
@@ -103,7 +107,9 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                     .add(generateGet(getSupport(), file, table::columns))
                     .add(generateSet(getSupport(), file, table::columns))
                     .add(generateFields(getSupport(), file, table::columns))
-                    .add(generatePrimaryKeyFields(getSupport(), file, () -> table.columns().filter(this::isPrimaryKey)))
+                    .add(generatePrimaryKeyFields(getSupport(), file, 
+                        () -> table.columns().filter(GeneratedEntityManagerImplTranslator::isPrimaryKey))
+                    )
                     .add(generateGetPrimaryKeyClassesField(file))
                     .add(generateGetPrimaryKeyClasses(file))
                     .add(generateNewCopyOf(file));
@@ -158,17 +164,15 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         return method;
     }
 
-    public static String readFromResultSet(Speedment speedment, Column c, AtomicInteger position) {
+    private String readFromResultSet(Column c, AtomicInteger position) {
 
-        final TranslatorSupport<Table> support = new TranslatorSupport<>(speedment, c.getParentOrThrow());
+        final TranslatorSupport<Table> support = new TranslatorSupport<>(c.getParentOrThrow());
         final Dbms dbms = c.getParentOrThrow().getParentOrThrow().getParentOrThrow();
-        final ResultSetMapperComponent mapperComponent = speedment.getResultSetMapperComponent();
-
-        final ResultSetMapping<?> mapping = mapperComponent
-            .apply(
-                dbmsTypeOf(speedment, c.getParentOrThrow().getParentOrThrow().getParentOrThrow()),
-                c.findTypeMapper().getDatabaseType()
-            );
+        
+        final ResultSetMapping<?> mapping = resultSetMapperComponent.apply(
+            dbmsTypeOf(dbmsHandlerComponent, c.getParentOrThrow().getParentOrThrow().getParentOrThrow()),
+            c.findTypeMapper().getDatabaseType()
+        );
 
         final boolean isIdentityMapper = c.findTypeMapper().isIdentityMapper();
 
@@ -268,19 +272,19 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         }
     }
 
-    public static Method generateFields(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+    private static Method generateFields(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
         return Method.of(FIELDS_METHOD, Type.of(Stream.class).add(Generic.of().add(Type.of(FieldTrait.class))))
             .public_().add(OVERRIDE)
             .add(generateFieldsBody(support, file, columnsSupplier));
     }
 
-    public static Method generatePrimaryKeyFields(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+    private static Method generatePrimaryKeyFields(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
         return Method.of(PRIMARY_KEYS_FIELDS_METHOD, Type.of(Stream.class).add(Generic.of().add(Type.of(FieldTrait.class))))
             .public_().add(OVERRIDE)
             .add(generateFieldsBody(support, file, columnsSupplier));
     }
 
-    public static String[] generateFieldsBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+    private static String[] generateFieldsBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
         final List<String> rows = new LinkedList<>();
 
         rows.add("return Stream.of(");
@@ -296,7 +300,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         return rows.toArray(new String[rows.size()]);
     }
 
-    public static Method generateNewEntityFrom(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+    private Method generateNewEntityFrom(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
         return Method.of(NEW_ENTITY_FROM_METHOD, support.entityType())
             .protected_()
             .add(Type.of(SQLException.class))
@@ -305,7 +309,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
             .add(generateNewEntityFromBody(support, file, columnsSupplier));
     }
 
-    public static String[] generateNewEntityFromBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+    private String[] generateNewEntityFromBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
 
         final List<String> rows = new LinkedList<>();
         rows.add("final " + support.entityName() + " entity = " + NEW_EMPTY_ENTITY_METHOD + "();");
@@ -316,7 +320,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         columnsSupplier.get()
             .filter(HasEnabled::isEnabled)
             .forEachOrdered(c -> {
-                streamBuilder.add("entity.set" + support.namer().javaTypeName(c.getJavaName()) + "(" + readFromResultSet(support.speedment(), c, position) + ");");
+                streamBuilder.add("entity.set" + support.namer().javaTypeName(c.getJavaName()) + "(" + readFromResultSet(c, position) + ");");
             });
 
         rows.add("try " + block(streamBuilder.build()));
@@ -328,18 +332,49 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         return rows.toArray(new String[rows.size()]);
     }
 
-    public static Method generateNewEmptyEntity(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+    private Method generateNewEmptyEntity(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
         return Method.of(NEW_EMPTY_ENTITY_METHOD, support.entityType())
             .public_().add(OVERRIDE)
             .add(generateNewEmptyEntityBody(support, file, columnsSupplier));
 
     }
 
-    public static String[] generateNewEmptyEntityBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+    private String[] generateNewEmptyEntityBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
         file.add(Import.of(support.entityImplType()));
         return new String[] {
             "return new " + support.entityImplName() + "();"
         };
+    }
+    
+    private Method generateNewCopyOf(File file) {
+        file.add(Import.of(getSupport().entityImplType()));
+
+        final String varName = "source";
+        final String entityName = "copy";
+        final Method result = Method.of("newCopyOf", getSupport().entityType()).public_().add(OVERRIDE)
+            .add(Field.of(varName, getSupport().entityType()))
+            .add("final " + getSupport().entityName() + " " + entityName + 
+                " = new " + getSupport().entityImplName() + "();"
+            );
+
+        columns().forEachOrdered(c -> {
+            if (c.isNullable()) {
+                result.add(
+                    varName + "." + GETTER_METHOD_PREFIX + getSupport().typeName(c)
+                    + "().ifPresent(" + entityName + "::"
+                    + SETTER_METHOD_PREFIX + getSupport().typeName(c)
+                    + ");"
+                );
+            } else {
+                result.add(
+                    entityName + "." + SETTER_METHOD_PREFIX
+                    + getSupport().typeName(c) + "(" + varName + ".get"
+                    + getSupport().typeName(c) + "());"
+                );
+            }
+        });
+
+        return result.add("", "return " + entityName + ";");
     }
 
     private static enum Primitive {
@@ -377,38 +412,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         return support.entityName() + "." + support.namer().javaStaticFieldName(col.getJavaName()) + ".typeMapper()";
     }
 
-    private boolean isPrimaryKey(Column column) {
+    private static boolean isPrimaryKey(Column column) {
         return column.getParentOrThrow().findPrimaryKeyColumn(column.getName()).isPresent();
-    }
-
-    private Method generateNewCopyOf(File file) {
-        file.add(Import.of(getSupport().entityImplType()));
-
-        final String varName = "source";
-        final String entityName = "copy";
-        final Method result = Method.of("newCopyOf", getSupport().entityType()).public_().add(OVERRIDE)
-            .add(Field.of(varName, getSupport().entityType()))
-            .add("final " + getSupport().entityName() + " " + entityName + 
-                " = new " + getSupport().entityImplName() + "();"
-            );
-
-        columns().forEachOrdered(c -> {
-            if (c.isNullable()) {
-                result.add(
-                    varName + "." + GETTER_METHOD_PREFIX + getSupport().typeName(c)
-                    + "().ifPresent(" + entityName + "::"
-                    + SETTER_METHOD_PREFIX + getSupport().typeName(c)
-                    + ");"
-                );
-            } else {
-                result.add(
-                    entityName + "." + SETTER_METHOD_PREFIX
-                    + getSupport().typeName(c) + "(" + varName + ".get"
-                    + getSupport().typeName(c) + "());"
-                );
-            }
-        });
-
-        return result.add("", "return " + entityName + ";");
     }
 }

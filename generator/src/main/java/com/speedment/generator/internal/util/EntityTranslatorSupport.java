@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.generator.internal.entity;
+package com.speedment.generator.internal.util;
 
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;

@@ -16,7 +16,6 @@
  */
 package com.speedment.generator.internal;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.generator.JavaClassTranslator;
 import com.speedment.generator.Translator;
 import com.speedment.generator.Translator.Builder;
@@ -48,7 +47,8 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Type;
-import com.speedment.generator.component.CodeGenerationComponent;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.CopyConstructorMode.SETTER;
 import com.speedment.runtime.internal.config.BaseDocument;
 import com.speedment.runtime.internal.config.ColumnImpl;
@@ -72,13 +72,15 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import com.speedment.common.mapstream.MapStream;
+import com.speedment.runtime.component.InfoComponent;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author pemi
- * @param <DOC> document type.
- * @param <T> Java type (Interface, Class or Enum) to generate
+ * @param <DOC>  document type.
+ * @param <T>    Java type (Interface, Class or Enum) to generate
+ * 
+ * @author  Per Minborg
  */
 public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName & HasEnabled & HasMainInterface, T extends ClassOrInterface<T>>
     implements JavaClassTranslator<DOC, T> {
@@ -89,29 +91,24 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
         = "\n<p>\nThis file is safe to edit. It will not be overwritten by the "
         + "code generator.";
 
-    private final Speedment speedment;
-    private final Generator generator;
+    private @Inject InfoComponent infoComponent;
+    private @Inject Generator generator;
+    private @Inject JavaLanguageNamer javaLanguageNamer;
+    private @Inject Injector injector;
+    
     private final DOC document;
     private final Function<String, T> mainModelConstructor;
-
-    private final JavaLanguageNamer javaLanguageNamer;
-    private final TranslatorSupport<DOC> support;
-
     private final List<BiConsumer<File, Builder<T>>> listeners;
 
-    protected DefaultJavaClassTranslator(Speedment speedment, Generator generator, DOC document, Function<String, T> constructor) {
-        this.speedment = requireNonNull(speedment);
-        this.generator = requireNonNull(generator);
-        this.document = requireNonNull(document);
-        this.mainModelConstructor = requireNonNull(constructor);
-        this.javaLanguageNamer = speedment.getOrThrow(CodeGenerationComponent.class).javaLanguageNamer();
-        this.listeners = new CopyOnWriteArrayList<>();
-        this.support = new TranslatorSupport<>(speedment, document);
+    protected DefaultJavaClassTranslator(DOC document, Function<String, T> mainModelConstructor) {
+        this.document             = requireNonNull(document);
+        this.mainModelConstructor = requireNonNull(mainModelConstructor);
+        this.listeners            = new CopyOnWriteArrayList<>();
     }
 
     @Override
     public final TranslatorSupport<DOC> getSupport() {
-        return support;
+        return injector.inject(new TranslatorSupport<>(document));
     }
 
     @Override
@@ -119,12 +116,8 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
         return document;
     }
 
-    protected final Speedment getSpeedment() {
-        return speedment;
-    }
-
     protected AnnotationUsage generated() {
-        final String owner = speedment.getInfoComponent().title();
+        final String owner = infoComponent.title();
         return GENERATED.set(new TextValue(owner));
     }
 
@@ -164,7 +157,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
 
     @Override
     public File get() {
-        final File file = File.of(support.baseDirectoryName() + "/"
+        final File file = File.of(getSupport().baseDirectoryName() + "/"
             + (isInGeneratedPackage() ? "generated/" : "")
             + getClassOrInterfaceName() + ".java"
         );
@@ -183,7 +176,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
         final String owner, message;
 
         if (isInGeneratedPackage()) {
-            owner = getSpeedment().getInfoComponent().title();
+            owner = infoComponent.title();
             message = getGeneratedJavadocMessage();
         } else {
             owner = project().get().getCompanyName();
@@ -395,7 +388,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
     }
 
     public Field fieldFor(Column c) {
-        return Field.of(support.variableName(c), Type.of(c.findTypeMapper().getJavaType()));
+        return Field.of(getSupport().variableName(c), Type.of(c.findTypeMapper().getJavaType()));
     }
 
     public Constructor emptyConstructor() {
@@ -407,6 +400,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
     }
 
     public Constructor copyConstructor(Type type, CopyConstructorMode mode) {
+        final TranslatorSupport<DOC> support = getSupport();
         final Constructor constructor = Constructor.of().protected_()
             .add(Field.of(support.variableName(), type));
 
@@ -451,8 +445,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
     
     protected String getGeneratedJavadocMessage() {
         return "\n<p>\nThis file has been automatically generated by " + 
-            getSpeedment().getInfoComponent().title() +
-            ". Any changes made to it will be overwritten.";
+            infoComponent.title() + ". Any changes made to it will be overwritten.";
     }
 
     @Override

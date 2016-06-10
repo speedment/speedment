@@ -17,7 +17,6 @@
 package com.speedment.generator.internal.manager;
 
 import com.speedment.runtime.Speedment;
-import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Field;
@@ -33,8 +32,8 @@ import com.speedment.generator.internal.EntityAndManagerTranslator;
  */
 public final class EntityManagerImplTranslator extends EntityAndManagerTranslator<Class> {
 
-    public EntityManagerImplTranslator(Speedment speedment, Generator gen, Table table) {
-        super(speedment, gen, table, Class::of);
+    public EntityManagerImplTranslator(Table table) {
+        super(table, Class::of);
     }
 
     @Override

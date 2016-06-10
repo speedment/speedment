@@ -16,7 +16,6 @@
  */
 package com.speedment.generator;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
@@ -29,7 +28,7 @@ import com.speedment.runtime.config.trait.HasName;
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import static com.speedment.common.codegen.internal.util.Formatting.ucfirst;
 import com.speedment.common.codegen.model.Type;
-import com.speedment.generator.component.CodeGenerationComponent;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
 import com.speedment.generator.util.JavaLanguageNamer;
@@ -56,20 +55,16 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
         GENERATED_PACKAGE = "generated",
         GENERATED_PREFIX  = "Generated";
     
-    private final Speedment speedment;
     private final DOC document;
     
-    public TranslatorSupport(Speedment speedment, DOC document) {
-        this.speedment = requireNonNull(speedment);
-        this.document  = requireNonNull(document);
-    }
+    private @Inject JavaLanguageNamer javaLanguageNamer;
     
-    public Speedment speedment() {
-        return speedment;
+    public TranslatorSupport(DOC document) {
+        this.document = requireNonNull(document);
     }
     
     public JavaLanguageNamer namer() {
-        return speedment.getOrThrow(CodeGenerationComponent.class).javaLanguageNamer();
+        return javaLanguageNamer;
     }
     
     protected DOC document() {

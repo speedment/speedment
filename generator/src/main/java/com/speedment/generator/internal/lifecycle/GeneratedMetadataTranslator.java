@@ -16,8 +16,6 @@
  */
 package com.speedment.generator.internal.lifecycle;
 
-import com.speedment.runtime.Speedment;
-import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
@@ -40,6 +38,8 @@ import java.util.List;
 import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.runtime.component.InfoComponent;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -53,10 +53,10 @@ public final class GeneratedMetadataTranslator extends DefaultJavaClassTranslato
     private static final String STRING_BUILDER_NAME = "sb";
     public static final String METADATA = "Metadata";
 
-    private final String className = "Generated" + getSupport().typeName(getSupport().projectOrThrow()) + METADATA;
+    private @Inject InfoComponent infoComponent;
 
-    public GeneratedMetadataTranslator(Speedment speedment, Generator gen, Project doc) {
-        super(speedment, gen, doc, Class::of);
+    public GeneratedMetadataTranslator(Project doc) {
+        super(doc, Class::of);
     }
 
     @Override
@@ -118,7 +118,7 @@ public final class GeneratedMetadataTranslator extends DefaultJavaClassTranslato
         metadataField.set(new ReferenceValue("init()"));
         getMetadata.add("return METADATA;");
 
-        final Class result = newBuilder(file, className)
+        final Class result = newBuilder(file, getClassOrInterfaceName())
             .forEveryProject((clazz, project) -> {
                 clazz.public_()
                     .add(Type.of(ApplicationMetadata.class))
@@ -142,7 +142,7 @@ public final class GeneratedMetadataTranslator extends DefaultJavaClassTranslato
 
     @Override
     protected Javadoc getJavaDoc() {
-        final String owner = getSpeedment().getInfoComponent().title();
+        final String owner = infoComponent.title();
         return new JavadocImpl(getJavadocRepresentText() + getGeneratedJavadocMessage())
             .add(AUTHOR.setValue(owner));
     }
@@ -157,6 +157,6 @@ public final class GeneratedMetadataTranslator extends DefaultJavaClassTranslato
 
     @Override
     protected String getClassOrInterfaceName() {
-        return className;
+        return "Generated" + getSupport().typeName(getSupport().projectOrThrow()) + METADATA;
     }
 }

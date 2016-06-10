@@ -16,10 +16,8 @@
  */
 package com.speedment.generator;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.trait.HasMainInterface;
-import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.ClassOrInterface;
 
 /**
@@ -30,9 +28,9 @@ import com.speedment.common.codegen.model.ClassOrInterface;
  * @author       Emil Forslund
  * @param <DOC>  document type
  * @param <T>    codegen model type
- * @since        2.3
+ * @since        2.3.0
  */
-@Api(version = "2.3")
+@Api(version = "2.4")
 @FunctionalInterface
 public interface TranslatorConstructor<DOC extends HasMainInterface, T extends ClassOrInterface<T>> {
     
@@ -42,10 +40,8 @@ public interface TranslatorConstructor<DOC extends HasMainInterface, T extends C
      * This method is ment to be implemented using a functional reference to the
      * implementing classes constructor method.
      * 
-     * @param speedment  the speedment instance
-     * @param gen        the code generator to use
      * @param document   the document to generate from
      * @return           the created translator
      */
-    Translator<DOC, T> apply(Speedment speedment, Generator gen, DOC document);
+    Translator<DOC, T> apply(DOC document);
 }

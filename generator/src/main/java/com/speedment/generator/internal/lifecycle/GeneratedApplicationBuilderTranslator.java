@@ -16,9 +16,7 @@
  */
 package com.speedment.generator.internal.lifecycle;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.generator.TranslatorSupport;
-import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.File;
@@ -34,6 +32,7 @@ import com.speedment.common.codegen.internal.model.JavadocImpl;
 import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.VOID;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import static com.speedment.generator.internal.lifecycle.GeneratedMetadataTranslator.METADATA;
 import com.speedment.runtime.internal.runtime.AbstractApplicationBuilder;
@@ -43,12 +42,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toSet;
 import com.speedment.common.mapstream.MapStream;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
-import static java.util.Objects.requireNonNull;
+import com.speedment.runtime.component.InfoComponent;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import static java.util.Objects.requireNonNull;
 
@@ -61,8 +55,10 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
     
     private final String className = "Generated" + getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationBuilder";
     
-    public GeneratedApplicationBuilderTranslator(Speedment speedment, Generator gen, Project doc) {
-        super(speedment, gen, doc, Class::of);
+    private @Inject InfoComponent infoComponent;
+    
+    public GeneratedApplicationBuilderTranslator(Project doc) {
+        super(doc, Class::of);
     }
 
     @Override
@@ -97,7 +93,7 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
                 traverseOver(project, Table.class)
                     .filter(HasEnabled::test)
                     .forEachOrdered(t -> {
-                        final TranslatorSupport<Table> support = new TranslatorSupport<>(getSpeedment(), t);
+                        final TranslatorSupport<Table> support = new TranslatorSupport<>(t);
                         final Type managerType = support.managerImplType();
                         final String managerName = support.managerImplName();
                         if (ambigousNames.contains(t.getName())) {
@@ -137,7 +133,7 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
     
     @Override
     protected Javadoc getJavaDoc() {
-        final String owner = getSpeedment().getInfoComponent().title();
+        final String owner = infoComponent.title();
         return new JavadocImpl(getJavadocRepresentText() + getGeneratedJavadocMessage())
             .add(AUTHOR.setValue(owner));
     }

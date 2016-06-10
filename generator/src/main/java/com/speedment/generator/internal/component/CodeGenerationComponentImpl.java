@@ -16,7 +16,6 @@
  */
 package com.speedment.generator.internal.component;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.generator.JavaClassTranslator;
 import static com.speedment.generator.StandardTranslatorKey.*;
 import com.speedment.generator.Translator;
@@ -32,7 +31,11 @@ import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.internal.java.JavaGenerator;
 import com.speedment.common.codegen.model.ClassOrInterface;
-import com.speedment.generator.internal.TranslatorManagerImpl;
+import com.speedment.common.injector.Injector;
+import static com.speedment.common.injector.State.RESOLVED;
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.RequiresInjectable;
 import com.speedment.generator.internal.entity.EntityImplTranslator;
 import com.speedment.generator.internal.entity.EntityTranslator;
 import com.speedment.generator.internal.entity.GeneratedEntityImplTranslator;
@@ -48,6 +51,7 @@ import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.runtime.license.Software;
 import com.speedment.common.mapstream.MapStream;
+import com.speedment.generator.internal.TranslatorManagerImpl;
 import com.speedment.generator.internal.lifecycle.ApplicationBuilderTranslator;
 import com.speedment.generator.internal.lifecycle.ApplicationImplTranslator;
 import com.speedment.generator.internal.lifecycle.GeneratedApplicationBuilderTranslator;
@@ -63,20 +67,26 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 
+@RequiresInjectable({
+    TranslatorManagerImpl.class,
+    DefaultJavaLanguageNamer.class,
+    JavaGenerator.class
+})
 public final class CodeGenerationComponentImpl extends InternalOpenSourceComponent implements CodeGenerationComponent {
 
-    private Generator generator;
-    private TranslatorManager translatorManager;
+    private @Inject TranslatorManager translatorManager;
+    private @Inject JavaLanguageNamer javaLanguageNamer;
+    private @Inject Generator generator;
+    private @Inject Injector injector;
+    
     private final Map<Class<? extends HasMainInterface>, Map<String, TranslatorSettings<?, ?>>> map;
-    private JavaLanguageNamer javaLanguageNamer;
-
-    public CodeGenerationComponentImpl(Speedment speedment) {
-        super(speedment);
-
-        generator = new JavaGenerator();
-        translatorManager = new TranslatorManagerImpl(speedment);
+    
+    public CodeGenerationComponentImpl() {
         map = new ConcurrentHashMap<>();
-
+    }
+    
+    @ExecuteBefore(RESOLVED)
+    void installTranslators() {
         put(Table.class, ENTITY, EntityTranslator::new);
         put(Table.class, ENTITY_IMPL, EntityImplTranslator::new);
         put(Table.class, MANAGER, EntityManagerTranslator::new);
@@ -92,12 +102,6 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
         put(Project.class, GENERATED_APPLICATION_IMPL, GeneratedApplicationImplTranslator::new);
         put(Project.class, GENERATED_APPLICATION_BUILDER, GeneratedApplicationBuilderTranslator::new);
         put(Project.class, GENERATED_METADATA, GeneratedMetadataTranslator::new);
-
-        javaLanguageNamer = new DefaultJavaLanguageNamer();
-    }
-
-    private CodeGenerationComponentImpl(Speedment speedment, CodeGenerationComponentImpl template) {
-        this(speedment);
     }
     
     @Override
@@ -111,18 +115,8 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
     }
 
     @Override
-    public void setGenerator(Generator generator) {
-        this.generator = requireNonNull(generator);
-    }
-
-    @Override
     public TranslatorManager getTranslatorManager() {
         return translatorManager;
-    }
-
-    @Override
-    public void setTranslatorManager(TranslatorManager manager) {
-        this.translatorManager = requireNonNull(manager);
     }
 
     @SuppressWarnings("unchecked")
@@ -180,7 +174,8 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
             .values()
             .flatMap(m -> MapStream.of(m).filterKey(nameFilter).values())
             .map(s -> (TranslatorSettings<DOC, ?>) s)
-            .map(settings -> settings.createDecorated(getSpeedment(), generator, document));
+            .map(settings -> settings.createDecorated(document))
+            .map(injector::inject);
     }
 
     @Override
@@ -202,11 +197,6 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
     @Override
     public Stream<Software> getDependencies() {
         return Stream.empty();
-    }
-
-    @Override
-    public CodeGenerationComponent defaultCopy(Speedment speedment) {
-        return new CodeGenerationComponentImpl(speedment, this);
     }
 
     private static Supplier<SpeedmentException> noTranslatorFound(HasMainInterface doc, String key) {
@@ -244,11 +234,13 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
             return decorators;
         }
 
-        public JavaClassTranslator<DOC, T> createDecorated(Speedment speedment, Generator generator, DOC document) {
+        public JavaClassTranslator<DOC, T> createDecorated(DOC document) {
             @SuppressWarnings("unchecked")
-            final JavaClassTranslator<DOC, T> translator = (JavaClassTranslator<DOC, T>) getConstructor().apply(speedment, generator, document);
+            final JavaClassTranslator<DOC, T> translator = 
+                (JavaClassTranslator<DOC, T>) getConstructor().apply(document);
 
             decorators.stream().forEachOrdered(dec -> dec.apply(translator));
+            
             return translator;
         }
     }

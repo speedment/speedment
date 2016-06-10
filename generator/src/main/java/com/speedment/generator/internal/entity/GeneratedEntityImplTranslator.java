@@ -16,8 +16,8 @@
  */
 package com.speedment.generator.internal.entity;
 
-import com.speedment.runtime.Speedment;
-import com.speedment.common.codegen.Generator;
+import com.speedment.generator.internal.util.FkHolder;
+import com.speedment.generator.internal.util.EntityTranslatorSupport;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Field;
@@ -59,8 +59,8 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
 
     private static final String MANAGER_OF_METHOD = "managerOf_";
 
-    public GeneratedEntityImplTranslator(Speedment speedment, Generator gen, Table table) {
-        super(speedment, gen, table, Class::of);
+    public GeneratedEntityImplTranslator(Table table) {
+        super(table, Class::of);
     }
 
     @Override
@@ -106,7 +106,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
              * Add streamers from back pointing foreign keys
              */
             .forEveryForeignKeyReferencingThis((clazz, fk) -> {
-                final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
+                final FkHolder fu = new FkHolder(fk);
                 final String methodName = EntityTranslatorSupport.FIND
                     + EntityTranslatorSupport.pluralis(fu.getTable(), getNamer())
                     + "By" + getSupport().typeName(fu.getColumn());
@@ -122,7 +122,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
              * Add getter for ordinary foreign keys
              */
             .forEveryForeignKey((clazz, fk) -> {
-                final FkHolder fu = new FkHolder(getSpeedment(), getCodeGenerator(), fk);
+                final FkHolder fu = new FkHolder(fk);
 
                 final Type returnType;
                 if (fu.getColumn().isNullable()) {

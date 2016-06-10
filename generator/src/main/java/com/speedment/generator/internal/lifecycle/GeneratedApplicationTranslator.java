@@ -16,7 +16,6 @@
  */
 package com.speedment.generator.internal.lifecycle;
 
-import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Type;
@@ -34,12 +33,8 @@ public final class GeneratedApplicationTranslator extends DefaultJavaClassTransl
 
     private final String className = "Generated" + getSupport().typeName(getSupport().projectOrThrow()) + "Application";
     
-    public GeneratedApplicationTranslator(
-            Speedment speedment, 
-            Generator generator, 
-            Project project) {
-        
-        super(speedment, generator, project, Interface::of);
+    public GeneratedApplicationTranslator(Project project) {
+        super(project, Interface::of);
     }
 
     @Override
