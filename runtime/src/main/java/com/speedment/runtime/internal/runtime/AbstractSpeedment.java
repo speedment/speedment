@@ -20,7 +20,6 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.RequiresInjectable;
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.component.Component;
 import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Project;
@@ -38,8 +37,6 @@ import com.speedment.runtime.internal.component.ProjectComponentImpl;
 import com.speedment.runtime.internal.component.ResultSetMapperComponentImpl;
 import com.speedment.runtime.internal.component.TypeMapperComponentImpl;
 import com.speedment.runtime.internal.config.dbms.StandardDbmsTypes;
-import com.speedment.runtime.manager.Manager;
-import static java.util.Objects.requireNonNull;
 
 /**
  * An abstract base implementation of the {@link Speedment} interface.
@@ -64,23 +61,13 @@ import static java.util.Objects.requireNonNull;
 })
 public abstract class AbstractSpeedment implements Speedment {
     
-    private @Inject ManagerComponent managerComponent;
     private @Inject ProjectComponent projectComponent;
-    private Injector injector;
+    private @Inject Injector injector;
     
     protected AbstractSpeedment() {}
-    
-    void setInjector(Injector injector) {
-        this.injector = requireNonNull(injector);
-    }
 
     @Override
-    public <ENTITY> Manager<ENTITY> managerOf(Class<ENTITY> entityClass) throws SpeedmentException {
-        return managerComponent.managerOf(entityClass);
-    }
-
-    @Override
-    public <C extends Component> C getOrThrow(Class<C> componentClass) throws SpeedmentException {
+    public <T> T getOrThrow(Class<T> componentClass) throws SpeedmentException {
         try {
             return injector.get(componentClass);
         } catch (final IllegalArgumentException ex) {

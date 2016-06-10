@@ -20,7 +20,6 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.manager.Manager;
 
 /**
  * The {@code Platform} class acts as a generic holder of different system
@@ -36,36 +35,18 @@ import com.speedment.runtime.manager.Manager;
  */
 @Api(version = "2.4")
 public interface Speedment {
-    
-    /**
-     * Obtains and returns the currently associated {@link Manager}
-     * implementation for the given Entity interface Class. If no Manager exists
-     * for the given entityClass, a SpeedmentException will be thrown.
-     * <p>
-     * N.B.This conveniency method is a pure delegator to the ManagerComponent
-     * and is exactly equivalent to the code:
-     * <p>
-     * {@code get(ManagerComponent.class).managerOf(entityClass) }
-     *
-     * @param <ENTITY> the Entity interface type
-     * @param entityClass the Entity interface {@code Class}
-     * @return the currently associated {@link Manager} implementation for the
-     * given Entity interface Class
-     * @throws SpeedmentException if no Manager exists for the given entityClass
-     */
-    <ENTITY> Manager<ENTITY> managerOf(Class<ENTITY> entityClass) throws SpeedmentException;
-    
+
     /**
      * Returns the specified component from the platform, or if it does not
      * exist, throws a {@code SpeedmentException}.
      * 
-     * @param <C>             the component interface type
-     * @param componentClass  the component interface class
-     * @return                the component
+     * @param <T>   the component interface type
+     * @param type  the component interface class
+     * @return      the component
      * 
      * @throws SpeedmentException  if it was not installed
      */
-    <C extends Component> C getOrThrow(Class<C> componentClass) throws SpeedmentException;
+    <T> T getOrThrow(Class<T> type) throws SpeedmentException;
     
     /**
      * Returns the project node.

@@ -17,6 +17,7 @@
 package com.speedment.runtime.internal.runtime;
 
 import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.exception.CyclicReferenceException;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.SpeedmentVersion;
 import static com.speedment.runtime.SpeedmentVersion.getImplementationVendor;
@@ -79,8 +80,7 @@ public abstract class AbstractApplicationBuilder<
     private boolean validateRuntimeConfig;
 
     protected AbstractApplicationBuilder(Class<? extends APP> applicationImplClass) {
-        this.injector = Injector.builder()
-            .canInject(applicationImplClass);
+        this.injector = Injector.builder().canInject(applicationImplClass);
         
         withsNamed = new ArrayList<>();
         withsAll   = new ArrayList<>();
@@ -230,7 +230,7 @@ public abstract class AbstractApplicationBuilder<
         
         try {
             inj = injector.build();
-        } catch (final InstantiationException ex) {
+        } catch (final InstantiationException | CyclicReferenceException ex) {
             throw new SpeedmentException("Error in dependency injection.", ex);
         }
         
