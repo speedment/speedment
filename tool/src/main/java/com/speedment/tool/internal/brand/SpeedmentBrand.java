@@ -14,39 +14,37 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.tool.brand;
+package com.speedment.tool.internal.brand;
 
-import static java.util.Objects.requireNonNull;
+import com.speedment.tool.brand.Brand;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * A default implementation of the {@link Brand} interface.
  * 
  * @author  Emil Forslund
- * @since   2.3
+ * @since   2.3.0
  */
-public class DefaultBrand implements Brand {
-        
-    private final String website, logoSmall, logoLarge;
-
-    public DefaultBrand(String website, String logoSmall, String logoLarge) {
-        this.website   = requireNonNull(website);
-        this.logoSmall = logoSmall; // Can be null.
-        this.logoLarge = logoLarge; // Can be null.
-    }
+public class SpeedmentBrand extends AbstractBrand {
 
     @Override
     public final String website() {
-        return website;
+        return "www.speedment.org";
     }
 
     @Override
     public final Optional<String> logoSmall() {
-        return Optional.ofNullable(logoSmall);
+        return Optional.ofNullable("/images/logo.png");
     }
 
     @Override
     public final Optional<String> logoLarge() {
-        return Optional.ofNullable(logoLarge);
+        return Optional.ofNullable("/images/speedment_open_source_small.png");
+    }
+
+    @Override
+    public Stream<String> stylesheets() {
+        return Stream.of("/css/speedment.css");
     }
 }

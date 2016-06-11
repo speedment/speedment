@@ -247,12 +247,6 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     public final <P extends Document, T extends Document> Stream<T> 
     children(String key, BiFunction<P, Map<String, Object>, T> constructor) {
        throw new UnsupportedOperationException("children() shall not be called from a Property");
-//        return observableListOf(key)
-//            .stream()
-//            .map(child -> constructor.apply(
-//                (P) child.getParent().orElse(null), 
-//                child.getData()
-//            ));
     }
 
     @Override
@@ -294,13 +288,12 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
      * <b>Warning!</b> This method is only intended to be called internally and does
      * not properly configure created children in the responsive model.
      * 
-     * @param speedment  the speedment instance
-     * @param key        the key to create the child on
-     * @return           the created child
+     * @param documentPropertyComponent  the documentPropertyComponent instance
+     * @param key                        the key to create the child on
+     * @return                           the created child
      */
-    protected final DocumentProperty createChild(Speedment speedment, String key) {
-
-        return speedment.getOrThrow(DocumentPropertyComponent.class)
+    protected final DocumentProperty createChild(DocumentPropertyComponent documentPropertyComponent, String key) {
+        return documentPropertyComponent
             .getConstructor(keyPathEndingWith(key))
             .create(this);
     }

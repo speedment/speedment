@@ -16,8 +16,8 @@
  */
 package com.speedment.tool.internal.controller;
 
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.notification.Notification;
-import com.speedment.tool.UISession;
 import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.util.LayoutAnimator;
 import java.net.URL;
@@ -27,22 +27,21 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.FlowPane;
-import static java.util.Objects.requireNonNull;
 
 /**
  * FXML Controller class
  *
  * @author  Emil Forslund
- * @since   2.3
+ * @since   2.3.0
  */
 public class NotificationAreaController implements Initializable {
     
-    private final UISession session;
     private final LayoutAnimator animator;
+    
+    private @Inject UserInterfaceComponent userInterfaceComponent;
     private @FXML FlowPane notificationArea;
     
-    public NotificationAreaController(UISession session) {
-        this.session  = requireNonNull(session);
+    public NotificationAreaController() {
         this.animator = new LayoutAnimator();
     }
 
@@ -56,9 +55,7 @@ public class NotificationAreaController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         animator.observe(notificationArea.getChildren());
         
-        final ObservableList<Notification> notifications = session.getSpeedment()
-                .getOrThrow(UserInterfaceComponent.class)
-                .getNotifications();
+        final ObservableList<Notification> notifications = userInterfaceComponent.notifications();
         
         notifications.addListener((ListChangeListener.Change<? extends Notification> change) -> {
             while (change.next()) {

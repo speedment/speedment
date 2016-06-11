@@ -15,18 +15,15 @@
  * the License.
  */
 package com.speedment.tool.internal.controller;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.brand.Brand;
-import com.speedment.tool.UISession;
 import com.speedment.tool.component.UserInterfaceComponent;
-import com.speedment.tool.util.Loader;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.net.URL;
-import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -38,34 +35,24 @@ import javafx.scene.image.ImageView;
 public final class ToolbarController implements Initializable {
     
     public final static String ICON_SIZE = "2em";
-    private final UISession session;
+    
+    private @Inject UserInterfaceComponent ui;
+    private @Inject Brand uiBrand;
     
     private @FXML Button buttonReload;
     private @FXML Button buttonGenerate;
     private @FXML ImageView brand;
-    
-    private ToolbarController(UISession session) {
-        this.session = requireNonNull(session);
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        buttonReload.setOnAction(session.reload());
-        buttonGenerate.setOnAction(session.generate());
+        buttonReload.setOnAction(ev -> ui.reload());
+        buttonGenerate.setOnAction(ev -> ui.generate());
         
         buttonReload.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.REFRESH, ICON_SIZE));
         buttonGenerate.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.PLAY_CIRCLE, ICON_SIZE));
 
-        final Brand uiBrand = session.getSpeedment()
-            .getOrThrow(UserInterfaceComponent.class)
-            .getBrand();
-        
         uiBrand.logoLarge()
             .map(Image::new)
             .ifPresent(brand::setImage);
     }
-    
-    public static Node create(UISession session) {
-        return Loader.create(session, "Toolbar");
-	}
 }

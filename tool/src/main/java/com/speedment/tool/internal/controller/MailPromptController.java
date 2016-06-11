@@ -16,27 +16,26 @@
  */
 package com.speedment.tool.internal.controller;
 
-import com.speedment.tool.UISession;
-import com.speedment.tool.util.Loader;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.runtime.component.EventComponent;
 import com.speedment.runtime.internal.util.EmailUtil;
+import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.event.UIEvent;
+import com.speedment.tool.internal.util.InjectionLoader;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 /**
  *
@@ -52,14 +51,13 @@ public final class MailPromptController implements Initializable {
     private final static Predicate<String> IS_INVALID_MAIL = 
         mail -> !INVALID_MAIL.matcher(mail).find();
     
-    private final UISession session;
+    private @Inject UserInterfaceComponent userInterfaceComponent;
+    private @Inject InjectionLoader injectionLoader;
+    private @Inject EventComponent eventComponent;
+    
     private @FXML TextField email;
     private @FXML TextArea terms;
     private @FXML Button okey;
-    
-    private MailPromptController(UISession session) {
-        this.session = requireNonNull(session);
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -70,8 +68,9 @@ public final class MailPromptController implements Initializable {
         ));
 
         okey.setOnAction(ev -> {
-            ConnectController.createAndShow(session);
+            injectionLoader.loadAndShow("Connect");
             EmailUtil.setEmail(email.getText());
+            eventComponent.notify(UIEvent.OPEN_CONNECT_WINDOW);
         });
         
         try {
@@ -79,7 +78,7 @@ public final class MailPromptController implements Initializable {
             final String str = inputToString(in);
             terms.setText(str);
         } catch (final IOException ex) {
-            session.showError(
+            userInterfaceComponent.showError(
                 "Failed to load file", 
                 "The terms and conditions of this software couldn't be loaded.", 
                 ex
@@ -87,19 +86,6 @@ public final class MailPromptController implements Initializable {
         }
         
     }
-    
-    public static void createAndShow(UISession session) {
-        Loader.createAndShow(session, "MailPrompt");
-        
-        final Stage stage = session.getStage();
-        stage.sizeToScene();
-        
-        final Scene scene = stage.getScene();
-        final double top = scene.getY();
-        
-        session.getSpeedment().getEventComponent().notify(UIEvent.OPEN_MAIL_PROMPT_WINDOW);
-        
-	}
     
     private static String inputToString(InputStream in) throws IOException {
         try (final BufferedInputStream bis = new BufferedInputStream(in)) {

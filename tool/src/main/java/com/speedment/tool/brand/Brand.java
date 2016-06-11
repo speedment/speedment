@@ -17,12 +17,9 @@
 package com.speedment.tool.brand;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.tool.UISession;
-import com.speedment.tool.component.UserInterfaceComponent;
 import java.util.Optional;
+import java.util.stream.Stream;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
 
 /**
  * A branding container.
@@ -64,35 +61,18 @@ public interface Brand {
      * @return  the larger logo
      */
     Optional<String> logoLarge();
+    
+    /**
+     * Returns a stream of stylesheets that are used when branding.
+     * 
+     * @return  the stream of stylesheets.
+     */
+    Stream<String> stylesheets();
 
     /**
      * Applies this brand to the specified {@link UISession} and {@link Scene}.
      * 
-     * @param session  the current session
-     * @param scene    the scene to set icons and stylesheets in
+     * @param scene  the scene to set icons and stylesheets in
      */
-    static void apply(UISession session, Scene scene) {
-        final Stage stage = session.getStage();
-        final Brand brand = session.getSpeedment()
-            .getOrThrow(UserInterfaceComponent.class)
-            .getBrand();
-
-        stage.setTitle(session.getSpeedment().getInfoComponent().title());
-        brand.logoSmall()
-            .map(Image::new)
-            .ifPresent(icon -> {
-                stage.getIcons().add(icon);
-
-                @SuppressWarnings("unchecked")
-                final Stage dialogStage = (Stage) scene.getWindow();
-                if (dialogStage != null) {
-                    dialogStage.getIcons().add(icon);
-                }
-            });
-
-        session.getSpeedment()
-            .getOrThrow(UserInterfaceComponent.class)
-            .stylesheetFiles()
-            .forEachOrdered(scene.getStylesheets()::add);
-    }
+    void apply(Scene scene);
 }

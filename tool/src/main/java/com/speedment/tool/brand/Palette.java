@@ -30,9 +30,6 @@ public enum Palette {
     /**
      * A special color to use for catching the users attention to informational
      * messages.
-     *//**
-     * A special color to use for catching the users attention to informational
-     * messages.
      */
     INFO,
     /**

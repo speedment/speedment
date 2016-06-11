@@ -17,6 +17,7 @@
 package com.speedment.tool.config;
 
 import com.speedment.runtime.Speedment;
+import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.runtime.config.Dbms;
 import static com.speedment.runtime.config.Dbms.IP_ADDRESS;
@@ -29,6 +30,7 @@ import com.speedment.runtime.internal.stream.OptionalUtil;
 import com.speedment.tool.config.mutator.DbmsPropertyMutator;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
+import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.tool.property.DefaultIntegerPropertyItem;
 import com.speedment.tool.property.DefaultStringPropertyItem;
 import com.speedment.tool.property.DefaultTextAreaPropertyItem;
@@ -86,9 +88,9 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
         return integerPropertyOf(PORT, () -> Dbms.super.getPort().orElse(0));
     }
     
-    protected IntegerBinding defaultPortProperty(Speedment speedment) {
+    protected IntegerBinding defaultPortProperty(DbmsHandlerComponent dbmsHandlerComponent) {
         return Bindings.createIntegerBinding(() -> 
-            Dbms.super.defaultPort(speedment),
+            DocumentDbUtil.findDbmsType(dbmsHandlerComponent, this).getDefaultPort(),
             typeNameProperty()
         );
     }
@@ -107,9 +109,9 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
         return Optional.ofNullable(connectionUrlProperty().get());
     }
 
-    protected StringBinding defaultConnectionUrlProperty(Speedment speedment) throws SpeedmentException {
+    protected StringBinding defaultConnectionUrlProperty(DbmsHandlerComponent dbmsHandlerComponent) throws SpeedmentException {
         return Bindings.createStringBinding(() -> 
-            Dbms.super.defaultConnectionUrl(speedment), 
+            DocumentDbUtil.findDbmsType(dbmsHandlerComponent, this).getConnectionUrlGenerator().from(this), 
             typeNameProperty(),
             ipAddressProperty(),
             portProperty(),
@@ -143,8 +145,9 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
         
+        final DbmsHandlerComponent dbmsHandler = speedment.getOrThrow(DbmsHandlerComponent.class);
         final ObservableList<String> supportedTypes = observableList(
-            speedment.getDbmsHandlerComponent()
+            dbmsHandler
                 .supportedDbmsTypes()
                 .map(DbmsType::getName)
                 .collect(toList())
@@ -170,7 +173,7 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
                 ),
                 new DefaultIntegerPropertyItem(
                     portProperty(),
-                    defaultPortProperty(speedment),
+                    defaultPortProperty(dbmsHandler),
                     "Port",                  
                     "The port of the database on the database host.",
                     editor -> {
@@ -186,7 +189,7 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
                 ),
                 new DefaultTextAreaPropertyItem(
                     connectionUrlProperty(),
-                    defaultConnectionUrlProperty(speedment),
+                    defaultConnectionUrlProperty(dbmsHandler),
                     "Connection URL",
                     "The connection URL that should be used when establishing " +
                     "connection with the database. If this is set to Auto, the " +

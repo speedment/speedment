@@ -16,20 +16,24 @@
  */
 package com.speedment.tool.internal.controller;
 
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.runtime.component.DbmsHandlerComponent;
+import com.speedment.runtime.component.EventComponent;
+import com.speedment.runtime.component.PasswordComponent;
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.tool.UISession;
-import static com.speedment.tool.UISession.ReuseStage.USE_EXISTING_STAGE;
 import com.speedment.tool.config.DbmsProperty;
 import static com.speedment.tool.internal.controller.ToolbarController.ICON_SIZE;
-import com.speedment.tool.util.Loader;
 import com.speedment.runtime.internal.util.Settings;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
+import com.speedment.tool.component.UserInterfaceComponent;
+import static com.speedment.tool.component.UserInterfaceComponent.ReuseStage.USE_EXISTING_STAGE;
 import com.speedment.tool.event.UIEvent;
+import com.speedment.tool.internal.util.ConfigFileHelper;
+import com.speedment.tool.internal.util.InjectionLoader;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.net.URL;
-import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
 import static java.util.stream.Collectors.toCollection;
 import java.util.stream.Stream;
@@ -57,7 +61,12 @@ public final class ConnectController implements Initializable {
         DEFAULT_USER = "root",
         DEFAULT_NAME = "db0";
     
-    private final UISession session;
+    private @Inject UserInterfaceComponent userInterfaceComponent;
+    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
+    private @Inject PasswordComponent passwordComponent;
+    private @Inject ConfigFileHelper configFileHelper;
+    private @Inject EventComponent eventComponent;
+    private @Inject InjectionLoader loader;
     
     private @FXML Button buttonOpen;
     private @FXML TextField fieldHost;
@@ -70,10 +79,6 @@ public final class ConnectController implements Initializable {
     private @FXML Button buttonConnect;
     private @FXML HBox container;
     private @FXML StackPane openContainer;
-    
-    private ConnectController(UISession session) {
-        this.session = requireNonNull(session);
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -89,13 +94,13 @@ public final class ConnectController implements Initializable {
                 .collect(toCollection(FXCollections::observableArrayList))
         );
         
-        final DbmsProperty dbms = session.getProject().mutator().addNewDbms();
+        final DbmsProperty dbms = userInterfaceComponent.projectProperty().mutator().addNewDbms();
         
         fieldType.getSelectionModel().selectedItemProperty().addListener((observable, old, typeName) -> {
             dbms.typeNameProperty().setValue(typeName);
             
             if (!typeName.isEmpty()) {
-                final DbmsType item = dbmsTypeOf(session.getSpeedment(), dbms);
+                final DbmsType item = dbmsTypeOf(dbmsHandlerComponent, dbms);
 
                 if (fieldHost.textProperty().getValue().isEmpty()) {
                     fieldHost.textProperty().setValue(DEFAULT_HOST);
@@ -154,7 +159,8 @@ public final class ConnectController implements Initializable {
                 fieldType.getSelectionModel().select(getDbmsTypes().findFirst().get());
             }
         } catch (final SpeedmentException ex) {
-            session.showError("Couldn't find any installed JDBC drivers", 
+            userInterfaceComponent.showError(
+                "Couldn't find any installed JDBC drivers", 
                 ex.getMessage(), ex
             );
             
@@ -165,14 +171,14 @@ public final class ConnectController implements Initializable {
         dbms.nameProperty().bindBidirectional(fieldName.textProperty());
         dbms.usernameProperty().bindBidirectional(fieldUser.textProperty());        
         
-        buttonOpen.setOnAction(session.openProject(USE_EXISTING_STAGE));
+        buttonOpen.setOnAction(ev -> userInterfaceComponent.openProject(USE_EXISTING_STAGE));
         buttonConnect.setOnAction(ev -> {
             
             // Register password in password component
-            session.getSpeedment().getPasswordComponent()
+            passwordComponent
                 .put(fieldName.getText(), fieldPass.getText().toCharArray());
             
-            session.getProject().nameProperty().setValue(fieldSchema.getText());
+            userInterfaceComponent.projectProperty().nameProperty().setValue(fieldSchema.getText());
             
             Settings.inst().set("last_known_schema", fieldSchema.getText());
             Settings.inst().set("last_known_dbtype", dbms.getTypeName());
@@ -181,9 +187,10 @@ public final class ConnectController implements Initializable {
             Settings.inst().set("last_known_name", fieldName.getText());
             Settings.inst().set("last_known_port", fieldPort.getText());           
 
-            if (session.loadFromDatabase(dbms, fieldSchema.getText())) {
+            if (configFileHelper.loadFromDatabase(dbms, fieldSchema.getText())) {
                 Settings.inst().set("hide_open_option", false);
-                SceneController.createAndShow(session);
+                loader.loadAndShow("Scene");
+                eventComponent.notify(UIEvent.OPEN_MAIN_WINDOW);
             }
         });
         
@@ -204,14 +211,8 @@ public final class ConnectController implements Initializable {
         ));
     }
     
-    public static void createAndShow(UISession session) {
-        Loader.createAndShow(session, "Connect");
-        session.getSpeedment().getEventComponent().notify(UIEvent.OPEN_CONNECT_WINDOW);
-	}
-    
     private Stream<String> getDbmsTypes() {
-        return session.getSpeedment()
-            .getDbmsHandlerComponent()
+        return dbmsHandlerComponent
             .supportedDbmsTypes()
             .map(DbmsType::getName);
     }

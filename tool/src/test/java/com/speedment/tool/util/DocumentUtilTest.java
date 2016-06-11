@@ -26,7 +26,6 @@ import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
-import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
@@ -254,10 +253,9 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         System.out.println("Testing: relativeName(Document, Class, Name, String, Function<String, String>)");
 
         final JavaLanguageNamer namer = new DefaultApplicationBuilder()
-            .with(CodeGenerationComponentImpl::new)
+            .with(CodeGenerationComponentImpl.class)
             .build()
-            .getOrThrow(CodeGenerationComponent.class)
-            .javaLanguageNamer();
+            .getOrThrow(JavaLanguageNamer.class);
 
         assertEquals("Check project java name: ", "project", DocumentUtil.relativeName(project, Project.class, JAVA_NAME, ".", namer::javaPackageName));
         assertEquals("Check project database name: ", "project", DocumentUtil.relativeName(project, Project.class, DATABASE_NAME, ".", namer::javaPackageName));

@@ -24,11 +24,11 @@ import static com.speedment.runtime.config.Project.PACKAGE_LOCATION;
 import static com.speedment.runtime.config.Project.PACKAGE_NAME;
 import static com.speedment.runtime.config.trait.HasName.NAME;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.ProjectPropertyMutator;
 import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
+import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.util.DocumentMerger;
 import com.speedment.tool.property.DefaultStringPropertyItem;
 import com.speedment.tool.property.StringPropertyItem;
@@ -57,9 +57,9 @@ import org.controlsfx.control.PropertySheet;
 public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectProperty>
     implements Project, HasEnabledProperty, HasExpandedProperty, HasNameProperty {
 
-    public void merge(Speedment speedment, Project project) {
+    public void merge(DocumentPropertyComponent documentPropertyComponent, Project project) {
         DocumentMerger.merge(this, project, (parent, key)
-            -> ((AbstractDocumentProperty<?>) parent).createChild(speedment, key)
+            -> ((AbstractDocumentProperty<?>) parent).createChild(documentPropertyComponent, key)
         );
     }
 
@@ -89,7 +89,7 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
     }
 
     public StringBinding defaultPackageNameProperty(Speedment speedment) {
-        final JavaLanguageNamer namer = speedment.getOrThrow(CodeGenerationComponent.class).javaLanguageNamer();
+        final JavaLanguageNamer namer = speedment.getOrThrow(JavaLanguageNamer.class);
         return Bindings.createStringBinding(
             () -> Project.DEFAULT_PACKAGE_NAME + namer.javaPackageName(getCompanyName()),
             companyNameProperty()

@@ -19,7 +19,6 @@ package com.speedment.tool.util;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.InfoComponent;
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
-import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.brand.Brand;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -41,9 +40,8 @@ public final class BrandUtil {
     }
     
     public static void applyBrandToStage(Speedment speedment, Stage stage) {
-        final InfoComponent info = speedment.getInfoComponent();
-        final UserInterfaceComponent ui = speedment.getOrThrow(UserInterfaceComponent.class);
-        final Brand brand = ui.getBrand();
+        final InfoComponent info = speedment.getOrThrow(InfoComponent.class);
+        final Brand brand = speedment.getOrThrow(Brand.class);
         
         stage.setTitle(info.title());
         brand.logoSmall()
@@ -52,9 +50,8 @@ public final class BrandUtil {
     }
     
     public static void applyBrandToScene(Speedment speedment, Scene scene) {
-        final UserInterfaceComponent ui = speedment.getOrThrow(UserInterfaceComponent.class);
-        ui.stylesheetFiles()
-            .forEachOrdered(scene.getStylesheets()::add);
+        final Brand brand = speedment.getOrThrow(Brand.class);
+        brand.apply(scene);
     }
     
     /**

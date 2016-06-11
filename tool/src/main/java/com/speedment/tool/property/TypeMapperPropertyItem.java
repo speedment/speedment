@@ -17,6 +17,7 @@
 package com.speedment.tool.property;
 
 import com.speedment.runtime.Speedment;
+import com.speedment.runtime.component.TypeMapperComponent;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.util.EditorsUtil;
@@ -53,8 +54,9 @@ public final class TypeMapperPropertyItem extends AbstractPropertyItem<String, S
     }
 
     @Override
-    protected PropertyEditor<?> createUndecoratedEditor() {
-        final List<String> mappers = speedment.getTypeMapperComponent().stream()
+    protected PropertyEditor<?> createUndecoratedEditor() { 
+        final TypeMapperComponent typeMapperComponent = speedment.getOrThrow(TypeMapperComponent.class);
+        final List<String> mappers = typeMapperComponent.stream()
             .filter(mapper -> type.isAssignableFrom(mapper.getDatabaseType()))
             .sorted(comparing(TypeMapper::getLabel))
             .map(TypeMapper::getClass)
@@ -70,7 +72,7 @@ public final class TypeMapperPropertyItem extends AbstractPropertyItem<String, S
         }
 
         return EditorsUtil.createChoiceEditorWithConverter(
-            this, mappers, clazz -> speedment.getTypeMapperComponent().get(clazz).get().getLabel()
+            this, mappers, clazz -> typeMapperComponent.get(clazz).get().getLabel()
         );
     }
 }

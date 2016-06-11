@@ -16,16 +16,15 @@
  */
 package com.speedment.tool.internal.controller;
 
-import com.speedment.tool.UISession;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.tool.component.UserInterfaceComponent;
+import com.speedment.tool.internal.util.InjectionLoader;
 import com.speedment.tool.resource.SilkIcon;
 import com.speedment.tool.resource.SpeedmentIcon;
-import com.speedment.tool.util.Loader;
 import java.net.URL;
-import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
 
 /**
@@ -34,7 +33,8 @@ import javafx.scene.control.MenuItem;
  */
 public final class MenubarController implements Initializable {
 
-    private final UISession session;
+    private @Inject UserInterfaceComponent userInterfaceComponent;
+    private @Inject InjectionLoader loader;
 
     private @FXML MenuItem mbNew;
     private @FXML MenuItem mbOpen;
@@ -45,15 +45,10 @@ public final class MenubarController implements Initializable {
     private @FXML MenuItem mbProjectTree;
     private @FXML MenuItem mbWorkspace;
     private @FXML MenuItem mbOutput;
-//    private @FXML MenuItem mbPreview;
     private @FXML MenuItem mbGitter;
     private @FXML MenuItem mbGitHub;
     private @FXML MenuItem mbComponents;
     private @FXML MenuItem mbAbout;
-
-    private MenubarController(UISession session) {
-        this.session = requireNonNull(session);
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -69,33 +64,27 @@ public final class MenubarController implements Initializable {
         mbProjectTree.setGraphic(SilkIcon.APPLICATION_SIDE_TREE.view());
         mbWorkspace.setGraphic(SilkIcon.APPLICATION_FORM.view());
         mbOutput.setGraphic(SilkIcon.APPLICATION_XP_TERMINAL.view());
-//        mbPreview.setGraphic(SilkIcon.PAGE_WHITE_CUP.view());
 
         mbGitter.setGraphic(SilkIcon.USER_COMMENT.view());
         mbGitHub.setGraphic(SilkIcon.USER_COMMENT.view());
         mbComponents.setGraphic(SilkIcon.BRICKS.view());
         mbAbout.setGraphic(SilkIcon.INFORMATION.view());
 
-        mbNew.setOnAction(session.newProject());
-        mbOpen.setOnAction(session.openProject());
-        mbSave.setOnAction(session.saveProject());
-        mbSaveAs.setOnAction(session.saveProjectAs());
-        mbQuit.setOnAction(session.quit());
+        mbNew.setOnAction(ev -> userInterfaceComponent.newProject());
+        mbOpen.setOnAction(ev -> userInterfaceComponent.openProject());
+        mbSave.setOnAction(ev -> userInterfaceComponent.saveProject());
+        mbSaveAs.setOnAction(ev -> userInterfaceComponent.saveProjectAs());
+        mbQuit.setOnAction(ev -> userInterfaceComponent.quit());
 
-        mbGenerate.setOnAction(session.generate());
+        mbGenerate.setOnAction(ev -> userInterfaceComponent.generate());
 
-        mbProjectTree.setOnAction(session.toggleProjectTree());
-        mbWorkspace.setOnAction(session.toggleWorkspace());
-        mbOutput.setOnAction(session.toggleOutput());
-//        mbPreview.setOnAction(session.togglePreview());
+        mbProjectTree.setOnAction(ev -> userInterfaceComponent.toggleProjectTree());
+        mbWorkspace.setOnAction(ev -> userInterfaceComponent.toggleWorkspace());
+        mbOutput.setOnAction(ev -> userInterfaceComponent.toggleOutput());
 
-        mbGitter.setOnAction(session.showGitter());
-        mbGitHub.setOnAction(session.showGithub());
-        mbComponents.setOnAction(ev -> ComponentsController.createAndShow(session));
-        mbAbout.setOnAction(ev -> AboutController.createAndShow(session));
-    }
-
-    public static Node create(UISession session) {
-        return Loader.create(session, "Menubar");
+        mbGitter.setOnAction(ev -> userInterfaceComponent.showGitter());
+        mbGitHub.setOnAction(ev -> userInterfaceComponent.showGithub());
+        mbComponents.setOnAction(ev -> loader.loadAsModal("Components"));
+        mbAbout.setOnAction(ev -> loader.loadAsModal("About"));
     }
 }

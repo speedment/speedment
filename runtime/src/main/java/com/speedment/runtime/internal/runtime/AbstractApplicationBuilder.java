@@ -80,10 +80,13 @@ public abstract class AbstractApplicationBuilder<
     private boolean validateRuntimeConfig;
 
     protected AbstractApplicationBuilder(Class<? extends APP> applicationImplClass) {
-        this.injector = Injector.builder().canInject(applicationImplClass);
-        
-        withsNamed = new ArrayList<>();
-        withsAll   = new ArrayList<>();
+        this(applicationImplClass, Injector.builder().canInject(applicationImplClass));
+    }
+    
+    protected AbstractApplicationBuilder(Class<? extends APP> applicationImplClass, Injector.Builder injector) {
+        this.injector   = requireNonNull(injector);
+        this.withsNamed = new ArrayList<>();
+        this.withsAll   = new ArrayList<>();
     }
     
     protected final BUILDER self() {

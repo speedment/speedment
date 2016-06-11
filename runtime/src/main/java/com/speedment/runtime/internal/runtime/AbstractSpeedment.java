@@ -86,6 +86,4 @@ public abstract class AbstractSpeedment implements Speedment {
     public void stop() {
         injector.stop();
     }
-    
-    protected abstract AbstractApplicationBuilder<?, ?> newApplicationBuilder();
 }

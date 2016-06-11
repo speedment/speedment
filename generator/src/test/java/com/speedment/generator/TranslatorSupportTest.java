@@ -279,5 +279,4 @@ public class TranslatorSupportTest extends SimpleModel {
     private String fullNameGen(String s) {
         return PATH + ".generated." + s;
     }
-
 }

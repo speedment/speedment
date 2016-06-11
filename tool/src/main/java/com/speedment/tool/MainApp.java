@@ -16,22 +16,22 @@
  */
 package com.speedment.tool;
 
-import com.speedment.runtime.Speedment;
+import com.speedment.common.injector.Injector;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
+import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
-import static com.speedment.tool.UISession.ReuseStage.USE_EXISTING_STAGE;
-import com.speedment.tool.internal.controller.ConnectController;
-import com.speedment.tool.internal.controller.MailPromptController;
 import com.speedment.runtime.internal.util.EmailUtil;
-import com.speedment.runtime.internal.util.Statistics;
-import com.speedment.tool.event.UIEvent;
+import static com.speedment.tool.component.UserInterfaceComponent.ReuseStage.USE_EXISTING_STAGE;
+import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
+import com.speedment.tool.internal.util.ConfigFileHelper;
+import com.speedment.tool.internal.util.InjectionLoader;
 import java.io.File;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import javafx.application.Application;
-import static javafx.application.Application.launch;
 import javafx.stage.Stage;
+import static java.util.Objects.requireNonNull;
+import static javafx.application.Application.launch;
 
 /**
  *
@@ -40,36 +40,42 @@ import javafx.stage.Stage;
 public final class MainApp extends Application {
 
     private final static Logger LOGGER = LoggerManager.getLogger(MainApp.class);
-    private static Speedment SPEEDMENT;
+    private static Injector INJECTOR;
     
-    public static void setSpeedment(Speedment speedment) {
-        SPEEDMENT = requireNonNull(speedment);
+    public static void setInjector(Injector injector) {
+        INJECTOR = requireNonNull(injector);
     }
 
     @Override
     public void start(Stage stage) throws Exception {
         requireNonNull(stage);
         
-        if (SPEEDMENT == null) {
+        if (INJECTOR == null) {
             LOGGER.warn("Creating new Speedment instance for UI session.");
-            SPEEDMENT = new DefaultApplicationBuilder().build();
+            INJECTOR = new DefaultApplicationBuilder()
+                .with(CodeGenerationComponentImpl.class)
+                .with(UserInterfaceComponentImpl.class)
+                .build().getOrThrow(Injector.class);
         }
+        
+        final UserInterfaceComponentImpl ui = INJECTOR.get(UserInterfaceComponentImpl.class);
+        final ConfigFileHelper config       = INJECTOR.get(ConfigFileHelper.class);
+        final InjectionLoader loader        = INJECTOR.get(InjectionLoader.class);
+        
+        ui.start(this, stage);
         
         final Parameters parameters = getParameters();
         final List<String> params   = parameters.getRaw();
         if (params.isEmpty()) {
-            final UISession session = createSession(stage, UISession.DEFAULT_CONFIG_LOCATION);
-            
             if (EmailUtil.hasEmail()) {
-                ConnectController.createAndShow(session);
+                loader.loadAndShow("Connect");
             } else {
-                MailPromptController.createAndShow(session);
+                loader.loadAndShow("MailPrompt");
             }
         } else {
             final String filename   = params.get(0).trim().replace("\\", "/");
-            final UISession session = createSession(stage, filename);
             final File file         = new File(filename);
-            session.loadConfigFile(file, USE_EXISTING_STAGE);
+            config.loadConfigFile(file, USE_EXISTING_STAGE);
         }
     }
     
@@ -78,12 +84,5 @@ public final class MainApp extends Application {
      */
     public static void main(String[] args) {
         launch(args);
-    }
-    
-    private UISession createSession(Stage stage, String configLocation) {
-        final UISession session = new UISession(SPEEDMENT, this, stage, configLocation);
-        Statistics.onGuiStarted();
-        SPEEDMENT.getEventComponent().notify(UIEvent.STARTED);
-        return session;
     }
 }

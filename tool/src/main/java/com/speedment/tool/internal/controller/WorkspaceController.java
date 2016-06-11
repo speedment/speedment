@@ -16,15 +16,15 @@
  */
 package com.speedment.tool.internal.controller;
 
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.runtime.Speedment;
+import com.speedment.runtime.component.EventComponent;
 import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.tool.UISession;
-import com.speedment.tool.util.Loader;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.event.TreeSelectionChange;
 import com.speedment.tool.property.AbstractPropertyItem;
 import java.net.URL;
-import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -32,7 +32,6 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
 import org.controlsfx.control.PropertySheet;
@@ -43,41 +42,20 @@ import org.controlsfx.control.PropertySheet;
  */
 public final class WorkspaceController implements Initializable {
     
-    private final UISession session;
     private final ObservableList<PropertySheet.Item> properties;
+    
+    private @Inject UserInterfaceComponent ui;
+    private @Inject EventComponent events;
+    private @Inject Speedment speedment;
     
     private @FXML TitledPane workspace;
     
-    private WorkspaceController(UISession session) {
-        this.session    = requireNonNull(session);
+    public WorkspaceController() {
         this.properties = FXCollections.observableArrayList();
-        
-        final UserInterfaceComponent ui = session.getSpeedment()
-            .getOrThrow(UserInterfaceComponent.class);
-        
-        ui.getSelectedTreeItems()
-            .addListener((ListChangeListener.Change<? extends TreeItem<DocumentProperty>> change) -> {
-                properties.clear();
-                
-                if (!change.getList().isEmpty()) {
-                    final TreeItem<DocumentProperty> treeItem = change.getList().get(0);
-                    
-                    if (treeItem != null) {
-                        treeItem.getValue()
-                            .getUiVisibleProperties(session.getSpeedment())
-                            .forEach(properties::add);
-                    }
-                }
-                
-                session.getSpeedment()
-                    .getEventComponent()
-                    .notify(new TreeSelectionChange(change, properties));
-            });
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        
         final PropertySheet sheet = new PropertySheet(properties);
         
         sheet.setMode(PropertySheet.Mode.NAME);
@@ -93,15 +71,25 @@ public final class WorkspaceController implements Initializable {
             );
         });
         
+        ui.getSelectedTreeItems()
+            .addListener((ListChangeListener.Change<? extends TreeItem<DocumentProperty>> change) -> {
+                properties.clear();
+                
+                if (!change.getList().isEmpty()) {
+                    final TreeItem<DocumentProperty> treeItem = change.getList().get(0);
+                    
+                    if (treeItem != null) {
+                        treeItem.getValue()
+                            .getUiVisibleProperties(speedment)
+                            .forEach(properties::add);
+                    }
+                }
+                
+                events.notify(new TreeSelectionChange(change, properties));
+            });
+        
         workspace.setContent(sheet);
         
-        Bindings.bindContentBidirectional(
-            session.getSpeedment().getOrThrow(UserInterfaceComponent.class).getProperties(), 
-            properties
-        );
+        Bindings.bindContentBidirectional(ui.getProperties(), properties);
     }
-    
-    public static Node create(UISession session) {
-        return Loader.create(session, "Workspace");
-	}
 }

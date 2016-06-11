@@ -16,44 +16,27 @@
  */
 package com.speedment.tool.internal.controller;
 
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.SpeedmentVersion;
-import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.runtime.component.Component;
-import com.speedment.runtime.component.DbmsHandlerComponent;
-import com.speedment.runtime.component.TypeMapperComponent;
-import com.speedment.tool.brand.Brand;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.parameter.DbmsType;
-import com.speedment.tool.UISession;
 import com.speedment.tool.resource.SilkIcon;
-import com.speedment.tool.util.Loader;
-import static com.speedment.runtime.internal.util.Cast.cast;
 import com.speedment.runtime.license.License;
 import com.speedment.runtime.license.Software;
-import com.speedment.common.mapstream.MapStream;
-import com.speedment.tool.component.UserInterfaceComponent;
-import com.speedment.tool.event.UIEvent;
+import com.speedment.runtime.component.InfoComponent;
+import static com.speedment.tool.internal.util.CloseUtil.newCloseHandler;
 import java.net.URL;
-import static java.util.Comparator.comparing;
+import java.util.LinkedList;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.stream.Collectors;
-import static java.util.stream.Collectors.toList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import static javafx.stage.Modality.APPLICATION_MODAL;
-import javafx.stage.Stage;
 
 /**
  *
@@ -61,30 +44,55 @@ import javafx.stage.Stage;
  */
 public final class ComponentsController implements Initializable {
 
-    private final UISession session;
-
+    private @Inject InfoComponent infoComponent;
+    private @Inject Speedment speedment;
+    
     private @FXML Label title;
     private @FXML Label header;
     private @FXML Button close;
     private @FXML Label info;
     private @FXML TreeView<String> tree;
+    
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        title.setTextFill(Color.web("#45a6fc")); // TODO Use styleClass instead
+        header.setText("Component Explorer");
 
-    private Stage dialog;
+        final RootItem root = new RootItem(speedment);
+        root.getChildren().addAll(components());
+        tree.setRoot(root);
+        
+        close.setOnAction(newCloseHandler());
+    }
 
-    private ComponentsController(UISession session) {
-        this.session = requireNonNull(session);
+    private List<TreeItem<String>> components() {
+        
+//        return MapStream.of(session.getSpeedment().components()
+//            .collect(Collectors.groupingBy(c -> c.asSoftware().getLicense()))
+//        ).sortedByKey(License.COMPARATOR)
+//            .map((license, components) -> {
+//            final LicenseItem l = new LicenseItem(license);
+//            
+//            components.stream()
+//                .sorted(comparing(c -> c.asSoftware().getName()))
+//                .map(this::treeItem)
+//                .forEachOrdered(l.getChildren()::add);
+//            
+//            return l;
+//        }).collect(toList());
+
+        return new LinkedList<>();
     }
     
     private class RootItem extends TreeItem<String> {
         public RootItem(Speedment speedment) {
             super(
-                SpeedmentVersion.getImplementationTitle() +
-                " (0x" + Integer.toHexString(System.identityHashCode(speedment)) + ")"
+                infoComponent.title() + " (0x" + Integer.toHexString(System.identityHashCode(speedment)) + ")"
             );
             setExpanded(true);
             setGraphic(SilkIcon.BOX.view());
             
-            title.setText(session.getSpeedment().getInfoComponent().title());
+            title.setText(infoComponent.title());
         }
     }
 
@@ -187,130 +195,99 @@ public final class ComponentsController implements Initializable {
             setGraphic(SilkIcon.BOOK_LINK.view());
         }
     }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        final Speedment speedment = session.getSpeedment();
-        title.setTextFill(Color.web("#45a6fc")); // TODO Use styleClass instead
-        header.setText("Component Explorer");
-
-        final RootItem root = new RootItem(speedment);
-        root.getChildren().addAll(components());
-        tree.setRoot(root);
-        
-        close.setOnAction(ev -> dialog.close());
-    }
-
-    private List<TreeItem<String>> components() {
-        
-        return MapStream.of(session.getSpeedment().components()
-            .collect(Collectors.groupingBy(c -> c.asSoftware().getLicense()))
-        ).sortedByKey(License.COMPARATOR)
-            .map((license, components) -> {
-            final LicenseItem l = new LicenseItem(license);
-            
-            components.stream()
-                .sorted(comparing(c -> c.asSoftware().getName()))
-                .map(this::treeItem)
-                .forEachOrdered(l.getChildren()::add);
-            
-            return l;
-        }).collect(toList());
-
-    }
-
-    private TreeItem<String> treeItem(Component comp) {
-        final ComponentItem item = new ComponentItem(comp);
-
-        // Show Translators
-        final TranslatorsItem translators = new TranslatorsItem();
-        cast(comp, CodeGenerationComponent.class).ifPresent(cg -> {
-            cg.stream().values()
-                .flatMap(Set::stream)
-                .sorted()
-                .map(TranslatorItem::new)
-                .forEachOrdered(translators.getChildren()::add);
-        });
-        if (!translators.getChildren().isEmpty()) {
-            item.getChildren().add(translators);
-        }
-        
-        // Show Dbms Types
-        final DbmsTypesItem dbmsTypes = new DbmsTypesItem();
-        cast(comp, DbmsHandlerComponent.class).ifPresent(dh -> {
-            dh.supportedDbmsTypes()
-                .sorted(DbmsType.COMPARATOR)
-                .map(DbmsTypeItem::new)
-                .forEachOrdered(dbmsTypes.getChildren()::add);
-        });
-        if (!dbmsTypes.getChildren().isEmpty()) {
-            item.getChildren().add(dbmsTypes);
-        }
-        
-        // Show Type Mappers
-        final TypeMappersItem typeMappers = new TypeMappersItem();
-        cast(comp, TypeMapperComponent.class).ifPresent(tm -> {
-            tm.stream()
-                .sorted(TypeMapper.COMPARATOR)
-                .map(TypeMapperItem::new)
-                .forEachOrdered(typeMappers.getChildren()::add);
-        });
-        if (!typeMappers.getChildren().isEmpty()) {
-            item.getChildren().add(typeMappers);
-        }
-        
-        // Show Third Party Software
-        final DependenciesItem dependencies = new DependenciesItem();
-        comp.asSoftware().getDependencies()
-            .sorted(Software.COMPARATOR)
-            .map(this::createSoftwareItem)
-            .forEachOrdered(dependencies.getChildren()::add);
-        if (!dependencies.getChildren().isEmpty()) {
-            item.getChildren().add(dependencies);
-        }
-
-        return item;
-    }
-    
-    private SoftwareItem createSoftwareItem(Software software) {
-        final SoftwareItem item = new SoftwareItem(software);
-        item.getChildren().add(new LicenseItem(software.getLicense()));
-        
-        final DependenciesItem dependencies = new DependenciesItem();
-        software.getDependencies()
-            .sorted(Software.COMPARATOR)
-            .map(this::createSoftwareItem)
-            .forEachOrdered(dependencies.getChildren()::add);
-        
-        if (!dependencies.getChildren().isEmpty()) {
-            item.getChildren().add(dependencies);
-        }
-        
-        return item;
-    }
-
-    public static void createAndShow(UISession session) {
-        final Stage dialog = new Stage();
-
-        final Parent root = Loader.create(session, "Components", control -> {
-            ((ComponentsController) control).dialog = dialog;
-        });
-        
-        final UserInterfaceComponent ui = session.getSpeedment()
-            .getOrThrow(UserInterfaceComponent.class);
-        
-        final Brand brand = ui.getBrand();
-        final Scene scene = new Scene(root);
-        ui.stylesheetFiles()
-            .forEachOrdered(scene.getStylesheets()::add);
-
-        dialog.setTitle("Components");
-        dialog.initModality(APPLICATION_MODAL);
-        brand.logoSmall().map(Image::new).ifPresent(dialog.getIcons()::add);
-        dialog.initOwner(session.getStage());
-        dialog.setScene(scene);
-        dialog.show();
-        
-        session.getSpeedment().getEventComponent().notify(UIEvent.OPEN_COMPONENTS_WINDOW);
-    }
+//
+//    private TreeItem<String> treeItem(Component comp) {
+//        final ComponentItem item = new ComponentItem(comp);
+//
+//        // Show Translators
+//        final TranslatorsItem translators = new TranslatorsItem();
+//        cast(comp, CodeGenerationComponent.class).ifPresent(cg -> {
+//            cg.stream().values()
+//                .flatMap(Set::stream)
+//                .sorted()
+//                .map(TranslatorItem::new)
+//                .forEachOrdered(translators.getChildren()::add);
+//        });
+//        if (!translators.getChildren().isEmpty()) {
+//            item.getChildren().add(translators);
+//        }
+//        
+//        // Show Dbms Types
+//        final DbmsTypesItem dbmsTypes = new DbmsTypesItem();
+//        cast(comp, DbmsHandlerComponent.class).ifPresent(dh -> {
+//            dh.supportedDbmsTypes()
+//                .sorted(DbmsType.COMPARATOR)
+//                .map(DbmsTypeItem::new)
+//                .forEachOrdered(dbmsTypes.getChildren()::add);
+//        });
+//        if (!dbmsTypes.getChildren().isEmpty()) {
+//            item.getChildren().add(dbmsTypes);
+//        }
+//        
+//        // Show Type Mappers
+//        final TypeMappersItem typeMappers = new TypeMappersItem();
+//        cast(comp, TypeMapperComponent.class).ifPresent(tm -> {
+//            tm.stream()
+//                .sorted(TypeMapper.COMPARATOR)
+//                .map(TypeMapperItem::new)
+//                .forEachOrdered(typeMappers.getChildren()::add);
+//        });
+//        if (!typeMappers.getChildren().isEmpty()) {
+//            item.getChildren().add(typeMappers);
+//        }
+//        
+//        // Show Third Party Software
+//        final DependenciesItem dependencies = new DependenciesItem();
+//        comp.asSoftware().getDependencies()
+//            .sorted(Software.COMPARATOR)
+//            .map(this::createSoftwareItem)
+//            .forEachOrdered(dependencies.getChildren()::add);
+//        if (!dependencies.getChildren().isEmpty()) {
+//            item.getChildren().add(dependencies);
+//        }
+//
+//        return item;
+//    }
+//    
+//    private SoftwareItem createSoftwareItem(Software software) {
+//        final SoftwareItem item = new SoftwareItem(software);
+//        item.getChildren().add(new LicenseItem(software.getLicense()));
+//        
+//        final DependenciesItem dependencies = new DependenciesItem();
+//        software.getDependencies()
+//            .sorted(Software.COMPARATOR)
+//            .map(this::createSoftwareItem)
+//            .forEachOrdered(dependencies.getChildren()::add);
+//        
+//        if (!dependencies.getChildren().isEmpty()) {
+//            item.getChildren().add(dependencies);
+//        }
+//        
+//        return item;
+//    }
+//
+//    public static void createAndShow(UISession session) {
+//        final Stage dialog = new Stage();
+//
+//        final Parent root = Loader.create(session, "Components", control -> {
+//            ((ComponentsController) control).dialog = dialog;
+//        });
+//        
+//        final UserInterfaceComponent ui = session.getSpeedment()
+//            .getOrThrow(UserInterfaceComponent.class);
+//        
+//        final Brand brand = ui.getBrand();
+//        final Scene scene = new Scene(root);
+//        ui.stylesheetFiles()
+//            .forEachOrdered(scene.getStylesheets()::add);
+//
+//        dialog.setTitle("Components");
+//        dialog.initModality(APPLICATION_MODAL);
+//        brand.logoSmall().map(Image::new).ifPresent(dialog.getIcons()::add);
+//        dialog.initOwner(session.getStage());
+//        dialog.setScene(scene);
+//        dialog.show();
+//        
+//        session.getSpeedment().getEventComponent().notify(UIEvent.OPEN_COMPONENTS_WINDOW);
+//    }
 }

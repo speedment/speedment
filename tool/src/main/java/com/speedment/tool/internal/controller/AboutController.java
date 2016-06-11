@@ -16,32 +16,20 @@
  */
 package com.speedment.tool.internal.controller;
 
-import com.speedment.runtime.component.Component;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.tool.brand.Brand;
-import com.speedment.tool.UISession;
-import com.speedment.tool.util.Loader;
-import com.speedment.runtime.internal.util.Trees;
-import com.speedment.runtime.license.License;
-import com.speedment.runtime.license.Software;
-import com.speedment.common.mapstream.MapStream;
 import com.speedment.tool.component.UserInterfaceComponent;
-import com.speedment.tool.event.UIEvent;
+import static com.speedment.tool.internal.util.CloseUtil.newCloseHandler;
+import com.speedment.tool.internal.util.InjectionLoader;
 import java.net.URL;
-import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
-import static java.util.stream.Collectors.joining;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import static javafx.stage.Modality.APPLICATION_MODAL;
 import javafx.stage.Stage;
 
 /**
@@ -50,7 +38,8 @@ import javafx.stage.Stage;
  */
 public final class AboutController implements Initializable {
     
-    private final UISession session;
+    private @Inject InfoComponent infoComponent;
+    private @Inject Brand brand;
     
     private @FXML ImageView titleImage;
     private @FXML Button close;
@@ -58,67 +47,57 @@ public final class AboutController implements Initializable {
     private @FXML Label external;
     private @FXML Label license;
     
-    private Stage dialog;
-    
-    private AboutController(UISession session) {
-        this.session = requireNonNull(session);
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        final InfoComponent info = session.getSpeedment().getInfoComponent();
-        final Brand brand = session.getSpeedment().getOrThrow(UserInterfaceComponent.class).getBrand();
         brand.logoLarge().map(Image::new).ifPresent(titleImage::setImage);
+        license.setText(license.getText().replace("{title}", infoComponent.title()));
+        version.setText(infoComponent.version());
         
-        license.setText(license.getText().replace("{title}", info.title()));
-        version.setText(info.version());
+        close.setOnAction(newCloseHandler());
         
-        external.setText(
-            MapStream.of(session.getSpeedment().components()
-                .map(Component::asSoftware)
-                .flatMap(software -> 
-                    Trees.traverse(software, 
-                        Software::getDependencies, 
-                        Trees.TraversalOrder.DEPTH_FIRST_POST
-                    ).filter(s -> !s.isInternal())
-                     .distinct()
-                ).collect(Collectors.groupingBy(Software::getLicense))
-            ).sortedByKey(License.COMPARATOR)
-             .mapValue(List::stream)
-             .mapValue(softwares -> 
-                 softwares.map(s -> "• " + s.getName() + " (" + s.getVersion() + ")")
-                    .collect(joining("\n"))
-             ).map(e -> e.getKey().getName() + ":\n" + e.getValue())
-              .collect(joining("\n\n"))
-        );
-        
-        close.setOnAction(ev -> dialog.close());
+//        external.setText(
+//            MapStream.of(session.getSpeedment().components()
+//                .map(Component::asSoftware)
+//                .flatMap(software -> 
+//                    Trees.traverse(software, 
+//                        Software::getDependencies, 
+//                        Trees.TraversalOrder.DEPTH_FIRST_POST
+//                    ).filter(s -> !s.isInternal())
+//                     .distinct()
+//                ).collect(Collectors.groupingBy(Software::getLicense))
+//            ).sortedByKey(License.COMPARATOR)
+//             .mapValue(List::stream)
+//             .mapValue(softwares -> 
+//                 softwares.map(s -> "• " + s.getName() + " (" + s.getVersion() + ")")
+//                    .collect(joining("\n"))
+//             ).map(e -> e.getKey().getName() + ":\n" + e.getValue())
+//              .collect(joining("\n\n"))
+//        );
     }
-    
-    public static void createAndShow(UISession session) {
-        final Stage dialog = new Stage();
-        
-        final Parent root = Loader.create(session, "About", control -> {
-            ((AboutController) control).dialog = dialog;
-        });
-        
-        final InfoComponent info = session.getSpeedment().getInfoComponent();
-        final Brand brand = session.getSpeedment().getOrThrow(UserInterfaceComponent.class).getBrand();
-        
-        final Scene scene  = new Scene(root);
-        session.getSpeedment()
-            .getOrThrow(UserInterfaceComponent.class)
-            .stylesheetFiles()
-            .forEachOrdered(scene.getStylesheets()::add);
-        
-        dialog.setTitle("About " + info.title());
-        dialog.initModality(APPLICATION_MODAL);
-        brand.logoSmall().map(Image::new).ifPresent(dialog.getIcons()::add);
-        dialog.initOwner(session.getStage());
-        dialog.setScene(scene);
-        dialog.show();
-        
-        session.getSpeedment().getEventComponent().notify(UIEvent.OPEN_ABOUT_WINDOW);
-    }
+//    
+//    public static void createAndShow(UISession session) {
+//        final Stage dialog = new Stage();
+//        
+//        final Parent root = loader.loadAndShow("About", control -> {
+//            ((AboutController) control).dialog = dialog;
+//        });
+//        
+//        final Brand brand = session.getSpeedment().getOrThrow(UserInterfaceComponent.class).getBrand();
+//        
+//        final Scene scene  = new Scene(root);
+//        session.getSpeedment()
+//            .getOrThrow(UserInterfaceComponent.class)
+//            .stylesheetFiles()
+//            .forEachOrdered(scene.getStylesheets()::add);
+//        
+//        dialog.setTitle("About " + infoComponent.title());
+//        dialog.initModality(APPLICATION_MODAL);
+//        brand.logoSmall().map(Image::new).ifPresent(dialog.getIcons()::add);
+//        dialog.initOwner(session.getStage());
+//        dialog.setScene(scene);
+//        dialog.show();
+//        
+//        session.getSpeedment().getEventComponent().notify(UIEvent.OPEN_ABOUT_WINDOW);
+//    }
 }

@@ -18,155 +18,184 @@ package com.speedment.tool.component;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
-import com.speedment.tool.brand.Brand;
-import com.speedment.tool.notification.Notification;
 import com.speedment.runtime.config.trait.HasMainInterface;
-import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.tool.UISession;
-import com.speedment.tool.internal.controller.ProjectTreeController;
-import com.speedment.tool.util.OutputUtil;
+import com.speedment.runtime.util.ProgressMeasure;
+import com.speedment.tool.brand.Palette;
+import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.DocumentProperty;
+import com.speedment.tool.config.ProjectProperty;
+import com.speedment.tool.notification.Notification;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
+import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
+import javafx.stage.Stage;
 import org.controlsfx.control.PropertySheet;
 
 /**
  * The user interface component contains a number of useful methods required to
  * pass information between different parts of the UI.
  * 
- * @author Emil Forslund
- * @since 2.3
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
-@Api(version="2.3")
+@Api(version="2.4")
 public interface UserInterfaceComponent extends Component {
 
-    @Override
-    default Class<UserInterfaceComponent> getComponentClass() {
-        return UserInterfaceComponent.class;
-    }
+    /*************************************************************/
+    /*                     Global properties                     */
+    /*************************************************************/
     
     /**
-     * Sets the {@code UISession} to use. This should only be called by 
-     * UISession itself to update the session in use once the platform has 
-     * loaded.
+     * Returns the {@link ProjectProperty} used in this session.
      * 
-     * @param session  the new UISession
+     * @return  the project property
      */
-    void setUISession(UISession session);
+    ProjectProperty projectProperty();
     
     /**
-     * Returns the UISession used. This method might throw an exception if the
-     * UISession has not yet updated the component with a reference to itself
-     * or if the UI isn't running.
+     * Returns the JavaFX Application that is currently running.
      * 
-     * @return                      the current session
-     * @throws  SpeedmentException  if the UI isn't running
+     * @return  the JavaFX application
      */
-    UISession getUISession() throws SpeedmentException;
-
+    Application getApplication();
+    
     /**
-     * Returns a observable and modifiable view of all the currently visible properties
-     * in the workspace of the GUI. This can for an example be modified to show more
-     * options.
-     * <p>
-     * The list will be modified by the GUI each time a new node in the tree is selected.
-     * It is therefore recommended to only modify this component as a result of a
-     * {@link #getSelectedTreeItems()} event.
+     * Returns the main JavaFX stage of the current session.
      * 
-     * @return  a view of the properties area
+     * @return  the main JavaFX stage.
      */
-    ObservableList<PropertySheet.Item> getProperties();
-
+    Stage getStage();
+    
     /**
-     * Returns a read-only view of the currently selected tree items in the GUI.
+     * Returns an observable list with all the notifications
+     * currently visible in the user interface.
      * 
-     * @return  the view of currently selected tree items.
+     * @return  the notification list
+     */
+    ObservableList<Notification> notifications();
+    
+    /**
+     * Returns an observable list of the output messages in the
+     * output section of the user interface.
+     * 
+     * @return  the output messages 
+     */
+    ObservableList<Node> outputMessages();
+    
+    /**
+     * Returns an observable list with the items in the configuration tree
+     * that is currently selected.
+     * 
+     * @return  the list of selected tree items
      */
     ObservableList<TreeItem<DocumentProperty>> getSelectedTreeItems();
     
     /**
-     * Returns an observable list with all the output messages currently
-     * visible in the output area. New messages can be added to this list or
-     * removed safely.
-     * <p>
-     * Messages should ideally be created using the {@link OutputUtil} class, but
-     * could be any node implementation.
+     * Returns the observable list of currently visible properties.
      * 
-     * @return  the currently visible output messages
+     * @return  visible properties
      */
-    ObservableList<Node> getOutputMessages();
+    ObservableList<PropertySheet.Item> getProperties();
     
-    /**
-     * Returns a stream of all the css-file that should be used to style the UI.
-     * 
-     * @return  the stylesheet
-     */
-    Stream<String> stylesheetFiles();
+    /*************************************************************/
+    /*                      Menubar actions                      */
+    /*************************************************************/
     
-    /**
-     * Appends an additional stylesheet file to be used when styling the UI.
-     * The specified file can override any rules specified by earlier files.
-     * 
-     * @param filename  the new css stylesheet
-     */
-    void addStylesheetFile(String filename);
+    void newProject();
     
-    /**
-     * Sets the brand that is shown in the top-left part of the UI.
-     * 
-     * @param brand  the new brand
-     */
-    void setBrand(Brand brand);
+    void openProject();
+
+    void openProject(ReuseStage reuse);
+
+    void saveProject();
+
+    void saveProjectAs();
     
-    /**
-     * Returns the brand that is currently used in the top-left part of the UI.
-     * 
-     * @return  the brand
-     */
-    Brand getBrand();
+    void quit();
+
+    void reload();
+
+    void generate();
+
+    void toggleProjectTree();
+
+    void toggleWorkspace();
+
+    void toggleOutput();
+
+    void togglePreview();
     
-    /**
-     * Returns an observable list of the notifications that has yet to be shown 
-     * in the UI.
-     * 
-     * @return  the observable list of notifications
-     */
-    ObservableList<Notification> getNotifications();
+    void showGitter();
+
+    void showGithub();
+
+    /*************************************************************/
+    /*                      Dialog messages                      */
+    /*************************************************************/
     
-    /**
-     * Installs a new context menu builder that will be used in the 
-     * {@link ProjectTreeController} of the GUI. This is useful for plugins
-     * that require a custom menu to handle custom project tree nodes. If no
-     * builder exists for a particular type of node, no menu will be displayed.
-     * 
-     * @param <DOC>       the implementation type of the node
-     * @param nodeType    the interface main type of the node
-     * @param menuBuilder the builder to use
-     */
-    <DOC extends DocumentProperty & HasMainInterface> void 
-    installContextMenu(Class<? extends DOC> nodeType, ContextMenuBuilder<DOC> menuBuilder);
+    void showError(String title, String message);
+
+    void showError(String title, String message, Throwable ex);
+
+    Optional<ButtonType> showWarning(String title, String message);
+
+    void showPasswordDialog(DbmsProperty dbms);
+
+    void showProgressDialog(String title, ProgressMeasure progress, CompletableFuture<Boolean> task);
+
+    void showNotification(String message);
+
+    void showNotification(String message, FontAwesomeIcon icon);
+
+    void showNotification(String message, Runnable action);
+
+    void showNotification(String message, Palette palette);
+
+    void showNotification(String message, FontAwesomeIcon icon, Palette palette);
+
+    void showNotification(String message, FontAwesomeIcon icon, Palette palette, Runnable action);
     
-    /**
-     * If a builder exists for the interface main type of the specified node,
-     * it will be called and the result will be returned. If no builder exists,
-     * an {@code empty} will be returned.
-     * 
-     * @param <DOC>    the implementation type of the node
-     * @param treeCell  the tree cell that invoced the context menu
-     * @param node      the node to create a context menu for
-     * @return          the created context menu or {@code empty}
-     */
-    <DOC extends DocumentProperty & HasMainInterface> Optional<ContextMenu> 
-    createContextMenu(TreeCell<DocumentProperty> treeCell, DOC node);
+    /*************************************************************/
+    /*                      Context Menues                       */
+    /*************************************************************/
+    
+    <DOC extends DocumentProperty & HasMainInterface> void installContextMenu(Class<? extends DOC> nodeType, ContextMenuBuilder<DOC> menuBuilder);
+
+    <DOC extends DocumentProperty & HasMainInterface> Optional<ContextMenu> createContextMenu(TreeCell<DocumentProperty> treeCell, DOC doc);
     
     @FunctionalInterface
     interface ContextMenuBuilder<DOC extends DocumentProperty> {
-        Stream<MenuItem> build(TreeCell<DocumentProperty> treeCell, DOC doc);
+        Stream<MenuItem> build(TreeCell<DocumentProperty> tc, DOC doc);
+    }
+
+    /*************************************************************/
+    /*                            Other                          */
+    /*************************************************************/
+    
+    void clearLog();
+
+    void log(Label line);
+
+    void browse(String url);
+    
+    
+    enum ReuseStage {
+        USE_EXISTING_STAGE,
+        CREATE_A_NEW_STAGE
+    }
+    
+    @Override
+    default Class<UserInterfaceComponent> getComponentClass() {
+        return UserInterfaceComponent.class;
     }
 }

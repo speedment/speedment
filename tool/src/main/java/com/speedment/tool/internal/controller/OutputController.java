@@ -16,16 +16,13 @@
  */
 package com.speedment.tool.internal.controller;
 
-import com.speedment.tool.UISession;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.component.UserInterfaceComponent;
-import com.speedment.tool.util.Loader;
 import java.net.URL;
-import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 
 /**
@@ -34,22 +31,14 @@ import javafx.scene.layout.VBox;
  */
 public final class OutputController implements Initializable {
     
-    private final UISession session;
+    private @Inject UserInterfaceComponent userInterfaceComponent;
     private @FXML VBox output;
-    
-    private OutputController(UISession session) {
-        this.session = requireNonNull(session);
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Bindings.bindContent(
             output.getChildren(), 
-            session.getSpeedment().getOrThrow(UserInterfaceComponent.class).getOutputMessages()
+            userInterfaceComponent.outputMessages()
         );
     }
-    
-    public static Node create(UISession session) {
-        return Loader.create(session, "Output");
-	}
 }

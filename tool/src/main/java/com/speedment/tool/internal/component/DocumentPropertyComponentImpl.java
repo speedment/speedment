@@ -14,9 +14,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.tool.component;
+package com.speedment.tool.internal.component;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.Index;
@@ -38,6 +37,7 @@ import com.speedment.tool.config.SchemaProperty;
 import com.speedment.tool.config.TableProperty;
 import com.speedment.runtime.internal.util.ImmutableListUtil;
 import com.speedment.runtime.license.Software;
+import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.config.DocumentProperty;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +49,8 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
-public final class DocumentPropertyComponentImpl extends InternalOpenSourceComponent implements DocumentPropertyComponent {
+public final class DocumentPropertyComponentImpl extends InternalOpenSourceComponent 
+    implements DocumentPropertyComponent {
 
     private final Branch root;
 
@@ -59,8 +60,7 @@ public final class DocumentPropertyComponentImpl extends InternalOpenSourceCompo
         return new DefaultDocumentProperty(castedParent, null);
     };
 
-    public DocumentPropertyComponentImpl(Speedment speedment) {
-        super(speedment);
+    public DocumentPropertyComponentImpl() {
         root = new Branch(DEFAULT_CONSTRUCTOR);
 
         root.find(ImmutableListUtil.of()).set(parent -> new ProjectProperty());
@@ -73,10 +73,6 @@ public final class DocumentPropertyComponentImpl extends InternalOpenSourceCompo
         root.find(INDEX_COLUMNS).set(parent -> new IndexColumnProperty((Index) parent));
         root.find(FOREIGN_KEYS).set(parent -> new ForeignKeyProperty((Table) parent));
         root.find(FOREIGN_KEY_COLUMNS).set(parent -> new ForeignKeyColumnProperty((ForeignKey) parent));
-    }
-
-    public DocumentPropertyComponentImpl(Speedment speedment, DocumentPropertyComponentImpl template) {
-        this(speedment);
     }
     
     @Override
@@ -143,11 +139,6 @@ public final class DocumentPropertyComponentImpl extends InternalOpenSourceCompo
         public String toString() {
             return children.toString();
         }
-    }
-
-    @Override
-    public DocumentPropertyComponent defaultCopy(Speedment speedment) {
-        return new DocumentPropertyComponentImpl(speedment, this);
     }
 
     private final static class ConstructorHolder {

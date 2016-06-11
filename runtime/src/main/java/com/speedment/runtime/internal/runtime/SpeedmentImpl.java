@@ -19,9 +19,4 @@ package com.speedment.runtime.internal.runtime;
 class SpeedmentImpl extends AbstractSpeedment {
     
     public SpeedmentImpl() {}
-
-    @Override
-    protected AbstractApplicationBuilder<?, ?> newApplicationBuilder() {
-        return new DefaultApplicationBuilder();
-    }
 }

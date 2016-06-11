@@ -16,12 +16,12 @@
  */
 package com.speedment.tool.internal.controller;
 
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.EventComponent;
 import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.event.ProjectLoaded;
-import com.speedment.tool.UISession;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.ForeignKeyProperty;
 import com.speedment.tool.config.IndexProperty;
@@ -30,7 +30,6 @@ import com.speedment.tool.config.SchemaProperty;
 import com.speedment.tool.config.TableProperty;
 import com.speedment.tool.resource.SilkIcon;
 import com.speedment.tool.resource.SpeedmentIcon;
-import com.speedment.tool.util.Loader;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.config.trait.HasEnabledProperty;
@@ -49,7 +48,6 @@ import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.MenuItem;
 import static javafx.scene.control.SelectionMode.SINGLE;
 import javafx.scene.control.TreeCell;
@@ -64,17 +62,13 @@ import javafx.scene.image.ImageView;
  */
 public final class ProjectTreeController implements Initializable {
     
-    private final UISession session;
-    private @FXML TreeView<DocumentProperty> hierarchy;
+    private @Inject UserInterfaceComponent ui;
+    private @Inject EventComponent events;
     
-    private ProjectTreeController(UISession session) {
-        this.session = requireNonNull(session);
-    }
+    private @FXML TreeView<DocumentProperty> hierarchy;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        final UserInterfaceComponent ui = session.getSpeedment().getOrThrow(UserInterfaceComponent.class);
-        
         ui.installContextMenu(ProjectProperty.class,    this::createDefaultContextMenu);
         ui.installContextMenu(DbmsProperty.class,       this::createDefaultContextMenu);
         ui.installContextMenu(SchemaProperty.class,     this::createDefaultContextMenu);
@@ -82,14 +76,11 @@ public final class ProjectTreeController implements Initializable {
         ui.installContextMenu(IndexProperty.class,      this::createDefaultContextMenu);
         ui.installContextMenu(ForeignKeyProperty.class, this::createDefaultContextMenu);
         
-        runLater(() -> prepareTree(session.getProject()));
+        runLater(() -> prepareTree(ui.projectProperty()));
     }
     
     private void prepareTree(ProjectProperty project) {
         requireNonNull(project);
-        
-        final UserInterfaceComponent ui = session.getSpeedment().getOrThrow(UserInterfaceComponent.class);
-        final EventComponent events     = session.getSpeedment().getEventComponent();
         
         events.notify(new ProjectLoaded(project));
 
@@ -182,10 +173,6 @@ public final class ProjectTreeController implements Initializable {
         
         return Stream.of(expandAll, collapseAll);
     }
-    
-    public static Node create(UISession session) {
-        return Loader.create(session, "ProjectTree");
-	}
     
     private final static class DocumentPropertyCell extends TreeCell<DocumentProperty> {
         

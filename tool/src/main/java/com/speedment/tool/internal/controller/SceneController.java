@@ -16,24 +16,17 @@
  */
 package com.speedment.tool.internal.controller;
 
-import com.speedment.tool.brand.Brand;
-import com.speedment.tool.UISession;
-import com.speedment.tool.util.Loader;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.internal.util.Statistics;
-import com.speedment.tool.event.UIEvent;
+import com.speedment.tool.component.UserInterfaceComponent;
+import com.speedment.tool.internal.util.InjectionLoader;
 import java.net.URL;
-import static java.util.Objects.requireNonNull;
 import java.util.ResourceBundle;
 import static javafx.application.Platform.runLater;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
 
 /**
  *
@@ -41,47 +34,28 @@ import javafx.stage.Stage;
  */
 public final class SceneController implements Initializable {
     
-    private final UISession session;
+    private @Inject UserInterfaceComponent ui;
+    private @Inject InjectionLoader loader;
     
     private @FXML VBox top;
     private @FXML SplitPane horizontal;
     private @FXML SplitPane vertical;
-
-    private SceneController(UISession session) {
-        this.session = requireNonNull(session);
-    }
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         runLater(() -> {
-            top.getChildren().add(MenubarController.create(session));
-            top.getChildren().add(ToolbarController.create(session));
-            horizontal.getItems().add(0, ProjectTreeController.create(session));
-            vertical.getItems().add(WorkspaceController.create(session));
-            vertical.getItems().add(OutputController.create(session));
+            top.getChildren().add(loader.load("Menubar"));
+            top.getChildren().add(loader.load("Toolbar"));
+            horizontal.getItems().add(0, loader.load("ProjectTree"));
+            vertical.getItems().add(loader.load("Workspace"));
+            vertical.getItems().add(loader.load("Output"));
             
             horizontal.setDividerPositions(0.2, 0.7);
             vertical.setDividerPositions(0.7, 0.3);
             
-            session.toggleOutput();
+            ui.toggleOutput();
             
             Statistics.onGuiProjectLoaded();
         });
     }
-    
-    public static void createAndShow(UISession session) {
-        final Parent root           = Loader.create(session, "Scene");
-        final Scene scene           = new Scene(root);
-        final Stage stage           = session.getStage();
-        final Rectangle2D screen    = Screen.getPrimary().getVisualBounds();
-        final boolean screenIsSmall = screen.getWidth() <= 1600; // TODO Save maximized setting.
-        
-        stage.hide();
-        Brand.apply(session, scene);
-        stage.setMaximized(screenIsSmall);
-        stage.setScene(scene);
-        stage.show();
-        
-        session.getSpeedment().getEventComponent().notify(UIEvent.OPEN_MAIN_WINDOW);
-	}
 }

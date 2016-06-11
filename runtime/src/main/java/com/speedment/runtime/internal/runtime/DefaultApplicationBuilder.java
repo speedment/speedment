@@ -62,6 +62,21 @@ public final class DefaultApplicationBuilder extends
         if (json == null) metadata = null;
         else metadata = () -> json;
     }
+    
+    /**
+     * Constructs a new DefaultApplicationBuilder from the specified
+     * json string, using the builder specified instead of the default
+     * one.
+     *
+     * @param injector  the injector builder to use
+     * @param json      json encoded domain model
+     */
+    public DefaultApplicationBuilder(Injector.Builder injector, File configFile) {
+        super(SpeedmentImpl.class, injector);
+        final String json = loadMetadataFrom(configFile);
+        if (json == null) metadata = null;
+        else metadata = () -> json;
+    }
 
     @Override
     protected Speedment build(Injector injector) {
