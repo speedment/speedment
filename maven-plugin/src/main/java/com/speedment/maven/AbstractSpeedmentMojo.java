@@ -36,7 +36,7 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
     private final SpeedmentBuilder<?, ?> builder;
 
     protected abstract File configLocation();
-    protected abstract Class<Component>[] components();
+    protected abstract Class<? extends Component>[] components();
     protected abstract String launchMessage();
     protected abstract void execute(Speedment speedment) 
         throws MojoExecutionException, MojoFailureException;
@@ -79,8 +79,11 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
         result.with(CodeGenerationComponentImpl.class);
         result.with(UserInterfaceComponentImpl.class);
         
-        for (final Class<Component> component : components()) {
-            result.with(component);
+        final Class<? extends Component>[] components = components();
+        if (components != null) {
+            for (final Class<? extends Component> component : components()) {
+                result.with(component);
+            }
         }
         
         return result;

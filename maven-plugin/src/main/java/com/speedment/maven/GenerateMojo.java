@@ -37,7 +37,7 @@ import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_L
 public final class GenerateMojo extends AbstractSpeedmentMojo {
 
     @Parameter
-    private Class<Component>[] components;
+    private Class<? extends Component>[] components;
 
     @Parameter(defaultValue = DEFAULT_CONFIG_LOCATION)
     private File configFile;
@@ -63,7 +63,7 @@ public final class GenerateMojo extends AbstractSpeedmentMojo {
     }
 
     @Override
-    protected Class<Component>[] components() {
+    protected Class<? extends Component>[] components() {
         return components;
     }
 

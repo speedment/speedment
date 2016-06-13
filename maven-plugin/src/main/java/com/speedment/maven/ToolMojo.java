@@ -38,7 +38,7 @@ import static javafx.application.Application.launch;
 public final class ToolMojo extends AbstractSpeedmentMojo {
     
     @Parameter
-    private Class<Component>[] components;
+    private Class<? extends Component>[] components;
     
     @Parameter(defaultValue = DEFAULT_CONFIG_LOCATION)
     private File configFile;
@@ -56,7 +56,7 @@ public final class ToolMojo extends AbstractSpeedmentMojo {
     }
 
     @Override
-    protected Class<Component>[] components() {
+    protected Class<? extends Component>[] components() {
         return components;
     }
     
