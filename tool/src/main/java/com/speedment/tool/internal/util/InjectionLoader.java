@@ -2,7 +2,6 @@ package com.speedment.tool.internal.util;
 
 import com.speedment.common.injector.Injector;
 import static com.speedment.common.injector.State.INITIALIZED;
-import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.mapstream.MapStream;
