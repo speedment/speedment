@@ -34,7 +34,7 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment</artifactId>
-    <version>2.3.5</version>
+    <version>2.3.6-SNAPSHOT</version>
     <packaging>bundle</packaging>
     
     <properties>
