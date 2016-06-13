@@ -42,6 +42,7 @@ import com.speedment.config.db.mapper.identity.TimeIdentityMapper;
 import com.speedment.config.db.mapper.identity.TimestampIdentityMapper;
 import com.speedment.config.db.mapper.identity.URLIdentityMapper;
 import com.speedment.config.db.mapper.identity.UUIDIdentityMapper;
+import com.speedment.config.db.mapper.integer.IntegerZeroOneToBooleanMapper;
 import com.speedment.config.db.mapper.largeobject.ClobToStringMapper;
 import com.speedment.config.db.mapper.string.StringToLocaleMapper;
 import com.speedment.config.db.mapper.string.TrueFalseStringToBooleanMapper;
@@ -118,6 +119,9 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
 
         // Special Large object mappers
         install(ClobToStringMapper::new);
+        
+        // Special integer mappers
+        install(IntegerZeroOneToBooleanMapper::new);
 
         // Other mappers
         install(UUIDIdentityMapper::new);
