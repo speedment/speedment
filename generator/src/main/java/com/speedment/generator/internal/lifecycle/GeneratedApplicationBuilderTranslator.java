@@ -110,7 +110,7 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
                     .public_().add(OVERRIDE)
                     .add(Field.of("injector", Type.of(Injector.class)))
                     .add("final " + ManagerComponent.class.getSimpleName() + 
-                        " managers = injector.get(" + ManagerComponent.class.getSimpleName() + 
+                        " managers = injector.getOrThrow(" + ManagerComponent.class.getSimpleName() + 
                         ".class);"
                     );
                 
@@ -119,7 +119,7 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
                     .map(StringBuilder::toString)
                     .forEachOrdered(build::add);
                 
-                build.add("return injector.get(" + getSupport().typeName(getSupport().projectOrThrow()) + "Application.class);");
+                build.add("return injector.getOrThrow(" + getSupport().typeName(getSupport().projectOrThrow()) + "Application.class);");
 
                 clazz.public_().abstract_()
                     .setSupertype(Type.of(AbstractApplicationBuilder.class)
