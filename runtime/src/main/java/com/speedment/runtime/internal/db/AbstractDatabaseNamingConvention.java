@@ -16,9 +16,7 @@
  */
 package com.speedment.runtime.internal.db;
 
-import com.speedment.runtime.config.Document;
 import com.speedment.runtime.db.DatabaseNamingConvention;
-import com.speedment.runtime.exception.SpeedmentException;
 
 /**
  * An abstract base implementation of the {@link DatabaseNamingConvention}
@@ -44,25 +42,6 @@ public abstract class AbstractDatabaseNamingConvention
                 + encloseField(tableName);
     }
 
-//    @Override
-//    public String fullNameOf(PrimaryKeyColumn pkc) {
-//        return encloseField(pkc.getName());
-//    }
-//
-//    @Override
-//    public String fullNameOf(Column column) {
-//        return encloseField(column.getParent().map(Table::getName)
-//            .orElseThrow(() -> noParentException(column)))
-//            + "." + encloseField(column.getName());
-//    }
-//
-//    @Override
-//    public String fullNameOf(Table table) {
-//        return encloseField(table.getParent().map(Schema::getName)
-//            .orElseThrow(() -> noParentException(table)))
-//            + "." + encloseField(table.getName());
-//    }
-//
     @Override
     public String quoteField(String field) {
         return getFieldQuoteStart() + field + getFieldQuoteEnd();
@@ -72,9 +51,6 @@ public abstract class AbstractDatabaseNamingConvention
     public String encloseField(String field) {
         return getFieldEncloserStart() + field + getFieldEncloserEnd();
     }
-//    
-//    @Override
-//    public abstract Set<String> getSchemaExcludeSet();
 
     /**
      * Returns the non-null field quote start string. The field quote start
@@ -97,9 +73,7 @@ public abstract class AbstractDatabaseNamingConvention
     protected String getFieldQuoteEnd() {
         return DEFAULT_QUOTE;
     }
-
-    ;
-
+    
     /**
      * Returns the non-null field encloser start string. The field encloser
      * start string precedes a database entity name like a table or schema name
@@ -168,12 +142,5 @@ public abstract class AbstractDatabaseNamingConvention
         } else {
             return item;
         }
-    }
-
-    private final static SpeedmentException noParentException(Document doc) {
-        return new SpeedmentException(
-                "Can't create full name of '" + doc
-                + "' since it doesn't have a parent."
-        );
     }
 }
