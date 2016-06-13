@@ -16,12 +16,16 @@
  */
 package com.speedment.maven;
 
+import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.runtime.Speedment;
+import com.speedment.runtime.SpeedmentBuilder;
+import com.speedment.runtime.component.Component;
+import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
+import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
 import java.io.File;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import com.speedment.runtime.component.ComponentConstructor;
 
 /**
  *
@@ -29,21 +33,22 @@ import com.speedment.runtime.component.ComponentConstructor;
  */
 abstract class AbstractSpeedmentMojo extends AbstractMojo {
     
-    private final SpeedmentInitializer initializer;
+    private final SpeedmentBuilder<?, ?> builder;
 
     protected abstract File configLocation();
-    protected abstract ComponentConstructor<?>[] components();
+    protected abstract Class<Component>[] components();
     protected abstract String launchMessage();
-    protected abstract void execute(Speedment speedment) throws MojoExecutionException, MojoFailureException;
+    protected abstract void execute(Speedment speedment) 
+        throws MojoExecutionException, MojoFailureException;
     
     protected AbstractSpeedmentMojo() {
-        initializer = createInitializer();
+        builder = createBuilder();
     }
 
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
         getLog().info(launchMessage());    
-        execute(initializer.build());
+        execute(builder.build());
     }
     
     protected final boolean hasConfigFile() {
@@ -62,11 +67,22 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
         } else return true;
     }
     
-    private SpeedmentInitializer createInitializer() {
-        return new SpeedmentInitializer(
-            super.getLog(), 
-            configLocation(), 
-            this::components
-        );
+    private SpeedmentBuilder<?, ?> createBuilder() {
+        final SpeedmentBuilder<?, ?> result;
+        
+        if (hasConfigFile()) {
+            result = new DefaultApplicationBuilder(configLocation());
+        } else {
+            result = new DefaultApplicationBuilder();
+        }
+        
+        result.with(CodeGenerationComponentImpl.class);
+        result.with(UserInterfaceComponentImpl.class);
+        
+        for (final Class<Component> component : components()) {
+            result.with(component);
+        }
+        
+        return result;
     }
 }

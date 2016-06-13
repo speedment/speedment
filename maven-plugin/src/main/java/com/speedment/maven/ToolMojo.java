@@ -17,16 +17,17 @@
 package com.speedment.maven;
 
 
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.Speedment;
+import com.speedment.runtime.component.Component;
 import java.io.File;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import com.speedment.runtime.component.ComponentConstructor;
 import com.speedment.tool.MainApp;
-import static com.speedment.tool.UISession.DEFAULT_CONFIG_LOCATION;
+import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 import static javafx.application.Application.launch;
 
 /**
@@ -37,14 +38,15 @@ import static javafx.application.Application.launch;
 public final class ToolMojo extends AbstractSpeedmentMojo {
     
     @Parameter
-    private ComponentConstructor<?>[] components;
+    private Class<Component>[] components;
     
     @Parameter(defaultValue = DEFAULT_CONFIG_LOCATION)
     private File configFile;
 
     @Override
     public void execute(Speedment speedment) throws MojoExecutionException, MojoFailureException {
-        MainApp.setSpeedment(speedment);
+        final Injector injector = speedment.getOrThrow(Injector.class);
+        MainApp.setInjector(injector);
         
         if (hasConfigFile()) {
             launch(MainApp.class, configFile.getAbsolutePath());
@@ -54,7 +56,7 @@ public final class ToolMojo extends AbstractSpeedmentMojo {
     }
 
     @Override
-    protected ComponentConstructor<?>[] components() {
+    protected Class<Component>[] components() {
         return components;
     }
     

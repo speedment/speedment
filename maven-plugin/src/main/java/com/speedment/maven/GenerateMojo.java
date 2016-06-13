@@ -16,20 +16,18 @@
  */
 package com.speedment.maven;
 
-import com.speedment.generator.component.CodeGenerationComponent;
+import com.speedment.generator.TranslatorManager;
 import com.speedment.runtime.Speedment;
+import com.speedment.runtime.component.Component;
+import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.util.document.DocumentTranscoder;
 import java.io.File;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import com.speedment.runtime.component.ComponentConstructor;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.internal.config.immutable.ImmutableProject;
-import static com.speedment.tool.UISession.DEFAULT_CONFIG_LOCATION;
+import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 
 /**
  *
@@ -39,7 +37,7 @@ import static com.speedment.tool.UISession.DEFAULT_CONFIG_LOCATION;
 public final class GenerateMojo extends AbstractSpeedmentMojo {
 
     @Parameter
-    private ComponentConstructor<?>[] components;
+    private Class<Component>[] components;
 
     @Parameter(defaultValue = DEFAULT_CONFIG_LOCATION)
     private File configFile;
@@ -50,13 +48,9 @@ public final class GenerateMojo extends AbstractSpeedmentMojo {
 
         if (hasConfigFile()) {
             try {
-                final Project p = DocumentTranscoder.load(configFile.toPath());
-                final Project immutableProject = ImmutableProject.wrap(p);
-                speedment.getProjectComponent().setProject(immutableProject);
-                speedment.getOrThrow(CodeGenerationComponent.class)
-                    .getTranslatorManager()
-                    .accept(immutableProject);
-            } catch (SpeedmentException ex) {
+                final Project project = speedment.project();
+                speedment.getOrThrow(TranslatorManager.class).accept(project);
+            } catch (final SpeedmentException ex) {
                 final String err = "Error parsing configFile file.";
                 getLog().error(err);
                 throw new MojoExecutionException(err, ex);
@@ -69,7 +63,7 @@ public final class GenerateMojo extends AbstractSpeedmentMojo {
     }
 
     @Override
-    protected ComponentConstructor<?>[] components() {
+    protected Class<Component>[] components() {
         return components;
     }
 
