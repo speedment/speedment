@@ -26,7 +26,7 @@ public class IntegerZeroOneToBooleanMapper implements TypeMapper<Integer, Boolea
 
     @Override
     public String getLabel() {
-        return "1/0 to Boolean";
+        return "Integer (0|1) to Boolean";
     }
 
     @Override
