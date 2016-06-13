@@ -22,6 +22,7 @@ import com.speedment.runtime.SpeedmentBuilder;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
 import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
+import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 import java.io.File;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -33,6 +34,7 @@ import org.apache.maven.plugin.MojoFailureException;
  */
 abstract class AbstractSpeedmentMojo extends AbstractMojo {
     
+    private final static File DEFAULT_CONFIG = new File(DEFAULT_CONFIG_LOCATION);
     private final SpeedmentBuilder<?, ?> builder;
 
     protected abstract File configLocation();
@@ -52,16 +54,20 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
     }
     
     protected final boolean hasConfigFile() {
-        if (configLocation() == null) {
+        return hasConfigFile(configLocation());
+    }
+    
+    protected final boolean hasConfigFile(File file) {
+        if (file == null) {
             final String err = "The specified .json-file is null.";
             getLog().error(err);
             return false;
-        } else if (!configLocation().exists()) {
-            final String err = "The specified .json-file '" + configLocation().getAbsolutePath() + "' does not exist.";
+        } else if (!file.exists()) {
+            final String err = "The specified .json-file '" + file.getAbsolutePath() + "' does not exist.";
             getLog().error(err);
             return false;
-        } else if (!configLocation().canRead()) {
-            final String err = "The specified .json-file '" + configLocation().getAbsolutePath() + "' is not readable.";
+        } else if (!file.canRead()) {
+            final String err = "The specified .json-file '" + file.getAbsolutePath() + "' is not readable.";
             getLog().error(err);
             return false;
         } else return true;
@@ -72,6 +78,8 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
         
         if (hasConfigFile()) {
             result = new DefaultApplicationBuilder(configLocation());
+        } else if (hasConfigFile(DEFAULT_CONFIG)) {
+            result = new DefaultApplicationBuilder(DEFAULT_CONFIG);
         } else {
             result = new DefaultApplicationBuilder();
         }
