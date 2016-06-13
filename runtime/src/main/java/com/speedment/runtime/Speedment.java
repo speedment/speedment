@@ -20,6 +20,7 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
+import com.speedment.runtime.manager.Manager;
 
 /**
  * The {@code Platform} class acts as a generic holder of different system
@@ -47,6 +48,15 @@ public interface Speedment {
      * @throws SpeedmentException  if it was not installed
      */
     <T> T getOrThrow(Class<T> type) throws SpeedmentException;
+    
+    /**
+     * Returns the manager for the specified entity type.
+     * 
+     * @param <ENTITY>    the entity type
+     * @param entityType  class for the entity to manage
+     * @return            the manager for that entity type
+     */
+    <ENTITY> Manager<ENTITY> managerOf(Class<ENTITY> entityType);
     
     /**
      * Returns the project node.

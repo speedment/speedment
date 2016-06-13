@@ -16,7 +16,6 @@
  */
 package com.speedment.generator.internal.manager;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
@@ -38,7 +37,6 @@ import static com.speedment.common.codegen.internal.model.constant.DefaultType.V
 import com.speedment.common.codegen.internal.model.value.ReferenceValue;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
-import com.speedment.runtime.internal.util.sql.ResultSetUtil;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -57,10 +55,15 @@ import com.speedment.runtime.util.tuple.Tuples;
 import static com.speedment.common.codegen.internal.util.Formatting.block;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
+import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.DbmsHandlerComponent;
+import com.speedment.runtime.component.ProjectComponent;
 import static java.util.stream.Collectors.joining;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
+import com.speedment.runtime.internal.util.sql.ResultSetUtil;
 
 /**
  *
@@ -89,7 +92,6 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
 
     @Override
     protected Class makeCodeGenModel(File file) {
-        file.add(Import.of(Type.of(ResultSetUtil.class)).static_().setStaticMember("*"));
         return newBuilder(file, getSupport().generatedManagerImplName())
             .forEveryTable((clazz, table) -> {
                 clazz
@@ -99,11 +101,23 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                         .add(Generic.of().add(getSupport().entityType()))
                     )
                     .add(getSupport().generatedManagerType())
+                    .add(Field.of("projectComponent", Type.of(ProjectComponent.class)).add(AnnotationUsage.of(Type.of(Inject.class))).private_())
                     .add(Constructor.of()
                         .protected_()
-                        .add(Field.of(SPEEDMENT_VARIABLE_NAME, Type.of(Speedment.class)))
-                        .add("super(" + SPEEDMENT_VARIABLE_NAME + ");")
-                        .add("setEntityMapper(this::" + NEW_ENTITY_FROM_METHOD + ");"))
+                        .add("setEntityMapper(this::" + NEW_ENTITY_FROM_METHOD + ");")
+                    )
+//                    .add(Method.of("findTableInstance", VOID)
+//                        .add(AnnotationUsage.of(Type.of(Execute.class)))
+//                        .add(Field.of("projectComponent", Type.of(ProjectComponent.class)).add(AnnotationUsage.of(Type.of(Inject.class))))
+//                        .add("table = projectComponent.getProject().findTableByName(\"" +
+//                            relativeName(getSupport().tableOrThrow(), Dbms.class, DATABASE_NAME) + "\");"
+//                        )
+//                    )
+                    .add(Method.of("getTable", Type.of(Table.class))
+                        .public_().add(OVERRIDE)
+                        .add("return projectComponent.getProject().findTableByName(\"" +
+                            relativeName(getSupport().tableOrThrow(), Dbms.class, DATABASE_NAME) + "\");")
+                    )
                     .add(generateNewEntityFrom(getSupport(), file, table::columns))
                     .add(generateNewEmptyEntity(getSupport(), file, table::columns))
                     .add(generateGet(getSupport(), file, table::columns))
@@ -166,7 +180,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         return method;
     }
 
-    private String readFromResultSet(Column c, AtomicInteger position) {
+    private String readFromResultSet(File file, Column c, AtomicInteger position) {
 
         final TranslatorSupport<Table> support = injector.inject(new TranslatorSupport<>(c.getParentOrThrow()));
         final Dbms dbms = c.getParentOrThrow().getParentOrThrow().getParentOrThrow();
@@ -201,6 +215,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                 .append(mapping.getResultSetMethodName(dbms))
                 .append("(").append(position.getAndIncrement()).append(")");
         } else {
+            file.add(Import.of(Type.of(ResultSetUtil.class)).static_().setStaticMember("*"));
             sb
                 .append("get")
                 .append(mapping.getResultSetMethodName(dbms))
@@ -322,7 +337,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
         columnsSupplier.get()
             .filter(HasEnabled::isEnabled)
             .forEachOrdered(c -> {
-                streamBuilder.add("entity.set" + support.namer().javaTypeName(c.getJavaName()) + "(" + readFromResultSet(c, position) + ");");
+                streamBuilder.add("entity.set" + support.namer().javaTypeName(c.getJavaName()) + "(" + readFromResultSet(file, c, position) + ");");
             });
 
         rows.add("try " + block(streamBuilder.build()));

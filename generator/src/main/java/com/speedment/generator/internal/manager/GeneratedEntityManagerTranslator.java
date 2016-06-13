@@ -51,13 +51,13 @@ public final class GeneratedEntityManagerTranslator extends EntityAndManagerTran
                 intf.public_()
                     .add(Type.of(SqlManager.class).add(Generic.of().add(getSupport().entityType())))
                     .add(generatePrimaryKeyFor(file))
-                    .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
-                    .add(Method.of("getTable", Type.of(Table.class)).default_().add(OVERRIDE)
-                        .add("return speedment()"
-                            + ".getProjectComponent().getProject().findTableByName(\""
-                            + relativeName(getSupport().tableOrThrow(), Dbms.class, DATABASE_NAME) + "\");"
-                        )
-                    )
+//                    .call(i -> file.add(Import.of(Type.of(ProjectComponent.class))))
+//                    .add(Method.of("getTable", Type.of(Table.class)).default_().add(OVERRIDE)
+//                        .add("return speedment()"
+//                            + ".getProjectComponent().getProject().findTableByName(\""
+//                            + relativeName(getSupport().tableOrThrow(), Dbms.class, DATABASE_NAME) + "\");"
+//                        )
+//                    )
                     .add(Method.of("getManagerClass", Type.of(Class.class).add(Generic.of().add(getSupport().managerType()))).default_().add(OVERRIDE)
                         .add("return " + getSupport().managerName() + ".class;"))
                     .add(Method.of("getEntityClass", Type.of(Class.class).add(Generic.of().add(getSupport().entityType()))).default_().add(OVERRIDE)

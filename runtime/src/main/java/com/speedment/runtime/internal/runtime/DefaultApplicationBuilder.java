@@ -72,7 +72,7 @@ public final class DefaultApplicationBuilder extends
      * @param json      json encoded domain model
      */
     public DefaultApplicationBuilder(Injector.Builder injector, File configFile) {
-        super(SpeedmentImpl.class, injector);
+        super(injector.canInject(SpeedmentImpl.class));
         final String json = loadMetadataFrom(configFile);
         if (json == null) metadata = null;
         else metadata = () -> json;
@@ -80,7 +80,6 @@ public final class DefaultApplicationBuilder extends
 
     @Override
     protected Speedment build(Injector injector) {
-        loadAndSetProject(injector);
         return injector.get(Speedment.class);
     }
 

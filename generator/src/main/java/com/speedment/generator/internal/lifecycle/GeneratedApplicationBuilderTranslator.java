@@ -31,15 +31,10 @@ import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.common.codegen.internal.model.JavadocImpl;
 import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.AUTHOR;
-import com.speedment.common.codegen.internal.model.value.ArrayValue;
-import com.speedment.common.codegen.internal.model.value.ReferenceValue;
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
-import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.Value;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.RequiresInjectable;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import static com.speedment.generator.internal.lifecycle.GeneratedMetadataTranslator.METADATA;
 import com.speedment.runtime.internal.runtime.AbstractApplicationBuilder;
@@ -50,6 +45,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toSet;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.component.InfoComponent;
+import com.speedment.runtime.component.ManagerComponent;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import java.util.LinkedList;
 import static java.util.Objects.requireNonNull;
@@ -89,8 +85,7 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
                     .keys()
                     .collect(toSet());
                 
-                final AnnotationUsage requireInjectable = AnnotationUsage.of(Type.of(RequiresInjectable.class));
-                final List<Value<?>> requirements = new LinkedList<>();
+                final List<String> managerImpls = new LinkedList<>();
 
                 traverseOver(project, Table.class)
                     .filter(HasEnabled::test)
@@ -98,17 +93,31 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
                         final TranslatorSupport<Table> support = injector.inject(new TranslatorSupport<>(t));
                         final Type managerType = support.managerImplType();
                         if (ambigousNames.contains(t.getName())) {
-                            requirements.add(new ReferenceValue(managerType.getName() + ".class"));
+                            managerImpls.add(managerType.getName());
                         } else {
                             file.add(Import.of(managerType));
-                            requirements.add(new ReferenceValue(shortName(managerType.getName()) + ".class"));
+                            managerImpls.add(shortName(managerType.getName()));
                         }
                     });
                 
-                requireInjectable.set(new ArrayValue(requirements));
-
                 file.add(Import.of(applicationType()));
                 file.add(Import.of(applicationImplType()));
+                file.add(Import.of(Type.of(ManagerComponent.class)));
+                
+                final Method build = Method.of("build", applicationType())
+                    .public_().add(OVERRIDE)
+                    .add(Field.of("injector", Type.of(Injector.class)))
+                    .add("final " + ManagerComponent.class.getSimpleName() + 
+                        " managers = injector.get(" + ManagerComponent.class.getSimpleName() + 
+                        ".class);"
+                    );
+                
+                managerImpls.stream()
+                    .map(s -> new StringBuilder("managers.put(injector.inject(new ").append(s).append("()));"))
+                    .map(StringBuilder::toString)
+                    .forEachOrdered(build::add);
+                
+                build.add("return injector.get(" + getSupport().typeName(getSupport().projectOrThrow()) + "Application.class);");
 
                 clazz.public_().abstract_()
                     .setSupertype(Type.of(AbstractApplicationBuilder.class)
@@ -120,12 +129,7 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
                         .add("super(" + getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationImpl.class);")
                         .add("setSpeedmentApplicationMetadata(new Generated" + getSupport().typeName(getSupport().projectOrThrow()) + METADATA + "());")
                     )
-                    .add(Method.of("build", applicationType())
-                        .public_()
-                        .add(OVERRIDE)
-                        .add(Field.of("injector", Type.of(Injector.class)))
-                        .add("return injector.get(" + getSupport().typeName(getSupport().projectOrThrow()) + "Application.class);")
-                    );
+                    .add(build);
             }).build();
     }
     

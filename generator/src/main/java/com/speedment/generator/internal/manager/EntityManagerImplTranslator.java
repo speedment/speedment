@@ -16,10 +16,7 @@
  */
 package com.speedment.generator.internal.manager;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Constructor;
-import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Type;
 import com.speedment.runtime.config.Table;
@@ -42,11 +39,7 @@ public final class EntityManagerImplTranslator extends EntityAndManagerTranslato
             .forEveryTable((clazz, table) -> {
                 clazz.public_().final_()
                     .setSupertype(getSupport().generatedManagerImplType())
-                    .add(getSupport().managerType())
-                    .add(Constructor.of().public_()
-                        .add(Field.of("speedment", Type.of(Speedment.class)))
-                        .add("super(speedment);")
-                    );
+                    .add(getSupport().managerType());
             }).build();
     }
     

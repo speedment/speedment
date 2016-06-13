@@ -20,6 +20,7 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.RequiresInjectable;
 import com.speedment.runtime.Speedment;
+import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
@@ -36,6 +37,7 @@ import com.speedment.runtime.internal.component.ProjectComponentImpl;
 import com.speedment.runtime.internal.component.ResultSetMapperComponentImpl;
 import com.speedment.runtime.internal.component.TypeMapperComponentImpl;
 import com.speedment.runtime.internal.config.dbms.StandardDbmsTypes;
+import com.speedment.runtime.manager.Manager;
 
 /**
  * An abstract base implementation of the {@link Speedment} interface.
@@ -61,6 +63,7 @@ import com.speedment.runtime.internal.config.dbms.StandardDbmsTypes;
 public abstract class AbstractSpeedment implements Speedment {
     
     private @Inject ProjectComponent projectComponent;
+    private @Inject ManagerComponent managerComponent;
     private @Inject Injector injector;
     
     protected AbstractSpeedment() {}
@@ -75,6 +78,11 @@ public abstract class AbstractSpeedment implements Speedment {
                 "' is not installed in the platform.", ex
             );
         }
+    }
+
+    @Override
+    public <ENTITY> Manager<ENTITY> managerOf(Class<ENTITY> entityType) {
+        return managerComponent.managerOf(entityType);
     }
 
     @Override

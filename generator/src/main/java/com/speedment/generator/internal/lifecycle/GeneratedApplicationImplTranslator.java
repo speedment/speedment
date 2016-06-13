@@ -16,13 +16,33 @@
  */
 package com.speedment.generator.internal.lifecycle;
 
+import com.speedment.common.codegen.internal.model.value.ArrayValue;
+import com.speedment.common.codegen.internal.model.value.ReferenceValue;
+import static com.speedment.common.codegen.internal.util.Formatting.shortName;
+import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Class;
+import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Type;
+import com.speedment.common.codegen.model.Value;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.RequiresInjectable;
+import com.speedment.common.mapstream.MapStream;
+import com.speedment.generator.TranslatorSupport;
 import com.speedment.runtime.config.Project;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
+import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.internal.runtime.AbstractSpeedment;
 import com.speedment.runtime.internal.runtime.AbstractApplicationBuilder;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toSet;
 
 /**
  *
@@ -31,6 +51,8 @@ import com.speedment.runtime.internal.runtime.AbstractApplicationBuilder;
  */
 public final class GeneratedApplicationImplTranslator extends DefaultJavaClassTranslator<Project, Class> {
 
+    private @Inject Injector injector;
+    
     public GeneratedApplicationImplTranslator(Project project) {
         super(project, Class::of);
     }
@@ -52,6 +74,35 @@ public final class GeneratedApplicationImplTranslator extends DefaultJavaClassTr
                 clazz.public_()
                     .setSupertype(Type.of(AbstractSpeedment.class))
                     .add(generatedType());
+                
+//                final Map<String, List<Table>> nameMap = traverseOver(project, Table.class)
+//                    .filter(HasEnabled::test)
+//                    .collect(Collectors.groupingBy(Table::getName));
+//                
+//                final Set<String> ambigousNames = MapStream.of(nameMap)
+//                    .filterValue(l -> l.size() > 1)
+//                    .keys()
+//                    .collect(toSet());
+//                
+//                final AnnotationUsage requireInjectable = AnnotationUsage.of(Type.of(RequiresInjectable.class));
+//                final List<Value<?>> requirements = new LinkedList<>();
+//                
+//                traverseOver(project, Table.class)
+//                    .filter(HasEnabled::test)
+//                    .forEachOrdered(t -> {
+//                        final TranslatorSupport<Table> support = injector.inject(new TranslatorSupport<>(t));
+//                        final Type managerType = support.managerImplType();
+//                        
+//                        if (ambigousNames.contains(t.getName())) {
+//                            requirements.add(new ReferenceValue(managerType.getName() + ".class"));
+//                        } else {
+//                            file.add(Import.of(managerType));
+//                            requirements.add(new ReferenceValue(shortName(managerType.getName()) + ".class"));
+//                        }
+//                    });
+//                
+//                requireInjectable.set(new ArrayValue(requirements));
+//                clazz.add(requireInjectable);
             }).build();
     }
     

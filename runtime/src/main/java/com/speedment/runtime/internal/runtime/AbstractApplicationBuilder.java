@@ -80,10 +80,10 @@ public abstract class AbstractApplicationBuilder<
     private boolean validateRuntimeConfig;
 
     protected AbstractApplicationBuilder(Class<? extends APP> applicationImplClass) {
-        this(applicationImplClass, Injector.builder().canInject(applicationImplClass));
+        this(Injector.builder().canInject(applicationImplClass));
     }
     
-    protected AbstractApplicationBuilder(Class<? extends APP> applicationImplClass, Injector.Builder injector) {
+    protected AbstractApplicationBuilder(Injector.Builder injector) {
         this.injector   = requireNonNull(injector);
         this.withsNamed = new ArrayList<>();
         this.withsAll   = new ArrayList<>();
@@ -237,6 +237,7 @@ public abstract class AbstractApplicationBuilder<
             throw new SpeedmentException("Error in dependency injection.", ex);
         }
         
+        loadAndSetProject(inj);
         return build(inj);
     }
     
