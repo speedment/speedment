@@ -21,6 +21,7 @@ import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.internal.InjectorImpl;
+import java.util.Optional;
 
 /**
  * The factory used to produce instances of classes with
@@ -51,7 +52,18 @@ public interface Injector {
      * 
      * @throws IllegalArgumentException  if it could not be found
      */
-    <T> T get(Class<T> type) throws IllegalArgumentException;
+    <T> T getOrThrow(Class<T> type) throws IllegalArgumentException;
+    
+    /**
+     * Looks for an dependency injectable instance of the specified class
+     * and if it exists, returns it. If it does not exist, an empty Optional
+     * is returned.
+     * 
+     * @param <T>   the type to look for
+     * @param type  type or supertype of that to be returned
+     * @return      the found instance
+     */
+    <T> Optional<T> get(Class<T> type);
     
     /**
      * Sets all the {@link Inject}-annoted fields in the specified instance.

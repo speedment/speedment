@@ -56,6 +56,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 
 /**
  *

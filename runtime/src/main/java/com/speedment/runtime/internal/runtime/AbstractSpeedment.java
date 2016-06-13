@@ -71,7 +71,7 @@ public abstract class AbstractSpeedment implements Speedment {
     @Override
     public <T> T getOrThrow(Class<T> componentClass) throws SpeedmentException {
         try {
-            return injector.get(componentClass);
+            return injector.getOrThrow(componentClass);
         } catch (final IllegalArgumentException ex) {
             throw new SpeedmentException(
                 "Specified component '" + componentClass.getSimpleName() + 

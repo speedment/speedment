@@ -62,6 +62,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 @RequiresInjectable({
     TranslatorManagerImpl.class,

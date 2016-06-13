@@ -38,6 +38,7 @@ import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traver
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 
 /**
  *

@@ -103,6 +103,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

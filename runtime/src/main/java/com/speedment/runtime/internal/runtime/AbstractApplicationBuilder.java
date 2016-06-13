@@ -52,6 +52,9 @@ import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import java.util.ArrayList;
 import static java.util.Objects.requireNonNull;
 import java.util.function.BiConsumer;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  * This abstract class is implemented by classes that can build a 
@@ -112,14 +115,14 @@ public abstract class AbstractApplicationBuilder<
     @Override
     public BUILDER withPassword(char[] password) {
         // password nullable
-        with(Dbms.class, (inj, dbms) -> inj.get(PasswordComponent.class).put(dbms, password));
+        with(Dbms.class, (inj, dbms) -> inj.getOrThrow(PasswordComponent.class).put(dbms, password));
         return self();
     }
 
     @Override
     public BUILDER withPassword(String dbmsName, char[] password) {
         // password nullable
-        with(Dbms.class, dbmsName, (inj, dbms) -> inj.get(PasswordComponent.class).put(dbms, password));
+        with(Dbms.class, dbmsName, (inj, dbms) -> inj.getOrThrow(PasswordComponent.class).put(dbms, password));
         return self();
     }
 
@@ -297,7 +300,7 @@ public abstract class AbstractApplicationBuilder<
                 .forEachOrdered(doc -> consumer.accept(injector, doc));
         });
 
-        injector.get(ProjectComponent.class).setProject(project);
+        injector.getOrThrow(ProjectComponent.class).setProject(project);
     }
     
     /**
@@ -307,7 +310,7 @@ public abstract class AbstractApplicationBuilder<
      */
     protected void printWelcomeMessage(Injector injector) {
         
-        final InfoComponent info = injector.get(InfoComponent.class);
+        final InfoComponent info = injector.getOrThrow(InfoComponent.class);
 
         try {
             final Package package_ = Runtime.class.getPackage();

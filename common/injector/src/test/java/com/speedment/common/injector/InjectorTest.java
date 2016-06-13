@@ -49,8 +49,8 @@ public class InjectorTest {
             );
         }
         
-        final StringIdentityMapper mapper = injector.get(StringIdentityMapper.class);
-        final TypeMapperComponent mappers = injector.get(TypeMapperComponent.class);
+        final StringIdentityMapper mapper = injector.getOrThrow(StringIdentityMapper.class);
+        final TypeMapperComponent mappers = injector.getOrThrow(TypeMapperComponent.class);
         
         assertNotNull(mapper);
         assertNotNull(mappers);
@@ -75,12 +75,12 @@ public class InjectorTest {
             );
         }
         
-        assertNotNull(injector.get(A.class).b);
-        assertNotNull(injector.get(A.class).c);
-        assertNotNull(injector.get(B.class).a);
-        assertNotNull(injector.get(B.class).c);
-        assertNotNull(injector.get(C.class).a);
-        assertNotNull(injector.get(C.class).b);
+        assertNotNull(injector.getOrThrow(A.class).b);
+        assertNotNull(injector.getOrThrow(A.class).c);
+        assertNotNull(injector.getOrThrow(B.class).a);
+        assertNotNull(injector.getOrThrow(B.class).c);
+        assertNotNull(injector.getOrThrow(C.class).a);
+        assertNotNull(injector.getOrThrow(C.class).b);
     }
     
     @Test
@@ -101,7 +101,7 @@ public class InjectorTest {
             );
         }
         
-        assertNotNull(injector.get(ParentType.class).a);
-        assertNotNull(injector.get(ChildType.class).b);
+        assertNotNull(injector.getOrThrow(ParentType.class).a);
+        assertNotNull(injector.getOrThrow(ChildType.class).b);
     }
 }

@@ -80,7 +80,7 @@ public final class DefaultApplicationBuilder extends
 
     @Override
     protected Speedment build(Injector injector) {
-        return injector.get(Speedment.class);
+        return injector.getOrThrow(Speedment.class);
     }
 
     @Override

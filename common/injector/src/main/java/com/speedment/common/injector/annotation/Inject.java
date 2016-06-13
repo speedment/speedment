@@ -44,4 +44,15 @@ public @interface Inject {
      */
     State value() default State.STARTED;
     
+    /**
+     * If the injector should throw an exception if no implementation
+     * for this value could be found. If {@code required} is false, then
+     * the value will simply be set to null.
+     * <p>
+     * The default is that every injected value is required.
+     * 
+     * @return  if this value is required
+     */
+    boolean required() default true;
+    
 }

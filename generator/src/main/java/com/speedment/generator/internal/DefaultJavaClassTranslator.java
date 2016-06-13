@@ -74,6 +74,8 @@ import static com.speedment.runtime.internal.util.document.DocumentUtil.relative
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.component.InfoComponent;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

@@ -29,6 +29,8 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import static java.util.Objects.requireNonNull;
 import static javafx.application.Application.launch;
+import static java.util.Objects.requireNonNull;
+import static javafx.application.Application.launch;
 
 /**
  *
@@ -55,9 +57,9 @@ public final class MainApp extends Application {
                 .build().getOrThrow(Injector.class);
         }
         
-        final UserInterfaceComponentImpl ui = INJECTOR.get(UserInterfaceComponentImpl.class);
-        final ProjectComponent projects     = INJECTOR.get(ProjectComponent.class);
-        final InjectionLoader loader        = INJECTOR.get(InjectionLoader.class);
+        final UserInterfaceComponentImpl ui = INJECTOR.getOrThrow(UserInterfaceComponentImpl.class);
+        final ProjectComponent projects     = INJECTOR.getOrThrow(ProjectComponent.class);
+        final InjectionLoader loader        = INJECTOR.getOrThrow(InjectionLoader.class);
         
         ui.start(this, stage);
         

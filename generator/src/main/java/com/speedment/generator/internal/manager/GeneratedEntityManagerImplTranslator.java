@@ -64,6 +64,8 @@ import static java.util.stream.Collectors.joining;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import com.speedment.runtime.internal.util.sql.ResultSetUtil;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 
 /**
  *

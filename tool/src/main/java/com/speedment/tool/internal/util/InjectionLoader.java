@@ -34,6 +34,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import static javafx.stage.Modality.APPLICATION_MODAL;
 import javafx.stage.Stage;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

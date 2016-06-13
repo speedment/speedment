@@ -49,6 +49,8 @@ import com.speedment.runtime.component.ManagerComponent;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import java.util.LinkedList;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

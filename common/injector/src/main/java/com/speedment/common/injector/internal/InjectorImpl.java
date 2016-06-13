@@ -41,6 +41,7 @@ import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
 import java.util.concurrent.atomic.AtomicBoolean;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -61,8 +62,13 @@ public final class InjectorImpl implements Injector {
     }
     
     @Override
-    public <T> T get(Class<T> type) throws IllegalArgumentException {
-        return findIn(type);
+    public <T> T getOrThrow(Class<T> type) throws IllegalArgumentException {
+        return findIn(type, true);
+    }
+    
+    @Override
+    public <T> Optional<T> get(Class<T> type) {
+        return Optional.ofNullable(findIn(type, false));
     }
 
     @Override
@@ -95,7 +101,7 @@ public final class InjectorImpl implements Injector {
                         printLine();
 
                         // Retreive the instance for that node
-                        final Object instance = findIn(n.getRepresentedType());
+                        final Object instance = findIn(n.getRepresentedType(), true);
 
                         // Execute all the executions for the next step.
                         n.getExecutions().stream()
@@ -103,7 +109,7 @@ public final class InjectorImpl implements Injector {
                             .map(Execution::getMethod)
                             .forEach(m -> {
                                 final Object[] params = Stream.of(m.getParameters())
-                                    .map(p -> findIn(p.getType()))
+                                    .map(p -> findIn(p.getType(), p.getAnnotation(Inject.class).required()))
                                     .toArray(Object[]::new);
 
                                 m.setAccessible(true);
@@ -151,11 +157,11 @@ public final class InjectorImpl implements Injector {
         return new Builder(injectables);
     }
     
-    private <T> T findIn(Class<T> type) {
-        return findIn(this, type, instances);
+    private <T> T findIn(Class<T> type, boolean required) {
+        return findIn(this, type, instances, required);
     }
     
-    private static <T> T findIn(Injector injector, Class<T> type, List<Object> instances) {
+    private static <T> T findIn(Injector injector, Class<T> type, List<Object> instances, boolean required) {
         if (Injector.class.isAssignableFrom(type)) {
             @SuppressWarnings("unchecked")
             final T casted = (T) injector;
@@ -168,9 +174,11 @@ public final class InjectorImpl implements Injector {
             }
         }
 
-        throw new IllegalArgumentException(
-            "Could not find any installed implementation of " + type.getName() + "."
-        );
+        if (required) {
+            throw new IllegalArgumentException(
+                "Could not find any installed implementation of " + type.getName() + "."
+            );
+        } else return null;
     }
     
     private static void printLine() {
@@ -190,7 +198,7 @@ public final class InjectorImpl implements Injector {
             if (Injector.class.isAssignableFrom(field.getType())) {
                 value = this;
             } else {
-                value = findIn(field.getType());
+                value = findIn(field.getType(), field.getAnnotation(Inject.class).required());
             }
 
             field.setAccessible(true);
@@ -271,7 +279,7 @@ public final class InjectorImpl implements Injector {
                     if (Inject.class.isAssignableFrom(field.getType())) {
                         value = injector;
                     } else {
-                        value = findIn(injector, field.getType(), instances);
+                        value = findIn(injector, field.getType(), instances, field.getAnnotation(Inject.class).required());
                     }
 
                     field.setAccessible(true);
@@ -310,7 +318,7 @@ public final class InjectorImpl implements Injector {
                             printLine();
                             
                             // Retreive the instance for that node
-                            final Object instance = findIn(injector, n.getRepresentedType(), instances);
+                            final Object instance = findIn(injector, n.getRepresentedType(), instances, true);
 
                             // Execute all the executions for the next step.
                             n.getExecutions().stream()
@@ -318,7 +326,7 @@ public final class InjectorImpl implements Injector {
                                 .map(Execution::getMethod)
                                 .forEach(m -> {
                                     final Object[] params = Stream.of(m.getParameters())
-                                        .map(p -> findIn(injector, p.getType(), instances))
+                                        .map(p -> findIn(injector, p.getType(), instances, p.getAnnotation(Inject.class).required()))
                                         .toArray(Object[]::new);
 
                                     m.setAccessible(true);
