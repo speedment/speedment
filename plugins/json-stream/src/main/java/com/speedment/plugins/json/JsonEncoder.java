@@ -18,12 +18,14 @@ package com.speedment.plugins.json;
 
 import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
 import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
-import com.speedment.runtime.Speedment;
+import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
+import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.field.trait.ReferenceForeignKeyFieldTrait;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
+import com.speedment.runtime.internal.util.document.DocumentUtil;
 import com.speedment.runtime.manager.Manager;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -68,22 +70,22 @@ import java.util.stream.Stream;
  */
 public final class JsonEncoder<ENTITY> {
 
-    protected final Map<String, Function<ENTITY, String>> getters;
-    private final Speedment speedment;
+    private final Map<String, Function<ENTITY, String>> getters;
+    private final Project project;
 
     /**
      * Constructs an empty JsonEncoder with no fields added to the output
      * renderer.
      */
-    private JsonEncoder(Speedment speedment) {
+    private JsonEncoder(Project project) {
         this.getters = new LinkedHashMap<>();
-        this.speedment = requireNonNull(speedment);
+        this.project = requireNonNull(project);
     }
 
     // Fields
     public <D, T, I extends FieldTrait & ReferenceFieldTrait<ENTITY, D, T>> JsonEncoder<ENTITY> put(I field) {
         requireNonNull(field);
-        final String columnName = jsonField(speedment, field.getIdentifier());
+        final String columnName = jsonField(project, field.getIdentifier());
         final Function<ENTITY, T> getter = ((ReferenceFieldTrait<ENTITY, D, T>) field).getter(); // Workaround bugg
         return put(columnName, getter);
     }
@@ -92,7 +94,7 @@ public final class JsonEncoder<ENTITY> {
     public <D, T, FK_ENTITY, I extends FieldTrait & ReferenceFieldTrait<ENTITY, D, T> & ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY>>
             JsonEncoder<ENTITY> put(I field, JsonEncoder<FK_ENTITY> builder) {
         requireNonNulls(field, builder);
-        final String columnName = jsonField(speedment, field.getIdentifier());
+        final String columnName = jsonField(project, field.getIdentifier());
         final ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY> fkField = (ReferenceForeignKeyFieldTrait< ENTITY, D, FK_ENTITY>) field; // Workaround bugg
         return put(columnName, fkField::findFrom, builder);
     }
@@ -140,7 +142,7 @@ public final class JsonEncoder<ENTITY> {
     
     public JsonEncoder<ENTITY> remove(FieldTrait field) {
         requireNonNull(field);
-        getters.remove(jsonField(speedment, field.getIdentifier()));
+        getters.remove(jsonField(project, field.getIdentifier()));
         return this;
     }
 
@@ -152,9 +154,9 @@ public final class JsonEncoder<ENTITY> {
             + "}";
     }
 
-    protected static String jsonField(Speedment speedment, FieldIdentifier<?> identifier) {
-        requireNonNulls(speedment, identifier);
-        return referencedColumn(speedment, identifier).getJavaName();
+    protected static String jsonField(Project project, FieldIdentifier<?> identifier) {
+        requireNonNulls(project, identifier);
+        return referencedColumn(project, identifier).getJavaName();
     }
 
     public static String jsonValue(Object in) {
@@ -190,7 +192,7 @@ public final class JsonEncoder<ENTITY> {
      * @return a new JsonEncoder with no fields added to the renderer
      */
     public static <ENTITY> JsonEncoder<ENTITY> noneOf(Manager<ENTITY> manager) {
-        return new JsonEncoder<>(manager.speedment());
+        return new JsonEncoder<>(projectOf(manager));
     }
 
     /**
@@ -214,7 +216,7 @@ public final class JsonEncoder<ENTITY> {
             .map(ReferenceFieldTrait::getIdentifier)
             .forEachOrdered(fi -> {
                 formatter.put(
-                    jsonField(manager.speedment(), fi),
+                    jsonField(projectOf(manager), fi),
                     entity -> manager.get(entity, fi)
                 );
             });
@@ -251,7 +253,7 @@ public final class JsonEncoder<ENTITY> {
             .map(ReferenceFieldTrait::getIdentifier)
             .forEachOrdered(fi
                 -> formatter.put(
-                    jsonField(manager.speedment(), fi),
+                    jsonField(projectOf(manager), fi),
                     entity -> manager.get(entity, fi)
                 )
             );
@@ -263,5 +265,13 @@ public final class JsonEncoder<ENTITY> {
         @SuppressWarnings("unchecked")
         final ReferenceFieldTrait<ENTITY, ?, ?> result = (ReferenceFieldTrait<ENTITY, ?, ?>) f;
         return result;
+    }
+    
+    private static <ENTITY> Project projectOf(Manager<ENTITY> manager) {
+        return DocumentUtil.ancestor(manager.getTable(), Project.class)
+            .orElseThrow(() -> new SpeedmentException(
+                "Could not find a project root to table '" + 
+                manager.getTable().toString() + "'."
+            ));
     }
 }
