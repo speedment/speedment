@@ -20,6 +20,7 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.EventComponent;
 import com.speedment.runtime.component.PasswordComponent;
+import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.config.DbmsProperty;
@@ -97,7 +98,7 @@ public final class ConnectController implements Initializable {
         final DbmsProperty dbms = userInterfaceComponent.projectProperty().mutator().addNewDbms();
         
         fieldType.getSelectionModel().selectedItemProperty().addListener((observable, old, typeName) -> {
-            dbms.typeNameProperty().setValue(typeName);
+            dbms.stringPropertyOf(Dbms.TYPE_NAME, () -> typeName).setValue(typeName);
             
             if (!typeName.isEmpty()) {
                 final DbmsType item = dbmsTypeOf(dbmsHandlerComponent, dbms);

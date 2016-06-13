@@ -30,6 +30,7 @@ import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.exception.SpeedmentException;
 import java.util.Optional;
 import java.util.OptionalInt;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**

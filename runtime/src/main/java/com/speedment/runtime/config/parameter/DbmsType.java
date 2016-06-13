@@ -17,8 +17,6 @@
 package com.speedment.runtime.config.parameter;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.parameter.DbmsTypeBuilder.WithDbmsNameMeaning;
-import com.speedment.runtime.config.parameter.DbmsTypeBuilder.WithName;
 import com.speedment.runtime.db.ConnectionUrlGenerator;
 import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;

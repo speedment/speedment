@@ -51,7 +51,17 @@ public abstract class AbstractDbmsType implements DbmsType {
 
     @Override
     public boolean isSupported() {
-        return true;
+        try {
+            Class.forName(
+                getDriverName(),
+                false,
+                AbstractDbmsType.class.getClassLoader()
+            );
+
+            return true;
+        } catch (final ClassNotFoundException ex) {
+            return false;
+        }
     }
 
     @Override

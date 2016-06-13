@@ -67,7 +67,7 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
     }
     
     public StringProperty typeNameProperty() {
-        return stringPropertyOf(TYPE_NAME,  () -> Dbms.super.getTypeName());
+        return stringPropertyOf(TYPE_NAME, () -> Dbms.super.getTypeName());
     }
 
     @Override

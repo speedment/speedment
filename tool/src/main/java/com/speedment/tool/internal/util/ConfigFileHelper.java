@@ -6,12 +6,14 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.DbmsHandlerComponent;
+import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.db.DbmsMetadataHandler;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.config.DbmsImpl;
+import com.speedment.runtime.internal.config.immutable.ImmutableProject;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
 import com.speedment.runtime.internal.util.Settings;
 import com.speedment.runtime.internal.util.document.DocumentTranscoder;
@@ -54,6 +56,7 @@ public final class ConfigFileHelper {
     private @Inject DocumentPropertyComponent documentPropertyComponent;
     private @Inject UserInterfaceComponent userInterfaceComponent;
     private @Inject DbmsHandlerComponent dbmsHandlerComponenet;
+    private @Inject ProjectComponent projectComponent;
     private @Inject Injector injector;
     
     private File currentlyOpenFile;
@@ -72,6 +75,9 @@ public final class ConfigFileHelper {
     
     public <DOC extends DocumentProperty> boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
         try {
+            // Create an immutable copy of the tree and store in the ProjectComponent
+            final Project projectCopy = ImmutableProject.wrap(userInterfaceComponent.projectProperty());
+            projectComponent.setProject(projectCopy);
             
             // Create a copy of everything in Dbms EXCEPT the schema key. This
             // is a hack to prevent duplication errors that would otherwise
@@ -81,10 +87,10 @@ public final class ConfigFileHelper {
             final Dbms dbmsCopy = new DbmsImpl(dbms.getParentOrThrow(), dbmsData);
 
             // Find the DbmsHandler to use when loading the metadata
-            final DbmsMetadataHandler dh = dbmsHandlerComponenet.findByName(dbmsCopy.getName())
+            final DbmsMetadataHandler dh = dbmsHandlerComponenet.findByName(dbmsCopy.getTypeName())
                 .map(DbmsType::getMetadataHandler)
                 .orElseThrow(() -> new SpeedmentException(
-                    "Could not find metadata handler for DbmsType '" + dbmsCopy.getName() + "'."
+                    "Could not find metadata handler for DbmsType '" + dbmsCopy.getTypeName() + "'."
                 ));
             
             // Begin executing the loading with a progress measurer
