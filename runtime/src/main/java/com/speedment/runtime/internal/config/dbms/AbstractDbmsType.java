@@ -51,7 +51,7 @@ public abstract class AbstractDbmsType implements DbmsType {
 
     @Override
     public boolean isSupported() {
-        return false;
+        return true;
     }
 
     @Override
