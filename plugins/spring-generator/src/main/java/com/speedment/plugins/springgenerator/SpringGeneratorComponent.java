@@ -16,13 +16,15 @@
  */
 package com.speedment.plugins.springgenerator;
 
+import static com.speedment.common.injector.State.RESOLVED;
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.plugins.springgenerator.internal.ConfigurationTranslator;
 import com.speedment.plugins.springgenerator.internal.ControllerTranslator;
 import com.speedment.plugins.springgenerator.internal.GeneratedConfigurationTranslator;
 import com.speedment.plugins.springgenerator.internal.GeneratedControllerTranslator;
 import com.speedment.plugins.springgenerator.internal.SpringTranslatorKey;
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.component.AbstractComponent;
@@ -39,15 +41,8 @@ import com.speedment.runtime.license.Software;
  */
 public final class SpringGeneratorComponent extends AbstractComponent {
 
-    public SpringGeneratorComponent(Speedment speedment) {
-        super(speedment);
-    }
-
-    @Override
-    public void onResolve() {
-        final CodeGenerationComponent code = 
-            getSpeedment().getOrThrow(CodeGenerationComponent.class);
-        
+    @ExecuteBefore(RESOLVED)
+    void onResolve(@Inject CodeGenerationComponent code) {
         code.put(Project.class, 
             SpringTranslatorKey.CONFIGURATION, 
             ConfigurationTranslator::new
@@ -77,10 +72,5 @@ public final class SpringGeneratorComponent extends AbstractComponent {
     @Override
     public Software asSoftware() {
         return AbstractSoftware.with("Spring Generator", "1.0.0", APACHE_2);
-    }
-
-    @Override
-    public SpringGeneratorComponent defaultCopy(Speedment speedment) {
-        return new SpringGeneratorComponent(speedment);
     }
 }

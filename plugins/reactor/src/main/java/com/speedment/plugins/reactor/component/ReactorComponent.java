@@ -16,6 +16,10 @@
  */
 package com.speedment.plugins.reactor.component;
 
+import static com.speedment.common.injector.State.RESOLVED;
+import com.speedment.common.injector.annotation.Execute;
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.StandardTranslatorKey;
 import com.speedment.generator.component.CodeGenerationComponent;
 import static com.speedment.plugins.reactor.component.ReactorComponentUtil.validMergingColumns;
@@ -55,15 +59,12 @@ public final class ReactorComponent extends AbstractComponent {
     
     public final static String MERGE_ON = "mergeOn";
 
-    public ReactorComponent(Speedment speedment) {
-        super(speedment);
-    }
-
-    @Override
-    public void onResolve() {
-        super.onResolve();
+    @ExecuteBefore(RESOLVED)
+    void setup(
+            @Inject CodeGenerationComponent code, 
+            @Inject UserInterfaceComponent ui, 
+            @Inject EventComponent events) {
         
-        final CodeGenerationComponent code = getSpeedment().getOrThrow(CodeGenerationComponent.class);
         code.add(Project.class, StandardTranslatorKey.GENERATED_APPLICATION, new GeneratedApplicationDecorator());
         code.add(Project.class, StandardTranslatorKey.GENERATED_APPLICATION_IMPL, new GeneratedApplicationImplDecorator());
         
@@ -71,9 +72,6 @@ public final class ReactorComponent extends AbstractComponent {
         code.put(Table.class, ReactorTranslatorKey.ENTITY_VIEW_IMPL, ViewImplTranslator::new);
         code.put(Table.class, ReactorTranslatorKey.GENERATED_ENTITY_VIEW, GeneratedViewTranslator::new);
         code.put(Table.class, ReactorTranslatorKey.GENERATED_ENTITY_VIEW_IMPL, GeneratedViewImplTranslator::new);
-        
-        final UserInterfaceComponent ui = getSpeedment().getOrThrow(UserInterfaceComponent.class);
-        final EventComponent events = getSpeedment().getEventComponent();
         
         events.on(TreeSelectionChange.class, ev -> {
             ev.changeEvent()
@@ -115,10 +113,5 @@ public final class ReactorComponent extends AbstractComponent {
         return AbstractSoftware.with(
             "Reactor Plugin", "1.1.0", APACHE_2
         );
-    }
-
-    @Override
-    public Component defaultCopy(Speedment speedment) {
-        return new ReactorComponent(speedment);
     }
 }

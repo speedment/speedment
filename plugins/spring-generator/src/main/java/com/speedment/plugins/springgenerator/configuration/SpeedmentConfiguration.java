@@ -36,64 +36,64 @@ import org.springframework.context.annotation.Bean;
  * @author Emil Forslund
  */
 public abstract class SpeedmentConfiguration {
-
-    @Bean
-    public EntityManager entityManager(Speedment speedment) {
-        return speedment.getEntityManager();
-    }
-    
-    @Bean
-    public EventComponent eventComponent(Speedment speedment) {
-        return speedment.getEventComponent();
-    }
-    
-    @Bean
-    public DbmsHandlerComponent dbmsHandlerComponent(Speedment speedment) {
-        return speedment.getDbmsHandlerComponent();
-    }
-    
-    @Bean
-    public ManagerComponent managerComponent(Speedment speedment) {
-        return speedment.getManagerComponent();
-    }
-    
-    @Bean
-    public PrimaryKeyFactoryComponent primaryKeyFactoryComponent(Speedment speedment) {
-        return speedment.getPrimaryKeyFactoryComponent();
-    }
-    
-    @Bean
-    public ProjectComponent projectComponent(Speedment speedment) {
-        return speedment.getProjectComponent();
-    }
-    
-    @Bean
-    public ResultSetMapperComponent resultSetMapperComponent(Speedment speedment) {
-        return speedment.getResultSetMapperComponent();
-    }
-    
-    @Bean
-    public ConnectionPoolComponent connectionPoolComponent(Speedment speedment) {
-        return speedment.getConnectionPoolComponent();
-    }
-    
-    @Bean
-    public StreamSupplierComponent streamSupplierComponent(Speedment speedment) {
-        return speedment.getStreamSupplierComponent();
-    }
-    
-    @Bean
-    public TypeMapperComponent typeMapperComponent(Speedment speedment) {
-        return speedment.getTypeMapperComponent();
-    }
-    
-    @Bean
-    public PasswordComponent passwordComponent(Speedment speedment) {
-        return speedment.getPasswordComponent();
-    }
-    
-    @Bean
-    public InfoComponent infoComponent(Speedment speedment) {
-        return speedment.getInfoComponent();
-    }
+//
+//    @Bean
+//    public EntityManager entityManager(Speedment speedment) {
+//        return speedment.getEntityManager();
+//    }
+//    
+//    @Bean
+//    public EventComponent eventComponent(Speedment speedment) {
+//        return speedment.getEventComponent();
+//    }
+//    
+//    @Bean
+//    public DbmsHandlerComponent dbmsHandlerComponent(Speedment speedment) {
+//        return speedment.getDbmsHandlerComponent();
+//    }
+//    
+//    @Bean
+//    public ManagerComponent managerComponent(Speedment speedment) {
+//        return speedment.getManagerComponent();
+//    }
+//    
+//    @Bean
+//    public PrimaryKeyFactoryComponent primaryKeyFactoryComponent(Speedment speedment) {
+//        return speedment.getPrimaryKeyFactoryComponent();
+//    }
+//    
+//    @Bean
+//    public ProjectComponent projectComponent(Speedment speedment) {
+//        return speedment.getProjectComponent();
+//    }
+//    
+//    @Bean
+//    public ResultSetMapperComponent resultSetMapperComponent(Speedment speedment) {
+//        return speedment.getResultSetMapperComponent();
+//    }
+//    
+//    @Bean
+//    public ConnectionPoolComponent connectionPoolComponent(Speedment speedment) {
+//        return speedment.getConnectionPoolComponent();
+//    }
+//    
+//    @Bean
+//    public StreamSupplierComponent streamSupplierComponent(Speedment speedment) {
+//        return speedment.getStreamSupplierComponent();
+//    }
+//    
+//    @Bean
+//    public TypeMapperComponent typeMapperComponent(Speedment speedment) {
+//        return speedment.getTypeMapperComponent();
+//    }
+//    
+//    @Bean
+//    public PasswordComponent passwordComponent(Speedment speedment) {
+//        return speedment.getPasswordComponent();
+//    }
+//    
+//    @Bean
+//    public InfoComponent infoComponent(Speedment speedment) {
+//        return speedment.getInfoComponent();
+//    }
 }

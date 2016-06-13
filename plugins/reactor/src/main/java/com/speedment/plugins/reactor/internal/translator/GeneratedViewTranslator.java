@@ -16,7 +16,6 @@
  */
 package com.speedment.plugins.reactor.internal.translator;
 
-import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Interface;
@@ -24,7 +23,6 @@ import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.plugins.reactor.MaterializedView;
 import static com.speedment.plugins.reactor.internal.translator.TranslatorUtil.mergingColumnType;
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Table;
 
 /**
@@ -34,12 +32,8 @@ import com.speedment.runtime.config.Table;
  */
 public final class GeneratedViewTranslator extends DefaultJavaClassTranslator<Table, Interface> {
 
-    public GeneratedViewTranslator(
-            Speedment speedment, 
-            Generator generator, 
-            Table document) {
-        
-        super(speedment, generator, document, Interface::of);
+    public GeneratedViewTranslator(Table document) {
+        super(document, Interface::of);
     }
 
     @Override

@@ -16,7 +16,6 @@
  */
 package com.speedment.plugins.reactor.internal.translator;
 
-import com.speedment.common.codegen.Generator;
 import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.Formatting.block;
@@ -45,12 +44,8 @@ import java.util.Objects;
  */
 public final class GeneratedViewImplTranslator extends DefaultJavaClassTranslator<Table, Class> {
 
-    public GeneratedViewImplTranslator(
-            Speedment speedment, 
-            Generator generator, 
-            Table document) {
-        
-        super(speedment, generator, document, Class::of);
+    public GeneratedViewImplTranslator(Table document) {
+        super(document, Class::of);
     }
 
     @Override

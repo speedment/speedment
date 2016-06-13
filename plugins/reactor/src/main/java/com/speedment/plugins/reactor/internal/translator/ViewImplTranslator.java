@@ -16,7 +16,6 @@
  */
 package com.speedment.plugins.reactor.internal.translator;
 
-import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Field;
@@ -33,12 +32,8 @@ import com.speedment.runtime.config.Table;
  */
 public final class ViewImplTranslator extends DefaultJavaClassTranslator<Table, Class> {
 
-    public ViewImplTranslator(
-            Speedment speedment, 
-            Generator generator, 
-            Table document) {
-        
-        super(speedment, generator, document, Class::of);
+    public ViewImplTranslator(Table document) {
+        super(document, Class::of);
     }
 
     @Override

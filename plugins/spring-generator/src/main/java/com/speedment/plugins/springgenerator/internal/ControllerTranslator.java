@@ -16,13 +16,11 @@
  */
 package com.speedment.plugins.springgenerator.internal;
 
-import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Table;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,9 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 public final class ControllerTranslator extends DefaultJavaClassTranslator<Table, Class> {
 
-    public ControllerTranslator(
-            Speedment speedment, Generator generator, Table document) {
-        super(speedment, generator, document, Class::of);
+    public ControllerTranslator(Table document) {
+        super(document, Class::of);
     }
     
     @Override

@@ -16,13 +16,11 @@
  */
 package com.speedment.plugins.springgenerator.internal;
 
-import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Project;
 import org.springframework.context.annotation.Configuration;
 
@@ -34,10 +32,8 @@ import org.springframework.context.annotation.Configuration;
 public final class ConfigurationTranslator 
 extends DefaultJavaClassTranslator<Project, Class> {
 
-    public ConfigurationTranslator(
-            Speedment speedment, Generator generator, Project document) {
-        
-        super(speedment, generator, document, Class::of);
+    public ConfigurationTranslator(Project document) {
+        super(document, Class::of);
     }
     
     @Override

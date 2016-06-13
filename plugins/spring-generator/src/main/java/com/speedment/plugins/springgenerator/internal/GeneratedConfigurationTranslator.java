@@ -16,7 +16,6 @@
  */
 package com.speedment.plugins.springgenerator.internal;
 
-import com.speedment.common.codegen.Generator;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.STRING;
 import com.speedment.common.codegen.internal.model.value.TextValue;
 import com.speedment.common.codegen.model.AnnotationUsage;
@@ -26,10 +25,11 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.Type;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.plugins.springgenerator.configuration.SpeedmentConfiguration;
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
@@ -46,11 +46,11 @@ import org.springframework.core.env.Environment;
  */
 public final class GeneratedConfigurationTranslator 
 extends DefaultJavaClassTranslator<Project, Class> {
+    
+    private @Inject Injector injector;
 
-    public GeneratedConfigurationTranslator(
-            Speedment speedment, Generator generator, Project document) {
-        
-        super(speedment, generator, document, Class::of);
+    public GeneratedConfigurationTranslator(Project document) {
+        super(document, Class::of);
     }
     
     @Override
@@ -133,7 +133,7 @@ extends DefaultJavaClassTranslator<Project, Class> {
                         .forEachOrdered(table -> {
                             
                     final TranslatorSupport<Table> support = 
-                        new TranslatorSupport<>(getSpeedment(), table);
+                        injector.inject(new TranslatorSupport<>(table));
                     
                     file.add(Import.of(support.entityType()));
                     

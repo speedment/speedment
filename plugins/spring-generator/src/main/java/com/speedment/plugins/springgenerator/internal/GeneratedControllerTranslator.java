@@ -16,7 +16,6 @@
  */
 package com.speedment.plugins.springgenerator.internal;
 
-import com.speedment.common.codegen.Generator;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.LONG_PRIMITIVE;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.list;
 import com.speedment.common.codegen.internal.model.value.ReferenceValue;
@@ -28,9 +27,10 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.Type;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import java.util.stream.Collectors;
@@ -46,9 +46,10 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 public final class GeneratedControllerTranslator extends DefaultJavaClassTranslator<Table, Class> {
 
-    public GeneratedControllerTranslator(
-            Speedment speedment, Generator generator, Table document) {
-        super(speedment, generator, document, Class::of);
+    private @Inject Injector injector;
+    
+    public GeneratedControllerTranslator(Table document) {
+        super(document, Class::of);
     }
     
     @Override
@@ -58,7 +59,7 @@ public final class GeneratedControllerTranslator extends DefaultJavaClassTransla
                 
                 final Project project = getSupport().projectOrThrow();
                 final TranslatorSupport<Project> projectSupport = 
-                    new TranslatorSupport<>(getSpeedment(), project);
+                    injector.inject(new TranslatorSupport<>(project));
                 
                 final Type appType = Type.of(
                     projectSupport.basePackageName() + "." +
