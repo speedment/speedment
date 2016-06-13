@@ -261,7 +261,8 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         requireNonNull(postMapper);
         return getTable().columns()
             .filter(HasEnabled::isEnabled)
-            .map(naming()::fullNameOf)
+            .map(Column::getName)
+            .map(naming()::encloseField)
             .map(postMapper)
             .collect(joining(","));
     }
@@ -275,9 +276,15 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     private String sqlPrimaryKeyColumnList(Function<String, String> postMapper) {
         requireNonNull(postMapper);
         return getTable().primaryKeyColumns()
-            .map(naming()::fullNameOf)
+            .map(this::findColumn)
+            .map(Column::getName)
+            .map(naming()::encloseField)
             .map(postMapper)
             .collect(joining(" AND "));
+    }
+
+    private Column findColumn(PrimaryKeyColumn pkc) {
+        return pkc.findColumn().orElseThrow(() -> new SpeedmentException("Cannot find column for " + pkc));
     }
 
     /**
@@ -394,7 +401,8 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     private String persistColumnList(List<Column> cols) {
         return cols.stream()
-            .map(naming()::fullNameOf)
+            .map(Column::getName)
+            .map(naming()::encloseField)
             .collect(joining(","));
     }
 
