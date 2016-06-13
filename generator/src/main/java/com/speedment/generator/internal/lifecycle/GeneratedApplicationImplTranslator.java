@@ -16,13 +16,8 @@
  */
 package com.speedment.generator.internal.lifecycle;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.WILDCARD;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Generic;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.Type;
 import com.speedment.runtime.config.Project;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
@@ -54,18 +49,9 @@ public final class GeneratedApplicationImplTranslator extends DefaultJavaClassTr
     protected Class makeCodeGenModel(File file) {
         return newBuilder(file, getClassOrInterfaceName())
             .forEveryProject((clazz, project) -> {
-                file.add(Import.of(builderType()));
                 clazz.public_()
                     .setSupertype(Type.of(AbstractSpeedment.class))
-                    .add(generatedType())
-                    .add(Method.of("newApplicationBuilder",
-                        Type.of(AbstractApplicationBuilder.class)
-                            .add(Generic.of(WILDCARD))
-                            .add(Generic.of(WILDCARD))
-                        )
-                        .public_().add(OVERRIDE)
-                        .add("return new " + getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationBuilder();")
-                    );
+                    .add(generatedType());
             }).build();
     }
     
@@ -80,13 +66,6 @@ public final class GeneratedApplicationImplTranslator extends DefaultJavaClassTr
         return Type.of(
             getSupport().basePackageName() + ".generated.Generated" + 
             getSupport().typeName(getSupport().projectOrThrow()) + "Application"
-        );
-    }
-    
-    private Type builderType() {
-        return Type.of(
-            getSupport().basePackageName() + "." + 
-            getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationBuilder"
         );
     }
 }
