@@ -19,7 +19,6 @@ package com.speedment.maven;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.component.Component;
 import java.io.File;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -38,7 +37,7 @@ import static javafx.application.Application.launch;
 public final class ToolMojo extends AbstractSpeedmentMojo {
     
     @Parameter
-    private Class<? extends Component>[] components;
+    private String[] components;
     
     @Parameter(defaultValue = DEFAULT_CONFIG_LOCATION)
     private File configFile;
@@ -56,7 +55,7 @@ public final class ToolMojo extends AbstractSpeedmentMojo {
     }
 
     @Override
-    protected Class<? extends Component>[] components() {
+    protected String[] components() {
         return components;
     }
     

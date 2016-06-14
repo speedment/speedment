@@ -17,7 +17,6 @@
 package com.speedment.plugins.reactor.component;
 
 import static com.speedment.common.injector.State.RESOLVED;
-import com.speedment.common.injector.annotation.Execute;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.StandardTranslatorKey;
@@ -30,7 +29,6 @@ import com.speedment.plugins.reactor.internal.translator.GeneratedViewTranslator
 import com.speedment.plugins.reactor.internal.translator.ReactorTranslatorKey;
 import com.speedment.plugins.reactor.internal.translator.ViewImplTranslator;
 import com.speedment.plugins.reactor.internal.translator.ViewTranslator;
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.component.EventComponent;
 import com.speedment.runtime.config.Column;

@@ -18,7 +18,6 @@ package com.speedment.maven;
 
 import com.speedment.generator.TranslatorManager;
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
 import java.io.File;
@@ -37,7 +36,7 @@ import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_L
 public final class GenerateMojo extends AbstractSpeedmentMojo {
 
     @Parameter
-    private Class<? extends Component>[] components;
+    private String[] components;
 
     @Parameter(defaultValue = DEFAULT_CONFIG_LOCATION)
     private File configFile;
@@ -63,7 +62,7 @@ public final class GenerateMojo extends AbstractSpeedmentMojo {
     }
 
     @Override
-    protected Class<? extends Component>[] components() {
+    protected String[] components() {
         return components;
     }
 

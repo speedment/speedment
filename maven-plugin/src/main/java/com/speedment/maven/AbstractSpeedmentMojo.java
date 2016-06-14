@@ -35,22 +35,19 @@ import org.apache.maven.plugin.MojoFailureException;
 abstract class AbstractSpeedmentMojo extends AbstractMojo {
     
     private final static File DEFAULT_CONFIG = new File(DEFAULT_CONFIG_LOCATION);
-    private final SpeedmentBuilder<?, ?> builder;
 
     protected abstract File configLocation();
-    protected abstract Class<? extends Component>[] components();
+    protected abstract String[] components();
     protected abstract String launchMessage();
     protected abstract void execute(Speedment speedment) 
         throws MojoExecutionException, MojoFailureException;
     
-    protected AbstractSpeedmentMojo() {
-        builder = createBuilder();
-    }
+    protected AbstractSpeedmentMojo() {}
 
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
         getLog().info(launchMessage());    
-        execute(builder.build());
+        execute(createBuilder().build());
     }
     
     protected final boolean hasConfigFile() {
@@ -73,7 +70,7 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
         } else return true;
     }
     
-    private SpeedmentBuilder<?, ?> createBuilder() {
+    private SpeedmentBuilder<?, ?> createBuilder() throws MojoExecutionException {
         final SpeedmentBuilder<?, ?> result;
         
         if (hasConfigFile()) {
@@ -87,10 +84,20 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
         result.with(CodeGenerationComponentImpl.class);
         result.with(UserInterfaceComponentImpl.class);
         
-        final Class<? extends Component>[] components = components();
+        final String[] components = components();
         if (components != null) {
-            for (final Class<? extends Component> component : components()) {
-                result.with(component);
+            for (final String component : components()) {
+                try {
+                    final Class<?> uncasted = Class.forName(component);
+                    
+                    @SuppressWarnings("unchecked")
+                    final Class<Component> casted = (Class<Component>) uncasted;
+                    result.with(casted);
+                } catch (final ClassNotFoundException | ClassCastException ex) {
+                    throw new MojoExecutionException(
+                        "Specified class '" + component + "' is not a component.", ex
+                    );
+                }
             }
         }
         
