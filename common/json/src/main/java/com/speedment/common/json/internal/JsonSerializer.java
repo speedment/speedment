@@ -202,7 +202,7 @@ public final class JsonSerializer {
             case 1  : out.write(SPACE);
             case 0  : return;
             default :
-                final int count = tabSize * level - 16;
+                final int count = tabSize * level;
                 for (int i = 0; i < count; i++) {
                     out.write(SPACE);
                 }
