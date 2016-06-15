@@ -32,6 +32,19 @@ import java.util.stream.Stream;
  */
 @Api(version = "2.4")
 public interface StreamSupplierComponent extends Component {
+    
+    /**
+     * Does all the preparations required to start serving streams 
+     * before returning. The component must never be called before
+     * this method has returned.
+     */
+    void start();
+    
+    /**
+     * Stops the componenet, releasing any resources. When this method
+     * returns, the component must never be called again.
+     */
+    void stop();
 
     /**
      * Basic stream over all entities.
