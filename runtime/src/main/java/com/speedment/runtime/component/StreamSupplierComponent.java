@@ -27,43 +27,57 @@ import java.util.stream.Stream;
 /**
  * This Component interface is used to obtain streams for different tables.
  *
- * @author pemi
- * @since 2.2
+ * @author  Per Minborg
+ * @since   2.2.0
  */
-@Api(version = "2.3")
+@Api(version = "2.4")
 public interface StreamSupplierComponent extends Component {
-
-    @Override
-    default Class<StreamSupplierComponent> getComponentClass() {
-        return StreamSupplierComponent.class;
-    }
 
     /**
      * Basic stream over all entities.
      *
-     * @param <ENTITY> entity type
-     * @param entityClass the entity class
-     * @param decorator decorates the stream before building it
-     * @return a stream for the given entity class
+     * @param <ENTITY>     entity type
+     * @param entityClass  the entity class
+     * @param decorator    decorates the stream before building it
+     * @return             a stream for the given entity class
      */
     <ENTITY> Stream<ENTITY> stream(Class<ENTITY> entityClass, StreamDecorator decorator);
 
-    default <ENTITY, D, V extends Comparable<? super V>, F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>>
-            Optional<ENTITY> findAny(Class<ENTITY> entityClass, F field, V value) {
+    /**
+     * Finds a particular entity in the source where the specified field has 
+     * the specified value. This is a form of key-value lookup than can 
+     * potentially be more efficient with for an example foreign key references.
+     * 
+     * @param <ENTITY>     the entity type
+     * @param <D>          the JDBC type of the column
+     * @param <V>          the java type of the column
+     * @param <F>          the field type
+     * @param entityClass  the entity interface .class
+     * @param field        the field to select on
+     * @param value        the value of that field for the entity to return
+     * @return             entity found or empty if none existed with that value
+     */
+    default <ENTITY, D, 
+        V extends Comparable<? super V>, 
+        F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>
+    > Optional<ENTITY> findAny(Class<ENTITY> entityClass, F field, V value) {
         return stream(entityClass, StreamDecorator.IDENTITY)
-                .filter(field.equal(value))
-                .findAny();
+            .filter(field.equal(value))
+            .findAny();
     }
 
     /**
      * Returns if this stream component will return the same stream result over
      * time (immutable or analytics type of data).
      *
-     * @return if this stream component will return the same stream result over
-     * time.
+     * @return  {@code true} if the source is immutable
      */
     default boolean isImmutable() {
         return false;
     }
-
+    
+    @Override
+    default Class<StreamSupplierComponent> getComponentClass() {
+        return StreamSupplierComponent.class;
+    }
 }
