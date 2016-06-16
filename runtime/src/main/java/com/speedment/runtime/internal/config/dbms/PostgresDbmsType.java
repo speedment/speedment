@@ -17,7 +17,6 @@
 package com.speedment.runtime.internal.config.dbms;
 
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.RequiresInjectable;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.db.ConnectionUrlGenerator;
 import com.speedment.runtime.db.DatabaseNamingConvention;
@@ -36,6 +35,8 @@ import static com.speedment.runtime.db.metadata.TypeInfoMetaData.of;
 import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
 import com.speedment.runtime.internal.db.postgresql.PostgresqlDbmsMetadataHandler;
 import com.speedment.runtime.internal.db.postgresql.PostgresqlDbmsOperationHandler;
+import com.speedment.common.injector.annotation.IncludeInjectable;
+import static com.speedment.runtime.db.metadata.TypeInfoMetaData.of;
 
 /**
  * Created by fdirlikl on 11/13/2015.
@@ -44,7 +45,7 @@ import com.speedment.runtime.internal.db.postgresql.PostgresqlDbmsOperationHandl
  * @author  Per Minborg
  * @author  Emil Forslund
  */
-@RequiresInjectable({
+@IncludeInjectable({
     PostgresqlDbmsMetadataHandler.class,
     PostgresqlDbmsOperationHandler.class
 })

@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.internal.runtime;
 
+import com.speedment.runtime.ApplicationMetadata;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.exception.CyclicReferenceException;
 import com.speedment.runtime.Speedment;
@@ -29,28 +30,20 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasName;
-import com.speedment.runtime.internal.config.ProjectImpl;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.SpeedmentBuilder;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.component.PasswordComponent;
-import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
-import com.speedment.runtime.internal.util.document.DocumentTranscoder;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.runtime.manager.Manager;
 import com.speedment.runtime.util.tuple.Tuple2;
 import com.speedment.runtime.util.tuple.Tuple3;
 import com.speedment.runtime.util.tuple.Tuples;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import java.util.ArrayList;
-import static java.util.Objects.requireNonNull;
 import java.util.function.BiConsumer;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
@@ -78,12 +71,11 @@ public abstract class AbstractApplicationBuilder<
     private final List<Tuple2<Class<? extends Document>, BiConsumer<Injector, ? extends Document>>> withsAll;
     private final Injector.Builder injector;
 
-    private ApplicationMetadata speedmentApplicationMetadata;
     private boolean checkDatabaseConnectivity;
     private boolean validateRuntimeConfig;
 
-    protected AbstractApplicationBuilder(Class<? extends APP> applicationImplClass) {
-        this(Injector.builder().canInject(applicationImplClass));
+    protected AbstractApplicationBuilder(Class<? extends APP> applicationImplClass, Class<? extends ApplicationMetadata> metadataClass) {
+        this(Injector.builder().canInject(applicationImplClass, metadataClass));
     }
     
     protected AbstractApplicationBuilder(Injector.Builder injector) {
@@ -109,6 +101,12 @@ public abstract class AbstractApplicationBuilder<
     public <C extends Document & HasEnabled> BUILDER with(Class<C> type, BiConsumer<Injector, C> consumer) {
         requireNonNulls(type, consumer);
         withsAll.add(Tuples.of(type, consumer));
+        return self();
+    }
+
+    @Override
+    public BUILDER withParam(String key, String value) {
+        injector.withParam(key, value);
         return self();
     }
 
@@ -211,6 +209,12 @@ public abstract class AbstractApplicationBuilder<
         injector.canInject(componentImplType);
         return self();
     }
+    
+    @Override
+    public <M extends Manager<?>> BUILDER withManager(Class<M> managerImplType) {
+        injector.canInject(managerImplType);
+        return self();
+    }
 
     @Override
     public <C extends Component> BUILDER withCheckDatabaseConnectivity(boolean checkDatabaseConnectivity) {
@@ -221,12 +225,6 @@ public abstract class AbstractApplicationBuilder<
     @Override
     public <C extends Component> BUILDER withValidateRuntimeConfig(boolean validateRuntimeConfig) {
         this.validateRuntimeConfig = validateRuntimeConfig;
-        return self();
-    }
-
-    @Override
-    public <M extends Manager<?>> BUILDER withManager(Class<M> managerImplType) {
-        injector.canInject(managerImplType);
         return self();
     }
 
@@ -258,16 +256,8 @@ public abstract class AbstractApplicationBuilder<
      * @param injector  the injector to use
      */
     protected void loadAndSetProject(Injector injector) {
-        final ApplicationMetadata meta = getSpeedmentApplicationMetadata();
-        final Project project;
-        
-        if (meta != null) {
-            project = DocumentTranscoder.load(meta.getMetadata());
-        } else {
-            final Map<String, Object> data = new ConcurrentHashMap<>();
-            data.put(HasName.NAME, "Project");
-            project = new ProjectImpl(data);
-        }
+        final ApplicationMetadata meta = injector.getOrThrow(ApplicationMetadata.class);
+        final Project project = meta.makeProject();
 
         // Apply overidden item (if any) for all Documents of a given class
         withsAll.forEach(t2 -> {
@@ -299,8 +289,6 @@ public abstract class AbstractApplicationBuilder<
                 .filter(c -> name.equals(relativeName(c, Project.class, DATABASE_NAME)))
                 .forEachOrdered(doc -> consumer.accept(injector, doc));
         });
-
-        injector.getOrThrow(ProjectComponent.class).setProject(project);
     }
     
     /**
@@ -342,28 +330,5 @@ public abstract class AbstractApplicationBuilder<
         if (!SpeedmentVersion.isProductionMode()) {
             LOGGER.warn("This version is NOT INTENDED FOR PRODUCTION USE!");
         }
-    }
-
-    /**
-     * Sets the SpeedmentApplicationMetadata. The meta data describes the layout
-     * of the Project (i.e. Dbms:es, Schemas, Tables, Columns etc)
-     *
-     * @param metadata  to use
-     * @return          a reference to this instance
-     */
-    protected BUILDER setSpeedmentApplicationMetadata(ApplicationMetadata metadata) {
-        this.speedmentApplicationMetadata = requireNonNull(metadata);
-        return self();
-    }
-
-    /**
-     * Returns the application metadata that will be used to build the application
-     * class. The meta data describes the layout
-     * of the Project (i.e. Dbms:es, Schemas, Tables, Columns etc)
-     * 
-     * @return  the application metadata.
-     */
-    protected ApplicationMetadata getSpeedmentApplicationMetadata() {
-        return speedmentApplicationMetadata;
     }
 }

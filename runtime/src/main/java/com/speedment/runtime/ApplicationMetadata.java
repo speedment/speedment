@@ -14,7 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.runtime;
+package com.speedment.runtime;
+
+import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.config.Project;
 
 /**
  * This interface defines how a Speedment application can obtain its
@@ -23,14 +26,13 @@ package com.speedment.runtime.internal.runtime;
  * @author pemi
  * @since  2.0
  */
+@Api(version = "2.4")
 public interface ApplicationMetadata {
 
     /**
-     * Returns the meta data as a String that shall be used to build up the
-     * complete Project meta data.
-     *
-     * @return the meta data
+     * Transforms the metadata into a {@link Project} document.
+     * 
+     * @return  the created project document.
      */
-    String getMetadata();
-
+    Project makeProject();
 }

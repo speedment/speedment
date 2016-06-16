@@ -21,6 +21,7 @@
  */
 package com.speedment.generator;
 
+import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
@@ -31,11 +32,12 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mapper.identity.StringIdentityMapper;
 import com.speedment.runtime.config.trait.HasName;
-import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
+import com.speedment.runtime.internal.runtime.AbstractApplicationMetadata;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
+import java.util.Optional;
+import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 import org.junit.Before;
-import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -59,100 +61,15 @@ public abstract class SimpleModel {
     protected Table table2;
     protected Column column2;
 
-    private String quote(String s) {
-        return "\"" + s + "\"";
-    }
-
-    private String name(String s) {
-        return quote(HasName.NAME) + " : " + quote(s);
-    }
-
-    private String typeMapper(Class<? extends TypeMapper<?, ?>> tmc) {
-        return quote(Column.TYPE_MAPPER) + " : " + quote(tmc.getName());
-    }
-
-    private String dbTypeName(String dbmsTypeName) {
-        return quote(Dbms.TYPE_NAME) + " : " + quote(dbmsTypeName);
-    }
-
-    private String columnDatabaseType(String typeName) {
-        return quote(Column.DATABASE_TYPE) + " : " + quote(typeName);
-    }
-
-    private String array(String name, String... s) {
-        return quote(name) + " : [\n" + Stream.of(s)
-            .map(line -> line.replace("\n", "\n    "))
-            .collect(joining(",\n    ")
-        ) + "\n]";
-    }
-
-    private String objectWithKey(String name, String... s) {
-        return quote(name) + " : " + object(s);
-    }
-
-    private String object(String... s) {
-        return "{\n" + Stream.of(s)
-            .map(line -> line.replace("\n", "\n    "))
-            .collect(joining(",\n    ")) + "\n}";
-    }
-
     @Before
     public void simpleModelTestSetUp() {
 
-        final String json = "{"
-            + objectWithKey("config",
-                name("myProject"),
-                array(Project.DBMSES,
-                    object(name("myDbms"),
-                        dbTypeName("MySQL"),
-                        array(Dbms.SCHEMAS,
-                            object(
-                                name(SCHEMA_NAME),
-                                array(Schema.TABLES,
-                                    object(
-                                        name(TABLE_NAME),
-                                        array(Table.COLUMNS,
-                                            object(
-                                                name(COLUMN_NAME),
-                                                typeMapper(StringIdentityMapper.class),
-                                                columnDatabaseType(String.class.getName())
-                                            )
-                                        ),
-                                        array(Table.PRIMARY_KEY_COLUMNS,
-                                            object(
-                                                name(COLUMN_NAME)
-                                            )
-                                        )
-                                    ),
-                                    object(
-                                        name(TABLE_NAME2),
-                                        array(Table.COLUMNS,
-                                            object(
-                                                name(COLUMN_NAME2),
-                                                typeMapper(StringIdentityMapper.class),
-                                                columnDatabaseType(String.class.getName())
-                                            )
-                                        ),
-                                        array(Table.PRIMARY_KEY_COLUMNS,
-                                            object(
-                                                name(COLUMN_NAME2)
-                                            )
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-            + "}";
-
-        speedment = new DefaultApplicationBuilder(json)
+        speedment = new DefaultApplicationBuilder(SimpleMetadata.class)
             .with(CodeGenerationComponentImpl.class)
             .withCheckDatabaseConnectivity(false)
             .withValidateRuntimeConfig(false)
             .build();
-
+        
         project = speedment.project();
         dbms = project.dbmses().findAny().get();
         schema = dbms.schemas().findAny().get();
@@ -162,5 +79,97 @@ public abstract class SimpleModel {
 
         table2 = schema.tables().filter(t -> TABLE_NAME2.equals(t.getName())).findAny().get();
         column2 = table2.columns().findAny().get();
+    }
+    
+    private final static class SimpleMetadata extends AbstractApplicationMetadata {
+
+        private String quote(String s) {
+            return "\"" + s + "\"";
+        }
+
+        private String name(String s) {
+            return quote(HasName.NAME) + " : " + quote(s);
+        }
+
+        private String typeMapper(Class<? extends TypeMapper<?, ?>> tmc) {
+            return quote(Column.TYPE_MAPPER) + " : " + quote(tmc.getName());
+        }
+
+        private String dbTypeName(String dbmsTypeName) {
+            return quote(Dbms.TYPE_NAME) + " : " + quote(dbmsTypeName);
+        }
+
+        private String columnDatabaseType(String typeName) {
+            return quote(Column.DATABASE_TYPE) + " : " + quote(typeName);
+        }
+
+        private String array(String name, String... s) {
+            return quote(name) + " : [\n" + Stream.of(s)
+                .map(line -> line.replace("\n", "\n    "))
+                .collect(joining(",\n    ")
+            ) + "\n]";
+        }
+
+        private String objectWithKey(String name, String... s) {
+            return quote(name) + " : " + object(s);
+        }
+
+        private String object(String... s) {
+            return "{\n" + Stream.of(s)
+                .map(line -> line.replace("\n", "\n    "))
+                .collect(joining(",\n    ")) + "\n}";
+        }
+        
+        @Override
+        public Optional<String> getMetadata() {
+            return Optional.of("{"
+                + objectWithKey("config",
+                    name("myProject"),
+                    array(Project.DBMSES,
+                        object(name("myDbms"),
+                            dbTypeName("MySQL"),
+                            array(Dbms.SCHEMAS,
+                                object(
+                                    name(SCHEMA_NAME),
+                                    array(Schema.TABLES,
+                                        object(
+                                            name(TABLE_NAME),
+                                            array(Table.COLUMNS,
+                                                object(
+                                                    name(COLUMN_NAME),
+                                                    typeMapper(StringIdentityMapper.class),
+                                                    columnDatabaseType(String.class.getName())
+                                                )
+                                            ),
+                                            array(Table.PRIMARY_KEY_COLUMNS,
+                                                object(
+                                                    name(COLUMN_NAME)
+                                                )
+                                            )
+                                        ),
+                                        object(
+                                            name(TABLE_NAME2),
+                                            array(Table.COLUMNS,
+                                                object(
+                                                    name(COLUMN_NAME2),
+                                                    typeMapper(StringIdentityMapper.class),
+                                                    columnDatabaseType(String.class.getName())
+                                                )
+                                            ),
+                                            array(Table.PRIMARY_KEY_COLUMNS,
+                                                object(
+                                                    name(COLUMN_NAME2)
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+                + "}"
+            );
+        }
     }
 }

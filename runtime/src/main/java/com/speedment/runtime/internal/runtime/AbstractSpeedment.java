@@ -18,7 +18,6 @@ package com.speedment.runtime.internal.runtime;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.RequiresInjectable;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.component.ProjectComponent;
@@ -38,6 +37,7 @@ import com.speedment.runtime.internal.component.ResultSetMapperComponentImpl;
 import com.speedment.runtime.internal.component.TypeMapperComponentImpl;
 import com.speedment.runtime.internal.config.dbms.StandardDbmsTypes;
 import com.speedment.runtime.manager.Manager;
+import com.speedment.common.injector.annotation.IncludeInjectable;
 
 /**
  * An abstract base implementation of the {@link Speedment} interface.
@@ -45,7 +45,7 @@ import com.speedment.runtime.manager.Manager;
  * @author Emil Forslund
  * @since  2.4.0
  */
-@RequiresInjectable({
+@IncludeInjectable({
     ConnectionPoolComponentImpl.class,
     DbmsHandlerComponentImpl.class,
     EntityManagerImpl.class,

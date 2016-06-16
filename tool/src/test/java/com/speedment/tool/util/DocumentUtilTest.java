@@ -31,6 +31,7 @@ import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DAT
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
 import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
+import com.speedment.runtime.internal.runtime.EmptyApplicationMetadata;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
 import org.junit.Test;
@@ -252,7 +253,7 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
     public void testRelativeName_5args() {
         System.out.println("Testing: relativeName(Document, Class, Name, String, Function<String, String>)");
 
-        final JavaLanguageNamer namer = new DefaultApplicationBuilder()
+        final JavaLanguageNamer namer = new DefaultApplicationBuilder(EmptyApplicationMetadata.class)
             .with(CodeGenerationComponentImpl.class)
             .build()
             .getOrThrow(JavaLanguageNamer.class);

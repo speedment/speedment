@@ -46,9 +46,7 @@ import static java.util.stream.Collectors.toSet;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.component.ManagerComponent;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import java.util.LinkedList;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import static java.util.Objects.requireNonNull;
 
@@ -128,8 +126,7 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
                     )
                     .add(Constructor.of()
                         .protected_()
-                        .add("super(" + getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationImpl.class);")
-                        .add("setSpeedmentApplicationMetadata(new Generated" + getSupport().typeName(getSupport().projectOrThrow()) + METADATA + "());")
+                        .add("super(" + getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationImpl.class, Generated" + getSupport().typeName(getSupport().projectOrThrow()) + METADATA + ".class);")
                     )
                     .add(build);
             }).build();

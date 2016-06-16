@@ -90,6 +90,17 @@ public interface SpeedmentBuilder<APP extends Speedment, BUILDER extends Speedme
     <C extends Document & HasEnabled> BUILDER with(Class<C> type, BiConsumer<Injector, C> consumer);
     
     /**
+     * Sets a config parameter that will be set automatically in all instances
+     * created during initialization. This parameter can override settings in
+     * the settings file.
+     * 
+     * @param key    the key to set
+     * @param value  the new value
+     * @return       this instance
+     */
+    BUILDER withParam(String key, String value);
+    
+    /**
      * Configures a password for all dbmses in this project. The password will
      * then be applied after the configuration has been read and after the
      * System properties have been applied.

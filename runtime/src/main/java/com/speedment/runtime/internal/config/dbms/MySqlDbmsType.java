@@ -17,7 +17,6 @@
 package com.speedment.runtime.internal.config.dbms;
 
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.RequiresInjectable;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.db.ConnectionUrlGenerator;
 import com.speedment.runtime.db.DatabaseNamingConvention;
@@ -33,6 +32,7 @@ import java.util.Set;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
+import com.speedment.common.injector.annotation.IncludeInjectable;
 
 
 /**
@@ -40,7 +40,7 @@ import java.util.stream.Stream;
  * @author  Per Minborg
  * @author  Emil Forslund
  */
-@RequiresInjectable({
+@IncludeInjectable({
     MySqlDbmsMetadataHandler.class,
     MySqlDbmsOperationHandler.class
 })

@@ -18,7 +18,6 @@ package com.speedment.tool.internal.component;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.RequiresInjectable;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.common.mapstream.MapStream;
@@ -38,8 +37,6 @@ import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.internal.config.immutable.ImmutableProject;
 import com.speedment.runtime.internal.util.Settings;
-import static com.speedment.runtime.internal.util.TextUtil.alignRight;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.config.DocumentProperty;
 import java.util.Optional;
@@ -80,7 +77,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import static java.util.stream.Collectors.toList;
@@ -106,12 +102,16 @@ import javafx.util.Pair;
 import static com.speedment.runtime.internal.util.TextUtil.alignRight;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
+import com.speedment.common.injector.annotation.IncludeInjectable;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Emil Forslund
  */
-@RequiresInjectable({
+@IncludeInjectable({
     DocumentPropertyComponentImpl.class,
     SpeedmentBrand.class,
     InjectionLoader.class,

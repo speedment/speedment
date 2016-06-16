@@ -15,6 +15,7 @@ import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.config.DbmsImpl;
 import com.speedment.runtime.internal.config.immutable.ImmutableProject;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
+import static com.speedment.runtime.internal.runtime.DefaultApplicationMetadata.METADATA_LOCATION;
 import com.speedment.runtime.internal.util.Settings;
 import com.speedment.runtime.internal.util.document.DocumentTranscoder;
 import com.speedment.runtime.util.ProgressMeasure;
@@ -149,8 +150,9 @@ public final class ConfigFileHelper {
                 switch (reuse) {
                     case CREATE_A_NEW_STAGE:
                         final Stage newStage = new Stage();
-                        final Injector.Builder injectorBuilder = injector.newBuilder();
-                        final Speedment newSpeedment = new DefaultApplicationBuilder(injectorBuilder, file).build();
+                        final Injector.Builder injectorBuilder = injector.newBuilder()
+                            .withParam(METADATA_LOCATION, DEFAULT_CONFIG_LOCATION);
+                        final Speedment newSpeedment = new DefaultApplicationBuilder(injectorBuilder).build();
                         
                         MainApp.setInjector(newSpeedment.getOrThrow(Injector.class));
                         final MainApp main = new MainApp();

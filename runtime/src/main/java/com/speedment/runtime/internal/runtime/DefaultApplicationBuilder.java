@@ -16,13 +16,9 @@
  */
 package com.speedment.runtime.internal.runtime;
 
+import com.speedment.runtime.ApplicationMetadata;
 import com.speedment.common.injector.Injector;
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.exception.SpeedmentException;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 
 /**
  *
@@ -31,51 +27,12 @@ import java.nio.file.Files;
 public final class DefaultApplicationBuilder extends
     AbstractApplicationBuilder<Speedment, DefaultApplicationBuilder> {
 
-    private final ApplicationMetadata metadata; // Can be null.
-
-    /**
-     * Constructs a new DefaultApplicationBuilder with an empty
-     * domain model.
-     */
-    public DefaultApplicationBuilder() {
-        this((File) null);
-    }
-
-    /**
-     * Constructs a new DefaultApplicationBuilder from the UTF-8
-     * encoded configuration file.
-     *
-     * @param configFile  UTF-8 encoded configuration file
-     */
-    public DefaultApplicationBuilder(File configFile) {
-        this(loadMetadataFrom(configFile));
+    public DefaultApplicationBuilder(Class<? extends ApplicationMetadata> metadataClass) {
+        super(SpeedmentImpl.class, metadataClass);
     }
     
-    /**
-     * Constructs a new DefaultApplicationBuilder from the specified
-     * json string.
-     *
-     * @param json  json encoded domain model
-     */
-    public DefaultApplicationBuilder(String json) {
-        super(SpeedmentImpl.class);
-        if (json == null) metadata = null;
-        else metadata = () -> json;
-    }
-    
-    /**
-     * Constructs a new DefaultApplicationBuilder from the specified
-     * json string, using the builder specified instead of the default
-     * one.
-     *
-     * @param injector  the injector builder to use
-     * @param json      json encoded domain model
-     */
-    public DefaultApplicationBuilder(Injector.Builder injector, File configFile) {
-        super(injector.canInject(SpeedmentImpl.class));
-        final String json = loadMetadataFrom(configFile);
-        if (json == null) metadata = null;
-        else metadata = () -> json;
+    public DefaultApplicationBuilder(Injector.Builder injector) {
+        super(injector);
     }
 
     @Override
@@ -84,28 +41,5 @@ public final class DefaultApplicationBuilder extends
     }
 
     @Override
-    protected ApplicationMetadata getSpeedmentApplicationMetadata() {
-        return metadata;
-    }
-
-    @Override
     protected void printWelcomeMessage(Injector injector) {}
-
-    private static String loadMetadataFrom(File configFile) {
-        if (configFile != null) {
-            final String json;
-            try {
-                final byte[] content = Files.readAllBytes(configFile.toPath());
-                json = new String(content, StandardCharsets.UTF_8);
-            } catch (final IOException ex) {
-                throw new SpeedmentException(
-                    "Could not load json-file from path '" + configFile.getAbsolutePath() + "'.", ex
-                );
-            }
-
-            return json;
-        } else {
-            return null;
-        }
-    }
 }

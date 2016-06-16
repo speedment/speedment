@@ -49,7 +49,7 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     @Override
     public Stream<ENTITY> stream(StreamDecorator decorator) {
         return streamSupplierComponent
-                .stream(getEntityClass(), decorator);
+            .stream(getEntityClass(), decorator);
     }
 
     @Override

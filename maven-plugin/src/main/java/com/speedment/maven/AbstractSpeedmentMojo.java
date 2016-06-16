@@ -21,6 +21,9 @@ import com.speedment.runtime.Speedment;
 import com.speedment.runtime.SpeedmentBuilder;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
+import com.speedment.runtime.internal.runtime.DefaultApplicationMetadata;
+import static com.speedment.runtime.internal.runtime.DefaultApplicationMetadata.METADATA_LOCATION;
+import com.speedment.runtime.internal.runtime.EmptyApplicationMetadata;
 import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
 import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 import java.io.File;
@@ -74,11 +77,13 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
         final SpeedmentBuilder<?, ?> result;
         
         if (hasConfigFile()) {
-            result = new DefaultApplicationBuilder(configLocation());
+            result = new DefaultApplicationBuilder(DefaultApplicationMetadata.class)
+                .withParam(METADATA_LOCATION, configLocation().getAbsolutePath());
         } else if (hasConfigFile(DEFAULT_CONFIG)) {
-            result = new DefaultApplicationBuilder(DEFAULT_CONFIG);
+            result = new DefaultApplicationBuilder(DefaultApplicationMetadata.class)
+                .withParam(METADATA_LOCATION, DEFAULT_CONFIG_LOCATION);
         } else {
-            result = new DefaultApplicationBuilder();
+            result = new DefaultApplicationBuilder(EmptyApplicationMetadata.class);
         }
         
         result.with(CodeGenerationComponentImpl.class);

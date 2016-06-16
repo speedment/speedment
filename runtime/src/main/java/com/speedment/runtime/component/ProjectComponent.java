@@ -40,7 +40,7 @@ public interface ProjectComponent extends Component {
      * @return the current {@link Project}
      */
     Project getProject();
-
+    
     /**
      * Sets the current {@link Project}.
      *

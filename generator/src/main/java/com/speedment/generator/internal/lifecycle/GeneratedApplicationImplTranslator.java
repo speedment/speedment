@@ -27,7 +27,6 @@ import com.speedment.common.codegen.model.Type;
 import com.speedment.common.codegen.model.Value;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.RequiresInjectable;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.runtime.config.Project;
@@ -43,6 +42,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toSet;
+import com.speedment.common.injector.annotation.IncludeInjectable;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 
 /**
  *
@@ -84,7 +85,7 @@ public final class GeneratedApplicationImplTranslator extends DefaultJavaClassTr
 //                    .keys()
 //                    .collect(toSet());
 //                
-//                final AnnotationUsage requireInjectable = AnnotationUsage.of(Type.of(RequiresInjectable.class));
+//                final AnnotationUsage requireInjectable = AnnotationUsage.of(Type.of(IncludeInjectable.class));
 //                final List<Value<?>> requirements = new LinkedList<>();
 //                
 //                traverseOver(project, Table.class)

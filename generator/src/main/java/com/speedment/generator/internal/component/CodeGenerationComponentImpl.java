@@ -33,7 +33,6 @@ import com.speedment.common.injector.Injector;
 import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.RequiresInjectable;
 import com.speedment.generator.internal.entity.EntityImplTranslator;
 import com.speedment.generator.internal.entity.EntityTranslator;
 import com.speedment.generator.internal.entity.GeneratedEntityImplTranslator;
@@ -63,8 +62,11 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
+import com.speedment.common.injector.annotation.IncludeInjectable;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
-@RequiresInjectable({
+@IncludeInjectable({
     TranslatorManagerImpl.class,
     DefaultJavaLanguageNamer.class,
     JavaGenerator.class

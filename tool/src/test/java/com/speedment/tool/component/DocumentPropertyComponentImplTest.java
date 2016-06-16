@@ -26,6 +26,7 @@ import com.speedment.runtime.config.mutator.DbmsMutator;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
+import com.speedment.runtime.internal.runtime.EmptyApplicationMetadata;
 import com.speedment.tool.config.AbstractChildDocumentProperty;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.config.DbmsProperty;
@@ -61,7 +62,7 @@ public class DocumentPropertyComponentImplTest {
 
     @Before
     public void setUp() {
-        speedment = new DefaultApplicationBuilder()
+        speedment = new DefaultApplicationBuilder(EmptyApplicationMetadata.class)
             .with(CodeGenerationComponentImpl.class)
             .with(UserInterfaceComponentImpl.class)
             .withCheckDatabaseConnectivity(false)

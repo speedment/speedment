@@ -22,13 +22,12 @@ import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
+import com.speedment.runtime.internal.runtime.DefaultApplicationMetadata;
 import com.speedment.runtime.internal.util.EmailUtil;
 import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
 import com.speedment.tool.internal.util.InjectionLoader;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import static java.util.Objects.requireNonNull;
-import static javafx.application.Application.launch;
 import static java.util.Objects.requireNonNull;
 import static javafx.application.Application.launch;
 
@@ -51,7 +50,7 @@ public final class MainApp extends Application {
         
         if (INJECTOR == null) {
             LOGGER.warn("Creating new Speedment instance for UI session.");
-            INJECTOR = new DefaultApplicationBuilder()
+            INJECTOR = new DefaultApplicationBuilder(DefaultApplicationMetadata.class)
                 .with(CodeGenerationComponentImpl.class)
                 .with(UserInterfaceComponentImpl.class)
                 .build().getOrThrow(Injector.class);

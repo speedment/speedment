@@ -17,7 +17,6 @@
 package com.speedment.runtime.internal.db;
 
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.RequiresInjectable;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.component.DbmsHandlerComponent;
@@ -74,6 +73,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import com.speedment.common.injector.annotation.IncludeInjectable;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -81,7 +83,7 @@ import java.util.function.Supplier;
  * @author  Per Minborg
  * @since   2.4.0
  */
-@RequiresInjectable(JavaTypeMap.class)
+@IncludeInjectable(JavaTypeMap.class)
 public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler {
     
     private final static Logger LOGGER = LoggerManager.getLogger(AbstractDbmsMetadataHandler.class);
