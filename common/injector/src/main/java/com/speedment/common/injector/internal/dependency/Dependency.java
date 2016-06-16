@@ -20,7 +20,8 @@ import com.speedment.common.injector.State;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   1.0.0
  */
 public interface Dependency {
     

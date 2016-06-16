@@ -10,7 +10,8 @@ import java.util.Set;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   1.0.0
  */
 final class InjectorDependencyNode implements DependencyNode {
 
@@ -33,7 +34,7 @@ final class InjectorDependencyNode implements DependencyNode {
 
     @Override
     public State getCurrentState() {
-        return State.STARTED;
+        return running ? State.STARTED : State.STOPPED;
     }
 
     @Override

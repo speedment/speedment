@@ -20,7 +20,6 @@ import com.speedment.common.injector.internal.dependency.Dependency;
 import com.speedment.common.injector.internal.dependency.DependencyNode;
 import com.speedment.common.injector.State;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

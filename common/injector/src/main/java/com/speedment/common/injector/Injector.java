@@ -21,6 +21,7 @@ import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.internal.InjectorImpl;
+import java.nio.file.Path;
 import java.util.Optional;
 
 /**
@@ -118,6 +119,24 @@ public interface Injector {
          *                                        have a default constructor.
          */
         Builder canInject(Class<?>... injectableTypes) throws NoDefaultConstructorException;
+        
+        /**
+         * Overrides a particular configuration parameter in the config file
+         * with the specified value.
+         * 
+         * @param key    the key to override
+         * @param value  the new value
+         * @return       a reference to this builder
+         */
+        Builder withParam(String key, String value);
+        
+        /**
+         * Sets the location of the configuration file.
+         * 
+         * @param configFile  the new config file location
+         * @return            a reference to this builder
+         */
+        Builder withConfigFileLocation(Path configFile);
         
         /**
          * Builds the {@link Injector} instance, organizing the 

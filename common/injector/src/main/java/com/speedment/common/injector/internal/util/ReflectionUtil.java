@@ -21,7 +21,8 @@ import java.lang.reflect.Method;
 import java.util.stream.Stream;
 
 /**
- *
+ * Some common utility methods for analyzing classes with reflection.
+ * 
  * @author  Emil Forslund
  * @since   1.0.0
  */

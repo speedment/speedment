@@ -25,23 +25,37 @@ import com.speedment.common.injector.internal.dependency.Execution;
 import com.speedment.common.injector.internal.dependency.impl.DependencyGraphImpl;
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
 import com.speedment.common.injector.State;
-import com.speedment.common.injector.annotation.RequiresInjectable;
+import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.internal.util.ReflectionUtil;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableSet;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
 import java.util.concurrent.atomic.AtomicBoolean;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import java.util.Properties;
+import com.speedment.common.injector.annotation.IncludeInjectable;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -52,13 +66,17 @@ import static java.util.stream.Collectors.joining;
  */
 public final class InjectorImpl implements Injector {
     
+    private final static Logger LOGGER = LoggerManager.getLogger(Injector.class);
+    
     private final static State[] STATES = State.values();
     private final Set<Class<?>> injectables;
     private final List<Object> instances;
+    private final Injector.Builder builder;
     
-    private InjectorImpl(Set<Class<?>> injectables, List<Object> instances) {
+    private InjectorImpl(Set<Class<?>> injectables, List<Object> instances, Injector.Builder builder) {
         this.injectables = requireNonNull(injectables);
         this.instances   = requireNonNull(instances);
+        this.builder     = requireNonNull(builder);
     }
     
     @Override
@@ -121,7 +139,7 @@ public final class InjectorImpl implements Injector {
                                         .map(p -> p.getType().getSimpleName().substring(0, 1))
                                         .collect(joining(", ")) + ")";
 
-                                System.out.printf("| -> %-76s |%n", shortMethodName);
+                                LOGGER.debug(String.format("| -> %-76s |%n", shortMethodName));
 
                                 try {
                                     m.invoke(instance, params);
@@ -137,16 +155,21 @@ public final class InjectorImpl implements Injector {
                         n.setState(State.STOPPED);
                         hasAnythingChanged.set(true);
 
-                        System.out.printf("| %-66s %12s |%n", 
+                        LOGGER.debug(String.format(
+                            "| %-66s %12s |%n", 
                             n.getRepresentedType().getSimpleName(), 
                             State.STOPPED.name()
-                        );
+                        ));
                     }
                 });
 
             if (!hasAnythingChanged.get()) {
                 throw new IllegalStateException(
-                    "Injector appears to be stuck in an infinite loop."
+                    "Injector appears to be stuck in an infinite loop. The following componenets have not been stopped: " + 
+                        unfinished.stream()
+                            .map(DependencyNode::getRepresentedType)
+                            .map(Class::getSimpleName)
+                            .collect(toSet())
                 );
             }
         }
@@ -154,7 +177,7 @@ public final class InjectorImpl implements Injector {
 
     @Override
     public Injector.Builder newBuilder() {
-        return new Builder(injectables);
+        return builder;
     }
     
     private <T> T findIn(Class<T> type, boolean required) {
@@ -182,7 +205,7 @@ public final class InjectorImpl implements Injector {
     }
     
     private static void printLine() {
-        System.out.println("+---------------------------------------------------------------------------------+");
+        LOGGER.debug("+---------------------------------------------------------------------------------+");
     }
     
     private <T> void injectFields(T instance) {
@@ -206,12 +229,11 @@ public final class InjectorImpl implements Injector {
             try {
                 field.set(instance, value);
             } catch (final IllegalAccessException ex) {
-                throw new RuntimeException(
-                    "Could not access field '" + field.getName() + 
+                final String err = "Could not access field '" + field.getName() + 
                     "' in class '" + value.getClass().getName() + 
-                    "' of type '" + field.getType() + 
-                    "'.", ex
-                );
+                    "' of type '" + field.getType() + "'.";
+                LOGGER.error(ex, err);
+                throw new RuntimeException(err, ex);
             }
         }
     }
@@ -223,6 +245,8 @@ public final class InjectorImpl implements Injector {
     private final static class Builder implements Injector.Builder {
         
         private final Set<Class<?>> injectables;
+        private final Map<String, String> overriddenParams;
+        private Path configFileLocation;
         
         private Builder() {
             this(Collections.emptySet());
@@ -231,6 +255,8 @@ public final class InjectorImpl implements Injector {
         private Builder(Set<Class<?>> injectables) {
             requireNonNull(injectables);
             this.injectables = new LinkedHashSet<>(injectables);
+            this.overriddenParams = new HashMap<>();
+            this.configFileLocation = Paths.get("settings.properties");
         }
 
         @Override
@@ -242,9 +268,9 @@ public final class InjectorImpl implements Injector {
                     injectables.add(type);
                     
                     ReflectionUtil.traverseAncestors(type)
-                        .filter(t -> t.isAnnotationPresent(RequiresInjectable.class))
-                        .map(t -> t.getAnnotation(RequiresInjectable.class))
-                        .map(RequiresInjectable::value)
+                        .filter(t -> t.isAnnotationPresent(IncludeInjectable.class))
+                        .map(t -> t.getAnnotation(IncludeInjectable.class))
+                        .map(IncludeInjectable::value)
                         .forEach(this::canInject);
                 });
             
@@ -252,19 +278,38 @@ public final class InjectorImpl implements Injector {
         }
 
         @Override
+        public Builder withConfigFileLocation(Path configFile) {
+            this.configFileLocation = requireNonNull(configFile);
+            return this;
+        }
+
+        @Override
+        public Builder withParam(String key, String value) {
+            overriddenParams.put(key, value);
+            return this;
+        }
+
+        @Override
         public Injector build() throws InstantiationException, NoDefaultConstructorException {
+            // Load settings
+            final File configFile = configFileLocation.toFile();
+            final Properties properties = loadProperties(configFile);
+            overriddenParams.forEach(properties::setProperty);
+            
             final DependencyGraph graph = DependencyGraphImpl.create(injectables);
             final LinkedList<Object> instances = new LinkedList<>();
             
             // Create an instance of every injectable type
             for (final Class<?> injectable : injectables) {
-                instances.addFirst(newInstance(injectable));
+                final Object instance = newInstance(injectable, properties);
+                instances.addFirst(instance);
             }
             
             // Build the Injector
             final Injector injector = new InjectorImpl(
                 unmodifiableSet(new LinkedHashSet<>(injectables)),
-                unmodifiableList(instances)
+                unmodifiableList(instances),
+                this
             );
             
             // Set the auto-injected fields
@@ -338,7 +383,7 @@ public final class InjectorImpl implements Injector {
                                             .map(p -> p.getType().getSimpleName().substring(0, 1))
                                             .collect(joining(", ")) + ")";
                                     
-                                    System.out.printf("| -> %-76s |%n", shortMethodName);
+                                    LOGGER.debug(String.format("| -> %-76s |%n", shortMethodName));
 
                                     try {
                                         m.invoke(instance, params);
@@ -354,10 +399,11 @@ public final class InjectorImpl implements Injector {
                             n.setState(state);
                             hasAnythingChanged.set(true);
 
-                            System.out.printf("| %-66s %12s |%n", 
+                            LOGGER.debug(String.format(
+                                "| %-66s %12s |%n", 
                                 n.getRepresentedType().getSimpleName(), 
-                                state.name()
-                            );
+                                State.STOPPED.name()
+                            ));
                         }
                     });
                 
@@ -369,17 +415,104 @@ public final class InjectorImpl implements Injector {
             }
             
             printLine();
-            System.out.printf("| %-79s |%n", "All " + instances.size() + " components have been configured!");
+            LOGGER.debug(String.format(
+                "| %-79s |%n", 
+                "All " + instances.size() + " components have been configured!"
+            ));
             printLine();
             
             return injector;
         }
         
-        private static <T> T newInstance(Class<T> type) throws InstantiationException, NoDefaultConstructorException {
+        private static Properties loadProperties(File configFile) {
+            final Properties properties = new Properties();
+            if (configFile.exists() && configFile.canRead()) {
+                
+                try (final InputStream in = new FileInputStream(configFile)) {
+                    properties.load(in);
+                } catch (final IOException ex) {
+                    final String err = "Error loading default settings from " + 
+                        configFile.getAbsolutePath() + "-file.";
+                    LOGGER.error(ex, err);
+                    throw new RuntimeException(err, ex);
+                }
+            } else {
+                LOGGER.info(
+                    "No configuration file '" + 
+                    configFile.getAbsolutePath() + "' found."
+                );
+            }
+            
+            return properties;
+        }
+        
+        private static <T> T newInstance(Class<T> type, Properties properties) throws InstantiationException, NoDefaultConstructorException {
             try {
                 final Constructor<T> constr = type.getDeclaredConstructor();
                 constr.setAccessible(true);
-                return constr.newInstance();
+                final T instance = constr.newInstance();
+                
+                traverseFields(type)
+                    .filter(f -> f.isAnnotationPresent(Config.class))
+                    .forEach(f -> {
+                        final Config config = f.getAnnotation(Config.class);
+                        
+                        final String serialized;
+                        if (properties.containsKey(config.name())) {
+                            serialized = properties.getProperty(config.name());
+                        } else {
+                            serialized = config.value();
+                        }
+                        
+                        f.setAccessible(true);
+                        
+                        try {
+                            if (Boolean.class.isAssignableFrom(f.getType())) {
+                                f.set(instance, Boolean.parseBoolean(serialized));
+                            } else if (Byte.class.isAssignableFrom(f.getType())) {
+                                f.set(instance, Byte.parseByte(serialized));
+                            } else if (Short.class.isAssignableFrom(f.getType())) {
+                                f.set(instance, Short.parseShort(serialized));
+                            } else if (Integer.class.isAssignableFrom(f.getType())) {
+                                f.set(instance, Integer.parseInt(serialized));
+                            } else if (Long.class.isAssignableFrom(f.getType())) {
+                                f.set(instance, Long.parseLong(serialized));
+                            } else if (Float.class.isAssignableFrom(f.getType())) {
+                                f.set(instance, Float.parseFloat(serialized));
+                            } else if (Double.class.isAssignableFrom(f.getType())) {
+                                f.set(instance, Double.parseDouble(serialized));
+                            } else if (String.class.isAssignableFrom(f.getType())) {
+                                f.set(instance, serialized);
+                            } else if (Character.class.isAssignableFrom(f.getType())) {
+                                if (serialized.length() == 1) {
+                                    f.set(instance, serialized.charAt(0));
+                                } else {
+                                    throw new IllegalArgumentException(
+                                        "Value '" + serialized + 
+                                        "' is to long to be parsed into a field of type '" + 
+                                        f.getType().getName() + "'."
+                                    );
+                                }
+                            } else if (File.class.isAssignableFrom(f.getType())) {
+                                f.set(instance, new File(serialized));
+                            } else if (URL.class.isAssignableFrom(f.getType())) {
+                                try {
+                                    f.set(instance, new URL(serialized));
+                                } catch (final MalformedURLException ex) {
+                                    throw new IllegalArgumentException(
+                                        "Specified URL '" + serialized + "' is malformed.", ex
+                                    );
+                                }
+                            }
+                        } catch (final IllegalAccessException | IllegalArgumentException ex) {
+                            throw new RuntimeException(
+                                "Failed to set config parameter '" + config.name() + 
+                                "' in class '" + type.getName() + "'.", ex
+                            );
+                        }
+                    });
+                
+                return instance;
                 
             } catch (final NoSuchMethodException ex) {
                 throw new NoDefaultConstructorException(

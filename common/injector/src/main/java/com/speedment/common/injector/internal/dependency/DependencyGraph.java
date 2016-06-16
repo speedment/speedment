@@ -21,7 +21,8 @@ import java.util.stream.Stream;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   1.0.0
  */
 public interface DependencyGraph {
     
