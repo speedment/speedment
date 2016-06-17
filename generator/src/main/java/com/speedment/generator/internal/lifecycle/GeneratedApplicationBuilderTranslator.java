@@ -31,7 +31,9 @@ import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.common.codegen.internal.model.JavadocImpl;
 import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.AUTHOR;
+import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
+import static com.speedment.common.codegen.internal.util.Formatting.tab;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
@@ -48,6 +50,7 @@ import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.component.ManagerComponent;
 import java.util.LinkedList;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
+import com.speedment.runtime.util.CollectorUtil;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -85,18 +88,24 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
                     .keys()
                     .collect(toSet());
                 
+                final List<String> managers = new LinkedList<>();
                 final List<String> managerImpls = new LinkedList<>();
 
                 traverseOver(project, Table.class)
                     .filter(HasEnabled::test)
                     .forEachOrdered(t -> {
                         final TranslatorSupport<Table> support = injector.inject(new TranslatorSupport<>(t));
-                        final Type managerType = support.managerImplType();
+                        final Type managerType = support.managerType();
+                        final Type managerImplType = support.managerImplType();
+                        
                         if (ambigousNames.contains(t.getName())) {
-                            managerImpls.add(managerType.getName());
+                            managers.add(managerType.getName());
+                            managerImpls.add(managerImplType.getName());
                         } else {
                             file.add(Import.of(managerType));
-                            managerImpls.add(shortName(managerType.getName()));
+                            file.add(Import.of(managerImplType));
+                            managers.add(shortName(managerType.getName()));
+                            managerImpls.add(shortName(managerImplType.getName()));
                         }
                     });
                 
@@ -112,22 +121,38 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
                         ".class);"
                     );
                 
-                managerImpls.stream()
-                    .map(s -> new StringBuilder("managers.put(injector.inject(new ").append(s).append("()));"))
+                managers.stream()
+                    .map(s -> new StringBuilder("managers.put(injector.getOrThrow(").append(s).append(".class));"))
                     .map(StringBuilder::toString)
                     .forEachOrdered(build::add);
                 
                 build.add("return injector.getOrThrow(" + getSupport().typeName(getSupport().projectOrThrow()) + "Application.class);");
 
+                final Constructor constr = Constructor.of().protected_();
+                
+                final StringBuilder constructorBody = new StringBuilder("super(").append(nl());
+                constructorBody.append(tab()).append(getSupport().typeName(getSupport().projectOrThrow())).append("ApplicationImpl.class,").append(nl());
+                constructorBody.append(tab()).append("Generated").append(getSupport().typeName(getSupport().projectOrThrow())).append(METADATA + ".class");
+                
+                final String separator = "," + nl() + tab();
+                if (!managerImpls.isEmpty()) {
+                    
+                    constructorBody.append(
+                        managerImpls.stream()
+                            .map(s -> s + ".class")
+                            .collect(CollectorUtil.joinIfNotEmpty(separator, separator, ""))
+                    );
+                }
+                
+                constructorBody.append(nl()).append(");");
+                constr.add(constructorBody.toString());
+                
                 clazz.public_().abstract_()
                     .setSupertype(Type.of(AbstractApplicationBuilder.class)
                         .add(Generic.of().add(applicationType()))
                         .add(Generic.of().add(builderType()))
                     )
-                    .add(Constructor.of()
-                        .protected_()
-                        .add("super(" + getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationImpl.class, Generated" + getSupport().typeName(getSupport().projectOrThrow()) + METADATA + ".class);")
-                    )
+                    .add(constr)
                     .add(build);
             }).build();
     }
