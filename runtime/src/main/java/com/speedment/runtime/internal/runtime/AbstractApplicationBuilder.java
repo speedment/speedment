@@ -74,8 +74,16 @@ public abstract class AbstractApplicationBuilder<
     private boolean checkDatabaseConnectivity;
     private boolean validateRuntimeConfig;
 
-    protected AbstractApplicationBuilder(Class<? extends APP> applicationImplClass, Class<? extends ApplicationMetadata> metadataClass) {
-        this(Injector.builder().canInject(applicationImplClass, metadataClass));
+    @SuppressWarnings("varargs")
+    protected AbstractApplicationBuilder(
+            Class<? extends APP> applicationImplClass, 
+            Class<? extends ApplicationMetadata> metadataClass,
+            Class<? extends Manager<?>>... managerClasses) {
+        
+        this(Injector.builder()
+            .canInject(applicationImplClass, metadataClass)
+            .canInject(managerClasses)
+        );
     }
     
     protected AbstractApplicationBuilder(Injector.Builder injector) {
@@ -212,6 +220,7 @@ public abstract class AbstractApplicationBuilder<
     
     @Override
     public <M extends Manager<?>> BUILDER withManager(Class<M> managerImplType) {
+        requireNonNull(managerImplType);
         injector.canInject(managerImplType);
         return self();
     }
