@@ -55,8 +55,10 @@ import java.util.Properties;
 import com.speedment.common.injector.annotation.IncludeInjectable;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
+import java.util.Arrays;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 /**
  * The default implementation of the {@link Injector} interface.
@@ -139,7 +141,7 @@ public final class InjectorImpl implements Injector {
                                         .map(p -> p.getType().getSimpleName().substring(0, 1))
                                         .collect(joining(", ")) + ")";
 
-                                LOGGER.debug(String.format("| -> %-76s |%n", shortMethodName));
+                                LOGGER.debug(String.format("| -> %-76s |", shortMethodName));
 
                                 try {
                                     m.invoke(instance, params);
@@ -156,7 +158,7 @@ public final class InjectorImpl implements Injector {
                         hasAnythingChanged.set(true);
 
                         LOGGER.debug(String.format(
-                            "| %-66s %12s |%n", 
+                            "| %-66s %12s |", 
                             n.getRepresentedType().getSimpleName(), 
                             State.STOPPED.name()
                         ));
@@ -265,6 +267,19 @@ public final class InjectorImpl implements Injector {
             
             Stream.of(injectableTypes)
                 .forEach(type -> {
+                    LOGGER.warn("CAN INJECT: " + type.getSimpleName());
+                    
+                    if (type.getSimpleName().equals("OffHeapReadOnlyCacheStreamSupplierComponentImpl")) {
+                        LOGGER.warn("FOUND IT!");
+                        final List<Class<?>> supers = ReflectionUtil.traverseAncestors(type).collect(toList());
+                        LOGGER.warn("Parents: " + supers);
+                        final List<Class<?>> afterFilter = ReflectionUtil.traverseAncestors(type)
+                            .peek(t -> LOGGER.warn("Does " + t.getSimpleName() + " have annotation? " + Arrays.asList(t.getAnnotations())))
+                            .filter(t -> t.isAnnotationPresent(IncludeInjectable.class))
+                            .collect(toList());
+                        LOGGER.warn("Parents: " + afterFilter);
+                    }
+                    
                     injectables.add(type);
                     
                     ReflectionUtil.traverseAncestors(type)
@@ -383,7 +398,7 @@ public final class InjectorImpl implements Injector {
                                             .map(p -> p.getType().getSimpleName().substring(0, 1))
                                             .collect(joining(", ")) + ")";
                                     
-                                    LOGGER.debug(String.format("| -> %-76s |%n", shortMethodName));
+                                    LOGGER.debug(String.format("| -> %-76s |", shortMethodName));
 
                                     try {
                                         m.invoke(instance, params);
@@ -400,9 +415,9 @@ public final class InjectorImpl implements Injector {
                             hasAnythingChanged.set(true);
 
                             LOGGER.debug(String.format(
-                                "| %-66s %12s |%n", 
+                                "| %-66s %12s |", 
                                 n.getRepresentedType().getSimpleName(), 
-                                State.STOPPED.name()
+                                state.name()
                             ));
                         }
                     });
@@ -416,7 +431,7 @@ public final class InjectorImpl implements Injector {
             
             printLine();
             LOGGER.debug(String.format(
-                "| %-79s |%n", 
+                "| %-79s |", 
                 "All " + instances.size() + " components have been configured!"
             ));
             printLine();

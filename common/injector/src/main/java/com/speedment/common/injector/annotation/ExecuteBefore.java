@@ -18,6 +18,7 @@ package com.speedment.common.injector.annotation;
 
 import com.speedment.common.injector.State;
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -35,6 +36,7 @@ import java.lang.annotation.Target;
  * 
  * @see  Execute
  */
+@Inherited
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExecuteBefore {
