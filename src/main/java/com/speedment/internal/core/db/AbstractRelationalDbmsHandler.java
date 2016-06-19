@@ -483,6 +483,16 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             fkcMutator.setOrdinalPosition(rs.getInt("KEY_SEQ"));
             fkcMutator.setForeignTableName(rs.getString("PKTABLE_NAME"));
             fkcMutator.setForeignColumnName(rs.getString("PKCOLUMN_NAME"));
+            if(nonNull(rs.getString("PKTABLE_CAT"))){
+            	fkcMutator.setForeignDatabaseName(rs.getString("PKTABLE_CAT"));
+            }	
+            else
+            	fkcMutator.setForeignDatabaseName("");
+            if(nonNull(rs.getString("PKTABLE_SCHEM"))){
+            	fkcMutator.setForeignSchemaName(rs.getString("PKTABLE_SCHEM"));
+            }	
+            else
+            	fkcMutator.setForeignSchemaName("");
         };
 
         tableChilds(table.mutator()::addNewForeignKey, supplier, mutator, progressListener);
