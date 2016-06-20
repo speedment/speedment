@@ -55,10 +55,9 @@ import java.util.Properties;
 import com.speedment.common.injector.annotation.IncludeInjectable;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
-import java.util.Arrays;
+import java.util.LinkedHashMap;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 
 /**
  * The default implementation of the {@link Injector} interface.
@@ -68,7 +67,7 @@ import static java.util.stream.Collectors.toList;
  */
 public final class InjectorImpl implements Injector {
     
-    private final static Logger LOGGER = LoggerManager.getLogger(Injector.class);
+    private final static Logger LOGGER = LoggerManager.getLogger(InjectorImpl.class);
     
     private final static State[] STATES = State.values();
     private final Set<Class<?>> injectables;
@@ -246,7 +245,7 @@ public final class InjectorImpl implements Injector {
     
     private final static class Builder implements Injector.Builder {
         
-        private final Set<Class<?>> injectables;
+        private final Map<String, Class<?>> injectables;
         private final Map<String, String> overriddenParams;
         private Path configFileLocation;
         
@@ -256,38 +255,30 @@ public final class InjectorImpl implements Injector {
         
         private Builder(Set<Class<?>> injectables) {
             requireNonNull(injectables);
-            this.injectables = new LinkedHashSet<>(injectables);
+            this.injectables = new LinkedHashMap<>();
             this.overriddenParams = new HashMap<>();
             this.configFileLocation = Paths.get("settings.properties");
+            
+            injectables.forEach(c -> this.injectables.put(c.getName(), c));
         }
 
         @Override
-        public Builder canInject(Class<?>... injectableTypes) {
-            requireNonNull(injectableTypes);
+        public Builder canInject(Class<?> injectableType) {
+            return canInject(injectableType.getName(), injectableType);
+        }
+
+        @Override
+        public Builder canInject(String key, Class<?> injectableType) throws NoDefaultConstructorException {
+            requireNonNull(injectableType);
             
-            Stream.of(injectableTypes)
-                .forEach(type -> {
-                    LOGGER.warn("CAN INJECT: " + type.getSimpleName());
-                    
-                    if (type.getSimpleName().equals("OffHeapReadOnlyCacheStreamSupplierComponentImpl")) {
-                        LOGGER.warn("FOUND IT!");
-                        final List<Class<?>> supers = ReflectionUtil.traverseAncestors(type).collect(toList());
-                        LOGGER.warn("Parents: " + supers);
-                        final List<Class<?>> afterFilter = ReflectionUtil.traverseAncestors(type)
-                            .peek(t -> LOGGER.warn("Does " + t.getSimpleName() + " have annotation? " + Arrays.asList(t.getAnnotations())))
-                            .filter(t -> t.isAnnotationPresent(IncludeInjectable.class))
-                            .collect(toList());
-                        LOGGER.warn("Parents: " + afterFilter);
-                    }
-                    
-                    injectables.add(type);
-                    
-                    ReflectionUtil.traverseAncestors(type)
-                        .filter(t -> t.isAnnotationPresent(IncludeInjectable.class))
-                        .map(t -> t.getAnnotation(IncludeInjectable.class))
-                        .map(IncludeInjectable::value)
-                        .forEach(this::canInject);
-                });
+            injectables.put(key, injectableType);
+
+            ReflectionUtil.traverseAncestors(injectableType)
+                .filter(t -> t.isAnnotationPresent(IncludeInjectable.class))
+                .map(t -> t.getAnnotation(IncludeInjectable.class))
+                .map(IncludeInjectable::value)
+                .flatMap(Stream::of)
+                .forEach(this::canInject);
             
             return this;
         }
@@ -311,18 +302,20 @@ public final class InjectorImpl implements Injector {
             final Properties properties = loadProperties(configFile);
             overriddenParams.forEach(properties::setProperty);
             
-            final DependencyGraph graph = DependencyGraphImpl.create(injectables);
+            final Set<Class<?>> injectablesSet = unmodifiableSet(new LinkedHashSet<>(injectables.values()));
+            
+            final DependencyGraph graph = DependencyGraphImpl.create(injectablesSet);
             final LinkedList<Object> instances = new LinkedList<>();
             
             // Create an instance of every injectable type
-            for (final Class<?> injectable : injectables) {
+            for (final Class<?> injectable : injectablesSet) {
                 final Object instance = newInstance(injectable, properties);
                 instances.addFirst(instance);
             }
             
             // Build the Injector
             final Injector injector = new InjectorImpl(
-                unmodifiableSet(new LinkedHashSet<>(injectables)),
+                injectablesSet,
                 unmodifiableList(instances),
                 this
             );
@@ -482,23 +475,23 @@ public final class InjectorImpl implements Injector {
                         f.setAccessible(true);
                         
                         try {
-                            if (Boolean.class.isAssignableFrom(f.getType())) {
+                            if (boolean.class == f.getType() || Boolean.class.isAssignableFrom(f.getType())) {
                                 f.set(instance, Boolean.parseBoolean(serialized));
-                            } else if (Byte.class.isAssignableFrom(f.getType())) {
+                            } else if (byte.class == f.getType() || Byte.class.isAssignableFrom(f.getType())) {
                                 f.set(instance, Byte.parseByte(serialized));
-                            } else if (Short.class.isAssignableFrom(f.getType())) {
+                            } else if (short.class == f.getType() || Short.class.isAssignableFrom(f.getType())) {
                                 f.set(instance, Short.parseShort(serialized));
-                            } else if (Integer.class.isAssignableFrom(f.getType())) {
+                            } else if (int.class == f.getType() || Integer.class.isAssignableFrom(f.getType())) {
                                 f.set(instance, Integer.parseInt(serialized));
-                            } else if (Long.class.isAssignableFrom(f.getType())) {
+                            } else if (long.class == f.getType() || Long.class.isAssignableFrom(f.getType())) {
                                 f.set(instance, Long.parseLong(serialized));
-                            } else if (Float.class.isAssignableFrom(f.getType())) {
+                            } else if (float.class == f.getType() || Float.class.isAssignableFrom(f.getType())) {
                                 f.set(instance, Float.parseFloat(serialized));
-                            } else if (Double.class.isAssignableFrom(f.getType())) {
+                            } else if (double.class == f.getType() || Double.class.isAssignableFrom(f.getType())) {
                                 f.set(instance, Double.parseDouble(serialized));
                             } else if (String.class.isAssignableFrom(f.getType())) {
                                 f.set(instance, serialized);
-                            } else if (Character.class.isAssignableFrom(f.getType())) {
+                            } else if (char.class == f.getType() || Character.class.isAssignableFrom(f.getType())) {
                                 if (serialized.length() == 1) {
                                     f.set(instance, serialized.charAt(0));
                                 } else {

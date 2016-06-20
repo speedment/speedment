@@ -111,14 +111,35 @@ public interface Injector {
          * injected into other classes to the builder. Classes can be appended in 
          * any order. The final injection order will be determined once the 
          * {@link #build()}-method is called.
+         * <p>
+         * This method will not replace any previous injectables.
          * 
-         * @param injectableTypes  the types that should be injectable
-         * @return                 a reference to this builder
+         * @param injectableType  the type that should be injectable
+         * @return                a reference to this builder
          * 
          * @throws NoDefaultConstructorException  if the specified type does not 
          *                                        have a default constructor.
          */
-        Builder canInject(Class<?>... injectableTypes) throws NoDefaultConstructorException;
+        Builder canInject(Class<?> injectableType) throws NoDefaultConstructorException;
+
+        /**
+         * Appends one or multiple classes that can be automatically dependency 
+         * injected into other classes to the builder. Classes can be appended in 
+         * any order. The final injection order will be determined once the 
+         * {@link #build()}-method is called.
+         * <p>
+         * If a class has already been passed as injectibale with the same key,
+         * the previous one will be replaced by this new one. The old one will
+         * never be instantiated.
+         * 
+         * @param key             the key to check uniqueness with
+         * @param injectableType  the type that should be injectable
+         * @return                a reference to this builder
+         * 
+         * @throws NoDefaultConstructorException  if the specified type does not 
+         *                                        have a default constructor.
+         */
+        Builder canInject(String key, Class<?> injectableType) throws NoDefaultConstructorException;
         
         /**
          * Overrides a particular configuration parameter in the config file
