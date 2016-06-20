@@ -27,6 +27,7 @@ import com.speedment.runtime.internal.runtime.EmptyApplicationMetadata;
 import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
 import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 import java.io.File;
+import java.util.Arrays;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -95,6 +96,14 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
                 try {
                     final Class<?> uncasted = Class.forName(component);
                     
+                    Class<?> temp = uncasted;
+                    while (temp != null) {
+                        System.out.println("Class name: " + temp.getName());
+                        System.out.println("Annotations: " + Arrays.toString(temp.getAnnotations()));
+                        System.out.println("Declared Annotations: " + Arrays.toString(temp.getDeclaredAnnotations()));
+                        temp = temp.getSuperclass();
+                    }
+                        
                     @SuppressWarnings("unchecked")
                     final Class<Component> casted = (Class<Component>) uncasted;
                     result.with(casted);

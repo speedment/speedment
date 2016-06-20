@@ -16,8 +16,7 @@
  */
 package com.speedment.runtime.internal.db.mysql;
 
-import com.speedment.common.injector.annotation.Execute;
-import com.speedment.common.injector.annotation.Inject;
+import com.speedment.runtime.db.DbmsMetadataHandler;
 import com.speedment.runtime.internal.db.AbstractDbmsMetadataHandler;
 import com.speedment.runtime.internal.db.JavaTypeMap;
 import java.sql.Blob;
@@ -32,9 +31,11 @@ import java.util.stream.Stream;
  * @since   2.0.0
  */
 public final class MySqlDbmsMetadataHandler extends AbstractDbmsMetadataHandler {
-    
-    @Execute
-    void installCustomTypes(@Inject JavaTypeMap javaTypeMap) {
+
+    @Override
+    protected JavaTypeMap newJavaTypeMap() {
+        final JavaTypeMap javaTypeMap = super.newJavaTypeMap();
+        
         javaTypeMap.put("YEAR", Integer.class);
         javaTypeMap.put("JSON", String.class);
         
@@ -48,6 +49,7 @@ public final class MySqlDbmsMetadataHandler extends AbstractDbmsMetadataHandler 
                 return Optional.of(Boolean.class);
             } else return Optional.empty();
         });
+        
+        return javaTypeMap;
     }
-
 }

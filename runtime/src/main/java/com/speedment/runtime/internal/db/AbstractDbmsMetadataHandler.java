@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.internal.db;
 
+import static com.speedment.common.injector.State.INITIALIZED;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
@@ -53,7 +55,6 @@ import static com.speedment.runtime.internal.db.AbstractDbmsOperationHandler.SHO
 import static com.speedment.runtime.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import com.speedment.runtime.util.ProgressMeasure;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -66,14 +67,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import static java.util.Objects.nonNull;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import com.speedment.common.injector.annotation.IncludeInjectable;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -83,7 +82,6 @@ import static java.util.Objects.requireNonNull;
  * @author  Per Minborg
  * @since   2.4.0
  */
-@IncludeInjectable(JavaTypeMap.class)
 public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler {
     
     private final static Logger LOGGER = LoggerManager.getLogger(AbstractDbmsMetadataHandler.class);
@@ -93,9 +91,18 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     private @Inject DbmsHandlerComponent dbmsHandlerComponent;
     private @Inject TypeMapperComponent typeMapperComponent;
     private @Inject ProjectComponent projectComponent;
-    private @Inject JavaTypeMap javaTypeMap;
+    private JavaTypeMap javaTypeMap;
     
     protected AbstractDbmsMetadataHandler() {}
+    
+    @ExecuteBefore(INITIALIZED)
+    final void createJavaTypeMap() {
+        this.javaTypeMap = newJavaTypeMap();
+    }
+    
+    protected JavaTypeMap newJavaTypeMap() {
+        return new JavaTypeMap();
+    }
     
     @Override
     public CompletableFuture<Project> readSchemaMetadata(

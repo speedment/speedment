@@ -16,8 +16,6 @@
  */
 package com.speedment.runtime.internal.db.postgresql;
 
-import com.speedment.common.injector.annotation.Execute;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.db.metadata.ColumnMetaData;
 import com.speedment.runtime.internal.db.AbstractDbmsMetadataHandler;
@@ -33,14 +31,18 @@ import java.util.Optional;
  */
 public final class PostgresqlDbmsMetadataHandler extends AbstractDbmsMetadataHandler {
 
-    @Execute
-    void installCustomTypes(@Inject JavaTypeMap javaTypeMap) {
+    @Override
+    protected JavaTypeMap newJavaTypeMap() {
+        final JavaTypeMap javaTypeMap = super.newJavaTypeMap();
+            
         javaTypeMap.addRule((sqlTypeMapping, md) -> {
             // Map a BIT(1) to boolean
             if ("BIT".equalsIgnoreCase(md.getTypeName()) && md.getColumnSize() == 1) {
                 return Optional.of(Boolean.class);
             } else return Optional.empty();
         });
+        
+        return javaTypeMap;
     }
     
     @Override

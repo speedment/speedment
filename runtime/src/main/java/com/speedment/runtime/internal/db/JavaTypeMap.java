@@ -16,9 +16,6 @@
  */
 package com.speedment.runtime.internal.db;
 
-import static com.speedment.common.injector.State.CREATED;
-import static com.speedment.common.injector.State.INITIALIZED;
-import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.db.metadata.ColumnMetaData;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.exception.SpeedmentException;
@@ -37,13 +34,14 @@ import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
 
 /**
  *
  * @author  Emil Forslund
  * @since   2.4.0
  */
-public final class JavaTypeMap {
+public class JavaTypeMap {
     
     @FunctionalInterface
     public interface Rule {
@@ -53,9 +51,48 @@ public final class JavaTypeMap {
     private final List<Rule> rules;
     private final Map<String, Class<?>> inner;
     
-    private JavaTypeMap() {
+    public JavaTypeMap() {
+        this(map -> {});
+    }
+    
+    /**
+     * Sets up the java type map for this database type
+     * @see http://docs.oracle.com/javase/1.5.0/docs/guide/jdbc/getstart/mapping.html
+     */
+    protected JavaTypeMap(Consumer<Map<String, Class<?>>> installer) {
         rules = new CopyOnWriteArrayList<>();
         inner = newCaseInsensitiveMap();
+        
+        inner.put("CHAR", String.class);
+        inner.put("VARCHAR", String.class);
+        inner.put("LONGVARCHAR", String.class);
+        inner.put("LONGVARCHAR", String.class);
+        inner.put("NUMERIC", BigDecimal.class);
+        inner.put("DECIMAL", BigDecimal.class);
+        inner.put("BIT", Integer.class); ///
+        inner.put("TINYINT", Byte.class);
+        inner.put("SMALLINT", Short.class);
+        inner.put("INTEGER", Integer.class);
+        inner.put("BIGINT", Long.class);
+        inner.put("REAL", Float.class);
+        inner.put("FLOAT", Double.class);
+        inner.put("DOUBLE", Double.class);
+        inner.put("DATE", java.sql.Date.class);
+        inner.put("TIME", Time.class);
+        inner.put("TIMESTAMP", Timestamp.class);
+        inner.put("CLOB", Clob.class);
+        inner.put("BLOB", Blob.class);
+        inner.put("BOOLEAN", Boolean.class);
+        inner.put("BOOL", Boolean.class);
+
+        //MySQL Specific mappings
+        inner.put("YEAR", Integer.class);
+
+        //PostgreSQL specific mappings
+        inner.put("UUID", UUID.class);
+        
+        installer.accept(inner);
+        assertJavaTypesKnown();
     }
     
     public void addRule(Rule rule) {
@@ -106,43 +143,7 @@ public final class JavaTypeMap {
         return inner.get(key);
     }
     
-    /**
-     * Sets up the java type map for this database type
-     * @see http://docs.oracle.com/javase/1.5.0/docs/guide/jdbc/getstart/mapping.html
-     */
-    @ExecuteBefore(INITIALIZED)
-    final void setupJavaTypeMap() {
-        inner.put("CHAR", String.class);
-        inner.put("VARCHAR", String.class);
-        inner.put("LONGVARCHAR", String.class);
-        inner.put("LONGVARCHAR", String.class);
-        inner.put("NUMERIC", BigDecimal.class);
-        inner.put("DECIMAL", BigDecimal.class);
-        inner.put("BIT", Integer.class); ///
-        inner.put("TINYINT", Byte.class);
-        inner.put("SMALLINT", Short.class);
-        inner.put("INTEGER", Integer.class);
-        inner.put("BIGINT", Long.class);
-        inner.put("REAL", Float.class);
-        inner.put("FLOAT", Double.class);
-        inner.put("DOUBLE", Double.class);
-        inner.put("DATE", java.sql.Date.class);
-        inner.put("TIME", Time.class);
-        inner.put("TIMESTAMP", Timestamp.class);
-        inner.put("CLOB", Clob.class);
-        inner.put("BLOB", Blob.class);
-        inner.put("BOOLEAN", Boolean.class);
-        inner.put("BOOL", Boolean.class);
-
-        //MySQL Specific mappings
-        inner.put("YEAR", Integer.class);
-
-        //PostgreSQL specific mappings
-        inner.put("UUID", UUID.class);
-    }
-    
-    @ExecuteBefore(CREATED)
-    void assertJavaTypesKnown() {
+    private void assertJavaTypesKnown() {
         final Map<String, Class<?>> unmapped = new LinkedHashMap<>();
         
         inner.entrySet().stream().forEach((entry) -> {

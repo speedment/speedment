@@ -138,17 +138,17 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
                     switch (sqlStatement.getType()) {
                         case INSERT: {
                             final SqlInsertStatement s = (SqlInsertStatement) sqlStatement;
-                            handleSqlStatement(conn, s);
+                            handleSqlStatement(dbms, conn, s);
                             break;
                         }
                         case UPDATE: {
                             final SqlUpdateStatement s = (SqlUpdateStatement) sqlStatement;
-                            handleSqlStatement(conn, s);
+                            handleSqlStatement(dbms, conn, s);
                             break;
                         }
                         case DELETE: {
                             final SqlDeleteStatement s = (SqlDeleteStatement) sqlStatement;
-                            handleSqlStatement(conn, s);
+                            handleSqlStatement(dbms, conn, s);
                             break;
                         }
                     }
@@ -202,7 +202,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         }
     }
 
-    protected void handleSqlStatement(final Connection conn, final SqlInsertStatement sqlStatement) throws SQLException {
+    protected void handleSqlStatement(Dbms dbms, final Connection conn, final SqlInsertStatement sqlStatement) throws SQLException {
         try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.RETURN_GENERATED_KEYS)) {
             int i = 1;
             for (Object o : sqlStatement.getValues()) {
@@ -218,15 +218,15 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         }
     }
 
-    protected void handleSqlStatement(final Connection conn, final SqlUpdateStatement sqlStatement) throws SQLException {
-        handleSqlStatementHelper(conn, sqlStatement);
+    protected void handleSqlStatement(Dbms dbms, final Connection conn, final SqlUpdateStatement sqlStatement) throws SQLException {
+        handleSqlStatementHelper(dbms, conn, sqlStatement);
     }
 
-    protected void handleSqlStatement(final Connection conn, final SqlDeleteStatement sqlStatement) throws SQLException {
-        handleSqlStatementHelper(conn, sqlStatement);
+    protected void handleSqlStatement(Dbms dbms, final Connection conn, final SqlDeleteStatement sqlStatement) throws SQLException {
+        handleSqlStatementHelper(dbms, conn, sqlStatement);
     }
 
-    private void handleSqlStatementHelper(final Connection conn, final SqlStatement sqlStatement) throws SQLException {
+    private void handleSqlStatementHelper(Dbms dbms, final Connection conn, final SqlStatement sqlStatement) throws SQLException {
         try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.NO_GENERATED_KEYS)) {
             int i = 1;
             for (Object o : sqlStatement.getValues()) {
@@ -252,26 +252,6 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     protected String encloseField(Dbms dbms, String fieldName) {
         return dbmsTypeOf(dbmsHandlerComponent, dbms).getDatabaseNamingConvention().encloseField(fieldName);
     }
-
-//    @Override
-//    public String getDbmsInfoString() throws SQLException {
-//        try (final Connection conn = connectionPoolComponent.getConnection(dbms)) {
-//            final DatabaseMetaData md = conn.getMetaData();
-//            return new StringBuilder()
-//                .append(md.getDatabaseProductName())
-//                .append(", ")
-//                .append(md.getDatabaseProductVersion())
-//                .append(", ")
-//                .append(md.getDriverName())
-//                .append(" ")
-//                .append(md.getDriverVersion())
-//                .append(", JDBC version ")
-//                .append(md.getJDBCMajorVersion())
-//                .append(".")
-//                .append(md.getJDBCMinorVersion())
-//                .toString();
-//        }
-//    }
 
     @Override
     public Clob createClob(Dbms dbms) throws SQLException {

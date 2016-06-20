@@ -47,7 +47,10 @@ import java.util.ArrayList;
 import java.util.function.BiConsumer;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Function;
 
 /**
  * This abstract class is implemented by classes that can build a 
@@ -74,15 +77,13 @@ public abstract class AbstractApplicationBuilder<
     private boolean checkDatabaseConnectivity;
     private boolean validateRuntimeConfig;
 
-    @SuppressWarnings("varargs")
     protected AbstractApplicationBuilder(
             Class<? extends APP> applicationImplClass, 
-            Class<? extends ApplicationMetadata> metadataClass,
-            Class<? extends Manager<?>>... managerClasses) {
+            Class<? extends ApplicationMetadata> metadataClass) {
         
         this(Injector.builder()
-            .canInject(applicationImplClass, metadataClass)
-            .canInject(managerClasses)
+            .canInject(applicationImplClass)
+            .canInject(metadataClass)
         );
     }
     
@@ -213,15 +214,13 @@ public abstract class AbstractApplicationBuilder<
 
     @Override
     public <C extends Component> BUILDER with(Class<C> componentImplType) {
-        requireNonNull(componentImplType);
-        injector.canInject(componentImplType);
+        withInjectable(injector, componentImplType, Component::getComponentClass);
         return self();
     }
     
     @Override
     public <M extends Manager<?>> BUILDER withManager(Class<M> managerImplType) {
-        requireNonNull(managerImplType);
-        injector.canInject(managerImplType);
+        withInjectable(injector, managerImplType, M::getEntityClass);
         return self();
     }
 
@@ -339,5 +338,25 @@ public abstract class AbstractApplicationBuilder<
         if (!SpeedmentVersion.isProductionMode()) {
             LOGGER.warn("This version is NOT INTENDED FOR PRODUCTION USE!");
         }
+    }
+    
+    private static <T> void withInjectable(Injector.Builder injector, Class<T> injectableImplType, Function<T, Class<?>> keyExtractor) {
+        requireNonNull(injectableImplType);
+        
+        final T injectable;
+        try {
+            final Constructor<T> constructor = injectableImplType.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            injectable = constructor.newInstance();
+        } catch (InstantiationException 
+               | IllegalAccessException 
+               | NoSuchMethodException 
+               | InvocationTargetException ex) {
+            
+            throw new SpeedmentException(ex);
+        }
+        
+        final Class<?> key = keyExtractor.apply(injectable);
+        injector.canInject(key.getName(), injectableImplType);
     }
 }

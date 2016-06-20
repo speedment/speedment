@@ -16,10 +16,13 @@
  */
 package com.speedment.runtime.internal.manager.sql;
 
+import com.speedment.common.injector.State;
+import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.DbmsHandlerComponent;
+import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.config.Column;
@@ -100,6 +103,11 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         this.fieldTraitMap     = new HashMap<>();
 
         this.hasPrimaryKeyColumns = primaryKeyFields().findAny().isPresent();
+    }
+    
+    @ExecuteBefore(INITIALIZED)
+    void addToManager(@Inject(INITIALIZED) ManagerComponent managers) {
+        managers.put(this);
     }
     
     @ExecuteBefore(RESOLVED)

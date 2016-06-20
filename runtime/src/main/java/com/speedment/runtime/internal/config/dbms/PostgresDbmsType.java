@@ -31,7 +31,6 @@ import java.util.Set;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
-import static com.speedment.runtime.db.metadata.TypeInfoMetaData.of;
 import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
 import com.speedment.runtime.internal.db.postgresql.PostgresqlDbmsMetadataHandler;
 import com.speedment.runtime.internal.db.postgresql.PostgresqlDbmsOperationHandler;
