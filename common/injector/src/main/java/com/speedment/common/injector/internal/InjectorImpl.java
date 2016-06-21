@@ -53,6 +53,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.Optional;
 import java.util.Properties;
 import com.speedment.common.injector.annotation.IncludeInjectable;
+import com.speedment.common.injector.annotation.WithState;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import java.util.LinkedHashMap;
@@ -128,7 +129,7 @@ public final class InjectorImpl implements Injector {
                             .map(Execution::getMethod)
                             .forEach(m -> {
                                 final Object[] params = Stream.of(m.getParameters())
-                                    .map(p -> findIn(p.getType(), p.getAnnotation(Inject.class).required()))
+                                    .map(p -> findIn(p.getType(), p.getAnnotation(WithState.class) != null))
                                     .toArray(Object[]::new);
 
                                 m.setAccessible(true);
@@ -222,7 +223,7 @@ public final class InjectorImpl implements Injector {
             if (Injector.class.isAssignableFrom(field.getType())) {
                 value = this;
             } else {
-                value = findIn(field.getType(), field.getAnnotation(Inject.class).required());
+                value = findIn(field.getType(), field.getAnnotation(WithState.class) != null);
             }
 
             field.setAccessible(true);
@@ -332,7 +333,7 @@ public final class InjectorImpl implements Injector {
                     if (Inject.class.isAssignableFrom(field.getType())) {
                         value = injector;
                     } else {
-                        value = findIn(injector, field.getType(), instances, field.getAnnotation(Inject.class).required());
+                        value = findIn(injector, field.getType(), instances, field.getAnnotation(WithState.class) != null);
                     }
 
                     field.setAccessible(true);
@@ -379,7 +380,7 @@ public final class InjectorImpl implements Injector {
                                 .map(Execution::getMethod)
                                 .forEach(m -> {
                                     final Object[] params = Stream.of(m.getParameters())
-                                        .map(p -> findIn(injector, p.getType(), instances, p.getAnnotation(Inject.class).required()))
+                                        .map(p -> findIn(injector, p.getType(), instances, p.getAnnotation(WithState.class) != null))
                                         .toArray(Object[]::new);
 
                                     m.setAccessible(true);

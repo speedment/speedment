@@ -18,15 +18,14 @@ package com.speedment.common.injector.internal.dependency.impl;
 
 import com.speedment.common.injector.annotation.Execute;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.exception.CyclicReferenceException;
 import com.speedment.common.injector.internal.dependency.Dependency;
 import com.speedment.common.injector.internal.dependency.DependencyGraph;
 import com.speedment.common.injector.internal.dependency.DependencyNode;
 import com.speedment.common.injector.internal.dependency.Execution;
-import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseMethods;
 import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.WithState;
 import com.speedment.common.injector.internal.InjectorImpl;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -81,10 +80,6 @@ public final class DependencyGraphImpl implements DependencyGraph {
     @Override
     public DependencyGraph inject() {
         nodes.forEach((clazz, node) -> {
-            // Go through all the member variables with the '@Inject'-annotation in the 
-            // class and add edges to them in the dependency graph.
-            addDependenciesTo(clazz, node.getDependencies());
-
             // Go through all the methods with the '@Execute'-annotation in the class and
             // add them to the executors set.
             traverseMethods(clazz)
@@ -120,55 +115,26 @@ public final class DependencyGraphImpl implements DependencyGraph {
             ")";
     }
     
-    private void addDependenciesTo(Class<?> clazz, Set<Dependency> dependencies) {
-        traverseFields(clazz)
-            .filter(f -> f.isAnnotationPresent(Inject.class))
-            .forEach(f -> {
-
-                final Inject inject = f.getAnnotation(Inject.class);
-                final Class<?> type = f.getType();
-                final State state   = inject.value();
-
-                try {
-                    dependencies.add(
-                        new DependencyImpl(get(type), state)
-                    );
-                } catch (final IllegalArgumentException ex) {
-                    throw new IllegalStateException(
-                        "Class " + clazz.getSimpleName() + 
-                        " requested field " + type.getSimpleName() + 
-                        " to be injected, but it was not found. Available components: [" +
-                        nodes.keySet().stream()
-                            .map(Class::getSimpleName)
-                            .collect(joining(",\n    ", "\n    ", "\n")) +
-                        "].", 
-                        ex
-                    );
-                }
-            });
-    }
-    
     private Execution createExecution(Class<?> clazz, Method m, State executeBefore) {
      
         // Make sure all the methods parameters are annoted with the 
-        // '@Inject'-annotation.
+        // '@WithState'-annotation.
         if (Stream.of(m.getParameters())
-            .anyMatch(p -> !p.isAnnotationPresent(Inject.class))) {
+            .anyMatch(p -> !p.isAnnotationPresent(WithState.class))) {
             throw new RuntimeException(
                 "Method '" + methodName(m) + 
                 "' has a parameter that is missing the @" + 
-                Inject.class.getSimpleName() + " annotation."
+                WithState.class.getSimpleName() + " annotation."
             );
         }
 
-        
         final Set<Dependency> dependencies = new HashSet<>();
         try {
             for (int i = 0; i < m.getParameterCount(); i++) {
                 final Parameter p   = m.getParameters()[i];
-                final Inject inject = p.getAnnotation(Inject.class);
+                final WithState ws  = p.getAnnotation(WithState.class);
                 final Class<?> type = p.getType();
-                final State state   = inject.value();
+                final State state   = ws.value();
 
                 try {
                     dependencies.add(
@@ -185,8 +151,6 @@ public final class DependencyGraphImpl implements DependencyGraph {
                 ex
             );
         }
-        
-        addDependenciesTo(clazz, dependencies);
 
         return new ExecutionImpl(executeBefore, m, dependencies);
     }

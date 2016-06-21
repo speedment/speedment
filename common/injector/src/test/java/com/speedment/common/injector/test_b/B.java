@@ -17,9 +17,9 @@
 package com.speedment.common.injector.test_b;
 
 import com.speedment.common.injector.State;
-import com.speedment.common.injector.annotation.Execute;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.WithState;
 
 /**
  *
@@ -28,12 +28,9 @@ import com.speedment.common.injector.annotation.Inject;
  */
 public final class B {
     
-    public @Inject(State.INITIALIZED) A a;
-    public @Inject(State.RESOLVED) C c;
-    
-    @Execute
-    protected void anytime() {}
-    
+    public @Inject A a;
+    public @Inject C c;
+
     @ExecuteBefore(State.RESOLVED)
-    protected void beforeResolve() {}
+    protected void beforeResolve(@WithState(State.INITIALIZED) A a, @WithState(State.RESOLVED) C c) {}
 }

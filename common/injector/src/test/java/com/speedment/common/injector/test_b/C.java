@@ -16,7 +16,6 @@
  */
 package com.speedment.common.injector.test_b;
 
-import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Inject;
 
 /**
@@ -26,7 +25,7 @@ import com.speedment.common.injector.annotation.Inject;
  */
 public final class C {
     
-    public @Inject(State.INITIALIZED) A a;
-    public @Inject(State.RESOLVED) B b;
+    public @Inject A a;
+    public @Inject B b;
     
 }
