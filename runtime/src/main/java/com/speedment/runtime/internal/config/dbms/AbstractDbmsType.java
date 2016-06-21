@@ -16,9 +16,10 @@
  */
 package com.speedment.runtime.internal.config.dbms;
 
+import static com.speedment.common.injector.State.CREATED;
 import static com.speedment.common.injector.State.INITIALIZED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.db.DatabaseNamingConvention;
@@ -36,7 +37,7 @@ import java.util.Set;
 public abstract class AbstractDbmsType implements DbmsType {
 
     @ExecuteBefore(INITIALIZED)
-    void install(@Inject DbmsHandlerComponent component) {
+    void install(@WithState(CREATED) DbmsHandlerComponent component) {
         component.install(this);
     }
     

@@ -18,6 +18,7 @@ package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.method.Finder;
+import com.speedment.runtime.manager.Manager;
 
 /**
  * A representation of an Entity field that is a reference type (eg 
@@ -45,10 +46,11 @@ public interface ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY> {
     /**
      * Finds the foreign entity associated by this field.
      *
-     * @param entity  this entity
-     * @return        the foreign entity associated by this field
+     * @param entity          this entity
+     * @param foreignManager  the foreign manager
+     * @return                the foreign entity associated by this field
      */
-    default FK_ENTITY findFrom(ENTITY entity) {
-        return finder().apply(entity);
+    default FK_ENTITY findFrom(ENTITY entity, Manager<FK_ENTITY> foreignManager) {
+        return finder().apply(entity, foreignManager);
     }
 }

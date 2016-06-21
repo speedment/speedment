@@ -17,7 +17,8 @@
 package com.speedment.runtime.field.method;
 
 import com.speedment.runtime.annotation.Api;
-import java.util.function.Function;
+import com.speedment.runtime.manager.Manager;
+import java.util.function.BiFunction;
 
 /**
  * A short-cut functional reference to the {@code findXXX()} method for a
@@ -39,4 +40,4 @@ import java.util.function.Function;
 @Api(version = "2.3")
 @FunctionalInterface
 public interface Finder<ENTITY, FK_ENTITY> extends 
-    Function<ENTITY, FK_ENTITY> {}
+    BiFunction<ENTITY, Manager<FK_ENTITY>, FK_ENTITY> {}

@@ -22,7 +22,7 @@ import com.speedment.runtime.config.ForeignKeyColumn;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.common.codegen.model.Interface;
-import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.Injector;
 import com.speedment.generator.JavaClassTranslator;
 import com.speedment.generator.StandardTranslatorKey;
 import com.speedment.generator.component.CodeGenerationComponent;
@@ -35,7 +35,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class FkHolder {
 
-    private @Inject CodeGenerationComponent codeGenerationComponent;
+    private final CodeGenerationComponent codeGenerationComponent;
     
     private final ForeignKey fk;
     private final ForeignKeyColumn fkc;
@@ -44,8 +44,9 @@ public final class FkHolder {
     private final Column foreignColumn;
     private final Table foreignTable;
 
-    public FkHolder(ForeignKey fk) {
+    public FkHolder(Injector injector, ForeignKey fk) {
         requireNonNull(fk);
+        this.codeGenerationComponent = injector.getOrThrow(CodeGenerationComponent.class);
         
         this.fk  = fk;
         this.fkc = fk.foreignKeyColumns().findFirst().orElseThrow(this::noEnabledForeignKeyException);

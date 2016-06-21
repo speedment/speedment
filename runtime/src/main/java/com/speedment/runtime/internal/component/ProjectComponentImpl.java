@@ -18,7 +18,7 @@ package com.speedment.runtime.internal.component;
 
 import static com.speedment.common.injector.State.INITIALIZED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.ApplicationMetadata;
@@ -26,11 +26,10 @@ import static java.util.Objects.requireNonNull;
 
 public final class ProjectComponentImpl extends InternalOpenSourceComponent implements ProjectComponent {
 
-    private @Inject ApplicationMetadata metadata;
     private Project project;
     
     @ExecuteBefore(INITIALIZED)
-    void loadProjectFromMetadata() {
+    void loadProjectFromMetadata(@WithState(INITIALIZED) ApplicationMetadata metadata) {
         project = metadata.makeProject();
     }
 

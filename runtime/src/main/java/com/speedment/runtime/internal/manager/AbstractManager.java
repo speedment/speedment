@@ -16,9 +16,11 @@
  */
 package com.speedment.runtime.internal.manager;
 
+import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.component.StreamSupplierComponent;
 import com.speedment.runtime.field.trait.ComparableFieldTrait;
@@ -42,7 +44,7 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     protected AbstractManager() {}
     
     @ExecuteBefore(RESOLVED)
-    void install(@Inject ManagerComponent managerComponent) {
+    void install(@WithState(INITIALIZED) ManagerComponent managerComponent) {
         managerComponent.put(this);
     }
 

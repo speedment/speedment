@@ -16,9 +16,7 @@
  */
 package com.speedment.generator.internal.entity;
 
-import com.speedment.generator.internal.util.FkHolder;
 import com.speedment.generator.internal.util.EntityTranslatorSupport;
-import com.speedment.generator.TranslatorSupport;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.codegen.model.EnumConstant;
@@ -42,20 +40,17 @@ import com.speedment.common.codegen.internal.model.value.TextValue;
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.TranslatorSupport;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
+import com.speedment.generator.internal.util.FkHolder;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.entity.Entity;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
+import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Stream;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 
 /**
@@ -74,8 +69,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
 
     @Override
     protected Interface makeCodeGenModel(File file) {
-        final Map<Table, List<String>> fkStreamers = new HashMap<>();
-
+        
         final Enum identifier = Enum.of(IDENTIFIER_NAME)
             .add(Field.of("columnName", STRING).private_().final_())
             .add(Type.of(FieldIdentifier.class).add(Generic.of().add(getSupport().entityType())))
@@ -161,28 +155,33 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                 final Type entityType        = getSupport().entityType();
                 final String shortEntityName = getSupport().entityName();
                 final Type typeMapperType    = Type.of(typeMapper);
+                final String shortEntityVarName = getSupport().namer().javaVariableName(shortEntityName);
 
                 file.add(Import.of(entityType));
                 file.add(Import.of(typeMapperType));
 
-                final String getter, finder;
-                if (col.isNullable()) {
-                    getter = "o -> o.get" + getSupport().typeName(col) + "().orElse(null)";
-                    finder = EntityTranslatorSupport.getForeignKey(getSupport().tableOrThrow(), col)
-                        .map(fkc -> 
-                            ", fk -> fk.find" +
-                            getNamer().javaTypeName(col.getJavaName()) +
-                            "().orElse(null)"
-                        ).orElse("");
-                } else {
-                    getter = shortEntityName + "::get" + getSupport().typeName(col);
-                    finder = EntityTranslatorSupport.getForeignKey(getSupport().tableOrThrow(), col)
-                        .map(fkc -> 
-                            ", " + shortEntityName + "::find" +
-                            getNamer().javaTypeName(col.getJavaName())
+                final String getter = col.isNullable() 
+                    ? ("o -> o.get" + getSupport().typeName(col) + "().orElse(null)") 
+                    : (shortEntityName + "::get" + getSupport().typeName(col));
 
-                        ).orElse("");
-                }
+                final String finder = EntityTranslatorSupport.getForeignKey(getSupport().tableOrThrow(), col)
+                    .map(fkc -> {
+                        final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
+                        final TranslatorSupport<Table> fuSupport = fu.getEmt().getSupport();
+
+                        file.add(Import.of(fuSupport.entityType()));
+
+                        return ", (" + shortEntityVarName + ", fkManager) -> fkManager.findAny(" +
+                            fu.getForeignEmt().getSupport().entityName() + "." +
+                            fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()
+                            ) + ", " + shortEntityVarName + ".get" +
+                                getNamer().javaTypeName(col.getJavaName()) + "()" + 
+
+                                (col.isNullable() ? ".orElse(null)" : "")
+
+                            + ").orElse(null)";
+                    }).orElse("");
+
                 final String setter = ", " + shortEntityName + "::set" + getSupport().typeName(col);
 
                 final String constant = getNamer().javaStaticFieldName(col.getJavaName());
@@ -211,112 +210,8 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                         )));
             })
             
-            /*** Add streamers from back pointing FK:s ***/
-            .forEveryForeignKeyReferencingThis((intrf, fk) -> {
-                final FkHolder fu = new FkHolder(fk);
-                file.add(Import.of(fu.getEmt().getSupport().entityType()));
-
-                Import imp = Import.of(fu.getEmt().getSupport().entityType());
-                file.add(imp);
-
-                final String methodName = EntityTranslatorSupport.FIND
-                    + EntityTranslatorSupport.pluralis(fu.getTable(), getNamer())
-                    + "By" + getSupport().typeName(fu.getColumn());
-                
-                /*** Record for later use in the construction of aggregate streamers ***/
-                fkStreamers.computeIfAbsent(fu.getTable(), t -> new ArrayList<>()).add(methodName);
-                final Type returnType = Type.of(Stream.class).add(Generic.of().add(fu.getEmt().getSupport().entityType()));
-                final Method method = Method.of(methodName, returnType);
-
-                method.set(Javadoc.of(
-                        "Creates and returns a {@link Stream} of all "
-                        + "{@link " + getSupport().typeName(fu.getTable()) + "} Entities that references this Entity by "
-                        + "the foreign key field that can be obtained using {@link " + getSupport().typeName(fu.getTable()) + "#get" + getSupport().typeName(fu.getColumn()) + "()}. "
-                        + "The order of the Entities are undefined and may change from time to time. "
-                        + "<p>\n"
-                        + "Using this method, you may \"walk the graph\" and jump "
-                        + "directly between referencing Entities without using {@code JOIN}s."
-                        + "<p>\n"
-                        + "N.B. The current implementation supports lazy-loading of the referencing Entities."
-                    )
-                    .add(RETURN.setText(
-                        "a {@link Stream} of all "
-                        + "{@link " + getSupport().typeName(fu.getTable()) + "} Entities  that references this Entity by "
-                        + "the foreign key field that can be obtained using {@link " + getSupport().typeName(fu.getTable()) + "#get" + getSupport().typeName(fu.getColumn()) + "()}")
-                    )
-                );
-
-                intrf.add(method);
-            })
-            
-            /*** Add ordinary finders ***/
-            .forEveryForeignKey((intrf, fk) -> {
-
-                final FkHolder fu = new FkHolder(fk);
-
-                final Type returnType;
-                if (fu.getColumn().isNullable()) {
-                    file.add(Import.of(Type.of(Optional.class)));
-                    returnType = Type.of(Optional.class).add(Generic.of().add(fu.getForeignEmt().getSupport().entityType()));
-
-                } else {
-                    returnType = fu.getForeignEmt().getSupport().entityType();
-                }
-
-                final Method method = Method.of("find" + getSupport().typeName(fu.getColumn()), returnType);
-
-                final String returns = 
-                    "the foreign key Entity {@link " + 
-                    getSupport().typeName(fu.getForeignTable()) + "} referenced " +
-                    "by the field that can be obtained using {@link " + 
-                    getSupport().entityName() + "#get" + 
-                    getSupport().typeName(fu.getColumn()) + "()}";
-
-                method.set(Javadoc.of(
-                        "Finds and returns " + returns + ".\n<p>\n" +
-                        "N.B. The current implementation only supports lazy-loading " +
-                        "of the referenced Entities. This means that if you " +
-                        "traverse N " + getSupport().entityName() + " entities and call this " +
-                        "method for each one, there will be N SQL-queries executed."
-                    ).add(RETURN.setText(returns)
-                ));
-
-                intrf.add(method);
-            })
             .build();
         
-        /*** Create aggregate streaming functions, if any ***/
-        fkStreamers.keySet().stream().forEach((referencingTable) -> {
-            final List<String> methodNames = fkStreamers.get(referencingTable);
-            if (!methodNames.isEmpty()) {
-                final Method method = Method.of(EntityTranslatorSupport.FIND + EntityTranslatorSupport.pluralis(referencingTable,
-                    getNamer()), Type.of(Stream.class).add(Generic.of().add(injector.inject(new TranslatorSupport<>(referencingTable)).entityType())));
-
-                method.set(Javadoc.of(
-                        "Creates and returns a <em>distinct</em> {@link Stream} of all " +
-                        "{@link " + getSupport().typeName(referencingTable) + "} Entities that "+
-                        "references this Entity by a foreign key. The order of the "+
-                        "Entities are undefined and may change from time to time.\n"+
-                        "<p>\n"+
-                        "Note that the Stream is <em>distinct</em>, meaning that " +
-                        "referencing Entities will only appear once in the Stream, even " +
-                        "though they may reference this Entity by several columns.\n" +
-                        "<p>\n" +
-                        "Using this method, you may \"walk the graph\" and jump " +
-                        "directly between referencing Entities without using {@code JOIN}s.\n" +
-                        "<p>\n" +
-                        "N.B. The current implementation supports lazy-loading of the referencing Entities."
-                    ).add(RETURN.setText(
-                        "a <em>distinct</em> {@link Stream} of all {@link " + 
-                        getSupport().typeName(referencingTable) + "} " +
-                        "Entities that references this Entity by a foreign key"
-                    ))
-                );
-
-                iface.add(method);
-            }
-        });
-
         return iface;
     }
 

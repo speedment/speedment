@@ -16,11 +16,11 @@
  */
 package com.speedment.runtime.internal.manager.sql;
 
-import com.speedment.common.injector.State;
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.component.ProjectComponent;
@@ -92,8 +92,8 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     private SqlFunction<ResultSet, ENTITY> entityMapper;
     
-    private @Inject ResultSetMapperComponent resultSetMapperComponent;
     private @Inject DbmsHandlerComponent dbmsHandlerComponent;
+    private @Inject ResultSetMapperComponent resultSetMapperComponent;
     private @Inject ProjectComponent projectComponent;
 
     protected AbstractSqlManager() {
@@ -106,12 +106,15 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
     
     @ExecuteBefore(INITIALIZED)
-    void addToManager(@Inject(INITIALIZED) ManagerComponent managers) {
+    void addToManager(
+            @WithState(INITIALIZED) ManagerComponent managers, 
+            @WithState(INITIALIZED) ProjectComponent projectComponent) {
+        requireNonNull(projectComponent); // Must be initalized for this to execute.
         managers.put(this);
     }
     
     @ExecuteBefore(RESOLVED)
-    void createFieldTraitMap() {
+    void createFieldTraitMap(@WithState(INITIALIZED) ProjectComponent projectComponent) {
         final Project project = projectComponent.getProject();
         final Table thisTable = getTable();
         

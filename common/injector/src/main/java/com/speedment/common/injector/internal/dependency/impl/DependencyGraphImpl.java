@@ -117,31 +117,34 @@ public final class DependencyGraphImpl implements DependencyGraph {
     
     private Execution createExecution(Class<?> clazz, Method m, State executeBefore) {
      
-        // Make sure all the methods parameters are annoted with the 
-        // '@WithState'-annotation.
-        if (Stream.of(m.getParameters())
-            .anyMatch(p -> !p.isAnnotationPresent(WithState.class))) {
-            throw new RuntimeException(
-                "Method '" + methodName(m) + 
-                "' has a parameter that is missing the @" + 
-                WithState.class.getSimpleName() + " annotation."
-            );
-        }
+//        // Make sure all the methods parameters are annoted with the 
+//        // '@WithState'-annotation.
+//        if (Stream.of(m.getParameters())
+//            .anyMatch(p -> !p.isAnnotationPresent(WithState.class))) {
+//            throw new RuntimeException(
+//                "Method '" + methodName(m) + 
+//                "' has a parameter that is missing the @" + 
+//                WithState.class.getSimpleName() + " annotation."
+//            );
+//        }
 
         final Set<Dependency> dependencies = new HashSet<>();
         try {
             for (int i = 0; i < m.getParameterCount(); i++) {
                 final Parameter p   = m.getParameters()[i];
                 final WithState ws  = p.getAnnotation(WithState.class);
-                final Class<?> type = p.getType();
-                final State state   = ws.value();
+                
+                if (ws != null) {
+                    final Class<?> type = p.getType();
+                    final State state   = ws.value();
 
-                try {
-                    dependencies.add(
-                        new DependencyImpl(get(type), state)
-                    );
-                } catch (final CyclicReferenceException ex) {
-                    throw new CyclicReferenceException(m.getDeclaringClass(), ex);
+                    try {
+                        dependencies.add(
+                            new DependencyImpl(get(type), state)
+                        );
+                    } catch (final CyclicReferenceException ex) {
+                        throw new CyclicReferenceException(m.getDeclaringClass(), ex);
+                    }
                 }
             }
         } catch (final CyclicReferenceException ex) {
