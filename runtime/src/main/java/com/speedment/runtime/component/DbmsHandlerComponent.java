@@ -23,10 +23,7 @@ import java.util.stream.Stream;
 
 /**
  * This class is a pluggable factory that produces
- * {@link DbmsHandler DbmsHandlers} for a given Dbms. The DbmsHandler is
- * obtained via the {@link #get(com.speedment.runtime.config.Dbms) } method and if an
- * existing DbmsHandler can not be found, the {@link #make(com.speedment.runtime.config.Dbms)
- * } method is called to provide a new instance.
+ * {@link DbmsHandler DbmsHandlers} for a given Dbms name.
  *
  * @author pemi
  * @since 2.0

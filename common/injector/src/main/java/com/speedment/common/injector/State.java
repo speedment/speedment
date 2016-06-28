@@ -18,32 +18,30 @@ package com.speedment.common.injector;
 
 /**
  * The state of an injectable instance.
- * 
+ *
  * @author Emil Forslund
- * @since  1.0.0
+ * @since 1.0.0
  */
 public enum State {
 
     /**
-     * The {@link Injectable} has been created but it has not been exposed anywhere yet.
-     *//**
-     * The {@link Injectable} has been created but it has not been exposed anywhere yet.
+     * The Injectable has been created but it has not been exposed anywhere yet.
      */
     CREATED,
     /**
-     * The {@link Injectable} has been initialized.
+     * The Injectable has been initialized.
      */
     INITIALIZED,
     /**
-     * The {@link Injectable} has been initialized and resolved.
+     * The Injectable has been initialized and resolved.
      */
     RESOLVED,
     /**
-     * The {@link Injectable} has been initialized, resolved and started.
+     * The Injectable has been initialized, resolved and started.
      */
     STARTED,
     /**
-     * The {@link Injectable} has been initialized, resolved, started and stopped.
+     * The Injectable has been initialized, resolved, started and stopped.
      */
     STOPPED;
 }

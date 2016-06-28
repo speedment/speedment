@@ -26,11 +26,8 @@ import java.util.Optional;
 
 /**
  * The factory used to produce instances of classes with
- * depdendency injection. This interface is expected to be
+ * dependency injection. This interface is expected to be
  * implemented using a builder pattern.
- * <p>
- * To create a new instance that requires dependency injection,
- * simply call {@link #newInstance(java.lang.Class)}.
  * 
  * @author  Emil Forslund
  * @since   1.0.0
@@ -61,14 +58,14 @@ public interface Injector {
      * is returned.
      * 
      * @param <T>   the type to look for
-     * @param type  type or supertype of that to be returned
+     * @param type  type or super type of that to be returned
      * @return      the found instance
      */
     <T> Optional<T> get(Class<T> type);
     
     /**
-     * Sets all the {@link Inject}-annoted fields in the specified instance.
-     * This method does <b>not</b> invoke any {@link Execute}-annoted methods
+     * Sets all the {@link Inject}-annotated fields in the specified instance.
+     * This method does <b>not</b> invoke any {@link Execute}-annotated methods
      * since it is typically called after the platform has been constructed.
      * 
      * @param <T>       the type to configure
@@ -78,7 +75,7 @@ public interface Injector {
     <T> T inject(T instance) throws IllegalArgumentException;
     
     /**
-     * Stop all installed componenets by calling their 
+     * Stop all installed components by calling their 
      * {@code @ExecuteBefore(STOPPED)}-methods in the correct order.
      */
     void stop();
