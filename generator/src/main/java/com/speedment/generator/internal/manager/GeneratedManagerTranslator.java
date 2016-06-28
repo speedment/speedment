@@ -48,11 +48,11 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
-public final class GeneratedEntityManagerTranslator extends EntityAndManagerTranslator<Interface> {
+public final class GeneratedManagerTranslator extends EntityAndManagerTranslator<Interface> {
 
     private @Inject Injector injector;
     
-    public GeneratedEntityManagerTranslator(Table table) {
+    public GeneratedManagerTranslator(Table table) {
         super(table, Interface::of);
     }
 

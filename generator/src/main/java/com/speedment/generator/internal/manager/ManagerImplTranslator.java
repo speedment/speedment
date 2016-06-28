@@ -27,9 +27,9 @@ import com.speedment.generator.internal.EntityAndManagerTranslator;
  * @author Emil Forslund
  * @author Per-Åke Minborg
  */
-public final class EntityManagerImplTranslator extends EntityAndManagerTranslator<Class> {
+public final class ManagerImplTranslator extends EntityAndManagerTranslator<Class> {
 
-    public EntityManagerImplTranslator(Table table) {
+    public ManagerImplTranslator(Table table) {
         super(table, Class::of);
     }
 

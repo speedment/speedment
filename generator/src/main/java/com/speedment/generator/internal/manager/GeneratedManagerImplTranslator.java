@@ -75,12 +75,18 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import static com.speedment.common.codegen.internal.util.Formatting.block;
+import static com.speedment.common.codegen.internal.util.Formatting.indent;
+import static com.speedment.common.codegen.internal.util.Formatting.nl;
+import static com.speedment.common.codegen.internal.util.Formatting.tab;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class GeneratedEntityManagerImplTranslator extends EntityAndManagerTranslator<Class> {
+public final class GeneratedManagerImplTranslator extends EntityAndManagerTranslator<Class> {
 
     public final static String 
         NEW_ENTITY_FROM_METHOD         = "newEntityFrom",
@@ -97,7 +103,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
     private @Inject DbmsHandlerComponent dbmsHandlerComponent;
     private @Inject Injector injector;
     
-    public GeneratedEntityManagerImplTranslator(Table table) {
+    public GeneratedManagerImplTranslator(Table table) {
         super(table, Class::of);
     }
 
@@ -215,7 +221,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                     .add(generateSet(getSupport(), file, table::columns))
                     .add(generateFields(getSupport(), file, table::columns))
                     .add(generatePrimaryKeyFields(getSupport(), file, 
-                        () -> table.columns().filter(GeneratedEntityManagerImplTranslator::isPrimaryKey))
+                        () -> table.columns().filter(GeneratedManagerImplTranslator::isPrimaryKey))
                     )
                     .add(generateGetPrimaryKeyClassesField(file))
                     .add(generateGetPrimaryKeyClasses(file))
