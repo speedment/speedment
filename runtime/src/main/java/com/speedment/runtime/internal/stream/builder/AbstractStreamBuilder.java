@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.internal.stream.builder;
 
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.stream.autoclose.AbstractAutoClosingStream;
 import com.speedment.runtime.internal.stream.builder.pipeline.PipelineImpl;
@@ -41,6 +43,8 @@ import java.util.stream.BaseStream;
  * @param <P> Pipeline type
  */
 public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P>, P> {
+
+    private static final Logger LOGGER = LoggerManager.getLogger(AbstractStreamBuilder.class);
 
     protected final String UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED = "This method has been disabled for this Stream type because improper use will "
         + "lead to resources not being freed up. "
@@ -132,6 +136,9 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
     protected <T> boolean finallyClose(BooleanSupplier bs) {
         try {
             return bs.getAsBoolean();
+        } catch (Exception e) {
+            LOGGER.error(e);
+            throw e;
         } finally {
             close();
         }
@@ -140,6 +147,9 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
     protected <T> long finallyClose(LongSupplier lp) {
         try {
             return lp.getAsLong();
+        } catch (Exception e) {
+            LOGGER.error(e);
+            throw e;
         } finally {
             close();
         }
@@ -148,6 +158,9 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
     protected <T> int finallyClose(IntSupplier is) {
         try {
             return is.getAsInt();
+        } catch (Exception e) {
+            LOGGER.error(e);
+            throw e;
         } finally {
             close();
         }
@@ -156,6 +169,9 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
     protected <T> double finallyClose(DoubleSupplier ds) {
         try {
             return ds.getAsDouble();
+        } catch (Exception e) {
+            LOGGER.error(e);
+            throw e;
         } finally {
             close();
         }
@@ -164,6 +180,9 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
     protected <T> void finallyClose(Runnable r) {
         try {
             r.run();
+        } catch (Exception e) {
+            LOGGER.error(e);
+            throw e;
         } finally {
             close();
         }
@@ -172,6 +191,9 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
     protected <T> T finallyClose(Supplier<T> s) {
         try {
             return s.get();
+        } catch (Exception e) {
+            LOGGER.error(e);
+            throw e;
         } finally {
             close();
         }
