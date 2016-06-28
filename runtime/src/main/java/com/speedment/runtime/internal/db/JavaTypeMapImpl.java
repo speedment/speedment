@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.internal.db;
 
+import com.speedment.runtime.db.JavaTypeMap;
 import com.speedment.runtime.db.metadata.ColumnMetaData;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.runtime.typemapping.StandardJavaTypeMapping;
 import static com.speedment.runtime.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.Clob;
@@ -30,28 +30,24 @@ import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author  Emil Forslund
  * @since   2.4.0
  */
-public class JavaTypeMap {
-    
-    @FunctionalInterface
-    public interface Rule {
-        Optional<Class<?>> findJdbcType(Map<String, Class<?>> sqlTypeMapping, ColumnMetaData md);
-    }
-    
+public class JavaTypeMapImpl implements JavaTypeMap {
+
     private final List<Rule> rules;
     private final Map<String, Class<?>> inner;
     
-    public JavaTypeMap() {
+    public JavaTypeMapImpl() {
         this(map -> {});
     }
     
@@ -59,7 +55,7 @@ public class JavaTypeMap {
      * Sets up the java type map for this database type
      * @see http://docs.oracle.com/javase/1.5.0/docs/guide/jdbc/getstart/mapping.html
      */
-    protected JavaTypeMap(Consumer<Map<String, Class<?>>> installer) {
+    protected JavaTypeMapImpl(Consumer<Map<String, Class<?>>> installer) {
         rules = new CopyOnWriteArrayList<>();
         inner = newCaseInsensitiveMap();
         
@@ -95,11 +91,13 @@ public class JavaTypeMap {
         assertJavaTypesKnown();
     }
     
-    public void addRule(Rule rule) {
+    @Override
+    public final void addRule(Rule rule) {
         rules.add(requireNonNull(rule));
     }
     
-    public Class<?> findJdbcType(Map<String, Class<?>> sqlTypeMapping, ColumnMetaData md) {
+    @Override
+    public final Class<?> findJdbcType(Map<String, Class<?>> sqlTypeMapping, ColumnMetaData md) {
         // Firstly, check if we have any rule for this type.
         final Optional<Class<?>> ruled = rules.stream()
             .map(r -> r.findJdbcType(sqlTypeMapping, md))
@@ -133,12 +131,14 @@ public class JavaTypeMap {
         }
     }
     
-    public void put(String key, Class<?> clazz) {
+    @Override
+    public final void put(String key, Class<?> clazz) {
         requireNonNulls(key, clazz);
         this.inner.put(key, clazz);
     }
     
-    public Class<?> get(String key) {
+    @Override
+    public final Class<?> get(String key) {
         requireNonNull(key);
         return inner.get(key);
     }

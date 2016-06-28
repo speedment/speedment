@@ -45,6 +45,7 @@ import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.db.DbmsMetadataHandler;
+import com.speedment.runtime.db.JavaTypeMap;
 import com.speedment.runtime.db.SqlPredicate;
 import com.speedment.runtime.db.SqlSupplier;
 import com.speedment.runtime.db.metadata.ColumnMetaData;
@@ -101,7 +102,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     }
     
     protected JavaTypeMap newJavaTypeMap() {
-        return new JavaTypeMap();
+        return JavaTypeMap.create();
     }
     
     @Override
