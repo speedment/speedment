@@ -38,6 +38,7 @@ import com.speedment.runtime.internal.component.TypeMapperComponentImpl;
 import com.speedment.runtime.internal.config.dbms.StandardDbmsTypes;
 import com.speedment.runtime.manager.Manager;
 import com.speedment.common.injector.annotation.IncludeInjectable;
+import java.util.Optional;
 
 /**
  * An abstract base implementation of the {@link Speedment} interface.
@@ -67,6 +68,11 @@ public abstract class AbstractSpeedment implements Speedment {
     private @Inject Injector injector;
     
     protected AbstractSpeedment() {}
+
+    @Override
+    public <T> Optional<T> get(Class<T> type) {
+        return injector.get(type);
+    }
 
     @Override
     public <T> T getOrThrow(Class<T> componentClass) throws SpeedmentException {

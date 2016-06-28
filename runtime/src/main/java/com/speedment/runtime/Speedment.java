@@ -21,6 +21,7 @@ import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.manager.Manager;
+import java.util.Optional;
 
 /**
  * The {@code Platform} class acts as a generic holder of different system
@@ -36,6 +37,16 @@ import com.speedment.runtime.manager.Manager;
  */
 @Api(version = "2.4")
 public interface Speedment {
+    
+    /**
+     * Returns the specified component from the platform, or if it does not
+     * exist, an empty {@code Optional}.
+     * 
+     * @param <T>   the type to search for
+     * @param type  the interface type
+     * @return      the implementation or empty
+     */
+    <T> Optional<T> get(Class<T> type);
 
     /**
      * Returns the specified component from the platform, or if it does not
