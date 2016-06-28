@@ -26,6 +26,7 @@ import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.common.codegen.model.ClassOrInterface;
+import com.speedment.common.injector.annotation.InjectorKey;
 import java.util.stream.Stream;
 
 /**
@@ -36,6 +37,7 @@ import java.util.stream.Stream;
  * @since   2.3
  */
 @Api(version = "2.3")
+@InjectorKey(CodeGenerationComponent.class)
 public interface CodeGenerationComponent extends Component {
 
     @Override

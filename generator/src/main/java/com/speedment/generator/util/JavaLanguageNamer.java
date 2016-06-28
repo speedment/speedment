@@ -19,6 +19,7 @@ package com.speedment.generator.util;
 import com.speedment.runtime.config.Project;
 import static com.speedment.runtime.config.Project.DEFAULT_PACKAGE_NAME;
 import static com.speedment.common.codegen.internal.util.Formatting.ucfirst;
+import com.speedment.common.injector.annotation.InjectorKey;
 import static com.speedment.runtime.internal.util.sql.SqlUtil.unQuote;
 import static com.speedment.runtime.util.CollectorUtil.toUnmodifiableSet;
 import static com.speedment.runtime.util.CollectorUtil.unmodifiableSetOf;
@@ -35,6 +36,7 @@ import java.util.stream.Stream;
  *
  * @author Per Minborg
  */
+@InjectorKey(JavaLanguageNamer.class)
 public interface JavaLanguageNamer {
 
     // From http://download.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html

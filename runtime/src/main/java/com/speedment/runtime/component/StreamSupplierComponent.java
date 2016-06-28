@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.component;
 
+import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.trait.ComparableFieldTrait;
 import com.speedment.runtime.field.trait.FieldTrait;
@@ -31,6 +32,7 @@ import java.util.stream.Stream;
  * @since   2.2.0
  */
 @Api(version = "2.4")
+@InjectorKey(StreamSupplierComponent.class)
 public interface StreamSupplierComponent extends Component {
     
     /**

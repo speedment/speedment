@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.component;
 
+import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.trait.HasMainInterface;
@@ -49,6 +50,7 @@ import org.controlsfx.control.PropertySheet;
  * @since   2.3.0
  */
 @Api(version="2.4")
+@InjectorKey(UserInterfaceComponent.class)
 public interface UserInterfaceComponent extends Component {
 
     /*************************************************************/

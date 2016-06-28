@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.component;
 
+import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
@@ -31,6 +32,7 @@ import java.util.stream.Stream;
  * @since 2.0
  */
 @Api(version = "2.3")
+@InjectorKey(ManagerComponent.class)
 public interface ManagerComponent extends Component {
 
     @Override

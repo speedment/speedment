@@ -21,6 +21,7 @@
  */
 package com.speedment.runtime.component;
 
+import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.exception.SpeedmentException;
 
@@ -33,6 +34,7 @@ import com.speedment.runtime.exception.SpeedmentException;
  * @since 2.0
  */
 @Api(version = "2.3")
+@InjectorKey(EntityManager.class)
 public interface EntityManager extends Component {
 
     @Override

@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.component;
 
+import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Dbms;
 import java.util.Optional;
@@ -25,6 +26,7 @@ import java.util.Optional;
  * @author Emil Forslund
  */
 @Api(version = "2.3")
+@InjectorKey(PasswordComponent.class)
 public interface PasswordComponent extends Component {
     
     void put(String dbmsName, char[] password);

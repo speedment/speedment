@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.component;
 
+import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.Document;
@@ -37,6 +38,7 @@ import java.util.List;
  * @since 2.3
  */
 @Api(version = "2.3")
+@InjectorKey(DocumentPropertyComponent.class)
 public interface DocumentPropertyComponent extends Component {
 
     final List<String>     
