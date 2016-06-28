@@ -35,7 +35,6 @@ import com.speedment.runtime.exception.SpeedmentException;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.OBJECT;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.OPTIONAL;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.VOID;
-import com.speedment.common.codegen.internal.model.value.BooleanValue;
 import com.speedment.common.codegen.internal.model.value.ReferenceValue;
 import com.speedment.common.codegen.internal.util.Formatting;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
@@ -239,7 +238,7 @@ public final class GeneratedEntityManagerImplTranslator extends EntityAndManager
                         method.add(Field.of("entity", getSupport().entityType()));
                         
                         if (methodNames.size() == 1) {
-                            method.add("return " + methodNames.get(0) + "();");
+                            method.add("return " + methodNames.get(0) + "(entity);");
                         } else {
                             file.add(Import.of(Type.of(Function.class)));
                             method.add("return Stream.of("
