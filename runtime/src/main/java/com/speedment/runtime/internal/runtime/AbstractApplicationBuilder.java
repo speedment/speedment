@@ -237,6 +237,12 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
+    public BUILDER withInjectable(String key, Class<?> injectableClass) {
+        injector.canInject(key, injectableClass);
+        return self();
+    }
+
+    @Override
     public final APP build() {
         final Injector inj;
         
