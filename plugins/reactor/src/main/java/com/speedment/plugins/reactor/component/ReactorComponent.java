@@ -19,6 +19,7 @@ package com.speedment.plugins.reactor.component;
 import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.WithState;
 import com.speedment.generator.StandardTranslatorKey;
 import com.speedment.generator.component.CodeGenerationComponent;
 import static com.speedment.plugins.reactor.component.ReactorComponentUtil.validMergingColumns;
@@ -59,9 +60,9 @@ public final class ReactorComponent extends AbstractComponent {
 
     @ExecuteBefore(RESOLVED)
     void setup(
-            @Inject CodeGenerationComponent code, 
-            @Inject UserInterfaceComponent ui, 
-            @Inject EventComponent events) {
+            @WithState(RESOLVED) CodeGenerationComponent code, 
+            @WithState(RESOLVED) UserInterfaceComponent ui, 
+            @WithState(RESOLVED) EventComponent events) {
         
         code.add(Project.class, StandardTranslatorKey.GENERATED_APPLICATION, new GeneratedApplicationDecorator());
         code.add(Project.class, StandardTranslatorKey.GENERATED_APPLICATION_IMPL, new GeneratedApplicationImplDecorator());

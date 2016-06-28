@@ -16,9 +16,9 @@
  */
 package com.speedment.plugins.springgenerator;
 
-import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.WithState;
+import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.plugins.springgenerator.internal.ConfigurationTranslator;
 import com.speedment.plugins.springgenerator.internal.ControllerTranslator;
@@ -42,7 +42,7 @@ import com.speedment.runtime.license.Software;
 public final class SpringGeneratorComponent extends AbstractComponent {
 
     @ExecuteBefore(RESOLVED)
-    void onResolve(@Inject CodeGenerationComponent code) {
+    void onResolve(@WithState(RESOLVED) CodeGenerationComponent code) {
         code.put(Project.class, 
             SpringTranslatorKey.CONFIGURATION, 
             ConfigurationTranslator::new

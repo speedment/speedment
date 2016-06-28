@@ -32,6 +32,7 @@ import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
@@ -40,46 +41,47 @@ import java.util.stream.Stream;
 /**
  * An encoder that can transform Speedment entities to JSON.
  * <p>
- * Example usage:
- * <code>
+ * Example usage:  <code>
  *      Manager&lt;Address&gt; addresses = app.managerOf(Address.class);
  *      Manager&lt;Employee&gt; employees = app.managerOf(Employee.class);
  *      Manager&lt;Employee&gt; departments = app.managerOf(Department.class);
- * 
+ *
  *      // Include street, zip-code and city only.
  *      JconEncoder&lt;Address&gt; addrEncoder = JsonEncoder.noneOf(addresses)
  *          .add(Address.STREET)
  *          .add(Address.ZIPCODE)
  *          .add(Address.CITY);
- * 
+ *
  *      // Do not expose SSN but do inline the home address.
  *      JconEncoder&lt;Employee&gt; empEncoder = JsonEncoder.allOf(employees)
  *          .remove(Employee.SSN)
  *          .remove(Employee.DEPARTMENT); // Go the other way around.
  *          .add(Employee.HOME_ADDRESS, addrEncoder); // Foreign key
- * 
+ *
  *      // Inline every employee in the department.
  *      JconEncoder&lt;Department&gt; depEncoder = JsonEncoder.allOf(departments)
  *          .putStreamer("employees", Department::employees, empEncoder);
- * 
+ *
  *      String json = depEncoder.apply(departments.findAny().get());
  * </code>
- * 
- * @author          Emil Forslund
- * @param <ENTITY>  entity type
+ *
+ * @author Emil Forslund
+ * @param <ENTITY> entity type
  */
 public final class JsonEncoder<ENTITY> {
 
     private final Map<String, Function<ENTITY, String>> getters;
     private final Project project;
+    private final Manager<ENTITY> manager;
 
     /**
      * Constructs an empty JsonEncoder with no fields added to the output
      * renderer.
      */
-    private JsonEncoder(Project project) {
+    private JsonEncoder(Project project, Manager<ENTITY> manager) {
         this.getters = new LinkedHashMap<>();
         this.project = requireNonNull(project);
+        this.manager = requireNonNull(manager);
     }
 
     // Fields
@@ -92,7 +94,7 @@ public final class JsonEncoder<ENTITY> {
 
     // Foreign key fields.
     public <D, T, FK_ENTITY, I extends FieldTrait & ReferenceFieldTrait<ENTITY, D, T> & ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY>>
-            JsonEncoder<ENTITY> put(I field, JsonEncoder<FK_ENTITY> builder) {
+        JsonEncoder<ENTITY> put(I field, JsonEncoder<FK_ENTITY> builder) {
         requireNonNulls(field, builder);
         final String columnName = jsonField(project, field.getIdentifier());
         final ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY> fkField = (ReferenceForeignKeyFieldTrait< ENTITY, D, FK_ENTITY>) field; // Workaround bugg
@@ -108,11 +110,11 @@ public final class JsonEncoder<ENTITY> {
     }
 
     // Label-and-getter with custom formatter
-    public <FK_ENTITY> JsonEncoder<ENTITY> put(String label, Function<ENTITY, FK_ENTITY> getter, JsonEncoder<FK_ENTITY> builder) {
+    public <FK_ENTITY> JsonEncoder<ENTITY> put(String label, BiFunction<ENTITY, Manager<FK_ENTITY>, FK_ENTITY> getter, JsonEncoder<FK_ENTITY> builder) {
         requireNonNull(label);
         requireNonNull(getter);
         requireNonNull(builder);
-        getters.put(label, e -> "\"" + label + "\":" + builder.apply(getter.apply(e)));
+        getters.put(label, e -> "\"" + label + "\":" + builder.apply(getter.apply(e, builder.manager)));
         return this;
     }
 
@@ -139,7 +141,7 @@ public final class JsonEncoder<ENTITY> {
         getters.remove(label);
         return this;
     }
-    
+
     public JsonEncoder<ENTITY> remove(FieldTrait field) {
         requireNonNull(field);
         getters.remove(jsonField(project, field.getIdentifier()));
@@ -192,7 +194,7 @@ public final class JsonEncoder<ENTITY> {
      * @return a new JsonEncoder with no fields added to the renderer
      */
     public static <ENTITY> JsonEncoder<ENTITY> noneOf(Manager<ENTITY> manager) {
-        return new JsonEncoder<>(projectOf(manager));
+        return new JsonEncoder<>(projectOf(manager), manager);
     }
 
     /**
@@ -266,12 +268,12 @@ public final class JsonEncoder<ENTITY> {
         final ReferenceFieldTrait<ENTITY, ?, ?> result = (ReferenceFieldTrait<ENTITY, ?, ?>) f;
         return result;
     }
-    
+
     private static <ENTITY> Project projectOf(Manager<ENTITY> manager) {
         return DocumentUtil.ancestor(manager.getTable(), Project.class)
             .orElseThrow(() -> new SpeedmentException(
-                "Could not find a project root to table '" + 
-                manager.getTable().toString() + "'."
+                "Could not find a project root to table '"
+                + manager.getTable().toString() + "'."
             ));
     }
 }
