@@ -235,6 +235,12 @@ public abstract class AbstractApplicationBuilder<
         this.validateRuntimeConfig = validateRuntimeConfig;
         return self();
     }
+    
+    @Override
+    public BUILDER withInjectable(Class<?> injectableClass) {
+        injector.canInject(injectableClass);
+        return self();
+    }
 
     @Override
     public BUILDER withInjectable(String key, Class<?> injectableClass) {
