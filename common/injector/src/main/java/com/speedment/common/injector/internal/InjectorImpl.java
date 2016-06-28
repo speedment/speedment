@@ -54,10 +54,12 @@ import java.util.Optional;
 import java.util.Properties;
 import com.speedment.common.injector.annotation.IncludeInjectable;
 import com.speedment.common.injector.annotation.WithState;
+import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import java.util.LinkedHashMap;
 import static java.util.Objects.requireNonNull;
+import java.util.concurrent.atomic.AtomicInteger;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -352,75 +354,94 @@ public final class InjectorImpl implements Injector {
             });
             
             final AtomicBoolean hasAnythingChanged = new AtomicBoolean();
+            final AtomicInteger nextState = new AtomicInteger(0);
 
             // Loop until all nodes have been started.
             Set<DependencyNode> unfinished;
-            while (!(unfinished = graph.nodes()
-                    .filter(n -> n.getCurrentState() != State.STARTED)
+            
+            // Go through every state up and including STARTED.
+            while (nextState.get() <= State.STARTED.ordinal()) {
+                
+                // Get a set of the nodes that has not yet reached that state,
+                // and operate upon it until it is empty
+                while (!(unfinished = graph.nodes()
+                    .filter(n -> n.getCurrentState().ordinal() < nextState.get())
                     .collect(toSet())).isEmpty()) {
-                
-                hasAnythingChanged.set(false);
+                    
+                    hasAnythingChanged.set(false);
 
-                unfinished.stream()
-                    .forEach(n -> {
-                        // Determine the next state of this node.
-                        final State state = STATES[n.getCurrentState().ordinal() + 1];
-                        
-                        // Check if all its dependencies have been satisfied.
-                        if (n.canBe(state)) {
-                            
-                            printLine();
-                            
-                            // Retreive the instance for that node
-                            final Object instance = findIn(injector, n.getRepresentedType(), instances, true);
+                    unfinished.stream()
+                        .forEach(n -> {
+                            // Determine the next state of this node.
+                            final State state = STATES[n.getCurrentState().ordinal() + 1];
 
-                            // Execute all the executions for the next step.
-                            n.getExecutions().stream()
-                                .filter(e -> e.getState() == state)
-                                .map(Execution::getMethod)
-                                .forEach(m -> {
-                                    final Object[] params = Stream.of(m.getParameters())
-                                        .map(p -> findIn(injector, p.getType(), instances, p.getAnnotation(WithState.class) != null))
-                                        .toArray(Object[]::new);
+                            // Check if all its dependencies have been satisfied.
+                            if (n.canBe(state)) {
 
-                                    m.setAccessible(true);
-                                    
-                                    final String shortMethodName = 
-                                        n.getRepresentedType().getSimpleName() + "#" + 
-                                        m.getName() + "(" + 
-                                        Stream.of(m.getParameters())
-                                            .map(p -> p.getType().getSimpleName().substring(0, 1))
-                                            .collect(joining(", ")) + ")";
-                                    
-                                    LOGGER.debug(String.format("| -> %-76s |", shortMethodName));
+                                printLine();
 
-                                    try {
-                                        m.invoke(instance, params);
-                                    } catch (final IllegalAccessException 
-                                                 | IllegalArgumentException 
-                                                 | InvocationTargetException ex) {
+                                // Retreive the instance for that node
+                                final Object instance = findIn(injector, n.getRepresentedType(), instances, true);
 
-                                        throw new RuntimeException(ex);
-                                    }
-                                });
+                                // Execute all the executions for the next step.
+                                n.getExecutions().stream()
+                                    .filter(e -> e.getState() == state)
+                                    .map(Execution::getMethod)
+                                    .forEach(m -> {
+                                        final Object[] params = Stream.of(m.getParameters())
+                                            .map(p -> findIn(injector, p.getType(), instances, p.getAnnotation(WithState.class) != null))
+                                            .toArray(Object[]::new);
 
-                            // Update its state to the new state.
-                            n.setState(state);
-                            hasAnythingChanged.set(true);
+                                        m.setAccessible(true);
 
-                            LOGGER.debug(String.format(
-                                "| %-66s %12s |", 
-                                n.getRepresentedType().getSimpleName(), 
-                                state.name()
-                            ));
-                        }
-                    });
-                
-                if (!hasAnythingChanged.get()) {
-                    throw new IllegalStateException(
-                        "Injector appears to be stuck in an infinite loop."
-                    );
+                                        // We might want to log exactly which steps we have 
+                                        // completed.
+                                        if (LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+                                            final String shortMethodName = 
+                                                n.getRepresentedType().getSimpleName() + "#" + 
+                                                m.getName() + "(" + 
+                                                Stream.of(m.getParameters())
+                                                    .map(p -> p.getType().getSimpleName().substring(0, 1))
+                                                    .collect(joining(", ")) + ")";
+
+                                            LOGGER.debug(String.format("| -> %-76s |", shortMethodName));
+                                        }
+                                            
+                                        try {
+                                            m.invoke(instance, params);
+                                        } catch (final IllegalAccessException 
+                                                     | IllegalArgumentException 
+                                                     | InvocationTargetException ex) {
+
+                                            throw new RuntimeException(ex);
+                                        }
+                                    });
+
+                                // Update its state to the new state.
+                                n.setState(state);
+                                hasAnythingChanged.set(true);
+
+                                LOGGER.debug(String.format(
+                                    "| %-66s %12s |", 
+                                    n.getRepresentedType().getSimpleName(), 
+                                    state.name()
+                                ));
+                            }
+                        });
+
+                    // The set was not empty when we entered the 'while' clause, and
+                    // yet nothing has changed. This means that we are stuck in an
+                    // infinite loop.
+                    if (!hasAnythingChanged.get()) {
+                        throw new IllegalStateException(
+                            "Injector appears to be stuck in an infinite loop."
+                        );
+                    }
                 }
+                
+                // Every node has reached the desired state. 
+                // Begin working with the next state.
+                nextState.incrementAndGet();
             }
             
             printLine();
