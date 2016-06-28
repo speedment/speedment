@@ -42,23 +42,18 @@ public final class ReflectionUtil {
     }
     
     public static Stream<Method> traverseMethods(Class<?> clazz) {
-        final Class<?> parent = clazz.getSuperclass();
-        final Stream<Method> inherited;
-        
-        if (parent != null) {
-            inherited = traverseMethods(parent);
-        } else {
-            inherited = Stream.empty();
-        }
-        
-        return Stream.concat(inherited, Stream.of(clazz.getDeclaredMethods()));
+        return traverseAncestors(clazz)
+            .flatMap(c -> Stream.of(c.getDeclaredMethods()));
     }
     
     public static Stream<Class<?>> traverseAncestors(Class<?> clazz) {
         if (clazz.getSuperclass() == null) {
             return Stream.of(clazz);
         } else {
-            return Stream.concat(Stream.of(clazz), traverseAncestors(clazz.getSuperclass()));
+            return Stream.concat(
+                Stream.of(clazz),
+                Stream.concat(traverseAncestors(clazz.getSuperclass()), Stream.of(clazz.getInterfaces()))
+            ).distinct();
         }
     }
     

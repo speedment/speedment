@@ -53,7 +53,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.Optional;
 import java.util.Properties;
 import com.speedment.common.injector.annotation.IncludeInjectable;
+import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.common.injector.annotation.WithState;
+import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseAncestors;
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
@@ -212,6 +214,15 @@ public final class InjectorImpl implements Injector {
         LOGGER.debug("+---------------------------------------------------------------------------------+");
     }
     
+    private static String limit(String in, int length) {
+        if (in.length() < length) {
+            return in;
+        } else {
+            final int breakpoint = (length - 3) / 2;
+            return in.substring(0, breakpoint) + "..." + in.substring(length - breakpoint - 3);
+        }
+    }
+    
     private <T> void injectFields(T instance) {
         requireNonNull(instance);
         
@@ -267,7 +278,15 @@ public final class InjectorImpl implements Injector {
 
         @Override
         public Builder canInject(Class<?> injectableType) {
-            return canInject(injectableType.getName(), injectableType);
+            final String key = traverseAncestors(injectableType)
+                .filter(c -> c.isAnnotationPresent(InjectorKey.class))
+                .map(c -> c.getAnnotation(InjectorKey.class))
+                .map(InjectorKey::value)
+                .findFirst()
+                .orElse(injectableType)
+                .getName();
+            
+            return canInject(key, injectableType);
         }
 
         @Override
@@ -310,8 +329,33 @@ public final class InjectorImpl implements Injector {
             final DependencyGraph graph = DependencyGraphImpl.create(injectablesSet);
             final LinkedList<Object> instances = new LinkedList<>();
             
+            LOGGER.debug("Creating " + injectablesSet.size() + " injectable instances.");
+            printLine();
+            
             // Create an instance of every injectable type
             for (final Class<?> injectable : injectablesSet) {
+                
+                // If we are currently debugging, print out every created instance
+                // and which configuration options are available for it.
+                if (LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+                    LOGGER.debug(String.format("| %-71s CREATED |", limit(injectable.getSimpleName(), 71)));
+                    
+                    traverseFields(injectable)
+                        .filter(f -> f.isAnnotationPresent(Config.class))
+                        .map(f -> f.getAnnotation(Config.class))
+                        .map(a -> String.format("|     %-48s %26s |", limit(a.name(), 48), 
+                            limit(properties.containsKey(a.name())
+                                ? properties.get(a.name()).toString()
+                                : a.value(), 26
+                            )
+                        ))
+                        .forEachOrdered(LOGGER::debug);
+                    
+                    printLine();
+                }
+
+                
+                
                 final Object instance = newInstance(injectable, properties);
                 instances.addFirst(instance);
             }
@@ -404,7 +448,7 @@ public final class InjectorImpl implements Injector {
                                                     .map(p -> p.getType().getSimpleName().substring(0, 1))
                                                     .collect(joining(", ")) + ")";
 
-                                            LOGGER.debug(String.format("| -> %-76s |", shortMethodName));
+                                            LOGGER.debug(String.format("| -> %-76s |", limit(shortMethodName, 76)));
                                         }
                                             
                                         try {
@@ -423,8 +467,8 @@ public final class InjectorImpl implements Injector {
 
                                 LOGGER.debug(String.format(
                                     "| %-66s %12s |", 
-                                    n.getRepresentedType().getSimpleName(), 
-                                    state.name()
+                                    limit(n.getRepresentedType().getSimpleName(), 66), 
+                                    limit(state.name(), 12)
                                 ));
                             }
                         });
