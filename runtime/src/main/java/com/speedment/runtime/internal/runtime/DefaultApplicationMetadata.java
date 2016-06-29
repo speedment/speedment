@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.internal.runtime;
 
+import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.runtime.ApplicationMetadata;
 import com.speedment.runtime.config.Project;
@@ -35,6 +36,11 @@ public final class DefaultApplicationMetadata implements ApplicationMetadata {
         name=METADATA_LOCATION, 
         value="src/main/json/speedment.json"
     ) File metadataLocation;
+    
+    /**
+     * Should only be instantiated by the {@link Injector}.
+     */
+    private DefaultApplicationMetadata() {}
 
     @Override
     public Project makeProject() {
