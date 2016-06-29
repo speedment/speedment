@@ -20,6 +20,7 @@ import com.speedment.common.injector.Injector;
 import static com.speedment.common.injector.State.INITIALIZED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.exception.SpeedmentException;
@@ -39,7 +40,6 @@ import com.speedment.tool.internal.controller.WorkspaceController;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 import javafx.fxml.FXMLLoader;
@@ -57,6 +57,7 @@ import static java.util.Objects.requireNonNull;
  * @author  Emil Forslund
  * @since   1.0.0
  */
+@InjectorKey(InjectionLoader.class)
 public final class InjectionLoader {
     
     private final static String 

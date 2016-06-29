@@ -19,12 +19,14 @@ package com.speedment.generator;
 import com.speedment.runtime.config.Project;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
+import com.speedment.common.injector.annotation.InjectorKey;
 import java.nio.file.Path;
 
 /**
  *
  * @author Per Minborg
  */
+@InjectorKey(TranslatorManager.class)
 public interface TranslatorManager {
 
     void accept(Project project);

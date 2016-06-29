@@ -56,7 +56,7 @@ public class TranslatorSupportTest extends SimpleModel {
 
     @Before
     public void setUp() {
-        instance = speedment.getOrThrow(Injector.class).inject(new TranslatorSupport<>(table));
+        instance = new TranslatorSupport<>(speedment.getOrThrow(JavaLanguageNamer.class), table);
     }
 
     @After
@@ -268,7 +268,7 @@ public class TranslatorSupportTest extends SimpleModel {
 
     @Test
     public void testShortTableName() {
-        final TranslatorSupport<Table> support = speedment.getOrThrow(Injector.class).inject(new TranslatorSupport<>(table2));
+        final TranslatorSupport<Table> support = new TranslatorSupport<>(speedment.getOrThrow(JavaLanguageNamer.class), table2);
         assertEquals("sP", support.variableName());
     }
 

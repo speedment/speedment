@@ -27,10 +27,10 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.Type;
-import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
+import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import java.util.stream.Collectors;
@@ -46,7 +46,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 public final class GeneratedControllerTranslator extends DefaultJavaClassTranslator<Table, Class> {
 
-    private @Inject Injector injector;
+    private @Inject JavaLanguageNamer namer;
     
     public GeneratedControllerTranslator(Table document) {
         super(document, Class::of);
@@ -58,8 +58,7 @@ public final class GeneratedControllerTranslator extends DefaultJavaClassTransla
             .forEveryTable((clazz, table) -> {
                 
                 final Project project = getSupport().projectOrThrow();
-                final TranslatorSupport<Project> projectSupport = 
-                    injector.inject(new TranslatorSupport<>(project));
+                final TranslatorSupport<Project> projectSupport = new TranslatorSupport<>(namer, project);
                 
                 final Type appType = Type.of(
                     projectSupport.basePackageName() + "." +

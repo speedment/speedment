@@ -18,6 +18,7 @@ package com.speedment.tool.internal.util;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.Speedment;
@@ -65,6 +66,7 @@ import javafx.stage.Stage;
  * @author  Emil Forslund
  * @since   2.4.0
  */
+@InjectorKey(ConfigFileHelper.class)
 public final class ConfigFileHelper {
     
     private final static Logger LOGGER = LoggerManager.getLogger(ConfigFileHelper.class);

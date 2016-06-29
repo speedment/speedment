@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.util;
 
-import com.speedment.runtime.Speedment;
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.component.InfoComponent;
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.tool.brand.Brand;
@@ -30,18 +30,18 @@ import javafx.stage.Stage;
  */
 public final class BrandUtil {
     
-    public static void applyBrand(Speedment speedment, Stage stage) {
-        applyBrand(speedment, stage, stage.getScene());
+    public static void applyBrand(Injector injector, Stage stage) {
+        applyBrand(injector, stage, stage.getScene());
     }
     
-    public static void applyBrand(Speedment speedment, Stage stage, Scene scene) {
-        applyBrandToStage(speedment, stage);
-        applyBrandToScene(speedment, scene);
+    public static void applyBrand(Injector injector, Stage stage, Scene scene) {
+        applyBrandToStage(injector, stage);
+        applyBrandToScene(injector, scene);
     }
     
-    public static void applyBrandToStage(Speedment speedment, Stage stage) {
-        final InfoComponent info = speedment.getOrThrow(InfoComponent.class);
-        final Brand brand = speedment.getOrThrow(Brand.class);
+    public static void applyBrandToStage(Injector injector, Stage stage) {
+        final InfoComponent info = injector.getOrThrow(InfoComponent.class);
+        final Brand brand = injector.getOrThrow(Brand.class);
         
         stage.setTitle(info.title());
         brand.logoSmall()
@@ -49,8 +49,8 @@ public final class BrandUtil {
             .ifPresent(stage.getIcons()::add);
     }
     
-    public static void applyBrandToScene(Speedment speedment, Scene scene) {
-        final Brand brand = speedment.getOrThrow(Brand.class);
+    public static void applyBrandToScene(Injector injector, Scene scene) {
+        final Brand brand = injector.getOrThrow(Brand.class);
         brand.apply(scene);
     }
     

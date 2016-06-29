@@ -32,31 +32,21 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.OBJECT;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.OPTIONAL;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.VOID;
 import com.speedment.common.codegen.internal.model.value.ReferenceValue;
 import com.speedment.common.codegen.internal.util.Formatting;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
-import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.config.trait.HasEnabled;
-import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.internal.manager.sql.AbstractSqlManager;
 import com.speedment.runtime.util.tuple.Tuples;
-import static com.speedment.common.codegen.internal.util.Formatting.block;
-import static com.speedment.common.codegen.internal.util.Formatting.indent;
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
-import static com.speedment.common.codegen.internal.util.Formatting.tab;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
@@ -67,18 +57,21 @@ import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.ProjectComponent;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.runtime.internal.util.sql.ResultSetUtil;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-import static com.speedment.common.codegen.internal.util.Formatting.block;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.Formatting.tab;
+import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.generateFields;
+import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.generateGet;
+import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.generateNewEmptyEntity;
+import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.generateNewEntityFromBody;
+import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.generatePrimaryKeyFields;
+import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.generateSet;
+import com.speedment.generator.util.JavaLanguageNamer;
 import static java.util.stream.Collectors.joining;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 
@@ -101,6 +94,7 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
 
     private @Inject ResultSetMapperComponent resultSetMapperComponent;
     private @Inject DbmsHandlerComponent dbmsHandlerComponent;
+    private @Inject JavaLanguageNamer javaLanguageNamer;
     private @Inject Injector injector;
     
     public GeneratedManagerImplTranslator(Table table) {
@@ -224,7 +218,7 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
                         () -> table.columns().filter(GeneratedManagerImplTranslator::isPrimaryKey))
                     )
                     .add(generateGetPrimaryKeyClassesField(file))
-                    .add(generateGetPrimaryKeyClasses(file))
+                    .add(generateGetPrimaryKeyClasses())
                     .add(generateNewCopyOf(file));
             })
             
@@ -234,7 +228,7 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
             .forEveryTable(Phase.POST_MAKE, (clazz, table) -> {
                 fkStreamers.keySet().stream().forEach(referencingTable -> {
                     final List<String> methodNames = fkStreamers.get(referencingTable);
-                    final TranslatorSupport<Table> foreignSupport = injector.inject(new TranslatorSupport<>(referencingTable));
+                    final TranslatorSupport<Table> foreignSupport = new TranslatorSupport<>(javaLanguageNamer, referencingTable);
                     
                     if (!methodNames.isEmpty()) {
                         final Method method = Method.of(EntityTranslatorSupport.FIND + EntityTranslatorSupport.pluralis(referencingTable, getNamer()),
@@ -278,36 +272,19 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
     public Type getImplType() {
         return getSupport().managerImplType();
     }
-
-    protected Field generateGetPrimaryKeyClassesField(File file) {
-        file.add(Import.of(Type.of(Tuples.class)));
-        final Field field = Field.of(PRIMARY_KEY_CLASSES, pkTupleType())
-            .private_()
-            .static_()
-            .final_();
-
-        final String parameters = primaryKeyColumns()
-            .map(pkc -> pkc.findColumn().get().findTypeMapper().getJavaType())
-            .map(c -> c.getSimpleName() + ".class")
-            .collect(joining(", "));
-
-        field.set(new ReferenceValue(Tuples.class.getSimpleName() + ".of(" + parameters + ")"));
-
-        return field;
+    
+    private Method generateNewEntityFrom(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+        return Method.of(NEW_ENTITY_FROM_METHOD, support.entityType())
+            .protected_()
+            .add(Type.of(SQLException.class))
+            .add(Type.of(SpeedmentException.class))
+            .add(Field.of("resultSet", Type.of(ResultSet.class)))
+            .add(generateNewEntityFromBody(this::readFromResultSet, support, file, columnsSupplier));
     }
-
-    protected Method generateGetPrimaryKeyClasses(File file) {
-
-        final Method method = Method.of(GET_PRIMARY_KEY_CLASSES_METHOD, pkTupleType())
-            .public_()
-            .add(OVERRIDE)
-            .add("return " + PRIMARY_KEY_CLASSES + ";");
-        return method;
-    }
-
+    
     private String readFromResultSet(File file, Column c, AtomicInteger position) {
-
-        final TranslatorSupport<Table> support = injector.inject(new TranslatorSupport<>(c.getParentOrThrow()));
+        
+        final TranslatorSupport<Table> support = new TranslatorSupport<>(javaLanguageNamer, c.getParentOrThrow());
         final Dbms dbms = c.getParentOrThrow().getParentOrThrow().getParentOrThrow();
         
         final ResultSetMapping<?> mapping = resultSetMapperComponent.apply(
@@ -354,140 +331,6 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
         return sb.toString();
     }
 
-    public static Method generateGet(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        return Method.of(GET_METHOD, OBJECT).public_().add(OVERRIDE)
-            .add(Field.of("entity", support.entityType()))
-            .add(Field.of("identifier", Type.of(FieldIdentifier.class).add(Generic.of().add(support.entityType()))))
-            .add(generateGetBody(support, file, columnsSupplier));
-    }
-
-    public static String[] generateGetBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        file.add(Import.of(Type.of(IllegalArgumentException.class)));
-
-        return new String[]{
-            "switch ((" + support.entityName() + ".Identifier) identifier) " + block(
-            columnsSupplier.get()
-            .filter(HasEnabled::isEnabled)
-            .map(c
-            -> "case " + support.namer().javaStaticFieldName(c.getJavaName())
-            + " : return entity." + getterCode(support, c)
-            + ";"
-            ).collect(Collectors.joining(nl()))
-            + nl() + "default : throw new IllegalArgumentException(\"Unknown identifier '\" + identifier + \"'.\");"
-            )
-        };
-    }
-
-    public static Method generateSet(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        return Method.of(SET_METHOD, VOID).public_().add(OVERRIDE)
-            .add(Field.of("entity", support.entityType()))
-            .add(Field.of("identifier", Type.of(FieldIdentifier.class).add(Generic.of().add(support.entityType()))))
-            .add(Field.of("value", Type.of(Object.class)))
-            .add(generateSetBody(support, file, columnsSupplier));
-    }
-
-    public static String[] generateSetBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        file.add(Import.of(Type.of(IllegalArgumentException.class)));
-
-        return new String[]{
-            "switch ((" + support.entityName() + ".Identifier) identifier) " + block(
-            columnsSupplier.get()
-            .filter(HasEnabled::isEnabled)
-            .peek(c -> file.add(Import.of(Type.of(c.findTypeMapper().getJavaType()))))
-            .map(c
-            -> "case " + support.namer().javaStaticFieldName(c.getJavaName())
-            + " : entity." + SETTER_METHOD_PREFIX + support.typeName(c)
-            + "("
-            + castToColumnTypeIfNotObject(c)
-            + "value); break;").collect(Collectors.joining(nl()))
-            + nl() + "default : throw new IllegalArgumentException(\"Unknown identifier '\" + identifier + \"'.\");"
-            )
-        };
-    }
-
-    private static String castToColumnTypeIfNotObject(Column c) {
-        final java.lang.Class<?> castType = c.findTypeMapper().getJavaType();
-        if (Object.class.equals(castType)) {
-            return "";
-        } else {
-            return "(" + c.findTypeMapper().getJavaType().getSimpleName() + ") ";
-        }
-    }
-
-    private static Method generateFields(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        return Method.of(FIELDS_METHOD, Type.of(Stream.class).add(Generic.of().add(Type.of(FieldTrait.class))))
-            .public_().add(OVERRIDE)
-            .add(generateFieldsBody(support, file, columnsSupplier));
-    }
-
-    private static Method generatePrimaryKeyFields(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        return Method.of(PRIMARY_KEYS_FIELDS_METHOD, Type.of(Stream.class).add(Generic.of().add(Type.of(FieldTrait.class))))
-            .public_().add(OVERRIDE)
-            .add(generateFieldsBody(support, file, columnsSupplier));
-    }
-
-    private static String[] generateFieldsBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        final List<String> rows = new LinkedList<>();
-
-        rows.add("return Stream.of(");
-        rows.add(indent(columnsSupplier.get()
-            .filter(HasEnabled::isEnabled)
-            .map(Column::getJavaName)
-            .map(support.namer()::javaStaticFieldName)
-            .map(field -> support.typeName() + "." + field)
-            .collect(joining("," + nl()))
-        ));
-        rows.add(");");
-
-        return rows.toArray(new String[rows.size()]);
-    }
-
-    private Method generateNewEntityFrom(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        return Method.of(NEW_ENTITY_FROM_METHOD, support.entityType())
-            .protected_()
-            .add(Type.of(SQLException.class))
-            .add(Type.of(SpeedmentException.class))
-            .add(Field.of("resultSet", Type.of(ResultSet.class)))
-            .add(generateNewEntityFromBody(support, file, columnsSupplier));
-    }
-
-    private String[] generateNewEntityFromBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-
-        final List<String> rows = new LinkedList<>();
-        rows.add("final " + support.entityName() + " entity = " + NEW_EMPTY_ENTITY_METHOD + "();");
-
-        final Stream.Builder<String> streamBuilder = Stream.builder();
-
-        final AtomicInteger position = new AtomicInteger(1);
-        columnsSupplier.get()
-            .filter(HasEnabled::isEnabled)
-            .forEachOrdered(c -> {
-                streamBuilder.add("entity.set" + support.namer().javaTypeName(c.getJavaName()) + "(" + readFromResultSet(file, c, position) + ");");
-            });
-
-        rows.add("try " + block(streamBuilder.build()));
-        rows.add("catch (" + SQLException.class.getSimpleName() + " sqle) " + block(
-            "throw new " + SpeedmentException.class.getSimpleName() + "(sqle);"
-        ));
-        rows.add("return entity;");
-
-        return rows.toArray(new String[rows.size()]);
-    }
-
-    private Method generateNewEmptyEntity(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        return Method.of(NEW_EMPTY_ENTITY_METHOD, support.entityType())
-            .public_().add(OVERRIDE)
-            .add(generateNewEmptyEntityBody(support, file, columnsSupplier));
-
-    }
-
-    private String[] generateNewEmptyEntityBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        file.add(Import.of(support.entityImplType()));
-        return new String[] {
-            "return new " + support.entityImplName() + "();"
-        };
-    }
-    
     private Method generateNewCopyOf(File file) {
         file.add(Import.of(getSupport().entityImplType()));
 
@@ -518,6 +361,32 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
 
         return result.add("", "return " + entityName + ";");
     }
+    
+    private Field generateGetPrimaryKeyClassesField(File file) {
+        file.add(Import.of(Type.of(Tuples.class)));
+        final Field field = Field.of(PRIMARY_KEY_CLASSES, pkTupleType())
+            .private_()
+            .static_()
+            .final_();
+
+        final String parameters = primaryKeyColumns()
+            .map(pkc -> pkc.findColumn().get().findTypeMapper().getJavaType())
+            .map(c -> c.getSimpleName() + ".class")
+            .collect(joining(", "));
+
+        field.set(new ReferenceValue(Tuples.class.getSimpleName() + ".of(" + parameters + ")"));
+
+        return field;
+    }
+
+    private Method generateGetPrimaryKeyClasses() {
+
+        final Method method = Method.of(GET_PRIMARY_KEY_CLASSES_METHOD, pkTupleType())
+            .public_()
+            .add(OVERRIDE)
+            .add("return " + PRIMARY_KEY_CLASSES + ";");
+        return method;
+    }
 
     private static enum Primitive {
         BYTE("byte"), SHORT("short"), INT("int"), LONG("long"), FLOAT("float"),
@@ -539,14 +408,6 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
 
         public static Stream<String> nameStream() {
             return Stream.of(values()).map(Primitive::getJavaName);
-        }
-    }
-
-    private static String getterCode(TranslatorSupport<Table> support, Column c) {
-        if (c.isNullable()) {
-            return GETTER_METHOD_PREFIX + support.typeName(c) + "().orElse(null)";
-        } else {
-            return GETTER_METHOD_PREFIX + support.typeName(c) + "()";
         }
     }
 

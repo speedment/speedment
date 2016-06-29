@@ -34,6 +34,7 @@ import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
 import com.speedment.generator.internal.util.EntityTranslatorSupport;
 import com.speedment.generator.internal.util.FkHolder;
+import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.internal.manager.sql.SqlManager;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -51,6 +52,7 @@ import java.util.stream.Stream;
 public final class GeneratedManagerTranslator extends EntityAndManagerTranslator<Interface> {
 
     private @Inject Injector injector;
+    private @Inject JavaLanguageNamer namer;
     
     public GeneratedManagerTranslator(Table table) {
         super(table, Interface::of);
@@ -155,7 +157,7 @@ public final class GeneratedManagerTranslator extends EntityAndManagerTranslator
                 /*** Create aggregate streaming functions, if any ***/
                 fkStreamers.keySet().stream().forEach((referencingTable) -> {
                     final List<String> methodNames = fkStreamers.get(referencingTable);
-                    final TranslatorSupport<Table> foreignSupport = injector.inject(new TranslatorSupport<>(referencingTable));
+                    final TranslatorSupport<Table> foreignSupport = new TranslatorSupport<>(namer, referencingTable);
 
                     if (!methodNames.isEmpty()) {
                         final Method method = Method.of(EntityTranslatorSupport.FIND + EntityTranslatorSupport.pluralis(referencingTable,

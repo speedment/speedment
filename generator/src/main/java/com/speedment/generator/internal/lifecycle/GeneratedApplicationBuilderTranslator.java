@@ -45,6 +45,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toSet;
 import com.speedment.common.mapstream.MapStream;
+import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.component.InfoComponent;
 import java.util.LinkedList;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
@@ -59,7 +60,7 @@ import static java.util.stream.Collectors.joining;
 public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClassTranslator<Project, Class> {
     
     private @Inject InfoComponent infoComponent;
-    private @Inject Injector injector;
+    private @Inject JavaLanguageNamer namer;
 
     public GeneratedApplicationBuilderTranslator(Project doc) {
         super(doc, Class::of);
@@ -91,7 +92,7 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
                 traverseOver(project, Table.class)
                     .filter(HasEnabled::test)
                     .forEachOrdered(t -> {
-                        final TranslatorSupport<Table> support = injector.inject(new TranslatorSupport<>(t));
+                        final TranslatorSupport<Table> support = new TranslatorSupport<>(namer, t);
                         final Type managerImplType = support.managerImplType();
                         
                         if (ambigousNames.contains(t.getName())) {

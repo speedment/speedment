@@ -30,12 +30,12 @@ import static com.speedment.common.codegen.model.Generic.BoundType.EXTENDS;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.Type;
-import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.JavaClassTranslator;
 import static com.speedment.generator.Translator.Phase.POST_MAKE;
 import com.speedment.generator.TranslatorDecorator;
 import com.speedment.generator.TranslatorSupport;
+import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.plugins.reactor.MaterializedView;
 import com.speedment.plugins.reactor.Reactor;
 import com.speedment.runtime.config.Column;
@@ -59,7 +59,7 @@ import java.util.stream.Stream;
  */
 public final class GeneratedApplicationImplDecorator implements TranslatorDecorator<Project, Class> {
     
-    private @Inject Injector injector;
+    private @Inject JavaLanguageNamer namer;
     
     @Override
     public void apply(JavaClassTranslator<Project, Class> translator) {
@@ -92,7 +92,7 @@ public final class GeneratedApplicationImplDecorator implements TranslatorDecora
                     .flatMap(Schema::tables)
                     .filter(Table::isEnabled)
                     .forEachOrdered(table -> {
-                        final TranslatorSupport<Table> support = injector.inject(new TranslatorSupport<>(table));
+                        final TranslatorSupport<Table> support = new TranslatorSupport<>(namer, table);
                         final String viewName     = support.variableName() + "View";
                         final String viewTypeName = support.typeName() + "View";
                         final Type viewType       = Type.of(support.basePackageName() + "." + viewTypeName);

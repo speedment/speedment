@@ -47,7 +47,6 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Type;
-import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.CopyConstructorMode.SETTER;
 import com.speedment.runtime.internal.config.BaseDocument;
@@ -70,10 +69,8 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.component.InfoComponent;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
 
@@ -96,7 +93,6 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
     private @Inject InfoComponent infoComponent;
     private @Inject Generator generator;
     private @Inject JavaLanguageNamer javaLanguageNamer;
-    private @Inject Injector injector;
     
     private final DOC document;
     private final Function<String, T> mainModelConstructor;
@@ -110,7 +106,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
 
     @Override
     public final TranslatorSupport<DOC> getSupport() {
-        return injector.inject(new TranslatorSupport<>(document));
+        return new TranslatorSupport<>(javaLanguageNamer, document);
     }
 
     @Override
