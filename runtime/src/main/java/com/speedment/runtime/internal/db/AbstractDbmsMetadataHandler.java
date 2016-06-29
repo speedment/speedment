@@ -482,7 +482,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
 
             // FKs always point to the same DBMS but can
             // be changed to another one using the config 
-            fkcMutator.setForeignDatabaseName(dbms.getName());
+            fkcMutator.setForeignDatabaseName(schema.getParentOrThrow().getName());
 
             // Use schema name first but if not present, use catalog name
             fkcMutator.setForeignSchemaName(
