@@ -43,6 +43,25 @@ import org.controlsfx.control.PropertySheet;
  */
 public final class ForeignKeyColumnProperty extends AbstractChildDocumentProperty<ForeignKey, ForeignKeyColumnProperty> 
     implements ForeignKeyColumn, HasExpandedProperty, HasNameProperty, HasOrdinalPositionProperty, HasColumnProperty {
+	
+    public final StringProperty foreignDatabaseNameProperty() {
+    	return stringPropertyOf(FOREIGN_DATABASE_NAME, ForeignKeyColumn.super::getForeignDatabaseName);
+    }
+    
+    @Override
+    public String getForeignDatabaseName() {
+    	return foreignDatabaseNameProperty().get();
+    }
+    
+    public final StringProperty foreignSchemaNameProperty() {
+    	return stringPropertyOf(FOREIGN_SCHEMA_NAME, ForeignKeyColumn.super::getForeignSchemaName);
+    }
+    
+    @Override
+    public String getForeignSchemaName() {
+    	return foreignSchemaNameProperty().get();
+    }
+
 
     public ForeignKeyColumnProperty(ForeignKey parent) {
         super(parent);
@@ -105,6 +124,16 @@ public final class ForeignKeyColumnProperty extends AbstractChildDocumentPropert
         return Stream.of(
             HasColumnProperty.super.getUiVisibleProperties(speedment),
             Stream.of(
+               new StringPropertyItem(
+                            foreignDatabaseNameProperty(), 
+                            "Foreign Database Name",
+                            "The name of the database that this foreign key references."
+                        ),
+               new StringPropertyItem(
+                                foreignSchemaNameProperty(), 
+                                "Foreign Schema Name",
+                                "The name of the schema that this foreign key references."
+                         ),
                 new StringPropertyItem(
                     foreignTableNameProperty(), 
                     "Foreign Table Name",

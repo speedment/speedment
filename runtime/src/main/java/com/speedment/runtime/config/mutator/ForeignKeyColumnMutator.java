@@ -42,4 +42,13 @@ public class ForeignKeyColumnMutator<DOC extends ForeignKeyColumn> extends Docum
         put(FOREIGN_COLUMN_NAME, foreignColumnName);
     }
     
+    public void setForeignDatabaseName(String foreignDatabaseName){
+    	put(FOREIGN_DATABASE_NAME, foreignDatabaseName);
+    }
+    
+    public void setForeignSchemaName(String foreignSchemaName) {
+    	put(FOREIGN_SCHEMA_NAME, foreignSchemaName);
+    }
+
+    
 }

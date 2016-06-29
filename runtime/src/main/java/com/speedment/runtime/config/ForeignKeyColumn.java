@@ -48,8 +48,30 @@ public interface ForeignKeyColumn extends
     HasMutator<ForeignKeyColumnMutator<? extends ForeignKeyColumn>> {
 
     final String FOREIGN_TABLE_NAME = "foreignTableName",
-        FOREIGN_COLUMN_NAME = "foreignColumnName";
-
+        FOREIGN_COLUMN_NAME = "foreignColumnName",
+        FOREIGN_DATABASE_NAME = "foreignDatabaseName",
+        FOREIGN_SCHEMA_NAME = "foreignSchemaName";
+    
+    /**
+     * Returns the name of the foreign database referenced by this column.
+     * 
+     * @return the name of the foreign database
+     */
+    default String getForeignDatabaseName() {
+    	return getAsString(FOREIGN_DATABASE_NAME)
+    			.orElseThrow(newNoSuchElementExceptionFor(this, FOREIGN_DATABASE_NAME));
+    }
+    
+    /**
+     * Returns the name of the foreign schema(depends on DBMS type) referenced by this column.
+     * 
+     * @return the name of the foreign schema
+     */
+    default String getForeignSchemaName() {
+    	return getAsString(FOREIGN_SCHEMA_NAME)
+    			.orElseThrow(newNoSuchElementExceptionFor(this, FOREIGN_SCHEMA_NAME));
+    }
+    
     /**
      * Returns the name of the foreign column referenced by this column.
      *
