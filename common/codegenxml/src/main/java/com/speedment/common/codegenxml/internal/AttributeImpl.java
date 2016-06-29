@@ -32,6 +32,7 @@ public final class AttributeImpl implements Attribute {
 
     public AttributeImpl(String name) {
         this.name = requireNonNull(name);
+        this.escape = true;
     }
 
     @Override
