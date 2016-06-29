@@ -53,8 +53,12 @@ public interface Document extends HasElements<Document> {
     static Document html(TagElement root) {
         return of().setDocType(DocType.of("html")).add(root);
     }
+    
+    static Document xmlWithDocType(TagElement root) {
+        return of().setXmlDeclaration(XmlDeclaration.of("1.0", "UTF-8")).setDocType(DocType.of(root.getName())).add(root);
+    }
 
     static Document xml(TagElement root) {
-        return of().setXmlDeclaration(XmlDeclaration.of("1.0", "UTF-8")).setDocType(DocType.of("xml")).add(root);
+        return of().setXmlDeclaration(XmlDeclaration.of("1.0", "UTF-8")).add(root);
     }
 }

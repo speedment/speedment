@@ -28,6 +28,7 @@ public final class AttributeImpl implements Attribute {
 
     private String name;
     private String value;
+    private boolean escape;
 
     public AttributeImpl(String name) {
         this.name = requireNonNull(name);
@@ -53,5 +54,16 @@ public final class AttributeImpl implements Attribute {
     public Attribute setValue(String value) {
         this.value = value;
         return this;
+    }
+    
+    @Override
+    public Attribute setEscape(boolean escape) {
+        this.escape = escape;
+        return this;
+    }
+
+    @Override
+    public boolean isEscape() {
+        return escape;
     }
 }
