@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.stream.OptionalUtil;
