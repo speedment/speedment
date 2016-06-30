@@ -62,6 +62,7 @@ public final class JsonCollector<ENTITY> implements Collector<ENTITY, List<Strin
      * @param <T> the type of the stream
      * @return the json string
      */
+    @Deprecated // Need to be rewritten to work in 3.0.0
     public static <T> Collector<T, ?, String> toJson() {
         return new JsonCollector<>(JsonUtil::toJson, l -> "[" + l.stream().collect(joining(", ")) + "]");
     }
@@ -69,17 +70,14 @@ public final class JsonCollector<ENTITY> implements Collector<ENTITY, List<Strin
     /**
      * Returns a collector that calls the specified encoder for each element in
      * the stream and joins the resuling stream separated by commas and
-     * surrounded by square brackets.
-     * <p>
-     * The result of the stream:
-     * <pre>    a b c</pre> would be:
-     * <pre>    ['a', 'b', 'c']</pre>
+     * surrounded by square brackets. Each element is also formatted using the 
+     * specified {@link JsonEncoder}.
      *
-     * @param <T> the type of the stream
-     * @param encoder the enocder to use
-     * @return the json string
+     * @param <ENTITY>  the type of the stream
+     * @param encoder   the enocder to use
+     * @return          the json string
      */
-    public static <T> Collector<T, ?, String> toJson(JsonEncoder<T> encoder) {
+    public static <ENTITY> Collector<ENTITY, ?, String> toJson(JsonEncoder<ENTITY> encoder) {
         requireNonNull(encoder);
         return new JsonCollector<>(encoder::apply, l -> "[" + l.stream().collect(joining(", ")) + "]");
     }
