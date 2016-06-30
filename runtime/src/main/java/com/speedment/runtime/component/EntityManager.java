@@ -14,11 +14,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.runtime.component;
 
 import com.speedment.common.injector.annotation.InjectorKey;
@@ -30,10 +25,10 @@ import com.speedment.runtime.exception.SpeedmentException;
  * Component provides an interface similar to JPA but is not used for any other
  * purpose. Thus, it acts as a delegator.
  *
- * @author pemi
- * @since 2.0
+ * @author  Per Minborg
+ * @since   2.0.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 @InjectorKey(EntityManager.class)
 public interface EntityManager extends Component {
 

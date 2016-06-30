@@ -35,8 +35,8 @@ import java.util.function.BiFunction;
  * @param <V>       the type of the value to return
  * 
  * @author  Emil Forslund
- * @since   2.2
+ * @since   2.2.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 @FunctionalInterface
 public interface Setter<ENTITY, V> extends BiFunction<ENTITY, V, ENTITY> {}

@@ -16,12 +16,14 @@
  */
 package com.speedment.runtime.config.mapper.identity;
 
+import com.speedment.runtime.annotation.Api;
 import java.sql.SQLXML;
 
 /**
  *
  * @author Emil Forslund
  */
+@Api(version = "3.0")
 public final class SQLXMLIdentityMapper extends AbstractIdentityMapper<SQLXML> {
 
     public SQLXMLIdentityMapper() {

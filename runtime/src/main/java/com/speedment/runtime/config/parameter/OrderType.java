@@ -21,9 +21,9 @@ import java.util.function.Supplier;
 
 /**
  *
- * @author pemi
+ * @author  Per Minborg
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public enum OrderType {
     ASC {
         @Override

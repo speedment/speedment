@@ -27,9 +27,9 @@ import com.speedment.runtime.config.parameter.DbmsType;
  * this interface, arbitrary mappings may be carried out.
  *
  * @author  Per Minborg
- * @since   2.0
+ * @since   2.0.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 @InjectorKey(ResultSetMapperComponent.class)
 public interface ResultSetMapperComponent extends Component {
 

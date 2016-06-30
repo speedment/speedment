@@ -30,10 +30,10 @@ import com.speedment.runtime.config.trait.HasParent;
  * A typed {@link Document} that represents the primary key column instance in
  * the database. A {@code PrimaryKeyColumn} is located inside a {@link Table}.
  *
- * @author Emil Forslund
- * @since 2.0
+ * @author  Emil Forslund
+ * @since   2.0.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface PrimaryKeyColumn extends
     Document,
     HasParent<Table>,

@@ -20,7 +20,8 @@ import java.util.stream.Stream;
 
 /**
  *
- * @author pemi
+ * @author  Per Minborg
+ * @since   2.1.0
  */
 public interface BasicAction {
 

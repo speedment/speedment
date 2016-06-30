@@ -24,10 +24,10 @@ import com.speedment.runtime.config.Project;
  * This Component interface is used for holding the current {@link Project} that is being
  * used by Speedment.
  *
- * @author Emil Forslund
- * @since 2.0
+ * @author  Emil Forslund
+ * @since   2.0.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 @InjectorKey(ProjectComponent.class)
 public interface ProjectComponent extends Component {
 

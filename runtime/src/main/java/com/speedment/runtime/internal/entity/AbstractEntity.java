@@ -53,11 +53,6 @@ public abstract class AbstractEntity<ENTITY> implements Entity<ENTITY> {
     public ENTITY remove(Manager<ENTITY> manager) throws SpeedmentException {
         return manager.remove(selfAsEntity());
     }
-
-    @Override
-    public ENTITY copy(Manager<ENTITY> manager) {
-        return manager.newCopyOf(selfAsEntity());
-    }
     
     private ENTITY selfAsEntity() {
         @SuppressWarnings("unchecked")

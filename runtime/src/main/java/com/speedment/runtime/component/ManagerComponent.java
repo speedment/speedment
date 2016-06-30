@@ -24,14 +24,14 @@ import com.speedment.runtime.manager.Manager;
 import java.util.stream.Stream;
 
 /**
- * The ManagerComponent provides the mapping between entities and their
+ * The {@code ManagerComponent} provides the mapping between entities and their
  * corresponding managers. Custom managers may be plugged into the Speedment
  * framework.
  *
- * @author Emil Forslund
- * @since 2.0
+ * @author  Emil Forslund
+ * @since   2.0.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 @InjectorKey(ManagerComponent.class)
 public interface ManagerComponent extends Component {
 

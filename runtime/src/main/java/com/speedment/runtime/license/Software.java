@@ -25,10 +25,10 @@ import java.util.stream.Stream;
  * Represents a third-party dependency. This is used to keep track of the 
  * licenses that are used.
  * 
- * @author Emil Forslund
- * @since  2.3
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface Software {
     
     final Comparator<Software> COMPARATOR = 

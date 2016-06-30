@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.config.mapper.identity;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import static java.util.Objects.requireNonNull;
 
@@ -24,6 +25,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @param <T> type
  */
+@Api(version = "3.0")
 public abstract class AbstractIdentityMapper<T> implements TypeMapper<T, T> {
     
     private final Class<T> type;

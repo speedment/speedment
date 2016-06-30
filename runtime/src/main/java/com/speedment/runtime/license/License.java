@@ -25,8 +25,9 @@ import java.util.stream.Stream;
  * Trait used to separate open source from commercial components.
  *
  * @author  Emil Forslund
+ * @since   2.3.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface License {
     
     final Comparator<License> COMPARATOR = 

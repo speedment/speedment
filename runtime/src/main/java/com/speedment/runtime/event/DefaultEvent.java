@@ -19,11 +19,13 @@ package com.speedment.runtime.event;
 import com.speedment.runtime.annotation.Api;
 
 /**
- *
- * @author Emil Forslund
- * @since 2.3
+ * A default event. This file may be subject to change in an 
+ * upcomming version.
+ * 
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
-@Api(version="2.3")
+@Api(version = "3.0", snapshot = true)
 public enum DefaultEvent implements Event {
     // May be added further on.
 }

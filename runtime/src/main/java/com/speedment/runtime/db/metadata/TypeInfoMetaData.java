@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.db.metadata;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.db.metadata.TypeInfoMetaDataImpl;
 import java.lang.reflect.Field;
@@ -27,14 +28,17 @@ import java.util.Optional;
 
 /**
  *
- * @author pemi
+ * @author  Per Minborg
  */
+@Api(version = "3.0")
 public interface TypeInfoMetaData {
 
-    public class Hidden {
+    public final class Hidden {
 
         private static final Map<Integer, String> JAVA_SQL_TYPE_INT_TO_STRING_MAP = new HashMap<>();
 
+        private Hidden() {}
+        
         static {
             // Get all field in java.sql.Types using reflection
             final Field[] fields = java.sql.Types.class.getFields();
@@ -98,5 +102,4 @@ public interface TypeInfoMetaData {
     boolean isNullableUnknown();
 
     boolean isUnsigned();
-
 }

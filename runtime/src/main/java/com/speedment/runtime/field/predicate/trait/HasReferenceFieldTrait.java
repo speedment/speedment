@@ -27,9 +27,9 @@ import com.speedment.runtime.field.trait.ReferenceFieldTrait;
  * @param <V>       the value type
  * 
  * @author  Per Minborg
- * @since   2.2
+ * @since   2.2.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface HasReferenceFieldTrait<ENTITY, D, V> {
 
     /**

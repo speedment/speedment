@@ -25,10 +25,10 @@ import java.util.stream.Stream;
 
 /**
  *
- * @author pemi
- * @param <T> The type that the ResultSet shall be mapped to
+ * @author  Per Minborg
+ * @param <T>  the type that the {@code ResultSet} shall be mapped to
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface AsynchronousQueryResult<T> extends HasParallelStrategy, AutoCloseable {
 
     Stream<T> stream();

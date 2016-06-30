@@ -25,10 +25,10 @@ import java.util.List;
  * plugging in a custom PrimaryKeyFactoryComponent, one may produce custom
  * primary keys.
  *
- * @author pemi
- * @since 2.0
+ * @author  Per Minborg
+ * @since   2.0.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 @InjectorKey(PrimaryKeyFactoryComponent.class)
 public interface PrimaryKeyFactoryComponent extends Component {
 

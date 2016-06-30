@@ -20,12 +20,15 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Dbms;
 
 /**
- *
- * @author pemi
- * @param <T> Java type for this mapping
- * @since 2.0
+ * A mapping that defined how a JDBC {@code ResultSet} or 
+ * {@code PreparedStatement} is supposed to be mapped.
+ * 
+ * @param <T>  java type for this mapping
+ * 
+ * @author  Per Minborg
+ * @since   2.0.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface ResultSetMapping<T> {
 
     /**

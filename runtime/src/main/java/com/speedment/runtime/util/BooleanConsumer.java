@@ -16,10 +16,14 @@
  */
 package com.speedment.runtime.util;
 
+import com.speedment.runtime.annotation.Api;
+
 /**
  *
- * @author Emil
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
+@Api(version = "3.0")
 @FunctionalInterface
 public interface BooleanConsumer {
     void accept(boolean bool);

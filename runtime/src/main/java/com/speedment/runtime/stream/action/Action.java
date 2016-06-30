@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.stream.action;
 
+import com.speedment.runtime.annotation.Api;
 import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -29,10 +30,13 @@ import java.util.stream.Stream;
 
 /**
  *
- * @author pemi
- * @param <T> Input BaseStream type
- * @param <R> Output (return) BaseStream type
+ * @param <T>  input {@code BaseStream} type
+ * @param <R>  output (return) {@code BaseStream} type
+ * 
+ * @author  Per Minborg
+ * @since   2.1.0
  */
+@Api(version = "3.0")
 public abstract class Action<T extends BaseStream<?, T>, R extends BaseStream<?, R>> implements Supplier<Function<T, R>> {
 
     private final Function<T, R> mapper;

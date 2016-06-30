@@ -22,9 +22,9 @@ import com.speedment.runtime.annotation.Api;
  * Support class for classes that only contains static methods and fields.
  * This interface can for example be used for various "Util" classes.
  *
- * @author pemi
+ * @author  Per Minborg
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public final class StaticClassUtil {
 
     /**

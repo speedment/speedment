@@ -16,12 +16,14 @@
  */
 package com.speedment.runtime.util;
 
+import com.speedment.runtime.annotation.Api;
 import java.util.function.*;
 
 /**
  *
  * @author Per Minborg
  */
+@Api(version = "3.0")
 public class FunctionCastUtil {
 
     public static <T, U> BiConsumer<T, U> asBiConsumer(BiConsumer<T, U> biConsumer) {

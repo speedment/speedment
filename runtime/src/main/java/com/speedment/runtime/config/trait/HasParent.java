@@ -26,9 +26,9 @@ import java.util.Optional;
  * 
  * @param <PARENT>  the type of the parent document
  * @author   Emil Forslund
- * @version  2.3
+ * @version  2.3.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface HasParent<PARENT extends Document> extends Document {
 
     /**

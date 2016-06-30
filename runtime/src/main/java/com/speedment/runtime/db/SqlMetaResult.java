@@ -22,11 +22,12 @@ import java.util.Optional;
 
 /**
  *
- * @author pemi
- * @param <ENTITY> the entity type
- * @param <R> return type
+ * @param <ENTITY>  the entity type
+ * @param <R>       return type
+ * 
+ * @author  Per Minborg
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface SqlMetaResult<ENTITY, R extends SqlMetaResult<ENTITY, R>> extends MetaResult<ENTITY> {
 
     String getQuery();

@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.config.mutator;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Dbms;
 import static com.speedment.runtime.config.Dbms.*;
 import com.speedment.runtime.config.Schema;
@@ -29,6 +30,7 @@ import static com.speedment.runtime.internal.util.document.DocumentUtil.newDocum
  * @author       Per Minborg
  * @param <DOC>  document type
  */
+@Api(version = "3.0")
 public class DbmsMutator<DOC extends Dbms> extends DocumentMutatorImpl<DOC> implements 
         HasEnabledMutator<DOC>, 
         HasNameMutator<DOC> {

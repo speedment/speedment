@@ -25,10 +25,11 @@ import java.util.function.Predicate;
 
 /**
  *
- * @author pemi
- * @param <T> Input type
+ * @param <T>  input type
+ * 
+ * @author  Per Minborg
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 @FunctionalInterface
 public interface SqlPredicate<T> {
 

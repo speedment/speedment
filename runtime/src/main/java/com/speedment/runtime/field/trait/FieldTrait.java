@@ -28,8 +28,9 @@ import java.util.Optional;
  * 
  * @author  Per Minborg
  * @author  Emil Forslund
+ * @since   2.2.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface FieldTrait {
     
     /**

@@ -23,9 +23,9 @@ import com.speedment.runtime.field.trait.FieldTrait;
  * A trait for predicates the implement the {@link #getField()} method.
  * 
  * @author  Per Minborg
- * @since   2.2
+ * @since   2.2.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface HasFieldTrait {
 
     /**

@@ -27,10 +27,10 @@ import java.util.stream.Stream;
  * Speedment before execution. This can for an example be used to perform
  * optimizations.
  *
- * @author Emil Forslund
- * @since 2.2
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface StreamDecorator {
 
     final static StreamDecorator IDENTITY = new StreamDecorator() {

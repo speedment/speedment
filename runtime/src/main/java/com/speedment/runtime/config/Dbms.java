@@ -30,7 +30,6 @@ import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.exception.SpeedmentException;
 import java.util.Optional;
 import java.util.OptionalInt;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -39,9 +38,9 @@ import java.util.stream.Stream;
  * {@link Schema Schemas} as children.
  * 
  * @author  Emil Forslund
- * @since   2.0
+ * @since   2.0.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface Dbms extends 
         Document,
         HasParent<Project>,

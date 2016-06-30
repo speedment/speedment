@@ -32,12 +32,12 @@ import com.speedment.runtime.field.trait.ReferenceForeignKeyFieldTrait;
  * 
  * @author  Per Minborg
  * @author  Emil Forslund
- * @since   2.2
+ * @since   2.2.0
  * 
  * @since  ReferenceFieldTrait
  * @since  ReferenceForeignKeyFieldTrait
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface ReferenceForeignKeyField<ENTITY, D, V, FK_ENTITY> extends
     FieldTrait, 
     ReferenceFieldTrait<ENTITY, D, V>,

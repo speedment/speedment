@@ -30,10 +30,10 @@ import com.speedment.runtime.annotation.Api;
  * execution of the method or constructor and propagate outside the method or
  * constructor boundary.
  *
- * @author pemi
- * @since 2.0
+ * @author  Per Minborg
+ * @since   2.0.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public final class SpeedmentException extends RuntimeException {
 
     static final long serialVersionUID = -623523923713561356L;

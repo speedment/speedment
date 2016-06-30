@@ -16,14 +16,16 @@
  */
 package com.speedment.runtime.config.mapper.time;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import java.sql.Time;
 
 /**
  *
- * @author Maria Sparenberg
- * @author Patrick Hobusch
+ * @author  Maria Sparenberg
+ * @author  Patrick Hobusch
  */
+@Api(version = "3.0")
 public class TimeToLongMapper implements TypeMapper<Time, Long> {
 
     @Override

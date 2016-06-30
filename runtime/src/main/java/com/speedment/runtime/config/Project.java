@@ -36,9 +36,9 @@ import java.util.stream.Stream;
  * {@link Dbms Dbmses} as children.
  * 
  * @author  Emil Forslund
- * @since   2.0
+ * @since   2.0.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface Project extends
         Document,
         HasEnabled,

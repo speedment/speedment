@@ -25,9 +25,9 @@ import static com.speedment.runtime.config.trait.HasName.NAME;
  * therefore implements the {@code defaultNameFor(Document)} method.
  * 
  * @author  Per Minborg
- * @since   2.3
+ * @since   2.3.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface HasChildren extends Document {
 
     /**

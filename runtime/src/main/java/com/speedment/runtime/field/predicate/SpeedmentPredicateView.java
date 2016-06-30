@@ -16,11 +16,15 @@
  */
 package com.speedment.runtime.field.predicate;
 
+import com.speedment.runtime.annotation.Api;
+
 /**
  *
  * @author  Per Minborg
+ * @since   2.1.0
  */
 @FunctionalInterface
+@Api(version = "3.0")
 public interface SpeedmentPredicateView {
 
     SqlPredicateFragment transform(SpeedmentPredicate<?, ?, ?> model);

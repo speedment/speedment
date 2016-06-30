@@ -16,10 +16,13 @@
  */
 package com.speedment.runtime.config.mapper.identity;
 
+import com.speedment.runtime.annotation.Api;
+
 /**
  *
  * @author Emil Forslund
  */
+@Api(version = "3.0")
 public final class LongIdentityMapper extends AbstractIdentityMapper<Long> {
 
     public LongIdentityMapper() {

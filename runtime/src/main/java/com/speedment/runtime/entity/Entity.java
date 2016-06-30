@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.entity;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.manager.Manager;
@@ -29,18 +28,17 @@ import com.speedment.runtime.manager.Manager;
  * 
  * @author  Emil Forslund
  * @author  Per Minborg
- * @since   2.1
+ * @since   2.1.0
  */
-@Api(version = "2.4")
+@Api(version = "3.0")
 public interface Entity<ENTITY> {
 
     /**
      * Creates and returns a new copy of this entity.
      *
-     * @param manager  the manager for this entity
-     * @return         creates and returns a new copy of this entity
+     * @return  the copy
      */
-    ENTITY copy(Manager<ENTITY> manager);
+    ENTITY copy();
 
     /**
      * Persists this entity to the underlying database and returns a potentially

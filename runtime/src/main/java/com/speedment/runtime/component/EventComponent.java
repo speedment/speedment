@@ -27,11 +27,12 @@ import java.util.function.Consumer;
  * execution has been reached.
  * 
  * @author Emil Forslund
- * @since  2.3
+ * @since  2.3.0
+ * 
  * @see    Event
  * @see    DefaultEvent
  */
-@Api(version="2.3")
+@Api(version = "3.0")
 @InjectorKey(EventComponent.class)
 public interface EventComponent extends Component {
 

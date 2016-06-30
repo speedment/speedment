@@ -23,11 +23,11 @@ import com.speedment.runtime.license.Software;
  * A Component represents the basic functionality for a Speedment Platform
  * Component.
  *
- * @author Per Minborg
- * @author Emil Forslund
- * @since 2.0
+ * @author  Per Minborg
+ * @author  Emil Forslund
+ * @since   2.0.0
  */
-@Api(version = "2.4")
+@Api(version = "3.0")
 public interface Component {
 
     /**

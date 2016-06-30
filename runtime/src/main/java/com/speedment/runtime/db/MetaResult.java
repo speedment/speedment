@@ -21,10 +21,11 @@ import java.util.Optional;
 
 /**
  *
- * @author pemi
  * @param <ENTITY> the entity type
+ * 
+ * @author  Per Minborg
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface MetaResult<ENTITY> {
 
     default Optional<? extends SqlMetaResult<ENTITY, ?>> getSqlMetaResult() {

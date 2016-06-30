@@ -31,7 +31,7 @@ import java.util.stream.Stream;
  * @author  Per Minborg
  * @since   2.2.0
  */
-@Api(version = "2.4")
+@Api(version = "3.0")
 @InjectorKey(StreamSupplierComponent.class)
 public interface StreamSupplierComponent extends Component {
     

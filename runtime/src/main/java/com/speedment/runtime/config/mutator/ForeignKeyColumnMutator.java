@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.config.mutator;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.ForeignKeyColumn;
 import static com.speedment.runtime.config.ForeignKeyColumn.*;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
@@ -26,6 +27,7 @@ import com.speedment.runtime.config.mutator.trait.HasOrdinalPositionMutator;
  * @author       Per Minborg
  * @param <DOC>  document type
  */
+@Api(version = "3.0")
 public class ForeignKeyColumnMutator<DOC extends ForeignKeyColumn> extends DocumentMutatorImpl<DOC> implements 
         HasNameMutator<DOC>, 
         HasOrdinalPositionMutator<DOC> {

@@ -24,7 +24,7 @@ import com.speedment.runtime.config.mapper.TypeMapper;
  * @author  Roberts Vartins
  * @since   2.3.5
  */
-@Api(version = "2.4")
+@Api(version = "3.0")
 public class IntegerZeroOneToBooleanMapper implements TypeMapper<Integer, Boolean> {
 
     @Override

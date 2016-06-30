@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.config.mutator.trait;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.trait.HasName;
 
@@ -24,6 +25,7 @@ import com.speedment.runtime.config.trait.HasName;
  * @author       Per Minborg
  * @param <DOC>  document type
  */
+@Api(version = "3.0")
 public interface HasNameMutator<DOC extends HasName> extends DocumentMutator<DOC> {
     
     default void setName(String name) {

@@ -35,9 +35,9 @@ import java.util.stream.Stream;
  * @param <FK_ENTITY>  the type of the foreign entity referencing this
  * 
  * @author  Emil Forslund
- * @since   2.2
+ * @since   2.2.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 @FunctionalInterface
 public interface Streamer<ENTITY, FK_ENTITY> extends 
     Function<ENTITY, Stream<FK_ENTITY>> {}

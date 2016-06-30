@@ -22,9 +22,10 @@ import com.speedment.runtime.annotation.Api;
  * The predicate types that exists in Speedment. A predicate type must always
  * have a negated {@code PredicateType} that is the exact negation of itself.
  *
- * @author Per Minborg
+ * @author  Per Minborg
+ * @since   2.1.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public enum PredicateType {
 
     // Constants

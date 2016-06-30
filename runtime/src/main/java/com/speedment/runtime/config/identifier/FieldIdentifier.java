@@ -42,7 +42,7 @@ import com.speedment.runtime.internal.util.document.DocumentDbUtil;
  * @author  Emil Forslund
  * @since   2.3
  */
-@Api(version = "2.4")
+@Api(version = "3.0")
 public interface FieldIdentifier<ENTITY> {
     
     /**

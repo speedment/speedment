@@ -16,10 +16,13 @@
  */
 package com.speedment.runtime.stream;
 
+import com.speedment.runtime.annotation.Api;
+
 /**
  *
- * @author pemi
+ * @author  Per Minborg
  */
+@Api(version = "3.0")
 public interface HasParallelStrategy {
 
     ParallelStrategy getParallelStrategy();

@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.stream.action;
 
+import com.speedment.runtime.annotation.Api;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -24,8 +25,10 @@ import java.util.function.Function;
 
 /**
  *
- * @author pemi
+ * @author  Per Minborg
+ * @since   2.1.0
  */
+@Api(version = "3.0")
 public final class Statement {
 
     private final Verb verb;

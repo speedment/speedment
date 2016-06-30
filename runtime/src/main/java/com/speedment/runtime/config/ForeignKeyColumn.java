@@ -34,10 +34,10 @@ import java.util.Optional;
  * key instance in the database. A {@code ForeignKeyColumn} is located inside a
  * {@link ForeignKey}.
  *
- * @author Emil Forslund
- * @since 2.0
+ * @author  Emil Forslund
+ * @since   2.0.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface ForeignKeyColumn extends
     Document,
     HasParent<ForeignKey>,

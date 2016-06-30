@@ -16,13 +16,17 @@
  */
 package com.speedment.runtime.util;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.internal.util.ProgressMeasurerImpl;
 import java.util.function.Consumer;
 
 /**
- *
- * @author Per Minborg
+ * Measures the progress of a task.
+ * 
+ * @author  Per Minborg
+ * @since   2.3.0
  */
+@Api(version = "3.0")
 public interface ProgressMeasure {
     
     public final static double 

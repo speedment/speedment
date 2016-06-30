@@ -30,10 +30,11 @@ import java.util.Set;
  * @param <D> the database type
  * @param <V> the field value type
  *
- * @author Per Minborg
- * @author Emil Forslund
+ * @author  Per Minborg
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>> {
 
     /**

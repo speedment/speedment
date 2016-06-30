@@ -29,10 +29,10 @@ import static java.util.Comparator.comparing;
  * @param <DB_TYPE> the type as it is represented in the JDBC driver
  * @param <JAVA_TYPE> the type as it should be represented in generated code
  *
- * @author Emil Forslund
- * @since 2.2
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
 
     /**

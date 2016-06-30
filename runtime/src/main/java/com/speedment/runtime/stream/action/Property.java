@@ -16,11 +16,15 @@
  */
 package com.speedment.runtime.stream.action;
 
+import com.speedment.runtime.annotation.Api;
+
 /**
  *
- * @author pemi
+ * @author  Per Minborg
+ * @since   2.1.0
  */
-public enum Property implements ActionProperty {
+@Api(version = "3.0")
+public enum Property {
 
     ORDER,
     SIZE,

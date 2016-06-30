@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.config.mutator.trait;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.trait.HasAlias;
 
@@ -24,6 +25,7 @@ import com.speedment.runtime.config.trait.HasAlias;
  * @author       Per Minborg
  * @param <DOC>  document type
  */
+@Api(version = "3.0")
 public interface HasAliasMutator<DOC extends HasAlias> extends DocumentMutator<DOC>, HasNameMutator<DOC> {
     
     default void setAlias(String alias) {

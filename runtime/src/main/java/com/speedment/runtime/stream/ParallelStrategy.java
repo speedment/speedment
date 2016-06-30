@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.stream;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.internal.stream.parallelstrategy.ComputeIntensityExtremeParallelStrategy;
 import com.speedment.runtime.internal.stream.parallelstrategy.ComputeIntensityHighParallelStrategy;
 import com.speedment.runtime.internal.stream.parallelstrategy.ComputeIntensityMediumParallelStrategy;
@@ -26,9 +27,10 @@ import java.util.Spliterators;
 
 /**
  *
- * @author pemi
+ * @author  Per Minborg
  */
 @FunctionalInterface
+@Api(version = "3.0")
 public interface ParallelStrategy {
 
     /**

@@ -25,8 +25,8 @@ import com.speedment.runtime.annotation.Api;
  * @param <D>  the database type
  * 
  * @author  Per Minborg
- * @since   2.1
+ * @since   2.1.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface StringSpeedmentPredicate<T, D> 
     extends ComparableSpeedmentPredicate<T, D, String> {}

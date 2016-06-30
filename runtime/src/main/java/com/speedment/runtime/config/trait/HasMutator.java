@@ -25,11 +25,12 @@ import com.speedment.runtime.config.mutator.DocumentMutator;
  * {@link #mutator()} method. Mutable {@code Documents} can be modified using a
  * specified typed mutator class, specified in the {@code T} type parameter.
  *
- * @param <T> Mutator type
- * @author Emil Forslund
- * @since 2.3
+ * @param <T>  mutator type
+ * 
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 @FunctionalInterface
 public interface HasMutator<T extends DocumentMutator<?>> {
 

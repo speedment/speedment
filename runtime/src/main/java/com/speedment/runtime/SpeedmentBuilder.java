@@ -17,6 +17,7 @@
 package com.speedment.runtime;
 
 import com.speedment.common.injector.Injector;
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.trait.HasEnabled;
@@ -30,9 +31,10 @@ import java.util.function.Consumer;
  * @param <APP>      application that is built
  * @param <BUILDER>  the type of this builder
  * 
- * @author Emil Forslund
- * @since  2.4.0
+ * @author  Emil Forslund
+ * @since   3.0.0
  */
+@Api(version = "3.0")
 public interface SpeedmentBuilder<APP extends Speedment, BUILDER extends SpeedmentBuilder<APP, BUILDER>> {
     
     /**

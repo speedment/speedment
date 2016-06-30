@@ -41,9 +41,9 @@ import java.util.stream.Stream;
  *
  * @author  Per Minborg
  * @author  Emil Forslund
- * @since   2.0
+ * @since   2.0.0
  */
-@Api(version = "2.4")
+@Api(version = "3.0")
 public interface DbmsOperationHandler {
     
     /**

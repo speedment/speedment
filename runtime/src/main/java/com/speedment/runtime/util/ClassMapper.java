@@ -29,8 +29,9 @@ import java.util.stream.Stream;
  * @param <V> the base type
  * 
  * @author  Per Minborg
+ * @since   2.2.0
  */
-@Api(version = "2.4")
+@Api(version = "3.0")
 public interface ClassMapper<V> {
 
     /**
@@ -57,5 +58,4 @@ public interface ClassMapper<V> {
      * @return a {@link Stream} of all mappings that exists
      */
     Stream<Map.Entry<Class<?>, V>> stream();
-
 }

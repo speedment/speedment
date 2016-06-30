@@ -35,9 +35,9 @@ import java.util.function.BiFunction;
  * @param <FK_ENTITY>  the type of the foreign key stream
  * 
  * @author  Emil Forslund
- * @since   2.2
+ * @since   2.2.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 @FunctionalInterface
 public interface Finder<ENTITY, FK_ENTITY> extends 
     BiFunction<ENTITY, Manager<FK_ENTITY>, FK_ENTITY> {}

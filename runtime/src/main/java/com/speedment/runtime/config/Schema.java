@@ -33,9 +33,9 @@ import java.util.stream.Stream;
  * {@code Schema} is located inside a {@link Dbms} and can have multiple 
  * {@link Table Tables} as children.
  * 
- * @author Emil Forslund
+ * @author  Emil Forslund
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface Schema extends
         Document,
         HasParent<Dbms>,

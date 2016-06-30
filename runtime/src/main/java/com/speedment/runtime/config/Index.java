@@ -33,9 +33,9 @@ import java.util.stream.Stream;
  * multiple {@link IndexColumn IndexColumns} as children.
  * 
  * @author  Emil Forslund
- * @since   2.0
+ * @since   2.0.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface Index extends 
         Document,
         HasParent<Table>,

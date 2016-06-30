@@ -23,10 +23,10 @@ import com.speedment.runtime.config.Dbms;
  * A functional interface that given a certain {@link Dbms} instance can produce
  * a connection URL.
  * 
- * @author Emil Forslund
- * @since 2.3
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 @FunctionalInterface
 public interface ConnectionUrlGenerator {
     

@@ -23,10 +23,11 @@ import java.util.function.Supplier;
 
 /**
  *
- * @author pemi
- * @param <T> Supplied type
+ * @param <T>  supplied type
+ * 
+ * @author  Per Minborg
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 @FunctionalInterface
 public interface SqlSupplier<T> {
 

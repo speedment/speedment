@@ -26,8 +26,8 @@ import com.speedment.runtime.annotation.Api;
  * @param <V>  field type
  * 
  * @author  Per Minborg
- * @since   2.1
+ * @since   2.1.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface ComparableSpeedmentPredicate<T, D, V extends Comparable<? super V>> 
     extends SpeedmentPredicate<T, D, V> {}

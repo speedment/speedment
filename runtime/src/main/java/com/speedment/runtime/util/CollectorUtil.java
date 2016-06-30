@@ -43,11 +43,11 @@ import java.util.stream.Stream;
 /**
  * Utility methods for collecting Speedment streams in various ways.
  *
- * @author pemi
- * @author Emil Forslund
- * @since 2.1
+ * @author  Per Minborg
+ * @author  Emil Forslund
+ * @since   2.1.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public final class CollectorUtil {
 
     private static final String NULL_TEXT = " must not be null";

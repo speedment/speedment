@@ -28,9 +28,9 @@ import java.util.Map;
  * {@link #getOrderType()} method.
  * 
  * @author   Emil Forslund
- * @version  2.3
+ * @version  2.3.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface HasOrderType extends Document {
     
     /**

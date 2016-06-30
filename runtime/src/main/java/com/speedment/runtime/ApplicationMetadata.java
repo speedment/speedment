@@ -23,10 +23,10 @@ import com.speedment.runtime.config.Project;
  * This interface defines how a Speedment application can obtain its
  * configuration meta data. For example, in a form of a json file
  *
- * @author pemi
- * @since  2.0
+ * @author  Per Minborg
+ * @since   2.0.0
  */
-@Api(version = "2.4")
+@Api(version = "3.0")
 public interface ApplicationMetadata {
 
     /**

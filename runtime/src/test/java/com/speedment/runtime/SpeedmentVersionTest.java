@@ -25,8 +25,8 @@ import org.junit.Test;
  */
 public class SpeedmentVersionTest {
     
-    private static final String EXPECTED_IMPLEMENTATION_VERSION = "2.4.0";
-    private static final String EXPECTED_SPECIFICATION_VERSION = "2.4";
+    private static final String EXPECTED_IMPLEMENTATION_VERSION = "3.0.0";
+    private static final String EXPECTED_SPECIFICATION_VERSION = "3.0";
 
     @Test
     public void testGetImplementationTitle() {

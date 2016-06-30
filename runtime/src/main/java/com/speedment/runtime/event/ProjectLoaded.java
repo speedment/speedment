@@ -22,11 +22,12 @@ import com.speedment.runtime.event.trait.ProjectEvent;
 import static java.util.Objects.requireNonNull;
 
 /**
- *
- * @author Emil Forslund
- * @since 2.3
+ * A special event that happens when a project has been fully loaded.
+ * 
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
-@Api(version="2.3")
+@Api(version = "3.0")
 public final class ProjectLoaded implements ProjectEvent {
 
     private final Project project;

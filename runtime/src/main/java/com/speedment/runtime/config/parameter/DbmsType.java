@@ -34,10 +34,10 @@ import java.util.Set;
  * {@code DbmsHandler}, one may easily implement support for new Dbms vendor
  * types.
  *
- * @author pemi
- * @since 2.0
+ * @author  Per Minborg
+ * @since   2.0.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface DbmsType {
 
     final Comparator<DbmsType> COMPARATOR = comparing(DbmsType::getName);

@@ -25,11 +25,12 @@ import java.util.function.Function;
 
 /**
  *
- * @author pemi
- * @param <T> Input type
- * @param <R> Result type
+ * @param <T>  input type
+ * @param <R>  result type
+ * 
+ * @author  Per Minborg
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 @FunctionalInterface
 public interface SqlFunction<T, R> {
 

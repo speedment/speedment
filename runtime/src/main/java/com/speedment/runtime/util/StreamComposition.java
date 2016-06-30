@@ -33,9 +33,9 @@ import java.util.stream.Stream;
 /**
  * Utility methods for making sure composed streams are closed properly.
  *
- * @author pemi
+ * @author  Per Minborg
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public class StreamComposition {
 
     /**

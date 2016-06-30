@@ -16,12 +16,14 @@
  */
 package com.speedment.runtime.config.mapper.identity;
 
+import com.speedment.runtime.annotation.Api;
 import java.sql.Timestamp;
 
 /**
  *
  * @author Emil Forslund
  */
+@Api(version = "3.0")
 public final class TimestampIdentityMapper extends AbstractIdentityMapper<Timestamp> {
 
     public TimestampIdentityMapper() {

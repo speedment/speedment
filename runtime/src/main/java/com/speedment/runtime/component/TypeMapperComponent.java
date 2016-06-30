@@ -24,11 +24,12 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
- *
- * @author Emil Forslund
- * @since 2.2
+ * Stores the currently installed {@link TypeMapper TypeMappers}.
+ * 
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
-@Api(version="2.3")
+@Api(version = "3.0")
 @InjectorKey(TypeMapperComponent.class)
 public interface TypeMapperComponent extends Component {
     

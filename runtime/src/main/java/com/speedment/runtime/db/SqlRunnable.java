@@ -22,9 +22,9 @@ import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author pemi
+ * @author  Per Minborg
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 @FunctionalInterface
 public interface SqlRunnable {
 

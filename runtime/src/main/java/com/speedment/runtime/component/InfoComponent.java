@@ -24,10 +24,10 @@ import com.speedment.runtime.annotation.Api;
  * and version. This is used to print correct messages for an example when the
  * application launches.
  * 
- * @author Emil Forslund
- * @since  2.4.0
+ * @author  Emil Forslund
+ * @since   3.0.0
  */
-@Api(version = "2.4")
+@Api(version = "3.0")
 @InjectorKey(InfoComponent.class)
 public interface InfoComponent extends Component {
     

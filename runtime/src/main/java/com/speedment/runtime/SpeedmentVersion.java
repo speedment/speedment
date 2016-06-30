@@ -24,16 +24,16 @@ import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
  * the values here, they will survive any jar modification process such as the
  * Maven Shade Plugin.
  *
- * @author pemi
- * @since 2.0
+ * @author  Per Minborg
+ * @since   2.0.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public final class SpeedmentVersion {
 
     private static final String IMPLEMENTATION_TITLE = "Speedment",
         IMPLEMENTATION_VENDOR  = "Speedment Inc.", // "Speedment, Inc." difficult to enter into POM because of ','
-        IMPLEMENTATION_VERSION = "2.4.0",
-        SPECIFICATION_VERSION  = "2.4";
+        IMPLEMENTATION_VERSION = "3.0.0",
+        SPECIFICATION_VERSION  = "3.0";
 
     private static final boolean PRODUCTION_MODE = true;
 

@@ -34,9 +34,9 @@ import java.util.function.Predicate;
  * @param <V>       the value type
  * 
  * @author  Per Minborg
- * @since   2.1
+ * @since   2.1.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface SpeedmentPredicate<ENTITY, D, V> extends
     HasGetter<ENTITY, V>,
     HasPredicateType,

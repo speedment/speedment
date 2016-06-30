@@ -16,12 +16,14 @@
  */
 package com.speedment.runtime.config.mapper.identity;
 
+import com.speedment.runtime.annotation.Api;
 import java.net.URL;
 
 /**
  *
  * @author Emil Forslund
  */
+@Api(version = "3.0")
 public final class URLIdentityMapper extends AbstractIdentityMapper<URL> {
 
     public URLIdentityMapper() {

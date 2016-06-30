@@ -26,10 +26,10 @@ import java.sql.Connection;
  * This Component interface is used for holding the connection pool that is
  * being used by Speedment.
  *
- * @author pemi
- * @since 2.1
+ * @author  pemi
+ * @since   2.1.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 @InjectorKey(ConnectionPoolComponent.class)
 public interface ConnectionPoolComponent extends Component {
 

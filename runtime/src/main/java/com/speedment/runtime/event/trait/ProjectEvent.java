@@ -21,11 +21,18 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.event.Event;
 
 /**
- *
- * @author Emil Forslund
- * @since 2.3
+ * An event that has something to do with a particular project.
+ * 
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface ProjectEvent extends Event {
+    
+    /**
+     * Returns the project that this event is about.
+     * 
+     * @return  the project
+     */
     Project project();
 }

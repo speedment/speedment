@@ -21,11 +21,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- *
- * @author pemi
- * @since  2.2
+ * A connection in a {@link ConnectionPoolComponent} that in addition to 
+ * the standard JDBC methods also has information about when it was 
+ * created and twhen it expires, among other things.
+ * 
+ * @author  Per Minborg
+ * @since   2.2.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface PoolableConnection extends Connection {
 
     long getId();

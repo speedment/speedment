@@ -31,13 +31,13 @@ import com.speedment.runtime.field.trait.StringFieldTrait;
  * 
  * @author  Per Minborg
  * @author  Emil Forslund
- * @since   2.2
+ * @since   2.2.0
  * 
  * @see  ReferenceFieldTrait
  * @see  ComparableFieldTrait
  * @see  StringFieldTrait
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface StringField<ENTITY, D> extends
     FieldTrait, 
     ReferenceFieldTrait<ENTITY, D, String>,

@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.stream;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.stream.action.Action;
 import java.util.NoSuchElementException;
 import java.util.function.Supplier;
@@ -24,8 +25,9 @@ import java.util.stream.Stream;
 
 /**
  *
- * @author pemi
+ * @author  Per Minborg
  */
+@Api(version = "3.0")
 public interface Pipeline extends Iterable<Action<?, ?>> {
 
     Action<?, ?> getFirst();

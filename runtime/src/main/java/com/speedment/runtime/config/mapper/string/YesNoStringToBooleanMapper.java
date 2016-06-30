@@ -16,13 +16,15 @@
  */
 package com.speedment.runtime.config.mapper.string;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mapper.TypeMapper;
 
 /**
  *
- * @author Maria Sparenberg
- * @author Patrick Hobusch
+ * @author  Maria Sparenberg
+ * @author  Patrick Hobusch
  */
+@Api(version = "3.0")
 public class YesNoStringToBooleanMapper implements TypeMapper<String, Boolean> {
 
     @Override

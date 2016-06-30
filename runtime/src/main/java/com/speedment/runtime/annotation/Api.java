@@ -38,9 +38,10 @@ import java.lang.annotation.Target;
  * Enum: Its elements will remain and their individual order will remain. New
  * elements might be added.
  *
- * @author pemi
+ * @author  Per Minborg
+ * @since   2.0.0
  */
-@Api(version = "2.3", snapshot = false)
+@Api(version = "3.0")
 @Retention(value = RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE, ElementType.CONSTRUCTOR})
 public @interface Api {

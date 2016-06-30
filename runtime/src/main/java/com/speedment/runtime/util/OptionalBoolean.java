@@ -16,12 +16,15 @@
  */
 package com.speedment.runtime.util;
 
+import com.speedment.runtime.annotation.Api;
 import java.util.function.Supplier;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
+@Api(version = "3.0")
 public enum OptionalBoolean {
     
     FALSE, TRUE, EMPTY;

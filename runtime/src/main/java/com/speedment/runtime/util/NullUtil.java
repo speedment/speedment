@@ -27,7 +27,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author pemi
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public final class NullUtil {
 
     private static final String FIRST_ARG_IS_NULL = "First argument is null";

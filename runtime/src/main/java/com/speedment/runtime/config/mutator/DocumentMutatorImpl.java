@@ -20,8 +20,9 @@ import com.speedment.runtime.config.Document;
 import static java.util.Objects.requireNonNull;
 
 /**
- *
- * @author Per Minborg
+ * A package private implementation of the {@link DocumentMutator} interface.
+ * 
+ * @author       Per Minborg
  * @param <DOC>  the type of the document
  */
 abstract class DocumentMutatorImpl<DOC extends Document> implements DocumentMutator<DOC> {

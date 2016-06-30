@@ -31,9 +31,9 @@ import java.util.Optional;
  * is also expected to implement the {@link HasMainInterface} trait.
  * 
  * @author   Emil Forslund
- * @version  2.3
+ * @version  2.3.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface HasName extends Document, HasMainInterface {
 
     /**

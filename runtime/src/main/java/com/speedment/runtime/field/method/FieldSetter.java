@@ -14,11 +14,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.runtime.field.method;
 
 import com.speedment.runtime.annotation.Api;
@@ -33,9 +28,9 @@ import java.util.function.UnaryOperator;
  * 
  * @author  Emil Forslund
  * @author  Per Minborg
- * @since   2.2
+ * @since   2.2.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface FieldSetter<ENTITY, V> extends UnaryOperator<ENTITY> {
 
     /**
