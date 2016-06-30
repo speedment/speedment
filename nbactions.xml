@@ -62,6 +62,13 @@
         </properties>
     </action>
     <action>
+        <actionName>CUSTOM-update-child-modules</actionName>
+        <displayName>Update Child Modules</displayName>
+        <goals>
+            <goal>org.codehaus.mojo:versions-maven-plugin:2.2:update-child-modules</goal>
+        </goals>
+    </action>
+    <action>
         <actionName>CUSTOM-Deploy</actionName>
         <displayName>Deploy</displayName>
         <goals>
