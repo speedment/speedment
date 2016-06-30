@@ -36,8 +36,7 @@ Here are a few examples of how you could use Speedment from your code:
 ###### Easy initialization
 A `HareApplication` class is generated from the database.
 ```java
-HareApplication app = new HareApplicationBuilder()
-    .withPassword("myPwd729").build();
+HareApplication app = new HareApplicationBuilder().withPassword("myPwd729").build();
 Manager<Hare> hares = app.managerOf(Hare.class);
 ```
 
