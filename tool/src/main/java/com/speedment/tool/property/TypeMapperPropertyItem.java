@@ -17,6 +17,7 @@
 package com.speedment.tool.property;
 
 import com.speedment.runtime.Speedment;
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.TypeMapperComponent;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.exception.SpeedmentException;
@@ -31,8 +32,10 @@ import org.controlsfx.property.editor.PropertyEditor;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
+@Api(version="3.0")
 public final class TypeMapperPropertyItem extends AbstractPropertyItem<String, StringProperty, PropertyEditor<?>> {
     
     private final Speedment speedment;

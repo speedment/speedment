@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.config.mutator;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mutator.ProjectMutator;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.ProjectProperty;
@@ -25,8 +26,10 @@ import java.nio.file.Paths;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
+@Api(version = "3.0")
 public final class ProjectPropertyMutator extends ProjectMutator<ProjectProperty> implements 
         HasEnabledPropertyMutator<ProjectProperty>,
         HasNamePropertyMutator<ProjectProperty> {

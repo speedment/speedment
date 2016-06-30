@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.config.mutator;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.ForeignKeyColumnProperty;
@@ -29,8 +30,10 @@ import com.speedment.tool.config.TableProperty;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
+@Api(version = "3.0")
 public final class DocumentPropertyMutator {
 
     public static ColumnPropertyMutator of(ColumnProperty column) {

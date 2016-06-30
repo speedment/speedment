@@ -14,22 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.tool.resource;
 
+import com.speedment.runtime.annotation.Api;
 import java.io.InputStream;
 import static java.util.Objects.requireNonNull;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
+ * An enumeration of all the icons available in the Silk Icon package.
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
+@Api(version="3.0")
 public enum SilkIcon {
 	ACCEPT ("accept.png"),
 	ADD ("add.png"),

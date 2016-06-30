@@ -16,10 +16,14 @@
  */
 package com.speedment.tool.config.trait;
 
+import com.speedment.runtime.annotation.Api;
+
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
+@Api(version = "3.0")
 public interface HasIconPath {
     String getIconPath();
 }

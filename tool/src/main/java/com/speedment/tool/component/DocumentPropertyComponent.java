@@ -34,10 +34,10 @@ import java.util.List;
  * Describes which implementations the {@link Document} interface to use at
  * different places in the config tree. This is purely used by the UI.
  * 
- * @author Emil Forslund
- * @since 2.3
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 @InjectorKey(DocumentPropertyComponent.class)
 public interface DocumentPropertyComponent extends Component {
 

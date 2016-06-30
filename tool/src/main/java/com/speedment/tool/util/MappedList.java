@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.util;
 
+import com.speedment.runtime.annotation.Api;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -24,12 +25,13 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.TransformationList;
 
 /**
- * A list 
+ * A list mapped to a transformation list.
  * 
  * @author        Emil Forslund
  * @param <FROM>  the type to map from
  * @param <TO>    the type to map to
  */
+@Api(version="3.0")
 public final class MappedList<FROM, TO> extends TransformationList<TO, FROM> {
 
     private final Function<FROM, TO> mapper;

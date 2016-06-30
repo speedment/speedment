@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.property;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.property.DefaultIntegerPropertyItem.DefaultIntegerPropertyEditor;
 import com.speedment.tool.util.SimpleNumericProperty;
 import java.util.Objects;
@@ -37,8 +38,10 @@ import org.controlsfx.property.editor.AbstractPropertyEditor;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
+@Api(version="3.0")
 public final class DefaultIntegerPropertyItem extends AbstractPropertyItem<Number, IntegerProperty, DefaultIntegerPropertyEditor> {
 
     private final IntegerProperty valueProperty;

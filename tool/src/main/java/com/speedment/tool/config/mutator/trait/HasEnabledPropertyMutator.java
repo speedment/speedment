@@ -16,14 +16,18 @@
  */
 package com.speedment.tool.config.mutator.trait;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.tool.config.trait.HasEnabledProperty;
 
 /**
  *
- * @author       Emil Forslund
  * @param <DOC>  document type
+ * 
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
+@Api(version = "3.0")
 public interface HasEnabledPropertyMutator<DOC extends HasEnabledProperty> extends HasEnabledMutator<DOC> {
     
     @Override

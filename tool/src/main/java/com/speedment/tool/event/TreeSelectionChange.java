@@ -26,10 +26,14 @@ import javafx.scene.control.TreeItem;
 import org.controlsfx.control.PropertySheet;
 
 /**
- *
- * @author pemi
+ * An event that is published when the user selects a new span
+ * of nodes in the "Project Tree" section. This can be used to
+ * add additional items to the workspace from a plugin.
+ * 
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
-@Api(version="2.3")
+@Api(version="3.0")
 public final class TreeSelectionChange implements Event {
 
     private final ListChangeListener.Change<? extends TreeItem<DocumentProperty>> changeEvent;

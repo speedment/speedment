@@ -18,6 +18,7 @@ package com.speedment.tool.config.trait;
 
 import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.runtime.Speedment;
+import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.property.DefaultStringPropertyItem;
 import java.util.Optional;
@@ -27,8 +28,10 @@ import org.controlsfx.control.PropertySheet;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
+@Api(version = "3.0")
 public interface HasAliasProperty extends DocumentProperty, HasAlias {
 
     StringProperty nameProperty();

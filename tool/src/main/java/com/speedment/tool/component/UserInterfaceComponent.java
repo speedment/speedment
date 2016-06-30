@@ -51,7 +51,7 @@ import org.controlsfx.control.PropertySheet;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version="2.4")
+@Api(version = "3.0")
 @InjectorKey(UserInterfaceComponent.class)
 public interface UserInterfaceComponent extends Component {
 

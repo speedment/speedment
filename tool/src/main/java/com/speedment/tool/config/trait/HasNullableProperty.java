@@ -17,6 +17,7 @@
 package com.speedment.tool.config.trait;
 
 import com.speedment.runtime.Speedment;
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.trait.HasNullable;
 import static com.speedment.runtime.config.trait.HasNullable.NULLABLE;
 import com.speedment.tool.config.DocumentProperty;
@@ -27,8 +28,10 @@ import org.controlsfx.control.PropertySheet;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
+@Api(version = "3.0")
 public interface HasNullableProperty extends DocumentProperty, HasNullable {
 
     @Override

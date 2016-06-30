@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.config.mutator;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mutator.IndexColumnMutator;
 import com.speedment.tool.config.IndexColumnProperty;
 import com.speedment.tool.config.mutator.trait.HasNamePropertyMutator;
@@ -24,8 +25,10 @@ import com.speedment.tool.config.mutator.trait.HasOrdinalPositionPropertyMutator
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
+@Api(version = "3.0")
 public final class IndexColumnPropertyMutator extends IndexColumnMutator<IndexColumnProperty> implements 
         HasNamePropertyMutator<IndexColumnProperty>,
         HasOrdinalPositionPropertyMutator<IndexColumnProperty>, 

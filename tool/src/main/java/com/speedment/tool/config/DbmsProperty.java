@@ -17,6 +17,7 @@
 package com.speedment.tool.config;
 
 import com.speedment.runtime.Speedment;
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.runtime.config.Dbms;
@@ -57,8 +58,10 @@ import org.controlsfx.control.PropertySheet;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
+@Api(version = "3.0")
 public final class DbmsProperty extends AbstractChildDocumentProperty<Project, DbmsProperty> 
     implements Dbms, HasEnabledProperty, HasExpandedProperty, HasNameProperty, HasAliasProperty {
 

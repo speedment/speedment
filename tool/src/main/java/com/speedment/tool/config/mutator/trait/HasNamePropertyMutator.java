@@ -16,14 +16,18 @@
  */
 package com.speedment.tool.config.mutator.trait;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 import com.speedment.tool.config.trait.HasNameProperty;
 
 /**
  *
- * @author       Emil Forslund
  * @param <DOC>  document type
+ * 
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
+@Api(version = "3.0")
 public interface HasNamePropertyMutator<DOC extends HasNameProperty> extends HasNameMutator<DOC> {
     
     @Override

@@ -25,6 +25,7 @@ import static com.speedment.runtime.config.Project.PACKAGE_NAME;
 import static com.speedment.runtime.config.trait.HasName.NAME;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.generator.util.JavaLanguageNamer;
+import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.ProjectPropertyMutator;
 import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
@@ -52,8 +53,10 @@ import org.controlsfx.control.PropertySheet;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
+@Api(version = "3.0")
 public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectProperty>
     implements Project, HasEnabledProperty, HasExpandedProperty, HasNameProperty {
 

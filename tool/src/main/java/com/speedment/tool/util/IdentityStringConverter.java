@@ -16,14 +16,16 @@
  */
 package com.speedment.tool.util;
 
+import com.speedment.runtime.annotation.Api;
 import javafx.util.StringConverter;
 
 /**
  * A {@link StringConverter} that simply returns the input string.
  * 
- * @author Emil Forslund
- * @since  2.4.0
+ * @author  Emil Forslund
+ * @since   3.0.0
  */
+@Api(version="3.0")
 public final class IdentityStringConverter extends StringConverter<String> {
 
     @Override

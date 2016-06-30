@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.util;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
@@ -40,8 +41,10 @@ import javafx.collections.ObservableList;
  * A utility class for merging two documents to preserve maximum amount of
  * information.
  * 
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
+@Api(version="3.0")
 public final class DocumentMerger {
     
     /**

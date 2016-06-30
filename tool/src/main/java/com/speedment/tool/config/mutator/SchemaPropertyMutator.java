@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.config.mutator;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mutator.SchemaMutator;
 import com.speedment.tool.config.SchemaProperty;
 import com.speedment.tool.config.TableProperty;
@@ -25,8 +26,10 @@ import com.speedment.tool.config.mutator.trait.HasNamePropertyMutator;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
+@Api(version = "3.0")
 public final class SchemaPropertyMutator extends SchemaMutator<SchemaProperty> implements 
         HasEnabledPropertyMutator<SchemaProperty>, 
         HasNamePropertyMutator<SchemaProperty>, 

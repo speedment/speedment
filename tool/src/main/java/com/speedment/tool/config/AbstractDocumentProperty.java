@@ -23,6 +23,7 @@ import com.speedment.tool.util.NumericProperty;
 import com.speedment.tool.util.SimpleNumericProperty;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.toStringHelper;
 import com.speedment.common.mapstream.MapStream;
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.util.FloatSupplier;
 import com.speedment.runtime.util.OptionalBoolean;
 import com.speedment.tool.component.DocumentPropertyComponent;
@@ -66,9 +67,12 @@ import javafx.collections.ObservableMap;
 
 /**
  *
- * @author        Emil Forslund
  * @param <THIS>  the type of the implementing class
+ * 
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
+@Api(version = "3.0")
 public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProperty<? super THIS>> 
     implements DocumentProperty/*, HasExpandedProperty, HasNameProperty */{
  

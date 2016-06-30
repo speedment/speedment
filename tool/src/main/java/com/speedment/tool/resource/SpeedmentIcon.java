@@ -30,6 +30,7 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
+import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.config.trait.HasIconPath;
 import java.io.InputStream;
 import java.util.Map;
@@ -40,9 +41,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- *
- * @author Emil Forslund
+ * An enumeration of all the icons available in the Speedment Icon Package.
+ * 
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
+@Api(version="3.0")
 public enum SpeedmentIcon {
 
     // Big buttons

@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.util;
 
+import com.speedment.runtime.annotation.Api;
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.FloatProperty;
@@ -34,6 +35,7 @@ import javafx.beans.value.ObservableValue;
  *
  * @author Emil Forslund
  */
+@Api(version="3.0")
 public final class SimpleNumericProperty implements NumericProperty {
     
     private final Property<Number> wrapped;

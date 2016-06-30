@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.config.mutator;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mutator.PrimaryKeyColumnMutator;
 import com.speedment.tool.config.PrimaryKeyColumnProperty;
 import com.speedment.tool.config.mutator.trait.HasNamePropertyMutator;
@@ -23,8 +24,10 @@ import com.speedment.tool.config.mutator.trait.HasOrdinalPositionPropertyMutator
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
+@Api(version = "3.0")
 public final class PrimaryKeyColumnPropertyMutator  extends PrimaryKeyColumnMutator<PrimaryKeyColumnProperty> implements 
         HasNamePropertyMutator<PrimaryKeyColumnProperty>,
         HasOrdinalPositionPropertyMutator<PrimaryKeyColumnProperty> {

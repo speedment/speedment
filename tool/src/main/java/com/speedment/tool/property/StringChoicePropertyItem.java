@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.property;
 
+import com.speedment.runtime.annotation.Api;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 import javafx.beans.property.StringProperty;
@@ -27,8 +28,10 @@ import org.controlsfx.property.editor.PropertyEditor;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
+@Api(version="3.0")
 public final class StringChoicePropertyItem extends AbstractPropertyItem<String, StringProperty, PropertyEditor<String>> {
     
     private final ObservableList<String> alternatives;

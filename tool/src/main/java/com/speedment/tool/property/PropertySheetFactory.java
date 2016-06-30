@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.property;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.config.DocumentProperty;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
@@ -26,8 +27,10 @@ import org.controlsfx.control.PropertySheet.Item;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
+@Api(version="3.0")
 public final class PropertySheetFactory {
 
     private final Map<Class<?>, Function<DocumentProperty, ObservableList<Item>>> constructors;
@@ -45,13 +48,6 @@ public final class PropertySheetFactory {
         requireNonNull(node);
         final Function<DocumentProperty, ObservableList<Item>> constructor = constructors.get(node.mainInterface());
 
-//        if (node instanceof HasMainInterface) {
-//            @SuppressWarnings("unchecked")
-//            final HasMainInterface withMainInterface = (HasMainInterface) node;
-//            constructor = constructors.get(withMainInterface.mainInterface());
-//        } else {
-//            constructor = constructors.get(node.getClass());
-//        }
         if (constructor == null) {
             throw new IllegalArgumentException(
                 "The specified document '" + node

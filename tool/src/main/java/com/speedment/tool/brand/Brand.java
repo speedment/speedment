@@ -28,7 +28,7 @@ import javafx.scene.Scene;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 @InjectorKey(Brand.class)
 public interface Brand {
 

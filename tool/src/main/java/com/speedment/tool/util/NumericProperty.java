@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.util;
 
+import com.speedment.runtime.annotation.Api;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
@@ -28,6 +29,7 @@ import javafx.beans.property.Property;
  * @author  Emil Forslund
  * @since   2.3.0
  */
+@Api(version="3.0")
 public interface NumericProperty extends Property<Number> {
     IntegerProperty asIntegerProperty();
     DoubleProperty asDoubleProperty();

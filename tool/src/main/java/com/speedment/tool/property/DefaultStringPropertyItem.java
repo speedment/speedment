@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.property;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.property.DefaultStringPropertyItem.DefaultStringPropertyEditor;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -33,8 +34,10 @@ import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
+@Api(version="3.0")
 public final class DefaultStringPropertyItem extends AbstractPropertyItem<String, StringProperty, DefaultStringPropertyEditor> {
 
     private final StringProperty textProperty;

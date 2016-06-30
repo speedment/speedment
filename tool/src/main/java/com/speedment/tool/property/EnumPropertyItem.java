@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.property;
 
+import com.speedment.runtime.annotation.Api;
 import java.util.Arrays;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
@@ -25,9 +26,12 @@ import org.controlsfx.property.editor.PropertyEditor;
 
 /**
  *
- * @author Emil Forslund
  * @param <E> the enum type
+ * 
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
+@Api(version="3.0")
 public final class EnumPropertyItem<E extends Enum<E>> extends AbstractPropertyItem<E, Property<E>, PropertyEditor<?>> {
     
     private final Class<E> enumType;

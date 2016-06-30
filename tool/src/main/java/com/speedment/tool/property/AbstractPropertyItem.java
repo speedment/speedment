@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.property;
 
+import com.speedment.runtime.annotation.Api;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -26,14 +27,18 @@ import org.controlsfx.property.editor.PropertyEditor;
 
 /**
  *
- * @author Emil Forslund
- * @param <T> the type of the value
- * @param <PROPERTY> the type of the property implementation
+ * @param <T>         the type of the value
+ * @param <PROPERTY>  the type of the property implementation
+ * @param <EDITOR>    the type of the property editor
+ * 
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
+@Api(version="3.0")
 public abstract class AbstractPropertyItem<T, PROPERTY extends ObservableValue<T> & WritableValue<T>, EDITOR extends PropertyEditor<?>> implements PropertySheet.Item {
     
     protected static <EDITOR extends PropertyEditor<?>> Consumer<EDITOR> defaultDecorator() { 
-        return  editor -> {};
+        return editor -> {};
     }
     
     private final PROPERTY property;

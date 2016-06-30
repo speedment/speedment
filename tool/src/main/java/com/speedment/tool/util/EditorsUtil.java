@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.util;
 
+import com.speedment.runtime.annotation.Api;
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import java.util.List;
 import java.util.function.Function;
@@ -35,8 +36,10 @@ import org.controlsfx.property.editor.PropertyEditor;
  * Utility methods for creating custom {@link PropertyEditor editors} for a 
  * ControlsFX {@link PropertySheet}.
  * 
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
+@Api(version="3.0")
 public final class EditorsUtil {
     
     /**

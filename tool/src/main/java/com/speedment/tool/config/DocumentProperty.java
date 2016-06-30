@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.config;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
@@ -63,8 +64,9 @@ import javafx.collections.ObservableMap;
  * getter methods to keep notified about changes to this document.
  * 
  * @author  Emil Forslund
- * @since   2.3
+ * @since   2.3.0
  */
+@Api(version = "3.0")
 public interface DocumentProperty extends Document, 
         HasUiVisibleProperties, 
         HasMainInterface,

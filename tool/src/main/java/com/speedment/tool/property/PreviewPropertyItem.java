@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.property;
 
+import com.speedment.runtime.annotation.Api;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 import javafx.beans.property.SimpleStringProperty;
@@ -32,8 +33,10 @@ import org.controlsfx.property.editor.PropertyEditor;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
+@Api(version="3.0")
 public final class PreviewPropertyItem extends AbstractPropertyItem<String, StringProperty, PropertyEditor<?>> {
     
     private final ObservableStringValue preview;

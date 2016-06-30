@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.property;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.property.DefaultTextAreaPropertyItem.DefaultTextAreaPropertyEditor;
 import java.util.Objects;
 import static java.util.Objects.requireNonNull;
@@ -34,8 +35,10 @@ import org.controlsfx.property.editor.AbstractPropertyEditor;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
+@Api(version="3.0")
 public final class DefaultTextAreaPropertyItem extends AbstractPropertyItem<String, StringProperty, DefaultTextAreaPropertyEditor> {
     
     private final StringProperty textProperty;
