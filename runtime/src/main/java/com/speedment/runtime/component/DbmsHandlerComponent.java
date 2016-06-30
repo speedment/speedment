@@ -23,11 +23,11 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * This class is a pluggable factory that produces
- * {@link DbmsHandler DbmsHandlers} for a given Dbms name.
+ * This class holds the various {@link DbmsType DbmsTypes} 
+ * currently installed in the Speedment platform.
  *
- * @author pemi
- * @since 2.0
+ * @author  Per Minborg
+ * @since   2.0.0
  */
 @Api(version = "2.3")
 @InjectorKey(DbmsHandlerComponent.class)
