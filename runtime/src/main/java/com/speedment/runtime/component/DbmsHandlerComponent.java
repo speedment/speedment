@@ -34,11 +34,11 @@ import java.util.stream.Stream;
 public interface DbmsHandlerComponent extends Component {
 
     /**
-     * Installs a new {@link DbmsType} so that handlers can be created using the
-     * {@link #make(com.speedment.runtime.config.Dbms) } method.
+     * Installs a new {@link DbmsType} so that handlers can be located using the
+     * {@link #findByName(String)} method.
      * <p>
      * The type will be indexed by its name as returned by
-     * {@link DbmsType#getName() }. If multiple {@code DbmsTypes} share name,
+     * {@link DbmsType#getName()}. If multiple {@code DbmsTypes} share name,
      * only the most recently installed will be saved.
      *
      * @param dbmsType the type to install

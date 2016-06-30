@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.config.identifier;
 
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
@@ -32,10 +31,10 @@ import com.speedment.runtime.internal.util.document.DocumentDbUtil;
  * To find the actual documents refered to by the identifier, the following
  * utility methods can be used:
  * <ul>
- *      <li>{@link DocumentDbUtil#referencedColumn(Speedment, FieldIdentifier)}
- *      <li>{@link DocumentDbUtil#referencedTable(Speedment, FieldIdentifier)}
- *      <li>{@link DocumentDbUtil#referencedSchema(Speedment, FieldIdentifier)}
- *      <li>{@link DocumentDbUtil#referencedDbms(Speedment, FieldIdentifier)}
+ *      <li>{@link DocumentDbUtil#referencedColumn(Project, FieldIdentifier)}
+ *      <li>{@link DocumentDbUtil#referencedTable(Project, FieldIdentifier)}
+ *      <li>{@link DocumentDbUtil#referencedSchema(Project, FieldIdentifier)}
+ *      <li>{@link DocumentDbUtil#referencedDbms(Project, FieldIdentifier)}
  * </ul>
  * 
  * @param <ENTITY>  the entity type
