@@ -119,19 +119,19 @@ public final class JsonEncoder<ENTITY> {
     }
 
     // Label-and-streamer with custom formatter.
-    public <FK_ENTITY> JsonEncoder<ENTITY> putStreamer(String label, Function<ENTITY, Stream<FK_ENTITY>> streamer, JsonEncoder<FK_ENTITY> builder) {
+    public <FK_ENTITY> JsonEncoder<ENTITY> putStreamer(String label, BiFunction<Manager<ENTITY>, ENTITY, Stream<FK_ENTITY>> streamer, JsonEncoder<FK_ENTITY> builder) {
         requireNonNull(label);
         requireNonNull(streamer);
         requireNonNull(builder);
-        getters.put(label, e -> "\"" + label + "\":[" + streamer.apply(e).map(builder::apply).collect(joining(",")) + "]");
+        getters.put(label, e -> "\"" + label + "\":[" + streamer.apply(manager, e).map(builder::apply).collect(joining(",")) + "]");
         return this;
     }
 
-    public <FK_ENTITY> JsonEncoder<ENTITY> putStreamer(String label, Function<ENTITY, Stream<FK_ENTITY>> streamer, Function<FK_ENTITY, String> encoder) {
+    public <FK_ENTITY> JsonEncoder<ENTITY> putStreamer(String label, BiFunction<Manager<ENTITY>, ENTITY, Stream<FK_ENTITY>> streamer, Function<FK_ENTITY, String> encoder) {
         requireNonNull(label);
         requireNonNull(streamer);
         requireNonNull(encoder);
-        getters.put(label, e -> "\"" + label + "\":[" + streamer.apply(e).map(encoder).collect(joining(",")) + "]");
+        getters.put(label, e -> "\"" + label + "\":[" + streamer.apply(manager, e).map(encoder).collect(joining(",")) + "]");
         return this;
     }
 
