@@ -72,7 +72,7 @@ public interface Brand {
     Stream<String> stylesheets();
 
     /**
-     * Applies this brand to the specified {@link UISession} and {@link Scene}.
+     * Applies this brand to the specified {@link Scene}.
      * 
      * @param scene  the scene to set icons and stylesheets in
      */
