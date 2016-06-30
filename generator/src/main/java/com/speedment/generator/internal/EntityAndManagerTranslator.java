@@ -24,7 +24,7 @@ import com.speedment.common.codegen.model.Type;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.common.codegen.internal.model.constant.DefaultType;
-import com.speedment.runtime.util.tuple.Tuple1;
+import com.speedment.common.tuple.Tuple1;
 import java.util.function.Function;
 
 /**

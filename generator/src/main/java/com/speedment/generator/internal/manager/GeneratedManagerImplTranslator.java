@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.runtime.internal.manager.sql.AbstractSqlManager;
-import com.speedment.runtime.util.tuple.Tuples;
+import com.speedment.common.tuple.Tuples;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;

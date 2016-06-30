@@ -21,6 +21,8 @@
  */
 package com.speedment.runtime.util.tuple;
 
+import com.speedment.common.tuple.Tuples;
+import com.speedment.common.tuple.Tuple2;
 import java.util.Arrays;
 import java.util.List;
 import static java.util.stream.Collectors.toList;

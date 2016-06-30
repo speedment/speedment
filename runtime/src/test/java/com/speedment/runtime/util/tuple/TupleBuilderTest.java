@@ -21,6 +21,9 @@
  */
 package com.speedment.runtime.util.tuple;
 
+import com.speedment.common.tuple.TupleBuilder;
+import com.speedment.common.tuple.Tuples;
+import com.speedment.common.tuple.Tuple;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;

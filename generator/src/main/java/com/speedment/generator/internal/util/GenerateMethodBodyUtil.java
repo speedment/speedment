@@ -46,7 +46,7 @@ import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.util.tuple.Tuples;
+import com.speedment.common.tuple.Tuples;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;

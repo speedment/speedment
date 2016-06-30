@@ -39,6 +39,7 @@
 	
     <modules>
         <module>json</module>
+        <module>tuple</module>
         <module>logger</module>
         <module>mapstream</module>
         <module>codegen</module>
