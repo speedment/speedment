@@ -20,12 +20,14 @@ import com.speedment.runtime.config.Project;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.injector.annotation.InjectorKey;
+import com.speedment.runtime.annotation.Api;
 import java.nio.file.Path;
 
 /**
  *
  * @author Per Minborg
  */
+@Api(version = "3.0")
 @InjectorKey(TranslatorManager.class)
 public interface TranslatorManager {
 

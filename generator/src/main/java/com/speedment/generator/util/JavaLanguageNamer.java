@@ -20,6 +20,7 @@ import com.speedment.runtime.config.Project;
 import static com.speedment.runtime.config.Project.DEFAULT_PACKAGE_NAME;
 import static com.speedment.common.codegen.internal.util.Formatting.ucfirst;
 import com.speedment.common.injector.annotation.InjectorKey;
+import com.speedment.runtime.annotation.Api;
 import static com.speedment.runtime.internal.util.sql.SqlUtil.unQuote;
 import static com.speedment.runtime.util.CollectorUtil.toUnmodifiableSet;
 import static com.speedment.runtime.util.CollectorUtil.unmodifiableSetOf;
@@ -34,8 +35,10 @@ import java.util.stream.Stream;
 
 /**
  *
- * @author Per Minborg
+ * @author  Per Minborg
+ * @since   2.2.0
  */
+@Api(version = "3.0")
 @InjectorKey(JavaLanguageNamer.class)
 public interface JavaLanguageNamer {
 

@@ -27,9 +27,9 @@ import static java.util.Objects.requireNonNull;
 /**
  *
  * @author  Emil Forslund
- * @since   2.4.0
+ * @since   3.0.0
  */
-@Api(version="2.4")
+@Api(version = "3.0")
 public final class FileGenerated implements ProjectEvent, Event {
     
     private final Project project;

@@ -18,6 +18,7 @@ package com.speedment.generator.util;
 
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import com.speedment.runtime.annotation.Api;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -35,8 +36,10 @@ import java.util.regex.Pattern;
 
 /**
  *
- * @author Per Minborg
+ * @author  Per Minborg
+ * @since   2.1.0
  */
+@Api(version = "3.0")
 public enum Pluralis {
 
     INSTANCE;

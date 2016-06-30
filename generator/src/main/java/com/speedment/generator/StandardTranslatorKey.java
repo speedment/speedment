@@ -35,7 +35,7 @@ import java.util.stream.Stream;
  * @author  Per Minborg
  * @since   2.3.0
  */
-@Api(version = "2.4")
+@Api(version = "3.0")
 public final class StandardTranslatorKey {
     
     public final static TranslatorKey<Project, Interface> 

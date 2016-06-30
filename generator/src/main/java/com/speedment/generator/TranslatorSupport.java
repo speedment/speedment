@@ -31,6 +31,7 @@ import com.speedment.common.codegen.model.Type;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
 import com.speedment.generator.util.JavaLanguageNamer;
+import com.speedment.runtime.annotation.Api;
 import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 
@@ -44,8 +45,9 @@ import static java.util.Objects.requireNonNull;
  * @param <DOC>  the document type
  * 
  * @author  Emil Forslund
- * @since   2.3
+ * @since   2.3.0
  */
+@Api(version = "3.0")
 public final class TranslatorSupport<DOC extends Document & HasName & HasMainInterface> {
     
     public final static String 

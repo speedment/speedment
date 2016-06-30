@@ -30,7 +30,7 @@ import com.speedment.common.codegen.model.ClassOrInterface;
  * @param <T>    codegen model type
  * @since        2.3.0
  */
-@Api(version = "2.4")
+@Api(version = "3.0")
 @FunctionalInterface
 public interface TranslatorConstructor<DOC extends HasMainInterface, T extends ClassOrInterface<T>> {
     

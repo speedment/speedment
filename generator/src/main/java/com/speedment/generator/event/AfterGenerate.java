@@ -25,10 +25,10 @@ import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author Emil Forslund
- * @since 2.3
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
-@Api(version="2.3")
+@Api(version = "3.0")
 public final class AfterGenerate implements ProjectEvent, GeneratorEvent {
     
     private final Project project;

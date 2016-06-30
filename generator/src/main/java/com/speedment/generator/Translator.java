@@ -49,13 +49,13 @@ import java.util.stream.Stream;
  * interface is implemented to generate more files from the same database
  * structure.
  *
- * @author       pemi
+ * @author       Per Minborg
  * @param <DOC>  the Document type to use
  * @param <T>    the codegen type to make (Class, Interface or Enum)
  * @see          Document
- * @since        2.3
+ * @since        2.3.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface Translator<DOC extends Document & HasMainInterface, T> extends Supplier<File> {
 
     /**

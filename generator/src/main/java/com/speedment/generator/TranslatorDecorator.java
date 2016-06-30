@@ -29,9 +29,9 @@ import com.speedment.common.codegen.model.ClassOrInterface;
  * @author       Emil Forslund
  * @param <DOC>  the document type
  * @param <T>    the codegen model type
- * @since        2.3
+ * @since        2.3.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 @FunctionalInterface
 public interface TranslatorDecorator<DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> {
     

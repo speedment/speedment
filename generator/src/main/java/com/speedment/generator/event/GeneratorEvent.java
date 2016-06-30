@@ -23,10 +23,10 @@ import com.speedment.runtime.event.Event;
 
 /**
  *
- * @author Emil Forslund
- * @since 2.3
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface GeneratorEvent extends Event {
     Generator generator();
     TranslatorManager translatorManager();

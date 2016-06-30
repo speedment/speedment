@@ -30,12 +30,12 @@ import java.util.function.Supplier;
  * The class contains many helper-functions to make the generation process
  * easier.
  *
- * @author       pemi
+ * @author       Per Minborg
  * @param <DOC>  the document type
  * @param <T>    the codegen model type
- * @since        2.0
+ * @since        2.0.0
  */
-@Api(version = "2.3")
+@Api(version = "3.0")
 public interface JavaClassTranslator<DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> 
     extends Translator<DOC, T> {
 
