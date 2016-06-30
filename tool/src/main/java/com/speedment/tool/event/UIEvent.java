@@ -20,21 +20,42 @@ import com.speedment.runtime.event.Event;
 import com.speedment.runtime.annotation.Api;
 
 /**
- * Event that is created when the User Interface is starting. This happens when
- * the {@link com.speedment.tool.UISession UISession} 
- * instance is accessible but no window have been created yet.
+ * An enumeration of standard events caused by the user interface.
  * 
  * @author  Emil Forslund
- * @since   2.3
+ * @since   2.3.0
  */
 @Api(version = "2.3")
 public enum UIEvent implements Event {
     
+    /**
+     * The user interface has started but no window has been opened yet.
+     */
     STARTED,
+    
+    /**
+     * The "Mail Prompt Window" has just been opened.
+     */
     OPEN_MAIL_PROMPT_WINDOW,
+    
+    /**
+     * The "Connect Window" has just been opened.
+     */
     OPEN_CONNECT_WINDOW,
+    
+    /**
+     * The "Main Window" has just been opened.
+     */
     OPEN_MAIN_WINDOW,
+    
+    /**
+     * The "Components Window" has just been opened.
+     */
     OPEN_COMPONENTS_WINDOW,
+    
+    /**
+     * The "About Window" has just been opened.
+     */
     OPEN_ABOUT_WINDOW;
     
 }
