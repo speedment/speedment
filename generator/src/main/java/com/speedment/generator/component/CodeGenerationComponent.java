@@ -52,7 +52,7 @@ public interface CodeGenerationComponent extends Component {
      *
      * @param <DOC>        type of Document
      * @param <T>          type of codegen model
-     * @param docType        class of the Document
+     * @param docType      class of the Document
      * @param tKey         translatorKey to use
      * @param constructor  to use when producing Translators of the specified
      *                     type
