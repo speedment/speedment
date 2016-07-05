@@ -31,8 +31,6 @@ import static com.speedment.common.codegen.internal.model.constant.DefaultType.I
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.OBJECT;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.OPTIONAL;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.STRING;
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
-import static com.speedment.common.codegen.internal.util.Formatting.tab;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
@@ -40,6 +38,8 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.internal.entity.AbstractEntity;
 import java.util.Objects;
 import java.util.StringJoiner;
+import static com.speedment.common.codegen.internal.util.Formatting.nl;
+import static com.speedment.common.codegen.internal.util.Formatting.tab;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -97,8 +97,8 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
              */
             .forEveryTable(Phase.POST_MAKE, (clazz, table) -> {
                 clazz
-                    .add(copy(file))
-                    .add(toString(file))
+                    .add(copyMethod(file))
+                    .add(toStringMethod(file))
                     .add(equalsMethod())
                     .add(hashCodeMethod())
                     .add(Method.of("entityClass", Type.of(java.lang.Class.class).add(Generic.of().add(getSupport().entityType()))).public_().add(OVERRIDE)
@@ -114,7 +114,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
 
     }
     
-    protected Method copy(File file) {
+    protected Method copyMethod(File file) {
         file.add(Import.of(getSupport().entityImplType()));
         final Method result = Method.of("copy", getSupport().entityType())
             .add(OVERRIDE).public_()
@@ -131,7 +131,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
         return result;
     }
 
-    protected Method toString(File file) {
+    protected Method toStringMethod(File file) {
         file.add(Import.of(Type.of(StringJoiner.class)));
         file.add(Import.of(Type.of(Objects.class)));
         final Method m = Method.of("toString", STRING)
