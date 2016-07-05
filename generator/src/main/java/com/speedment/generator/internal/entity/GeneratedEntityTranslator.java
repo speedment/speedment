@@ -45,10 +45,8 @@ import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
 import com.speedment.generator.internal.util.FkHolder;
-import com.speedment.runtime.config.Column;
 import com.speedment.runtime.entity.Entity;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;

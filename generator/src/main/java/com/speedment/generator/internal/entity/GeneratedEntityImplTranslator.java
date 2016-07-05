@@ -16,8 +16,6 @@
  */
 package com.speedment.generator.internal.entity;
 
-import com.speedment.generator.internal.util.FkHolder;
-import com.speedment.generator.internal.util.EntityTranslatorSupport;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Field;
@@ -27,32 +25,18 @@ import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.Type;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.exception.SpeedmentException;
 import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.BOOLEAN_PRIMITIVE;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.INT_PRIMITIVE;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.OBJECT;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.OPTIONAL;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.STRING;
-import static com.speedment.common.codegen.internal.util.Formatting.indent;
-import static com.speedment.common.codegen.internal.util.Formatting.tab;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.generator.TranslatorSupport;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
 import com.speedment.runtime.internal.entity.AbstractEntity;
-import com.speedment.runtime.manager.Manager;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.StringJoiner;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -62,8 +46,6 @@ import static java.util.Objects.requireNonNull;
  */
 public final class GeneratedEntityImplTranslator extends EntityAndManagerTranslator<Class> {
 
-    private @Inject Injector injector;
-
     public GeneratedEntityImplTranslator(Table table) {
         super(table, Class::of);
     }
@@ -72,7 +54,6 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
     protected Class makeCodeGenModel(File file) {
         requireNonNull(file);
 
-        final Map<Table, List<String>> fkStreamers = new HashMap<>();
         return newBuilder(file, getSupport().generatedEntityImplName())
             /**
              * Getters
