@@ -31,13 +31,17 @@ import static com.speedment.common.codegen.internal.model.constant.DefaultType.I
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.OBJECT;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.OPTIONAL;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.STRING;
+import static com.speedment.common.codegen.internal.util.Formatting.nl;
+import static com.speedment.common.codegen.internal.util.Formatting.tab;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.internal.entity.AbstractEntity;
 import java.util.Objects;
 import java.util.StringJoiner;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -93,6 +97,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
              */
             .forEveryTable(Phase.POST_MAKE, (clazz, table) -> {
                 clazz
+                    .add(copy(file))
                     .add(toString(file))
                     .add(equalsMethod())
                     .add(hashCodeMethod())
@@ -107,6 +112,23 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
             .add(getSupport().entityType())
             .add(Constructor.of().protected_());
 
+    }
+    
+    protected Method copy(File file) {
+        file.add(Import.of(getSupport().entityImplType()));
+        final Method result = Method.of("copy", getSupport().entityType())
+            .add(OVERRIDE).public_()
+            .add("return new " + getSupport().entityImplName() + "()");
+        
+        result.add(
+            getDocument().columns()
+                .map(Column::getJavaName)
+                .map(c -> ".set" + getNamer().javaTypeName(c) + "(" + getNamer().javaVariableName(c) + ")")
+                .collect(joining(nl() + tab(), tab(), ";"))
+                .split(nl())
+        );
+        
+        return result;
     }
 
     protected Method toString(File file) {
@@ -124,10 +146,10 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
             } else {
                 getter = "get" + getSupport().typeName(c) + "()";
             }
-            m.add("sj.add(\"" + getSupport().variableName(c) + " = \"+Objects.toString(" + getter + "));");
+            m.add("sj.add(\"" + getSupport().variableName(c) + " = \" + Objects.toString(" + getter + "));");
         });
 
-        m.add("return \"" + getSupport().entityImplName() + " \"+sj.toString();");
+        m.add("return \"" + getSupport().entityImplName() + " \" + sj.toString();");
 
         return m;
 
