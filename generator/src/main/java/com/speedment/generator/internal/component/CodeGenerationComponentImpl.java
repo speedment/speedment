@@ -157,6 +157,8 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
             .values()
             .flatMap(m -> MapStream.of(m).filterKey(nameFilter).values())
             .map(s -> (TranslatorSettings<DOC, ?>) s)
+            .filter(s -> s != null)
+            .filter(s -> s.getConstructor() != null)
             .map(settings -> settings.createDecorated(document))
             .map(injector::inject);
     }
