@@ -19,7 +19,6 @@ package com.speedment.tool.internal.brand;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.tool.brand.Brand;
-import com.speedment.tool.component.UserInterfaceComponent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -31,20 +30,22 @@ import javafx.stage.Stage;
  */
 public abstract class AbstractBrand implements Brand {
     
-    private @Inject UserInterfaceComponent userInterfaceComponent;
     private @Inject InfoComponent infoComponent;
     
+    protected AbstractBrand() {}
+    
     @Override
-    public void apply(Scene scene) {
-        final Stage stage = scene.getWindow() == null 
-            ? userInterfaceComponent.getStage() 
-            : (Stage) scene.getWindow();
-
-        stage.setTitle(infoComponent.title());
+    public void apply(Stage stage, Scene scene) {
+        if (stage != null) {
+            stage.setTitle(infoComponent.title());
+        }
+        
         logoSmall()
             .map(Image::new)
             .ifPresent(icon -> {
-                stage.getIcons().add(icon);
+                if (stage != null) {
+                    stage.getIcons().add(icon);
+                }
 
                 @SuppressWarnings("unchecked")
                 final Stage dialogStage = (Stage) scene.getWindow();

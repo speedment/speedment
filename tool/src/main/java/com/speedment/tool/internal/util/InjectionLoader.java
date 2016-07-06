@@ -127,7 +127,7 @@ public final class InjectionLoader {
         final Scene scene = new Scene(parent);
         
         stage.hide();
-        brand.apply(scene);
+        brand.apply(stage, scene);
         stage.setScene(scene);
         stage.show();
         
@@ -140,7 +140,7 @@ public final class InjectionLoader {
         final Parent root     = (Parent) load(name);
         final Scene scene     = new Scene(root);
         
-        brand.apply(scene);
+        brand.apply(dialog, scene);
         
         dialog.setTitle("About " + infoComponent.title());
         dialog.initModality(APPLICATION_MODAL);

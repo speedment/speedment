@@ -21,6 +21,7 @@ import com.speedment.runtime.annotation.Api;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  * A branding container.
@@ -74,7 +75,8 @@ public interface Brand {
     /**
      * Applies this brand to the specified {@link Scene}.
      * 
+     * @param stage  the stage to style
      * @param scene  the scene to set icons and stylesheets in
      */
-    void apply(Scene scene);
+    void apply(Stage stage, Scene scene);
 }

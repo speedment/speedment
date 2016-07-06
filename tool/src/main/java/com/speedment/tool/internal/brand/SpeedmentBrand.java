@@ -27,6 +27,8 @@ import java.util.stream.Stream;
  * @since   2.3.0
  */
 public class SpeedmentBrand extends AbstractBrand {
+    
+    private SpeedmentBrand() {}
 
     @Override
     public final String website() {

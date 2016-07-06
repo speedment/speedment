@@ -102,6 +102,7 @@ import javafx.util.Pair;
 import com.speedment.common.injector.annotation.IncludeInjectable;
 import static com.speedment.runtime.internal.util.TextUtil.alignRight;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import com.speedment.tool.util.BrandUtil;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -467,7 +468,7 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
         final Alert alert = new Alert(Alert.AlertType.ERROR);
         final Scene scene = alert.getDialogPane().getScene();
 
-        brand.apply(scene);
+        BrandUtil.applyBrand(injector, stage, scene);
 
         alert.setHeaderText(title);
         alert.setContentText(message);
@@ -513,7 +514,7 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
         final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         final Scene scene = alert.getDialogPane().getScene();
 
-        brand.apply(scene);
+        BrandUtil.applyBrand(injector, stage, scene);
 
         alert.setTitle("Confirmation");
         alert.setHeaderText(title);
@@ -533,7 +534,7 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
         pane.getStyleClass().add("authentication");
 
         final Scene scene = pane.getScene();
-        brand.apply(scene);
+        BrandUtil.applyBrand(injector, stage, scene);
 
         final ButtonType authButtonType = new ButtonType("OK", ButtonData.OK_DONE);
         pane.getButtonTypes().addAll(ButtonType.CANCEL, authButtonType);
@@ -624,7 +625,7 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
         pane.setMaxWidth(Double.MAX_VALUE);
 
         final Scene scene = pane.getScene();
-        brand.apply(scene);
+        BrandUtil.applyBrand(injector, stage, scene);
 
         if (!progress.isDone()) {
             dialog.showAndWait();

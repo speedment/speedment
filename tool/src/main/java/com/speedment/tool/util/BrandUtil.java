@@ -21,6 +21,7 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.InfoComponent;
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.tool.brand.Brand;
+import com.speedment.tool.component.UserInterfaceComponent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -39,7 +40,9 @@ public final class BrandUtil {
     
     public static void applyBrand(Injector injector, Stage stage, Scene scene) {
         applyBrandToStage(injector, stage);
-        applyBrandToScene(injector, scene);
+        
+        final Brand brand = injector.getOrThrow(Brand.class);
+        brand.apply(stage, scene);
     }
     
     public static void applyBrandToStage(Injector injector, Stage stage) {
@@ -54,7 +57,13 @@ public final class BrandUtil {
     
     public static void applyBrandToScene(Injector injector, Scene scene) {
         final Brand brand = injector.getOrThrow(Brand.class);
-        brand.apply(scene);
+        final UserInterfaceComponent ui = injector.getOrThrow(UserInterfaceComponent.class);
+        
+        final Stage stage = scene.getWindow() == null 
+            ? ui.getStage() 
+            : (Stage) scene.getWindow();
+        
+        brand.apply(stage, scene);
     }
     
     /**

@@ -21,7 +21,7 @@ import com.speedment.runtime.component.InfoComponent;
 /**
  *
  * @author Emil Forslund
- * @since  2.4.0
+ * @since  3.0.0
  */
 public final class InfoComponentImpl extends InternalOpenSourceComponent 
     implements InfoComponent {
@@ -43,6 +43,6 @@ public final class InfoComponentImpl extends InternalOpenSourceComponent
 
     @Override
     public String version() {
-        return "2.4.0";
+        return "3.0.0";
     }
 }
