@@ -3,6 +3,7 @@
 **.versionsBackup
 **/nbproject/
 **/nbactions.xml
+**.iml
 /target/
 /.sonar
 /.idea
