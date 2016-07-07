@@ -16,10 +16,11 @@
  */
 package com.speedment.runtime.internal.field;
 
+import org.junit.Test;
+
 import static com.speedment.runtime.internal.field.Entity.ID;
 import static com.speedment.runtime.internal.field.Entity.NAME;
 import static org.junit.Assert.assertEquals;
-import org.junit.Test;
 
 /**
  *

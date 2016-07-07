@@ -16,41 +16,24 @@
  */
 package com.speedment.generator.internal.util;
 
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Generic;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.ForeignKey;
-import com.speedment.runtime.config.ForeignKeyColumn;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Table;
+import com.speedment.common.codegen.model.*;
+import com.speedment.generator.util.JavaLanguageNamer;
+import com.speedment.generator.util.Pluralis;
+import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.exception.SpeedmentException;
-import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
-import com.speedment.runtime.internal.field.ComparableFieldImpl;
-import com.speedment.runtime.internal.field.ComparableForeignKeyFieldImpl;
-import com.speedment.runtime.internal.field.ReferenceFieldImpl;
-import com.speedment.runtime.internal.field.ReferenceForeignKeyFieldImpl;
-import com.speedment.runtime.internal.field.StringFieldImpl;
-import com.speedment.runtime.internal.field.StringForeignKeyFieldImpl;
+import com.speedment.runtime.field.*;
+import com.speedment.runtime.internal.field.*;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.ancestor;
-import com.speedment.generator.util.JavaLanguageNamer;
-import com.speedment.generator.util.Pluralis;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
+import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.ancestor;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
-import com.speedment.runtime.field.ComparableField;
-import com.speedment.runtime.field.ComparableForeignKeyField;
-import com.speedment.runtime.field.ReferenceField;
-import com.speedment.runtime.field.ReferenceForeignKeyField;
-import com.speedment.runtime.field.StringField;
-import com.speedment.runtime.field.StringForeignKeyField;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 

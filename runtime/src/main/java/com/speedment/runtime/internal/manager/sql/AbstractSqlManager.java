@@ -16,8 +16,6 @@
  */
 package com.speedment.runtime.internal.manager.sql;
 
-import static com.speedment.common.injector.State.INITIALIZED;
-import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
@@ -25,56 +23,45 @@ import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.component.resultset.ResultSetMapperComponent;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.PrimaryKeyColumn;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.*;
+import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.parameter.DbmsType;
-import com.speedment.runtime.db.AsynchronousQueryResult;
-import com.speedment.runtime.db.DatabaseNamingConvention;
-import com.speedment.runtime.db.MetaResult;
-import com.speedment.runtime.db.SqlFunction;
-import com.speedment.runtime.db.SqlRunnable;
+import com.speedment.runtime.db.*;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.db.DbmsOperationHandler;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.internal.manager.AbstractManager;
 import com.speedment.runtime.internal.manager.metaresult.SqlMetaResultImpl;
-import static com.speedment.runtime.internal.stream.OptionalUtil.unwrap;
 import com.speedment.runtime.internal.stream.builder.ReferenceStreamBuilder;
 import com.speedment.runtime.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.runtime.internal.util.LazyString;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.findDbmsType;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.isSame;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.ancestor;
 import com.speedment.runtime.stream.StreamDecorator;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import static java.util.Objects.requireNonNull;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import static java.util.function.Function.identity;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.speedment.common.injector.State.INITIALIZED;
+import static com.speedment.common.injector.State.RESOLVED;
+import static com.speedment.runtime.internal.stream.OptionalUtil.unwrap;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.*;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.ancestor;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import java.util.stream.Stream;
 
 /**
  *

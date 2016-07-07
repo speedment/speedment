@@ -19,8 +19,6 @@ package com.speedment.tool.property;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.property.DefaultIntegerPropertyItem.DefaultIntegerPropertyEditor;
 import com.speedment.tool.util.SimpleNumericProperty;
-import java.util.Objects;
-import java.util.function.Consumer;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.IntegerProperty;
@@ -35,6 +33,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.util.StringConverter;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
+
+import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  *

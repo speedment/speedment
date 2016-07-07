@@ -21,6 +21,7 @@ import com.speedment.common.codegen.model.trait.HasAnnotationUsage;
 import com.speedment.common.codegen.model.trait.HasCopy;
 import com.speedment.common.codegen.model.trait.HasGenerics;
 import com.speedment.common.codegen.model.trait.HasName;
+
 import java.util.Optional;
 
 /**

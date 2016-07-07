@@ -17,16 +17,18 @@
 package com.speedment.common.injector.internal;
 
 import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.*;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.internal.dependency.DependencyGraph;
 import com.speedment.common.injector.internal.dependency.DependencyNode;
 import com.speedment.common.injector.internal.dependency.Execution;
 import com.speedment.common.injector.internal.dependency.impl.DependencyGraphImpl;
-import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
-import com.speedment.common.injector.State;
-import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.internal.util.ReflectionUtil;
+import com.speedment.common.logger.Level;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -38,31 +40,18 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
+
+import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseAncestors;
+import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableSet;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import static java.util.stream.Collectors.toSet;
-import java.util.stream.Stream;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.Optional;
-import java.util.Properties;
-import com.speedment.common.injector.annotation.IncludeInjectable;
-import com.speedment.common.injector.annotation.InjectorKey;
-import com.speedment.common.injector.annotation.WithState;
-import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseAncestors;
-import com.speedment.common.logger.Level;
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
-import java.util.LinkedHashMap;
 import static java.util.Objects.requireNonNull;
-import java.util.concurrent.atomic.AtomicInteger;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * The default implementation of the {@link Injector} interface.

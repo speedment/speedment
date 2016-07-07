@@ -19,13 +19,11 @@ package com.speedment.tool.internal.controller;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.EventComponent;
-import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.runtime.exception.SpeedmentException;
+import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.event.TreeSelectionChange;
 import com.speedment.tool.property.AbstractPropertyItem;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -35,6 +33,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
 import org.controlsfx.control.PropertySheet;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  *

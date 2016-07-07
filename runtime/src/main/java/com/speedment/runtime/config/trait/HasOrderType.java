@@ -20,8 +20,10 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.parameter.OrderType;
 import com.speedment.runtime.internal.util.document.TraitUtil.AbstractTraitView;
-import static com.speedment.runtime.internal.util.document.TraitUtil.viewOf;
+
 import java.util.Map;
+
+import static com.speedment.runtime.internal.util.document.TraitUtil.viewOf;
 
 /**
  * Trait for {@link Document} implementations that implement the 

@@ -16,28 +16,24 @@
  */
 package com.speedment.plugins.springgenerator.internal;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.LONG_PRIMITIVE;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.list;
 import com.speedment.common.codegen.internal.model.value.ReferenceValue;
 import com.speedment.common.codegen.internal.model.value.TextValue;
-import com.speedment.common.codegen.model.AnnotationUsage;
-import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.stream.Collectors;
+
+import static com.speedment.common.codegen.internal.model.constant.DefaultType.LONG_PRIMITIVE;
+import static com.speedment.common.codegen.internal.model.constant.DefaultType.list;
 
 /**
  *

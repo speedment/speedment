@@ -16,12 +16,14 @@
  */
 package com.speedment.common.codegen.internal.model;
 
+import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.JavadocTag;
-import com.speedment.common.codegen.internal.util.Copier;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import static java.util.Objects.requireNonNull;
 
 /**

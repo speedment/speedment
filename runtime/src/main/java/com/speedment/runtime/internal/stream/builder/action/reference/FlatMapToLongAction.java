@@ -16,12 +16,14 @@
  */
 package com.speedment.runtime.internal.stream.builder.action.reference;
 
-import static com.speedment.runtime.internal.stream.builder.action.StandardBasicAction.FLAT_MAP_TO;
 import com.speedment.runtime.stream.action.Action;
-import static java.util.Objects.requireNonNull;
+
 import java.util.function.Function;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
+
+import static com.speedment.runtime.internal.stream.builder.action.StandardBasicAction.FLAT_MAP_TO;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

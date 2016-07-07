@@ -16,21 +16,23 @@
  */
 package com.speedment.runtime.internal.config.immutable;
 
+import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.config.ProjectImpl;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
-import com.speedment.common.mapstream.MapStream;
+
 import java.nio.file.Path;
-import static java.util.Collections.unmodifiableList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+
+import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
+import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.toList;
 
 /**
  *

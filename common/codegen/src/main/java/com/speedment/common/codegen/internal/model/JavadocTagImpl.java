@@ -17,9 +17,11 @@
 package com.speedment.common.codegen.internal.model;
 
 import com.speedment.common.codegen.model.JavadocTag;
+
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * This is the default implementation of the {@link JavadocTag} interface. This

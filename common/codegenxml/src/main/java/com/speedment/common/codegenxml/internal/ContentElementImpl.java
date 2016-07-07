@@ -17,6 +17,7 @@
 package com.speedment.common.codegenxml.internal;
 
 import com.speedment.common.codegenxml.ContentElement;
+
 import java.util.Optional;
 
 /**

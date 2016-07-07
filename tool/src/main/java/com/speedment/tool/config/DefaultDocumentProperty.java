@@ -19,13 +19,15 @@ package com.speedment.tool.config;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Document;
-import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
 import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
+import org.controlsfx.control.PropertySheet;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-import org.controlsfx.control.PropertySheet;
+
+import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
 
 /**
  *

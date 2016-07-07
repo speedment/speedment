@@ -16,31 +16,20 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.runtime.Speedment;
-import com.speedment.runtime.config.Project;
-import static com.speedment.runtime.config.Project.CONFIG_PATH;
-import static com.speedment.runtime.config.Project.DEFAULT_PROJECT_NAME;
-import static com.speedment.runtime.config.Project.PACKAGE_LOCATION;
-import static com.speedment.runtime.config.Project.PACKAGE_NAME;
-import static com.speedment.runtime.config.trait.HasName.NAME;
-import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.generator.util.JavaLanguageNamer;
+import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.exception.SpeedmentException;
+import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.ProjectPropertyMutator;
-import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
-import com.speedment.tool.component.DocumentPropertyComponent;
-import com.speedment.tool.util.DocumentMerger;
-import com.speedment.tool.property.DefaultStringPropertyItem;
-import com.speedment.tool.property.StringPropertyItem;
 import com.speedment.tool.config.trait.HasEnabledProperty;
 import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
+import com.speedment.tool.property.DefaultStringPropertyItem;
+import com.speedment.tool.property.StringPropertyItem;
+import com.speedment.tool.util.DocumentMerger;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
@@ -50,6 +39,16 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.util.StringConverter;
 import org.controlsfx.control.PropertySheet;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import static com.speedment.runtime.config.Project.*;
+import static com.speedment.runtime.config.trait.HasName.NAME;
+import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
 
 /**
  *

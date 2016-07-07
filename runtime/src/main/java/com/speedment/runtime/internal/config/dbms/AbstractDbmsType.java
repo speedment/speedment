@@ -16,8 +16,6 @@
  */
 package com.speedment.runtime.internal.config.dbms;
 
-import static com.speedment.common.injector.State.CREATED;
-import static com.speedment.common.injector.State.INITIALIZED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.component.DbmsHandlerComponent;
@@ -25,9 +23,13 @@ import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.internal.db.DefaultDatabaseNamingConvention;
+
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
+
+import static com.speedment.common.injector.State.CREATED;
+import static com.speedment.common.injector.State.INITIALIZED;
 
 /**
  *

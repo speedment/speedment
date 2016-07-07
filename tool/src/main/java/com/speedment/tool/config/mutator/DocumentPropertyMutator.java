@@ -17,16 +17,7 @@
 package com.speedment.tool.config.mutator;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.tool.config.ColumnProperty;
-import com.speedment.tool.config.DbmsProperty;
-import com.speedment.tool.config.ForeignKeyColumnProperty;
-import com.speedment.tool.config.ForeignKeyProperty;
-import com.speedment.tool.config.IndexColumnProperty;
-import com.speedment.tool.config.IndexProperty;
-import com.speedment.tool.config.PrimaryKeyColumnProperty;
-import com.speedment.tool.config.ProjectProperty;
-import com.speedment.tool.config.SchemaProperty;
-import com.speedment.tool.config.TableProperty;
+import com.speedment.tool.config.*;
 
 /**
  *

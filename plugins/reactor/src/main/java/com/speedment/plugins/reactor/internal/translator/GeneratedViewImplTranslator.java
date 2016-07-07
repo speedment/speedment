@@ -16,26 +16,19 @@
  */
 package com.speedment.plugins.reactor.internal.translator;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
-import static com.speedment.common.codegen.internal.util.Formatting.block;
-import static com.speedment.common.codegen.internal.util.Formatting.dnl;
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
-import com.speedment.common.codegen.model.Constructor;
-import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Generic;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
+import com.speedment.common.codegen.model.*;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.plugins.reactor.MaterializedViewImpl;
-import static com.speedment.plugins.reactor.internal.translator.TranslatorUtil.mergingColumnType;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
+
 import java.util.Objects;
+
+import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.common.codegen.internal.util.Formatting.*;
+import static com.speedment.plugins.reactor.internal.translator.TranslatorUtil.mergingColumnType;
 
 /**
  *

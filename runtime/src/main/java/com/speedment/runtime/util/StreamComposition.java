@@ -17,18 +17,16 @@
 package com.speedment.runtime.util;
 
 import com.speedment.runtime.annotation.Api;
-import static com.speedment.runtime.internal.stream.autoclose.AbstractAutoClosingStream.composedClose;
 import com.speedment.runtime.internal.stream.autoclose.AutoClosingDoubleStream;
 import com.speedment.runtime.internal.stream.autoclose.AutoClosingIntStream;
 import com.speedment.runtime.internal.stream.autoclose.AutoClosingLongStream;
 import com.speedment.runtime.internal.stream.autoclose.AutoClosingReferenceStream;
-import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
+
 import java.util.function.Function;
-import java.util.stream.BaseStream;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
-import java.util.stream.LongStream;
-import java.util.stream.Stream;
+import java.util.stream.*;
+
+import static com.speedment.runtime.internal.stream.autoclose.AbstractAutoClosingStream.composedClose;
+import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
 
 /**
  * Utility methods for making sure composed streams are closed properly.

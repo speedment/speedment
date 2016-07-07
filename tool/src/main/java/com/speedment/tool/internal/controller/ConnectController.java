@@ -23,23 +23,15 @@ import com.speedment.runtime.component.PasswordComponent;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.tool.config.DbmsProperty;
-import static com.speedment.tool.internal.controller.ToolbarController.ICON_SIZE;
 import com.speedment.runtime.internal.util.Settings;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import com.speedment.tool.component.UserInterfaceComponent;
-import static com.speedment.tool.component.UserInterfaceComponent.ReuseStage.USE_EXISTING_STAGE;
+import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.event.UIEvent;
 import com.speedment.tool.internal.util.ConfigFileHelper;
 import com.speedment.tool.internal.util.InjectionLoader;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import java.net.URL;
-import java.util.ResourceBundle;
-import static java.util.stream.Collectors.toCollection;
-import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
-import static javafx.beans.binding.Bindings.createBooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -50,6 +42,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.StringConverter;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.stream.Stream;
+
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
+import static com.speedment.tool.component.UserInterfaceComponent.ReuseStage.USE_EXISTING_STAGE;
+import static com.speedment.tool.internal.controller.ToolbarController.ICON_SIZE;
+import static java.util.stream.Collectors.toCollection;
+import static javafx.beans.binding.Bindings.createBooleanBinding;
 
 /**
  *

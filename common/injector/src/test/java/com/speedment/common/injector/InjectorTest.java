@@ -23,9 +23,10 @@ import com.speedment.common.injector.test_b.B;
 import com.speedment.common.injector.test_b.C;
 import com.speedment.common.injector.test_c.ChildType;
 import com.speedment.common.injector.test_c.ParentType;
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import org.junit.Test;
 
 /**
  *

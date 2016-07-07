@@ -17,15 +17,7 @@
 package com.speedment.runtime.config.mutator;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.ForeignKey;
-import com.speedment.runtime.config.Index;
-import com.speedment.runtime.config.PrimaryKeyColumn;
-import com.speedment.runtime.config.Table;
-import static com.speedment.runtime.config.Table.COLUMNS;
-import static com.speedment.runtime.config.Table.FOREIGN_KEYS;
-import static com.speedment.runtime.config.Table.INDEXES;
-import static com.speedment.runtime.config.Table.PRIMARY_KEY_COLUMNS;
+import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.mutator.trait.HasAliasMutator;
 import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
@@ -33,6 +25,8 @@ import com.speedment.runtime.internal.config.ColumnImpl;
 import com.speedment.runtime.internal.config.ForeignKeyImpl;
 import com.speedment.runtime.internal.config.IndexImpl;
 import com.speedment.runtime.internal.config.PrimaryKeyColumnImpl;
+
+import static com.speedment.runtime.config.Table.*;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.newDocument;
 
 /**

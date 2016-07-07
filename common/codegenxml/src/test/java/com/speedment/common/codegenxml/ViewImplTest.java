@@ -17,11 +17,9 @@
 package com.speedment.common.codegenxml;
 
 import com.speedment.common.codegen.internal.util.Formatting;
-import static com.speedment.common.codegenxml.Elements.body;
-import static com.speedment.common.codegenxml.Elements.head;
-import static com.speedment.common.codegenxml.Elements.html;
-import static com.speedment.common.codegenxml.Elements.title;
 import org.junit.Test;
+
+import static com.speedment.common.codegenxml.Elements.*;
 
 /**
  *

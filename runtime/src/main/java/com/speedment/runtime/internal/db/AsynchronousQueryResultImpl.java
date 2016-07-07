@@ -21,21 +21,23 @@
  */
 package com.speedment.runtime.internal.db;
 
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.db.AsynchronousQueryResult;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.stream.StreamUtil;
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.stream.ParallelStrategy;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

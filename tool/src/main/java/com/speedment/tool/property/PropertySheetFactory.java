@@ -18,12 +18,14 @@ package com.speedment.tool.property;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.config.DocumentProperty;
-import java.util.Map;
-import static java.util.Objects.requireNonNull;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet.Item;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

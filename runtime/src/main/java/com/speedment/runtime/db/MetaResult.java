@@ -17,6 +17,7 @@
 package com.speedment.runtime.db;
 
 import com.speedment.runtime.annotation.Api;
+
 import java.util.Optional;
 
 /**

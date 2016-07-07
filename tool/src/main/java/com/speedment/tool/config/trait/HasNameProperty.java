@@ -22,9 +22,10 @@ import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.property.StringPropertyItem;
-import java.util.stream.Stream;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.control.PropertySheet;
+
+import java.util.stream.Stream;
 
 /**
  *

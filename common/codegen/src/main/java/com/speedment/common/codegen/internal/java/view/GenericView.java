@@ -19,9 +19,11 @@ package com.speedment.common.codegen.internal.java.view;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.Generic;
+
+import java.util.Optional;
+
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-import java.util.Optional;
 
 /**
  * Transforms from a {@link Generic} to java code.

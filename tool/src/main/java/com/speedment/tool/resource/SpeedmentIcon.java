@@ -16,29 +16,21 @@
  */
 package com.speedment.tool.resource;
 
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.ForeignKey;
-import com.speedment.runtime.config.ForeignKeyColumn;
-import com.speedment.runtime.config.Index;
-import com.speedment.runtime.config.IndexColumn;
-import com.speedment.runtime.config.PrimaryKeyColumn;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.config.*;
+import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.tool.config.trait.HasIconPath;
-import java.io.InputStream;
-import java.util.Map;
-import static java.util.Objects.requireNonNull;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import java.io.InputStream;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * An enumeration of all the icons available in the Speedment Icon Package.

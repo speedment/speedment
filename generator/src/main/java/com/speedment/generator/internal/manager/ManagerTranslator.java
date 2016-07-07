@@ -18,8 +18,8 @@ package com.speedment.generator.internal.manager;
 
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Interface;
-import com.speedment.runtime.config.Table;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
+import com.speedment.runtime.config.Table;
 
 /**
  *

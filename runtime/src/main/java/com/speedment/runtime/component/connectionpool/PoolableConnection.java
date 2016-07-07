@@ -17,6 +17,7 @@
 package com.speedment.runtime.component.connectionpool;
 
 import com.speedment.runtime.annotation.Api;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 

@@ -18,7 +18,8 @@ package com.speedment.runtime.internal.util.analytics;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.Date;
+import java.util.Random;
 
 public final class GoogleAnalytics_v1_URLBuildingStrategy implements URLBuildingStrategy {
 

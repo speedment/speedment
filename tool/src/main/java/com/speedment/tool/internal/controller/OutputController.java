@@ -18,12 +18,13 @@ package com.speedment.tool.internal.controller;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.component.UserInterfaceComponent;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  *

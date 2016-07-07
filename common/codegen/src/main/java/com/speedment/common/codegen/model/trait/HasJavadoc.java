@@ -17,6 +17,7 @@
 package com.speedment.common.codegen.model.trait;
 
 import com.speedment.common.codegen.model.Javadoc;
+
 import java.util.Optional;
 
 /**

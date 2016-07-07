@@ -17,9 +17,11 @@
 package com.speedment.runtime.internal.pool;
 
 import com.speedment.runtime.component.connectionpool.PoolableConnection;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicLong;
+
 import static java.util.Objects.requireNonNull;
 
 /**

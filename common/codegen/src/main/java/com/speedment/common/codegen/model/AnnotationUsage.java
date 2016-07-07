@@ -20,10 +20,9 @@ import com.speedment.common.codegen.internal.model.AnnotationUsageImpl;
 import com.speedment.common.codegen.model.trait.HasCopy;
 import com.speedment.common.codegen.model.trait.HasType;
 import com.speedment.common.codegen.model.trait.HasValue;
+
 import java.util.List;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
-import java.util.function.Function;
 
 /**
  * A model that represents the usage of a particular annotation in code.

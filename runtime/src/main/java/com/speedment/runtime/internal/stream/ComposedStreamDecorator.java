@@ -20,6 +20,7 @@ import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.stream.HasParallelStrategy;
 import com.speedment.runtime.stream.Pipeline;
 import com.speedment.runtime.stream.StreamDecorator;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;

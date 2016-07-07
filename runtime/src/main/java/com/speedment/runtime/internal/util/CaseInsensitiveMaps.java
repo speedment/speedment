@@ -16,9 +16,10 @@
  */
 package com.speedment.runtime.internal.util;
 
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import java.util.Map;
 import java.util.TreeMap;
+
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  *

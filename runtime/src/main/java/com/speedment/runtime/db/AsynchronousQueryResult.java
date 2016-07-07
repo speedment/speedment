@@ -18,6 +18,7 @@ package com.speedment.runtime.db;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.stream.HasParallelStrategy;
+
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.function.Function;

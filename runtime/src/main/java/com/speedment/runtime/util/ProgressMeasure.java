@@ -18,6 +18,7 @@ package com.speedment.runtime.util;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.internal.util.ProgressMeasurerImpl;
+
 import java.util.function.Consumer;
 
 /**

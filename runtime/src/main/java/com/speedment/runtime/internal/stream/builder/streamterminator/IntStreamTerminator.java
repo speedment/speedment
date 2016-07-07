@@ -17,19 +17,12 @@
 package com.speedment.runtime.internal.stream.builder.streamterminator;
 
 import com.speedment.runtime.internal.stream.builder.pipeline.IntPipeline;
-import java.util.IntSummaryStatistics;
-import static java.util.Objects.requireNonNull;
-import java.util.OptionalDouble;
-import java.util.OptionalInt;
-import java.util.PrimitiveIterator;
-import java.util.Spliterator;
-import java.util.function.BiConsumer;
-import java.util.function.IntBinaryOperator;
-import java.util.function.IntConsumer;
-import java.util.function.IntPredicate;
-import java.util.function.ObjIntConsumer;
-import java.util.function.Supplier;
+
+import java.util.*;
+import java.util.function.*;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

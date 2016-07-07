@@ -18,19 +18,14 @@ package com.speedment.common.codegen.internal.java.view;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegen.internal.java.view.trait.HasAnnotationUsageView;
-import com.speedment.common.codegen.internal.java.view.trait.HasCodeView;
-import com.speedment.common.codegen.internal.java.view.trait.HasFieldsView;
-import com.speedment.common.codegen.internal.java.view.trait.HasGenericsView;
-import com.speedment.common.codegen.internal.java.view.trait.HasJavadocView;
-import com.speedment.common.codegen.internal.java.view.trait.HasModifiersView;
-import com.speedment.common.codegen.internal.java.view.trait.HasNameView;
-import com.speedment.common.codegen.internal.java.view.trait.HasThrowsView;
-import com.speedment.common.codegen.internal.java.view.trait.HasTypeView;
+import com.speedment.common.codegen.internal.java.view.trait.*;
 import com.speedment.common.codegen.model.InterfaceMethod;
-import static com.speedment.common.codegen.model.modifier.Modifier.*;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Optional;
+
+import static com.speedment.common.codegen.model.modifier.Modifier.DEFAULT;
+import static com.speedment.common.codegen.model.modifier.Modifier.STATIC;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Transforms from an {@link InterfaceMethod} to java code.

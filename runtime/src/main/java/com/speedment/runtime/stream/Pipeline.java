@@ -18,6 +18,7 @@ package com.speedment.runtime.stream;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.stream.action.Action;
+
 import java.util.NoSuchElementException;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;

@@ -16,17 +16,14 @@
  */
 package com.speedment.plugins.json;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.List;
-import static java.util.Objects.requireNonNull;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
+
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collector.Characteristics.CONCURRENT;
 import static java.util.stream.Collectors.joining;
 

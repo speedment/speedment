@@ -16,16 +16,17 @@
  */
 package com.speedment.generator.internal.util;
 
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.ForeignKey;
-import com.speedment.runtime.config.ForeignKeyColumn;
-import com.speedment.runtime.config.Table;
-import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.injector.Injector;
 import com.speedment.generator.JavaClassTranslator;
 import com.speedment.generator.StandardTranslatorKey;
 import com.speedment.generator.component.CodeGenerationComponent;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.ForeignKey;
+import com.speedment.runtime.config.ForeignKeyColumn;
+import com.speedment.runtime.config.Table;
+import com.speedment.runtime.exception.SpeedmentException;
+
 import static com.speedment.runtime.internal.util.document.DocumentUtil.ancestor;
 import static java.util.Objects.requireNonNull;
 

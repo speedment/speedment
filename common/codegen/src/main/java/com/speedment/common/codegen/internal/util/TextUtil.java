@@ -16,18 +16,19 @@
  */
 package com.speedment.common.codegen.internal.util;
 
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 import java.util.Collections;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  *

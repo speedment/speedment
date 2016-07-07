@@ -23,16 +23,18 @@ package com.speedment.runtime.internal.stream;
 
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.stream.ParallelStrategy;
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Spliterator;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

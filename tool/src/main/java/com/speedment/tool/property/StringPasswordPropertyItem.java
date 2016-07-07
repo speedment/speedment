@@ -18,9 +18,10 @@ package com.speedment.tool.property;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.util.EditorsUtil;
-import java.util.function.Consumer;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.property.editor.PropertyEditor;
+
+import java.util.function.Consumer;
 
 /**
  *

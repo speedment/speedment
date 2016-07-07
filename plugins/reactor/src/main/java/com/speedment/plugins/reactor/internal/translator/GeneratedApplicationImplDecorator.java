@@ -16,41 +16,32 @@
  */
 package com.speedment.plugins.reactor.internal.translator;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.common.codegen.internal.model.constant.DefaultType;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.VOID;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.WILDCARD;
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
-import static com.speedment.common.codegen.internal.util.Formatting.indent;
-import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Constructor;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.Generic;
-import static com.speedment.common.codegen.model.Generic.BoundType.EXTENDS;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.JavaClassTranslator;
-import static com.speedment.generator.Translator.Phase.POST_MAKE;
 import com.speedment.generator.TranslatorDecorator;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.plugins.reactor.MaterializedView;
 import com.speedment.plugins.reactor.Reactor;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.PrimaryKeyColumn;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.*;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.ComparableField;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
+
+import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.internal.model.constant.DefaultType.VOID;
+import static com.speedment.common.codegen.internal.model.constant.DefaultType.WILDCARD;
+import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.common.codegen.internal.util.Formatting.indent;
+import static com.speedment.common.codegen.model.Generic.BoundType.EXTENDS;
+import static com.speedment.generator.Translator.Phase.POST_MAKE;
 
 /**
  *

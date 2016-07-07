@@ -17,10 +17,12 @@
 package com.speedment.tool.resource;
 
 import com.speedment.runtime.annotation.Api;
-import java.io.InputStream;
-import static java.util.Objects.requireNonNull;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import java.io.InputStream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * An enumeration of all the icons available in the Silk Icon package.

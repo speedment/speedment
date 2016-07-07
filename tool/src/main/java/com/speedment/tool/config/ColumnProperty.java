@@ -18,28 +18,16 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.runtime.config.Column;
-import static com.speedment.runtime.config.Column.AUTO_INCREMENT;
-import static com.speedment.runtime.config.Column.DATABASE_TYPE;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.exception.SpeedmentException;
+import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.ColumnPropertyMutator;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
-import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
+import com.speedment.tool.config.trait.*;
 import com.speedment.tool.property.BooleanPropertyItem;
 import com.speedment.tool.property.TypeMapperPropertyItem;
-import com.speedment.tool.config.trait.HasAliasProperty;
-import com.speedment.tool.config.trait.HasEnabledProperty;
-import com.speedment.tool.config.trait.HasExpandedProperty;
-import com.speedment.tool.config.trait.HasNameProperty;
-import com.speedment.tool.config.trait.HasNullableProperty;
-import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-import static javafx.beans.binding.Bindings.createObjectBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
@@ -47,6 +35,14 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.util.StringConverter;
 import org.controlsfx.control.PropertySheet;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import static com.speedment.runtime.config.Column.AUTO_INCREMENT;
+import static com.speedment.runtime.config.Column.DATABASE_TYPE;
+import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
 
 /**
  *

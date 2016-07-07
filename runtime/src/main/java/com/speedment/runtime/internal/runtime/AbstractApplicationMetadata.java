@@ -21,6 +21,7 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.internal.config.ProjectImpl;
 import com.speedment.runtime.internal.util.document.DocumentTranscoder;
+
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;

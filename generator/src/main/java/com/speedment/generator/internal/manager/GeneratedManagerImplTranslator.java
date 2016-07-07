@@ -16,64 +16,46 @@
  */
 package com.speedment.generator.internal.manager;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
+import com.speedment.common.codegen.internal.model.value.ReferenceValue;
+import com.speedment.common.codegen.internal.util.Formatting;
+import com.speedment.common.codegen.model.*;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.tuple.Tuples;
 import com.speedment.generator.TranslatorSupport;
-import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Constructor;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Generic;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
+import com.speedment.generator.internal.EntityAndManagerTranslator;
+import com.speedment.generator.internal.util.EntityTranslatorSupport;
+import com.speedment.generator.internal.util.FkHolder;
+import com.speedment.generator.util.JavaLanguageNamer;
+import com.speedment.runtime.component.DbmsHandlerComponent;
+import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.component.resultset.ResultSetMapping;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.OPTIONAL;
-import com.speedment.common.codegen.internal.model.value.ReferenceValue;
-import com.speedment.common.codegen.internal.util.Formatting;
-import com.speedment.generator.internal.EntityAndManagerTranslator;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
+import com.speedment.runtime.internal.manager.sql.AbstractSqlManager;
+import com.speedment.runtime.internal.util.sql.ResultSetUtil;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
-import com.speedment.runtime.internal.manager.sql.AbstractSqlManager;
-import com.speedment.common.tuple.Tuples;
-import com.speedment.common.codegen.model.AnnotationUsage;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
-import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
-import com.speedment.generator.internal.util.EntityTranslatorSupport;
-import com.speedment.generator.internal.util.FkHolder;
-import com.speedment.runtime.component.DbmsHandlerComponent;
-import com.speedment.runtime.component.ProjectComponent;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
-import com.speedment.runtime.internal.util.sql.ResultSetUtil;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
+
+import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.internal.model.constant.DefaultType.OPTIONAL;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static com.speedment.common.codegen.internal.util.Formatting.tab;
-import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.generateFields;
-import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.generateGet;
-import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.generateNewEmptyEntity;
-import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.generateNewEntityFromBody;
-import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.generatePrimaryKeyFields;
-import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.generateSet;
-import com.speedment.generator.util.JavaLanguageNamer;
-import static java.util.stream.Collectors.joining;
+import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.*;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
+import static java.util.stream.Collectors.joining;
 
 /**
  *

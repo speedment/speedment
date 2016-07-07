@@ -19,17 +19,12 @@ package com.speedment.tool.internal.controller;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.Component;
+import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.parameter.DbmsType;
-import com.speedment.tool.resource.SilkIcon;
 import com.speedment.runtime.license.License;
 import com.speedment.runtime.license.Software;
-import com.speedment.runtime.component.InfoComponent;
-import static com.speedment.tool.internal.util.CloseUtil.newCloseHandler;
-import java.net.URL;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ResourceBundle;
+import com.speedment.tool.resource.SilkIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -37,6 +32,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.paint.Color;
+
+import java.net.URL;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+import static com.speedment.tool.internal.util.CloseUtil.newCloseHandler;
 
 /**
  *

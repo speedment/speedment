@@ -21,6 +21,7 @@ import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.manager.Manager;
 import com.speedment.runtime.stream.StreamDecorator;
+
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;

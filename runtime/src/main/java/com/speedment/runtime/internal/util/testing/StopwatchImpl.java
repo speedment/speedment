@@ -17,10 +17,8 @@
 package com.speedment.runtime.internal.util.testing;
 
 import java.util.concurrent.TimeUnit;
-import static java.util.concurrent.TimeUnit.MICROSECONDS;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.concurrent.TimeUnit.NANOSECONDS;
-import static java.util.concurrent.TimeUnit.SECONDS;
+
+import static java.util.concurrent.TimeUnit.*;
 
 /**
  *

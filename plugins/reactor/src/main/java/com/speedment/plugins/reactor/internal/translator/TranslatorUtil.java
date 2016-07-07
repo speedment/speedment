@@ -21,6 +21,7 @@ import com.speedment.generator.TranslatorSupport;
 import com.speedment.plugins.reactor.component.ReactorComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
+
 import static com.speedment.plugins.reactor.component.ReactorComponentUtil.validMergingColumns;
 
 /**

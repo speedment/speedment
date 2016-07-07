@@ -16,9 +16,8 @@
  */
 package com.speedment.runtime.internal.config.dbms;
 
-import com.speedment.common.injector.annotation.Execute;
+import com.speedment.common.injector.annotation.IncludeInjectable;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.db.ConnectionUrlGenerator;
 import com.speedment.runtime.db.DatabaseNamingConvention;
@@ -29,12 +28,13 @@ import com.speedment.runtime.internal.db.AbstractDatabaseNamingConvention;
 import com.speedment.runtime.internal.db.mysql.MySqlDbmsMetadataHandler;
 import com.speedment.runtime.internal.db.mysql.MySqlDbmsOperationHandler;
 import com.speedment.runtime.internal.manager.sql.MySqlSpeedmentPredicateView;
+
 import java.util.Collections;
 import java.util.Set;
+import java.util.stream.Stream;
+
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
-import java.util.stream.Stream;
-import com.speedment.common.injector.annotation.IncludeInjectable;
 
 /**
  *

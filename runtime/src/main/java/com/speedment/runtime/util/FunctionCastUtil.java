@@ -17,6 +17,7 @@
 package com.speedment.runtime.util;
 
 import com.speedment.runtime.annotation.Api;
+
 import java.util.function.*;
 
 /**

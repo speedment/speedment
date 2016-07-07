@@ -17,33 +17,26 @@
 package com.speedment.runtime.internal.runtime.typemapping;
 
 import com.speedment.runtime.component.resultset.ResultSetMapping;
-import static com.speedment.runtime.component.resultset.ResultSetMapping.unableToMapLong;
-import static com.speedment.runtime.component.resultset.ResultSetMapping.unableToMapString;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.util.LongUtil;
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Date;
-import java.sql.NClob;
-import java.sql.Ref;
-import java.sql.RowId;
-import java.sql.SQLXML;
-import java.sql.Time;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
-import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+
+import static com.speedment.runtime.component.resultset.ResultSetMapping.unableToMapLong;
+import static com.speedment.runtime.component.resultset.ResultSetMapping.unableToMapString;
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 public final class StandardJavaTypeMapping {
 

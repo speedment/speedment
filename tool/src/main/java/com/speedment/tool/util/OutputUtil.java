@@ -17,8 +17,9 @@
 package com.speedment.tool.util;
 
 import com.speedment.runtime.annotation.Api;
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import javafx.scene.control.Label;
+
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  *

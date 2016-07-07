@@ -17,13 +17,15 @@
 package com.speedment.runtime.internal.util;
 
 import com.speedment.runtime.util.StaticClassUtil;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collector;
+import java.util.stream.Stream;
+
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
-import java.util.stream.Stream;
 
 /**
  *

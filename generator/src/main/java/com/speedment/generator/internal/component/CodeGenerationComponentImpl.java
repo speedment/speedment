@@ -16,43 +16,37 @@
  */
 package com.speedment.generator.internal.component;
 
+import com.speedment.common.codegen.internal.java.JavaGenerator;
+import com.speedment.common.codegen.model.ClassOrInterface;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.IncludeInjectable;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.mapstream.MapStream;
 import com.speedment.generator.JavaClassTranslator;
-import static com.speedment.generator.StandardTranslatorKey.*;
 import com.speedment.generator.Translator;
 import com.speedment.generator.TranslatorConstructor;
 import com.speedment.generator.TranslatorDecorator;
 import com.speedment.generator.component.CodeGenerationComponent;
+import com.speedment.generator.internal.TranslatorManagerImpl;
+import com.speedment.generator.internal.entity.EntityImplTranslator;
+import com.speedment.generator.internal.entity.EntityTranslator;
+import com.speedment.generator.internal.entity.GeneratedEntityImplTranslator;
+import com.speedment.generator.internal.entity.GeneratedEntityTranslator;
+import com.speedment.generator.internal.lifecycle.*;
+import com.speedment.generator.internal.manager.GeneratedManagerImplTranslator;
+import com.speedment.generator.internal.manager.GeneratedManagerTranslator;
+import com.speedment.generator.internal.manager.ManagerImplTranslator;
+import com.speedment.generator.internal.manager.ManagerTranslator;
+import com.speedment.generator.internal.util.DefaultJavaLanguageNamer;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.common.codegen.internal.java.JavaGenerator;
-import com.speedment.common.codegen.model.ClassOrInterface;
-import com.speedment.common.injector.Injector;
-import static com.speedment.common.injector.State.RESOLVED;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.generator.internal.entity.EntityImplTranslator;
-import com.speedment.generator.internal.entity.EntityTranslator;
-import com.speedment.generator.internal.entity.GeneratedEntityImplTranslator;
-import com.speedment.generator.internal.entity.GeneratedEntityTranslator;
-import com.speedment.generator.internal.lifecycle.GeneratedMetadataTranslator;
-import com.speedment.generator.internal.lifecycle.ApplicationTranslator;
-import com.speedment.generator.internal.manager.ManagerImplTranslator;
-import com.speedment.generator.internal.manager.ManagerTranslator;
-import com.speedment.generator.internal.manager.GeneratedManagerImplTranslator;
-import com.speedment.generator.internal.manager.GeneratedManagerTranslator;
-import com.speedment.generator.internal.util.DefaultJavaLanguageNamer;
 import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.runtime.license.Software;
-import com.speedment.common.mapstream.MapStream;
-import com.speedment.generator.internal.TranslatorManagerImpl;
-import com.speedment.generator.internal.lifecycle.ApplicationBuilderTranslator;
-import com.speedment.generator.internal.lifecycle.ApplicationImplTranslator;
-import com.speedment.generator.internal.lifecycle.GeneratedApplicationBuilderTranslator;
-import com.speedment.generator.internal.lifecycle.GeneratedApplicationImplTranslator;
-import com.speedment.generator.internal.lifecycle.GeneratedApplicationTranslator;
+
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -60,7 +54,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import com.speedment.common.injector.annotation.IncludeInjectable;
+
+import static com.speedment.common.injector.State.RESOLVED;
+import static com.speedment.generator.StandardTranslatorKey.*;
 import static java.util.Objects.requireNonNull;
 
 @IncludeInjectable({

@@ -20,6 +20,7 @@ import com.speedment.common.codegen.internal.model.ImportImpl;
 import com.speedment.common.codegen.model.modifier.ImportModifier;
 import com.speedment.common.codegen.model.trait.HasCopy;
 import com.speedment.common.codegen.model.trait.HasType;
+
 import java.util.Optional;
 
 /**

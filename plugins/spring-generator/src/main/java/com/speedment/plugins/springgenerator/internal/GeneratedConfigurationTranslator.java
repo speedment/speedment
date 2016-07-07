@@ -16,15 +16,8 @@
  */
 package com.speedment.plugins.springgenerator.internal;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.STRING;
 import com.speedment.common.codegen.internal.model.value.TextValue;
-import com.speedment.common.codegen.model.AnnotationUsage;
-import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.generator.TranslatorSupport;
@@ -34,10 +27,11 @@ import com.speedment.plugins.springgenerator.configuration.SpeedmentConfiguratio
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+
+import static com.speedment.common.codegen.internal.model.constant.DefaultType.STRING;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 
 /**

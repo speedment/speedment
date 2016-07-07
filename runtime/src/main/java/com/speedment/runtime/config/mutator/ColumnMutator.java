@@ -18,12 +18,13 @@ package com.speedment.runtime.config.mutator;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
-import static com.speedment.runtime.config.Column.*;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mutator.trait.HasAliasMutator;
 import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 import com.speedment.runtime.config.mutator.trait.HasOrdinalPositionMutator;
+
+import static com.speedment.runtime.config.Column.*;
 import static com.speedment.runtime.config.trait.HasNullable.NULLABLE;
 
 /**

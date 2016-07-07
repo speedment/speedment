@@ -18,12 +18,14 @@ package com.speedment.common.codegen.internal.java.view.trait;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegen.model.trait.HasModifiers;
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import com.speedment.common.codegen.model.modifier.Modifier;
+import com.speedment.common.codegen.model.trait.HasModifiers;
+
 import java.util.Set;
-import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
+
+import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * A trait with the functionality to render models with the trait 

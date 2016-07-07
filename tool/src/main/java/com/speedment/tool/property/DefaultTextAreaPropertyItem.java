@@ -18,9 +18,6 @@ package com.speedment.tool.property;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.property.DefaultTextAreaPropertyItem.DefaultTextAreaPropertyEditor;
-import java.util.Objects;
-import static java.util.Objects.requireNonNull;
-import java.util.function.Consumer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableStringValue;
@@ -29,9 +26,13 @@ import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
-import static javafx.scene.layout.HBox.setHgrow;
 import javafx.scene.layout.Priority;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
+
+import java.util.Objects;
+import java.util.function.Consumer;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

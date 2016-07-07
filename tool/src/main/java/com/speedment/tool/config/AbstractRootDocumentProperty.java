@@ -18,6 +18,7 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Document;
+
 import java.util.Optional;
 import java.util.stream.Stream;
 

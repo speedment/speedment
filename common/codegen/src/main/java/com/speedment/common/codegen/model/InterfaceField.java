@@ -18,12 +18,7 @@ package com.speedment.common.codegen.model;
 
 import com.speedment.common.codegen.internal.model.InterfaceFieldImpl;
 import com.speedment.common.codegen.model.modifier.InterfaceFieldModifier;
-import com.speedment.common.codegen.model.trait.HasAnnotationUsage;
-import com.speedment.common.codegen.model.trait.HasCopy;
-import com.speedment.common.codegen.model.trait.HasJavadoc;
-import com.speedment.common.codegen.model.trait.HasName;
-import com.speedment.common.codegen.model.trait.HasType;
-import com.speedment.common.codegen.model.trait.HasValue;
+import com.speedment.common.codegen.model.trait.*;
 
 /**
  * A model that represents a field of an interface in code.

@@ -16,36 +16,19 @@
  */
 package com.speedment.runtime.internal.util.document;
 
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.ForeignKey;
-import com.speedment.runtime.config.ForeignKeyColumn;
-import com.speedment.runtime.config.Index;
-import com.speedment.runtime.config.IndexColumn;
-import com.speedment.runtime.config.PrimaryKeyColumn;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
+import com.speedment.common.mapstream.MapStream;
+import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.mapper.identity.IntegerIdentityMapper;
 import com.speedment.runtime.config.mapper.identity.LongIdentityMapper;
 import com.speedment.runtime.config.mapper.identity.StringIdentityMapper;
-import com.speedment.runtime.internal.config.ColumnImpl;
-import com.speedment.runtime.internal.config.DbmsImpl;
-import com.speedment.runtime.internal.config.ForeignKeyColumnImpl;
-import com.speedment.runtime.internal.config.ForeignKeyImpl;
-import com.speedment.runtime.internal.config.IndexColumnImpl;
-import com.speedment.runtime.internal.config.IndexImpl;
-import com.speedment.runtime.internal.config.PrimaryKeyColumnImpl;
-import com.speedment.runtime.internal.config.ProjectImpl;
-import com.speedment.runtime.internal.config.SchemaImpl;
-import com.speedment.runtime.internal.config.TableImpl;
-import com.speedment.common.mapstream.MapStream;
+import com.speedment.runtime.internal.config.*;
+import org.junit.Before;
+
 import java.util.AbstractMap;
 import java.util.Map;
-import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import org.junit.Before;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  *

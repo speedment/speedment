@@ -19,8 +19,10 @@ package com.speedment.runtime.internal.field.predicate;
 import com.speedment.runtime.field.predicate.trait.HasNegated;
 import com.speedment.runtime.internal.field.predicate.AbstractCombinedBasePredicate.AndCombinedBasePredicate;
 import com.speedment.runtime.internal.field.predicate.AbstractCombinedBasePredicate.OrCombinedBasePredicate;
-import static java.util.Objects.requireNonNull;
+
 import java.util.function.Predicate;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * This class represents a BasePredicate that is used to build up higher orders

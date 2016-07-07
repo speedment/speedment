@@ -17,16 +17,18 @@
 package com.speedment.common.codegen.internal;
 
 import com.speedment.common.codegen.DependencyManager;
+
 import java.util.Collections;
-import static java.util.Collections.emptySet;
 import java.util.HashSet;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
+
+import static java.util.Collections.emptySet;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
-import java.util.stream.Stream;
 
 /**
  * Default implementation of the {@link DependencyManager} interface.

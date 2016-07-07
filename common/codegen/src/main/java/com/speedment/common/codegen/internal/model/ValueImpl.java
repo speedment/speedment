@@ -22,6 +22,7 @@
 package com.speedment.common.codegen.internal.model;
 
 import com.speedment.common.codegen.model.Value;
+
 import java.util.Objects;
 
 /**

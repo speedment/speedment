@@ -17,12 +17,14 @@
 package com.speedment.common.codegen.internal;
 
 import com.speedment.common.codegen.RenderStack;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
-import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * The default {@link RenderStack} implementation.

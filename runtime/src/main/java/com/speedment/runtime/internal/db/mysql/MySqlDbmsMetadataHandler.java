@@ -19,6 +19,7 @@ package com.speedment.runtime.internal.db.mysql;
 import com.speedment.runtime.db.DbmsMetadataHandler;
 import com.speedment.runtime.db.JavaTypeMap;
 import com.speedment.runtime.internal.db.AbstractDbmsMetadataHandler;
+
 import java.sql.Blob;
 import java.util.Optional;
 import java.util.stream.Stream;

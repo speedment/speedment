@@ -17,6 +17,7 @@
 package com.speedment.common.tuple.impl;
 
 import com.speedment.common.tuple.TupleOfNullables;
+
 import java.util.Optional;
 import java.util.stream.Stream;
 

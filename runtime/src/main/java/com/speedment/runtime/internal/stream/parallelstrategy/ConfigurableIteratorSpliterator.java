@@ -19,9 +19,10 @@ package com.speedment.runtime.internal.stream.parallelstrategy;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
-import static java.util.Objects.requireNonNull;
 import java.util.Spliterator;
 import java.util.function.Consumer;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

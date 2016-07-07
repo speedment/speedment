@@ -19,9 +19,10 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasImports;
+
+import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.Formatting.dnl;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 
 /**
  * A trait with the functionality to render models with the trait 

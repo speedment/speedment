@@ -18,6 +18,7 @@ package com.speedment.runtime.field.predicate;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.internal.manager.sql.SqlPredicateFragmentImpl;
+
 import java.util.Collection;
 import java.util.stream.Stream;
 

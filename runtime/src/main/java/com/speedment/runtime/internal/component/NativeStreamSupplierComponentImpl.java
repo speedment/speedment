@@ -21,6 +21,7 @@ import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.component.StreamSupplierComponent;
 import com.speedment.runtime.license.Software;
 import com.speedment.runtime.stream.StreamDecorator;
+
 import java.util.stream.Stream;
 
 /**

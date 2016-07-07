@@ -24,8 +24,10 @@ package com.speedment.common.codegen.internal.java.view.value;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.internal.model.value.TextValue;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+
 import java.util.Optional;
+
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 
 /**
  * Transforms from an {@link TextValue} to java code.

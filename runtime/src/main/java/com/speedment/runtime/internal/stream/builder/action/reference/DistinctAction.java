@@ -16,9 +16,11 @@
  */
 package com.speedment.runtime.internal.stream.builder.action.reference;
 
-import static com.speedment.runtime.internal.stream.builder.action.StandardBasicAction.DISTINCT;
 import com.speedment.runtime.stream.action.Action;
+
 import java.util.stream.Stream;
+
+import static com.speedment.runtime.internal.stream.builder.action.StandardBasicAction.DISTINCT;
 
 /**
  *

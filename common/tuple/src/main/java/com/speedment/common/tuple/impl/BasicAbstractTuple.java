@@ -17,10 +17,12 @@
 package com.speedment.common.tuple.impl;
 
 import com.speedment.common.tuple.BasicTuple;
+
 import java.util.Arrays;
 import java.util.Objects;
-import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.joining;
 
 /**
  * The BasicAbstractTuple implements parts of a generic Tuple of any order.

@@ -16,14 +16,11 @@
  */
 package com.speedment.runtime.internal.util.testing;
 
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
+
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  * General Permutation support from

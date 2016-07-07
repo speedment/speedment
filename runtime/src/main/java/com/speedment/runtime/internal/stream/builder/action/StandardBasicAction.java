@@ -18,16 +18,14 @@ package com.speedment.runtime.internal.stream.builder.action;
 
 import com.speedment.runtime.stream.action.BasicAction;
 import com.speedment.runtime.stream.action.Property;
-import static com.speedment.runtime.stream.action.Property.ORDER;
-import static com.speedment.runtime.stream.action.Property.SIDE_EFFECT;
-import static com.speedment.runtime.stream.action.Property.SIZE;
-import static com.speedment.runtime.stream.action.Property.STREAM_TYPE;
-import static com.speedment.runtime.stream.action.Property.TYPE;
 import com.speedment.runtime.stream.action.Statement;
+
+import java.util.stream.Stream;
+
+import static com.speedment.runtime.stream.action.Property.*;
 import static com.speedment.runtime.stream.action.Verb.PRESERVE;
 import static com.speedment.runtime.stream.action.Verb.SET;
 import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
-import java.util.stream.Stream;
 
 
 /**

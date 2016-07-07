@@ -17,13 +17,15 @@
 package com.speedment.runtime.internal.util;
 
 import com.speedment.runtime.exception.SpeedmentException;
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
+
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  *

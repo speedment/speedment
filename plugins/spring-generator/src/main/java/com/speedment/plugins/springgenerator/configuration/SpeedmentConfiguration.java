@@ -16,21 +16,6 @@
  */
 package com.speedment.plugins.springgenerator.configuration;
 
-import com.speedment.runtime.Speedment;
-import com.speedment.runtime.component.DbmsHandlerComponent;
-import com.speedment.runtime.component.EntityManager;
-import com.speedment.runtime.component.EventComponent;
-import com.speedment.runtime.component.InfoComponent;
-import com.speedment.runtime.component.ManagerComponent;
-import com.speedment.runtime.component.PasswordComponent;
-import com.speedment.runtime.component.PrimaryKeyFactoryComponent;
-import com.speedment.runtime.component.ProjectComponent;
-import com.speedment.runtime.component.StreamSupplierComponent;
-import com.speedment.runtime.component.TypeMapperComponent;
-import com.speedment.runtime.component.connectionpool.ConnectionPoolComponent;
-import com.speedment.runtime.component.resultset.ResultSetMapperComponent;
-import org.springframework.context.annotation.Bean;
-
 /**
  *
  * @author Emil Forslund

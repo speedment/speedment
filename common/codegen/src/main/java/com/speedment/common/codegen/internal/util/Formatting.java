@@ -16,14 +16,15 @@
  */
 package com.speedment.common.codegen.internal.util;
 
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 import java.util.Arrays;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Function;
-import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
+
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  * Common formatting methods used when generating code.

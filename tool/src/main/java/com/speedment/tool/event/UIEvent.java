@@ -16,8 +16,8 @@
  */
 package com.speedment.tool.event;
 
-import com.speedment.runtime.event.Event;
 import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.event.Event;
 
 /**
  * An enumeration of standard events caused by the user interface.

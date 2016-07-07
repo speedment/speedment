@@ -17,11 +17,13 @@
 package com.speedment.runtime.internal.manager.sql;
 
 import com.speedment.runtime.field.predicate.SqlPredicateFragment;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

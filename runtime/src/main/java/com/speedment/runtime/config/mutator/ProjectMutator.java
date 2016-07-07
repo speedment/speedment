@@ -19,14 +19,11 @@ package com.speedment.runtime.config.mutator;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
-import static com.speedment.runtime.config.Project.COMPANY_NAME;
-import static com.speedment.runtime.config.Project.CONFIG_PATH;
-import static com.speedment.runtime.config.Project.DBMSES;
-import static com.speedment.runtime.config.Project.PACKAGE_LOCATION;
-import static com.speedment.runtime.config.Project.PACKAGE_NAME;
 import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 import com.speedment.runtime.internal.config.DbmsImpl;
+
+import static com.speedment.runtime.config.Project.*;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.newDocument;
 
 /**

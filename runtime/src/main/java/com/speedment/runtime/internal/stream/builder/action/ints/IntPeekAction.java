@@ -16,11 +16,13 @@
  */
 package com.speedment.runtime.internal.stream.builder.action.ints;
 
-import static com.speedment.runtime.internal.stream.builder.action.StandardBasicAction.PEEK;
 import com.speedment.runtime.stream.action.Action;
-import static java.util.Objects.requireNonNull;
+
 import java.util.function.IntConsumer;
 import java.util.stream.IntStream;
+
+import static com.speedment.runtime.internal.stream.builder.action.StandardBasicAction.PEEK;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

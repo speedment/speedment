@@ -22,6 +22,7 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.event.Event;
 import com.speedment.runtime.event.trait.ProjectEvent;
+
 import static java.util.Objects.requireNonNull;
 
 /**

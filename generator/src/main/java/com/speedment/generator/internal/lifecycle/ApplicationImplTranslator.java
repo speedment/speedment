@@ -17,10 +17,9 @@
 package com.speedment.generator.internal.lifecycle;
 
 import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Type;
-import com.speedment.runtime.config.Project;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
+import com.speedment.runtime.config.Project;
 import com.speedment.runtime.internal.runtime.AbstractApplicationBuilder;
 
 /**

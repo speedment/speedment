@@ -21,19 +21,15 @@
  */
 package com.speedment.runtime.internal.util;
 
-import static com.speedment.runtime.internal.util.Trees.TraversalOrder.BREADTH_FIRST;
-import static com.speedment.runtime.internal.util.Trees.TraversalOrder.DEPTH_FIRST_POST;
-import static com.speedment.runtime.internal.util.Trees.TraversalOrder.DEPTH_FIRST_PRE;
+import org.junit.*;
+
 import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.junit.After;
-import org.junit.AfterClass;
+
+import static com.speedment.runtime.internal.util.Trees.TraversalOrder.*;
 import static org.junit.Assert.assertEquals;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  *

@@ -16,10 +16,11 @@
  */
 package com.speedment.runtime.internal.config.dbms;
 
+import com.speedment.common.injector.annotation.IncludeInjectable;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.parameter.DbmsType;
+
 import java.util.stream.Stream;
-import com.speedment.common.injector.annotation.IncludeInjectable;
 
 /**
  *

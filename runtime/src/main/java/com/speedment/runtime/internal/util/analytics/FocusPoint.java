@@ -18,8 +18,10 @@ package com.speedment.runtime.internal.util.analytics;
 
 import com.speedment.runtime.SpeedmentVersion;
 import com.speedment.runtime.internal.util.EmailUtil;
-import static java.util.stream.Collectors.joining;
+
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.joining;
 
 public enum FocusPoint {
     

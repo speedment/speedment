@@ -16,15 +16,16 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.runtime.config.trait.HasOrderType;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.parameter.OrderType;
+import com.speedment.runtime.config.trait.HasOrderType;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.property.EnumPropertyItem;
-import java.util.stream.Stream;
 import javafx.beans.property.ObjectProperty;
 import org.controlsfx.control.PropertySheet;
+
+import java.util.stream.Stream;
 
 /**
  *

@@ -17,12 +17,7 @@
 package com.speedment.common.codegen.model;
 
 import com.speedment.common.codegen.internal.model.FileImpl;
-import com.speedment.common.codegen.model.trait.HasCall;
-import com.speedment.common.codegen.model.trait.HasClasses;
-import com.speedment.common.codegen.model.trait.HasCopy;
-import com.speedment.common.codegen.model.trait.HasImports;
-import com.speedment.common.codegen.model.trait.HasJavadoc;
-import com.speedment.common.codegen.model.trait.HasName;
+import com.speedment.common.codegen.model.trait.*;
 
 /**
  * A model that represents an entire code file.

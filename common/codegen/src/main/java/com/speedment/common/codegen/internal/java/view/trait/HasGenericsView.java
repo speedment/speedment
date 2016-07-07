@@ -19,6 +19,7 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasGenerics;
+
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 
 /**

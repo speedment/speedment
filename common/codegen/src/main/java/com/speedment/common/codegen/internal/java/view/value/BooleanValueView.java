@@ -19,8 +19,10 @@ package com.speedment.common.codegen.internal.java.view.value;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.internal.model.value.BooleanValue;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Transforms from an {@link BooleanValue} to java code.

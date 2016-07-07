@@ -20,6 +20,7 @@ import com.speedment.runtime.component.EventComponent;
 import com.speedment.runtime.event.DefaultEvent;
 import com.speedment.runtime.event.Event;
 import com.speedment.runtime.license.Software;
+
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;

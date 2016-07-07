@@ -21,17 +21,13 @@
  */
 package com.speedment.runtime.internal.stream.parallelstrategy;
 
-import com.speedment.runtime.internal.stream.parallelstrategy.SingletonSpliterator;
-import static com.speedment.runtime.internal.stream.parallelstrategy.BaseSpliteratorTest.DO_NOTHING;
+import org.junit.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  *

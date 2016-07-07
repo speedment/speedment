@@ -19,6 +19,7 @@ package com.speedment.common.codegen.model;
 import com.speedment.common.codegen.internal.model.EnumConstantImpl;
 import com.speedment.common.codegen.model.trait.HasCopy;
 import com.speedment.common.codegen.model.trait.HasName;
+
 import java.util.List;
 
 /**

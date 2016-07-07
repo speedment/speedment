@@ -24,17 +24,15 @@ import com.speedment.runtime.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.runtime.internal.stream.builder.streamterminator.StreamTerminator;
 import com.speedment.runtime.stream.action.Action;
 import com.speedment.runtime.util.StreamComposition;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-import java.util.function.IntSupplier;
-import java.util.function.LongSupplier;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.BaseStream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

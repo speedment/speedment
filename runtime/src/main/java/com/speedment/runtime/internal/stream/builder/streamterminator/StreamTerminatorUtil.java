@@ -22,11 +22,13 @@ import com.speedment.runtime.internal.stream.builder.action.reference.FilterActi
 import com.speedment.runtime.internal.util.Cast;
 import com.speedment.runtime.stream.Pipeline;
 import com.speedment.runtime.stream.action.Action;
+
 import java.util.ArrayList;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Predicate;
+
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 /**

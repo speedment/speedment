@@ -16,46 +16,31 @@
  */
 package com.speedment.generator.internal.util;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.OBJECT;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.VOID;
-import com.speedment.common.codegen.internal.model.value.ReferenceValue;
-import static com.speedment.common.codegen.internal.util.Formatting.block;
-import static com.speedment.common.codegen.internal.util.Formatting.indent;
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Generic;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
+import com.speedment.common.codegen.model.*;
 import com.speedment.generator.TranslatorSupport;
-import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
-import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
-import static com.speedment.generator.internal.manager.GeneratedManagerImplTranslator.FIELDS_METHOD;
-import static com.speedment.generator.internal.manager.GeneratedManagerImplTranslator.GET_METHOD;
-import static com.speedment.generator.internal.manager.GeneratedManagerImplTranslator.GET_PRIMARY_KEY_CLASSES_METHOD;
-import static com.speedment.generator.internal.manager.GeneratedManagerImplTranslator.NEW_EMPTY_ENTITY_METHOD;
-import static com.speedment.generator.internal.manager.GeneratedManagerImplTranslator.NEW_ENTITY_FROM_METHOD;
-import static com.speedment.generator.internal.manager.GeneratedManagerImplTranslator.PRIMARY_KEYS_FIELDS_METHOD;
-import static com.speedment.generator.internal.manager.GeneratedManagerImplTranslator.PRIMARY_KEY_CLASSES;
-import static com.speedment.generator.internal.manager.GeneratedManagerImplTranslator.SET_METHOD;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.common.tuple.Tuples;
-import java.sql.ResultSet;
+
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
+
+import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.internal.model.constant.DefaultType.OBJECT;
+import static com.speedment.common.codegen.internal.model.constant.DefaultType.VOID;
+import static com.speedment.common.codegen.internal.util.Formatting.*;
+import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
+import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
+import static com.speedment.generator.internal.manager.GeneratedManagerImplTranslator.*;
+import static java.util.stream.Collectors.joining;
 
 /**
  *

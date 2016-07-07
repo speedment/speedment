@@ -16,11 +16,13 @@
  */
 package com.speedment.runtime.internal.stream.builder.action.doubles;
 
-import static com.speedment.runtime.internal.stream.builder.action.StandardBasicAction.FILTER;
 import com.speedment.runtime.stream.action.Action;
-import static java.util.Objects.requireNonNull;
+
 import java.util.function.DoublePredicate;
 import java.util.stream.DoubleStream;
+
+import static com.speedment.runtime.internal.stream.builder.action.StandardBasicAction.FILTER;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

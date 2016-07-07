@@ -19,6 +19,7 @@ package com.speedment.tool.internal.notification;
 import com.speedment.tool.brand.Palette;
 import com.speedment.tool.notification.Notification;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+
 import static java.util.Objects.requireNonNull;
 
 /**

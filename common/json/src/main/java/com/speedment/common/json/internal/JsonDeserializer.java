@@ -17,6 +17,7 @@
 package com.speedment.common.json.internal;
 
 import com.speedment.common.json.JsonSyntaxException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;

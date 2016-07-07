@@ -16,15 +16,17 @@
  */
 package com.speedment.generator;
 
-import com.speedment.runtime.config.Table;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.injector.Injector;
 import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.generator.internal.TranslatorManagerImpl;
 import com.speedment.generator.util.JavaLanguageNamer;
-import java.nio.file.Path;
-import static org.junit.Assert.assertTrue;
+import com.speedment.runtime.config.Table;
 import org.junit.Test;
+
+import java.nio.file.Path;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  *

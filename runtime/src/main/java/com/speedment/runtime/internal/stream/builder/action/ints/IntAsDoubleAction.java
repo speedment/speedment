@@ -16,10 +16,12 @@
  */
 package com.speedment.runtime.internal.stream.builder.action.ints;
 
-import static com.speedment.runtime.internal.stream.builder.action.StandardBasicAction.AS;
 import com.speedment.runtime.stream.action.Action;
+
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
+
+import static com.speedment.runtime.internal.stream.builder.action.StandardBasicAction.AS;
 
 /**
  *

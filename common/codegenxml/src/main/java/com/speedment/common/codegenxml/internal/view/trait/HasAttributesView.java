@@ -17,8 +17,9 @@
 package com.speedment.common.codegenxml.internal.view.trait;
 
 import com.speedment.common.codegen.Generator;
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import com.speedment.common.codegenxml.trait.HasAttributes;
+
+import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 
 /**
  *

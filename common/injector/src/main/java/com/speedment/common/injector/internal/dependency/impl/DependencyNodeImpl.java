@@ -16,13 +16,15 @@
  */
 package com.speedment.common.injector.internal.dependency.impl;
 
+import com.speedment.common.injector.State;
 import com.speedment.common.injector.internal.dependency.Dependency;
 import com.speedment.common.injector.internal.dependency.DependencyNode;
 import com.speedment.common.injector.internal.dependency.Execution;
-import com.speedment.common.injector.State;
-import static java.util.Collections.newSetFromMap;
+
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static java.util.Collections.newSetFromMap;
 import static java.util.Objects.requireNonNull;
 
 /**

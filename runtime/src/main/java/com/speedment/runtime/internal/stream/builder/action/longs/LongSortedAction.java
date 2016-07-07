@@ -16,9 +16,11 @@
  */
 package com.speedment.runtime.internal.stream.builder.action.longs;
 
-import static com.speedment.runtime.internal.stream.builder.action.StandardBasicAction.SORTED;
 import com.speedment.runtime.stream.action.Action;
+
 import java.util.stream.LongStream;
+
+import static com.speedment.runtime.internal.stream.builder.action.StandardBasicAction.SORTED;
 
 /**
  *

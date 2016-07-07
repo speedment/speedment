@@ -16,12 +16,13 @@
  */
 package com.speedment.common.codegenxml.internal;
 
-import com.speedment.common.codegenxml.internal.view.trait.HasAttributesView;
 import com.speedment.common.codegenxml.Attribute;
 import com.speedment.common.codegenxml.Element;
 import com.speedment.common.codegenxml.TagElement;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 

@@ -16,47 +16,16 @@
  */
 package com.speedment.runtime.internal.stream.builder;
 
-import com.speedment.runtime.internal.stream.builder.action.reference.DistinctAction;
-import com.speedment.runtime.internal.stream.builder.action.reference.FilterAction;
-import com.speedment.runtime.internal.stream.builder.action.reference.FlatMapAction;
-import com.speedment.runtime.internal.stream.builder.action.reference.FlatMapToDoubleAction;
-import com.speedment.runtime.internal.stream.builder.action.reference.FlatMapToIntAction;
-import com.speedment.runtime.internal.stream.builder.action.reference.FlatMapToLongAction;
-import com.speedment.runtime.internal.stream.builder.action.reference.LimitAction;
-import com.speedment.runtime.internal.stream.builder.action.reference.MapAction;
-import com.speedment.runtime.internal.stream.builder.action.reference.MapToDoubleAction;
-import com.speedment.runtime.internal.stream.builder.action.reference.MapToIntAction;
-import com.speedment.runtime.internal.stream.builder.action.reference.MapToLongAction;
-import com.speedment.runtime.internal.stream.builder.action.reference.PeekAction;
-import com.speedment.runtime.internal.stream.builder.action.reference.SkipAction;
-import com.speedment.runtime.internal.stream.builder.action.reference.SortedAction;
-import com.speedment.runtime.internal.stream.builder.action.reference.SortedComparatorAction;
+import com.speedment.runtime.internal.stream.builder.action.reference.*;
 import com.speedment.runtime.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.runtime.internal.stream.builder.pipeline.ReferencePipeline;
 import com.speedment.runtime.internal.stream.builder.streamterminator.StreamTerminator;
-import java.util.Comparator;
-import java.util.Iterator;
+
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
+
 import static java.util.Objects.requireNonNull;
-import java.util.Optional;
-import java.util.Set;
-import java.util.Spliterator;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.BinaryOperator;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.IntFunction;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-import java.util.function.ToDoubleFunction;
-import java.util.function.ToIntFunction;
-import java.util.function.ToLongFunction;
-import java.util.stream.BaseStream;
-import java.util.stream.Collector;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
-import java.util.stream.LongStream;
-import java.util.stream.Stream;
 
 /**
  *

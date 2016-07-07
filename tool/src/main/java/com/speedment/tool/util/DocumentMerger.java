@@ -22,20 +22,15 @@ import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.config.BaseDocument;
 import com.speedment.tool.config.DocumentProperty;
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import static java.util.Objects.requireNonNull;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
-import static java.util.stream.Collectors.toList;
 import javafx.beans.property.Property;
 import javafx.collections.ObservableList;
+
+import java.util.*;
+import java.util.function.Function;
+
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  * A utility class for merging two documents to preserve maximum amount of

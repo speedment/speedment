@@ -21,19 +21,17 @@ import com.speedment.runtime.db.metadata.ColumnMetaData;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.runtime.typemapping.StandardJavaTypeMapping;
-import static com.speedment.runtime.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
+
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
+
+import static com.speedment.runtime.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 

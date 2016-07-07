@@ -16,8 +16,6 @@
  */
 package com.speedment.runtime.internal.manager;
 
-import static com.speedment.common.injector.State.INITIALIZED;
-import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
@@ -28,9 +26,13 @@ import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.manager.Manager;
 import com.speedment.runtime.stream.StreamDecorator;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import static com.speedment.common.injector.State.INITIALIZED;
+import static com.speedment.common.injector.State.RESOLVED;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

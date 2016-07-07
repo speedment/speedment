@@ -16,22 +16,20 @@
  */
 package com.speedment.common.logger.internal;
 
-import com.speedment.common.logger.Level;
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerEventListener;
-import com.speedment.common.logger.LoggerFactory;
-import com.speedment.common.logger.LoggerFormatter;
+import com.speedment.common.logger.*;
 import com.speedment.common.logger.internal.formatter.StandardFormatters;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
+
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

@@ -16,15 +16,17 @@
  */
 package com.speedment.common.codegen.internal.model;
 
+import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Type;
 import com.speedment.common.codegen.model.modifier.Modifier;
-import com.speedment.common.codegen.internal.util.Copier;
+
 import java.util.EnumSet;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * This is the default implementation of the {@link Import} interface. This

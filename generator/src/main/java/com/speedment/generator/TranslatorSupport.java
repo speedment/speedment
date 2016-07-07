@@ -16,23 +16,20 @@
  */
 package com.speedment.generator;
 
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
+import com.speedment.common.codegen.model.Type;
+import com.speedment.generator.util.JavaLanguageNamer;
+import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.internal.util.document.DocumentUtil;
+
+import java.util.Optional;
+
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import static com.speedment.common.codegen.internal.util.Formatting.ucfirst;
-import com.speedment.common.codegen.model.Type;
-import com.speedment.runtime.internal.util.document.DocumentUtil;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
-import com.speedment.generator.util.JavaLanguageNamer;
-import com.speedment.runtime.annotation.Api;
-import java.util.Optional;
 import static java.util.Objects.requireNonNull;
 
 /**

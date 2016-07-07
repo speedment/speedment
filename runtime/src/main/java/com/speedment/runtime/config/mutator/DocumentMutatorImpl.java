@@ -17,6 +17,7 @@
 package com.speedment.runtime.config.mutator;
 
 import com.speedment.runtime.config.Document;
+
 import static java.util.Objects.requireNonNull;
 
 /**

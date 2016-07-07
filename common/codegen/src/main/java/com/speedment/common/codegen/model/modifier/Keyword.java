@@ -16,8 +16,9 @@
  */
 package com.speedment.common.codegen.model.modifier;
 
-import static com.speedment.common.codegen.model.modifier.Modifier.*;
 import com.speedment.common.codegen.model.trait.HasModifiers;
+
+import static com.speedment.common.codegen.model.modifier.Modifier.*;
 
 /**
  *

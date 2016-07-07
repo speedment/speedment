@@ -18,13 +18,7 @@ package com.speedment.common.codegen.model;
 
 import com.speedment.common.codegen.internal.model.ConstructorImpl;
 import com.speedment.common.codegen.model.modifier.ConstructorModifier;
-import com.speedment.common.codegen.model.trait.HasAnnotationUsage;
-import com.speedment.common.codegen.model.trait.HasCall;
-import com.speedment.common.codegen.model.trait.HasCode;
-import com.speedment.common.codegen.model.trait.HasCopy;
-import com.speedment.common.codegen.model.trait.HasFields;
-import com.speedment.common.codegen.model.trait.HasJavadoc;
-import com.speedment.common.codegen.model.trait.HasThrows;
+import com.speedment.common.codegen.model.trait.*;
 
 /**
  * A model that represents a constructor in code.

@@ -16,12 +16,13 @@
  */
 package com.speedment.runtime.internal.util;
 
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

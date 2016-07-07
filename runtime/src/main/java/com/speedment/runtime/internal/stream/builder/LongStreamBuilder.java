@@ -16,44 +16,16 @@
  */
 package com.speedment.runtime.internal.stream.builder;
 
-import com.speedment.runtime.internal.stream.builder.action.longs.LongAsDoubleAction;
-import com.speedment.runtime.internal.stream.builder.action.longs.LongBoxedAction;
-import com.speedment.runtime.internal.stream.builder.action.longs.LongDistinctAction;
-import com.speedment.runtime.internal.stream.builder.action.longs.LongFilterAction;
-import com.speedment.runtime.internal.stream.builder.action.longs.LongFlatMapAction;
-import com.speedment.runtime.internal.stream.builder.action.longs.LongLimitAction;
-import com.speedment.runtime.internal.stream.builder.action.longs.LongMapAction;
-import com.speedment.runtime.internal.stream.builder.action.longs.LongMapToDoubleAction;
-import com.speedment.runtime.internal.stream.builder.action.longs.LongMapToIntAction;
-import com.speedment.runtime.internal.stream.builder.action.longs.LongMapToObjAction;
-import com.speedment.runtime.internal.stream.builder.action.longs.LongPeekAction;
-import com.speedment.runtime.internal.stream.builder.action.longs.LongSkipAction;
-import com.speedment.runtime.internal.stream.builder.action.longs.LongSortedAction;
+import com.speedment.runtime.internal.stream.builder.action.longs.*;
 import com.speedment.runtime.internal.stream.builder.pipeline.LongPipeline;
 import com.speedment.runtime.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.runtime.internal.stream.builder.streamterminator.StreamTerminator;
-import java.util.LongSummaryStatistics;
+
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
+
 import static java.util.Objects.requireNonNull;
-import java.util.OptionalDouble;
-import java.util.OptionalLong;
-import java.util.PrimitiveIterator;
-import java.util.Set;
-import java.util.Spliterator;
-import java.util.function.BiConsumer;
-import java.util.function.LongBinaryOperator;
-import java.util.function.LongConsumer;
-import java.util.function.LongFunction;
-import java.util.function.LongPredicate;
-import java.util.function.LongToDoubleFunction;
-import java.util.function.LongToIntFunction;
-import java.util.function.LongUnaryOperator;
-import java.util.function.ObjLongConsumer;
-import java.util.function.Supplier;
-import java.util.stream.BaseStream;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
-import java.util.stream.LongStream;
-import java.util.stream.Stream;
 
 /**
  *

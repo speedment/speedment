@@ -18,8 +18,8 @@ package com.speedment.runtime.internal.field;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
+import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.Inclusion;
 import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.field.method.FieldSetter;
@@ -37,10 +37,12 @@ import com.speedment.runtime.internal.field.trait.FieldTraitImpl;
 import com.speedment.runtime.internal.field.trait.ReferenceFieldTraitImpl;
 import com.speedment.runtime.internal.field.trait.StringFieldTraitImpl;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
+
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 
 /**
  * This class represents a Comparable Reference Field. A Reference Field is

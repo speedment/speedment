@@ -18,11 +18,13 @@ package com.speedment.runtime.internal.manager.sql;
 
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

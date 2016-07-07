@@ -19,9 +19,11 @@ package com.speedment.common.codegen.internal.java.view;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.JavadocTag;
-import static com.speedment.common.codegen.internal.util.Formatting.*;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Optional;
+
+import static com.speedment.common.codegen.internal.util.Formatting.ifelse;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Transforms from a {@link JavadocTag} to java code.

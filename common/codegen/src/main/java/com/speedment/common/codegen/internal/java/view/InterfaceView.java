@@ -17,9 +17,9 @@
 package com.speedment.common.codegen.internal.java.view;
 
 import com.speedment.common.codegen.Generator;
+import com.speedment.common.codegen.internal.model.InterfaceMethodImpl;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.internal.model.InterfaceMethodImpl;
 
 /**
  * Transforms from an {@link Interface} to java code.

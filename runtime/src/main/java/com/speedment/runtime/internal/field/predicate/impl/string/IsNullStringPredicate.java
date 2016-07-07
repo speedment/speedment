@@ -16,11 +16,12 @@
  */
 package com.speedment.runtime.internal.field.predicate.impl.string;
 
-import static com.speedment.runtime.field.predicate.PredicateType.IS_NULL;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.internal.field.predicate.iface.type.BinaryOperation;
+
+import static com.speedment.runtime.field.predicate.PredicateType.IS_NULL;
 
 /**
  *

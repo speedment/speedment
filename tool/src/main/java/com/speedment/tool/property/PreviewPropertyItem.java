@@ -17,8 +17,6 @@
 package com.speedment.tool.property;
 
 import com.speedment.runtime.annotation.Api;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableStringValue;
@@ -30,6 +28,9 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
 import org.controlsfx.property.editor.PropertyEditor;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 /**
  *

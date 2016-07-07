@@ -17,11 +17,7 @@
 package com.speedment.runtime.field;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.field.trait.ComparableFieldTrait;
-import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
-import com.speedment.runtime.field.trait.ReferenceForeignKeyFieldTrait;
-import com.speedment.runtime.field.trait.StringFieldTrait;
+import com.speedment.runtime.field.trait.*;
 
 /**
  * A field that implements the {@link ReferenceFieldTrait}, the 

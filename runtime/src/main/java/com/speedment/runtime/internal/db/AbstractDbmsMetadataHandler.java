@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.internal.db;
 
-import static com.speedment.common.injector.State.INITIALIZED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
@@ -25,17 +24,7 @@ import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.component.TypeMapperComponent;
 import com.speedment.runtime.component.connectionpool.ConnectionPoolComponent;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.ForeignKey;
-import com.speedment.runtime.config.ForeignKeyColumn;
-import com.speedment.runtime.config.Index;
-import com.speedment.runtime.config.IndexColumn;
-import com.speedment.runtime.config.PrimaryKeyColumn;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mutator.ForeignKeyColumnMutator;
 import com.speedment.runtime.config.parameter.DbmsType;
@@ -43,38 +32,27 @@ import com.speedment.runtime.config.parameter.OrderType;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
-import com.speedment.runtime.db.DatabaseNamingConvention;
-import com.speedment.runtime.db.DbmsMetadataHandler;
-import com.speedment.runtime.db.JavaTypeMap;
-import com.speedment.runtime.db.SqlPredicate;
-import com.speedment.runtime.db.SqlSupplier;
+import com.speedment.runtime.db.*;
 import com.speedment.runtime.db.metadata.ColumnMetaData;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.config.ProjectImpl;
-import static com.speedment.runtime.internal.db.AbstractDbmsOperationHandler.SHOW_METADATA;
-import static com.speedment.runtime.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
 import com.speedment.runtime.util.ProgressMeasure;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import static java.util.Objects.nonNull;
-import java.util.Optional;
-import java.util.Set;
+
+import java.sql.*;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+
+import static com.speedment.common.injector.State.INITIALIZED;
+import static com.speedment.runtime.internal.db.AbstractDbmsOperationHandler.SHOW_METADATA;
+import static com.speedment.runtime.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 
 /**

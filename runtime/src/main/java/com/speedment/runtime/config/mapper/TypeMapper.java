@@ -18,7 +18,9 @@ package com.speedment.runtime.config.mapper;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.TypeMapperComponent;
+
 import java.util.Comparator;
+
 import static java.util.Comparator.comparing;
 
 /**

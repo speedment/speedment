@@ -17,6 +17,7 @@
 package com.speedment.runtime.config.mapper.identity;
 
 import com.speedment.runtime.annotation.Api;
+
 import java.sql.Date;
 
 /**

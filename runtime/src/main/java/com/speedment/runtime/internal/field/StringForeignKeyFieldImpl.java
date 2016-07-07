@@ -18,32 +18,26 @@ package com.speedment.runtime.internal.field;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
+import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.Inclusion;
 import com.speedment.runtime.field.StringForeignKeyField;
-import com.speedment.runtime.field.predicate.ComparableSpeedmentPredicate;
-import com.speedment.runtime.field.predicate.SpeedmentPredicate;
-import com.speedment.runtime.field.predicate.StringSpeedmentPredicate;
-import com.speedment.runtime.field.trait.ComparableFieldTrait;
-import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
-import com.speedment.runtime.field.trait.ReferenceForeignKeyFieldTrait;
-import com.speedment.runtime.field.trait.StringFieldTrait;
-import com.speedment.runtime.internal.field.trait.FieldTraitImpl;
-import com.speedment.runtime.internal.field.trait.ReferenceFieldTraitImpl;
-import com.speedment.runtime.internal.field.trait.ReferenceForeignKeyFieldTraitImpl;
-import com.speedment.runtime.internal.field.trait.StringFieldTraitImpl;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.field.method.FieldSetter;
 import com.speedment.runtime.field.method.Finder;
 import com.speedment.runtime.field.method.Getter;
 import com.speedment.runtime.field.method.Setter;
-import com.speedment.runtime.internal.field.trait.ComparableFieldTraitImpl;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import com.speedment.runtime.field.predicate.ComparableSpeedmentPredicate;
+import com.speedment.runtime.field.predicate.SpeedmentPredicate;
+import com.speedment.runtime.field.predicate.StringSpeedmentPredicate;
+import com.speedment.runtime.field.trait.*;
+import com.speedment.runtime.internal.field.trait.*;
+import com.speedment.runtime.internal.util.document.DocumentDbUtil;
+
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
+
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 
 /**
  * This class represents a Reference Field. A Reference Field is something that

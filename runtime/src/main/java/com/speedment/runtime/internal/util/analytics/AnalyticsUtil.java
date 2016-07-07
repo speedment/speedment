@@ -17,6 +17,7 @@
 package com.speedment.runtime.internal.util.analytics;
 
 import com.speedment.runtime.internal.util.testing.TestSettings;
+
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
 

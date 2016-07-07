@@ -21,17 +21,13 @@
  */
 package com.speedment.generator;
 
-import com.speedment.common.injector.Injector;
-import com.speedment.runtime.config.Table;
 import com.speedment.generator.util.JavaLanguageNamer;
+import com.speedment.runtime.config.Table;
+import org.junit.*;
+
 import java.util.Optional;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 /**
  *

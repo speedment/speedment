@@ -17,11 +17,13 @@
 package com.speedment.plugins.reactor;
 
 import com.speedment.runtime.field.ComparableField;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+
 import static java.util.Objects.requireNonNull;
 
 /**

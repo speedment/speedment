@@ -18,8 +18,10 @@ package com.speedment.common.codegen.internal;
 
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.RenderTree;
+
 import java.util.LinkedList;
 import java.util.List;
+
 import static java.util.Objects.requireNonNull;
 
 /**

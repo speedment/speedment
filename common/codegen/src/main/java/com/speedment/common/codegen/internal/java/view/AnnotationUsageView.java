@@ -18,11 +18,13 @@ package com.speedment.common.codegen.internal.java.view;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import com.speedment.common.codegen.model.AnnotationUsage;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Transforms from an {@link AnnotationUsage} to java code.

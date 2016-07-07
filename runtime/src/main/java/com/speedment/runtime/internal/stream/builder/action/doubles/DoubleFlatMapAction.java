@@ -18,9 +18,11 @@ package com.speedment.runtime.internal.stream.builder.action.doubles;
 
 import com.speedment.runtime.internal.stream.builder.action.StandardBasicAction;
 import com.speedment.runtime.stream.action.Action;
-import static java.util.Objects.requireNonNull;
+
 import java.util.function.DoubleFunction;
 import java.util.stream.DoubleStream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

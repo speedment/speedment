@@ -21,6 +21,7 @@ import com.speedment.common.injector.annotation.Config;
 import com.speedment.runtime.ApplicationMetadata;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.internal.util.document.DocumentTranscoder;
+
 import java.io.File;
 
 /**

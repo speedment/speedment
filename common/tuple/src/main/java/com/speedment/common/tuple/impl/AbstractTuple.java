@@ -17,6 +17,7 @@
 package com.speedment.common.tuple.impl;
 
 import com.speedment.common.tuple.Tuple;
+
 import java.util.stream.Stream;
 
 /**

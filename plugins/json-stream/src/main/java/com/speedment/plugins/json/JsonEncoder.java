@@ -16,27 +16,29 @@
  */
 package com.speedment.plugins.json;
 
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.field.trait.ReferenceForeignKeyFieldTrait;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
 import com.speedment.runtime.manager.Manager;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Stream;
+
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
-import java.util.stream.Stream;
 
 /**
  * An encoder that can transform Speedment entities to JSON.

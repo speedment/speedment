@@ -16,7 +16,6 @@
  */
 package com.speedment.common.codegen.internal.util;
 
-import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 import java.util.Collections;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -26,6 +25,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+
+import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  * Utility methods for collecting streams in various ways.

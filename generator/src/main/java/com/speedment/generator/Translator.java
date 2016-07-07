@@ -16,33 +16,27 @@
  */
 package com.speedment.generator;
 
-import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.ForeignKey;
-import com.speedment.runtime.config.Index;
-import com.speedment.runtime.config.PrimaryKeyColumn;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.trait.HasAlias;
-import com.speedment.runtime.config.trait.HasEnabled;
-import com.speedment.runtime.config.trait.HasMainInterface;
-import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
+import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.config.*;
+import com.speedment.runtime.config.trait.HasAlias;
+import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.runtime.config.trait.HasMainInterface;
+import com.speedment.runtime.exception.SpeedmentException;
+
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Something that can translate a {@link Document} into something else. This

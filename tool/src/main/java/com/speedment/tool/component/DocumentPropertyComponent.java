@@ -19,16 +19,12 @@ package com.speedment.tool.component;
 import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.ForeignKey;
-import com.speedment.runtime.config.Index;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
-import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
+import com.speedment.runtime.config.*;
 import com.speedment.tool.config.DocumentProperty;
+
 import java.util.List;
+
+import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
 
 /**
  * Describes which implementations the {@link Document} interface to use at

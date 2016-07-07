@@ -21,9 +21,11 @@ import com.speedment.runtime.config.IndexColumn;
 import com.speedment.runtime.config.parameter.OrderType;
 import com.speedment.runtime.internal.config.IndexColumnImpl;
 import com.speedment.runtime.internal.util.Lazy;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.toStringHelper;
+
 import java.util.Map;
 import java.util.Optional;
+
+import static com.speedment.runtime.internal.util.document.DocumentUtil.toStringHelper;
 
 /**
  *

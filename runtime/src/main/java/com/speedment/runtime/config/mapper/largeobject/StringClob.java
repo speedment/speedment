@@ -17,16 +17,13 @@
 package com.speedment.runtime.config.mapper.largeobject;
 
 import com.speedment.runtime.annotation.Api;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.Writer;
+
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.Clob;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
+
 import static java.util.Objects.requireNonNull;
 
 /**

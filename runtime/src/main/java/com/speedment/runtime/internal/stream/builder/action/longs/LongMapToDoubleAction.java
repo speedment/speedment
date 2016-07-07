@@ -16,12 +16,14 @@
  */
 package com.speedment.runtime.internal.stream.builder.action.longs;
 
-import static com.speedment.runtime.internal.stream.builder.action.StandardBasicAction.MAP_TO;
 import com.speedment.runtime.stream.action.Action;
-import static java.util.Objects.requireNonNull;
+
 import java.util.function.LongToDoubleFunction;
 import java.util.stream.DoubleStream;
 import java.util.stream.LongStream;
+
+import static com.speedment.runtime.internal.stream.builder.action.StandardBasicAction.MAP_TO;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

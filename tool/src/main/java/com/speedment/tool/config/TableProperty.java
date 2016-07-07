@@ -18,21 +18,23 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
+import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.TablePropertyMutator;
-import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
 import com.speedment.tool.config.trait.HasAliasProperty;
 import com.speedment.tool.config.trait.HasEnabledProperty;
 import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
-import java.util.List;
-import java.util.stream.Stream;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import org.controlsfx.control.PropertySheet;
+
+import java.util.List;
+import java.util.stream.Stream;
+
+import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
 
 /**
  *

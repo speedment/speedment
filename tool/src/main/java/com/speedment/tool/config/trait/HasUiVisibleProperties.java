@@ -18,8 +18,9 @@ package com.speedment.tool.config.trait;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
-import java.util.stream.Stream;
 import org.controlsfx.control.PropertySheet;
+
+import java.util.stream.Stream;
 
 /**
  *

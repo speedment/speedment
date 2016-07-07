@@ -16,13 +16,15 @@
  */
 package com.speedment.runtime.internal.field.predicate.impl.reference;
 
-import static com.speedment.runtime.field.predicate.PredicateType.IS_NULL;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.internal.field.predicate.iface.type.UnaryOperation;
 import com.speedment.runtime.internal.field.predicate.impl.SpeedmentPredicateImpl;
+
 import java.util.Objects;
+
+import static com.speedment.runtime.field.predicate.PredicateType.IS_NULL;
 
 /**
  *

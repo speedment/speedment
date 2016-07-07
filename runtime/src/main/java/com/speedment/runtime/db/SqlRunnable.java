@@ -17,7 +17,9 @@
 package com.speedment.runtime.db;
 
 import com.speedment.runtime.annotation.Api;
+
 import java.sql.SQLException;
+
 import static java.util.Objects.requireNonNull;
 
 /**

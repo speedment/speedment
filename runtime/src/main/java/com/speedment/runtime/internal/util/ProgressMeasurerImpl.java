@@ -16,12 +16,14 @@
  */
 package com.speedment.runtime.internal.util;
 
-import com.speedment.runtime.util.*;
-import static java.util.Collections.newSetFromMap;
-import static java.util.Objects.requireNonNull;
+import com.speedment.runtime.util.ProgressMeasure;
+
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+
+import static java.util.Collections.newSetFromMap;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

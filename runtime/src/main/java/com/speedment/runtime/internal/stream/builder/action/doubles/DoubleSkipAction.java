@@ -16,10 +16,12 @@
  */
 package com.speedment.runtime.internal.stream.builder.action.doubles;
 
-import static com.speedment.runtime.internal.stream.builder.action.StandardBasicAction.SKIP;
 import com.speedment.runtime.internal.stream.builder.action.trait.HasSkip;
 import com.speedment.runtime.stream.action.Action;
+
 import java.util.stream.DoubleStream;
+
+import static com.speedment.runtime.internal.stream.builder.action.StandardBasicAction.SKIP;
 
 /**
  *

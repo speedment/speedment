@@ -17,9 +17,11 @@
 package com.speedment.common.codegen.internal.model.constant;
 
 import com.speedment.common.codegen.model.JavadocTag;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Optional;
 import java.util.function.Consumer;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

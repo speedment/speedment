@@ -16,23 +16,16 @@
  */
 package com.speedment.generator.util;
 
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.runtime.annotation.Api;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import static java.util.Objects.requireNonNull;
-import java.util.Optional;
-import java.util.Set;
+
+import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

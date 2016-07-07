@@ -16,28 +16,27 @@
  */
 package com.speedment.generator.internal;
 
-import com.speedment.generator.Translator;
-import com.speedment.generator.TranslatorManager;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.internal.java.JavaGenerator;
-import com.speedment.generator.component.CodeGenerationComponent;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.trait.HasEnabled;
-import com.speedment.generator.event.AfterGenerate;
-import com.speedment.generator.event.BeforeGenerate;
-import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.common.codegen.internal.util.Formatting;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
+import com.speedment.generator.Translator;
+import com.speedment.generator.TranslatorManager;
+import com.speedment.generator.component.CodeGenerationComponent;
+import com.speedment.generator.event.AfterGenerate;
+import com.speedment.generator.event.BeforeGenerate;
 import com.speedment.generator.event.FileGenerated;
 import com.speedment.runtime.component.EventComponent;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.util.Statistics;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -46,10 +45,13 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

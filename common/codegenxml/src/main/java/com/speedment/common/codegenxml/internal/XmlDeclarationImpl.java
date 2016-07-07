@@ -18,8 +18,10 @@ package com.speedment.common.codegenxml.internal;
 
 import com.speedment.common.codegenxml.Attribute;
 import com.speedment.common.codegenxml.XmlDeclaration;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import static java.util.stream.Collectors.joining;
 
 /**

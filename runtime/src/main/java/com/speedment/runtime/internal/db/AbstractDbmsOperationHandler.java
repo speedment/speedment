@@ -17,8 +17,13 @@
 package com.speedment.runtime.internal.db;
 
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
+import com.speedment.runtime.component.DbmsHandlerComponent;
+import com.speedment.runtime.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.db.AsynchronousQueryResult;
+import com.speedment.runtime.db.DbmsOperationHandler;
 import com.speedment.runtime.db.SqlFunction;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.trait.FieldTrait;
@@ -27,28 +32,17 @@ import com.speedment.runtime.internal.manager.sql.SqlDeleteStatement;
 import com.speedment.runtime.internal.manager.sql.SqlInsertStatement;
 import com.speedment.runtime.internal.manager.sql.SqlStatement;
 import com.speedment.runtime.internal.manager.sql.SqlUpdateStatement;
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
-import com.speedment.runtime.component.DbmsHandlerComponent;
-import com.speedment.runtime.component.connectionpool.ConnectionPoolComponent;
-import com.speedment.runtime.db.DbmsOperationHandler;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Connection;
-import java.sql.NClob;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLXML;
-import java.sql.Statement;
-import java.sql.Struct;
-import java.util.*;
-import static java.util.Collections.singletonList;
-import java.util.function.*;
+
+import java.sql.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
+
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
 /**

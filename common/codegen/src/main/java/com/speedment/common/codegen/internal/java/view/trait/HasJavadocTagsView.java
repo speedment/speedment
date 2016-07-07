@@ -20,6 +20,7 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasJavadoc;
 import com.speedment.common.codegen.model.trait.HasJavadocTags;
+
 import java.util.stream.Stream;
 
 /**

@@ -20,12 +20,14 @@ import com.speedment.generator.TranslatorManager;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
-import java.io.File;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+
+import java.io.File;
+
 import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 
 /**

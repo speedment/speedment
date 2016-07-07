@@ -20,13 +20,15 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.internal.util.Statistics;
 import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.internal.util.InjectionLoader;
-import java.net.URL;
-import java.util.ResourceBundle;
-import static javafx.application.Platform.runLater;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.VBox;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import static javafx.application.Platform.runLater;
 
 /**
  *

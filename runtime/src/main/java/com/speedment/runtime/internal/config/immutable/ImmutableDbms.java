@@ -19,15 +19,17 @@ package com.speedment.runtime.internal.config.immutable;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.internal.config.DbmsImpl;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.toStringHelper;
-import static com.speedment.runtime.util.NullUtil.requireKeys;
-import static java.util.Collections.unmodifiableList;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.OptionalInt;
-import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+
+import static com.speedment.runtime.internal.util.document.DocumentUtil.toStringHelper;
+import static com.speedment.runtime.util.NullUtil.requireKeys;
+import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.toList;
 
 /**
  *

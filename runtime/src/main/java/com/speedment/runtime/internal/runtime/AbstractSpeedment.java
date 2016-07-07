@@ -17,27 +17,17 @@
 package com.speedment.runtime.internal.runtime;
 
 import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.IncludeInjectable;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.component.ConnectionPoolComponentImpl;
-import com.speedment.runtime.internal.component.DbmsHandlerComponentImpl;
-import com.speedment.runtime.internal.component.EntityManagerImpl;
-import com.speedment.runtime.internal.component.EventComponentImpl;
-import com.speedment.runtime.internal.component.InfoComponentImpl;
-import com.speedment.runtime.internal.component.ManagerComponentImpl;
-import com.speedment.runtime.internal.component.NativeStreamSupplierComponentImpl;
-import com.speedment.runtime.internal.component.PasswordComponentImpl;
-import com.speedment.runtime.internal.component.PrimaryKeyFactoryComponentImpl;
-import com.speedment.runtime.internal.component.ProjectComponentImpl;
-import com.speedment.runtime.internal.component.ResultSetMapperComponentImpl;
-import com.speedment.runtime.internal.component.TypeMapperComponentImpl;
+import com.speedment.runtime.internal.component.*;
 import com.speedment.runtime.internal.config.dbms.StandardDbmsTypes;
 import com.speedment.runtime.manager.Manager;
-import com.speedment.common.injector.annotation.IncludeInjectable;
+
 import java.util.Optional;
 
 /**

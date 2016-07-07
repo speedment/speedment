@@ -22,15 +22,17 @@ import com.speedment.runtime.SpeedmentBuilder;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
 import com.speedment.runtime.internal.runtime.DefaultApplicationMetadata;
-import static com.speedment.runtime.internal.runtime.DefaultApplicationMetadata.METADATA_LOCATION;
 import com.speedment.runtime.internal.runtime.EmptyApplicationMetadata;
 import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
-import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
-import java.io.File;
-import java.util.Arrays;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+
+import java.io.File;
+import java.util.Arrays;
+
+import static com.speedment.runtime.internal.runtime.DefaultApplicationMetadata.METADATA_LOCATION;
+import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 
 /**
  *

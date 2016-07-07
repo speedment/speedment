@@ -19,12 +19,14 @@ package com.speedment.runtime.internal.config.immutable;
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.config.ForeignKeyImpl;
-import static java.util.Collections.unmodifiableList;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+
+import static java.util.Collections.unmodifiableList;
+import static java.util.stream.Collectors.toList;
 
 /**
  *

@@ -19,9 +19,11 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasComment;
+
+import java.util.stream.Stream;
+
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static java.util.stream.Collectors.joining;
-import java.util.stream.Stream;
 
 /**
  * A trait with the functionality to render models with the trait 

@@ -22,6 +22,7 @@ import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.manager.Manager;
+
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 

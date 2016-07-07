@@ -18,8 +18,8 @@ package com.speedment.runtime.internal.field.trait;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
+import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.method.FieldSetter;
 import com.speedment.runtime.field.method.Getter;
 import com.speedment.runtime.field.method.Setter;
@@ -30,8 +30,10 @@ import com.speedment.runtime.internal.field.FieldSetterImpl;
 import com.speedment.runtime.internal.field.predicate.impl.reference.IsNotNullPredicate;
 import com.speedment.runtime.internal.field.predicate.impl.reference.IsNullPredicate;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * @param <ENTITY> the entity type

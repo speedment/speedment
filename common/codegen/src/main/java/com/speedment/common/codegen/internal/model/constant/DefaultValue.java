@@ -16,9 +16,10 @@
  */
 package com.speedment.common.codegen.internal.model.constant;
 
-import com.speedment.common.codegen.model.Value;
 import com.speedment.common.codegen.internal.model.value.NullValue;
 import com.speedment.common.codegen.internal.model.value.TextValue;
+import com.speedment.common.codegen.model.Value;
+
 import static java.util.Objects.requireNonNull;
 
 /**

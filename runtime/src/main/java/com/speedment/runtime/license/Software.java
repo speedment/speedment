@@ -17,6 +17,7 @@
 package com.speedment.runtime.license;
 
 import com.speedment.runtime.annotation.Api;
+
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Stream;

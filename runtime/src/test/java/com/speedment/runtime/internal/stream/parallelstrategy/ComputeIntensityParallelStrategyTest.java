@@ -22,8 +22,10 @@
 package com.speedment.runtime.internal.stream.parallelstrategy;
 
 import com.speedment.runtime.stream.ParallelStrategy;
+import org.junit.*;
+import org.junit.rules.TestName;
+
 import java.util.Collection;
-import static java.util.Comparator.comparing;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,17 +33,12 @@ import java.util.Spliterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import static java.util.stream.Collectors.toList;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestName;
+
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.toList;
 
 /**
  *

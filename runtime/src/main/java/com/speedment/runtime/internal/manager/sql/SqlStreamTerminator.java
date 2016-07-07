@@ -17,10 +17,12 @@
 package com.speedment.runtime.internal.manager.sql;
 
 import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.db.AsynchronousQueryResult;
-import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
+import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
+import com.speedment.runtime.field.predicate.SqlPredicateFragment;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.internal.stream.builder.pipeline.DoublePipeline;
 import com.speedment.runtime.internal.stream.builder.pipeline.IntPipeline;
@@ -28,19 +30,19 @@ import com.speedment.runtime.internal.stream.builder.pipeline.LongPipeline;
 import com.speedment.runtime.internal.stream.builder.pipeline.ReferencePipeline;
 import com.speedment.runtime.internal.stream.builder.streamterminator.StreamTerminator;
 import com.speedment.runtime.internal.stream.builder.streamterminator.StreamTerminatorUtil;
-import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
-import com.speedment.runtime.field.predicate.SqlPredicateFragment;
 import com.speedment.runtime.stream.Pipeline;
 import com.speedment.runtime.stream.StreamDecorator;
 import com.speedment.runtime.stream.action.Action;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.LongSupplier;
+import java.util.function.Predicate;
+
 import static com.speedment.runtime.stream.action.Property.SIZE;
 import static com.speedment.runtime.stream.action.Verb.PRESERVE;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
-import java.util.ArrayList;
-import java.util.List;
 import static java.util.Objects.requireNonNull;
-import java.util.function.LongSupplier;
-import java.util.function.Predicate;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 

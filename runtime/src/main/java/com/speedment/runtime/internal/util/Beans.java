@@ -17,11 +17,13 @@
 package com.speedment.runtime.internal.util;
 
 import com.speedment.runtime.config.mapper.TypeMapper;
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Utility class with methods for managing generated beans.

@@ -18,6 +18,7 @@ package com.speedment.runtime.config.trait;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Document;
+
 import java.util.Optional;
 
 /**

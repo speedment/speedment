@@ -19,6 +19,7 @@ package com.speedment.runtime.config.mapper.largeobject;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.exception.SpeedmentException;
+
 import java.sql.Clob;
 import java.sql.SQLException;
 

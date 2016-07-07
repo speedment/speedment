@@ -19,6 +19,7 @@ package com.speedment.common.codegen.internal.java.view;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.modifier.Modifier;
+
 import java.util.Optional;
 
 /**

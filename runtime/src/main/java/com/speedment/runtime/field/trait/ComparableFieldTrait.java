@@ -19,6 +19,7 @@ package com.speedment.runtime.field.trait;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.Inclusion;
 import com.speedment.runtime.field.predicate.ComparableSpeedmentPredicate;
+
 import java.util.Comparator;
 import java.util.Set;
 

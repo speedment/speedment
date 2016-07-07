@@ -18,6 +18,7 @@ package com.speedment.runtime.internal.field.trait;
 
 import com.speedment.runtime.field.method.Finder;
 import com.speedment.runtime.field.trait.ReferenceForeignKeyFieldTrait;
+
 import static java.util.Objects.requireNonNull;
 
 /**

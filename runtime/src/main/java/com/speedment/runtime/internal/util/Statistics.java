@@ -16,18 +16,13 @@
  */
 package com.speedment.runtime.internal.util;
 
-import com.speedment.runtime.SpeedmentVersion;
-import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
+import com.speedment.runtime.SpeedmentVersion;
+import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.util.analytics.AnalyticsUtil;
-import static com.speedment.runtime.internal.util.analytics.FocusPoint.APP_STARTED;
-import static com.speedment.runtime.internal.util.analytics.FocusPoint.GENERATE;
-import static com.speedment.runtime.internal.util.analytics.FocusPoint.GUI_PROJECT_LOADED;
-import static com.speedment.runtime.internal.util.analytics.FocusPoint.GUI_STARTED;
 import com.speedment.runtime.internal.util.testing.TestSettings;
-import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -38,11 +33,15 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+
+import static com.speedment.runtime.internal.util.analytics.FocusPoint.*;
+import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import java.util.List;
 import static java.util.Objects.requireNonNull;
-import java.util.concurrent.CompletableFuture;
 import static java.util.stream.Collectors.joining;
 
 /**

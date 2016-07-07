@@ -22,6 +22,7 @@ import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.config.mutator.trait.HasEnabledPropertyMutator;
 import com.speedment.tool.config.mutator.trait.HasNamePropertyMutator;
+
 import java.nio.file.Paths;
 
 /**

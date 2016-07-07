@@ -17,9 +17,11 @@
 package com.speedment.runtime.internal.util;
 
 import com.speedment.runtime.db.MetaResult;
+
+import java.util.function.Consumer;
+
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
-import java.util.function.Consumer;
 
 /**
  *

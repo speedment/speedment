@@ -18,6 +18,7 @@ package com.speedment.runtime.component;
 
 import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
+
 import java.util.List;
 
 /**

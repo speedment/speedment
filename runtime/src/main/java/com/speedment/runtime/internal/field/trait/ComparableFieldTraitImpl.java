@@ -23,26 +23,15 @@ import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.internal.comparator.NullOrder;
 import com.speedment.runtime.internal.comparator.SpeedmentComparatorImpl;
-import com.speedment.runtime.internal.field.predicate.impl.comparable.AlwaysFalseComparablePredicate;
-import com.speedment.runtime.internal.field.predicate.impl.comparable.AlwaysTrueComparablePredicate;
-import com.speedment.runtime.internal.field.predicate.impl.comparable.BetweenPredicate;
-import com.speedment.runtime.internal.field.predicate.impl.comparable.EqualPredicate;
-import com.speedment.runtime.internal.field.predicate.impl.comparable.GreaterOrEqualPredicate;
-import com.speedment.runtime.internal.field.predicate.impl.comparable.GreaterThanPredicate;
-import com.speedment.runtime.internal.field.predicate.impl.comparable.InPredicate;
-import com.speedment.runtime.internal.field.predicate.impl.comparable.IsNotNullComparablePredicate;
-import com.speedment.runtime.internal.field.predicate.impl.comparable.IsNullComparablePredicate;
-import com.speedment.runtime.internal.field.predicate.impl.comparable.LessOrEqualPredicate;
-import com.speedment.runtime.internal.field.predicate.impl.comparable.LessThanPredicate;
-import com.speedment.runtime.internal.field.predicate.impl.comparable.NotBetweenPredicate;
-import com.speedment.runtime.internal.field.predicate.impl.comparable.NotEqualPredicate;
-import com.speedment.runtime.internal.field.predicate.impl.comparable.NotInPredicate;
-import static com.speedment.runtime.internal.util.CollectionsUtil.getAnyFrom;
+import com.speedment.runtime.internal.field.predicate.impl.comparable.*;
+
 import java.util.Comparator;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
-import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
+
+import static com.speedment.runtime.internal.util.CollectionsUtil.getAnyFrom;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * @param <ENTITY> the entity type

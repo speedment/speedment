@@ -19,6 +19,7 @@ package com.speedment.runtime.db;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.db.metadata.ColumnMetaData;
 import com.speedment.runtime.internal.db.JavaTypeMapImpl;
+
 import java.util.Map;
 import java.util.Optional;
 

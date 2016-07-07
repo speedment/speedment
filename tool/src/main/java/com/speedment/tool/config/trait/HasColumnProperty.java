@@ -17,12 +17,14 @@
 package com.speedment.tool.config.trait;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.trait.HasColumn;
 import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.trait.HasColumn;
 import com.speedment.tool.config.DocumentProperty;
-import java.util.Optional;
-import static javafx.beans.binding.Bindings.createObjectBinding;
 import javafx.beans.binding.ObjectBinding;
+
+import java.util.Optional;
+
+import static javafx.beans.binding.Bindings.createObjectBinding;
 
 /**
  *

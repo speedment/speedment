@@ -20,6 +20,7 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.db.JavaTypeMap;
 import com.speedment.runtime.db.metadata.ColumnMetaData;
 import com.speedment.runtime.internal.db.AbstractDbmsMetadataHandler;
+
 import java.sql.SQLException;
 import java.util.Optional;
 

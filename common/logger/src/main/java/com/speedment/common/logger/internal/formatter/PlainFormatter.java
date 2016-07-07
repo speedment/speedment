@@ -18,8 +18,10 @@ package com.speedment.common.logger.internal.formatter;
 
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.LoggerFormatter;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+
 import java.time.Instant;
+
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
 
 /**
  *

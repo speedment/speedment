@@ -17,13 +17,15 @@
 package com.speedment.common.codegenxml.internal.view.trait;
 
 import com.speedment.common.codegen.Generator;
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
-import static com.speedment.common.codegen.internal.util.Formatting.indent;
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import com.speedment.common.codegenxml.ContentElement;
 import com.speedment.common.codegenxml.Element;
 import com.speedment.common.codegenxml.trait.HasElements;
+
 import java.util.List;
+
+import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.common.codegen.internal.util.Formatting.indent;
+import static com.speedment.common.codegen.internal.util.Formatting.nl;
 
 /**
  *

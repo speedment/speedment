@@ -19,15 +19,16 @@ package com.speedment.maven;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.runtime.Speedment;
-import java.io.File;
+import com.speedment.tool.MainApp;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import com.speedment.tool.MainApp;
+
+import java.io.File;
+
 import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
-import static javafx.application.Application.launch;
 
 /**
  *

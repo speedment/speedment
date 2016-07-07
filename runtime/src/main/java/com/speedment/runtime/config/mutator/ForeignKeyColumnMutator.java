@@ -18,9 +18,10 @@ package com.speedment.runtime.config.mutator;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.ForeignKeyColumn;
-import static com.speedment.runtime.config.ForeignKeyColumn.*;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 import com.speedment.runtime.config.mutator.trait.HasOrdinalPositionMutator;
+
+import static com.speedment.runtime.config.ForeignKeyColumn.*;
 
 /**
  *

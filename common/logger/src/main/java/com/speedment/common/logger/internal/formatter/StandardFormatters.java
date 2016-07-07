@@ -17,6 +17,7 @@
 package com.speedment.common.logger.internal.formatter;
 
 import com.speedment.common.logger.LoggerFormatter;
+
 import static com.speedment.common.logger.internal.util.StaticClassUtil.instanceNotAllowed;
 
 /**

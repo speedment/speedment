@@ -19,14 +19,16 @@ package com.speedment.runtime.config.parameter;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.db.ConnectionUrlGenerator;
 import com.speedment.runtime.db.DatabaseNamingConvention;
-import com.speedment.runtime.db.metadata.TypeInfoMetaData;
-import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
-import static com.speedment.common.mapstream.MapStream.comparing;
 import com.speedment.runtime.db.DbmsMetadataHandler;
 import com.speedment.runtime.db.DbmsOperationHandler;
+import com.speedment.runtime.db.metadata.TypeInfoMetaData;
+import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
+
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
+
+import static com.speedment.common.mapstream.MapStream.comparing;
 
 /**
  * The {@code DbmsType} interface defines unique properties for different Dbms

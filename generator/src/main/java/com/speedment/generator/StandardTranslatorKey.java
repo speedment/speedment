@@ -16,15 +16,16 @@
  */
 package com.speedment.generator;
 
-import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
+import com.speedment.common.codegen.model.ClassOrInterface;
+import com.speedment.common.codegen.model.Interface;
+import com.speedment.generator.internal.TranslatorKeyImpl;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
-import com.speedment.common.codegen.model.ClassOrInterface;
-import com.speedment.common.codegen.model.Interface;
-import com.speedment.common.codegen.model.Class;
-import com.speedment.generator.internal.TranslatorKeyImpl;
+
 import java.util.stream.Stream;
+
+import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  * Standard implementations of the {@link TranslatorKey} interface to make it

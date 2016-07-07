@@ -18,6 +18,7 @@ package com.speedment.runtime.config.mapper.string;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mapper.TypeMapper;
+
 import java.util.Locale;
 
 /**

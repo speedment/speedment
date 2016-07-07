@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.internal.runtime;
 
-import com.speedment.runtime.ApplicationMetadata;
 import com.speedment.common.injector.Injector;
+import com.speedment.runtime.ApplicationMetadata;
 import com.speedment.runtime.Speedment;
 
 /**

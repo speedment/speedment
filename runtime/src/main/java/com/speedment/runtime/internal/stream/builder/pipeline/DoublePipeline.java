@@ -17,6 +17,7 @@
 package com.speedment.runtime.internal.stream.builder.pipeline;
 
 import com.speedment.runtime.stream.Pipeline;
+
 import java.util.stream.DoubleStream;
 
 /**

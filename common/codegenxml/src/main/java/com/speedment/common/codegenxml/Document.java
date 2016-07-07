@@ -18,6 +18,7 @@ package com.speedment.common.codegenxml;
 
 import com.speedment.common.codegenxml.internal.DocumentImpl;
 import com.speedment.common.codegenxml.trait.HasElements;
+
 import java.util.List;
 import java.util.Optional;
 

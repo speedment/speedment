@@ -15,18 +15,20 @@
  * the License.
  */
 package com.speedment.tool.internal.controller;
+
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.brand.Brand;
 import com.speedment.tool.component.UserInterfaceComponent;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  *

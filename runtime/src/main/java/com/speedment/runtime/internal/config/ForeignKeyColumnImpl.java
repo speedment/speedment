@@ -18,7 +18,7 @@ package com.speedment.runtime.internal.config;
 
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;
-import com.speedment.runtime.internal.config.AbstractChildDocument;
+
 import java.util.Map;
 
 /**

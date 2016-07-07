@@ -17,6 +17,7 @@
 package com.speedment.common.codegen.model.trait;
 
 import com.speedment.common.codegen.model.ClassOrInterface;
+
 import java.util.Collection;
 import java.util.List;
 

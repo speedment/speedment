@@ -16,38 +16,27 @@
  */
 package com.speedment.generator.internal.entity;
 
+import com.speedment.common.codegen.internal.model.value.ReferenceValue;
+import com.speedment.common.codegen.internal.model.value.TextValue;
+import com.speedment.common.codegen.model.*;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.TranslatorSupport;
+import com.speedment.generator.internal.EntityAndManagerTranslator;
 import com.speedment.generator.internal.util.EntityTranslatorSupport;
-import com.speedment.common.codegen.model.Constructor;
-import com.speedment.common.codegen.model.Enum;
-import com.speedment.common.codegen.model.EnumConstant;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Generic;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Interface;
-import com.speedment.common.codegen.model.Javadoc;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
+import com.speedment.generator.internal.util.FkHolder;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.identifier.FieldIdentifier;
+import com.speedment.runtime.entity.Entity;
+import com.speedment.runtime.internal.util.document.DocumentDbUtil;
+
 import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.PARAM;
 import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.RETURN;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.OPTIONAL;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.STRING;
-import com.speedment.common.codegen.internal.model.value.ReferenceValue;
-import com.speedment.common.codegen.internal.model.value.TextValue;
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.generator.TranslatorSupport;
-import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
-import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
-import com.speedment.generator.internal.EntityAndManagerTranslator;
-import com.speedment.generator.internal.util.FkHolder;
-import com.speedment.runtime.entity.Entity;
-import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 

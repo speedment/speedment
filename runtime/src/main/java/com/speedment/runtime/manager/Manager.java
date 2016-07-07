@@ -16,17 +16,18 @@
  */
 package com.speedment.runtime.manager;
 
+import com.speedment.common.tuple.Tuple;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.field.trait.ComparableFieldTrait;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.stream.StreamDecorator;
-import com.speedment.common.tuple.Tuple;
+
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;

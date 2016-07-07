@@ -19,6 +19,7 @@ package com.speedment.runtime.internal.component;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.component.PasswordComponent;
 import com.speedment.runtime.license.Software;
+
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;

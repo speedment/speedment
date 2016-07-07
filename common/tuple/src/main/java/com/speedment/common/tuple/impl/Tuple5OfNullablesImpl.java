@@ -17,6 +17,7 @@
 package com.speedment.common.tuple.impl;
 
 import com.speedment.common.tuple.Tuple5OfNullables;
+
 import java.util.Optional;
 
 /**

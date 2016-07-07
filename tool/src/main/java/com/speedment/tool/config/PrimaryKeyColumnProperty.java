@@ -18,19 +18,21 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Table;
+import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.PrimaryKeyColumnPropertyMutator;
-import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
 import com.speedment.tool.config.trait.HasColumnProperty;
 import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
 import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
+import org.controlsfx.control.PropertySheet;
+
 import java.util.List;
 import java.util.stream.Stream;
-import org.controlsfx.control.PropertySheet;
+
+import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
 
 /**
  *

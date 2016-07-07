@@ -16,17 +16,17 @@
  */
 package com.speedment.common.injector.internal.dependency.impl;
 
+import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Execute;
 import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.WithState;
 import com.speedment.common.injector.exception.CyclicReferenceException;
+import com.speedment.common.injector.internal.InjectorImpl;
 import com.speedment.common.injector.internal.dependency.Dependency;
 import com.speedment.common.injector.internal.dependency.DependencyGraph;
 import com.speedment.common.injector.internal.dependency.DependencyNode;
 import com.speedment.common.injector.internal.dependency.Execution;
-import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseMethods;
-import com.speedment.common.injector.State;
-import com.speedment.common.injector.annotation.WithState;
-import com.speedment.common.injector.internal.InjectorImpl;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.HashSet;
@@ -34,6 +34,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+
+import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseMethods;
 import static java.util.stream.Collectors.joining;
 
 /**

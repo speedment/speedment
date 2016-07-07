@@ -16,10 +16,11 @@
  */
 package com.speedment.common.codegen.internal.model;
 
+import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.codegen.model.EnumConstant;
-import com.speedment.common.codegen.internal.util.Copier;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;

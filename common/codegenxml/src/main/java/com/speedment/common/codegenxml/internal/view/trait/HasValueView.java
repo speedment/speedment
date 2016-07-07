@@ -17,6 +17,7 @@
 package com.speedment.common.codegenxml.internal.view.trait;
 
 import com.speedment.common.codegenxml.trait.HasValue;
+
 import java.util.Optional;
 
 /**

@@ -18,6 +18,7 @@ package com.speedment.common.logger.internal;
 
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.internal.formatter.StandardFormatters;
+
 import java.util.Optional;
 
 /**

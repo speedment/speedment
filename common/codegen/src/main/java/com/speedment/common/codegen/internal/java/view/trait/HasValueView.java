@@ -19,6 +19,7 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasValue;
+
 import static com.speedment.common.codegen.internal.util.Formatting.ifelse;
 
 /**

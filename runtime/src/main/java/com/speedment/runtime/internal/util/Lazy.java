@@ -16,8 +16,9 @@
  */
 package com.speedment.runtime.internal.util;
 
-import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Generic lazy initialization class. The supplier must produce a non-null

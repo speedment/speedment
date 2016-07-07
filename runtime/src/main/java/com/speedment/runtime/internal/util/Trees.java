@@ -16,14 +16,15 @@
  */
 package com.speedment.runtime.internal.util;
 
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import java.util.ArrayDeque;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Queue;
 import java.util.function.Function;
 import java.util.stream.Stream;
+
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  *

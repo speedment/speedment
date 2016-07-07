@@ -16,16 +16,13 @@
  */
 package com.speedment.plugins.reactor.internal.translator;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.WILDCARD;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.Generic;
-import com.speedment.common.codegen.model.Interface;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
+import com.speedment.common.codegen.model.*;
 import com.speedment.generator.JavaClassTranslator;
 import com.speedment.generator.TranslatorDecorator;
 import com.speedment.plugins.reactor.MaterializedView;
 import com.speedment.runtime.config.Project;
+
+import static com.speedment.common.codegen.internal.model.constant.DefaultType.WILDCARD;
 
 /**
  *

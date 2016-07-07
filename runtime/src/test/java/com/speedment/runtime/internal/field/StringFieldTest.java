@@ -16,12 +16,14 @@
  */
 package com.speedment.runtime.internal.field;
 
-import static com.speedment.runtime.internal.field.predicate.impl.string.BaseStringPredicate.ENDS_WITH_PREDICATE;
-import static com.speedment.runtime.internal.field.Entity.NAME;
+import org.junit.Test;
+
 import java.util.List;
+
+import static com.speedment.runtime.internal.field.Entity.NAME;
+import static com.speedment.runtime.internal.field.predicate.impl.string.BaseStringPredicate.ENDS_WITH_PREDICATE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 /**
  *

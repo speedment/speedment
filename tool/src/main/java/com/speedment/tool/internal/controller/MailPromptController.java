@@ -22,6 +22,13 @@ import com.speedment.runtime.internal.util.EmailUtil;
 import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.event.UIEvent;
 import com.speedment.tool.internal.util.InjectionLoader;
+import javafx.beans.binding.Bindings;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -30,12 +37,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
-import javafx.beans.binding.Bindings;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 
 /**
  *

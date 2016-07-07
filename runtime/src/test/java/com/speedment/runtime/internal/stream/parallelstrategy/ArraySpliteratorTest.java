@@ -21,21 +21,17 @@
  */
 package com.speedment.runtime.internal.stream.parallelstrategy;
 
-import com.speedment.runtime.internal.stream.parallelstrategy.ArraySpliterator;
+import org.junit.*;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Supplier;
-import static java.util.stream.Collectors.toSet;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-import org.junit.After;
-import org.junit.AfterClass;
+
+import static java.util.stream.Collectors.toSet;
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
 
 /**
  *

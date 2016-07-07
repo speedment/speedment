@@ -19,14 +19,16 @@ package com.speedment.common.codegen.internal.java.view;
 import com.speedment.common.codegen.DependencyManager;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.internal.java.view.trait.HasClassesView;
 import com.speedment.common.codegen.internal.java.view.trait.HasImportsView;
 import com.speedment.common.codegen.internal.java.view.trait.HasJavadocView;
 import com.speedment.common.codegen.internal.util.Formatting;
+import com.speedment.common.codegen.model.File;
+
+import java.util.Optional;
+
 import static com.speedment.common.codegen.internal.util.Formatting.*;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-import java.util.Optional;
 
 /**
  * Transforms from a {@link File} to java code.

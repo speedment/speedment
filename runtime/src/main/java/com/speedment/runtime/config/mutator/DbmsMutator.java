@@ -18,11 +18,12 @@ package com.speedment.runtime.config.mutator;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Dbms;
-import static com.speedment.runtime.config.Dbms.*;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 import com.speedment.runtime.internal.config.SchemaImpl;
+
+import static com.speedment.runtime.config.Dbms.*;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.newDocument;
 
 /**

@@ -19,11 +19,12 @@ package com.speedment.tool.event;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.event.Event;
 import com.speedment.tool.config.DocumentProperty;
-import static java.util.Objects.requireNonNull;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
 import org.controlsfx.control.PropertySheet;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * An event that is published when the user selects a new span

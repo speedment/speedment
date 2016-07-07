@@ -18,8 +18,9 @@ package com.speedment.common.codegenxml.internal.view;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegenxml.internal.view.trait.HasValueView;
 import com.speedment.common.codegenxml.ContentElement;
+import com.speedment.common.codegenxml.internal.view.trait.HasValueView;
+
 import java.util.Optional;
 
 /**

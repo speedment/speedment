@@ -19,8 +19,10 @@ package com.speedment.common.codegen.controller;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.modifier.Keyword;
 import com.speedment.common.codegen.model.trait.HasMethods;
-import static java.util.Objects.requireNonNull;
+
 import java.util.function.Consumer;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * This control makes sure all method parameters in the specified model is set

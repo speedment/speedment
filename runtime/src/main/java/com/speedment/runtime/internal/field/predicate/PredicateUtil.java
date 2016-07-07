@@ -18,12 +18,9 @@ package com.speedment.runtime.internal.field.predicate;
 
 import com.speedment.runtime.field.Inclusion;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
-import com.speedment.runtime.internal.field.predicate.iface.type.HasFirstOperand;
-import com.speedment.runtime.internal.field.predicate.iface.type.HasFirstSetOperand;
-import com.speedment.runtime.internal.field.predicate.iface.type.HasSecondOperand;
-import com.speedment.runtime.internal.field.predicate.iface.type.HasThirdInclusionOperand;
-import com.speedment.runtime.internal.field.predicate.iface.type.HasThirdOperand;
+import com.speedment.runtime.internal.field.predicate.iface.type.*;
 import com.speedment.runtime.internal.util.Cast;
+
 import java.util.Set;
 
 /**

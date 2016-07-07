@@ -17,13 +17,15 @@
 package com.speedment.runtime.internal.field.predicate.impl.comparable;
 
 import com.speedment.runtime.field.predicate.ComparableSpeedmentPredicate;
-import static com.speedment.runtime.field.predicate.PredicateType.IN;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.internal.field.predicate.iface.type.BinarySetOperation;
 import com.speedment.runtime.internal.field.predicate.impl.SpeedmentPredicateImpl;
+
 import java.util.Set;
+
+import static com.speedment.runtime.field.predicate.PredicateType.IN;
 
 /**
  *

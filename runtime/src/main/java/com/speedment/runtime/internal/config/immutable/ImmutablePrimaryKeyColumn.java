@@ -20,9 +20,11 @@ import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.config.PrimaryKeyColumnImpl;
 import com.speedment.runtime.internal.util.Lazy;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.toStringHelper;
+
 import java.util.Map;
 import java.util.Optional;
+
+import static com.speedment.runtime.internal.util.document.DocumentUtil.toStringHelper;
 
 /**
  *

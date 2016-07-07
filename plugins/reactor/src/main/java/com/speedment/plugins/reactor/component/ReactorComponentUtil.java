@@ -20,8 +20,10 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
+
 import java.util.List;
 import java.util.Optional;
+
 import static java.util.stream.Collectors.toList;
 
 /**

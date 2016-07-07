@@ -16,28 +16,17 @@
  */
 package com.speedment.generator.internal.entity;
 
-import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Constructor;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Generic;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
-import com.speedment.runtime.config.Table;
-import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.BOOLEAN_PRIMITIVE;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.INT_PRIMITIVE;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.OBJECT;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.OPTIONAL;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.STRING;
-import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
-import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
+import com.speedment.common.codegen.model.*;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
 import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.entity.AbstractEntity;
+
 import java.util.Objects;
 import java.util.StringJoiner;
+
+import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.internal.model.constant.DefaultType.*;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.Formatting.tab;
 import static java.util.Objects.requireNonNull;

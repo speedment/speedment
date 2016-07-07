@@ -16,41 +16,43 @@
  */
 package com.speedment.runtime.internal.runtime;
 
-import com.speedment.runtime.ApplicationMetadata;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.exception.CyclicReferenceException;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
+import com.speedment.common.tuple.Tuple2;
+import com.speedment.common.tuple.Tuple3;
+import com.speedment.common.tuple.Tuples;
+import com.speedment.runtime.ApplicationMetadata;
 import com.speedment.runtime.Speedment;
+import com.speedment.runtime.SpeedmentBuilder;
 import com.speedment.runtime.SpeedmentVersion;
-import static com.speedment.runtime.SpeedmentVersion.getImplementationVendor;
-import static com.speedment.runtime.SpeedmentVersion.getSpecificationVersion;
 import com.speedment.runtime.component.Component;
-import com.speedment.runtime.config.Document;
+import com.speedment.runtime.component.InfoComponent;
+import com.speedment.runtime.component.PasswordComponent;
 import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasName;
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
-import com.speedment.runtime.SpeedmentBuilder;
-import com.speedment.runtime.component.InfoComponent;
-import com.speedment.runtime.component.PasswordComponent;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.runtime.manager.Manager;
-import com.speedment.common.tuple.Tuple2;
-import com.speedment.common.tuple.Tuple3;
-import com.speedment.common.tuple.Tuples;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.function.BiConsumer;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import static java.util.Objects.requireNonNull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
+
+import static com.speedment.runtime.SpeedmentVersion.getImplementationVendor;
+import static com.speedment.runtime.SpeedmentVersion.getSpecificationVersion;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  * This abstract class is implemented by classes that can build a 

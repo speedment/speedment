@@ -18,14 +18,16 @@ package com.speedment.common.codegen.internal.java.view;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import com.speedment.common.codegen.internal.util.Formatting;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.trait.HasName;
-import com.speedment.common.codegen.internal.util.Formatting;
-import static com.speedment.common.codegen.internal.util.Formatting.*;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.common.codegen.internal.util.Formatting.*;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 
 /**
  * Transforms from a {@link Constructor} to java code.

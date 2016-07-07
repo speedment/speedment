@@ -17,18 +17,18 @@
 package com.speedment.runtime.internal.component;
 
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.runtime.component.connectionpool.ConnectionPoolComponent;
-import com.speedment.runtime.component.connectionpool.PoolableConnection;
-import com.speedment.runtime.internal.pool.PoolableConnectionImpl;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.PasswordComponent;
+import com.speedment.runtime.component.connectionpool.ConnectionPoolComponent;
+import com.speedment.runtime.component.connectionpool.PoolableConnection;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.exception.SpeedmentException;
-import static com.speedment.runtime.internal.stream.OptionalUtil.unwrap;
+import com.speedment.runtime.internal.pool.PoolableConnectionImpl;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.license.Software;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -36,10 +36,12 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.Map;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Stream;
+
+import static com.speedment.runtime.internal.stream.OptionalUtil.unwrap;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A fully concurrent implementation of a connection pool.

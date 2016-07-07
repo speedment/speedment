@@ -16,14 +16,16 @@
  */
 package com.speedment.runtime.internal.field;
 
-import static com.speedment.runtime.internal.field.Entity.ID;
-import static com.speedment.runtime.internal.field.Entity.NAME;
+import org.junit.Before;
+
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
-import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import org.junit.Before;
+
+import static com.speedment.runtime.internal.field.Entity.ID;
+import static com.speedment.runtime.internal.field.Entity.NAME;
+import static java.util.stream.Collectors.toList;
 
 /**
  *

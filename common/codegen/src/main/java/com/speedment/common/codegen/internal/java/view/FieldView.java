@@ -18,15 +18,12 @@ package com.speedment.common.codegen.internal.java.view;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
+import com.speedment.common.codegen.internal.java.view.trait.*;
 import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.internal.java.view.trait.HasAnnotationUsageView;
-import com.speedment.common.codegen.internal.java.view.trait.HasJavadocView;
-import com.speedment.common.codegen.internal.java.view.trait.HasModifiersView;
-import com.speedment.common.codegen.internal.java.view.trait.HasNameView;
-import com.speedment.common.codegen.internal.java.view.trait.HasTypeView;
-import com.speedment.common.codegen.internal.java.view.trait.HasValueView;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+
 import java.util.Optional;
+
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 
 /**
  * Transforms from a {@link Field} to java code.

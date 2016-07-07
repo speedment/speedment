@@ -19,8 +19,10 @@ package com.speedment.tool.config;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.trait.HasParent;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

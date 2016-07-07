@@ -16,13 +16,15 @@
  */
 package com.speedment.common.injector.internal.dependency.impl;
 
+import com.speedment.common.injector.State;
 import com.speedment.common.injector.internal.dependency.Dependency;
 import com.speedment.common.injector.internal.dependency.Execution;
-import com.speedment.common.injector.State;
+
 import java.lang.reflect.Method;
+import java.util.Set;
+
 import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
-import java.util.Set;
 
 /**
  *

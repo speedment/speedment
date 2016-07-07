@@ -18,8 +18,6 @@ package com.speedment.tool.property;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.property.DefaultStringPropertyItem.DefaultStringPropertyEditor;
-import java.util.Objects;
-import java.util.function.Consumer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableStringValue;
@@ -30,6 +28,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import org.controlsfx.property.editor.AbstractPropertyEditor;
+
+import java.util.Objects;
+import java.util.function.Consumer;
+
 import static java.util.Objects.requireNonNull;
 
 /**

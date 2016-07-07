@@ -17,16 +17,18 @@
 package com.speedment.runtime.stream.action;
 
 import com.speedment.runtime.annotation.Api;
-import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
+
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Stream;
+
+import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

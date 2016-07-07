@@ -17,10 +17,12 @@
 package com.speedment.runtime.util;
 
 import com.speedment.runtime.annotation.Api;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.NoSuchElementException;
+
 import static java.util.Objects.requireNonNull;
 
 /**

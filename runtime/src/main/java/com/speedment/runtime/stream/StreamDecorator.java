@@ -20,6 +20,7 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.internal.stream.ComposedStreamDecorator;
 import com.speedment.runtime.internal.util.Cast;
+
 import java.util.stream.Stream;
 
 /**

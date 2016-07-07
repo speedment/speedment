@@ -18,13 +18,15 @@ package com.speedment.common.codegen.internal.java.view;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.internal.java.view.trait.HasJavadocTagsView;
-import static com.speedment.common.codegen.internal.util.Formatting.*;
 import com.speedment.common.codegen.internal.util.TextUtil;
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import com.speedment.common.codegen.model.Javadoc;
+
 import java.util.Optional;
+
+import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.common.codegen.internal.util.Formatting.nl;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 
 /**
  * Transforms from a {@link Javadoc} to java code.

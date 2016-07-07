@@ -16,11 +16,12 @@
  */
 package com.speedment.runtime.internal.stream;
 
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
+
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  *

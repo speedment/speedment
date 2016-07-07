@@ -17,12 +17,8 @@
 package com.speedment.runtime.field.predicate;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.field.predicate.trait.HasEffectivePredicateType;
-import com.speedment.runtime.field.predicate.trait.HasFieldTrait;
-import com.speedment.runtime.field.predicate.trait.HasGetter;
-import com.speedment.runtime.field.predicate.trait.HasNegated;
-import com.speedment.runtime.field.predicate.trait.HasPredicateType;
-import com.speedment.runtime.field.predicate.trait.HasReferenceFieldTrait;
+import com.speedment.runtime.field.predicate.trait.*;
+
 import java.util.function.Predicate;
 
 /**

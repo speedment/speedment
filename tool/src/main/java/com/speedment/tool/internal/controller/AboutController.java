@@ -19,15 +19,17 @@ package com.speedment.tool.internal.controller;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.tool.brand.Brand;
-import static com.speedment.tool.internal.util.CloseUtil.newCloseHandler;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import static com.speedment.tool.internal.util.CloseUtil.newCloseHandler;
 
 /**
  *

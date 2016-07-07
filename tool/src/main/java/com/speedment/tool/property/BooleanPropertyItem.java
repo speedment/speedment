@@ -17,10 +17,11 @@
 package com.speedment.tool.property;
 
 import com.speedment.runtime.annotation.Api;
-import java.util.function.Consumer;
 import javafx.beans.property.BooleanProperty;
 import org.controlsfx.property.editor.Editors;
 import org.controlsfx.property.editor.PropertyEditor;
+
+import java.util.function.Consumer;
 
 /**
  *

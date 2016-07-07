@@ -21,15 +21,12 @@
  */
 package com.speedment.runtime.util.tuple;
 
+import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleBuilder;
 import com.speedment.common.tuple.Tuples;
-import com.speedment.common.tuple.Tuple;
-import org.junit.After;
-import org.junit.AfterClass;
+import org.junit.*;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  *

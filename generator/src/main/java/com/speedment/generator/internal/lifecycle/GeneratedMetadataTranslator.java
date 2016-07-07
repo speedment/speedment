@@ -16,33 +16,29 @@
  */
 package com.speedment.generator.internal.lifecycle;
 
-import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Javadoc;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
-import com.speedment.runtime.config.Project;
 import com.speedment.common.codegen.internal.model.JavadocImpl;
-import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.AUTHOR;
 import com.speedment.common.codegen.internal.model.constant.DefaultType;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.STRING;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.VOID;
 import com.speedment.common.codegen.internal.model.value.ReferenceValue;
+import com.speedment.common.codegen.model.*;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
-import com.speedment.runtime.internal.util.document.DocumentTranscoder;
 import com.speedment.runtime.ApplicationMetadata;
+import com.speedment.runtime.component.InfoComponent;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.internal.runtime.AbstractApplicationMetadata;
+import com.speedment.runtime.internal.util.document.DocumentTranscoder;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
-import static java.util.stream.Collectors.toList;
+
+import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.AUTHOR;
+import static com.speedment.common.codegen.internal.model.constant.DefaultType.STRING;
+import static com.speedment.common.codegen.internal.model.constant.DefaultType.VOID;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.runtime.component.InfoComponent;
-import com.speedment.runtime.internal.runtime.AbstractApplicationMetadata;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  *

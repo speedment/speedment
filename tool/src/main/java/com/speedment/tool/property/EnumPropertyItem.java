@@ -17,12 +17,14 @@
 package com.speedment.tool.property;
 
 import com.speedment.runtime.annotation.Api;
-import java.util.Arrays;
-import static java.util.Objects.requireNonNull;
-import java.util.function.Consumer;
 import javafx.beans.property.Property;
 import org.controlsfx.property.editor.Editors;
 import org.controlsfx.property.editor.PropertyEditor;
+
+import java.util.Arrays;
+import java.util.function.Consumer;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

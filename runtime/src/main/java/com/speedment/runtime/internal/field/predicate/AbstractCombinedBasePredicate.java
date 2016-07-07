@@ -18,9 +18,10 @@ package com.speedment.runtime.internal.field.predicate;
 
 import java.util.ArrayList;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Aggregation of a number of {@link Predicate Predicates} of the same type

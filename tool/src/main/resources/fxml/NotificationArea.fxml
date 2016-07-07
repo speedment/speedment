@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<FlowPane 
+<?import javafx.scene.layout.FlowPane?>
+<FlowPane
     xmlns:fx="http://javafx.com/fxml/1" 
     fx:id="notificationArea"
     orientation="VERTICAL" 

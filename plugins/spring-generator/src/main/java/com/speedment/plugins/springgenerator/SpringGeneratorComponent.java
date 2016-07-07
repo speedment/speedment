@@ -18,19 +18,16 @@ package com.speedment.plugins.springgenerator;
 
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
-import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.generator.component.CodeGenerationComponent;
-import com.speedment.plugins.springgenerator.internal.ConfigurationTranslator;
-import com.speedment.plugins.springgenerator.internal.ControllerTranslator;
-import com.speedment.plugins.springgenerator.internal.GeneratedConfigurationTranslator;
-import com.speedment.plugins.springgenerator.internal.GeneratedControllerTranslator;
-import com.speedment.plugins.springgenerator.internal.SpringTranslatorKey;
+import com.speedment.plugins.springgenerator.internal.*;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.component.AbstractComponent;
 import com.speedment.runtime.internal.license.AbstractSoftware;
-import static com.speedment.runtime.internal.license.OpenSourceLicense.APACHE_2;
 import com.speedment.runtime.license.Software;
+
+import static com.speedment.common.injector.State.RESOLVED;
+import static com.speedment.runtime.internal.license.OpenSourceLicense.APACHE_2;
 
 /**
  * Plugins into the Speedment platform, generating Spring annoted classes as

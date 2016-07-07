@@ -19,9 +19,9 @@ package com.speedment.common.codegen.model;
 import com.speedment.common.codegen.internal.model.GenericImpl;
 import com.speedment.common.codegen.internal.model.constant.DefaultType;
 import com.speedment.common.codegen.model.trait.HasCopy;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 /**
  * A model that represents the generic part of a type declaration in code. A

@@ -17,6 +17,7 @@
 package com.speedment.common.injector.internal.dependency;
 
 import com.speedment.common.injector.exception.CyclicReferenceException;
+
 import java.util.stream.Stream;
 
 /**

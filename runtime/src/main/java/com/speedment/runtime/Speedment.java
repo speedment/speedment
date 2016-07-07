@@ -21,6 +21,7 @@ import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.manager.Manager;
+
 import java.util.Optional;
 
 /**

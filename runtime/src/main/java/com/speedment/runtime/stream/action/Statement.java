@@ -17,11 +17,13 @@
 package com.speedment.runtime.stream.action;
 
 import com.speedment.runtime.annotation.Api;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

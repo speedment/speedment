@@ -18,10 +18,12 @@ package com.speedment.runtime.db;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.exception.SpeedmentException;
+
 import java.sql.SQLException;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Predicate;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

@@ -21,22 +21,19 @@
  */
 package com.speedment.runtime.util;
 
+import org.junit.*;
+import org.junit.rules.TestName;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
-import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import org.junit.After;
-import org.junit.AfterClass;
+
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestName;
 
 /**
  *

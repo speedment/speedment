@@ -17,17 +17,15 @@
 package com.speedment.common.codegen.controller;
 
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.Javadoc;
-import com.speedment.common.codegen.model.JavadocTag;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.OPTIONAL;
-import static com.speedment.common.codegen.internal.util.Formatting.*;
+import com.speedment.common.codegen.model.*;
+
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
+
+import static com.speedment.common.codegen.internal.model.constant.DefaultType.OPTIONAL;
+import static com.speedment.common.codegen.internal.util.Formatting.*;
 import static java.util.Objects.requireNonNull;
 
 /**

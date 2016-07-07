@@ -16,18 +16,15 @@
  */
 package com.speedment.common.codegen.internal.model;
 
-import com.speedment.common.codegen.model.AnnotationUsage;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.InterfaceField;
-import com.speedment.common.codegen.model.Javadoc;
-import com.speedment.common.codegen.model.Type;
-import com.speedment.common.codegen.model.Value;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.modifier.Modifier;
+
 import java.util.List;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * The default implementation of the wrapper for the {@link Field} interface.

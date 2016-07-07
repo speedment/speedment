@@ -17,6 +17,7 @@
 package com.speedment.runtime.internal.manager.metaresult;
 
 import com.speedment.runtime.db.MetaResult;
+
 import java.util.Optional;
 
 /**

@@ -21,11 +21,13 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.internal.java.view.trait.HasGenericsView;
 import com.speedment.common.codegen.model.Type;
-import static com.speedment.common.codegen.internal.util.Formatting.*;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+
 import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.speedment.common.codegen.internal.util.Formatting.shortName;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 
 /**
  * Transforms from a {@link Type} to java code.

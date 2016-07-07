@@ -17,6 +17,7 @@
 package com.speedment.runtime.internal.stream.parallelstrategy;
 
 import com.speedment.runtime.stream.ParallelStrategy;
+
 import java.util.Iterator;
 import java.util.Spliterator;
 

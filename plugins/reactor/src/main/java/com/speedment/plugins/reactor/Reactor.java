@@ -20,10 +20,8 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.manager.Manager;
-import static java.util.Collections.newSetFromMap;
-import static java.util.Collections.unmodifiableList;
+
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -31,6 +29,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
+
+import static java.util.Collections.newSetFromMap;
+import static java.util.Collections.unmodifiableList;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 /**

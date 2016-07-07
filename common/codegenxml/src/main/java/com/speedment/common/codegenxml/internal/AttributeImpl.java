@@ -17,8 +17,10 @@
 package com.speedment.common.codegenxml.internal;
 
 import com.speedment.common.codegenxml.Attribute;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

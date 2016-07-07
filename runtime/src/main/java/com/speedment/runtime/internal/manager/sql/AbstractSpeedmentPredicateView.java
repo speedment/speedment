@@ -19,22 +19,15 @@ package com.speedment.runtime.internal.manager.sql;
 import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.field.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
-import static com.speedment.runtime.field.predicate.PredicateType.NOT_BETWEEN;
-import static com.speedment.runtime.field.predicate.PredicateType.NOT_CONTAINS;
-import static com.speedment.runtime.field.predicate.PredicateType.NOT_ENDS_WITH;
-import static com.speedment.runtime.field.predicate.PredicateType.NOT_EQUAL_IGNORE_CASE;
-import static com.speedment.runtime.field.predicate.PredicateType.NOT_IN;
-import static com.speedment.runtime.field.predicate.PredicateType.NOT_STARTS_WITH;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
-import static com.speedment.runtime.internal.field.predicate.PredicateUtil.getFirstOperandAsRaw;
-import static com.speedment.runtime.internal.field.predicate.PredicateUtil.getFirstOperandAsRawSet;
-import static com.speedment.runtime.internal.field.predicate.PredicateUtil.getSecondOperandAsRaw;
-import static com.speedment.runtime.internal.field.predicate.PredicateUtil.getThirdOperandAsInclusion;
 import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
 import com.speedment.runtime.field.predicate.SqlPredicateFragment;
+
 import java.util.Collection;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
+
+import static com.speedment.runtime.internal.field.predicate.PredicateUtil.*;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
 /**

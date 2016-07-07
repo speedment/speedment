@@ -17,7 +17,6 @@
 package com.speedment.tool.internal.util;
 
 import com.speedment.common.injector.Injector;
-import static com.speedment.common.injector.State.INITIALIZED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectorKey;
@@ -26,31 +25,24 @@ import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.brand.Brand;
 import com.speedment.tool.component.UserInterfaceComponent;
-import com.speedment.tool.internal.controller.AboutController;
-import com.speedment.tool.internal.controller.ComponentsController;
-import com.speedment.tool.internal.controller.ConnectController;
-import com.speedment.tool.internal.controller.MailPromptController;
-import com.speedment.tool.internal.controller.MenubarController;
-import com.speedment.tool.internal.controller.NotificationAreaController;
-import com.speedment.tool.internal.controller.OutputController;
-import com.speedment.tool.internal.controller.ProjectTreeController;
-import com.speedment.tool.internal.controller.SceneController;
-import com.speedment.tool.internal.controller.ToolbarController;
-import com.speedment.tool.internal.controller.WorkspaceController;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Supplier;
+import com.speedment.tool.internal.controller.*;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import static javafx.stage.Modality.APPLICATION_MODAL;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
+
+import static com.speedment.common.injector.State.INITIALIZED;
 import static java.util.Objects.requireNonNull;
+import static javafx.stage.Modality.APPLICATION_MODAL;
 
 /**
  *

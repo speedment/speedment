@@ -18,25 +18,27 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;
 import com.speedment.runtime.exception.SpeedmentException;
+import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.ForeignKeyColumnPropertyMutator;
-import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
-import com.speedment.tool.property.StringPropertyItem;
 import com.speedment.tool.config.trait.HasColumnProperty;
 import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
 import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-import static javafx.beans.binding.Bindings.createObjectBinding;
+import com.speedment.tool.property.StringPropertyItem;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.control.PropertySheet;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
+import static javafx.beans.binding.Bindings.createObjectBinding;
 
 /**
  *

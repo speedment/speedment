@@ -18,6 +18,7 @@ package com.speedment.common.logger.internal;
 
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.LoggerEvent;
+
 import static java.util.Objects.requireNonNull;
 
 /**

@@ -17,18 +17,15 @@
 package com.speedment.runtime.internal.stream.builder.streamterminator;
 
 import com.speedment.runtime.internal.stream.builder.pipeline.DoublePipeline;
+
 import java.util.DoubleSummaryStatistics;
-import static java.util.Objects.requireNonNull;
 import java.util.OptionalDouble;
 import java.util.PrimitiveIterator;
 import java.util.Spliterator;
-import java.util.function.BiConsumer;
-import java.util.function.DoubleBinaryOperator;
-import java.util.function.DoubleConsumer;
-import java.util.function.DoublePredicate;
-import java.util.function.ObjDoubleConsumer;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

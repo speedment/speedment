@@ -17,7 +17,9 @@
 package com.speedment.runtime.internal.db.metadata;
 
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;
+
 import java.sql.DatabaseMetaData;
+
 import static java.util.Objects.requireNonNull;
 
 /**

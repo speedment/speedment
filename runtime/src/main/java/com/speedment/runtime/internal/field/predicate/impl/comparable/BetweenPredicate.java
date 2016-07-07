@@ -18,12 +18,13 @@ package com.speedment.runtime.internal.field.predicate.impl.comparable;
 
 import com.speedment.runtime.field.Inclusion;
 import com.speedment.runtime.field.predicate.ComparableSpeedmentPredicate;
-import static com.speedment.runtime.field.predicate.PredicateType.BETWEEN;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.internal.field.predicate.iface.type.QuaternaryInclusionOperation;
 import com.speedment.runtime.internal.field.predicate.impl.SpeedmentPredicateImpl;
+
+import static com.speedment.runtime.field.predicate.PredicateType.BETWEEN;
 
 /**
  *

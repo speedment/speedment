@@ -17,6 +17,7 @@
 package com.speedment.runtime;
 
 import com.speedment.runtime.annotation.Api;
+
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 
 /**

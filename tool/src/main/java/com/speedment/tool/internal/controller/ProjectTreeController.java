@@ -18,29 +18,18 @@ package com.speedment.tool.internal.controller;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.EventComponent;
-import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.event.ProjectLoaded;
-import com.speedment.tool.config.DbmsProperty;
-import com.speedment.tool.config.ForeignKeyProperty;
-import com.speedment.tool.config.IndexProperty;
-import com.speedment.tool.config.ProjectProperty;
-import com.speedment.tool.config.SchemaProperty;
-import com.speedment.tool.config.TableProperty;
-import com.speedment.tool.resource.SilkIcon;
-import com.speedment.tool.resource.SpeedmentIcon;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
-import com.speedment.tool.config.DocumentProperty;
+import com.speedment.tool.component.UserInterfaceComponent;
+import com.speedment.tool.config.*;
 import com.speedment.tool.config.trait.HasEnabledProperty;
 import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasIconPath;
 import com.speedment.tool.config.trait.HasNameProperty;
-import java.net.URL;
-import static java.util.Objects.requireNonNull;
-import java.util.ResourceBundle;
-import java.util.stream.Stream;
-import static javafx.application.Platform.runLater;
+import com.speedment.tool.resource.SilkIcon;
+import com.speedment.tool.resource.SpeedmentIcon;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
@@ -49,12 +38,19 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
-import static javafx.scene.control.SelectionMode.SINGLE;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
+import static javafx.application.Platform.runLater;
+import static javafx.scene.control.SelectionMode.SINGLE;
 
 /**
  *

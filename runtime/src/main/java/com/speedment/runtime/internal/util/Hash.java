@@ -16,10 +16,11 @@
  */
 package com.speedment.runtime.internal.util;
 
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  *

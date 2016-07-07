@@ -21,8 +21,10 @@ import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.internal.java.view.trait.HasCodeView;
 import com.speedment.common.codegen.internal.java.view.trait.HasModifiersView;
 import com.speedment.common.codegen.model.Initializer;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Transforms from an {@link Initializer} to java code.

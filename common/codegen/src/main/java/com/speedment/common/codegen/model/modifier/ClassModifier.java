@@ -16,13 +16,7 @@
  */
 package com.speedment.common.codegen.model.modifier;
 
-import com.speedment.common.codegen.model.modifier.Keyword.abstract_;
-import com.speedment.common.codegen.model.modifier.Keyword.final_;
-import com.speedment.common.codegen.model.modifier.Keyword.private_;
-import com.speedment.common.codegen.model.modifier.Keyword.protected_;
-import com.speedment.common.codegen.model.modifier.Keyword.public_;
-import com.speedment.common.codegen.model.modifier.Keyword.static_;
-import com.speedment.common.codegen.model.modifier.Keyword.strictfp_;
+import com.speedment.common.codegen.model.modifier.Keyword.*;
 
 /**
  *

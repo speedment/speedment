@@ -16,34 +16,19 @@
  */
 package com.speedment.tool.internal.component;
 
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.ForeignKey;
-import com.speedment.runtime.config.Index;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.*;
 import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
-import com.speedment.tool.config.AbstractDocumentProperty;
-import com.speedment.tool.config.ColumnProperty;
-import com.speedment.tool.config.DbmsProperty;
-import com.speedment.tool.config.DefaultDocumentProperty;
-import com.speedment.tool.config.ForeignKeyColumnProperty;
-import com.speedment.tool.config.ForeignKeyProperty;
-import com.speedment.tool.config.IndexColumnProperty;
-import com.speedment.tool.config.IndexProperty;
-import com.speedment.tool.config.PrimaryKeyColumnProperty;
-import com.speedment.tool.config.ProjectProperty;
-import com.speedment.tool.config.SchemaProperty;
-import com.speedment.tool.config.TableProperty;
 import com.speedment.runtime.internal.util.ImmutableListUtil;
 import com.speedment.runtime.license.Software;
 import com.speedment.tool.component.DocumentPropertyComponent;
-import com.speedment.tool.config.DocumentProperty;
+import com.speedment.tool.config.*;
+
 import java.util.List;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

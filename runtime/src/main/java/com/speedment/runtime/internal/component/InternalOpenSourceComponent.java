@@ -21,6 +21,7 @@ import com.speedment.runtime.internal.license.AbstractSoftware;
 import com.speedment.runtime.internal.license.OpenSourceLicense;
 import com.speedment.runtime.license.License;
 import com.speedment.runtime.license.Software;
+
 import java.util.stream.Stream;
 
 /**

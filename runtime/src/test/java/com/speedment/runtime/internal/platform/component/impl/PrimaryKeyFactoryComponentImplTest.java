@@ -21,17 +21,17 @@
  */
 package com.speedment.runtime.internal.platform.component.impl;
 
-import com.speedment.runtime.internal.component.PrimaryKeyFactoryComponentImpl;
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.PrimaryKeyFactoryComponent;
-import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
+import com.speedment.runtime.internal.component.PrimaryKeyFactoryComponentImpl;
+import org.junit.Before;
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.UnaryOperator;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  *

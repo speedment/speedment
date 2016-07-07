@@ -17,6 +17,7 @@
 package com.speedment.runtime.field.method;
 
 import com.speedment.runtime.annotation.Api;
+
 import java.util.function.Function;
 import java.util.stream.Stream;
 

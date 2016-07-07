@@ -16,23 +16,20 @@
  */
 package com.speedment.common.codegen.internal.model.constant;
 
+import com.speedment.common.codegen.internal.model.TypeImpl.TypeConst;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Type;
 import com.speedment.common.codegen.model.Value;
-import com.speedment.common.codegen.internal.model.TypeImpl.TypeConst;
-import static com.speedment.common.codegen.internal.model.constant.DefaultValue.string;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Native;
-import java.lang.annotation.Repeatable;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+
+import javax.annotation.Generated;
+import java.lang.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import javax.annotation.Generated;
+
+import static com.speedment.common.codegen.internal.model.constant.DefaultValue.string;
+import static java.util.Objects.requireNonNull;
 
 /**
  * An enumeration with default constants for the {@link AnnotationUsage}

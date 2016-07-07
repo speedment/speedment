@@ -20,9 +20,8 @@ import com.speedment.common.codegen.internal.model.JavadocTagImpl;
 import com.speedment.common.codegen.model.trait.HasCall;
 import com.speedment.common.codegen.model.trait.HasCopy;
 import com.speedment.common.codegen.model.trait.HasName;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * A model that represents a specific tag in a {@link Javadoc} block.

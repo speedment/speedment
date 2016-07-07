@@ -20,14 +20,9 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mutator.DbmsMutator;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.parameter.DbmsType;
-import com.speedment.runtime.config.trait.HasAlias;
-import com.speedment.runtime.config.trait.HasChildren;
-import com.speedment.runtime.config.trait.HasEnabled;
-import com.speedment.runtime.config.trait.HasMainInterface;
-import com.speedment.runtime.config.trait.HasMutator;
-import com.speedment.runtime.config.trait.HasName;
-import com.speedment.runtime.config.trait.HasParent;
+import com.speedment.runtime.config.trait.*;
 import com.speedment.runtime.exception.SpeedmentException;
+
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.Stream;

@@ -16,9 +16,10 @@
  */
 package com.speedment.common.injector.test_a;
 
-import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
+
+import static com.speedment.common.injector.State.RESOLVED;
 
 /**
  *

@@ -19,12 +19,13 @@ package com.speedment.tool.util;
 import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.InfoComponent;
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.tool.brand.Brand;
 import com.speedment.tool.component.UserInterfaceComponent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  *

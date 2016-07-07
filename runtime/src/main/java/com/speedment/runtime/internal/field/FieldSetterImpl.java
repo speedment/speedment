@@ -19,6 +19,7 @@ package com.speedment.runtime.internal.field;
 import com.speedment.runtime.field.method.FieldSetter;
 import com.speedment.runtime.field.method.Setter;
 import com.speedment.runtime.field.trait.FieldTrait;
+
 import static java.util.Objects.requireNonNull;
 
 /**

@@ -16,15 +16,16 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.property.DefaultStringPropertyItem;
-import java.util.Optional;
-import java.util.stream.Stream;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.control.PropertySheet;
+
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  *

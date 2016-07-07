@@ -18,6 +18,7 @@ package com.speedment.common.codegenxml.trait;
 
 import com.speedment.common.codegenxml.ContentElement;
 import com.speedment.common.codegenxml.Element;
+
 import java.util.List;
 
 /**

@@ -18,9 +18,11 @@ package com.speedment.runtime.internal.stream.builder.action.longs;
 
 import com.speedment.runtime.internal.stream.builder.action.StandardBasicAction;
 import com.speedment.runtime.stream.action.Action;
-import static java.util.Objects.requireNonNull;
+
 import java.util.function.LongFunction;
 import java.util.stream.LongStream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

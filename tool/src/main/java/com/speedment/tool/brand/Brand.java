@@ -18,10 +18,11 @@ package com.speedment.tool.brand;
 
 import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
-import java.util.Optional;
-import java.util.stream.Stream;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * A branding container.

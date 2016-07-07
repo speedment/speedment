@@ -18,9 +18,8 @@ package com.speedment.runtime.internal.config.immutable;
 
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.internal.config.BaseDocument;
-import static com.speedment.runtime.internal.util.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.toStringHelper;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,8 +27,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+
+import static com.speedment.runtime.internal.util.ImmutableUtil.throwNewUnsupportedOperationExceptionImmutable;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.toStringHelper;
+import static java.util.stream.Collectors.toList;
 
 /**
  *

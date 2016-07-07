@@ -18,6 +18,7 @@ package com.speedment.runtime.internal.manager.sql;
 
 import com.speedment.runtime.db.SqlFunction;
 import com.speedment.runtime.manager.Manager;
+
 import java.sql.ResultSet;
 
 /**

@@ -22,8 +22,9 @@ import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.plugins.reactor.MaterializedView;
-import static com.speedment.plugins.reactor.internal.translator.TranslatorUtil.mergingColumnType;
 import com.speedment.runtime.config.Table;
+
+import static com.speedment.plugins.reactor.internal.translator.TranslatorUtil.mergingColumnType;
 
 /**
  *

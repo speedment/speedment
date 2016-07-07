@@ -16,15 +16,17 @@
  */
 package com.speedment.common.codegen.internal.model;
 
+import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Type;
-import com.speedment.common.codegen.internal.util.Copier;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
+
 import java.util.ArrayList;
-import static java.util.Arrays.asList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
+import static java.util.Arrays.asList;
 
 /**
  * This is the default implementation of the {@link Generic} interface.

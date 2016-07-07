@@ -28,8 +28,8 @@ import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
 import com.speedment.tool.internal.util.InjectionLoader;
 import javafx.application.Application;
 import javafx.stage.Stage;
+
 import static java.util.Objects.requireNonNull;
-import static javafx.application.Application.launch;
 
 /**
  *

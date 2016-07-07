@@ -16,25 +16,18 @@
  */
 package com.speedment.common.codegen.controller;
 
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Javadoc;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
-import com.speedment.common.codegen.model.trait.HasFields;
-import com.speedment.common.codegen.model.trait.HasImports;
-import com.speedment.common.codegen.model.trait.HasMethods;
-import com.speedment.common.codegen.model.trait.HasName;
-import com.speedment.common.codegen.model.trait.HasSupertype;
-import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.PARAM;
-import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.RETURN;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.*;
+import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.model.trait.*;
+
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.PARAM;
+import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.RETURN;
+import static com.speedment.common.codegen.internal.model.constant.DefaultType.*;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.Formatting.tab;
 import static java.util.Objects.requireNonNull;

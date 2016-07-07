@@ -16,27 +16,25 @@
  */
 package com.speedment.runtime.internal.util.document;
 
+import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.internal.util.Trees;
-import com.speedment.common.mapstream.MapStream;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import static java.util.Objects.requireNonNull;
-import java.util.Optional;
-import java.util.StringJoiner;
+
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
+
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import java.util.stream.Stream;
 
 /**
  * Common utility methods for working with instances of the {@code Document}

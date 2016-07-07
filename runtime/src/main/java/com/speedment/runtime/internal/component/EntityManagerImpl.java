@@ -22,10 +22,12 @@ import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.license.Software;
 import com.speedment.runtime.manager.Manager;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

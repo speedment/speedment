@@ -22,13 +22,15 @@ import com.speedment.runtime.component.TypeMapperComponent;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.util.EditorsUtil;
-import static java.util.Comparator.comparing;
-import java.util.List;
-import static java.util.Objects.requireNonNull;
-import java.util.function.Consumer;
-import static java.util.stream.Collectors.toList;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.property.editor.PropertyEditor;
+
+import java.util.List;
+import java.util.function.Consumer;
+
+import static java.util.Comparator.comparing;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  *

@@ -18,10 +18,12 @@ package com.speedment.runtime.internal.license;
 
 import com.speedment.runtime.license.License;
 import com.speedment.runtime.license.Software;
+
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

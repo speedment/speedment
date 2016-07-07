@@ -16,40 +16,31 @@
  */
 package com.speedment.tool.component;
 
-import com.speedment.tool.internal.component.DocumentPropertyComponentImpl;
-import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
+import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.mutator.DbmsMutator;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
 import com.speedment.runtime.internal.runtime.EmptyApplicationMetadata;
-import com.speedment.tool.config.AbstractChildDocumentProperty;
-import com.speedment.tool.config.ColumnProperty;
-import com.speedment.tool.config.DbmsProperty;
-import com.speedment.tool.config.ForeignKeyColumnProperty;
-import com.speedment.tool.config.ForeignKeyProperty;
-import com.speedment.tool.config.IndexColumnProperty;
-import com.speedment.tool.config.IndexProperty;
-import com.speedment.tool.config.PrimaryKeyColumnProperty;
-import com.speedment.tool.config.ProjectProperty;
-import com.speedment.tool.config.SchemaProperty;
-import com.speedment.tool.config.TableProperty;
 import com.speedment.runtime.internal.util.ImmutableListUtil;
-import com.speedment.tool.config.DocumentProperty;
+import com.speedment.tool.config.*;
+import com.speedment.tool.internal.component.DocumentPropertyComponentImpl;
+import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
+import org.controlsfx.control.PropertySheet;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.stream.Stream;
-import org.controlsfx.control.PropertySheet;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
 
 /**
  *

@@ -22,6 +22,7 @@ import com.speedment.runtime.field.trait.ComparableFieldTrait;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.stream.StreamDecorator;
+
 import java.util.Optional;
 import java.util.stream.Stream;
 

@@ -17,21 +17,14 @@
 package com.speedment.runtime.internal.stream.autoclose;
 
 import com.speedment.runtime.exception.SpeedmentException;
-import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.BiFunction;
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-import java.util.function.IntSupplier;
-import java.util.function.LongSupplier;
-import java.util.function.Supplier;
-import java.util.stream.BaseStream;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
-import java.util.stream.LongStream;
-import java.util.stream.Stream;
+import java.util.function.*;
+import java.util.stream.*;
+
+import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
 
 /**
  *

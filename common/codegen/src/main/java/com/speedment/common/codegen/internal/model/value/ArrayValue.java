@@ -16,9 +16,10 @@
  */
 package com.speedment.common.codegen.internal.model.value;
 
-import com.speedment.common.codegen.model.Value;
 import com.speedment.common.codegen.internal.model.ValueImpl;
 import com.speedment.common.codegen.internal.util.Copier;
+import com.speedment.common.codegen.model.Value;
+
 import java.util.ArrayList;
 import java.util.List;
 

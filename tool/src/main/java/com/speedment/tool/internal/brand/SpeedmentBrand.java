@@ -17,6 +17,7 @@
 package com.speedment.tool.internal.brand;
 
 import com.speedment.tool.brand.Brand;
+
 import java.util.Optional;
 import java.util.stream.Stream;
 

@@ -16,22 +16,24 @@
  */
 package com.speedment.generator.util;
 
-import com.speedment.runtime.config.Project;
-import static com.speedment.runtime.config.Project.DEFAULT_PACKAGE_NAME;
-import static com.speedment.common.codegen.internal.util.Formatting.ucfirst;
 import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
-import static com.speedment.runtime.internal.util.sql.SqlUtil.unQuote;
-import static com.speedment.runtime.util.CollectorUtil.toUnmodifiableSet;
-import static com.speedment.runtime.util.CollectorUtil.unmodifiableSetOf;
+import com.speedment.runtime.config.Project;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Collection;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.speedment.common.codegen.internal.util.Formatting.ucfirst;
+import static com.speedment.runtime.config.Project.DEFAULT_PACKAGE_NAME;
+import static com.speedment.runtime.internal.util.sql.SqlUtil.unQuote;
+import static com.speedment.runtime.util.CollectorUtil.toUnmodifiableSet;
+import static com.speedment.runtime.util.CollectorUtil.unmodifiableSetOf;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

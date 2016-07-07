@@ -16,18 +16,14 @@
  */
 package com.speedment.common.codegen.internal;
 
-import com.speedment.common.codegen.DependencyManager;
-import com.speedment.common.codegen.Generator;
-import com.speedment.common.codegen.Meta;
-import com.speedment.common.codegen.RenderStack;
-import com.speedment.common.codegen.RenderTree;
-import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegen.TransformFactory;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import com.speedment.common.codegen.*;
+
 import java.util.LinkedList;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
+
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**

@@ -19,7 +19,9 @@ package com.speedment.common.codegen.model;
 import com.speedment.common.codegen.internal.model.EnumImpl;
 import com.speedment.common.codegen.model.modifier.EnumModifier;
 import com.speedment.common.codegen.model.trait.HasConstructors;
+
 import java.util.List;
+
 import static java.util.Objects.requireNonNull;
 
 /**

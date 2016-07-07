@@ -16,29 +16,15 @@
  */
 package com.speedment.runtime.internal.util.stream;
 
-import static com.speedment.runtime.internal.util.stream.SingletonUtil.*;
-import java.util.IntSummaryStatistics;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import static java.util.Objects.requireNonNull;
-import java.util.OptionalDouble;
-import java.util.OptionalInt;
-import java.util.PrimitiveIterator;
-import java.util.Spliterator;
-import java.util.function.BiConsumer;
-import java.util.function.IntBinaryOperator;
-import java.util.function.IntConsumer;
-import java.util.function.IntFunction;
-import java.util.function.IntPredicate;
-import java.util.function.IntToDoubleFunction;
-import java.util.function.IntToLongFunction;
-import java.util.function.IntUnaryOperator;
-import java.util.function.ObjIntConsumer;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.function.*;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
+
+import static com.speedment.runtime.internal.util.stream.SingletonUtil.*;
+import static java.util.Objects.requireNonNull;
 
 /**
  * An implementation of an IntStream that takes exactly one element as its

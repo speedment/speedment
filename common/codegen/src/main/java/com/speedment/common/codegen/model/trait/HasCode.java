@@ -16,10 +16,11 @@
  */
 package com.speedment.common.codegen.model.trait;
 
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
 import java.util.Collections;
 import java.util.List;
+
+import static com.speedment.common.codegen.internal.util.Formatting.nl;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
 
 /**
  * A trait for models that contains code.

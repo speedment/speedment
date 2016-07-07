@@ -16,10 +16,12 @@
  */
 package com.speedment.runtime.internal.stream.builder.action.doubles;
 
-import static com.speedment.runtime.internal.stream.builder.action.StandardBasicAction.BOXED;
 import com.speedment.runtime.stream.action.Action;
+
 import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
+
+import static com.speedment.runtime.internal.stream.builder.action.StandardBasicAction.BOXED;
 
 /**
  *

@@ -32,7 +32,6 @@ import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.config.DbmsImpl;
 import com.speedment.runtime.internal.config.immutable.ImmutableProject;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
-import static com.speedment.runtime.internal.runtime.DefaultApplicationMetadata.METADATA_LOCATION;
 import com.speedment.runtime.internal.util.Settings;
 import com.speedment.runtime.internal.util.document.DocumentTranscoder;
 import com.speedment.runtime.util.ProgressMeasure;
@@ -43,9 +42,10 @@ import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.component.UserInterfaceComponent.ReuseStage;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.DocumentProperty;
-import static com.speedment.tool.util.OutputUtil.error;
-import static com.speedment.tool.util.OutputUtil.success;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -57,9 +57,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
+
+import static com.speedment.runtime.internal.runtime.DefaultApplicationMetadata.METADATA_LOCATION;
+import static com.speedment.tool.util.OutputUtil.error;
+import static com.speedment.tool.util.OutputUtil.success;
 import static javafx.application.Platform.runLater;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 /**
  *

@@ -16,13 +16,14 @@
  */
 package com.speedment.runtime.internal.field.predicate.impl.string;
 
-import static com.speedment.runtime.field.predicate.PredicateType.IS_NOT_EMPTY;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.field.predicate.StringSpeedmentPredicate;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.internal.field.predicate.iface.type.UnaryOperation;
 import com.speedment.runtime.internal.field.predicate.impl.SpeedmentPredicateImpl;
+
+import static com.speedment.runtime.field.predicate.PredicateType.IS_NOT_EMPTY;
 
 /**
  *

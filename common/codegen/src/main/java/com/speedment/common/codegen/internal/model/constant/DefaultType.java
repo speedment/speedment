@@ -16,23 +16,17 @@
  */
 package com.speedment.common.codegen.internal.model.constant;
 
+import com.speedment.common.codegen.internal.model.GenericImpl;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Type;
-import com.speedment.common.codegen.internal.model.GenericImpl;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import static java.util.Objects.requireNonNull;
-import java.util.Optional;
-import java.util.Queue;
-import java.util.Set;
-import java.util.Stack;
+
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+
 import static java.util.Objects.requireNonNull;
 
 /**

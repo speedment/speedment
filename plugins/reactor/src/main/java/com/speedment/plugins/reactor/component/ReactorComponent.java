@@ -16,20 +16,11 @@
  */
 package com.speedment.plugins.reactor.component;
 
-import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.generator.StandardTranslatorKey;
 import com.speedment.generator.component.CodeGenerationComponent;
-import static com.speedment.plugins.reactor.component.ReactorComponentUtil.validMergingColumns;
-import com.speedment.plugins.reactor.internal.translator.GeneratedApplicationDecorator;
-import com.speedment.plugins.reactor.internal.translator.GeneratedApplicationImplDecorator;
-import com.speedment.plugins.reactor.internal.translator.GeneratedViewImplTranslator;
-import com.speedment.plugins.reactor.internal.translator.GeneratedViewTranslator;
-import com.speedment.plugins.reactor.internal.translator.ReactorTranslatorKey;
-import com.speedment.plugins.reactor.internal.translator.ViewImplTranslator;
-import com.speedment.plugins.reactor.internal.translator.ViewTranslator;
+import com.speedment.plugins.reactor.internal.translator.*;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.component.EventComponent;
 import com.speedment.runtime.config.Column;
@@ -37,7 +28,6 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.component.AbstractComponent;
 import com.speedment.runtime.internal.license.AbstractSoftware;
-import static com.speedment.runtime.internal.license.OpenSourceLicense.APACHE_2;
 import com.speedment.runtime.license.Software;
 import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.config.DocumentProperty;
@@ -45,8 +35,12 @@ import com.speedment.tool.config.TableProperty;
 import com.speedment.tool.event.TreeSelectionChange;
 import com.speedment.tool.property.ChoicePropertyItem;
 import com.speedment.tool.util.IdentityStringConverter;
-import static java.util.stream.Collectors.toList;
 import javafx.scene.control.TreeItem;
+
+import static com.speedment.common.injector.State.RESOLVED;
+import static com.speedment.plugins.reactor.component.ReactorComponentUtil.validMergingColumns;
+import static com.speedment.runtime.internal.license.OpenSourceLicense.APACHE_2;
+import static java.util.stream.Collectors.toList;
 import static javafx.collections.FXCollections.observableList;
 
 /**
