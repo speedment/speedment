@@ -78,8 +78,8 @@ import java.util.stream.Stream;
 
 /**
  *
- * @param <ENTITY>  entity type for this Manager
- * 
+ * @param <ENTITY> entity type for this Manager
+ *
  * @author Per Minborg
  */
 public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY> implements SqlManager<ENTITY> {
@@ -91,45 +91,48 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     private final boolean hasPrimaryKeyColumns;
 
     private SqlFunction<ResultSet, ENTITY> entityMapper;
-    
-    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject ResultSetMapperComponent resultSetMapperComponent;
-    private @Inject ProjectComponent projectComponent;
+
+    private @Inject
+    DbmsHandlerComponent dbmsHandlerComponent;
+    private @Inject
+    ResultSetMapperComponent resultSetMapperComponent;
+    private @Inject
+    ProjectComponent projectComponent;
 
     protected AbstractSqlManager() {
-        this.sqlColumnList     = LazyString.create();
+        this.sqlColumnList = LazyString.create();
         this.sqlTableReference = LazyString.create();
-        this.sqlSelect         = LazyString.create();
-        this.fieldTraitMap     = new HashMap<>();
+        this.sqlSelect = LazyString.create();
+        this.fieldTraitMap = new HashMap<>();
 
         this.hasPrimaryKeyColumns = primaryKeyFields().findAny().isPresent();
     }
-    
+
     @ExecuteBefore(INITIALIZED)
     void addToManager(
-            @WithState(INITIALIZED) ManagerComponent managers, 
-            @WithState(INITIALIZED) ProjectComponent projectComponent) {
+        @WithState(INITIALIZED) ManagerComponent managers,
+        @WithState(INITIALIZED) ProjectComponent projectComponent) {
         requireNonNull(projectComponent); // Must be initalized for this to execute.
         managers.put(this);
     }
-    
+
     @ExecuteBefore(RESOLVED)
     void createFieldTraitMap(@WithState(INITIALIZED) ProjectComponent projectComponent) {
         final Project project = projectComponent.getProject();
         final Table thisTable = getTable();
-        
+
         // Only include fields that point towards a column in this table.
         // In the future we might add fields that reference columns in foreign
         // tables.
         fieldTraitMap.putAll(
             fields()
-                .filter(f
-                    -> f.findColumn(project)
-                    .map(c -> c.getParent())
-                    .map(t -> isSame(thisTable, t.get()))
-                    .orElse(false)
-                )
-                .collect(Collectors.toMap(f -> f.getIdentifier().columnName(), identity()))
+            .filter(f
+                -> f.findColumn(project)
+                .map(c -> c.getParent())
+                .map(t -> isSame(thisTable, t.get()))
+                .orElse(false)
+            )
+            .collect(Collectors.toMap(f -> f.getIdentifier().columnName(), identity()))
         );
     }
 
@@ -282,7 +285,8 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         requireNonNull(postMapper);
         return getTable().columns()
             .filter(Column::isEnabled)
-            .map(naming()::fullNameOf)
+            .map(Column::getName)
+            .map(naming()::encloseField)
             .map(postMapper)
             .collect(joining(","));
     }
@@ -296,9 +300,15 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     private String sqlPrimaryKeyColumnList(Function<String, String> postMapper) {
         requireNonNull(postMapper);
         return getTable().primaryKeyColumns()
-            .map(naming()::fullNameOf)
+            .map(this::findColumn)
+            .map(Column::getName)
+            .map(naming()::encloseField)
             .map(postMapper)
             .collect(joining(" AND "));
+    }
+
+    private Column findColumn(PrimaryKeyColumn pkc) {
+        return pkc.findColumn().orElseThrow(() -> new SpeedmentException("Cannot find column for " + pkc));
     }
 
     /**
@@ -414,7 +424,8 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     private String persistColumnList(List<Column> cols) {
         return cols.stream()
-            .map(naming()::fullNameOf)
+            .map(Column::getName)
+            .map(naming()::encloseField)
             .collect(joining(","));
     }
 
