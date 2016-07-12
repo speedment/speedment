@@ -21,7 +21,11 @@
  */
 package com.speedment.runtime.internal.stream.parallelstrategy;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -21,7 +21,11 @@
  */
 package com.speedment.runtime.internal.util;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.List;
 import java.util.stream.Collectors;

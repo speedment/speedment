@@ -33,7 +33,17 @@ import com.speedment.runtime.internal.manager.sql.SqlInsertStatement;
 import com.speedment.runtime.internal.manager.sql.SqlStatement;
 import com.speedment.runtime.internal.manager.sql.SqlUpdateStatement;
 
-import java.sql.*;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.Connection;
+import java.sql.NClob;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.SQLXML;
+import java.sql.Statement;
+import java.sql.Struct;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;

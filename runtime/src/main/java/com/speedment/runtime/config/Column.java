@@ -20,7 +20,14 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mutator.ColumnMutator;
 import com.speedment.runtime.config.mutator.DocumentMutator;
-import com.speedment.runtime.config.trait.*;
+import com.speedment.runtime.config.trait.HasAlias;
+import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.runtime.config.trait.HasMainInterface;
+import com.speedment.runtime.config.trait.HasMutator;
+import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.trait.HasNullable;
+import com.speedment.runtime.config.trait.HasOrdinalPosition;
+import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.exception.SpeedmentException;
 
 import static com.speedment.runtime.internal.util.document.DocumentUtil.newNoSuchElementExceptionFor;

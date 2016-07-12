@@ -18,8 +18,17 @@ package com.speedment.generator.internal.entity;
 
 import com.speedment.common.codegen.internal.model.value.ReferenceValue;
 import com.speedment.common.codegen.internal.model.value.TextValue;
-import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Enum;
+import com.speedment.common.codegen.model.EnumConstant;
+import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.model.Generic;
+import com.speedment.common.codegen.model.Import;
+import com.speedment.common.codegen.model.Interface;
+import com.speedment.common.codegen.model.Javadoc;
+import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.Type;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.TranslatorSupport;
@@ -84,11 +93,11 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
 
         final Interface iface = newBuilder(file, getSupport().generatedEntityName())
             /*** General ***/
-            .forEveryTable((intrf, col) -> {
+            .forEveryTable((intrf, col) ->
                 intrf.public_()
                     .add(identifier)
-                    .add(Type.of(Entity.class).add(Generic.of().add(getSupport().entityType())));
-            })
+                    .add(Type.of(Entity.class).add(Generic.of().add(getSupport().entityType())))
+            )
             
             /*** Getters ***/
             .forEveryColumn((intrf, col) -> {

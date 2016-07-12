@@ -23,7 +23,11 @@ import com.speedment.runtime.config.IndexColumn;
 import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.IndexColumnPropertyMutator;
-import com.speedment.tool.config.trait.*;
+import com.speedment.tool.config.trait.HasColumnProperty;
+import com.speedment.tool.config.trait.HasExpandedProperty;
+import com.speedment.tool.config.trait.HasNameProperty;
+import com.speedment.tool.config.trait.HasOrderTypeProperty;
+import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
 import org.controlsfx.control.PropertySheet;
 
 import java.util.List;

@@ -20,7 +20,18 @@ import com.speedment.runtime.db.SqlFunction;
 
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.*;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.Date;
+import java.sql.NClob;
+import java.sql.Ref;
+import java.sql.ResultSet;
+import java.sql.RowId;
+import java.sql.SQLException;
+import java.sql.SQLXML;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;

@@ -25,7 +25,14 @@ import com.speedment.tool.config.DocumentProperty;
 import javafx.beans.property.Property;
 import javafx.collections.ObservableList;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;

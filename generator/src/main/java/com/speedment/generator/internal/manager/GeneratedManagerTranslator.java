@@ -17,7 +17,14 @@
 package com.speedment.generator.internal.manager;
 
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.model.Generic;
+import com.speedment.common.codegen.model.Import;
+import com.speedment.common.codegen.model.Interface;
+import com.speedment.common.codegen.model.Javadoc;
+import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.Type;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.TranslatorSupport;
@@ -28,7 +35,12 @@ import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.manager.sql.SqlManager;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

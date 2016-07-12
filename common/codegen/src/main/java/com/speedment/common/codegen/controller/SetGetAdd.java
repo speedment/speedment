@@ -17,7 +17,11 @@
 package com.speedment.common.codegen.controller;
 
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.Javadoc;
+import com.speedment.common.codegen.model.JavadocTag;
+import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.Type;
 
 import java.util.Collection;
 import java.util.Optional;

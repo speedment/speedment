@@ -23,7 +23,11 @@ import com.speedment.runtime.internal.stream.autoclose.AutoClosingLongStream;
 import com.speedment.runtime.internal.stream.autoclose.AutoClosingReferenceStream;
 
 import java.util.function.Function;
-import java.util.stream.*;
+import java.util.stream.BaseStream;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.stream.autoclose.AbstractAutoClosingStream.composedClose;
 import static com.speedment.runtime.util.NullUtil.requireNonNullElements;

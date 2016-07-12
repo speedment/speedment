@@ -17,7 +17,12 @@
 package com.speedment.plugins.springgenerator.internal;
 
 import com.speedment.common.codegen.internal.model.value.TextValue;
-import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.model.AnnotationUsage;
+import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.model.Import;
+import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.Type;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.generator.TranslatorSupport;

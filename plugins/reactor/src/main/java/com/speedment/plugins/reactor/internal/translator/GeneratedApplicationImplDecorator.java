@@ -17,7 +17,12 @@
 package com.speedment.plugins.reactor.internal.translator;
 
 import com.speedment.common.codegen.internal.model.constant.DefaultType;
-import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.model.Constructor;
+import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.Generic;
+import com.speedment.common.codegen.model.Import;
+import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.Type;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.JavaClassTranslator;
 import com.speedment.generator.TranslatorDecorator;
@@ -25,7 +30,12 @@ import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.plugins.reactor.MaterializedView;
 import com.speedment.plugins.reactor.Reactor;
-import com.speedment.runtime.config.*;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.PrimaryKeyColumn;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.ComparableField;
 

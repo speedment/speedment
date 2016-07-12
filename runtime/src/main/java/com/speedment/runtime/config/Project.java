@@ -19,7 +19,11 @@ package com.speedment.runtime.config;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.mutator.ProjectMutator;
-import com.speedment.runtime.config.trait.*;
+import com.speedment.runtime.config.trait.HasChildren;
+import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.runtime.config.trait.HasMainInterface;
+import com.speedment.runtime.config.trait.HasMutator;
+import com.speedment.runtime.config.trait.HasName;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

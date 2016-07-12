@@ -18,8 +18,17 @@ package com.speedment.runtime.internal.stream.builder.streamterminator;
 
 import com.speedment.runtime.internal.stream.builder.pipeline.LongPipeline;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.LongSummaryStatistics;
+import java.util.OptionalDouble;
+import java.util.OptionalLong;
+import java.util.PrimitiveIterator;
+import java.util.Spliterator;
+import java.util.function.BiConsumer;
+import java.util.function.LongBinaryOperator;
+import java.util.function.LongConsumer;
+import java.util.function.LongPredicate;
+import java.util.function.ObjLongConsumer;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;

@@ -17,7 +17,11 @@
 package com.speedment.runtime.config.mutator;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.*;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.ForeignKey;
+import com.speedment.runtime.config.Index;
+import com.speedment.runtime.config.PrimaryKeyColumn;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.mutator.trait.HasAliasMutator;
 import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;

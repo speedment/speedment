@@ -22,7 +22,11 @@
 package com.speedment.runtime.config.parameters;
 
 import com.speedment.runtime.config.parameter.OrderType;
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;

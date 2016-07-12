@@ -22,7 +22,12 @@
 package com.speedment.runtime.internal.code.model.java;
 
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.config.*;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.PrimaryKeyColumn;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mapper.identity.StringIdentityMapper;
 import com.speedment.runtime.config.trait.HasName;

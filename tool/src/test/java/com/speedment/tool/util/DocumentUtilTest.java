@@ -18,7 +18,16 @@ package com.speedment.tool.util;
 
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.generator.util.JavaLanguageNamer;
-import com.speedment.runtime.config.*;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.ForeignKey;
+import com.speedment.runtime.config.ForeignKeyColumn;
+import com.speedment.runtime.config.Index;
+import com.speedment.runtime.config.IndexColumn;
+import com.speedment.runtime.config.PrimaryKeyColumn;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
 import com.speedment.runtime.internal.runtime.EmptyApplicationMetadata;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;

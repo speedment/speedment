@@ -19,7 +19,13 @@ package com.speedment.tool.component;
 import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
-import com.speedment.runtime.config.*;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.Document;
+import com.speedment.runtime.config.ForeignKey;
+import com.speedment.runtime.config.Index;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.Table;
 import com.speedment.tool.config.DocumentProperty;
 
 import java.util.List;
@@ -38,7 +44,7 @@ import static com.speedment.runtime.internal.util.ImmutableListUtil.of;
 @InjectorKey(DocumentPropertyComponent.class)
 public interface DocumentPropertyComponent extends Component {
 
-    final List<String>     
+    List<String>
         PROJECTS            = of(),
         DBMSES              = of(Project.DBMSES),
         SCHEMAS             = concat(DBMSES, Dbms.SCHEMAS),
@@ -57,7 +63,7 @@ public interface DocumentPropertyComponent extends Component {
      * @param <PARENT>  the parent type
      */
     @FunctionalInterface
-    public interface Constructor<PARENT extends DocumentProperty> {
+    interface Constructor<PARENT extends DocumentProperty> {
         DocumentProperty create(PARENT parent);
     }
 

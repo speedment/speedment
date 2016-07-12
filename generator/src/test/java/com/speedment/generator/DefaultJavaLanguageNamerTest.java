@@ -23,7 +23,12 @@ package com.speedment.generator;
 
 import com.speedment.generator.internal.util.DefaultJavaLanguageNamer;
 import com.speedment.generator.util.JavaLanguageNamer;
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import static com.speedment.generator.util.JavaLanguageNamer.toHumanReadable;
 import static org.junit.Assert.assertEquals;

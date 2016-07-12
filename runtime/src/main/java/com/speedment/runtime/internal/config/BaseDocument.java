@@ -21,7 +21,11 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.util.OptionalBoolean;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.util.document.DocumentUtil.childrenOf;

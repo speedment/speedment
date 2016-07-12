@@ -18,7 +18,16 @@ package com.speedment.common.codegen.model;
 
 import com.speedment.common.codegen.internal.model.MethodImpl;
 import com.speedment.common.codegen.model.modifier.MethodModifier;
-import com.speedment.common.codegen.model.trait.*;
+import com.speedment.common.codegen.model.trait.HasAnnotationUsage;
+import com.speedment.common.codegen.model.trait.HasCall;
+import com.speedment.common.codegen.model.trait.HasCode;
+import com.speedment.common.codegen.model.trait.HasCopy;
+import com.speedment.common.codegen.model.trait.HasFields;
+import com.speedment.common.codegen.model.trait.HasGenerics;
+import com.speedment.common.codegen.model.trait.HasJavadoc;
+import com.speedment.common.codegen.model.trait.HasName;
+import com.speedment.common.codegen.model.trait.HasThrows;
+import com.speedment.common.codegen.model.trait.HasType;
 
 /**
  * A model that represents a method declaration in code.

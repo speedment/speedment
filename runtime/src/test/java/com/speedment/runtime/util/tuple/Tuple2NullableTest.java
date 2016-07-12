@@ -23,7 +23,11 @@ package com.speedment.runtime.util.tuple;
 
 import com.speedment.common.tuple.Tuple2OfNullables;
 import com.speedment.common.tuple.Tuples;
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;

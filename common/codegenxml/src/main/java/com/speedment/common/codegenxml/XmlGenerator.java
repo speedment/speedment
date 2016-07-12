@@ -18,7 +18,12 @@ package com.speedment.common.codegenxml;
 
 import com.speedment.common.codegen.internal.DefaultGenerator;
 import com.speedment.common.codegen.internal.DefaultTransformFactory;
-import com.speedment.common.codegenxml.internal.view.*;
+import com.speedment.common.codegenxml.internal.view.AttributeView;
+import com.speedment.common.codegenxml.internal.view.ContentElementView;
+import com.speedment.common.codegenxml.internal.view.DocTypeView;
+import com.speedment.common.codegenxml.internal.view.DocumentView;
+import com.speedment.common.codegenxml.internal.view.TagElementView;
+import com.speedment.common.codegenxml.internal.view.XmlDeclarationView;
 
 /**
  *

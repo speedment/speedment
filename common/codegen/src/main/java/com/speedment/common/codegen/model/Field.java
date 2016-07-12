@@ -18,7 +18,13 @@ package com.speedment.common.codegen.model;
 
 import com.speedment.common.codegen.internal.model.FieldImpl;
 import com.speedment.common.codegen.model.modifier.FieldModifier;
-import com.speedment.common.codegen.model.trait.*;
+import com.speedment.common.codegen.model.trait.HasAnnotationUsage;
+import com.speedment.common.codegen.model.trait.HasCall;
+import com.speedment.common.codegen.model.trait.HasCopy;
+import com.speedment.common.codegen.model.trait.HasJavadoc;
+import com.speedment.common.codegen.model.trait.HasName;
+import com.speedment.common.codegen.model.trait.HasType;
+import com.speedment.common.codegen.model.trait.HasValue;
 
 /**
  * A model that represents a field in code. This can be either as a method
