@@ -24,7 +24,7 @@ package com.speedment.runtime.internal.util;
 import com.speedment.runtime.util.NullUtil;
 import org.junit.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 /**
  *

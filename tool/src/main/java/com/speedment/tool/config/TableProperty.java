@@ -34,7 +34,7 @@ import org.controlsfx.control.PropertySheet;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
+import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
 
 /**
  *

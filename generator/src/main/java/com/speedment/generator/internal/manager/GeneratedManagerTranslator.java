@@ -16,6 +16,7 @@
  */
 package com.speedment.generator.internal.manager;
 
+import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;

@@ -17,6 +17,7 @@
 package com.speedment.generator.internal.lifecycle;
 
 import com.speedment.common.codegen.internal.model.JavadocImpl;
+import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;

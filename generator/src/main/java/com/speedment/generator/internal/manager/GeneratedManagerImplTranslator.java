@@ -18,6 +18,7 @@ package com.speedment.generator.internal.manager;
 
 import com.speedment.common.codegen.internal.model.value.ReferenceValue;
 import com.speedment.common.codegen.internal.util.Formatting;
+import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;

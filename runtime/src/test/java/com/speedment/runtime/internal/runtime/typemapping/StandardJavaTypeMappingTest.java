@@ -23,7 +23,7 @@ package com.speedment.runtime.internal.runtime.typemapping;
 
 import org.junit.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  *

@@ -24,7 +24,8 @@ import com.speedment.tool.config.DocumentProperty;
 
 import java.util.List;
 
-import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
+import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
+import static com.speedment.runtime.internal.util.ImmutableListUtil.of;
 
 /**
  * Describes which implementations the {@link Document} interface to use at

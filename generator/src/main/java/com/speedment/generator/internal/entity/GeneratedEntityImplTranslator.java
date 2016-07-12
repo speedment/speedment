@@ -17,6 +17,7 @@
 package com.speedment.generator.internal.entity;
 
 import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.model.Class;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;

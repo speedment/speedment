@@ -26,7 +26,8 @@ import com.speedment.common.tuple.TupleBuilder;
 import com.speedment.common.tuple.Tuples;
 import org.junit.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  *

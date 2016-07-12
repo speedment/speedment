@@ -26,8 +26,6 @@ import org.controlsfx.control.PropertySheet;
 
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.config.trait.HasNullable.NULLABLE;
-
 /**
  *
  * @author  Emil Forslund

@@ -40,9 +40,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.config.Column.AUTO_INCREMENT;
-import static com.speedment.runtime.config.Column.DATABASE_TYPE;
 import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
+import static javafx.beans.binding.Bindings.createObjectBinding;
 
 /**
  *

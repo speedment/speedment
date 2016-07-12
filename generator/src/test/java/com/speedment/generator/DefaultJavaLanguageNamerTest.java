@@ -26,7 +26,7 @@ import com.speedment.generator.util.JavaLanguageNamer;
 import org.junit.*;
 
 import static com.speedment.generator.util.JavaLanguageNamer.toHumanReadable;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  *

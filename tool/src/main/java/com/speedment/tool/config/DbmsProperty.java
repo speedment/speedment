@@ -50,7 +50,6 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.config.Dbms.*;
 import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.toList;

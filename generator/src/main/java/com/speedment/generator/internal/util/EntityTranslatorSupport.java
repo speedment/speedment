@@ -27,6 +27,7 @@ import com.speedment.runtime.field.*;
 import com.speedment.runtime.internal.field.*;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 
+import java.lang.Class;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -180,7 +181,7 @@ public final class EntityTranslatorSupport {
         return Pluralis.INSTANCE.pluralizeJavaIdentifier(javaLanguageNamer.javaTypeName(table.getJavaName()), javaLanguageNamer);
     }
 
-    public static Optional<ForeignKeyColumn> getForeignKey(Table table, Column column) {
+    public static Optional<? extends ForeignKeyColumn> getForeignKey(Table table, Column column) {
         requireNonNull(table);
         requireNonNull(column);
         return table.foreignKeys()

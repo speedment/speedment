@@ -16,6 +16,7 @@
  */
 package com.speedment.generator;
 
+import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.generator.internal.TranslatorKeyImpl;

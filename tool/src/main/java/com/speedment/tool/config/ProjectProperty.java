@@ -21,6 +21,7 @@ import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
+import com.speedment.runtime.internal.util.ImmutableListUtil;
 import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.ProjectPropertyMutator;
@@ -45,10 +46,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-
-import static com.speedment.runtime.config.Project.*;
-import static com.speedment.runtime.config.trait.HasName.NAME;
-import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
 
 /**
  *
@@ -168,7 +165,7 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
 
     @Override
     protected List<String> keyPathEndingWith(String key) {
-        return of(key);
+        return ImmutableListUtil.of(key);
     }
 
     private final static StringConverter<Path> PATH_CONVERTER = new StringConverter<Path>() {

@@ -19,6 +19,7 @@ package com.speedment.generator.internal.entity;
 import com.speedment.common.codegen.internal.model.value.ReferenceValue;
 import com.speedment.common.codegen.internal.model.value.TextValue;
 import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.TranslatorSupport;

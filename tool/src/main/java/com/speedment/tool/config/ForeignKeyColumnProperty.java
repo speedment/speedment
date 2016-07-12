@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
+import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
 import static javafx.beans.binding.Bindings.createObjectBinding;
 
 /**

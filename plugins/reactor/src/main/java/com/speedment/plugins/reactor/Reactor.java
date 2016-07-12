@@ -27,6 +27,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
@@ -39,13 +40,12 @@ import static java.util.stream.Collectors.toList;
  * A reactor is an object that polls the database for changes at a particular 
  * interval, and if changes was found, notifies a set of listeners.
  * 
- * @author          Emil Forslund
- * @param <ENTITY>  the entity type
- * @param <T>       the primary key of the entity table
+ * @author  Emil Forslund
+ * @since   1.0.0
  */
-public final class Reactor<ENTITY, T extends Comparable<T>> {
+public final class Reactor {
     
-    public final static int 
+    private final static int
         DEFAULT_INTERVAL = 1000, // in milliseconds.
         DEFAULT_LIMIT    = 100;
     
@@ -79,7 +79,7 @@ public final class Reactor<ENTITY, T extends Comparable<T>> {
      * @param <ENTITY>  the entity type
      * @param <T>       the primary key of the entity table
      * @param manager   the manager to use
-     * @param idField   the field that identifier which entity is refered to in 
+     * @param idField   the field that identifier which entity is referred to in
      *                  the event
      * @return  the new builder
      */
@@ -169,14 +169,16 @@ public final class Reactor<ENTITY, T extends Comparable<T>> {
          * Builds and starts this reactor. When this method is called, the 
          * reactor will start polling the database at the specified interval.
          * The returned instance could be ignored, but it might be good to hold
-         * on toit since that is the only way to stop the reactor once started.
+         * on to it since that is the only way to stop the reactor once started.
          * 
          * @return  the running reactor
          */
-        public Reactor<ENTITY, T> build() {
+        public Reactor build() {
             
             final AtomicBoolean working = new AtomicBoolean(false);
             final AtomicReference<T> last = new AtomicReference<>();
+            final AtomicLong total = new AtomicLong();
+
             final String managerName = manager.getTable().getName();
             final String fieldName = idField.getIdentifier().columnName();
             
@@ -184,6 +186,8 @@ public final class Reactor<ENTITY, T extends Comparable<T>> {
             final TimerTask task = new TimerTask() {
                 @Override
                 public void run() {
+                    boolean first = true;
+
                     if (working.compareAndSet(false, true)) {
                         try {
                             while (true) {
@@ -196,6 +200,15 @@ public final class Reactor<ENTITY, T extends Comparable<T>> {
                                 );
 
                                 if (added.isEmpty()) {
+                                    if (!first) {
+                                        LOGGER.debug(String.format(
+                                            "%s: View is up to date. A total of %d " +
+                                                "rows have been loaded.",
+                                            System.identityHashCode(last),
+                                            total.get()
+                                        ));
+                                    }
+
                                     break;
                                 } else {
                                     final ENTITY lastEntity = added.get(added.size() - 1);
@@ -204,6 +217,8 @@ public final class Reactor<ENTITY, T extends Comparable<T>> {
                                     listeners.forEach(
                                         listener -> listener.accept(added)
                                     );
+
+                                    total.addAndGet(added.size());
 
                                     LOGGER.debug(String.format(
                                         "%s: Downloaded %d row(s) from %s. Latest %s: %d.", 
@@ -214,6 +229,8 @@ public final class Reactor<ENTITY, T extends Comparable<T>> {
                                         Long.parseLong("" + last.get())
                                     ));
                                 }
+
+                                first = false;
                             }
                         } finally {
                             working.set(false);
@@ -223,7 +240,7 @@ public final class Reactor<ENTITY, T extends Comparable<T>> {
             };
             
             timer.scheduleAtFixedRate(task, 0, interval);
-            return new Reactor<>(timer);
+            return new Reactor(timer);
         }
     }
 }

@@ -19,6 +19,7 @@ package com.speedment.tool.config;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Document;
+import com.speedment.runtime.internal.util.ImmutableListUtil;
 import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
 import org.controlsfx.control.PropertySheet;
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.internal.util.ImmutableListUtil.*;
+import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
 
 /**
  *
@@ -50,9 +51,9 @@ public final class DefaultDocumentProperty extends
     protected List<String> keyPathEndingWith(String key) {
         if (parent == null) {
             if (key == null) {
-                return of();
+                return ImmutableListUtil.of();
             } else {
-                return of(key);
+                return ImmutableListUtil.of(key);
             }
         } else {
             final List<String> path = parent.keyPathEndingWith(this.key);

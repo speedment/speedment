@@ -20,6 +20,7 @@ import com.speedment.common.codegen.internal.model.JavadocImpl;
 import com.speedment.common.codegen.internal.model.constant.DefaultType;
 import com.speedment.common.codegen.internal.model.value.ReferenceValue;
 import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.model.Class;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.runtime.ApplicationMetadata;
@@ -49,6 +50,7 @@ public final class GeneratedMetadataTranslator extends DefaultJavaClassTranslato
     private static final int LINES_PER_METHOD = 100;
     private static final String INIT_PART_METHOD_NAME = "initPart";
     private static final String STRING_BUILDER_NAME = "sb";
+
     public static final String METADATA = "Metadata";
 
     private @Inject InfoComponent infoComponent;
