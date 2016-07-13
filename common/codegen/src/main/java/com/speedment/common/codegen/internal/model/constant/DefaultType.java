@@ -229,7 +229,7 @@ public enum DefaultType implements Type {
      * 
      * @param typeName  the name
      */
-    private DefaultType(String typeName) {
+    DefaultType(String typeName) {
         this.javaImpl = null;
         this.typeName = typeName;
     }
@@ -238,9 +238,9 @@ public enum DefaultType implements Type {
      * Constructs the Type based on the java implementation class. The type name
      * will be calculated using {@link Class#getName()}.
      * 
-     * @param typeName  the name
+     * @param javaImpl  the implementation type
      */
-    private DefaultType(Class<?> javaImpl) {
+    DefaultType(Class<?> javaImpl) {
         this.javaImpl = javaImpl;
         this.typeName = javaImpl.getName();
     }

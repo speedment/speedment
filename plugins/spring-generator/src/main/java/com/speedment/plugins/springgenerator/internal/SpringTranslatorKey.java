@@ -16,6 +16,7 @@
  */
 package com.speedment.plugins.springgenerator.internal;
 
+import com.speedment.common.codegen.model.Class;
 import com.speedment.generator.TranslatorKey;
 import com.speedment.generator.internal.TranslatorKeyImpl;
 import com.speedment.runtime.config.Project;

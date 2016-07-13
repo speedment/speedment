@@ -17,6 +17,7 @@
 package com.speedment.plugins.reactor.internal.translator;
 
 import com.speedment.common.codegen.internal.model.constant.DefaultType;
+import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.Generic;

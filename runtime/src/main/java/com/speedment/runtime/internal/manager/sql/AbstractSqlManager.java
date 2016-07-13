@@ -247,7 +247,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     /**
-     * Short-cut for retrieving the current {@link DbmsHandler}.
+     * Short-cut for retrieving the current {@link DbmsOperationHandler}.
      *
      * @return the current dbms handler
      */

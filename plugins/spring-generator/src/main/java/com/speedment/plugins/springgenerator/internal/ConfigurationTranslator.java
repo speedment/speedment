@@ -17,6 +17,7 @@
 package com.speedment.plugins.springgenerator.internal;
 
 import com.speedment.common.codegen.model.AnnotationUsage;
+import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;

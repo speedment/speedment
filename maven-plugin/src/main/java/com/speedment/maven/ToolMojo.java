@@ -29,6 +29,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import java.io.File;
 
 import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
+import javafx.application.Application;
 
 /**
  *
@@ -49,9 +50,9 @@ public final class ToolMojo extends AbstractSpeedmentMojo {
         MainApp.setInjector(injector);
         
         if (hasConfigFile()) {
-            launch(MainApp.class, configFile.getAbsolutePath());
+            Application.launch(MainApp.class, configFile.getAbsolutePath());
         } else {
-            launch(MainApp.class);
+            Application.launch(MainApp.class);
         }
     }
 

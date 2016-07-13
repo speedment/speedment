@@ -19,6 +19,7 @@ package com.speedment.plugins.springgenerator.internal;
 import com.speedment.common.codegen.internal.model.value.ReferenceValue;
 import com.speedment.common.codegen.internal.model.value.TextValue;
 import com.speedment.common.codegen.model.AnnotationUsage;
+import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
