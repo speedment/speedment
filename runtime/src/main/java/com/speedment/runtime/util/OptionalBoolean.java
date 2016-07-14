@@ -47,14 +47,14 @@ public enum OptionalBoolean {
     }
     
     public OptionalBoolean filter(BooleanPredicate predicate) {
-        if (this == EMPTY || predicate.test(get())) {
+        if (this == EMPTY || predicate.test(getAsBoolean())) {
             return this;
         } else {
             return EMPTY;
         }
     }
     
-    public boolean get() {
+    public boolean getAsBoolean() {
         switch (this) {
             case FALSE : return false;
             case TRUE  : return true;
