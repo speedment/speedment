@@ -56,7 +56,7 @@
         -->
         <dependency>
             <groupId>com.speedment</groupId>
-            <artifactId>speedment</artifactId>
+            <artifactId>runtime</artifactId>
             <version>\${speedment.version}</version>
         </dependency>
         
