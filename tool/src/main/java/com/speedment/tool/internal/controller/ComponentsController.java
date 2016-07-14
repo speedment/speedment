@@ -16,12 +16,19 @@
  */
 package com.speedment.tool.internal.controller;
 
+import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.mapstream.MapStream;
+import static com.speedment.common.mapstream.MapStream.comparing;
+import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.Component;
+import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.InfoComponent;
+import com.speedment.runtime.component.TypeMapperComponent;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.parameter.DbmsType;
+import static com.speedment.runtime.internal.util.Cast.cast;
 import com.speedment.runtime.license.License;
 import com.speedment.runtime.license.Software;
 import com.speedment.tool.resource.SilkIcon;
@@ -34,11 +41,13 @@ import javafx.scene.control.TreeView;
 import javafx.scene.paint.Color;
 
 import java.net.URL;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.speedment.tool.internal.util.CloseUtil.newCloseHandler;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -48,11 +57,11 @@ public final class ComponentsController implements Initializable {
 
     private @Inject InfoComponent infoComponent;
     private @Inject Speedment speedment;
+    private @Inject Injector injector;
     
     private @FXML Label title;
     private @FXML Label header;
     private @FXML Button close;
-    private @FXML Label info;
     private @FXML TreeView<String> tree;
     
     @Override
@@ -68,22 +77,25 @@ public final class ComponentsController implements Initializable {
     }
 
     private List<TreeItem<String>> components() {
-        
-//        return MapStream.of(session.getSpeedment().components()
-//            .collect(Collectors.groupingBy(c -> c.asSoftware().getLicense()))
-//        ).sortedByKey(License.COMPARATOR)
-//            .map((license, components) -> {
-//            final LicenseItem l = new LicenseItem(license);
-//            
-//            components.stream()
-//                .sorted(comparing(c -> c.asSoftware().getName()))
-//                .map(this::treeItem)
-//                .forEachOrdered(l.getChildren()::add);
-//            
-//            return l;
-//        }).collect(toList());
-
-        return new LinkedList<>();
+        return MapStream.of(
+            injector.injectables()
+                .filter(Component.class::isAssignableFrom)
+                .map(injector::get)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(Component.class::cast)
+                .collect(Collectors.groupingBy(c -> c.asSoftware().getLicense()))
+            ).sortedByKey(License.COMPARATOR)
+            .map((license, components) -> {
+            final LicenseItem l = new LicenseItem(license);
+            
+            components.stream()
+                .sorted(comparing(c -> c.asSoftware().getName()))
+                .map(this::treeItem)
+                .forEachOrdered(l.getChildren()::add);
+            
+            return l;
+        }).collect(toList());
     }
     
     private class RootItem extends TreeItem<String> {
@@ -197,76 +209,75 @@ public final class ComponentsController implements Initializable {
             setGraphic(SilkIcon.BOOK_LINK.view());
         }
     }
-//
-//    private TreeItem<String> treeItem(Component comp) {
-//        final ComponentItem item = new ComponentItem(comp);
-//
-//        // Show Translators
-//        final TranslatorsItem translators = new TranslatorsItem();
-//        cast(comp, CodeGenerationComponent.class).ifPresent(cg -> {
-//            cg.stream().values()
-//                .flatMap(Set::stream)
-//                .sorted()
-//                .map(TranslatorItem::new)
-//                .forEachOrdered(translators.getChildren()::add);
-//        });
-//        if (!translators.getChildren().isEmpty()) {
-//            item.getChildren().add(translators);
-//        }
-//        
-//        // Show Dbms Types
-//        final DbmsTypesItem dbmsTypes = new DbmsTypesItem();
-//        cast(comp, DbmsHandlerComponent.class).ifPresent(dh -> {
-//            dh.supportedDbmsTypes()
-//                .sorted(DbmsType.COMPARATOR)
-//                .map(DbmsTypeItem::new)
-//                .forEachOrdered(dbmsTypes.getChildren()::add);
-//        });
-//        if (!dbmsTypes.getChildren().isEmpty()) {
-//            item.getChildren().add(dbmsTypes);
-//        }
-//        
-//        // Show Type Mappers
-//        final TypeMappersItem typeMappers = new TypeMappersItem();
-//        cast(comp, TypeMapperComponent.class).ifPresent(tm -> {
-//            tm.stream()
-//                .sorted(TypeMapper.COMPARATOR)
-//                .map(TypeMapperItem::new)
-//                .forEachOrdered(typeMappers.getChildren()::add);
-//        });
-//        if (!typeMappers.getChildren().isEmpty()) {
-//            item.getChildren().add(typeMappers);
-//        }
-//        
-//        // Show Third Party Software
-//        final DependenciesItem dependencies = new DependenciesItem();
-//        comp.asSoftware().getDependencies()
-//            .sorted(Software.COMPARATOR)
-//            .map(this::createSoftwareItem)
-//            .forEachOrdered(dependencies.getChildren()::add);
-//        if (!dependencies.getChildren().isEmpty()) {
-//            item.getChildren().add(dependencies);
-//        }
-//
-//        return item;
-//    }
-//    
-//    private SoftwareItem createSoftwareItem(Software software) {
-//        final SoftwareItem item = new SoftwareItem(software);
-//        item.getChildren().add(new LicenseItem(software.getLicense()));
-//        
-//        final DependenciesItem dependencies = new DependenciesItem();
-//        software.getDependencies()
-//            .sorted(Software.COMPARATOR)
-//            .map(this::createSoftwareItem)
-//            .forEachOrdered(dependencies.getChildren()::add);
-//        
-//        if (!dependencies.getChildren().isEmpty()) {
-//            item.getChildren().add(dependencies);
-//        }
-//        
-//        return item;
-//    }
+
+    private TreeItem<String> treeItem(Component comp) {
+        final ComponentItem item = new ComponentItem(comp);
+
+        // Show Translators
+        final TranslatorsItem translators = new TranslatorsItem();
+        cast(comp, CodeGenerationComponent.class).ifPresent(cg -> {
+            cg.translatorKeys()
+                .sorted()
+                .map(TranslatorItem::new)
+                .forEachOrdered(translators.getChildren()::add);
+        });
+        if (!translators.getChildren().isEmpty()) {
+            item.getChildren().add(translators);
+        }
+        
+        // Show Dbms Types
+        final DbmsTypesItem dbmsTypes = new DbmsTypesItem();
+        cast(comp, DbmsHandlerComponent.class).ifPresent(dh -> {
+            dh.supportedDbmsTypes()
+                .sorted(DbmsType.COMPARATOR)
+                .map(DbmsTypeItem::new)
+                .forEachOrdered(dbmsTypes.getChildren()::add);
+        });
+        if (!dbmsTypes.getChildren().isEmpty()) {
+            item.getChildren().add(dbmsTypes);
+        }
+        
+        // Show Type Mappers
+        final TypeMappersItem typeMappers = new TypeMappersItem();
+        cast(comp, TypeMapperComponent.class).ifPresent(tm -> {
+            tm.stream()
+                .sorted(TypeMapper.COMPARATOR)
+                .map(TypeMapperItem::new)
+                .forEachOrdered(typeMappers.getChildren()::add);
+        });
+        if (!typeMappers.getChildren().isEmpty()) {
+            item.getChildren().add(typeMappers);
+        }
+        
+        // Show Third Party Software
+        final DependenciesItem dependencies = new DependenciesItem();
+        comp.asSoftware().getDependencies()
+            .sorted(Software.COMPARATOR)
+            .map(this::createSoftwareItem)
+            .forEachOrdered(dependencies.getChildren()::add);
+        if (!dependencies.getChildren().isEmpty()) {
+            item.getChildren().add(dependencies);
+        }
+
+        return item;
+    }
+    
+    private SoftwareItem createSoftwareItem(Software software) {
+        final SoftwareItem item = new SoftwareItem(software);
+        item.getChildren().add(new LicenseItem(software.getLicense()));
+        
+        final DependenciesItem dependencies = new DependenciesItem();
+        software.getDependencies()
+            .sorted(Software.COMPARATOR)
+            .map(this::createSoftwareItem)
+            .forEachOrdered(dependencies.getChildren()::add);
+        
+        if (!dependencies.getChildren().isEmpty()) {
+            item.getChildren().add(dependencies);
+        }
+        
+        return item;
+    }
 //
 //    public static void createAndShow(UISession session) {
 //        final Stage dialog = new Stage();

@@ -139,6 +139,13 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
         Stream<? extends Translator<DOC, ?>> translators(DOC document) {
         return translators(document, s -> true);
     }
+        
+    @Override
+    public Stream<String> translatorKeys() {
+        return map.values().stream()
+            .flatMap(m -> MapStream.of(m).filterValue(s -> s.constructor != null).keys())
+            .distinct();
+    }
 
     @Override
     @SuppressWarnings("unchecked")

@@ -118,7 +118,7 @@ public final class InjectionLoader {
             return loader.load();
         } catch (final IOException ex) {
             throw new SpeedmentException(
-                "Error! Could not find FXML-file: " + filename + "."
+                "Error! Could not find FXML-file: " + filename + ".", ex
             );
         }
     }

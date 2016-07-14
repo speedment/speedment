@@ -26,14 +26,14 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     
-    <artifactId>json</artifactId>
+    <artifactId>rest</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
     
-    <name>Speedment - Common - JSON</name>
+    <name>Speedment - Common - REST</name>
     <description>
-        A lightweight JSON serializer and deserializer made with the ambition to 
-        reduce complexity for non-performance critical parsing situations.
+        A library for asynchronously invoking functions in a 
+        public REST API.
     </description>
     
     <build>
@@ -47,21 +47,25 @@
                     <instructions>
                         <Bundle-Vendor>Speedment, Inc.</Bundle-Vendor>
                         <Bundle-Description>
-                            A lightweight JSON serializer and deserializer made 
-                            with the ambition to reduce complexity for 
-                            non-performance critical parsing situations.
+                            A library for asynchronously invoking 
+                            functions in a public REST API.
                         </Bundle-Description>
                         <Import-Package>
                             org.osgi.framework,
                             *;resolution:=optional 
                         </Import-Package>
-                        <Export-Package>com.speedment.common.json</Export-Package>
+                        <Export-Package>com.speedment.common.rest</Export-Package>
                     </instructions>
                 </configuration>
             </plugin>                            
         </plugins>
     </build>
     <dependencies>
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>json</artifactId>
+            <version>${json.version}</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

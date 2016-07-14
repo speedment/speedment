@@ -98,6 +98,11 @@ public final class InjectorImpl implements Injector {
     }
 
     @Override
+    public Stream<Class<?>> injectables() {
+        return injectables.stream();
+    }
+
+    @Override
     public <T> T inject(T instance) {
         injectFields(instance);
         return instance;

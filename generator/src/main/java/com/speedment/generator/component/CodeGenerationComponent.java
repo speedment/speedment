@@ -179,4 +179,11 @@ public interface CodeGenerationComponent extends Component {
      */
     <DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> Translator<DOC, T> 
     findTranslator(DOC document, Class<T> modelType, String key) throws SpeedmentException;
+    
+    /**
+     * Returns a stream over the currently installed translator keys.
+     * 
+     * @return  stream of translator keys
+     */
+    Stream<String> translatorKeys();
 }

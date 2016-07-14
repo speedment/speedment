@@ -374,7 +374,8 @@ public interface UserInterfaceComponent extends Component {
 
     /**
      * Logs a particular line in the output section of the user interface.
-     * @param line 
+     * 
+     * @param line  the message to log
      */
     void log(Label line);
 

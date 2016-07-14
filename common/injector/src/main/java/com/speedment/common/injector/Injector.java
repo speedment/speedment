@@ -24,6 +24,7 @@ import com.speedment.common.injector.internal.InjectorImpl;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * The factory used to produce instances of classes with
@@ -63,6 +64,14 @@ public interface Injector {
      * @return      the found instance
      */
     <T> Optional<T> get(Class<T> type);
+    
+    /**
+     * Returns a stream of all the injectable types that are accessible from
+     * this Injector.
+     * 
+     * @return  stream of injectable types
+     */
+    Stream<Class<?>> injectables();
     
     /**
      * Sets all the {@link Inject}-annotated fields in the specified instance.

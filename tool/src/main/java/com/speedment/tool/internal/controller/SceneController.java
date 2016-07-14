@@ -17,8 +17,12 @@
 package com.speedment.tool.internal.controller;
 
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
+import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.internal.util.Statistics;
 import com.speedment.tool.component.UserInterfaceComponent;
+import com.speedment.tool.component.VersionComponent;
 import com.speedment.tool.internal.util.InjectionLoader;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,6 +31,9 @@ import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import static javafx.application.Platform.runLater;
 
@@ -36,8 +43,12 @@ import static javafx.application.Platform.runLater;
  */
 public final class SceneController implements Initializable {
     
+    private final static Logger LOGGER = LoggerManager.getLogger(SceneController.class);
+    
     private @Inject UserInterfaceComponent ui;
+    private @Inject InfoComponent info;
     private @Inject InjectionLoader loader;
+    private @Inject VersionComponent version;
     
     private @FXML VBox top;
     private @FXML SplitPane horizontal;
@@ -58,6 +69,35 @@ public final class SceneController implements Initializable {
             ui.toggleOutput();
             
             Statistics.onGuiProjectLoaded();
+            
+            try {
+                version.latestVersion()
+                    .thenAcceptAsync(release -> {
+                        runLater(() -> {
+                            final int compare = release.compareTo(info.version());
+                            if (compare == 0) {
+                                ui.showNotification(
+                                    "Your version of " + info.title() + " is up to date."
+                                );
+                            } else if (compare > 0) {
+                                ui.showNotification(
+                                    "A new version " + release +
+                                        " of " + info.title() + " is available."
+                                );
+                            } else {
+                                ui.showNotification(
+                                    "Your version " + info.version() +
+                                        " of " + info.title() + " is newer than the released " +
+                                        release + "."
+                                );
+                            }
+                        });
+                    }).get(3, TimeUnit.SECONDS);
+            } catch (final InterruptedException | ExecutionException ex) {
+                LOGGER.debug(ex, "Error loading last released version.");
+            } catch (final TimeoutException ex) {
+                LOGGER.debug(ex, "Request for latest released version timed out.");
+            }
         });
     }
 }

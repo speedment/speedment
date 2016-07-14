@@ -113,6 +113,7 @@ import static javafx.application.Platform.runLater;
  */
 @IncludeInjectable({
     DocumentPropertyComponentImpl.class,
+    VersionComponentImpl.class,
     SpeedmentBrand.class,
     InjectionLoader.class,
     ConfigFileHelper.class

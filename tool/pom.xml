@@ -100,6 +100,12 @@
             <artifactId>generator</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>rest</artifactId>
+            <version>${rest.version}</version>
+        </dependency>
         	
         <!-- LICENSE INFORMATION
         Silk:1.3
