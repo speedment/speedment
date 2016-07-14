@@ -20,7 +20,7 @@ import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.stream.OptionalUtil;
+import com.speedment.runtime.util.OptionalUtil;
 import com.speedment.runtime.util.FloatSupplier;
 import com.speedment.runtime.util.OptionalBoolean;
 import com.speedment.tool.component.DocumentPropertyComponent;

@@ -40,7 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.internal.stream.OptionalUtil.unwrap;
+import static com.speedment.runtime.util.OptionalUtil.unwrap;
 import static java.util.Objects.requireNonNull;
 
 /**

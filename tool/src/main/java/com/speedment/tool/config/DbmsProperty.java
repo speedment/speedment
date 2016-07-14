@@ -23,7 +23,7 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.stream.OptionalUtil;
+import com.speedment.runtime.util.OptionalUtil;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DbmsPropertyMutator;

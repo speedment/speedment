@@ -66,7 +66,7 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.injector.State.RESOLVED;
-import static com.speedment.runtime.internal.stream.OptionalUtil.unwrap;
+import static com.speedment.runtime.util.OptionalUtil.unwrap;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.*;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.ancestor;
