@@ -44,18 +44,15 @@ public class ClobToStringMapper implements TypeMapper<Clob, String> {
     public String toJavaType(Clob value) {
         if (value == null) {
             return null;
-        }
-        try {
+        } else try {
             if (value.length() < Integer.MAX_VALUE) {
                 return value.getSubString(1, (int) value.length());
+            } else {
+                throw new SpeedmentException(
+                    "The provided Clob contains too many characters >" + Integer.MAX_VALUE
+                );
             }
-            throw new SpeedmentException("The provided Clob contains too many characters >" + Integer.MAX_VALUE);
-//            final StringBuilder sb = new StringBuilder();
-//            try (BufferedReader br = new BufferedReader(value.getCharacterStream())) {
-//            
-//            }
-//            return sb.toString();
-        } catch (SQLException sqle) {
+        } catch (final SQLException sqle) {
             throw new SpeedmentException("Unable to convert Clob to String.", sqle);
         }
     }
