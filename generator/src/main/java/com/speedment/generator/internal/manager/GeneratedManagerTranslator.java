@@ -16,7 +16,6 @@
  */
 package com.speedment.generator.internal.manager;
 
-import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Generic;
