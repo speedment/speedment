@@ -45,6 +45,7 @@ import static com.speedment.common.codegen.internal.util.Formatting.*;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import static com.speedment.generator.internal.manager.GeneratedManagerImplTranslator.*;
+import com.speedment.runtime.util.OptionalUtil;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -70,7 +71,7 @@ public final class GenerateMethodBodyUtil {
             .filter(HasEnabled::isEnabled)
             .map(c
             -> "case " + support.namer().javaStaticFieldName(c.getJavaName())
-            + " : return entity." + getterCode(support, c)
+            + " : return " + getterCode(file, support, c)
             + ";"
             ).collect(Collectors.joining(nl()))
             + nl() + "default : throw new IllegalArgumentException(\"Unknown identifier '\" + identifier + \"'.\");"
@@ -186,11 +187,12 @@ public final class GenerateMethodBodyUtil {
         }
     }
     
-    private static String getterCode(TranslatorSupport<Table> support, Column c) {
+    private static String getterCode(File file, TranslatorSupport<Table> support, Column c) {
         if (c.isNullable()) {
-            return GETTER_METHOD_PREFIX + support.typeName(c) + "().orElse(null)";
+            file.add(Import.of(Type.of(OptionalUtil.class)));
+            return "OptionalUtil.unwrap(entity." + GETTER_METHOD_PREFIX + support.typeName(c) + "())";
         } else {
-            return GETTER_METHOD_PREFIX + support.typeName(c) + "()";
+            return "entity." + GETTER_METHOD_PREFIX + support.typeName(c) + "()";
         }
     }
     

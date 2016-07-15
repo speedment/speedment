@@ -44,11 +44,15 @@ import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.PARAM;
 import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.RETURN;
+import com.speedment.common.codegen.internal.model.constant.DefaultType;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.OPTIONAL;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.STRING;
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
+import com.speedment.runtime.config.Column;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
+import com.speedment.runtime.util.OptionalBoolean;
+import com.speedment.runtime.util.OptionalUtil;
 
 /**
  *
@@ -58,15 +62,16 @@ import static com.speedment.runtime.internal.util.document.DocumentUtil.relative
 public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<Interface> {
 
     public final static String IDENTIFIER_NAME = "Identifier";
-    private @Inject Injector injector;
-    
+    private @Inject
+    Injector injector;
+
     public GeneratedEntityTranslator(Table table) {
         super(table, Interface::of);
     }
 
     @Override
     protected Interface makeCodeGenModel(File file) {
-        
+
         final Enum identifier = Enum.of(IDENTIFIER_NAME)
             .add(Field.of("columnName", STRING).private_().final_())
             .add(Type.of(FieldIdentifier.class).add(Generic.of().add(getSupport().entityType())))
@@ -92,74 +97,77 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
             );
 
         final Interface iface = newBuilder(file, getSupport().generatedEntityName())
-            /*** General ***/
-            .forEveryTable((intrf, col) ->
-                intrf.public_()
-                    .add(identifier)
-                    .add(Type.of(Entity.class).add(Generic.of().add(getSupport().entityType())))
+            /**
+             * * General **
+             */
+            .forEveryTable((intrf, col)
+                -> intrf.public_()
+                .add(identifier)
+                .add(Type.of(Entity.class).add(Generic.of().add(getSupport().entityType())))
             )
-            
-            /*** Getters ***/
+            /**
+             * * Getters **
+             */
             .forEveryColumn((intrf, col) -> {
-                final Type retType = col.isNullable()
-                    ? OPTIONAL.add(
-                        Generic.of().add(
-                            Type.of(col.findTypeMapper().getJavaType())
-                        )
-                    )
-                    : Type.of(col.findTypeMapper().getJavaType());
-                
+                final Type retType = getterReturnType(col);
+
                 intrf.add(Method.of(GETTER_METHOD_PREFIX + getSupport().typeName(col), retType)
                     .set(Javadoc.of(
-                            "Returns the " + getSupport().variableName(col) + 
-                            " of this " + getSupport().entityName() + 
-                            ". The " + getSupport().variableName(col) + 
-                            " field corresponds to the database column " +
-                            relativeName(col, Dbms.class, DATABASE_NAME) + "."
-                        ).add(RETURN.setText(
-                            "the " + getSupport().variableName(col) + 
-                            " of this " + getSupport().entityName()
-                        ))
+                        "Returns the " + getSupport().variableName(col)
+                        + " of this " + getSupport().entityName()
+                        + ". The " + getSupport().variableName(col)
+                        + " field corresponds to the database column "
+                        + relativeName(col, Dbms.class, DATABASE_NAME) + "."
+                    ).add(RETURN.setText(
+                        "the " + getSupport().variableName(col)
+                        + " of this " + getSupport().entityName()
+                    ))
                     )
                 );
             })
-            
-            /*** Setters ***/
+            /**
+             * * Setters **
+             */
             .forEveryColumn((intrf, col) -> {
                 intrf.add(Method.of(SETTER_METHOD_PREFIX + getSupport().typeName(col), getSupport().entityType())
                     .add(Field.of(getSupport().variableName(col), Type.of(col.findTypeMapper().getJavaType())))
                     .set(Javadoc.of(
-                        "Sets the " + getSupport().variableName(col) + 
-                        " of this " + getSupport().entityName() + 
-                        ". The " + getSupport().variableName(col) + 
-                        " field corresponds to the database column " +
-                        relativeName(col, Dbms.class, DATABASE_NAME) + "."
+                        "Sets the " + getSupport().variableName(col)
+                        + " of this " + getSupport().entityName()
+                        + ". The " + getSupport().variableName(col)
+                        + " field corresponds to the database column "
+                        + relativeName(col, Dbms.class, DATABASE_NAME) + "."
                     )
-                    .add(PARAM.setValue(getSupport().variableName(col)).setText("to set of this " + getSupport().entityName()))
-                    .add(RETURN.setText("this " + getSupport().entityName() + " instance")))
+                        .add(PARAM.setValue(getSupport().variableName(col)).setText("to set of this " + getSupport().entityName()))
+                        .add(RETURN.setText("this " + getSupport().entityName() + " instance")))
                 );
             })
-            
-            /*** Fields ***/
+            /**
+             * * Fields **
+             */
             .forEveryColumn((intrf, col) -> {
-                
-                final EntityTranslatorSupport.ReferenceFieldType ref = 
-                    EntityTranslatorSupport.getReferenceFieldType(
+
+                final EntityTranslatorSupport.ReferenceFieldType ref
+                    = EntityTranslatorSupport.getReferenceFieldType(
                         file, getSupport().tableOrThrow(), col, getSupport().entityType(), getNamer()
                     );
 
-                final String typeMapper      = col.getTypeMapper();
-                final Type entityType        = getSupport().entityType();
+                final String typeMapper = col.getTypeMapper();
+                final Type entityType = getSupport().entityType();
                 final String shortEntityName = getSupport().entityName();
-                final Type typeMapperType    = Type.of(typeMapper);
+                final Type typeMapperType = Type.of(typeMapper);
                 final String shortEntityVarName = getSupport().namer().javaVariableName(shortEntityName);
 
                 file.add(Import.of(entityType));
                 file.add(Import.of(typeMapperType));
 
-                final String getter = col.isNullable() 
-                    ? ("o -> o.get" + getSupport().typeName(col) + "().orElse(null)") 
-                    : (shortEntityName + "::get" + getSupport().typeName(col));
+                final String getter;
+                if (col.isNullable()) {
+                    getter = "o -> OptionalUtil.unwrap(o.get" + getSupport().typeName(col) + "())";
+                    file.add(Import.of(Type.of(OptionalUtil.class)));
+                } else {
+                    getter = shortEntityName + "::get" + getSupport().typeName(col);
+                }
 
                 final String finder = EntityTranslatorSupport.getForeignKey(getSupport().tableOrThrow(), col)
                     .map(fkc -> {
@@ -168,14 +176,12 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
 
                         file.add(Import.of(fuSupport.entityType()));
 
-                        return ", (" + shortEntityVarName + ", fkManager) -> fkManager.findAny(" +
-                            fu.getForeignEmt().getSupport().entityName() + "." +
-                            fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()
-                            ) + ", " + shortEntityVarName + ".get" +
-                                getNamer().javaTypeName(col.getJavaName()) + "()" + 
-
-                                (col.isNullable() ? ".orElse(null)" : "")
-
+                        return ", (" + shortEntityVarName + ", fkManager) -> fkManager.findAny("
+                            + fu.getForeignEmt().getSupport().entityName() + "."
+                            + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()
+                            ) + ", " + shortEntityVarName + ".get"
+                            + getNamer().javaTypeName(col.getJavaName()) + "()"
+                            + (col.isNullable() ? ".orElse(null)" : "")
                             + ").orElse(null)";
                     }).orElse("");
 
@@ -186,29 +192,28 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
 
                 file.add(Import.of(ref.implType));
                 intrf.add(Field.of(getNamer().javaStaticFieldName(col.getJavaName()), ref.type)
-                        .final_()
-                        .set(new ReferenceValue(
-                            "new " + shortName(ref.implType.getName())
-                            + "<>(Identifier."
-                            + constant
-                            + ", "
-                            + getter
-                            + setter
-                            + finder
-                            + ", new "
-                            + shortName(typeMapper)
-                            + "(), " 
-                            + DocumentDbUtil.isUnique(col)
-                            + ")"
-                        ))
-                        .set(Javadoc.of(
-                                "This Field corresponds to the {@link " + shortEntityName + "} field that can be obtained using the "
-                                + "{@link " + shortEntityName + "#get" + getSupport().typeName(col) + "()} method."
-                        )));
+                    .final_()
+                    .set(new ReferenceValue(
+                        "new " + shortName(ref.implType.getName())
+                        + "<>(Identifier."
+                        + constant
+                        + ", "
+                        + getter
+                        + setter
+                        + finder
+                        + ", new "
+                        + shortName(typeMapper)
+                        + "(), "
+                        + DocumentDbUtil.isUnique(col)
+                        + ")"
+                    ))
+                    .set(Javadoc.of(
+                        "This Field corresponds to the {@link " + shortEntityName + "} field that can be obtained using the "
+                        + "{@link " + shortEntityName + "#get" + getSupport().typeName(col) + "()} method."
+                    )));
             })
-            
             .build();
-        
+
         return iface;
     }
 
@@ -225,5 +230,30 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
     @Override
     public boolean isInGeneratedPackage() {
         return true;
+    }
+    
+    static Type getterReturnType(Column col) {
+        final Type retType;
+        final Class<?> javaType = col.findTypeMapper().getJavaType();
+
+        if (col.isNullable()) {
+            if (javaType == Integer.class) {
+                retType = DefaultType.OPTIONAL_INT;
+            } else if (javaType == Long.class) {
+                retType = DefaultType.OPTIONAL_LONG;
+            } else if (javaType == Double.class) {
+                retType = DefaultType.OPTIONAL_DOUBLE;
+            } else if (javaType == Boolean.class) {
+                retType = Type.of(OptionalBoolean.class);
+            } else {
+                retType = OPTIONAL.add(
+                    Generic.of(Type.of(javaType))
+                );
+            }
+        } else {
+            retType = Type.of(javaType);
+        }
+        
+        return retType;
     }
 }

@@ -51,8 +51,10 @@ public class VersionComponentImplTest {
         try {
             final String latest = version.latestVersion().get(2, TimeUnit.SECONDS);
             System.out.println("The latest released version of Speedment is " + latest + ".");
-        } catch (final ExecutionException | InterruptedException | TimeoutException ex) {
+        } catch (final ExecutionException | InterruptedException ex) {
             throw new RuntimeException(ex);
+        } catch (final TimeoutException ex ) {
+            System.out.println("Connection timed out before a version could be established");
         }
     }
     

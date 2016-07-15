@@ -36,7 +36,9 @@ import static com.speedment.common.codegen.internal.model.constant.DefaultAnnota
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.*;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.Formatting.tab;
+import com.speedment.runtime.util.OptionalUtil;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -59,13 +61,17 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
              * Getters
              */
             .forEveryColumn((clazz, col) -> {
-                final Type retType;
+                final Type retType = GeneratedEntityTranslator.getterReturnType(col);
                 final String getter;
                 if (col.isNullable()) {
-                    retType = OPTIONAL.add(Generic.of().add(Type.of(col.findTypeMapper().getJavaType())));
-                    getter = "Optional.ofNullable(" + getSupport().variableName(col) + ")";
+                    final String varName = getSupport().variableName(col);
+                    if (retType.getJavaImpl().get() == Optional.class) {
+                        getter = "Optional.ofNullable(" + varName + ")";
+                    } else {
+                        file.add(Import.of(Type.of(OptionalUtil.class)));
+                        getter = "OptionalUtil.ofNullable(" + varName + ")";
+                    }
                 } else {
-                    retType = Type.of(col.findTypeMapper().getJavaType());
                     getter = getSupport().variableName(col);
                 }
                 clazz
@@ -138,7 +144,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
         columns().forEachOrdered(c -> {
             final String getter;
             if (c.isNullable()) {
-                getter = "get" + getSupport().typeName(c) + "()" + ".orElse(null)";
+                getter = "OptionalUtil.unwrap(get" + getSupport().typeName(c) + "())";
             } else {
                 getter = "get" + getSupport().typeName(c) + "()";
             }

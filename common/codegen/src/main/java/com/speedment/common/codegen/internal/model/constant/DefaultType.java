@@ -35,6 +35,9 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static java.util.Objects.requireNonNull;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
 
 /**
  * Constant implementations of the {@link Type} interface that can be used to
@@ -72,6 +75,9 @@ public enum DefaultType implements Type {
 		QUEUE(Queue.class),
 		STACK(Stack.class),
 		OPTIONAL(Optional.class),
+		OPTIONAL_INT(OptionalInt.class),
+		OPTIONAL_LONG(OptionalLong.class),
+		OPTIONAL_DOUBLE(OptionalDouble.class),
 		ENTRY(HashMap.Entry.class),
 		FUNCTION(Function.class),
 		PREDICATE(Predicate.class),
