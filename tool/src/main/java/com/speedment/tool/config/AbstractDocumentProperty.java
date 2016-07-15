@@ -19,7 +19,6 @@ package com.speedment.tool.config;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Document;
-import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.util.OptionalUtil;
 import com.speedment.runtime.util.FloatSupplier;
 import com.speedment.runtime.util.OptionalBoolean;
@@ -32,10 +31,8 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.LongProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -207,15 +204,6 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
             );
         
         return wrapper.apply(property);
-    }
-
-    @Override
-    public final <T> ObjectProperty<T> objectPropertyOf(String key, Class<T> type, Supplier<T> ifEmpty) throws SpeedmentException {
-        @SuppressWarnings("unchecked")
-        final ObjectProperty<T> prop = (ObjectProperty<T>) 
-            properties.computeIfAbsent(key, k -> prepare(k, new SimpleObjectProperty<>(), ifEmpty.get()));
-        
-        return prop;
     }
 
     @Override

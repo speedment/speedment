@@ -110,8 +110,7 @@ public final class DocumentMerger {
                 ||  setPropertyIf(Float.class,   proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))
                 ||  setPropertyIf(Double.class,  proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))
                 ||  setPropertyIf(Byte.class,    proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))
-                ||  setPropertyIf(Short.class,   proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))
-                ||  setPropertyIf(Object.class,  proposedValue, casted -> existing.objectPropertyOf(key,  castToClassObject(casted.getClass()), () -> casted))) {}
+                ||  setPropertyIf(Short.class,   proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))) {}
                 else {
                     throw new SpeedmentException(
                         "Property was not of any known type."
@@ -119,12 +118,6 @@ public final class DocumentMerger {
                 }
             }
         }
-    }
-    
-    private static Class<Object> castToClassObject(Class<?> clazz) {
-        @SuppressWarnings("unchecked")
-        final Class<Object> result = (Class<Object>)clazz;
-        return result;
     }
     
     

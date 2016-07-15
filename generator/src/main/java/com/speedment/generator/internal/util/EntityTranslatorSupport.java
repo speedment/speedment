@@ -27,7 +27,6 @@ import com.speedment.generator.util.Pluralis;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;
-import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.db.MetaResult;
@@ -50,9 +49,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.ancestor;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
+import com.speedment.generator.TranslatorSupport;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -65,19 +62,8 @@ public final class EntityTranslatorSupport {
     public static final String CONSUMER_NAME = "consumer";
     public static final String FIND = "find";
 
-    public EntityTranslatorSupport() {
+    private EntityTranslatorSupport() {
         instanceNotAllowed(getClass());
-    }
-
-    public static Type getEntityType(Table table, JavaLanguageNamer javaLanguageNamer) {
-        requireNonNull(table);
-        requireNonNull(javaLanguageNamer);
-        final Project project = ancestor(table, Project.class).get();
-
-        return Type.of(javaLanguageNamer.findPackageName(project) + "."
-            + relativeName(table, Project.class, JAVA_NAME, javaLanguageNamer::javaPackageName) + "."
-            + javaLanguageNamer.javaTypeName(table.getJavaName())
-        );
     }
 
     public static class ReferenceFieldType {
@@ -106,14 +92,11 @@ public final class EntityTranslatorSupport {
             // If this is a foreign key.
             .map(fkc -> {
                 final Type type, implType;
-                final Type fkType = getEntityType(
-                    fkc.findForeignTable().orElseThrow(
+                final Type fkType = new TranslatorSupport<>(javaLanguageNamer, fkc.findForeignTable().orElseThrow(
                         () -> new SpeedmentException(
                             "Could not find referenced foreign table '"
                             + fkc.getForeignTableName() + "'."
-                        )),
-                    javaLanguageNamer
-                );
+                        ))).entityType();
 
                 file.add(Import.of(fkType));
 

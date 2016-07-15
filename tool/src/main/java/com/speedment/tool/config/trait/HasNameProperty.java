@@ -49,7 +49,7 @@ public interface HasNameProperty extends DocumentProperty {
         return Stream.of(
             new StringPropertyItem(
                 nameProperty(), 
-                "Database Name", 
+                mainInterface().getSimpleName() + " Name", 
                 "The name of the persisted entity in the database. This should only be modified if the database has been changed!"
             )
         );

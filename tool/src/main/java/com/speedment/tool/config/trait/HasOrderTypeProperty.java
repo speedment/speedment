@@ -26,17 +26,36 @@ import javafx.beans.property.ObjectProperty;
 import org.controlsfx.control.PropertySheet;
 
 import java.util.stream.Stream;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.StringProperty;
+import javafx.util.StringConverter;
 
 /**
  *
- * @author  Emil Forslund
- * @since   2.3.0
+ * @author Emil Forslund
+ * @since 2.3.0
  */
 @Api(version = "3.0")
 public interface HasOrderTypeProperty extends DocumentProperty, HasOrderType {
-    
+
     default ObjectProperty<OrderType> orderTypeProperty() {
-        return objectPropertyOf(HasOrderType.ORDER_TYPE, OrderType.class, HasOrderType.super::getOrderType);
+        final StringProperty orderType = stringPropertyOf(HasOrderType.ORDER_TYPE, () -> null);    
+        final StringConverter<OrderType> converter = new StringConverter<OrderType>() {
+            @Override
+            public String toString(OrderType object) {
+                return object == null ? null : object.name();
+            }
+
+            @Override
+            public OrderType fromString(String string) {
+                return string == null ? null : OrderType.valueOf(string);
+            }
+        };
+        final ObjectProperty<OrderType> object = new SimpleObjectProperty<>(converter.fromString(orderType.get()));       
+        Bindings.bindBidirectional(orderType, object, converter);
+        
+        return object;
     }
 
     @Override
