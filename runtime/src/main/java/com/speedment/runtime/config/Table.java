@@ -52,7 +52,8 @@ public interface Table extends
     final String COLUMNS = "columns",
             INDEXES = "indexes",
             FOREIGN_KEYS = "foreignKeys",
-            PRIMARY_KEY_COLUMNS = "primaryKeyColumns";
+            PRIMARY_KEY_COLUMNS = "primaryKeyColumns",
+            PACKAGE_NAME = "packageName";
     
     /**
      * Creates a stream of columns located in this document.
@@ -96,6 +97,15 @@ public interface Table extends
 
     default Optional<? extends PrimaryKeyColumn> findPrimaryKeyColumn(String name) {
         return primaryKeyColumns().filter(child -> child.getName().equals(name)).findAny();
+    }
+    
+    /**
+     * Returns any custom name to use for the package.
+     * 
+     * @return  the custom package name, or empty
+     */
+    default Optional<String> getPackageName() { 
+        return getAsString(PACKAGE_NAME);
     }
 
     @Override

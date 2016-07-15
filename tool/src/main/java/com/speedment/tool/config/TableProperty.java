@@ -16,6 +16,8 @@
  */
 package com.speedment.tool.config;
 
+import com.speedment.generator.TranslatorSupport;
+import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Schema;
@@ -35,6 +37,9 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
+import com.speedment.tool.property.DefaultStringPropertyItem;
+import java.util.Optional;
+import static javafx.beans.binding.Bindings.createStringBinding;
 
 /**
  *
@@ -75,6 +80,15 @@ public final class TableProperty
     public StringProperty nameProperty() {
         return HasNameProperty.super.nameProperty();
     }
+   
+    public StringProperty packageNameProperty() {
+        return stringPropertyOf(Table.PACKAGE_NAME, () -> null);
+    }
+    
+    @Override
+    public Optional<String> getPackageName() {
+        return Optional.ofNullable(packageNameProperty().get());
+    }
 
     @Override
     public Stream<? extends ColumnProperty> columns() {
@@ -103,10 +117,18 @@ public final class TableProperty
 
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+        final TranslatorSupport<Table> support = new TranslatorSupport<>(speedment.getOrThrow(JavaLanguageNamer.class), this);
+        
         return Stream.of(
             HasEnabledProperty.super.getUiVisibleProperties(speedment),
             HasNameProperty.super.getUiVisibleProperties(speedment),
-            HasAliasProperty.super.getUiVisibleProperties(speedment)
+            HasAliasProperty.super.getUiVisibleProperties(speedment),
+            Stream.of(new DefaultStringPropertyItem(
+                packageNameProperty(),
+                createStringBinding(support::basePackageName, aliasProperty()),
+                "Package Name", 
+                "The package where generated classes will be located."
+            ))
         ).flatMap(s -> s);
     }
 

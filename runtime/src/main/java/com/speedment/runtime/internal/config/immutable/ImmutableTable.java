@@ -37,6 +37,7 @@ public final class ImmutableTable extends ImmutableDocument implements Table {
     private final transient boolean enabled;
     private final transient String name;
     private final transient Optional<String> alias;
+    private final transient Optional<String> packageName;
     
     private final transient List<ImmutableColumn> columns;
     private final transient List<ImmutableIndex> indexes;
@@ -48,9 +49,10 @@ public final class ImmutableTable extends ImmutableDocument implements Table {
         
         final Table prototype = new TableImpl(parent, table);
         
-        this.enabled = prototype.isEnabled();
-        this.name    = prototype.getName();
-        this.alias   = prototype.getAlias();
+        this.enabled     = prototype.isEnabled();
+        this.name        = prototype.getName();
+        this.alias       = prototype.getAlias();
+        this.packageName = prototype.getPackageName();
         
         this.columns           = unmodifiableList(super.children(COLUMNS, ImmutableColumn::new).collect(toList()));
         this.indexes           = unmodifiableList(super.children(INDEXES, ImmutableIndex::new).collect(toList()));
@@ -71,6 +73,11 @@ public final class ImmutableTable extends ImmutableDocument implements Table {
     @Override
     public Optional<String> getAlias() {
         return alias;
+    }
+
+    @Override
+    public Optional<String> getPackageName() {
+        return packageName;
     }
 
     @Override
