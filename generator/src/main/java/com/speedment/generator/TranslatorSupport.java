@@ -366,7 +366,12 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
      * @return  the base package name in lowercase.
      */
     public String basePackageName() {
+        return table().flatMap(Table::getPackageName).orElseGet(this::defaultPackageName);
+    }
+    
+    private String defaultPackageName() {
         final String packName = namer().findPackageName(projectOrThrow()) + ".";
+        
         if (document() instanceof Project) {
             return packName + namer().javaPackageName(projectOrThrow().getName());
         } else {
