@@ -114,7 +114,7 @@ public final class ConnectController implements Initializable {
                 }
                 
                 if (fieldName.textProperty().getValue().isEmpty()) {
-                    fieldName.textProperty().setValue(DEFAULT_NAME);
+                    fieldName.textProperty().setValue(item.getDefaultDbmsName().orElse(DEFAULT_NAME));
                 }
 
                 fieldName.getTooltip().setText(item.getDbmsNameMeaning());
