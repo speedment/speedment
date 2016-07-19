@@ -43,7 +43,7 @@ public final class VersionComponentImpl extends InternalOpenSourceComponent impl
     public CompletableFuture<String> latestVersion() {
         return Rest.connectHttps("api.github.com")
             .get("repos/speedment/speedment/releases")
-            .thenApply(res -> {
+            .thenApplyAsync(res -> {
                 if (res.success()) {
                     final Optional<String> latest = res.decodeJsonArray()
                         .map(o -> {
