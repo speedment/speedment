@@ -204,6 +204,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                         + finder
                         + ", new "
                         + shortName(typeMapper)
+                        + (col.getTypeMapper().isPresent() ? "" : "<>")
                         + "(), "
                         + DocumentDbUtil.isUnique(col)
                         + ")"
@@ -232,7 +233,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
     public boolean isInGeneratedPackage() {
         return true;
     }
-    
+
     static Type getterReturnType(Column col) {
         final Type retType;
         final String javaType = col.getJavaType();
@@ -254,7 +255,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
         } else {
             retType = Type.of(javaType);
         }
-        
+
         return retType;
     }
 }
