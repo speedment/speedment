@@ -17,6 +17,7 @@
 package com.speedment.runtime.config.mapper.bigdecimal;
 
 import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 
 import java.math.BigDecimal;
@@ -26,20 +27,15 @@ import java.math.BigDecimal;
  * @author Per Minborg
  */
 @Api(version = "3.0")
-public class BigDecimalToDouble implements TypeMapper<BigDecimal, Double> {
+public final class BigDecimalToDouble implements TypeMapper<BigDecimal, Double> {
 
     @Override
-    public Class<Double> getJavaType() {
-        return Double.class;
+    public String getLabel() {
+        return "BigDecimal to Double";
     }
 
     @Override
-    public Class<BigDecimal> getDatabaseType() {
-        return BigDecimal.class;
-    }
-
-    @Override
-    public Double toJavaType(BigDecimal value) {
+    public <ENTITY> Double toJavaType(Column column, ENTITY entity, BigDecimal value) {
         return value == null ? null : value.doubleValue();
     }
 
@@ -47,15 +43,4 @@ public class BigDecimalToDouble implements TypeMapper<BigDecimal, Double> {
     public BigDecimal toDatabaseType(Double value) {
         return value == null ? null : BigDecimal.valueOf(value);
     }
-
-    @Override
-    public boolean isIdentityMapper() {
-        return false;
-    }
-
-    @Override
-    public boolean isApproximation() {
-        return true;
-    }
-
 }

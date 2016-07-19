@@ -17,13 +17,12 @@
 package com.speedment.runtime.internal.manager.sql;
 
 import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.db.AsynchronousQueryResult;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
 import com.speedment.runtime.field.predicate.SqlPredicateFragment;
-import com.speedment.runtime.field.trait.FieldTrait;
+import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.internal.stream.builder.pipeline.DoublePipeline;
 import com.speedment.runtime.internal.stream.builder.pipeline.IntPipeline;
 import com.speedment.runtime.internal.stream.builder.pipeline.LongPipeline;
@@ -83,17 +82,22 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
     public void modifySource(final List<SpeedmentPredicate<ENTITY, ?, ?>> predicateBuilders, AsynchronousQueryResult<ENTITY> qr) {
         requireNonNull(predicateBuilders);
         requireNonNull(qr);
+        
         if (predicateBuilders.isEmpty()) {
             // Nothing to do...
             return;
         }
         
-        final List<Column> columns = predicateBuilders
+        final List<TypeMapper<Object, Object>> typeMappers = predicateBuilders
                 .stream()
                 .map(SpeedmentPredicate::getField)
-                .map(FieldTrait::getIdentifier)
-                .map(FieldIdentifier::columnName)
-                .map(this::findColumn)
+                .map(ReferenceFieldTrait.class::cast)
+                .map(ReferenceFieldTrait<ENTITY, ?, ?>::typeMapper)
+                .map(tm -> {
+                    @SuppressWarnings("unchecked")
+                    final TypeMapper<Object, Object> tm2 = (TypeMapper<Object, Object>) tm;
+                    return tm2;
+                })
                 .collect(toList());
 
         final SpeedmentPredicateView spv = manager.getDbmsType().getSpeedmentPredicateView();
@@ -110,8 +114,8 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
 
         final List<Object> values = new ArrayList<>();
         for (int i = 0; i < fragments.size(); i++) {
-            @SuppressWarnings("unchecked")
-            final TypeMapper<Object, Object> tm = (TypeMapper<Object, Object>) columns.get(i).findTypeMapper();
+            final TypeMapper<Object, Object> tm = typeMappers.get(i);
+            
             fragments.get(i).objects()
                     .map(tm::toDatabaseType)
                     .forEach(values::add);

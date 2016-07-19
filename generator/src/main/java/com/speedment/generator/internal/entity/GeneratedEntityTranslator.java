@@ -49,6 +49,7 @@ import static com.speedment.common.codegen.internal.model.constant.DefaultType.O
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.STRING;
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.mapper.IdentityTypeMapper;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import com.speedment.runtime.util.OptionalBoolean;
@@ -98,7 +99,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
 
         final Interface iface = newBuilder(file, getSupport().generatedEntityName())
             /**
-             * * General **
+             * General
              */
             .forEveryTable((intrf, col)
                 -> intrf.public_()
@@ -106,7 +107,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                 .add(Type.of(Entity.class).add(Generic.of().add(getSupport().entityType())))
             )
             /**
-             * * Getters **
+             * Getters
              */
             .forEveryColumn((intrf, col) -> {
                 final Type retType = getterReturnType(col);
@@ -126,11 +127,11 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                 );
             })
             /**
-             * * Setters **
+             * Setters
              */
             .forEveryColumn((intrf, col) -> {
                 intrf.add(Method.of(SETTER_METHOD_PREFIX + getSupport().typeName(col), getSupport().entityType())
-                    .add(Field.of(getSupport().variableName(col), Type.of(col.findTypeMapper().getJavaType())))
+                    .add(Field.of(getSupport().variableName(col), Type.of(col.getJavaType())))
                     .set(Javadoc.of(
                         "Sets the " + getSupport().variableName(col)
                         + " of this " + getSupport().entityName()
@@ -143,7 +144,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                 );
             })
             /**
-             * * Fields **
+             * Fields
              */
             .forEveryColumn((intrf, col) -> {
 
@@ -152,7 +153,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                         file, getSupport().tableOrThrow(), col, getSupport().entityType(), getNamer()
                     );
 
-                final String typeMapper = col.getTypeMapper();
+                final String typeMapper = col.getTypeMapper().orElse(IdentityTypeMapper.class.getName());
                 final Type entityType = getSupport().entityType();
                 final String shortEntityName = getSupport().entityName();
                 final Type typeMapperType = Type.of(typeMapper);
@@ -234,17 +235,17 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
     
     static Type getterReturnType(Column col) {
         final Type retType;
-        final Class<?> javaType = col.findTypeMapper().getJavaType();
+        final String javaType = col.getJavaType();
 
         if (col.isNullable()) {
-            if (javaType == Integer.class) {
+            if (javaType.equals(Integer.class.getName())) {
                 retType = DefaultType.OPTIONAL_INT;
-            } else if (javaType == Long.class) {
+            } else if (javaType.equals(Long.class.getName())) {
                 retType = DefaultType.OPTIONAL_LONG;
-            } else if (javaType == Double.class) {
+            } else if (javaType.equals(Double.class.getName())) {
                 retType = DefaultType.OPTIONAL_DOUBLE;
-            } else if (javaType == Boolean.class) {
-                retType = Type.of(OptionalBoolean.class);
+            } else if (javaType.equals(Boolean.class.getName())) {
+                retType = Type.of(OptionalBoolean.class.getName());
             } else {
                 retType = OPTIONAL.add(
                     Generic.of(Type.of(javaType))

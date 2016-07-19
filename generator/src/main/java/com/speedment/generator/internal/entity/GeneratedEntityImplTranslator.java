@@ -65,7 +65,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                 final String getter;
                 if (col.isNullable()) {
                     final String varName = getSupport().variableName(col);
-                    if (retType.getJavaImpl().get() == Optional.class) {
+                    if (retType.getName().equals(Optional.class.getName())) {
                         getter = "Optional.ofNullable(" + varName + ")";
                     } else {
                         file.add(Import.of(Type.of(OptionalUtil.class)));
@@ -136,6 +136,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
     protected Method toStringMethod(File file) {
         file.add(Import.of(Type.of(StringJoiner.class)));
         file.add(Import.of(Type.of(Objects.class)));
+        
         final Method m = Method.of("toString", STRING)
             .public_()
             .add(OVERRIDE)
@@ -144,6 +145,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
         columns().forEachOrdered(c -> {
             final String getter;
             if (c.isNullable()) {
+                file.add(Import.of(Type.of(OptionalUtil.class)));
                 getter = "OptionalUtil.unwrap(get" + getSupport().typeName(c) + "())";
             } else {
                 getter = "get" + getSupport().typeName(c) + "()";
@@ -171,10 +173,15 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
 
         columns().forEachOrdered(c -> {
             final String getter = "get" + getSupport().typeName(c);
-            if (c.findTypeMapper().getJavaType().isPrimitive()) {
-                method.add("if (this." + getter + "() != " + thatCastedName + "." + getter + "()) {return false; }");
-            } else {
-                method.add("if (!Objects.equals(this." + getter + "(), " + thatCastedName + "." + getter + "())) {return false; }");
+            
+            switch (c.getJavaType()) {
+                case "byte" : case "short" : case "int" : case "long" : 
+                case "float" : case "double" : case "boolean" :
+                    method.add("if (this." + getter + "() != " + thatCastedName + "." + getter + "()) {return false; }");
+                    break;
+                default :
+                    method.add("if (!Objects.equals(this." + getter + "(), " + thatCastedName + "." + getter + "())) {return false; }");
+                    break;
             }
         });
 
@@ -193,7 +200,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
             final StringBuilder str = new StringBuilder();
             str.append("hash = 31 * hash + ");
 
-            switch (c.findTypeMapper().getJavaType().getName()) {
+            switch (c.getJavaType()) {
                 case "byte":
                     str.append("Byte");
                     break;

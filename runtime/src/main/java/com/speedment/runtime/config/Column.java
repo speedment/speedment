@@ -31,6 +31,7 @@ import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.exception.SpeedmentException;
 
 import static com.speedment.runtime.internal.util.document.DocumentUtil.newNoSuchElementExceptionFor;
+import java.util.Optional;
 
 /**
  * A typed {@link Document} that represents a column in the database. A
@@ -51,9 +52,13 @@ public interface Column extends
     HasMainInterface,
     HasMutator<ColumnMutator<? extends Column>> {
 
-    final String AUTO_INCREMENT = "autoIncrement",
-        TYPE_MAPPER = "typeMapper",
-        DATABASE_TYPE = "databaseType";
+    final String 
+        AUTO_INCREMENT    = "autoIncrement",
+        TYPE_MAPPER       = "typeMapper",
+        DATABASE_TYPE     = "databaseType",
+        JAVA_TYPE         = "javaType",
+        JAVA_TYPE_FACTORY = "javaTypeFactory",
+        ENUM_CONSTANTS    = "enumConstants";
 
     /**
      * Returns whether or not this column will auto increment when new values
@@ -65,35 +70,7 @@ public interface Column extends
     default boolean isAutoIncrement() {
         return getAsBoolean(AUTO_INCREMENT).orElse(false);
     }
-
-    /**
-     * Returns the name of the mapper class that will be used to generate a java
-     * representation of the database types.
-     *
-     * @return the mapper class
-     */
-    default String getTypeMapper() {
-        return getAsString(TYPE_MAPPER).orElseThrow(newNoSuchElementExceptionFor(this, TYPE_MAPPER));
-    }
-
-    /**
-     * Returns the mapper class that will be used to generate a java
-     * representation of the database types.
-     *
-     * @return the mapper class
-     */
-    default TypeMapper<?, ?> findTypeMapper() {
-        final String name = getTypeMapper();
-
-        try {
-            @SuppressWarnings("unchecked")
-            final TypeMapper<?, ?> mapper = (TypeMapper<?, ?>) Class.forName(name).newInstance();
-            return mapper;
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
-            throw new SpeedmentException("Could not instantiate TypeMapper: '" + name + "'.", ex);
-        }
-    }
-
+    
     /**
      * Returns the name of the class that represents the database type.
      *
@@ -101,6 +78,48 @@ public interface Column extends
      */
     default String getDatabaseType() {
         return getAsString(DATABASE_TYPE).orElseThrow(newNoSuchElementExceptionFor(this, DATABASE_TYPE));
+    }
+    
+    /**
+     * Returns the name of the class that represents this column in the code.
+     * 
+     * @return  the java type name
+     */
+    default String getJavaType() {
+        return getAsString(JAVA_TYPE).orElseThrow(newNoSuchElementExceptionFor(this, JAVA_TYPE));
+    }
+    
+    /**
+     * Returns the name of the class that is used to produce the java type
+     * implementation for this column. If no factory is specified (the java
+     * type can be created using its default constructor) then this method 
+     * returns an empty {@code Optional}.
+     * 
+     * @return  the java type factory or empty
+     */
+    default Optional<String> getJavaTypeFactory() {
+        return getAsString(JAVA_TYPE_FACTORY);
+    }
+    
+    /**
+     * Returns the name of the mapper class that will be used to generate a java
+     * representation of the database types.
+     *
+     * @return the mapper class
+     */
+    default Optional<String> getTypeMapper() {
+        return getAsString(TYPE_MAPPER);
+    }
+
+    /**
+     * Returns a comma separated string of the possible values that this column
+     * may have. If the list of potential values are not constrained, an empty
+     * optional is returned.
+     * 
+     * @return  list of constant values separated by commas or empty
+     */
+    default Optional<String> getEnumConstants() {
+        return getAsString(ENUM_CONSTANTS);
     }
 
     /**
@@ -113,9 +132,42 @@ public interface Column extends
 
         try {
             return Class.forName(name);
-        } catch (ClassNotFoundException ex) {
+        } catch (final ClassNotFoundException ex) {
             throw new SpeedmentException("Could not find database type: '" + name + "'.", ex);
         }
+    }
+    
+    /**
+     * Returns the class that represents the java type.
+     *
+     * @return the java type
+     */
+    default Class<?> findJavaType() {
+        final String name = getJavaType();
+
+        try {
+            return Class.forName(name);
+        } catch (final ClassNotFoundException ex) {
+            throw new SpeedmentException("Could not find database type: '" + name + "'.", ex);
+        }
+    }
+    
+    /**
+     * Returns the mapper class that will be used to generate a java
+     * representation of the database types.
+     *
+     * @return the mapper class
+     */
+    default Optional<TypeMapper<?, ?>> findTypeMapper() {
+        return getTypeMapper().map(name -> {
+            try {
+                @SuppressWarnings("unchecked")
+                final TypeMapper<?, ?> mapper = (TypeMapper<?, ?>) Class.forName(name).newInstance();
+                return mapper;
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
+                throw new SpeedmentException("Could not instantiate TypeMapper: '" + name + "'.", ex);
+            }
+        });
     }
 
     @Override

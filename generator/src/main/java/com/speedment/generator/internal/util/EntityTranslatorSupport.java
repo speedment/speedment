@@ -75,6 +75,15 @@ public final class EntityTranslatorSupport {
             this.implType = implType;
         }
     }
+    
+    private static Optional<Class<?>> find(String className) {
+        try {
+            final Class<?> temp = Class.forName(className);
+            return Optional.of(temp);
+        } catch (final ClassNotFoundException ex) {
+            return Optional.empty();
+        }
+    }
 
     public static ReferenceFieldType getReferenceFieldType(
         File file,
@@ -85,8 +94,10 @@ public final class EntityTranslatorSupport {
     ) {
         requireNonNulls(file, table, column, entityType, javaLanguageNamer);
 
-        final Class<?> mapping = column.findTypeMapper().getJavaType();
-        final Type databaseType = Type.of(column.findTypeMapper().getDatabaseType());
+        final String mapping = column.getJavaType();
+        final Optional<Class<?>> mappingObject = find(mapping);
+        
+        final Type databaseType = Type.of(column.getDatabaseType());
 
         return EntityTranslatorSupport.getForeignKey(table, column)
             // If this is a foreign key.
@@ -100,7 +111,7 @@ public final class EntityTranslatorSupport {
 
                 file.add(Import.of(fkType));
 
-                if (String.class.equals(mapping)) {
+                if (String.class.getName().equals(mapping)) {
                     type = Type.of(StringForeignKeyField.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(databaseType))
@@ -110,7 +121,7 @@ public final class EntityTranslatorSupport {
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(databaseType))
                         .add(Generic.of().add(fkType));
-                } else if (Comparable.class.isAssignableFrom(mapping)) {
+                } else if (mappingObject.isPresent() && Comparable.class.isAssignableFrom(mappingObject.get())) {
                     type = Type.of(ComparableForeignKeyField.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(databaseType))
@@ -140,41 +151,41 @@ public final class EntityTranslatorSupport {
 
                 // If it is not a foreign key
             }).orElseGet(() -> {
-            final Type type, implType;
+                final Type type, implType;
 
-            if (String.class.equals(mapping)) {
-                type = Type.of(StringField.class)
-                    .add(Generic.of().add(entityType))
-                    .add(Generic.of().add(databaseType));
+                if (String.class.getName().equals(mapping)) {
+                    type = Type.of(StringField.class)
+                        .add(Generic.of().add(entityType))
+                        .add(Generic.of().add(databaseType));
 
-                implType = Type.of(StringFieldImpl.class)
-                    .add(Generic.of().add(entityType))
-                    .add(Generic.of().add(databaseType));
+                    implType = Type.of(StringFieldImpl.class)
+                        .add(Generic.of().add(entityType))
+                        .add(Generic.of().add(databaseType));
 
-            } else if (Comparable.class.isAssignableFrom(mapping)) {
-                type = Type.of(ComparableField.class)
-                    .add(Generic.of().add(entityType))
-                    .add(Generic.of().add(databaseType))
-                    .add(Generic.of().add(Type.of(mapping)));
+                } else if (mappingObject.isPresent() && Comparable.class.isAssignableFrom(mappingObject.get())) {
+                    type = Type.of(ComparableField.class)
+                        .add(Generic.of().add(entityType))
+                        .add(Generic.of().add(databaseType))
+                        .add(Generic.of().add(Type.of(mapping)));
 
-                implType = Type.of(ComparableFieldImpl.class)
-                    .add(Generic.of().add(entityType))
-                    .add(Generic.of().add(databaseType))
-                    .add(Generic.of().add(Type.of(mapping)));
-            } else {
-                type = Type.of(ReferenceField.class)
-                    .add(Generic.of().add(entityType))
-                    .add(Generic.of().add(databaseType))
-                    .add(Generic.of().add(Type.of(mapping)));
+                    implType = Type.of(ComparableFieldImpl.class)
+                        .add(Generic.of().add(entityType))
+                        .add(Generic.of().add(databaseType))
+                        .add(Generic.of().add(Type.of(mapping)));
+                } else {
+                    type = Type.of(ReferenceField.class)
+                        .add(Generic.of().add(entityType))
+                        .add(Generic.of().add(databaseType))
+                        .add(Generic.of().add(Type.of(mapping)));
 
-                implType = Type.of(ReferenceFieldImpl.class)
-                    .add(Generic.of().add(entityType))
-                    .add(Generic.of().add(databaseType))
-                    .add(Generic.of().add(Type.of(mapping)));
-            }
+                    implType = Type.of(ReferenceFieldImpl.class)
+                        .add(Generic.of().add(entityType))
+                        .add(Generic.of().add(databaseType))
+                        .add(Generic.of().add(Type.of(mapping)));
+                }
 
-            return new ReferenceFieldType(type, implType);
-        });
+                return new ReferenceFieldType(type, implType);
+            });
     }
 
     public static String pluralis(Table table, JavaLanguageNamer javaLanguageNamer) {

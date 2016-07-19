@@ -82,12 +82,12 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table, C
     }
 
     public StringProperty typeMapperProperty() {
-        return stringPropertyOf(TYPE_MAPPER, Column.super::getTypeMapper);
+        return stringPropertyOf(TYPE_MAPPER, () -> Column.super.getTypeMapper().orElse(null));
     }
 
     @Override
-    public String getTypeMapper() {
-        return typeMapperProperty().get();
+    public Optional<String> getTypeMapper() {
+        return Optional.ofNullable(typeMapperProperty().get());
     }
 
     public Property<TypeMapper<?, ?>> typeMapperObjectProperty() {
@@ -101,17 +101,17 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table, C
     }
 
     @Override
-    public TypeMapper<?, ?> findTypeMapper() {
-        return typeMapperObjectProperty().getValue();
+    public Optional<TypeMapper<?, ?>> findTypeMapper() {
+        return Optional.ofNullable(typeMapperObjectProperty().getValue());
+    }
+    
+    @Override
+    public String getDatabaseType() {
+        return databaseTypeProperty().get();
     }
 
     public StringProperty databaseTypeProperty() {
         return stringPropertyOf(DATABASE_TYPE, Column.super::getDatabaseType);
-    }
-
-    @Override
-    public String getDatabaseType() {
-        return databaseTypeProperty().get();
     }
 
     public ObjectBinding<Class<?>> databaseTypeObjectProperty() {
@@ -121,6 +121,24 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table, C
     @Override
     public Class<?> findDatabaseType() {
         return databaseTypeObjectProperty().get();
+    }
+    
+    @Override
+    public String getJavaType() {
+        return javaTypeProperty().get();
+    }
+
+    public StringProperty javaTypeProperty() {
+        return stringPropertyOf(JAVA_TYPE, Column.super::getJavaType);
+    }
+
+    public ObjectBinding<Class<?>> javaTypeObjectProperty() {
+        return createObjectBinding(Column.super::findJavaType, javaTypeProperty());
+    }
+
+    @Override
+    public Class<?> findJavaType() {
+        return javaTypeObjectProperty().get();
     }
 
     @Override
@@ -137,9 +155,7 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table, C
             Stream.of(
                 new TypeMapperPropertyItem(
                     speedment,
-                    Optional.ofNullable(findTypeMapper())
-                    .map(tm -> (Class) tm.getDatabaseType())
-                    .orElse(findDatabaseType()),
+                    findDatabaseType(),
                     typeMapperProperty(),
                     "JDBC Type to Java",
                     "The class that will be used to map types between the database and the generated code."

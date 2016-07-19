@@ -58,4 +58,16 @@ public class ColumnMutator<DOC extends Column> extends DocumentMutatorImpl<DOC> 
     public void setDatabaseType(Class<?> databaseType) {
         put(DATABASE_TYPE, databaseType.getName());
     }
+    
+    public void setJavaType(Class<?> javaType) {
+        put(JAVA_TYPE, javaType.getName());
+    }
+    
+    public void setJavaTypeFactory(Class<?> javaTypeFactory) {
+        put(JAVA_TYPE_FACTORY, javaTypeFactory.getName());
+    }
+    
+    public void setEnumConstants(String enumConstants) {
+        put(ENUM_CONSTANTS, enumConstants);
+    }
 }

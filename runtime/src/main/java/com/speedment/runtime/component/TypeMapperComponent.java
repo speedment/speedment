@@ -42,14 +42,23 @@ public interface TypeMapperComponent extends Component {
     /**
      * Installs the specified type mapper in this component.
      * 
+     * @param databaseType        the type to install it for
      * @param typeMapperSupplier  the constructor for a mapper to install
      */
-    void install(Supplier<TypeMapper<?, ?>> typeMapperSupplier);
+    void install(Class<?> databaseType, Supplier<TypeMapper<?, ?>> typeMapperSupplier);
     
     /**
      * Streams over all the type mappers installed in this component.
      * 
-     * @return  all mappers
+     * @param databaseType  the type to get mappers for
+     * @return              all mappers
+     */
+    Stream<TypeMapper<?, ?>> mapFrom(Class<?> databaseType);
+    
+    /**
+     * Streams over all the installed type mappers.
+     * 
+     * @return  stream of type mappers 
      */
     Stream<TypeMapper<?, ?>> stream();
     

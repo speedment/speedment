@@ -35,15 +35,15 @@ public class IntegerZeroOneToBooleanMapperTest {
 
     @Test
     public void testStringYesMapping() {
-        Assert.assertEquals("JavaType should have value 'true'",  Boolean.TRUE, mapper.toJavaType(1));
-        Assert.assertEquals("JavaType should have value 'true'",  Boolean.TRUE, mapper.toJavaType(2));
-        Assert.assertEquals("JavaType should have value 'true'",  Boolean.TRUE, mapper.toJavaType(-1));
+        Assert.assertEquals("JavaType should have value 'true'",  Boolean.TRUE, mapper.toJavaType(null, null, 1));
+        Assert.assertEquals("JavaType should have value 'true'",  Boolean.TRUE, mapper.toJavaType(null, null, 2));
+        Assert.assertEquals("JavaType should have value 'true'",  Boolean.TRUE, mapper.toJavaType(null, null, -1));
         Assert.assertTrue("DatabaseType should have value '1'", 1 == mapper.toDatabaseType(true));
     }
 
     @Test
     public void testStringNoMapping() {
-    	Assert.assertEquals("JavaType should have value 'false'",  Boolean.FALSE, mapper.toJavaType(0));
+    	Assert.assertEquals("JavaType should have value 'false'",  Boolean.FALSE, mapper.toJavaType(null, null, 0));
     	Assert.assertTrue("DatabaseType should have value '0'", 0 == mapper.toDatabaseType(false));
     }
 }

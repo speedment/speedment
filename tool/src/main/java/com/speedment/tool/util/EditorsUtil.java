@@ -105,7 +105,7 @@ public final class EditorsUtil {
         
         final ChoiceBox<String> choice = new ChoiceBox<>(labels);
         @SuppressWarnings("unchecked")
-        final T itemValue = (T)item.getValue();
+        final T itemValue = (T) item.getValue();
         choice.getSelectionModel().select(converter.apply(itemValue));
         
         return new AbstractPropertyEditor<T, ChoiceBox<String>>(item, choice) {

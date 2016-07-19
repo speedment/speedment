@@ -14,18 +14,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.config.mapper.identity;
-
-import com.speedment.runtime.annotation.Api;
+package com.speedment.runtime.config.typetoken;
 
 /**
- *
- * @author Emil Forslund
+ * 
+ * @author  Emil Forslund
+ * @author  Simon Jonasson
+ * @since   3.0.0
  */
-@Api(version = "3.0")
-public final class ByteIdentityMapper extends AbstractIdentityMapper<Byte> {
+public interface ArrayTypeToken extends TypeToken {
+    
+    /**
+     * Returns the dimension for the array in this type. 
+     * <p>
+     * Here are some examples:
+     * <pre>
+     *     String       → 0
+     *     String[]     → 1
+     *     String[][]   → 2
+     *     String[][][] → 3
+     * </pre> 
+     * 
+     * @return  the array dimension
+     */
+    int getArrayDimension();
 
-    public ByteIdentityMapper() {
-        super(Byte.class);
+    @Override
+    default boolean isArray() {
+        return true;
     }
 }

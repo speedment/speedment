@@ -14,32 +14,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.config.mapper.string;
+package com.speedment.runtime.config.mapper;
 
-import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.mapper.TypeMapper;
 
 /**
- *
- * @author Maria Sparenberg
- * @author Patrick Hobusch
+ * A special implementation of {@link TypeMapper} that simply returns the 
+ * same object that it received.
+ * 
+ * @param <T>  the type
+ * 
+ * @author  Emil Forslund
+ * @author  Simon Jonasson
+ * @since   3.0.0
  */
-@Api(version = "3.0")
-public final class TrueFalseStringToBooleanMapper implements TypeMapper<String, Boolean> {
+public final class IdentityTypeMapper<T> implements TypeMapper<T, T> {
 
     @Override
     public String getLabel() {
-        return "True/False to Boolean";
-    }
-    
-    @Override
-    public <ENTITY> Boolean toJavaType(Column column, ENTITY entity, String value) {
-        return value == null ? null : Boolean.valueOf(value);
+        return "Identity Mapper";
     }
 
     @Override
-    public String toDatabaseType(Boolean value) {
-        return value == null ? null : String.valueOf(value);
+    public <ENTITY> T toJavaType(Column column, ENTITY entity, T value) {
+        return value;
+    }
+
+    @Override
+    public T toDatabaseType(T value) {
+        return value;
     }
 }

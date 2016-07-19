@@ -17,6 +17,7 @@
 package com.speedment.runtime.config.mapper.integer;
 
 import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 
 /**
@@ -25,7 +26,7 @@ import com.speedment.runtime.config.mapper.TypeMapper;
  * @since   2.3.5
  */
 @Api(version = "3.0")
-public class IntegerZeroOneToBooleanMapper implements TypeMapper<Integer, Boolean> {
+public final class IntegerZeroOneToBooleanMapper implements TypeMapper<Integer, Boolean> {
 
     @Override
     public String getLabel() {
@@ -33,27 +34,12 @@ public class IntegerZeroOneToBooleanMapper implements TypeMapper<Integer, Boolea
     }
 
     @Override
-    public Class<Boolean> getJavaType() {
-        return Boolean.class;
-    }
-
-    @Override
-    public Class<Integer> getDatabaseType() {
-        return Integer.class;
-    }
-
-    @Override
-    public Boolean toJavaType(Integer value) {
+    public <ENTITY> Boolean toJavaType(Column column, ENTITY entity, Integer value) {
         return value == null ? null : value != 0;
     }
 
     @Override
     public Integer toDatabaseType(Boolean value) {
         return value == null ? null : (value ? 1 : 0);
-    }
-
-    @Override
-    public boolean isIdentityMapper() {
-        return false;
     }
 }

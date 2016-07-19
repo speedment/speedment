@@ -28,9 +28,6 @@ import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.mapper.identity.IntegerIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.LongIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.StringIdentityMapper;
 import com.speedment.runtime.internal.config.ColumnImpl;
 import com.speedment.runtime.internal.config.DbmsImpl;
 import com.speedment.runtime.internal.config.ForeignKeyColumnImpl;
@@ -86,12 +83,14 @@ public abstract class AbstractDocumentTest {
                             entry(Column.NAME, "Column A1"),
                             entry(Schema.ALIAS, "Custom Column A1"),
                             entry(Column.ENABLED, true),
-                            entry(Column.TYPE_MAPPER, LongIdentityMapper.class.getName())
+                            entry(Column.DATABASE_TYPE, Long.class.getName()),
+                            entry(Column.JAVA_TYPE, Long.class.getName())
                         ), map(
                             entry(Column.NAME, "Column A2"),
                             entry(Schema.ALIAS, "Custom Column A2"),
                             entry(Column.ENABLED, true),
-                            entry(Column.TYPE_MAPPER, IntegerIdentityMapper.class.getName())
+                            entry(Column.DATABASE_TYPE, Integer.class.getName()),
+                            entry(Column.JAVA_TYPE, Integer.class.getName())
                         )),
                         entry(Table.PRIMARY_KEY_COLUMNS, map(
                             entry(PrimaryKeyColumn.NAME, "Column A1")
@@ -120,12 +119,14 @@ public abstract class AbstractDocumentTest {
                             entry(Column.NAME, "Column C1"),
                             entry(Schema.ALIAS, "Custom Column C1"),
                             entry(Column.ENABLED, true),
-                            entry(Column.TYPE_MAPPER, IntegerIdentityMapper.class.getName())
+                            entry(Column.DATABASE_TYPE, Integer.class.getName()),
+                            entry(Column.JAVA_TYPE, Integer.class.getName())
                         ), map(
                             entry(Column.NAME, "Column C2"),
                             entry(Schema.ALIAS, "Custom Column C2"),
                             entry(Column.ENABLED, true),
-                            entry(Column.TYPE_MAPPER, StringIdentityMapper.class.getName())
+                            entry(Column.DATABASE_TYPE, String.class.getName()),
+                            entry(Column.JAVA_TYPE, String.class.getName())
                         )),
                         entry(Table.PRIMARY_KEY_COLUMNS, map(
                             entry(PrimaryKeyColumn.NAME, "Column C1")
@@ -147,12 +148,14 @@ public abstract class AbstractDocumentTest {
                             entry(Column.NAME, "Column B1"),
                             entry(Schema.ALIAS, "Custom Column B1"),
                             entry(Column.ENABLED, true),
-                            entry(Column.TYPE_MAPPER, LongIdentityMapper.class.getName())
+                            entry(Column.DATABASE_TYPE, Long.class.getName()),
+                            entry(Column.JAVA_TYPE, Long.class.getName())
                         ), map(
                             entry(Column.NAME, "Column B2"),
                             entry(Schema.ALIAS, "Custom Column B2"),
                             entry(Column.ENABLED, true),
-                            entry(Column.TYPE_MAPPER, IntegerIdentityMapper.class.getName())
+                            entry(Column.DATABASE_TYPE, Integer.class.getName()),
+                            entry(Column.JAVA_TYPE, Integer.class.getName())
                         )),
                         entry(Table.PRIMARY_KEY_COLUMNS, map(
                             entry(PrimaryKeyColumn.NAME, "Column B1")
@@ -182,12 +185,14 @@ public abstract class AbstractDocumentTest {
                             entry(Column.NAME, "Column D1"),
                             entry(Schema.ALIAS, "Custom Column D1"),
                             entry(Column.ENABLED, true),
-                            entry(Column.TYPE_MAPPER, IntegerIdentityMapper.class.getName())
+                            entry(Column.DATABASE_TYPE, Integer.class.getName()),
+                            entry(Column.JAVA_TYPE, Integer.class.getName())
                         ), map(
                             entry(Column.NAME, "Column D2"),
                             entry(Schema.ALIAS, "Custom Column D2"),
                             entry(Column.ENABLED, true),
-                            entry(Column.TYPE_MAPPER, StringIdentityMapper.class.getName())
+                            entry(Column.DATABASE_TYPE, String.class.getName()),
+                            entry(Column.JAVA_TYPE, String.class.getName())
                         )),
                         entry(Table.PRIMARY_KEY_COLUMNS, map(
                             entry(PrimaryKeyColumn.NAME, "Column D1")

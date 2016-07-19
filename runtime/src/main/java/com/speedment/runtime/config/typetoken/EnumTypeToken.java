@@ -14,18 +14,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.config.mapper.identity;
+package com.speedment.runtime.config.typetoken;
 
-import com.speedment.runtime.annotation.Api;
+import java.util.List;
 
 /**
- *
- * @author Emil Forslund
+ * 
+ * @author  Emil Forslund
+ * @author  Simon Jonasson
+ * @since   3.0.0
  */
-@Api(version = "3.0")
-public final class LongIdentityMapper extends AbstractIdentityMapper<Long> {
+public interface EnumTypeToken extends TypeToken {
+    
+    /**
+     * Returns the set of available constants that this enum type has.
+     * 
+     * @return  enum constants
+     */
+    List<String> getEnumConstants();
 
-    public LongIdentityMapper() {
-        super(Long.class);
+    @Override
+    default boolean isEnum() {
+        return true;
     }
 }

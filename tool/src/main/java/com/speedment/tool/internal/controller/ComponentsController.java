@@ -278,29 +278,4 @@ public final class ComponentsController implements Initializable {
         
         return item;
     }
-//
-//    public static void createAndShow(UISession session) {
-//        final Stage dialog = new Stage();
-//
-//        final Parent root = Loader.create(session, "Components", control -> {
-//            ((ComponentsController) control).dialog = dialog;
-//        });
-//        
-//        final UserInterfaceComponent ui = session.getSpeedment()
-//            .getOrThrow(UserInterfaceComponent.class);
-//        
-//        final Brand brand = ui.getBrand();
-//        final Scene scene = new Scene(root);
-//        ui.stylesheetFiles()
-//            .forEachOrdered(scene.getStylesheets()::add);
-//
-//        dialog.setTitle("Components");
-//        dialog.initModality(APPLICATION_MODAL);
-//        brand.logoSmall().map(Image::new).ifPresent(dialog.getIcons()::add);
-//        dialog.initOwner(session.getStage());
-//        dialog.setScene(scene);
-//        dialog.show();
-//        
-//        session.getSpeedment().getEventComponent().notify(UIEvent.OPEN_COMPONENTS_WINDOW);
-//    }
 }

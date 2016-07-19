@@ -14,50 +14,48 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.config.mapper.identity;
+package com.speedment.generator.internal.typetoken;
 
-import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.mapper.TypeMapper;
-
+import com.speedment.runtime.config.typetoken.TypeToken;
 import static java.util.Objects.requireNonNull;
 
 /**
- *
- * @author Emil Forslund
- * @param <T> type
+ * The default implementation of the {@link TypeToken} interface.
+ * 
+ * @author  Emil Forslund
+ * @author  Simon Jonasson
+ * @since   3.0.0
  */
-@Api(version = "3.0")
-public abstract class AbstractIdentityMapper<T> implements TypeMapper<T, T> {
+public final class DefaultTypeToken<T> implements TypeToken {
     
-    private final Class<T> type;
+    private final Class<T> wrapped;
     
-    protected AbstractIdentityMapper(Class<T> type) {
-        this.type = requireNonNull(type);
+    public DefaultTypeToken(Class<T> wrapped) {
+        this.wrapped = requireNonNull(wrapped);
     }
 
     @Override
-    public final Class<T> getJavaType() {
-        return type;
+    public String getTypeName() {
+        return wrapped.getName();
     }
 
     @Override
-    public final Class<T> getDatabaseType() {
-        return type;
-    }
-
-    @Override
-    public final T toJavaType(T value) {
-        return value;
-    }
-
-    @Override
-    public final T toDatabaseType(T value) {
-        return value;
-    }
-
-    @Override
-    public boolean isIdentityMapper() {
-        return true;
+    public boolean isArray() {
+        return false;
     }
     
+    @Override
+    public boolean isEnum() {
+        return false;
+    }
+
+    @Override
+    public boolean isPrimitive() {
+        return false;
+    }
+
+    @Override
+    public boolean isGeneric() {
+        return false;
+    }
 }

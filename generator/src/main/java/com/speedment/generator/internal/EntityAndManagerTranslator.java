@@ -32,11 +32,11 @@ import java.util.function.Function;
  * @param <T> type of model to translate into
  */
 public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
-        extends DefaultJavaClassTranslator<Table, T> {
+    extends DefaultJavaClassTranslator<Table, T> {
 
     protected EntityAndManagerTranslator(
-            Table table,
-            Function<String, T> modelConstructor) {
+        Table table,
+        Function<String, T> modelConstructor) {
 
         super(table, modelConstructor);
     }
@@ -48,15 +48,15 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
             return DefaultType.list(DefaultType.WILDCARD);
         }
 
-        final Class<?> first = primaryKeyColumns()
-                .findFirst().get()
-                .findColumn().get()
-                .findTypeMapper().getJavaType();
+        final String first = primaryKeyColumns()
+            .findFirst().get()
+            .findColumn().get()
+            .getJavaType();
 
         if (pks == 1) {
             return Type.of(first);
         } else if (primaryKeyColumns().allMatch(c -> c.findColumn().get()
-                .findTypeMapper().getJavaType().equals(first))) {
+            .getJavaType().equals(first))) {
 
             return DefaultType.list(Type.of(first));
         } else {
@@ -75,14 +75,14 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
             throw new SpeedmentException("Speedment does not support " + pks + " primary keys.", cnf);
         }
         final Type result = Type.of(tupleClass);
-        primaryKeyColumns().forEachOrdered(pk -> 
-            result.add(
-                    Generic.of().add(
-                            Type.of(java.lang.Class.class)
-                            .add(Generic.of().add(
-                                    Type.of(pk.findColumn().get().findTypeMapper().getJavaType()))
-                            )
+        primaryKeyColumns().forEachOrdered(pk
+            -> result.add(
+                Generic.of().add(
+                    Type.of(java.lang.Class.class)
+                    .add(Generic.of().add(
+                        Type.of(pk.findColumn().get().getJavaType()))
                     )
+                )
             )
         );
         return result;

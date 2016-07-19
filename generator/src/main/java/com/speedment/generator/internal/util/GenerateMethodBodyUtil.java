@@ -41,6 +41,7 @@ import java.util.stream.Stream;
 import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.OBJECT;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.VOID;
+import com.speedment.common.codegen.internal.util.Formatting;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
@@ -94,7 +95,7 @@ public final class GenerateMethodBodyUtil {
             "switch ((" + support.entityName() + ".Identifier) identifier) " + block(
             columnsSupplier.get()
             .filter(HasEnabled::isEnabled)
-            .peek(c -> file.add(Import.of(Type.of(c.findTypeMapper().getJavaType()))))
+            .peek(c -> file.add(Import.of(Type.of(c.getJavaType()))))
             .map(c
             -> "case " + support.namer().javaStaticFieldName(c.getJavaName())
             + " : entity." + SETTER_METHOD_PREFIX + support.typeName(c)
@@ -179,11 +180,10 @@ public final class GenerateMethodBodyUtil {
     }
     
     private static String castToColumnTypeIfNotObject(Column c) {
-        final java.lang.Class<?> castType = c.findTypeMapper().getJavaType();
-        if (Object.class.equals(castType)) {
+        if (Object.class.getName().equals(c.getJavaType())) {
             return "";
         } else {
-            return "(" + c.findTypeMapper().getJavaType().getSimpleName() + ") ";
+            return "(" + Formatting.shortName(c.getJavaType()) + ") ";
         }
     }
     

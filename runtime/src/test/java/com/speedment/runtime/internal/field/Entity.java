@@ -17,8 +17,7 @@
 package com.speedment.runtime.internal.field;
 
 import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.config.mapper.identity.IntegerIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.StringIdentityMapper;
+import com.speedment.runtime.config.mapper.IdentityTypeMapper;
 import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.field.StringField;
 
@@ -58,8 +57,8 @@ public interface Entity {
         }
     }
 
-    public final static ComparableField<Entity, Integer, Integer> ID = new ComparableFieldImpl<>(Identifier.ID, Entity::getId, Entity::setId, new IntegerIdentityMapper(), true);
-    public final static StringField<Entity, String> NAME = new StringFieldImpl<>(Identifier.NAME, Entity::getName, Entity::setName, new StringIdentityMapper(), false);
+    public final static ComparableField<Entity, Integer, Integer> ID = new ComparableFieldImpl<>(Identifier.ID, Entity::getId, Entity::setId, new IdentityTypeMapper<>(), true);
+    public final static StringField<Entity, String> NAME = new StringFieldImpl<>(Identifier.NAME, Entity::getName, Entity::setName, new IdentityTypeMapper<>(), false);
 
     public Integer getId();
 

@@ -17,6 +17,7 @@
 package com.speedment.runtime.config.mapper.largeobject;
 
 import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.exception.SpeedmentException;
 
@@ -28,20 +29,15 @@ import java.sql.SQLException;
  * @author Per Minborg
  */
 @Api(version = "3.0")
-public class ClobToStringMapper implements TypeMapper<Clob, String> {
+public final class ClobToStringMapper implements TypeMapper<Clob, String> {
 
     @Override
-    public Class<String> getJavaType() {
-        return String.class;
+    public String getLabel() {
+        return "Clob to String";
     }
 
     @Override
-    public Class<Clob> getDatabaseType() {
-        return Clob.class;
-    }
-
-    @Override
-    public String toJavaType(Clob value) {
+    public <ENTITY> String toJavaType(Column column, ENTITY entity, Clob value) {
         if (value == null) {
             return null;
         } else try {
@@ -63,10 +59,5 @@ public class ClobToStringMapper implements TypeMapper<Clob, String> {
             return null;
         }
         return new StringClob(value);
-    }
-
-    @Override
-    public boolean isIdentityMapper() {
-        return false;
     }
 }

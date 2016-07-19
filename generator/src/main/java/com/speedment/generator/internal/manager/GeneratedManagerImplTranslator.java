@@ -284,16 +284,20 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
         
         final ResultSetMapping<?> mapping = resultSetMapperComponent.apply(
             dbmsTypeOf(dbmsHandlerComponent, c.getParentOrThrow().getParentOrThrow().getParentOrThrow()),
-            c.findTypeMapper().getDatabaseType()
+            c.findDatabaseType()
         );
 
-        final boolean isIdentityMapper = c.findTypeMapper().isIdentityMapper();
+        final boolean isIdentityMapper = c.getDatabaseType().equals(c.getJavaType());
 
         final StringBuilder sb = new StringBuilder();
         if (!isIdentityMapper) {
             sb
                 .append(typeMapperName(support, c))
-                .append(".toJavaType(");
+                .append(".toJavaType(getColumn(")
+                .append(support.entityName())
+                .append(".")
+                .append(support.namer().javaStaticFieldName(c.getJavaName()))
+                .append("), entity, ");
         }
         final String getterName = "get" + mapping.getResultSetMethodName(dbms);
 
@@ -365,8 +369,8 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
             .final_();
 
         final String parameters = primaryKeyColumns()
-            .map(pkc -> pkc.findColumn().get().findTypeMapper().getJavaType())
-            .map(c -> c.getSimpleName() + ".class")
+            .map(pkc -> Formatting.shortName(pkc.findColumn().get().getJavaType()))
+            .map(javaType -> javaType + ".class")
             .collect(joining(", "));
 
         field.set(new ReferenceValue(Tuples.class.getSimpleName() + ".of(" + parameters + ")"));

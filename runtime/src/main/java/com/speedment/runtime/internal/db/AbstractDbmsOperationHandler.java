@@ -52,6 +52,7 @@ import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import java.util.Collection;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
@@ -109,7 +110,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     }
 
     @Override
-    public <F extends FieldTrait & ReferenceFieldTrait<?, ?, ?>> void executeInsert(Dbms dbms, String sql, List<?> values, List<F> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
+    public <F extends FieldTrait & ReferenceFieldTrait<?, ?, ?>> void executeInsert(Dbms dbms, String sql, List<?> values, Collection<F> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
         final SqlInsertStatement sqlUpdateStatement = new SqlInsertStatement(sql, values, generatedKeyFields, generatedKeyConsumer);
         execute(dbms, singletonList(sqlUpdateStatement));
     }

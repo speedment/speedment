@@ -30,6 +30,7 @@ import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.sql.SQLXML;
 import java.sql.Struct;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -132,7 +133,7 @@ public interface DbmsOperationHandler {
             Dbms dbms,
             String sql,
             List<?> values,
-            List<F> generatedKeyFields,
+            Collection<F> generatedKeyFields,
             Consumer<List<Long>> generatedKeyConsumer
     ) throws SQLException;
 

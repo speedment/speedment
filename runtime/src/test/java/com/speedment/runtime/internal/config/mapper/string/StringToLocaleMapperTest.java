@@ -41,7 +41,7 @@ public class StringToLocaleMapperTest {
     public void testStringLocaleMapping() {
         String string = "DE";
 
-        Locale javaType = mapper.toJavaType(string);
+        Locale javaType = mapper.toJavaType(null, null, string);
         Assert.assertEquals("JavaType should have value 'de'", new Locale("de"), javaType);
 
         String databaseType = mapper.toDatabaseType(javaType);

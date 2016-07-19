@@ -39,7 +39,7 @@ public class YesNoStringToBooleanMapperTest {
     public void testStringYesMapping() {
         String string = "YES";
 
-        Boolean javaType = mapper.toJavaType(string);
+        Boolean javaType = mapper.toJavaType(null, null, string);
         Assert.assertEquals("JavaType should have value 'true'",  true, javaType);
 
         String databaseType = mapper.toDatabaseType(javaType);
@@ -50,7 +50,7 @@ public class YesNoStringToBooleanMapperTest {
     public void testStringNoMapping() {
         String string = "NO";
 
-        Boolean javaType = mapper.toJavaType(string);
+        Boolean javaType = mapper.toJavaType(null, null, string);
         Assert.assertEquals("JavaType should have value 'false'",  false, javaType);
 
         String databaseType = mapper.toDatabaseType(javaType);

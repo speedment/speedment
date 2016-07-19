@@ -19,28 +19,6 @@ package com.speedment.runtime.internal.component;
 import com.speedment.runtime.component.TypeMapperComponent;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mapper.bigdecimal.BigDecimalToDouble;
-import com.speedment.runtime.config.mapper.identity.ArrayIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.BigDecimalIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.BlobIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.BooleanIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.ByteIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.ClobIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.DateIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.DoubleIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.FloatIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.IntegerIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.LongIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.NClobIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.ObjectIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.RefIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.RowIdIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.SQLXMLIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.ShortIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.StringIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.TimeIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.TimestampIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.URLIdentityMapper;
-import com.speedment.runtime.config.mapper.identity.UUIDIdentityMapper;
 import com.speedment.runtime.config.mapper.integer.IntegerZeroOneToBooleanMapper;
 import com.speedment.runtime.config.mapper.largeobject.ClobToStringMapper;
 import com.speedment.runtime.config.mapper.string.StringToLocaleMapper;
@@ -53,6 +31,14 @@ import com.speedment.runtime.config.mapper.time.TimeToLongMapper;
 import com.speedment.runtime.config.mapper.time.TimestampToIntMapper;
 import com.speedment.runtime.config.mapper.time.TimestampToLongMapper;
 import com.speedment.runtime.license.Software;
+import java.math.BigDecimal;
+import java.sql.Clob;
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import java.util.Map;
 import java.util.Optional;
@@ -67,7 +53,7 @@ import java.util.stream.Stream;
  */
 public final class TypeMapperComponentImpl extends InternalOpenSourceComponent implements TypeMapperComponent {
 
-    private final Map<String, TypeMapper<?, ?>> mappers;
+    private final Map<String, List<TypeMapper<?, ?>>> mappers;
 
     /**
      * Constructs the component.
@@ -75,54 +61,27 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
     public TypeMapperComponentImpl() {
         this.mappers = new ConcurrentHashMap<>();
 
-        // Identity mappers
-        install(ArrayIdentityMapper::new);
-        install(BigDecimalIdentityMapper::new);
-        install(BlobIdentityMapper::new);
-        install(BooleanIdentityMapper::new);
-        install(ByteIdentityMapper::new);
-        install(ClobIdentityMapper::new);
-        install(DateIdentityMapper::new);
-        install(DoubleIdentityMapper::new);
-        install(FloatIdentityMapper::new);
-        install(IntegerIdentityMapper::new);
-        install(LongIdentityMapper::new);
-        install(NClobIdentityMapper::new);
-        install(ObjectIdentityMapper::new);
-        install(RefIdentityMapper::new);
-        install(RowIdIdentityMapper::new);
-        install(ShortIdentityMapper::new);
-        install(SQLXMLIdentityMapper::new);
-        install(StringIdentityMapper::new);
-        install(TimeIdentityMapper::new);
-        install(TimestampIdentityMapper::new);
-        install(URLIdentityMapper::new);
-
         // Special time mappers
-        install(DateToLongMapper::new);
-        install(TimestampToLongMapper::new);
-        install(TimeToLongMapper::new);
-        install(DateToIntMapper::new);
-        install(TimestampToIntMapper::new);
-        install(TimeToIntMapper::new);
+        install(Date.class,      DateToLongMapper::new);
+        install(Timestamp.class, TimestampToLongMapper::new);
+        install(Time.class,      TimeToLongMapper::new);
+        install(Date.class,      DateToIntMapper::new);
+        install(Timestamp.class, TimestampToIntMapper::new);
+        install(Time.class,      TimeToIntMapper::new);
 
         // Special string mappers
-        install(StringToLocaleMapper::new);
-        install(TrueFalseStringToBooleanMapper::new);
-        install(YesNoStringToBooleanMapper::new);
+        install(String.class, StringToLocaleMapper::new);
+        install(String.class, TrueFalseStringToBooleanMapper::new);
+        install(String.class, YesNoStringToBooleanMapper::new);
 
         // Special BigDecimal object mappers
-        install(BigDecimalToDouble::new);
+        install(BigDecimal.class, BigDecimalToDouble::new);
 
         // Special Large object mappers
-        install(ClobToStringMapper::new);
+        install(Clob.class, ClobToStringMapper::new);
         
         // Special integer mappers
-        install(IntegerZeroOneToBooleanMapper::new);
-
-        // Other mappers
-        install(UUIDIdentityMapper::new);
-
+        install(Integer.class, IntegerZeroOneToBooleanMapper::new);
     }
     
     @Override
@@ -132,19 +91,27 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
     }
 
     @Override
-    public void install(Supplier<TypeMapper<?, ?>> typeMapperConstructor) {
+    public void install(Class<?> databaseType, Supplier<TypeMapper<?, ?>> typeMapperConstructor) {
         final TypeMapper<?, ?> mapper = typeMapperConstructor.get();
-        mappers.put(mapper.getClass().getName(), mapper);
+        mappers.computeIfAbsent(databaseType.getName(), n -> new LinkedList<>()).add(mapper);
     }
 
     @Override
-    public final Stream<TypeMapper<?, ?>> stream() {
-        return mappers.values().stream();
+    public final Stream<TypeMapper<?, ?>> mapFrom(Class<?> databaseType) {
+        return mappers.getOrDefault(databaseType.getName(), Collections.emptyList()).stream();
+    }
+
+    @Override
+    public Stream<TypeMapper<?, ?>> stream() {
+        return mappers.values().stream()
+            .flatMap(List::stream);
     }
 
     @Override
     public Optional<TypeMapper<?, ?>> get(String absoluteClassName) {
-        return Optional.ofNullable(mappers.get(absoluteClassName));
+        return stream()
+            .filter(tm -> tm.getClass().getName().equals(absoluteClassName))
+            .findAny();
     }
 
     @Override

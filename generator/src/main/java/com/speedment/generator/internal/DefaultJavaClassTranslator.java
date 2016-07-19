@@ -387,7 +387,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
     }
 
     public Field fieldFor(Column c) {
-        return Field.of(getSupport().variableName(c), Type.of(c.findTypeMapper().getJavaType()));
+        return Field.of(getSupport().variableName(c), Type.of(c.getJavaType()));
     }
 
     public Constructor emptyConstructor() {

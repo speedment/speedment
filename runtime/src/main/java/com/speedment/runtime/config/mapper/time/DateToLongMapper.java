@@ -17,6 +17,7 @@
 package com.speedment.runtime.config.mapper.time;
 
 import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 
 import java.sql.Date;
@@ -28,30 +29,20 @@ import java.sql.Date;
  * @author  Patrick Hobusch
  */
 @Api(version = "3.0")
-public class DateToLongMapper implements TypeMapper<Date, Long> {
+public final class DateToLongMapper implements TypeMapper<Date, Long> {
 
     @Override
-    public Class<Long> getJavaType() {
-        return Long.class;
+    public String getLabel() {
+        return "Date to Long";
     }
 
     @Override
-    public Class<Date> getDatabaseType() {
-        return Date.class;
-    }
-
-    @Override
-    public Long toJavaType(Date value) {
+    public <ENTITY> Long toJavaType(Column column, ENTITY entity, Date value) {
         return value == null ? null : value.getTime();
     }
 
     @Override
     public Date toDatabaseType(Long value) {
         return value == null ? null : new Date(value);
-    }
-    
-    @Override
-    public boolean isIdentityMapper() {
-        return false;
     }
 }

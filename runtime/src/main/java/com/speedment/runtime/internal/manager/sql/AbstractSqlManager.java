@@ -66,11 +66,13 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.injector.State.RESOLVED;
+import com.speedment.common.mapstream.MapStream;
 import static com.speedment.runtime.util.OptionalUtil.unwrap;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.*;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.ancestor;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import java.util.Collection;
 import static java.util.Objects.requireNonNull;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.joining;
@@ -92,12 +94,9 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     private SqlFunction<ResultSet, ENTITY> entityMapper;
 
-    private @Inject
-    DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject
-    ResultSetMapperComponent resultSetMapperComponent;
-    private @Inject
-    ProjectComponent projectComponent;
+    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
+    private @Inject ResultSetMapperComponent resultSetMapperComponent;
+    private @Inject ProjectComponent projectComponent;
 
     protected AbstractSqlManager() {
         this.sqlColumnList = LazyString.create();
@@ -256,6 +255,19 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     }
 
     /**
+     * Returns the column corresponding to a particular field in an entity
+     * managed by this manager.
+     * 
+     * @param field  the field
+     * @return       the corresponding Column
+     */
+    protected Column getColumn(ReferenceFieldTrait<ENTITY, ?, ?> field) {
+        return field.findColumn(projectComponent.getProject()).orElseThrow(
+            () -> new SpeedmentException("Could not find column '" + field.getIdentifier() + "'.")
+        );
+    }
+    
+    /**
      * Short-cut for retrieving the current {@link DatabaseNamingConvention}.
      *
      * @return the current naming convention
@@ -324,8 +336,10 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
     private <F extends FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>> Object toDatabaseType(F field, ENTITY entity) {
         final Object javaValue = unwrap(get(entity, field.getIdentifier()));
+        
         @SuppressWarnings("unchecked")
         final Object dbValue = ((TypeMapper<Object, Object>) field.typeMapper()).toDatabaseType(javaValue);
+        
         return dbValue;
     }
 
@@ -345,37 +359,37 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
             .map(f -> (FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>) f)
             .map(f -> toDatabaseType(f, entity))
             .collect(toList());
-
-        // TODO: Make autoinc part of FieldTrait
+ 
         @SuppressWarnings("unchecked")
-        final List<F> generatedFields = fields()
-            .filter(f -> DocumentDbUtil.referencedColumn(projectComponent.getProject(), f.getIdentifier()).isAutoIncrement())
-            .filter(ReferenceFieldTrait.class::isInstance)
-            .map(f -> (F) f)
-            .collect(toList());
+        final Map<F, Column> generatedFields = MapStream.fromKeys(fields(), 
+            f -> DocumentDbUtil.referencedColumn(projectComponent.getProject(), f.getIdentifier()))
+                .filterValue(Column::isAutoIncrement)
+                .filterKey(ReferenceFieldTrait.class::isInstance)
+                .mapKey(f -> (F) f)
+                .toMap();
 
-        final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer = builder -> {
+        final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer = newEntity -> {
             return l -> {
                 if (!l.isEmpty()) {
                     final AtomicInteger cnt = new AtomicInteger();
                     // Just assume that they are in order, what else is there to do?
                     generatedFields
-                        .forEach(f -> {
+                        .forEach((f, col) -> {
 
                             // Cast from Long to the column target type
                             final Object val = resultSetMapperComponent
-                                .apply(f.typeMapper().getJavaType())
+                                .apply(col.findJavaType())
                                 .parse(l.get(cnt.getAndIncrement()));
 
                             @SuppressWarnings("unchecked")
-                            final Object javaValue = ((TypeMapper<Object, Object>) f.typeMapper()).toJavaType(val);
-                            set(builder, f.getIdentifier(), javaValue);
+                            final Object javaValue = ((TypeMapper<Object, Object>) f.typeMapper()).toJavaType(col, newEntity, val);
+                            set(newEntity, f.getIdentifier(), javaValue);
                         });
                 }
             };
         };
 
-        executeInsert(entity, sb.toString(), values, generatedFields, generatedKeyconsumer, listener);
+        executeInsert(entity, sb.toString(), values, generatedFields.keySet(), generatedKeyconsumer, listener);
         return entity;
     }
 
@@ -479,7 +493,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         final ENTITY entity,
         final String sql,
         final List<Object> values,
-        final List<F> generatedFields,
+        final Collection<F> generatedFields,
         final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer,
         final Optional<Consumer<MetaResult<ENTITY>>> listener
     ) throws SpeedmentException {

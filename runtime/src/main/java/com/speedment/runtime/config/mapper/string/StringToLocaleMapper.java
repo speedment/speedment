@@ -17,6 +17,7 @@
 package com.speedment.runtime.config.mapper.string;
 
 import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 
 import java.util.Locale;
@@ -27,30 +28,20 @@ import java.util.Locale;
 * @author  Patrick Hobusch
 */
 @Api(version = "3.0")
-public class StringToLocaleMapper implements TypeMapper<String, Locale> {
-   
+public final class StringToLocaleMapper implements TypeMapper<String, Locale> {
+    
     @Override
-    public Class<Locale> getJavaType() {
-        return Locale.class;
+    public String getLabel() {
+        return "String to Locale";
     }
 
     @Override
-    public Class<String> getDatabaseType() {
-        return String.class;
-    }
-
-    @Override
-    public Locale toJavaType(String value) {
+    public <ENTITY> Locale toJavaType(Column column, ENTITY entity, String value) {
        return value == null ? null : new Locale(value);
     }
 
     @Override
     public String toDatabaseType(Locale value) {
        return value == null ? null : value.getLanguage();
-    }
-
-    @Override
-    public boolean isIdentityMapper() {
-        return false;
     }
 }

@@ -17,6 +17,7 @@
 package com.speedment.runtime.config.mapper.string;
 
 import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 
 /**
@@ -25,7 +26,7 @@ import com.speedment.runtime.config.mapper.TypeMapper;
  * @author  Patrick Hobusch
  */
 @Api(version = "3.0")
-public class YesNoStringToBooleanMapper implements TypeMapper<String, Boolean> {
+public final class YesNoStringToBooleanMapper implements TypeMapper<String, Boolean> {
 
     @Override
     public String getLabel() {
@@ -33,17 +34,7 @@ public class YesNoStringToBooleanMapper implements TypeMapper<String, Boolean> {
     }
 
     @Override
-    public Class<Boolean> getJavaType() {
-        return Boolean.class;
-    }
-
-    @Override
-    public Class<String> getDatabaseType() {
-        return String.class;
-    }
-
-    @Override
-    public Boolean toJavaType(String value) {
+    public <ENTITY> Boolean toJavaType(Column column, ENTITY entity, String value) {
         return value == null ? null : value.equalsIgnoreCase("yes");
     }
 
@@ -51,10 +42,4 @@ public class YesNoStringToBooleanMapper implements TypeMapper<String, Boolean> {
     public String toDatabaseType(Boolean value) {
         return value == null ? null : (value ? "yes" : "no");
     }
-
-    @Override
-    public boolean isIdentityMapper() {
-        return false;
-    }
-
 }

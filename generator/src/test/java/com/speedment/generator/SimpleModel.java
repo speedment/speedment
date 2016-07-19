@@ -30,7 +30,6 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.config.mapper.identity.StringIdentityMapper;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.internal.runtime.AbstractApplicationMetadata;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
@@ -93,16 +92,16 @@ public abstract class SimpleModel {
             return quote(HasName.NAME) + " : " + quote(s);
         }
 
-        private String typeMapper(Class<? extends TypeMapper<?, ?>> tmc) {
-            return quote(Column.TYPE_MAPPER) + " : " + quote(tmc.getName());
-        }
-
         private String dbTypeName(String dbmsTypeName) {
             return quote(Dbms.TYPE_NAME) + " : " + quote(dbmsTypeName);
         }
 
         private String columnDatabaseType(String typeName) {
             return quote(Column.DATABASE_TYPE) + " : " + quote(typeName);
+        }
+        
+        private String columnJavaType(String typeName) {
+            return quote(Column.JAVA_TYPE) + " : " + quote(typeName);
         }
 
         private String array(String name, String... s) {
@@ -139,8 +138,8 @@ public abstract class SimpleModel {
                                             array(Table.COLUMNS,
                                                 object(
                                                     name(COLUMN_NAME),
-                                                    typeMapper(StringIdentityMapper.class),
-                                                    columnDatabaseType(String.class.getName())
+                                                    columnDatabaseType(String.class.getName()),
+                                                    columnJavaType(String.class.getName())
                                                 )
                                             ),
                                             array(Table.PRIMARY_KEY_COLUMNS,
@@ -154,8 +153,8 @@ public abstract class SimpleModel {
                                             array(Table.COLUMNS,
                                                 object(
                                                     name(COLUMN_NAME2),
-                                                    typeMapper(StringIdentityMapper.class),
-                                                    columnDatabaseType(String.class.getName())
+                                                    columnDatabaseType(String.class.getName()),
+                                                    columnJavaType(String.class.getName())
                                                 )
                                             ),
                                             array(Table.PRIMARY_KEY_COLUMNS,

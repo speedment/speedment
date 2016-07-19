@@ -20,6 +20,7 @@ import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -32,14 +33,14 @@ import static java.util.Objects.requireNonNull;
  */
 public final class SqlInsertStatement extends SqlStatement {
 
-    private final List<? extends FieldTrait> generatedColumnFields;
+    private final Collection<? extends FieldTrait> generatedColumnFields;
     private final List<Long> generatedKeys;
     private final Consumer<List<Long>> generatedKeysConsumer;
 
     public <F extends FieldTrait & ReferenceFieldTrait<?, ?, ?>> SqlInsertStatement(
         final String sql,
         final List<?> values,
-        final List<F> generatedColumnFields,
+        final Collection<F> generatedColumnFields,
         final Consumer<List<Long>> generatedKeysConsumer
     ) {
         super(sql, values);

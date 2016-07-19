@@ -20,7 +20,6 @@ import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.TypeMapperComponent;
 import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.util.EditorsUtil;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.property.editor.PropertyEditor;
@@ -28,9 +27,8 @@ import org.controlsfx.property.editor.PropertyEditor;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static java.util.Comparator.comparing;
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -61,23 +59,14 @@ public final class TypeMapperPropertyItem extends AbstractPropertyItem<String, S
     @Override
     protected PropertyEditor<?> createUndecoratedEditor() { 
         final TypeMapperComponent typeMapperComponent = speedment.getOrThrow(TypeMapperComponent.class);
-        final List<String> mappers = typeMapperComponent.stream()
-            .filter(mapper -> type.isAssignableFrom(mapper.getDatabaseType()))
-            .sorted(comparing(TypeMapper::getLabel))
+        final List<String> mappers = typeMapperComponent.mapFrom(type)
+            .sorted(TypeMapper.COMPARATOR)
             .map(TypeMapper::getClass)
             .map(Class::getName)
             .collect(toList());
-        
-        if (mappers.isEmpty()) {
-            throw new SpeedmentException(
-                "Created TypeMapperPropertyItem to illustrate type '" + 
-                type.getSimpleName() + 
-                "' but no mappers was found."
-            );
-        }
 
         return EditorsUtil.createChoiceEditorWithConverter(
-            this, mappers, clazz -> typeMapperComponent.get(clazz).get().getLabel()
+            this, mappers, clazz -> typeMapperComponent.get(clazz).map(TypeMapper::getLabel).orElse(null)
         );
     }
 }
