@@ -53,7 +53,7 @@ final class TranslatorUtil {
     }
 
     static Type mergingColumnType(Table table) {
-        return Type.of(mergingColumn(table).findTypeMapper().getJavaType());
+        return Type.of(mergingColumn(table).findJavaType());
     }
     
     private TranslatorUtil() {}

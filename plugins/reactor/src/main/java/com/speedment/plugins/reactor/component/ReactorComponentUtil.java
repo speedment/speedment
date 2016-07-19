@@ -52,7 +52,7 @@ public final class ReactorComponentUtil {
             // comparable.
             .filter(col -> Comparable.class
                 .isAssignableFrom(
-                    col.findTypeMapper().getJavaType()
+                    col.findJavaType()
                 )
             )
 
