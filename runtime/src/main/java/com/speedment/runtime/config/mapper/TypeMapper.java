@@ -20,22 +20,22 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.TypeMapperComponent;
 import com.speedment.runtime.config.Column;
 import static com.speedment.runtime.config.mapper.IdentityTypeMapper.IDENTITY;
+import com.speedment.runtime.config.typetoken.TypeToken;
 
 import java.util.Comparator;
 
 import static java.util.Comparator.comparing;
-import java.util.Optional;
 
 /**
  * A type mapper contains logic for converting between the database and the java
  * type for a field. Implementations of this class should be installed in the
  * {@link TypeMapperComponent}.
  *
- * @param <DB_TYPE> the type as it is represented in the JDBC driver
+ * @param <DB_TYPE>   the type as it is represented in the JDBC driver
  * @param <JAVA_TYPE> the type as it should be represented in generated code
  *
- * @author Emil Forslund
- * @since 2.2.0
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
 @Api(version = "3.0")
 public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
@@ -51,36 +51,45 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
     /**
      * Returns the label for this mapper that should appear to the end user.
      *
-     * @return the label
+     * @return  the label
      */
     String getLabel();
 
-    //  TODO: Should we have a getJavaType(Column column, ENTITY entity) -> TypeToken
+    /**
+     * Returns a token describing the resulting java type when this mapper is
+     * applied to a database result.
+     * 
+     * @param <ENTITY>  the entity type
+     * @param column    the column that is being mapped
+     * @return          token describing the resulting java type
+     */
+    <ENTITY> TypeToken getJavaType(Column column);
+    
     /**
      * Converts a value from the database domain to the java domain.
      *
      * @param <ENTITY> the type of the entity
      *
-     * @param column the column that is being mapped
-     * @param entity the entity instance that the mapping is for
-     * @param value the value to convert
-     * @return the converted value
+     * @param column      the column that is being mapped
+     * @param entityType  the entity type that the mapping is for
+     * @param value       the value to convert
+     * @return            the converted value
      */
-    <ENTITY> JAVA_TYPE toJavaType(Column column, ENTITY entity, DB_TYPE value);
+    <ENTITY> JAVA_TYPE toJavaType(Column column, Class<ENTITY> entityType, DB_TYPE value);
 
     /**
      * Converts a value from the java domain to the database domain.
      *
-     * @param value the value to convert
-     * @return the converted value
+     * @param value  the value to convert
+     * @return       the converted value
      */
     DB_TYPE toDatabaseType(JAVA_TYPE value);
 
     /**
      * Returns an identity type mapper.
      *
-     * @param <T> the type of the identity type mapper
-     * @return an identity type mapper
+     * @param <T>  the type of the identity type mapper
+     * @return     an identity type mapper
      */
     static <T> TypeMapper<T, T> identity() {
         @SuppressWarnings("unchecked")

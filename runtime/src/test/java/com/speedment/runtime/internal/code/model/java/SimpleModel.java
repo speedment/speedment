@@ -96,10 +96,6 @@ public abstract class SimpleModel {
         private String columnDatabaseType(String typeName) {
             return quote(Column.DATABASE_TYPE) + " : " + quote(typeName);
         }
-        
-        private String columnJavaType(String typeName) {
-            return quote(Column.JAVA_TYPE) + " : " + quote(typeName);
-        }
 
         private String array(String name, String... s) {
             return quote(name) + " : [\n" + Stream.of(s)
@@ -135,8 +131,7 @@ public abstract class SimpleModel {
                                             array(Table.COLUMNS,
                                                 object(
                                                     name(COLUMN_NAME),
-                                                    columnDatabaseType(String.class.getName()),
-                                                    columnJavaType(String.class.getName())
+                                                    columnDatabaseType(String.class.getName())
                                                 )
                                             ),
                                             array(Table.PRIMARY_KEY_COLUMNS,
@@ -150,8 +145,7 @@ public abstract class SimpleModel {
                                             array(Table.COLUMNS,
                                                 object(
                                                     name(COLUMN_NAME2),
-                                                    columnDatabaseType(String.class.getName()),
-                                                    columnJavaType(String.class.getName())
+                                                    columnDatabaseType(String.class.getName())
                                                 )
                                             ),
                                             array(Table.PRIMARY_KEY_COLUMNS,

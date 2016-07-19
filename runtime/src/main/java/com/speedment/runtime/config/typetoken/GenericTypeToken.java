@@ -19,6 +19,7 @@ package com.speedment.runtime.config.typetoken;
 import java.util.List;
 
 /**
+ * A special type of {@link TypeToken} that represent a generic type.
  * 
  * @author  Emil Forslund
  * @author  Simon Jonasson
@@ -26,6 +27,35 @@ import java.util.List;
  */
 public interface GenericTypeToken extends TypeToken {
     
+    /**
+     * Returns a list of generic type parameters to this type token. For
+     * an example, the type below has two generic tokens:
+     * {@code Map<String, Long>}.
+     * <p>
+     * The returned list can be empty.
+     * 
+     * @return  list of generic types to this type
+     */
+    List<GenericToken> getGenericTokens();
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Returns {@code true} for all generic types.
+     * 
+     * @return  always {@code true}
+     */
+    @Override
+    default boolean isGeneric() {
+        return true;
+    }
+    
+    /**
+     * The inner type of the generic type token that tells if the type
+     * variable has a bound or not. Bound type variables also implement
+     * {@link BoundGenericToken} and unbound type variables also
+     * implement {@link UnboundGenericToken}.
+     */
     interface GenericToken {
         
         /**
@@ -37,6 +67,10 @@ public interface GenericTypeToken extends TypeToken {
         boolean isBound();
     }
 
+    /**
+     * The inner type variable in a generic type statement. This holds
+     * the {@link TypeToken} of the generic type.
+     */
     interface UnboundGenericToken extends GenericToken {
         
         /**
@@ -46,14 +80,28 @@ public interface GenericTypeToken extends TypeToken {
          */
         TypeToken getTypeToken();
 
+        /**
+         * {@inheritDoc}
+         * <p>
+         * Always {@code false}.
+         * 
+         * @return  {@code false} for all unbound types
+         */
         @Override
         default boolean isBound() {
             return false;
         }
     }
 
+    /**
+     * The inner type variable in a generic type statement. This holds
+     * the {@link TypeToken} of every upper bound for the generic type.
+     */
     interface BoundGenericToken extends GenericToken {
         
+        /**
+         * The type of bound that this type token has.
+         */
         enum BoundType {
             EXTENDS, SUPER
         }
@@ -76,25 +124,16 @@ public interface GenericTypeToken extends TypeToken {
          */
         List<TypeToken> getBounds();
 
+        /**
+         * {@inheritDoc}
+         * <p>
+         * Always {@code true}.
+         * 
+         * @return  {@code true} for all bound types
+         */
         @Override
         default boolean isBound() {
             return true;
         }
-    }
-
-    /**
-     * Returns a list of generic type parameters to this type token. For
-     * an example, the type below has two generic tokens:
-     * {@code Map<String, Long>}.
-     * <p>
-     * The returned list can be empty.
-     * 
-     * @return  list of generic types to this type
-     */
-    List<GenericToken> getGenericTokens();
-
-    @Override
-    default boolean isGeneric() {
-        return true;
     }
 }

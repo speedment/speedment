@@ -36,7 +36,7 @@ import static java.util.Objects.requireNonNull;
  * @author Per Minborg
  */
 @Api(version = "3.0")
-public class StringClob implements Clob {
+public final class StringClob implements Clob {
 
     private String inner;
 
@@ -67,6 +67,7 @@ public class StringClob implements Clob {
         return inner.substring((int) ordinalPosition - 1, effectiveLen);
     }
 
+    @Override
     public Reader getCharacterStream() throws SQLException {
         assertNotFreeNotCalled();
         return new StringReader(inner);

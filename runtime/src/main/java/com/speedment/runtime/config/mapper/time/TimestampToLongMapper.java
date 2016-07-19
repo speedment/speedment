@@ -19,6 +19,8 @@ package com.speedment.runtime.config.mapper.time;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.config.typetoken.TypeToken;
+import com.speedment.runtime.util.TypeTokenFactory;
 
 import java.sql.Timestamp;
 
@@ -35,7 +37,12 @@ public final class TimestampToLongMapper implements TypeMapper<Timestamp, Long> 
     }
 
     @Override
-    public <ENTITY> Long toJavaType(Column column, ENTITY entity, Timestamp value) {
+    public <ENTITY> TypeToken getJavaType(Column column) {
+        return TypeTokenFactory.create(Long.class);
+    }
+
+    @Override
+    public <ENTITY> Long toJavaType(Column column, Class<ENTITY> entityType, Timestamp value) {
         return value == null ? null : value.getTime();
     }
 

@@ -48,13 +48,16 @@ import com.speedment.common.codegen.internal.model.constant.DefaultType;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.OPTIONAL;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.STRING;
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
+import com.speedment.generator.util.TypeTokenUtil;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.IdentityTypeMapper;
 import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.config.typetoken.TypeToken;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import com.speedment.runtime.util.OptionalBoolean;
 import com.speedment.runtime.util.OptionalUtil;
+import com.speedment.runtime.util.TypeTokenFactory;
 
 /**
  *
@@ -132,7 +135,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
              */
             .forEveryColumn((intrf, col) -> {
                 intrf.add(Method.of(SETTER_METHOD_PREFIX + getSupport().typeName(col), getSupport().entityType())
-                    .add(Field.of(getSupport().variableName(col), Type.of(col.getJavaType())))
+                    .add(Field.of(getSupport().variableName(col), TypeTokenUtil.typeOf(col)))
                     .set(Javadoc.of(
                         "Sets the " + getSupport().variableName(col)
                         + " of this " + getSupport().entityName()
@@ -244,24 +247,22 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
 
     static Type getterReturnType(Column col) {
         final Type retType;
-        final String javaType = col.getJavaType();
+        final TypeToken token = TypeTokenUtil.tokenOf(col);
 
         if (col.isNullable()) {
-            if (javaType.equals(Integer.class.getName())) {
+            if (TypeTokenFactory.createIntegerToken().equals(token)) {
                 retType = DefaultType.OPTIONAL_INT;
-            } else if (javaType.equals(Long.class.getName())) {
+            } else if (TypeTokenFactory.createLongToken().equals(token)) {
                 retType = DefaultType.OPTIONAL_LONG;
-            } else if (javaType.equals(Double.class.getName())) {
+            } else if (TypeTokenFactory.createDoubleToken().equals(token)) {
                 retType = DefaultType.OPTIONAL_DOUBLE;
-            } else if (javaType.equals(Boolean.class.getName())) {
+            } else if (TypeTokenFactory.createBooleanToken().equals(token)) {
                 retType = Type.of(OptionalBoolean.class.getName());
             } else {
-                retType = OPTIONAL.add(
-                    Generic.of(Type.of(javaType))
-                );
+                retType = OPTIONAL.add(Generic.of(TypeTokenUtil.typeOf(col)));
             }
         } else {
-            retType = Type.of(javaType);
+            retType = TypeTokenUtil.typeOf(col);
         }
 
         return retType;

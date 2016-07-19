@@ -19,6 +19,8 @@ package com.speedment.runtime.config.mapper.bigdecimal;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.config.typetoken.TypeToken;
+import com.speedment.runtime.util.TypeTokenFactory;
 
 import java.math.BigDecimal;
 
@@ -33,9 +35,14 @@ public final class BigDecimalToDouble implements TypeMapper<BigDecimal, Double> 
     public String getLabel() {
         return "BigDecimal to Double";
     }
+    
+    @Override
+    public <ENTITY> TypeToken getJavaType(Column column) {
+        return TypeTokenFactory.create(Double.class);
+    }
 
     @Override
-    public <ENTITY> Double toJavaType(Column column, ENTITY entity, BigDecimal value) {
+    public <ENTITY> Double toJavaType(Column column, Class<ENTITY> entityType, BigDecimal value) {
         return value == null ? null : value.doubleValue();
     }
 

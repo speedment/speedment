@@ -50,10 +50,9 @@ public final class ReactorComponentUtil {
 
             // Only include columns that are 
             // comparable.
-            .filter(col -> Comparable.class
-                .isAssignableFrom(
-                    col.findJavaType()
-                )
+            .filter(col -> col.findTypeMapper()
+                .getJavaType(col)
+                .isComparable()
             )
 
             // Return list of names.

@@ -16,7 +16,6 @@
  */
 package com.speedment.common.codegen.internal.model.constant;
 
-import com.speedment.common.codegen.internal.model.GenericImpl;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Type;
@@ -82,7 +81,19 @@ public enum DefaultType implements Type {
 		FUNCTION(Function.class),
 		PREDICATE(Predicate.class),
 		CONSUMER(Consumer.class),
-        SUPPLIER(Supplier.class);
+        SUPPLIER(Supplier.class),
+        CLASS(java.lang.Class.class);
+        
+    /**
+     * Generates a {@link Type} to represent a java standard {@link Class} with
+     * a generic type variable.
+     * 
+     * @param innerType  the type variable
+     * @return           the resulting type
+     */
+    public static Type classOf(Type innerType) {
+		return CLASS.add(Generic.of(requireNonNull(innerType)));
+	}
       
     /**
      * Generates a {@link Type} to represent a java standard {@link List} with
@@ -92,7 +103,7 @@ public enum DefaultType implements Type {
      * @return           the resulting type
      */
     public static Type list(Type innerType) {
-		return LIST.add(new GenericImpl(requireNonNull(innerType)));
+		return LIST.add(Generic.of(requireNonNull(innerType)));
 	}
 	
     /**
@@ -103,7 +114,7 @@ public enum DefaultType implements Type {
      * @return           the resulting type
      */
 	public static Type set(Type innerType) {
-		return SET.add(new GenericImpl(requireNonNull(innerType)));
+		return SET.add(Generic.of(requireNonNull(innerType)));
 	}
 	
     /**
@@ -116,8 +127,8 @@ public enum DefaultType implements Type {
      */
 	public static Type map(Type innerTypeA, Type innerTypeB) {
 		return MAP
-            .add(new GenericImpl(requireNonNull(innerTypeA)))
-            .add(new GenericImpl(requireNonNull(innerTypeB)));
+            .add(Generic.of(requireNonNull(innerTypeA)))
+            .add(Generic.of(requireNonNull(innerTypeB)));
 	}
 	
     /**
@@ -128,7 +139,7 @@ public enum DefaultType implements Type {
      * @return           the resulting type
      */
 	public static Type queue(Type innerType) {
-		return QUEUE.add(new GenericImpl(requireNonNull(innerType)));
+		return QUEUE.add(Generic.of(requireNonNull(innerType)));
 	}
 	
     /**
@@ -139,7 +150,7 @@ public enum DefaultType implements Type {
      * @return           the resulting type
      */
     public static Type stack(Type innerType) {
-        return STACK.add(new GenericImpl(requireNonNull(innerType)));
+        return STACK.add(Generic.of(requireNonNull(innerType)));
     }
     
     /**
@@ -150,7 +161,7 @@ public enum DefaultType implements Type {
      * @return           the resulting type
      */
     public static Type optional(Type innerType) {
-        return OPTIONAL.add(new GenericImpl(requireNonNull(innerType)));
+        return OPTIONAL.add(Generic.of(requireNonNull(innerType)));
     }
     
     /**
@@ -163,8 +174,8 @@ public enum DefaultType implements Type {
      */
     public static Type entry(Type innerTypeA, Type innerTypeB) {
         return ENTRY
-            .add(new GenericImpl(requireNonNull(innerTypeA)))
-            .add(new GenericImpl(requireNonNull(innerTypeB)));
+            .add(Generic.of(requireNonNull(innerTypeA)))
+            .add(Generic.of(requireNonNull(innerTypeB)));
     }
     
     /**
@@ -177,8 +188,8 @@ public enum DefaultType implements Type {
      */
     public static Type function(Type innerTypeA, Type innerTypeB) {
         return FUNCTION
-            .add(new GenericImpl(requireNonNull(innerTypeA)))
-            .add(new GenericImpl(requireNonNull(innerTypeB)));
+            .add(Generic.of(requireNonNull(innerTypeA)))
+            .add(Generic.of(requireNonNull(innerTypeB)));
     }
     
     /**
@@ -189,7 +200,7 @@ public enum DefaultType implements Type {
      * @return           the resulting type
      */
     public static Type predicate(Type innerType) {
-        return PREDICATE.add(new GenericImpl(requireNonNull(innerType)));
+        return PREDICATE.add(Generic.of(requireNonNull(innerType)));
     }
     
     /**
@@ -200,7 +211,7 @@ public enum DefaultType implements Type {
      * @return           the resulting type
      */
     public static Type consumer(Type innerType) {
-        return CONSUMER.add(new GenericImpl(requireNonNull(innerType)));
+        return CONSUMER.add(Generic.of(requireNonNull(innerType)));
     }
     
     /**
@@ -211,7 +222,7 @@ public enum DefaultType implements Type {
      * @return           the resulting type
      */
     public static Type supplier(Type innerType) {
-        return SUPPLIER.add(new GenericImpl(requireNonNull(innerType)));
+        return SUPPLIER.add(Generic.of(requireNonNull(innerType)));
     }
     
     /**

@@ -101,8 +101,8 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table, C
     }
 
     @Override
-    public Optional<TypeMapper<?, ?>> findTypeMapper() {
-        return Optional.ofNullable(typeMapperObjectProperty().getValue());
+    public TypeMapper<?, ?> findTypeMapper() {
+        return typeMapperObjectProperty().getValue();
     }
     
     @Override
@@ -121,24 +121,6 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table, C
     @Override
     public Class<?> findDatabaseType() {
         return databaseTypeObjectProperty().get();
-    }
-    
-    @Override
-    public String getJavaType() {
-        return javaTypeProperty().get();
-    }
-
-    public StringProperty javaTypeProperty() {
-        return stringPropertyOf(JAVA_TYPE, Column.super::getJavaType);
-    }
-
-    public ObjectBinding<Class<?>> javaTypeObjectProperty() {
-        return createObjectBinding(Column.super::findJavaType, javaTypeProperty());
-    }
-
-    @Override
-    public Class<?> findJavaType() {
-        return javaTypeObjectProperty().get();
     }
 
     @Override
@@ -194,9 +176,9 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table, C
                     return typeMapper;
                 } catch (final ClassNotFoundException ex) {
                     throw new SpeedmentException("Could not find type-mapper class: '" + className + "'.", ex);
-                } catch (InstantiationException ex) {
+                } catch (final InstantiationException ex) {
                     throw new SpeedmentException("Could not instantiate type-mapper class: '" + className + "'.", ex);
-                } catch (IllegalAccessException ex) {
+                } catch (final IllegalAccessException ex) {
                     throw new SpeedmentException("Could not access type-mapper class: '" + className + "'.", ex);
                 }
             }

@@ -17,6 +17,8 @@
 package com.speedment.runtime.config.typetoken;
 
 /**
+ * A special type of {@link TypeToken} that represent the eight types of primitive
+ * types in the java language. These can be implemented effectivily using an enum.
  * 
  * @author  Emil Forslund
  * @author  Simon Jonasson
@@ -24,6 +26,10 @@ package com.speedment.runtime.config.typetoken;
  */
 public interface PrimitiveTypeToken extends TypeToken {
     
+    /**
+     * An enum holding the eight primitive types of the java language, along with
+     * the class object of both the wrapper and the unwrapped type.
+     */
     enum Primitive {
         
         BYTE    (byte.class, Byte.class),
@@ -32,7 +38,8 @@ public interface PrimitiveTypeToken extends TypeToken {
         LONG    (long.class, Long.class),
         FLOAT   (float.class, Float.class),
         DOUBLE  (double.class, Double.class),
-        BOOLEAN (boolean.class, Boolean.class);
+        BOOLEAN (boolean.class, Boolean.class),
+        CHAR    (char.class, Character.class);
 
         private final Class<?> unwrapped, wrapper;
 
@@ -58,11 +65,39 @@ public interface PrimitiveTypeToken extends TypeToken {
      */
     Primitive getPrimitiveType();
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Returns {@code true} for all primitive types.
+     * 
+     * @return  always {@code true}
+     */
     @Override
     default boolean isPrimitive() {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * All primitive types are comparable, so this method will always
+     * return {@code true}.
+     * 
+     * @return  {@code true} since all primitive types are comparable
+     */
+    @Override
+    public default boolean isComparable() {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Returns the unwrapped type ({@code int} if the type is an integer
+     * for an example).
+     * 
+     * @return  the unwrapped class object for this primitive type token
+     */
     @Override
     default Class<?> asClass() throws ClassNotFoundException {
         return getPrimitiveType().getUnwrapped();

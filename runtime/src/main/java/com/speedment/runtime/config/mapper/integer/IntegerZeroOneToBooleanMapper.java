@@ -19,6 +19,8 @@ package com.speedment.runtime.config.mapper.integer;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.config.typetoken.TypeToken;
+import com.speedment.runtime.util.TypeTokenFactory;
 
 /**
  *
@@ -32,9 +34,14 @@ public final class IntegerZeroOneToBooleanMapper implements TypeMapper<Integer, 
     public String getLabel() {
         return "Integer (0|1) to Boolean";
     }
+    
+    @Override
+    public <ENTITY> TypeToken getJavaType(Column column) {
+        return TypeTokenFactory.create(Boolean.class);
+    }
 
     @Override
-    public <ENTITY> Boolean toJavaType(Column column, ENTITY entity, Integer value) {
+    public <ENTITY> Boolean toJavaType(Column column, Class<ENTITY> entityType, Integer value) {
         return value == null ? null : value != 0;
     }
 

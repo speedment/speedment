@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.generator.internal.typetoken;
+package com.speedment.runtime.internal.config.typetoken;
 
 import com.speedment.runtime.config.typetoken.PrimitiveTypeToken;
 
@@ -25,7 +25,7 @@ import com.speedment.runtime.config.typetoken.PrimitiveTypeToken;
  * @author  Simon Jonasson
  * @since   3.0.0
  */
-public enum PrimitiveTypeTokenImpl implements PrimitiveTypeToken {
+enum PrimitiveTypeTokenImpl implements PrimitiveTypeToken {
     
     BYTE    (PrimitiveTypeToken.Primitive.BYTE),
     SHORT   (PrimitiveTypeToken.Primitive.SHORT),
@@ -33,7 +33,8 @@ public enum PrimitiveTypeTokenImpl implements PrimitiveTypeToken {
     LONG    (PrimitiveTypeToken.Primitive.LONG),
     FLOAT   (PrimitiveTypeToken.Primitive.FLOAT),
     DOUBLE  (PrimitiveTypeToken.Primitive.DOUBLE),
-    BOOLEAN (PrimitiveTypeToken.Primitive.BOOLEAN);
+    BOOLEAN (PrimitiveTypeToken.Primitive.BOOLEAN),
+    CHAR    (PrimitiveTypeToken.Primitive.CHAR);
     
     private final Primitive primitive;
 

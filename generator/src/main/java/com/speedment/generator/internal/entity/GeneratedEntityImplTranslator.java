@@ -36,6 +36,9 @@ import static com.speedment.common.codegen.internal.model.constant.DefaultAnnota
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.*;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.Formatting.tab;
+import com.speedment.generator.util.TypeTokenUtil;
+import com.speedment.runtime.config.typetoken.PrimitiveTypeToken;
+import com.speedment.runtime.config.typetoken.TypeToken;
 import com.speedment.runtime.util.OptionalUtil;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
@@ -173,15 +176,12 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
 
         columns().forEachOrdered(c -> {
             final String getter = "get" + getSupport().typeName(c);
+            final TypeToken token = TypeTokenUtil.tokenOf(c);
             
-            switch (c.getJavaType()) {
-                case "byte" : case "short" : case "int" : case "long" : 
-                case "float" : case "double" : case "boolean" :
-                    method.add("if (this." + getter + "() != " + thatCastedName + "." + getter + "()) {return false; }");
-                    break;
-                default :
-                    method.add("if (!Objects.equals(this." + getter + "(), " + thatCastedName + "." + getter + "())) {return false; }");
-                    break;
+            if (token.isPrimitive()) {
+                method.add("if (this." + getter + "() != " + thatCastedName + "." + getter + "()) {return false; }");
+            } else {
+                method.add("if (!Objects.equals(this." + getter + "(), " + thatCastedName + "." + getter + "())) {return false; }");
             }
         });
 
@@ -199,37 +199,16 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
 
             final StringBuilder str = new StringBuilder();
             str.append("hash = 31 * hash + ");
-
-            switch (c.getJavaType()) {
-                case "byte":
-                    str.append("Byte");
-                    break;
-                case "short":
-                    str.append("Short");
-                    break;
-                case "int":
-                    str.append("Integer");
-                    break;
-                case "long":
-                    str.append("Long");
-                    break;
-                case "float":
-                    str.append("Float");
-                    break;
-                case "double":
-                    str.append("Double");
-                    break;
-                case "boolean":
-                    str.append("Boolean");
-                    break;
-                case "char":
-                    str.append("Character");
-                    break;
-                default:
-                    str.append("Objects");
-                    break;
+            final TypeToken token = TypeTokenUtil.tokenOf(c);
+            
+            if (token.isPrimitive()) {
+                @SuppressWarnings("unchecked")
+                final PrimitiveTypeToken primitive = (PrimitiveTypeToken) token;
+                str.append(primitive.getPrimitiveType().getWrapper().getSimpleName());
+            } else {
+                str.append("Objects");
             }
-
+            
             str.append(".hashCode(get").append(getSupport().typeName(c)).append("());");
             method.add(str.toString());
         });

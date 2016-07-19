@@ -65,6 +65,9 @@ import static com.speedment.common.codegen.internal.model.constant.DefaultType.O
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static com.speedment.common.codegen.internal.util.Formatting.tab;
 import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.*;
+import com.speedment.generator.internal.util.InternalTypeTokenUtil;
+import com.speedment.generator.util.TypeTokenUtil;
+import com.speedment.runtime.config.typetoken.TypeToken;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
@@ -287,7 +290,7 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
             c.findDatabaseType()
         );
 
-        final boolean isIdentityMapper = c.getDatabaseType().equals(c.getJavaType());
+        final boolean isIdentityMapper = !c.getTypeMapper().isPresent();
 
         final StringBuilder sb = new StringBuilder();
         if (!isIdentityMapper) {
@@ -297,7 +300,7 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
                 .append(support.entityName())
                 .append(".")
                 .append(support.namer().javaStaticFieldName(c.getJavaName()))
-                .append("), entity, ");
+                .append("), getEntityClass(), ");
         }
         final String getterName = "get" + mapping.getResultSetMethodName(dbms);
 
@@ -369,7 +372,17 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
             .final_();
 
         final String parameters = primaryKeyColumns()
-            .map(pkc -> Formatting.shortName(pkc.findColumn().get().getJavaType()))
+            .map(pkc -> {
+                final Column col = pkc.findColumn().orElseThrow(() -> new SpeedmentException(
+                    "Could not find any column associated with primary key column '" + 
+                    pkc.getName() + "'."
+                ));
+                
+                final TypeToken token = TypeTokenUtil.tokenOf(col);
+                file.add(Import.of(TypeTokenUtil.typeOf(col)));
+                
+                return InternalTypeTokenUtil.renderShort(token);
+            })
             .map(javaType -> javaType + ".class")
             .collect(joining(", "));
 

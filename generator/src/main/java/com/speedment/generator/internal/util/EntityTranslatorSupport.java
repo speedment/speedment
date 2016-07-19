@@ -50,7 +50,10 @@ import java.util.function.Consumer;
 
 import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.generator.TranslatorSupport;
+import com.speedment.generator.util.TypeTokenUtil;
+import com.speedment.runtime.config.typetoken.TypeToken;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import com.speedment.runtime.util.TypeTokenFactory;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -94,9 +97,7 @@ public final class EntityTranslatorSupport {
     ) {
         requireNonNulls(file, table, column, entityType, javaLanguageNamer);
 
-        final String mapping = column.getJavaType();
-        final Optional<Class<?>> mappingObject = find(mapping);
-        
+        final TypeToken mapping = TypeTokenUtil.tokenOf(column);
         final Type databaseType = Type.of(column.getDatabaseType());
 
         return EntityTranslatorSupport.getForeignKey(table, column)
@@ -111,7 +112,7 @@ public final class EntityTranslatorSupport {
 
                 file.add(Import.of(fkType));
 
-                if (String.class.getName().equals(mapping)) {
+                if (TypeTokenFactory.createStringToken().equals(mapping)) {
                     type = Type.of(StringForeignKeyField.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(databaseType))
@@ -121,29 +122,29 @@ public final class EntityTranslatorSupport {
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(databaseType))
                         .add(Generic.of().add(fkType));
-                } else if (mappingObject.isPresent() && Comparable.class.isAssignableFrom(mappingObject.get())) {
+                } else if (mapping.isComparable()) {
                     type = Type.of(ComparableForeignKeyField.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(Type.of(mapping)))
+                        .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)))
                         .add(Generic.of().add(fkType));
 
                     implType = Type.of(ComparableForeignKeyFieldImpl.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(Type.of(mapping)))
+                        .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)))
                         .add(Generic.of().add(fkType));
                 } else {
                     type = Type.of(ReferenceForeignKeyField.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(Type.of(mapping)))
+                        .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)))
                         .add(Generic.of().add(fkType));
 
                     implType = Type.of(ReferenceForeignKeyFieldImpl.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(Type.of(mapping)))
+                        .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)))
                         .add(Generic.of().add(fkType));
                 }
 
@@ -153,7 +154,7 @@ public final class EntityTranslatorSupport {
             }).orElseGet(() -> {
                 final Type type, implType;
 
-                if (String.class.getName().equals(mapping)) {
+                if (TypeTokenFactory.createStringToken().equals(mapping)) {
                     type = Type.of(StringField.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(databaseType));
@@ -162,26 +163,26 @@ public final class EntityTranslatorSupport {
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(databaseType));
 
-                } else if (mappingObject.isPresent() && Comparable.class.isAssignableFrom(mappingObject.get())) {
+                } else if (mapping.isComparable()) {
                     type = Type.of(ComparableField.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(Type.of(mapping)));
+                        .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)));
 
                     implType = Type.of(ComparableFieldImpl.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(Type.of(mapping)));
+                        .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)));
                 } else {
                     type = Type.of(ReferenceField.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(Type.of(mapping)));
+                        .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)));
 
                     implType = Type.of(ReferenceFieldImpl.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(Type.of(mapping)));
+                        .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)));
                 }
 
                 return new ReferenceFieldType(type, implType);

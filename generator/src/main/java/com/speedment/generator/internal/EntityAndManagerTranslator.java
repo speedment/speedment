@@ -21,10 +21,14 @@ import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Type;
 import com.speedment.common.tuple.Tuple1;
+import com.speedment.generator.util.TypeTokenUtil;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
+import java.util.NoSuchElementException;
 
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  *
@@ -48,17 +52,18 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
             return DefaultType.list(DefaultType.WILDCARD);
         }
 
-        final String first = primaryKeyColumns()
-            .findFirst().get()
-            .findColumn().get()
-            .getJavaType();
+        final Column firstColumn = columnsFromPks()
+                .findFirst().orElseThrow(() -> new SpeedmentException(
+                    "Table '" + table().get().getName() + 
+                    "' did not contain any primary key columns."
+                ));
+        
+        final Type first = TypeTokenUtil.typeOf(firstColumn);
 
         if (pks == 1) {
-            return Type.of(first);
-        } else if (primaryKeyColumns().allMatch(c -> c.findColumn().get()
-            .getJavaType().equals(first))) {
-
-            return DefaultType.list(Type.of(first));
+            return first;
+        } else if (columnsFromPks().map(TypeTokenUtil::typeOf).allMatch(first::equals)) {
+            return DefaultType.list(first);
         } else {
             return DefaultType.list(DefaultType.WILDCARD);
         }
@@ -69,22 +74,35 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
         final Package pkg = Tuple1.class.getPackage();
         final String tupleClassName = pkg.getName() + ".Tuple" + pks;
         final java.lang.Class<?> tupleClass;
+        
         try {
             tupleClass = java.lang.Class.forName(tupleClassName);
-        } catch (ClassNotFoundException cnf) {
+        } catch (final ClassNotFoundException cnf) {
             throw new SpeedmentException("Speedment does not support " + pks + " primary keys.", cnf);
         }
+        
         final Type result = Type.of(tupleClass);
-        primaryKeyColumns().forEachOrdered(pk
-            -> result.add(
+        
+        columnsFromPks().forEachOrdered(col -> 
+            result.add(
                 Generic.of().add(
-                    Type.of(java.lang.Class.class)
-                    .add(Generic.of().add(
-                        Type.of(pk.findColumn().get().getJavaType()))
-                    )
+                    DefaultType.classOf(TypeTokenUtil.typeOf(col))
                 )
             )
         );
+        
         return result;
+    }
+    
+    private Stream<Column> columnsFromPks() {
+        return primaryKeyColumns().map(pk -> {
+            try {
+                return pk.findColumn().get();
+            } catch (final NoSuchElementException ex) {
+                throw new SpeedmentException(
+                    "Could not find any column belonging to primary key '" + pk.getName() + "'.", ex
+                );
+            }
+        });
     }
 }

@@ -19,6 +19,7 @@ package com.speedment.runtime.config.typetoken;
 import java.util.List;
 
 /**
+ * A special type of {@link TypeToken} that represent an enumerated type.
  * 
  * @author  Emil Forslund
  * @author  Simon Jonasson
@@ -33,8 +34,27 @@ public interface EnumTypeToken extends TypeToken {
      */
     List<String> getEnumConstants();
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Returns {@code true} for all enum types.
+     * 
+     * @return  always {@code true}
+     */
     @Override
     default boolean isEnum() {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Returns {@code true} for all enum types.
+     * 
+     * @return  always {@code true}
+     */
+    @Override
+    default boolean isComparable() {
         return true;
     }
 }

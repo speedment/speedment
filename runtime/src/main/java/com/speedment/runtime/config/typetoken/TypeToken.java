@@ -66,6 +66,14 @@ public interface TypeToken {
      * @return  {@code true} if this is an enum type, else {@code false}
      */
     boolean isEnum();
+    
+    /**
+     * Returns true if this represents a type that implements the 
+     * {@link Comparable} interface.
+     * 
+     * @return  {@code true} if comparable, else {@code false}
+     */
+    boolean isComparable();
 
     /**
      * Attempts to produce a {@code Class} instance for the represented type,

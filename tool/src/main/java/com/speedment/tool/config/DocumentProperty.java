@@ -20,7 +20,6 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
-import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.util.FloatSupplier;
 import com.speedment.tool.config.trait.HasUiVisibleProperties;
 import javafx.beans.Observable;
@@ -29,7 +28,6 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.LongProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -53,7 +51,6 @@ import java.util.stream.Stream;
  *     <li>{@link #longPropertyOf(String, LongSupplier)}
  *     <li>{@link #doublePropertyOf(String, DoubleSupplier)}
  *     <li>{@link #floatPropertyOf(String, FloatSupplier)}
- *     <li>{@link #objectPropertyOf(String, Class, Supplier)}
  * </ul>
  * <p>
  * To get an observable view of a specific child type, call 

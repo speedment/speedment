@@ -37,13 +37,10 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
     private final transient Optional<String> alias;
     private final transient boolean nullable;
     private final transient boolean autoincrement;
-    private final transient Optional<String> javaTypeFactory;
     private final transient Optional<String> typeMapper;
     private final transient String databaseType;
-    private final transient String javaType;
-    private final transient Optional<TypeMapper<?, ?>> typeMapperObject;
+    private final transient TypeMapper<?, ?> typeMapperObject;
     private final transient Class<?> databaseTypeObject;
-    private final transient Class<?> javaTypeObject;
     private final transient Optional<String> enumConstants;
 
     ImmutableColumn(ImmutableTable parent, Map<String, Object> data) {
@@ -58,11 +55,8 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
         this.autoincrement      = prototype.isAutoIncrement();
         this.typeMapper         = prototype.getTypeMapper();
         this.databaseType       = prototype.getDatabaseType();
-        this.javaType           = prototype.getJavaType();
-        this.javaTypeFactory    = prototype.getJavaTypeFactory();
         this.typeMapperObject   = prototype.findTypeMapper();
         this.databaseTypeObject = prototype.findDatabaseType();
-        this.javaTypeObject     = prototype.findJavaType();
         this.enumConstants      = prototype.getEnumConstants();
     }
 
@@ -90,11 +84,6 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
     public boolean isAutoIncrement() {
         return autoincrement;
     }
-    
-    @Override
-    public Optional<String> getJavaTypeFactory() {
-        return javaTypeFactory;
-    }
 
     @Override
     public Optional<String> getTypeMapper() {
@@ -102,7 +91,7 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
     }
 
     @Override
-    public Optional<TypeMapper<?, ?>> findTypeMapper() {
+    public TypeMapper<?, ?> findTypeMapper() {
         return typeMapperObject;
     }
 
@@ -110,20 +99,10 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
     public String getDatabaseType() {
         return databaseType;
     }
-    
-    @Override
-    public String getJavaType() {
-        return javaType;
-    }
 
     @Override
     public Class<?> findDatabaseType() {
         return databaseTypeObject;
-    }
-    
-    @Override
-    public Class<?> findJavaType() {
-        return javaTypeObject;
     }
     
     @Override
@@ -140,5 +119,4 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
     public String toString() {
         return toStringHelper(this);
     }
-    
 }

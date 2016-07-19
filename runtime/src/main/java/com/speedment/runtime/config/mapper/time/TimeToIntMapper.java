@@ -19,6 +19,8 @@ package com.speedment.runtime.config.mapper.time;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.config.typetoken.TypeToken;
+import com.speedment.runtime.util.TypeTokenFactory;
 
 import java.sql.Time;
 
@@ -34,9 +36,14 @@ public final class TimeToIntMapper implements TypeMapper<Time, Integer> {
     public String getLabel() {
         return "Time to Integer";
     }
+    
+    @Override
+    public <ENTITY> TypeToken getJavaType(Column column) {
+        return TypeTokenFactory.create(Integer.class);
+    }
 
     @Override
-    public <ENTITY> Integer toJavaType(Column column, ENTITY entity, Time value) {
+    public <ENTITY> Integer toJavaType(Column column, Class<ENTITY> entityType, Time value) {
         return value == null ? null : (int) (value.getTime() / 1000);
     }
 

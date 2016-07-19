@@ -19,7 +19,9 @@ package com.speedment.runtime.config.mapper.largeobject;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.config.typetoken.TypeToken;
 import com.speedment.runtime.exception.SpeedmentException;
+import com.speedment.runtime.util.TypeTokenFactory;
 
 import java.sql.Clob;
 import java.sql.SQLException;
@@ -35,9 +37,14 @@ public final class ClobToStringMapper implements TypeMapper<Clob, String> {
     public String getLabel() {
         return "Clob to String";
     }
+    
+    @Override
+    public <ENTITY> TypeToken getJavaType(Column column) {
+        return TypeTokenFactory.create(String.class);
+    }
 
     @Override
-    public <ENTITY> String toJavaType(Column column, ENTITY entity, Clob value) {
+    public <ENTITY> String toJavaType(Column column, Class<ENTITY> entityType, Clob value) {
         if (value == null) {
             return null;
         } else try {

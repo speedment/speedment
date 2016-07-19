@@ -14,39 +14,36 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.generator.internal.typetoken;
+package com.speedment.runtime.internal.config.typetoken;
 
-import com.speedment.runtime.config.typetoken.TypeToken;
+import com.speedment.runtime.config.typetoken.ArrayTypeToken;
 import static java.util.Objects.requireNonNull;
 
 /**
- * The default implementation of the {@link TypeToken} interface.
+ * The default implementation of the {@link ArrayTypeToken} interface.
  * 
  * @author  Emil Forslund
  * @author  Simon Jonasson
  * @since   3.0.0
  */
-public final class DefaultTypeToken<T> implements TypeToken {
+public final class ArrayTypeTokenImpl implements ArrayTypeToken {
     
-    private final Class<T> wrapped;
+    private final String name;
+    private final int dimension;
     
-    public DefaultTypeToken(Class<T> wrapped) {
-        this.wrapped = requireNonNull(wrapped);
+    public ArrayTypeTokenImpl(String name, int dimension) {
+        this.name      = requireNonNull(name);
+        this.dimension = dimension;
     }
 
     @Override
     public String getTypeName() {
-        return wrapped.getName();
+        return name;
     }
 
     @Override
-    public boolean isArray() {
-        return false;
-    }
-    
-    @Override
-    public boolean isEnum() {
-        return false;
+    public int getArrayDimension() {
+        return dimension;
     }
 
     @Override
@@ -56,6 +53,16 @@ public final class DefaultTypeToken<T> implements TypeToken {
 
     @Override
     public boolean isGeneric() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnum() {
+        return false;
+    }
+
+    @Override
+    public boolean isComparable() {
         return false;
     }
 }

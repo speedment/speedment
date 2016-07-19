@@ -17,6 +17,7 @@
 package com.speedment.runtime.config.typetoken;
 
 /**
+ * A special type of {@link TypeToken} that represent an array type.
  * 
  * @author  Emil Forslund
  * @author  Simon Jonasson
@@ -39,6 +40,13 @@ public interface ArrayTypeToken extends TypeToken {
      */
     int getArrayDimension();
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Returns {@code true} for all array types.
+     * 
+     * @return  always {@code true}
+     */
     @Override
     default boolean isArray() {
         return true;

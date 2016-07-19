@@ -378,11 +378,13 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
 
                             // Cast from Long to the column target type
                             final Object val = resultSetMapperComponent
-                                .apply(col.findJavaType())
+                                .apply(col.findDatabaseType())
                                 .parse(l.get(cnt.getAndIncrement()));
 
                             @SuppressWarnings("unchecked")
-                            final Object javaValue = ((TypeMapper<Object, Object>) f.typeMapper()).toJavaType(col, newEntity, val);
+                            final Object javaValue = ((TypeMapper<Object, Object>) 
+                                f.typeMapper()).toJavaType(col, getEntityClass(), val);
+                            
                             set(newEntity, f.getIdentifier(), javaValue);
                         });
                 }

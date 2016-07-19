@@ -14,11 +14,6 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.generator;
 
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
@@ -29,7 +24,6 @@ import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.internal.runtime.AbstractApplicationMetadata;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
@@ -99,10 +93,6 @@ public abstract class SimpleModel {
         private String columnDatabaseType(String typeName) {
             return quote(Column.DATABASE_TYPE) + " : " + quote(typeName);
         }
-        
-        private String columnJavaType(String typeName) {
-            return quote(Column.JAVA_TYPE) + " : " + quote(typeName);
-        }
 
         private String array(String name, String... s) {
             return quote(name) + " : [\n" + Stream.of(s)
@@ -138,8 +128,7 @@ public abstract class SimpleModel {
                                             array(Table.COLUMNS,
                                                 object(
                                                     name(COLUMN_NAME),
-                                                    columnDatabaseType(String.class.getName()),
-                                                    columnJavaType(String.class.getName())
+                                                    columnDatabaseType(String.class.getName())
                                                 )
                                             ),
                                             array(Table.PRIMARY_KEY_COLUMNS,
@@ -153,8 +142,7 @@ public abstract class SimpleModel {
                                             array(Table.COLUMNS,
                                                 object(
                                                     name(COLUMN_NAME2),
-                                                    columnDatabaseType(String.class.getName()),
-                                                    columnJavaType(String.class.getName())
+                                                    columnDatabaseType(String.class.getName())
                                                 )
                                             ),
                                             array(Table.PRIMARY_KEY_COLUMNS,

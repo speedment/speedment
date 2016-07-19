@@ -18,6 +18,7 @@ package com.speedment.plugins.reactor.internal.translator;
 
 import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.TranslatorSupport;
+import com.speedment.generator.util.TypeTokenUtil;
 import com.speedment.plugins.reactor.component.ReactorComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
@@ -53,7 +54,8 @@ final class TranslatorUtil {
     }
 
     static Type mergingColumnType(Table table) {
-        return Type.of(mergingColumn(table).findJavaType());
+        final Column column = mergingColumn(table);
+        return TypeTokenUtil.typeOf(column);
     }
     
     private TranslatorUtil() {}

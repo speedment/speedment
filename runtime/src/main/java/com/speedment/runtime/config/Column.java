@@ -17,6 +17,7 @@
 package com.speedment.runtime.config;
 
 import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.config.mapper.IdentityTypeMapper;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mutator.ColumnMutator;
 import com.speedment.runtime.config.mutator.DocumentMutator;
@@ -56,8 +57,6 @@ public interface Column extends
         AUTO_INCREMENT    = "autoIncrement",
         TYPE_MAPPER       = "typeMapper",
         DATABASE_TYPE     = "databaseType",
-        JAVA_TYPE         = "javaType",
-        JAVA_TYPE_FACTORY = "javaTypeFactory",
         ENUM_CONSTANTS    = "enumConstants";
 
     /**
@@ -78,27 +77,6 @@ public interface Column extends
      */
     default String getDatabaseType() {
         return getAsString(DATABASE_TYPE).orElseThrow(newNoSuchElementExceptionFor(this, DATABASE_TYPE));
-    }
-    
-    /**
-     * Returns the name of the class that represents this column in the Java code.
-     * 
-     * @return  the java type name
-     */
-    default String getJavaType() {
-        return getAsString(JAVA_TYPE).orElseThrow(newNoSuchElementExceptionFor(this, JAVA_TYPE));
-    }
-    
-    /**
-     * Returns the name of the class that is used to produce the java type
-     * implementation for this column. If no factory is specified (the java
-     * type can be created using its default constructor) then this method 
-     * returns an empty {@code Optional}.
-     * 
-     * @return  the java type factory or empty
-     */
-    default Optional<String> getJavaTypeFactory() {
-        return getAsString(JAVA_TYPE_FACTORY);
     }
     
     /**
@@ -138,36 +116,24 @@ public interface Column extends
     }
     
     /**
-     * Returns the class that represents the java type.
-     *
-     * @return the java type
-     */
-    default Class<?> findJavaType() {
-        final String name = getJavaType();
-
-        try {
-            return Class.forName(name);
-        } catch (final ClassNotFoundException ex) {
-            throw new SpeedmentException("Could not find database type: '" + name + "'.", ex);
-        }
-    }
-    
-    /**
      * Returns the mapper class that will be used to generate a java
-     * representation of the database types.
+     * representation of the database types. If no type mapper is
+     * specified, then an {@link IdentityTypeMapper} will be created
+     * and returned.
      *
      * @return the mapper class
      */
-    default Optional<TypeMapper<?, ?>> findTypeMapper() {
+    default TypeMapper<?, ?> findTypeMapper() {
         return getTypeMapper().map(name -> {
             try {
                 @SuppressWarnings("unchecked")
-                final TypeMapper<?, ?> mapper = (TypeMapper<?, ?>) Class.forName(name).newInstance();
+                final TypeMapper<Object, Object> mapper = 
+                    (TypeMapper<Object, Object>) Class.forName(name).newInstance();
                 return mapper;
             } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
                 throw new SpeedmentException("Could not instantiate TypeMapper: '" + name + "'.", ex);
             }
-        });
+        }).orElseGet(TypeMapper::identity);
     }
 
     @Override

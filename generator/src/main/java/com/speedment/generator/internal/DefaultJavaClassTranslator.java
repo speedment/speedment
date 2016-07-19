@@ -71,6 +71,7 @@ import java.util.stream.Stream;
 import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.GENERATED;
 import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import com.speedment.generator.util.TypeTokenUtil;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import static java.util.Objects.requireNonNull;
@@ -387,7 +388,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
     }
 
     public Field fieldFor(Column c) {
-        return Field.of(getSupport().variableName(c), Type.of(c.getJavaType()));
+        return Field.of(getSupport().variableName(c), TypeTokenUtil.typeOf(c));
     }
 
     public Constructor emptyConstructor() {

@@ -379,19 +379,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                 LOGGER.warn("Unable to determine mapping for table " + table.getName() + ", column " + column.getName() + ". Fall-back to JDBC-type " + selectedJdbcClass.getSimpleName());
             }
 
-//            final TypeMapper<?, ?> typeMapper = typeMapperComponent.stream()
-//                .filter(tm -> Objects.equals(selectedJdbcClass, tm.getDatabaseType()))
-//                .filter(tm -> Objects.equals(selectedJdbcClass, tm.getJavaType()))
-//                .findFirst().orElseThrow(() -> new SpeedmentException(
-//                    "Found no identity type mapper for mapping '" + selectedJdbcClass.getName() + "'."
-//                ));
-//
-//            column.mutator().setTypeMapper(typeMapper);
             column.mutator().setDatabaseType(selectedJdbcClass);
-            column.mutator().setJavaType(selectedJdbcClass);
-            
-            // TODO: If any standard types require a factory, 
-            // this is where it should be set.
             
             // TODO: Fill in information about enum constants
 

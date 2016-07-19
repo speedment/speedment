@@ -41,12 +41,14 @@ import java.util.stream.Stream;
 import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.OBJECT;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.VOID;
-import com.speedment.common.codegen.internal.util.Formatting;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import static com.speedment.generator.internal.manager.GeneratedManagerImplTranslator.*;
+import com.speedment.generator.util.TypeTokenUtil;
+import com.speedment.runtime.config.typetoken.TypeToken;
 import com.speedment.runtime.util.OptionalUtil;
+import com.speedment.runtime.util.TypeTokenFactory;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -90,19 +92,20 @@ public final class GenerateMethodBodyUtil {
 
     public static String[] generateSetBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
         file.add(Import.of(Type.of(IllegalArgumentException.class)));
-
+        
         return new String[]{
             "switch ((" + support.entityName() + ".Identifier) identifier) " + block(
             columnsSupplier.get()
-            .filter(HasEnabled::isEnabled)
-            .peek(c -> file.add(Import.of(Type.of(c.getJavaType()))))
-            .map(c
-            -> "case " + support.namer().javaStaticFieldName(c.getJavaName())
-            + " : entity." + SETTER_METHOD_PREFIX + support.typeName(c)
-            + "("
-            + castToColumnTypeIfNotObject(c)
-            + "value); break;").collect(Collectors.joining(nl()))
-            + nl() + "default : throw new IllegalArgumentException(\"Unknown identifier '\" + identifier + \"'.\");"
+                .filter(HasEnabled::isEnabled)
+                .peek(c -> file.add(Import.of(TypeTokenUtil.typeOf(c))))
+                .map(c -> 
+                    "case " + support.namer().javaStaticFieldName(c.getJavaName())
+                    + " : entity." + SETTER_METHOD_PREFIX + support.typeName(c)
+                    + "("
+                    + castToColumnTypeIfNotObject(file, c)
+                    + "value); break;"
+                ).collect(Collectors.joining(nl()))
+                    + nl() + "default : throw new IllegalArgumentException(\"Unknown identifier '\" + identifier + \"'.\");"
             )
         };
     }
@@ -154,7 +157,6 @@ public final class GenerateMethodBodyUtil {
     public interface ReadFromResultSet {
         String readFromResultSet(File file, Column c, AtomicInteger position);
     }
-    // String readFromResultSet(File file, Column c, AtomicInteger position)
 
     public static String[] generateNewEntityFromBody(ReadFromResultSet readFromResultSet, TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
 
@@ -179,11 +181,13 @@ public final class GenerateMethodBodyUtil {
         return rows.toArray(new String[rows.size()]);
     }
     
-    private static String castToColumnTypeIfNotObject(Column c) {
-        if (Object.class.getName().equals(c.getJavaType())) {
+    private static String castToColumnTypeIfNotObject(File file, Column c) {
+        final TypeToken token = TypeTokenUtil.tokenOf(c);
+        if (TypeTokenFactory.createObjectToken().equals(token)) {
             return "";
         } else {
-            return "(" + Formatting.shortName(c.getJavaType()) + ") ";
+            file.add(Import.of(TypeTokenUtil.typeOf(c)));
+            return "(" + InternalTypeTokenUtil.renderShort(token) + ") ";
         }
     }
     
