@@ -81,7 +81,7 @@ public interface Column extends
     }
     
     /**
-     * Returns the name of the class that represents this column in the code.
+     * Returns the name of the class that represents this column in the Java code.
      * 
      * @return  the java type name
      */

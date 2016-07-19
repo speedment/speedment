@@ -90,7 +90,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         
         final List<TypeMapper<Object, Object>> typeMappers = predicateBuilders
                 .stream()
-                .map(SpeedmentPredicate::getField)
+                .map(SpeedmentPredicate::getReferenceField)
                 .map(ReferenceFieldTrait.class::cast)
                 .map(ReferenceFieldTrait<ENTITY, ?, ?>::typeMapper)
                 .map(tm -> {
