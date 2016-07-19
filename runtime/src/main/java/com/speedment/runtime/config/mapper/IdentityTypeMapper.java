@@ -30,6 +30,11 @@ import com.speedment.runtime.config.Column;
  */
 public final class IdentityTypeMapper<T> implements TypeMapper<T, T> {
 
+     /**
+     * Common instance for {@code identity()}.
+     */
+    static final IdentityTypeMapper<?> IDENTITY = new IdentityTypeMapper<>();
+    
     @Override
     public String getLabel() {
         return "Identity Mapper";

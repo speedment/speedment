@@ -50,6 +50,7 @@ import static com.speedment.common.codegen.internal.model.constant.DefaultType.S
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.IdentityTypeMapper;
+import com.speedment.runtime.config.mapper.TypeMapper;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import com.speedment.runtime.util.OptionalBoolean;
@@ -160,7 +161,6 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                 final String shortEntityVarName = getSupport().namer().javaVariableName(shortEntityName);
 
                 file.add(Import.of(entityType));
-                file.add(Import.of(typeMapperType));
 
                 final String getter;
                 if (col.isNullable()) {
@@ -191,6 +191,15 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                 final String constant = getNamer().javaStaticFieldName(col.getJavaName());
                 identifier.add(EnumConstant.of(constant).add(new TextValue(col.getName())));
 
+                final String typeMapperCode;
+                if (col.getTypeMapper().isPresent()) {
+                    typeMapperCode = "new " + shortName(typeMapper) + "()";
+                    file.add(Import.of(typeMapperType));
+                } else {
+                    typeMapperCode = "TypeMapper.identity()";
+                    file.add(Import.of(Type.of(TypeMapper.class)));
+                }
+
                 file.add(Import.of(ref.implType));
                 intrf.add(Field.of(getNamer().javaStaticFieldName(col.getJavaName()), ref.type)
                     .final_()
@@ -202,10 +211,9 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                         + getter
                         + setter
                         + finder
-                        + ", new "
-                        + shortName(typeMapper)
-                        + (col.getTypeMapper().isPresent() ? "" : "<>")
-                        + "(), "
+                        + ", "
+                        + typeMapperCode
+                        + ", "
                         + DocumentDbUtil.isUnique(col)
                         + ")"
                     ))
