@@ -45,7 +45,7 @@ public abstract class AbstractDbmsType implements DbmsType {
     
     @Override
     public String getResultSetTableSchema() {
-        return "TABLE_SCHEMA";
+        return "TABLE_SCHEM";
     }
 
     @Override

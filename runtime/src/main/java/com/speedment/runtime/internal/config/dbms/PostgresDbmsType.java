@@ -113,10 +113,10 @@ public final class PostgresDbmsType extends AbstractDbmsType {
         return new PostgresSpeedmentPredicateView(namingConvention);
     }
 
-    @Override
-    public String getResultSetTableSchema() {
-        return "TABLE_SCHEMA";
-    }
+//    @Override
+//    public String getResultSetTableSchema() {
+//        return "TABLE_SCHEMA";
+//    }
     
     @Override
     public String getInitialQuery() {
