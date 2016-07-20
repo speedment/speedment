@@ -93,9 +93,7 @@ public final class TypeMapperPropertyItem extends AbstractPropertyItem<String, S
         final PropertyEditor<String> editor = new PropertyEditor<String>() {
 
             @Override
-            public void setValue(String javaName) {
-                System.out.println("Attempting to set value to '" + javaName + "'.");
-            }
+            public void setValue(String javaName) {}
 
             @Override
             public Node getEditor() {
