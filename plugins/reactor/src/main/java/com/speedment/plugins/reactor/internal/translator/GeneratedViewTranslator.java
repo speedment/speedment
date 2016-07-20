@@ -20,11 +20,11 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.Type;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.plugins.reactor.MaterializedView;
 import com.speedment.runtime.config.Table;
-
-import static com.speedment.plugins.reactor.internal.translator.TranslatorUtil.mergingColumnType;
+import com.speedment.plugins.reactor.util.MergingSupport;
 
 /**
  *
@@ -33,13 +33,15 @@ import static com.speedment.plugins.reactor.internal.translator.TranslatorUtil.m
  */
 public final class GeneratedViewTranslator extends DefaultJavaClassTranslator<Table, Interface> {
 
+    private @Inject MergingSupport merger;
+    
     public GeneratedViewTranslator(Table document) {
         super(document, Interface::of);
     }
 
     @Override
     protected String getClassOrInterfaceName() {
-        return "Generated" + getNamer().javaTypeName(getDocument().getJavaName()) + "View";
+        return "Generated" + getSupport().namer().javaTypeName(getDocument().getJavaName()) + "View";
     }
 
     @Override
@@ -54,7 +56,7 @@ public final class GeneratedViewTranslator extends DefaultJavaClassTranslator<Ta
                 clazz.public_()
                     .add(Type.of(MaterializedView.class)
                         .add(Generic.of().add(getSupport().entityType()))
-                        .add(Generic.of().add(mergingColumnType(table)))
+                        .add(Generic.of().add(merger.mergingColumnType(table)))
                     );
             }).build();
     }

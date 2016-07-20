@@ -21,7 +21,6 @@ import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Type;
 import com.speedment.common.tuple.Tuple1;
-import com.speedment.generator.util.TypeTokenUtil;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
@@ -58,11 +57,14 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
                     "' did not contain any primary key columns."
                 ));
         
-        final Type first = TypeTokenUtil.typeOf(firstColumn);
+        final Type first = getSupport().typeTokenGenerator().typeOf(firstColumn);
 
         if (pks == 1) {
             return first;
-        } else if (columnsFromPks().map(TypeTokenUtil::typeOf).allMatch(first::equals)) {
+        } else if (columnsFromPks()
+            .map(c -> getSupport().typeTokenGenerator().typeOf(c))
+            .allMatch(first::equals)) {
+            
             return DefaultType.list(first);
         } else {
             return DefaultType.list(DefaultType.WILDCARD);
@@ -84,9 +86,7 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
         final Type result = Type.of(tupleClass);
         
         columnsFromPks().forEachOrdered(col -> 
-            result.add(
-                Generic.of().add(
-                    DefaultType.classOf(TypeTokenUtil.typeOf(col))
+            result.add(Generic.of().add(DefaultType.classOf(getSupport().typeTokenGenerator().typeOf(col))
                 )
             )
         );

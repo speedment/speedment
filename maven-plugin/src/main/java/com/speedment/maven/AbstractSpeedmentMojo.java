@@ -16,7 +16,11 @@
  */
 package com.speedment.maven;
 
+import com.speedment.common.injector.internal.InjectorImpl;
+import com.speedment.common.logger.Level;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
+import com.speedment.generator.internal.entity.GeneratedEntityTranslator;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.SpeedmentBuilder;
 import com.speedment.runtime.component.Component;
@@ -42,6 +46,7 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
     
     private final static File DEFAULT_CONFIG = new File(DEFAULT_CONFIG_LOCATION);
 
+    protected abstract boolean debug();
     protected abstract File configLocation();
     protected abstract String[] components();
     protected abstract String launchMessage();
@@ -52,6 +57,11 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
+        if (debug()) {
+            LoggerManager.getLogger(InjectorImpl.class).setLevel(Level.DEBUG);
+            LoggerManager.getLogger(GeneratedEntityTranslator.class).setLevel(Level.DEBUG);
+        }
+        
         getLog().info(launchMessage());    
         execute(createBuilder().build());
     }

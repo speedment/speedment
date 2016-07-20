@@ -37,6 +37,9 @@ import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_L
 @Mojo(name = "generate", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public final class GenerateMojo extends AbstractSpeedmentMojo {
 
+    @Parameter(defaultValue = "false")
+    private boolean debug;
+    
     @Parameter
     private String[] components;
 
@@ -71,6 +74,11 @@ public final class GenerateMojo extends AbstractSpeedmentMojo {
     @Override
     protected File configLocation() {
         return configFile;
+    }
+    
+    @Override
+    protected boolean debug() {
+        return debug;
     }
 
     @Override

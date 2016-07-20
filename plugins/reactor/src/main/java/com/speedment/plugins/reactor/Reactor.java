@@ -16,25 +16,12 @@
  */
 package com.speedment.plugins.reactor;
 
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
+import com.speedment.plugins.reactor.internal.ReactorBuilder;
 import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.manager.Manager;
-
 import java.util.List;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
-import static java.util.Collections.newSetFromMap;
-import static java.util.Collections.unmodifiableList;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
 
 /**
  * A reactor is an object that polls the database for changes at a particular 
@@ -43,33 +30,12 @@ import static java.util.stream.Collectors.toList;
  * @author  Emil Forslund
  * @since   1.0.0
  */
-public final class Reactor {
-    
-    private final static int
-        DEFAULT_INTERVAL = 1000, // in milliseconds.
-        DEFAULT_LIMIT    = 100;
-    
-    private final static Logger LOGGER = 
-        LoggerManager.getLogger(Reactor.class);
-    
-    private final Timer timer;
-    
-    /**
-     * Constructs a new Reactor. This should only be called as part of the
-     * builder pattern for this class and never directly.
-     * 
-     * @param timer  the timer that is polling the database
-     */
-    private Reactor(Timer timer) {
-        this.timer = requireNonNull(timer);
-    }
-    
+public interface Reactor {
+
     /**
      * Stops the reactor from polling the database.
      */
-    public void stop() {
-        timer.cancel();
-    }
+    void stop();
 
     /**
      * Creates a new reactor builder for the specified {@link Manager} by using
@@ -83,44 +49,20 @@ public final class Reactor {
      *                  the event
      * @return  the new builder
      */
-    public static <ENTITY, T extends Comparable<T>> Builder<ENTITY, T> builder(
-        Manager<ENTITY> manager, 
-        ComparableField<ENTITY, ?, T> idField) {
+    static <ENTITY, T extends Comparable<T>> Builder<ENTITY, T> builder(
+            Manager<ENTITY> manager, 
+            ComparableField<ENTITY, ?, T> idField) {
         
-        return new Builder<>(manager, idField);
+        return new ReactorBuilder<>(manager, idField);
     }
     
     /**
-     * Builder class for creating new {@link Reactor} instances.
+     * Builder pattern for the {@link Reactor} interface.
      * 
-     * @param <ENTITY>  the entity type to react on
-     * @param <T>       the primary key of the entity table
+     * @param <ENTITY>  the entity type
+     * @param <T>       the merging type
      */
-    public final static class Builder<ENTITY, T extends Comparable<T>> {
-        
-        private final Manager<ENTITY> manager;
-        private final ComparableField<ENTITY, ?, T> idField;
-        private final Set<Consumer<List<ENTITY>>> listeners;
-        private long interval; 
-        private long limit;
-
-        /**
-         * Initiates the builder with default values.
-         * 
-         * @param manager  the manager to use for database polling
-         * @param idField  the field that identifier which entity is refered to 
-         *                 in the event
-         */
-        private Builder(
-                Manager<ENTITY> manager, 
-                ComparableField<ENTITY, ?, T> idField) {
-            
-            this.manager   = requireNonNull(manager);
-            this.idField   = requireNonNull(idField);
-            this.listeners = newSetFromMap(new ConcurrentHashMap<>());
-            this.interval  = DEFAULT_INTERVAL;
-            this.limit     = DEFAULT_LIMIT;
-        }
+    interface Builder<ENTITY, T extends Comparable<T>> {
         
         /**
          * Adds a listener to the reactor being built. The listener will be
@@ -129,11 +71,8 @@ public final class Reactor {
          * @param listener  the new listener
          * @return          a reference to this builder
          */
-        public Builder<ENTITY, T> withListener(Consumer<List<ENTITY>> listener) {
-            listeners.add(listener);
-            return this;
-        }
-        
+        Builder<ENTITY, T> withListener(Consumer<List<ENTITY>> listener);
+
         /**
          * Sets the interval for which the database will be polled for changes.
          * The interval is specified in milliseconds.
@@ -144,11 +83,8 @@ public final class Reactor {
          * @param millis  the interval in milliseconds
          * @return        a reference to this builder
          */
-        public Builder<ENTITY, T> withInterval(long millis) {
-            this.interval = millis;
-            return this;
-        }
-        
+        Builder<ENTITY, T> withInterval(long millis);
+
         /**
          * Sets the maximum amount of rows that might be loaded at once from
          * the database. Setting a limit might be a good way to prevent the 
@@ -160,10 +96,7 @@ public final class Reactor {
          * @param count  the maximum amount of rows that might be loaded at once
          * @return       a reference to this builder
          */
-        public Builder<ENTITY, T> withLimit(long count) {
-            this.limit = count;
-            return this;
-        }
+        Builder<ENTITY, T> withLimit(long count);
         
         /**
          * Builds and starts this reactor. When this method is called, the 
@@ -173,74 +106,6 @@ public final class Reactor {
          * 
          * @return  the running reactor
          */
-        public Reactor build() {
-            
-            final AtomicBoolean working = new AtomicBoolean(false);
-            final AtomicReference<T> last = new AtomicReference<>();
-            final AtomicLong total = new AtomicLong();
-
-            final String managerName = manager.getTable().getName();
-            final String fieldName = idField.getIdentifier().columnName();
-            
-            final Timer timer = new Timer();
-            final TimerTask task = new TimerTask() {
-                @Override
-                public void run() {
-                    boolean first = true;
-
-                    if (working.compareAndSet(false, true)) {
-                        try {
-                            while (true) {
-                                final List<ENTITY> added = unmodifiableList(
-                                    manager.stream()
-                                        .filter(idField.greaterThan(last.get()))
-                                        .limit(limit)
-                                        .sorted(idField.comparator())
-                                        .collect(toList())
-                                );
-
-                                if (added.isEmpty()) {
-                                    if (!first) {
-                                        LOGGER.debug(String.format(
-                                            "%s: View is up to date. A total of %d " +
-                                                "rows have been loaded.",
-                                            System.identityHashCode(last),
-                                            total.get()
-                                        ));
-                                    }
-
-                                    break;
-                                } else {
-                                    final ENTITY lastEntity = added.get(added.size() - 1);
-                                    last.set(idField.get(lastEntity));
-
-                                    listeners.forEach(
-                                        listener -> listener.accept(added)
-                                    );
-
-                                    total.addAndGet(added.size());
-
-                                    LOGGER.debug(String.format(
-                                        "%s: Downloaded %d row(s) from %s. Latest %s: %d.", 
-                                        System.identityHashCode(last),
-                                        added.size(),
-                                        managerName,
-                                        fieldName,
-                                        Long.parseLong("" + last.get())
-                                    ));
-                                }
-
-                                first = false;
-                            }
-                        } finally {
-                            working.set(false);
-                        }
-                    }
-                }
-            };
-            
-            timer.scheduleAtFixedRate(task, 0, interval);
-            return new Reactor(timer);
-        }
+        Reactor build();
     }
 }

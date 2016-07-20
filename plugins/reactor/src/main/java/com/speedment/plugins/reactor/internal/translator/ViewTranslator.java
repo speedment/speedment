@@ -38,7 +38,7 @@ public final class ViewTranslator extends DefaultJavaClassTranslator<Table, Inte
 
     @Override
     protected String getClassOrInterfaceName() {
-        return getNamer().javaTypeName(getDocument().getJavaName()) + "View";
+        return getSupport().namer().javaTypeName(getDocument().getJavaName()) + "View";
     }
 
     @Override
@@ -48,7 +48,7 @@ public final class ViewTranslator extends DefaultJavaClassTranslator<Table, Inte
                 intrf.public_().add(Type.of(
                     getSupport().basePackageName() + 
                     ".generated.Generated" + 
-                    getNamer().javaTypeName(getDocument().getJavaName()) + 
+                    getSupport().namer().javaTypeName(getDocument().getJavaName()) + 
                     "View"
                 ));
             }).build();

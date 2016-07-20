@@ -30,7 +30,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Per Minborg
  */
-public class DefaultJavaLanguageNamer implements JavaLanguageNamer {
+public final class JavaLanguageNamerImpl implements JavaLanguageNamer {
 
     @Override
     public String javaTypeName(final String externalName) {

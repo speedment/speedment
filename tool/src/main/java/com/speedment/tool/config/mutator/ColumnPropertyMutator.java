@@ -17,7 +17,6 @@
 package com.speedment.tool.config.mutator;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mutator.ColumnMutator;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.config.mutator.trait.HasAliasPropertyMutator;
@@ -49,11 +48,6 @@ public final class ColumnPropertyMutator extends ColumnMutator<ColumnProperty> i
     @Override
     public void setAutoIncrement(Boolean autoIncrement) {
         document().autoIncrementProperty().setValue(autoIncrement);
-    }
-
-    @Override
-    public void setTypeMapper(TypeMapper<?, ?> typeMapper) {
-        document().typeMapperObjectProperty().setValue(typeMapper);
     }
 
     @Override

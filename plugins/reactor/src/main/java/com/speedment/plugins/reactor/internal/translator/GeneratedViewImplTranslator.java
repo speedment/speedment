@@ -35,7 +35,8 @@ import java.util.Objects;
 import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
-import static com.speedment.plugins.reactor.internal.translator.TranslatorUtil.mergingColumnType;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.plugins.reactor.util.MergingSupport;
 
 /**
  *
@@ -44,13 +45,15 @@ import static com.speedment.plugins.reactor.internal.translator.TranslatorUtil.m
  */
 public final class GeneratedViewImplTranslator extends DefaultJavaClassTranslator<Table, Class> {
 
+    private @Inject MergingSupport merger;
+    
     public GeneratedViewImplTranslator(Table document) {
         super(document, Class::of);
     }
 
     @Override
     protected String getClassOrInterfaceName() {
-        return "Generated" + getNamer().javaTypeName(getDocument().getJavaName()) + "ViewImpl";
+        return "Generated" + getSupport().namer().javaTypeName(getDocument().getJavaName()) + "ViewImpl";
     }
 
     @Override
@@ -67,14 +70,14 @@ public final class GeneratedViewImplTranslator extends DefaultJavaClassTranslato
                 clazz.public_().abstract_()
                     .setSupertype(Type.of(MaterializedViewImpl.class)
                         .add(Generic.of().add(getSupport().entityType()))
-                        .add(Generic.of().add(mergingColumnType(table)))
+                        .add(Generic.of().add(merger.mergingColumnType(table)))
                     )
                     .add(Type.of("Generated" + getSupport().entityName() + "View"))
                     .add(Field.of("app", Type.of(Speedment.class)).protected_().final_())
                     .add(Constructor.of().public_()
                         .add(Field.of("app", Type.of(Speedment.class)))
                         .add(
-                            "super(" + TranslatorUtil.mergingColumnField(table, getSupport()) + ");",
+                            "super(" + merger.mergingColumnField(table) + ");",
                             "this.app = requireNonNull(app);"
                         )
                     )

@@ -16,8 +16,8 @@
  */
 package com.speedment.tool.config;
 
+import com.speedment.common.injector.Injector;
 import com.speedment.generator.TranslatorSupport;
-import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Schema;
@@ -117,7 +117,9 @@ public final class TableProperty
 
     @Override
     public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        final TranslatorSupport<Table> support = new TranslatorSupport<>(speedment.getOrThrow(JavaLanguageNamer.class), this);
+        final TranslatorSupport<Table> support = new TranslatorSupport<>(
+            speedment.getOrThrow(Injector.class), this
+        );
         
         return Stream.of(
             HasEnabledProperty.super.getUiVisibleProperties(speedment),

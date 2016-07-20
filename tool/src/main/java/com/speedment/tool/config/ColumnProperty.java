@@ -35,8 +35,6 @@ import com.speedment.tool.property.BooleanPropertyItem;
 import com.speedment.tool.property.TypeMapperPropertyItem;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.util.StringConverter;
 import org.controlsfx.control.PropertySheet;
@@ -88,21 +86,6 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table, C
     @Override
     public Optional<String> getTypeMapper() {
         return Optional.ofNullable(typeMapperProperty().get());
-    }
-
-    public Property<TypeMapper<?, ?>> typeMapperObjectProperty() {
-        final Property<TypeMapper<?, ?>> pathProperty = new SimpleObjectProperty<>(
-            TYPE_MAPPER_CONVERTER.fromString(typeMapperProperty().get())
-        );
-
-        typeMapperProperty().bindBidirectional(pathProperty, TYPE_MAPPER_CONVERTER);
-
-        return pathProperty;
-    }
-
-    @Override
-    public TypeMapper<?, ?> findTypeMapper() {
-        return typeMapperObjectProperty().getValue();
     }
     
     @Override

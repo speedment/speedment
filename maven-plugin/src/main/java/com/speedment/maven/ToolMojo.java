@@ -38,6 +38,9 @@ import javafx.application.Application;
 @Mojo(name = "tool", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public final class ToolMojo extends AbstractSpeedmentMojo {
     
+    @Parameter(defaultValue = "false")
+    private boolean debug;
+    
     @Parameter
     private String[] components;
     
@@ -64,6 +67,11 @@ public final class ToolMojo extends AbstractSpeedmentMojo {
     @Override
     protected File configLocation() {
         return configFile;
+    }
+    
+    @Override
+    protected boolean debug() {
+        return debug;
     }
 
     @Override

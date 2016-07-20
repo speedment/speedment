@@ -52,6 +52,7 @@ import static com.speedment.common.codegen.internal.model.constant.DefaultType.W
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static com.speedment.common.codegen.model.Generic.BoundType.EXTENDS;
+import com.speedment.common.injector.Injector;
 import static com.speedment.generator.Translator.Phase.POST_MAKE;
 
 /**
@@ -61,7 +62,7 @@ import static com.speedment.generator.Translator.Phase.POST_MAKE;
  */
 public final class GeneratedApplicationImplDecorator implements TranslatorDecorator<Project, Class> {
     
-    private @Inject JavaLanguageNamer namer;
+    private @Inject Injector injector;
     
     @Override
     public void apply(JavaClassTranslator<Project, Class> translator) {
@@ -94,7 +95,7 @@ public final class GeneratedApplicationImplDecorator implements TranslatorDecora
                     .flatMap(Schema::tables)
                     .filter(Table::isEnabled)
                     .forEachOrdered(table -> {
-                        final TranslatorSupport<Table> support = new TranslatorSupport<>(namer, table);
+                        final TranslatorSupport<Table> support = new TranslatorSupport<>(injector, table);
                         final String viewName     = support.variableName() + "View";
                         final String viewTypeName = support.typeName() + "View";
                         final Type viewType       = Type.of(support.basePackageName() + "." + viewTypeName);
@@ -127,7 +128,7 @@ public final class GeneratedApplicationImplDecorator implements TranslatorDecora
                             .filter(Optional::isPresent)
                             .map(Optional::get)
                             .map(Column::getJavaName)
-                            .map(translator.getNamer()::javaStaticFieldName)
+                            .map(translator.getSupport().namer()::javaStaticFieldName)
                             .findFirst()
                             .orElseThrow(() -> new SpeedmentException(
                                 "Error generating code. Table '" + table.getName() + 

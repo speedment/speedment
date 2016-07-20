@@ -34,6 +34,8 @@ import java.util.Optional;
 
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import static com.speedment.common.codegen.internal.util.Formatting.ucfirst;
+import com.speedment.common.injector.Injector;
+import com.speedment.generator.typetoken.TypeTokenGenerator;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
 import static java.util.Objects.requireNonNull;
 
@@ -59,15 +61,19 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
         GENERATED_PREFIX  = "Generated";
     
     private final DOC document;
-    private final JavaLanguageNamer javaLanguageNamer;
+    private final Injector injector;
     
-    public TranslatorSupport(JavaLanguageNamer javaLanguageNamer, DOC document) {
-        this.document          = requireNonNull(document);
-        this.javaLanguageNamer = requireNonNull(javaLanguageNamer);
+    public TranslatorSupport(Injector injector, DOC document) {
+        this.document = requireNonNull(document);
+        this.injector = requireNonNull(injector);
     }
     
     public JavaLanguageNamer namer() {
-        return javaLanguageNamer;
+        return injector.getOrThrow(JavaLanguageNamer.class);
+    }
+    
+    public TypeTokenGenerator typeTokenGenerator() {
+        return injector.getOrThrow(TypeTokenGenerator.class);
     }
     
     protected DOC document() {

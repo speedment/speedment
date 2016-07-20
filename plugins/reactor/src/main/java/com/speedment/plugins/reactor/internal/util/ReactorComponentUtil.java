@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.plugins.reactor.component;
+package com.speedment.plugins.reactor.internal.util;
 
+import com.speedment.runtime.component.TypeMapperComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Table;
@@ -33,7 +34,7 @@ import static java.util.stream.Collectors.toList;
  */
 public final class ReactorComponentUtil {
 
-    public static List<Column> validMergingColumns(Table table) {
+    public static List<Column> validMergingColumns(Table table, TypeMapperComponent typeMappers) {
         return table.columns()
 
             // Only consider non-primary-key columns
@@ -50,7 +51,7 @@ public final class ReactorComponentUtil {
 
             // Only include columns that are 
             // comparable.
-            .filter(col -> col.findTypeMapper()
+            .filter(col -> typeMappers.get(col)
                 .getJavaType(col)
                 .isComparable()
             )

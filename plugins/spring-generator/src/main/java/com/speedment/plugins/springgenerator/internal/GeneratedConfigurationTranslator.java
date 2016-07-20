@@ -28,7 +28,6 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
-import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.plugins.springgenerator.configuration.SpeedmentConfiguration;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
@@ -38,6 +37,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.STRING;
+import com.speedment.common.injector.Injector;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 
 /**
@@ -49,7 +49,7 @@ import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traver
 public final class GeneratedConfigurationTranslator 
 extends DefaultJavaClassTranslator<Project, Class> {
     
-    private @Inject JavaLanguageNamer namer;
+    private @Inject Injector injector;
 
     public GeneratedConfigurationTranslator(Project document) {
         super(document, Class::of);
@@ -134,7 +134,7 @@ extends DefaultJavaClassTranslator<Project, Class> {
                         .filter(HasEnabled::isEnabled)
                         .forEachOrdered(table -> {
                             
-                    final TranslatorSupport<Table> support = new TranslatorSupport<>(namer, table);
+                    final TranslatorSupport<Table> support = new TranslatorSupport<>(injector, table);
                     
                     file.add(Import.of(support.entityType()));
                     

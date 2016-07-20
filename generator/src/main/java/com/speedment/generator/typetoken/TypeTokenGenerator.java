@@ -14,34 +14,40 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.generator.util;
+package com.speedment.generator.typetoken;
 
 import com.speedment.common.codegen.model.Type;
+import com.speedment.common.injector.annotation.InjectorKey;
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.typetoken.TypeToken;
-import com.speedment.generator.internal.util.InternalTypeTokenUtil;
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 
 /**
+ * Generates type tokens and codegen types from columns.
  * 
  * @author  Emil Forslund
  * @author  Simon Jonasson
  * @since   3.0.0
  */
-public final class TypeTokenUtil {
-    
-    public static TypeToken tokenOf(Column col) {
-        return col.findTypeMapper().getJavaType(col);
-    }
-    
-    public static Type typeOf(Column col) {
-        return InternalTypeTokenUtil.toType(tokenOf(col));
-    }
+@Api(version = "3.0")
+@InjectorKey(TypeTokenGenerator.class)
+public interface TypeTokenGenerator {
+
+    /**
+     * Returns the token describing the java type used to
+     * store data from the specified column.
+     * 
+     * @param column  the column
+     * @return        token describing its java type
+     */
+    TypeToken tokenOf(Column column);
     
     /**
-     * Utility classes should not be instantiated.
+     * Returns the a codegen {@link Type} for the specified
+     * column in generated code.
+     * 
+     * @param column  the column
+     * @return        the codegen type
      */
-    private TypeTokenUtil() {
-        instanceNotAllowed(getClass());
-    }
+    Type typeOf(Column column);
 }

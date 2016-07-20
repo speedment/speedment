@@ -16,7 +16,10 @@
  */
 package com.speedment.runtime.internal.component;
 
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.TypeMapperComponent;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mapper.bigdecimal.BigDecimalToDouble;
 import com.speedment.runtime.config.mapper.integer.IntegerZeroOneToBooleanMapper;
@@ -30,6 +33,7 @@ import com.speedment.runtime.config.mapper.time.TimeToIntMapper;
 import com.speedment.runtime.config.mapper.time.TimeToLongMapper;
 import com.speedment.runtime.config.mapper.time.TimestampToIntMapper;
 import com.speedment.runtime.config.mapper.time.TimestampToLongMapper;
+import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.license.Software;
 import java.math.BigDecimal;
 import java.sql.Clob;
@@ -53,7 +57,8 @@ import java.util.stream.Stream;
  */
 public final class TypeMapperComponentImpl extends InternalOpenSourceComponent implements TypeMapperComponent {
 
-    private final Map<String, List<TypeMapper<?, ?>>> mappers;
+    private final Map<String, List<Supplier<TypeMapper<?, ?>>>> mappers;
+    private @Inject Injector injector;
 
     /**
      * Constructs the component.
@@ -92,19 +97,26 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
 
     @Override
     public void install(Class<?> databaseType, Supplier<TypeMapper<?, ?>> typeMapperConstructor) {
-        final TypeMapper<?, ?> mapper = typeMapperConstructor.get();
-        mappers.computeIfAbsent(databaseType.getName(), n -> new LinkedList<>()).add(mapper);
+        mappers.computeIfAbsent(
+            databaseType.getName(), 
+            n -> new LinkedList<>()
+        ).add(typeMapperConstructor);
     }
 
     @Override
     public final Stream<TypeMapper<?, ?>> mapFrom(Class<?> databaseType) {
-        return mappers.getOrDefault(databaseType.getName(), Collections.emptyList()).stream();
+        return mappers.getOrDefault(databaseType.getName(), Collections.emptyList())
+            .stream()
+            .map(Supplier::get)
+            .map(injector::inject);
     }
 
     @Override
     public Stream<TypeMapper<?, ?>> stream() {
         return mappers.values().stream()
-            .flatMap(List::stream);
+            .flatMap(List::stream)
+            .map(Supplier::get)
+            .map(injector::inject);
     }
 
     @Override
@@ -112,6 +124,22 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
         return stream()
             .filter(tm -> tm.getClass().getName().equals(absoluteClassName))
             .findAny();
+    }
+    
+    @Override
+    public TypeMapper<?, ?> get(Column column) {
+        return injector.inject(
+            column.getTypeMapper().map(name -> {
+                try {
+                    @SuppressWarnings("unchecked")
+                    final TypeMapper<Object, Object> mapper = 
+                        (TypeMapper<Object, Object>) Class.forName(name).newInstance();
+                    return mapper;
+                } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
+                    throw new SpeedmentException("Could not instantiate TypeMapper: '" + name + "'.", ex);
+                }
+            }).orElseGet(TypeMapper::identity)
+        );
     }
 
     @Override

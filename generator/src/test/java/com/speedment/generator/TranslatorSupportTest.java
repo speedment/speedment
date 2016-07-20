@@ -21,6 +21,7 @@
  */
 package com.speedment.generator;
 
+import com.speedment.common.injector.Injector;
 import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.config.Table;
 import org.junit.After;
@@ -58,7 +59,9 @@ public class TranslatorSupportTest extends SimpleModel {
 
     @Before
     public void setUp() {
-        instance = new TranslatorSupport<>(speedment.getOrThrow(JavaLanguageNamer.class), table);
+        instance = new TranslatorSupport<>(
+            speedment.getOrThrow(Injector.class), table
+        );
     }
 
     @After
@@ -270,7 +273,10 @@ public class TranslatorSupportTest extends SimpleModel {
 
     @Test
     public void testShortTableName() {
-        final TranslatorSupport<Table> support = new TranslatorSupport<>(speedment.getOrThrow(JavaLanguageNamer.class), table2);
+        final TranslatorSupport<Table> support = new TranslatorSupport<>(
+            speedment.getOrThrow(Injector.class), table2
+        );
+        
         assertEquals("sP", support.variableName());
     }
 

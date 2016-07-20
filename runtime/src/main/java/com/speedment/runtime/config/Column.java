@@ -17,8 +17,6 @@
 package com.speedment.runtime.config;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.mapper.IdentityTypeMapper;
-import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mutator.ColumnMutator;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.trait.HasAlias;
@@ -113,27 +111,6 @@ public interface Column extends
         } catch (final ClassNotFoundException ex) {
             throw new SpeedmentException("Could not find database type: '" + name + "'.", ex);
         }
-    }
-    
-    /**
-     * Returns the mapper class that will be used to generate a java
-     * representation of the database types. If no type mapper is
-     * specified, then an {@link IdentityTypeMapper} will be created
-     * and returned.
-     *
-     * @return the mapper class
-     */
-    default TypeMapper<?, ?> findTypeMapper() {
-        return getTypeMapper().map(name -> {
-            try {
-                @SuppressWarnings("unchecked")
-                final TypeMapper<Object, Object> mapper = 
-                    (TypeMapper<Object, Object>) Class.forName(name).newInstance();
-                return mapper;
-            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
-                throw new SpeedmentException("Could not instantiate TypeMapper: '" + name + "'.", ex);
-            }
-        }).orElseGet(TypeMapper::identity);
     }
 
     @Override

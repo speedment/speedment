@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.plugins.reactor.internal.translator;
+package com.speedment.plugins.reactor.translator;
 
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Interface;

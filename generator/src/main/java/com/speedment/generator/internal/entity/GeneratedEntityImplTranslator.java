@@ -34,14 +34,15 @@ import java.util.StringJoiner;
 
 import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.*;
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
-import static com.speedment.common.codegen.internal.util.Formatting.tab;
-import com.speedment.generator.util.TypeTokenUtil;
+import com.speedment.generator.typetoken.TypeTokenGenerator;
 import com.speedment.runtime.config.typetoken.PrimitiveTypeToken;
 import com.speedment.runtime.config.typetoken.TypeToken;
 import com.speedment.runtime.util.OptionalUtil;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import static com.speedment.common.codegen.internal.util.Formatting.nl;
+import static com.speedment.common.codegen.internal.util.Formatting.tab;
+import com.speedment.common.injector.annotation.Inject;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -51,6 +52,8 @@ import static java.util.stream.Collectors.joining;
  */
 public final class GeneratedEntityImplTranslator extends EntityAndManagerTranslator<Class> {
 
+    private @Inject TypeTokenGenerator typeTokenGenerator;
+    
     public GeneratedEntityImplTranslator(Table table) {
         super(table, Class::of);
     }
@@ -64,7 +67,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
              * Getters
              */
             .forEveryColumn((clazz, col) -> {
-                final Type retType = GeneratedEntityTranslator.getterReturnType(col);
+                final Type retType = GeneratedEntityTranslator.getterReturnType(typeTokenGenerator, col);
                 final String getter;
                 if (col.isNullable()) {
                     final String varName = getSupport().variableName(col);
@@ -128,7 +131,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
         result.add(
             getDocument().columns()
                 .map(Column::getJavaName)
-                .map(c -> ".set" + getNamer().javaTypeName(c) + "(" + getNamer().javaVariableName(c) + ")")
+                .map(c -> ".set" + getSupport().namer().javaTypeName(c) + "(" + getSupport().namer().javaVariableName(c) + ")")
                 .collect(joining(nl() + tab(), tab(), ";"))
                 .split(nl())
         );
@@ -176,7 +179,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
 
         columns().forEachOrdered(c -> {
             final String getter = "get" + getSupport().typeName(c);
-            final TypeToken token = TypeTokenUtil.tokenOf(c);
+            final TypeToken token = typeTokenGenerator.tokenOf(c);
             
             if (token.isPrimitive()) {
                 method.add("if (this." + getter + "() != " + thatCastedName + "." + getter + "()) {return false; }");
@@ -199,7 +202,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
 
             final StringBuilder str = new StringBuilder();
             str.append("hash = 31 * hash + ");
-            final TypeToken token = TypeTokenUtil.tokenOf(c);
+            final TypeToken token = typeTokenGenerator.tokenOf(c);
             
             if (token.isPrimitive()) {
                 @SuppressWarnings("unchecked")

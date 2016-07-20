@@ -46,6 +46,7 @@ import java.util.stream.Stream;
 import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.PARAM;
 import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.RETURN;
+import com.speedment.common.codegen.internal.model.constant.DefaultType;
 
 /**
  *
@@ -85,12 +86,12 @@ public final class GeneratedManagerTranslator extends EntityAndManagerTranslator
                 file.add(imp);
 
                 final String methodName = EntityTranslatorSupport.FIND
-                    + EntityTranslatorSupport.pluralis(fu.getTable(), getNamer())
+                    + EntityTranslatorSupport.pluralis(fu.getTable(), getSupport().namer())
                     + "By" + getSupport().typeName(fu.getColumn());
                 
                 /*** Record for later use in the construction of aggregate streamers ***/
                 fkStreamers.computeIfAbsent(fu.getTable(), t -> new ArrayList<>()).add(methodName);
-                final Type returnType = Type.of(Stream.class).add(Generic.of().add(fu.getEmt().getSupport().entityType()));
+                final Type returnType = DefaultType.stream(fu.getEmt().getSupport().entityType());
                 final Method method = Method.of(methodName, returnType);
                 
                 method.add(Field.of("entity", fu.getForeignEmt().getSupport().entityType()));
@@ -159,11 +160,14 @@ public final class GeneratedManagerTranslator extends EntityAndManagerTranslator
                 /*** Create aggregate streaming functions, if any ***/
                 fkStreamers.keySet().stream().forEach((referencingTable) -> {
                     final List<String> methodNames = fkStreamers.get(referencingTable);
-                    final TranslatorSupport<Table> foreignSupport = new TranslatorSupport<>(namer, referencingTable);
+                    final TranslatorSupport<Table> foreignSupport = new TranslatorSupport<>(injector, referencingTable);
 
                     if (!methodNames.isEmpty()) {
-                        final Method method = Method.of(EntityTranslatorSupport.FIND + EntityTranslatorSupport.pluralis(referencingTable,
-                            getNamer()), Type.of(Stream.class).add(Generic.of().add(foreignSupport.entityType())));
+                        final Method method = Method.of(
+                            EntityTranslatorSupport.FIND + 
+                            EntityTranslatorSupport.pluralis(referencingTable, getSupport().namer()),
+                            DefaultType.stream(foreignSupport.entityType())
+                        );
 
                         method.add(Field.of("entity", getSupport().entityType()));
 

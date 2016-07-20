@@ -66,4 +66,14 @@ public interface MaterializedView<ENTITY, T extends Comparable<T>>
      * @return  the stream
      */
     Stream<ENTITY> stream();
+
+    /**
+     * Accepts a series of modifications into this view. This should only be 
+     * called by the owner of the view, normally a {@link Reactor}. The events
+     * given to this method is expected to be ordered chronologically.
+     * 
+     * @param events  the events to load
+     */
+    @Override
+    void accept(List<ENTITY> events);
 }

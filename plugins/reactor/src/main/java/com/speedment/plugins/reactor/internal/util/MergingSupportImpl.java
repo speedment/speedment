@@ -14,16 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.plugins.reactor.internal.translator;
+package com.speedment.plugins.reactor.internal.util;
 
 import com.speedment.common.codegen.model.Type;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.TranslatorSupport;
-import com.speedment.generator.util.TypeTokenUtil;
-import com.speedment.plugins.reactor.component.ReactorComponent;
+import com.speedment.generator.typetoken.TypeTokenGenerator;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 
-import static com.speedment.plugins.reactor.component.ReactorComponentUtil.validMergingColumns;
+import static com.speedment.plugins.reactor.internal.util.ReactorComponentUtil.validMergingColumns;
+import com.speedment.plugins.reactor.internal.component.ReactorComponentImpl;
+import com.speedment.plugins.reactor.util.MergingSupport;
+import com.speedment.runtime.component.TypeMapperComponent;
 
 /**
  * Utility methods that are used by several translators in this package but that
@@ -32,31 +36,39 @@ import static com.speedment.plugins.reactor.component.ReactorComponentUtil.valid
  * @author Emil Forslund
  * @since  1.1.0
  */
-final class TranslatorUtil {
+public final class MergingSupportImpl implements MergingSupport {
     
-    static Column mergingColumn(Table table) {
-        return table.getAsString(ReactorComponent.MERGE_ON)
+    private @Inject Injector injector;
+    private @Inject TypeTokenGenerator typeTokenGenerator;
+    private @Inject TypeMapperComponent typeMappers;
+    
+    @Override
+    public Column mergingColumn(Table table) {
+        return table.getAsString(ReactorComponentImpl.MERGE_ON)
             .flatMap(str -> table.columns()
                 .filter(col -> col.getName().equals(str))
                 .findAny()
             )
             .map(Column.class::cast)
             .orElseGet(() -> 
-                validMergingColumns(table).get(0)
+                validMergingColumns(table, typeMappers).get(0)
             );
     }
     
-    static String mergingColumnField(Table table, TranslatorSupport<Table> support) {
+    @Override
+    public String mergingColumnField(Table table) {
+        final TranslatorSupport<Table> support = new TranslatorSupport<>(injector, table);
         return support.namer().javaTypeName(table.getJavaName()) + "." +
             support.namer().javaStaticFieldName(
                 mergingColumn(table).getJavaName()
             );
     }
 
-    static Type mergingColumnType(Table table) {
+    @Override
+    public Type mergingColumnType(Table table) {
         final Column column = mergingColumn(table);
-        return TypeTokenUtil.typeOf(column);
+        return typeTokenGenerator.typeOf(column);
     }
     
-    private TranslatorUtil() {}
+    private MergingSupportImpl() {}
 }

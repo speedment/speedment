@@ -18,7 +18,6 @@ package com.speedment.generator;
 
 import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.File;
-import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
@@ -41,8 +40,6 @@ public interface JavaClassTranslator<DOC extends HasName & HasMainInterface, T e
     extends Translator<DOC, T> {
 
     TranslatorSupport<DOC> getSupport();
-    
-    JavaLanguageNamer getNamer();
     
     static Supplier<SpeedmentException> foundNoProjectException() {
         return () -> new SpeedmentException(

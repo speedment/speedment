@@ -44,7 +44,7 @@ import com.speedment.generator.internal.manager.GeneratedManagerImplTranslator;
 import com.speedment.generator.internal.manager.GeneratedManagerTranslator;
 import com.speedment.generator.internal.manager.ManagerImplTranslator;
 import com.speedment.generator.internal.manager.ManagerTranslator;
-import com.speedment.generator.internal.util.DefaultJavaLanguageNamer;
+import com.speedment.generator.internal.util.JavaLanguageNamerImpl;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasMainInterface;
@@ -63,12 +63,15 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.RESOLVED;
 import static com.speedment.generator.StandardTranslatorKey.*;
+import com.speedment.generator.internal.typetoken.TypeTokenGeneratorImpl;
+import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 @IncludeInjectable({
     TranslatorManagerImpl.class,
-    DefaultJavaLanguageNamer.class,
-    JavaGenerator.class
+    JavaLanguageNamerImpl.class,
+    JavaGenerator.class,
+    TypeTokenGeneratorImpl.class
 })
 public final class CodeGenerationComponentImpl extends InternalOpenSourceComponent implements CodeGenerationComponent {
 

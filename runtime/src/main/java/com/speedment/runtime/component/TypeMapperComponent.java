@@ -18,6 +18,7 @@ package com.speedment.runtime.component;
 
 import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 
 import java.util.Optional;
@@ -70,4 +71,15 @@ public interface TypeMapperComponent extends Component {
      * @return                   the type mapper or empty
      */
     Optional<TypeMapper<?, ?>> get(String absoluteClassName);
+    
+    /**
+     * Returns the mapper class that will be used to generate a java
+     * representation of the database types. If no type mapper is
+     * specified, then an {@link IdentityTypeMapper} will be created
+     * and returned.
+     *
+     * @param column  the column to retreive the type mapper for
+     * @return        the mapper class
+     */
+    TypeMapper<?, ?> get(Column column);
 }

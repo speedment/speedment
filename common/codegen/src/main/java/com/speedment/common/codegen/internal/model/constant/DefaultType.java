@@ -37,6 +37,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
+import java.util.stream.Stream;
 
 /**
  * Constant implementations of the {@link Type} interface that can be used to
@@ -82,7 +83,8 @@ public enum DefaultType implements Type {
 		PREDICATE(Predicate.class),
 		CONSUMER(Consumer.class),
         SUPPLIER(Supplier.class),
-        CLASS(java.lang.Class.class);
+        CLASS(java.lang.Class.class),
+        STREAM(Stream.class);
         
     /**
      * Generates a {@link Type} to represent a java standard {@link Class} with
@@ -223,6 +225,17 @@ public enum DefaultType implements Type {
      */
     public static Type supplier(Type innerType) {
         return SUPPLIER.add(Generic.of(requireNonNull(innerType)));
+    }
+    
+    /**
+     * Generates a {@link Type} to represent a java standard {@link Stream} 
+     * with a generic type variable.
+     * 
+     * @param innerType  the type variable
+     * @return           the resulting type
+     */
+    public static Type stream(Type innerType) {
+        return STREAM.add(Generic.of(requireNonNull(innerType)));
     }
     
     /**

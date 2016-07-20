@@ -47,7 +47,9 @@ public final class InternalTypeTokenUtil {
     public static String renderShort(TypeToken token) {
         final Generator gen = new JavaGenerator();
         final Type type = toType(token);
+        
         gen.getDependencyMgr().load(type.getName());
+        
         return gen.on(type).orElseThrow(() -> new SpeedmentException(
             "Code Generator did not return any result for type token '" + token + "'."
         ));

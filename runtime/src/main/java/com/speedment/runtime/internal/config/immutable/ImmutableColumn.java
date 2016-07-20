@@ -18,7 +18,6 @@ package com.speedment.runtime.internal.config.immutable;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.internal.config.ColumnImpl;
 
 import java.util.Map;
@@ -39,7 +38,6 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
     private final transient boolean autoincrement;
     private final transient Optional<String> typeMapper;
     private final transient String databaseType;
-    private final transient TypeMapper<?, ?> typeMapperObject;
     private final transient Class<?> databaseTypeObject;
     private final transient Optional<String> enumConstants;
 
@@ -55,7 +53,6 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
         this.autoincrement      = prototype.isAutoIncrement();
         this.typeMapper         = prototype.getTypeMapper();
         this.databaseType       = prototype.getDatabaseType();
-        this.typeMapperObject   = prototype.findTypeMapper();
         this.databaseTypeObject = prototype.findDatabaseType();
         this.enumConstants      = prototype.getEnumConstants();
     }
@@ -88,11 +85,6 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
     @Override
     public Optional<String> getTypeMapper() {
         return typeMapper;
-    }
-
-    @Override
-    public TypeMapper<?, ?> findTypeMapper() {
-        return typeMapperObject;
     }
 
     @Override

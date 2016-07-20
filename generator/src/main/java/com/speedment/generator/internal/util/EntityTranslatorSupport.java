@@ -49,11 +49,12 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
+import com.speedment.common.injector.Injector;
 import com.speedment.generator.TranslatorSupport;
-import com.speedment.generator.util.TypeTokenUtil;
+import com.speedment.generator.typetoken.TypeTokenGenerator;
 import com.speedment.runtime.config.typetoken.TypeToken;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import com.speedment.runtime.util.TypeTokenFactory;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -93,18 +94,18 @@ public final class EntityTranslatorSupport {
         Table table,
         Column column,
         Type entityType,
-        JavaLanguageNamer javaLanguageNamer
+        Injector injector
     ) {
-        requireNonNulls(file, table, column, entityType, javaLanguageNamer);
+        requireNonNulls(file, table, column, entityType, injector);
 
-        final TypeToken mapping = TypeTokenUtil.tokenOf(column);
+        final TypeToken mapping = injector.getOrThrow(TypeTokenGenerator.class).tokenOf(column);
         final Type databaseType = Type.of(column.getDatabaseType());
 
         return EntityTranslatorSupport.getForeignKey(table, column)
             // If this is a foreign key.
             .map(fkc -> {
                 final Type type, implType;
-                final Type fkType = new TranslatorSupport<>(javaLanguageNamer, fkc.findForeignTable().orElseThrow(
+                final Type fkType = new TranslatorSupport<>(injector, fkc.findForeignTable().orElseThrow(
                         () -> new SpeedmentException(
                             "Could not find referenced foreign table '"
                             + fkc.getForeignTableName() + "'."

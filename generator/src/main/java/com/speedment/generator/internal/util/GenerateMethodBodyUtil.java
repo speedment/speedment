@@ -45,7 +45,7 @@ import static com.speedment.common.codegen.internal.util.Formatting.*;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import static com.speedment.generator.internal.manager.GeneratedManagerImplTranslator.*;
-import com.speedment.generator.util.TypeTokenUtil;
+import com.speedment.generator.typetoken.TypeTokenGenerator;
 import com.speedment.runtime.config.typetoken.TypeToken;
 import com.speedment.runtime.util.OptionalUtil;
 import com.speedment.runtime.util.TypeTokenFactory;
@@ -94,15 +94,14 @@ public final class GenerateMethodBodyUtil {
         file.add(Import.of(Type.of(IllegalArgumentException.class)));
         
         return new String[]{
-            "switch ((" + support.entityName() + ".Identifier) identifier) " + block(
-            columnsSupplier.get()
+            "switch ((" + support.entityName() + ".Identifier) identifier) " + block(columnsSupplier.get()
                 .filter(HasEnabled::isEnabled)
-                .peek(c -> file.add(Import.of(TypeTokenUtil.typeOf(c))))
+                .peek(c -> file.add(Import.of(support.typeTokenGenerator().typeOf(c))))
                 .map(c -> 
                     "case " + support.namer().javaStaticFieldName(c.getJavaName())
                     + " : entity." + SETTER_METHOD_PREFIX + support.typeName(c)
                     + "("
-                    + castToColumnTypeIfNotObject(file, c)
+                    + castToColumnTypeIfNotObject(support.typeTokenGenerator(), file, c)
                     + "value); break;"
                 ).collect(Collectors.joining(nl()))
                     + nl() + "default : throw new IllegalArgumentException(\"Unknown identifier '\" + identifier + \"'.\");"
@@ -181,12 +180,12 @@ public final class GenerateMethodBodyUtil {
         return rows.toArray(new String[rows.size()]);
     }
     
-    private static String castToColumnTypeIfNotObject(File file, Column c) {
-        final TypeToken token = TypeTokenUtil.tokenOf(c);
+    private static String castToColumnTypeIfNotObject(TypeTokenGenerator typeTokenGenerator, File file, Column c) {
+        final TypeToken token = typeTokenGenerator.tokenOf(c);
         if (TypeTokenFactory.createObjectToken().equals(token)) {
             return "";
         } else {
-            file.add(Import.of(TypeTokenUtil.typeOf(c)));
+            file.add(Import.of(typeTokenGenerator.typeOf(c)));
             return "(" + InternalTypeTokenUtil.renderShort(token) + ") ";
         }
     }

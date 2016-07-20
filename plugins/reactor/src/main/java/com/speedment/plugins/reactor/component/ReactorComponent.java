@@ -16,99 +16,27 @@
  */
 package com.speedment.plugins.reactor.component;
 
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.WithState;
-import com.speedment.generator.StandardTranslatorKey;
-import com.speedment.generator.component.CodeGenerationComponent;
-import com.speedment.plugins.reactor.internal.translator.GeneratedApplicationDecorator;
-import com.speedment.plugins.reactor.internal.translator.GeneratedApplicationImplDecorator;
-import com.speedment.plugins.reactor.internal.translator.GeneratedViewImplTranslator;
-import com.speedment.plugins.reactor.internal.translator.GeneratedViewTranslator;
-import com.speedment.plugins.reactor.internal.translator.ReactorTranslatorKey;
-import com.speedment.plugins.reactor.internal.translator.ViewImplTranslator;
-import com.speedment.plugins.reactor.internal.translator.ViewTranslator;
 import com.speedment.runtime.component.Component;
-import com.speedment.runtime.component.EventComponent;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Table;
-import com.speedment.runtime.internal.component.AbstractComponent;
 import com.speedment.runtime.internal.license.AbstractSoftware;
 import com.speedment.runtime.license.Software;
-import com.speedment.tool.component.UserInterfaceComponent;
-import com.speedment.tool.config.DocumentProperty;
-import com.speedment.tool.config.TableProperty;
-import com.speedment.tool.event.TreeSelectionChange;
-import com.speedment.tool.property.ChoicePropertyItem;
-import com.speedment.tool.util.IdentityStringConverter;
-import javafx.scene.control.TreeItem;
-
-import static com.speedment.common.injector.State.RESOLVED;
-import static com.speedment.plugins.reactor.component.ReactorComponentUtil.validMergingColumns;
+import com.speedment.common.injector.annotation.InjectorKey;
 import static com.speedment.runtime.internal.license.OpenSourceLicense.APACHE_2;
-import static java.util.stream.Collectors.toList;
-import static javafx.collections.FXCollections.observableList;
 
 /**
  *
  * @author Emil Forslund
  * @since  1.1.0
  */
-public final class ReactorComponent extends AbstractComponent {
-    
-    public final static String MERGE_ON = "mergeOn";
-
-    @ExecuteBefore(RESOLVED)
-    void setup(
-            @WithState(RESOLVED) CodeGenerationComponent code, 
-            @WithState(RESOLVED) UserInterfaceComponent ui, 
-            @WithState(RESOLVED) EventComponent events) {
-        
-        code.add(Project.class, StandardTranslatorKey.GENERATED_APPLICATION, new GeneratedApplicationDecorator());
-        code.add(Project.class, StandardTranslatorKey.GENERATED_APPLICATION_IMPL, new GeneratedApplicationImplDecorator());
-        
-        code.put(Table.class, ReactorTranslatorKey.ENTITY_VIEW, ViewTranslator::new);
-        code.put(Table.class, ReactorTranslatorKey.ENTITY_VIEW_IMPL, ViewImplTranslator::new);
-        code.put(Table.class, ReactorTranslatorKey.GENERATED_ENTITY_VIEW, GeneratedViewTranslator::new);
-        code.put(Table.class, ReactorTranslatorKey.GENERATED_ENTITY_VIEW_IMPL, GeneratedViewImplTranslator::new);
-        
-        events.on(TreeSelectionChange.class, ev -> {
-            ev.changeEvent()
-                .getList()
-                .stream()
-                .map(TreeItem<DocumentProperty>::getValue)
-                .findAny()
-                .ifPresent(doc -> {
-                    if (doc instanceof TableProperty) {
-                        System.out.println("It was a table.");
-                        final TableProperty table = (TableProperty) doc;
-
-                        ui.getProperties().add(new ChoicePropertyItem<>(
-                            observableList(
-                                validMergingColumns(table).stream()
-                                    .map(Column::getJavaName)
-                                    .collect(toList())
-                            ),
-                            table.stringPropertyOf(MERGE_ON, () -> null),
-                            new IdentityStringConverter(), 
-                            String.class,
-                            "Merge events on", 
-                            "This column will be used to merge events in a " + 
-                            "materialized object view (MOV) so that only the " + 
-                            "most recent revision of an entity is visible."
-                        ));
-                    }
-                });
-        });
-    }
+@InjectorKey(ReactorComponent.class)
+public interface ReactorComponent extends Component {
 
     @Override
-    public Class<? extends Component> getComponentClass() {
+    default Class<ReactorComponent> getComponentClass() {
         return ReactorComponent.class;
     }
 
     @Override
-    public Software asSoftware() {
+    default Software asSoftware() {
         return AbstractSoftware.with(
             "Reactor Plugin", "1.1.0", APACHE_2
         );
