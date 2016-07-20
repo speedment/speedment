@@ -104,6 +104,7 @@ public final class EditorsUtil {
         final ObservableList<T> observable = observableArrayList(alternatives);
         
         final ChoiceBox<String> choice = new ChoiceBox<>(labels);
+        
         @SuppressWarnings("unchecked")
         final T itemValue = (T) item.getValue();
         choice.getSelectionModel().select(converter.apply(itemValue));

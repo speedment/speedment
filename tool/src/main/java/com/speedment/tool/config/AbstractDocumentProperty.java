@@ -305,8 +305,11 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
         final ChangeListener<T> change = (ob, oldValue, newValue) -> {
             if (newValue != null) {
                 config.put(key, newValue);
-                invalidate();
+            } else {
+                config.remove(key);
             }
+            
+            invalidate();
         };
         
         property.setValue(initialValue);

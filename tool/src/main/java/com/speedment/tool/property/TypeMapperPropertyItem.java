@@ -16,19 +16,24 @@
  */
 package com.speedment.tool.property;
 
+import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.TypeMapperComponent;
-import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.tool.util.EditorsUtil;
+import com.speedment.runtime.exception.SpeedmentException;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.property.editor.PropertyEditor;
 
-import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.Objects.requireNonNull;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.control.ChoiceBox;
 
 /**
  *
@@ -38,6 +43,9 @@ import static java.util.Objects.requireNonNull;
 @Api(version="3.0")
 public final class TypeMapperPropertyItem extends AbstractPropertyItem<String, StringProperty, PropertyEditor<?>> {
     
+    public final static String IDENTITY_MAPPER = "(Use Identity Mapper)";
+    
+    private final StringProperty property;
     private final Speedment speedment;
     private final Class<?> type;
     
@@ -49,6 +57,7 @@ public final class TypeMapperPropertyItem extends AbstractPropertyItem<String, S
         super(property, name, description, decorator);
         this.speedment = requireNonNull(speedment);
         this.type      = requireNonNull(type);
+        this.property  = requireNonNull(property);
     }
 
     @Override
@@ -57,16 +66,62 @@ public final class TypeMapperPropertyItem extends AbstractPropertyItem<String, S
     }
 
     @Override
-    protected PropertyEditor<?> createUndecoratedEditor() { 
+    protected PropertyEditor<?> createUndecoratedEditor() {
         final TypeMapperComponent typeMapperComponent = speedment.getOrThrow(TypeMapperComponent.class);
-        final List<String> mappers = typeMapperComponent.mapFrom(type)
-            .sorted(TypeMapper.COMPARATOR)
-            .map(TypeMapper::getClass)
-            .map(Class::getName)
-            .collect(toList());
-
-        return EditorsUtil.createChoiceEditorWithConverter(
-            this, mappers, clazz -> typeMapperComponent.get(clazz).map(TypeMapper::getLabel).orElse(null)
+        
+        final Map<String, String> mapping = MapStream.fromStream(
+            typeMapperComponent.mapFrom(type),
+            tm -> tm.getLabel(),
+            tm -> tm.getClass().getName()
+        ).toSortedMap();
+        
+        final ObservableList<String> alternatives = FXCollections.observableList(
+            mapping.keySet().stream().collect(toList())
         );
+        
+        alternatives.add(0, IDENTITY_MAPPER);
+        
+        final ChoiceBox<String> choice = new ChoiceBox<>(alternatives);
+        choice.valueProperty().addListener((ob, o, n) -> {
+            if (n == null || IDENTITY_MAPPER.equals(n)) {
+                property.set(null);
+            } else {
+                property.set(mapping.get(n));
+            }
+        });
+        
+        final PropertyEditor<String> editor = new PropertyEditor<String>() {
+
+            @Override
+            public void setValue(String javaName) {
+                System.out.println("Attempting to set value to '" + javaName + "'.");
+            }
+
+            @Override
+            public Node getEditor() {
+                return choice;
+            }
+
+            @Override
+            public String getValue() {
+                return choice.getValue();
+            }
+        };
+        
+        final String initialValue = property.get();
+        if (initialValue == null) {
+            choice.setValue(IDENTITY_MAPPER);
+        } else {
+            choice.setValue(MapStream.of(mapping)
+                .filterValue(initialValue::equals)
+                .keys()
+                .findAny()
+                .orElseThrow(() -> new SpeedmentException(
+                    "Could not find requested value '" + initialValue + "' in mapping."
+                ))
+            );
+        }
+        
+        return editor;
     }
 }
