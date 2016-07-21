@@ -16,8 +16,8 @@
  */
 package com.speedment.tool.event;
 
+import com.speedment.generator.event.Event;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.event.Event;
 import com.speedment.tool.config.DocumentProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;

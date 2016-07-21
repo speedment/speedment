@@ -30,7 +30,7 @@ import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.generator.event.AfterGenerate;
 import com.speedment.generator.event.BeforeGenerate;
 import com.speedment.generator.event.FileGenerated;
-import com.speedment.runtime.component.EventComponent;
+import com.speedment.generator.component.EventComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;

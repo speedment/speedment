@@ -67,6 +67,7 @@ import com.speedment.generator.internal.typetoken.TypeTokenGeneratorImpl;
 import static java.util.Objects.requireNonNull;
 
 @IncludeInjectable({
+    EventComponentImpl.class,
     TypeMapperComponentImpl.class,
     TranslatorManagerImpl.class,
     JavaLanguageNamerImpl.class,

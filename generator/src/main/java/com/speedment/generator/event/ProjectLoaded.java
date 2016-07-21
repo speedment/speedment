@@ -14,38 +14,31 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.event;
+package com.speedment.generator.event;
 
+import com.speedment.generator.event.trait.ProjectEvent;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.component.EventComponent;
+import com.speedment.runtime.config.Project;
+
+import static java.util.Objects.requireNonNull;
 
 /**
- * An event passed to the {@link EventComponent}.
+ * A special event that happens when a project has been fully loaded.
  * 
  * @author  Emil Forslund
  * @since   2.3.0
  */
 @Api(version = "3.0")
-public interface Event {
+public final class ProjectLoaded implements ProjectEvent {
+
+    private final Project project;
     
-    /**
-     * The name of the event. This is the key that will be used
-     * to determine which listeners might be interested.
-     * <p>
-     * The default name of any event is the simple class name.
-     * 
-     * @return  the name of the event
-     */
-    default String name() {
-        return getClass().getSimpleName();
+    public ProjectLoaded(Project project) {
+        this.project = requireNonNull(project);
     }
     
-    /**
-     * Publishes this event to the specified {@link EventComponent}.
-     * 
-     * @param eventComponent  the component to publish to
-     */
-    default void publish(EventComponent eventComponent) {
-        eventComponent.notify(this);
+    @Override
+    public Project project() {
+        return project;
     }
 }

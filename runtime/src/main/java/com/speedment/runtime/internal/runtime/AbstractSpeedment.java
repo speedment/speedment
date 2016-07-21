@@ -27,7 +27,6 @@ import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.component.ConnectionPoolComponentImpl;
 import com.speedment.runtime.internal.component.DbmsHandlerComponentImpl;
 import com.speedment.runtime.internal.component.EntityManagerImpl;
-import com.speedment.runtime.internal.component.EventComponentImpl;
 import com.speedment.runtime.internal.component.InfoComponentImpl;
 import com.speedment.runtime.internal.component.ManagerComponentImpl;
 import com.speedment.runtime.internal.component.NativeStreamSupplierComponentImpl;
@@ -50,7 +49,6 @@ import java.util.Optional;
     ConnectionPoolComponentImpl.class,
     DbmsHandlerComponentImpl.class,
     EntityManagerImpl.class,
-    EventComponentImpl.class,
     InfoComponentImpl.class,
     ManagerComponentImpl.class,
     NativeStreamSupplierComponentImpl.class,

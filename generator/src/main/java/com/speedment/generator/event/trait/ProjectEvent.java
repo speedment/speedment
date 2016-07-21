@@ -14,11 +14,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.event.trait;
+package com.speedment.generator.event.trait;
 
+import com.speedment.generator.event.Event;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Project;
-import com.speedment.runtime.event.Event;
 
 /**
  * An event that has something to do with a particular project.

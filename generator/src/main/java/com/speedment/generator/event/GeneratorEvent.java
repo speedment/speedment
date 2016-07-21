@@ -19,7 +19,6 @@ package com.speedment.generator.event;
 import com.speedment.common.codegen.Generator;
 import com.speedment.generator.TranslatorManager;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.event.Event;
 
 /**
  *

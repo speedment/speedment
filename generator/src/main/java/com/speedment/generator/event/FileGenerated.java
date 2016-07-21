@@ -18,10 +18,9 @@ package com.speedment.generator.event;
 
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
+import com.speedment.generator.event.trait.ProjectEvent;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Project;
-import com.speedment.runtime.event.Event;
-import com.speedment.runtime.event.trait.ProjectEvent;
 
 import static java.util.Objects.requireNonNull;
 
