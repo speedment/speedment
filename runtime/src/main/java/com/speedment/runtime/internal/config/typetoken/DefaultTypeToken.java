@@ -17,6 +17,7 @@
 package com.speedment.runtime.internal.config.typetoken;
 
 import com.speedment.runtime.config.typetoken.TypeToken;
+import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -83,6 +84,6 @@ final class DefaultTypeToken<T> implements TypeToken {
             return false;
         }
         
-        return getTypeName().equals(other.getTypeName());
+        return Objects.equals(getTypeName(), other.getTypeName());
     }
 }

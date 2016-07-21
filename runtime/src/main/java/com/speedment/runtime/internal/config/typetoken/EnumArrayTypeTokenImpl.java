@@ -21,6 +21,7 @@ import com.speedment.runtime.config.typetoken.EnumTypeToken;
 import java.util.ArrayList;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;
+import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -70,5 +71,29 @@ final class EnumArrayTypeTokenImpl implements EnumTypeToken, ArrayTypeToken {
     @Override
     public int getArrayDimension() {
         return dimension;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.name);
+        hash = 79 * hash + Objects.hashCode(this.constants);
+        hash = 79 * hash + this.dimension;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        else if (obj == null) return false;
+        else if (!(obj instanceof EnumTypeToken)) return false;
+        else if (!(obj instanceof ArrayTypeToken)) return false;
+        
+        final EnumTypeToken asEnum = (EnumTypeToken) obj;
+        final ArrayTypeToken asArray = (ArrayTypeToken) obj;
+        
+        return getArrayDimension() == asArray.getArrayDimension()
+            && Objects.equals(this.getTypeName(), asEnum.getTypeName())
+            && Objects.deepEquals(this.getEnumConstants(), asEnum.getEnumConstants());
     }
 }

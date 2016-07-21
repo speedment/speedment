@@ -17,6 +17,7 @@
 package com.speedment.runtime.internal.config.typetoken;
 
 import com.speedment.runtime.config.typetoken.ArrayTypeToken;
+import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -64,5 +65,24 @@ public final class ArrayTypeTokenImpl implements ArrayTypeToken {
     @Override
     public boolean isComparable() {
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.name);
+        hash = 97 * hash + this.dimension;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        else if (obj == null) return false;
+        else if (!(obj instanceof ArrayTypeToken)) return false;
+        
+        final ArrayTypeToken other = (ArrayTypeToken) obj;
+        return this.getArrayDimension() == other.getArrayDimension()
+            && Objects.equals(this.getTypeName(), other.getTypeName());
     }
 }

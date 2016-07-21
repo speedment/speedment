@@ -20,6 +20,7 @@ import com.speedment.runtime.config.typetoken.EnumTypeToken;
 import java.util.ArrayList;
 import static java.util.Collections.unmodifiableList;
 import java.util.List;
+import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -62,5 +63,24 @@ final class EnumTypeTokenImpl implements EnumTypeToken {
     @Override
     public boolean isGeneric() {
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 59 * hash + Objects.hashCode(this.getTypeName());
+        hash = 59 * hash + Objects.hashCode(this.getEnumConstants());
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        else if (obj == null) return false;
+        else if (!(obj instanceof EnumTypeToken)) return false;
+        
+        final EnumTypeToken other = (EnumTypeToken) obj;
+        return Objects.equals(this.getTypeName(), other.getTypeName())
+            && Objects.deepEquals(this.getEnumConstants(), other.getEnumConstants());
     }
 }
