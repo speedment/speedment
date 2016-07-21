@@ -35,7 +35,6 @@ import com.speedment.runtime.internal.component.PasswordComponentImpl;
 import com.speedment.runtime.internal.component.PrimaryKeyFactoryComponentImpl;
 import com.speedment.runtime.internal.component.ProjectComponentImpl;
 import com.speedment.runtime.internal.component.ResultSetMapperComponentImpl;
-import com.speedment.runtime.internal.component.TypeMapperComponentImpl;
 import com.speedment.runtime.internal.config.dbms.StandardDbmsTypes;
 import com.speedment.runtime.manager.Manager;
 
@@ -59,7 +58,6 @@ import java.util.Optional;
     PrimaryKeyFactoryComponentImpl.class,
     ProjectComponentImpl.class,
     ResultSetMapperComponentImpl.class,
-    TypeMapperComponentImpl.class,
     StandardDbmsTypes.class
 })
 public abstract class AbstractSpeedment implements Speedment {

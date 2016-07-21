@@ -17,7 +17,6 @@
 package com.speedment.runtime.config.mapper;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.component.TypeMapperComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.typetoken.TypeToken;
 import com.speedment.runtime.internal.config.mapper.IdentityTypeMapper;
@@ -29,7 +28,7 @@ import static java.util.Comparator.comparing;
 /**
  * A type mapper contains logic for converting between the database and the java
  * type for a field. Implementations of this class should be installed in the
- * {@link TypeMapperComponent}.
+ * {@code TypeMapperComponent}.
  *
  * @param <DB_TYPE>   the type as it is represented in the JDBC driver
  * @param <JAVA_TYPE> the type as it should be represented in generated code

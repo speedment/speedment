@@ -65,9 +65,9 @@ import static com.speedment.common.injector.State.RESOLVED;
 import static com.speedment.generator.StandardTranslatorKey.*;
 import com.speedment.generator.internal.typetoken.TypeTokenGeneratorImpl;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 @IncludeInjectable({
+    TypeMapperComponentImpl.class,
     TranslatorManagerImpl.class,
     JavaLanguageNamerImpl.class,
     JavaGenerator.class,

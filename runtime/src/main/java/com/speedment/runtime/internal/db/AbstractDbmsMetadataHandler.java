@@ -22,7 +22,6 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.ProjectComponent;
-import com.speedment.runtime.component.TypeMapperComponent;
 import com.speedment.runtime.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
@@ -35,7 +34,6 @@ import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mutator.ForeignKeyColumnMutator;
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.config.parameter.OrderType;
@@ -63,7 +61,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -92,7 +89,6 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     
     private @Inject ConnectionPoolComponent connectionPoolComponent;
     private @Inject DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject TypeMapperComponent typeMapperComponent;
     private @Inject ProjectComponent projectComponent;
     private JavaTypeMap javaTypeMap;
     
