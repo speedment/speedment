@@ -158,10 +158,10 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                         file, getSupport().tableOrThrow(), col, getSupport().entityType(), injector
                     );
 
-                final String typeMapper = col.getTypeMapper().orElse(IdentityTypeMapper.class.getName());
-                final Type entityType = getSupport().entityType();
-                final String shortEntityName = getSupport().entityName();
-                final Type typeMapperType = Type.of(typeMapper);
+                final String typeMapper         = col.getTypeMapper().orElse(IdentityTypeMapper.class.getName());
+                final Type entityType           = getSupport().entityType();
+                final String shortEntityName    = getSupport().entityName();
+                final Type typeMapperType       = Type.of(typeMapper);
                 final String shortEntityVarName = getSupport().namer().javaVariableName(shortEntityName);
 
                 file.add(Import.of(entityType));
