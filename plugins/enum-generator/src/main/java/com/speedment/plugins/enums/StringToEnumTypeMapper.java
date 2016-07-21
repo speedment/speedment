@@ -11,6 +11,7 @@ import com.speedment.runtime.config.typetoken.TypeToken;
 import com.speedment.runtime.exception.SpeedmentException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
 
 /**
@@ -32,6 +33,11 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
 
     @Override
     public TypeToken getJavaType(Column column) {
+        requireNonNull(injector, 
+            StringToEnumTypeMapper.class.getSimpleName() + 
+            ".getJavaType(Column) is not available if instantiated without injector."
+        );
+        
         return new GeneratedEnumTypeToken(
             EnumGeneratorUtil.enumNameOf(column, injector), 
             EnumGeneratorUtil.enumConstantsOf(column)
