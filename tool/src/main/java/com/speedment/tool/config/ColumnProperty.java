@@ -44,7 +44,9 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
+import com.speedment.tool.property.CommaSeparatedStringPropertyItem;
 import static javafx.beans.binding.Bindings.createObjectBinding;
+import javafx.beans.property.SimpleStringProperty;
 
 /**
  *
@@ -87,7 +89,14 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table, C
     public Optional<String> getTypeMapper() {
         return Optional.ofNullable(typeMapperProperty().get());
     }
-    
+    public StringProperty enumConstantsProperty() {
+        return stringPropertyOf(ENUM_CONSTANTS, () -> Column.super.getEnumConstants().orElse(null));
+    }
+
+    @Override
+    public Optional<String> getEnumConstants() {
+        return Optional.ofNullable(enumConstantsProperty().get());
+    }
     @Override
     public String getDatabaseType() {
         return databaseTypeProperty().get();
@@ -118,16 +127,23 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table, C
             HasAliasProperty.super.getUiVisibleProperties(speedment),
             HasNullableProperty.super.getUiVisibleProperties(speedment),
             Stream.of(
+                new BooleanPropertyItem(
+                    autoIncrementProperty(),
+                    "Is Auto Incrementing",
+                    "If this column will increment automatically for each new entity."
+                ),
                 new TypeMapperPropertyItem(
                     speedment,
                     findDatabaseType(),
                     typeMapperProperty(),
                     "JDBC Type to Java",
                     "The class that will be used to map types between the database and the generated code."
-                ), new BooleanPropertyItem(
-                    autoIncrementProperty(),
-                    "Is Auto Incrementing",
-                    "If this column will increment automatically for each new entity."
+                ),
+                new CommaSeparatedStringPropertyItem(
+                    enumConstantsProperty(), 
+                    getEnumConstants().orElse(null), 
+                    "Enum Constants", 
+                    "Used for defining what value the enum can take"
                 )
             )
         ).flatMap(s -> s);
