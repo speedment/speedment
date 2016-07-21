@@ -9,7 +9,7 @@ import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.generator.StandardTranslatorKey;
 import com.speedment.generator.component.CodeGenerationComponent;
-import com.speedment.runtime.component.TypeMapperComponent;
+import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.component.AbstractComponent;
 import com.speedment.runtime.internal.license.AbstractSoftware;

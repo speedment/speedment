@@ -4,7 +4,7 @@ import com.speedment.common.codegen.model.Type;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.internal.util.InternalTypeTokenUtil;
 import com.speedment.generator.typetoken.TypeTokenGenerator;
-import com.speedment.runtime.component.TypeMapperComponent;
+import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.typetoken.TypeToken;
 

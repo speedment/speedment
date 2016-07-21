@@ -16,7 +16,7 @@
  */
 package com.speedment.plugins.reactor.internal.util;
 
-import com.speedment.runtime.component.TypeMapperComponent;
+import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Table;

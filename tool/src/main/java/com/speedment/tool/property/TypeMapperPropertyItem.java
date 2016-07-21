@@ -19,7 +19,7 @@ package com.speedment.tool.property;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.component.TypeMapperComponent;
+import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.runtime.exception.SpeedmentException;
 import javafx.beans.property.StringProperty;
 import org.controlsfx.property.editor.PropertyEditor;

@@ -27,7 +27,7 @@ import com.speedment.runtime.config.Table;
 import static com.speedment.plugins.reactor.internal.util.ReactorComponentUtil.validMergingColumns;
 import com.speedment.plugins.reactor.internal.component.ReactorComponentImpl;
 import com.speedment.plugins.reactor.util.MergingSupport;
-import com.speedment.runtime.component.TypeMapperComponent;
+import com.speedment.generator.component.TypeMapperComponent;
 
 /**
  * Utility methods that are used by several translators in this package but that

@@ -22,7 +22,7 @@ import com.speedment.plugins.reactor.translator.ReactorTranslatorKey;
 import com.speedment.plugins.reactor.internal.translator.ViewImplTranslator;
 import com.speedment.plugins.reactor.internal.translator.ViewTranslator;
 import com.speedment.runtime.component.EventComponent;
-import com.speedment.runtime.component.TypeMapperComponent;
+import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
