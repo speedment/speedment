@@ -14,9 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.config.mapper;
+package com.speedment.runtime.internal.config.mapper;
 
 import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.typetoken.TypeToken;
 import com.speedment.runtime.util.TypeTokenFactory;
 
@@ -32,11 +33,6 @@ import com.speedment.runtime.util.TypeTokenFactory;
  */
 public final class IdentityTypeMapper<T> implements TypeMapper<T, T> {
 
-     /**
-     * Common instance for {@code identity()}.
-     */
-    static final IdentityTypeMapper<?> IDENTITY = new IdentityTypeMapper<>();
-    
     @Override
     public String getLabel() {
         return "Identity Mapper";

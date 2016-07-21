@@ -50,7 +50,6 @@ import static com.speedment.common.codegen.internal.model.constant.DefaultType.S
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import com.speedment.generator.typetoken.TypeTokenGenerator;
 import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.mapper.IdentityTypeMapper;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.typetoken.TypeToken;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
@@ -158,10 +157,8 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                         file, getSupport().tableOrThrow(), col, getSupport().entityType(), injector
                     );
 
-                final String typeMapper         = col.getTypeMapper().orElse(IdentityTypeMapper.class.getName());
                 final Type entityType           = getSupport().entityType();
                 final String shortEntityName    = getSupport().entityName();
-                final Type typeMapperType       = Type.of(typeMapper);
                 final String shortEntityVarName = getSupport().namer().javaVariableName(shortEntityName);
 
                 file.add(Import.of(entityType));
@@ -197,8 +194,9 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
 
                 final String typeMapperCode;
                 if (col.getTypeMapper().isPresent()) {
+                    final String typeMapper = col.getTypeMapper().get();
                     typeMapperCode = "new " + shortName(typeMapper) + "()";
-                    file.add(Import.of(typeMapperType));
+                    file.add(Import.of(Type.of(typeMapper)));
                 } else {
                     typeMapperCode = "TypeMapper.identity()";
                     file.add(Import.of(Type.of(TypeMapper.class)));

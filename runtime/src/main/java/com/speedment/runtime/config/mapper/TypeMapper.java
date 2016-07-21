@@ -19,8 +19,8 @@ package com.speedment.runtime.config.mapper;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.TypeMapperComponent;
 import com.speedment.runtime.config.Column;
-import static com.speedment.runtime.config.mapper.IdentityTypeMapper.IDENTITY;
 import com.speedment.runtime.config.typetoken.TypeToken;
+import com.speedment.runtime.internal.config.mapper.IdentityTypeMapper;
 
 import java.util.Comparator;
 
@@ -92,9 +92,6 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
      * @return     an identity type mapper
      */
     static <T> TypeMapper<T, T> identity() {
-        @SuppressWarnings("unchecked")
-        final TypeMapper<T, T> result = (TypeMapper<T, T>) IDENTITY;
-        return result;
+        return new IdentityTypeMapper<>();
     }
-
 }
