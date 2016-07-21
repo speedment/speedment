@@ -81,9 +81,9 @@ public final class InternalTypeTokenFactory {
                 }
             } else {
                 if (constants.isEmpty()) {
-                    return new EnumTypeTokenImpl(inner.getName(), constants);
-                } else {
                     return new DefaultTypeToken<>(inner);
+                } else {
+                    return new EnumTypeTokenImpl(inner.getName(), constants);
                 }
             }
         }
