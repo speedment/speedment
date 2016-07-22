@@ -33,7 +33,7 @@ public interface LoggerManager {
         Holder.INST.defaultFactory = newFactory;
     }
 
-    static LoggerFactory gettFactory() {
+    static LoggerFactory getFactory() {
         return Holder.INST.defaultFactory;
     }
 
