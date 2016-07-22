@@ -25,7 +25,12 @@ import com.speedment.runtime.internal.util.document.DocumentTranscoder;
 import java.io.File;
 
 /**
- *
+ * The default implementation of the {@link ApplicationMetadata} interface.
+ * This class will load the metadata from a .json-file. The default location
+ * of the file is {@code src/main/json/speedment.json}, but a custom path
+ * can be separated by setting the {@link #METADATA_LOCATION} param in the
+ * {@link Injector}.
+ * 
  * @author  Emil Forslund
  * @since   2.4.0
  */
@@ -33,6 +38,10 @@ public final class DefaultApplicationMetadata implements ApplicationMetadata {
     
     public final static String METADATA_LOCATION = "metadata_location";
     
+    /**
+     * Specified the location of the .json-file from which the metadata
+     * is loaded.
+     */
     private @Config(
         name=METADATA_LOCATION, 
         value="src/main/json/speedment.json"
