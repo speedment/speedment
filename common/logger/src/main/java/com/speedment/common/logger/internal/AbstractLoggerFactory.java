@@ -48,7 +48,7 @@ public abstract class AbstractLoggerFactory implements LoggerFactory {
     protected AbstractLoggerFactory() {
         loggers = new ConcurrentHashMap<>();
         formatter = StandardFormatters.PLAIN_FORMATTER;
-        listeners = Collections.newSetFromMap(new ConcurrentHashMap<LoggerEventListener, Boolean>());
+        listeners = Collections.newSetFromMap(new ConcurrentHashMap<>());
     }
 
     @Override
@@ -90,7 +90,11 @@ public abstract class AbstractLoggerFactory implements LoggerFactory {
 
     protected Logger acquireLogger(String binding) {
         requireNonNull(binding);
-        return loggers.computeIfAbsent(binding, b -> make(b, formatter));
+        return loggers.computeIfAbsent(binding, b -> {
+            final Logger log = make(b, formatter);
+            listeners.forEach(log::addListener);
+            return log;
+        });
     }
 
     public abstract Logger make(String binding, LoggerFormatter formatter);

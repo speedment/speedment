@@ -103,7 +103,6 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 import static javafx.application.Platform.runLater;
 import static com.speedment.runtime.internal.util.TextUtil.alignRight;
-import com.speedment.runtime.internal.util.testing.Stopwatch;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
