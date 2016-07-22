@@ -24,8 +24,10 @@ import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
 import com.speedment.runtime.internal.runtime.DefaultApplicationMetadata;
 import com.speedment.runtime.internal.util.EmailUtil;
+import com.speedment.tool.brand.Palette;
 import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
 import com.speedment.tool.internal.util.InjectionLoader;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -70,6 +72,12 @@ public final class MainApp extends Application {
             }
         } else {
             loader.loadAndShow("Scene");
+            ui.showNotification(
+                "Metadata has been loaded from an offline file. Click here to reload from database.",
+                FontAwesomeIcon.REFRESH,
+                Palette.INFO,
+                ui::reload
+            );
         }
     }
     
