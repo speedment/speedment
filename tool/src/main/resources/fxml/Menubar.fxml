@@ -32,7 +32,6 @@
                 <MenuItem fx:id="mbProjectTree" mnemonicParsing="false" text="Project Tree" />
                 <MenuItem fx:id="mbWorkspace" mnemonicParsing="false" text="Workspace" />
                 <MenuItem fx:id="mbOutput" mnemonicParsing="false" text="Output" />
-                <!--<MenuItem fx:id="mbPreview" mnemonicParsing="false" text="Preview" />-->
             </items>
         </Menu>
         <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">
