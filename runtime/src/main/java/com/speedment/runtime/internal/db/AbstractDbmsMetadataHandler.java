@@ -72,13 +72,13 @@ import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.runtime.internal.db.AbstractDbmsOperationHandler.SHOW_METADATA;
 import static com.speedment.runtime.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import java.sql.PreparedStatement;
 import static java.util.Objects.nonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -412,6 +412,10 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         };
 
         tableChilds(table.mutator()::addNewPrimaryKeyColumn, supplier, mutator, progressListener);
+        
+        if (table.primaryKeyColumns().noneMatch(pk -> true)) {
+            LOGGER.warn("Table '" + table.getName() + "' does not have any primary key.");
+        }
     }
 
     protected void indexes(Connection connection, Table table, ProgressMeasure progressListener) {

@@ -38,7 +38,6 @@ import com.speedment.runtime.internal.util.Settings;
 import com.speedment.runtime.license.Software;
 import com.speedment.runtime.util.ProgressMeasure;
 import com.speedment.tool.MainApp;
-import com.speedment.tool.brand.Brand;
 import com.speedment.tool.brand.Palette;
 import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.component.UserInterfaceComponent;
@@ -101,11 +100,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.internal.util.TextUtil.alignRight;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 import static javafx.application.Platform.runLater;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
+import com.speedment.runtime.internal.util.testing.Stopwatch;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -152,7 +152,6 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
     private @Inject ProjectComponent projectComponent;
     private @Inject ConfigFileHelper configFileHelper;
     private @Inject Injector injector;
-    private @Inject Brand brand;
     
     private Stage stage;
     private Application application;
@@ -170,6 +169,22 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
         this.stage       = requireNonNull(stage);
         this.application = requireNonNull(application);
         this.project     = new ProjectProperty();
+        
+        LoggerManager.getFactory().addListener(ev -> {
+            switch (ev.getLevel()) {
+                case DEBUG : case TRACE : case INFO : 
+                    outputMessages.add(OutputUtil.info(ev.getMessage()));
+                    break;
+                case WARN :
+                    outputMessages.add(OutputUtil.warning(ev.getMessage()));
+                    showNotification(ev.getMessage(), Palette.WARNING);
+                    break;
+                case ERROR : case FATAL :
+                    outputMessages.add(OutputUtil.error(ev.getMessage()));
+                    showNotification(ev.getMessage(), Palette.ERROR);
+                    break;
+            }
+        });
         
         final Project loaded = projectComponent.getProject();
         if (loaded != null) {
@@ -247,7 +262,6 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
             app.start(newStage);
         } catch (final Exception e) {
             LOGGER.error(e);
-            log(OutputUtil.error(e.getMessage()));
             showError("Could not create empty project", e.getMessage(), e);
         }
     }
@@ -466,8 +480,6 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
 
     @Override
     public void showError(String title, String message, Throwable ex) {
-        LOGGER.error(ex, message);
-
         final Alert alert = new Alert(Alert.AlertType.ERROR);
         final Scene scene = alert.getDialogPane().getScene();
 
@@ -512,8 +524,6 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
 
     @Override
     public Optional<ButtonType> showWarning(String title, String message) {
-        LOGGER.warn(message);
-
         final Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         final Scene scene = alert.getDialogPane().getScene();
 
