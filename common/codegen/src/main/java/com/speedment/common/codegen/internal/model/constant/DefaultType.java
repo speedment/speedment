@@ -67,7 +67,7 @@ public enum DefaultType implements Type {
 		CHARACTER(Character.class),
 		STRING(String.class),
 		OBJECT(Object.class),
-		VOID("void"),
+		VOID(void.class),
 		WILDCARD("?"),
 		LIST(List.class),
 		SET(Set.class),
