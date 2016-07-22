@@ -381,7 +381,6 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
 
             column.mutator().setDatabaseType(selectedJdbcClass);
             
-            // TODO: Fill in information about enum constants
             if ("ENUM".equals(md.getTypeName())) {
                 final Dbms dbms = schema.getParentOrThrow();
                 final List<String> constants = enumConstantsOf(dbms, table, columnName);
