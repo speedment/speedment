@@ -1,8 +1,7 @@
-package com.speedment.tool.property;
+package com.speedment.plugins.enums.internal.ui;
 
-import com.speedment.tool.internal.element.CommaSeparatedStringEditor;
+import com.speedment.tool.property.AbstractPropertyItem;
 import java.util.function.Consumer;
-import javafx.beans.binding.StringBinding;
 import javafx.beans.property.StringProperty;
 
 public class CommaSeparatedStringPropertyItem extends AbstractPropertyItem<String, StringProperty, CommaSeparatedStringEditor>{

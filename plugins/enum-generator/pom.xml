@@ -67,7 +67,7 @@
         <!-- Compile Time Dependencies -->
         <dependency>
             <groupId>com.speedment</groupId>
-            <artifactId>generator</artifactId>
+            <artifactId>tool</artifactId>
             <version>${speedment.version}</version>
         </dependency>
         

@@ -44,9 +44,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
-import com.speedment.tool.property.CommaSeparatedStringPropertyItem;
 import static javafx.beans.binding.Bindings.createObjectBinding;
-import javafx.beans.property.SimpleStringProperty;
 
 /**
  *
@@ -138,12 +136,6 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table, C
                     typeMapperProperty(),
                     "JDBC Type to Java",
                     "The class that will be used to map types between the database and the generated code."
-                ),
-                new CommaSeparatedStringPropertyItem(
-                    enumConstantsProperty(), 
-                    getEnumConstants().orElse(null), 
-                    "Enum Constants", 
-                    "Used for defining what value the enum can take"
                 )
             )
         ).flatMap(s -> s);

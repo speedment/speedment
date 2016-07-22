@@ -1,4 +1,4 @@
-package com.speedment.tool.internal.element;
+package com.speedment.plugins.enums.internal.ui;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
