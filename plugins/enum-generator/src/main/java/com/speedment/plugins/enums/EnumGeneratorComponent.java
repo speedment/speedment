@@ -18,6 +18,7 @@ import com.speedment.runtime.internal.component.AbstractComponent;
 import com.speedment.runtime.internal.license.AbstractSoftware;
 import static com.speedment.runtime.internal.license.OpenSourceLicense.APACHE_2;
 import com.speedment.runtime.license.Software;
+import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.event.TreeSelectionChange;
@@ -46,7 +47,7 @@ public final class EnumGeneratorComponent extends AbstractComponent {
     @ExecuteBefore(RESOLVED)
     void installDecorators(Injector injector,
         @WithState(INITIALIZED) TypeMapperComponent typeMappers,
-        @WithState(INITIALIZED) CodeGenerationComponent codeGen) {
+        @WithState(INITIALIZED) CodeGenerationComponent codeGen){
 
         typeMappers.install(String.class, StringToEnumTypeMapper::new);
         codeGen.add(Table.class, StandardTranslatorKey.GENERATED_ENTITY, new GeneratedEntityDecorator(injector));
@@ -60,7 +61,6 @@ public final class EnumGeneratorComponent extends AbstractComponent {
                         final ColumnProperty col = (ColumnProperty) doc;
                         
                         final BooleanBinding isNotEnumMapper = Bindings.notEqual(col.typeMapperProperty(), StringToEnumTypeMapper.class.getName());
-                        
                         ev.properties().add(new CommaSeparatedStringPropertyItem(
                                 col.enumConstantsProperty(),
                                 col.getEnumConstants().orElse(null),
@@ -71,7 +71,6 @@ public final class EnumGeneratorComponent extends AbstractComponent {
                                 }
                             )
                         );
-                        
                     }
                 }
             }

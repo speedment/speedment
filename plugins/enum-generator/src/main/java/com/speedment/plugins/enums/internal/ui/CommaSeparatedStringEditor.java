@@ -1,6 +1,12 @@
 package com.speedment.plugins.enums.internal.ui;
 
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
 import javafx.animation.AnimationTimer;
 import javafx.beans.binding.Bindings;
@@ -14,14 +20,16 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
 import org.controlsfx.property.editor.PropertyEditor;
 
 public final class CommaSeparatedStringEditor extends VBox implements PropertyEditor<String> {
-
     //***********************************************************
     // 				VARIABLES
     //***********************************************************   
-    private final String DEFAULT_FIELD = "ENTER_FIELD_NAME";
+    private final static Logger LOGGER = LoggerManager.getLogger(CommaSeparatedStringEditor.class);
+    
+    private final String DEFAULT_FIELD = "ENUM_CONSTANT_";
     private final double SPACING = 10.0;
     private final int LIST_HEIGHT = 200;
 
@@ -34,11 +42,10 @@ public final class CommaSeparatedStringEditor extends VBox implements PropertyEd
     public CommaSeparatedStringEditor(String defaultValue) {
         this.strings = FXCollections.observableArrayList();
         this.binding = Bindings.createStringBinding(() -> getFormatedString(), strings);
-
         setValue(defaultValue);
 
         ListView<String> listView = new ListView<>(strings);
-        listView.setCellFactory(TextFieldListCell.forListView());
+        listView.setCellFactory((ListView<String> param) -> new EnumCell());
         listView.setEditable(true);
 
         listView.setMaxHeight(USE_PREF_SIZE);
@@ -83,7 +90,7 @@ public final class CommaSeparatedStringEditor extends VBox implements PropertyEd
     @Override
     public void setValue(String value) {
         if (value == null) {
-            strings.setAll(DEFAULT_FIELD);
+            strings.clear();
         } else {
             strings.setAll(
                 Stream.of(value.split(","))
@@ -114,7 +121,12 @@ public final class CommaSeparatedStringEditor extends VBox implements PropertyEd
         button.setOnAction(e -> {
             final int newIndex = listView.getItems().size();
 
-            listView.getItems().add(DEFAULT_FIELD);
+            final Set<String> set = strings.stream().collect(toSet());
+            AtomicInteger i = new AtomicInteger(0);
+            while (!set.add(DEFAULT_FIELD + i.incrementAndGet())) {
+            }
+
+            listView.getItems().add(DEFAULT_FIELD + i.get());
             listView.scrollTo(newIndex);
             listView.getSelectionModel().select(newIndex);
 
@@ -138,5 +150,61 @@ public final class CommaSeparatedStringEditor extends VBox implements PropertyEd
             }.start();
         });
         return button;
+    }
+
+    //***********************************************************
+    // 				PRIVATE CLASS : ENUM CELL
+    //***********************************************************    
+    private class EnumCell extends TextFieldListCell<String> {
+
+        private String labelString;
+
+        private EnumCell() {
+            super();
+            setConverter(myConverter());
+        }
+
+        @Override
+        public void startEdit() {
+            labelString = getText();
+            super.startEdit();
+        }
+
+        private StringConverter<String> myConverter() {
+            return new StringConverter<String>() {
+               
+                @Override
+                public String toString(String value) {
+                    return (value != null) ? value : "";
+                }
+
+                @Override
+                public String fromString(String value) {
+                    //Avoid false positives (ie showing an error that we match ourselves)
+                    if(value.equalsIgnoreCase(labelString)){
+                        return value;
+                    }
+                     //Make sure this is not a douplicate entry
+                    final AtomicBoolean douplicate = new AtomicBoolean(false);
+                    strings.stream()
+                        .filter( elem -> elem.equalsIgnoreCase(value) )
+                        .forEach( elem -> douplicate.set(true) );
+                    if(douplicate.get()){
+                        LOGGER.error("Enum cannot contain the same constant twice");
+                        return labelString;
+                    //Make sure this entry contains only legal characters
+                    } else if ( !value.matches("([\\w\\-\\_\\ ]+)")) {
+                        LOGGER.error("Enum should only contain letters, number, underscore and/or dashes");
+                        return labelString;
+                    //Warn if it contains a space
+                    }  else if (value.contains(" ")) {
+                        LOGGER.warn("Enum spaces will be converted to underscores in Java");
+                        return value;
+                    } else {
+                        return value; 
+                    }
+                }
+            };
+        }
     }
 }
