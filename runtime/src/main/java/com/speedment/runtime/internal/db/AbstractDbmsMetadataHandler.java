@@ -73,8 +73,12 @@ import static com.speedment.runtime.internal.db.AbstractDbmsOperationHandler.SHO
 import static com.speedment.runtime.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import java.sql.PreparedStatement;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
+import java.util.stream.Stream;
 
 /**
  *
@@ -378,6 +382,11 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             column.mutator().setDatabaseType(selectedJdbcClass);
             
             // TODO: Fill in information about enum constants
+            if ("ENUM".equals(md.getTypeName())) {
+                final Dbms dbms = schema.getParentOrThrow();
+                final List<String> constants = enumConstantsOf(dbms, table, columnName);
+                column.mutator().setEnumConstants(constants.stream().collect(joining(",")));
+            }
 
             setAutoIncrement(column, md);
             progressListener.setCurrentAction(actionName(column));
@@ -625,6 +634,17 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         return table.getName();
     }
     
+    /**
+     * Returns the table name used when calling the
+     * {@code SHOW COLUMNS FROM} statement.
+     * 
+     * @param table  to use
+     * @return       the table name to use
+     */
+    protected String metaDataTableNameForShowColumns(Table table) {
+        return table.getName();
+    }
+    
     protected Map<String, Class<?>> readTypeMapFromDB(Dbms dbms) throws SQLException {
         requireNonNull(dbms);
 
@@ -689,5 +709,51 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             .append(" in ")
             .append(doc.getParentOrThrow().getName())
             .toString();
+    }
+    
+    /**
+     * Queries the database for a list of ENUM constants belonging to the specified table and
+     * column.
+     * 
+     * @param conn           the connection to use
+     * @param table          the table
+     * @param columnName     the column name
+     * @return               list of enum constants.
+     * @throws SQLException  if an error occured
+     */
+    protected List<String> enumConstantsOf(Dbms dbms, Table table, String columnName) throws SQLException {
+
+        final DbmsType dbmsType = dbmsTypeOf(dbmsHandlerComponent, dbms);
+        final DatabaseNamingConvention naming = dbmsType.getDatabaseNamingConvention();
+        
+        final String sql = String.format(
+            "show columns from %s where field=%s;", 
+            naming.fullNameOf(table), 
+            naming.quoteField(columnName)
+        );
+        
+        try (final Connection conn = connectionPoolComponent.getConnection(dbms);
+             final PreparedStatement ps = conn.prepareStatement(sql);
+             final ResultSet rs = ps.executeQuery()) {
+            
+            if (rs.next()) {
+                final String fullResult = rs.getString(2);
+
+                if (fullResult.startsWith("enum('")
+                &&  fullResult.endsWith("')")) {
+
+                    final String middle = fullResult.substring(5, fullResult.length() - 1);
+                    return Stream.of(middle.split(","))
+                        .map(s -> s.substring(1, s.length() - 1))
+                        .filter(s -> !s.isEmpty())
+                        .collect(toList());
+
+                } else {
+                    throw new SpeedmentException("Unexpected response (" + fullResult + ").");
+                }
+            } else {
+                throw new SpeedmentException("Expected an result.");
+            }
+        }
     }
 }
