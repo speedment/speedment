@@ -35,30 +35,6 @@ import java.util.function.Predicate;
  */
 @Api(version = "3.0")
 public interface DbmsMetadataHandler {
-    
-    /**
-     * A String predicate that always returns true.
-     */
-    final Predicate<String> NO_FILTER = s -> true;
-
-    /**
-     * Reads the schema metadata with populated {@link Schema Schemas} that are
-     * available in this database. The schemas are populated by all their
-     * sub-items such as tables, columns etc. Schemas that are a part of the
-     * {@code getDbms().getType().getSchemaExcludSet()} set are excluded from
-     * the model.
-     * <p>
-     * This method can be used to read a complete inventory of the database
-     * structure.
-     *
-     * @param dbms  the dbms to read it from
-     * @param progressListener the progress listener
-     * @return the handle for this task
-     */
-    default CompletableFuture<Project> readSchemaMetadata(
-        Dbms dbms, ProgressMeasure progressListener) {
-        return DbmsMetadataHandler.this.readSchemaMetadata(dbms, progressListener, NO_FILTER);
-    }
 
     /**
      * /**
@@ -69,23 +45,14 @@ public interface DbmsMetadataHandler {
      * the model or that does not match the given filter will be excluded from
      * the {@code Stream}.
      *
-     * @param dbms  the dbms to read it from
-     * @param progressListener the progress listener
-     * @param filterCriteria criteria that schema names must fulfill
-     * @return the handle for this task
+     * @param dbms              the dbms to read it from
+     * @param progressListener  the progress listener
+     * @param filterCriteria    criteria that schema names must fulfill
+     * @return                  the handle for this task
      */
     CompletableFuture<Project> readSchemaMetadata(
         Dbms dbms,
         ProgressMeasure progressListener,
         Predicate<String> filterCriteria
     );
-    
-//    /**
-//     * Returns a string with information on the current dbms.
-//     *
-//     * @return a string with information on the current dbms
-//     * @throws SQLException if an error occurs
-//     */
-//    public String getDbmsInfoString() throws SQLException;
-    
 }

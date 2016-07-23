@@ -129,7 +129,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
 
         return readSchemaMetadata(
             projectCopy, dbmsCopy, filterCriteria, progress
-        ).whenComplete((project, ex) -> {
+        ).whenCompleteAsync((project, ex) -> {
             progress.setCurrentAction("Done!");
             progress.setProgress(ProgressMeasure.DONE);
         });
@@ -233,16 +233,15 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         return CompletableFuture.allOf(
             schemasTask,
             catalogsTask
-        ).thenCompose(v -> {
+        ).thenComposeAsync(v -> {
             @SuppressWarnings({"unchecked", "rawtypes"})
             final CompletableFuture<Schema>[] tablesTask
                 = dbms.schemas()
                 .map(schema -> tables(sqlTypeMappingTask, dbms, schema, progress))
                 .toArray(s -> (CompletableFuture<Schema>[]) new CompletableFuture[s]);
 
-            //CompletableFuture[] foo = new CompletableFuture[2];
             return CompletableFuture.allOf(tablesTask)
-                .handle((v2, ex) -> {
+                .handleAsync((v2, ex) -> {
                     if (ex == null) {
                         if (tablesTask.length == 0) {
                             throw new SpeedmentException(
@@ -263,6 +262,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     private String readSchemaName(ResultSet rs, DbmsType dbmsType) throws SQLException {
         final String schemaName = rs.getString(dbmsType.getResultSetTableSchema());
         String catalogName = "";
+        
         try {
             // This column is not there for Oracle so handle it
             // gracefully....
@@ -270,12 +270,15 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         } catch (final SQLException ex) {
             LOGGER.info("TABLE_CATALOG not in result set.");
         }
+        
         return Optional.ofNullable(schemaName).orElse(catalogName);
-
     }
 
     protected CompletableFuture<Schema> tables(CompletableFuture<Map<String, Class<?>>> sqlTypeMapping, Dbms dbms, Schema schema, ProgressMeasure progressListener) {
         requireNonNulls(sqlTypeMapping, dbms, schema, progressListener);
+        
+        // If the wrapped task has already been cancelled, there is no point in going on.
+        if (sqlTypeMapping.isCancelled()) return CompletableFuture.completedFuture(null);
 
         final String action = actionName(schema);
         LOGGER.info(action);
@@ -300,12 +303,13 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                             LOGGER.debug(rsmd.getColumnName(x) + ":'" + rsTable.getObject(x) + "'");
                         }
                     }
+                    
                     final Table table = schema.mutator().addNewTable();
                     final String tableName = rsTable.getString("TABLE_NAME");
                     table.mutator().setName(tableName);
                 }
             }
-        } catch (SQLException sqle) {
+        } catch (final SQLException sqle) {
             throw new SpeedmentException(sqle);
         }
 
@@ -325,7 +329,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                     throw new SpeedmentException(ex);
                 }
             })).toArray(CompletableFuture[]::new)
-        ).thenApply(v -> schema);
+        ).thenApplyAsync(v -> schema);
     }
 
     protected void columns(Connection connection, Map<String, Class<?>> sqlTypeMapping, Table table, ProgressMeasure progressListener) {

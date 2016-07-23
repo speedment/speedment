@@ -44,6 +44,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static java.util.Objects.requireNonNull;
+import static javafx.application.Platform.runLater;
 import static javafx.util.Duration.millis;
 
 /**
@@ -132,13 +133,15 @@ public final class NotificationController implements Initializable {
         fade.setFromValue(0);
         fade.setToValue(1);
 
-        childrenOf(area).add(notification);
-        fade.play();
-        
-        final Timeline timeline = new Timeline(new KeyFrame(
-            TIMER, ev -> ref.get().fadeAway()
-        ));
-        timeline.play();
+        runLater(() -> {
+            childrenOf(area).add(notification);
+            fade.play();
+
+            final Timeline timeline = new Timeline(new KeyFrame(
+                TIMER, ev -> ref.get().fadeAway()
+            ));
+            timeline.play();
+        });
     }
     
     private FontAwesomeIconView createGlyph() {

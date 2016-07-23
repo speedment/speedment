@@ -616,22 +616,29 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
         box.setSpacing(8);
 
         progress.addListener(measure -> {
-            final String msg = measure.getCurrentAction();
-            final double prg = measure.getProgress();
+            final String msg   = measure.getCurrentAction();
+            final double prg   = measure.getProgress();
             final boolean done = measure.isDone();
-
+            
             runLater(() -> {
-                message.setText(msg);
-                bar.setProgress(prg);
-
                 if (done) {
                     dialog.setResult(true);
                     dialog.close();
+                } else {
+                    message.setText(msg);
+                    bar.setProgress(prg);
                 }
             });
         });
 
-        cancel.setOnAction(ev -> task.cancel(true));
+        cancel.setOnAction(ev -> {
+            if (!task.cancel(true)) {
+                LOGGER.error("Failed to cancel task.");
+            }
+            
+            progress.setCurrentAction("Cancelling...");
+            progress.setProgress(ProgressMeasure.DONE);
+        });
 
         pane.setContent(box);
         pane.setMaxWidth(Double.MAX_VALUE);
