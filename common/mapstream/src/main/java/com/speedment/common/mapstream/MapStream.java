@@ -19,6 +19,7 @@ package com.speedment.common.mapstream;
 import com.speedment.common.mapstream.util.CollectorUtil;
 
 import java.util.AbstractMap;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -54,6 +55,7 @@ import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static java.util.Collections.newSetFromMap;
+import java.util.LinkedHashMap;
 
 /**
  * A java {@code Stream} wrapper that stream over Key-Value pairs. With this
@@ -110,7 +112,27 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @return     created {@code MapStream}
      */
     public static <K, V> MapStream<K, V> of(Map<K, V> map) {
-        return new MapStream<>(map.entrySet().stream());
+        return of(map, false);
+    }
+    
+    /**
+     * Constructs a new {@code MapStream} from a map of key-value pairs. The map
+     * will not be affected.
+     * <p>
+     * This is equivalent to writing the following if {@code parallel} is set to
+     * {@code true}:
+     * {@code MapStream.of(map.entrySet().stream().parallel());}
+     * 
+     * @param <K>       key type
+     * @param <V>       value type
+     * @param map       elements to stream over
+     * @param parallel  if the new stream should be executed in parallel
+     * @return          created {@code MapStream}
+     */
+    public static <K, V> MapStream<K, V> of(Map<K, V> map, boolean parallel) {
+        final MapStream<K, V> stream = new MapStream<>(map.entrySet().stream());
+        if (parallel) stream.inner = stream.inner.parallel();
+        return stream;
     }
 
     /**
@@ -910,15 +932,20 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @return        the new stream
      */
     public MapStream<K, V> distinctKeys(BinaryOperator<V> merger) {
-        final Map<K, V> result = new ConcurrentHashMap<>();
+        final boolean parallel = isParallel();
+        final Map<K, V> result = parallel
+            ? Collections.synchronizedMap(new LinkedHashMap<>())
+            : new LinkedHashMap<>();
         
-        inner.forEach(e -> {
+        inner.forEachOrdered(e -> {
             result.compute(e.getKey(), (k, v) -> 
-                merger.apply(e.getValue(), v)
+                v == null 
+                    ? e.getValue()
+                    : merger.apply(e.getValue(), v)
             );
         });
         
-        return MapStream.of(result);
+        return MapStream.of(result, parallel);
     }
     
     /**
@@ -936,15 +963,7 @@ public final class MapStream<K, V> implements Stream<Map.Entry<K, V>> {
      * @return        the new stream
      */
     public MapStream<K, V> distinctValues(BinaryOperator<K> merger) {
-        final Map<V, K> result = new ConcurrentHashMap<>();
-        
-        inner.forEach(e -> {
-            result.compute(e.getValue(), (v, k) -> 
-                merger.apply(e.getKey(), k)
-            );
-        });
-        
-        return MapStream.flip(MapStream.of(result));
+        return MapStream.flip(MapStream.flip(this).distinctKeys(merger));
     }
 
     /**
