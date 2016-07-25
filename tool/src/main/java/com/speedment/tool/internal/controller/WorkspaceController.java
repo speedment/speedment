@@ -23,6 +23,7 @@ import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.component.PropertyEditorComponent;
 import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.config.DocumentProperty;
+import com.speedment.tool.config.trait.HasNameProperty;
 import com.speedment.tool.event.TreeSelectionChange;
 import com.speedment.tool.property.AbstractPropertyItem;
 import javafx.beans.binding.Bindings;
@@ -82,7 +83,19 @@ public final class WorkspaceController implements Initializable {
                     final TreeItem<DocumentProperty> treeItem = change.getList().get(0);
                     
                     if (treeItem != null) {
-                        editors.getUiVisibleProperties( treeItem.getValue() )
+                        final DocumentProperty property = treeItem.getValue();
+                    
+                        @SuppressWarnings("unchecked")
+                        final HasNameProperty withName = (HasNameProperty) property;
+                        
+                        workspace.textProperty().bind(
+                            Bindings.createStringBinding(() -> String.format(
+                                "Editing %s '%s'",
+                                withName.mainInterface().getSimpleName(),
+                                withName.getName()
+                            ), withName.nameProperty())
+                        );
+                       editors.getUiVisibleProperties( treeItem.getValue() )
                             .forEach(properties::add);
                     }
                 }

@@ -39,6 +39,7 @@ public final class PropertyEditorComponentImpl extends InternalOpenSourceCompone
     }
     
     @Override
+    public <DOC extends DocumentProperty> Stream<PropertySheet.Item> getUiVisibleProperties(DOC document) {
 
         return MapStream.of(factoryMap)                                         // MapStream<Class, Map<String, DocumentEditorFactory>>
             .filterKey(clazz -> clazz.isAssignableFrom(document.getClass()))    // MapStream<Class, Map<String, DocumentEditorFactory>>
