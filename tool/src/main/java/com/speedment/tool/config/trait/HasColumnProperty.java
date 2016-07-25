@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.runtime.Speedment;
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.trait.HasColumn;
@@ -51,7 +51,7 @@ public interface HasColumnProperty extends DocumentProperty, HasColumn, HasNameP
     }
 
     @Override
-    default Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+    default Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
         return Stream.of(
             new StringPropertyItem(
                 nameProperty(), 

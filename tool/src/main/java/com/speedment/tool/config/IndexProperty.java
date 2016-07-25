@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.runtime.Speedment;
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Index;
 import com.speedment.runtime.config.Table;
@@ -78,10 +78,9 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table, In
     }
 
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return Stream.of(
-            HasEnabledProperty.super.getUiVisibleProperties(speedment),
-            HasNameProperty.super.getUiVisibleProperties(speedment),
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
+        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(injector),
+            HasNameProperty.super.getUiVisibleProperties(injector),
             Stream.of(
                 new BooleanPropertyItem(
                     uniqueProperty(),

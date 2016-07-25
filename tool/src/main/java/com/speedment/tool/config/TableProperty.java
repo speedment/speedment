@@ -116,15 +116,14 @@ public final class TableProperty
     }
 
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
         final TranslatorSupport<Table> support = new TranslatorSupport<>(
-            speedment.getOrThrow(Injector.class), this
+            injector.getOrThrow(Injector.class), this
         );
         
-        return Stream.of(
-            HasEnabledProperty.super.getUiVisibleProperties(speedment),
-            HasNameProperty.super.getUiVisibleProperties(speedment),
-            HasAliasProperty.super.getUiVisibleProperties(speedment),
+        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(injector),
+            HasNameProperty.super.getUiVisibleProperties(injector),
+            HasAliasProperty.super.getUiVisibleProperties(injector),
             Stream.of(new DefaultStringPropertyItem(
                 packageNameProperty(),
                 createStringBinding(support::basePackageName, aliasProperty()),

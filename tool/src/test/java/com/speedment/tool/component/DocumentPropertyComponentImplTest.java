@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.component;
 
+import com.speedment.common.injector.Injector;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Dbms;
@@ -151,7 +152,7 @@ public class DocumentPropertyComponentImplTest {
         }
 
         @Override
-        public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+        public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
             throw new UnsupportedOperationException("Not required by test.");
         }
 

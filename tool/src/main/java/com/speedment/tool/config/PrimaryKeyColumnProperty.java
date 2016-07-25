@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.runtime.Speedment;
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Table;
@@ -59,8 +59,8 @@ public final class PrimaryKeyColumnProperty
     }
 
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return HasColumnProperty.super.getUiVisibleProperties(speedment);
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
+        return HasColumnProperty.super.getUiVisibleProperties(injector);
     }
 
     @Override

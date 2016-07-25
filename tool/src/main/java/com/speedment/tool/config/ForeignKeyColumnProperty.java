@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.runtime.Speedment;
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;
@@ -125,9 +125,8 @@ public final class ForeignKeyColumnProperty extends AbstractChildDocumentPropert
     }
     
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return Stream.of(
-            HasColumnProperty.super.getUiVisibleProperties(speedment),
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
+        return Stream.of(HasColumnProperty.super.getUiVisibleProperties(injector),
             Stream.of(
                new StringPropertyItem(
                             foreignDatabaseNameProperty(), 

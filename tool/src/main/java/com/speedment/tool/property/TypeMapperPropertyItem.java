@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.property;
 
+import com.speedment.common.injector.Injector;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
@@ -29,7 +30,6 @@ import java.util.function.Consumer;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.Objects.requireNonNull;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -46,16 +46,16 @@ public final class TypeMapperPropertyItem extends AbstractPropertyItem<String, S
     public final static String IDENTITY_MAPPER = "(Use Identity Mapper)";
     
     private final StringProperty property;
-    private final Speedment speedment;
+    private final Injector injector;
     private final Class<?> type;
     
-    public TypeMapperPropertyItem(Speedment speedment, Class<?> type, StringProperty property, String name, String description) {
-        this(speedment, type, property, name, description, defaultDecorator());
+    public TypeMapperPropertyItem(Injector injector, Class<?> type, StringProperty property, String name, String description) {
+        this(injector, type, property, name, description, defaultDecorator());
     }
 
-    public TypeMapperPropertyItem(Speedment speedment, Class<?> type, StringProperty property, String name, String description, Consumer<PropertyEditor<?>> decorator) {
+    public TypeMapperPropertyItem(Injector injector, Class<?> type, StringProperty property, String name, String description, Consumer<PropertyEditor<?>> decorator) {
         super(property, name, description, decorator);
-        this.speedment = requireNonNull(speedment);
+        this.injector  = requireNonNull(injector);
         this.type      = requireNonNull(type);
         this.property  = requireNonNull(property);
     }
@@ -67,7 +67,7 @@ public final class TypeMapperPropertyItem extends AbstractPropertyItem<String, S
 
     @Override
     protected PropertyEditor<?> createUndecoratedEditor() {
-        final TypeMapperComponent typeMapperComponent = speedment.getOrThrow(TypeMapperComponent.class);
+        final TypeMapperComponent typeMapperComponent = injector.getOrThrow(TypeMapperComponent.class);
         
         final Map<String, String> mapping = MapStream.fromStream(
             typeMapperComponent.mapFrom(type),

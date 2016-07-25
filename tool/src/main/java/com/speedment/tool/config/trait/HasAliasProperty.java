@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.runtime.Speedment;
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.tool.config.DocumentProperty;
@@ -47,7 +47,7 @@ public interface HasAliasProperty extends DocumentProperty, HasAlias {
     }
 
     @Override
-    default Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+    default Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
         return Stream.of(new DefaultStringPropertyItem(
                 aliasProperty(),
                 nameProperty(),

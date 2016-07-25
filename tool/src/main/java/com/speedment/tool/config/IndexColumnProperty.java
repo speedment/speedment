@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.runtime.Speedment;
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Index;
 import com.speedment.runtime.config.IndexColumn;
@@ -55,10 +55,9 @@ public final class IndexColumnProperty extends AbstractChildDocumentProperty<Ind
     }
 
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return Stream.concat(
-            HasColumnProperty.super.getUiVisibleProperties(speedment),
-            HasOrderTypeProperty.super.getUiVisibleProperties(speedment)
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
+        return Stream.concat(HasColumnProperty.super.getUiVisibleProperties(injector),
+            HasOrderTypeProperty.super.getUiVisibleProperties(injector)
         );
     }
 

@@ -115,7 +115,8 @@ import static java.util.Objects.requireNonNull;
     VersionComponentImpl.class,
     SpeedmentBrand.class,
     InjectionLoader.class,
-    ConfigFileHelper.class
+    ConfigFileHelper.class,
+    PropertyEditorComponentImpl.class
 })
 public final class UserInterfaceComponentImpl extends InternalOpenSourceComponent implements UserInterfaceComponent {
     

@@ -16,10 +16,11 @@
  */
 package com.speedment.tool.internal.controller;
 
+import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.runtime.Speedment;
 import com.speedment.generator.component.EventComponent;
 import com.speedment.runtime.exception.SpeedmentException;
+import com.speedment.tool.component.PropertyEditorComponent;
 import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.event.TreeSelectionChange;
@@ -47,7 +48,8 @@ public final class WorkspaceController implements Initializable {
     
     private @Inject UserInterfaceComponent ui;
     private @Inject EventComponent events;
-    private @Inject Speedment speedment;
+    private @Inject Injector injector;
+    private @Inject PropertyEditorComponent editors;
     
     private @FXML TitledPane workspace;
     
@@ -80,8 +82,7 @@ public final class WorkspaceController implements Initializable {
                     final TreeItem<DocumentProperty> treeItem = change.getList().get(0);
                     
                     if (treeItem != null) {
-                        treeItem.getValue()
-                            .getUiVisibleProperties(speedment)
+                        editors.getUiVisibleProperties( treeItem.getValue() )
                             .forEach(properties::add);
                     }
                 }

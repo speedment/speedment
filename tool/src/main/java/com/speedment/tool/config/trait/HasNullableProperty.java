@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.runtime.Speedment;
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.trait.HasNullable;
 import com.speedment.tool.config.DocumentProperty;
@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 public interface HasNullableProperty extends DocumentProperty, HasNullable {
 
     @Override
-    default Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+    default Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
         return Stream.of(
             new BooleanPropertyItem(
                 nullableProperty(),

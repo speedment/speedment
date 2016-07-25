@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.runtime.Speedment;
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.config.Dbms;
@@ -145,9 +145,9 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
     }
     
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
         
-        final DbmsHandlerComponent dbmsHandler = speedment.getOrThrow(DbmsHandlerComponent.class);
+        final DbmsHandlerComponent dbmsHandler = injector.getOrThrow(DbmsHandlerComponent.class);
         final ObservableList<String> supportedTypes = observableList(
             dbmsHandler
                 .supportedDbmsTypes()
@@ -155,10 +155,9 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
                 .collect(toList())
         );
         
-        return Stream.of(
-            HasEnabledProperty.super.getUiVisibleProperties(speedment),
-            HasNameProperty.super.getUiVisibleProperties(speedment),
-            HasAliasProperty.super.getUiVisibleProperties(speedment),
+        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(injector),
+            HasNameProperty.super.getUiVisibleProperties(injector),
+            HasAliasProperty.super.getUiVisibleProperties(injector),
             Stream.of(new StringChoicePropertyItem(
                     supportedTypes,
                     typeNameProperty(),

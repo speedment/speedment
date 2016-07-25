@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.runtime.Speedment;
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
@@ -119,19 +119,21 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table, C
     }
 
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(speedment),
-            HasNameProperty.super.getUiVisibleProperties(speedment),
-            HasAliasProperty.super.getUiVisibleProperties(speedment),
-            HasNullableProperty.super.getUiVisibleProperties(speedment),
-            Stream.of(
-                new BooleanPropertyItem(
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
+        
+        
+        
+        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(injector),
+            HasNameProperty.super.getUiVisibleProperties(injector),
+            HasAliasProperty.super.getUiVisibleProperties(injector),
+            HasNullableProperty.super.getUiVisibleProperties(injector),
+            Stream.of(new BooleanPropertyItem(
                     autoIncrementProperty(),
                     "Is Auto Incrementing",
                     "If this column will increment automatically for each new entity."
                 ),
                 new TypeMapperPropertyItem(
-                    speedment,
+                    injector,
                     findDatabaseType(),
                     typeMapperProperty(),
                     "JDBC Type to Java",
@@ -145,34 +147,4 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table, C
     protected List<String> keyPathEndingWith(String key) {
         return concat(DocumentPropertyComponent.COLUMNS, key);
     }
-
-    private final static StringConverter<TypeMapper<?, ?>> TYPE_MAPPER_CONVERTER = new StringConverter<TypeMapper<?, ?>>() {
-        @Override
-        public String toString(TypeMapper<?, ?> typeMapper) {
-            if (typeMapper == null) {
-                return null;
-            } else {
-                return typeMapper.getClass().getName();
-            }
-        }
-
-        @Override
-        public TypeMapper<?, ?> fromString(String className) {
-            if (className == null) {
-                return null;
-            } else {
-                try {
-                    @SuppressWarnings("unchecked")
-                    final TypeMapper<?, ?> typeMapper = (TypeMapper<?, ?>) Class.forName(className).newInstance();
-                    return typeMapper;
-                } catch (final ClassNotFoundException ex) {
-                    throw new SpeedmentException("Could not find type-mapper class: '" + className + "'.", ex);
-                } catch (final InstantiationException ex) {
-                    throw new SpeedmentException("Could not instantiate type-mapper class: '" + className + "'.", ex);
-                } catch (final IllegalAccessException ex) {
-                    throw new SpeedmentException("Could not access type-mapper class: '" + className + "'.", ex);
-                }
-            }
-        }
-    };
 }

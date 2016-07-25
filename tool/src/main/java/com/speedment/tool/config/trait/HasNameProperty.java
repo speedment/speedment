@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.runtime.Speedment;
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
@@ -45,7 +45,7 @@ public interface HasNameProperty extends DocumentProperty {
     }
 
     @Override
-    default Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+    default Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
         return Stream.of(
             new StringPropertyItem(
                 nameProperty(), 

@@ -28,10 +28,13 @@ import com.speedment.runtime.config.mapper.string.StringToLocaleMapper;
 import com.speedment.runtime.config.mapper.string.TrueFalseStringToBooleanMapper;
 import com.speedment.runtime.config.mapper.string.YesNoStringToBooleanMapper;
 import com.speedment.runtime.config.mapper.time.DateToIntMapper;
+import com.speedment.runtime.config.mapper.time.DateToLocalDateMapper;
 import com.speedment.runtime.config.mapper.time.DateToLongMapper;
 import com.speedment.runtime.config.mapper.time.TimeToIntMapper;
+import com.speedment.runtime.config.mapper.time.TimeToLocalTimeMapper;
 import com.speedment.runtime.config.mapper.time.TimeToLongMapper;
 import com.speedment.runtime.config.mapper.time.TimestampToIntMapper;
+import com.speedment.runtime.config.mapper.time.TimestampToLocalDateTimeMapper;
 import com.speedment.runtime.config.mapper.time.TimestampToLongMapper;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
@@ -68,13 +71,16 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
         this.mappers = new ConcurrentHashMap<>();
 
         // Special time mappers
+        install(Date.class,      DateToLocalDateMapper::new);
         install(Date.class,      DateToLongMapper::new);
-        install(Timestamp.class, TimestampToLongMapper::new);
-        install(Time.class,      TimeToLongMapper::new);
         install(Date.class,      DateToIntMapper::new);
+        install(Timestamp.class, TimestampToLongMapper::new);
         install(Timestamp.class, TimestampToIntMapper::new);
+        install(Timestamp.class, TimestampToLocalDateTimeMapper::new);
+        install(Time.class,      TimeToLongMapper::new);
         install(Time.class,      TimeToIntMapper::new);
-
+        install(Time.class,      TimeToLocalTimeMapper::new);
+        
         // Special string mappers
         install(String.class, StringToLocaleMapper::new);
         install(String.class, TrueFalseStringToBooleanMapper::new);

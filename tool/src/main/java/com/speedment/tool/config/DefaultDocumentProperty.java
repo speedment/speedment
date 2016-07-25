@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.runtime.Speedment;
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.internal.util.ImmutableListUtil;
@@ -67,7 +67,7 @@ public final class DefaultDocumentProperty extends
     }
     
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
         return Stream.empty();
     }
 

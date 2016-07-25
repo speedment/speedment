@@ -4,6 +4,9 @@ import com.speedment.tool.property.AbstractPropertyItem;
 import java.util.function.Consumer;
 import javafx.beans.property.StringProperty;
 
+/**
+ * Property item for the comma separated string editor
+ */
 public class CommaSeparatedStringPropertyItem extends AbstractPropertyItem<String, StringProperty, CommaSeparatedStringEditor>{
   
     private final StringProperty valueProperty;

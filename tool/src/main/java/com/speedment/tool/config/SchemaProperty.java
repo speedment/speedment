@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.runtime.Speedment;
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Schema;
@@ -79,11 +79,10 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms, Sc
     }
 
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return Stream.of(
-            HasEnabledProperty.super.getUiVisibleProperties(speedment),
-            HasNameProperty.super.getUiVisibleProperties(speedment),
-            HasAliasProperty.super.getUiVisibleProperties(speedment)
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
+        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(injector),
+            HasNameProperty.super.getUiVisibleProperties(injector),
+            HasAliasProperty.super.getUiVisibleProperties(injector)
         ).flatMap(s -> s);
     }
 

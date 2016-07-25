@@ -23,6 +23,13 @@ import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 import org.controlsfx.property.editor.PropertyEditor;
 
+/**
+ * The editor object for editing a string. The editor consists of several
+ * rows, and the input on each row can be retrieved as a single string. The 
+ * different rows data is separated by commas.
+ * 
+ * 
+ */
 public final class CommaSeparatedStringEditor extends VBox implements PropertyEditor<String> {
     //***********************************************************
     // 				VARIABLES

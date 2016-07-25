@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.config;
 
+import com.speedment.common.injector.Injector;
 import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
@@ -87,8 +88,8 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
         return Optional.ofNullable(packageNameProperty().get());
     }
 
-    public StringBinding defaultPackageNameProperty(Speedment speedment) {
-        final JavaLanguageNamer namer = speedment.getOrThrow(JavaLanguageNamer.class);
+    public StringBinding defaultPackageNameProperty(Injector injector) {
+        final JavaLanguageNamer namer = injector.getOrThrow(JavaLanguageNamer.class);
         return Bindings.createStringBinding(
             () -> Project.DEFAULT_PACKAGE_NAME + namer.javaPackageName(getCompanyName()),
             companyNameProperty()
@@ -136,9 +137,8 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
     }
 
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Speedment speedment) {
-        return Stream.of(
-            new StringPropertyItem(
+    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
+        return Stream.of(new StringPropertyItem(
                 nameProperty(),
                 "Project Name",
                 "The name that should be used for this project."
@@ -150,7 +150,7 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
             ),
             new DefaultStringPropertyItem(
                 packageNameProperty(),
-                defaultPackageNameProperty(speedment),
+                defaultPackageNameProperty(injector),
                 "Package Name",
                 "The name of the package to place all generated files in. This should be a fully qualified java package name."
             ),
