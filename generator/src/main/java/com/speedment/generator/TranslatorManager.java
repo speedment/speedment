@@ -34,11 +34,13 @@ public interface TranslatorManager {
 
     void accept(Project project);
 
-    int getFilesCreated();
+    void clearExistingFiles(Project project);
     
     void writeToFile(Project project, Meta<File, String> meta, boolean overwriteExisting);
     
     void writeToFile(Project project, String filename, String content, boolean overwriteExisting);
     
     void writeToFile(Path location, String content, boolean overwriteExisting);
+    
+    int getFilesCreated();
 }

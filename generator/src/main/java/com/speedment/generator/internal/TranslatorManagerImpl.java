@@ -45,13 +45,16 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import com.speedment.generator.internal.util.HashUtil;
+import com.speedment.runtime.component.InfoComponent;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
+import java.nio.file.DirectoryStream;
 import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 
 /**
  *
@@ -60,11 +63,14 @@ import static java.util.Objects.requireNonNull;
  */
 public class TranslatorManagerImpl implements TranslatorManager {
 
-    private final static Logger LOGGER = LoggerManager.getLogger(TranslatorManagerImpl.class);
+    private final static Logger LOGGER      = LoggerManager.getLogger(TranslatorManagerImpl.class);
+    private final static String HASH_PREFIX = ".";
+    private final static String HASH_SUFFIX = ".sha1";
     private final static boolean PRINT_CODE = false;
     
     private final AtomicInteger fileCounter = new AtomicInteger(0);
 
+    private @Inject InfoComponent info;
     private @Inject EventComponent eventComponent;
     private @Inject CodeGenerationComponent codeGenerationComponent;
 
@@ -102,7 +108,11 @@ public class TranslatorManagerImpl implements TranslatorManager {
                     }
                 });
             });
-
+        
+        // Erase any previous unmodified files.
+        clearExistingFiles(project);
+        
+        // Write generated code to file.
         gen.metaOn(writeOnceTranslators.stream()
             .map(Translator::get)
             .collect(Collectors.toList())
@@ -117,8 +127,60 @@ public class TranslatorManagerImpl implements TranslatorManager {
     }
 
     @Override
-    public int getFilesCreated() {
-        return fileCounter.get();
+    public void clearExistingFiles(Project project) {
+        final Path dir = Paths.get(project.getPackageLocation());
+
+        try {
+            clearExistingFilesIn(dir);
+        } catch (final IOException ex) {
+            throw new SpeedmentException(
+                "Error! Could not delete files in '" + dir.toString() + "'.", ex
+            );
+        }
+    }
+    
+    private void clearExistingFilesIn(Path directory) throws IOException {
+        try (final DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {
+            for (final Path entry : stream) {
+                if (Files.isDirectory(entry)) {
+                    clearExistingFilesIn(entry);
+                    
+                    if (isDirectoryEmpty(entry)) {
+                        Files.delete(entry);
+                    }
+                } else {
+                    final String filename = entry.toFile().getName();
+                    if (filename.startsWith(HASH_PREFIX)
+                    &&  filename.endsWith(HASH_SUFFIX)) {
+                        final Path original = 
+                            entry
+                                .getParent()                 // The hidden folder
+                                .getParent()                 // The parent folder
+                                .resolve(filename.substring( // Lookup original .java file
+                                    HASH_PREFIX.length(), 
+                                    filename.length() - HASH_SUFFIX.length()
+                                ));
+                        
+                        if (original.toFile().exists()
+                        &&  HashUtil.compare(original, entry)) {
+                            delete(original);
+                            delete(entry);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private static void delete(Path path) throws IOException {
+        LOGGER.info("Deleting '" + path.toString() + "'.");
+        Files.delete(path);
+    }
+    
+    private static boolean isDirectoryEmpty(Path directory) throws IOException {
+        try (final DirectoryStream<Path> dirStream = Files.newDirectoryStream(directory)) {
+            return !dirStream.iterator().hasNext();
+        }
     }
 
     @Override
@@ -134,32 +196,67 @@ public class TranslatorManagerImpl implements TranslatorManager {
     }
 
     @Override
-    public void writeToFile(Path path, String content, boolean overwriteExisting) {
-        requireNonNulls(path, content);
+    public void writeToFile(Path codePath, String content, boolean overwriteExisting) {
+        requireNonNulls(codePath, content);
 
         try {
-            Optional.ofNullable(path.getParent())
-                .ifPresent(p -> p.toFile().mkdirs());
-        } catch (SecurityException se) {
-            throw new SpeedmentException("Unable to create directory " + path.toString(), se);
-        }
-
-        try {
-            if (overwriteExisting || !path.toFile().exists()) {
-                Files.write(path, content.getBytes(StandardCharsets.UTF_8),
-                    StandardOpenOption.CREATE,
-                    StandardOpenOption.TRUNCATE_EXISTING
-                );
+            if (overwriteExisting || !codePath.toFile().exists()) {
+                final Path hashPath = codePath.getParent()
+                    .resolve(secretFolderName())
+                    .resolve(HASH_PREFIX + codePath.getFileName().toString() + HASH_SUFFIX);
+                
+                write(hashPath, HashUtil.sha1(content), true);
+                write(codePath, content, false);
+                
                 fileCounter.incrementAndGet();
             }
         } catch (final IOException ex) {
-            LOGGER.error(ex, "Failed to write file " + path);
+            LOGGER.error(ex, "Failed to write file " + codePath);
         }
 
         if (PRINT_CODE) {
-            System.out.println("*** BEGIN File:" + path);
-            System.out.println(content);
-            System.out.println("*** END   File:" + path);
+            LOGGER.info("*** BEGIN File:" + codePath);
+            Stream.of(content.split(Formatting.nl())).forEachOrdered(LOGGER::info);
+            LOGGER.info("*** END   File:" + codePath);
         }
+    }
+    
+    @Override
+    public int getFilesCreated() {
+        return fileCounter.get();
+    }
+    
+    private static void write(Path path, String content, boolean hidden) throws IOException {
+        LOGGER.info("Creating '" + path.toString() + "'.");
+        
+        final Path parent = path.getParent();
+        try {
+            if (parent != null) {
+                Files.createDirectories(parent);
+                
+                if (hidden) {
+                    Files.setAttribute(parent, "dos:hidden", true);
+                }
+            }
+        } catch (final SecurityException se) {
+            throw new SpeedmentException("Unable to create directory " + parent.toString(), se);
+        }
+
+        Files.write(path, content.getBytes(StandardCharsets.UTF_8),
+            StandardOpenOption.CREATE,
+            StandardOpenOption.TRUNCATE_EXISTING
+        );
+        
+        if (hidden) {
+            Files.setAttribute(path, "dos:hidden", true);
+        }
+    }
+    
+    private String secretFolderName() {
+        return "." + info.title()
+            .replace(" ", "")
+            .replace(".", "")
+            .replace("/", "")
+            .toLowerCase();
     }
 }
