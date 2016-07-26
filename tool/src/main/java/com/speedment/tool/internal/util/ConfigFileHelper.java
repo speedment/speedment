@@ -26,12 +26,14 @@ import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.db.DbmsMetadataHandler;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.config.DbmsImpl;
 import com.speedment.runtime.internal.config.immutable.ImmutableProject;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
+import static com.speedment.runtime.internal.runtime.DefaultApplicationMetadata.METADATA_LOCATION;
 import com.speedment.runtime.internal.util.Settings;
 import com.speedment.runtime.internal.util.document.DocumentTranscoder;
 import com.speedment.runtime.util.ProgressMeasure;
@@ -41,7 +43,6 @@ import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.component.UserInterfaceComponent.ReuseStage;
 import com.speedment.tool.config.DbmsProperty;
-import com.speedment.tool.config.DocumentProperty;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -58,9 +59,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 
-import static com.speedment.runtime.internal.runtime.DefaultApplicationMetadata.METADATA_LOCATION;
+import com.speedment.runtime.internal.util.ProgressMeasurerImpl;
+import com.speedment.tool.config.ProjectProperty;
 import static com.speedment.tool.util.OutputUtil.error;
 import static com.speedment.tool.util.OutputUtil.success;
+import java.util.Set;
+import static java.util.stream.Collectors.toSet;
 import static javafx.application.Platform.runLater;
 
 /**
@@ -94,7 +98,67 @@ public final class ConfigFileHelper {
         this.currentlyOpenFile = currentlyOpenFile; // Nullable
     }
     
-    public <DOC extends DocumentProperty> boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
+    public void loadFromDatabaseAndSaveToFile() {
+        final ProjectProperty project = new ProjectProperty();
+        final Project loaded = projectComponent.getProject();
+        
+        if (loaded != null) {
+            project.merge(documentPropertyComponent, loaded);
+        } else {
+            throw new SpeedmentException(
+                "Can't load from database unless either a dbms and schema " + 
+                "is specified or a config file is present."
+            );
+        }
+        
+        project.dbmses().map(dbms -> {
+            final DbmsType dbmsType = dbmsHandlerComponenet.findByName(dbms.getTypeName())
+                .orElseThrow(() -> new SpeedmentException(
+                    "Could not find dbms type with name '" + dbms.getTypeName() + "'."
+                ));
+
+            LOGGER.info(String.format(
+                "Reloading from dbms '%s' on %s:%d.", 
+                dbms.getName(), 
+                dbms.getIpAddress().orElse("127.0.0.1"), 
+                dbms.getPort().orElseGet(dbmsType::getDefaultPort)
+            ));
+
+            final Predicate<String> schemaFilter;
+            final Set<String> schemaNames = dbms.schemas()
+                .map(Schema::getName).collect(toSet());
+            
+            if (schemaNames.isEmpty()) {
+                schemaFilter = s -> true;
+            } else {
+                schemaFilter = schemaNames::contains;
+            }
+            
+            return dbmsType.getMetadataHandler()
+                .readSchemaMetadata(dbms, new ProgressMeasurerImpl(), schemaFilter);
+        }).forEachOrdered(fut -> {
+            try {
+                final Project newProject = fut.get();
+                synchronized (project) {
+                    project.merge(documentPropertyComponent, newProject);
+                }
+            } catch (final ExecutionException ex) {
+                throw new SpeedmentException("Error in execution of reload sequence.", ex);
+            } catch (final InterruptedException ex) {
+                throw new SpeedmentException("Reload sequence was interrupted.", ex);
+            }
+        });
+        
+        saveConfigFile(
+            currentlyOpenFile == null
+                ? new File(DEFAULT_CONFIG_LOCATION)
+                : currentlyOpenFile,
+            project,
+            false
+        );
+    }
+    
+    public boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
         try {
             // Create an immutable copy of the tree and store in the ProjectComponent
             final Project projectCopy = ImmutableProject.wrap(userInterfaceComponent.projectProperty());
@@ -256,6 +320,10 @@ public final class ConfigFileHelper {
     }
 
     public void saveConfigFile(File file) {
+        saveConfigFile(file, userInterfaceComponent.projectProperty(), true);
+    }
+    
+    private void saveConfigFile(File file, ProjectProperty project, boolean isGraphical) {
         final Path path = file.toPath();
         final Path parent = path.getParent();
         if (parent == null) {
@@ -267,16 +335,22 @@ public final class ConfigFileHelper {
                 Files.createDirectories(parent);
             }
 
-            DocumentTranscoder.save(userInterfaceComponent.projectProperty(), path);
+            DocumentTranscoder.save(project, path);
 
             final String absolute = parent.toFile().getAbsolutePath();
             Settings.inst().set("project_location", absolute);
-            userInterfaceComponent.log(success("Saved project file to '" + absolute + "'."));
-            userInterfaceComponent.showNotification("Configuration saved.", FontAwesomeIcon.SAVE, Palette.INFO);
+            
+            if (isGraphical) {
+                userInterfaceComponent.log(success("Saved project file to '" + absolute + "'."));
+                userInterfaceComponent.showNotification("Configuration saved.", FontAwesomeIcon.SAVE, Palette.INFO);
+            }
+            
             currentlyOpenFile = file;
 
-        } catch (IOException ex) {
-            userInterfaceComponent.showError("Could not save file", ex.getMessage(), ex);
+        } catch (final IOException ex) {
+            if (isGraphical) {
+                userInterfaceComponent.showError("Could not save file", ex.getMessage(), ex);
+            } else throw new SpeedmentException(ex);
         }
     }
     

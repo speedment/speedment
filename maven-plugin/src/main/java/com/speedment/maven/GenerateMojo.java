@@ -37,14 +37,13 @@ import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_L
 @Mojo(name = "generate", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public final class GenerateMojo extends AbstractSpeedmentMojo {
 
-    @Parameter(defaultValue = "false")
-    private boolean debug;
-    
-    @Parameter
-    private String[] components;
-
-    @Parameter(defaultValue = DEFAULT_CONFIG_LOCATION)
-    private File configFile;
+    private @Parameter(defaultValue = "false") boolean debug;
+    private @Parameter String dbmsHost;
+    private @Parameter int dbmsPort;
+    private @Parameter String dbmsUsername;
+    private @Parameter String dbmsPassword;
+    private @Parameter String[] components;
+    private @Parameter(defaultValue = DEFAULT_CONFIG_LOCATION) File configFile;
 
     @Override
     public void execute(Speedment speedment) throws MojoExecutionException, MojoFailureException {
@@ -79,6 +78,26 @@ public final class GenerateMojo extends AbstractSpeedmentMojo {
     @Override
     protected boolean debug() {
         return debug;
+    }
+    
+    @Override
+    protected String dbmsHost() {
+        return dbmsHost;
+    }
+
+    @Override
+    protected int dbmsPort() {
+        return dbmsPort;
+    }
+
+    @Override
+    protected String dbmsUsername() {
+        return dbmsUsername;
+    }
+
+    @Override
+    protected String dbmsPassword() {
+        return dbmsPassword;
     }
 
     @Override

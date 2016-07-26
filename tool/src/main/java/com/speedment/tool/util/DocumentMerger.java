@@ -22,18 +22,16 @@ import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.config.BaseDocument;
 import com.speedment.tool.config.DocumentProperty;
-import javafx.beans.property.Property;
-import javafx.collections.ObservableList;
 
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
+import javafx.beans.property.Property;
+import javafx.collections.ObservableList;
 
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
@@ -64,9 +62,9 @@ public final class DocumentMerger {
             DocumentConstructor constructor
         ) {
         
-        // Go through the union of both the documents keys.
-        final Set<String> newKeys = new HashSet<>(proposed.getData().keySet());
-        for (final String key : newKeys) {
+        // Go through the keys specified by the proposed document
+        for (final Map.Entry<String, Object> entry : proposed.getData().entrySet()) {
+            final String key           = entry.getKey();
             final Object proposedValue = proposed.getData().get(key);
             
             // Check if the proposed value fulfills the requirements to be

@@ -20,7 +20,6 @@ import com.speedment.common.injector.internal.InjectorImpl;
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
-import com.speedment.generator.internal.entity.GeneratedEntityTranslator;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.SpeedmentBuilder;
 import com.speedment.runtime.component.Component;
@@ -28,12 +27,12 @@ import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
 import com.speedment.runtime.internal.runtime.DefaultApplicationMetadata;
 import com.speedment.runtime.internal.runtime.EmptyApplicationMetadata;
 import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
+
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 import java.io.File;
-import java.util.Arrays;
 
 import static com.speedment.runtime.internal.runtime.DefaultApplicationMetadata.METADATA_LOCATION;
 import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
@@ -47,6 +46,10 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
     private final static File DEFAULT_CONFIG = new File(DEFAULT_CONFIG_LOCATION);
 
     protected abstract boolean debug();
+    protected abstract String dbmsHost();
+    protected abstract int dbmsPort();
+    protected abstract String dbmsUsername();
+    protected abstract String dbmsPassword();
     protected abstract File configLocation();
     protected abstract String[] components();
     protected abstract String launchMessage();
@@ -59,10 +62,9 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
     public final void execute() throws MojoExecutionException, MojoFailureException {
         if (debug()) {
             LoggerManager.getLogger(InjectorImpl.class).setLevel(Level.DEBUG);
-            LoggerManager.getLogger(GeneratedEntityTranslator.class).setLevel(Level.DEBUG);
         }
         
-        getLog().info(launchMessage());    
+        getLog().info(launchMessage());
         execute(createBuilder().build());
     }
     
@@ -72,23 +74,24 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
     
     protected final boolean hasConfigFile(File file) {
         if (file == null) {
-            final String err = "The specified .json-file is null.";
-            getLog().error(err);
+            final String msg = "The expected .json-file is null.";
+            getLog().info(msg);
             return false;
         } else if (!file.exists()) {
-            final String err = "The specified .json-file '" + file.getAbsolutePath() + "' does not exist.";
-            getLog().error(err);
+            final String msg = "The expected .json-file '" + file.getAbsolutePath() + "' does not exist.";
+            getLog().info(msg);
             return false;
         } else if (!file.canRead()) {
-            final String err = "The specified .json-file '" + file.getAbsolutePath() + "' is not readable.";
+            final String err = "The expected .json-file '" + file.getAbsolutePath() + "' is not readable.";
             getLog().error(err);
             return false;
         } else return true;
     }
     
     private SpeedmentBuilder<?, ?> createBuilder() throws MojoExecutionException {
-        final SpeedmentBuilder<?, ?> result;
+        SpeedmentBuilder<?, ?> result;
         
+        // Configure config file location
         if (hasConfigFile()) {
             result = new DefaultApplicationBuilder(DefaultApplicationMetadata.class)
                 .withParam(METADATA_LOCATION, configLocation().getAbsolutePath());
@@ -99,9 +102,32 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
             result = new DefaultApplicationBuilder(EmptyApplicationMetadata.class);
         }
         
+        // Configure manual database settings
+        if (dbmsHost() != null) {
+            result = result.withIpAddress(dbmsHost());
+            getLog().info("Custom database host '" + dbmsHost() + "'.");
+        }
+        
+        if (dbmsPort() != 0) {
+            result = result.withPort(dbmsPort());
+            getLog().info("Custom database port '" + dbmsPort() + "'.");
+        }
+        
+        if (dbmsUsername() != null) {
+            result = result.withUsername(dbmsUsername());
+            getLog().info("Custom database username '" + dbmsUsername() + "'.");
+        }
+        
+        if (dbmsPassword() != null) {
+            result = result.withPassword(dbmsPassword());
+            getLog().info("Custom database password '********'.");
+        }
+        
+        // Add mandatory components that are not included in 'runtime'
         result.with(CodeGenerationComponentImpl.class);
         result.with(UserInterfaceComponentImpl.class);
         
+        // Add extra components requested by the user
         final String[] components = components();
         if (components != null) {
             for (final String component : components()) {
@@ -110,9 +136,6 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
                     
                     Class<?> temp = uncasted;
                     while (temp != null) {
-                        System.out.println("Class name: " + temp.getName());
-                        System.out.println("Annotations: " + Arrays.toString(temp.getAnnotations()));
-                        System.out.println("Declared Annotations: " + Arrays.toString(temp.getDeclaredAnnotations()));
                         temp = temp.getSuperclass();
                     }
                         

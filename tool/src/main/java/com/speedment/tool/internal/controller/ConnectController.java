@@ -188,7 +188,7 @@ public final class ConnectController implements Initializable {
             Settings.inst().set("last_known_host", fieldHost.getText());
             Settings.inst().set("last_known_user", fieldUser.getText());
             Settings.inst().set("last_known_name", fieldName.getText());
-            Settings.inst().set("last_known_port", fieldPort.getText());           
+            Settings.inst().set("last_known_port", fieldPort.getText());
 
             if (configFileHelper.loadFromDatabase(dbms, fieldSchema.getText())) {
                 Settings.inst().set("hide_open_option", false);

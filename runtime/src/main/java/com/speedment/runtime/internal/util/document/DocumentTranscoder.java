@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Various utility methods for transcoding and decoding documents into JSON.
@@ -89,6 +90,7 @@ public final class DocumentTranscoder {
      * @throws SpeedmentException  if the file couldn't be loaded
      */
     public static Project load(String json) throws SpeedmentException {
+        requireNonNull(json, "No json value specified.");
         try {
             @SuppressWarnings("unchecked")
             final Map<String, Object> root = (Map<String, Object>) Json.fromJson(json);

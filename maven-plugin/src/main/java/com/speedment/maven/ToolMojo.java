@@ -38,14 +38,13 @@ import javafx.application.Application;
 @Mojo(name = "tool", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public final class ToolMojo extends AbstractSpeedmentMojo {
     
-    @Parameter(defaultValue = "false")
-    private boolean debug;
-    
-    @Parameter
-    private String[] components;
-    
-    @Parameter(defaultValue = DEFAULT_CONFIG_LOCATION)
-    private File configFile;
+    private @Parameter(defaultValue = "false") boolean debug;
+    private @Parameter String dbmsHost;
+    private @Parameter int dbmsPort;
+    private @Parameter String dbmsUsername;
+    private @Parameter String dbmsPassword;
+    private @Parameter String[] components;
+    private @Parameter(defaultValue = DEFAULT_CONFIG_LOCATION) File configFile;
 
     @Override
     public void execute(Speedment speedment) throws MojoExecutionException, MojoFailureException {
@@ -74,6 +73,26 @@ public final class ToolMojo extends AbstractSpeedmentMojo {
         return debug;
     }
 
+    @Override
+    protected String dbmsHost() {
+        return dbmsHost;
+    }
+
+    @Override
+    protected int dbmsPort() {
+        return dbmsPort;
+    }
+
+    @Override
+    protected String dbmsUsername() {
+        return dbmsUsername;
+    }
+
+    @Override
+    protected String dbmsPassword() {
+        return dbmsPassword;
+    }
+    
     @Override
     protected String launchMessage() {
         return "Running speedment:tool";
