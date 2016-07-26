@@ -18,12 +18,11 @@ import org.controlsfx.control.PropertySheet;
 public class EnabledPropertyEditor<T extends HasEnabledProperty> implements PropertyEditor<T>{
 
     @Override
-    public Stream<PropertySheet.Item> fieldsFor(T document) {
+    public Stream<PropertyEditor.Item> fieldsFor(T document) {
         return Stream.of(
-            new BooleanPropertyItem(
-                document.enabledProperty(), 
+            new SimpleBooleanItem(
                 "Enabled", 
-                "True if this node should be included in the code generation."
+                document.enabledProperty()
             )
         );
     }

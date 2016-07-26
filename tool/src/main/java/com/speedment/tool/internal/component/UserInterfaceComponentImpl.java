@@ -86,7 +86,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-import org.controlsfx.control.PropertySheet;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -104,6 +103,7 @@ import static java.util.stream.Collectors.toList;
 import static javafx.application.Platform.runLater;
 import static com.speedment.runtime.internal.util.TextUtil.alignRight;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import com.speedment.tool.property.PropertyEditor;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -142,7 +142,7 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
     private final ObservableList<Notification> notifications;
     private final ObservableList<Node> outputMessages;
     private final ObservableList<TreeItem<DocumentProperty>> selectedTreeItems;
-    private final ObservableList<PropertySheet.Item> properties;
+    private final ObservableList<PropertyEditor.Item> properties;
     private final Map<Class<?>, List<UserInterfaceComponent.ContextMenuBuilder<?>>> contextMenuBuilders;
     
     private @Inject DocumentPropertyComponent documentPropertyComponent;
@@ -245,7 +245,7 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
     }
 
     @Override
-    public ObservableList<PropertySheet.Item> getProperties() {
+    public ObservableList<PropertyEditor.Item> getProperties() {
         return properties;
     }
     

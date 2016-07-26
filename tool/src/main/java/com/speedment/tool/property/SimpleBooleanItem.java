@@ -32,6 +32,7 @@ public class SimpleBooleanItem implements PropertyEditor.Item{
     @Override
     public Node getEditor() {
         final CheckBox box = new CheckBox();
+        box.setSelected( property.get() );        
         property.bind( box.selectedProperty() );
         return box;
     }    

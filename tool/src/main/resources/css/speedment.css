@@ -435,3 +435,10 @@
 
 .notification.authentication { -fx-border-color: -fx-speedment-blue; }
 .notification.authentication .glyph-icon { -fx-fill: -fx-speedment-blue; }
+
+/*** Properties layout ***/
+.properties-layout {
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+    -fx-padding: 5 15 5 15;
+}

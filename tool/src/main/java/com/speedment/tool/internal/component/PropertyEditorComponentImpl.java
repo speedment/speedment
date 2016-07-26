@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Stream;
-import org.controlsfx.control.PropertySheet;
 import com.speedment.tool.component.PropertyEditorComponent;
 import com.speedment.tool.config.trait.HasAliasProperty;
 import com.speedment.tool.config.trait.HasEnabledProperty;
@@ -39,7 +38,7 @@ public final class PropertyEditorComponentImpl extends InternalOpenSourceCompone
     }
     
     @Override
-    public <DOC extends DocumentProperty> Stream<PropertySheet.Item> getUiVisibleProperties(DOC document) {
+    public <DOC extends DocumentProperty> Stream<PropertyEditor.Item> getUiVisibleProperties(DOC document) {
 
         return MapStream.of(factoryMap)                                         // MapStream<Class, Map<String, DocumentEditorFactory>>
             .filterKey(clazz -> clazz.isAssignableFrom(document.getClass()))    // MapStream<Class, Map<String, DocumentEditorFactory>>

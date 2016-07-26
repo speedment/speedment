@@ -19,13 +19,13 @@ package com.speedment.tool.internal.controller;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.component.EventComponent;
-import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.component.PropertyEditorComponent;
 import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
 import com.speedment.tool.event.TreeSelectionChange;
-import com.speedment.tool.property.AbstractPropertyItem;
+import com.speedment.tool.property.PropertyEditor;
+import com.speedment.tool.resource.PropertySheet;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -34,7 +34,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
-import org.controlsfx.control.PropertySheet;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -45,7 +44,7 @@ import java.util.ResourceBundle;
  */
 public final class WorkspaceController implements Initializable {
     
-    private final ObservableList<PropertySheet.Item> properties;
+    private final ObservableList<PropertyEditor.Item> properties;
     
     private @Inject UserInterfaceComponent ui;
     private @Inject EventComponent events;
@@ -60,20 +59,21 @@ public final class WorkspaceController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        
         final PropertySheet sheet = new PropertySheet(properties);
         
-        sheet.setMode(PropertySheet.Mode.NAME);
-        sheet.setModeSwitcherVisible(false);
-        sheet.setSearchBoxVisible(false);
-        sheet.setPropertyEditorFactory(item -> {
-            if (item instanceof AbstractPropertyItem<?, ?, ?>) {
-                @SuppressWarnings("unchecked")
-                final AbstractPropertyItem<?, ?, ?> casted = (AbstractPropertyItem<?, ?, ?>) item;
-                return casted.createEditor();
-            } else throw new SpeedmentException(
-                "Unknown property item type '" + item.getClass() + "'."
-            );
-        });
+//        sheet.setMode(PropertySheet.Mode.NAME);
+//        sheet.setModeSwitcherVisible(false);
+//        sheet.setSearchBoxVisible(false);
+//        sheet.setPropertyEditorFactory(item -> {
+//            if (item instanceof AbstractPropertyItem<?, ?, ?>) {
+//                @SuppressWarnings("unchecked")
+//                final AbstractPropertyItem<?, ?, ?> casted = (AbstractPropertyItem<?, ?, ?>) item;
+//                return casted.createEditor();
+//            } else throw new SpeedmentException(
+//                "Unknown property item type '" + item.getClass() + "'."
+//            );
+//        });
         
         ui.getSelectedTreeItems()
             .addListener((ListChangeListener.Change<? extends TreeItem<DocumentProperty>> change) -> {

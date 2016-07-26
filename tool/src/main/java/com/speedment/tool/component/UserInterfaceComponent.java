@@ -28,6 +28,7 @@ import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.notification.Notification;
+import com.speedment.tool.property.PropertyEditor;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -39,7 +40,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
-import org.controlsfx.control.PropertySheet;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -110,7 +110,7 @@ public interface UserInterfaceComponent extends Component {
      * 
      * @return  visible properties
      */
-    ObservableList<PropertySheet.Item> getProperties();
+    ObservableList<PropertyEditor.Item> getProperties();
     
     /*************************************************************/
     /*                      Menubar actions                      */

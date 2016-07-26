@@ -31,7 +31,7 @@ public class SimpleStringItem implements PropertyEditor.Item{
 
     @Override
     public Node getEditor() {
-        final TextField box = new TextField();
+        final TextField box = new TextField( property.get() );
         property.bind( box.textProperty() );
         return box;
     }    

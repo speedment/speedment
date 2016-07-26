@@ -2,7 +2,6 @@ package com.speedment.tool.property;
 
 import java.util.stream.Stream;
 import javafx.scene.Node;
-import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -16,7 +15,7 @@ public interface PropertyEditor<T> {
         Node getEditor();
     }
     
-    Stream<PropertySheet.Item> fieldsFor(T document);
+    Stream<PropertyEditor.Item> fieldsFor(T document);
     
     String getPropertyKey();
 }

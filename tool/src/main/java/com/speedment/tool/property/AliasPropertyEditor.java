@@ -18,14 +18,15 @@ import org.controlsfx.control.PropertySheet;
 public class AliasPropertyEditor<T extends HasAliasProperty> implements PropertyEditor<T> {
 
     @Override
-    public Stream<PropertySheet.Item> fieldsFor(T document) {
-        return Stream.of(new DefaultStringPropertyItem(
-                document.aliasProperty(),
-                document.nameProperty(),
-                "Java Alias", 
-                "The name that will be used for this in generated code."
-            )
-        );
+    public Stream<PropertyEditor.Item> fieldsFor(T document) {
+        return Stream.empty();
+//        return Stream.of(new DefaultStringPropertyItem(
+//                document.aliasProperty(),
+//                document.nameProperty(),
+//                "Java Alias", 
+//                "The name that will be used for this in generated code."
+//            )
+//        );
     }
 
     @Override

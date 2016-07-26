@@ -19,10 +19,10 @@ package com.speedment.tool.event;
 import com.speedment.generator.event.Event;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.config.DocumentProperty;
+import com.speedment.tool.property.PropertyEditor;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeItem;
-import org.controlsfx.control.PropertySheet;
 
 import static java.util.Objects.requireNonNull;
 
@@ -38,11 +38,11 @@ import static java.util.Objects.requireNonNull;
 public final class TreeSelectionChange implements Event {
 
     private final ListChangeListener.Change<? extends TreeItem<DocumentProperty>> changeEvent;
-    private final ObservableList<PropertySheet.Item> properties;
+    private final ObservableList<PropertyEditor.Item> properties;
 
     public TreeSelectionChange(
             ListChangeListener.Change<? extends TreeItem<DocumentProperty>> changeEvent, 
-            ObservableList<PropertySheet.Item> properties) {
+            ObservableList<PropertyEditor.Item> properties) {
         
         this.changeEvent = requireNonNull(changeEvent);
         this.properties  = requireNonNull(properties);
@@ -52,7 +52,7 @@ public final class TreeSelectionChange implements Event {
         return changeEvent;
     }
     
-    public ObservableList<PropertySheet.Item> properties() {
+    public ObservableList<PropertyEditor.Item> properties() {
         return properties;
     }
 }
