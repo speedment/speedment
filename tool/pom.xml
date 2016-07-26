@@ -34,8 +34,8 @@
     
     <name>Speedment - Tool</name>
     <description>
-        A graphical user interface that allows the user to modify the Speedment configuration
-        file without writing .json-code.
+        A graphical user interface that allows the user to modify the Speedment 
+        configuration file without writing .json-code.
     </description>
     
     <build>

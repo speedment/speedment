@@ -34,8 +34,8 @@ public final class PropertyEditorComponentImpl extends InternalOpenSourceCompone
     @ExecuteBefore(State.RESOLVED)
     void installEditors() {
         install(HasEnabledProperty.class, new EnabledPropertyEditor());
-        install(HasNameProperty.class, new NamePropertyEditor());
-        install(HasAliasProperty.class, new AliasPropertyEditor());
+        install(HasNameProperty.class,    new NamePropertyEditor());
+        install(HasAliasProperty.class,   new AliasPropertyEditor());
     }
     
     @Override

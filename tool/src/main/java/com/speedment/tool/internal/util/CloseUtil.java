@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.internal.util;
 
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -24,7 +25,7 @@ import javafx.stage.Stage;
 /**
  *
  * @author Emil Forslund
- * @since  2.4.0
+ * @since  3.0.0
  */
 public final class CloseUtil {
     
@@ -36,5 +37,10 @@ public final class CloseUtil {
         };
     }
     
-    private CloseUtil() {}
+    /**
+     * This should never be called.
+     */
+    private CloseUtil() {
+        instanceNotAllowed(getClass());
+    }
 }

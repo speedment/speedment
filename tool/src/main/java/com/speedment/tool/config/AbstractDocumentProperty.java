@@ -73,7 +73,7 @@ import static javafx.collections.FXCollections.observableMap;
  */
 @Api(version = "3.0")
 public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProperty<? super THIS>> 
-    implements DocumentProperty/*, HasExpandedProperty, HasNameProperty */{
+    implements DocumentProperty {
  
     private final Map<String, Object> config;
     private final transient ObservableMap<String, Property<?>> properties;

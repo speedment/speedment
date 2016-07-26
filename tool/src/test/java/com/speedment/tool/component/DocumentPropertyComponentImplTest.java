@@ -152,17 +152,17 @@ public class DocumentPropertyComponentImplTest {
         }
 
         @Override
-        public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
-            throw new UnsupportedOperationException("Not required by test.");
-        }
-
-        @Override
         public DbmsMutator<Dbms> mutator() {
             throw new UnsupportedOperationException("Not required by test.");
         }
 
         @Override
         public Stream<? extends Schema> schemas() {
+            throw new UnsupportedOperationException("Not required by test.");
+        }
+
+        @Override
+        public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
             throw new UnsupportedOperationException("Not required by test.");
         }
     }
