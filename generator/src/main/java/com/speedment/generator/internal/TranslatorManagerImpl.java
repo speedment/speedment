@@ -48,13 +48,13 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.generator.internal.util.HashUtil;
 import com.speedment.runtime.component.InfoComponent;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import java.nio.file.DirectoryStream;
-import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -65,7 +65,7 @@ public class TranslatorManagerImpl implements TranslatorManager {
 
     private final static Logger LOGGER      = LoggerManager.getLogger(TranslatorManagerImpl.class);
     private final static String HASH_PREFIX = ".";
-    private final static String HASH_SUFFIX = ".sha1";
+    private final static String HASH_SUFFIX = ".md5";
     private final static boolean PRINT_CODE = false;
     
     private final AtomicInteger fileCounter = new AtomicInteger(0);
@@ -205,7 +205,7 @@ public class TranslatorManagerImpl implements TranslatorManager {
                     .resolve(secretFolderName())
                     .resolve(HASH_PREFIX + codePath.getFileName().toString() + HASH_SUFFIX);
                 
-                write(hashPath, HashUtil.sha1(content), true);
+                write(hashPath, HashUtil.md5(content), true);
                 write(codePath, content, false);
                 
                 fileCounter.incrementAndGet();

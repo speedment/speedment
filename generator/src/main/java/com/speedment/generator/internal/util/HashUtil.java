@@ -21,35 +21,35 @@ import static java.util.stream.Collectors.joining;
  */
 public final class HashUtil {
     
-    private final static String ALGORITHM = "SHA-1";
-    private final static Charset CHARSET = StandardCharsets.UTF_8;
+    private final static String ALGORITHM = "MD5";
+    private final static Charset CHARSET  = StandardCharsets.UTF_8;
     
-    public static boolean compare(Path path, Path sha1) {
-        final String expected = sha1(path);
-        final String actual   = load(sha1).get(0);
+    public static boolean compare(Path contentPath, Path checksumPath) {
+        final String expected = HashUtil.md5(contentPath);
+        final String actual   = load(checksumPath).get(0);
         return expected.equals(actual);
     }
     
-    public static boolean compare(Path path, String sha1) {
-        final String expected = sha1(path);
-        return expected.equals(sha1);
+    public static boolean compare(Path path, String checksum) {
+        final String expected = HashUtil.md5(path);
+        return expected.equals(checksum);
     }
     
-    public static boolean compare(String content, String sha1) {
-        final String expected = sha1(content);
-        return expected.equals(sha1);
+    public static boolean compare(String content, String checksum) {
+        final String expected = md5(content);
+        return expected.equals(checksum);
     }
     
-    public static String sha1(Path path) {
-        return sha1(load(path));
+    public static String md5(Path path) {
+        return md5(load(path));
     }
     
-    public static String sha1(String content) {
-        return sha1(Arrays.asList(content.split("\\s+")));
+    public static String md5(String content) {
+        return md5(Arrays.asList(content.split("\\s+")));
     }
     
-    private static String sha1(List<String> rows) {
-        return sha1(rows.stream()
+    private static String md5(List<String> rows) {
+        return md5(rows.stream()
             .map(String::trim)
             .flatMap(s -> Arrays.asList(s.split("\\s+")).stream())
             .collect(joining())
@@ -57,7 +57,7 @@ public final class HashUtil {
         );
     }
     
-    private static String sha1(byte[] bytes) {
+    private static String md5(byte[] bytes) {
         final MessageDigest md;
         
         try {
