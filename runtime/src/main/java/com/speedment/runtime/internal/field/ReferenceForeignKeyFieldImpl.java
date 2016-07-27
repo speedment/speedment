@@ -1,19 +1,4 @@
-/**
- *
- * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); You may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
+
 package com.speedment.runtime.internal.field;
 
 import com.speedment.runtime.config.Column;
@@ -21,21 +6,84 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.ReferenceForeignKeyField;
-import com.speedment.runtime.field.method.FieldSetter;
-import com.speedment.runtime.field.method.Finder;
-import com.speedment.runtime.field.method.Getter;
-import com.speedment.runtime.field.method.Setter;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.field.trait.ReferenceForeignKeyFieldTrait;
 import com.speedment.runtime.internal.field.trait.FieldTraitImpl;
-import com.speedment.runtime.internal.field.trait.ReferenceFieldTraitImpl;
+import com.speedment.runtime.internal.field.trait.ReferenceFieldImpl;
 import com.speedment.runtime.internal.field.trait.ReferenceForeignKeyFieldTraitImpl;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 
 import java.util.Optional;
 
+import com.speedment.runtime.field.method.SetToReference;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import com.speedment.runtime.field.method.ReferenceGetter;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import com.speedment.runtime.field.method.ReferenceSetter;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import com.speedment.runtime.field.method.Finder;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 
 /**
@@ -54,16 +102,16 @@ public class ReferenceForeignKeyFieldImpl<ENTITY, D, V, FK> implements Reference
 
     public ReferenceForeignKeyFieldImpl(
             FieldIdentifier<ENTITY> identifier,
-            Getter<ENTITY, V> getter,
-            Setter<ENTITY, V> setter,
+            ReferenceGetter<ENTITY, V> getter,
+            ReferenceSetter<ENTITY, V> setter,
             Finder<ENTITY, FK> finder,
             TypeMapper<D, V> typeMapper,
             boolean unique
     ) {
         requireNonNulls(identifier, getter, setter, finder, typeMapper);
         field = new FieldTraitImpl(identifier, unique);
-        referenceField = new ReferenceFieldTraitImpl<>(field, getter, setter, typeMapper);
-        referenceForeignKeyField = new ReferenceForeignKeyFieldTraitImpl<>(finder);
+        referenceField = new ReferenceFieldImpl<>(field, getter, setter, typeMapper);
+        referenceForeignKeyField = new com.speedment.runtime.internal.field.trait.ReferenceForeignKeyFieldImpl<>(finder);
     }
 
     @Override
@@ -82,12 +130,12 @@ public class ReferenceForeignKeyFieldImpl<ENTITY, D, V, FK> implements Reference
     }
 
     @Override
-    public Setter<ENTITY, V> setter() {
+    public ReferenceSetter<ENTITY, V> setter() {
         return referenceField.setter();
     }
 
     @Override
-    public Getter<ENTITY, V> getter() {
+    public ReferenceGetter<ENTITY, V> getter() {
         return referenceField.getter();
     }
 
@@ -102,7 +150,7 @@ public class ReferenceForeignKeyFieldImpl<ENTITY, D, V, FK> implements Reference
     }
 
     @Override
-    public FieldSetter<ENTITY, V> setTo(V value) {
+    public SetToReference<ENTITY, V> setTo(V value) {
         return referenceField.setTo(value);
     }
 

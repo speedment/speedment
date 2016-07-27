@@ -29,6 +29,8 @@ import java.util.Set;
 import static com.speedment.runtime.internal.field.predicate.PredicateUtil.*;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -174,7 +176,7 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
     }
 
     protected SqlPredicateFragment betweenHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated) {
-        final Inclusion inclusion = getThirdOperandAsInclusion(model);
+        final Inclusion inclusion = getInclusionOperand(model);
         switch (inclusion) {
             case START_EXCLUSIVE_END_EXCLUSIVE: {
                 return of("(" + cn + " > ? AND " + cn + " < ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperandAsRaw(model));

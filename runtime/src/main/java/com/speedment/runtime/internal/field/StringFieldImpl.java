@@ -22,9 +22,6 @@ import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.Inclusion;
 import com.speedment.runtime.field.StringField;
-import com.speedment.runtime.field.method.FieldSetter;
-import com.speedment.runtime.field.method.Getter;
-import com.speedment.runtime.field.method.Setter;
 import com.speedment.runtime.field.predicate.ComparableSpeedmentPredicate;
 import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.field.predicate.StringSpeedmentPredicate;
@@ -32,9 +29,9 @@ import com.speedment.runtime.field.trait.ComparableFieldTrait;
 import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.field.trait.StringFieldTrait;
-import com.speedment.runtime.internal.field.trait.ComparableFieldTraitImpl;
+import com.speedment.runtime.internal.field.trait.ComparableReferenceFieldTraitImpl;
 import com.speedment.runtime.internal.field.trait.FieldTraitImpl;
-import com.speedment.runtime.internal.field.trait.ReferenceFieldTraitImpl;
+import com.speedment.runtime.internal.field.trait.ReferenceFieldImpl;
 import com.speedment.runtime.internal.field.trait.StringFieldTraitImpl;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 
@@ -42,6 +39,24 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 
+import com.speedment.runtime.field.method.SetToReference;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import com.speedment.runtime.field.method.ReferenceGetter;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import com.speedment.runtime.field.method.ReferenceSetter;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 
 /**
@@ -60,15 +75,15 @@ public class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> {
 
     public StringFieldImpl(
         FieldIdentifier<ENTITY> identifier,
-        Getter<ENTITY, String> getter,
-        Setter<ENTITY, String> setter,
+        ReferenceGetter<ENTITY, String> getter,
+        ReferenceSetter<ENTITY, String> setter,
         TypeMapper<D, String> typeMapper,
         boolean unique
     ) {
         requireNonNulls(identifier, getter, setter, typeMapper);
         field = new FieldTraitImpl(identifier, unique);
-        referenceField = new ReferenceFieldTraitImpl<>(field, getter, setter, typeMapper);
-        comparableField = new ComparableFieldTraitImpl<>(field, referenceField);
+        referenceField = new ReferenceFieldImpl<>(field, getter, setter, typeMapper);
+        comparableField = new ComparableReferenceFieldTraitImpl<>(field, referenceField);
         stringField = new StringFieldTraitImpl<>(field, referenceField);
     }
 
@@ -88,12 +103,12 @@ public class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> {
     }
 
     @Override
-    public Setter<ENTITY, String> setter() {
+    public ReferenceSetter<ENTITY, String> setter() {
         return referenceField.setter();
     }
 
     @Override
-    public Getter<ENTITY, String> getter() {
+    public ReferenceGetter<ENTITY, String> getter() {
         return referenceField.getter();
     }
 
@@ -103,7 +118,7 @@ public class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> {
     }
 
     @Override
-    public FieldSetter<ENTITY, String> setTo(String value) {
+    public SetToReference<ENTITY, String> setTo(String value) {
         return referenceField.setTo(value);
     }
 

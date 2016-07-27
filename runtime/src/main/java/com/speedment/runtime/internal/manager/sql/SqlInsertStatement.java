@@ -17,7 +17,6 @@
 package com.speedment.runtime.internal.manager.sql;
 
 import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,14 +32,14 @@ import static java.util.Objects.requireNonNull;
  */
 public final class SqlInsertStatement extends SqlStatement {
 
-    private final Collection<? extends FieldTrait> generatedColumnFields;
+    private final Collection<FieldTrait<?>> generatedColumnFields;
     private final List<Long> generatedKeys;
     private final Consumer<List<Long>> generatedKeysConsumer;
 
-    public <F extends FieldTrait & ReferenceFieldTrait<?, ?, ?>> SqlInsertStatement(
+    public SqlInsertStatement(
         final String sql,
         final List<?> values,
-        final Collection<F> generatedColumnFields,
+        final Collection<FieldTrait<?>> generatedColumnFields,
         final Consumer<List<Long>> generatedKeysConsumer
     ) {
         super(sql, values);
@@ -49,9 +48,8 @@ public final class SqlInsertStatement extends SqlStatement {
         this.generatedColumnFields = requireNonNull(generatedColumnFields);
     }
 
-    @SuppressWarnings("unchecked")
-    public <F extends FieldTrait & ReferenceFieldTrait<?, ?, ?>> List<F> getGeneratedColumnFields() {
-        return (List<F>) generatedColumnFields;
+    public Collection<FieldTrait<?>> getGeneratedColumnFields() {
+        return generatedColumnFields;
     }
 
     public List<Long> getGeneratedKeys() {

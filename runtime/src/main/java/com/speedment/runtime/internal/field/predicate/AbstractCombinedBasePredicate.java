@@ -27,10 +27,10 @@ import static java.util.Objects.requireNonNull;
  * Aggregation of a number of {@link Predicate Predicates} of the same type
  * (e.g. AND or OR) that can be applied in combination.
  *
- * @author pemi
- * @param <ENTITY> the Entity type
+ * @param <ENTITY>  the entity type
+ * @author  Per Minborg
  */
-public abstract class AbstractCombinedBasePredicate<ENTITY> extends AbstractBasePredicate<ENTITY> {
+public abstract class AbstractCombinedBasePredicate<ENTITY> extends AbstractPredicate<ENTITY> {
 
     /**
      * This enum list all the different types of concrete implementation of the
@@ -44,6 +44,7 @@ public abstract class AbstractCombinedBasePredicate<ENTITY> extends AbstractBase
     private final Type type;
 
     private AbstractCombinedBasePredicate(Type type, Predicate<ENTITY> first, Predicate<? super ENTITY> second) {
+        
         this.type = requireNonNull(type);
         this.predicates = new ArrayList<>();
         add(requireNonNull(first));
@@ -129,9 +130,9 @@ public abstract class AbstractCombinedBasePredicate<ENTITY> extends AbstractBase
         }
 
         @Override
-        public boolean test(ENTITY t) {
-            requireNonNull(t);
-            return stream().allMatch(p -> p.test(t));
+        protected boolean testWithoutNegation(ENTITY entity) {
+            requireNonNull(entity);
+            return stream().allMatch(p -> p.test(entity));
         }
 
         @Override
@@ -154,9 +155,9 @@ public abstract class AbstractCombinedBasePredicate<ENTITY> extends AbstractBase
         }
 
         @Override
-        public boolean test(ENTITY t) {
-            requireNonNull(t);
-            return stream().anyMatch(p -> p.test(t));
+        protected boolean testWithoutNegation(ENTITY entity) {
+            requireNonNull(entity);
+            return stream().anyMatch(p -> p.test(entity));
         }
 
         @Override

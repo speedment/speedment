@@ -35,5 +35,5 @@ import com.speedment.runtime.field.trait.ReferenceFieldTrait;
  */
 @Api(version = "3.0")
 public interface ReferenceField<ENTITY, D, V> extends 
-    FieldTrait, 
+    FieldTrait<ENTITY>, 
     ReferenceFieldTrait<ENTITY, D, V> {}

@@ -18,17 +18,18 @@ package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.Inclusion;
-import com.speedment.runtime.field.predicate.ComparableSpeedmentPredicate;
-
+import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import java.util.Comparator;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * A representation of an Entity field that is a reference type (e.g.
  * {@code Integer} and not {@code int}) and that implements {@link Comparable}.
  *
  * @param <ENTITY> the entity type
- * @param <D> the database type
  * @param <V> the field value type
  *
  * @author  Per Minborg
@@ -36,7 +37,7 @@ import java.util.Set;
  * @since   2.2.0
  */
 @Api(version = "3.0")
-public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>> {
+public interface ComparableFieldTrait<ENTITY, V extends Comparable<? super V>> {
 
     /**
      * Returns a {@link Comparator} that will compare to this field using this
@@ -75,7 +76,7 @@ public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>equal</em> to the given value
      */
-    ComparableSpeedmentPredicate<ENTITY, D, V> equal(V value);
+    SpeedmentPredicate<ENTITY> equal(V value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -86,7 +87,9 @@ public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>not equal</em> to the given value
      */
-    ComparableSpeedmentPredicate<ENTITY, D, V> notEqual(V value);
+    default Predicate<ENTITY> notEqual(V value) {
+        return equal(value).negate();
+    }
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -97,7 +100,9 @@ public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>less than</em> the given value
      */
-    ComparableSpeedmentPredicate<ENTITY, D, V> lessThan(V value);
+    default Predicate<ENTITY> lessThan(V value) {
+        return greaterOrEqual(value).negate();
+    }
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -108,7 +113,9 @@ public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>less than or equal</em> to the given value
      */
-    ComparableSpeedmentPredicate<ENTITY, D, V> lessOrEqual(V value);
+    default Predicate<ENTITY> lessOrEqual(V value) {
+        return greaterThan(value).negate();
+    }
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -119,7 +126,7 @@ public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>greater than</em> the given value
      */
-    ComparableSpeedmentPredicate<ENTITY, D, V> greaterThan(V value);
+    Predicate<ENTITY> greaterThan(V value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -130,7 +137,7 @@ public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>greater than or equal</em> to the given value
      */
-    ComparableSpeedmentPredicate<ENTITY, D, V> greaterOrEqual(V value);
+    Predicate<ENTITY> greaterOrEqual(V value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -146,7 +153,7 @@ public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>
      * this Field is <em>between</em> the given values (inclusive the start
      * value but exclusive the end value)
      */
-    default ComparableSpeedmentPredicate<ENTITY, D, V> between(V start, V end) {
+    default Predicate<ENTITY> between(V start, V end) {
         return between(start, end, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
     }
 
@@ -169,7 +176,7 @@ public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>
      * parameter into account when determining if either of the end points shall
      * be included in the Field range or not
      */
-    ComparableSpeedmentPredicate<ENTITY, D, V> between(V start, V end, Inclusion inclusion);
+    Predicate<ENTITY> between(V start, V end, Inclusion inclusion);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -185,8 +192,8 @@ public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>
      * this Field is <em>not between</em> the given values (inclusive the start
      * value but exclusive the end value)
      */
-    default ComparableSpeedmentPredicate<ENTITY, D, V> notBetween(V start, V end) {
-        return between(start, end, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
+    default Predicate<ENTITY> notBetween(V start, V end) {
+        return between(start, end).negate();
     }
 
     /**
@@ -208,7 +215,9 @@ public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>
      * Inclusion parameter into account when determining if either of the end
      * points shall be included in the Field range or not
      */
-    ComparableSpeedmentPredicate<ENTITY, D, V> notBetween(V start, V end, Inclusion inclusion);
+    default Predicate<ENTITY> notBetween(V start, V end, Inclusion inclusion) {
+        return between(start, end, inclusion).negate();
+    }
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -223,7 +232,9 @@ public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>
      * this Field is <em>in</em> the set of given values
      */
     @SuppressWarnings("unchecked")
-    ComparableSpeedmentPredicate<ENTITY, D, V> in(V... values);
+    default Predicate<ENTITY> in(V... values) {
+        return in(Stream.of(values).collect(toSet()));
+    }
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -236,7 +247,7 @@ public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>in</em> the given Set
      */
-    ComparableSpeedmentPredicate<ENTITY, D, V> in(Set<V> values);
+    Predicate<ENTITY> in(Set<V> values);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -251,7 +262,9 @@ public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>
      * this Field is <em>not in</em> the set of given values
      */
     @SuppressWarnings("unchecked")
-    ComparableSpeedmentPredicate<ENTITY, D, V> notIn(V... values);
+    default Predicate<ENTITY> notIn(V... values) {
+        return in(values).negate();
+    }
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -264,6 +277,7 @@ public interface ComparableFieldTrait<ENTITY, D, V extends Comparable<? super V>
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>not in</em> the given Set
      */
-    ComparableSpeedmentPredicate<ENTITY, D, V> notIn(Set<V> values);
-
+    default Predicate<ENTITY> notIn(Set<V> values) {
+        return in(values).negate();
+    }
 }

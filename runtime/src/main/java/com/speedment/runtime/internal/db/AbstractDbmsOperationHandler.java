@@ -27,7 +27,6 @@ import com.speedment.runtime.db.DbmsOperationHandler;
 import com.speedment.runtime.db.SqlFunction;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.internal.manager.sql.SqlDeleteStatement;
 import com.speedment.runtime.internal.manager.sql.SqlInsertStatement;
 import com.speedment.runtime.internal.manager.sql.SqlStatement;
@@ -110,7 +109,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     }
 
     @Override
-    public <F extends FieldTrait & ReferenceFieldTrait<?, ?, ?>> void executeInsert(Dbms dbms, String sql, List<?> values, Collection<F> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
+    public void executeInsert(Dbms dbms, String sql, List<?> values, Collection<FieldTrait<?>> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
         final SqlInsertStatement sqlUpdateStatement = new SqlInsertStatement(sql, values, generatedKeyFields, generatedKeyConsumer);
         execute(dbms, singletonList(sqlUpdateStatement));
     }

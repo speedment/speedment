@@ -17,7 +17,8 @@
 package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.field.predicate.StringSpeedmentPredicate;
+import com.speedment.runtime.field.predicate.SpeedmentPredicate;
+import java.util.function.Predicate;
 
 /**
  * A representation of an Entity field that is a {@code String} type. String 
@@ -32,7 +33,7 @@ import com.speedment.runtime.field.predicate.StringSpeedmentPredicate;
  * @since   2.2.0
  */
 @Api(version = "3.0")
-public interface StringFieldTrait<ENTITY, D> {
+public interface StringFieldTrait<ENTITY, D> extends ReferenceFieldTrait<ENTITY, D, String> {
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -46,7 +47,7 @@ public interface StringFieldTrait<ENTITY, D> {
      *
      * @see String#compareToIgnoreCase(java.lang.String)
      */
-    StringSpeedmentPredicate<ENTITY, D> equalIgnoreCase(String value);
+    Predicate<ENTITY> equalIgnoreCase(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -60,7 +61,9 @@ public interface StringFieldTrait<ENTITY, D> {
      *
      * @see String#compareToIgnoreCase(java.lang.String)
      */
-    StringSpeedmentPredicate<ENTITY, D> notEqualIgnoreCase(String value);
+    default Predicate<ENTITY> notEqualIgnoreCase(String value) {
+        return equalIgnoreCase(value).negate();
+    }
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -73,7 +76,7 @@ public interface StringFieldTrait<ENTITY, D> {
      *
      * @see String#startsWith(java.lang.String)
      */
-    StringSpeedmentPredicate<ENTITY, D> startsWith(String value);
+    Predicate<ENTITY> startsWith(String value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -86,7 +89,9 @@ public interface StringFieldTrait<ENTITY, D> {
      *
      * @see String#startsWith(java.lang.String)
      */
-    StringSpeedmentPredicate<ENTITY, D> notStartsWith(String value);
+    default Predicate<ENTITY> notStartsWith(String value) {
+        return startsWith(value).negate();
+    }
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -99,7 +104,7 @@ public interface StringFieldTrait<ENTITY, D> {
      *
      * @see String#endsWith(java.lang.String)
      */
-    StringSpeedmentPredicate<ENTITY, D> endsWith(String value);
+    Predicate<ENTITY> endsWith(String value);
     
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -112,7 +117,9 @@ public interface StringFieldTrait<ENTITY, D> {
      *
      * @see String#endsWith(java.lang.String)
      */
-    StringSpeedmentPredicate<ENTITY, D> notEndsWith(String value);
+    default Predicate<ENTITY> notEndsWith(String value) {
+        return endsWith(value).negate();
+    }
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -125,7 +132,7 @@ public interface StringFieldTrait<ENTITY, D> {
      *
      * @see String#contains(java.lang.CharSequence)
      */
-    StringSpeedmentPredicate<ENTITY, D> contains(String value);
+    Predicate<ENTITY> contains(String value);
     
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -138,7 +145,9 @@ public interface StringFieldTrait<ENTITY, D> {
      *
      * @see String#contains(java.lang.CharSequence)
      */
-    StringSpeedmentPredicate<ENTITY, D> notContains(String value);
+    default Predicate<ENTITY> notContains(String value) {
+        return contains(value).negate();
+    }
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -150,7 +159,7 @@ public interface StringFieldTrait<ENTITY, D> {
      *
      * @see String#isEmpty()
      */
-    StringSpeedmentPredicate<ENTITY, D> isEmpty();
+    Predicate<ENTITY> isEmpty();
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -162,5 +171,7 @@ public interface StringFieldTrait<ENTITY, D> {
      *
      * @see String#isEmpty()
      */
-    StringSpeedmentPredicate<ENTITY, D> isNotEmpty();
+    default Predicate<ENTITY> isNotEmpty() {
+        return isEmpty().negate();
+    }
 }

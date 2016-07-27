@@ -41,16 +41,8 @@ public abstract class AbstractTupleOfNullables extends BasicAbstractTuple<Abstra
         return Optional.ofNullable(values[assertIndexBounds(index)]);
     }
 
-//    @Override
-//    public Optional<Object> remove(int index) {
-//        final Object previousValue = get(index);
-//        values[index] = null;
-//        return Optional.ofNullable(previousValue);
-//    }
-
     @Override
     public Stream<Optional<Object>> stream() {
         return Stream.of(values).map(Optional::ofNullable);
     }
-
 }

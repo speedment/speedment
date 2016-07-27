@@ -24,10 +24,11 @@ package com.speedment.runtime.field.trait;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.field.method.FieldSetter;
-import com.speedment.runtime.field.method.Getter;
-import com.speedment.runtime.field.method.Setter;
-import com.speedment.runtime.field.predicate.SpeedmentPredicate;
+import com.speedment.runtime.field.method.SetToReference;
+import com.speedment.runtime.field.method.ReferenceGetter;
+import com.speedment.runtime.field.method.ReferenceSetter;
+import com.speedment.runtime.internal.field.SetToReferenceImpl;
+import java.util.function.Predicate;
 
 /**
  * A representation of an Entity field that is a reference type (eg 
@@ -42,24 +43,23 @@ import com.speedment.runtime.field.predicate.SpeedmentPredicate;
  * @since   2.2.0
  */
 @Api(version = "3.0")
-public interface ReferenceFieldTrait<ENTITY, D, V> extends FieldTrait {
-
-    @Override
-    FieldIdentifier<ENTITY> getIdentifier();
+public interface ReferenceFieldTrait<ENTITY, D, V> extends FieldTrait<ENTITY> {
 
     /**
      * Returns a reference to the setter for this field.
      *
      * @return the setter
      */
-    Setter<ENTITY, V> setter();
+    @Override
+    ReferenceSetter<ENTITY, V> setter();
 
     /**
      * Returns a reference to the getter of this field.
      *
      * @return the getter
      */
-    Getter<ENTITY, V> getter();
+    @Override
+    ReferenceGetter<ENTITY, V> getter();
 
     /**
      * Returns the type mapper of this field.
@@ -90,12 +90,14 @@ public interface ReferenceFieldTrait<ENTITY, D, V> extends FieldTrait {
     }
 
     /**
-     * Creates and returns a FieldSetter with a given value.
+     * Creates and returns a SetToReference with a given value.
      *
-     * @param value to set
-     * @return a FieldSetter with a given value
+     * @param value  to set
+     * @return       a SetToReference with a given value
      */
-    FieldSetter<ENTITY, V> setTo(V value);
+    default SetToReference<ENTITY, V> setTo(V value) {
+        return new SetToReferenceImpl<>(this, value);
+    }
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -104,7 +106,7 @@ public interface ReferenceFieldTrait<ENTITY, D, V> extends FieldTrait {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is {@code null}
      */
-    SpeedmentPredicate<ENTITY, D, V> isNull();
+    Predicate<ENTITY> isNull();
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -113,6 +115,7 @@ public interface ReferenceFieldTrait<ENTITY, D, V> extends FieldTrait {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>not</em> {@code null}
      */
-    SpeedmentPredicate<ENTITY, D, V> isNotNull();
-
+    default Predicate<ENTITY> isNotNull() {
+        return isNull().negate();
+    }
 }

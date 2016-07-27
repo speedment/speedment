@@ -22,16 +22,18 @@ import com.speedment.runtime.field.trait.FieldTrait;
 /**
  * A trait for predicates the implement the {@link #getField()} method.
  * 
+ * @param <ENTITY>  the entity type
+ * 
  * @author  Per Minborg
  * @since   2.2.0
  */
 @Api(version = "3.0")
-public interface HasFieldTrait {
+public interface HasFieldTrait<ENTITY> {
 
     /**
      * Returns the {@link FieldTrait} that was used to generate this predicate.
      * 
      * @return  the field
      */
-    FieldTrait getField();
+    FieldTrait<ENTITY> getField();
 }

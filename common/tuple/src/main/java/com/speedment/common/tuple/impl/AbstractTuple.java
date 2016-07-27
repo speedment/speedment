@@ -44,5 +44,4 @@ public abstract class AbstractTuple extends BasicAbstractTuple<AbstractTuple, Ob
     public Stream<Object> stream() {
         return Stream.of(values);
     }
-
 }

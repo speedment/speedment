@@ -39,6 +39,11 @@ import static com.speedment.runtime.internal.util.document.DocumentDbUtil.refere
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  * An encoder that can transform Speedment entities to JSON.

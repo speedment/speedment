@@ -29,5 +29,4 @@ public final class Tuple0Impl extends AbstractTuple implements Tuple0 {
     private Tuple0Impl() {
         super(Tuple0Impl.class);
     }
-
 }

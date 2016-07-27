@@ -37,8 +37,8 @@ import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.ReferenceForeignKeyField;
 import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.field.StringForeignKeyField;
-import com.speedment.runtime.internal.field.ComparableFieldImpl;
-import com.speedment.runtime.internal.field.ComparableForeignKeyFieldImpl;
+import com.speedment.runtime.internal.field.ComparableReferenceFieldImpl;
+import com.speedment.runtime.internal.field.ComparableReferenceForeignKeyFieldImpl;
 import com.speedment.runtime.internal.field.ReferenceFieldImpl;
 import com.speedment.runtime.internal.field.ReferenceForeignKeyFieldImpl;
 import com.speedment.runtime.internal.field.StringFieldImpl;
@@ -54,6 +54,12 @@ import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.typetoken.TypeTokenGenerator;
 import com.speedment.runtime.config.typetoken.TypeToken;
 import com.speedment.runtime.util.TypeTokenFactory;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -130,7 +136,7 @@ public final class EntityTranslatorSupport {
                         .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)))
                         .add(Generic.of().add(fkType));
 
-                    implType = Type.of(ComparableForeignKeyFieldImpl.class)
+                    implType = Type.of(ComparableReferenceForeignKeyFieldImpl.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(databaseType))
                         .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)))
@@ -170,7 +176,7 @@ public final class EntityTranslatorSupport {
                         .add(Generic.of().add(databaseType))
                         .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)));
 
-                    implType = Type.of(ComparableFieldImpl.class)
+                    implType = Type.of(ComparableReferenceFieldImpl.class)
                         .add(Generic.of().add(entityType))
                         .add(Generic.of().add(databaseType))
                         .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)));

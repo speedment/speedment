@@ -19,7 +19,6 @@ package com.speedment.runtime.db;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 
 import java.sql.Array;
 import java.sql.Blob;
@@ -120,7 +119,6 @@ public interface DbmsOperationHandler {
      * Executes an SQL update command. Generated key(s) following an insert
      * command (if any) will be feed to the provided Consumer.
      *
-     * @param <F> dynamic type
      * @param dbms the dbms to send it to
      * @param sql the non-null SQL command to execute
      * @param values a non-null list
@@ -129,11 +127,11 @@ public interface DbmsOperationHandler {
      * parameters in the SQL command
      * @throws SQLException if an error occurs
      */
-    <F extends FieldTrait & ReferenceFieldTrait<?, ?, ?>> void executeInsert(
+    void executeInsert(
             Dbms dbms,
             String sql,
             List<?> values,
-            Collection<F> generatedKeyFields,
+            Collection<FieldTrait<?>> generatedKeyFields,
             Consumer<List<Long>> generatedKeyConsumer
     ) throws SQLException;
 

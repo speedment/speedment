@@ -39,7 +39,7 @@ import com.speedment.runtime.field.trait.StringFieldTrait;
  */
 @Api(version = "3.0")
 public interface StringField<ENTITY, D> extends
-    FieldTrait, 
+    FieldTrait<ENTITY>, 
     ReferenceFieldTrait<ENTITY, D, String>,
-    ComparableFieldTrait<ENTITY, D, String>,
+    ComparableFieldTrait<ENTITY, String>,
     StringFieldTrait<ENTITY, D> {}

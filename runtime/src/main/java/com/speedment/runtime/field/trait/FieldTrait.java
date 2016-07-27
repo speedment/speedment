@@ -21,25 +21,28 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
+import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 
 import java.util.Optional;
 
 /**
  * A trait that every field implements.
  * 
+ * @param <ENTITY>  the entity type
+ * 
  * @author  Per Minborg
  * @author  Emil Forslund
  * @since   2.2.0
  */
 @Api(version = "3.0")
-public interface FieldTrait {
+public interface FieldTrait<ENTITY> extends HasGetter<ENTITY>, HasSetter<ENTITY> {
     
     /**
      * Returns the unique identifier of this field.
      * 
      * @return  the identifier
      */
-    FieldIdentifier<?> getIdentifier();
+    FieldIdentifier<ENTITY> getIdentifier();
 
     /**
      * Returns {@code true} if the column that this field represents is UNIQUE.
@@ -55,5 +58,7 @@ public interface FieldTrait {
      * @param project  the project instance
      * @return         the column
      */
-    Optional<Column> findColumn(Project project);
+    default Optional<? extends Column> findColumn(Project project) {
+        return DocumentDbUtil.referencedColumnIfPresent(project, getIdentifier());
+    }
 }

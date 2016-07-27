@@ -17,8 +17,8 @@
 package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.field.method.Finder;
 import com.speedment.runtime.manager.Manager;
+import com.speedment.runtime.field.method.Finder;
 
 /**
  * A representation of an Entity field that is a reference type (eg 
@@ -26,7 +26,6 @@ import com.speedment.runtime.manager.Manager;
  * field.
  * 
  * @param <ENTITY>     the entity type
- * @param <D>          the database type
  * @param <FK_ENTITY>  the foreign entity type
  * 
  * @author  Per Minborg
@@ -34,7 +33,7 @@ import com.speedment.runtime.manager.Manager;
  * @since   2.2.0
  */
 @Api(version = "3.0")
-public interface ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY> {
+public interface ReferenceForeignKeyFieldTrait<ENTITY, FK_ENTITY> {
 
     /**
      * Returns a function that can find a foreign entity pointed out by this

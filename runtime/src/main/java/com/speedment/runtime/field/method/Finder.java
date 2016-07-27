@@ -28,7 +28,7 @@ import java.util.function.BiFunction;
  * A {@code Finder<ENTITY, FK_ENTITY>} has the following signature:
  * <code>
  *      interface ENTITY {
- *          FK_ENTITY findXXX();
+ *          FK_ENTITY findXXX(fk_manager);
  *      }
  * </code>
  * 

@@ -41,8 +41,7 @@ import com.speedment.runtime.field.trait.ReferenceForeignKeyFieldTrait;
  */
 @Api(version = "3.0")
 public interface ComparableForeignKeyField<ENTITY, D, V extends Comparable<? super V>, FK> extends
-    FieldTrait, 
+    FieldTrait<ENTITY>, 
     ReferenceFieldTrait<ENTITY, D, V>,
-    ComparableFieldTrait<ENTITY, D, V>,
-    ReferenceForeignKeyFieldTrait<ENTITY, D, FK>
-{}
+    ComparableFieldTrait<ENTITY, V>,
+    ReferenceForeignKeyFieldTrait<ENTITY, FK> {}

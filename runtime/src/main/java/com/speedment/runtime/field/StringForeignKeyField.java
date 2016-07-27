@@ -43,8 +43,8 @@ import com.speedment.runtime.field.trait.StringFieldTrait;
  */
 @Api(version = "3.0")
 public interface StringForeignKeyField<ENTITY, D, FK_ENTITY> extends
-    FieldTrait, 
+    FieldTrait<ENTITY>, 
     ReferenceFieldTrait<ENTITY, D, String>,
-    ComparableFieldTrait<ENTITY, D, String>,
+    ComparableFieldTrait<ENTITY, String>,
     StringFieldTrait<ENTITY, D>,
-    ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY> {}
+    ReferenceForeignKeyFieldTrait<ENTITY, FK_ENTITY> {}
