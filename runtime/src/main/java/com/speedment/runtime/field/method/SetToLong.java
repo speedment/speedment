@@ -17,7 +17,7 @@
 package com.speedment.runtime.field.method;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.field.trait.FieldTrait;
+import com.speedment.runtime.field.trait.HasLongValue;
 
 import java.util.function.UnaryOperator;
 
@@ -25,20 +25,21 @@ import java.util.function.UnaryOperator;
  * Represents a set-operation with all the metadata contained.
  * 
  * @param <ENTITY>  entity type
+ * @param <D>       database type
  * 
  * @author  Emil Forslund
  * @author  Per Minborg
  * @since   2.2.0
  */
 @Api(version = "3.0")
-public interface SetToLong<ENTITY> extends UnaryOperator<ENTITY> {
+public interface SetToLong<ENTITY, D> extends UnaryOperator<ENTITY> {
 
     /**
      * Returns the field that this setter sets.
      * 
      * @return  the field
      */
-    FieldTrait getField();
+    HasLongValue<ENTITY, D> getField();
     
     /**
      * Returns the value that this setter will set the field to when applied.

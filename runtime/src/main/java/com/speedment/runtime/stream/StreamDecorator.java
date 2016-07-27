@@ -17,11 +17,11 @@
 package com.speedment.runtime.stream;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.internal.stream.ComposedStreamDecorator;
 import com.speedment.runtime.internal.util.Cast;
 
 import java.util.stream.Stream;
+import com.speedment.runtime.field.predicate.FieldPredicate;
 
 /**
  * Decorator that is applied to a various part of the custom streams of
@@ -62,7 +62,7 @@ public interface StreamDecorator {
         return stream;
     }
 
-    default <ENTITY, D, V> SpeedmentPredicate<ENTITY, D, V> apply(SpeedmentPredicate<ENTITY, D, V> predicate) {
+    default <ENTITY> FieldPredicate<ENTITY> apply(FieldPredicate<ENTITY> predicate) {
         return predicate;
     }
 

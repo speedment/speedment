@@ -17,16 +17,11 @@
 package com.speedment.runtime.field;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.field.trait.ComparableFieldTrait;
-import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
-import com.speedment.runtime.field.trait.ReferenceForeignKeyFieldTrait;
-import com.speedment.runtime.field.trait.StringFieldTrait;
+import com.speedment.runtime.field.trait.HasFinder;
 
 /**
- * A field that implements the {@link ReferenceFieldTrait}, the 
- * {@link ComparableFieldTrait}, the {@link StringFieldTrait} and the 
- * {ReferenceForeignKeyFieldTrait}.
+ * A field that represents a string column with a foreign key to 
+ * another column.
  * 
  * @param <ENTITY>     the entity type
  * @param <D>          the database type
@@ -39,12 +34,9 @@ import com.speedment.runtime.field.trait.StringFieldTrait;
  * @see  ReferenceFieldTrait
  * @see  ComparableFieldTrait
  * @see  StringFieldTrait
- * @see  ReferenceForeignKeyFieldTrait
+ * @see  HasFinder
  */
 @Api(version = "3.0")
 public interface StringForeignKeyField<ENTITY, D, FK_ENTITY> extends
-    FieldTrait<ENTITY>, 
-    ReferenceFieldTrait<ENTITY, D, String>,
-    ComparableFieldTrait<ENTITY, String>,
-    StringFieldTrait<ENTITY, D>,
-    ReferenceForeignKeyFieldTrait<ENTITY, FK_ENTITY> {}
+    StringField<ENTITY, D>, 
+    HasFinder<ENTITY, FK_ENTITY> {}

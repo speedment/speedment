@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.internal.manager.sql;
 
-import com.speedment.runtime.field.trait.FieldTrait;
+import com.speedment.runtime.field.Field;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,18 +28,18 @@ import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author pemi
+ * @author Per Minborg
  */
-public final class SqlInsertStatement extends SqlStatement {
+public final class SqlInsertStatement<ENTITY> extends SqlStatement {
 
-    private final Collection<FieldTrait<?>> generatedColumnFields;
+    private final Collection<Field<ENTITY>> generatedColumnFields;
     private final List<Long> generatedKeys;
     private final Consumer<List<Long>> generatedKeysConsumer;
 
     public SqlInsertStatement(
         final String sql,
         final List<?> values,
-        final Collection<FieldTrait<?>> generatedColumnFields,
+        final Collection<Field<ENTITY>> generatedColumnFields,
         final Consumer<List<Long>> generatedKeysConsumer
     ) {
         super(sql, values);
@@ -48,7 +48,7 @@ public final class SqlInsertStatement extends SqlStatement {
         this.generatedColumnFields = requireNonNull(generatedColumnFields);
     }
 
-    public Collection<FieldTrait<?>> getGeneratedColumnFields() {
+    public Collection<Field<ENTITY>> getGeneratedColumnFields() {
         return generatedColumnFields;
     }
 

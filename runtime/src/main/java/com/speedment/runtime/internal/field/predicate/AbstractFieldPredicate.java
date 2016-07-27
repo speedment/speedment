@@ -1,23 +1,25 @@
 package com.speedment.runtime.internal.field.predicate;
 
 import com.speedment.common.tuple.Tuple;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.predicate.PredicateType;
-import com.speedment.runtime.field.predicate.SpeedmentPredicate;
-import com.speedment.runtime.field.trait.FieldTrait;
 import com.speedment.runtime.internal.util.Cast;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Predicate;
+import com.speedment.runtime.field.predicate.FieldPredicate;
+import static java.util.Objects.requireNonNull;
 
 /**
- *
+ * A predicate that contains metadata about the {@link FieldTrait} that was used
+ * to construct it.
+ * 
  * @param <ENTITY>  the entity type that is being tested
  * @param <FIELD>   the field in the entity that is operated on
  * 
  * @author  Emil Forslund
  * @since   3.0.0
  */
-public abstract class AbstractFieldPredicate<ENTITY, FIELD extends FieldTrait<ENTITY>> 
-        extends AbstractPredicate<ENTITY> implements SpeedmentPredicate<ENTITY> {
+public abstract class AbstractFieldPredicate<ENTITY, FIELD extends Field<ENTITY>> 
+        extends AbstractPredicate<ENTITY> implements FieldPredicate<ENTITY> {
     
     private final PredicateType predicateType;
     private final FIELD field;

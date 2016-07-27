@@ -19,9 +19,8 @@ package com.speedment.plugins.json;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.field.trait.FieldTrait;
+import com.speedment.runtime.field.FieldTrait;
 import com.speedment.runtime.field.trait.ReferenceFieldTrait;
-import com.speedment.runtime.field.trait.ReferenceForeignKeyFieldTrait;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
 import com.speedment.runtime.manager.Manager;
 
@@ -39,6 +38,77 @@ import static com.speedment.runtime.internal.util.document.DocumentDbUtil.refere
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import com.speedment.runtime.field.trait.HasFinder;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
 import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
@@ -94,17 +164,17 @@ public final class JsonEncoder<ENTITY> {
     // Fields
     public <D, T, I extends FieldTrait & ReferenceFieldTrait<ENTITY, D, T>> JsonEncoder<ENTITY> put(I field) {
         requireNonNull(field);
-        final String columnName = jsonField(project, field.getIdentifier());
+        final String columnName = jsonField(project, field.identifier());
         final Function<ENTITY, T> getter = ((ReferenceFieldTrait<ENTITY, D, T>) field).getter(); // Workaround bugg
         return put(columnName, getter);
     }
 
     // Foreign key fields.
-    public <D, T, FK_ENTITY, I extends FieldTrait & ReferenceFieldTrait<ENTITY, D, T> & ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY>>
+    public <D, T, FK_ENTITY, I extends FieldTrait & ReferenceFieldTrait<ENTITY, D, T> & HasFinder<ENTITY, D, FK_ENTITY>>
         JsonEncoder<ENTITY> put(I field, JsonEncoder<FK_ENTITY> builder) {
         requireNonNulls(field, builder);
         final String columnName = jsonField(project, field.getIdentifier());
-        final ReferenceForeignKeyFieldTrait<ENTITY, D, FK_ENTITY> fkField = (ReferenceForeignKeyFieldTrait< ENTITY, D, FK_ENTITY>) field; // Workaround bugg
+        final HasFinder<ENTITY, D, FK_ENTITY> fkField = (HasFinder< ENTITY, D, FK_ENTITY>) field; // Workaround bugg
         return put(columnName, fkField::findFrom, builder);
     }
 
@@ -151,7 +221,7 @@ public final class JsonEncoder<ENTITY> {
 
     public JsonEncoder<ENTITY> remove(FieldTrait field) {
         requireNonNull(field);
-        getters.remove(jsonField(project, field.getIdentifier()));
+        getters.remove(jsonField(project, field.identifier()));
         return this;
     }
 
@@ -222,7 +292,7 @@ public final class JsonEncoder<ENTITY> {
         manager.fields()
             .filter(ReferenceFieldTrait.class::isInstance)
             .map(f -> castReferenceFieldTrait(manager, f))
-            .map(ReferenceFieldTrait::getIdentifier)
+            .map(ReferenceFieldTrait::identifier)
             .forEachOrdered(fi -> {
                 formatter.put(
                     jsonField(projectOf(manager), fi),
@@ -251,15 +321,15 @@ public final class JsonEncoder<ENTITY> {
         final JsonEncoder<ENTITY> formatter = noneOf(manager);
 
         final Set<String> fieldNames = Stream.of(fields)
-            .map(FieldTrait::getIdentifier)
+            .map(FieldTrait::identifier)
             .map(FieldIdentifier::columnName)
             .collect(toSet());
 
         manager.fields()
             .filter(ReferenceFieldTrait.class::isInstance)
             .map(f -> castReferenceFieldTrait(manager, f))
-            .filter(f -> fieldNames.contains(f.getIdentifier().columnName()))
-            .map(ReferenceFieldTrait::getIdentifier)
+            .filter(f -> fieldNames.contains(f.identifier().columnName()))
+            .map(ReferenceFieldTrait::identifier)
             .forEachOrdered(fi
                 -> formatter.put(
                     jsonField(projectOf(manager), fi),

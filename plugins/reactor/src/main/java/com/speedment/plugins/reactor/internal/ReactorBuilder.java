@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import static java.util.stream.Collectors.toList;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Builder class for creating new {@link Reactor} instances.
@@ -88,7 +89,7 @@ public final class ReactorBuilder<ENTITY, T extends Comparable<T>>
         final AtomicLong total = new AtomicLong();
 
         final String managerName = manager.getTable().getName();
-        final String fieldName = idField.getIdentifier().columnName();
+        final String fieldName = idField.identifier().columnName();
 
         final Timer timer = new Timer();
         final TimerTask task = new TimerTask() {

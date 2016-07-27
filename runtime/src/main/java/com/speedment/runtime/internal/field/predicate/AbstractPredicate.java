@@ -17,19 +17,21 @@
 package com.speedment.runtime.internal.field.predicate;
 
 import com.speedment.runtime.field.predicate.trait.HasNegated;
-import com.speedment.runtime.internal.field.predicate.AbstractCombinedBasePredicate.AndCombinedBasePredicate;
-import com.speedment.runtime.internal.field.predicate.AbstractCombinedBasePredicate.OrCombinedBasePredicate;
+import com.speedment.runtime.internal.field.predicate.AbstractCombinedPredicate.AndCombinedBasePredicate;
+import com.speedment.runtime.internal.field.predicate.AbstractCombinedPredicate.OrCombinedBasePredicate;
 
 import java.util.function.Predicate;
 
 import static java.util.Objects.requireNonNull;
 
 /**
- * This class represents a BasePredicate that is used to build up higher orders
+ * This class represents a Predicate that is used to build up higher orders
  * of predicates.
  *
  * @param <T>  the type being evaluated
+ * 
  * @author  Per Minborg
+ * @since   2.1.0
  */
 abstract class AbstractPredicate<T> implements HasNegated, Predicate<T> {
 
@@ -67,5 +69,13 @@ abstract class AbstractPredicate<T> implements HasNegated, Predicate<T> {
         return testWithoutNegation(instance) ^ negated;
     }
     
+    /**
+     * Tests this predicate without applying negation. If the predicate
+     * has been negated, the result from this method will be negated
+     * afterwards.
+     * 
+     * @param instance  the instance to test
+     * @return          the result of the test (without negation)
+     */
     protected abstract boolean testWithoutNegation(T instance);
 }

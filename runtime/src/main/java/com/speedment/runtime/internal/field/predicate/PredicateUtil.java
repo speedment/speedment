@@ -17,11 +17,11 @@
 package com.speedment.runtime.internal.field.predicate;
 
 import com.speedment.common.tuple.Tuple;
-import com.speedment.runtime.field.Inclusion;
-import com.speedment.runtime.field.predicate.SpeedmentPredicate;
+import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.internal.util.Cast;
 
 import java.util.Set;
+import com.speedment.runtime.field.predicate.FieldPredicate;
 
 /**
  *
@@ -30,23 +30,23 @@ import java.util.Set;
  */
 public final class PredicateUtil {
 
-    public static Object getFirstOperandAsRaw(SpeedmentPredicate<?> p) {
+    public static Object getFirstOperandAsRaw(FieldPredicate<?> p) {
         return Cast.castOrFail(p, Tuple.class).get(0);
     }
 
-    public static Set<?> getFirstOperandAsRawSet(SpeedmentPredicate<?> p) {
+    public static Set<?> getFirstOperandAsRawSet(FieldPredicate<?> p) {
         return Cast.castOrFail(getFirstOperandAsRaw(p), Set.class);
     }
 
-    public static Object getSecondOperand(SpeedmentPredicate<?> p) {
+    public static Object getSecondOperand(FieldPredicate<?> p) {
         return Cast.castOrFail(p, Tuple.class).get(1);
     }
 
-    public static Object getThirdOperand(SpeedmentPredicate<?> p) {
+    public static Object getThirdOperand(FieldPredicate<?> p) {
         return Cast.castOrFail(p, Tuple.class).get(2);
     }
 
-    public static Inclusion getInclusionOperand(SpeedmentPredicate<?> p) {
+    public static Inclusion getInclusionOperand(FieldPredicate<?> p) {
         return Cast.castOrFail(p, BetweenPredicate.class).getInclusion();
     }
 

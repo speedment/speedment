@@ -17,7 +17,7 @@
 package com.speedment.runtime.field.method;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.field.trait.FieldTrait;
+import com.speedment.runtime.field.trait.HasReferenceValue;
 
 import java.util.function.UnaryOperator;
 
@@ -25,6 +25,7 @@ import java.util.function.UnaryOperator;
  * Represents a set-operation with all the metadata contained.
  * 
  * @param <ENTITY>  entity type
+ * @param <D>       database type
  * @param <V>       column value type
  * 
  * @author  Emil Forslund
@@ -32,14 +33,14 @@ import java.util.function.UnaryOperator;
  * @since   2.2.0
  */
 @Api(version = "3.0")
-public interface SetToReference<ENTITY, V> extends UnaryOperator<ENTITY> {
+public interface SetToReference<ENTITY, D, V> extends UnaryOperator<ENTITY> {
 
     /**
      * Returns the field that this setter sets.
      * 
      * @return  the field
      */
-    FieldTrait getField();
+    HasReferenceValue<ENTITY, D, V> getField();
     
     /**
      * Returns the value that this setter will set the field to when applied.

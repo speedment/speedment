@@ -16,8 +16,7 @@
  */
 package com.speedment.runtime.internal.field.comparator;
 
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
-
+import com.speedment.runtime.field.trait.HasReferenceValue;
 import java.util.Comparator;
 
 /**
@@ -36,7 +35,7 @@ public interface ReferenceFieldComparator<ENTITY, D, V extends Comparable<? supe
      *
      * @return  the compared field
      */
-    ReferenceFieldTrait<ENTITY, D, V> getField();
+    HasReferenceValue<ENTITY, D, V> getField();
 
     /**
      * Returns if this {@code Comparator} is reversed.

@@ -23,9 +23,7 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.field.trait.ComparableFieldTrait;
-import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.stream.StreamDecorator;
 
 import java.util.Optional;
@@ -104,7 +102,7 @@ public interface Manager<ENTITY> {
      *
      * @return a stream fo all fields
      */
-    Stream<FieldTrait> fields();
+    Stream<Field<ENTITY>> fields();
 
     /**
      * Returns a stream of the fields that are included in the primary key of
@@ -112,7 +110,7 @@ public interface Manager<ENTITY> {
      *
      * @return the primary key fields
      */
-    Stream<FieldTrait> primaryKeyFields();
+    Stream<Field<ENTITY>> primaryKeyFields();
 
     // Data source metadata
     /**
@@ -371,17 +369,13 @@ public interface Manager<ENTITY> {
      * several entities match, then an arbitrary matching entity will be
      * returned.
      *
-     * @param <D> the database type
      * @param <V> value type
-     * @param <F> the field type
      * @param field to use
      * @param value to match with the field
      * @return An Optional entity where the given field matches the given value
      */
-    <D, V extends Comparable<? super V>, F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>>
-        Optional<ENTITY> findAny(F field, V value);
+    <V extends Comparable<? super V>> Optional<ENTITY> findAny(Field<ENTITY> field, V value);
 
-    // TBI: Shall we expose this method in the API?
     // Persistence
     /**
      * Persists the provided entity to the underlying database and returns a

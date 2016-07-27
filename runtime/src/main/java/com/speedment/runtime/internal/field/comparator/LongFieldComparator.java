@@ -16,9 +16,9 @@
  */
 package com.speedment.runtime.internal.field.comparator;
 
-import com.speedment.runtime.field.trait.LongFieldTrait;
 
 import java.util.Comparator;
+import com.speedment.runtime.field.trait.HasLongValue;
 
 /**
  *
@@ -35,7 +35,7 @@ public interface LongFieldComparator<ENTITY, D> extends Comparator<ENTITY> {
      *
      * @return  the compared field
      */
-    LongFieldTrait<ENTITY, D> getField();
+    HasLongValue<ENTITY, D> getField();
 
     /**
      * Returns if this {@code Comparator} is reversed.

@@ -17,13 +17,11 @@
 package com.speedment.runtime.field;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
-import com.speedment.runtime.field.trait.ReferenceForeignKeyFieldTrait;
+import com.speedment.runtime.field.trait.HasFinder;
 
 /**
- * A field that represents a value that implements the 
- * {@link ReferenceFieldTrait} and the {ReferenceForeignKeyFieldTrait}.
+ * A field that represents an object value with a foreign key to another
+ * field.
  * 
  * @param <ENTITY>     the entity type
  * @param <D>          the database type
@@ -39,6 +37,5 @@ import com.speedment.runtime.field.trait.ReferenceForeignKeyFieldTrait;
  */
 @Api(version = "3.0")
 public interface ReferenceForeignKeyField<ENTITY, D, V, FK_ENTITY> extends
-    FieldTrait<ENTITY>, 
-    ReferenceFieldTrait<ENTITY, D, V>,
-    ReferenceForeignKeyFieldTrait<ENTITY, FK_ENTITY> {}
+    ReferenceField<ENTITY, D, V>, 
+    HasFinder<ENTITY, FK_ENTITY> {}

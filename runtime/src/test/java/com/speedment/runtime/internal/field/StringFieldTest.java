@@ -21,9 +21,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static com.speedment.runtime.internal.field.Entity.NAME;
-import static com.speedment.runtime.internal.field.predicate.impl.string.AbstractStringPredicate.ENDS_WITH_PREDICATE;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -66,9 +64,7 @@ public class StringFieldTest extends BaseFieldTest {
 
     @Test
     public void endsWith() throws Exception {
-
-        assertTrue(ENDS_WITH_PREDICATE.test("f", "abcdEf"));
-
+        
         final List<Entity> expected = collect(e -> e.getName() != null && e.getName().endsWith("f"));
         final List<Entity> result = collect(NAME.endsWith("f"));
 

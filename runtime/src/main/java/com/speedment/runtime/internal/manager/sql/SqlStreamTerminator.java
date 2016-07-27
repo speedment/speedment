@@ -19,10 +19,9 @@ package com.speedment.runtime.internal.manager.sql;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.db.AsynchronousQueryResult;
-import com.speedment.runtime.field.predicate.SpeedmentPredicate;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
 import com.speedment.runtime.field.predicate.SqlPredicateFragment;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.internal.stream.builder.pipeline.DoublePipeline;
 import com.speedment.runtime.internal.stream.builder.pipeline.IntPipeline;
 import com.speedment.runtime.internal.stream.builder.pipeline.LongPipeline;
@@ -40,10 +39,11 @@ import java.util.function.Predicate;
 
 import static com.speedment.runtime.stream.action.Property.SIZE;
 import static com.speedment.runtime.stream.action.Verb.PRESERVE;
+import static java.util.stream.Collectors.toList;
+import com.speedment.runtime.field.predicate.FieldPredicate;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -70,7 +70,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
     @Override
     public <P extends Pipeline> P optimize(P initialPipeline) {
         requireNonNull(initialPipeline);
-        final List<SpeedmentPredicate<ENTITY, ?, ?>> andPredicateBuilders = StreamTerminatorUtil.topLevelAndPredicates(initialPipeline);
+        final List<FieldPredicate<ENTITY>> andPredicateBuilders = StreamTerminatorUtil.topLevelAndPredicates(initialPipeline);
         
         if (!andPredicateBuilders.isEmpty()) {
             modifySource(andPredicateBuilders, asynchronousQueryResult);
@@ -79,7 +79,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         return getStreamDecorator().apply(initialPipeline);
     }
     
-    public void modifySource(final List<SpeedmentPredicate<ENTITY, ?, ?>> predicateBuilders, AsynchronousQueryResult<ENTITY> qr) {
+    public void modifySource(final List<FieldPredicate<ENTITY>> predicateBuilders, AsynchronousQueryResult<ENTITY> qr) {
         requireNonNull(predicateBuilders);
         requireNonNull(qr);
         
@@ -90,9 +90,8 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         
         final List<TypeMapper<Object, Object>> typeMappers = predicateBuilders
                 .stream()
-                .map(SpeedmentPredicate::getReferenceField)
-                .map(ReferenceFieldTrait.class::cast)
-                .map(ReferenceFieldTrait<ENTITY, ?, ?>::typeMapper)
+                .map(FieldPredicate::getField)
+                .map(Field<ENTITY>::typeMapper)
                 .map(tm -> {
                     @SuppressWarnings("unchecked")
                     final TypeMapper<Object, Object> tm2 = (TypeMapper<Object, Object>) tm;

@@ -21,9 +21,6 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.component.StreamSupplierComponent;
-import com.speedment.runtime.field.trait.ComparableFieldTrait;
-import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
 import com.speedment.runtime.manager.Manager;
 import com.speedment.runtime.stream.StreamDecorator;
 
@@ -32,7 +29,9 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.injector.State.RESOLVED;
-import static java.util.Objects.requireNonNull;
+import com.speedment.runtime.exception.SpeedmentException;
+import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.trait.HasComparableOperators;
 
 /**
  *
@@ -57,12 +56,15 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
-    public <D, V extends Comparable<? super V>, 
-    F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>> 
-    Optional<ENTITY> findAny(F field, V value) {
-        
-        requireNonNull(field);
-        return streamSupplierComponent
-                .findAny(getEntityClass(), field, value);
+    public <V extends Comparable<? super V>> Optional<ENTITY> findAny(Field<ENTITY> field, V value) {
+        try {
+            @SuppressWarnings("unchecked")
+            final HasComparableOperators<ENTITY, V> casted = (HasComparableOperators<ENTITY, V>) field;
+            return streamSupplierComponent.findAny(getEntityClass(), casted, value);
+        } catch (final ClassCastException ex) {
+            throw new SpeedmentException(
+                "Field " + field + " was not of the expected type.", ex
+            );
+        }
     }
 }

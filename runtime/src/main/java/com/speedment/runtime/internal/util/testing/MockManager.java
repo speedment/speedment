@@ -16,9 +16,7 @@
  */
 package com.speedment.runtime.internal.util.testing;
 
-import com.speedment.runtime.field.trait.ComparableFieldTrait;
-import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.manager.Manager;
 import com.speedment.runtime.stream.StreamDecorator;
 
@@ -112,9 +110,8 @@ public interface MockManager<ENTITY> extends Manager<ENTITY> {
      * @param finder  the new finder supplier
      * @return        this instance
      */
-    public <D, V extends Comparable<? super V>, 
-    F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>> 
-    MockManager<ENTITY> setFinder(BiFunction<F, V, Optional<ENTITY>> finder);
+    <V extends Comparable<? super V>> MockManager<ENTITY> 
+    setFinder(BiFunction<Field<ENTITY>, V, Optional<ENTITY>> finder);
 
     /**
      * Wraps the specified manager in a new {@link MockManager}.

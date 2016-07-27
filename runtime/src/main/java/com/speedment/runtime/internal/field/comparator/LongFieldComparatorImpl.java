@@ -16,8 +16,10 @@
  */
 package com.speedment.runtime.internal.field.comparator;
 
-import com.speedment.runtime.field.trait.LongFieldTrait;
 import java.util.Comparator;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import com.speedment.runtime.field.trait.HasLongValue;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -31,15 +33,15 @@ import static java.util.Objects.requireNonNull;
  */
 public final class LongFieldComparatorImpl<ENTITY, D> implements LongFieldComparator<ENTITY, D> {
 
-    private final LongFieldTrait<ENTITY, D> longField;
+    private final HasLongValue<ENTITY, D> longField;
     private boolean reversed;
 
-    public LongFieldComparatorImpl(LongFieldTrait<ENTITY, D> longField) {
+    public LongFieldComparatorImpl(HasLongValue<ENTITY, D> longField) {
         this.longField = requireNonNull(longField);
     }
     
     @Override
-    public LongFieldTrait<ENTITY, D> getField() {
+    public HasLongValue<ENTITY, D> getField() {
         return longField;
     }
 

@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.internal.stream;
 
-import com.speedment.runtime.field.predicate.SpeedmentPredicate;
 import com.speedment.runtime.stream.HasParallelStrategy;
 import com.speedment.runtime.stream.Pipeline;
 import com.speedment.runtime.stream.StreamDecorator;
@@ -24,6 +23,7 @@ import com.speedment.runtime.stream.StreamDecorator;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
+import com.speedment.runtime.field.predicate.FieldPredicate;
 
 /**
  *
@@ -47,7 +47,7 @@ public final class ComposedStreamDecorator implements StreamDecorator {
     public <ENTITY, S extends Stream<ENTITY>> S applyOnFinal(S stream) {
         S s = stream;
 
-        for (StreamDecorator sd : decorators) {
+        for (final StreamDecorator sd : decorators) {
             s = sd.applyOnFinal(s);
         }
 
@@ -55,10 +55,10 @@ public final class ComposedStreamDecorator implements StreamDecorator {
     }
 
     @Override
-    public <ENTITY, D, V> SpeedmentPredicate<ENTITY, D, V> apply(SpeedmentPredicate<ENTITY, D, V> predicate) {
-        SpeedmentPredicate<ENTITY, D, V> s = predicate;
+    public <ENTITY> FieldPredicate<ENTITY> apply(FieldPredicate<ENTITY> predicate) {
+        FieldPredicate<ENTITY> s = predicate;
 
-        for (StreamDecorator sd : decorators) {
+        for (final StreamDecorator sd : decorators) {
             s = sd.apply(s);
         }
 
@@ -69,7 +69,7 @@ public final class ComposedStreamDecorator implements StreamDecorator {
     public <P extends Pipeline> P apply(P pipeline) {
         P p = pipeline;
 
-        for (StreamDecorator sd : decorators) {
+        for (final StreamDecorator sd : decorators) {
             p = sd.apply(p);
         }
 
@@ -80,9 +80,10 @@ public final class ComposedStreamDecorator implements StreamDecorator {
     public <ENTITY, S extends Stream<ENTITY>> S applyOnInitial(S stream) {
         S s = stream;
 
-        for (StreamDecorator sd : decorators) {
+        for (final StreamDecorator sd : decorators) {
             s = sd.applyOnInitial(s);
         }
+        
         return s;
     }
 
@@ -90,11 +91,10 @@ public final class ComposedStreamDecorator implements StreamDecorator {
     public <H extends HasParallelStrategy> H apply(H hasParallelStrategy) {
         H h = hasParallelStrategy;
 
-        for (StreamDecorator sd : decorators) {
+        for (final StreamDecorator sd : decorators) {
             h = sd.apply(h);
         }
+        
         return h;
-
     }
-
 }
