@@ -16,9 +16,14 @@
  */
 package com.speedment.runtime.internal.field.predicate.reference;
 
-import static com.speedment.runtime.field.predicate.PredicateType.IS_NULL;
-import com.speedment.runtime.field.trait.HasReferenceValue;
+import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
+
+import java.util.Set;
+
+import static com.speedment.runtime.field.predicate.PredicateType.IN;
+import com.speedment.runtime.field.trait.HasReferenceValue;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -29,10 +34,22 @@ import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
  * @author  Per Minborg
  * @since   2.2.0
  */
-public final class ReferenceIsNullPredicate<ENTITY, D, V>
-        extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>> {
-    
-    public ReferenceIsNullPredicate(HasReferenceValue<ENTITY, D, V> field) {
-        super(IS_NULL, field, entity -> entity == null || field.get(entity) == null);
+public final class ReferenceNotInPredicate<ENTITY, D, V extends Comparable<? super V>>
+        extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
+        implements Tuple1<Set<V>> {
+
+    private final Set<V> set;
+
+    public ReferenceNotInPredicate(HasReferenceValue<ENTITY, D, V> field, Set<V> values) {
+        super(IN, field, entity -> {
+            final V value = field.get(entity);
+            return value != null && !values.contains(field.get(entity));
+        });
+        this.set = requireNonNull(values);
+    }
+
+    @Override
+    public Set<V> get0() {
+        return set;
     }
 }

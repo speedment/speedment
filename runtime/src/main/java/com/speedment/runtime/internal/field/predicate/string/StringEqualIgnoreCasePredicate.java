@@ -19,7 +19,6 @@ package com.speedment.runtime.internal.field.predicate.string;
 
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasReferenceValue;
-import java.util.Objects;
 
 /**
  *
@@ -30,7 +29,14 @@ import java.util.Objects;
  * @since   2.2.0
  */
 public final class StringEqualIgnoreCasePredicate<ENTITY, D> extends AbstractStringPredicate<ENTITY, D> {
-    public StringEqualIgnoreCasePredicate(HasReferenceValue<ENTITY, D, String> field, String operand) {
-        super(PredicateType.EQUAL_IGNORE_CASE, field, operand, (v, f) -> Objects.equals(v, f) || (f != null && f.equalsIgnoreCase(v)));
+    public StringEqualIgnoreCasePredicate(HasReferenceValue<ENTITY, D, String> field, String str) {
+        super(PredicateType.EQUAL_IGNORE_CASE, field, str, entity -> {
+            final String fieldValue = field.get(entity);
+            if (fieldValue == null && str == null) {
+                return true;
+            } else if (fieldValue == null || str == null) {
+                return false;
+            } else return fieldValue.equalsIgnoreCase(str);
+        });
     }
 }

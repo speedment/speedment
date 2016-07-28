@@ -16,6 +16,7 @@ import java.util.Comparator;
 import java.util.Set;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Predicate;
 
 /**
  *
@@ -122,5 +123,30 @@ public final class LongFieldImpl<ENTITY, D> implements LongField<ENTITY, D> {
     @Override
     public FieldPredicate<ENTITY> in(Set<Long> values) {
         return new LongInPredicate<>(this, values);
+    }
+
+    @Override
+    public Predicate<ENTITY> notEqual(Long value) {
+        return new LongEqualPredicate<>(this, value).negate();
+    }
+
+    @Override
+    public Predicate<ENTITY> lessThan(Long value) {
+        return new LongGreaterOrEqualPredicate<>(this, value).negate();
+    }
+
+    @Override
+    public Predicate<ENTITY> lessOrEqual(Long value) {
+        return new LongGreaterThanPredicate<>(this, value).negate();
+    }
+
+    @Override
+    public Predicate<ENTITY> notBetween(Long start, Long end, Inclusion inclusion) {
+        return new LongBetweenPredicate<>(this, start, end, inclusion).negate();
+    }
+
+    @Override
+    public Predicate<ENTITY> notIn(Set<Long> values) {
+        return new LongInPredicate<>(this, values).negate();
     }
 }

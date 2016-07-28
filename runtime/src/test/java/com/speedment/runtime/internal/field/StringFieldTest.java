@@ -90,7 +90,7 @@ public class StringFieldTest extends BaseFieldTest {
 
     @Test
     public void isEmpty() throws Exception {
-        final List<Entity> expected = collect(e -> e.getName() != null && e.getName().isEmpty());
+        final List<Entity> expected = collect(e -> e.getName() == null || e.getName().isEmpty());
         final List<Entity> result = collect(NAME.isEmpty());
         assertEquals(expected, result);
     }

@@ -16,9 +16,11 @@
  */
 package com.speedment.runtime.internal.field.predicate.reference;
 
-import static com.speedment.runtime.field.predicate.PredicateType.IS_NULL;
-import com.speedment.runtime.field.trait.HasReferenceValue;
+import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
+import static com.speedment.runtime.field.predicate.PredicateType.LESS_THAN;
+import com.speedment.runtime.field.trait.HasReferenceValue;
+
 
 /**
  *
@@ -29,10 +31,25 @@ import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
  * @author  Per Minborg
  * @since   2.2.0
  */
-public final class ReferenceIsNullPredicate<ENTITY, D, V>
-        extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>> {
+public final class ReferenceLessThanPredicate<ENTITY, D, V extends Comparable<? super V>>
+        extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
+        implements Tuple1<V> {
     
-    public ReferenceIsNullPredicate(HasReferenceValue<ENTITY, D, V> field) {
-        super(IS_NULL, field, entity -> entity == null || field.get(entity) == null);
+    private final V value;
+
+    public ReferenceLessThanPredicate(HasReferenceValue<ENTITY, D, V> field, V value) {
+        super(LESS_THAN, field, entity -> {
+            final V fieldValue = field.get(entity);
+            if (fieldValue == null || value == null) {
+                return false;
+            } else return fieldValue.compareTo(value) < 0;
+        });
+        
+        this.value = value;
+    }
+
+    @Override
+    public V get0() {
+        return value;
     }
 }

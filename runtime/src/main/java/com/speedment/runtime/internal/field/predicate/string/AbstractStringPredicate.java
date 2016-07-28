@@ -20,7 +20,7 @@ import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasReferenceValue;
 import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
-import static java.util.Objects.requireNonNull;
+import java.util.function.Predicate;
 
 /**
  *
@@ -32,25 +32,17 @@ extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, String>>
 implements Tuple1<String> {
 
     private final String operand;
-    private final HasReferenceValue<ENTITY, D, String> field;
 
     protected AbstractStringPredicate(PredicateType predicateType,
         HasReferenceValue<ENTITY, D, String> field,
         String operand,
-        BiStringPredicate innerPredicate) {
-        super(predicateType, field, entity -> innerPredicate.test(field.get(entity), operand));
-        
+        Predicate<ENTITY> tester) {
+        super(predicateType, field, tester);
         this.operand = operand;
-        this.field   = requireNonNull(field);
     }
 
     @Override
     public String get0() {
         return operand;
-    }
-
-    @FunctionalInterface
-    protected interface BiStringPredicate {
-        boolean test(String first, String second);
     }
 }

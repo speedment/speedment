@@ -40,6 +40,11 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.function.Predicate;
 import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.internal.field.predicate.reference.ReferenceLessOrEqualPredicate;
+import com.speedment.runtime.internal.field.predicate.reference.ReferenceLessThanPredicate;
+import com.speedment.runtime.internal.field.predicate.reference.ReferenceNotBetweenPredicate;
+import com.speedment.runtime.internal.field.predicate.reference.ReferenceNotEqualPredicate;
+import com.speedment.runtime.internal.field.predicate.reference.ReferenceNotInPredicate;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -160,6 +165,31 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     @Override
     public Predicate<ENTITY> in(Set<String> values) {
         return new ReferenceInPredicate<>(this, values);
+    }
+    
+    @Override
+    public Predicate<ENTITY> notEqual(String value) {
+        return new ReferenceNotEqualPredicate<>(this, value);
+    }
+
+    @Override
+    public Predicate<ENTITY> lessThan(String value) {
+        return new ReferenceLessThanPredicate<>(this, value);
+    }
+
+    @Override
+    public Predicate<ENTITY> lessOrEqual(String value) {
+        return new ReferenceLessOrEqualPredicate<>(this, value);
+    }
+
+    @Override
+    public Predicate<ENTITY> notBetween(String start, String end, Inclusion inclusion) {
+        return new ReferenceNotBetweenPredicate<>(this, start, end, inclusion);
+    }
+
+    @Override
+    public Predicate<ENTITY> notIn(Set<String> values) {
+        return new ReferenceNotInPredicate<>(this, values);
     }
 
     @Override

@@ -16,9 +16,12 @@
  */
 package com.speedment.runtime.internal.field.predicate.reference;
 
-import static com.speedment.runtime.field.predicate.PredicateType.IS_NULL;
-import com.speedment.runtime.field.trait.HasReferenceValue;
+import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
+
+import static com.speedment.runtime.field.predicate.PredicateType.NOT_EQUAL;
+import com.speedment.runtime.field.trait.HasReferenceValue;
+import java.util.Objects;
 
 /**
  *
@@ -29,10 +32,19 @@ import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
  * @author  Per Minborg
  * @since   2.2.0
  */
-public final class ReferenceIsNullPredicate<ENTITY, D, V>
-        extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>> {
+public final class ReferenceNotEqualPredicate<ENTITY, D, V extends Comparable<? super V>>
+        extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
+        implements Tuple1<V> {
+
+    private final V value;
     
-    public ReferenceIsNullPredicate(HasReferenceValue<ENTITY, D, V> field) {
-        super(IS_NULL, field, entity -> entity == null || field.get(entity) == null);
+    public ReferenceNotEqualPredicate(HasReferenceValue<ENTITY, D, V> field, V value) {
+        super(NOT_EQUAL, field, entity -> !Objects.equals(field.get(entity), value));
+        this.value = value;
+    }
+
+    @Override
+    public V get0() {
+        return value;
     }
 }

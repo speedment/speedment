@@ -17,6 +17,7 @@
 package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.predicate.Inclusion;
 import java.util.Comparator;
 import java.util.Set;
@@ -36,7 +37,7 @@ import static java.util.stream.Collectors.toSet;
  * @since   2.2.0
  */
 @Api(version = "3.0")
-public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>> {
+public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>> extends Field<ENTITY> {
 
     /**
      * Returns a {@link Comparator} that will compare to this field using this
@@ -86,44 +87,46 @@ public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>not equal</em> to the given value
      */
-    default Predicate<ENTITY> notEqual(V value) {
-        return equal(value).negate();
-    }
+    Predicate<ENTITY> notEqual(V value);
     
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
      * {@code true}, if and only if this Field is <em>less than</em> the given
      * value.
+     * <p>
+     * If the specified value is {@code null}, the returned predicate will
+     * always return {@code false}.
      *
      * @param value to compare
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>less than</em> the given value
      */
-    default Predicate<ENTITY> lessThan(V value) {
-        return greaterOrEqual(value).negate();
-    }
+    Predicate<ENTITY> lessThan(V value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
      * {@code true}, if and only if this Field is <em>less than or equal</em>
      * to the given value.
+     * <p>
+     * If the specified value is {@code null}, the returned predicate will
+     * only return {@code true} for {@code null} values.
      *
      * @param value to compare
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>less than or equal</em> to the given value
      */
-    default Predicate<ENTITY> lessOrEqual(V value) {
-        return greaterThan(value).negate();
-    }
+    Predicate<ENTITY> lessOrEqual(V value);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
      * {@code true}, if and only if this Field is <em>greater than</em>
      * the given value.
+     * If the specified value is {@code null}, the returned predicate will
+     * always return {@code false}.
      *
-     * @param value to compare
-     * @return a Predicate that will evaluate to {@code true}, if and only if
-     * this Field is <em>greater than</em> the given value
+     * @param value  to compare
+     * @return       a Predicate that will evaluate to {@code true}, if and only if
+     *               this Field is <em>greater than</em> the given value
      */
     Predicate<ENTITY> greaterThan(V value);
 
@@ -131,10 +134,13 @@ public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
      * Returns a {@link java.util.function.Predicate} that will evaluate to
      * {@code true}, if and only if this Field is <em>greater than or equal</em>
      * to the given value.
+     * <p>
+     * If the specified value is {@code null}, the returned predicate will
+     * only return {@code true} for {@code null} values.
      *
-     * @param value to compare
-     * @return a Predicate that will evaluate to {@code true}, if and only if
-     * this Field is <em>greater than or equal</em> to the given value
+     * @param value  to compare
+     * @return       a Predicate that will evaluate to {@code true}, if and only if
+     *               this Field is <em>greater than or equal</em> to the given value
      */
     Predicate<ENTITY> greaterOrEqual(V value);
 
@@ -143,14 +149,14 @@ public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
      * {@code true}, if and only if this Field is <em>between</em>
      * the given values (inclusive the start value but exclusive the end value).
      * <p>
-     * N.B. if the start value is greater than the end value, then the returned
-     * Predicate will always evaluate to {@code false}
+     * N.B. if the start value is greater or equal to the end value, then the
+     * returned Predicate will always evaluate to {@code false}.
      *
-     * @param start to compare as a start value
-     * @param end to compare as an end value
-     * @return a Predicate that will evaluate to {@code true}, if and only if
-     * this Field is <em>between</em> the given values (inclusive the start
-     * value but exclusive the end value)
+     * @param start  to compare as a start value
+     * @param end    to compare as an end value
+     * @return       a Predicate that will evaluate to {@code true}, if and only if
+     *               this Field is <em>between</em> the given values (inclusive the 
+     *               start value but exclusive the end value)
      */
     default Predicate<ENTITY> between(V start, V end) {
         return between(start, end, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
@@ -192,7 +198,7 @@ public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
      * value but exclusive the end value)
      */
     default Predicate<ENTITY> notBetween(V start, V end) {
-        return between(start, end).negate();
+        return notBetween(start, end, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
     }
 
     /**
@@ -214,9 +220,7 @@ public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
      * Inclusion parameter into account when determining if either of the end
      * points shall be included in the Field range or not
      */
-    default Predicate<ENTITY> notBetween(V start, V end, Inclusion inclusion) {
-        return between(start, end, inclusion).negate();
-    }
+    Predicate<ENTITY> notBetween(V start, V end, Inclusion inclusion);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -262,7 +266,7 @@ public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
      */
     @SuppressWarnings("unchecked")
     default Predicate<ENTITY> notIn(V... values) {
-        return in(values).negate();
+        return notIn(Stream.of(values).collect(toSet()));
     }
 
     /**
@@ -276,7 +280,5 @@ public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>not in</em> the given Set
      */
-    default Predicate<ENTITY> notIn(Set<V> values) {
-        return in(values).negate();
-    }
+    Predicate<ENTITY> notIn(Set<V> values);
 }
