@@ -50,4 +50,14 @@ public interface TypeTokenGenerator {
      * @return        the codegen type
      */
     Type typeOf(Column column);
+    
+    /**
+     * Returns the same thing as {@link #typeOf(com.speedment.runtime.config.Column)},
+     * except if the column is mapping to an primitive type, in which case the wrapper
+     * type will be returned instead.
+     * 
+     * @param column  the column
+     * @return        the codegen type (for the wrapper if primitive)
+     */
+    Type wrapperOf(Column column);
 }

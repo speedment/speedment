@@ -28,7 +28,6 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.field.FieldTrait;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -39,6 +38,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
+import com.speedment.common.codegen.internal.model.constant.DefaultType;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.OBJECT;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.VOID;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
@@ -109,14 +109,13 @@ public final class GenerateMethodBodyUtil {
         };
     }
 
-    public static Method generateFields(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        return Method.of(FIELDS_METHOD, Type.of(Stream.class).add(Generic.of().add(Type.of(FieldTrait.class))))
-            .public_().add(OVERRIDE)
-            .add(generateFieldsBody(support, file, columnsSupplier));
-    }
-
-    public static Method generatePrimaryKeyFields(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        return Method.of(PRIMARY_KEYS_FIELDS_METHOD, Type.of(Stream.class).add(Generic.of().add(Type.of(FieldTrait.class))))
+    public static Method generateFields(TranslatorSupport<Table> support, File file, String methodName, Supplier<Stream<? extends Column>> columnsSupplier) {
+        return Method.of(methodName, 
+                DefaultType.stream(
+                    Type.of(com.speedment.runtime.field.Field.class)
+                        .add(Generic.of(support.entityType()))
+                )
+            )
             .public_().add(OVERRIDE)
             .add(generateFieldsBody(support, file, columnsSupplier));
     }

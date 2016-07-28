@@ -31,17 +31,10 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.field.ComparableForeignKeyField;
-import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.ReferenceForeignKeyField;
-import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.field.StringForeignKeyField;
-import com.speedment.runtime.internal.field.ComparableReferenceFieldImpl;
-import com.speedment.runtime.internal.field.ComparableReferenceForeignKeyFieldImpl;
-import com.speedment.runtime.internal.field.ReferenceFieldImpl;
 import com.speedment.runtime.internal.field.ReferenceForeignKeyFieldImpl;
-import com.speedment.runtime.internal.field.StringFieldImpl;
 import com.speedment.runtime.internal.field.StringForeignKeyFieldImpl;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 
@@ -53,59 +46,69 @@ import com.speedment.common.injector.Injector;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.typetoken.TypeTokenGenerator;
 import com.speedment.runtime.config.typetoken.TypeToken;
+import com.speedment.runtime.field.ComparableField;
+import com.speedment.runtime.field.LongField;
+import com.speedment.runtime.field.LongForeignKeyField;
+import com.speedment.runtime.field.ReferenceField;
+import com.speedment.runtime.field.StringField;
+import com.speedment.runtime.internal.field.ComparableFieldImpl;
+import com.speedment.runtime.internal.field.ComparableForeignKeyFieldImpl;
+import com.speedment.runtime.internal.field.LongFieldImpl;
+import com.speedment.runtime.internal.field.LongForeignKeyFieldImpl;
+import com.speedment.runtime.internal.field.ReferenceFieldImpl;
+import com.speedment.runtime.internal.field.StringFieldImpl;
 import com.speedment.runtime.util.TypeTokenFactory;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author pemi
+ * @author Per Minborg
  */
 public final class EntityTranslatorSupport {
 
     public static final String CONSUMER_NAME = "consumer";
-    public static final String FIND = "find";
-
-    private EntityTranslatorSupport() {
-        instanceNotAllowed(getClass());
+    public static final String FIND          = "find";
+    
+    private enum FieldType {
+        STRING,
+        LONG,
+        COMPARABLE,
+        REFERENCE
     }
-
+    
     public static class ReferenceFieldType {
 
         public final Type type, implType;
 
         public ReferenceFieldType(Type type, Type implType) {
-            this.type = type;
-            this.implType = implType;
-        }
-    }
-    
-    private static Optional<Class<?>> find(String className) {
-        try {
-            final Class<?> temp = Class.forName(className);
-            return Optional.of(temp);
-        } catch (final ClassNotFoundException ex) {
-            return Optional.empty();
+            this.type     = requireNonNull(type);
+            this.implType = requireNonNull(implType);
         }
     }
 
     public static ReferenceFieldType getReferenceFieldType(
-        File file,
-        Table table,
-        Column column,
-        Type entityType,
-        Injector injector
-    ) {
+            File file,
+            Table table,
+            Column column,
+            Type entityType,
+            Injector injector) {
+        
         requireNonNulls(file, table, column, entityType, injector);
 
         final TypeToken mapping = injector.getOrThrow(TypeTokenGenerator.class).tokenOf(column);
         final Type databaseType = Type.of(column.getDatabaseType());
+        
+        final FieldType fieldType;
+        if (TypeTokenFactory.createStringToken().equals(mapping)) {
+            fieldType = FieldType.STRING;
+        } else if (TypeTokenFactory.create(long.class).equals(mapping)) {
+            fieldType = FieldType.LONG;
+        } else if (mapping.isComparable()) {
+            fieldType = FieldType.COMPARABLE;
+        } else {
+            fieldType = FieldType.REFERENCE;
+        }
 
         return EntityTranslatorSupport.getForeignKey(table, column)
             // If this is a foreign key.
@@ -119,40 +122,62 @@ public final class EntityTranslatorSupport {
 
                 file.add(Import.of(fkType));
 
-                if (TypeTokenFactory.createStringToken().equals(mapping)) {
-                    type = Type.of(StringForeignKeyField.class)
-                        .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(fkType));
+                switch (fieldType) {
+                    case STRING :
+                        type = Type.of(StringForeignKeyField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(fkType));
 
-                    implType = Type.of(StringForeignKeyFieldImpl.class)
-                        .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(fkType));
-                } else if (mapping.isComparable()) {
-                    type = Type.of(ComparableForeignKeyField.class)
-                        .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)))
-                        .add(Generic.of().add(fkType));
+                        implType = Type.of(StringForeignKeyFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(fkType));
+                        break;
+                        
+                    case LONG :
+                        type = Type.of(LongForeignKeyField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(fkType));
 
-                    implType = Type.of(ComparableReferenceForeignKeyFieldImpl.class)
-                        .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)))
-                        .add(Generic.of().add(fkType));
-                } else {
-                    type = Type.of(ReferenceForeignKeyField.class)
-                        .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)))
-                        .add(Generic.of().add(fkType));
+                        implType = Type.of(LongForeignKeyFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(fkType));
+                        break;
+                        
+                    case COMPARABLE :
+                        type = Type.of(ComparableForeignKeyField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(InternalTypeTokenUtil.toType(mapping)))
+                            .add(Generic.of(fkType));
 
-                    implType = Type.of(ReferenceForeignKeyFieldImpl.class)
-                        .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)))
-                        .add(Generic.of().add(fkType));
+                        implType = Type.of(ComparableForeignKeyFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(InternalTypeTokenUtil.toType(mapping)))
+                            .add(Generic.of(fkType));
+                        break;
+                        
+                    case REFERENCE :
+                        type = Type.of(ReferenceForeignKeyField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(InternalTypeTokenUtil.toType(mapping)))
+                            .add(Generic.of(fkType));
+
+                        implType = Type.of(ReferenceForeignKeyFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(InternalTypeTokenUtil.toType(mapping)))
+                            .add(Generic.of(fkType));
+                        
+                        break;
+                    default : throw new UnsupportedOperationException(
+                        "Unknown enum constant '" + fieldType + "'."
+                    );
                 }
 
                 return new ReferenceFieldType(type, implType);
@@ -161,35 +186,54 @@ public final class EntityTranslatorSupport {
             }).orElseGet(() -> {
                 final Type type, implType;
 
-                if (TypeTokenFactory.createStringToken().equals(mapping)) {
-                    type = Type.of(StringField.class)
-                        .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(databaseType));
+                switch (fieldType) {
+                    case STRING :
+                        type = Type.of(StringField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType));
 
-                    implType = Type.of(StringFieldImpl.class)
-                        .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(databaseType));
+                        implType = Type.of(StringFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType));
+                        break;
+                        
+                    case LONG :
+                        type = Type.of(LongField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType));
 
-                } else if (mapping.isComparable()) {
-                    type = Type.of(ComparableField.class)
-                        .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)));
+                        implType = Type.of(LongFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType));
+                        break;
+                        
+                    case COMPARABLE :
+                        type = Type.of(ComparableField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(InternalTypeTokenUtil.toType(mapping)));
 
-                    implType = Type.of(ComparableReferenceFieldImpl.class)
-                        .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)));
-                } else {
-                    type = Type.of(ReferenceField.class)
-                        .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)));
+                        implType = Type.of(ComparableFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(InternalTypeTokenUtil.toType(mapping)));
+                        break;
+                        
+                    case REFERENCE :
+                        type = Type.of(ReferenceField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(InternalTypeTokenUtil.toType(mapping)));
 
-                    implType = Type.of(ReferenceFieldImpl.class)
-                        .add(Generic.of().add(entityType))
-                        .add(Generic.of().add(databaseType))
-                        .add(Generic.of().add(InternalTypeTokenUtil.toType(mapping)));
+                        implType = Type.of(ReferenceFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(InternalTypeTokenUtil.toType(mapping)));
+                        
+                        break;
+                    default : throw new UnsupportedOperationException(
+                        "Unknown enum constant '" + fieldType + "'."
+                    );
                 }
 
                 return new ReferenceFieldType(type, implType);
@@ -202,8 +246,7 @@ public final class EntityTranslatorSupport {
     }
 
     public static Optional<? extends ForeignKeyColumn> getForeignKey(Table table, Column column) {
-        requireNonNull(table);
-        requireNonNull(column);
+        requireNonNulls(table, column);
         return table.foreignKeys()
             .filter(HasEnabled::test)
             .flatMap(ForeignKey::foreignKeyColumns)
@@ -212,14 +255,12 @@ public final class EntityTranslatorSupport {
     }
 
     public static Method dbMethod(String name, Type entityType) {
-        requireNonNull(name);
-        requireNonNull(entityType);
+        requireNonNulls(name, entityType);
         return Method.of(name, entityType).add(Type.of(SpeedmentException.class));
     }
 
     public static Method dbMethodWithListener(String name, Type entityType) {
-        requireNonNull(name);
-        requireNonNull(entityType);
+        requireNonNulls(name, entityType);
         return Method.of(name, entityType).add(Type.of(SpeedmentException.class))
             .add(Field.of(CONSUMER_NAME, Type.of(Consumer.class)
                 .add(Generic.of().add(Type.of(MetaResult.class).add(Generic.of().add(entityType))))
@@ -248,5 +289,9 @@ public final class EntityTranslatorSupport {
 
     public static Method removeWithListener(Type entityType) {
         return EntityTranslatorSupport.dbMethodWithListener("remove", requireNonNull(entityType));
+    }
+    
+    private EntityTranslatorSupport() {
+        instanceNotAllowed(getClass());
     }
 }
