@@ -61,12 +61,6 @@ public final class JavadocView implements Transform<Javadoc, String>,
         requireNonNulls(gen, model);
 
         final int blockWidth = BLOCK_WIDTH - 3 - currentTabLevel(gen);
-        
-        System.out.println("--------------------- Begin Text -------------------------");
-        System.out.println(model.getText());
-        System.out.println("---------------------- End Text --------------------------");
-        
-        
         final String formattedText = formatText(model.getText(), 0, blockWidth).toString();
         
         final Map<String, List<JavadocTag>> tagGroups = model.getTags().stream()
