@@ -23,7 +23,6 @@ import com.speedment.runtime.db.ConnectionUrlGenerator;
 import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.db.DbmsMetadataHandler;
 import com.speedment.runtime.db.DbmsOperationHandler;
-import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
 import com.speedment.runtime.internal.db.AbstractDatabaseNamingConvention;
 import com.speedment.runtime.internal.db.mysql.MySqlDbmsMetadataHandler;
 import com.speedment.runtime.internal.db.mysql.MySqlDbmsOperationHandler;
@@ -35,6 +34,7 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
+import com.speedment.runtime.field.predicate.FieldPredicateView;
 
 
 /**
@@ -105,7 +105,7 @@ public final class MySqlDbmsType extends AbstractDbmsType {
     }
 
     @Override
-    public SpeedmentPredicateView getSpeedmentPredicateView() {
+    public FieldPredicateView getSpeedmentPredicateView() {
         return new MySqlSpeedmentPredicateView(namingConvention);
     }
 

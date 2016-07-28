@@ -25,7 +25,7 @@ import com.speedment.runtime.annotation.Api;
  */
 @FunctionalInterface
 @Api(version = "3.0")
-public interface SpeedmentPredicateView {
+public interface FieldPredicateView {
 
     SqlPredicateFragment transform(FieldPredicate<?> model);
     

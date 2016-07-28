@@ -17,18 +17,18 @@
 package com.speedment.runtime.internal.manager.sql;
 
 import com.speedment.runtime.db.DatabaseNamingConvention;
-import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
 import com.speedment.runtime.field.predicate.SqlPredicateFragment;
 
 import static com.speedment.runtime.internal.field.predicate.PredicateUtil.getFirstOperandAsRaw;
 import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.field.predicate.FieldPredicateView;
 
 /**
  * Created by fdirlikl on 11/18/2015.
  * 
  * @author  Fatih Dirlikli
  */
-public class PostgresSpeedmentPredicateView extends AbstractSpeedmentPredicateView implements SpeedmentPredicateView {
+public class PostgresSpeedmentPredicateView extends AbstractSpeedmentPredicateView implements FieldPredicateView {
 
     public PostgresSpeedmentPredicateView(DatabaseNamingConvention namingConvention) {
         super(namingConvention);

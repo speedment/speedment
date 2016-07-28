@@ -20,7 +20,6 @@ import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
-import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
 import com.speedment.runtime.field.predicate.SqlPredicateFragment;
 
 import java.util.Collection;
@@ -29,12 +28,15 @@ import java.util.Set;
 import static com.speedment.runtime.internal.field.predicate.PredicateUtil.*;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import com.speedment.runtime.field.predicate.FieldPredicateView;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
  * @author Per Minborg
  */
-public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredicateView {
+public abstract class AbstractSpeedmentPredicateView implements FieldPredicateView {
     
     private final DatabaseNamingConvention namingConvention;
     

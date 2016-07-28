@@ -17,18 +17,18 @@
 package com.speedment.runtime.internal.manager.sql;
 
 import com.speedment.runtime.db.DatabaseNamingConvention;
-import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
 import com.speedment.runtime.field.predicate.SqlPredicateFragment;
 
 import static com.speedment.runtime.internal.field.predicate.PredicateUtil.getFirstOperandAsRaw;
 import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.field.predicate.FieldPredicateView;
 
 /**
  *
  * @author Emil Forslund
  */
 @SuppressWarnings("rawtypes")
-public final class MySqlSpeedmentPredicateView extends AbstractSpeedmentPredicateView implements SpeedmentPredicateView {
+public final class MySqlSpeedmentPredicateView extends AbstractSpeedmentPredicateView implements FieldPredicateView {
     
     public MySqlSpeedmentPredicateView(DatabaseNamingConvention namingConvention) {
         super(namingConvention);

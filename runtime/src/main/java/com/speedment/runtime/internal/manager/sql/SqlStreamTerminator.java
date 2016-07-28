@@ -20,7 +20,6 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.db.AsynchronousQueryResult;
 import com.speedment.runtime.field.Field;
-import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
 import com.speedment.runtime.field.predicate.SqlPredicateFragment;
 import com.speedment.runtime.internal.stream.builder.pipeline.DoublePipeline;
 import com.speedment.runtime.internal.stream.builder.pipeline.IntPipeline;
@@ -41,6 +40,10 @@ import static com.speedment.runtime.stream.action.Property.SIZE;
 import static com.speedment.runtime.stream.action.Verb.PRESERVE;
 import static java.util.stream.Collectors.toList;
 import com.speedment.runtime.field.predicate.FieldPredicate;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import com.speedment.runtime.field.predicate.FieldPredicateView;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
@@ -99,7 +102,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
                 })
                 .collect(toList());
 
-        final SpeedmentPredicateView spv = manager.getDbmsType().getSpeedmentPredicateView();
+        final FieldPredicateView spv = manager.getDbmsType().getSpeedmentPredicateView();
         final List<SqlPredicateFragment> fragments = predicateBuilders.stream()
                 .map(spv::transform)
                 .collect(toList());
