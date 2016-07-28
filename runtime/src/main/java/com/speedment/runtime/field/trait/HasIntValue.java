@@ -3,13 +3,13 @@ package com.speedment.runtime.field.trait;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.Field;
-import com.speedment.runtime.field.method.LongGetter;
-import com.speedment.runtime.field.method.LongSetter;
-import com.speedment.runtime.field.method.SetToLong;
-import com.speedment.runtime.internal.field.setter.SetToLongImpl;
+import com.speedment.runtime.field.method.IntGetter;
+import com.speedment.runtime.field.method.IntSetter;
+import com.speedment.runtime.field.method.SetToInt;
+import com.speedment.runtime.internal.field.setter.SetToIntImpl;
 
 /**
- * A representation of an Entity field that is a primitive {@code long} type.
+ * A representation of an Entity field that is a primitive {@code int} type.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type
@@ -18,16 +18,16 @@ import com.speedment.runtime.internal.field.setter.SetToLongImpl;
  * @since  3.0.0
  */
 @Api(version = "3.0")
-public interface HasLongValue<ENTITY, D>  extends Field<ENTITY> {
+public interface HasIntValue<ENTITY, D>  extends Field<ENTITY> {
     
     @Override
-    LongSetter<ENTITY> setter();
+    IntSetter<ENTITY> setter();
     
     @Override
-    LongGetter<ENTITY> getter();
+    IntGetter<ENTITY> getter();
     
     @Override
-    TypeMapper<D, Long> typeMapper();
+    TypeMapper<D, Integer> typeMapper();
     
     /**
      * Gets the value from the Entity field.
@@ -35,8 +35,8 @@ public interface HasLongValue<ENTITY, D>  extends Field<ENTITY> {
      * @param entity the entity
      * @return       the value of the field
      */
-    default long getAsLong(ENTITY entity) {
-        return getter().getAsLong(entity);
+    default int getAsInt(ENTITY entity) {
+        return getter().getAsInt(entity);
     }
     
     /**
@@ -46,8 +46,8 @@ public interface HasLongValue<ENTITY, D>  extends Field<ENTITY> {
      * @param value  to set
      * @return       the entity itself
      */
-    default ENTITY set(ENTITY entity, long value) {
-        return setter().setAsLong(entity, value);
+    default ENTITY set(ENTITY entity, int value) {
+        return setter().setAsInt(entity, value);
     }
     
     /**
@@ -56,7 +56,7 @@ public interface HasLongValue<ENTITY, D>  extends Field<ENTITY> {
      * @param value to set
      * @return      a set-operation with a given value
      */
-    default SetToLong<ENTITY, D> setTo(long value) {
-        return new SetToLongImpl<>(this, value);
+    default SetToInt<ENTITY, D> setTo(int value) {
+        return new SetToIntImpl<>(this, value);
     }
 }

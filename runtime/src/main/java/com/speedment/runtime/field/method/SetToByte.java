@@ -1,7 +1,7 @@
 package com.speedment.runtime.field.method;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.field.trait.HasLongValue;
+import com.speedment.runtime.field.trait.HasByteValue;
 import java.util.function.UnaryOperator;
 
 /**
@@ -14,14 +14,14 @@ import java.util.function.UnaryOperator;
  * @since  3.0.0
  */
 @Api(version = "3.0")
-public interface SetToLong<ENTITY, D>  extends UnaryOperator<ENTITY> {
+public interface SetToByte<ENTITY, D>  extends UnaryOperator<ENTITY> {
     
     /**
      * Returns the field that this setter sets.
      * 
      * @return the field
      */
-    HasLongValue<ENTITY, D> getField();
+    HasByteValue<ENTITY, D> getField();
     
     /**
      * Returns the value that this setter will set in the field when it is
@@ -29,5 +29,5 @@ public interface SetToLong<ENTITY, D>  extends UnaryOperator<ENTITY> {
      * 
      * @return the field
      */
-    long getValue();
+    byte getValue();
 }

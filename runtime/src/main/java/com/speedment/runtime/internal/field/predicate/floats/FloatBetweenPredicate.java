@@ -1,15 +1,15 @@
-package com.speedment.runtime.internal.field.predicate.longs;
+package com.speedment.runtime.internal.field.predicate.floats;
 
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
-import com.speedment.runtime.field.trait.HasLongValue;
+import com.speedment.runtime.field.trait.HasFloatValue;
 import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.internal.field.predicate.BetweenPredicate;
 import static java.util.Objects.requireNonNull;
 
 /**
- * A predicate that evaluates if a value is between two longs.
+ * A predicate that evaluates if a value is between two floats.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type
@@ -17,15 +17,15 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class LongBetweenPredicate<ENTITY, D>  extends AbstractFieldPredicate<ENTITY, HasLongValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Long, Long> {
+public final class FloatBetweenPredicate<ENTITY, D>  extends AbstractFieldPredicate<ENTITY, HasFloatValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Float, Float> {
     
-    private final long start;
-    private final long end;
+    private final float start;
+    private final float end;
     private final Inclusion inclusion;
     
-    public LongBetweenPredicate(HasLongValue<ENTITY, D> field, long start, long end, Inclusion inclusion) {
+    public FloatBetweenPredicate(HasFloatValue<ENTITY, D> field, float start, float end, Inclusion inclusion) {
         super(PredicateType.BETWEEN, field, entity -> {
-            final long fieldValue = field.getAsLong(entity);
+            final float fieldValue = field.getAsFloat(entity);
             
             switch (inclusion) {
                 case START_EXCLUSIVE_END_EXCLUSIVE :
@@ -50,12 +50,12 @@ public final class LongBetweenPredicate<ENTITY, D>  extends AbstractFieldPredica
     }
     
     @Override
-    public Long get0() {
+    public Float get0() {
         return start;
     }
     
     @Override
-    public Long get1() {
+    public Float get1() {
         return end;
     }
     

@@ -2,10 +2,10 @@ package com.speedment.runtime.field;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.trait.HasComparableOperators;
-import com.speedment.runtime.field.trait.HasLongValue;
+import com.speedment.runtime.field.trait.HasIntValue;
 
 /**
- * A field that represents a primitive {@code long} value.
+ * A field that represents a primitive {@code int} value.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type
@@ -16,7 +16,7 @@ import com.speedment.runtime.field.trait.HasLongValue;
  * @see ReferenceField
  */
 @Api(version = "3.0")
-public interface LongField<ENTITY, D>  extends Field<ENTITY>, HasLongValue<ENTITY, D>, HasComparableOperators<ENTITY, Long> {
+public interface IntField<ENTITY, D>  extends Field<ENTITY>, HasIntValue<ENTITY, D>, HasComparableOperators<ENTITY, Integer> {
     
     
 }

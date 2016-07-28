@@ -1,14 +1,14 @@
 package com.speedment.runtime.internal.field.setter;
 
-import com.speedment.runtime.field.method.SetToLong;
-import com.speedment.runtime.field.trait.HasLongValue;
+import com.speedment.runtime.field.method.SetToChar;
+import com.speedment.runtime.field.trait.HasCharValue;
 import static java.util.Objects.requireNonNull;
 
 /**
  * A {@code set} operation that will apply a value {@link #getValue()} to the
  * field {@link #getField()} of any instance passed to it.
  * <p>
- * This particular implementation is for values of type {@code long}.
+ * This particular implementation is for values of type {@code char}.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type
@@ -16,28 +16,28 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class SetToLongImpl<ENTITY, D>  implements SetToLong<ENTITY, D> {
+public final class SetToCharImpl<ENTITY, D>  implements SetToChar<ENTITY, D> {
     
-    private final HasLongValue<ENTITY, D> field;
-    private final long newValue;
+    private final HasCharValue<ENTITY, D> field;
+    private final char newValue;
     
-    public SetToLongImpl(HasLongValue<ENTITY, D> field, long newValue) {
+    public SetToCharImpl(HasCharValue<ENTITY, D> field, char newValue) {
         this.field    = requireNonNull(field);
         this.newValue = requireNonNull(newValue);
     }
     
     @Override
-    public HasLongValue<ENTITY, D> getField() {
+    public HasCharValue<ENTITY, D> getField() {
         return field;
     }
     
     @Override
-    public long getValue() {
+    public char getValue() {
         return newValue;
     }
     
     @Override
     public ENTITY apply(ENTITY entity) {
-        return field.setter().setAsLong(entity, newValue);
+        return field.setter().setAsChar(entity, newValue);
     }
 }

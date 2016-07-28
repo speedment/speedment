@@ -4,7 +4,7 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.trait.HasFinder;
 
 /**
- * A field that represents a primitive {@code long} value that references
+ * A field that represents a primitive {@code char} value that references
  * another column using a foreign key.
  * 
  * @param <ENTITY>    entity type
@@ -18,7 +18,7 @@ import com.speedment.runtime.field.trait.HasFinder;
  * @see ReferenceForeignKeyField
  */
 @Api(version = "3.0")
-public interface LongForeignKeyField<ENTITY, D, FK_ENTITY>  extends LongField<ENTITY, D>, HasFinder<ENTITY, FK_ENTITY> {
+public interface CharForeignKeyField<ENTITY, D, FK_ENTITY>  extends CharField<ENTITY, D>, HasFinder<ENTITY, FK_ENTITY> {
     
     
 }

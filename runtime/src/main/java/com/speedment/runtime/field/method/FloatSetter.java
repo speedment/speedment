@@ -7,10 +7,10 @@ import com.speedment.runtime.annotation.Api;
  * particular field in an entity. The referenced method should return a
  * reference to itself.
  * <p>
- * A {@code LongSetter<ENTITY>} has the following signature:
+ * A {@code FloatSetter<ENTITY>} has the following signature:
  * {@code
  *     interface ENTITY {
- *         ENTITY setXXX(long value);
+ *         ENTITY setXXX(float value);
  *     }
  * }
  * 
@@ -21,7 +21,7 @@ import com.speedment.runtime.annotation.Api;
  */
 @Api(version = "3.0")
 @FunctionalInterface
-public interface LongSetter<ENTITY>  extends Setter<ENTITY> {
+public interface FloatSetter<ENTITY>  extends Setter<ENTITY> {
     
     /**
      * Sets the member represented by this setter in the specified instance to
@@ -32,5 +32,5 @@ public interface LongSetter<ENTITY>  extends Setter<ENTITY> {
      * @param value    the new value
      * @return         a reference to that instance
      */
-    ENTITY setAsLong(ENTITY instance, long value);
+    ENTITY setAsFloat(ENTITY instance, float value);
 }

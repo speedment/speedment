@@ -1,15 +1,15 @@
-package com.speedment.runtime.internal.field.predicate.longs;
+package com.speedment.runtime.internal.field.predicate.ints;
 
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
-import com.speedment.runtime.field.trait.HasLongValue;
+import com.speedment.runtime.field.trait.HasIntValue;
 import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.internal.field.predicate.BetweenPredicate;
 import static java.util.Objects.requireNonNull;
 
 /**
- * A predicate that evaluates if a value is between two longs.
+ * A predicate that evaluates if a value is between two ints.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type
@@ -17,15 +17,15 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class LongBetweenPredicate<ENTITY, D>  extends AbstractFieldPredicate<ENTITY, HasLongValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Long, Long> {
+public final class IntBetweenPredicate<ENTITY, D>  extends AbstractFieldPredicate<ENTITY, HasIntValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Integer, Integer> {
     
-    private final long start;
-    private final long end;
+    private final int start;
+    private final int end;
     private final Inclusion inclusion;
     
-    public LongBetweenPredicate(HasLongValue<ENTITY, D> field, long start, long end, Inclusion inclusion) {
+    public IntBetweenPredicate(HasIntValue<ENTITY, D> field, int start, int end, Inclusion inclusion) {
         super(PredicateType.BETWEEN, field, entity -> {
-            final long fieldValue = field.getAsLong(entity);
+            final int fieldValue = field.getAsInt(entity);
             
             switch (inclusion) {
                 case START_EXCLUSIVE_END_EXCLUSIVE :
@@ -50,12 +50,12 @@ public final class LongBetweenPredicate<ENTITY, D>  extends AbstractFieldPredica
     }
     
     @Override
-    public Long get0() {
+    public Integer get0() {
         return start;
     }
     
     @Override
-    public Long get1() {
+    public Integer get1() {
         return end;
     }
     
