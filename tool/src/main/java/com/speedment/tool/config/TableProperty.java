@@ -18,7 +18,6 @@ package com.speedment.tool.config;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.generator.TranslatorSupport;
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
@@ -31,15 +30,12 @@ import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
-import org.controlsfx.control.PropertySheet;
 
 import java.util.List;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
-import com.speedment.tool.property.DefaultStringPropertyItem;
-import java.util.Optional;
-import static javafx.beans.binding.Bindings.createStringBinding;
+import com.speedment.tool.config.trait.HasPackageNameProperty;
 
 /**
  *
@@ -54,7 +50,8 @@ public final class TableProperty
     HasEnabledProperty,
     HasExpandedProperty,
     HasNameProperty,
-    HasAliasProperty {
+    HasAliasProperty,
+    HasPackageNameProperty {
 
     public TableProperty(Schema parent) {
         super(parent);
@@ -78,16 +75,7 @@ public final class TableProperty
 
     @Override
     public StringProperty nameProperty() {
-        return HasNameProperty.super.nameProperty();
-    }
-   
-    public StringProperty packageNameProperty() {
-        return stringPropertyOf(Table.PACKAGE_NAME, () -> null);
-    }
-    
-    @Override
-    public Optional<String> getPackageName() {
-        return Optional.ofNullable(packageNameProperty().get());
+        return HasPackageNameProperty.super.nameProperty();
     }
 
     @Override
@@ -113,24 +101,6 @@ public final class TableProperty
     @Override
     public TablePropertyMutator mutator() {
         return DocumentPropertyMutator.of(this);
-    }
-
-    @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
-        final TranslatorSupport<Table> support = new TranslatorSupport<>(
-            injector.getOrThrow(Injector.class), this
-        );
-        
-        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(injector),
-            HasNameProperty.super.getUiVisibleProperties(injector),
-            HasAliasProperty.super.getUiVisibleProperties(injector),
-            Stream.of(new DefaultStringPropertyItem(
-                packageNameProperty(),
-                createStringBinding(support::basePackageName, aliasProperty()),
-                "Package Name", 
-                "The package where generated classes will be located."
-            ))
-        ).flatMap(s -> s);
     }
 
     @Override

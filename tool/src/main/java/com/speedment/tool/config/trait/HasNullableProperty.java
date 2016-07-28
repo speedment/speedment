@@ -16,15 +16,10 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.trait.HasNullable;
 import com.speedment.tool.config.DocumentProperty;
-import com.speedment.tool.property.BooleanPropertyItem;
 import javafx.beans.property.BooleanProperty;
-import org.controlsfx.control.PropertySheet;
-
-import java.util.stream.Stream;
 
 /**
  *
@@ -34,17 +29,6 @@ import java.util.stream.Stream;
 @Api(version = "3.0")
 public interface HasNullableProperty extends DocumentProperty, HasNullable {
 
-    @Override
-    default Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
-        return Stream.of(
-            new BooleanPropertyItem(
-                nullableProperty(),
-                "Is Nullable",
-                "If this node can hold 'null'-values or not."
-            )
-        );
-    }
-    
     default BooleanProperty nullableProperty() {
         return booleanPropertyOf(NULLABLE, HasNullable.super::isNullable);
     }

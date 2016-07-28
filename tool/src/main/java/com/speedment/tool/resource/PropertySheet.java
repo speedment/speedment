@@ -11,17 +11,16 @@ import static java.util.Objects.requireNonNull;
  * @author Simon
  */
 public final class PropertySheet extends BorderPane {
-    private final ObservableList<PropertyEditor.Item> properties;
+    private final ObservableList<PropertyEditor.Item> properties; 
     private PropertyLayout layout;
     
     public PropertySheet( ObservableList<PropertyEditor.Item> properties ){
         requireNonNull(properties);
+        this.properties = properties;
         
         layout = new PropertyLayout(properties);
         setCenter(layout);
-
-        this.properties = properties;
-        this.properties.addListener((ListChangeListener.Change<? extends PropertyEditor.Item> c) -> {
+        this.properties.addListener( (ListChangeListener.Change<? extends PropertyEditor.Item> c) -> {
             while( c.next() ){
                 if( c.wasRemoved() ){
                     if( properties.isEmpty() ){
@@ -33,6 +32,6 @@ public final class PropertySheet extends BorderPane {
                     c.getAddedSubList().stream().forEachOrdered( i -> layout.addItem(i) );
                 }
             }
-        });
+        } );
     }
 }

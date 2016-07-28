@@ -16,16 +16,11 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.config.DocumentProperty;
-import com.speedment.tool.property.StringPropertyItem;
 import javafx.beans.property.StringProperty;
-import org.controlsfx.control.PropertySheet;
-
-import java.util.stream.Stream;
 
 /**
  *
@@ -42,16 +37,5 @@ public interface HasNameProperty extends DocumentProperty {
     @Override
     default String getName() throws SpeedmentException {
         return nameProperty().get();
-    }
-
-    @Override
-    default Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
-        return Stream.of(
-            new StringPropertyItem(
-                nameProperty(), 
-                mainInterface().getSimpleName() + " Name", 
-                "The name of the persisted entity in the database. This should only be modified if the database has been changed!"
-            )
-        );
     }
 }

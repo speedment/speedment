@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Table;
@@ -27,10 +26,8 @@ import com.speedment.tool.config.trait.HasColumnProperty;
 import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
 import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
-import org.controlsfx.control.PropertySheet;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
 
@@ -58,10 +55,10 @@ public final class PrimaryKeyColumnProperty
         return DocumentPropertyMutator.of(this);
     }
 
-    @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
-        return HasColumnProperty.super.getUiVisibleProperties(injector);
-    }
+//    @Override
+//    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
+//        return HasColumnProperty.super.getUiVisibleProperties(injector);
+//    }
 
     @Override
     protected List<String> keyPathEndingWith(String key) {

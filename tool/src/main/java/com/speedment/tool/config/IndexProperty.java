@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Index;
 import com.speedment.runtime.config.Table;
@@ -26,10 +25,8 @@ import com.speedment.tool.config.mutator.IndexPropertyMutator;
 import com.speedment.tool.config.trait.HasEnabledProperty;
 import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
-import com.speedment.tool.property.BooleanPropertyItem;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
-import org.controlsfx.control.PropertySheet;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -75,20 +72,6 @@ public final class IndexProperty extends AbstractChildDocumentProperty<Table, In
     @Override
     public IndexPropertyMutator mutator() {
         return DocumentPropertyMutator.of(this);
-    }
-
-    @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
-        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(injector),
-            HasNameProperty.super.getUiVisibleProperties(injector),
-            Stream.of(
-                new BooleanPropertyItem(
-                    uniqueProperty(),
-                    "Is Unique",
-                    "True if elements in this index are unique."
-                )
-            )
-        ).flatMap(s -> s);
     }
 
     @Override

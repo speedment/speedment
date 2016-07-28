@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Schema;
@@ -30,7 +29,6 @@ import com.speedment.tool.config.trait.HasNameProperty;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
-import org.controlsfx.control.PropertySheet;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -76,14 +74,6 @@ public final class SchemaProperty extends AbstractChildDocumentProperty<Dbms, Sc
     @Override
     public SchemaPropertyMutator mutator() {
         return DocumentPropertyMutator.of(this);
-    }
-
-    @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
-        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(injector),
-            HasNameProperty.super.getUiVisibleProperties(injector),
-            HasAliasProperty.super.getUiVisibleProperties(injector)
-        ).flatMap(s -> s);
     }
 
     @Override

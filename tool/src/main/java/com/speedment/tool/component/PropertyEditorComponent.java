@@ -4,6 +4,7 @@ import com.speedment.tool.property.PropertyEditor;
 import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.component.Component;
 import com.speedment.tool.config.DocumentProperty;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -17,7 +18,7 @@ public interface PropertyEditorComponent extends Component {
     
     <DOC extends DocumentProperty> Stream<PropertyEditor.Item> getUiVisibleProperties(DOC document);
     
-    <DOC extends DocumentProperty> void install(Class<DOC> documentType, PropertyEditor<DOC> factory);    
+    <DOC extends DocumentProperty> void install(Class<DOC> documentType, String propertyKey, Supplier<PropertyEditor<DOC>> factory);    
    
     @Override
     default Class<PropertyEditorComponent> getComponentClass(){

@@ -1,7 +1,8 @@
-package com.speedment.plugins.enums.internal.ui;
+package com.speedment.plugins.enums.internal.newUi;
 
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
+import com.speedment.tool.property.item.AbstractLabelAndTooltipItem;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -11,6 +12,8 @@ import java.util.stream.Stream;
 import javafx.animation.AnimationTimer;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableBooleanValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -19,38 +22,52 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.HBox;
+import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
-import org.controlsfx.property.editor.PropertyEditor;
 
 /**
- * The editor object for editing a string. The editor consists of several
- * rows, and the input on each row can be retrieved as a single string. The 
- * different rows data is separated by commas.
- * 
- * 
+ *
+ * @author Simon
  */
-public final class CommaSeparatedStringEditor extends VBox implements PropertyEditor<String> {
+public class AddRemoveStringItem extends AbstractLabelAndTooltipItem{
     //***********************************************************
     // 				VARIABLES
     //***********************************************************   
     private final static Logger LOGGER = LoggerManager.getLogger(CommaSeparatedStringEditor.class);
+
+    private final ObservableList<String> strings;
+    private final ObservableBooleanValue disabled;
+    private final StringProperty value;
     
     private final String DEFAULT_FIELD = "ENUM_CONSTANT_";
     private final double SPACING = 10.0;
     private final int LIST_HEIGHT = 200;
-
-    private final ObservableList<String> strings;
-    private final StringBinding binding;
-
+    
     //***********************************************************
     // 				CONSTRUCTOR
-    //***********************************************************	
-    public CommaSeparatedStringEditor(String defaultValue) {
+    //***********************************************************
+     
+    public AddRemoveStringItem(String label, StringProperty value, String oldValue, String tooltip, ObservableBooleanValue enableThis) {
+        super(label, tooltip);
         this.strings = FXCollections.observableArrayList();
-        this.binding = Bindings.createStringBinding(() -> getFormatedString(), strings);
-        setValue(defaultValue);
-
+        this.value = value;
+        this.disabled = Bindings.not(enableThis);
+        
+        StringBinding binding = Bindings.createStringBinding(() -> getFormatedString(), strings);
+        value.bind( binding );
+      
+        setValue( oldValue );
+    }
+    
+    //***********************************************************
+    // 				PUBLIC
+    //***********************************************************   
+    
+    @Override
+    public Node getEditor() {
+        final VBox container = new VBox();
+        
         ListView<String> listView = new ListView<>(strings);
         listView.setCellFactory((ListView<String> param) -> new EnumCell());
         listView.setEditable(true);
@@ -62,40 +79,27 @@ public final class CommaSeparatedStringEditor extends VBox implements PropertyEd
         controls.setAlignment(Pos.CENTER);
         controls.getChildren().addAll(addButton(listView), removeButton(listView));
 
-        setSpacing(SPACING);
-        getChildren().addAll(listView, controls);
+        container.setSpacing(SPACING);
+        container.disableProperty().bind( disabled );
+        container.getChildren().addAll(listView, controls);
+        return container;
     }
-
+    
     //***********************************************************
-    // 				PUBLIC
+    // 				PRIVATE
     //***********************************************************
-    @Override
-    public ObservableList<Node> getChildren() {
-        return super.getChildren();
-    }
-
-    public StringBinding binding() {
-        return binding;
-    }
-
-    public String getFormatedString() {
-        return strings.stream()
+    
+    private String getFormatedString() {
+        String formated = strings.stream()
             .filter(v -> !v.isEmpty())
             .collect(Collectors.joining(","));
+        if( formated == null || formated.isEmpty() )
+            return null;
+        else
+            return formated;
     }
-
-    @Override
-    public Node getEditor() {
-        return this;
-    }
-
-    @Override
-    public String getValue() {
-        return getFormatedString();
-    }
-
-    @Override
-    public void setValue(String value) {
+    
+    private void setValue(String value) {
         if (value == null) {
             strings.clear();
         } else {
@@ -105,10 +109,7 @@ public final class CommaSeparatedStringEditor extends VBox implements PropertyEd
             );
         }
     }
-
-    //***********************************************************
-    // 				PRIVATE
-    //***********************************************************	
+    
     private Button removeButton(final ListView<String> listView) {
         final Button button = new Button("Remove Selected");
         button.setOnAction(e -> {

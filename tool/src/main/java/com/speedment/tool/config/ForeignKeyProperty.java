@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.Table;
@@ -27,7 +26,6 @@ import com.speedment.tool.config.trait.HasEnabledProperty;
 import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
 import javafx.collections.ObservableList;
-import org.controlsfx.control.PropertySheet;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -64,13 +62,6 @@ public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Tabl
     @Override
     public ForeignKeyPropertyMutator mutator() {
         return DocumentPropertyMutator.of(this);
-    }
-    
-    @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
-        return Stream.concat(HasEnabledProperty.super.getUiVisibleProperties(injector),
-            HasNameProperty.super.getUiVisibleProperties(injector)
-        );
     }
     
     @Override

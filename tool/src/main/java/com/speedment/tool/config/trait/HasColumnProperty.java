@@ -16,19 +16,15 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.trait.HasColumn;
 import com.speedment.tool.config.DocumentProperty;
-import com.speedment.tool.property.StringPropertyItem;
 import javafx.beans.binding.ObjectBinding;
 
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static javafx.beans.binding.Bindings.createObjectBinding;
-import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -48,16 +44,5 @@ public interface HasColumnProperty extends DocumentProperty, HasColumn, HasNameP
     @Override
     default Optional<? extends Column> findColumn() {
         return Optional.ofNullable(columnProperty().get());
-    }
-
-    @Override
-    default Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
-        return Stream.of(
-            new StringPropertyItem(
-                nameProperty(), 
-                "Column Name", 
-                "The name of the column that is referenced."
-            )
-        );
     }
 }

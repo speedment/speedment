@@ -16,16 +16,11 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.parameter.OrderType;
 import com.speedment.runtime.config.trait.HasOrderType;
 import com.speedment.tool.config.DocumentProperty;
-import com.speedment.tool.property.EnumPropertyItem;
 import javafx.beans.property.ObjectProperty;
-import org.controlsfx.control.PropertySheet;
-
-import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
@@ -61,17 +56,5 @@ public interface HasOrderTypeProperty extends DocumentProperty, HasOrderType {
     @Override
     default OrderType getOrderType() {
         return orderTypeProperty().get();
-    }
-
-    @Override
-    default Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
-        return Stream.of(
-            new EnumPropertyItem<>(
-                OrderType.class,
-                orderTypeProperty(),
-                "Order Type",
-                "The order in which elements will be considered."
-            )
-        );
     }
 }

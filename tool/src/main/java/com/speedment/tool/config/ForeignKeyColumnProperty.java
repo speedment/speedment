@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;
@@ -28,14 +27,11 @@ import com.speedment.tool.config.trait.HasColumnProperty;
 import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
 import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
-import com.speedment.tool.property.StringPropertyItem;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.StringProperty;
-import org.controlsfx.control.PropertySheet;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
 import static javafx.beans.binding.Bindings.createObjectBinding;
@@ -122,34 +118,6 @@ public final class ForeignKeyColumnProperty extends AbstractChildDocumentPropert
     @Override
     public ForeignKeyColumnPropertyMutator mutator() {
         return DocumentPropertyMutator.of(this);
-    }
-    
-    @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
-        return Stream.of(HasColumnProperty.super.getUiVisibleProperties(injector),
-            Stream.of(
-               new StringPropertyItem(
-                            foreignDatabaseNameProperty(), 
-                            "Foreign Database Name",
-                            "The name of the database that this foreign key references."
-                        ),
-               new StringPropertyItem(
-                                foreignSchemaNameProperty(), 
-                                "Foreign Schema Name",
-                                "The name of the schema that this foreign key references."
-                         ),
-                new StringPropertyItem(
-                    foreignTableNameProperty(), 
-                    "Foreign Table Name",
-                    "The name of the database table that this foreign key references."
-                ),
-                new StringPropertyItem(
-                    foreignColumnNameProperty(), 
-                    "Foreign Column Name",
-                    "The name of the database column that this foreign key references."
-                )
-            )
-        ).flatMap(s -> s);
     }
     
     @Override

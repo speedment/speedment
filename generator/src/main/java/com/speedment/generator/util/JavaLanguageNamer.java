@@ -180,10 +180,4 @@ public interface JavaLanguageNamer {
                 .map(String::toLowerCase)
                 .map(s -> ucfirst(s)).collect(Collectors.joining(" "));
     }
-
-    default String findPackageName(Project project) {
-        return project.getPackageName().orElseGet(() -> 
-            DEFAULT_PACKAGE_NAME + javaPackageName(project.getCompanyName())
-        );
-    }
 }

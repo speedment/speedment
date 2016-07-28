@@ -3,36 +3,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.tool.property;
+package com.speedment.tool.property.item;
 
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 /**
  *
  * @author Simon
  */
-public class SimpleStringItem implements PropertyEditor.Item{
+public class SimpleStringItem extends AbstractLabelAndTooltipItem{
 
-    private final String label;
     private final StringProperty property;
     
-    public SimpleStringItem(String label, StringProperty property){
-        this.label = label;
+    public SimpleStringItem(String label, StringProperty property, String tooltip){
+        super(label, tooltip);
         this.property = property;
-    }
-    
-    @Override
-    public Node getLabel() {
-        return new Label(label);
     }
 
     @Override
     public Node getEditor() {
         final TextField box = new TextField( property.get() );
         property.bind( box.textProperty() );
+        box.getStyleClass().add("property-editors");
         return box;
     }    
 }

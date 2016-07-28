@@ -36,8 +36,10 @@ import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import static com.speedment.common.codegen.internal.util.Formatting.ucfirst;
 import com.speedment.common.injector.Injector;
 import com.speedment.generator.typetoken.TypeTokenGenerator;
+import static com.speedment.runtime.config.Project.DEFAULT_PACKAGE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Supplier;
 
 /**
  * A support class for the {@link Translator} interface that holds various
@@ -375,13 +377,23 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
         return table().flatMap(Table::getPackageName).orElseGet(this::defaultPackageName);
     }
     
-    private String defaultPackageName() {
-        final String packName = namer().findPackageName(projectOrThrow()) + ".";
+    public String defaultPackageName() {
+        final Supplier<String> projectPackage = () ->
+            DEFAULT_PACKAGE_NAME + 
+            namer().javaPackageName(projectOrThrow().getCompanyName()) + "." +
+            namer().javaPackageName(projectOrThrow().getName());
         
         if (document() instanceof Project) {
-            return packName + namer().javaPackageName(projectOrThrow().getName());
+            return projectPackage.get();
         } else {
-            return packName + DocumentUtil.relativeName(document(), Project.class, JAVA_NAME, namer()::javaPackageName);
+            return projectOrThrow().getPackageName()
+                .orElseGet(projectPackage) + "." +
+                    DocumentUtil.relativeName(
+                        document(), 
+                        Dbms.class, 
+                        JAVA_NAME, 
+                        namer()::javaPackageName
+                    );
         }
     }
     

@@ -16,12 +16,10 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.util.OptionalUtil;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
@@ -32,18 +30,12 @@ import com.speedment.tool.config.trait.HasAliasProperty;
 import com.speedment.tool.config.trait.HasEnabledProperty;
 import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
-import com.speedment.tool.property.DefaultIntegerPropertyItem;
-import com.speedment.tool.property.DefaultStringPropertyItem;
-import com.speedment.tool.property.DefaultTextAreaPropertyItem;
-import com.speedment.tool.property.StringChoicePropertyItem;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
-import org.controlsfx.control.PropertySheet;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,9 +43,6 @@ import java.util.OptionalInt;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
-import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.toList;
-import static javafx.collections.FXCollections.observableList;
 
 /**
  *
@@ -145,62 +134,6 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
     }
     
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
-        
-        final DbmsHandlerComponent dbmsHandler = injector.getOrThrow(DbmsHandlerComponent.class);
-        final ObservableList<String> supportedTypes = observableList(
-            dbmsHandler
-                .supportedDbmsTypes()
-                .map(DbmsType::getName)
-                .collect(toList())
-        );
-        
-        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(injector),
-            HasNameProperty.super.getUiVisibleProperties(injector),
-            HasAliasProperty.super.getUiVisibleProperties(injector),
-            Stream.of(new StringChoicePropertyItem(
-                    supportedTypes,
-                    typeNameProperty(),
-                    "Dbms Type", 
-                    "Which type of database this is. If the type you are looking " +
-                    "for is missing, make sure it has been loaded properly in " +
-                    "the pom.xml-file."
-                ), 
-                new DefaultStringPropertyItem(
-                    ipAddressProperty(), 
-                    new SimpleStringProperty("127.0.0.1"),
-                    "IP Address",
-                    "The ip of the database host."
-                ),
-                new DefaultIntegerPropertyItem(
-                    portProperty(),
-                    defaultPortProperty(dbmsHandler),
-                    "Port",                  
-                    "The port of the database on the database host.",
-                    editor -> {
-                        editor.setMin(0); 
-                        editor.setMax(65536);
-                    }
-                ),
-                new DefaultStringPropertyItem(
-                    usernameProperty(),
-                    new SimpleStringProperty("root"),
-                    "Username",
-                    "The username to use when connecting to the database."
-                ),
-                new DefaultTextAreaPropertyItem(
-                    connectionUrlProperty(),
-                    defaultConnectionUrlProperty(dbmsHandler),
-                    "Connection URL",
-                    "The connection URL that should be used when establishing " +
-                    "connection with the database. If this is set to Auto, the " +
-                    "DbmsType will generate one."
-                )
-            )
-        ).flatMap(identity());
-    }
-    
-    @Override
     protected List<String> keyPathEndingWith(String key) {
         return concat(DocumentPropertyComponent.DBMSES, key);
     }
@@ -209,4 +142,5 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
     public StringProperty nameProperty() {
         return HasNameProperty.super.nameProperty();
     }
+    
 }

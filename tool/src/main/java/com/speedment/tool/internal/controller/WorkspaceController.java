@@ -62,19 +62,6 @@ public final class WorkspaceController implements Initializable {
         
         final PropertySheet sheet = new PropertySheet(properties);
         
-//        sheet.setMode(PropertySheet.Mode.NAME);
-//        sheet.setModeSwitcherVisible(false);
-//        sheet.setSearchBoxVisible(false);
-//        sheet.setPropertyEditorFactory(item -> {
-//            if (item instanceof AbstractPropertyItem<?, ?, ?>) {
-//                @SuppressWarnings("unchecked")
-//                final AbstractPropertyItem<?, ?, ?> casted = (AbstractPropertyItem<?, ?, ?>) item;
-//                return casted.createEditor();
-//            } else throw new SpeedmentException(
-//                "Unknown property item type '" + item.getClass() + "'."
-//            );
-//        });
-        
         ui.getSelectedTreeItems()
             .addListener((ListChangeListener.Change<? extends TreeItem<DocumentProperty>> change) -> {
                 properties.clear();

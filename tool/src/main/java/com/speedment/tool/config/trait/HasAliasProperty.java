@@ -16,16 +16,12 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.tool.config.DocumentProperty;
-import com.speedment.tool.property.DefaultStringPropertyItem;
 import javafx.beans.property.StringProperty;
-import org.controlsfx.control.PropertySheet;
 
 import java.util.Optional;
-import java.util.stream.Stream;
 
 /**
  *
@@ -44,16 +40,5 @@ public interface HasAliasProperty extends DocumentProperty, HasAlias {
     @Override
     default Optional<String> getAlias() {
         return Optional.ofNullable(aliasProperty().get());
-    }
-
-    @Override
-    default Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
-        return Stream.of(new DefaultStringPropertyItem(
-                aliasProperty(),
-                nameProperty(),
-                "Java Alias", 
-                "The name that will be used for this in generated code."
-            )
-        );
     }
 }

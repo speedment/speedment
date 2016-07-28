@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Index;
 import com.speedment.runtime.config.IndexColumn;
@@ -28,10 +27,8 @@ import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
 import com.speedment.tool.config.trait.HasOrderTypeProperty;
 import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
-import org.controlsfx.control.PropertySheet;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
 
@@ -54,12 +51,13 @@ public final class IndexColumnProperty extends AbstractChildDocumentProperty<Ind
         return DocumentPropertyMutator.of(this);
     }
 
-    @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
-        return Stream.concat(HasColumnProperty.super.getUiVisibleProperties(injector),
-            HasOrderTypeProperty.super.getUiVisibleProperties(injector)
-        );
-    }
+//    @Override
+//    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
+//        return Stream.concat(
+//            HasColumnProperty.super.getUiVisibleProperties(injector),
+//            HasOrderTypeProperty.super.getUiVisibleProperties(injector)
+//        );
+//    }
 
     @Override
     protected List<String> keyPathEndingWith(String key) {

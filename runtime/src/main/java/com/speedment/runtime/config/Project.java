@@ -24,6 +24,7 @@ import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasMutator;
 import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.trait.HasPackageName;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -44,13 +45,13 @@ public interface Project extends
         Document,
         HasEnabled,
         HasName,
+        HasPackageName,
         HasChildren,
         HasMainInterface,
         HasMutator<ProjectMutator<? extends Project>> {
 
     final String 
             COMPANY_NAME     = "companyName",
-            PACKAGE_NAME     = "packageName",
             PACKAGE_LOCATION = "packageLocation",
             CONFIG_PATH      = "configPath",
             DBMSES           = "dbmses";
@@ -68,16 +69,6 @@ public interface Project extends
      */
     default String getCompanyName() {
         return getAsString(COMPANY_NAME).orElse(DEFAULT_COMPANY_NAME);
-    }
-
-    /**
-     * Returns the name of the generated package where this project will be
-     * located.
-     *
-     * @return the name of the generated package or {@code empty}
-     */
-    default Optional<String> getPackageName() {
-        return getAsString(PACKAGE_NAME);
     }
 
     /**

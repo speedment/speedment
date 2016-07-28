@@ -16,12 +16,9 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.ColumnPropertyMutator;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
@@ -31,17 +28,12 @@ import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
 import com.speedment.tool.config.trait.HasNullableProperty;
 import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
-import com.speedment.tool.property.BooleanPropertyItem;
-import com.speedment.tool.property.TypeMapperPropertyItem;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
-import javafx.util.StringConverter;
-import org.controlsfx.control.PropertySheet;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
 import static javafx.beans.binding.Bindings.createObjectBinding;
@@ -87,6 +79,7 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table, C
     public Optional<String> getTypeMapper() {
         return Optional.ofNullable(typeMapperProperty().get());
     }
+    
     public StringProperty enumConstantsProperty() {
         return stringPropertyOf(ENUM_CONSTANTS, () -> Column.super.getEnumConstants().orElse(null));
     }
@@ -119,32 +112,8 @@ public final class ColumnProperty extends AbstractChildDocumentProperty<Table, C
     }
 
     @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
-        
-        
-        
-        return Stream.of(HasEnabledProperty.super.getUiVisibleProperties(injector),
-            HasNameProperty.super.getUiVisibleProperties(injector),
-            HasAliasProperty.super.getUiVisibleProperties(injector),
-            HasNullableProperty.super.getUiVisibleProperties(injector),
-            Stream.of(new BooleanPropertyItem(
-                    autoIncrementProperty(),
-                    "Is Auto Incrementing",
-                    "If this column will increment automatically for each new entity."
-                ),
-                new TypeMapperPropertyItem(
-                    injector,
-                    findDatabaseType(),
-                    typeMapperProperty(),
-                    "JDBC Type to Java",
-                    "The class that will be used to map types between the database and the generated code."
-                )
-            )
-        ).flatMap(s -> s);
-    }
-
-    @Override
     protected List<String> keyPathEndingWith(String key) {
         return concat(DocumentPropertyComponent.COLUMNS, key);
     }
+    
 }

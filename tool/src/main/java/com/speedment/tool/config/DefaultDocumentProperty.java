@@ -16,17 +16,14 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.internal.util.ImmutableListUtil;
 import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
-import org.controlsfx.control.PropertySheet;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
 
@@ -64,11 +61,6 @@ public final class DefaultDocumentProperty extends
     @Override
     public Optional<? extends Document> getParent() {
         return Optional.ofNullable(parent);
-    }
-    
-    @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
-        return Stream.empty();
     }
 
     @Override

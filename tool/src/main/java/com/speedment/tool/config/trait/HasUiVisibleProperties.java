@@ -16,11 +16,7 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
-import org.controlsfx.control.PropertySheet;
-
-import java.util.stream.Stream;
 
 /**
  *
@@ -29,5 +25,5 @@ import java.util.stream.Stream;
  */
 @Api(version = "3.0")
 public interface HasUiVisibleProperties {
-    Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector);
+    //Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector);
 }

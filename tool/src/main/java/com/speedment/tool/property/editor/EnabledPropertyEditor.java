@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.tool.property;
+package com.speedment.tool.property.editor;
 
+import com.speedment.tool.property.item.SimpleBooleanItem;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.tool.config.trait.HasEnabledProperty;
+import com.speedment.tool.property.PropertyEditor;
 import java.util.stream.Stream;
-import org.controlsfx.control.PropertySheet;
 
 /**
  *
@@ -22,14 +23,9 @@ public class EnabledPropertyEditor<T extends HasEnabledProperty> implements Prop
         return Stream.of(
             new SimpleBooleanItem(
                 "Enabled", 
-                document.enabledProperty()
+                document.enabledProperty(),
+                "True if this node should be included in the code generation."
             )
         );
     }
-
-    @Override
-    public String getPropertyKey() {
-        return HasEnabled.ENABLED;
-    }
-    
 }

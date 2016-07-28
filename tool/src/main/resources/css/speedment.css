@@ -442,3 +442,17 @@
     -fx-vgap: 10px;
     -fx-padding: 5 15 5 15;
 }
+
+/*** Properties layout : left ***/
+.properties-layout .property-labels {
+    -fx-font-size: 1.2em;
+    -fx-alignment: CENTER_LEFT
+}
+
+/*** Properties layout : right ***/
+.properties-layout .property-editors {
+    -fx-spacing: 10px;
+    -fx-fill-width: true;    
+    -fx-alignment: CENTER_LEFT;
+    -fx-wrap-text: true;    
+}

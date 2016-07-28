@@ -16,9 +16,6 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.common.injector.Injector;
-import com.speedment.generator.util.JavaLanguageNamer;
-import com.speedment.runtime.Speedment;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
@@ -29,18 +26,14 @@ import com.speedment.tool.config.mutator.ProjectPropertyMutator;
 import com.speedment.tool.config.trait.HasEnabledProperty;
 import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
-import com.speedment.tool.property.DefaultStringPropertyItem;
-import com.speedment.tool.property.StringPropertyItem;
+import com.speedment.tool.config.trait.HasPackageNameProperty;
 import com.speedment.tool.util.DocumentMerger;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.util.StringConverter;
-import org.controlsfx.control.PropertySheet;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -55,7 +48,7 @@ import java.util.stream.Stream;
  */
 @Api(version = "3.0")
 public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectProperty>
-    implements Project, HasEnabledProperty, HasExpandedProperty, HasNameProperty {
+    implements Project, HasEnabledProperty, HasExpandedProperty, HasNameProperty, HasPackageNameProperty {
 
     public void merge(DocumentPropertyComponent documentPropertyComponent, Project project) {
         DocumentMerger.merge(this, project, (parent, key)
@@ -77,23 +70,6 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
     @Override
     public String getCompanyName() {
         return getAsString(COMPANY_NAME).orElse(DEFAULT_COMPANY_NAME);
-    }
-
-    public StringProperty packageNameProperty() {
-        return stringPropertyOf(PACKAGE_NAME, () -> Project.super.getPackageName().orElse(null));
-    }
-
-    @Override
-    public Optional<String> getPackageName() {
-        return Optional.ofNullable(packageNameProperty().get());
-    }
-
-    public StringBinding defaultPackageNameProperty(Injector injector) {
-        final JavaLanguageNamer namer = injector.getOrThrow(JavaLanguageNamer.class);
-        return Bindings.createStringBinding(
-            () -> Project.DEFAULT_PACKAGE_NAME + namer.javaPackageName(getCompanyName()),
-            companyNameProperty()
-        );
     }
 
     public StringProperty packageLocationProperty() {
@@ -134,33 +110,6 @@ public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectP
     @Override
     public ProjectPropertyMutator mutator() {
         return DocumentPropertyMutator.of(this);
-    }
-
-    @Override
-    public Stream<PropertySheet.Item> getUiVisibleProperties(Injector injector) {
-        return Stream.of(new StringPropertyItem(
-                nameProperty(),
-                "Project Name",
-                "The name that should be used for this project."
-            ),
-            new StringPropertyItem(
-                companyNameProperty(),
-                "Company Name",
-                "The company name that should be used for this project. It is used in the generated code."
-            ),
-            new DefaultStringPropertyItem(
-                packageNameProperty(),
-                defaultPackageNameProperty(injector),
-                "Package Name",
-                "The name of the package to place all generated files in. This should be a fully qualified java package name."
-            ),
-            new DefaultStringPropertyItem(
-                packageLocationProperty(),
-                new SimpleStringProperty(DEFAULT_PACKAGE_LOCATION),
-                "Package Location",
-                "The folder to store all generated files in. This should be a relative name from the working directory."
-            )
-        );
     }
 
     @Override

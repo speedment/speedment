@@ -25,6 +25,7 @@ import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasMutator;
 import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.trait.HasPackageName;
 import com.speedment.runtime.config.trait.HasParent;
 
 import java.util.Optional;
@@ -46,14 +47,14 @@ public interface Table extends
         HasName,
         HasChildren,
         HasAlias,
+        HasPackageName,
         HasMainInterface,
         HasMutator<TableMutator<? extends Table>> {
 
     final String COLUMNS = "columns",
             INDEXES = "indexes",
             FOREIGN_KEYS = "foreignKeys",
-            PRIMARY_KEY_COLUMNS = "primaryKeyColumns",
-            PACKAGE_NAME = "packageName";
+            PRIMARY_KEY_COLUMNS = "primaryKeyColumns";
     
     /**
      * Creates a stream of columns located in this document.
@@ -97,15 +98,6 @@ public interface Table extends
 
     default Optional<? extends PrimaryKeyColumn> findPrimaryKeyColumn(String name) {
         return primaryKeyColumns().filter(child -> child.getName().equals(name)).findAny();
-    }
-    
-    /**
-     * Returns any custom name to use for the package.
-     * 
-     * @return  the custom package name, or empty
-     */
-    default Optional<String> getPackageName() { 
-        return getAsString(PACKAGE_NAME);
     }
 
     @Override

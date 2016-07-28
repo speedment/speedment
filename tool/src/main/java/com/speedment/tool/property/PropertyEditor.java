@@ -16,6 +16,4 @@ public interface PropertyEditor<T> {
     }
     
     Stream<PropertyEditor.Item> fieldsFor(T document);
-    
-    String getPropertyKey();
 }

@@ -23,6 +23,7 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.generator.TranslatorManager;
+import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.component.PasswordComponent;
 import com.speedment.runtime.component.ProjectComponent;
@@ -346,9 +347,10 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
         }
 
         configFileHelper.saveConfigFile(configFileHelper.getCurrentlyOpenFile());
+        TranslatorSupport<Project> support = new TranslatorSupport<>(injector, project);
 
 //        final Stopwatch stopwatch = Stopwatch.createStarted();
-        log(OutputUtil.info("Generating classes " + javaLanguageNamer.findPackageName(project) + "." + project.getName() + ".*"));
+        log(OutputUtil.info("Generating classes " + support.basePackageName() + "." + project.getName() + ".*"));
         log(OutputUtil.info("Target directory is " + project.getPackageLocation()));
 
         final Project immutableProject = ImmutableProject.wrap(project);
