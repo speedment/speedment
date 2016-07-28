@@ -25,7 +25,7 @@ import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
 import com.speedment.tool.event.TreeSelectionChange;
 import com.speedment.tool.property.PropertyEditor;
-import com.speedment.tool.resource.PropertySheet;
+import com.speedment.tool.property.PropertySheet;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -48,7 +48,6 @@ public final class WorkspaceController implements Initializable {
     
     private @Inject UserInterfaceComponent ui;
     private @Inject EventComponent events;
-    private @Inject Injector injector;
     private @Inject PropertyEditorComponent editors;
     
     private @FXML TitledPane workspace;

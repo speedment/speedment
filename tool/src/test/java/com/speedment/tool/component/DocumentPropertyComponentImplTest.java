@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.component;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Dbms;
@@ -41,7 +40,6 @@ import com.speedment.tool.config.SchemaProperty;
 import com.speedment.tool.config.TableProperty;
 import com.speedment.tool.internal.component.DocumentPropertyComponentImpl;
 import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
-import org.controlsfx.control.PropertySheet;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

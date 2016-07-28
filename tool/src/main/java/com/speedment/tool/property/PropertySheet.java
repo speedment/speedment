@@ -1,4 +1,4 @@
-package com.speedment.tool.resource;
+package com.speedment.tool.property;
 
 import com.speedment.tool.property.PropertyEditor;
 import javafx.collections.ListChangeListener;
@@ -24,6 +24,7 @@ public final class PropertySheet extends BorderPane {
             while( c.next() ){
                 if( c.wasRemoved() ){
                     if( properties.isEmpty() ){
+                        layout.remove();
                         layout = new PropertyLayout(properties);
                         setCenter(layout);
                     }

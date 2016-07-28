@@ -121,19 +121,6 @@
         </dependency>
         
         <!-- LICENSE INFORMATION
-        ControlsFX:8.40.10
-        BSD 3-Clause
-        https://opensource.org/licenses/BSD-3-Clause
-        2015-11-24
-        emifor
-        -->
-        <dependency>
-            <groupId>org.controlsfx</groupId>
-            <artifactId>controlsfx</artifactId>
-            <version>8.40.10</version>
-        </dependency>
-        
-        <!-- LICENSE INFORMATION
         FontawesomeFX:8.8
         Apache 2 License
         http://www.apache.org/licenses/LICENSE-2.0.txt

@@ -1,4 +1,4 @@
-package com.speedment.tool.resource;
+package com.speedment.tool.property;
 
 import com.speedment.tool.property.PropertyEditor;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -31,5 +31,9 @@ final class PropertyLayout extends GridPane{
 
     void addItem(PropertyEditor.Item item){
         addRow(index.getAndIncrement(), item.getLabel(), item.getEditor());
+    }
+
+    void remove() {
+        //Remove all nodes and make sure they can be GC'd
     }
 }
