@@ -13,17 +13,17 @@ import javafx.scene.control.TextField;
  *
  * @author Simon
  */
-public class SimpleStringItem extends AbstractLabelAndTooltipItem{
+public class SimpleTextFieldItem extends BaseLabelTooltipItem{
 
     private final StringProperty property;
     
-    public SimpleStringItem(String label, StringProperty property, String tooltip){
+    public SimpleTextFieldItem(String label, StringProperty property, String tooltip){
         super(label, tooltip);
         this.property = property;
     }
 
     @Override
-    public Node getEditor() {
+    protected Node getEditorNode() {
         final TextField box = new TextField( property.get() );
         property.bind( box.textProperty() );
         box.getStyleClass().add("property-editors");

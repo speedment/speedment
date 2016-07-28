@@ -18,23 +18,26 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Simon
  */
-public class DefaultIntegerItem extends AbstractLabelAndTooltipItem {
+public class DefaultSpinnerItem extends BaseLabelTooltipItem {
 
     private final ObservableIntegerValue defaultValue;
     private final ObjectProperty<Integer> value;
     private final ObjectProperty<Integer> customValue;
     private final int min, max;
 
-    public DefaultIntegerItem(String label, ObservableIntegerValue defaultValue, IntegerProperty value, String tooltip) {
+    public DefaultSpinnerItem(String label, ObservableIntegerValue defaultValue, IntegerProperty value, String tooltip) {
         this(label, defaultValue, value, tooltip, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
-    public DefaultIntegerItem(String label, ObservableIntegerValue defaultValue, IntegerProperty value, String tooltip, int min, int max) {
+    public DefaultSpinnerItem(String label, ObservableIntegerValue defaultValue, IntegerProperty value, String tooltip, int min, int max) {
         super(label, tooltip);
         this.defaultValue = requireNonNull(defaultValue);
         this.value = requireNonNull(value).asObject();
@@ -44,7 +47,7 @@ public class DefaultIntegerItem extends AbstractLabelAndTooltipItem {
     }
 
     @Override
-    public Node getEditor() {
+    protected Node getEditorNode() {
         final boolean usesDefaultValue = value.getValue() == null || value.getValue().equals(defaultValue.getValue());
         
         final HBox container = new HBox();
@@ -57,7 +60,7 @@ public class DefaultIntegerItem extends AbstractLabelAndTooltipItem {
         spinner.setEditable(true);
         
         auto.setSelected(usesDefaultValue);
-        auto.selectedProperty().addListener( (ov, o, isAuto) -> 
+        attachListener(auto.selectedProperty(), (ov, o, isAuto) -> 
             setSpinnerBehaviour(svf, isAuto, defaultValue, customValue)
         );
         
@@ -65,14 +68,14 @@ public class DefaultIntegerItem extends AbstractLabelAndTooltipItem {
         setSpinnerBehaviour(svf, usesDefaultValue, defaultValue, customValue);
         
         final TextField editor = spinner.getEditor();
-        editor.textProperty().addListener( (ov, oldVal, newVal) -> {
+        attachListener(editor.textProperty(), (ov, oldVal, newVal) -> {
             try{
                 Integer.parseInt(newVal);                
             } catch (final NumberFormatException ex){
                 editor.setText(oldVal);
             }
         });
-        editor.focusedProperty().addListener( (ov, wasFocused, isFocused) -> {
+        attachListener(editor.focusedProperty(), (ov, wasFocused, isFocused) -> {
             if(wasFocused) {
                 try{
                     final int editorValue = Integer.parseInt( editor.getText() );

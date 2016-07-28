@@ -10,7 +10,7 @@ import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.property.PropertyEditor;
-import com.speedment.tool.property.item.DefaultIntegerItem;
+import com.speedment.tool.property.item.DefaultSpinnerItem;
 import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
@@ -25,8 +25,7 @@ public class PortNumberEditor<T extends DbmsProperty> implements PropertyEditor<
     
     @Override
     public Stream<Item> fieldsFor(T document) {                    
-        return Stream.of(
-            new DefaultIntegerItem(
+        return Stream.of(new DefaultSpinnerItem(
                 "Port", 
                 defaultPortProperty(document, dbmsHandler), 
                 document.portProperty(), 

@@ -1,6 +1,8 @@
 package com.speedment.tool.property;
 
-import com.speedment.tool.property.PropertyEditor;
+import com.speedment.tool.property.PropertyEditor.Editor;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
@@ -17,9 +19,11 @@ import static javafx.scene.layout.Region.USE_PREF_SIZE;
 final class PropertyLayout extends GridPane{
     private final static int MIN_LABEL_WIDTH = 100;
     private final AtomicInteger index;
+    private final Set<Editor> editors;
 
     PropertyLayout(ObservableList<PropertyEditor.Item> properties){
         this.index = new AtomicInteger(0);
+        this.editors = new HashSet<>();
 
         getColumnConstraints().add(0, new ColumnConstraints(MIN_LABEL_WIDTH, USE_COMPUTED_SIZE, USE_PREF_SIZE,    Priority.NEVER,  HPos.LEFT, true));
         getColumnConstraints().add(1, new ColumnConstraints(USE_PREF_SIZE,   USE_COMPUTED_SIZE, Double.MAX_VALUE, Priority.ALWAYS, HPos.LEFT, true));
@@ -30,10 +34,13 @@ final class PropertyLayout extends GridPane{
     }
 
     void addItem(PropertyEditor.Item item){
-        addRow(index.getAndIncrement(), item.getLabel(), item.getEditor());
+        final Editor editor = item.getEditor();
+       
+        addRow(index.getAndIncrement(), item.getLabel(), editor.getNode());
+        editors.add(editor);
     }
 
     void remove() {
-        //Remove all nodes and make sure they can be GC'd
+        editors.stream().forEach( Editor::onRemove );
     }
 }

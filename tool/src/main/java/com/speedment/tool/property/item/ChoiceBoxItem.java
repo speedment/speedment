@@ -15,7 +15,7 @@ import javafx.scene.control.ChoiceBox;
  *
  * @author Simon
  */
-public class ChoiceBoxItem<T> extends AbstractLabelAndTooltipItem{
+public class ChoiceBoxItem<T> extends BaseLabelTooltipItem{
     
     private final Property<T> currentValue;
     private final ObservableList<T> alternatives;
@@ -27,7 +27,7 @@ public class ChoiceBoxItem<T> extends AbstractLabelAndTooltipItem{
     }
 
     @Override
-    public Node getEditor() {
+    protected Node getEditorNode() {
         final ChoiceBox<T> box = new ChoiceBox<>(alternatives);
         final T val = currentValue.getValue();
         

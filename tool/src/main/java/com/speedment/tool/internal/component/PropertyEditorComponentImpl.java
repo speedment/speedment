@@ -39,12 +39,13 @@ import com.speedment.tool.property.editor.DbmsTypePropertyEditor;
 import com.speedment.tool.property.editor.EnabledPropertyEditor;
 import com.speedment.tool.property.editor.NullablePropertyEditor;
 import com.speedment.tool.property.PropertyEditor;
+import com.speedment.tool.property.editor.CompanyNamePropertyEditor;
 import com.speedment.tool.property.editor.ConnectionUrlPropertyEditor;
 import com.speedment.tool.property.editor.IpAdressPropertyEditor;
 import com.speedment.tool.property.editor.OrderTypePropertyEditor;
+import com.speedment.tool.property.editor.PackageLocationPropertyEditor;
 import com.speedment.tool.property.editor.PackageNameEditor;
 import com.speedment.tool.property.editor.PortNumberEditor;
-import com.speedment.tool.property.editor.ProjectPropertyEditor;
 import com.speedment.tool.property.editor.TypeMapperPropertyEditor;
 import com.speedment.tool.property.editor.UniquePropertyEditor;
 import com.speedment.tool.property.editor.UsernamePropertyEditor;
@@ -70,7 +71,6 @@ public final class PropertyEditorComponentImpl extends InternalOpenSourceCompone
         install(HasAliasProperty.class,     HasAlias.ALIAS,        AliasPropertyEditor::new);
         install(HasNullableProperty.class,  HasNullable.NULLABLE,  NullablePropertyEditor::new);
         install(HasOrderTypeProperty.class, HasOrderType.ORDER_TYPE, OrderTypePropertyEditor::new);
-//        install(HasColumnProperty.class,  Column.NAME,           ColumnPropertyEditor::new);
         install(ColumnProperty.class,       Column.AUTO_INCREMENT, AutoIncrementPropertyEditor::new);
         install(ColumnProperty.class,       Column.TYPE_MAPPER,    TypeMapperPropertyEditor::new);
         install(DbmsProperty.class,         Dbms.TYPE_NAME,        DbmsTypePropertyEditor::new);
@@ -79,8 +79,9 @@ public final class PropertyEditorComponentImpl extends InternalOpenSourceCompone
         install(DbmsProperty.class,         Dbms.USERNAME,         UsernamePropertyEditor::new);
         install(DbmsProperty.class,         Dbms.CONNECTION_URL,   ConnectionUrlPropertyEditor::new);
         install(IndexProperty.class,        Index.UNIQUE,          UniquePropertyEditor::new);
+        install(ProjectProperty.class,      Project.COMPANY_NAME,           CompanyNamePropertyEditor::new);
         install(HasPackageNameProperty.class, HasPackageName.PACKAGE_NAME,  PackageNameEditor::new);
-        install(ProjectProperty.class,        Project.DEFAULT_PROJECT_NAME, ProjectPropertyEditor::new);
+        install(ProjectProperty.class,      Project.PACKAGE_LOCATION,       PackageLocationPropertyEditor::new);
     }
     
     @Override

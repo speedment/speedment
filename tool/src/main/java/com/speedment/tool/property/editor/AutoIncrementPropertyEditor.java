@@ -5,7 +5,7 @@
  */
 package com.speedment.tool.property.editor;
 
-import com.speedment.tool.property.item.SimpleBooleanItem;
+import com.speedment.tool.property.item.SimpleCheckBoxItem;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.property.PropertyEditor;
 import java.util.stream.Stream;
@@ -19,8 +19,7 @@ public class AutoIncrementPropertyEditor<T extends ColumnProperty> implements Pr
 
     @Override
     public Stream<Item> fieldsFor(T document) {
-        return Stream.of(
-            new SimpleBooleanItem(
+        return Stream.of(new SimpleCheckBoxItem(
                 "Is Auto Incrementing",
                 document.autoIncrementProperty(),
                 "If this column will increment automatically for each new entity.")

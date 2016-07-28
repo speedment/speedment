@@ -9,7 +9,7 @@ import javafx.scene.control.TextInputControl;
  *
  * @author Simon
  */
-public class DefaultTextAreaItem extends AbstractDefaultStringItem {
+public class DefaultTextAreaItem extends DefaultStringItem {
 
     public DefaultTextAreaItem(String label, ObservableStringValue defaultValue, StringProperty value, String tooltip) {
         super(label, defaultValue, value, tooltip);

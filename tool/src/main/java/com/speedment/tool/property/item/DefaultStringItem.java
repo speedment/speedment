@@ -14,13 +14,13 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Simon
  */
-public abstract class AbstractDefaultStringItem  extends AbstractLabelAndTooltipItem {
+abstract class DefaultStringItem  extends BaseLabelTooltipItem {
 
     private final ObservableStringValue defaultValue;
     private final StringProperty value;
     private final StringProperty customValue;
 
-    public AbstractDefaultStringItem(String label, ObservableStringValue defaultValue, StringProperty value, String tooltip) {
+    public DefaultStringItem(String label, ObservableStringValue defaultValue, StringProperty value, String tooltip) {
         super(label, tooltip);
         this.defaultValue = requireNonNull(defaultValue);
         this.value        = requireNonNull(value);
@@ -28,7 +28,7 @@ public abstract class AbstractDefaultStringItem  extends AbstractLabelAndTooltip
     }
     
     @Override
-    public Node getEditor() {
+    protected Node getEditorNode() {
         final HBox container = new HBox();
         final TextInputControl textInput = getInputControl();
         final CheckBox auto = new CheckBox("Auto");
@@ -42,7 +42,7 @@ public abstract class AbstractDefaultStringItem  extends AbstractLabelAndTooltip
         value.bind(textInput.textProperty());
         
         auto.setSelected(usesDefaultValue);
-        auto.selectedProperty().addListener( (ov, o, isAuto) -> 
+        attachListener( auto.selectedProperty(), (ov, o, isAuto) -> 
             setTextFieldBehaviour(textInput, isAuto, defaultValue, customValue)
         );
         

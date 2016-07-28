@@ -5,7 +5,7 @@
  */
 package com.speedment.tool.property.editor;
 
-import com.speedment.tool.property.item.SimpleStringItem;
+import com.speedment.tool.property.item.SimpleTextFieldItem;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.property.PropertyEditor;
 import java.util.stream.Stream;
@@ -19,8 +19,7 @@ public class UsernamePropertyEditor<T extends DbmsProperty> implements PropertyE
 
     @Override
     public Stream<Item> fieldsFor(T document) {
-        return Stream.of(
-            new SimpleStringItem(
+        return Stream.of(new SimpleTextFieldItem(
                 "Username", 
                 document.usernameProperty(), 
                 "The username to use when connecting to the database."

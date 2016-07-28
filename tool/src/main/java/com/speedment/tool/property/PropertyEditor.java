@@ -12,7 +12,11 @@ public interface PropertyEditor<T> {
     
     interface Item{
         Node getLabel();
-        Node getEditor();
+        Editor getEditor();
+    }
+    interface Editor{
+        Node getNode();
+        void onRemove();
     }
     
     Stream<PropertyEditor.Item> fieldsFor(T document);

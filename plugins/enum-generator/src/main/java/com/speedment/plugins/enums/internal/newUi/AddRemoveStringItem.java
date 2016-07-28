@@ -2,7 +2,7 @@ package com.speedment.plugins.enums.internal.newUi;
 
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
-import com.speedment.tool.property.item.AbstractLabelAndTooltipItem;
+import com.speedment.tool.property.item.BaseLabelTooltipItem;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -30,7 +30,7 @@ import javafx.util.StringConverter;
  *
  * @author Simon
  */
-public class AddRemoveStringItem extends AbstractLabelAndTooltipItem{
+public class AddRemoveStringItem extends BaseLabelTooltipItem{
     //***********************************************************
     // 				VARIABLES
     //***********************************************************   
@@ -65,7 +65,7 @@ public class AddRemoveStringItem extends AbstractLabelAndTooltipItem{
     //***********************************************************   
     
     @Override
-    public Node getEditor() {
+    protected Node getEditorNode() {
         final VBox container = new VBox();
         
         ListView<String> listView = new ListView<>(strings);

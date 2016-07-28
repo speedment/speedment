@@ -5,7 +5,7 @@
  */
 package com.speedment.tool.property.editor;
 
-import com.speedment.tool.property.item.SimpleBooleanItem;
+import com.speedment.tool.property.item.SimpleCheckBoxItem;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.tool.config.trait.HasEnabledProperty;
 import com.speedment.tool.property.PropertyEditor;
@@ -20,8 +20,7 @@ public class EnabledPropertyEditor<T extends HasEnabledProperty> implements Prop
 
     @Override
     public Stream<PropertyEditor.Item> fieldsFor(T document) {
-        return Stream.of(
-            new SimpleBooleanItem(
+        return Stream.of(new SimpleCheckBoxItem(
                 "Enabled", 
                 document.enabledProperty(),
                 "True if this node should be included in the code generation."

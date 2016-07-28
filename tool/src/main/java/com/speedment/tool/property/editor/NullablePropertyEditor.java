@@ -5,7 +5,7 @@
  */
 package com.speedment.tool.property.editor;
 
-import com.speedment.tool.property.item.SimpleBooleanItem;
+import com.speedment.tool.property.item.SimpleCheckBoxItem;
 import com.speedment.runtime.config.trait.HasNullable;
 import com.speedment.tool.config.trait.HasNullableProperty;
 import com.speedment.tool.property.PropertyEditor;
@@ -20,8 +20,7 @@ public class NullablePropertyEditor<T extends HasNullableProperty> implements Pr
 
     @Override
     public Stream<Item> fieldsFor(T document) {
-        return Stream.of( 
-            new SimpleBooleanItem(
+        return Stream.of(new SimpleCheckBoxItem(
                 "Is nullable", 
                 document.nullableProperty(),
                 "If this node can hold 'null'-values or not."

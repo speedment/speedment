@@ -13,17 +13,17 @@ import javafx.scene.control.CheckBox;
  *
  * @author Simon
  */
-public class SimpleBooleanItem extends AbstractLabelAndTooltipItem{
+public class SimpleCheckBoxItem extends BaseLabelTooltipItem{
 
     private final BooleanProperty property;
     
-    public SimpleBooleanItem(String label, BooleanProperty property, String tooltip){
+    public SimpleCheckBoxItem(String label, BooleanProperty property, String tooltip){
         super(label, tooltip);
         this.property = property;
     }
 
     @Override
-    public Node getEditor() {
+    protected Node getEditorNode() {
         final CheckBox box = new CheckBox();
         box.setSelected( property.get() );        
         property.bind( box.selectedProperty() );
