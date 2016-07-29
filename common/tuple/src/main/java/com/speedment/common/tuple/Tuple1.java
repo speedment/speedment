@@ -42,7 +42,7 @@ public interface Tuple1<T0> extends Tuple {
 
     @Override
     default Object get(int index) {
-        if (index == 1) {
+        if (index == 0) {
             return get0();
         } else {
             throw new IllegalArgumentException(String.format(
