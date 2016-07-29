@@ -46,16 +46,40 @@ import com.speedment.common.injector.Injector;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.typetoken.TypeTokenGenerator;
 import com.speedment.runtime.config.typetoken.TypeToken;
+import com.speedment.runtime.field.ByteField;
+import com.speedment.runtime.field.ByteForeignKeyField;
+import com.speedment.runtime.field.CharField;
+import com.speedment.runtime.field.CharForeignKeyField;
 import com.speedment.runtime.field.ComparableField;
+import com.speedment.runtime.field.DoubleField;
+import com.speedment.runtime.field.DoubleForeignKeyField;
+import com.speedment.runtime.field.FloatField;
+import com.speedment.runtime.field.FloatForeignKeyField;
+import com.speedment.runtime.field.IntField;
+import com.speedment.runtime.field.IntForeignKeyField;
 import com.speedment.runtime.field.LongField;
 import com.speedment.runtime.field.LongForeignKeyField;
 import com.speedment.runtime.field.ReferenceField;
+import com.speedment.runtime.field.ShortField;
+import com.speedment.runtime.field.ShortForeignKeyField;
 import com.speedment.runtime.field.StringField;
+import com.speedment.runtime.internal.field.ByteFieldImpl;
+import com.speedment.runtime.internal.field.ByteForeignKeyFieldImpl;
+import com.speedment.runtime.internal.field.CharFieldImpl;
+import com.speedment.runtime.internal.field.CharForeignKeyFieldImpl;
 import com.speedment.runtime.internal.field.ComparableFieldImpl;
 import com.speedment.runtime.internal.field.ComparableForeignKeyFieldImpl;
+import com.speedment.runtime.internal.field.DoubleFieldImpl;
+import com.speedment.runtime.internal.field.DoubleForeignKeyFieldImpl;
+import com.speedment.runtime.internal.field.FloatFieldImpl;
+import com.speedment.runtime.internal.field.FloatForeignKeyFieldImpl;
+import com.speedment.runtime.internal.field.IntFieldImpl;
+import com.speedment.runtime.internal.field.IntForeignKeyFieldImpl;
 import com.speedment.runtime.internal.field.LongFieldImpl;
 import com.speedment.runtime.internal.field.LongForeignKeyFieldImpl;
 import com.speedment.runtime.internal.field.ReferenceFieldImpl;
+import com.speedment.runtime.internal.field.ShortFieldImpl;
+import com.speedment.runtime.internal.field.ShortForeignKeyFieldImpl;
 import com.speedment.runtime.internal.field.StringFieldImpl;
 import com.speedment.runtime.util.TypeTokenFactory;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
@@ -72,7 +96,13 @@ public final class EntityTranslatorSupport {
     
     private enum FieldType {
         STRING,
+        BYTE,
+        SHORT,
+        INT,
         LONG,
+        FLOAT,
+        DOUBLE,
+        CHAR,
         COMPARABLE,
         REFERENCE
     }
@@ -102,8 +132,20 @@ public final class EntityTranslatorSupport {
         final FieldType fieldType;
         if (TypeTokenFactory.createStringToken().equals(mapping)) {
             fieldType = FieldType.STRING;
+        } else if (TypeTokenFactory.create(byte.class).equals(mapping)) {
+            fieldType = FieldType.BYTE;
+        } else if (TypeTokenFactory.create(short.class).equals(mapping)) {
+            fieldType = FieldType.SHORT;
+        } else if (TypeTokenFactory.create(int.class).equals(mapping)) {
+            fieldType = FieldType.INT;
         } else if (TypeTokenFactory.create(long.class).equals(mapping)) {
             fieldType = FieldType.LONG;
+        } else if (TypeTokenFactory.create(float.class).equals(mapping)) {
+            fieldType = FieldType.FLOAT;
+        } else if (TypeTokenFactory.create(double.class).equals(mapping)) {
+            fieldType = FieldType.DOUBLE;
+        } else if (TypeTokenFactory.create(char.class).equals(mapping)) {
+            fieldType = FieldType.CHAR;
         } else if (mapping.isComparable()) {
             fieldType = FieldType.COMPARABLE;
         } else {
@@ -135,6 +177,42 @@ public final class EntityTranslatorSupport {
                             .add(Generic.of(fkType));
                         break;
                         
+                    case BYTE :
+                        type = Type.of(ByteForeignKeyField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(fkType));
+
+                        implType = Type.of(ByteForeignKeyFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(fkType));
+                        break;
+                        
+                    case SHORT :
+                        type = Type.of(ShortForeignKeyField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(fkType));
+
+                        implType = Type.of(ShortForeignKeyFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(fkType));
+                        break;
+                        
+                    case INT :
+                        type = Type.of(IntForeignKeyField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(fkType));
+
+                        implType = Type.of(IntForeignKeyFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(fkType));
+                        break;
+                        
                     case LONG :
                         type = Type.of(LongForeignKeyField.class)
                             .add(Generic.of(entityType))
@@ -142,6 +220,42 @@ public final class EntityTranslatorSupport {
                             .add(Generic.of(fkType));
 
                         implType = Type.of(LongForeignKeyFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(fkType));
+                        break;
+                        
+                    case FLOAT :
+                        type = Type.of(FloatForeignKeyField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(fkType));
+
+                        implType = Type.of(FloatForeignKeyFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(fkType));
+                        break;
+                        
+                    case DOUBLE :
+                        type = Type.of(DoubleForeignKeyField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(fkType));
+
+                        implType = Type.of(DoubleForeignKeyFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(fkType));
+                        break;
+                        
+                    case CHAR :
+                        type = Type.of(CharForeignKeyField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(fkType));
+
+                        implType = Type.of(CharForeignKeyFieldImpl.class)
                             .add(Generic.of(entityType))
                             .add(Generic.of(databaseType))
                             .add(Generic.of(fkType));
@@ -197,12 +311,72 @@ public final class EntityTranslatorSupport {
                             .add(Generic.of(databaseType));
                         break;
                         
+                    case BYTE :
+                        type = Type.of(ByteField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType));
+
+                        implType = Type.of(ByteFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType));
+                        break;
+                        
+                    case SHORT :
+                        type = Type.of(ShortField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType));
+
+                        implType = Type.of(ShortFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType));
+                        break;
+                        
+                    case INT :
+                        type = Type.of(IntField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType));
+
+                        implType = Type.of(IntFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType));
+                        break;
+                        
                     case LONG :
                         type = Type.of(LongField.class)
                             .add(Generic.of(entityType))
                             .add(Generic.of(databaseType));
 
                         implType = Type.of(LongFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType));
+                        break;
+                        
+                    case FLOAT :
+                        type = Type.of(FloatField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType));
+
+                        implType = Type.of(FloatFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType));
+                        break;
+                        
+                    case DOUBLE :
+                        type = Type.of(DoubleField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType));
+
+                        implType = Type.of(DoubleFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType));
+                        break;
+                        
+                    case CHAR :
+                        type = Type.of(CharField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType));
+
+                        implType = Type.of(CharFieldImpl.class)
                             .add(Generic.of(entityType))
                             .add(Generic.of(databaseType));
                         break;
