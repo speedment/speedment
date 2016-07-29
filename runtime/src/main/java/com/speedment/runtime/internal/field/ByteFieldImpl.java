@@ -1,0 +1,133 @@
+package com.speedment.runtime.internal.field;
+
+import com.speedment.runtime.config.identifier.FieldIdentifier;
+import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.field.ByteField;
+import com.speedment.runtime.field.method.ByteGetter;
+import com.speedment.runtime.field.method.ByteSetter;
+import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.field.predicate.Inclusion;
+import com.speedment.runtime.internal.field.comparator.ByteFieldComparator;
+import com.speedment.runtime.internal.field.comparator.ByteFieldComparatorImpl;
+import com.speedment.runtime.internal.field.predicate.bytes.ByteBetweenPredicate;
+import com.speedment.runtime.internal.field.predicate.bytes.ByteEqualPredicate;
+import com.speedment.runtime.internal.field.predicate.bytes.ByteGreaterOrEqualPredicate;
+import com.speedment.runtime.internal.field.predicate.bytes.ByteGreaterThanPredicate;
+import com.speedment.runtime.internal.field.predicate.bytes.ByteInPredicate;
+import java.util.Set;
+import java.util.function.Predicate;
+import static java.util.Objects.requireNonNull;
+
+/**
+ * @param <ENTITY> entity type
+ * @param <D>      database type
+ * 
+ * @author Emil Forslund
+ * @since  3.0.0
+ */
+public final class ByteFieldImpl<ENTITY, D>  implements ByteField<ENTITY, D> {
+    
+    private final FieldIdentifier<ENTITY> identifier;
+    private final ByteGetter<ENTITY> getter;
+    private final ByteSetter<ENTITY> setter;
+    private final TypeMapper<D, Byte> typeMapper;
+    private final boolean unique;
+    
+    public ByteFieldImpl(FieldIdentifier<ENTITY> identifier, ByteGetter<ENTITY> getter, ByteSetter<ENTITY> setter, TypeMapper<D, Byte> typeMapper, boolean unique) {
+        this.identifier = requireNonNull(identifier);
+        this.getter     = requireNonNull(getter);
+        this.setter     = requireNonNull(setter);
+        this.typeMapper = requireNonNull(typeMapper);
+        this.unique     = unique;
+    }
+    
+    @Override
+    public FieldIdentifier<ENTITY> identifier() {
+        return identifier;
+    }
+    
+    @Override
+    public ByteSetter<ENTITY> setter() {
+        return setter;
+    }
+    
+    @Override
+    public ByteGetter<ENTITY> getter() {
+        return getter;
+    }
+    
+    @Override
+    public TypeMapper<D, Byte> typeMapper() {
+        return typeMapper;
+    }
+    
+    @Override
+    public boolean isUnique() {
+        return unique;
+    }
+    
+    @Override
+    public ByteFieldComparator<ENTITY, D> comparator() {
+        return new ByteFieldComparatorImpl<>(this);
+    }
+    
+    @Override
+    public ByteFieldComparator<ENTITY, D> comparatorNullFieldsFirst() {
+        return comparator();
+    }
+    
+    @Override
+    public ByteFieldComparator<ENTITY, D> comparatorNullFieldsLast() {
+        return comparator();
+    }
+    
+    @Override
+    public FieldPredicate<ENTITY> equal(Byte value) {
+        return new ByteEqualPredicate<>(this, value);
+    }
+    
+    @Override
+    public FieldPredicate<ENTITY> greaterThan(Byte value) {
+        return new ByteGreaterThanPredicate<>(this, value);
+    }
+    
+    @Override
+    public FieldPredicate<ENTITY> greaterOrEqual(Byte value) {
+        return new ByteGreaterOrEqualPredicate<>(this, value);
+    }
+    
+    @Override
+    public FieldPredicate<ENTITY> between(Byte start, Byte end, Inclusion inclusion) {
+        return new ByteBetweenPredicate<>(this, start, end, inclusion);
+    }
+    
+    @Override
+    public FieldPredicate<ENTITY> in(Set<Byte> set) {
+        return new ByteInPredicate<>(this, set);
+    }
+    
+    @Override
+    public Predicate<ENTITY> notEqual(Byte value) {
+        return new ByteEqualPredicate<>(this, value).negate();
+    }
+    
+    @Override
+    public Predicate<ENTITY> lessOrEqual(Byte value) {
+        return new ByteGreaterThanPredicate<>(this, value).negate();
+    }
+    
+    @Override
+    public Predicate<ENTITY> lessThan(Byte value) {
+        return new ByteGreaterOrEqualPredicate<>(this, value).negate();
+    }
+    
+    @Override
+    public Predicate<ENTITY> notBetween(Byte start, Byte end, Inclusion inclusion) {
+        return new ByteBetweenPredicate<>(this, start, end, inclusion).negate();
+    }
+    
+    @Override
+    public Predicate<ENTITY> notIn(Set<Byte> set) {
+        return new ByteInPredicate<>(this, set).negate();
+    }
+}

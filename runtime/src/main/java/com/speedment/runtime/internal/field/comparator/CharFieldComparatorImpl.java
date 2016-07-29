@@ -1,6 +1,6 @@
 package com.speedment.runtime.internal.field.comparator;
 
-import com.speedment.runtime.field.trait.HasLongValue;
+import com.speedment.runtime.field.trait.HasCharValue;
 import java.util.Comparator;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -12,18 +12,18 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class LongFieldComparatorImpl<ENTITY, D>  implements LongFieldComparator<ENTITY, D> {
+public final class CharFieldComparatorImpl<ENTITY, D>  implements CharFieldComparator<ENTITY, D> {
     
-    private final HasLongValue<ENTITY, D> field;
+    private final HasCharValue<ENTITY, D> field;
     private boolean reversed;
     
-    public LongFieldComparatorImpl(HasLongValue<ENTITY, D> field) {
+    public CharFieldComparatorImpl(HasCharValue<ENTITY, D> field) {
         this.field    = requireNonNull(field);
         this.reversed = false;
     }
     
     @Override
-    public HasLongValue<ENTITY, D> getField() {
+    public HasCharValue<ENTITY, D> getField() {
         return field;
     }
     
@@ -41,12 +41,12 @@ public final class LongFieldComparatorImpl<ENTITY, D>  implements LongFieldCompa
     @Override
     public int compare(ENTITY first, ENTITY second) {
         requireNonNulls(first, second);
-        final long a = field.getAsLong(first);
-        final long b = field.getAsLong(second);
+        final char a = field.getAsChar(first);
+        final char b = field.getAsChar(second);
         return applyReversed(a - b);
     }
     
-    private int applyReversed(long compare) {
+    private int applyReversed(int compare) {
         if (compare == 0) {
             return 0;
         } else {

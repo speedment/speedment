@@ -1,10 +1,10 @@
 package com.speedment.runtime.internal.field.comparator;
 
-import com.speedment.runtime.field.trait.HasLongValue;
+import com.speedment.runtime.field.trait.HasDoubleValue;
 import java.util.Comparator;
 
 /**
- * A predicate that evaluates if a value is between two longs.
+ * A predicate that evaluates if a value is between two doubles.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type
@@ -12,14 +12,14 @@ import java.util.Comparator;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public interface LongFieldComparator<ENTITY, D>  extends Comparator<ENTITY> {
+public interface DoubleFieldComparator<ENTITY, D>  extends Comparator<ENTITY> {
     
     /**
      * Gets the field that is being compared.
      * 
      * @return the compared field
      */
-    HasLongValue<ENTITY, D> getField();
+    HasDoubleValue<ENTITY, D> getField();
     
     /**
      * Returns if this {@code Comparator} is reversed.
