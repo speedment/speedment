@@ -20,7 +20,7 @@ public class IpAdressPropertyEditor<T extends DbmsProperty> implements PropertyE
     public Stream<Item> fieldsFor(T document) {
         return Stream.of(new DefaultTextFieldItem(
                 "IP Adress", 
-                new SimpleStringProperty("192.168.0.1"), 
+                new SimpleStringProperty("127.0.0.1"), 
                 document.ipAddressProperty(), 
                 "The ip of the database host."
             )

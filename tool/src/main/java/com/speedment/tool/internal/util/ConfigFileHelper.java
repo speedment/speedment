@@ -337,7 +337,7 @@ public final class ConfigFileHelper {
 
             DocumentTranscoder.save(project, path);
 
-            final String absolute = parent.toFile().getAbsolutePath();
+            final String absolute = file.getAbsolutePath();
             Settings.inst().set("project_location", absolute);
             
             if (isGraphical) {

@@ -395,6 +395,7 @@
 /*** Output messages ***/
 .label.msg {
     -fx-font-family: 'Consolas', "Monospace";
+    -fx-text-overrun: center-ellipsis;
     -fx-font-size: 1.1em;
     -fx-text-fill: black;
 }

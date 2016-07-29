@@ -40,7 +40,9 @@ public class DefaultTextAreaItem extends DefaultStringItem {
 
     @Override
     protected TextInputControl getInputControl() {
-        return new TextArea();
+        TextArea area = new TextArea();
+        area.setWrapText(true);
+        return area;
     }
     
 }

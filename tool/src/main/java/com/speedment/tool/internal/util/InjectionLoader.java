@@ -131,6 +131,8 @@ public final class InjectionLoader {
         stage.hide();
         brand.apply(stage, scene);
         stage.setScene(scene);
+        WindowSettingUtil.applySaveOnCloseMethod(stage, name);
+        WindowSettingUtil.applyStoredDisplaySettings(stage, name);
         stage.show();
         
         return parent;
