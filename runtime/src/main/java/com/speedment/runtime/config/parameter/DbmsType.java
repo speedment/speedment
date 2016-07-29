@@ -22,13 +22,13 @@ import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.db.DbmsMetadataHandler;
 import com.speedment.runtime.db.DbmsOperationHandler;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;
-import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
 
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 
 import static com.speedment.common.mapstream.MapStream.comparing;
+import com.speedment.runtime.field.predicate.FieldPredicateView;
 
 /**
  * The {@code DbmsType} interface defines unique properties for different Dbms
@@ -153,12 +153,12 @@ public interface DbmsType {
     ConnectionUrlGenerator getConnectionUrlGenerator();
 
     /**
-     * Returns the SpeedmentPredicateView for this database. A
-     * SpeedmentPredicateView can render a SQL query given a stream pipeline.
+     * Returns the FieldPredicateView for this database. A
+ FieldPredicateView can render a SQL query given a stream pipeline.
      *
-     * @return the SpeedmentPredicateView for this database
+     * @return the FieldPredicateView for this database
      */
-    SpeedmentPredicateView getSpeedmentPredicateView();
+    FieldPredicateView getSpeedmentPredicateView();
 
     /**
      * Returns a pre-defined Set for the TypeInfoMetaData for this database

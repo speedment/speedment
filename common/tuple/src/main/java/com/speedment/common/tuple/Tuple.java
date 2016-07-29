@@ -35,5 +35,13 @@ public interface Tuple extends BasicTuple<Object> {
      * @return a {@link Stream} of all values for this Tuple
      */
     Stream<Object> stream();
+    
+    @Override
+    default <T> Stream<T> streamOf(Class<T> clazz) {
+        return stream()
+            .filter(s -> s != null)
+            .filter(clazz::isInstance)
+            .map(clazz::cast);
+    }
 
 }

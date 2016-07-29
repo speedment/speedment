@@ -259,6 +259,47 @@ public final class DocumentDbUtil {
             );
     }
     
+    public static Optional<? extends Column> referencedColumnIfPresent(Project project, FieldIdentifier<?> identifier) {
+        return referencedColumnIfPresent(project, identifier.dbmsName(), identifier.schemaName(), identifier.tableName(), identifier.columnName());
+    }
+    
+    public static Optional<? extends Table> referencedTableIfPresent(Project project, FieldIdentifier<?> identifier) {
+        return referencedTableIfPresent(project, identifier.dbmsName(), identifier.schemaName(), identifier.tableName());
+    }
+    
+    public static Optional<? extends Schema> referencedSchemaIfPresent(Project project, FieldIdentifier<?> identifier) {
+        return referencedSchemaIfPresent(project, identifier.dbmsName(), identifier.schemaName());
+    }
+    
+    public static Optional<? extends Dbms> referencedDbmsIfPresent(Project project, FieldIdentifier<?> identifier) {
+        return referencedDbmsIfPresent(project, identifier.dbmsName());
+    }
+    
+    public static Optional<? extends Column> referencedColumnIfPresent(Project project, String dbmsName, String schemaName, String tableName, String columnName) {
+        return referencedTableIfPresent(project, dbmsName, schemaName, tableName)
+            .flatMap(table -> table.columns().filter(column -> columnName.equals(column.getName()))
+                .findAny()
+            );
+    }
+    
+    public static Optional<? extends Table> referencedTableIfPresent(Project project, String dbmsName, String schemaName, String tableName) {
+        return referencedSchemaIfPresent(project, dbmsName, schemaName)
+            .flatMap(schema -> schema.tables().filter(table -> tableName.equals(table.getName()))
+                .findAny()
+            );
+    }
+    
+    public static Optional<? extends Schema> referencedSchemaIfPresent(Project project, String dbmsName, String schemaName) {
+        return referencedDbmsIfPresent(project, dbmsName)
+            .flatMap(dbms -> dbms.schemas().filter(schema -> schemaName.equals(schema.getName()))
+                .findAny()
+            );
+    }
+    
+    public static Optional<? extends Dbms> referencedDbmsIfPresent(Project project, String dbmsName) {
+        return project.dbmses().filter(dbms -> dbmsName.equals(dbms.getName())).findAny();
+    }
+    
     public static Column referencedColumn(Project project, FieldIdentifier<?> identifier) {
         return referencedColumn(project, identifier.dbmsName(), identifier.schemaName(), identifier.tableName(), identifier.columnName());
     }
@@ -276,9 +317,8 @@ public final class DocumentDbUtil {
     }
     
     public static Column referencedColumn(Project project, String dbmsName, String schemaName, String tableName, String columnName) {
-        return referencedTable(project, dbmsName, schemaName, tableName)
-            .columns().filter(column -> columnName.equals(column.getName()))
-            .findAny().orElseThrow(() -> new SpeedmentException(
+        return referencedColumnIfPresent(project, dbmsName, schemaName, tableName, columnName)
+            .orElseThrow(() -> new SpeedmentException(
                 "Could not find referenced " + Column.class.getSimpleName() + 
                 " with name '" + columnName + "'."
             ));

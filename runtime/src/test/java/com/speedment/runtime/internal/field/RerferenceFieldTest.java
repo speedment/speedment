@@ -16,14 +16,14 @@
  */
 package com.speedment.runtime.internal.field;
 
-import com.speedment.runtime.field.method.Getter;
-import com.speedment.runtime.field.method.Setter;
 import org.junit.Test;
 
 import java.util.List;
 
 import static com.speedment.runtime.internal.field.Entity.NAME;
 import static org.junit.Assert.assertEquals;
+import com.speedment.runtime.field.method.ReferenceGetter;
+import com.speedment.runtime.field.method.ReferenceSetter;
 
 /**
  *
@@ -33,15 +33,15 @@ public class RerferenceFieldTest extends BaseFieldTest {
 
     @Test
     public void testGetter() throws Exception {
-        final Getter<Entity, String> result = NAME.getter();
-        final Getter<Entity, String> expected = (Entity e) -> e.getName();
+        final ReferenceGetter<Entity, String> result = NAME.getter();
+        final ReferenceGetter<Entity, String> expected = (Entity e) -> e.getName();
         final Entity e = new EntityImpl(45, "Arne");
         assertEquals(expected.apply(e), result.apply(e));
     }
 
     @Test
     public void testSetter() throws Exception {
-        final Setter<Entity, String> result = NAME.setter();
+        final ReferenceSetter<Entity, String> result = NAME.setter();
         final Entity e = new EntityImpl(45, "Arne");
         result.apply(e, "Tryggve");
         assertEquals("Tryggve", e.getName());

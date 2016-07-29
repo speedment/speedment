@@ -26,8 +26,7 @@ import com.speedment.runtime.db.AsynchronousQueryResult;
 import com.speedment.runtime.db.DbmsOperationHandler;
 import com.speedment.runtime.db.SqlFunction;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.internal.manager.sql.SqlDeleteStatement;
 import com.speedment.runtime.internal.manager.sql.SqlInsertStatement;
 import com.speedment.runtime.internal.manager.sql.SqlStatement;
@@ -110,8 +109,8 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     }
 
     @Override
-    public <F extends FieldTrait & ReferenceFieldTrait<?, ?, ?>> void executeInsert(Dbms dbms, String sql, List<?> values, Collection<F> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
-        final SqlInsertStatement sqlUpdateStatement = new SqlInsertStatement(sql, values, generatedKeyFields, generatedKeyConsumer);
+    public <ENTITY> void executeInsert(Dbms dbms, String sql, List<?> values, Collection<Field<ENTITY>> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
+        final SqlInsertStatement<ENTITY> sqlUpdateStatement = new SqlInsertStatement<>(sql, values, generatedKeyFields, generatedKeyConsumer);
         execute(dbms, singletonList(sqlUpdateStatement));
     }
 
@@ -142,7 +141,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
                     lastSqlStatement = sqlStatement;
                     switch (sqlStatement.getType()) {
                         case INSERT: {
-                            final SqlInsertStatement s = (SqlInsertStatement) sqlStatement;
+                            final SqlInsertStatement<?> s = (SqlInsertStatement<?>) sqlStatement;
                             handleSqlStatement(dbms, conn, s);
                             break;
                         }
@@ -207,7 +206,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         }
     }
 
-    protected void handleSqlStatement(Dbms dbms, final Connection conn, final SqlInsertStatement sqlStatement) throws SQLException {
+    protected <ENTITY> void handleSqlStatement(Dbms dbms, Connection conn, SqlInsertStatement<ENTITY> sqlStatement) throws SQLException {
         try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.RETURN_GENERATED_KEYS)) {
             int i = 1;
             for (Object o : sqlStatement.getValues()) {
@@ -223,15 +222,15 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         }
     }
 
-    protected void handleSqlStatement(Dbms dbms, final Connection conn, final SqlUpdateStatement sqlStatement) throws SQLException {
+    protected void handleSqlStatement(Dbms dbms, Connection conn, SqlUpdateStatement sqlStatement) throws SQLException {
         handleSqlStatementHelper(dbms, conn, sqlStatement);
     }
 
-    protected void handleSqlStatement(Dbms dbms, final Connection conn, final SqlDeleteStatement sqlStatement) throws SQLException {
+    protected void handleSqlStatement(Dbms dbms, Connection conn, SqlDeleteStatement sqlStatement) throws SQLException {
         handleSqlStatementHelper(dbms, conn, sqlStatement);
     }
 
-    private void handleSqlStatementHelper(Dbms dbms, final Connection conn, final SqlStatement sqlStatement) throws SQLException {
+    private void handleSqlStatementHelper(Dbms dbms, Connection conn, SqlStatement sqlStatement) throws SQLException {
         try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.NO_GENERATED_KEYS)) {
             int i = 1;
             for (Object o : sqlStatement.getValues()) {
@@ -245,7 +244,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         sqlStatementList.stream()
             .filter(SqlInsertStatement.class::isInstance)
             .map(SqlInsertStatement.class::cast)
-            .forEach(SqlInsertStatement::acceptGeneratedKeys);
+            .forEach(SqlInsertStatement<?>::acceptGeneratedKeys);
     }
 
     @FunctionalInterface

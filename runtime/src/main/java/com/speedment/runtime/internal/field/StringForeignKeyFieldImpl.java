@@ -16,256 +16,204 @@
  */
 package com.speedment.runtime.internal.field;
 
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.field.Inclusion;
 import com.speedment.runtime.field.StringForeignKeyField;
-import com.speedment.runtime.field.method.FieldSetter;
+import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.method.Finder;
-import com.speedment.runtime.field.method.Getter;
-import com.speedment.runtime.field.method.Setter;
-import com.speedment.runtime.field.predicate.ComparableSpeedmentPredicate;
-import com.speedment.runtime.field.predicate.SpeedmentPredicate;
-import com.speedment.runtime.field.predicate.StringSpeedmentPredicate;
-import com.speedment.runtime.field.trait.ComparableFieldTrait;
-import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
-import com.speedment.runtime.field.trait.ReferenceForeignKeyFieldTrait;
-import com.speedment.runtime.field.trait.StringFieldTrait;
-import com.speedment.runtime.internal.field.trait.ComparableFieldTraitImpl;
-import com.speedment.runtime.internal.field.trait.FieldTraitImpl;
-import com.speedment.runtime.internal.field.trait.ReferenceFieldTraitImpl;
-import com.speedment.runtime.internal.field.trait.ReferenceForeignKeyFieldTraitImpl;
-import com.speedment.runtime.internal.field.trait.StringFieldTraitImpl;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
-
+import com.speedment.runtime.field.method.ReferenceGetter;
+import com.speedment.runtime.field.method.ReferenceSetter;
+import com.speedment.runtime.internal.field.comparator.NullOrder;
+import com.speedment.runtime.internal.field.comparator.ReferenceFieldComparatorImpl;
+import com.speedment.runtime.internal.field.predicate.reference.ReferenceBetweenPredicate;
+import com.speedment.runtime.internal.field.predicate.reference.ReferenceEqualPredicate;
+import com.speedment.runtime.internal.field.predicate.reference.ReferenceGreaterOrEqualPredicate;
+import com.speedment.runtime.internal.field.predicate.reference.ReferenceGreaterThanPredicate;
+import com.speedment.runtime.internal.field.predicate.reference.ReferenceInPredicate;
+import com.speedment.runtime.internal.field.predicate.reference.ReferenceIsNullPredicate;
+import com.speedment.runtime.internal.field.predicate.string.StringContainsPredicate;
+import com.speedment.runtime.internal.field.predicate.string.StringEndsWithPredicate;
+import com.speedment.runtime.internal.field.predicate.string.StringEqualIgnoreCasePredicate;
+import com.speedment.runtime.internal.field.predicate.string.StringIsEmptyPredicate;
+import com.speedment.runtime.internal.field.predicate.string.StringStartsWithPredicate;
 import java.util.Comparator;
-import java.util.Optional;
 import java.util.Set;
-
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import java.util.function.Predicate;
+import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.internal.field.predicate.reference.ReferenceLessOrEqualPredicate;
+import com.speedment.runtime.internal.field.predicate.reference.ReferenceLessThanPredicate;
+import com.speedment.runtime.internal.field.predicate.reference.ReferenceNotBetweenPredicate;
+import com.speedment.runtime.internal.field.predicate.reference.ReferenceNotEqualPredicate;
+import com.speedment.runtime.internal.field.predicate.reference.ReferenceNotInPredicate;
+import static java.util.Objects.requireNonNull;
 
 /**
- * This class represents a Reference Field. A Reference Field is something that
- * extends {@link Object}.
- *
- * @author pemi
- * @param <ENTITY> The entity type
- * @param <FK> Foreign Key type
+ * @param <ENTITY> the entity type
+ * @param <D>      the database type
+ * 
+ * @author  Per Minborg
+ * @since   2.2.0
  */
-public class StringForeignKeyFieldImpl<ENTITY, D, FK> implements StringForeignKeyField<ENTITY, D, FK> {
+public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements 
+        StringForeignKeyField<ENTITY, D, FK_ENTITY> {
 
-    private final FieldTrait field;
-    private final ReferenceFieldTrait<ENTITY, D, String> referenceField;
-    private final ComparableFieldTrait<ENTITY, D, String> comparableField;
-    private final StringFieldTrait<ENTITY, D> stringField;
-    private final ReferenceForeignKeyFieldTrait<ENTITY, D, FK> referenceForeignKeyField;
+    private final FieldIdentifier<ENTITY> identifier;
+    private final ReferenceGetter<ENTITY, String> getter;
+    private final ReferenceSetter<ENTITY, String> setter;
+    private final Finder<ENTITY, FK_ENTITY> finder;
+    private final TypeMapper<D, String> typeMapper;
+    private final boolean unique;
 
     public StringForeignKeyFieldImpl(
-        FieldIdentifier<ENTITY> identifier,
-        Getter<ENTITY, String> getter,
-        Setter<ENTITY, String> setter,
-        Finder<ENTITY, FK> finder,
-        TypeMapper<D, String> typeMapper,
-        boolean unique
-    ) {
-        requireNonNulls(identifier, getter, setter, finder, typeMapper);
-        field = new FieldTraitImpl(identifier, unique);
-        referenceField = new ReferenceFieldTraitImpl<>(field, getter, setter, typeMapper);
-        comparableField = new ComparableFieldTraitImpl<>(field, referenceField);
-        stringField = new StringFieldTraitImpl<>(field, referenceField);
-        referenceForeignKeyField = new ReferenceForeignKeyFieldTraitImpl<>(finder);
+            FieldIdentifier<ENTITY> identifier,
+            ReferenceGetter<ENTITY, String> getter,
+            ReferenceSetter<ENTITY, String> setter,
+            Finder<ENTITY, FK_ENTITY> finder,
+            TypeMapper<D, String> typeMapper,
+            boolean unique) {
+        
+        this.identifier = requireNonNull(identifier);
+        this.getter     = requireNonNull(getter);
+        this.setter     = requireNonNull(setter);
+        this.finder     = requireNonNull(finder);
+        this.typeMapper = requireNonNull(typeMapper);
+        this.unique     = unique;
+    }
+    
+    /*****************************************************************/
+    /*                           Getters                             */
+    /*****************************************************************/
+
+    @Override
+    public FieldIdentifier<ENTITY> identifier() {
+        return identifier;
     }
 
     @Override
-    public FieldIdentifier<ENTITY> getIdentifier() {
-        return referenceField.getIdentifier();
+    public ReferenceSetter<ENTITY, String> setter() {
+        return setter;
     }
 
     @Override
-    public boolean isUnique() {
-        return field.isUnique();
+    public ReferenceGetter<ENTITY, String> getter() {
+        return getter;
     }
-
+    
     @Override
-    public Optional<Column> findColumn(Project project) {
-        return Optional.of(DocumentDbUtil.referencedColumn(project, getIdentifier()));
-    }
-
-    @Override
-    public Setter<ENTITY, String> setter() {
-        return referenceField.setter();
-    }
-
-    @Override
-    public Getter<ENTITY, String> getter() {
-        return referenceField.getter();
-    }
-
-    @Override
-    public Finder<ENTITY, FK> finder() {
-        return referenceForeignKeyField.finder();
+    public Finder<ENTITY, FK_ENTITY> finder() {
+        return finder;
     }
 
     @Override
     public TypeMapper<D, String> typeMapper() {
-        return referenceField.typeMapper();
+        return typeMapper;
     }
-
+    
     @Override
-    public FieldSetter<ENTITY, String> setTo(String value) {
-        return referenceField.setTo(value);
+    public boolean isUnique() {
+        return unique;
     }
-
-    @Override
-    public SpeedmentPredicate<ENTITY, D, String> isNull() {
-        return referenceField.isNull();
-    }
-
-    @Override
-    public SpeedmentPredicate<ENTITY, D, String> isNotNull() {
-        return referenceField.isNotNull();
-    }
-
+    
+    /*****************************************************************/
+    /*                         Comparators                           */
+    /*****************************************************************/
+    
     @Override
     public Comparator<ENTITY> comparator() {
-        return comparableField.comparator();
+        return new ReferenceFieldComparatorImpl<>(this, NullOrder.NONE);
     }
 
     @Override
     public Comparator<ENTITY> comparatorNullFieldsFirst() {
-        return comparableField.comparatorNullFieldsFirst();
+        return new ReferenceFieldComparatorImpl<>(this, NullOrder.FIRST);
     }
 
     @Override
     public Comparator<ENTITY> comparatorNullFieldsLast() {
-        return comparableField.comparatorNullFieldsLast();
+        return new ReferenceFieldComparatorImpl<>(this, NullOrder.LAST);
+    }
+    
+    /*****************************************************************/
+    /*                           Operators                           */
+    /*****************************************************************/
+
+    @Override
+    public FieldPredicate<ENTITY> isNull() {
+        return new ReferenceIsNullPredicate<>(this);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, D, String> equal(String value) {
-        return comparableField.equal(value);
+    public FieldPredicate<ENTITY> equal(String value) {
+        return new ReferenceEqualPredicate<>(this, value);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, D, String> notEqual(String value) {
-        return comparableField.notEqual(value);
+    public Predicate<ENTITY> greaterThan(String value) {
+        return new ReferenceGreaterThanPredicate<>(this, value);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, D, String> lessThan(String value) {
-        return comparableField.lessThan(value);
+    public Predicate<ENTITY> greaterOrEqual(String value) {
+        return new ReferenceGreaterOrEqualPredicate<>(this, value);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, D, String> lessOrEqual(String value) {
-        return comparableField.lessOrEqual(value);
+    public Predicate<ENTITY> between(String start, String end, Inclusion inclusion) {
+        return new ReferenceBetweenPredicate<>(this, start, end, inclusion);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, D, String> greaterThan(String value) {
-        return comparableField.greaterThan(value);
+    public Predicate<ENTITY> in(Set<String> values) {
+        return new ReferenceInPredicate<>(this, values);
+    }
+    
+    @Override
+    public Predicate<ENTITY> notEqual(String value) {
+        return new ReferenceNotEqualPredicate<>(this, value);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, D, String> greaterOrEqual(String value) {
-        return comparableField.greaterOrEqual(value);
+    public Predicate<ENTITY> lessThan(String value) {
+        return new ReferenceLessThanPredicate<>(this, value);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, D, String> between(String start, String end) {
-        return comparableField.between(start, end);
+    public Predicate<ENTITY> lessOrEqual(String value) {
+        return new ReferenceLessOrEqualPredicate<>(this, value);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, D, String> between(String start, String end, Inclusion inclusion) {
-        return comparableField.between(start, end, inclusion);
+    public Predicate<ENTITY> notBetween(String start, String end, Inclusion inclusion) {
+        return new ReferenceNotBetweenPredicate<>(this, start, end, inclusion);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, D, String> notBetween(String start, String end) {
-        return comparableField.notBetween(start, end);
+    public Predicate<ENTITY> notIn(Set<String> values) {
+        return new ReferenceNotInPredicate<>(this, values);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, D, String> notBetween(String start, String end, Inclusion inclusion) {
-        return comparableField.notBetween(start, end, inclusion);
-    }
-
-    @SafeVarargs
-    @SuppressWarnings("varargs") // delegator is safe
-    @Override
-    public final ComparableSpeedmentPredicate<ENTITY, D, String> in(String... values) {
-        return comparableField.in(values);
+    public Predicate<ENTITY> equalIgnoreCase(String value) {
+        return new StringEqualIgnoreCasePredicate<>(this, value);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, D, String> in(Set<String> values) {
-        return comparableField.in(values);
-    }
-
-    @SafeVarargs
-    @SuppressWarnings("varargs") // delegator is safe
-    @Override
-    public final ComparableSpeedmentPredicate<ENTITY, D, String> notIn(String... values) {
-        return comparableField.notIn(values);
+    public Predicate<ENTITY> startsWith(String value) {
+        return new StringStartsWithPredicate<>(this, value);
     }
 
     @Override
-    public ComparableSpeedmentPredicate<ENTITY, D, String> notIn(Set<String> values) {
-        return comparableField.notIn(values);
+    public Predicate<ENTITY> endsWith(String value) {
+        return new StringEndsWithPredicate<>(this, value);
     }
 
     @Override
-    public StringSpeedmentPredicate<ENTITY, D> equalIgnoreCase(String value) {
-        return stringField.equalIgnoreCase(value);
+    public Predicate<ENTITY> contains(String value) {
+        return new StringContainsPredicate<>(this, value);
     }
 
     @Override
-    public StringSpeedmentPredicate<ENTITY, D> notEqualIgnoreCase(String value) {
-        return stringField.notEqualIgnoreCase(value);
+    public Predicate<ENTITY> isEmpty() {
+        return new StringIsEmptyPredicate<>(this);
     }
-
-    @Override
-    public StringSpeedmentPredicate<ENTITY, D> startsWith(String value) {
-        return stringField.startsWith(value);
-    }
-
-    @Override
-    public StringSpeedmentPredicate<ENTITY, D> notStartsWith(String value) {
-        return stringField.notStartsWith(value);
-    }
-
-    @Override
-    public StringSpeedmentPredicate<ENTITY, D> endsWith(String value) {
-        return stringField.endsWith(value);
-    }
-
-    @Override
-    public StringSpeedmentPredicate<ENTITY, D> notEndsWith(String value) {
-        return stringField.notEndsWith(value);
-    }
-
-    @Override
-    public StringSpeedmentPredicate<ENTITY, D> contains(String value) {
-        return stringField.contains(value);
-    }
-
-    @Override
-    public StringSpeedmentPredicate<ENTITY, D> notContains(String value) {
-        return stringField.notContains(value);
-    }
-
-    @Override
-    public StringSpeedmentPredicate<ENTITY, D> isEmpty() {
-        return stringField.isEmpty();
-    }
-
-    @Override
-    public StringSpeedmentPredicate<ENTITY, D> isNotEmpty() {
-        return stringField.isNotEmpty();
-    }
-
 }

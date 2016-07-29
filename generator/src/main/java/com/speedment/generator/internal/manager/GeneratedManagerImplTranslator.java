@@ -215,8 +215,8 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
                     .add(generateNewEmptyEntity(getSupport(), file, table::columns))
                     .add(generateGet(getSupport(), file, table::columns))
                     .add(generateSet(getSupport(), file, table::columns))
-                    .add(generateFields(getSupport(), file, table::columns))
-                    .add(generatePrimaryKeyFields(getSupport(), file, 
+                    .add(generateFields(getSupport(), file, FIELDS_METHOD, table::columns))
+                    .add(generateFields(getSupport(), file, PRIMARY_KEYS_FIELDS_METHOD,
                         () -> table.columns().filter(GeneratedManagerImplTranslator::isPrimaryKey))
                     )
                     .add(generateGetPrimaryKeyClassesField(file))

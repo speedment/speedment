@@ -19,6 +19,7 @@ package com.speedment.runtime.internal.manager.sql;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
+import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.component.ProjectComponent;
@@ -28,7 +29,6 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.db.AsynchronousQueryResult;
@@ -38,8 +38,7 @@ import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.db.SqlFunction;
 import com.speedment.runtime.db.SqlRunnable;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.internal.manager.AbstractManager;
 import com.speedment.runtime.internal.manager.metaresult.SqlMetaResultImpl;
 import com.speedment.runtime.internal.stream.builder.ReferenceStreamBuilder;
@@ -52,6 +51,7 @@ import com.speedment.runtime.stream.StreamDecorator;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,17 +66,15 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.injector.State.RESOLVED;
-import com.speedment.common.mapstream.MapStream;
-import static com.speedment.runtime.util.OptionalUtil.unwrap;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.*;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.ancestor;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
-import java.util.Collection;
-import static java.util.Objects.requireNonNull;
 import static java.util.function.Function.identity;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+import static com.speedment.runtime.util.OptionalUtil.unwrap;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -89,7 +87,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     private final LazyString sqlColumnList;
     private final LazyString sqlTableReference;
     private final LazyString sqlSelect;
-    private final Map<String, FieldTrait> fieldTraitMap;
+    private final Map<String, Field<ENTITY>> fieldMap;
     private final boolean hasPrimaryKeyColumns;
 
     private SqlFunction<ResultSet, ENTITY> entityMapper;
@@ -99,18 +97,19 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     private @Inject ProjectComponent projectComponent;
 
     protected AbstractSqlManager() {
-        this.sqlColumnList = LazyString.create();
+        this.sqlColumnList     = LazyString.create();
         this.sqlTableReference = LazyString.create();
-        this.sqlSelect = LazyString.create();
-        this.fieldTraitMap = new HashMap<>();
+        this.sqlSelect         = LazyString.create();
+        this.fieldMap          = new HashMap<>();
 
         this.hasPrimaryKeyColumns = primaryKeyFields().findAny().isPresent();
     }
 
     @ExecuteBefore(INITIALIZED)
     void addToManager(
-        @WithState(INITIALIZED) ManagerComponent managers,
-        @WithState(INITIALIZED) ProjectComponent projectComponent) {
+            @WithState(INITIALIZED) ManagerComponent managers,
+            @WithState(INITIALIZED) ProjectComponent projectComponent) {
+        
         requireNonNull(projectComponent); // Must be initalized for this to execute.
         managers.put(this);
     }
@@ -123,15 +122,13 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         // Only include fields that point towards a column in this table.
         // In the future we might add fields that reference columns in foreign
         // tables.
-        fieldTraitMap.putAll(
-            fields()
-            .filter(f
-                -> f.findColumn(project)
+        fieldMap.putAll(fields()
+            .filter(f -> f.findColumn(project)
                 .map(c -> c.getParent())
                 .map(t -> isSame(thisTable, t.get()))
                 .orElse(false)
             )
-            .collect(Collectors.toMap(f -> f.getIdentifier().columnName(), identity()))
+            .collect(Collectors.toMap(f -> f.identifier().columnName(), identity()))
         );
     }
 
@@ -261,9 +258,8 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
      * @param field  the field
      * @return       the corresponding Column
      */
-    protected Column getColumn(ReferenceFieldTrait<ENTITY, ?, ?> field) {
-        return field.findColumn(projectComponent.getProject()).orElseThrow(
-            () -> new SpeedmentException("Could not find column '" + field.getIdentifier() + "'.")
+    protected Column getColumn(Field<ENTITY> field) {
+        return field.findColumn(projectComponent.getProject()).orElseThrow(() -> new SpeedmentException("Could not find column '" + field.identifier() + "'.")
         );
     }
     
@@ -334,8 +330,8 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         return sqlTableReference.getOrCompute(() -> naming().fullNameOf(getTable()));
     }
 
-    private <F extends FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>> Object toDatabaseType(F field, ENTITY entity) {
-        final Object javaValue = unwrap(get(entity, field.getIdentifier()));
+    private <F extends Field<ENTITY>> Object toDatabaseType(F field, ENTITY entity) {
+        final Object javaValue = unwrap(get(entity, field.identifier()));
         
         @SuppressWarnings("unchecked")
         final Object dbValue = ((TypeMapper<Object, Object>) field.typeMapper()).toDatabaseType(javaValue);
@@ -343,7 +339,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         return dbValue;
     }
 
-    private <F extends FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>> ENTITY persistHelp(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
+    private ENTITY persistHelp(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
         final List<Column> cols = persistColumns(entity);
         final StringBuilder sb = new StringBuilder();
         sb.append("INSERT INTO ").append(sqlTableReference());
@@ -354,18 +350,14 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         @SuppressWarnings("unchecked")
         final List<Object> values = cols.stream()
             .map(Column::getName)
-            .map(fieldTraitMap::get)
-            .filter(ReferenceFieldTrait.class::isInstance)
-            .map(f -> (FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>) f)
+            .map(fieldMap::get)
             .map(f -> toDatabaseType(f, entity))
             .collect(toList());
  
         @SuppressWarnings("unchecked")
-        final Map<F, Column> generatedFields = MapStream.fromKeys(fields(), 
-            f -> DocumentDbUtil.referencedColumn(projectComponent.getProject(), f.getIdentifier()))
+        final Map<Field<ENTITY>, Column> generatedFields = MapStream.fromKeys(fields(), 
+            f -> DocumentDbUtil.referencedColumn(projectComponent.getProject(), f.identifier()))
                 .filterValue(Column::isAutoIncrement)
-                .filterKey(ReferenceFieldTrait.class::isInstance)
-                .mapKey(f -> (F) f)
                 .toMap();
 
         final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer = newEntity -> {
@@ -385,7 +377,7 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
                             final Object javaValue = ((TypeMapper<Object, Object>) 
                                 f.typeMapper()).toJavaType(col, getEntityClass(), val);
                             
-                            set(newEntity, f.getIdentifier(), javaValue);
+                            set(newEntity, f.identifier(), javaValue);
                         });
                 }
             };
@@ -403,12 +395,12 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         sb.append(" WHERE ");
         sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
 
-        final List<Object> values = castedFieldsOf(this::fields)
+        final List<Object> values = fields()
             .map(f -> toDatabaseType(f, entity))
             .collect(Collectors.toList());
 
-        castedFieldsOf(this::primaryKeyFields)
-            .map(ReferenceFieldTrait::getIdentifier)
+        primaryKeyFields()
+            .map(Field::identifier)
             .forEachOrdered(f -> values.add(get(entity, f)));
 
         executeUpdate(sb.toString(), values, listener);
@@ -422,20 +414,12 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         sb.append(" WHERE ");
         sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
 
-        final List<Object> values = castedFieldsOf(this::primaryKeyFields)
+        final List<Object> values = primaryKeyFields()
             .map(f -> toDatabaseType(f, entity))
             .collect(toList());
 
         executeDelete(sb.toString(), values, listener);
         return entity;
-    }
-
-    private <T extends FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>> Stream<T> castedFieldsOf(Supplier<Stream<FieldTrait>> supplier) {
-        @SuppressWarnings("unchecked")
-        final Stream<T> result = supplier.get()
-            .filter(ReferenceFieldTrait.class::isInstance)
-            .map(f -> (T) f);
-        return result;
     }
 
     private String persistColumnList(List<Column> cols) {
@@ -477,11 +461,9 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
      */
     protected boolean isPersistColumn(ENTITY entity, Column c) {
         if (c.isAutoIncrement()) {
-            final FieldTrait ft = fieldTraitMap.get(c.getName());
-            if (ft != null) {
-                @SuppressWarnings("unchecked")
-                final FieldIdentifier<ENTITY> fi = (FieldIdentifier<ENTITY>) ft.getIdentifier();
-                final Object colValue = get(entity, fi);
+            final Field<ENTITY> field = fieldMap.get(c.getName());
+            if (field != null) {
+                final Object colValue = get(entity, field.identifier());
                 if (colValue != null) {
                     return true;
                 }
@@ -491,11 +473,11 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         return true;
     }
 
-    private <F extends FieldTrait & ReferenceFieldTrait<ENTITY, ?, ?>> void executeInsert(
+    private void executeInsert(
         final ENTITY entity,
         final String sql,
         final List<Object> values,
-        final Collection<F> generatedFields,
+        final Collection<Field<ENTITY>> generatedFields,
         final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer,
         final Optional<Consumer<MetaResult<ENTITY>>> listener
     ) throws SpeedmentException {

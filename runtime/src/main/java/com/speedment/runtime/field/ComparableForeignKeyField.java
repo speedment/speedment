@@ -17,14 +17,11 @@
 package com.speedment.runtime.field;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.field.trait.ComparableFieldTrait;
-import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
-import com.speedment.runtime.field.trait.ReferenceForeignKeyFieldTrait;
+import com.speedment.runtime.field.trait.HasFinder;
 
 /**
- * A field that represents a value that implements {@link ReferenceFieldTrait},
- * {@link ComparableFieldTrait} and {ReferenceForeignKeyFieldTrait}.
+ * A field that represents an object value that implements {@code Comparable}
+ * and that references another field using a foreign key.
  * 
  * @param <ENTITY>  the entity type
  * @param <D>       the database type
@@ -37,12 +34,9 @@ import com.speedment.runtime.field.trait.ReferenceForeignKeyFieldTrait;
  * 
  * @see  ReferenceFieldTrait
  * @see  ComparableFieldTrait
- * @see  ReferenceForeignKeyFieldTrait
+ * @see  HasFinder
  */
 @Api(version = "3.0")
 public interface ComparableForeignKeyField<ENTITY, D, V extends Comparable<? super V>, FK> extends
-    FieldTrait, 
-    ReferenceFieldTrait<ENTITY, D, V>,
-    ComparableFieldTrait<ENTITY, D, V>,
-    ReferenceForeignKeyFieldTrait<ENTITY, D, FK>
-{}
+    ComparableField<ENTITY, D, V>, 
+    HasFinder<ENTITY, FK> {}

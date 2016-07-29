@@ -17,13 +17,10 @@
 package com.speedment.runtime.field;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.field.trait.ComparableFieldTrait;
-import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
+import com.speedment.runtime.field.trait.HasComparableOperators;
 
 /**
- * A field that implements the {@link ReferenceFieldTrait} and 
- * {@link ComparableFieldTrait}.
+ * A field that represents an object value that implements {@code Comparable}.
  *
  * @param <ENTITY>  the entity type
  * @param <D>       the database type
@@ -38,7 +35,6 @@ import com.speedment.runtime.field.trait.ReferenceFieldTrait;
  */
 @Api(version = "3.0")
 public interface ComparableField<ENTITY, D, V extends Comparable<? super V>> extends
-    FieldTrait, 
-    ReferenceFieldTrait<ENTITY, D, V>,
-    ComparableFieldTrait<ENTITY, D, V> {
+    ReferenceField<ENTITY, D, V>,
+    HasComparableOperators<ENTITY, V> {
 }

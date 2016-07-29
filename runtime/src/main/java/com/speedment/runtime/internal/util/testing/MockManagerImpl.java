@@ -21,9 +21,7 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.field.trait.ComparableFieldTrait;
-import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.manager.Manager;
 import com.speedment.runtime.stream.StreamDecorator;
 
@@ -48,7 +46,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     private Function<ENTITY, ENTITY> persister;
     private Function<ENTITY, ENTITY> updater;
     private Function<ENTITY, ENTITY> remover;
-    private BiFunction<FieldTrait, Comparable<?>, Optional<ENTITY>> finder;
+    private BiFunction<Field<ENTITY>, Comparable<?>, Optional<ENTITY>> finder;
 
     public MockManagerImpl(Manager<ENTITY> inner) {
         this.inner = inner;
@@ -98,11 +96,12 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public <D, V extends Comparable<? super V>, F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>>
-        MockManager<ENTITY> setFinder(BiFunction<F, V, Optional<ENTITY>> finder) {
+    public <V extends Comparable<? super V>> MockManager<ENTITY> setFinder(
+            BiFunction<Field<ENTITY>, V, Optional<ENTITY>> finder) {
+        
         @SuppressWarnings("unchecked")
-        final BiFunction<FieldTrait, Comparable<?>, Optional<ENTITY>> castedFinder
-            = (BiFunction<FieldTrait, Comparable<?>, Optional<ENTITY>>) (BiFunction<?, ?, ?>) finder;
+        final BiFunction<Field<ENTITY>, Comparable<?>, Optional<ENTITY>> castedFinder
+            = (BiFunction<Field<ENTITY>, Comparable<?>, Optional<ENTITY>>) finder;
         this.finder = castedFinder;
 
         return this;
@@ -175,8 +174,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public <D, V extends Comparable<? super V>, F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>>
-        Optional<ENTITY> findAny(F field, V value) {
+    public <V extends Comparable<? super V>> Optional<ENTITY> findAny(Field<ENTITY> field, V value) {
         return finder.apply(field, value);
     }
 
@@ -196,12 +194,12 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public Stream<FieldTrait> fields() {
+    public Stream<Field<ENTITY>> fields() {
         return inner.fields();
     }
 
     @Override
-    public Stream<FieldTrait> primaryKeyFields() {
+    public Stream<Field<ENTITY>> primaryKeyFields() {
         return inner.primaryKeyFields();
     }
 

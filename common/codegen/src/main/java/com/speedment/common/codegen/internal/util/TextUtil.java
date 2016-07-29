@@ -36,9 +36,8 @@ import static java.util.stream.Collectors.toList;
  */
 public final class TextUtil {
 
-    //private static final Pattern WORDS = Pattern.compile("[\\.,\\s!;?:\"]+");
     private static final Pattern WORDS = Pattern.compile("[\\s]+");
-    private static final Pattern JAVADOC_WORDS = Pattern.compile("[\\s]+"); // Text within html tags "pre" are treated as one "word"
+    private static final Pattern JAVADOC_WORDS = Pattern.compile("[ ]+"); // Text within html tags "pre" are treated as one "word"
     private static final String NL = "\n";
     private static final int JAVA_DOC_WIDTH = 74;
     private static final Set<String> JAVA_DOC_SINGLE_LINE_WORDS = Collections.unmodifiableSet(Stream.of("<p>").collect(Collectors.toSet()));
@@ -85,28 +84,30 @@ public final class TextUtil {
 
         final StringBuilder sb = new StringBuilder();
         final AtomicInteger col = new AtomicInteger();
-        //final AtomicInteger wordCount = new AtomicInteger();
-        final List<String> words = splitter.splitAsStream(text).collect(toList());
-        for (final String w : words) {
-            final int wordLen = w.length();
-            if (singleRowers.contains(w)) {
-                sb.append(NL);
-                sb.append(w);
-                sb.append(NL);
-                col.set(0);
-            } else {
-                if (col.get() + wordLen >= width) {
+        
+        splitter.splitAsStream(text)
+            .map(w -> w.replace("\t", Formatting.tab()))
+            .forEachOrdered(w -> {
+                final int wordLen = w.length() - Math.max(w.lastIndexOf("\n"), 0);
+                
+                if (singleRowers.contains(w)) {
+                    sb.append(NL);
+                    sb.append(w);
                     sb.append(NL);
                     col.set(0);
-                } else if (col.get() > 0) {
-                    sb.append(" ");
-                    col.incrementAndGet();
+                } else {
+                    if (col.get() + wordLen >= width) {
+                        sb.append(NL);
+                        col.set(0);
+                    } else if (col.get() > 0) {
+                        sb.append(" ");
+                        col.incrementAndGet();
+                    }
+                    sb.append(w);
+                    col.getAndAdd(wordLen);
                 }
-                sb.append(w);
-                col.getAndAdd(wordLen);
-            }
-            //wordCount.incrementAndGet();
-        }
+            });
+        
         return sb.toString();
     }
 

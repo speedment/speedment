@@ -16,8 +16,7 @@
  */
 package com.speedment.runtime.internal.stream.builder.streamterminator;
 
-import com.speedment.runtime.field.predicate.SpeedmentPredicate;
-import com.speedment.runtime.internal.field.predicate.AbstractCombinedBasePredicate;
+import com.speedment.runtime.internal.field.predicate.AbstractCombinedPredicate;
 import com.speedment.runtime.internal.stream.builder.action.reference.FilterAction;
 import com.speedment.runtime.internal.util.Cast;
 import com.speedment.runtime.stream.Pipeline;
@@ -28,24 +27,25 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
+import com.speedment.runtime.field.predicate.FieldPredicate;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public class StreamTerminatorUtil {
+public final class StreamTerminatorUtil {
 
-    public static <T extends Pipeline, ENTITY> List<SpeedmentPredicate<ENTITY, ?, ?>> topLevelAndPredicates(T initialPipeline) {
-        final List<SpeedmentPredicate<ENTITY, ?, ?>> andPredicateBuilders = new ArrayList<>();
+    public static <T extends Pipeline, ENTITY> List<FieldPredicate<ENTITY>> topLevelAndPredicates(T initialPipeline) {
+        final List<FieldPredicate<ENTITY>> andPredicateBuilders = new ArrayList<>();
 
         for (final Action<?, ?> action : initialPipeline.stream().collect(toList())) {
             @SuppressWarnings("rawtypes")
             final Optional<FilterAction> oFilterAction = Cast.cast(action, FilterAction.class);
             if (oFilterAction.isPresent()) {
                 @SuppressWarnings("unchecked")
-                final List<SpeedmentPredicate<ENTITY, ?, ?>> newAndPredicates = andPredicates(oFilterAction.get());
+                final List<FieldPredicate<ENTITY>> newAndPredicates = andPredicates(oFilterAction.get());
                 andPredicateBuilders.addAll(newAndPredicates);
             } else {
                 break; // We can only do initial consecutive FilterAction(s)
@@ -55,22 +55,22 @@ public class StreamTerminatorUtil {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static <ENTITY> List<SpeedmentPredicate<?, ?, ?>> andPredicates(FilterAction<ENTITY> action) {
+    public static <ENTITY> List<FieldPredicate<?>> andPredicates(FilterAction<ENTITY> action) {
         requireNonNull(action);
-        final List<SpeedmentPredicate<?, ?, ?>> andPredicateBuilders = new ArrayList<>();
+        final List<FieldPredicate<?>> andPredicateBuilders = new ArrayList<>();
         final Predicate<? super ENTITY> predicate = action.getPredicate();
 
-        final Optional<SpeedmentPredicate> oPredicateBuilder = Cast.cast(predicate, SpeedmentPredicate.class);
+        final Optional<FieldPredicate> oPredicateBuilder = Cast.cast(predicate, FieldPredicate.class);
         if (oPredicateBuilder.isPresent()) {
             andPredicateBuilders.add(oPredicateBuilder.get()); // Just a top level predicate builder
         } else {
 
-            final Optional<AbstractCombinedBasePredicate.AndCombinedBasePredicate> oAndCombinedBasePredicate = Cast.cast(predicate, AbstractCombinedBasePredicate.AndCombinedBasePredicate.class);
+            final Optional<AbstractCombinedPredicate.AndCombinedBasePredicate> oAndCombinedBasePredicate = Cast.cast(predicate, AbstractCombinedPredicate.AndCombinedBasePredicate.class);
             if (oAndCombinedBasePredicate.isPresent()) {
 
-                final AbstractCombinedBasePredicate.AndCombinedBasePredicate<ENTITY> andCombinedBasePredicate = (AbstractCombinedBasePredicate.AndCombinedBasePredicate<ENTITY>) oAndCombinedBasePredicate.get();
+                final AbstractCombinedPredicate.AndCombinedBasePredicate<ENTITY> andCombinedBasePredicate = (AbstractCombinedPredicate.AndCombinedBasePredicate<ENTITY>) oAndCombinedBasePredicate.get();
                 andCombinedBasePredicate.stream()
-                    .map(p -> Cast.cast(p, SpeedmentPredicate.class))
+                    .map(p -> Cast.cast(p, FieldPredicate.class))
                     .filter(p -> p.isPresent())
                     .map(Optional::get)
                     .forEachOrdered(andPredicateBuilders::add);
@@ -79,7 +79,5 @@ public class StreamTerminatorUtil {
         return andPredicateBuilders;
     }
 
-    private StreamTerminatorUtil() {
-    }
-
+    private StreamTerminatorUtil() {}
 }

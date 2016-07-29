@@ -16,6 +16,8 @@
  */
 package com.speedment.common.tuple;
 
+import java.util.stream.Stream;
+
 /**
  * {@inheritDoc}
  *
@@ -30,5 +32,25 @@ public interface Tuple2<T0, T1> extends Tuple {
     T0 get0();
 
     T1 get1();
+    
+    @Override
+    default Stream<Object> stream() {
+        return Stream.of(get0(), get1());
+    }
+    
+    @Override
+    default int length() {
+        return 2;
+    }
 
+    @Override
+    default Object get(int index) {
+        switch (index) {
+            case 0 : return get0();
+            case 1 : return get1();
+            default : throw new IllegalArgumentException(String.format(
+                "Index %d is outside bounds of tuple of length %s", index, length()
+            ));
+        }
+    }
 }

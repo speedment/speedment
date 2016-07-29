@@ -24,6 +24,7 @@ import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mapper.bigdecimal.BigDecimalToDouble;
 import com.speedment.runtime.config.mapper.integer.IntegerZeroOneToBooleanMapper;
 import com.speedment.runtime.config.mapper.largeobject.ClobToStringMapper;
+import com.speedment.runtime.config.mapper.primitive.PrimitiveTypeMapper;
 import com.speedment.runtime.config.mapper.string.StringToLocaleMapper;
 import com.speedment.runtime.config.mapper.string.TrueFalseStringToBooleanMapper;
 import com.speedment.runtime.config.mapper.string.YesNoStringToBooleanMapper;
@@ -94,6 +95,16 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
         
         // Special integer mappers
         install(Integer.class, IntegerZeroOneToBooleanMapper::new);
+        
+        // Primitive mappers
+        install(Byte.class,      PrimitiveTypeMapper<Byte>::new);
+        install(Short.class,     PrimitiveTypeMapper<Short>::new);
+        install(Integer.class,   PrimitiveTypeMapper<Integer>::new);
+        install(Long.class,      PrimitiveTypeMapper<Long>::new);
+        install(Float.class,     PrimitiveTypeMapper<Float>::new);
+        install(Double.class,    PrimitiveTypeMapper<Double>::new);
+        install(Boolean.class,   PrimitiveTypeMapper<Boolean>::new);
+        install(Character.class, PrimitiveTypeMapper<Character>::new);
     }
     
     @Override

@@ -18,9 +18,7 @@ package com.speedment.runtime.component;
 
 import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.field.trait.ComparableFieldTrait;
-import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
+import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.stream.StreamDecorator;
 
 import java.util.Optional;
@@ -65,18 +63,18 @@ public interface StreamSupplierComponent extends Component {
      * potentially be more efficient with for an example foreign key references.
      * 
      * @param <ENTITY>     the entity type
-     * @param <D>          the JDBC type of the column
      * @param <V>          the java type of the column
-     * @param <F>          the field type
      * @param entityClass  the entity interface .class
      * @param field        the field to select on
      * @param value        the value of that field for the entity to return
      * @return             entity found or empty if none existed with that value
      */
-    default <ENTITY, D, 
-        V extends Comparable<? super V>, 
-        F extends FieldTrait & ReferenceFieldTrait<ENTITY, D, V> & ComparableFieldTrait<ENTITY, D, V>
-    > Optional<ENTITY> findAny(Class<ENTITY> entityClass, F field, V value) {
+    default <ENTITY, V extends Comparable<? super V>> 
+    Optional<ENTITY> findAny(
+            Class<ENTITY> entityClass, 
+            HasComparableOperators<ENTITY, V> field, 
+            V value) {
+        
         return stream(entityClass, StreamDecorator.IDENTITY)
             .filter(field.equal(value))
             .findAny();

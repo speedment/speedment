@@ -17,11 +17,11 @@
 package com.speedment.runtime.field;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.field.trait.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
+import com.speedment.runtime.field.trait.HasReferenceOperators;
+import com.speedment.runtime.field.trait.HasReferenceValue;
 
 /**
- * A field that implements the {@link ReferenceFieldTrait}.
+ * A field that represents an object value.
  * 
  * @param <ENTITY>  the entity type
  * @param <D>       the database type
@@ -35,5 +35,6 @@ import com.speedment.runtime.field.trait.ReferenceFieldTrait;
  */
 @Api(version = "3.0")
 public interface ReferenceField<ENTITY, D, V> extends 
-    FieldTrait, 
-    ReferenceFieldTrait<ENTITY, D, V> {}
+    Field<ENTITY>, 
+    HasReferenceOperators<ENTITY, V>,
+    HasReferenceValue<ENTITY, D, V> {}

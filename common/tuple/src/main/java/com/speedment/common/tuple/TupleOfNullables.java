@@ -30,15 +30,6 @@ import java.util.stream.Stream;
  */
 public interface TupleOfNullables extends BasicTuple<Optional<Object>> {
 
-//    /**
-//     * Removes the element at the given index and returns the previous element
-//     * at that position.
-//     *
-//     * @param index of the element
-//     * @return the previous element at that position
-//     */
-//    public Optional<Object> remove(int index);
-
     /**
      * Returns a {@link Stream} of all values for this Tuple. If sequential, the
      * Stream will start with the 0:th tuple and progress upwards.
@@ -46,7 +37,5 @@ public interface TupleOfNullables extends BasicTuple<Optional<Object>> {
      * @return a {@link Stream} of all values for this Tuple
      */
     Stream<Optional<Object>> stream();
-
-
 
 }

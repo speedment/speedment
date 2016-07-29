@@ -24,7 +24,6 @@ import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.db.DbmsMetadataHandler;
 import com.speedment.runtime.db.DbmsOperationHandler;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;
-import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
 import com.speedment.runtime.internal.db.AbstractDatabaseNamingConvention;
 import com.speedment.runtime.internal.db.postgresql.PostgresqlDbmsMetadataHandler;
 import com.speedment.runtime.internal.db.postgresql.PostgresqlDbmsOperationHandler;
@@ -38,6 +37,8 @@ import java.util.stream.Stream;
 import static com.speedment.runtime.db.metadata.TypeInfoMetaData.of;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
+import com.speedment.runtime.field.predicate.FieldPredicateView;
+import static com.speedment.runtime.db.metadata.TypeInfoMetaData.of;
 
 /**
  * Created by fdirlikl on 11/13/2015.
@@ -109,7 +110,7 @@ public final class PostgresDbmsType extends AbstractDbmsType {
     }
 
     @Override
-    public SpeedmentPredicateView getSpeedmentPredicateView() {
+    public FieldPredicateView getSpeedmentPredicateView() {
         return new PostgresSpeedmentPredicateView(namingConvention);
     }
 

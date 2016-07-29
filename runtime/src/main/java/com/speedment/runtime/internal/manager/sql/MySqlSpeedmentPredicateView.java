@@ -17,40 +17,40 @@
 package com.speedment.runtime.internal.manager.sql;
 
 import com.speedment.runtime.db.DatabaseNamingConvention;
-import com.speedment.runtime.field.predicate.SpeedmentPredicate;
-import com.speedment.runtime.field.predicate.SpeedmentPredicateView;
 import com.speedment.runtime.field.predicate.SqlPredicateFragment;
 
 import static com.speedment.runtime.internal.field.predicate.PredicateUtil.getFirstOperandAsRaw;
+import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.field.predicate.FieldPredicateView;
 
 /**
  *
  * @author Emil Forslund
  */
 @SuppressWarnings("rawtypes")
-public final class MySqlSpeedmentPredicateView extends AbstractSpeedmentPredicateView implements SpeedmentPredicateView {
+public final class MySqlSpeedmentPredicateView extends AbstractSpeedmentPredicateView implements FieldPredicateView {
     
     public MySqlSpeedmentPredicateView(DatabaseNamingConvention namingConvention) {
         super(namingConvention);
     }
 
     @Override
-    protected SqlPredicateFragment equalIgnoreCaseHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated) {
+    protected SqlPredicateFragment equalIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
         return of("(LOWER(" + cn + ") = LOWER(?))", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment startsWithHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated) {
+    protected SqlPredicateFragment startsWithHelper(String cn, FieldPredicate<?> model, boolean negated) {
         return of("(" + cn + " LIKE BINARY CONCAT(? ,'%'))", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment endsWithHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated) {
+    protected SqlPredicateFragment endsWithHelper(String cn, FieldPredicate<?> model, boolean negated) {
         return of("(" + cn + " LIKE BINARY CONCAT('%', ?))", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment containsHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated) {
+    protected SqlPredicateFragment containsHelper(String cn, FieldPredicate<?> model, boolean negated) {
         return of("(" + cn + " LIKE BINARY CONCAT('%', ? ,'%'))", negated).add(getFirstOperandAsRaw(model));
     }
 

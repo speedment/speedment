@@ -62,6 +62,14 @@ public enum PredicateType {
 
     private PredicateType negatedType;
 
+    public PredicateType negate() {
+        return negatedType;
+    }
+
+    public PredicateType effectiveType(boolean negate) {
+        return negate ? negatedType : this;
+    }
+    
     static {
         associateNegations(ALWAYS_TRUE, ALWAYS_FALSE);
         associateNegations(IS_NULL, IS_NOT_NULL);
@@ -75,14 +83,6 @@ public enum PredicateType {
         associateNegations(ENDS_WITH, NOT_ENDS_WITH);
         associateNegations(CONTAINS, NOT_CONTAINS);
         associateNegations(IS_EMPTY, IS_NOT_EMPTY);
-    }
-
-    public PredicateType negate() {
-        return negatedType;
-    }
-
-    public PredicateType effectiveType(boolean negate) {
-        return negate ? negatedType : this;
     }
 
     private static void associateNegations(PredicateType a, PredicateType b) {

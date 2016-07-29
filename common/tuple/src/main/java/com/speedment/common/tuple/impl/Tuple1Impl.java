@@ -34,5 +34,4 @@ public final class Tuple1Impl<T0> extends AbstractTuple implements Tuple1<T0> {
     public T0 get0() {
         return (T0) values[0];
     }
-
 }
