@@ -52,7 +52,7 @@ public class ChoiceBoxItem<T> extends BaseLabelTooltipItem {
             box.setValue(alternatives.get(0));
         }
 
-        currentValue.bind(box.valueProperty());
+        currentValue.bindBidirectional(box.valueProperty());
         return box;
     }
 

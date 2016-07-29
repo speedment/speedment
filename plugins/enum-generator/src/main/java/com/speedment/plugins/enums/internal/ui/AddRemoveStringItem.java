@@ -65,6 +65,7 @@ public class AddRemoveStringItem extends BaseLabelTooltipItem{
         this.cache = new SimpleStringProperty();
         
         StringBinding binding = Bindings.createStringBinding(() -> getFormatedString(), strings);
+        value.unbind();
         value.bind( binding );
        
         setValue( oldValue );
@@ -102,7 +103,6 @@ public class AddRemoveStringItem extends BaseLabelTooltipItem{
         hideShowBehaviour(container);
         
         attachListener(disabled, (ov, was, isDisabled) -> {
-            System.out.println("Disabled: " + disabled);
             if( isDisabled ){
                 cache.set( getFormatedString() );
                 setValue(null);

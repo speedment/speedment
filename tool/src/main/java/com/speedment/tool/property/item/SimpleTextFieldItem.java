@@ -37,7 +37,7 @@ public class SimpleTextFieldItem extends BaseLabelTooltipItem{
     @Override
     public Node getEditor() {
         final TextField box = new TextField( property.get() );
-        property.bind( box.textProperty() );
+        property.bindBidirectional(box.textProperty() );
         return box;
     }    
 }
