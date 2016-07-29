@@ -379,9 +379,9 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      * Creates and return a new JsonEncoder with no fields added to the
      * renderer.
      *
-     * @param <ENTITY> the Entity type
-     * @param manager of the entity
-     * @return a new JsonEncoder with no fields added to the renderer
+     * @param <ENTITY>  the Entity type
+     * @param manager   of the entity
+     * @return          a new JsonEncoder with no fields added to the renderer
      */
     public static <ENTITY> JsonEncoder<ENTITY> noneOf(Manager<ENTITY> manager) {
         return new JsonEncoderImpl<>(projectOf(manager), manager);
@@ -392,10 +392,10 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      * the renderer. The field(s) will be rendered using their default class
      * renderer.
      *
-     * @param <ENTITY> the Entity type
-     * @param manager of the entity
-     * @return a new JsonEncoder with all the Entity fields added to the
-     * renderer
+     * @param <ENTITY>  the Entity type
+     * @param manager   of the entity
+     * @return          a new JsonEncoder with all the Entity fields added to 
+     *                  the renderer
      */
     public static <ENTITY> JsonEncoder<ENTITY> allOf(Manager<ENTITY> manager) {
         requireNonNull(manager);
@@ -419,10 +419,11 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      * added to the renderer. The field(s) will be rendered using their default
      * class renderer.
      *
-     * @param <ENTITY> the Entity type
-     * @param manager of the ENTITY
-     * @param fields to add to the output renderer
-     * @return a new JsonEncoder with the specified fields added to the renderer
+     * @param <ENTITY>  the Entity type
+     * @param manager   of the ENTITY
+     * @param fields    to add to the output renderer
+     * @return          a new JsonEncoder with the specified fields added to the 
+     *                  renderer
      */
     @SafeVarargs
     @SuppressWarnings("varargs") // Using the array in a Stream.of() is safe
