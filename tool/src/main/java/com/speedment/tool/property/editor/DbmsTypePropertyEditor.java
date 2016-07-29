@@ -1,29 +1,24 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.tool.property.editor;
 
 import com.speedment.tool.property.item.ChoiceBoxItem;
-import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.property.PropertyEditor;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import static javafx.collections.FXCollections.observableList;
 import javafx.collections.ObservableList;
-import static javafx.collections.FXCollections.observableList;
-import static javafx.collections.FXCollections.observableList;
 import static javafx.collections.FXCollections.observableList;
 
 /**
  *
- * @author Simon
+ * @author Simon Jonasson
+ * @param <T>  the document type
+ * @since 3.0.0
  */
+@Api(version="3.0")
 public class DbmsTypePropertyEditor<T extends DbmsProperty> implements PropertyEditor<T>{
 
     private @Inject DbmsHandlerComponent dbmsHandler;
@@ -37,7 +32,7 @@ public class DbmsTypePropertyEditor<T extends DbmsProperty> implements PropertyE
                 .collect(toList())
         );
         
-        return Stream.of(new ChoiceBoxItem(
+        return Stream.of(new ChoiceBoxItem<String>(
                 "Dbms Type",
                 document.typeNameProperty(),
                 supportedTypes,

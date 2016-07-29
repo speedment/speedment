@@ -1,21 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.tool.property.editor;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.property.item.SimpleCheckBoxItem;
-import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.tool.config.trait.HasEnabledProperty;
 import com.speedment.tool.property.PropertyEditor;
 import java.util.stream.Stream;
 
 /**
  *
- * @author Simon
+ * @author Simon Jonasson
  * @param <T>  the document type
+ * @since 3.0.0
  */
+@Api(version="3.0")
 public class EnabledPropertyEditor<T extends HasEnabledProperty> implements PropertyEditor<T>{
 
     @Override

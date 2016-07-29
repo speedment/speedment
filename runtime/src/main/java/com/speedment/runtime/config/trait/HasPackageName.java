@@ -4,6 +4,7 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.internal.util.document.TraitUtil.AbstractTraitView;
 import static com.speedment.runtime.internal.util.document.TraitUtil.viewOf;
+import com.speedment.runtime.util.OptionalBoolean;
 import java.util.Map;
 import java.util.Optional;
 
@@ -15,15 +16,26 @@ import java.util.Optional;
 public interface HasPackageName extends Document{
     
     final String PACKAGE_NAME = "packageName";  
+    final String USE_DEFAULT_PACKAGE_NAME = "useDefaultPackageName";
     
     /**
-     * Returns the name of the generated package where this project will be
+     * Returns the name of the generated package where this document will be
      * located.
      *
      * @return the name of the generated package or {@code empty}
      */
     default Optional<String> getPackageName() {
         return getAsString(PACKAGE_NAME);
+    }
+    
+    /**
+     * Return whether this document uses a custom package name or the 
+     * default package name.
+     * 
+     * @return  whether a custom package name is used
+     */
+    default OptionalBoolean useDefaultPackageName() {
+        return getAsBoolean(USE_DEFAULT_PACKAGE_NAME);
     }
     
         /**
