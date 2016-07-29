@@ -37,8 +37,9 @@ import static com.speedment.common.codegen.internal.util.Formatting.ucfirst;
 import com.speedment.common.injector.Injector;
 import com.speedment.generator.typetoken.TypeTokenGenerator;
 import static com.speedment.runtime.config.Project.DEFAULT_PACKAGE_NAME;
+import com.speedment.runtime.config.trait.HasPackageName;
+import com.speedment.runtime.exception.SpeedmentException;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
 import static java.util.Objects.requireNonNull;
 
@@ -371,26 +372,46 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
     /**
      * Returns the base package name of the current node. This is everything up
      * to but not including the type name. No trailing dot is added.
+     * <p>
+     * If the user has specified a custom package in the config file, that will
+     * be returned. Otherwise a package name will ge generated using the default
+     * settings.
      *
-     * @return  the base package name in lowercase.
+     * @return  the base package name in lowercase
      */
     public String basePackageName() {
-        return table()
-            .flatMap(Table::getPackageName)
-            .orElseGet(this::defaultPackageName);
+        try {
+            return Optional.of(document())
+                .map(HasPackageName.class::cast)
+                .flatMap(HasPackageName::getPackageName)
+                .orElseGet(this::defaultPackageName);
+        } catch (final ClassCastException ex) {
+            throw new SpeedmentException(
+                "The method basePackageName() may only be called on " +
+                "instances of TranslatorSupport that have a document that " +
+                "implements HasPackageName.",
+                ex
+            );
+        }
     }
     
+    /**
+     * Returns the default package name where the document would be located if
+     * the user has not specified a custom package in the config file.
+     * 
+     * @return  the default package name
+     */
     public String defaultPackageName() {
-        final Supplier<String> projectPackage = () ->
+        final Supplier<String> defaultProjectPackage = () ->
             DEFAULT_PACKAGE_NAME + 
             namer().javaPackageName(projectOrThrow().getCompanyName()) + "." +
             namer().javaPackageName(projectOrThrow().getName());
         
         if (document() instanceof Project) {
-            return projectPackage.get();
+            return defaultProjectPackage.get();
         } else {
             return projectOrThrow().getPackageName()
-                .orElseGet(projectPackage) + "." +
+                .orElseGet(defaultProjectPackage) + "." +
                     DocumentUtil.relativeName(
                         document(), 
                         Dbms.class, 
