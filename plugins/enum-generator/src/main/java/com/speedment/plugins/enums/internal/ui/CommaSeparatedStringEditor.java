@@ -1,4 +1,4 @@
-package com.speedment.plugins.enums.internal.newUi;
+package com.speedment.plugins.enums.internal.ui;
 
 import com.speedment.plugins.enums.StringToEnumTypeMapper;
 import com.speedment.tool.config.ColumnProperty;
@@ -7,8 +7,14 @@ import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
 
 /**
- *
- * @author Simon
+ * Editor for generating a comma-separated string.
+ * <p>
+ * We parse what values an enum should be able to take from a string, where
+ * each element is separated by a comma. This editor allows the user
+ * to easily edit such a string.
+ * 
+ * @author Simon Jonasson
+ * @since 1.0.0
  */
 public class CommaSeparatedStringEditor<T extends ColumnProperty> implements PropertyEditor<T>{
 

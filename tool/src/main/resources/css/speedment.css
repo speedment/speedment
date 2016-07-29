@@ -444,13 +444,13 @@
 }
 
 /*** Properties layout : left ***/
-.properties-layout .property-labels {
+.properties-layout .property-label {
     -fx-font-size: 1.2em;
     -fx-alignment: CENTER_LEFT
 }
 
 /*** Properties layout : right ***/
-.properties-layout .property-editors {
+.properties-layout .property-editor {
     -fx-spacing: 10px;
     -fx-fill-width: true;    
     -fx-alignment: CENTER_LEFT;

@@ -40,6 +40,7 @@ import static com.speedment.runtime.config.Project.DEFAULT_PACKAGE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A support class for the {@link Translator} interface that holds various
@@ -374,7 +375,9 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
      * @return  the base package name in lowercase.
      */
     public String basePackageName() {
-        return table().flatMap(Table::getPackageName).orElseGet(this::defaultPackageName);
+        return table()
+            .flatMap(Table::getPackageName)
+            .orElseGet(this::defaultPackageName);
     }
     
     public String defaultPackageName() {

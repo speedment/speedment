@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.tool.property.editor;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.property.item.DefaultTextFieldItem;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.property.PropertyEditor;
@@ -13,9 +9,11 @@ import javafx.beans.property.SimpleStringProperty;
 
 /**
  *
- * @author Simon
+ * @author Simon Jonasson
  * @param <T>  the document type
+ * @since 3.0.0
  */
+@Api(version="3.0")
 public class IpAdressPropertyEditor<T extends DbmsProperty> implements PropertyEditor<T>{
 
     @Override

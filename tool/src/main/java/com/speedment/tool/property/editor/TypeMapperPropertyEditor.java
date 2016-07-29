@@ -1,15 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.tool.property.editor;
 
 import com.speedment.tool.property.item.ChoiceBoxItem;
-import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.generator.component.TypeMapperComponent;
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.property.PropertyEditor;
@@ -25,9 +20,11 @@ import javafx.collections.ObservableList;
 
 /**
  *
- * @author Simon
+ * @author Simon Jonasson
  * @param <T>  the document type
+ * @since 3.0.0
  */
+@Api(version="3.0")
 public class TypeMapperPropertyEditor<T extends ColumnProperty> implements PropertyEditor<T>{
     public final static String IDENTITY_MAPPER = "(Use Identity Mapper)";
     
@@ -45,11 +42,10 @@ public class TypeMapperPropertyEditor<T extends ColumnProperty> implements Prope
             document.getTypeMapper().isPresent() 
             ? document.getTypeMapper().get() 
             : null;
-        final Class<?> type = document.findDatabaseType();
-        final TypeMapperComponent typeMapperComponent = typeMappers;     
+        final Class<?> type = document.findDatabaseType();   
         
         final Map<String, String> mapping = MapStream.fromStream(
-            typeMapperComponent.mapFrom(type),
+            typeMappers.mapFrom(type),
             tm -> tm.getLabel(),
             tm -> tm.getClass().getName()
         ).toSortedMap();
@@ -59,6 +55,8 @@ public class TypeMapperPropertyEditor<T extends ColumnProperty> implements Prope
         );
         alternatives.add(0, IDENTITY_MAPPER);
         
+        //Create a binding that will convert the ChoiceBox's value to a valid
+        //value for the document.typeMapperProperty()
         binding = Bindings.createStringBinding(() -> {
             if( outputValue.isEmpty().get() || outputValue.get().equals(IDENTITY_MAPPER) ){
                 return null;
@@ -79,7 +77,7 @@ public class TypeMapperPropertyEditor<T extends ColumnProperty> implements Prope
                 )) 
             : null );
         
-        return Stream.of(new ChoiceBoxItem(
+        return Stream.of(new ChoiceBoxItem<String>(
                 "JDBC Type to Java",
                 outputValue,
                 alternatives,

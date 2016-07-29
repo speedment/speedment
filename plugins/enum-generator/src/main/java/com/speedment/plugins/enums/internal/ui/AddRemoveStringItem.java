@@ -1,4 +1,4 @@
-package com.speedment.plugins.enums.internal.newUi;
+package com.speedment.plugins.enums.internal.ui;
 
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 import javafx.animation.AnimationTimer;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableBooleanValue;
 import javafx.collections.FXCollections;
@@ -19,6 +20,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.HBox;
@@ -27,8 +29,14 @@ import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
 /**
- *
- * @author Simon
+ * Item for generating a comma-separated string.
+ * <p>
+ * We parse what values an enum should be able to take from a string, where
+ * each element is separated by a comma. This editor item allows the user
+ * to easily edit such a string.
+ * 
+ * @author Simon Jonasson
+ * @since 1.0.0
  */
 public class AddRemoveStringItem extends BaseLabelTooltipItem{
     //***********************************************************
@@ -37,8 +45,9 @@ public class AddRemoveStringItem extends BaseLabelTooltipItem{
     private final static Logger LOGGER = LoggerManager.getLogger(CommaSeparatedStringEditor.class);
 
     private final ObservableList<String> strings;
+    private final ObservableBooleanValue enabled;
     private final ObservableBooleanValue disabled;
-    private final StringProperty value;
+    private final StringProperty cache;
     
     private final String DEFAULT_FIELD = "ENUM_CONSTANT_";
     private final double SPACING = 10.0;
@@ -51,18 +60,27 @@ public class AddRemoveStringItem extends BaseLabelTooltipItem{
     public AddRemoveStringItem(String label, StringProperty value, String oldValue, String tooltip, ObservableBooleanValue enableThis) {
         super(label, tooltip);
         this.strings = FXCollections.observableArrayList();
-        this.value = value;
+        this.enabled = enableThis;
         this.disabled = Bindings.not(enableThis);
+        this.cache = new SimpleStringProperty();
         
         StringBinding binding = Bindings.createStringBinding(() -> getFormatedString(), strings);
         value.bind( binding );
-      
+       
         setValue( oldValue );
     }
     
     //***********************************************************
     // 				PUBLIC
-    //***********************************************************   
+    //***********************************************************  
+
+    @Override
+    public Node getLabel() {
+        Node node = super.getLabel();
+        hideShowBehaviour(node);        
+        return node;
+    }
+    
     
     @Override
     protected Node getEditorNode() {
@@ -80,8 +98,19 @@ public class AddRemoveStringItem extends BaseLabelTooltipItem{
         controls.getChildren().addAll(addButton(listView), removeButton(listView));
 
         container.setSpacing(SPACING);
-        container.disableProperty().bind( disabled );
         container.getChildren().addAll(listView, controls);
+        hideShowBehaviour(container);
+        
+        attachListener(disabled, (ov, was, isDisabled) -> {
+            System.out.println("Disabled: " + disabled);
+            if( isDisabled ){
+                cache.set( getFormatedString() );
+                setValue(null);
+            } else {
+                setValue( cache.get() );
+            }
+        });
+        
         return container;
     }
     
@@ -108,6 +137,12 @@ public class AddRemoveStringItem extends BaseLabelTooltipItem{
                 .toArray(String[]::new)
             );
         }
+    }
+    
+    private void hideShowBehaviour(Node node){
+        node.visibleProperty().bind(enabled);
+        node.managedProperty().bind(enabled);
+        node.disableProperty().bind(disabled);
     }
     
     private Button removeButton(final ListView<String> listView) {
@@ -192,17 +227,21 @@ public class AddRemoveStringItem extends BaseLabelTooltipItem{
                     if(value.equalsIgnoreCase(labelString)){
                         return value;
                     }
+                    if(value.isEmpty()){
+                        LOGGER.info("An enum field cannot be empty. Please remove the field instead.");
+                        return labelString;
+                    }
                      //Make sure this is not a douplicate entry
                     final AtomicBoolean douplicate = new AtomicBoolean(false);
                     strings.stream()
                         .filter( elem -> elem.equalsIgnoreCase(value) )
                         .forEach( elem -> douplicate.set(true) );
                     if(douplicate.get()){
-                        LOGGER.error("Enum cannot contain the same constant twice");
+                        LOGGER.info("Enum cannot contain the same constant twice");
                         return labelString;
                     //Make sure this entry contains only legal characters
                     } else if ( !value.matches("([\\w\\-\\_\\ ]+)")) {
-                        LOGGER.error("Enum should only contain letters, number, underscore and/or dashes");
+                        LOGGER.info("Enum should only contain letters, number, underscore and/or dashes");
                         return labelString;
                     //Warn if it contains a space
                     }  else if (value.contains(" ")) {

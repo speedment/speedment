@@ -7,6 +7,7 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.ForeignKeyColumn;
 import com.speedment.runtime.config.Index;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.trait.HasAlias;
@@ -26,6 +27,7 @@ import java.util.stream.Stream;
 import com.speedment.tool.component.PropertyEditorComponent;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.config.DbmsProperty;
+import com.speedment.tool.config.ForeignKeyColumnProperty;
 import com.speedment.tool.config.IndexProperty;
 import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.config.trait.HasAliasProperty;
@@ -41,6 +43,7 @@ import com.speedment.tool.property.editor.NullablePropertyEditor;
 import com.speedment.tool.property.PropertyEditor;
 import com.speedment.tool.property.editor.CompanyNamePropertyEditor;
 import com.speedment.tool.property.editor.ConnectionUrlPropertyEditor;
+import com.speedment.tool.property.editor.ForeignKeyColumnEditor;
 import com.speedment.tool.property.editor.IpAdressPropertyEditor;
 import com.speedment.tool.property.editor.OrderTypePropertyEditor;
 import com.speedment.tool.property.editor.PackageLocationPropertyEditor;
@@ -53,7 +56,8 @@ import java.util.function.Supplier;
 
 /**
  *
- * @author Simon
+ * @author Simon Jonasson
+ * @since 3.0.0
  */
 public final class PropertyEditorComponentImpl extends InternalOpenSourceComponent implements PropertyEditorComponent{
     
@@ -80,8 +84,9 @@ public final class PropertyEditorComponentImpl extends InternalOpenSourceCompone
         install(DbmsProperty.class,         Dbms.CONNECTION_URL,   ConnectionUrlPropertyEditor::new);
         install(IndexProperty.class,        Index.UNIQUE,          UniquePropertyEditor::new);
         install(ProjectProperty.class,      Project.COMPANY_NAME,           CompanyNamePropertyEditor::new);
-        install(HasPackageNameProperty.class, HasPackageName.PACKAGE_NAME,  PackageNameEditor::new);
         install(ProjectProperty.class,      Project.PACKAGE_LOCATION,       PackageLocationPropertyEditor::new);
+        install(HasPackageNameProperty.class,   HasPackageName.PACKAGE_NAME,          PackageNameEditor::new);
+        install(ForeignKeyColumnProperty.class, ForeignKeyColumn.FOREIGN_COLUMN_NAME, ForeignKeyColumnEditor::new);
     }
     
     @Override

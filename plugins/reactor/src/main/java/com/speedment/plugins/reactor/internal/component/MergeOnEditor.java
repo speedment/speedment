@@ -15,6 +15,7 @@ import com.speedment.tool.property.item.ChoiceBoxItem;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import static javafx.collections.FXCollections.observableList;
+import static javafx.collections.FXCollections.observableList;
 
 /**
  *

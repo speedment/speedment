@@ -1,12 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.tool.property.item;
 
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.exception.SpeedmentException;
-import static java.util.Objects.requireNonNull;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -19,20 +14,41 @@ import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
+import javafx.beans.binding.Bindings;
 
 /**
+ * An editor for editing a StringProperty via an IntegerSpinner, which has a default value. The user
+ * may opt to use the default value or not, by checking or un-checking a CheckBox. The property
+ * will bind to Spinner.valueProperty()
  *
- * @author Simon
+ * @author Simon Jonasson
+ * @since 3.0.0
  */
+@Api(version="3.0")
 public class DefaultSpinnerItem extends BaseLabelTooltipItem {
 
     private final ObservableIntegerValue defaultValue;
-    private final ObjectProperty<Integer> value;
-    private final ObjectProperty<Integer> customValue;
+    private final ObjectProperty<Integer> value;        //Output value
+    private final ObjectProperty<Integer> customValue;  
     private final int min, max;
 
+    /**
+     * Creates a new DefaultSpinnerItem. 
+     * <p>
+     * While the CheckBox is checked, the Spinner will be disabled, 
+     * and the property will always have the default value. <br>
+     * While the CheckBox is un-checked, the Spinner will be enabled, 
+     * and the property will always have the Spinner's current value.
+     * <p>
+     * Upon construction, the editor decides whether to check the default box
+     * by comparing the property value to the default value. If they match, or
+     * the property value is {@code null}, the CheckBox will be checked.
+     * 
+     * @param label         the label text
+     * @param defaultValue  the default value 
+     * @param value         the property to be edited
+     * @param tooltip       the tooltip
+     */
     public DefaultSpinnerItem(String label, ObservableIntegerValue defaultValue, IntegerProperty value, String tooltip) {
         this(label, defaultValue, value, tooltip, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
@@ -47,7 +63,7 @@ public class DefaultSpinnerItem extends BaseLabelTooltipItem {
     }
 
     @Override
-    protected Node getEditorNode() {
+    public Node getEditorNode() {
         final boolean usesDefaultValue = value.getValue() == null || value.getValue().equals(defaultValue.getValue());
         
         final HBox container = new HBox();
@@ -89,17 +105,13 @@ public class DefaultSpinnerItem extends BaseLabelTooltipItem {
                 }
             } 
         });
-
-        svf.valueProperty().bindBidirectional( value );
         
-        container.getStyleClass().add("property-editors");
+        svf.valueProperty().bindBidirectional( value );
         container.getChildren().addAll(auto, spinner);
         return container;
     }
 
-    private void setSpinnerBehaviour(IntegerSpinnerValueFactory svf, boolean useDefaultValue, ObservableIntegerValue defaultValue, ObjectProperty<Integer> customValue) {
-        //DefaultValue and CustomValue are unnessesary parameters.
-        //However, having them as parameters makes it easier to see that they are used by this method
+    private static void setSpinnerBehaviour(IntegerSpinnerValueFactory svf, boolean useDefaultValue, ObservableIntegerValue defaultValue, ObjectProperty<Integer> customValue) {
         if (useDefaultValue) {
             svf.valueProperty().unbindBidirectional( customValue );
             svf.setValue(defaultValue.get());

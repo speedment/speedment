@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.tool.property.editor;
 
 import com.speedment.tool.property.item.DefaultTextAreaItem;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
@@ -19,9 +15,11 @@ import javafx.beans.binding.StringBinding;
 
 /**
  *
- * @author Simon
+ * @author Simon Jonassons
  * @param <T>  the document type
+ * @since 3.0.0
  */
+@Api(version="3.0")
 public class ConnectionUrlPropertyEditor<T extends DbmsProperty> implements PropertyEditor<T> {
 
     private @Inject Injector injector;

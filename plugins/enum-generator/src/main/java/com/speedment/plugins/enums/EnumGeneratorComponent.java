@@ -12,7 +12,7 @@ import com.speedment.generator.StandardTranslatorKey;
 import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.generator.component.EventComponent;
 import com.speedment.generator.component.TypeMapperComponent;
-import com.speedment.plugins.enums.internal.newUi.CommaSeparatedStringEditor;
+import com.speedment.plugins.enums.internal.ui.CommaSeparatedStringEditor;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.component.AbstractComponent;
