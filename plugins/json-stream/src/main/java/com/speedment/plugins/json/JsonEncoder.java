@@ -16,252 +16,395 @@
  */
 package com.speedment.plugins.json;
 
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.field.FieldTrait;
-import com.speedment.runtime.field.trait.ReferenceFieldTrait;
-import com.speedment.runtime.internal.util.document.DocumentUtil;
 import com.speedment.runtime.manager.Manager;
+import com.speedment.runtime.field.trait.HasFinder;
+import com.speedment.plugins.json.internal.JsonEncoderImpl;
+import com.speedment.runtime.field.BooleanField;
+import com.speedment.runtime.field.ByteField;
+import com.speedment.runtime.field.CharField;
+import com.speedment.runtime.field.DoubleField;
+import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.FloatField;
+import com.speedment.runtime.field.IntField;
+import com.speedment.runtime.field.LongField;
+import com.speedment.runtime.field.ReferenceField;
+import com.speedment.runtime.field.ShortField;
+import com.speedment.runtime.field.method.BooleanGetter;
+import com.speedment.runtime.field.method.ByteGetter;
+import com.speedment.runtime.field.method.CharGetter;
+import com.speedment.runtime.field.method.DoubleGetter;
+import com.speedment.runtime.field.method.Finder;
+import com.speedment.runtime.field.method.FloatGetter;
+import com.speedment.runtime.field.method.IntGetter;
+import com.speedment.runtime.field.method.LongGetter;
+import com.speedment.runtime.field.method.ReferenceGetter;
+import com.speedment.runtime.field.method.ShortGetter;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toSet;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import com.speedment.runtime.field.trait.HasFinder;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-
 /**
  * An encoder that can transform Speedment entities to JSON.
  * <p>
- * Example usage:  <code>
- *      Manager&lt;Address&gt; addresses = app.managerOf(Address.class);
- *      Manager&lt;Employee&gt; employees = app.managerOf(Employee.class);
- *      Manager&lt;Employee&gt; departments = app.managerOf(Department.class);
+ * <em>Example usage:</em> 
+ * {@code
+ *      Manager<Address> addresses    = app.managerOf(Address.class);
+ *      Manager<Employee> employees   = app.managerOf(Employee.class);
+ *      Manager<Employee> departments = app.managerOf(Department.class);
  *
  *      // Include street, zip-code and city only.
- *      JconEncoder&lt;Address&gt; addrEncoder = JsonEncoder.noneOf(addresses)
+ *      JconEncoder<Address> addrEncoder = JsonEncoder.noneOf(addresses)
  *          .add(Address.STREET)
  *          .add(Address.ZIPCODE)
  *          .add(Address.CITY);
  *
  *      // Do not expose SSN but do inline the home address.
- *      JconEncoder&lt;Employee&gt; empEncoder = JsonEncoder.allOf(employees)
+ *      JconEncoder<Employee> empEncoder = JsonEncoder.allOf(employees)
  *          .remove(Employee.SSN)
- *          .remove(Employee.DEPARTMENT); // Go the other way around.
+ *          .remove(Employee.DEPARTMENT);             // Go the other way around
  *          .add(Employee.HOME_ADDRESS, addrEncoder); // Foreign key
  *
  *      // Inline every employee in the department.
- *      JconEncoder&lt;Department&gt; depEncoder = JsonEncoder.allOf(departments)
+ *      JconEncoder<Department> depEncoder = JsonEncoder.allOf(departments)
  *          .putStreamer("employees", Department::employees, empEncoder);
  *
  *      String json = depEncoder.apply(departments.findAny().get());
- * </code>
+ * }
  *
- * @author Emil Forslund
  * @param <ENTITY> entity type
+ * 
+ * @author Emil Forslund
+ * @since  2.1.0
  */
-public final class JsonEncoder<ENTITY> {
+public interface JsonEncoder<ENTITY> {
+    
+    /**************************************************************************/
+    /*                             Getters                                    */
+    /**************************************************************************/
+    
+    /**
+     * Returns the manager for the entity type that this encoder works with.
+     * 
+     * @return  the manager
+     */
+    Manager<ENTITY> getManager();
 
-    private final Map<String, Function<ENTITY, String>> getters;
-    private final Project project;
-    private final Manager<ENTITY> manager;
+    /**************************************************************************/
+    /*                          Field Putters                                 */
+    /**************************************************************************/
+    
+    /**
+     * Include the specified field in the encoder.
+     * 
+     * @param <D>    the database type
+     * @param <V>    the java type
+     * @param field  the field type
+     * @return       a reference to this encoder
+     */
+    <D, V> JsonEncoder<ENTITY> put(ReferenceField<ENTITY, D, V> field);
+    
+    /**
+     * Include the specified field in the encoder.
+     * 
+     * @param <D>    the database type
+     * @param field  the field type
+     * @return       a reference to this encoder
+     */
+    <D> JsonEncoder<ENTITY> putByte(ByteField<ENTITY, D> field);
+    
+    /**
+     * Include the specified field in the encoder.
+     * 
+     * @param <D>    the database type
+     * @param field  the field type
+     * @return       a reference to this encoder
+     */
+    <D> JsonEncoder<ENTITY> putShort(ShortField<ENTITY, D> field);
+    
+    /**
+     * Include the specified field in the encoder.
+     * 
+     * @param <D>    the database type
+     * @param field  the field type
+     * @return       a reference to this encoder
+     */
+    <D> JsonEncoder<ENTITY> putInt(IntField<ENTITY, D> field);
+    
+    /**
+     * Include the specified field in the encoder.
+     * 
+     * @param <D>    the database type
+     * @param field  the field type
+     * @return       a reference to this encoder
+     */
+    <D> JsonEncoder<ENTITY> putLong(LongField<ENTITY, D> field);
+    
+    /**
+     * Include the specified field in the encoder.
+     * 
+     * @param <D>    the database type
+     * @param field  the field type
+     * @return       a reference to this encoder
+     */
+    <D> JsonEncoder<ENTITY> putFloat(FloatField<ENTITY, D> field);
+    
+    /**
+     * Include the specified field in the encoder.
+     * 
+     * @param <D>    the database type
+     * @param field  the field type
+     * @return       a reference to this encoder
+     */
+    <D> JsonEncoder<ENTITY> putDouble(DoubleField<ENTITY, D> field);
+    
+    /**
+     * Include the specified field in the encoder.
+     * 
+     * @param <D>    the database type
+     * @param field  the field type
+     * @return       a reference to this encoder
+     */
+    <D> JsonEncoder<ENTITY> putChar(CharField<ENTITY, D> field);
+    
+    /**
+     * Include the specified field in the encoder.
+     * 
+     * @param <D>    the database type
+     * @param field  the field type
+     * @return       a reference to this encoder
+     */
+    <D> JsonEncoder<ENTITY> putBoolean(BooleanField<ENTITY, D> field);
+
+    /**************************************************************************/
+    /*                        Put Labels with Getters                         */
+    /**************************************************************************/
+    
+    /**
+     * Include the specified label in the encoder, using the specified getter to
+     * determine its value. If the label is the same as an existing field name, 
+     * it will be replaced.
+     * 
+     * @param <T>     the reference type of the field
+     * @param label   the label to store it under
+     * @param getter  how to retreive the value to store
+     * @return        a reference to this encoder
+     */
+    <T> JsonEncoder<ENTITY> put(String label, ReferenceGetter<ENTITY, T> getter);
+    
+    /**
+     * Include the specified label in the encoder, using the specified getter to
+     * determine its value. If the label is the same as an existing field name, 
+     * it will be replaced.
+     * 
+     * @param label   the label to store it under
+     * @param getter  how to retreive the value to store
+     * @return        a reference to this encoder
+     */
+    JsonEncoder<ENTITY> putByte(String label, ByteGetter<ENTITY> getter);
+    
+    /**
+     * Include the specified label in the encoder, using the specified getter to
+     * determine its value. If the label is the same as an existing field name, 
+     * it will be replaced.
+     * 
+     * @param label   the label to store it under
+     * @param getter  how to retreive the value to store
+     * @return        a reference to this encoder
+     */
+    JsonEncoder<ENTITY> putShort(String label, ShortGetter<ENTITY> getter);
+    
+    /**
+     * Include the specified label in the encoder, using the specified getter to
+     * determine its value. If the label is the same as an existing field name, 
+     * it will be replaced.
+     * 
+     * @param label   the label to store it under
+     * @param getter  how to retreive the value to store
+     * @return        a reference to this encoder
+     */
+    JsonEncoder<ENTITY> putInt(String label, IntGetter<ENTITY> getter);
+    
+    /**
+     * Include the specified label in the encoder, using the specified getter to
+     * determine its value. If the label is the same as an existing field name, 
+     * it will be replaced.
+     * 
+     * @param label   the label to store it under
+     * @param getter  how to retreive the value to store
+     * @return        a reference to this encoder
+     */
+    JsonEncoder<ENTITY> putLong(String label, LongGetter<ENTITY> getter);
+    
+    /**
+     * Include the specified label in the encoder, using the specified getter to
+     * determine its value. If the label is the same as an existing field name, 
+     * it will be replaced.
+     * 
+     * @param label   the label to store it under
+     * @param getter  how to retreive the value to store
+     * @return        a reference to this encoder
+     */
+    JsonEncoder<ENTITY> putFloat(String label, FloatGetter<ENTITY> getter);
+    
+    /**
+     * Include the specified label in the encoder, using the specified getter to
+     * determine its value. If the label is the same as an existing field name, 
+     * it will be replaced.
+     * 
+     * @param label   the label to store it under
+     * @param getter  how to retreive the value to store
+     * @return        a reference to this encoder
+     */
+    JsonEncoder<ENTITY> putDouble(String label, DoubleGetter<ENTITY> getter);
+    
+    /**
+     * Include the specified label in the encoder, using the specified getter to
+     * determine its value. If the label is the same as an existing field name, 
+     * it will be replaced.
+     * 
+     * @param label   the label to store it under
+     * @param getter  how to retreive the value to store
+     * @return        a reference to this encoder
+     */
+    JsonEncoder<ENTITY> putChar(String label, CharGetter<ENTITY> getter);
+    
+    /**
+     * Include the specified label in the encoder, using the specified getter to
+     * determine its value. If the label is the same as an existing field name, 
+     * it will be replaced.
+     * 
+     * @param label   the label to store it under
+     * @param getter  how to retreive the value to store
+     * @return        a reference to this encoder
+     */
+    JsonEncoder<ENTITY> putBoolean(String label, BooleanGetter<ENTITY> getter);
+    
+    /**************************************************************************/
+    /*                        Put Fields with Finders                         */
+    /**************************************************************************/
+    
+    /**
+     * Include the specified foreign key field in the encoder, embedding foreign
+     * entities as inner JSON objects.
+     * 
+     * @param <FK_ENTITY>  the type of the foreign entity
+     * @param <FIELD>      the type of the field itself
+     * @param field        the foreign key field
+     * @param encoder      encoder for the foreign entity
+     * @return             a reference to this encoder
+     */
+    <FK_ENTITY, FIELD extends Field<ENTITY> & HasFinder<ENTITY, FK_ENTITY>> 
+    JsonEncoder<ENTITY> put(FIELD field, JsonEncoder<FK_ENTITY> encoder);
+
+    /**************************************************************************/
+    /*                        Put Labels with Finders                         */
+    /**************************************************************************/
+    
+    /**
+     * Include the specified label in this encoder, populating it with an inner
+     * JSON object representing a foreign entity. This can be used to create
+     * custom object hierarchies. If the specified label already exists in the
+     * encoder, it will be replaced.
+     * 
+     * @param <FK_ENTITY>  the foreign entity type
+     * @param label        the label to store it under
+     * @param finder       a finder method used to retrieve the foreign entity
+     * @param fkEncoder    an encoder for the foreign entity type
+     * @return             a reference to this encoder
+     */
+    <FK_ENTITY> JsonEncoder<ENTITY> put(
+            String label, 
+            Finder<ENTITY, FK_ENTITY> finder, 
+            JsonEncoder<FK_ENTITY> fkEncoder);
+
+    /**************************************************************************/
+    /*                        Put Labels with Find Many                       */
+    /**************************************************************************/
+    
+    /**
+     * Include the specified label in this encoder, using it to store an array
+     * of inner JSON objects determined by applying the specified streaming
+     * method. If the specified label already exists in the encoder, it will be 
+     * replaced.
+     * 
+     * @param <FK_ENTITY>  the foreign entity type
+     * @param label        the label to store it under
+     * @param streamer     the streaming method to use
+     * @param fkEncoder    encoder for the foreign entity type
+     * @return             a reference to this encoder
+     */
+    <FK_ENTITY> JsonEncoder<ENTITY> putStreamer(
+            String label, 
+            BiFunction<Manager<ENTITY>, ENTITY, Stream<FK_ENTITY>> streamer, 
+            JsonEncoder<FK_ENTITY> fkEncoder);
 
     /**
-     * Constructs an empty JsonEncoder with no fields added to the output
-     * renderer.
+     * Include the specified label in this encoder, using it to store an array
+     * of inner JSON objects determined by applying the specified streaming
+     * method. If the specified label already exists in the encoder, it will be 
+     * replaced.
+     * 
+     * @param <FK_ENTITY>  the foreign entity type
+     * @param label        the label to store it under
+     * @param streamer     the streaming method to use
+     * @param fkEncoder    encoder for the foreign entity type
+     * @return             a reference to this encoder
      */
-    private JsonEncoder(Project project, Manager<ENTITY> manager) {
-        this.getters = new LinkedHashMap<>();
-        this.project = requireNonNull(project);
-        this.manager = requireNonNull(manager);
-    }
+    <FK_ENTITY> JsonEncoder<ENTITY> putStreamer(
+            String label, 
+            BiFunction<Manager<ENTITY>, ENTITY, Stream<FK_ENTITY>> streamer, 
+            Function<FK_ENTITY, String> fkEncoder);
 
-    // Fields
-    public <D, T, I extends FieldTrait & ReferenceFieldTrait<ENTITY, D, T>> JsonEncoder<ENTITY> put(I field) {
-        requireNonNull(field);
-        final String columnName = jsonField(project, field.identifier());
-        final Function<ENTITY, T> getter = ((ReferenceFieldTrait<ENTITY, D, T>) field).getter(); // Workaround bugg
-        return put(columnName, getter);
-    }
+    /**************************************************************************/
+    /*                             Remove by Label                            */
+    /**************************************************************************/
+    
+    /**
+     * Exclude the specified label from this encoder. If the label was not 
+     * already included, this method will have no effect.
+     * <p>
+     * This method can be used to remove fields as well if the correct field
+     * name is specified.
+     * 
+     * @param label  the label to remove
+     * @return       a reference to this encoder
+     */
+    JsonEncoder<ENTITY> remove(String label);
 
-    // Foreign key fields.
-    public <D, T, FK_ENTITY, I extends FieldTrait & ReferenceFieldTrait<ENTITY, D, T> & HasFinder<ENTITY, D, FK_ENTITY>>
-        JsonEncoder<ENTITY> put(I field, JsonEncoder<FK_ENTITY> builder) {
-        requireNonNulls(field, builder);
-        final String columnName = jsonField(project, field.getIdentifier());
-        final HasFinder<ENTITY, D, FK_ENTITY> fkField = (HasFinder< ENTITY, D, FK_ENTITY>) field; // Workaround bugg
-        return put(columnName, fkField::findFrom, builder);
-    }
+    /**
+     * Exclude the specified field from this encoder. If the field was not 
+     * already included in the encoder, this method has no effect.
+     * 
+     * @param field  the field to remove
+     * @return       a reference to this encoder
+     */
+    JsonEncoder<ENTITY> remove(Field<ENTITY> field);
 
-    // Label-and-getter pairs
-    public <T> JsonEncoder<ENTITY> put(String label, Function<ENTITY, T> getter) {
-        requireNonNull(label);
-        requireNonNull(getter);
-        getters.put(label, e -> "\"" + label + "\":" + jsonValue(getter.apply(e)));
-        return this;
-    }
+    /**************************************************************************/
+    /*                                  Encode                                */
+    /**************************************************************************/
+    
+    /**
+     * Encodes the specified entity using this encoder.
+     * 
+     * @param entity  the entity to encode
+     * @return        the JSON encoded string
+     */
+    String apply(ENTITY entity);
+    
+    /**
+     * Returns a collector that will use this encoder to encode any incoming
+     * entities.
+     * 
+     * @return  the collector
+     */
+    JsonCollector<ENTITY> collector();
 
-    // Label-and-getter with custom formatter
-    public <FK_ENTITY> JsonEncoder<ENTITY> put(String label, BiFunction<ENTITY, Manager<FK_ENTITY>, FK_ENTITY> getter, JsonEncoder<FK_ENTITY> builder) {
-        requireNonNull(label);
-        requireNonNull(getter);
-        requireNonNull(builder);
-        getters.put(label, e -> "\"" + label + "\":" + builder.apply(getter.apply(e, builder.manager)));
-        return this;
-    }
-
-    // Label-and-streamer with custom formatter.
-    public <FK_ENTITY> JsonEncoder<ENTITY> putStreamer(String label, BiFunction<Manager<ENTITY>, ENTITY, Stream<FK_ENTITY>> streamer, JsonEncoder<FK_ENTITY> builder) {
-        requireNonNull(label);
-        requireNonNull(streamer);
-        requireNonNull(builder);
-        getters.put(label, e -> "\"" + label + "\":[" + streamer.apply(manager, e).map(builder::apply).collect(joining(",")) + "]");
-        return this;
-    }
-
-    public <FK_ENTITY> JsonEncoder<ENTITY> putStreamer(String label, BiFunction<Manager<ENTITY>, ENTITY, Stream<FK_ENTITY>> streamer, Function<FK_ENTITY, String> encoder) {
-        requireNonNull(label);
-        requireNonNull(streamer);
-        requireNonNull(encoder);
-        getters.put(label, e -> "\"" + label + "\":[" + streamer.apply(manager, e).map(encoder).collect(joining(",")) + "]");
-        return this;
-    }
-
-    // Removers by label
-    public JsonEncoder<ENTITY> remove(String label) {
-        requireNonNull(label);
-        getters.remove(label);
-        return this;
-    }
-
-    public JsonEncoder<ENTITY> remove(FieldTrait field) {
-        requireNonNull(field);
-        getters.remove(jsonField(project, field.identifier()));
-        return this;
-    }
-
-    public String apply(ENTITY entity) {
-        return entity == null ? "null" : "{"
-            + getters.values().stream()
-            .map(g -> g.apply(entity))
-            .collect(joining(","))
-            + "}";
-    }
-
-    protected static String jsonField(Project project, FieldIdentifier<?> identifier) {
-        requireNonNulls(project, identifier);
-        return referencedColumn(project, identifier).getJavaName();
-    }
-
-    public static String jsonValue(Object in) {
-        // in is nullable, a field can certainly be null
-        final String value;
-
-        if (in instanceof Optional<?>) {
-            final Optional<?> o = (Optional<?>) in;
-            return o.map(JsonEncoder::jsonValue).orElse("null");
-        } else if (in == null) {
-            value = "null";
-        } else if (in instanceof Byte
-            || in instanceof Short
-            || in instanceof Integer
-            || in instanceof Long
-            || in instanceof Boolean
-            || in instanceof Float
-            || in instanceof Double) {
-            value = String.valueOf(in);
-        } else {
-            value = "\"" + String.valueOf(in).replace("\"", "\\\"") + "\"";
-        }
-
-        return value;
-    }
-
+    /**************************************************************************/
+    /*                         Static Factory Methods                         */
+    /**************************************************************************/
+    
     /**
      * Creates and return a new JsonEncoder with no fields added to the
      * renderer.
@@ -270,8 +413,8 @@ public final class JsonEncoder<ENTITY> {
      * @param manager of the entity
      * @return a new JsonEncoder with no fields added to the renderer
      */
-    public static <ENTITY> JsonEncoder<ENTITY> noneOf(Manager<ENTITY> manager) {
-        return new JsonEncoder<>(projectOf(manager), manager);
+    static <ENTITY> JsonEncoder<ENTITY> noneOf(Manager<ENTITY> manager) {
+        return JsonEncoderImpl.noneOf(manager);
     }
 
     /**
@@ -284,23 +427,8 @@ public final class JsonEncoder<ENTITY> {
      * @return a new JsonEncoder with all the Entity fields added to the
      * renderer
      */
-    public static <ENTITY> JsonEncoder<ENTITY> allOf(Manager<ENTITY> manager) {
-        requireNonNull(manager);
-
-        final JsonEncoder<ENTITY> formatter = noneOf(manager);
-
-        manager.fields()
-            .filter(ReferenceFieldTrait.class::isInstance)
-            .map(f -> castReferenceFieldTrait(manager, f))
-            .map(ReferenceFieldTrait::identifier)
-            .forEachOrdered(fi -> {
-                formatter.put(
-                    jsonField(projectOf(manager), fi),
-                    entity -> manager.get(entity, fi)
-                );
-            });
-
-        return formatter;
+    static <ENTITY> JsonEncoder<ENTITY> allOf(Manager<ENTITY> manager) {
+        return JsonEncoderImpl.allOf(manager);
     }
 
     /**
@@ -315,42 +443,7 @@ public final class JsonEncoder<ENTITY> {
      */
     @SafeVarargs
     @SuppressWarnings("varargs") // Using the array in a Stream.of() is safe
-    public static <ENTITY> JsonEncoder<ENTITY> of(Manager<ENTITY> manager, FieldTrait... fields) {
-        requireNonNull(manager);
-        requireNonNullElements(fields);
-        final JsonEncoder<ENTITY> formatter = noneOf(manager);
-
-        final Set<String> fieldNames = Stream.of(fields)
-            .map(FieldTrait::identifier)
-            .map(FieldIdentifier::columnName)
-            .collect(toSet());
-
-        manager.fields()
-            .filter(ReferenceFieldTrait.class::isInstance)
-            .map(f -> castReferenceFieldTrait(manager, f))
-            .filter(f -> fieldNames.contains(f.identifier().columnName()))
-            .map(ReferenceFieldTrait::identifier)
-            .forEachOrdered(fi
-                -> formatter.put(
-                    jsonField(projectOf(manager), fi),
-                    entity -> manager.get(entity, fi)
-                )
-            );
-
-        return formatter;
-    }
-
-    private static <ENTITY> ReferenceFieldTrait<ENTITY, ?, ?> castReferenceFieldTrait(Manager<ENTITY> mgr, FieldTrait f) {
-        @SuppressWarnings("unchecked")
-        final ReferenceFieldTrait<ENTITY, ?, ?> result = (ReferenceFieldTrait<ENTITY, ?, ?>) f;
-        return result;
-    }
-
-    private static <ENTITY> Project projectOf(Manager<ENTITY> manager) {
-        return DocumentUtil.ancestor(manager.getTable(), Project.class)
-            .orElseThrow(() -> new SpeedmentException(
-                "Could not find a project root to table '"
-                + manager.getTable().toString() + "'."
-            ));
+    static <ENTITY> JsonEncoder<ENTITY> of(Manager<ENTITY> manager, Field<ENTITY>... fields) {
+        return JsonEncoderImpl.of(manager, fields);
     }
 }

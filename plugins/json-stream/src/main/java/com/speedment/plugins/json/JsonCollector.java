@@ -16,19 +16,11 @@
  */
 package com.speedment.plugins.json;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumSet;
+import com.speedment.plugins.json.internal.JsonCollectorImpl;
 import java.util.List;
-import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collector.Characteristics.CONCURRENT;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -48,25 +40,7 @@ import static java.util.stream.Collectors.joining;
  * @author Emil Forslund
  * @since  1.0.0
  */
-public final class JsonCollector<ENTITY> implements Collector<ENTITY, List<String>, String> {
-    
-    /**
-     * Returns a collector that calls the {@link #toJson(JsonEncoder)}
-     * method for each element in the stream and joins the resulting stream
-     * separated by commas and surrounded by square brackets.
-     * <p>
-     * The result of the stream:
-     * <pre>    a b c</pre> 
-     * would be:
-     * <pre>    ['a', 'b', 'c']</pre>
-     *
-     * @param <T> the type of the stream
-     * @return the json string
-     */
-    @Deprecated // Need to be rewritten to work in 3.0.0
-    public static <T> Collector<T, ?, String> toJson() {
-        return new JsonCollector<>(JsonUtil::toJson, l -> "[" + l.stream().collect(joining(", ")) + "]");
-    }
+public interface JsonCollector<ENTITY> extends Collector<ENTITY, List<String>, String> {
 
     /**
      * Returns a collector that calls the specified encoder for each element in
@@ -78,50 +52,11 @@ public final class JsonCollector<ENTITY> implements Collector<ENTITY, List<Strin
      * @param encoder   the enocder to use
      * @return          the json string
      */
-    public static <ENTITY> Collector<ENTITY, ?, String> toJson(JsonEncoder<ENTITY> encoder) {
+    static <ENTITY> JsonCollector<ENTITY> toJson(JsonEncoder<ENTITY> encoder) {
         requireNonNull(encoder);
-        return new JsonCollector<>(encoder::apply, l -> "[" + l.stream().collect(joining(", ")) + "]");
+        
+        return JsonCollectorImpl.collect(
+            encoder::apply, l -> "[" + l.stream().collect(joining(", ")) + "]"
+        );
     }
-
-    @Override
-    public Supplier<List<String>> supplier() {
-        return () -> Collections.synchronizedList(new ArrayList<>());
-    }
-
-    @Override
-    public BiConsumer<List<String>, ENTITY> accumulator() {
-        return (l, t) -> {
-            synchronized (l) {
-                l.add(converter.apply(t));
-            }
-        };
-    }
-
-    @Override
-    public BinaryOperator<List<String>> combiner() {
-        return (l1, l2) -> {
-            synchronized (l1) {
-                l1.addAll(l2);
-                return l1;
-            }
-        };
-    }
-
-    @Override
-    public Function<List<String>, String> finisher() {
-        return merger::apply;
-    }
-
-    @Override
-    public Set<Collector.Characteristics> characteristics() {
-        return EnumSet.of(CONCURRENT);
-    }
-    
-    private JsonCollector(Function<ENTITY, String> converter, Function<List<String>, String> merger) {
-        this.converter = requireNonNull(converter);
-        this.merger = requireNonNull(merger);
-    }
-    
-    private final Function<ENTITY, String> converter;
-    private final Function<List<String>, String> merger;
 }
