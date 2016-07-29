@@ -51,6 +51,7 @@ import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import com.speedment.generator.typetoken.TypeTokenGenerator;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.config.mapper.primitive.PrimitiveTypeMapper;
 import com.speedment.runtime.config.typetoken.TypeToken;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.runtime.util.OptionalBoolean;
@@ -195,7 +196,13 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                 final String typeMapperCode;
                 if (col.getTypeMapper().isPresent()) {
                     final String typeMapper = col.getTypeMapper().get();
-                    typeMapperCode = "new " + shortName(typeMapper) + "()";
+
+                    if (PrimitiveTypeMapper.class.getName().equals(typeMapper)) {
+                        typeMapperCode = "new " + shortName(typeMapper) + "<>()";
+                    } else {
+                        typeMapperCode = "new " + shortName(typeMapper) + "()";
+                    }
+                    
                     file.add(Import.of(Type.of(typeMapper)));
                 } else {
                     typeMapperCode = "TypeMapper.identity()";
