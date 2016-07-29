@@ -46,6 +46,8 @@ import com.speedment.common.injector.Injector;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.typetoken.TypeTokenGenerator;
 import com.speedment.runtime.config.typetoken.TypeToken;
+import com.speedment.runtime.field.BooleanField;
+import com.speedment.runtime.field.BooleanForeignKeyField;
 import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.ByteForeignKeyField;
 import com.speedment.runtime.field.CharField;
@@ -63,6 +65,8 @@ import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.ShortField;
 import com.speedment.runtime.field.ShortForeignKeyField;
 import com.speedment.runtime.field.StringField;
+import com.speedment.runtime.internal.field.BooleanFieldImpl;
+import com.speedment.runtime.internal.field.BooleanForeignKeyFieldImpl;
 import com.speedment.runtime.internal.field.ByteFieldImpl;
 import com.speedment.runtime.internal.field.ByteForeignKeyFieldImpl;
 import com.speedment.runtime.internal.field.CharFieldImpl;
@@ -103,6 +107,7 @@ public final class EntityTranslatorSupport {
         FLOAT,
         DOUBLE,
         CHAR,
+        BOOLEAN,
         COMPARABLE,
         REFERENCE
     }
@@ -146,6 +151,8 @@ public final class EntityTranslatorSupport {
             fieldType = FieldType.DOUBLE;
         } else if (TypeTokenFactory.create(char.class).equals(mapping)) {
             fieldType = FieldType.CHAR;
+        } else if (TypeTokenFactory.create(boolean.class).equals(mapping)) {
+            fieldType = FieldType.BOOLEAN;
         } else if (mapping.isComparable()) {
             fieldType = FieldType.COMPARABLE;
         } else {
@@ -256,6 +263,18 @@ public final class EntityTranslatorSupport {
                             .add(Generic.of(fkType));
 
                         implType = Type.of(CharForeignKeyFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(fkType));
+                        break;
+                        
+                    case BOOLEAN :
+                        type = Type.of(BooleanForeignKeyField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType))
+                            .add(Generic.of(fkType));
+
+                        implType = Type.of(BooleanForeignKeyFieldImpl.class)
                             .add(Generic.of(entityType))
                             .add(Generic.of(databaseType))
                             .add(Generic.of(fkType));
@@ -377,6 +396,16 @@ public final class EntityTranslatorSupport {
                             .add(Generic.of(databaseType));
 
                         implType = Type.of(CharFieldImpl.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType));
+                        break;
+                        
+                    case BOOLEAN :
+                        type = Type.of(BooleanField.class)
+                            .add(Generic.of(entityType))
+                            .add(Generic.of(databaseType));
+
+                        implType = Type.of(BooleanFieldImpl.class)
                             .add(Generic.of(entityType))
                             .add(Generic.of(databaseType));
                         break;
