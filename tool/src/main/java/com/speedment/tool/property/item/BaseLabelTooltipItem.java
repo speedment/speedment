@@ -46,15 +46,7 @@ public abstract class BaseLabelTooltipItem implements PropertyEditor.Item{
     public Node getLabel() {
         final Label l = new Label(label);
         l.setTooltip( new Tooltip(tooltip) );
-        l.getStyleClass().add("property-label");
         return l;
-    }
-    
-    @Override
-    public Node getEditor(){
-        final Node node = getEditorNode();
-        node.getStyleClass().add("property-editor");
-        return node;
     }
     
     @Override
@@ -84,11 +76,4 @@ public abstract class BaseLabelTooltipItem implements PropertyEditor.Item{
         listeners.put(key, value);
         observable.addListener(listener);
     }
-    
-    /**
-     * Expects to retrieve the editor node for this PropertyEditor
-     * 
-     * @return  the editor node
-     */
-    protected abstract Node getEditorNode();
 }

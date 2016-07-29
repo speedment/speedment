@@ -42,7 +42,7 @@ public class ChoiceBoxItem<T> extends BaseLabelTooltipItem {
     }
 
     @Override
-    public Node getEditorNode() {
+    public Node getEditor() {
         final ChoiceBox<T> box = new ChoiceBox<>(alternatives);
         final T val = currentValue.getValue();
 

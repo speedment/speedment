@@ -34,7 +34,7 @@ public class SimpleCheckBoxItem extends BaseLabelTooltipItem{
     }
 
     @Override
-    public Node getEditorNode() {
+    public Node getEditor() {
         final CheckBox box = new CheckBox();
         box.setSelected( property.get() );        
         property.bind( box.selectedProperty() );

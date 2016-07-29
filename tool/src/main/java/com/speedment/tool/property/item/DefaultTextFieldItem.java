@@ -38,27 +38,6 @@ public class DefaultTextFieldItem  extends DefaultStringItem {
     public DefaultTextFieldItem(String label, ObservableStringValue defaultValue, StringProperty value, String tooltip) {
         super(label, defaultValue, value, tooltip);
     }
-    
-    /**
-     * Creates a new DefaultTextFieldItem. 
-     * <p>
-     * While the CheckBox is checked, the TextField will be disabled, 
-     * and the property will always have the default value. <br>
-     * While the CheckBox is un-checked, the TextField will be enabled, 
-     * and the property will always have the TextField's current value.
-     * <p>
-     * This constructor will bind the CheckBox value to the <b>useDefaultValue<b>
-     * property bidirectional.
-     * 
-     * @param label             the label text
-     * @param defaultValue      the default value 
-     * @param value             the property to be edited
-     * @param useDefaultValue   the status of the checkbox
-     * @param tooltip           the tooltip
-     */
-    public DefaultTextFieldItem(String label, ObservableStringValue defaultValue, StringProperty value, BooleanProperty useDefaultValue, String tooltip) {
-        super(label, defaultValue, value, useDefaultValue, tooltip);
-    }
 
     @Override
     protected TextInputControl getInputControl() {

@@ -83,7 +83,7 @@ public class AddRemoveStringItem extends BaseLabelTooltipItem{
     
     
     @Override
-    protected Node getEditorNode() {
+    public Node getEditor() {
         final VBox container = new VBox();
         
         ListView<String> listView = new ListView<>(strings);

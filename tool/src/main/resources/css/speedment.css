@@ -440,19 +440,20 @@
 .properties-layout {
     -fx-hgap: 10px;
     -fx-vgap: 10px;
-    -fx-padding: 5 15 5 15;
+    -fx-padding: 5px 15px 5px 15px;
 }
 
 /*** Properties layout : left ***/
 .properties-layout .property-label {
     -fx-font-size: 1.2em;
-    -fx-alignment: CENTER_LEFT
+    -fx-alignment: top-left;
+    -fx-paddigin: 10px 0px 10px 0px;
 }
 
 /*** Properties layout : right ***/
 .properties-layout .property-editor {
     -fx-spacing: 10px;
     -fx-fill-width: true;    
-    -fx-alignment: CENTER_LEFT;
+    -fx-alignment: center-left;
     -fx-wrap-text: true;    
 }

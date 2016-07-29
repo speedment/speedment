@@ -63,7 +63,7 @@ public class DefaultSpinnerItem extends BaseLabelTooltipItem {
     }
 
     @Override
-    public Node getEditorNode() {
+    public Node getEditor() {
         final boolean usesDefaultValue = value.getValue() == null || value.getValue().equals(defaultValue.getValue());
         
         final HBox container = new HBox();
@@ -106,7 +106,13 @@ public class DefaultSpinnerItem extends BaseLabelTooltipItem {
             } 
         });
         
-        svf.valueProperty().bindBidirectional( value );
+        attachListener( svf.valueProperty(), (ov, o, n) -> {
+            if( n == null || n == defaultValue.get() ){
+                value.setValue(null);
+            } else {
+                value.setValue(n);
+            }
+        });
         container.getChildren().addAll(auto, spinner);
         return container;
     }

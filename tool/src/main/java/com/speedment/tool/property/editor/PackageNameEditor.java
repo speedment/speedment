@@ -26,7 +26,6 @@ public class PackageNameEditor<T extends HasPackageNameProperty> implements Prop
                 "Package Name",
                 document.defaultPackageNameProperty(injector),
                 document.packageNameProperty(),
-                document.useDefaultPackageNameProperty(),
                 "The package where generated classes will be located."
             )
         );

@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
+import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -20,7 +22,8 @@ import static javafx.scene.layout.Region.USE_PREF_SIZE;
  */
 @Api(version="3.0")
 final class PropertyLayout extends GridPane{
-    private final static int MIN_LABEL_WIDTH = 100;
+    private final static int MIN_LABEL_WIDTH = 150;
+    private final static int MIN_EDITOR_WIDTH = 450;
     private final AtomicInteger index;
     private final Set<PropertyEditor.Item> items;
 
@@ -34,8 +37,8 @@ final class PropertyLayout extends GridPane{
         this.index = new AtomicInteger(0);
         this.items = new HashSet<>();
 
-        getColumnConstraints().add(0, new ColumnConstraints(MIN_LABEL_WIDTH, USE_COMPUTED_SIZE, USE_PREF_SIZE,    Priority.NEVER,  HPos.LEFT, true));
-        getColumnConstraints().add(1, new ColumnConstraints(USE_PREF_SIZE,   USE_COMPUTED_SIZE, Double.MAX_VALUE, Priority.ALWAYS, HPos.LEFT, true));
+        getColumnConstraints().add(0, new ColumnConstraints(MIN_LABEL_WIDTH,  USE_COMPUTED_SIZE, USE_PREF_SIZE,    Priority.NEVER,  HPos.LEFT, true));
+        getColumnConstraints().add(1, new ColumnConstraints(MIN_EDITOR_WIDTH, USE_COMPUTED_SIZE, Double.MAX_VALUE, Priority.ALWAYS, HPos.LEFT, true));
         getStyleClass().add("properties-layout");
 
         properties.stream().forEachOrdered( i -> addItem(i) );
@@ -48,8 +51,16 @@ final class PropertyLayout extends GridPane{
      * 
      * @param item  the editor
      */
-    void addItem(PropertyEditor.Item item){       
-        addRow(index.getAndIncrement(), item.getLabel(), item.getEditor());
+    void addItem(PropertyEditor.Item item){  
+        final Node label = item.getLabel();        
+        label.getStyleClass().add("property-label");
+        GridPane.setValignment(label, VPos.TOP);
+        
+        final Node editor = item.getEditor();
+        editor.getStyleClass().add("property-editor");
+        GridPane.setValignment(editor, VPos.CENTER);
+        
+        addRow(index.getAndIncrement(), label, editor);
         items.add(item);
     }
 

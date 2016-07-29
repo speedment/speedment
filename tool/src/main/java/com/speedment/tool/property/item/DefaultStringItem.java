@@ -9,9 +9,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.control.TextInputControl;
 import static java.util.Objects.requireNonNull;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
@@ -25,7 +22,6 @@ abstract class DefaultStringItem  extends BaseLabelTooltipItem {
     private final ObservableStringValue defaultValue;
     private final StringProperty value;
     private final StringProperty customValue;
-    private final BooleanProperty useDefaultValue;
 
     
     /**
@@ -46,53 +42,33 @@ abstract class DefaultStringItem  extends BaseLabelTooltipItem {
      * @param tooltip       the tooltip
      */
     public DefaultStringItem(String label, ObservableStringValue defaultValue, StringProperty value, String tooltip) {
-        this(label, 
-            defaultValue, 
-            value, 
-            new SimpleBooleanProperty( value.isEmpty().get() || value.get().equals(defaultValue.get())), 
-            tooltip
-        );
-    }
-    
-    /**
-     * Creates a new DefaultTextFieldItem. 
-     * <p>
-     * While the CheckBox is checked, the TextInput will be disabled, 
-     * and the property will always have the default value. <br>
-     * While the CheckBox is un-checked, the TextInput will be enabled, 
-     * and the property will always have the TextInput's current value.
-     * <p>
-     * This constructor will bind the CheckBox value to the <b>useDefaultValue<b>
-     * property bidirectional.
-     * 
-     * @param label             the label text
-     * @param defaultValue      the default value 
-     * @param value             the property to be edited
-     * @param useDefaultValue   the status of the checkbox
-     * @param tooltip           the tooltip
-     */
-    public DefaultStringItem(String label, ObservableStringValue defaultValue, StringProperty value, BooleanProperty useDefaultValue, String tooltip) {
         super(label, tooltip);
         this.defaultValue = requireNonNull(defaultValue);
         this.value        = requireNonNull(value);
         this.customValue = new SimpleStringProperty();
-        this.useDefaultValue = useDefaultValue;
     }
     
     @Override
-    public Node getEditorNode() {
+    public Node getEditor() {
         final HBox container = new HBox();
         final TextInputControl textInput = getInputControl();
-        final CheckBox auto = new CheckBox("Auto");
+        final CheckBox auto = new CheckBox("Auto");      
+        final boolean useDefaultValue =value.isEmpty().get() || value.get().equals(defaultValue.get());
 
-        customValue.setValue( useDefaultValue.get()  ? defaultValue.get() : value.get());     
+        customValue.setValue( useDefaultValue ? defaultValue.get() : value.get());     
        
-        setTextFieldBehaviour(textInput, useDefaultValue.get(), defaultValue, customValue);
+        setTextFieldBehaviour(textInput, useDefaultValue, defaultValue, customValue);
         textInput.disableProperty().bind(auto.selectedProperty());
+         
+        attachListener( textInput.textProperty(), (ov, o, n) -> {
+            if( n == null || n.isEmpty() || n.equalsIgnoreCase(defaultValue.getValue() )){
+                value.setValue(null);
+            } else {
+                value.setValue(n);
+            }
+        });
         
-        value.bind(textInput.textProperty());
-        
-        auto.selectedProperty().bindBidirectional(useDefaultValue);
+        auto.selectedProperty().setValue(useDefaultValue);
         attachListener( auto.selectedProperty(), (ov, o, isAuto) -> 
             setTextFieldBehaviour(textInput, isAuto, defaultValue, customValue)
         );
