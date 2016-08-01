@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.runtime.config.mapper.time;
 
 import com.speedment.runtime.config.Column;
@@ -11,11 +6,19 @@ import com.speedment.runtime.config.typetoken.TypeToken;
 import com.speedment.runtime.util.TypeTokenFactory;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 /**
+ * A mapping from SQL's Date to Java's LocalDate.
+ * <p>
+ * The mapping is naive, and will not include or consider timezone or the similar.
+ * Instead, the mapping will be direct: what is written in the database will
+ * be directly mapped into Java.
+ * <p>
+ * Example: <br>
+ * In database:<t> 2016-08-01<br>
+ * In Java:<t> 2016-08-01
  *
- * @author Simon
+ * @author Simon Jonasson
  */
 public class DateToLocalDateMapper implements TypeMapper<Date, LocalDate>{
 
