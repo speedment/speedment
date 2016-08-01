@@ -26,8 +26,6 @@ import java.util.Collection;
 import java.util.Set;
 
 import static com.speedment.runtime.internal.field.predicate.PredicateUtil.*;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 import com.speedment.runtime.field.predicate.FieldPredicateView;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
@@ -47,10 +45,16 @@ public abstract class AbstractSpeedmentPredicateView implements FieldPredicateVi
     protected abstract SqlPredicateFragment equalIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated);
 
     protected abstract SqlPredicateFragment startsWithHelper(String cn, FieldPredicate<?> model, boolean negated);
+    
+    protected abstract SqlPredicateFragment startsWithIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated);
 
     protected abstract SqlPredicateFragment endsWithHelper(String cn, FieldPredicate<?> model, boolean negated);
+    
+    protected abstract SqlPredicateFragment endsWithIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated);
 
     protected abstract SqlPredicateFragment containsHelper(String cn, FieldPredicate<?> model, boolean negated);
+    
+    protected abstract SqlPredicateFragment containsIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated);
 
     @Override
     public SqlPredicateFragment transform(FieldPredicate<?> model) {
@@ -68,11 +72,13 @@ public abstract class AbstractSpeedmentPredicateView implements FieldPredicateVi
                 return alwaysTrue();
             case ALWAYS_FALSE:
                 return alwaysFalse();
+                
             // Reference
             case IS_NULL:
                 return isNull(cn);
             case IS_NOT_NULL:
                 return isNotNull(cn);
+                
             // Comparable
             case EQUAL:
                 return equal(cn, model);
@@ -86,7 +92,6 @@ public abstract class AbstractSpeedmentPredicateView implements FieldPredicateVi
                 return lessThan(cn, model);
             case LESS_OR_EQUAL:
                 return lessOrEqual(cn, model);
-
             case BETWEEN:
                 return between(cn, model);
             case NOT_BETWEEN:
@@ -96,6 +101,7 @@ public abstract class AbstractSpeedmentPredicateView implements FieldPredicateVi
             case NOT_IN:
                 return notIn(cn, model);
 
+            // String
             case EQUAL_IGNORE_CASE:
                 return equalIgnoreCase(cn, model);
             case NOT_EQUAL_IGNORE_CASE:
@@ -105,16 +111,29 @@ public abstract class AbstractSpeedmentPredicateView implements FieldPredicateVi
                 return startsWith(cn, model);
             case NOT_STARTS_WITH:
                 return notStartsWith(cn, model);
+            case STARTS_WITH_IGNORE_CASE:
+                return startsWithIgnoreCase(cn, model);
+            case NOT_STARTS_WITH_IGNORE_CASE:
+                return notStartsWithIgnoreCase(cn, model);   
+            
 
             case ENDS_WITH:
                 return endsWith(cn, model);
             case NOT_ENDS_WITH:
                 return notEndsWith(cn, model);
+            case ENDS_WITH_IGNORE_CASE:
+                return endsWithIgnoreCase(cn, model);
+            case NOT_ENDS_WITH_IGNORE_CASE:
+                return notEndsWithIgnoreCase(cn, model);
 
             case CONTAINS:
                 return contains(cn, model);
             case NOT_CONTAINS:
                 return notContains(cn, model);
+            case CONTAINS_IGNORE_CASE:
+                return containsIgnoreCase(cn, model);
+            case NOT_CONTAINS_IGNORE_CASE:
+                return notContainsIgnoreCase(cn, model);
 
             case IS_EMPTY:
                 return isEmpty(cn);
@@ -222,6 +241,14 @@ public abstract class AbstractSpeedmentPredicateView implements FieldPredicateVi
     protected SqlPredicateFragment notStartsWith(String cn, FieldPredicate<?> model) {
         return startsWithHelper(cn, model, true);
     }
+    
+    protected SqlPredicateFragment startsWithIgnoreCase(String cn, FieldPredicate<?> model) {
+        return startsWithIgnoreCaseHelper(cn, model, false);
+    }
+
+    protected SqlPredicateFragment notStartsWithIgnoreCase(String cn, FieldPredicate<?> model) {
+        return startsWithIgnoreCaseHelper(cn, model, true);
+    }
 
     protected SqlPredicateFragment endsWith(String cn, FieldPredicate<?> model) {
         return endsWithHelper(cn, model, false);
@@ -230,6 +257,14 @@ public abstract class AbstractSpeedmentPredicateView implements FieldPredicateVi
     protected SqlPredicateFragment notEndsWith(String cn, FieldPredicate<?> model) {
         return endsWithHelper(cn, model, true);
     }
+    
+    protected SqlPredicateFragment endsWithIgnoreCase(String cn, FieldPredicate<?> model) {
+        return endsWithIgnoreCaseHelper(cn, model, false);
+    }
+
+    protected SqlPredicateFragment notEndsWithIgnoreCase(String cn, FieldPredicate<?> model) {
+        return endsWithIgnoreCaseHelper(cn, model, true);
+    }
 
     protected SqlPredicateFragment contains(String cn, FieldPredicate<?> model) {
         return containsHelper(cn, model, false);
@@ -237,6 +272,14 @@ public abstract class AbstractSpeedmentPredicateView implements FieldPredicateVi
 
     protected SqlPredicateFragment notContains(String cn, FieldPredicate<?> model) {
         return containsHelper(cn, model, true);
+    }
+    
+    protected SqlPredicateFragment containsIgnoreCase(String cn, FieldPredicate<?> model) {
+        return containsIgnoreCaseHelper(cn, model, false);
+    }
+
+    protected SqlPredicateFragment notContainsIgnoreCase(String cn, FieldPredicate<?> model) {
+        return containsIgnoreCaseHelper(cn, model, true);
     }
 
     protected SqlPredicateFragment isEmpty(String cn) {

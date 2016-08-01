@@ -46,14 +46,29 @@ public class PostgresSpeedmentPredicateView extends AbstractSpeedmentPredicateVi
     protected SqlPredicateFragment startsWithHelper(String cn, FieldPredicate<?> model, boolean negated) {
         return of("(" + cn + " LIKE ? || '%')", negated).add(getFirstOperandAsRaw(model));
     }
+    
+    @Override
+    protected SqlPredicateFragment startsWithIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
+        return of("(" + cn + " ILIKE ? || '%')", negated).add(getFirstOperandAsRaw(model));
+    }
 
     @Override
     protected SqlPredicateFragment endsWithHelper(String cn, FieldPredicate<?> model, boolean negated) {
         return of("(" + cn + " LIKE '%' || ?)", negated).add(getFirstOperandAsRaw(model));
     }
+    
+    @Override
+    protected SqlPredicateFragment endsWithIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
+        return of("(" + cn + " ILIKE '%' || ?)", negated).add(getFirstOperandAsRaw(model));
+    }
 
     @Override
     protected SqlPredicateFragment containsHelper(String cn, FieldPredicate<?> model, boolean negated) {
         return of("(" + cn + " LIKE '%' || ? || '%')", negated).add(getFirstOperandAsRaw(model));
+    }
+
+    @Override
+    protected SqlPredicateFragment containsIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
+        return of("(" + cn + " ILIKE '%' || ? || '%')", negated).add(getFirstOperandAsRaw(model));
     }
 }

@@ -44,19 +44,25 @@ public enum PredicateType {
     LESS_THAN,
     LESS_OR_EQUAL,
     BETWEEN,
-    NOT_BETWEEN, // Currently not exposed in external predicates
+    NOT_BETWEEN,                 // Currently not exposed in external predicates
     IN,
-    NOT_IN, // Currently not exposed in external predicates
+    NOT_IN,                      // Currently not exposed in external predicates
     
     // String
     EQUAL_IGNORE_CASE,
     NOT_EQUAL_IGNORE_CASE,
     STARTS_WITH,
-    NOT_STARTS_WITH, // Currently not exposed in external predicates
+    NOT_STARTS_WITH,             // Currently not exposed in external predicates
+    STARTS_WITH_IGNORE_CASE,
+    NOT_STARTS_WITH_IGNORE_CASE, // Currently not exposed in external predicates
     ENDS_WITH,
-    NOT_ENDS_WITH, // Currently not exposed in external predicates
+    NOT_ENDS_WITH,               // Currently not exposed in external predicates
+    ENDS_WITH_IGNORE_CASE,
+    NOT_ENDS_WITH_IGNORE_CASE,   // Currently not exposed in external predicates
     CONTAINS,
-    NOT_CONTAINS, // Currently not exposed in external predicates
+    NOT_CONTAINS,                // Currently not exposed in external predicates
+    CONTAINS_IGNORE_CASE,
+    NOT_CONTAINS_IGNORE_CASE,    // Currently not exposed in external predicates
     IS_EMPTY,
     IS_NOT_EMPTY;
 
@@ -80,8 +86,11 @@ public enum PredicateType {
         associateNegations(IN, NOT_IN);
         associateNegations(EQUAL_IGNORE_CASE, NOT_EQUAL_IGNORE_CASE);
         associateNegations(STARTS_WITH, NOT_STARTS_WITH);
+        associateNegations(STARTS_WITH_IGNORE_CASE, NOT_STARTS_WITH_IGNORE_CASE);
         associateNegations(ENDS_WITH, NOT_ENDS_WITH);
+        associateNegations(ENDS_WITH_IGNORE_CASE, NOT_ENDS_WITH_IGNORE_CASE);
         associateNegations(CONTAINS, NOT_CONTAINS);
+        associateNegations(CONTAINS_IGNORE_CASE, NOT_CONTAINS_IGNORE_CASE);
         associateNegations(IS_EMPTY, IS_NOT_EMPTY);
     }
 

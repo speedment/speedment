@@ -40,9 +40,6 @@ import static com.speedment.runtime.stream.action.Property.SIZE;
 import static com.speedment.runtime.stream.action.Verb.PRESERVE;
 import static java.util.stream.Collectors.toList;
 import com.speedment.runtime.field.predicate.FieldPredicate;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 import com.speedment.runtime.field.predicate.FieldPredicateView;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -92,20 +89,20 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         }
         
         final List<TypeMapper<Object, Object>> typeMappers = predicateBuilders
-                .stream()
-                .map(FieldPredicate::getField)
-                .map(Field<ENTITY>::typeMapper)
-                .map(tm -> {
-                    @SuppressWarnings("unchecked")
-                    final TypeMapper<Object, Object> tm2 = (TypeMapper<Object, Object>) tm;
-                    return tm2;
-                })
-                .collect(toList());
+            .stream()
+            .map(FieldPredicate::getField)
+            .map(Field<ENTITY>::typeMapper)
+            .map(tm -> {
+                @SuppressWarnings("unchecked")
+                final TypeMapper<Object, Object> tm2 = (TypeMapper<Object, Object>) tm;
+                return tm2;
+            })
+            .collect(toList());
 
         final FieldPredicateView spv = manager.getDbmsType().getSpeedmentPredicateView();
         final List<SqlPredicateFragment> fragments = predicateBuilders.stream()
-                .map(spv::transform)
-                .collect(toList());
+            .map(spv::transform)
+            .collect(toList());
         
         final String sql = manager.sqlSelect() + 
             " WHERE " +

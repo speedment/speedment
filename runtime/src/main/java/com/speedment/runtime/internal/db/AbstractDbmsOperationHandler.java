@@ -90,7 +90,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
                 }
                 return streamBuilder.build();
             }
-        } catch (SQLException sqle) {
+        } catch (final SQLException sqle) {
             LOGGER.error(sqle, "Error querying " + sql);
             throw new SpeedmentException(sqle);
         }
