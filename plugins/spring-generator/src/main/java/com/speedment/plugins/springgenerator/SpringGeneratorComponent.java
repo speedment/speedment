@@ -36,6 +36,14 @@ import static com.speedment.runtime.internal.license.OpenSourceLicense.APACHE_2;
 /**
  * Plugins into the Speedment platform, generating Spring annoted classes as
  * part of the regular code generation process.
+ * <p>
+ * <em>Usage:</em>
+ * Add the following configuration tag to the {@code speedment-maven-plugin}:
+ * {@code 
+ *     <components>
+ *         <component>com.speedment.plugins.springgenerator.SpringGeneratorComponent</component>
+ *     </components>
+ * }
  * 
  * @author Emil Forslund
  * @since  1.0.0
