@@ -16,6 +16,7 @@
  */
 package com.speedment.maven;
 
+import com.speedment.maven.typemapper.Mapping;
 import com.speedment.generator.TranslatorManager;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Project;
@@ -38,11 +39,12 @@ import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_L
 public final class GenerateMojo extends AbstractSpeedmentMojo {
 
     private @Parameter(defaultValue = "false") boolean debug;
-    private @Parameter String dbmsHost;
-    private @Parameter int dbmsPort;
-    private @Parameter String dbmsUsername;
-    private @Parameter String dbmsPassword;
+    private @Parameter(defaultValue = "${dbms.host}") String dbmsHost;
+    private @Parameter(defaultValue = "${dbms.port}") int dbmsPort;
+    private @Parameter(defaultValue = "${dbms.username}") String dbmsUsername;
+    private @Parameter(defaultValue = "${dbms.password}") String dbmsPassword;
     private @Parameter String[] components;
+    private @Parameter Mapping[] typeMappers;
     private @Parameter(defaultValue = DEFAULT_CONFIG_LOCATION) File configFile;
 
     @Override
@@ -68,6 +70,11 @@ public final class GenerateMojo extends AbstractSpeedmentMojo {
     @Override
     protected String[] components() {
         return components;
+    }
+    
+    @Override
+    protected Mapping[] typeMappers() {
+        return typeMappers;
     }
 
     @Override

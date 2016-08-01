@@ -17,6 +17,7 @@
 package com.speedment.maven;
 
 
+import com.speedment.maven.typemapper.Mapping;
 import com.speedment.common.injector.Injector;
 import com.speedment.runtime.Speedment;
 import com.speedment.tool.MainApp;
@@ -39,11 +40,12 @@ import javafx.application.Application;
 public final class ToolMojo extends AbstractSpeedmentMojo {
     
     private @Parameter(defaultValue = "false") boolean debug;
-    private @Parameter String dbmsHost;
-    private @Parameter int dbmsPort;
-    private @Parameter String dbmsUsername;
-    private @Parameter String dbmsPassword;
+    private @Parameter(defaultValue = "${dbms.host}") String dbmsHost;
+    private @Parameter(defaultValue = "${dbms.port}") int dbmsPort;
+    private @Parameter(defaultValue = "${dbms.username}") String dbmsUsername;
+    private @Parameter(defaultValue = "${dbms.password}") String dbmsPassword;
     private @Parameter String[] components;
+    private @Parameter Mapping[] typeMappers;
     private @Parameter(defaultValue = DEFAULT_CONFIG_LOCATION) File configFile;
 
     @Override
@@ -61,6 +63,11 @@ public final class ToolMojo extends AbstractSpeedmentMojo {
     @Override
     protected String[] components() {
         return components;
+    }
+    
+    @Override
+    protected Mapping[] typeMappers() {
+        return typeMappers;
     }
     
     @Override

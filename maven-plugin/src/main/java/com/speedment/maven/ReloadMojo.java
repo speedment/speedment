@@ -1,5 +1,6 @@
 package com.speedment.maven;
 
+import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.internal.util.ConfigFileHelper;
@@ -27,6 +28,7 @@ public final class ReloadMojo extends AbstractSpeedmentMojo {
     private @Parameter(defaultValue = "${dbms.username}") String dbmsUsername;
     private @Parameter(defaultValue = "${dbms.password}") String dbmsPassword;
     private @Parameter String[] components;
+    private @Parameter Mapping[] typeMappers;
     private @Parameter(defaultValue = DEFAULT_CONFIG_LOCATION) File configFile;
     
     @Override
@@ -57,6 +59,11 @@ public final class ReloadMojo extends AbstractSpeedmentMojo {
     @Override
     protected String[] components() {
         return components;
+    }
+    
+    @Override
+    protected Mapping[] typeMappers() {
+        return typeMappers;
     }
 
     @Override

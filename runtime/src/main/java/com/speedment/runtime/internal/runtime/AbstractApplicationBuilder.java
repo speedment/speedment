@@ -76,7 +76,8 @@ public abstract class AbstractApplicationBuilder<
     private final List<Tuple2<Class<? extends Document>, BiConsumer<Injector, ? extends Document>>> withsAll;
     private final Injector.Builder injector;
 
-    private boolean checkDatabaseConnectivity;
+    // TODO Investigate why these are not used.
+    private boolean checkDatabaseConnectivity; 
     private boolean validateRuntimeConfig;
 
     protected AbstractApplicationBuilder(
