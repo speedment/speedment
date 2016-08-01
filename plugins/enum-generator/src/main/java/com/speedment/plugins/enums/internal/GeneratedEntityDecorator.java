@@ -19,6 +19,8 @@ import com.speedment.plugins.enums.StringToEnumTypeMapper;
 import com.speedment.runtime.config.Table;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.common.codegen.internal.util.Formatting.indent;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

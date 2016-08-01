@@ -22,9 +22,9 @@ public final class EnumGeneratorUtil {
      * Returns the full name of the enum that will be generated for 
      * the specified column.
      * 
-     * @param column      the column that should be implemented as an enum
-     * @param injector    the injector used in the platform
-     * @return            full name for the enum
+     * @param column    the column that should be implemented as an enum
+     * @param injector  the injector used in the platform
+     * @return          full name for the enum
      */
     public static String enumNameOf(Column column, Injector injector) {
         final TranslatorSupport<Table> support = new TranslatorSupport<>(injector, column.getParentOrThrow());
@@ -54,6 +54,19 @@ public final class EnumGeneratorUtil {
             ))
             .split(",")
         ).collect(toList());
+    }
+    
+    public static Stream<Class<?>> classesIn(Class<?> entityClass) {
+        if (entityClass == null) {
+            return Stream.empty();
+        } else {
+            return Stream.concat(Stream.concat(Stream.of(entityClass.getDeclaredClasses()),
+                Stream.of(entityClass.getSuperclass())
+                    .flatMap(EnumGeneratorUtil::classesIn)
+            ), Stream.of(entityClass.getInterfaces())
+                .flatMap(EnumGeneratorUtil::classesIn)
+            );
+        }
     }
     
     /**

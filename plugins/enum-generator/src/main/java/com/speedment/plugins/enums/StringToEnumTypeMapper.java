@@ -9,10 +9,12 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.typetoken.TypeToken;
 import com.speedment.runtime.exception.SpeedmentException;
+import com.speedment.runtime.internal.util.Lazy;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -24,7 +26,12 @@ import java.util.stream.Stream;
  */
 public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapper<String, T> {
 
+    private final Lazy<Class<?>> cachedEnum;
     private @Inject Injector injector;
+    
+    public StringToEnumTypeMapper() {
+        cachedEnum = Lazy.create();
+    }
     
     @Override
     public String getLabel() {
@@ -49,23 +56,45 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
         if (value == null) {
             return null;
         } else {
-            final String expectedName = EnumGeneratorUtil.enumNameOf(column, injector);
-            final Class<?> enumClass = Stream.of(entityType.getClasses())
-                .filter(c -> c.getName().equals(expectedName))
-                .findAny()
-                .orElseThrow(() -> new SpeedmentException(
-                    "Could not find the expected inner enum class '" + expectedName + 
-                    "' in entity inteface '" + entityType.getName() + "'."
-                ));
+            final Class<?> enumClass = cachedEnum.getOrCompute(
+                () -> EnumGeneratorUtil.classesIn(entityType)
+
+                    // Include only enum subclasses
+                    .filter(Enum.class::isAssignableFrom)
+                    
+                    // Include only enums with the correct name
+                    .filter(c -> c.getSimpleName().equalsIgnoreCase(
+                        column.getJavaName().replace("_", "")
+                    ))
+
+                    // Include only enums with a method called fromDatabase()
+                    // that takes the right parameters
+                    .filter(c -> Stream.of(c.getMethods())
+                        .filter(m -> m.getName().equals("fromDatabase"))
+                        .filter(m -> {
+                            final Class<?>[] params = m.getParameterTypes();
+                            return params.length == 1 
+                                && params[0] == column.findDatabaseType();
+                        })
+                        .findAny().isPresent()
+                    )
+
+                    // Return it as the enumClass or throw an exception.
+                    .findAny()
+                    .orElse(null)
+//                    .orElseThrow(() -> new SpeedmentException(
+//                        "Could not find the expected inner enum class in entity " + 
+//                        "inteface '" + entityType.getName() + "'."
+//                    ))
+            );
 
             final Method method;
             try {
                 method = enumClass.getMethod(FROM_DATABASE_METHOD, String.class);
-
             } catch (final NoSuchMethodException ex) {
                 throw new SpeedmentException(
-                    "Could not find generated '" + FROM_DATABASE_METHOD + "'-method in enum class '" + 
-                    expectedName + "'."
+                    "Could not find generated '" + FROM_DATABASE_METHOD + 
+                    "'-method in enum class '" + enumClass.getName() + "'.", ex
                 );
             }
 
@@ -73,10 +102,13 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
                 @SuppressWarnings("unchecked")
                 final T result = (T) method.invoke(null, value);
                 return result;
-            } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            } catch (final IllegalAccessException 
+                         | IllegalArgumentException 
+                         | InvocationTargetException ex) {
                 throw new SpeedmentException(
                     "Error executing '" + FROM_DATABASE_METHOD + 
-                    "' in generated enum class '" + expectedName + "'."
+                    "' in generated enum class '" + enumClass.getName() + "'.",
+                    ex
                 );
             }
         }
