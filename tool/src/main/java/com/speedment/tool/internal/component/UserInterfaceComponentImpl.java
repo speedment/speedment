@@ -24,7 +24,6 @@ import com.speedment.common.logger.LoggerManager;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.generator.TranslatorManager;
 import com.speedment.generator.TranslatorSupport;
-import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.component.PasswordComponent;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Dbms;
@@ -148,7 +147,6 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
     
     private @Inject DocumentPropertyComponent documentPropertyComponent;
     private @Inject TranslatorManager translatorManager;
-    private @Inject JavaLanguageNamer javaLanguageNamer;
     private @Inject PasswordComponent passwordComponent;
     private @Inject ProjectComponent projectComponent;
     private @Inject ConfigFileHelper configFileHelper;
@@ -182,7 +180,14 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
                     break;
                 case ERROR : case FATAL :
                     outputMessages.add(OutputUtil.error(ev.getMessage()));
-                    showNotification(ev.getMessage(), Palette.ERROR);
+                    
+                    // Hack to remove stack trace from message.
+                    String msg = ev.getMessage();
+                    if (msg.contains("\tat ")) {
+                        msg = msg.substring(0, msg.indexOf("\tat "));
+                    }
+                    
+                    showNotification(msg, Palette.ERROR);
                     break;
             }
         });
