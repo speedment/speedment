@@ -28,7 +28,6 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
-import com.speedment.plugins.springgenerator.configuration.SpeedmentConfiguration;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
@@ -39,6 +38,7 @@ import org.springframework.core.env.Environment;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.STRING;
 import com.speedment.common.injector.Injector;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
+import org.springframework.context.annotation.Configuration;
 
 /**
  *
@@ -75,7 +75,6 @@ extends DefaultJavaClassTranslator<Project, Class> {
         return newBuilder(file, getClassOrInterfaceName())
             .forEveryProject((clazz, project) -> {
                 clazz.public_();
-                clazz.setSupertype(Type.of(SpeedmentConfiguration.class));
                 
                 // Add constants
                 clazz.add(Field.of("URL_PROPERTY", STRING)
