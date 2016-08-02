@@ -50,6 +50,7 @@ abstract class DefaultStringItem  extends BaseLabelTooltipItem {
     
     @Override
     public Node getEditor() {
+        //TODO: CustomValue should be bound to defaultValue until we disable auto for the first time
         final HBox container = new HBox();
         final TextInputControl textInput = getInputControl();
         final CheckBox auto = new CheckBox("Auto");      

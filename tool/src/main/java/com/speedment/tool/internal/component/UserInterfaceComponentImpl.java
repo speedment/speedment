@@ -103,8 +103,11 @@ import static java.util.stream.Collectors.toList;
 import static javafx.application.Platform.runLater;
 import static com.speedment.runtime.internal.util.TextUtil.alignRight;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import com.speedment.tool.component.RuleComponent;
 import com.speedment.tool.property.PropertyEditor;
+import java.time.Clock;
 import static java.util.Objects.requireNonNull;
+import java.util.concurrent.ExecutionException;
 
 /**
  *
@@ -116,7 +119,9 @@ import static java.util.Objects.requireNonNull;
     SpeedmentBrand.class,
     InjectionLoader.class,
     ConfigFileHelper.class,
-    PropertyEditorComponentImpl.class
+    PropertyEditorComponentImpl.class,
+    RuleComponentImpl.class,
+    IssueComponentImpl.class
 })
 public final class UserInterfaceComponentImpl extends InternalOpenSourceComponent implements UserInterfaceComponent {
     
@@ -150,6 +155,7 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
     private @Inject PasswordComponent passwordComponent;
     private @Inject ProjectComponent projectComponent;
     private @Inject ConfigFileHelper configFileHelper;
+    private @Inject RuleComponent rules;
     private @Inject Injector injector;
     
     private Stage stage;
@@ -346,21 +352,38 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
     @Override
     public void generate() {
         clearLog();
-
+        
         if (!configFileHelper.isFileOpen()) {
             configFileHelper.setCurrentlyOpenFile(new File(ConfigFileHelper.DEFAULT_CONFIG_LOCATION));
         }
-
+        
         configFileHelper.saveConfigFile(configFileHelper.getCurrentlyOpenFile());
         TranslatorSupport<Project> support = new TranslatorSupport<>(injector, project);
 
 //        final Stopwatch stopwatch = Stopwatch.createStarted();
-        log(OutputUtil.info("Generating classes " + support.basePackageName() + "." + project.getName() + ".*"));
+        log(OutputUtil.info("Prepairing for generating classes " + support.basePackageName() + "." + project.getName() + ".*"));
         log(OutputUtil.info("Target directory is " + project.getPackageLocation()));
+        log(OutputUtil.info("Performing rule verifications..."));
 
         final Project immutableProject = ImmutableProject.wrap(project);
         projectComponent.setProject(immutableProject);
-
+        
+        try{
+            CompletableFuture<Void> future = rules.verify();
+            future.get();
+            log(OutputUtil.info("Rule verifications completed"));
+        } catch(final InterruptedException ex){
+            LOGGER.error("Interruption in rule verification");
+            log(OutputUtil.error("Interruption in rule verification. You can reach out to us via Gitter: \n"+GITTER_URI));
+            System.err.println(ex);
+            return;
+        } catch(final ExecutionException ex){
+            LOGGER.error("Exception in rule verification");
+            log(OutputUtil.error("Exception in rule verification. You can reach out to us via Gitter: \n"+GITTER_URI));
+            System.err.println(ex);
+            return;
+        }
+        
         try {
             translatorManager.accept(immutableProject);
 //            stopwatch.stop();

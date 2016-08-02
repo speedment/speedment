@@ -51,8 +51,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import static com.speedment.common.injector.State.INITIALIZED;
+import com.speedment.tool.internal.controller.ProjectProblemController;
 import static java.util.Objects.requireNonNull;
 import static javafx.stage.Modality.APPLICATION_MODAL;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -89,6 +91,7 @@ public final class InjectionLoader {
         constructors.put(SceneController.class,            SceneController::new);
         constructors.put(ToolbarController.class,          ToolbarController::new);
         constructors.put(WorkspaceController.class,        WorkspaceController::new);
+        constructors.put(ProjectProblemController.class,   ProjectProblemController::new);
     }
     
     public FXMLLoader fxmlLoader() {

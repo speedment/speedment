@@ -7,7 +7,17 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<VBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="8.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.speedment.tool.internal.controller.ProjectProblemsController.java">
+<VBox alignment="TOP_RIGHT" 
+      maxHeight="-Infinity" 
+      maxWidth="-Infinity" 
+      minHeight="-Infinity" 
+      minWidth="-Infinity" 
+      prefHeight="400.0" 
+      prefWidth="600.0" 
+      spacing="8.0" 
+      fx:controller="com.speedment.tool.internal.controller.ProjectProblemController"
+      xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/8.0.40">
    <children>
       <TitledPane animated="false" collapsible="false" text="Project Problems" VBox.vgrow="SOMETIMES">
          <content>
@@ -19,7 +29,7 @@
             <TextFlow fx:id="txtDescription" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" />
          </content>
       </TitledPane>
-      <Button fx:id="btnClose" mnemonicParsing="false" onAction="#closeWindow" text="Close" />
+      <Button fx:id="btnClose" mnemonicParsing="false" text="Close" />
    </children>
    <padding>
       <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
