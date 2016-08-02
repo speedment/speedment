@@ -1,7 +1,6 @@
 package com.speedment.tool.property.item;
 
 import com.speedment.runtime.annotation.Api;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableStringValue;
 import javafx.scene.control.TextField;

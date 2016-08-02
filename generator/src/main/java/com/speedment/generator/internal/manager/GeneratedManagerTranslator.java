@@ -46,6 +46,7 @@ import static com.speedment.common.codegen.internal.model.constant.DefaultAnnota
 import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.PARAM;
 import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.RETURN;
 import com.speedment.common.codegen.internal.model.constant.DefaultType;
+import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
 
 /**
  *
@@ -123,7 +124,7 @@ public final class GeneratedManagerTranslator extends EntityAndManagerTranslator
                 final FkHolder fu = new FkHolder(injector, fk);
 
                 final Type returnType;
-                if (fu.getColumn().isNullable()) {
+                if (usesOptional(fu.getColumn())) {
                     file.add(Import.of(Type.of(Optional.class)));
                     returnType = Type.of(Optional.class).add(Generic.of().add(fu.getForeignEmt().getSupport().entityType()));
 

@@ -1,9 +1,9 @@
 package com.speedment.tool.property.editor;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.tool.property.item.SimpleCheckBoxItem;
 import com.speedment.tool.config.trait.HasNullableProperty;
 import com.speedment.tool.property.PropertyEditor;
+import com.speedment.tool.property.item.NullableItem;
 import java.util.stream.Stream;
 
 /**
@@ -17,11 +17,9 @@ public class NullablePropertyEditor<T extends HasNullableProperty> implements Pr
 
     @Override
     public Stream<Item> fieldsFor(T document) {
-        return Stream.of(new SimpleCheckBoxItem(
-                "Is nullable", 
-                document.nullableProperty(),
-                "If this node can hold 'null'-values or not."
-            )
-        );
+        return Stream.of(new NullableItem(
+            document.nullableProperty(),
+            document.nullableImplementationProperty()
+        ));
     }
 }

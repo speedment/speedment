@@ -20,7 +20,6 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.HBox;
@@ -58,7 +57,7 @@ public class AddRemoveStringItem extends BaseLabelTooltipItem{
     //***********************************************************
      
     public AddRemoveStringItem(String label, StringProperty value, String oldValue, String tooltip, ObservableBooleanValue enableThis) {
-        super(label, tooltip);
+        super(label, tooltip, NO_DECORATOR);
         this.strings = FXCollections.observableArrayList();
         this.enabled = enableThis;
         this.disabled = Bindings.not(enableThis);
@@ -76,15 +75,14 @@ public class AddRemoveStringItem extends BaseLabelTooltipItem{
     //***********************************************************  
 
     @Override
-    public Node getLabel() {
-        Node node = super.getLabel();
+    public Node createLabel() {
+        Node node = super.createLabel();
         hideShowBehaviour(node);        
         return node;
     }
     
-    
     @Override
-    public Node getEditor() {
+    protected Node createUndecoratedEditor() {
         final VBox container = new VBox();
         
         ListView<String> listView = new ListView<>(strings);

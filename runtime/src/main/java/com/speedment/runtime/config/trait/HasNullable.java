@@ -35,9 +35,36 @@ import static com.speedment.runtime.internal.util.document.TraitUtil.viewOf;
 public interface HasNullable extends Document {
     
     /**
+     * The various ways a nullable column can be implemented in the generated
+     * code.
+     */
+    enum ImplementAs {
+        
+        /**
+         * This option means that the getter for a column will return an
+         * {@code Optional<T>} where {@code T} is the java type. If a primitive
+         * type mapper is used, one of the primitive implementations like
+         * {@code OptionalInt} might be used instead.
+         */
+        OPTIONAL,
+        
+        /**
+         * This option means that the getter for a column will return the value
+         * straight off. If the value is a {@code Long}, then a {@code Long}
+         * will be returned.
+         */
+        WRAPPER
+    }
+    
+    /**
      * The key of the {@code nullable} property.
      */
     final String NULLABLE = "nullable";
+    
+    /**
+     * The key of the {@code nullableImplementation} property.
+     */
+    final String NULLABLE_IMPLEMENTATION = "nullableImplementation";
     
     /**
      * Returns whether or not this column can hold {@code null} values.
@@ -46,6 +73,27 @@ public interface HasNullable extends Document {
      */
     default boolean isNullable() {
         return getAsBoolean(NULLABLE).orElse(true);
+    }
+    
+    /**
+     * Returns the implementation that should be used when generating getters
+     * for this column. If {@link ImplementAs#OPTIONAL}, every getter will
+     * return an {@code Optional<T>}, {@code OptionalInt}, etc. If 
+     * {@link ImplementAs#WRAPPER}, every getter will return the type as it is, 
+     * {@code Long} for an example.
+     * <p>
+     * If no value is specified, {@link ImplementAs#OPTIONAL} is returned.
+     * 
+     * @return  the nullable implementation or {@link ImplementAs#OPTIONAL} if
+     *          it is not specified
+     */
+    default ImplementAs getNullableImplementation() {
+        final String impl = getAsString(NULLABLE_IMPLEMENTATION).orElse(null);
+        if (impl == null) {
+            return ImplementAs.OPTIONAL;
+        } else {
+            return ImplementAs.valueOf(impl);
+        }
     }
     
     /**

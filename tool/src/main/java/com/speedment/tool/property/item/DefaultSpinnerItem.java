@@ -14,7 +14,7 @@ import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import static java.util.Objects.requireNonNull;
-import javafx.beans.binding.Bindings;
+import java.util.function.Consumer;
 
 /**
  * An editor for editing a StringProperty via an IntegerSpinner, which has a default value. The user
@@ -49,21 +49,113 @@ public class DefaultSpinnerItem extends BaseLabelTooltipItem {
      * @param value         the property to be edited
      * @param tooltip       the tooltip
      */
-    public DefaultSpinnerItem(String label, ObservableIntegerValue defaultValue, IntegerProperty value, String tooltip) {
+    public DefaultSpinnerItem(
+            String label, 
+            ObservableIntegerValue defaultValue, 
+            IntegerProperty value, 
+            String tooltip) {
+        
         this(label, defaultValue, value, tooltip, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
+    
+    /**
+     * Creates a new DefaultSpinnerItem. 
+     * <p>
+     * While the CheckBox is checked, the Spinner will be disabled, 
+     * and the property will always have the default value. <br>
+     * While the CheckBox is un-checked, the Spinner will be enabled, 
+     * and the property will always have the Spinner's current value.
+     * <p>
+     * Upon construction, the editor decides whether to check the default box
+     * by comparing the property value to the default value. If they match, or
+     * the property value is {@code null}, the CheckBox will be checked.
+     * 
+     * @param label         the label text
+     * @param defaultValue  the default value 
+     * @param value         the property to be edited
+     * @param tooltip       the tooltip
+     * @param decorator     the editor decorator
+     */
+    public DefaultSpinnerItem(
+            String label, 
+            ObservableIntegerValue defaultValue, 
+            IntegerProperty value, 
+            String tooltip, 
+            Consumer<Node> decorator) {
+        
+        this(label, defaultValue, value, tooltip, Integer.MIN_VALUE, Integer.MAX_VALUE, decorator);
+    }
 
-    public DefaultSpinnerItem(String label, ObservableIntegerValue defaultValue, IntegerProperty value, String tooltip, int min, int max) {
-        super(label, tooltip);
+    /**
+     * Creates a new DefaultSpinnerItem. 
+     * <p>
+     * While the CheckBox is checked, the Spinner will be disabled, 
+     * and the property will always have the default value. <br>
+     * While the CheckBox is un-checked, the Spinner will be enabled, 
+     * and the property will always have the Spinner's current value.
+     * <p>
+     * Upon construction, the editor decides whether to check the default box
+     * by comparing the property value to the default value. If they match, or
+     * the property value is {@code null}, the CheckBox will be checked.
+     * 
+     * @param label         the label text
+     * @param defaultValue  the default value 
+     * @param value         the property to be edited
+     * @param tooltip       the tooltip
+     * @param min           the minimum spinner value
+     * @param max           the maximum spinner value
+     */
+    public DefaultSpinnerItem(
+            String label, 
+            ObservableIntegerValue defaultValue, 
+            IntegerProperty value, 
+            String tooltip, 
+            int min, 
+            int max) {
+        
+        this(label, defaultValue, value, tooltip, min, max, NO_DECORATOR);
+    }
+    
+    /**
+     * Creates a new DefaultSpinnerItem. 
+     * <p>
+     * While the CheckBox is checked, the Spinner will be disabled, 
+     * and the property will always have the default value. <br>
+     * While the CheckBox is un-checked, the Spinner will be enabled, 
+     * and the property will always have the Spinner's current value.
+     * <p>
+     * Upon construction, the editor decides whether to check the default box
+     * by comparing the property value to the default value. If they match, or
+     * the property value is {@code null}, the CheckBox will be checked.
+     * 
+     * @param label         the label text
+     * @param defaultValue  the default value 
+     * @param value         the property to be edited
+     * @param tooltip       the tooltip
+     * @param min           the minimum spinner value
+     * @param max           the maximum spinner value
+     * @param decorator     the editor decorator
+     */
+    public DefaultSpinnerItem(
+            String label, 
+            ObservableIntegerValue defaultValue, 
+            IntegerProperty value, 
+            String tooltip, 
+            int min, 
+            int max, 
+            Consumer<Node> decorator) {
+        
+        super(label, tooltip, decorator);
+        
         this.defaultValue = requireNonNull(defaultValue);
-        this.value = requireNonNull(value).asObject();
-        this.customValue = new SimpleIntegerProperty().asObject();
-        this.min = min;
-        this.max = max;
+        this.value        = requireNonNull(value).asObject();
+        this.customValue  = new SimpleIntegerProperty().asObject();
+        this.min          = min;
+        this.max          = max;
     }
 
     @Override
-    public Node getEditor() {
+    protected Node createUndecoratedEditor() {
         final boolean usesDefaultValue = value.getValue() == null || value.getValue().equals(defaultValue.getValue());
         
         final HBox container = new HBox();

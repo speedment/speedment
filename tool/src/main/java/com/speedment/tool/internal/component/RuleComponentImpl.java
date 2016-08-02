@@ -40,10 +40,12 @@ public class RuleComponentImpl extends InternalOpenSourceComponent implements  R
 
     @Override
     public CompletableFuture<Void> verify() {
-        final CompletableFuture<Void>[] futures;
-        futures = rules.stream().parallel()
-                        .map( Rule::verify )
-                        .toArray( CompletableFuture[]::new );
+        @SuppressWarnings("unchecked")
+        final CompletableFuture<Void>[] futures = 
+            (CompletableFuture<Void>[]) rules.stream()
+                .map( Rule::verify )
+                .toArray();
+        
         return CompletableFuture.allOf(futures);
     }
     
