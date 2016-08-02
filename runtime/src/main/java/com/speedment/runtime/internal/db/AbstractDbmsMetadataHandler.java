@@ -69,6 +69,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static com.speedment.common.injector.State.INITIALIZED;
+import com.speedment.runtime.config.mapper.primitive.PrimitiveTypeMapper;
 import static com.speedment.runtime.internal.db.AbstractDbmsOperationHandler.SHOW_METADATA;
 import static com.speedment.runtime.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
@@ -380,10 +381,28 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             } else {
                 // Fall-back to DEFAULT_MAPPING
                 selectedJdbcClass = DEFAULT_MAPPING;
-                LOGGER.warn("Unable to determine mapping for table " + table.getName() + ", column " + column.getName() + ". Fall-back to JDBC-type " + selectedJdbcClass.getSimpleName());
+                LOGGER.warn(
+                    "Unable to determine mapping for table " + table.getName() + 
+                    ", column " + column.getName() + 
+                    ". Fall-back to JDBC-type " + 
+                    selectedJdbcClass.getSimpleName()
+                );
             }
 
             column.mutator().setDatabaseType(selectedJdbcClass);
+            
+            if (nullable) {
+                if (selectedJdbcClass == Byte.class
+                ||  selectedJdbcClass == Short.class
+                ||  selectedJdbcClass == Integer.class
+                ||  selectedJdbcClass == Long.class
+                ||  selectedJdbcClass == Float.class
+                ||  selectedJdbcClass == Double.class
+                ||  selectedJdbcClass == Character.class
+                ||  selectedJdbcClass == Boolean.class) {
+                    column.mutator().setTypeMapper(new PrimitiveTypeMapper<>());
+                }
+            }
             
             if ("ENUM".equals(md.getTypeName())) {
                 final Dbms dbms = schema.getParentOrThrow();
