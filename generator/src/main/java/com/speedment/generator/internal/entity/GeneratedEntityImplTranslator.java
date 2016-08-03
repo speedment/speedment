@@ -42,6 +42,7 @@ import java.util.Optional;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.Formatting.tab;
 import com.speedment.common.injector.annotation.Inject;
+import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -69,7 +70,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
             .forEveryColumn((clazz, col) -> {
                 final Type retType = GeneratedEntityTranslator.getterReturnType(typeTokenGenerator, col);
                 final String getter;
-                if (col.isNullable()) {
+                if (usesOptional(col)) {
                     final String varName = getSupport().variableName(col);
                     if (retType.getName().equals(Optional.class.getName())) {
                         getter = "Optional.ofNullable(" + varName + ")";
@@ -148,15 +149,15 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
             .add(OVERRIDE)
             .add("final StringJoiner sj = new StringJoiner(\", \", \"{ \", \" }\");");
 
-        columns().forEachOrdered(c -> {
+        columns().forEachOrdered(col -> {
             final String getter;
-            if (c.isNullable()) {
+            if (usesOptional(col)) {
                 file.add(Import.of(Type.of(OptionalUtil.class)));
-                getter = "OptionalUtil.unwrap(get" + getSupport().typeName(c) + "())";
+                getter = "OptionalUtil.unwrap(get" + getSupport().typeName(col) + "())";
             } else {
-                getter = "get" + getSupport().typeName(c) + "()";
+                getter = "get" + getSupport().typeName(col) + "()";
             }
-            m.add("sj.add(\"" + getSupport().variableName(c) + " = \" + Objects.toString(" + getter + "));");
+            m.add("sj.add(\"" + getSupport().variableName(col) + " = \" + Objects.toString(" + getter + "));");
         });
 
         m.add("return \"" + getSupport().entityImplName() + " \" + sj.toString();");

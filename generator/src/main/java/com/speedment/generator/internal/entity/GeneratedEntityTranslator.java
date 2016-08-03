@@ -40,7 +40,6 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.entity.Entity;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
-
 import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.PARAM;
 import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.RETURN;
@@ -48,6 +47,7 @@ import com.speedment.common.codegen.internal.model.constant.DefaultType;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.OPTIONAL;
 import static com.speedment.common.codegen.internal.model.constant.DefaultType.STRING;
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
+import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
 import com.speedment.generator.typetoken.TypeTokenGenerator;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
@@ -165,7 +165,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                 file.add(Import.of(entityType));
 
                 final String getter;
-                if (col.isNullable()) {
+                if (usesOptional(col)) {
                     getter = "o -> OptionalUtil.unwrap(o.get" + getSupport().typeName(col) + "())";
                     file.add(Import.of(Type.of(OptionalUtil.class)));
                 } else {
@@ -184,7 +184,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                             + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()
                             ) + ", " + shortEntityVarName + ".get"
                             + fuSupport.namer().javaTypeName(col.getJavaName()) + "()"
-                            + (col.isNullable() ? ".orElse(null)" : "")
+                            + (usesOptional(col) ? ".orElse(null)" : "")
                             + ").orElse(null)";
                     }).orElse("");
 
@@ -255,7 +255,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
         final Type retType;
         final TypeToken token = typeTokenGenerator.tokenOf(col);
 
-        if (col.isNullable()) {
+        if (usesOptional(col)) {
             if (TypeTokenFactory.createIntegerToken().equals(token)) {
                 retType = DefaultType.OPTIONAL_INT;
             } else if (TypeTokenFactory.createLongToken().equals(token)) {
@@ -266,7 +266,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                 retType = Type.of(OptionalBoolean.class.getName());
             } else {
                 retType = OPTIONAL.add(Generic.of(typeTokenGenerator.typeOf(col)));
-            }
+            } 
         } else {
             retType = typeTokenGenerator.typeOf(col);
         }

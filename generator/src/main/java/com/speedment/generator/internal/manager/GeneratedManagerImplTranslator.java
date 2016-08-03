@@ -70,6 +70,7 @@ import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTy
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static com.speedment.common.codegen.internal.util.Formatting.tab;
+import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import static java.util.stream.Collectors.joining;
 
@@ -156,7 +157,7 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
                 }
 
                 final Type returnType;
-                if (fu.getColumn().isNullable()) {
+                if (usesOptional(fu.getColumn())) {
                     file.add(Import.of(OPTIONAL));
                     returnType = OPTIONAL.add(Generic.of().add(fu.getForeignEmt().getSupport().entityType()));
                 } else {
@@ -167,7 +168,7 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
                     .public_().add(OVERRIDE)
                     .add(Field.of("entity", fu.getEmt().getSupport().entityType()));
                 
-                if (fu.getColumn().isNullable()) {
+                if (usesOptional(fu.getColumn())) {
                     final String varName = getSupport().variableName(fu.getColumn()) + "_";
                     method.add("return entity.get" + getSupport().typeName(fu.getColumn()) + "()")
                         .add(indent(".flatMap(" + varName + " -> " + fkManagerName + ".findAny("
@@ -318,7 +319,7 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
             .filter(m -> m.getName().equals(getterName))
             .anyMatch(m -> m.getReturnType().isPrimitive());
 
-        if (isResultSetMethod && !(c.isNullable() && isResultSetMethodReturnsPrimitive)) {
+        if (isResultSetMethod && !(usesOptional(c) && isResultSetMethodReturnsPrimitive)) {
             sb
                 .append("resultSet.")
                 .append("get")
@@ -351,7 +352,7 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
             );
 
         columns().forEachOrdered(c -> {
-            if (c.isNullable()) {
+            if (usesOptional(c)) {
                 result.add(
                     varName + "." + GETTER_METHOD_PREFIX + getSupport().typeName(c)
                     + "().ifPresent(" + entityName + "::"

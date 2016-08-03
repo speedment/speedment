@@ -1,6 +1,7 @@
 package com.speedment.tool.property.item;
 
 import com.speedment.runtime.annotation.Api;
+import java.util.function.Consumer;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
@@ -29,12 +30,30 @@ public class SimpleCheckBoxItem extends BaseLabelTooltipItem{
      * @param tooltip   the tooltip text
      */ 
     public SimpleCheckBoxItem(String label, BooleanProperty property, String tooltip){
-        super(label, tooltip);
+        this(label, property, tooltip, NO_DECORATOR);
+    }
+    
+    /**
+     * Creates a new SimpleCheckBoxItem. The property will bind to the
+     * editor node's CheckBox.selectedProperty()
+     * 
+     * @param label      the label text
+     * @param property   the property to edit
+     * @param tooltip    the tooltip text
+     * @param decorator  the editor decorator
+     */ 
+    public SimpleCheckBoxItem(
+            String label, 
+            BooleanProperty property, 
+            String tooltip, 
+            Consumer<Node> decorator) {
+        
+        super(label, tooltip, decorator);
         this.property = property;
     }
 
     @Override
-    public Node getEditor() {
+    protected Node createUndecoratedEditor() {
         final CheckBox box = new CheckBox();
         box.setSelected( property.get() );        
         property.bindBidirectional(box.selectedProperty() );

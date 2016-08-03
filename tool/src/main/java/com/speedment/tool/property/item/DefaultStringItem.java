@@ -9,8 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.control.TextInputControl;
 import static java.util.Objects.requireNonNull;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import java.util.function.Consumer;
 
 /**
  *
@@ -23,7 +22,6 @@ abstract class DefaultStringItem  extends BaseLabelTooltipItem {
     private final StringProperty value;
     private final StringProperty customValue;
 
-    
     /**
      * Creates a new DefaultStringItem. 
      * <p>
@@ -42,14 +40,36 @@ abstract class DefaultStringItem  extends BaseLabelTooltipItem {
      * @param tooltip       the tooltip
      */
     public DefaultStringItem(String label, ObservableStringValue defaultValue, StringProperty value, String tooltip) {
-        super(label, tooltip);
+        this(label, defaultValue, value, tooltip, NO_DECORATOR);
+    }
+    
+    /**
+     * Creates a new DefaultStringItem. 
+     * <p>
+     * While the CheckBox is checked, the TextInput will be disabled, 
+     * and the property will always have the default value. <br>
+     * While the CheckBox is un-checked, the TextInput will be enabled, 
+     * and the property will always have the TextInput's current value.
+     * <p>
+     * Upon construction, the editor decides whether to check the default box
+     * by comparing the property value to the default value. If they match, or
+     * the property value is {@code null}, the CheckBox will be checked.
+     * 
+     * @param label         the label text
+     * @param defaultValue  the default value 
+     * @param value         the property to be edited
+     * @param tooltip       the tooltip
+     * @param decorator     the editor decorator
+     */
+    public DefaultStringItem(String label, ObservableStringValue defaultValue, StringProperty value, String tooltip, Consumer<Node> decorator) {
+        super(label, tooltip, decorator);
         this.defaultValue = requireNonNull(defaultValue);
         this.value        = requireNonNull(value);
         this.customValue = new SimpleStringProperty();
     }
     
     @Override
-    public Node getEditor() {
+    protected Node createUndecoratedEditor() {
         //TODO: CustomValue should be bound to defaultValue until we disable auto for the first time
         final HBox container = new HBox();
         final TextInputControl textInput = getInputControl();

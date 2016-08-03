@@ -17,14 +17,14 @@ public interface PropertyEditor<T> {
     /**
      * Used for rendering a property editor and related explanation label
      */
-    interface Item{
+    interface Item {
         /**
          * Should return the JavaFX node which will be located in the left column
          * of the {@link PropertyLayout}. This can normally be just a JavaFX.Label 
          * 
          * @return  the JavaFX node used for describing the edited property
          */
-        Node getLabel();
+        Node createLabel();
         
         /**
          * Should return the JavaFX node which will be located in the right column
@@ -33,7 +33,7 @@ public interface PropertyEditor<T> {
          * 
          * @return  the JavaFX node used for editing the property 
          */
-        Node getEditor();
+        Node createEditor();
         
         /**
          * A method that will be called when this item is removed from the {@link PropertyLayout}

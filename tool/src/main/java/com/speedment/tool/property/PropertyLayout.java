@@ -52,11 +52,11 @@ final class PropertyLayout extends GridPane{
      * @param item  the item
      */
     void addItem(PropertyEditor.Item item){  
-        final Node label = item.getLabel();        
+        final Node label = item.createLabel();        
         label.getStyleClass().add("property-label");
         GridPane.setValignment(label, VPos.TOP);
         
-        final Node editor = item.getEditor();
+        final Node editor = item.createEditor();
         editor.getStyleClass().add("property-editor");
         GridPane.setValignment(editor, VPos.CENTER);
         

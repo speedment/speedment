@@ -18,6 +18,7 @@ package com.speedment.runtime.internal.config.immutable;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.trait.HasNullable;
 import com.speedment.runtime.internal.config.ColumnImpl;
 
 import java.util.Map;
@@ -35,6 +36,7 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
     private final transient String name;
     private final transient Optional<String> alias;
     private final transient boolean nullable;
+    private final transient HasNullable.ImplementAs nullableImplementation;
     private final transient boolean autoincrement;
     private final transient Optional<String> typeMapper;
     private final transient String databaseType;
@@ -46,15 +48,16 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
         
         final Column prototype = new ColumnImpl(parent, data);
         
-        this.enabled            = prototype.isEnabled();
-        this.name               = prototype.getName();
-        this.alias              = prototype.getAlias();
-        this.nullable           = prototype.isNullable();
-        this.autoincrement      = prototype.isAutoIncrement();
-        this.typeMapper         = prototype.getTypeMapper();
-        this.databaseType       = prototype.getDatabaseType();
-        this.databaseTypeObject = prototype.findDatabaseType();
-        this.enumConstants      = prototype.getEnumConstants();
+        this.enabled                = prototype.isEnabled();
+        this.name                   = prototype.getName();
+        this.alias                  = prototype.getAlias();
+        this.nullable               = prototype.isNullable();
+        this.nullableImplementation = prototype.getNullableImplementation();
+        this.autoincrement          = prototype.isAutoIncrement();
+        this.typeMapper             = prototype.getTypeMapper();
+        this.databaseType           = prototype.getDatabaseType();
+        this.databaseTypeObject     = prototype.findDatabaseType();
+        this.enumConstants          = prototype.getEnumConstants();
     }
 
     @Override
@@ -75,6 +78,11 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
     @Override
     public boolean isNullable() {
         return nullable;
+    }
+
+    @Override
+    public ImplementAs getNullableImplementation() {
+        return nullableImplementation;
     }
 
     @Override
