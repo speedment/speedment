@@ -73,14 +73,17 @@ abstract class DefaultStringItem  extends BaseLabelTooltipItem {
         //TODO: CustomValue should be bound to defaultValue until we disable auto for the first time
         final HBox container = new HBox();
         final TextInputControl textInput = getInputControl();
-        final CheckBox auto = new CheckBox("Auto");      
-        final boolean useDefaultValue =value.isEmpty().get() || value.get().equals(defaultValue.get());
+        final CheckBox auto = new CheckBox("Auto");
+        final boolean useDefaultValue = value.isEmpty().get() || value.get().equals(defaultValue.get());
 
-        customValue.setValue( useDefaultValue ? defaultValue.get() : value.get());     
-       
-        setTextFieldBehaviour(textInput, useDefaultValue, defaultValue, customValue);
         textInput.disableProperty().bind(auto.selectedProperty());
-         
+        if( useDefaultValue ) {
+            textInput.textProperty().bind( defaultValue );        
+        } else {
+            textInput.setText(value.get());
+        }        
+        customValue.bind( textInput.textProperty() );
+                
         attachListener( textInput.textProperty(), (ov, o, n) -> {
             if( n == null || n.isEmpty() || n.equalsIgnoreCase(defaultValue.getValue() )){
                 value.setValue(null);
