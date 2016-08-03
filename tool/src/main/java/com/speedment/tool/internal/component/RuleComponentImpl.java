@@ -8,6 +8,7 @@ import com.speedment.runtime.component.Component;
 import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.tool.component.RuleComponent;
 import com.speedment.tool.internal.rule.ProtectedNameRule;
+import com.speedment.tool.internal.rule.ReferencesEnabledRule;
 import com.speedment.tool.internal.util.CompletableFutureUtil;
 import com.speedment.tool.rule.Rule;
 import java.util.LinkedList;
@@ -32,6 +33,7 @@ public class RuleComponentImpl extends InternalOpenSourceComponent implements  R
     @ExecuteBefore(State.RESOLVED)
     private void installRules(){
         install(ProtectedNameRule::new);
+        install(ReferencesEnabledRule::new);
     }
     
     @Override

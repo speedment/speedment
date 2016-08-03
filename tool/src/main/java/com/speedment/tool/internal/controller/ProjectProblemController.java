@@ -45,13 +45,8 @@ public class ProjectProblemController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Bindings.bindContent(issues, issueComponent.getIssues());
+        
         lstProjectProblems.setItems(issues);
-        
-        btnClose.setOnAction( (ev) -> closeWindow() );
-        btnProceed.setOnAction( (ev) -> closeWindowAndGenerate());
-        
-        btnProceed.disableProperty().bind(hasErrors);
-        
         lstProjectProblems.setCellFactory((ListView<Issue> param) -> new ListCell<Issue>() {
             @Override
             protected void updateItem(Issue item, boolean empty) {
@@ -74,6 +69,12 @@ public class ProjectProblemController implements Initializable {
             }
         });
         
+        
+        
+        btnClose.setOnAction( (ev) -> closeWindow() );
+        
+        btnProceed.setOnAction( (ev) -> closeWindowAndGenerate());
+        btnProceed.disableProperty().bind(hasErrors);
         //We need to attach a scene listener somewhere, so this button will do
         btnProceed.sceneProperty().addListener( (ov, oldVal, newVal) -> {
             if( oldVal == null && newVal != null ){

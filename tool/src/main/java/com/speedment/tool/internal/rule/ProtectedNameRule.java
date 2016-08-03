@@ -2,16 +2,15 @@ package com.speedment.tool.internal.rule;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.ProjectComponent;
-import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.trait.HasAlias;
+import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.tool.component.IssueComponent;
 import com.speedment.tool.rule.Issue;
 import com.speedment.tool.rule.Rule;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -48,7 +47,6 @@ public class ProtectedNameRule implements Rule{
     };
     
     private final Pattern pattern;
-    private final AtomicBoolean noIssues;
     
     private @Inject ProjectComponent projectComponent;
     private @Inject IssueComponent issues;
@@ -56,30 +54,24 @@ public class ProtectedNameRule implements Rule{
     public ProtectedNameRule(){
         String regex = Arrays.stream(PROTECTED_NAMES).collect(Collectors.joining("|"));
         this.pattern = Pattern.compile( regex , Pattern.CASE_INSENSITIVE );
-        this.noIssues = new AtomicBoolean(true);
     }
 
     @Override
     public CompletableFuture<Boolean> verify() {
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        ForkJoinPool.commonPool().execute( () -> checkRule(future) );
-        return future;
+        return CompletableFuture.supplyAsync( () -> checkRule() );
     }
     
-    private void checkRule(CompletableFuture<Boolean> future){
-        noIssues.set(true);
-        Project project = projectComponent.getProject();        
-        project.children().forEach( this::checkRuleRecursive );    
-        check( project );
-        future.complete( noIssues.get() );
+    private boolean checkRule(){
+        final AtomicBoolean noIssues = new AtomicBoolean(true);
+        final Project project = projectComponent.getProject();  
+        
+        DocumentDbUtil.traverseOver(project)
+            .forEach(doc -> check(doc, noIssues));
+        
+        return noIssues.get();
     }
     
-    private void checkRuleRecursive(Document document){
-        document.children().forEach( this::checkRuleRecursive ); 
-        check( document );
-    }
-    
-    private void check(Document document){
+    private void check(Document document, AtomicBoolean noIssues){
         final HasAlias alias = HasAlias.of(document);
         final String docName = alias.getJavaName();
         if( pattern.matcher( docName ).matches() ){
@@ -92,10 +84,10 @@ public class ProtectedNameRule implements Rule{
 
                 @Override
                 public String getDescription() {
-                    return "The Type name " + docName +" is used internally by Speedment. "
+                    return "The Type name " + docName +" is used internally by Speedment."
                         + " If this name is assigned to a generated entiry, it might cause"
-                        + " conflicts in the generated code. \n"
-                        + " You may still proceed with code generation, but please be aware that"
+                        + " conflicts in the generated code.\n"
+                        + "You may still proceed with code generation, but please be aware that"
                         + " the generated code might contain errors. To fix this issue, rename the"
                         + " entity in question.";
                 }

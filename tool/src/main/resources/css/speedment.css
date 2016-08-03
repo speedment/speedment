@@ -90,6 +90,21 @@
     -fx-font-style: italic;
 }
 
+/*** List View ***/
+.list-view .list-cell{
+    -fx-font-size: 1.1em;
+}
+
+.list-view .list-cell:filled:selected{
+    -fx-text-fill: white;
+    -fx-border-color: -fx-speedment-blue;
+}
+/*** Text Flow ***/
+.text-flow{
+    -fx-font-size: 1.1em;
+    -fx-padding: 8px;
+}
+
 /*** Label ***/
 .label {
     -fx-font-size: 1.1em;
