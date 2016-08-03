@@ -384,7 +384,6 @@ public interface UserInterfaceComponent extends Component {
      * @param line  the message to log
      */
     void log(Label line);
-
     /**
      * Opens the specified URL in an internet browser.
      * 

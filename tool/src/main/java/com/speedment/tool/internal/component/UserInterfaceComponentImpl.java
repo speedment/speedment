@@ -101,12 +101,11 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static javafx.application.Platform.runLater;
-import static com.speedment.runtime.internal.util.TextUtil.alignRight;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import com.speedment.tool.component.RuleComponent;
 import com.speedment.tool.property.PropertyEditor;
 import static java.util.Objects.requireNonNull;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  *
@@ -149,6 +148,8 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
     private final ObservableList<PropertyEditor.Item> properties;
     private final Map<Class<?>, List<UserInterfaceComponent.ContextMenuBuilder<?>>> contextMenuBuilders;
     
+    private final AtomicBoolean canGenerate;
+    
     private @Inject DocumentPropertyComponent documentPropertyComponent;
     private @Inject TranslatorManager translatorManager;
     private @Inject PasswordComponent passwordComponent;
@@ -169,6 +170,7 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
         selectedTreeItems    = FXCollections.observableArrayList();
         properties           = FXCollections.observableArrayList();
         contextMenuBuilders  = new ConcurrentHashMap<>();
+        canGenerate          = new AtomicBoolean(true);
     }
     
     public void start(Application application, Stage stage) {
@@ -352,6 +354,12 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
 
     @Override
     public void generate() {
+        //Make sure that no more than one attemp of generating occurs concurrently
+        boolean allowed = canGenerate.getAndSet(false);
+        if( !allowed ){
+            return;
+        }
+        
         clearLog();
         
         if (!configFileHelper.isFileOpen()) {
@@ -379,13 +387,16 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
                 runLater(() -> showError("Error Creating Report", err, ex));
             } else {
                 if (!bool) {
-                    showIssues();
+                    runLater( () -> {
+                        showIssues();
+                        canGenerate.set(true);
+                    } );
                 } else {
                     runLater( () -> log(OutputUtil.info("Rule verifications completed") ) );
                     configFileHelper.generateSources();
+                    canGenerate.set(true);
                 }
             }
-
             return bool;
         });
     }

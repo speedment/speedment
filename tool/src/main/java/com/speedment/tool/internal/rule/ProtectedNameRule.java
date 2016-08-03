@@ -2,6 +2,7 @@ package com.speedment.tool.internal.rule;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.ProjectComponent;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.trait.HasAlias;
@@ -24,7 +25,8 @@ import java.util.stream.Collectors;
  * that normally show up during code generation. 
  * <P>
  * This rule is not perfect. The TypeMapper types are not included, and might cause
- * problems.
+ * problems. For example, if someone names their entity Time, and that entity's SQL
+ * type is Time, this might cause conflicts.
  *
  * @author Simon Jonasson
  * @since 3.0.0
@@ -65,6 +67,7 @@ public class ProtectedNameRule implements Rule{
     }
     
     private void checkRule(CompletableFuture<Boolean> future){
+        noIssues.set(true);
         Project project = projectComponent.getProject();        
         project.children().forEach( this::checkRuleRecursive );    
         check( project );
@@ -72,7 +75,7 @@ public class ProtectedNameRule implements Rule{
     }
     
     private void checkRuleRecursive(Document document){
-        document.children().forEach( this::checkRuleRecursive );
+        document.children().forEach( this::checkRuleRecursive ); 
         check( document );
     }
     
@@ -89,9 +92,12 @@ public class ProtectedNameRule implements Rule{
 
                 @Override
                 public String getDescription() {
-                    return "The name " + docName +" is protected. If this name"
-                         + " is used during code generation, there might be errors"
-                         + " in the generated code.";
+                    return "The Type name " + docName +" is used internally by Speedment. "
+                        + " If this name is assigned to a generated entiry, it might cause"
+                        + " conflicts in the generated code. \n"
+                        + " You may still proceed with code generation, but please be aware that"
+                        + " the generated code might contain errors. To fix this issue, rename the"
+                        + " entity in question.";
                 }
 
                 @Override

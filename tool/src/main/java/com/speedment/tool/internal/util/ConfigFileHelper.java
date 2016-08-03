@@ -365,36 +365,39 @@ public final class ConfigFileHelper {
             translatorManager.accept( projectComponent.getProject() );
 //            stopwatch.stop();
 
-            userInterfaceComponent.log(OutputUtil.success(
-                "+------------: Generation completed! :------------+" + "\n"
-//                + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
-                + "| Files generated  " + alignRight("" + Integer.toString(translatorManager.getFilesCreated()), 30) + " |\n"
-                + "+-------------------------------------------------+"
-            ));
+            runLater(() -> {
+                userInterfaceComponent.log(OutputUtil.success(
+                    "+------------: Generation completed! :------------+" + "\n"
+    //                + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
+                    + "| Files generated  " + alignRight("" + Integer.toString(translatorManager.getFilesCreated()), 30) + " |\n"
+                    + "+-------------------------------------------------+"
+                ));
 
-            userInterfaceComponent.showNotification(
-                "Generation completed! " + translatorManager.getFilesCreated()
-                + " files created.",
-                FontAwesomeIcon.STAR,
-                Palette.SUCCESS
-            );
+                userInterfaceComponent.showNotification(
+                    "Generation completed! " + translatorManager.getFilesCreated()
+                    + " files created.",
+                    FontAwesomeIcon.STAR,
+                    Palette.SUCCESS
+                );
+            });
         } catch (final Exception ex) {
 //            if (!stopwatch.isStopped()) {
 //                stopwatch.stop();
 //            }
+            runLater(() -> {
+                userInterfaceComponent.log(OutputUtil.error(
+                    "+--------------: Generation failed! :-------------+" + "\n"
+    //                + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
+                    + "| Files generated  " + alignRight("" + Integer.toString(translatorManager.getFilesCreated()), 30) + " |\n"
+                    + "| Exception Type   " + alignRight(ex.getClass().getSimpleName(), 30) + " |\n"
+                    + "+-------------------------------------------------+"
+                ));
 
-            userInterfaceComponent.log(OutputUtil.error(
-                "+--------------: Generation failed! :-------------+" + "\n"
-//                + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
-                + "| Files generated  " + alignRight("" + Integer.toString(translatorManager.getFilesCreated()), 30) + " |\n"
-                + "| Exception Type   " + alignRight(ex.getClass().getSimpleName(), 30) + " |\n"
-                + "+-------------------------------------------------+"
-            ));
+                final String msg = "Error! Failed to generate code. A " + ex.getClass().getSimpleName() + " was thrown.";
 
-            final String msg = "Error! Failed to generate code. A " + ex.getClass().getSimpleName() + " was thrown.";
-
-            LOGGER.error(ex, msg);
-            userInterfaceComponent.showError("Failed to generate code", ex.getMessage(), ex);
+                LOGGER.error(ex, msg);
+                userInterfaceComponent.showError("Failed to generate code", ex.getMessage(), ex);
+            });
         }
     }
     

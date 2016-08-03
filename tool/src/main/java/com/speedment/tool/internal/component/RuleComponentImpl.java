@@ -40,9 +40,10 @@ public class RuleComponentImpl extends InternalOpenSourceComponent implements  R
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public CompletableFuture<Boolean> verify() {
         final CompletableFuture<Boolean>[] futures;
-        futures = rules.stream().parallel()
+        futures =  rules.stream().parallel()
                         .map( Rule::verify )
                         .toArray( CompletableFuture[]::new );
 
