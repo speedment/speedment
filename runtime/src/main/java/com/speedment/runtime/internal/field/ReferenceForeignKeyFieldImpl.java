@@ -18,12 +18,16 @@ package com.speedment.runtime.internal.field;
 
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.ReferenceForeignKeyField;
+import com.speedment.runtime.field.finder.FindFrom;
 import com.speedment.runtime.field.method.Finder;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceIsNullPredicate;
 import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.internal.field.finder.FindFromReference;
+import com.speedment.runtime.manager.Manager;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -40,6 +44,7 @@ implements ReferenceForeignKeyField<ENTITY, D, V, FK_ENTITY> {
     private final FieldIdentifier<ENTITY> identifier;
     private final ReferenceGetter<ENTITY, V> getter;
     private final ReferenceSetter<ENTITY, V> setter;
+    private final ReferenceField<FK_ENTITY, ?, V> referenced;
     private final Finder<ENTITY, FK_ENTITY> finder;
     private final TypeMapper<D, V> typeMapper;
     private final boolean unique;
@@ -48,6 +53,7 @@ implements ReferenceForeignKeyField<ENTITY, D, V, FK_ENTITY> {
             FieldIdentifier<ENTITY> identifier,
             ReferenceGetter<ENTITY, V> getter,
             ReferenceSetter<ENTITY, V> setter,
+            ReferenceField<FK_ENTITY, ?, V> referenced,
             Finder<ENTITY, FK_ENTITY> finder,
             TypeMapper<D, V> typeMapper,
             boolean unique) {
@@ -55,6 +61,7 @@ implements ReferenceForeignKeyField<ENTITY, D, V, FK_ENTITY> {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
+        this.referenced = requireNonNull(referenced);
         this.finder     = requireNonNull(finder);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
@@ -77,6 +84,11 @@ implements ReferenceForeignKeyField<ENTITY, D, V, FK_ENTITY> {
     @Override
     public ReferenceGetter<ENTITY, V> getter() {
         return getter;
+    }
+
+    @Override
+    public FindFrom<ENTITY, FK_ENTITY> findFrom(Manager<FK_ENTITY> foreignManager) {
+        return new FindFromReference<>(this, referenced, foreignManager);
     }
     
     @Override

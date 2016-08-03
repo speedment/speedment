@@ -4,6 +4,7 @@ import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.ByteForeignKeyField;
+import com.speedment.runtime.field.finder.FindFrom;
 import com.speedment.runtime.field.method.ByteGetter;
 import com.speedment.runtime.field.method.ByteSetter;
 import com.speedment.runtime.field.method.Finder;
@@ -11,11 +12,13 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.internal.field.comparator.ByteFieldComparator;
 import com.speedment.runtime.internal.field.comparator.ByteFieldComparatorImpl;
+import com.speedment.runtime.internal.field.finder.FindFromByte;
 import com.speedment.runtime.internal.field.predicate.bytes.ByteBetweenPredicate;
 import com.speedment.runtime.internal.field.predicate.bytes.ByteEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.bytes.ByteGreaterOrEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.bytes.ByteGreaterThanPredicate;
 import com.speedment.runtime.internal.field.predicate.bytes.ByteInPredicate;
+import com.speedment.runtime.manager.Manager;
 import java.util.Set;
 import java.util.function.Predicate;
 import static java.util.Objects.requireNonNull;
@@ -33,14 +36,16 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY>  implements Byt
     private final FieldIdentifier<ENTITY> identifier;
     private final ByteGetter<ENTITY> getter;
     private final ByteSetter<ENTITY> setter;
+    private final ByteField<FK_ENTITY, ?> referenced;
     private final Finder<ENTITY, FK_ENTITY> finder;
     private final TypeMapper<D, Byte> typeMapper;
     private final boolean unique;
     
-    public ByteForeignKeyFieldImpl(FieldIdentifier<ENTITY> identifier, ByteGetter<ENTITY> getter, ByteSetter<ENTITY> setter, Finder<ENTITY, FK_ENTITY> finder, TypeMapper<D, Byte> typeMapper, boolean unique) {
+    public ByteForeignKeyFieldImpl(FieldIdentifier<ENTITY> identifier, ByteGetter<ENTITY> getter, ByteSetter<ENTITY> setter, ByteField<FK_ENTITY, ?> referenced, Finder<ENTITY, FK_ENTITY> finder, TypeMapper<D, Byte> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
+        this.referenced = requireNonNull(referenced);
         this.finder     = requireNonNull(finder);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
@@ -59,6 +64,11 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY>  implements Byt
     @Override
     public ByteGetter<ENTITY> getter() {
         return getter;
+    }
+    
+    @Override
+    public FindFrom<ENTITY, FK_ENTITY> findFrom(Manager<FK_ENTITY> foreignManager) {
+        return new FindFromByte<>(this, referenced, foreignManager);
     }
     
     @Override

@@ -17,6 +17,7 @@
 package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.field.finder.FindFrom;
 import com.speedment.runtime.manager.Manager;
 import com.speedment.runtime.field.method.Finder;
 
@@ -41,6 +42,15 @@ public interface HasFinder<ENTITY, FK_ENTITY> {
      * @return the finder
      */
     Finder<ENTITY, FK_ENTITY> finder();
+    
+    /**
+     * Returns a function that can be used to find referenced entites using the
+     * specified manager.
+     * 
+     * @param foreignManager  the foreign manager
+     * @return                finder method
+     */
+    FindFrom<ENTITY, FK_ENTITY> findFrom(Manager<FK_ENTITY> foreignManager);
 
     /**
      * Finds the foreign entity associated by this field.

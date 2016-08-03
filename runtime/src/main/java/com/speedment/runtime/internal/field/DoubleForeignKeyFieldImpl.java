@@ -4,6 +4,7 @@ import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.DoubleField;
 import com.speedment.runtime.field.DoubleForeignKeyField;
+import com.speedment.runtime.field.finder.FindFrom;
 import com.speedment.runtime.field.method.DoubleGetter;
 import com.speedment.runtime.field.method.DoubleSetter;
 import com.speedment.runtime.field.method.Finder;
@@ -11,11 +12,13 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.internal.field.comparator.DoubleFieldComparator;
 import com.speedment.runtime.internal.field.comparator.DoubleFieldComparatorImpl;
+import com.speedment.runtime.internal.field.finder.FindFromDouble;
 import com.speedment.runtime.internal.field.predicate.doubles.DoubleBetweenPredicate;
 import com.speedment.runtime.internal.field.predicate.doubles.DoubleEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.doubles.DoubleGreaterOrEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.doubles.DoubleGreaterThanPredicate;
 import com.speedment.runtime.internal.field.predicate.doubles.DoubleInPredicate;
+import com.speedment.runtime.manager.Manager;
 import java.util.Set;
 import java.util.function.Predicate;
 import static java.util.Objects.requireNonNull;
@@ -33,14 +36,16 @@ public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY>  implements D
     private final FieldIdentifier<ENTITY> identifier;
     private final DoubleGetter<ENTITY> getter;
     private final DoubleSetter<ENTITY> setter;
+    private final DoubleField<FK_ENTITY, ?> referenced;
     private final Finder<ENTITY, FK_ENTITY> finder;
     private final TypeMapper<D, Double> typeMapper;
     private final boolean unique;
     
-    public DoubleForeignKeyFieldImpl(FieldIdentifier<ENTITY> identifier, DoubleGetter<ENTITY> getter, DoubleSetter<ENTITY> setter, Finder<ENTITY, FK_ENTITY> finder, TypeMapper<D, Double> typeMapper, boolean unique) {
+    public DoubleForeignKeyFieldImpl(FieldIdentifier<ENTITY> identifier, DoubleGetter<ENTITY> getter, DoubleSetter<ENTITY> setter, DoubleField<FK_ENTITY, ?> referenced, Finder<ENTITY, FK_ENTITY> finder, TypeMapper<D, Double> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
+        this.referenced = requireNonNull(referenced);
         this.finder     = requireNonNull(finder);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
@@ -59,6 +64,11 @@ public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY>  implements D
     @Override
     public DoubleGetter<ENTITY> getter() {
         return getter;
+    }
+    
+    @Override
+    public FindFrom<ENTITY, FK_ENTITY> findFrom(Manager<FK_ENTITY> foreignManager) {
+        return new FindFromDouble<>(this, referenced, foreignManager);
     }
     
     @Override

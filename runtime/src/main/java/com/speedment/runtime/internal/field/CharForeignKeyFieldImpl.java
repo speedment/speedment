@@ -4,6 +4,7 @@ import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.CharField;
 import com.speedment.runtime.field.CharForeignKeyField;
+import com.speedment.runtime.field.finder.FindFrom;
 import com.speedment.runtime.field.method.CharGetter;
 import com.speedment.runtime.field.method.CharSetter;
 import com.speedment.runtime.field.method.Finder;
@@ -11,11 +12,13 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.internal.field.comparator.CharFieldComparator;
 import com.speedment.runtime.internal.field.comparator.CharFieldComparatorImpl;
+import com.speedment.runtime.internal.field.finder.FindFromChar;
 import com.speedment.runtime.internal.field.predicate.chars.CharBetweenPredicate;
 import com.speedment.runtime.internal.field.predicate.chars.CharEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.chars.CharGreaterOrEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.chars.CharGreaterThanPredicate;
 import com.speedment.runtime.internal.field.predicate.chars.CharInPredicate;
+import com.speedment.runtime.manager.Manager;
 import java.util.Set;
 import java.util.function.Predicate;
 import static java.util.Objects.requireNonNull;
@@ -33,14 +36,16 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY>  implements Cha
     private final FieldIdentifier<ENTITY> identifier;
     private final CharGetter<ENTITY> getter;
     private final CharSetter<ENTITY> setter;
+    private final CharField<FK_ENTITY, ?> referenced;
     private final Finder<ENTITY, FK_ENTITY> finder;
     private final TypeMapper<D, Character> typeMapper;
     private final boolean unique;
     
-    public CharForeignKeyFieldImpl(FieldIdentifier<ENTITY> identifier, CharGetter<ENTITY> getter, CharSetter<ENTITY> setter, Finder<ENTITY, FK_ENTITY> finder, TypeMapper<D, Character> typeMapper, boolean unique) {
+    public CharForeignKeyFieldImpl(FieldIdentifier<ENTITY> identifier, CharGetter<ENTITY> getter, CharSetter<ENTITY> setter, CharField<FK_ENTITY, ?> referenced, Finder<ENTITY, FK_ENTITY> finder, TypeMapper<D, Character> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
+        this.referenced = requireNonNull(referenced);
         this.finder     = requireNonNull(finder);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
@@ -59,6 +64,11 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY>  implements Cha
     @Override
     public CharGetter<ENTITY> getter() {
         return getter;
+    }
+    
+    @Override
+    public FindFrom<ENTITY, FK_ENTITY> findFrom(Manager<FK_ENTITY> foreignManager) {
+        return new FindFromChar<>(this, referenced, foreignManager);
     }
     
     @Override

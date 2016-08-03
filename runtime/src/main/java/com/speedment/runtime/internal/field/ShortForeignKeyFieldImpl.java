@@ -4,6 +4,7 @@ import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.ShortField;
 import com.speedment.runtime.field.ShortForeignKeyField;
+import com.speedment.runtime.field.finder.FindFrom;
 import com.speedment.runtime.field.method.Finder;
 import com.speedment.runtime.field.method.ShortGetter;
 import com.speedment.runtime.field.method.ShortSetter;
@@ -11,11 +12,13 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.internal.field.comparator.ShortFieldComparator;
 import com.speedment.runtime.internal.field.comparator.ShortFieldComparatorImpl;
+import com.speedment.runtime.internal.field.finder.FindFromShort;
 import com.speedment.runtime.internal.field.predicate.shorts.ShortBetweenPredicate;
 import com.speedment.runtime.internal.field.predicate.shorts.ShortEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.shorts.ShortGreaterOrEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.shorts.ShortGreaterThanPredicate;
 import com.speedment.runtime.internal.field.predicate.shorts.ShortInPredicate;
+import com.speedment.runtime.manager.Manager;
 import java.util.Set;
 import java.util.function.Predicate;
 import static java.util.Objects.requireNonNull;
@@ -33,14 +36,16 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY>  implements Sh
     private final FieldIdentifier<ENTITY> identifier;
     private final ShortGetter<ENTITY> getter;
     private final ShortSetter<ENTITY> setter;
+    private final ShortField<FK_ENTITY, ?> referenced;
     private final Finder<ENTITY, FK_ENTITY> finder;
     private final TypeMapper<D, Short> typeMapper;
     private final boolean unique;
     
-    public ShortForeignKeyFieldImpl(FieldIdentifier<ENTITY> identifier, ShortGetter<ENTITY> getter, ShortSetter<ENTITY> setter, Finder<ENTITY, FK_ENTITY> finder, TypeMapper<D, Short> typeMapper, boolean unique) {
+    public ShortForeignKeyFieldImpl(FieldIdentifier<ENTITY> identifier, ShortGetter<ENTITY> getter, ShortSetter<ENTITY> setter, ShortField<FK_ENTITY, ?> referenced, Finder<ENTITY, FK_ENTITY> finder, TypeMapper<D, Short> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
+        this.referenced = requireNonNull(referenced);
         this.finder     = requireNonNull(finder);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
@@ -59,6 +64,11 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY>  implements Sh
     @Override
     public ShortGetter<ENTITY> getter() {
         return getter;
+    }
+    
+    @Override
+    public FindFrom<ENTITY, FK_ENTITY> findFrom(Manager<FK_ENTITY> foreignManager) {
+        return new FindFromShort<>(this, referenced, foreignManager);
     }
     
     @Override

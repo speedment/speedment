@@ -179,7 +179,9 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
 
                         file.add(Import.of(fuSupport.entityType()));
 
-                        return ", (" + shortEntityVarName + ", fkManager) -> fkManager.findAny("
+                        return 
+                            ", " + fuSupport.entityName() + "." + fuSupport.namer().javaStaticFieldName(fu.getColumn().getJavaName())
+                            + ", (" + shortEntityVarName + ", fkManager) -> fkManager.findAny("
                             + fu.getForeignEmt().getSupport().entityName() + "."
                             + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()
                             ) + ", " + shortEntityVarName + ".get"

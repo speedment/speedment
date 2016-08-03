@@ -18,7 +18,9 @@ package com.speedment.runtime.internal.field;
 
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.field.StringForeignKeyField;
+import com.speedment.runtime.field.finder.FindFrom;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.method.Finder;
 import com.speedment.runtime.field.method.ReferenceGetter;
@@ -40,11 +42,13 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.function.Predicate;
 import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.internal.field.finder.FindFromReference;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceLessOrEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceLessThanPredicate;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceNotBetweenPredicate;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceNotEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceNotInPredicate;
+import com.speedment.runtime.manager.Manager;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -60,6 +64,7 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     private final FieldIdentifier<ENTITY> identifier;
     private final ReferenceGetter<ENTITY, String> getter;
     private final ReferenceSetter<ENTITY, String> setter;
+    private final StringField<FK_ENTITY, ?> referenced;
     private final Finder<ENTITY, FK_ENTITY> finder;
     private final TypeMapper<D, String> typeMapper;
     private final boolean unique;
@@ -68,6 +73,7 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
             FieldIdentifier<ENTITY> identifier,
             ReferenceGetter<ENTITY, String> getter,
             ReferenceSetter<ENTITY, String> setter,
+            StringField<FK_ENTITY, ?> referenced,
             Finder<ENTITY, FK_ENTITY> finder,
             TypeMapper<D, String> typeMapper,
             boolean unique) {
@@ -75,6 +81,7 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
+        this.referenced = requireNonNull(referenced);
         this.finder     = requireNonNull(finder);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
@@ -97,6 +104,11 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     @Override
     public ReferenceGetter<ENTITY, String> getter() {
         return getter;
+    }
+    
+    @Override
+    public FindFrom<ENTITY, FK_ENTITY> findFrom(Manager<FK_ENTITY> foreignManager) {
+        return new FindFromReference<>(this, referenced, foreignManager);
     }
     
     @Override

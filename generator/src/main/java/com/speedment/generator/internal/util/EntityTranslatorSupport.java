@@ -37,17 +37,14 @@ import com.speedment.runtime.field.StringForeignKeyField;
 import com.speedment.runtime.internal.field.ReferenceForeignKeyFieldImpl;
 import com.speedment.runtime.internal.field.StringForeignKeyFieldImpl;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
-
 import java.util.Optional;
 import java.util.function.Consumer;
-
 import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.common.injector.Injector;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.typetoken.TypeTokenGenerator;
 import com.speedment.runtime.config.typetoken.TypeToken;
 import com.speedment.runtime.field.BooleanField;
-import com.speedment.runtime.field.BooleanForeignKeyField;
 import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.ByteForeignKeyField;
 import com.speedment.runtime.field.CharField;
@@ -66,7 +63,6 @@ import com.speedment.runtime.field.ShortField;
 import com.speedment.runtime.field.ShortForeignKeyField;
 import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.internal.field.BooleanFieldImpl;
-import com.speedment.runtime.internal.field.BooleanForeignKeyFieldImpl;
 import com.speedment.runtime.internal.field.ByteFieldImpl;
 import com.speedment.runtime.internal.field.ByteForeignKeyFieldImpl;
 import com.speedment.runtime.internal.field.CharFieldImpl;
@@ -269,16 +265,9 @@ public final class EntityTranslatorSupport {
                         break;
                         
                     case BOOLEAN :
-                        type = Type.of(BooleanForeignKeyField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(fkType));
-
-                        implType = Type.of(BooleanForeignKeyFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(fkType));
-                        break;
+                        throw new UnsupportedOperationException(
+                            "Boolean foreign key fields are not supported."
+                        );
                         
                     case COMPARABLE :
                         type = Type.of(ComparableForeignKeyField.class)

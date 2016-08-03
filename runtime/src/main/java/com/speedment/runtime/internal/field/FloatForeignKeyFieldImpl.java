@@ -4,6 +4,7 @@ import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.FloatField;
 import com.speedment.runtime.field.FloatForeignKeyField;
+import com.speedment.runtime.field.finder.FindFrom;
 import com.speedment.runtime.field.method.Finder;
 import com.speedment.runtime.field.method.FloatGetter;
 import com.speedment.runtime.field.method.FloatSetter;
@@ -11,11 +12,13 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.internal.field.comparator.FloatFieldComparator;
 import com.speedment.runtime.internal.field.comparator.FloatFieldComparatorImpl;
+import com.speedment.runtime.internal.field.finder.FindFromFloat;
 import com.speedment.runtime.internal.field.predicate.floats.FloatBetweenPredicate;
 import com.speedment.runtime.internal.field.predicate.floats.FloatEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.floats.FloatGreaterOrEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.floats.FloatGreaterThanPredicate;
 import com.speedment.runtime.internal.field.predicate.floats.FloatInPredicate;
+import com.speedment.runtime.manager.Manager;
 import java.util.Set;
 import java.util.function.Predicate;
 import static java.util.Objects.requireNonNull;
@@ -33,14 +36,16 @@ public final class FloatForeignKeyFieldImpl<ENTITY, D, FK_ENTITY>  implements Fl
     private final FieldIdentifier<ENTITY> identifier;
     private final FloatGetter<ENTITY> getter;
     private final FloatSetter<ENTITY> setter;
+    private final FloatField<FK_ENTITY, ?> referenced;
     private final Finder<ENTITY, FK_ENTITY> finder;
     private final TypeMapper<D, Float> typeMapper;
     private final boolean unique;
     
-    public FloatForeignKeyFieldImpl(FieldIdentifier<ENTITY> identifier, FloatGetter<ENTITY> getter, FloatSetter<ENTITY> setter, Finder<ENTITY, FK_ENTITY> finder, TypeMapper<D, Float> typeMapper, boolean unique) {
+    public FloatForeignKeyFieldImpl(FieldIdentifier<ENTITY> identifier, FloatGetter<ENTITY> getter, FloatSetter<ENTITY> setter, FloatField<FK_ENTITY, ?> referenced, Finder<ENTITY, FK_ENTITY> finder, TypeMapper<D, Float> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
+        this.referenced = requireNonNull(referenced);
         this.finder     = requireNonNull(finder);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
@@ -59,6 +64,11 @@ public final class FloatForeignKeyFieldImpl<ENTITY, D, FK_ENTITY>  implements Fl
     @Override
     public FloatGetter<ENTITY> getter() {
         return getter;
+    }
+    
+    @Override
+    public FindFrom<ENTITY, FK_ENTITY> findFrom(Manager<FK_ENTITY> foreignManager) {
+        return new FindFromFloat<>(this, referenced, foreignManager);
     }
     
     @Override
