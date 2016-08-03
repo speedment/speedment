@@ -198,12 +198,12 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                     final String typeMapper = col.getTypeMapper().get();
 
                     if (PrimitiveTypeMapper.class.getName().equals(typeMapper)) {
-                        typeMapperCode = "new " + shortName(typeMapper) + "<>()";
+                        file.add(Import.of(Type.of(TypeMapper.class)));
+                        typeMapperCode = "TypeMapper.primitive()";
                     } else {
+                        file.add(Import.of(Type.of(typeMapper)));
                         typeMapperCode = "new " + shortName(typeMapper) + "()";
                     }
-                    
-                    file.add(Import.of(Type.of(typeMapper)));
                 } else {
                     typeMapperCode = "TypeMapper.identity()";
                     file.add(Import.of(Type.of(TypeMapper.class)));

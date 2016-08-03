@@ -18,6 +18,7 @@ package com.speedment.runtime.config.mapper;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.mapper.primitive.PrimitiveTypeMapper;
 import com.speedment.runtime.config.typetoken.TypeToken;
 import com.speedment.runtime.internal.config.mapper.IdentityTypeMapper;
 
@@ -92,5 +93,15 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
      */
     static <T> TypeMapper<T, T> identity() {
         return new IdentityTypeMapper<>();
+    }
+    
+    /**
+     * Returns an primitive type mapper.
+     *
+     * @param <T>  the wrapper type of the primitive type mapper
+     * @return     an primitive type mapper
+     */
+    static <T> TypeMapper<T, T> primitive() {
+        return new PrimitiveTypeMapper<>();
     }
 }
