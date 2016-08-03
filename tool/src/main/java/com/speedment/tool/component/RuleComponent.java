@@ -40,5 +40,5 @@ public interface RuleComponent extends Component{
      * 
      * @return  a CompletableFuture which will return once all rules have executed
      */
-    CompletableFuture<Void> verify();
+    CompletableFuture<Boolean> verify();
 }

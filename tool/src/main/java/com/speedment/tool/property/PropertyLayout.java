@@ -36,7 +36,7 @@ final class PropertyLayout extends GridPane{
     PropertyLayout(ObservableList<PropertyEditor.Item> properties){
         this.index = new AtomicInteger(0);
         this.items = new HashSet<>();
-
+        
         getColumnConstraints().add(0, new ColumnConstraints(MIN_LABEL_WIDTH,  USE_COMPUTED_SIZE, USE_PREF_SIZE,    Priority.NEVER,  HPos.LEFT, true));
         getColumnConstraints().add(1, new ColumnConstraints(MIN_EDITOR_WIDTH, USE_COMPUTED_SIZE, Double.MAX_VALUE, Priority.ALWAYS, HPos.LEFT, true));
         getStyleClass().add("properties-layout");
@@ -49,7 +49,7 @@ final class PropertyLayout extends GridPane{
      * Adds a new editor item to the layout. New items are added at the
      * bottom.
      * 
-     * @param item  the editor
+     * @param item  the item
      */
     void addItem(PropertyEditor.Item item){  
         final Node label = item.getLabel();        

@@ -8,6 +8,7 @@ import com.speedment.runtime.component.Component;
 import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.tool.component.RuleComponent;
 import com.speedment.tool.internal.rule.ProtectedNameRule;
+import com.speedment.tool.internal.util.CompletableFutureUtil;
 import com.speedment.tool.rule.Rule;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,12 +40,13 @@ public class RuleComponentImpl extends InternalOpenSourceComponent implements  R
     }
 
     @Override
-    public CompletableFuture<Void> verify() {
-        final CompletableFuture<Void>[] futures;
+    public CompletableFuture<Boolean> verify() {
+        final CompletableFuture<Boolean>[] futures;
         futures = rules.stream().parallel()
                         .map( Rule::verify )
                         .toArray( CompletableFuture[]::new );
-        return CompletableFuture.allOf(futures);
+
+        return CompletableFutureUtil.allOf(Boolean.TRUE, Boolean::logicalAnd, futures);
     }
     
     @Override

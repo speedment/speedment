@@ -248,7 +248,7 @@ public interface UserInterfaceComponent extends Component {
 
     /**
      * Shows a progress dialog that measures how far a particular 
-     * task has come. This is usefull for particularly time 
+     * task has come. This is useful for particularly time 
      * consuming processes like connecting to a remote database.
      * 
      * @param title     the title on the dialog
@@ -256,6 +256,12 @@ public interface UserInterfaceComponent extends Component {
      * @param task      the task that is being performed
      */
     void showProgressDialog(String title, ProgressMeasure progress, CompletableFuture<Boolean> task);
+    
+    /**
+     * Shows a dialog with all the issues that has been posted to the
+     * {@link IssueComponent} so far.
+     */
+    void showIssues();
 
     /**
      * Shows a small notification in the user interface. The specified

@@ -31,6 +31,8 @@ public interface Issue {
         private Level(String value){
             this.value = value;
         }
+        
+        public String toString(){ return value; }
     };
     
     /**

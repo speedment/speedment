@@ -105,7 +105,6 @@ import static com.speedment.runtime.internal.util.TextUtil.alignRight;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import com.speedment.tool.component.RuleComponent;
 import com.speedment.tool.property.PropertyEditor;
-import java.time.Clock;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ExecutionException;
 
@@ -155,7 +154,9 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
     private @Inject PasswordComponent passwordComponent;
     private @Inject ProjectComponent projectComponent;
     private @Inject ConfigFileHelper configFileHelper;
+    private @Inject InjectionLoader loader;
     private @Inject RuleComponent rules;
+    
     private @Inject Injector injector;
     
     private Stage stage;
@@ -364,61 +365,29 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
         log(OutputUtil.info("Prepairing for generating classes " + support.basePackageName() + "." + project.getName() + ".*"));
         log(OutputUtil.info("Target directory is " + project.getPackageLocation()));
         log(OutputUtil.info("Performing rule verifications..."));
-
+        
         final Project immutableProject = ImmutableProject.wrap(project);
         projectComponent.setProject(immutableProject);
         
-        try{
-            CompletableFuture<Void> future = rules.verify();
-            future.get();
-            log(OutputUtil.info("Rule verifications completed"));
-        } catch(final InterruptedException ex){
-            LOGGER.error("Interruption in rule verification");
-            log(OutputUtil.error("Interruption in rule verification. You can reach out to us via Gitter: \n"+GITTER_URI));
-            System.err.println(ex);
-            return;
-        } catch(final ExecutionException ex){
-            LOGGER.error("Exception in rule verification");
-            log(OutputUtil.error("Exception in rule verification. You can reach out to us via Gitter: \n"+GITTER_URI));
-            System.err.println(ex);
-            return;
-        }
-        
-        try {
-            translatorManager.accept(immutableProject);
-//            stopwatch.stop();
+        CompletableFuture<Boolean> future = rules.verify();
+        future.handleAsync((bool, ex) -> {
+            if (ex != null) {
+                final String err = 
+                    "An error occured while the error checker was looking " + 
+                    "for issues in the project configuration.";
+                LOGGER.error(ex, err);
+                runLater(() -> showError("Error Creating Report", err, ex));
+            } else {
+                if (!bool) {
+                    showIssues();
+                } else {
+                    runLater( () -> log(OutputUtil.info("Rule verifications completed") ) );
+                    configFileHelper.generateSources();
+                }
+            }
 
-            log(OutputUtil.success(
-                "+------------: Generation completed! :------------+" + "\n"
-//                + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
-                + "| Files generated  " + alignRight("" + Integer.toString(translatorManager.getFilesCreated()), 30) + " |\n"
-                + "+-------------------------------------------------+"
-            ));
-
-            showNotification(
-                "Generation completed! " + translatorManager.getFilesCreated()
-                + " files created.",
-                FontAwesomeIcon.STAR,
-                Palette.SUCCESS
-            );
-        } catch (final Exception ex) {
-//            if (!stopwatch.isStopped()) {
-//                stopwatch.stop();
-//            }
-
-            log(OutputUtil.error(
-                "+--------------: Generation failed! :-------------+" + "\n"
-//                + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
-                + "| Files generated  " + alignRight("" + Integer.toString(translatorManager.getFilesCreated()), 30) + " |\n"
-                + "| Exception Type   " + alignRight(ex.getClass().getSimpleName(), 30) + " |\n"
-                + "+-------------------------------------------------+"
-            ));
-
-            final String msg = "Error! Failed to generate code. A " + ex.getClass().getSimpleName() + " was thrown.";
-
-            LOGGER.error(ex, msg);
-            showError("Failed to generate code", ex.getMessage(), ex);
-        }
+            return bool;
+        });
     }
 
     @Override
@@ -680,6 +649,11 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
         if (!progress.isDone()) {
             dialog.showAndWait();
         }
+    }
+
+    @Override
+    public void showIssues() {
+        loader.loadAsModal("ProjectProblem");
     }
 
     @Override

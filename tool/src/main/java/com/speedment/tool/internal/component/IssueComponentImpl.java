@@ -19,7 +19,6 @@ import javafx.collections.ObservableList;
 public class IssueComponentImpl extends InternalOpenSourceComponent implements  IssueComponent {
     private final ObservableList<Issue> issues;
     
-    private @Inject Injector injector;
     private @Inject InjectionLoader loader;
     
     public IssueComponentImpl(){
@@ -30,7 +29,6 @@ public class IssueComponentImpl extends InternalOpenSourceComponent implements  
     public void post(Issue issue) {
         Platform.runLater( () -> {
             if( issues.isEmpty() ){
-                //TODO: Improve logic
                 loader.loadAsModal("ProjectProblem");
             }
             issues.add(issue);

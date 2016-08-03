@@ -21,6 +21,7 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
+import com.speedment.generator.TranslatorManager;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.ProjectComponent;
@@ -60,7 +61,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 
 import com.speedment.runtime.internal.util.ProgressMeasurerImpl;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
 import com.speedment.tool.config.ProjectProperty;
+import com.speedment.tool.util.OutputUtil;
 import static com.speedment.tool.util.OutputUtil.error;
 import static com.speedment.tool.util.OutputUtil.success;
 import java.util.Set;
@@ -81,6 +84,7 @@ public final class ConfigFileHelper {
     private @Inject DocumentPropertyComponent documentPropertyComponent;
     private @Inject UserInterfaceComponent userInterfaceComponent;
     private @Inject DbmsHandlerComponent dbmsHandlerComponenet;
+    private @Inject TranslatorManager translatorManager;
     private @Inject ProjectComponent projectComponent;
     private @Inject Injector injector;
     
@@ -351,6 +355,46 @@ public final class ConfigFileHelper {
             if (isGraphical) {
                 userInterfaceComponent.showError("Could not save file", ex.getMessage(), ex);
             } else throw new SpeedmentException(ex);
+        }
+    }
+    
+    public void generateSources() {
+        
+        
+        try {
+            translatorManager.accept( projectComponent.getProject() );
+//            stopwatch.stop();
+
+            userInterfaceComponent.log(OutputUtil.success(
+                "+------------: Generation completed! :------------+" + "\n"
+//                + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
+                + "| Files generated  " + alignRight("" + Integer.toString(translatorManager.getFilesCreated()), 30) + " |\n"
+                + "+-------------------------------------------------+"
+            ));
+
+            userInterfaceComponent.showNotification(
+                "Generation completed! " + translatorManager.getFilesCreated()
+                + " files created.",
+                FontAwesomeIcon.STAR,
+                Palette.SUCCESS
+            );
+        } catch (final Exception ex) {
+//            if (!stopwatch.isStopped()) {
+//                stopwatch.stop();
+//            }
+
+            userInterfaceComponent.log(OutputUtil.error(
+                "+--------------: Generation failed! :-------------+" + "\n"
+//                + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
+                + "| Files generated  " + alignRight("" + Integer.toString(translatorManager.getFilesCreated()), 30) + " |\n"
+                + "| Exception Type   " + alignRight(ex.getClass().getSimpleName(), 30) + " |\n"
+                + "+-------------------------------------------------+"
+            ));
+
+            final String msg = "Error! Failed to generate code. A " + ex.getClass().getSimpleName() + " was thrown.";
+
+            LOGGER.error(ex, msg);
+            userInterfaceComponent.showError("Failed to generate code", ex.getMessage(), ex);
         }
     }
     

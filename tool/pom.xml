@@ -61,6 +61,7 @@
                             com.speedment.tool.notification.*,
                             com.speedment.tool.property.*,
                             com.speedment.tool.resource.*,
+                            com.speedment.tool.rule.*,
                             com.speedment.tool.util.*,
                             com.speedment.tool
                         </Export-Package>

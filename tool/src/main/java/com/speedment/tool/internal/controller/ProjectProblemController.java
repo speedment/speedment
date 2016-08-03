@@ -2,33 +2,42 @@ package com.speedment.tool.internal.controller;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.component.IssueComponent;
+import com.speedment.tool.internal.util.ConfigFileHelper;
 import com.speedment.tool.rule.Issue;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanExpression;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
-public class ProjectProblemController implements Initializable{
+public class ProjectProblemController implements Initializable {
+    
     @FXML private ListView<Issue> lstProjectProblems;
     @FXML private TextFlow txtDescription;
     @FXML private Button btnClose;
+    @FXML private Button btnProceed;
     
     private final ObservableList<Issue> issues;
+    private final BooleanExpression hasErrors;
     
+    private @Inject ConfigFileHelper configFileHelper;
     private @Inject IssueComponent issueComponent;
     
     public ProjectProblemController(){
         issues = FXCollections.observableArrayList();
+        hasErrors = Bindings.isNotEmpty(issues.filtered(issue -> issue.getLevel() == Issue.Level.ERROR));
+        
     }
     
     @Override
@@ -36,16 +45,23 @@ public class ProjectProblemController implements Initializable{
         Bindings.bindContent(issues, issueComponent.getIssues());
         lstProjectProblems.setItems(issues);
         
-        btnClose.setOnAction( (ev) -> closeWindow(ev) );
+        btnClose.setOnAction( (ev) -> closeWindow() );
+        btnProceed.setOnAction( (ev) -> closeWindowAndGenerate());
+        
+        btnProceed.disableProperty().bind(hasErrors);
         
         lstProjectProblems.setCellFactory((ListView<Issue> param) -> new ListCell<Issue>() {
             @Override
             protected void updateItem(Issue item, boolean empty) {
                 super.updateItem(item, empty);
                 if( item != null ){
-                    setText( item.getTitle() );
+                    setText( item.getLevel() +" - "+ item.getTitle() );
+                    if( item.getLevel() == Issue.Level.ERROR){
+                        setTextFill( Color.RED );
+                    }
                 } else {
                     setText("");
+                    setTextFill(Color.BLACK);
                 }
             }
         });
@@ -55,9 +71,28 @@ public class ProjectProblemController implements Initializable{
                 txtDescription.getChildren().add( new Text( newValue.getDescription() ));
             }
         });
+        
+        //We need to attach a scene listener somewhere, so this button will do
+        btnProceed.sceneProperty().addListener( (ov, oldVal, newVal) -> {
+            if( oldVal == null && newVal != null ){
+                Window window = newVal.windowProperty().get();
+                if( window != null ){
+                    window.setOnCloseRequest( (ev) -> closeWindow() );
+                } else {
+                    newVal.windowProperty().addListener( (ob, oldW, newW) -> {
+                        newW.setOnCloseRequest( (ev) -> closeWindow() );
+                    });
+                }
+            }
+        });
     }
     
-    private void closeWindow(ActionEvent ev){
+    private void closeWindowAndGenerate() {
+        configFileHelper.generateSources();
+        closeWindow();
+    }
+    
+    private void closeWindow() {
         issueComponent.clear();
         final Stage stage = (Stage) btnClose.getScene().getWindow();
         stage.close();

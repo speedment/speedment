@@ -17,5 +17,15 @@ import java.util.concurrent.CompletableFuture;
  */
 @Api(version="3.0")
 public interface Rule {
-    CompletableFuture<Void> verify(); 
+    
+    /**
+     * Verifies this rule. 
+     * <p>
+     * When the rule has performed all of its verifications, the CompletableFuture
+     * should be set. {@code true} if no issues were found, {@code false} if issues
+     * were found.
+     * 
+     * @return  a CompletableFuture, that will take {@code true} if no issues were found
+     */
+    CompletableFuture<Boolean> verify(); 
 }
