@@ -34,7 +34,11 @@ public class DefaultTextAreaItem extends DefaultStringItem {
      * @param value         the property to be edited
      * @param tooltip       the tooltip
      */
-    public DefaultTextAreaItem(String label, ObservableStringValue defaultValue, StringProperty value, String tooltip) {
+    public DefaultTextAreaItem(
+            String label, 
+            ObservableStringValue defaultValue, 
+            StringProperty value, 
+            String tooltip) {
         super(label, defaultValue, value, tooltip);
     }
 

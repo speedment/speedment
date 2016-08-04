@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.tool.property.editor;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.config.IndexProperty;
 import com.speedment.tool.property.PropertyEditor;
+import com.speedment.tool.property.item.ItemUtil;
 import com.speedment.tool.property.item.SimpleCheckBoxItem;
 import java.util.stream.Stream;
 
@@ -25,7 +21,8 @@ public class UniquePropertyEditor<T extends IndexProperty> implements PropertyEd
         return Stream.of(new SimpleCheckBoxItem(
                 "Is Unique", 
                 document.uniqueProperty(), 
-                "True if elements in this index are unique."
+                "True if elements in this index are unique.",
+                (editor) -> ItemUtil.lockDecorator(editor, ItemUtil.DATABASE_RELATION_TOOLTIP)
             )
         );
     }

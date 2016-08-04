@@ -1,7 +1,7 @@
 package com.speedment.tool.property.item;
 
 import com.speedment.runtime.annotation.Api;
-import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -38,7 +38,11 @@ public class ChoiceBoxItem<T> extends BaseLabelTooltipItem {
      * @param alternatives  list of alternatives in the choice box
      * @param tooltip       the tooltip
      */
-    public ChoiceBoxItem(String label, Property<T> value, ObservableList<T> alternatives, String tooltip) {
+    public ChoiceBoxItem(
+            String label, 
+            Property<T> value, 
+            ObservableList<T> alternatives, 
+            String tooltip) {
         this(label, value, alternatives, tooltip, NO_DECORATOR);
     }
     
@@ -63,7 +67,7 @@ public class ChoiceBoxItem<T> extends BaseLabelTooltipItem {
             Property<T> value, 
             ObservableList<T> alternatives, 
             String tooltip,
-            Consumer<Node> decorator) {
+            UnaryOperator<Node> decorator) {
         
         super(label, tooltip, decorator);
         this.currentValue = value;

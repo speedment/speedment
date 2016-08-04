@@ -1,9 +1,11 @@
 package com.speedment.tool.property.editor;
 
 import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.config.Project;
 import com.speedment.tool.property.item.SimpleTextFieldItem;
 import com.speedment.tool.config.trait.HasNameProperty;
 import com.speedment.tool.property.PropertyEditor;
+import com.speedment.tool.property.item.ItemUtil;
 import java.util.stream.Stream;
 
 /**
@@ -20,7 +22,14 @@ public class NamePropertyEditor<T extends HasNameProperty> implements PropertyEd
         return Stream.of(new SimpleTextFieldItem(
                 document.mainInterface().getSimpleName() + " Name",
                 document.nameProperty(),
-                "The name of the persisted entity in the database. This should only be modified if the database has been changed!"
+                "The name of the persisted entity in the database. This should only be modified if the database has been changed!",
+                (document instanceof Project) 
+                    ? (editor) -> {return editor;} 
+                    : (editor) -> ItemUtil.lockDecorator(
+                        editor, 
+                        "This field should ONLY be changed to reflect changes made in the underlying database. "
+                      + "If you want to change the name of this entity in Java, consider editing the Alias field instead."
+                      + "\nEnable editing by by right clicking on the field.") 
             )
         );
     }

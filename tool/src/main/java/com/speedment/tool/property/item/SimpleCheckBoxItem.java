@@ -2,6 +2,7 @@ package com.speedment.tool.property.item;
 
 import com.speedment.runtime.annotation.Api;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
@@ -46,7 +47,7 @@ public class SimpleCheckBoxItem extends BaseLabelTooltipItem{
             String label, 
             BooleanProperty property, 
             String tooltip, 
-            Consumer<Node> decorator) {
+            UnaryOperator<Node> decorator) {
         
         super(label, tooltip, decorator);
         this.property = property;

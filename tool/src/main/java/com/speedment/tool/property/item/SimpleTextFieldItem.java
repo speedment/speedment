@@ -7,6 +7,7 @@ package com.speedment.tool.property.item;
 
 import com.speedment.runtime.annotation.Api;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
@@ -44,7 +45,7 @@ public class SimpleTextFieldItem extends BaseLabelTooltipItem {
      * @param tooltip    this editor's tooltip text
      * @param decorator  the editor decorator
      */    
-    public SimpleTextFieldItem(String label, StringProperty property, String tooltip, Consumer<Node> decorator) {
+    public SimpleTextFieldItem(String label, StringProperty property, String tooltip, UnaryOperator<Node> decorator) {
         super(label, tooltip, decorator);
         this.property = property;
     }

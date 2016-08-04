@@ -14,7 +14,7 @@ import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import static java.util.Objects.requireNonNull;
-import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 /**
  * An editor for editing a StringProperty via an IntegerSpinner, which has a default value. The user
@@ -81,7 +81,7 @@ public class DefaultSpinnerItem extends BaseLabelTooltipItem {
             ObservableIntegerValue defaultValue, 
             IntegerProperty value, 
             String tooltip, 
-            Consumer<Node> decorator) {
+            UnaryOperator<Node> decorator) {
         
         this(label, defaultValue, value, tooltip, Integer.MIN_VALUE, Integer.MAX_VALUE, decorator);
     }
@@ -143,7 +143,7 @@ public class DefaultSpinnerItem extends BaseLabelTooltipItem {
             String tooltip, 
             int min, 
             int max, 
-            Consumer<Node> decorator) {
+            UnaryOperator<Node> decorator) {
         
         super(label, tooltip, decorator);
         
@@ -209,7 +209,11 @@ public class DefaultSpinnerItem extends BaseLabelTooltipItem {
         return container;
     }
 
-    private static void setSpinnerBehaviour(IntegerSpinnerValueFactory svf, boolean useDefaultValue, ObservableIntegerValue defaultValue, ObjectProperty<Integer> customValue) {
+    private static void setSpinnerBehaviour(
+            IntegerSpinnerValueFactory svf, 
+            boolean useDefaultValue, 
+            ObservableIntegerValue defaultValue, 
+            ObjectProperty<Integer> customValue) {
         if (useDefaultValue) {
             svf.valueProperty().unbindBidirectional( customValue );
             svf.setValue(defaultValue.get());

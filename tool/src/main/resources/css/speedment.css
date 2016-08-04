@@ -95,12 +95,14 @@
     -fx-font-size: 1.1em;
 }
 
-.list-view .list-cell:filled:selected{
+.list-view .list-cell:selected:focused{
     -fx-text-fill: white;
     -fx-border-color: -fx-speedment-blue;
 }
+
 /*** Text Flow ***/
 .text-flow{
+    -fx-font-family: 'monospace';
     -fx-font-size: 1.1em;
     -fx-padding: 8px;
 }
@@ -460,7 +462,7 @@
 .properties-layout {
     -fx-hgap: 10px;
     -fx-vgap: 10px;
-    -fx-padding: 0px 15px 0px 15px;
+    -fx-padding: 15px 15px 15px 15px;
 }
 
 /*** Properties layout : left ***/

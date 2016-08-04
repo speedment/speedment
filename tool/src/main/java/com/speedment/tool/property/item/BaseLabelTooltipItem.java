@@ -11,6 +11,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 /**
  * Base for most PropertyEditor.Item used in Speedment
@@ -25,12 +26,12 @@ import java.util.function.Consumer;
 @Api(version="3.0")
 public abstract class BaseLabelTooltipItem implements PropertyEditor.Item{
     
-    public final static Consumer<Node> NO_DECORATOR = n -> {};
+    public final static UnaryOperator<Node> NO_DECORATOR = n -> {return n;};
     
     private final String label;
     private final String tooltip;
     private final Map<ObservableValue<Object>, ChangeListener<Object>> listeners;
-    private final Consumer<Node> editorDecorator;
+    private final UnaryOperator<Node> editorDecorator;
     
     /**
      * Creates an instance of this class. This constructor lets the caller 
@@ -40,7 +41,7 @@ public abstract class BaseLabelTooltipItem implements PropertyEditor.Item{
      * @param tooltip         the tooltip text
      * @param editorDecorator the editor decorator
      */
-    protected BaseLabelTooltipItem(String label, String tooltip, Consumer<Node> editorDecorator){
+    protected BaseLabelTooltipItem(String label, String tooltip, UnaryOperator<Node> editorDecorator){
         requireNonNull(label,           "A label must be assigned.");
         requireNonNull(tooltip,         "A tooltip must be assigned");
         requireNonNull(editorDecorator, "An editor decorator must be assigned");
@@ -62,8 +63,7 @@ public abstract class BaseLabelTooltipItem implements PropertyEditor.Item{
     @Override
     public final Node createEditor() {
         final Node editor = createUndecoratedEditor();
-        editorDecorator.accept(editor);
-        return editor;
+        return editorDecorator.apply(editor);
     }
     
     @Override

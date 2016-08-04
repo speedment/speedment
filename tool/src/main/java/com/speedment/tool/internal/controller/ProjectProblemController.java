@@ -53,12 +53,16 @@ public class ProjectProblemController implements Initializable {
                 super.updateItem(item, empty);
                 if( item != null ){
                     setText( item.getLevel() +" - "+ item.getTitle() );
-                    if( item.getLevel() == Issue.Level.ERROR){
-                        setTextFill( Color.RED );
+                    switch( item.getLevel() ){
+                        case ERROR:
+                            setTextFill(Color.RED);
+                            break;
+                        case WARNING:
+                            setTextFill(Color.DARKORANGE);
+                            break;
                     }
                 } else {
                     setText("");
-                    setTextFill(Color.BLACK);
                 }
             }
         });

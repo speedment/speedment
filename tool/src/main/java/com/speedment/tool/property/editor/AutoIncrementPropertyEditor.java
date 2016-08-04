@@ -4,6 +4,7 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.property.item.SimpleCheckBoxItem;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.property.PropertyEditor;
+import com.speedment.tool.property.item.ItemUtil;
 import java.util.stream.Stream;
 
 /**
@@ -20,7 +21,9 @@ public class AutoIncrementPropertyEditor<T extends ColumnProperty> implements Pr
         return Stream.of(new SimpleCheckBoxItem(
                 "Is Auto Incrementing",
                 document.autoIncrementProperty(),
-                "If this column will increment automatically for each new entity.")
+                "If this column will increment automatically for each new entity.",
+                (editor) -> 
+                    ItemUtil.lockDecorator(editor, ItemUtil.DATABASE_RELATION_TOOLTIP))            
         );
     }
 }

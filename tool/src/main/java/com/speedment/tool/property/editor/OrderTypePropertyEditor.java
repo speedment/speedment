@@ -5,6 +5,7 @@ import com.speedment.runtime.config.parameter.OrderType;
 import com.speedment.tool.config.trait.HasOrderTypeProperty;
 import com.speedment.tool.property.PropertyEditor;
 import com.speedment.tool.property.item.ChoiceBoxItem;
+import com.speedment.tool.property.item.ItemUtil;
 import java.util.stream.Stream;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,7 +31,9 @@ public class OrderTypePropertyEditor<T extends HasOrderTypeProperty> implements 
                 "Order Type",
                 document.orderTypeProperty(),
                 alternatives,
-                "The order in which elements will be considered."
+                "The order in which elements will be considered.",
+                (editor) -> ItemUtil.lockDecorator(editor, ItemUtil.DATABASE_RELATION_TOOLTIP)
+                
             )
         );
     }

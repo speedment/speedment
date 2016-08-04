@@ -47,6 +47,7 @@ public final class NullableItem extends BaseLabelTooltipItem {
     protected Node createUndecoratedEditor() {
         
         final CheckBox cbNull               = new CheckBox();
+        final Node wrappedCb                = ItemUtil.lockDecorator(cbNull, ItemUtil.DATABASE_RELATION_TOOLTIP);
         final Label label                   = new Label(IMPLEMENTATION_TITLE);
         final ChoiceBox<ImplementAs> cbImpl = new ChoiceBox<>(
             observableArrayList(ImplementAs.values())
@@ -55,7 +56,7 @@ public final class NullableItem extends BaseLabelTooltipItem {
         cbImpl.setTooltip(new Tooltip(IMPLEMENTATION_TOOLTIP));
         
         final HBox right = new HBox(label, cbImpl);
-        final HBox left = new HBox(cbNull, right);
+        final HBox left = new HBox(wrappedCb, right);
         
         left.setSpacing(16);
         right.setSpacing(8);
