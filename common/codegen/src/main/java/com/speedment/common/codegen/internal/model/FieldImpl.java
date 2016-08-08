@@ -20,9 +20,9 @@ import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.Javadoc;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.codegen.model.Value;
 import com.speedment.common.codegen.model.modifier.Modifier;
+import java.lang.reflect.Type;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -76,7 +76,7 @@ public final class FieldImpl implements Field {
      */
 	protected FieldImpl(Field prototype) {
 		name		= requireNonNull(prototype).getName();
-		type		= Copier.copy(prototype.getType());
+		type		= prototype.getType();
 		value		= prototype.getValue().map(Copier::copy).orElse(null);
 		javadoc		= prototype.getJavadoc().map(Copier::copy).orElse(null);
 		annotations	= Copier.copy(prototype.getAnnotations());

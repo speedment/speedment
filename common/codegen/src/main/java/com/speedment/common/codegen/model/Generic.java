@@ -17,8 +17,9 @@
 package com.speedment.common.codegen.model;
 
 import com.speedment.common.codegen.internal.model.GenericImpl;
-import com.speedment.common.codegen.internal.model.constant.DefaultType;
+import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.model.trait.HasCopy;
+import java.lang.reflect.Type;
 
 import java.util.List;
 import java.util.Optional;
@@ -136,7 +137,7 @@ public interface Generic extends HasCopy<Generic> {
      *
      * @return a {@link Type} representing this generic variable
      */
-    Optional<Type> asType();
+    Type asType();
 
     /**
      * Creates a new instance implementing this interface by using the default

@@ -28,7 +28,6 @@ import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.Javadoc;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.generator.JavaClassTranslator;
@@ -67,12 +66,14 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.GENERATED;
-import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.AUTHOR;
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.GENERATED;
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.common.injector.Injector;
+import com.speedment.generator.component.TypeMapperComponent;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
+import java.lang.reflect.Type;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -85,7 +86,8 @@ import static java.util.Objects.requireNonNull;
 public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName & HasEnabled & HasMainInterface, T extends ClassOrInterface<T>>
     implements JavaClassTranslator<DOC, T> {
 
-    public static final String GETTER_METHOD_PREFIX = "get",
+    public static final String 
+        GETTER_METHOD_PREFIX = "get",
         SETTER_METHOD_PREFIX = "set",
         JAVADOC_MESSAGE
         = "\n<p>\nThis file is safe to edit. It will not be overwritten by the "
@@ -93,6 +95,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
 
     private @Inject Generator generator;
     private @Inject InfoComponent infoComponent;
+    private @Inject TypeMapperComponent typeMappers;
     private @Inject Injector injector;
     
     private final DOC document;
@@ -389,7 +392,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
     public Field fieldFor(Column c) {
         return Field.of(
             getSupport().variableName(c), 
-            getSupport().typeTokenGenerator().typeOf(c)
+            typeMappers.get(c).getJavaType(c)
         );
     }
 

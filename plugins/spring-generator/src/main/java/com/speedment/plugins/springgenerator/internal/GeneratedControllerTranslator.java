@@ -24,7 +24,6 @@ import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
@@ -37,9 +36,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.stream.Collectors;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.LONG_PRIMITIVE;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.list;
+import static com.speedment.common.codegen.constant.DefaultType.list;
+import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.injector.Injector;
+import java.lang.reflect.Type;
 
 /**
  *
@@ -62,7 +62,7 @@ public final class GeneratedControllerTranslator extends DefaultJavaClassTransla
                 final Project project = getSupport().projectOrThrow();
                 final TranslatorSupport<Project> projectSupport = new TranslatorSupport<>(injector, project);
                 
-                final Type appType = Type.of(
+                final Type appType = SimpleType.create(
                     projectSupport.basePackageName() + "." +
                     projectSupport.typeName() + "Application"
                 );
@@ -71,31 +71,31 @@ public final class GeneratedControllerTranslator extends DefaultJavaClassTransla
                 
                 clazz.add(Field.of("app", appType)
                     .protected_()
-                    .add(AnnotationUsage.of(Type.of(Autowired.class)))
+                    .add(AnnotationUsage.of(Autowired.class))
                 );
                 
                 clazz.add(Field.of("manager", getSupport().managerType())
                     .protected_()
-                    .add(AnnotationUsage.of(Type.of(Autowired.class)))
+                    .add(AnnotationUsage.of(Autowired.class))
                 );
                 
-                file.add(Import.of(Type.of(RequestMethod.class)).static_().setStaticMember("GET"));
-                file.add(Import.of(Type.of(Collectors.class)).static_().setStaticMember("toList"));
+                file.add(Import.of(RequestMethod.class).static_().setStaticMember("GET"));
+                file.add(Import.of(Collectors.class).static_().setStaticMember("toList"));
                 
                 clazz.add(Method.of("get", list(getSupport().entityType()))
                     .public_()
-                    .add(AnnotationUsage.of(Type.of(RequestMapping.class))
+                    .add(AnnotationUsage.of(RequestMapping.class)
                         .put("value", new TextValue("/" + getSupport().variableName()))
                         .put("method", new ReferenceValue("GET"))
                     )
-                    .add(Field.of("start", LONG_PRIMITIVE)
-                        .add(AnnotationUsage.of(Type.of(RequestParam.class))
+                    .add(Field.of("start", long.class)
+                        .add(AnnotationUsage.of(RequestParam.class)
                             .put("value", new TextValue("start"))
                             .put("defaultValue", new TextValue("0"))
                         )
                     )
-                    .add(Field.of("limit", LONG_PRIMITIVE)
-                        .add(AnnotationUsage.of(Type.of(RequestParam.class))
+                    .add(Field.of("limit", long.class)
+                        .add(AnnotationUsage.of(RequestParam.class)
                             .put("value", new TextValue("limit"))
                             .put("defaultValue", new TextValue("25"))
                         )

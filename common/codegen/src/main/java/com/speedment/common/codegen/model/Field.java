@@ -25,6 +25,7 @@ import com.speedment.common.codegen.model.trait.HasJavadoc;
 import com.speedment.common.codegen.model.trait.HasName;
 import com.speedment.common.codegen.model.trait.HasType;
 import com.speedment.common.codegen.model.trait.HasValue;
+import java.lang.reflect.Type;
 
 /**
  * A model that represents a field in code. This can be either as a method

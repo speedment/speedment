@@ -16,12 +16,13 @@
  */
 package com.speedment.generator.internal.lifecycle;
 
+import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.internal.runtime.AbstractApplicationBuilder;
+import java.lang.reflect.Type;
 
 /**
  *
@@ -57,14 +58,14 @@ public final class ApplicationImplTranslator extends DefaultJavaClassTranslator<
     }
     
     private Type applicationType() {
-        return Type.of(
+        return SimpleType.create(
             getSupport().basePackageName() + "." + 
             getSupport().typeName(getSupport().projectOrThrow()) + "Application"
         );
     }
     
     private Type generatedImplType() {
-        return Type.of(
+        return SimpleType.create(
             getSupport().basePackageName() + ".generated.Generated" + 
             getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationImpl"
         );

@@ -16,9 +16,9 @@
  */
 package com.speedment.plugins.reactor.internal.translator;
 
+import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Interface;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.runtime.config.Table;
 
@@ -45,7 +45,7 @@ public final class ViewTranslator extends DefaultJavaClassTranslator<Table, Inte
     protected Interface makeCodeGenModel(File file) {
         return newBuilder(file, getClassOrInterfaceName())
             .forEveryTable((intrf, table) -> {
-                intrf.public_().add(Type.of(
+                intrf.public_().add(SimpleType.create(
                     getSupport().basePackageName() + 
                     ".generated.Generated" + 
                     getSupport().namer().javaTypeName(getDocument().getJavaName()) + 

@@ -20,13 +20,13 @@ import com.speedment.common.codegen.DependencyManager;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Type;
 
 import java.util.Optional;
 
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.Formatting.packageName;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import java.lang.reflect.Type;
 
 /**
  * Transforms from an {@link Import} to java code.
@@ -41,16 +41,17 @@ public final class ImportView implements Transform<Import, String> {
     @Override
     public Optional<String> transform(Generator gen, Import model) {
         requireNonNulls(gen, model);
+        final String name = stripGenerics(model.getType().getTypeName());
 
         if (shouldImport(gen, model.getType())) {
             return Optional.of(
                 "import "
                 + gen.onEach(model.getModifiers()).collect(joinIfNotEmpty(" ", "", " "))
-                + model.getType().getName()
+                + name
                 + model.getStaticMember().map(str -> "." + str).orElse("")
                 + ";"
             ).filter(x -> {
-                gen.getDependencyMgr().load(model.getType().getName());
+                gen.getDependencyMgr().load(name);
                 return true;
             });
         } else {
@@ -69,22 +70,37 @@ public final class ImportView implements Transform<Import, String> {
      */
     private boolean shouldImport(Generator gen, Type type) {
         final DependencyManager mgr = gen.getDependencyMgr();
-
-        if (mgr.isIgnored(type.getName())) {
+        final String typeName = stripGenerics(type.getTypeName());
+        
+        if (mgr.isIgnored(typeName)) {
             return false;
         }
 
-        if (mgr.isLoaded(type.getName())) {
+        if (mgr.isLoaded(typeName)) {
             return false;
         }
 
         final Optional<String> current = mgr.getCurrentPackage();
-        final Optional<String> suggested = packageName(type.getName());
+        final Optional<String> suggested = packageName(typeName);
         
         // TODO: Inner classes might still be imported explicitly.
 
         return !(current.isPresent()
             && suggested.isPresent()
             && current.get().equals(suggested.get()));
+    }
+    
+    private static String stripGenerics(String className) {
+        String name = className;
+        
+        if (name.contains("<")) {
+            name = name.substring(0, name.indexOf("<"));
+        }
+        
+        if (name.contains("[")) {
+            name = name.substring(0, name.indexOf("["));
+        }
+        
+        return name;
     }
 }

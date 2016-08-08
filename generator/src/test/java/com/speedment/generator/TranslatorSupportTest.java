@@ -120,42 +120,42 @@ public class TranslatorSupportTest extends SimpleModel {
 
     @Test
     public void testEntityType() {
-        assertEquals(fullName("User"), instance.entityType().getName());
+        assertEquals(fullName("User"), instance.entityType().getTypeName());
     }
 
     @Test
     public void testEntityImplType() {
-        assertEquals(fullName("UserImpl"), instance.entityImplType().getName());
+        assertEquals(fullName("UserImpl"), instance.entityImplType().getTypeName());
     }
 
     @Test
     public void testGeneratedEntityType() {
-        assertEquals(fullNameGen("GeneratedUser"), instance.generatedEntityType().getName());
+        assertEquals(fullNameGen("GeneratedUser"), instance.generatedEntityType().getTypeName());
     }
 
     @Test
     public void testGeneratedEntityImplType() {
-        assertEquals(fullNameGen("GeneratedUserImpl"), instance.generatedEntityImplType().getName());
+        assertEquals(fullNameGen("GeneratedUserImpl"), instance.generatedEntityImplType().getTypeName());
     }
 
     @Test
     public void testManagerType() {
-        assertEquals(fullName("UserManager"), instance.managerType().getName());
+        assertEquals(fullName("UserManager"), instance.managerType().getTypeName());
     }
 
     @Test
     public void testManagerImplType() {
-        assertEquals(fullName("UserManagerImpl"), instance.managerImplType().getName());
+        assertEquals(fullName("UserManagerImpl"), instance.managerImplType().getTypeName());
     }
 
     @Test
     public void testGeneratedManagerType() {
-        assertEquals(fullNameGen("GeneratedUserManager"), instance.generatedManagerType().getName());
+        assertEquals(fullNameGen("GeneratedUserManager"), instance.generatedManagerType().getTypeName());
     }
 
     @Test
     public void testGeneratedManagerImplType() {
-        assertEquals(fullNameGen("GeneratedUserManagerImpl"), instance.generatedManagerImplType().getName());
+        assertEquals(fullNameGen("GeneratedUserManagerImpl"), instance.generatedManagerImplType().getTypeName());
     }
 
     @Test

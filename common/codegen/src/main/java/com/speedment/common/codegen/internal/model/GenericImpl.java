@@ -16,9 +16,9 @@
  */
 package com.speedment.common.codegen.internal.model;
 
+import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.Generic;
-import com.speedment.common.codegen.model.Type;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +26,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
+import java.lang.reflect.Type;
 import static java.util.Arrays.asList;
 
 /**
@@ -102,7 +103,7 @@ public final class GenericImpl implements Generic {
      */
 	protected GenericImpl(Generic prototype) {
 		lowerBound  = prototype.getLowerBound().orElse(null);
-		upperBounds = Copier.copy(prototype.getUpperBounds());
+		upperBounds = new ArrayList<>(prototype.getUpperBounds());
 	}
 
     /**
@@ -151,11 +152,8 @@ public final class GenericImpl implements Generic {
      * {@inheritDoc}
      */
     @Override
-	public Optional<Type> asType() {
-		return (lowerBound == null ? 
-            Optional.empty() :
-            Optional.of(new TypeImpl(lowerBound))
-        );
+	public Type asType() {
+		return SimpleType.create(lowerBound);
 	}
 	
     /**

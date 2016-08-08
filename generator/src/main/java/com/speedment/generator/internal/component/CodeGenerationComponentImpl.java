@@ -63,7 +63,6 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.RESOLVED;
 import static com.speedment.generator.StandardTranslatorKey.*;
-import com.speedment.generator.internal.typetoken.TypeTokenGeneratorImpl;
 import static java.util.Objects.requireNonNull;
 
 @IncludeInjectable({
@@ -71,8 +70,7 @@ import static java.util.Objects.requireNonNull;
     TypeMapperComponentImpl.class,
     TranslatorManagerImpl.class,
     JavaLanguageNamerImpl.class,
-    JavaGenerator.class,
-    TypeTokenGeneratorImpl.class
+    JavaGenerator.class
 })
 public final class CodeGenerationComponentImpl extends InternalOpenSourceComponent implements CodeGenerationComponent {
 

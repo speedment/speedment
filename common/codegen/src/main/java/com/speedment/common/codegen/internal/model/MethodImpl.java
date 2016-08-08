@@ -22,8 +22,8 @@ import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.codegen.model.modifier.Modifier;
+import java.lang.reflect.Type;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -66,15 +66,15 @@ public final class MethodImpl implements Method {
      * @param type the type
      */
     public MethodImpl(String name, Type type) {
-        this.name = requireNonNull(name);
-        this.type = requireNonNull(type);
-        this.javadoc = null;
+        this.name        = requireNonNull(name);
+        this.type        = requireNonNull(type);
+        this.javadoc     = null;
         this.annotations = new ArrayList<>();
-        this.generics = new ArrayList<>();
-        this.params = new ArrayList<>();
-        this.code = new ArrayList<>();
-        this.modifiers = EnumSet.noneOf(Modifier.class);
-        this.exceptions = new HashSet<>();
+        this.generics    = new ArrayList<>();
+        this.params      = new ArrayList<>();
+        this.code        = new ArrayList<>();
+        this.modifiers   = EnumSet.noneOf(Modifier.class);
+        this.exceptions  = new HashSet<>();
     }
 
     /**
@@ -83,15 +83,15 @@ public final class MethodImpl implements Method {
      * @param prototype the prototype
      */
     protected MethodImpl(final Method prototype) {
-        name = requireNonNull(prototype).getName();
-        type = Copier.copy(prototype.getType());
-        javadoc = prototype.getJavadoc().map(Copier::copy).orElse(null);
+        name        = requireNonNull(prototype).getName();
+        type        = requireNonNull(prototype.getType());
+        javadoc     = prototype.getJavadoc().map(Copier::copy).orElse(null);
         annotations = Copier.copy(prototype.getAnnotations());
-        generics = Copier.copy(prototype.getGenerics());
-        params = Copier.copy(prototype.getFields());
-        code = Copier.copy(prototype.getCode(), s -> s);
-        modifiers = Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
-        exceptions = Copier.copy(prototype.getExceptions());
+        generics    = Copier.copy(prototype.getGenerics());
+        params      = Copier.copy(prototype.getFields());
+        code        = Copier.copy(prototype.getCode(), s -> s);
+        modifiers   = Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
+        exceptions  = new HashSet<>(prototype.getExceptions());
     }
 
     /**

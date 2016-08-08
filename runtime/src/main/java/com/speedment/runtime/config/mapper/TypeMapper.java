@@ -19,8 +19,8 @@ package com.speedment.runtime.config.mapper;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.primitive.PrimitiveTypeMapper;
-import com.speedment.runtime.config.typetoken.TypeToken;
 import com.speedment.runtime.internal.config.mapper.IdentityTypeMapper;
+import java.lang.reflect.Type;
 
 import java.util.Comparator;
 
@@ -56,14 +56,13 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
     String getLabel();
 
     /**
-     * Returns a token describing the resulting java type when this mapper is
+     * Returns a type describing the resulting java type when this mapper is
      * applied to a database result.
      * 
-     * @param <ENTITY>  the entity type
      * @param column    the column that is being mapped
-     * @return          token describing the resulting java type
+     * @return          the resulting java type
      */
-    <ENTITY> TypeToken getJavaType(Column column);
+    Type getJavaType(Column column);
     
     /**
      * Converts a value from the database domain to the java domain.

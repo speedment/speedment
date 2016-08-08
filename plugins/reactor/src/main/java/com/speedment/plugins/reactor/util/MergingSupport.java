@@ -1,9 +1,9 @@
 package com.speedment.plugins.reactor.util;
 
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
+import java.lang.reflect.Type;
 
 /**
  * Utility methods that are used by several translators in this package but that

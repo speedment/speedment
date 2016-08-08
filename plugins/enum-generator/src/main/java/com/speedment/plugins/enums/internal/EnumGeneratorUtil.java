@@ -29,7 +29,7 @@ public final class EnumGeneratorUtil {
     public static String enumNameOf(Column column, Injector injector) {
         final TranslatorSupport<Table> support = new TranslatorSupport<>(injector, column.getParentOrThrow());
         final String shortName = support.namer().javaTypeName(column.getJavaName());
-        final String fullName  = support.generatedEntityType().getName() + "." + shortName;
+        final String fullName  = support.generatedEntityType().getTypeName() + "." + shortName;
         
         return fullName;
     }

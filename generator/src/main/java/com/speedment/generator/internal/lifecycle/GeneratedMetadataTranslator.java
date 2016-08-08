@@ -17,7 +17,7 @@
 package com.speedment.generator.internal.lifecycle;
 
 import com.speedment.common.codegen.internal.model.JavadocImpl;
-import com.speedment.common.codegen.internal.model.constant.DefaultType;
+import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.internal.model.value.ReferenceValue;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Field;
@@ -25,7 +25,6 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.runtime.ApplicationMetadata;
@@ -38,10 +37,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.AUTHOR;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.STRING;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.VOID;
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
@@ -72,14 +69,14 @@ public final class GeneratedMetadataTranslator extends DefaultJavaClassTranslato
     @Override
     protected Class makeCodeGenModel(File file) {
         requireNonNull(file);
-        final Method getMetadata = Method.of("getMetadata", DefaultType.optional(STRING))
+        final Method getMetadata = Method.of("getMetadata", DefaultType.optional(String.class))
             .protected_()
             .add(OVERRIDE);
 
-        final Field metadataField = Field.of("METADATA", Type.of(String.class))
+        final Field metadataField = Field.of("METADATA", String.class)
             .private_().final_().static_();
 
-        final Method initializer = Method.of("init", STRING).static_().private_();
+        final Method initializer = Method.of("init", String.class).static_().private_();
 
         final List<String> lines = Stream.of(DocumentTranscoder.save(getSupport().projectOrThrow()).split("\\R")).collect(toList());
         final List<List<String>> segments = new ArrayList<>();
@@ -112,8 +109,8 @@ public final class GeneratedMetadataTranslator extends DefaultJavaClassTranslato
             ").forEachOrdered(" + STRING_BUILDER_NAME + "::append);"
         ));
 
-        file.add(Import.of(Type.of(StringBuilder.class)));
-        file.add(Import.of(Type.of(Stream.class)));
+        file.add(Import.of(StringBuilder.class));
+        file.add(Import.of(Stream.class));
         initializer.add("final StringBuilder " + STRING_BUILDER_NAME + " = new StringBuilder();");
         subInitializers.stream().forEachOrdered(si -> {
             initializer.add(si.getName() + "(" + STRING_BUILDER_NAME + ");");
@@ -126,7 +123,7 @@ public final class GeneratedMetadataTranslator extends DefaultJavaClassTranslato
         final Class result = newBuilder(file, getClassOrInterfaceName())
             .forEveryProject((clazz, project) -> {
                 clazz.public_()
-                    .setSupertype(Type.of(AbstractApplicationMetadata.class))
+                    .setSupertype(AbstractApplicationMetadata.class)
                     .add(metadataField)
                     .add(initializer)
                     .add(getMetadata);
@@ -138,8 +135,8 @@ public final class GeneratedMetadataTranslator extends DefaultJavaClassTranslato
     }
 
     private Method addNewSubMethod(List<Method> methods) {
-        final Method m = Method.of(INIT_PART_METHOD_NAME + methods.size(), VOID).private_().static_()
-            .add(Field.of(STRING_BUILDER_NAME, Type.of(StringBuilder.class)));
+        final Method m = Method.of(INIT_PART_METHOD_NAME + methods.size(), void.class).private_().static_()
+            .add(Field.of(STRING_BUILDER_NAME, StringBuilder.class));
         methods.add(m);
         m.add("Stream.of(");
         return m;

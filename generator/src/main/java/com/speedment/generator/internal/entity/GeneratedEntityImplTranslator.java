@@ -20,10 +20,8 @@ import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
@@ -32,17 +30,17 @@ import com.speedment.runtime.internal.entity.AbstractEntity;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.*;
-import com.speedment.generator.typetoken.TypeTokenGenerator;
-import com.speedment.runtime.config.typetoken.PrimitiveTypeToken;
-import com.speedment.runtime.config.typetoken.TypeToken;
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.runtime.util.OptionalUtil;
 import java.util.Optional;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.Formatting.tab;
+import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.component.TypeMapperComponent;
 import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
+import java.lang.reflect.Type;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -53,7 +51,7 @@ import static java.util.stream.Collectors.joining;
  */
 public final class GeneratedEntityImplTranslator extends EntityAndManagerTranslator<Class> {
 
-    private @Inject TypeTokenGenerator typeTokenGenerator;
+    private @Inject TypeMapperComponent typeMappers;
     
     public GeneratedEntityImplTranslator(Table table) {
         super(table, Class::of);
@@ -68,14 +66,14 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
              * Getters
              */
             .forEveryColumn((clazz, col) -> {
-                final Type retType = GeneratedEntityTranslator.getterReturnType(typeTokenGenerator, col);
+                final Type retType = typeMappers.get(col).getJavaType(col);
                 final String getter;
                 if (usesOptional(col)) {
                     final String varName = getSupport().variableName(col);
-                    if (retType.getName().equals(Optional.class.getName())) {
+                    if (retType.getTypeName().startsWith(Optional.class.getName())) {
                         getter = "Optional.ofNullable(" + varName + ")";
                     } else {
-                        file.add(Import.of(Type.of(OptionalUtil.class)));
+                        file.add(Import.of(OptionalUtil.class));
                         getter = "OptionalUtil.ofNullable(" + varName + ")";
                     }
                 } else {
@@ -110,14 +108,14 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                     .add(toStringMethod(file))
                     .add(equalsMethod())
                     .add(hashCodeMethod())
-                    .add(Method.of("entityClass", Type.of(java.lang.Class.class).add(Generic.of().add(getSupport().entityType()))).public_().add(OVERRIDE)
+                    .add(Method.of("entityClass", SimpleParameterizedType.create(java.lang.Class.class, getSupport().entityType())).public_().add(OVERRIDE)
                         .add("return " + getSupport().entityName() + ".class;")
                     );
             })
             .build()
             .public_()
             .abstract_()
-            .setSupertype(Type.of(AbstractEntity.class).add(Generic.of().add(getSupport().entityType())))
+            .setSupertype(SimpleParameterizedType.create(AbstractEntity.class, getSupport().entityType()))
             .add(getSupport().entityType())
             .add(Constructor.of().protected_());
 
@@ -141,10 +139,10 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
     }
 
     protected Method toStringMethod(File file) {
-        file.add(Import.of(Type.of(StringJoiner.class)));
-        file.add(Import.of(Type.of(Objects.class)));
+        file.add(Import.of(StringJoiner.class));
+        file.add(Import.of(Objects.class));
         
-        final Method m = Method.of("toString", STRING)
+        final Method m = Method.of("toString", String.class)
             .public_()
             .add(OVERRIDE)
             .add("final StringJoiner sj = new StringJoiner(\", \", \"{ \", \" }\");");
@@ -152,7 +150,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
         columns().forEachOrdered(col -> {
             final String getter;
             if (usesOptional(col)) {
-                file.add(Import.of(Type.of(OptionalUtil.class)));
+                file.add(Import.of(OptionalUtil.class));
                 getter = "OptionalUtil.unwrap(get" + getSupport().typeName(col) + "())";
             } else {
                 getter = "get" + getSupport().typeName(col) + "()";
@@ -170,19 +168,19 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
 
         final String thatName = "that";
         final String thatCastedName = thatName + getSupport().entityName();
-        final Method method = Method.of("equals", BOOLEAN_PRIMITIVE)
+        final Method method = Method.of("equals", boolean.class)
             .public_()
             .add(OVERRIDE)
-            .add(Field.of(thatName, OBJECT))
+            .add(Field.of(thatName, Object.class))
             .add("if (this == that) { return true; }")
             .add("if (!(" + thatName + " instanceof " + getSupport().entityName() + ")) { return false; }")
             .add("final " + getSupport().entityName() + " " + thatCastedName + " = (" + getSupport().entityName() + ")" + thatName + ";");
 
         columns().forEachOrdered(c -> {
             final String getter = "get" + getSupport().typeName(c);
-            final TypeToken token = typeTokenGenerator.tokenOf(c);
+            final Type type = typeMappers.get(c).getJavaType(c);
             
-            if (token.isPrimitive()) {
+            if (DefaultType.isPrimitive(type)) {
                 method.add("if (this." + getter + "() != " + thatCastedName + "." + getter + "()) {return false; }");
             } else {
                 method.add("if (!Objects.equals(this." + getter + "(), " + thatCastedName + "." + getter + "())) {return false; }");
@@ -194,7 +192,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
     }
 
     private Method hashCodeMethod() {
-        final Method method = Method.of("hashCode", INT_PRIMITIVE)
+        final Method method = Method.of("hashCode", int.class)
             .public_()
             .add(OVERRIDE)
             .add("int hash = 7;");
@@ -203,12 +201,10 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
 
             final StringBuilder str = new StringBuilder();
             str.append("hash = 31 * hash + ");
-            final TypeToken token = typeTokenGenerator.tokenOf(c);
+            final Type type = typeMappers.get(c).getJavaType(c);
             
-            if (token.isPrimitive()) {
-                @SuppressWarnings("unchecked")
-                final PrimitiveTypeToken primitive = (PrimitiveTypeToken) token;
-                str.append(primitive.getPrimitiveType().getWrapper().getSimpleName());
+            if (DefaultType.isPrimitive(type)) {
+                str.append(DefaultType.wrapperFor(type).getSimpleName());
             } else {
                 str.append("Objects");
             }

@@ -16,10 +16,10 @@
  */
 package com.speedment.plugins.springgenerator.internal;
 
+import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.runtime.config.Project;
 import org.springframework.context.annotation.Configuration;
@@ -51,8 +51,8 @@ extends DefaultJavaClassTranslator<Project, Class> {
         return newBuilder(file, getClassOrInterfaceName())
             .forEveryProject((clazz, project) -> {
                 clazz.public_();
-                clazz.add(AnnotationUsage.of(Type.of(Configuration.class)));
-                clazz.setSupertype(Type.of(getSupport().basePackageName() + ".generated.Generated" + getSupport().typeName() + "Configuration"));
+                clazz.add(AnnotationUsage.of(Configuration.class));
+                clazz.setSupertype(SimpleType.create(getSupport().basePackageName() + ".generated.Generated" + getSupport().typeName() + "Configuration"));
             }).build();
     }
 }

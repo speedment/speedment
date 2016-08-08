@@ -16,10 +16,9 @@
  */
 package com.speedment.plugins.reactor.internal.translator;
 
+import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Interface;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.plugins.reactor.MaterializedView;
@@ -54,10 +53,11 @@ public final class GeneratedViewTranslator extends DefaultJavaClassTranslator<Ta
         return newBuilder(file, getClassOrInterfaceName())
             .forEveryTable((clazz, table) -> {
                 clazz.public_()
-                    .add(Type.of(MaterializedView.class)
-                        .add(Generic.of().add(getSupport().entityType()))
-                        .add(Generic.of().add(merger.mergingColumnType(table)))
-                    );
+                    .add(SimpleParameterizedType.create(
+                        MaterializedView.class,
+                        getSupport().entityType(),
+                        merger.mergingColumnType(table)
+                    ));
             }).build();
     }
 

@@ -23,10 +23,8 @@ import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.tuple.Tuples;
@@ -59,19 +57,19 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
-import com.speedment.common.codegen.internal.model.constant.DefaultType;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.OPTIONAL;
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import com.speedment.common.codegen.constant.DefaultType;
+import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.*;
-import com.speedment.generator.internal.util.InternalTypeTokenUtil;
-import com.speedment.generator.typetoken.TypeTokenGenerator;
-import com.speedment.runtime.config.typetoken.TypeToken;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static com.speedment.common.codegen.internal.util.Formatting.tab;
+import com.speedment.generator.component.TypeMapperComponent;
 import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
+import java.lang.reflect.Type;
+import java.util.Optional;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -93,7 +91,7 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
 
     private @Inject ResultSetMapperComponent resultSetMapperComponent;
     private @Inject DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject TypeTokenGenerator typeTokenGenerator;
+    private @Inject TypeMapperComponent typeMappers;
     private @Inject Injector injector;
     
     public GeneratedManagerImplTranslator(Table table) {
@@ -120,15 +118,15 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
                 fkStreamers.computeIfAbsent(fu.getTable(), t -> new ArrayList<>()).add(methodName);
                 
                 final Type manager = fu.getEmt().getSupport().managerType();
-                final String fkManagerName = getSupport().namer().javaVariableName(Formatting.shortName(manager.getName()));
+                final String fkManagerName = getSupport().namer().javaVariableName(Formatting.shortName(manager.getTypeName()));
                 if (fkManagersReferencingThis.add(manager)) {
                     clazz.add(Field.of(fkManagerName, manager)
                         .private_()
-                        .add(AnnotationUsage.of(Type.of(Inject.class)))
+                        .add(AnnotationUsage.of(Inject.class))
                     );
                 }
                 
-                final Type returnType = Type.of(Stream.class).add(Generic.of().add(fu.getEmt().getSupport().entityType()));
+                final Type returnType = DefaultType.stream(fu.getEmt().getSupport().entityType());
                 final Method method = Method.of(methodName, returnType)
                     .public_().add(OVERRIDE)
                     .add(Field.of("entity", fu.getForeignEmt().getSupport().entityType()))
@@ -148,18 +146,18 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
                 final FkHolder fu = new FkHolder(injector, fk);
                 
                 final Type manager = fu.getForeignEmt().getSupport().managerType();
-                final String fkManagerName = getSupport().namer().javaVariableName(Formatting.shortName(manager.getName()));
+                final String fkManagerName = getSupport().namer().javaVariableName(Formatting.shortName(manager.getTypeName()));
                 if (fkManagers.add(manager)) {
                     clazz.add(Field.of(fkManagerName, manager)
                         .private_()
-                        .add(AnnotationUsage.of(Type.of(Inject.class)))
+                        .add(AnnotationUsage.of(Inject.class))
                     );
                 }
 
                 final Type returnType;
                 if (usesOptional(fu.getColumn())) {
-                    file.add(Import.of(OPTIONAL));
-                    returnType = OPTIONAL.add(Generic.of().add(fu.getForeignEmt().getSupport().entityType()));
+                    file.add(Import.of(Optional.class));
+                    returnType = DefaultType.optional(fu.getForeignEmt().getSupport().entityType());
                 } else {
                     returnType = fu.getForeignEmt().getSupport().entityType();
                 }
@@ -175,7 +173,7 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
                             + getSupport().typeName(fu.getForeignTable()) + "." + getSupport().namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + ", " + varName + "));"
                         ));
                 } else {
-                    file.add(Import.of(Type.of(SpeedmentException.class)));
+                    file.add(Import.of(SpeedmentException.class));
                     method.add("return " + fkManagerName + ".findAny("
                         + getSupport().typeName(fu.getForeignTable()) + "." + getSupport().namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + ", entity.get" + getSupport().typeName(fu.getColumn()) + "())\n"
                         + indent(".orElseThrow(() -> new SpeedmentException(\n"
@@ -198,16 +196,17 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
                 clazz
                     .public_()
                     .abstract_()
-                    .setSupertype(Type.of(AbstractSqlManager.class)
-                        .add(Generic.of().add(getSupport().entityType()))
-                    )
+                    .setSupertype(SimpleParameterizedType.create(
+                        AbstractSqlManager.class,
+                        getSupport().entityType()
+                    ))
                     .add(getSupport().generatedManagerType())
-                    .add(Field.of("projectComponent", Type.of(ProjectComponent.class)).add(AnnotationUsage.of(Type.of(Inject.class))).private_())
+                    .add(Field.of("projectComponent", ProjectComponent.class).add(AnnotationUsage.of(Inject.class)).private_())
                     .add(Constructor.of()
                         .protected_()
                         .add("setEntityMapper(this::" + NEW_ENTITY_FROM_METHOD + ");")
                     )
-                    .add(Method.of("getTable", Type.of(Table.class))
+                    .add(Method.of("getTable", Table.class)
                         .public_().add(OVERRIDE)
                         .add("return projectComponent.getProject().findTableByName(\"" +
                             relativeName(getSupport().tableOrThrow(), Dbms.class, DATABASE_NAME) + "\");")
@@ -245,7 +244,7 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
                         if (methodNames.size() == 1) {
                             method.add("return " + methodNames.get(0) + "(entity);");
                         } else {
-                            file.add(Import.of(Type.of(Function.class)));
+                            file.add(Import.of(Function.class));
                             method.add("return Stream.of("
                                 + methodNames.stream().map(n -> n + "(entity)").collect(Collectors.joining(", "))
                                 + ").flatMap(Function.identity()).distinct();");
@@ -281,9 +280,9 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
     private Method generateNewEntityFrom(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
         return Method.of(NEW_ENTITY_FROM_METHOD, support.entityType())
             .protected_()
-            .add(Type.of(SQLException.class))
-            .add(Type.of(SpeedmentException.class))
-            .add(Field.of("resultSet", Type.of(ResultSet.class)))
+            .add(SQLException.class)
+            .add(SpeedmentException.class)
+            .add(Field.of("resultSet", ResultSet.class))
             .add(generateNewEntityFromBody(this::readFromResultSet, support, file, columnsSupplier));
     }
     
@@ -326,7 +325,7 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
                 .append(mapping.getResultSetMethodName(dbms))
                 .append("(").append(position.getAndIncrement()).append(")");
         } else {
-            file.add(Import.of(Type.of(ResultSetUtil.class)).static_().setStaticMember("*"));
+            file.add(Import.of(ResultSetUtil.class).static_().setStaticMember("*"));
             sb
                 .append("get")
                 .append(mapping.getResultSetMethodName(dbms))
@@ -372,7 +371,7 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
     }
     
     private Field generateGetPrimaryKeyClassesField(File file) {
-        file.add(Import.of(Type.of(Tuples.class)));
+        file.add(Import.of(Tuples.class));
         final Field field = Field.of(PRIMARY_KEY_CLASSES, pkTupleType())
             .private_()
             .static_()
@@ -385,10 +384,10 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
                     pkc.getName() + "'."
                 ));
                 
-                final TypeToken token = typeTokenGenerator.tokenOf(col);
-                file.add(Import.of(typeTokenGenerator.typeOf(col)));
+                final Type type = typeMappers.get(col).getJavaType(col);
+                file.add(Import.of(type));
                 
-                return InternalTypeTokenUtil.renderShort(token);
+                return Formatting.shortName(type.getTypeName());
             })
             .map(javaType -> javaType + ".class")
             .collect(joining(", "));

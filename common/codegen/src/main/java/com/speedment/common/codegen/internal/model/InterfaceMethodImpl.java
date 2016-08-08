@@ -22,8 +22,8 @@ import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.InterfaceMethod;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.codegen.model.modifier.Modifier;
+import java.lang.reflect.Type;
 
 import java.util.List;
 import java.util.Objects;

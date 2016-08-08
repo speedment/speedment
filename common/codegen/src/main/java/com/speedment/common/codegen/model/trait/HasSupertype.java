@@ -16,8 +16,7 @@
  */
 package com.speedment.common.codegen.model.trait;
 
-import com.speedment.common.codegen.model.Type;
-
+import java.lang.reflect.Type;
 import java.util.Optional;
 
 /**

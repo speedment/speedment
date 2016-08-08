@@ -14,11 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.codegen.internal.model.constant;
+package com.speedment.common.codegen.constant;
 
-import com.speedment.common.codegen.internal.model.TypeImpl.TypeConst;
 import com.speedment.common.codegen.model.AnnotationUsage;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.codegen.model.Value;
 
 import javax.annotation.Generated;
@@ -33,7 +31,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultValue.string;
+import static com.speedment.common.codegen.constant.DefaultValue.string;
+import java.lang.reflect.Type;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -47,17 +46,17 @@ import static java.util.Objects.requireNonNull;
  */
 public enum DefaultAnnotationUsage implements AnnotationUsage {
     
-    OVERRIDE    (new TypeConst(Override.class)),
-    DOCUMENTED  (new TypeConst(Documented.class)),
-    INHERITED   (new TypeConst(Inherited.class)),
-    NATIVE      (new TypeConst(Native.class)),
-    REPEATABLE  (new TypeConst(Repeatable.class)),
-    RETENTION   (new TypeConst(Retention.class)),
-    TARGET      (new TypeConst(Target.class)),
-    GENERATED   (new TypeConst(Generated.class)),
-    DEPRECATED  (new TypeConst(Deprecated.class)),
+    OVERRIDE    (Override.class),
+    DOCUMENTED  (Documented.class),
+    INHERITED   (Inherited.class),
+    NATIVE      (Native.class),
+    REPEATABLE  (Repeatable.class),
+    RETENTION   (Retention.class),
+    TARGET      (Target.class),
+    GENERATED   (Generated.class),
+    DEPRECATED  (Deprecated.class),
     SUPPRESS_WARNINGS_UNCHECKED (
-        new TypeConst(SuppressWarnings.class), string("unchecked")
+        SuppressWarnings.class, string("unchecked")
     );
     
     private final Type type;
@@ -68,7 +67,7 @@ public enum DefaultAnnotationUsage implements AnnotationUsage {
      * 
      * @param type  the type
      */
-	private DefaultAnnotationUsage(TypeConst type) {
+	private DefaultAnnotationUsage(Type type) {
 		this (type, null);
 	}
     
@@ -77,7 +76,7 @@ public enum DefaultAnnotationUsage implements AnnotationUsage {
      * 
      * @param type  the type
      */
-    private DefaultAnnotationUsage(TypeConst type, Value<?> value) {
+    private DefaultAnnotationUsage(Type type, Value<?> value) {
 		this.type	= requireNonNull(type);
 		this.value	= value;
 	}
@@ -120,7 +119,7 @@ public enum DefaultAnnotationUsage implements AnnotationUsage {
      */
     @Override
 	public Type getType() {
-		return type.copy();
+		return type;
 	}
 
     /**

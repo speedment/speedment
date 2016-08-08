@@ -29,7 +29,7 @@ import com.speedment.common.codegen.model.trait.HasMethods;
 
 import java.util.function.Consumer;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.*;
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.*;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -97,7 +97,7 @@ public final class AutoJavadoc<T extends HasJavadoc<?>> implements Consumer<T> {
 		}
 
 		if (model instanceof Method) {
-            if (!"void".equals(((Method) model).getType().getName())) {
+            if (((Method) model).getType() != void.class) {
                 // Add @return to methods.
                 addTag(doc, RETURN);
             }
@@ -144,7 +144,7 @@ public final class AutoJavadoc<T extends HasJavadoc<?>> implements Consumer<T> {
      * 
      * @param doc  the documentation block
      * @param tag  the tag to check
-     * @return     <code>true</code> if it exists, else <code>false</code>
+     * @return     {@code true} if it exists, else {@code false}
      */
 	private static boolean hasTagAlready(Javadoc doc, JavadocTag tag) {
         requireNonNull(doc);

@@ -19,23 +19,19 @@ package com.speedment.common.codegen.internal.java.view;
 import com.speedment.common.codegen.DependencyManager;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegen.internal.java.view.trait.HasGenericsView;
-import com.speedment.common.codegen.model.Type;
 
-import java.util.Collections;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import java.lang.reflect.Type;
 
 /**
  * Transforms from a {@link Type} to java code.
  * 
  * @author Emil Forslund
  */
-public final class TypeView implements Transform<Type, String>,
-        HasGenericsView<Type> {
+public final class TypeView implements Transform<Type, String> {
     
     /**
      * {@inheritDoc}
@@ -45,40 +41,10 @@ public final class TypeView implements Transform<Type, String>,
         requireNonNulls(gen, model);
         
 		if (shouldUseShortName(gen, model)) {
-			return renderName(gen, model, shortName(model.getName()));
+			return Optional.of(shortName(model.getTypeName()));
 		} else {
-			return renderName(gen, model, model.getName());
+			return Optional.of(model.getTypeName());
 		}
-	}
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String genericsSuffix() {
-        return "";
-    }
-    
-    /**
-     * Renders the full name of the type with generics and array dimension. 
-     * 
-     * @param gen    the generator
-     * @param model  the type
-     * @param name   the name, short or full
-     * @return       the generated name
-     */
-	private Optional<String> renderName(Generator gen, Type model, String name) {
-        requireNonNulls(gen, model, name);
-        
-		return Optional.of(
-			name.replace("$", ".") + 
-            renderGenerics(gen, model) + 
-			(model.getArrayDimension() > 0 
-                ? Collections.nCopies(model.getArrayDimension(), "[]")
-                    .stream().collect(Collectors.joining())
-				: ""
-			)
-		);
 	}
     
     /**
@@ -93,16 +59,16 @@ public final class TypeView implements Transform<Type, String>,
         
         final DependencyManager mgr = gen.getDependencyMgr();
         
-        if (mgr.isIgnored(type.getName())) {
+        if (mgr.isIgnored(type.getTypeName())) {
             return true;
         }
         
-        if (mgr.isLoaded(type.getName())) {
+        if (mgr.isLoaded(type.getTypeName())) {
             return true;
         }
         
         final Optional<String> current = mgr.getCurrentPackage();
-		return current.isPresent() && type.getName().startsWith(current.get());
+		return current.isPresent() && type.getTypeName().startsWith(current.get());
 
 	}
 }

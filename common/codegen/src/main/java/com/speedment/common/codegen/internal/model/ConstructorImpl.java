@@ -21,12 +21,13 @@ import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.Javadoc;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.codegen.model.modifier.Modifier;
+import java.lang.reflect.Type;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -78,7 +79,7 @@ public final class ConstructorImpl implements Constructor {
         params = Copier.copy(prototype.getFields());
         code = Copier.copy(prototype.getCode(), c -> c);
         modifiers = Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
-        exceptions = Copier.copy(prototype.getExceptions());
+        exceptions = new LinkedHashSet<>(prototype.getExceptions());
     }
 
     /**

@@ -16,12 +16,12 @@
  */
 package com.speedment.generator.internal.util;
 
+import com.speedment.common.codegen.constant.SimpleParameterizedType;
+import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.generator.util.Pluralis;
 import com.speedment.runtime.config.Column;
@@ -42,8 +42,7 @@ import java.util.function.Consumer;
 import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.common.injector.Injector;
 import com.speedment.generator.TranslatorSupport;
-import com.speedment.generator.typetoken.TypeTokenGenerator;
-import com.speedment.runtime.config.typetoken.TypeToken;
+import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.runtime.field.BooleanField;
 import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.ByteForeignKeyField;
@@ -81,8 +80,8 @@ import com.speedment.runtime.internal.field.ReferenceFieldImpl;
 import com.speedment.runtime.internal.field.ShortFieldImpl;
 import com.speedment.runtime.internal.field.ShortForeignKeyFieldImpl;
 import com.speedment.runtime.internal.field.StringFieldImpl;
-import com.speedment.runtime.util.TypeTokenFactory;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import java.lang.reflect.Type;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -127,32 +126,39 @@ public final class EntityTranslatorSupport {
         
         requireNonNulls(file, table, column, entityType, injector);
 
-        final TypeToken mapping = injector.getOrThrow(TypeTokenGenerator.class).tokenOf(column);
-        final Type databaseType = Type.of(column.getDatabaseType());
+        final Type mapping = injector.getOrThrow(TypeMapperComponent.class).get(column).getJavaType(column);
+        final Type databaseType = SimpleType.create(column.getDatabaseType());
         
         final FieldType fieldType;
-        if (TypeTokenFactory.createStringToken().equals(mapping)) {
+        if (mapping.equals(String.class)) {
             fieldType = FieldType.STRING;
-        } else if (TypeTokenFactory.create(byte.class).equals(mapping)) {
+        } else if (mapping.equals(byte.class)) {
             fieldType = FieldType.BYTE;
-        } else if (TypeTokenFactory.create(short.class).equals(mapping)) {
+        } else if (mapping.equals(short.class)) {
             fieldType = FieldType.SHORT;
-        } else if (TypeTokenFactory.create(int.class).equals(mapping)) {
+        } else if (mapping.equals(int.class)) {
             fieldType = FieldType.INT;
-        } else if (TypeTokenFactory.create(long.class).equals(mapping)) {
+        } else if (mapping.equals(long.class)) {
             fieldType = FieldType.LONG;
-        } else if (TypeTokenFactory.create(float.class).equals(mapping)) {
+        } else if (mapping.equals(float.class)) {
             fieldType = FieldType.FLOAT;
-        } else if (TypeTokenFactory.create(double.class).equals(mapping)) {
+        } else if (mapping.equals(double.class)) {
             fieldType = FieldType.DOUBLE;
-        } else if (TypeTokenFactory.create(char.class).equals(mapping)) {
+        } else if (mapping.equals(char.class)) {
             fieldType = FieldType.CHAR;
-        } else if (TypeTokenFactory.create(boolean.class).equals(mapping)) {
+        } else if (mapping.equals(boolean.class)) {
             fieldType = FieldType.BOOLEAN;
-        } else if (mapping.isComparable()) {
-            fieldType = FieldType.COMPARABLE;
         } else {
-            fieldType = FieldType.REFERENCE;
+            if (mapping instanceof Class<?>) {
+                final Class<?> casted = (Class<?>) mapping;
+                if (Comparable.class.isAssignableFrom(casted)) {
+                    fieldType = FieldType.COMPARABLE;
+                } else {
+                    fieldType = FieldType.REFERENCE;
+                }
+            } else {
+                fieldType = FieldType.REFERENCE;
+            }
         }
 
         return EntityTranslatorSupport.getForeignKey(table, column)
@@ -169,99 +175,139 @@ public final class EntityTranslatorSupport {
 
                 switch (fieldType) {
                     case STRING :
-                        type = Type.of(StringForeignKeyField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(fkType));
+                        type = SimpleParameterizedType.create(
+                            StringForeignKeyField.class, 
+                            entityType,
+                            databaseType,
+                            fkType
+                        );
 
-                        implType = Type.of(StringForeignKeyFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(fkType));
+                        implType = SimpleParameterizedType.create(
+                            StringForeignKeyFieldImpl.class, 
+                            entityType,
+                            databaseType,
+                            fkType
+                        );
+                        
                         break;
                         
                     case BYTE :
-                        type = Type.of(ByteForeignKeyField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(fkType));
+                        type = SimpleParameterizedType.create(
+                            ByteForeignKeyField.class, 
+                            entityType,
+                            databaseType,
+                            fkType
+                        );
 
-                        implType = Type.of(ByteForeignKeyFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(fkType));
+                        implType = SimpleParameterizedType.create(
+                            ByteForeignKeyFieldImpl.class, 
+                            entityType,
+                            databaseType,
+                            fkType
+                        );
+                        
                         break;
                         
                     case SHORT :
-                        type = Type.of(ShortForeignKeyField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(fkType));
+                        type = SimpleParameterizedType.create(
+                            ShortForeignKeyField.class, 
+                            entityType,
+                            databaseType,
+                            fkType
+                        );
 
-                        implType = Type.of(ShortForeignKeyFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(fkType));
+                        implType = SimpleParameterizedType.create(
+                            ShortForeignKeyFieldImpl.class, 
+                            entityType,
+                            databaseType,
+                            fkType
+                        );
+                        
                         break;
                         
                     case INT :
-                        type = Type.of(IntForeignKeyField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(fkType));
+                        type = SimpleParameterizedType.create(
+                            IntForeignKeyField.class, 
+                            entityType,
+                            databaseType,
+                            fkType
+                        );
 
-                        implType = Type.of(IntForeignKeyFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(fkType));
+                        implType = SimpleParameterizedType.create(
+                            IntForeignKeyFieldImpl.class, 
+                            entityType,
+                            databaseType,
+                            fkType
+                        );
+                        
                         break;
                         
                     case LONG :
-                        type = Type.of(LongForeignKeyField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(fkType));
+                        type = SimpleParameterizedType.create(
+                            LongForeignKeyField.class, 
+                            entityType,
+                            databaseType,
+                            fkType
+                        );
 
-                        implType = Type.of(LongForeignKeyFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(fkType));
+                        implType = SimpleParameterizedType.create(
+                            LongForeignKeyFieldImpl.class, 
+                            entityType,
+                            databaseType,
+                            fkType
+                        );
+                        
                         break;
                         
                     case FLOAT :
-                        type = Type.of(FloatForeignKeyField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(fkType));
+                        type = SimpleParameterizedType.create(
+                            FloatForeignKeyField.class, 
+                            entityType,
+                            databaseType,
+                            fkType
+                        );
 
-                        implType = Type.of(FloatForeignKeyFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(fkType));
+                        implType = SimpleParameterizedType.create(
+                            FloatForeignKeyFieldImpl.class, 
+                            entityType,
+                            databaseType,
+                            fkType
+                        );
+                        
                         break;
                         
                     case DOUBLE :
-                        type = Type.of(DoubleForeignKeyField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(fkType));
+                        type = SimpleParameterizedType.create(
+                            DoubleForeignKeyField.class, 
+                            entityType,
+                            databaseType,
+                            fkType
+                        );
 
-                        implType = Type.of(DoubleForeignKeyFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(fkType));
+                        implType = SimpleParameterizedType.create(
+                            DoubleForeignKeyFieldImpl.class, 
+                            entityType,
+                            databaseType,
+                            fkType
+                        );
+                        
                         break;
                         
                     case CHAR :
-                        type = Type.of(CharForeignKeyField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(fkType));
+                        type = SimpleParameterizedType.create(
+                            CharForeignKeyField.class, 
+                            entityType,
+                            databaseType,
+                            fkType
+                        );
 
-                        implType = Type.of(CharForeignKeyFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(fkType));
+                        implType = SimpleParameterizedType.create(
+                            CharForeignKeyFieldImpl.class, 
+                            entityType,
+                            databaseType,
+                            fkType
+                        );
+                        
                         break;
                         
                     case BOOLEAN :
@@ -270,31 +316,40 @@ public final class EntityTranslatorSupport {
                         );
                         
                     case COMPARABLE :
-                        type = Type.of(ComparableForeignKeyField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(InternalTypeTokenUtil.toType(mapping)))
-                            .add(Generic.of(fkType));
+                        type = SimpleParameterizedType.create(
+                            ComparableForeignKeyField.class,
+                            entityType,
+                            databaseType,
+                            mapping,
+                            fkType
+                        );
 
-                        implType = Type.of(ComparableForeignKeyFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(InternalTypeTokenUtil.toType(mapping)))
-                            .add(Generic.of(fkType));
+                        implType = SimpleParameterizedType.create(
+                            ComparableForeignKeyFieldImpl.class,
+                            entityType,
+                            databaseType,
+                            mapping,
+                            fkType
+                        );
+                        
                         break;
                         
                     case REFERENCE :
-                        type = Type.of(ReferenceForeignKeyField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(InternalTypeTokenUtil.toType(mapping)))
-                            .add(Generic.of(fkType));
+                        type = SimpleParameterizedType.create(
+                            ReferenceForeignKeyField.class,
+                            entityType,
+                            databaseType,
+                            mapping,
+                            fkType
+                        );
 
-                        implType = Type.of(ReferenceForeignKeyFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(InternalTypeTokenUtil.toType(mapping)))
-                            .add(Generic.of(fkType));
+                        implType = SimpleParameterizedType.create(
+                            ReferenceForeignKeyFieldImpl.class,
+                            entityType,
+                            databaseType,
+                            mapping,
+                            fkType
+                        );
                         
                         break;
                     default : throw new UnsupportedOperationException(
@@ -310,117 +365,173 @@ public final class EntityTranslatorSupport {
 
                 switch (fieldType) {
                     case STRING :
-                        type = Type.of(StringField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType));
+                        
+                        type = SimpleParameterizedType.create(
+                            StringField.class, 
+                            entityType,
+                            databaseType
+                        );
 
-                        implType = Type.of(StringFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType));
+                        implType = SimpleParameterizedType.create(
+                            StringFieldImpl.class, 
+                            entityType,
+                            databaseType
+                        );
+                        
                         break;
                         
                     case BYTE :
-                        type = Type.of(ByteField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType));
+                        type = SimpleParameterizedType.create(
+                            ByteField.class, 
+                            entityType,
+                            databaseType
+                        );
 
-                        implType = Type.of(ByteFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType));
+                        implType = SimpleParameterizedType.create(
+                            ByteFieldImpl.class, 
+                            entityType,
+                            databaseType
+                        );
+                        
                         break;
                         
                     case SHORT :
-                        type = Type.of(ShortField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType));
+                        type = SimpleParameterizedType.create(
+                            ShortField.class, 
+                            entityType,
+                            databaseType
+                        );
 
-                        implType = Type.of(ShortFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType));
+                        implType = SimpleParameterizedType.create(
+                            ShortFieldImpl.class, 
+                            entityType,
+                            databaseType
+                        );
+                        
                         break;
                         
                     case INT :
-                        type = Type.of(IntField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType));
+                        type = SimpleParameterizedType.create(
+                            IntField.class, 
+                            entityType,
+                            databaseType
+                        );
 
-                        implType = Type.of(IntFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType));
+                        implType = SimpleParameterizedType.create(
+                            IntFieldImpl.class, 
+                            entityType,
+                            databaseType
+                        );
+                        
                         break;
                         
                     case LONG :
-                        type = Type.of(LongField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType));
+                        type = SimpleParameterizedType.create(
+                            LongField.class, 
+                            entityType,
+                            databaseType
+                        );
 
-                        implType = Type.of(LongFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType));
+                        implType = SimpleParameterizedType.create(
+                            LongFieldImpl.class, 
+                            entityType,
+                            databaseType
+                        );
+                        
                         break;
                         
                     case FLOAT :
-                        type = Type.of(FloatField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType));
+                        type = SimpleParameterizedType.create(
+                            FloatField.class, 
+                            entityType,
+                            databaseType
+                        );
 
-                        implType = Type.of(FloatFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType));
+                        implType = SimpleParameterizedType.create(
+                            FloatFieldImpl.class, 
+                            entityType,
+                            databaseType
+                        );
+                        
                         break;
                         
                     case DOUBLE :
-                        type = Type.of(DoubleField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType));
+                        type = SimpleParameterizedType.create(
+                            DoubleField.class, 
+                            entityType,
+                            databaseType
+                        );
 
-                        implType = Type.of(DoubleFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType));
+                        implType = SimpleParameterizedType.create(
+                            DoubleFieldImpl.class, 
+                            entityType,
+                            databaseType
+                        );
+                        
                         break;
                         
                     case CHAR :
-                        type = Type.of(CharField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType));
+                        type = SimpleParameterizedType.create(
+                            CharField.class, 
+                            entityType,
+                            databaseType
+                        );
 
-                        implType = Type.of(CharFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType));
+                        implType = SimpleParameterizedType.create(
+                            CharFieldImpl.class, 
+                            entityType,
+                            databaseType
+                        );
+                        
                         break;
                         
                     case BOOLEAN :
-                        type = Type.of(BooleanField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType));
+                        type = SimpleParameterizedType.create(
+                            BooleanField.class, 
+                            entityType,
+                            databaseType
+                        );
 
-                        implType = Type.of(BooleanFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType));
+                        implType = SimpleParameterizedType.create(
+                            BooleanFieldImpl.class, 
+                            entityType,
+                            databaseType
+                        );
+                        
                         break;
                         
                     case COMPARABLE :
-                        type = Type.of(ComparableField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(InternalTypeTokenUtil.toType(mapping)));
+                        type = SimpleParameterizedType.create(
+                            ComparableField.class, 
+                            entityType,
+                            databaseType,
+                            mapping
+                        );
 
-                        implType = Type.of(ComparableFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(InternalTypeTokenUtil.toType(mapping)));
+                        implType = SimpleParameterizedType.create(
+                            ComparableFieldImpl.class, 
+                            entityType,
+                            databaseType,
+                            mapping
+                        );
+                        
                         break;
                         
                     case REFERENCE :
-                        type = Type.of(ReferenceField.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(InternalTypeTokenUtil.toType(mapping)));
+                        type = SimpleParameterizedType.create(
+                            ReferenceField.class, 
+                            entityType,
+                            databaseType,
+                            mapping
+                        );
 
-                        implType = Type.of(ReferenceFieldImpl.class)
-                            .add(Generic.of(entityType))
-                            .add(Generic.of(databaseType))
-                            .add(Generic.of(InternalTypeTokenUtil.toType(mapping)));
+                        implType = SimpleParameterizedType.create(
+                            ReferenceFieldImpl.class, 
+                            entityType,
+                            databaseType,
+                            mapping
+                        );
+                        
                         
                         break;
                     default : throw new UnsupportedOperationException(
@@ -448,14 +559,17 @@ public final class EntityTranslatorSupport {
 
     public static Method dbMethod(String name, Type entityType) {
         requireNonNulls(name, entityType);
-        return Method.of(name, entityType).add(Type.of(SpeedmentException.class));
+        return Method.of(name, entityType).add(SpeedmentException.class);
     }
 
     public static Method dbMethodWithListener(String name, Type entityType) {
         requireNonNulls(name, entityType);
-        return Method.of(name, entityType).add(Type.of(SpeedmentException.class))
-            .add(Field.of(CONSUMER_NAME, Type.of(Consumer.class)
-                .add(Generic.of().add(Type.of(MetaResult.class).add(Generic.of().add(entityType))))
+        return Method.of(name, entityType).add(SpeedmentException.class)
+            .add(Field.of(
+                CONSUMER_NAME, 
+                SimpleParameterizedType.create(Consumer.class,
+                    SimpleParameterizedType.create(MetaResult.class, entityType)
+                )
             ));
     }
 

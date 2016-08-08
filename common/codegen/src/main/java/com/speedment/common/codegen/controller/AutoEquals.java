@@ -21,7 +21,6 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.codegen.model.trait.HasFields;
 import com.speedment.common.codegen.model.trait.HasImports;
 import com.speedment.common.codegen.model.trait.HasMethods;
@@ -33,12 +32,13 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.PARAM;
-import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.RETURN;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.*;
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
+import static com.speedment.common.codegen.constant.DefaultType.*;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.Formatting.tab;
+import java.lang.reflect.Type;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -118,11 +118,11 @@ implements Consumer<T> {
         requireNonNull(model);
             
         if (importer != null) {
-            importer.add(Import.of(Type.of(Objects.class)));
-            importer.add(Import.of(Type.of(Optional.class)));
+            importer.add(Import.of(Objects.class));
+            importer.add(Import.of(Optional.class));
         }
         
-        model.add(Method.of(EQUALS, BOOLEAN_PRIMITIVE)
+        model.add(Method.of(EQUALS, boolean.class)
             .set(
                 Javadoc.of(
                     "Compares this object with the specified one for equality. " +
@@ -133,7 +133,7 @@ implements Consumer<T> {
                 .add(RETURN.setText("True if the objects are equal."))
             ).public_()
             .add(OVERRIDE)
-            .add(Field.of("other", OBJECT))
+            .add(Field.of("other", Object.class))
             .add("return Optional.ofNullable(other)")
             .call(m -> {
                 if (HasSupertype.class.isAssignableFrom(model.getClass())) {
@@ -161,7 +161,7 @@ implements Consumer<T> {
     protected void acceptHashcode(T model) {
         requireNonNull(model);
             
-        model.add(Method.of(HASHCODE, INT_PRIMITIVE)
+        model.add(Method.of(HASHCODE, int.class)
             .set(
                 Javadoc.of(
                     "Generates a hashCode for this object. If any field is " +
@@ -222,7 +222,7 @@ implements Consumer<T> {
         final String prefix = "hash = 31 * hash + (";
         final String suffix = ".hashCode(this." + f.getName() + "));";
         
-        switch (f.getType().getName()) {
+        switch (f.getType().getTypeName()) {
             case "byte":
                 return prefix + "Byte" + suffix;
             case "short":
@@ -253,7 +253,7 @@ implements Consumer<T> {
     protected boolean isPrimitive(Type type) {
         requireNonNull(type);
         
-        switch (type.getName()) {
+        switch (type.getTypeName()) {
             case "byte":
             case "short":
             case "int":

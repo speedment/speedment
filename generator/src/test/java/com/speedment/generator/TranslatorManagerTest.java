@@ -46,7 +46,12 @@ public class TranslatorManagerTest extends SimpleModel {
             }
         );
         
-        instance.accept(project);
+        try {
+            instance.accept(project);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            throw ex;
+        }
     }
 
     @Test

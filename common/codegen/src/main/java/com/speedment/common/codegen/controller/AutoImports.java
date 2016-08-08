@@ -19,7 +19,6 @@ package com.speedment.common.codegen.controller;
 import com.speedment.common.codegen.DependencyManager;
 import com.speedment.common.codegen.internal.model.ImportImpl;
 import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.codegen.model.trait.HasAnnotationUsage;
 import com.speedment.common.codegen.model.trait.HasClasses;
 import com.speedment.common.codegen.model.trait.HasConstructors;
@@ -30,6 +29,8 @@ import com.speedment.common.codegen.model.trait.HasMethods;
 import com.speedment.common.codegen.model.trait.HasSupertype;
 import com.speedment.common.codegen.model.trait.HasThrows;
 import com.speedment.common.codegen.model.trait.HasType;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +50,7 @@ public final class AutoImports implements Consumer<File> {
 	private final DependencyManager mgr;
 	
     /**
-     * Initializes the <code>AutoImports</code>.
+     * Initializes the {@code AutoImports}.
      * 
      * @param mgr  the dependency manager
      */
@@ -98,36 +99,36 @@ public final class AutoImports implements Consumer<File> {
         requireNonNull(model);
         requireNonNull(types);
 
-		if (HasSupertype.class.isAssignableFrom(model.getClass())) {
+		if (HasSupertype.class.isInstance(model)) {
 			((HasSupertype<?>) model).getSupertype().ifPresent(t -> addType(t, types));
 		}
 		
-		if (HasAnnotationUsage.class.isAssignableFrom(model.getClass())) {
+		if (HasAnnotationUsage.class.isInstance(model)) {
 			((HasAnnotationUsage<?>) model).getAnnotations().forEach(a -> {
 				addType(a.getType(), types);
 			});
 		}
 		
-		if (HasClasses.class.isAssignableFrom(model.getClass())) {
+		if (HasClasses.class.isInstance(model)) {
 			((HasClasses<?>) model).getClasses().forEach(c -> {
 				findTypesIn(c, types);
 			});
 		}
 		
-		if (HasConstructors.class.isAssignableFrom(model.getClass())) {
+		if (HasConstructors.class.isInstance(model)) {
 			((HasConstructors<?>) model).getConstructors().forEach(c -> {
 				findTypesIn(c, types);
 			});
 		}
 		
-		if (HasFields.class.isAssignableFrom(model.getClass())) {
+		if (HasFields.class.isInstance(model)) {
 			((HasFields<?>) model).getFields().forEach(f -> {
 				addType(f.getType(), types);
 				findTypesIn(f, types);
 			});
 		}
 		
-		if (HasGenerics.class.isAssignableFrom(model.getClass())) {
+		if (HasGenerics.class.isInstance(model)) {
 			((HasGenerics<?>) model).getGenerics().forEach(g -> {
 				g.getUpperBounds().forEach(ub -> {
 					addType(ub, types);
@@ -135,33 +136,33 @@ public final class AutoImports implements Consumer<File> {
 			});
 		}
 		
-		if (HasImplements.class.isAssignableFrom(model.getClass())) {
+		if (HasImplements.class.isInstance(model)) {
 			((HasImplements<?>) model).getInterfaces().forEach(i -> {
 				addType(i, types);
 			});
 		}
 		
-		if (HasMethods.class.isAssignableFrom(model.getClass())) {
+		if (HasMethods.class.isInstance(model)) {
 			((HasMethods<?>) model).getMethods().forEach(m -> {
 				addType(m.getType(), types);
 				findTypesIn(m, types);
 			});
 		}
         
-        if (HasThrows.class.isAssignableFrom(model.getClass())) {
+        if (HasThrows.class.isInstance(model)) {
 			((HasThrows<?>) model).getExceptions().forEach(e -> {
 				addType(e, types);
 			});
 		}
 		
-		if (HasType.class.isAssignableFrom(model.getClass())) {
+		if (HasType.class.isInstance(model)) {
 			addType(((HasType<?>) model).getType(), types);
 		}
 	}
 	
     /**
      * Add the specified {@link Type} to the supplied map. The key will be 
-     * calculated using the type name. If the <code>Type</code> represents a
+     * calculated using the type name. If the {@code Type} represents a
      * dependency that should be ignored according to the 
      * {@link DependencyManager}, it will not be added.
      * 
@@ -172,16 +173,36 @@ public final class AutoImports implements Consumer<File> {
         requireNonNull(type);
         requireNonNull(types);
         
-		final String name = type.getName();
+		String name = type.getTypeName();
+        
+        // Strip any generic parts from the type name
+        if (name.contains("<")) {
+            name = name.substring(0, name.indexOf("<"));
+        }
+        
+        // Strip any array parts from the type name
+        if (name.contains("[")) {
+            name = name.substring(0, name.indexOf("["));
+        }
 
+        // If the class is not a primitive type and it should be ignored, add
+        // it to the ignore list.
 		if (name.contains(".")) {
 			if (!mgr.isIgnored(name)) {
 				types.put(name, type);
 			}
 		}
         
-        if (!type.getGenerics().isEmpty()) {
-            findTypesIn(type, types);
+        // Recurse over any type parameters this type might have.
+        if (type instanceof ParameterizedType) {
+            final ParameterizedType generic = (ParameterizedType) type;
+            if (generic.getActualTypeArguments().length > 0) {
+                findTypesIn(type, types);
+                
+                for (final Type genType : generic.getActualTypeArguments()) {
+                    addType(genType, types);
+                }
+            }
         }
 	}
 }

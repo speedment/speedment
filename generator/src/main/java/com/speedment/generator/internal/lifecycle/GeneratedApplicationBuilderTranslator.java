@@ -25,7 +25,6 @@ import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.mapstream.MapStream;
@@ -43,12 +42,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.AUTHOR;
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
+import com.speedment.common.codegen.constant.SimpleParameterizedType;
+import com.speedment.common.codegen.constant.SimpleType;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import static com.speedment.generator.internal.lifecycle.GeneratedMetadataTranslator.METADATA;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
+import java.lang.reflect.Type;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
@@ -97,10 +99,10 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
                         final Type managerImplType = support.managerImplType();
                         
                         if (ambigousNames.contains(t.getName())) {
-                            managerImpls.add(managerImplType.getName());
+                            managerImpls.add(managerImplType.getTypeName());
                         } else {
                             file.add(Import.of(managerImplType));
-                            managerImpls.add(shortName(managerImplType.getName()));
+                            managerImpls.add(shortName(managerImplType.getTypeName()));
                         }
                     });
                 
@@ -109,7 +111,7 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
                 
                 final Method build = Method.of("build", applicationType())
                     .public_().add(OVERRIDE)
-                    .add(Field.of("injector", Type.of(Injector.class)))
+                    .add(Field.of("injector", Injector.class))
                     .add("return injector.getOrThrow(" + getSupport().typeName(getSupport().projectOrThrow()) + "Application.class);");
 
                 final Constructor constr = Constructor.of().protected_();
@@ -131,9 +133,12 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
                 constr.add(constructorBody.toString());
                 
                 clazz.public_().abstract_()
-                    .setSupertype(Type.of(AbstractApplicationBuilder.class)
-                        .add(Generic.of().add(applicationType()))
-                        .add(Generic.of().add(builderType()))
+                    .setSupertype(
+                        SimpleParameterizedType.create(
+                            AbstractApplicationBuilder.class,
+                            applicationType(),
+                            builderType()
+                        )
                     )
                     .add(constr)
                     .add(build);
@@ -160,21 +165,21 @@ public final class GeneratedApplicationBuilderTranslator extends DefaultJavaClas
     }
     
     private Type builderType() {
-        return Type.of(
+        return SimpleType.create(
             getSupport().basePackageName() + "." + 
             getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationBuilder"
         );
     }
     
     private Type applicationType() {
-        return Type.of(
+        return SimpleType.create(
             getSupport().basePackageName() + "." + 
             getSupport().typeName(getSupport().projectOrThrow()) + "Application"
         );
     }
     
     private Type applicationImplType() {
-        return Type.of(
+        return SimpleType.create(
             getSupport().basePackageName() + "." + 
             getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationImpl"
         );

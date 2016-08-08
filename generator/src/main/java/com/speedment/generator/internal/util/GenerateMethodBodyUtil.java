@@ -18,10 +18,8 @@ package com.speedment.generator.internal.util;
 
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
@@ -37,18 +35,16 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
-import com.speedment.common.codegen.internal.model.constant.DefaultType;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.OBJECT;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.VOID;
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import com.speedment.common.codegen.constant.DefaultType;
+import com.speedment.common.codegen.constant.SimpleParameterizedType;
+import com.speedment.common.codegen.internal.util.Formatting;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
 import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
 import static com.speedment.generator.internal.manager.GeneratedManagerImplTranslator.*;
-import com.speedment.generator.typetoken.TypeTokenGenerator;
-import com.speedment.runtime.config.typetoken.TypeToken;
 import com.speedment.runtime.util.OptionalUtil;
-import com.speedment.runtime.util.TypeTokenFactory;
+import java.lang.reflect.Type;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -59,14 +55,14 @@ import static java.util.stream.Collectors.joining;
 public final class GenerateMethodBodyUtil {
     
     public static Method generateGet(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        return Method.of(GET_METHOD, OBJECT).public_().add(OVERRIDE)
+        return Method.of(GET_METHOD, Object.class).public_().add(OVERRIDE)
             .add(Field.of("entity", support.entityType()))
-            .add(Field.of("identifier", Type.of(FieldIdentifier.class).add(Generic.of().add(support.entityType()))))
+            .add(Field.of("identifier", SimpleParameterizedType.create(FieldIdentifier.class, support.entityType())))
             .add(generateGetBody(support, file, columnsSupplier));
     }
 
     public static String[] generateGetBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        file.add(Import.of(Type.of(IllegalArgumentException.class)));
+        file.add(Import.of(IllegalArgumentException.class));
 
         return new String[]{
             "switch ((" + support.entityName() + ".Identifier) identifier) " + block(
@@ -83,25 +79,25 @@ public final class GenerateMethodBodyUtil {
     }
 
     public static Method generateSet(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        return Method.of(SET_METHOD, VOID).public_().add(OVERRIDE)
+        return Method.of(SET_METHOD, void.class).public_().add(OVERRIDE)
             .add(Field.of("entity", support.entityType()))
-            .add(Field.of("identifier", Type.of(FieldIdentifier.class).add(Generic.of().add(support.entityType()))))
-            .add(Field.of("value", Type.of(Object.class)))
+            .add(Field.of("identifier", SimpleParameterizedType.create(FieldIdentifier.class, support.entityType())))
+            .add(Field.of("value", Object.class))
             .add(generateSetBody(support, file, columnsSupplier));
     }
 
     public static String[] generateSetBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        file.add(Import.of(Type.of(IllegalArgumentException.class)));
+        file.add(Import.of(IllegalArgumentException.class));
         
         return new String[]{
             "switch ((" + support.entityName() + ".Identifier) identifier) " + block(columnsSupplier.get()
                 .filter(HasEnabled::isEnabled)
-                .peek(c -> file.add(Import.of(support.typeTokenGenerator().typeOf(c))))
+                .peek(c -> file.add(Import.of(support.typeOf(c))))
                 .map(c -> 
                     "case " + support.namer().javaStaticFieldName(c.getJavaName())
                     + " : entity." + SETTER_METHOD_PREFIX + support.typeName(c)
                     + "("
-                    + castToColumnTypeIfNotObject(support.typeTokenGenerator(), file, c)
+                    + castToColumnTypeIfNotObject(support, file, c)
                     + "value); break;"
                 ).collect(Collectors.joining(nl()))
                     + nl() + "default : throw new IllegalArgumentException(\"Unknown identifier '\" + identifier + \"'.\");"
@@ -112,8 +108,10 @@ public final class GenerateMethodBodyUtil {
     public static Method generateFields(TranslatorSupport<Table> support, File file, String methodName, Supplier<Stream<? extends Column>> columnsSupplier) {
         return Method.of(methodName, 
                 DefaultType.stream(
-                    Type.of(com.speedment.runtime.field.Field.class)
-                        .add(Generic.of(support.entityType()))
+                    SimpleParameterizedType.create(
+                        com.speedment.runtime.field.Field.class,
+                        support.entityType()
+                    )
                 )
             )
             .public_().add(OVERRIDE)
@@ -121,7 +119,7 @@ public final class GenerateMethodBodyUtil {
     }
 
     public static String[] generateFieldsBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        file.add(Import.of(Type.of(Stream.class)));
+        file.add(Import.of(Stream.class));
         final List<String> rows = new LinkedList<>();
 
         rows.add("return Stream.of(");
@@ -179,19 +177,19 @@ public final class GenerateMethodBodyUtil {
         return rows.toArray(new String[rows.size()]);
     }
     
-    private static String castToColumnTypeIfNotObject(TypeTokenGenerator typeTokenGenerator, File file, Column c) {
-        final TypeToken token = typeTokenGenerator.tokenOf(c);
-        if (TypeTokenFactory.createObjectToken().equals(token)) {
+    private static String castToColumnTypeIfNotObject(TranslatorSupport<Table> support, File file, Column c) {
+        final Type type = support.typeOf(c);
+        if (type.equals(Object.class)) {
             return "";
         } else {
-            file.add(Import.of(typeTokenGenerator.typeOf(c)));
-            return "(" + InternalTypeTokenUtil.renderShort(token) + ") ";
+            file.add(Import.of(type));
+            return "(" + Formatting.shortName(type.getTypeName()) + ") ";
         }
     }
     
     private static String getterCode(File file, TranslatorSupport<Table> support, Column c) {
         if (c.isNullable()) {
-            file.add(Import.of(Type.of(OptionalUtil.class)));
+            file.add(Import.of(OptionalUtil.class));
             return "OptionalUtil.unwrap(entity." + GETTER_METHOD_PREFIX + support.typeName(c) + "())";
         } else {
             return "entity." + GETTER_METHOD_PREFIX + support.typeName(c) + "()";

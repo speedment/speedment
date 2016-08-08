@@ -1,19 +1,19 @@
 package com.speedment.plugins.enums;
 
 import com.speedment.common.injector.Injector;
-import com.speedment.plugins.enums.internal.GeneratedEnumTypeToken;
+import com.speedment.plugins.enums.internal.GeneratedEnumType;
 import com.speedment.common.injector.annotation.Inject;
 import static com.speedment.plugins.enums.internal.GeneratedEntityDecorator.FROM_DATABASE_METHOD;
 import com.speedment.plugins.enums.internal.EnumGeneratorUtil;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.config.typetoken.TypeToken;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.util.Lazy;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import static java.util.Objects.requireNonNull;
+import java.lang.reflect.Type;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -39,13 +39,13 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
     }
 
     @Override
-    public TypeToken getJavaType(Column column) {
+    public Type getJavaType(Column column) {
         requireNonNull(injector, 
             StringToEnumTypeMapper.class.getSimpleName() + 
             ".getJavaType(Column) is not available if instantiated without injector."
         );
         
-        return new GeneratedEnumTypeToken(
+        return new GeneratedEnumType(
             EnumGeneratorUtil.enumNameOf(column, injector), 
             EnumGeneratorUtil.enumConstantsOf(column)
         );

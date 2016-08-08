@@ -21,6 +21,7 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
+import java.lang.reflect.Type;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,13 +52,18 @@ public final class ReactorComponentUtil {
 
             // Only include columns that are 
             // comparable.
-            .filter(col -> typeMappers.get(col)
-                .getJavaType(col)
-                .isComparable()
-            )
+            .filter(col -> isComparable(typeMappers.get(col).getJavaType(col)))
 
             // Return list of names.
             .collect(toList());
+    }
+    
+    private static boolean isComparable(Type type) {
+        if (type instanceof Class<?>) {
+            @SuppressWarnings("unchecked")
+            final Class<?> clazz = (Class<?>) type;
+            return Comparable.class.isAssignableFrom(clazz);
+        } else return false;
     }
     
     private ReactorComponentUtil() {}

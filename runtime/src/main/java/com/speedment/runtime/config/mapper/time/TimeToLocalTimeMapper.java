@@ -2,8 +2,7 @@ package com.speedment.runtime.config.mapper.time;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.config.typetoken.TypeToken;
-import com.speedment.runtime.util.TypeTokenFactory;
+import java.lang.reflect.Type;
 import java.sql.Time;
 import java.time.LocalTime;
 
@@ -28,8 +27,8 @@ public class TimeToLocalTimeMapper implements TypeMapper<Time, LocalTime> {
     }
 
     @Override
-    public <ENTITY> TypeToken getJavaType(Column column) {
-        return TypeTokenFactory.create(LocalTime.class);
+    public Type getJavaType(Column column) {
+        return LocalTime.class;
     }
 
     @Override

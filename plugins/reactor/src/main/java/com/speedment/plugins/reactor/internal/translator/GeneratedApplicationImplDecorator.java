@@ -16,19 +16,17 @@
  */
 package com.speedment.plugins.reactor.internal.translator;
 
-import com.speedment.common.codegen.internal.model.constant.DefaultType;
+import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.JavaClassTranslator;
 import com.speedment.generator.TranslatorDecorator;
 import com.speedment.generator.TranslatorSupport;
-import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.plugins.reactor.MaterializedView;
 import com.speedment.plugins.reactor.Reactor;
 import com.speedment.runtime.config.Column;
@@ -46,14 +44,16 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.VOID;
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.WILDCARD;
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.constant.DefaultType.WILDCARD;
+import com.speedment.common.codegen.constant.SimpleParameterizedType;
+import com.speedment.common.codegen.constant.SimpleType;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static com.speedment.common.codegen.model.Generic.BoundType.EXTENDS;
 import com.speedment.common.injector.Injector;
 import static com.speedment.generator.Translator.Phase.POST_MAKE;
+import java.lang.reflect.Type;
 
 /**
  *
@@ -73,15 +73,16 @@ public final class GeneratedApplicationImplDecorator implements TranslatorDecora
                 
                 // Generate new field '_reactors'
                 clazz.add(Field.of("_reactors", 
-                        DefaultType.list(Type.of(Reactor.class)
-                            .add(Generic.of().add(WILDCARD))
-                            .add(Generic.of().add(WILDCARD))
-                        )
+                        DefaultType.list(SimpleParameterizedType.create(
+                            Reactor.class,
+                            WILDCARD,
+                            WILDCARD
+                        ))
                     ).private_().final_()
                 );
                 
                 // Set '_reactors' in constructor.
-                file.add(Import.of(Type.of(LinkedList.class)));
+                file.add(Import.of(LinkedList.class));
                 getOrCreate(clazz).forEach(constr -> {
                     constr.add("this._reactors = new LinkedList<>();");
                 });
@@ -98,10 +99,10 @@ public final class GeneratedApplicationImplDecorator implements TranslatorDecora
                         final TranslatorSupport<Table> support = new TranslatorSupport<>(injector, table);
                         final String viewName     = support.variableName() + "View";
                         final String viewTypeName = support.typeName() + "View";
-                        final Type viewType       = Type.of(support.basePackageName() + "." + viewTypeName);
+                        final Type viewType       = SimpleType.create(support.basePackageName() + "." + viewTypeName);
                         
                         // Import required classes.
-                        file.add(Import.of(Type.of(support.basePackageName() + "." + viewTypeName + "Impl")));
+                        file.add(Import.of(SimpleType.create(support.basePackageName() + "." + viewTypeName + "Impl")));
                         file.add(Import.of(support.entityType()));
                         
                         // Add view field.
@@ -141,16 +142,17 @@ public final class GeneratedApplicationImplDecorator implements TranslatorDecora
                     });
                 
                 // Generate the 'viewOf' method
-                final Generic generic = Generic.of().setLowerBound("ENTITY");
-                clazz.add(Method.of("viewOf", Type.of(MaterializedView.class)
-                    .add(generic)
-                    .add(Generic.of().add(WILDCARD))
-                ).add(generic)
+                clazz.add(Method.of("viewOf", SimpleParameterizedType.create(
+                        MaterializedView.class,
+                        SimpleType.create("ENTITY"),
+                        WILDCARD
+                    ))
+                    .add(Generic.of().setLowerBound("ENTITY"))
                     .public_()
                     .add(OVERRIDE)
                     .add(Field.of(
                         "entityType", 
-                        Type.of(java.lang.Class.class).add(generic)
+                        DefaultType.classOf(SimpleType.create("ENTITY"))
                     ))
                     .add(
                         "final MaterializedView<ENTITY, ?> view;",
@@ -168,28 +170,29 @@ public final class GeneratedApplicationImplDecorator implements TranslatorDecora
                 getOrCreate(clazz, "stop").add("_reactors.forEach(Reactor::stop);");
                 
                 // Generate the 'newReactor' method
-                clazz.add(Method.of("newReactor", VOID)
+                clazz.add(Method.of("newReactor", void.class)
                     .private_()
                     .add(Generic.of().setLowerBound("E"))
                     .add(Generic.of().setLowerBound("T")
                         .setBoundType(EXTENDS)
-                        .add(Type.of(Comparable.class)
-                            .add(Generic.of().setLowerBound("T"))
-                        )
+                        .add(SimpleParameterizedType.create(
+                            Comparable.class, 
+                            SimpleType.create("T")
+                        ))
                     )
-                    .add(Field.of("entityType", Type.of(java.lang.Class.class)
-                        .add(Generic.of().setLowerBound("E"))
-                    ))
-                    .add(Field.of("field", Type.of(ComparableField.class)
-                        .add(Generic.of().setLowerBound("E"))
-                        .add(Generic.of().add(WILDCARD))
-                        .add(Generic.of().setLowerBound("T"))
-                    ))
-                    .add(Field.of("view", Type.of(MaterializedView.class)
-                        .add(Generic.of().setLowerBound("E"))
-                        .add(Generic.of().setLowerBound("T"))
-                    ))
-                    .call(() -> file.add(Import.of(Type.of(Consumer.class))))
+                    .add(Field.of("entityType", DefaultType.classOf(SimpleType.create("E"))))
+                    .add(Field.of("field", SimpleParameterizedType.create(
+                        ComparableField.class,
+                        SimpleType.create("E"),
+                        WILDCARD,
+                        SimpleType.create("T")
+                    )))
+                    .add(Field.of("view", SimpleParameterizedType.create(
+                        MaterializedView.class,
+                        SimpleType.create("E"),
+                        SimpleType.create("T")
+                    )))
+                    .call(() -> file.add(Import.of(Consumer.class)))
                     .add(
                         "final Consumer<List<E>> con = view;",
                         "_reactors.add(Reactor.builder(managerOf(entityType), field)",
@@ -214,7 +217,7 @@ public final class GeneratedApplicationImplDecorator implements TranslatorDecora
     }
 
     private static Method getOrCreate(Class clazz, String methodName) {
-        return getOrCreate(clazz, methodName, VOID);
+        return getOrCreate(clazz, methodName, void.class);
     }
     
     private static Method getOrCreate(Class clazz, String methodName, Type returnType) {

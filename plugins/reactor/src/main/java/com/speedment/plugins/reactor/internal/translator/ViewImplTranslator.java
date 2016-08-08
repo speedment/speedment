@@ -16,11 +16,11 @@
  */
 package com.speedment.plugins.reactor.internal.translator;
 
+import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Table;
@@ -46,16 +46,16 @@ public final class ViewImplTranslator extends DefaultJavaClassTranslator<Table, 
         return newBuilder(file, getClassOrInterfaceName())
             .forEveryTable((clazz, table) -> {
                 clazz.public_()
-                    .setSupertype(Type.of(
+                    .setSupertype(SimpleType.create(
                         getSupport().basePackageName() + 
                         ".generated.Generated" + 
                         getSupport().namer().javaTypeName(getDocument().getJavaName()) + 
                         "ViewImpl"
                     ))
-                    .add(Type.of(getSupport().entityName() + "View"))
+                    .add(SimpleType.create(getSupport().basePackageName() + "." + getSupport().entityName() + "View"))
                     .add(Constructor.of()
                         .public_()
-                        .add(Field.of("app", Type.of(Speedment.class)))
+                        .add(Field.of("app", Speedment.class))
                         .add("super(app);")
                     );
             }).build();

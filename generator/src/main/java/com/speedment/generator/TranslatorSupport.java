@@ -16,7 +16,6 @@
  */
 package com.speedment.generator;
 
-import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
@@ -34,12 +33,14 @@ import java.util.Optional;
 
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import static com.speedment.common.codegen.internal.util.Formatting.ucfirst;
+import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.injector.Injector;
-import com.speedment.generator.typetoken.TypeTokenGenerator;
+import com.speedment.generator.component.TypeMapperComponent;
 import static com.speedment.runtime.config.Project.DEFAULT_PACKAGE_NAME;
 import com.speedment.runtime.config.trait.HasPackageName;
 import com.speedment.runtime.exception.SpeedmentException;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
+import java.lang.reflect.Type;
 import java.util.function.Supplier;
 import static java.util.Objects.requireNonNull;
 
@@ -76,8 +77,9 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
         return injector.getOrThrow(JavaLanguageNamer.class);
     }
     
-    public TypeTokenGenerator typeTokenGenerator() {
-        return injector.getOrThrow(TypeTokenGenerator.class);
+    public Type typeOf(Column column) {
+        return injector.getOrThrow(TypeMapperComponent.class)
+            .get(column).getJavaType(column);
     }
     
     protected DOC document() {
@@ -85,67 +87,67 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
     }
     
     public String entityName() {
-        return shortName(entityType().getName());
+        return shortName(entityType().getTypeName());
     }
     
     public String entityImplName() {
-        return shortName(entityImplType().getName());
+        return shortName(entityImplType().getTypeName());
     }
     
     public String generatedEntityName() {
-        return shortName(generatedEntityType().getName());
+        return shortName(generatedEntityType().getTypeName());
     }
     
     public String generatedEntityImplName() {
-        return shortName(generatedEntityImplType().getName());
+        return shortName(generatedEntityImplType().getTypeName());
     }
     
     public String managerName() {
-        return shortName(managerType().getName());
+        return shortName(managerType().getTypeName());
     }
     
     public String managerImplName() {
-        return shortName(managerImplType().getName());
+        return shortName(managerImplType().getTypeName());
     }
     
     public String generatedManagerName() {
-        return shortName(generatedManagerType().getName());
+        return shortName(generatedManagerType().getTypeName());
     }
     
     public String generatedManagerImplName() {
-        return shortName(generatedManagerImplType().getName());
+        return shortName(generatedManagerImplType().getTypeName());
     }
     
     public Type entityType() {
-        return Type.of(fullyQualifiedTypeName());
+        return SimpleType.create(fullyQualifiedTypeName());
     }
     
     public Type entityImplType() {
-        return Type.of(fullyQualifiedTypeName() + IMPL_SUFFIX);
+        return SimpleType.create(fullyQualifiedTypeName() + IMPL_SUFFIX);
     }
     
     public Type generatedEntityType() {
-        return Type.of(fullyQualifiedTypeName(GENERATED_PACKAGE, GENERATED_PREFIX));
+        return SimpleType.create(fullyQualifiedTypeName(GENERATED_PACKAGE, GENERATED_PREFIX));
     }
     
     public Type generatedEntityImplType() {
-        return Type.of(fullyQualifiedTypeName(GENERATED_PACKAGE, GENERATED_PREFIX) + IMPL_SUFFIX);
+        return SimpleType.create(fullyQualifiedTypeName(GENERATED_PACKAGE, GENERATED_PREFIX) + IMPL_SUFFIX);
     }
     
     public Type managerType() {
-        return Type.of(fullyQualifiedTypeName() + MANAGER_SUFFIX);
+        return SimpleType.create(fullyQualifiedTypeName() + MANAGER_SUFFIX);
     }
     
     public Type managerImplType() {
-        return Type.of(fullyQualifiedTypeName() + MANAGER_SUFFIX + IMPL_SUFFIX);
+        return SimpleType.create(fullyQualifiedTypeName() + MANAGER_SUFFIX + IMPL_SUFFIX);
     }
     
     public Type generatedManagerType() {
-        return Type.of(fullyQualifiedTypeName(GENERATED_PACKAGE, GENERATED_PREFIX) + MANAGER_SUFFIX);
+        return SimpleType.create(fullyQualifiedTypeName(GENERATED_PACKAGE, GENERATED_PREFIX) + MANAGER_SUFFIX);
     }
     
     public Type generatedManagerImplType() {
-        return Type.of(fullyQualifiedTypeName(GENERATED_PACKAGE, GENERATED_PREFIX) + MANAGER_SUFFIX + IMPL_SUFFIX);
+        return SimpleType.create(fullyQualifiedTypeName(GENERATED_PACKAGE, GENERATED_PREFIX) + MANAGER_SUFFIX + IMPL_SUFFIX);
     }
 
     /**

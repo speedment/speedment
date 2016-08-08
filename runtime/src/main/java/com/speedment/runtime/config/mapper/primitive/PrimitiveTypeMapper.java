@@ -2,8 +2,7 @@ package com.speedment.runtime.config.mapper.primitive;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.config.typetoken.TypeToken;
-import com.speedment.runtime.util.TypeTokenFactory;
+import java.lang.reflect.Type;
 
 /**
  * 
@@ -20,17 +19,17 @@ public final class PrimitiveTypeMapper<T> implements TypeMapper<T, T> {
     }
 
     @Override
-    public <ENTITY> TypeToken getJavaType(Column column) {
+    public Type getJavaType(Column column) {
         final String type = column.getDatabaseType();
         switch (type) {
-            case "java.lang.Byte"      : return TypeTokenFactory.create(byte.class);
-            case "java.lang.Short"     : return TypeTokenFactory.create(short.class);
-            case "java.lang.Integer"   : return TypeTokenFactory.create(int.class);
-            case "java.lang.Long"      : return TypeTokenFactory.create(long.class);
-            case "java.lang.Float"     : return TypeTokenFactory.create(float.class);
-            case "java.lang.Double"    : return TypeTokenFactory.create(double.class);
-            case "java.lang.Boolean"   : return TypeTokenFactory.create(boolean.class);
-            case "java.lang.Character" : return TypeTokenFactory.create(char.class);
+            case "java.lang.Byte"      : return byte.class;
+            case "java.lang.Short"     : return short.class;
+            case "java.lang.Integer"   : return int.class;
+            case "java.lang.Long"      : return long.class;
+            case "java.lang.Float"     : return float.class;
+            case "java.lang.Double"    : return double.class;
+            case "java.lang.Boolean"   : return boolean.class;
+            case "java.lang.Character" : return char.class;
             default : throw new UnsupportedOperationException(
                 "Type " + type + " is not a wrapper for a primitive type."
             );

@@ -16,15 +16,17 @@
  */
 package com.speedment.generator.internal;
 
-import com.speedment.common.codegen.internal.model.constant.DefaultType;
+import com.speedment.common.codegen.constant.DefaultType;
+import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.Generic;
-import com.speedment.common.codegen.model.Type;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.tuple.Tuple1;
+import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.typetoken.TypeToken;
 import com.speedment.runtime.exception.SpeedmentException;
+import java.lang.reflect.Type;
 import java.util.NoSuchElementException;
 
 import java.util.function.Function;
@@ -38,6 +40,8 @@ import java.util.stream.Stream;
 public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
     extends DefaultJavaClassTranslator<Table, T> {
 
+    private @Inject TypeMapperComponent typeMappers;
+    
     protected EntityAndManagerTranslator(
         Table table,
         Function<String, T> modelConstructor) {
@@ -58,14 +62,14 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
                     "' did not contain any primary key columns."
                 ));
         
-        final TypeToken firstToken = getSupport().typeTokenGenerator().tokenOf(firstColumn);
-        final Type firstType       = getSupport().typeTokenGenerator().wrapperOf(firstColumn);
+        final Type firstType = typeMappers.get(firstColumn).getJavaType(firstColumn);
+        
 
         if (pks == 1) {
             return firstType;
         } else if (columnsFromPks()
-            .map(c -> getSupport().typeTokenGenerator().tokenOf(c))
-            .allMatch(firstToken::equals)) {
+            .map(c -> typeMappers.get(c).getJavaType(c))
+            .allMatch(firstType::equals)) {
             
             return DefaultType.list(firstType);
         } else {
@@ -85,13 +89,17 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
             throw new SpeedmentException("Speedment does not support " + pks + " primary keys.", cnf);
         }
         
-        final Type result = Type.of(tupleClass);
-        
-        columnsFromPks().forEachOrdered(col -> 
-            result.add(Generic.of(DefaultType.classOf(getSupport().typeTokenGenerator().wrapperOf(col))))
+        return SimpleParameterizedType.create(
+            tupleClass,
+            columnsFromPks().map(col -> {
+                final Type type = typeMappers.get(col).getJavaType(col);
+                if (DefaultType.isPrimitive(type)) {
+                    return DefaultType.classOf(DefaultType.wrapperFor(type));
+                } else {
+                    return DefaultType.classOf(type);
+                }
+            }).toArray(Type[]::new)
         );
-        
-        return result;
     }
     
     private Stream<Column> columnsFromPks() {

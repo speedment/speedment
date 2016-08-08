@@ -16,7 +16,7 @@
  */
 package com.speedment.common.codegen.model.trait;
 
-import com.speedment.common.codegen.model.Type;
+import java.lang.reflect.Type;
 
 /**
  * A trait for models that has a {@link Type}.

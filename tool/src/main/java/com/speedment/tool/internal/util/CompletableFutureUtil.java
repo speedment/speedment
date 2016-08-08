@@ -14,7 +14,7 @@ import java.util.function.BinaryOperator;
  */
 public final class CompletableFutureUtil {
     
-    
+    @SafeVarargs
     public static <T> CompletableFuture<T> allOf(
         T defaultValue,
         BinaryOperator<T> merger, 

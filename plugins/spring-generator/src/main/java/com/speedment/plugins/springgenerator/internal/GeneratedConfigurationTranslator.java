@@ -16,6 +16,7 @@
  */
 package com.speedment.plugins.springgenerator.internal;
 
+import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.internal.model.value.TextValue;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
@@ -23,7 +24,6 @@ import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.generator.TranslatorSupport;
@@ -35,10 +35,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultType.STRING;
 import com.speedment.common.injector.Injector;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
-import org.springframework.context.annotation.Configuration;
+import java.lang.reflect.Type;
 
 /**
  *
@@ -77,37 +76,37 @@ extends DefaultJavaClassTranslator<Project, Class> {
                 clazz.public_();
                 
                 // Add constants
-                clazz.add(Field.of("URL_PROPERTY", STRING)
+                clazz.add(Field.of("URL_PROPERTY", String.class)
                     .protected_().final_().static_()
                     .set(new TextValue("jdbc.url"))
                 );
                 
-                clazz.add(Field.of("USERNAME_PROPERTY", STRING)
+                clazz.add(Field.of("USERNAME_PROPERTY", String.class)
                     .protected_().final_().static_()
                     .set(new TextValue("jdbc.username"))
                 );
                 
-                clazz.add(Field.of("PASSWORD_PROPERTY", STRING)
+                clazz.add(Field.of("PASSWORD_PROPERTY", String.class)
                     .protected_().final_().static_()
                     .set(new TextValue("jdbc.password"))
                 );
                 
                 // Add environment variable
-                clazz.add(Field.of("env", Type.of(Environment.class))
+                clazz.add(Field.of("env", Environment.class)
                     .protected_()
-                    .add(AnnotationUsage.of(Type.of(Autowired.class)))
+                    .add(AnnotationUsage.of(Autowired.class))
                 );
                 
                 // Add application bean
-                final Type appType        = Type.of(getSupport().basePackageName() + "." + getSupport().typeName() + "Application");
+                final Type appType        = SimpleType.create(getSupport().basePackageName() + "." + getSupport().typeName() + "Application");
                 final String appBuilder   = getSupport().typeName() + "ApplicationBuilder";
-                final Type appBuilderType = Type.of(getSupport().basePackageName() + "." + appBuilder);
+                final Type appBuilderType = SimpleType.create(getSupport().basePackageName() + "." + appBuilder);
                 
                 file.add(Import.of(appBuilderType));
                 
                 clazz.add(Method.of("application", appType)
                     .public_()
-                    .add(AnnotationUsage.of(Type.of(Bean.class)))
+                    .add(AnnotationUsage.of(Bean.class))
                     .add(
                         "final " + appBuilder + " builder =",
                         "    new " + appBuilder + "();",
@@ -140,7 +139,7 @@ extends DefaultJavaClassTranslator<Project, Class> {
                     clazz.add(Method.of(support.variableName(), support.managerType())
                         .public_()
                         .add(Field.of("app", appType))
-                        .add(AnnotationUsage.of(Type.of(Bean.class)))
+                        .add(AnnotationUsage.of(Bean.class))
                         .add("return (" + support.managerName() + ") app.managerOf(" + support.typeName() + ".class);")
                     );
                 });

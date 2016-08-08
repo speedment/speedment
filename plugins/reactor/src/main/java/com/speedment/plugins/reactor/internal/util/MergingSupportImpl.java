@@ -16,11 +16,9 @@
  */
 package com.speedment.plugins.reactor.internal.util;
 
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.TranslatorSupport;
-import com.speedment.generator.typetoken.TypeTokenGenerator;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 
@@ -28,6 +26,7 @@ import static com.speedment.plugins.reactor.internal.util.ReactorComponentUtil.v
 import com.speedment.plugins.reactor.internal.component.ReactorComponentImpl;
 import com.speedment.plugins.reactor.util.MergingSupport;
 import com.speedment.generator.component.TypeMapperComponent;
+import java.lang.reflect.Type;
 
 /**
  * Utility methods that are used by several translators in this package but that
@@ -39,7 +38,6 @@ import com.speedment.generator.component.TypeMapperComponent;
 public final class MergingSupportImpl implements MergingSupport {
     
     private @Inject Injector injector;
-    private @Inject TypeTokenGenerator typeTokenGenerator;
     private @Inject TypeMapperComponent typeMappers;
     
     @Override
@@ -67,7 +65,7 @@ public final class MergingSupportImpl implements MergingSupport {
     @Override
     public Type mergingColumnType(Table table) {
         final Column column = mergingColumn(table);
-        return typeTokenGenerator.typeOf(column);
+        return typeMappers.get(column).getJavaType(column);
     }
     
     private MergingSupportImpl() {}

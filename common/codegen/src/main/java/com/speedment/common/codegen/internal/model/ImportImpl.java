@@ -18,8 +18,8 @@ package com.speedment.common.codegen.internal.model;
 
 import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.codegen.model.modifier.Modifier;
+import java.lang.reflect.Type;
 
 import java.util.EnumSet;
 import java.util.Objects;
@@ -63,7 +63,7 @@ public final class ImportImpl implements Import {
      * @param prototype the prototype
      */
     protected ImportImpl(Import prototype) {
-        type = Copier.copy(requireNonNull(prototype).getType());
+        type      = prototype.getType();
         modifiers = Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
     }
 

@@ -23,7 +23,6 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.plugins.reactor.MaterializedViewImpl;
 import com.speedment.runtime.Speedment;
@@ -32,11 +31,14 @@ import com.speedment.runtime.config.Table;
 
 import java.util.Objects;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import com.speedment.common.codegen.constant.SimpleParameterizedType;
+import com.speedment.common.codegen.constant.SimpleType;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.plugins.reactor.util.MergingSupport;
+import java.lang.reflect.Type;
 
 /**
  *
@@ -65,17 +67,18 @@ public final class GeneratedViewImplTranslator extends DefaultJavaClassTranslato
     protected Class makeCodeGenModel(File file) {
         return newBuilder(file, getClassOrInterfaceName())
             .forEveryTable((clazz, table) -> {
-                file.add(Import.of(Type.of(Objects.class)).static_().setStaticMember("requireNonNull"));
+                file.add(Import.of(Objects.class).static_().setStaticMember("requireNonNull"));
                 
                 clazz.public_().abstract_()
-                    .setSupertype(Type.of(MaterializedViewImpl.class)
-                        .add(Generic.of().add(getSupport().entityType()))
-                        .add(Generic.of().add(merger.mergingColumnType(table)))
-                    )
-                    .add(Type.of("Generated" + getSupport().entityName() + "View"))
-                    .add(Field.of("app", Type.of(Speedment.class)).protected_().final_())
+                    .setSupertype(SimpleParameterizedType.create(
+                        MaterializedViewImpl.class, 
+                        getSupport().entityType(), 
+                        merger.mergingColumnType(table)
+                    ))
+                    .add(SimpleType.create(getSupport().basePackageName() + ".generated.Generated" + getSupport().entityName() + "View"))
+                    .add(Field.of("app", Speedment.class).protected_().final_())
                     .add(Constructor.of().public_()
-                        .add(Field.of("app", Type.of(Speedment.class)))
+                        .add(Field.of("app", Speedment.class))
                         .add(
                             "super(" + merger.mergingColumnField(table) + ");",
                             "this.app = requireNonNull(app);"

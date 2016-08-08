@@ -24,8 +24,8 @@ import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Initializer;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.codegen.model.modifier.Modifier;
+import java.lang.reflect.Type;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -85,7 +85,7 @@ public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>>
 		javadoc		= prototype.getJavadoc().map(Copier::copy).orElse(null);
 		annotations	= Copier.copy(prototype.getAnnotations());
 		generics	= Copier.copy(prototype.getGenerics());
-		interfaces	= Copier.copy(prototype.getInterfaces());
+		interfaces	= new ArrayList<>(prototype.getInterfaces());
 		fields		= Copier.copy(prototype.getFields());
 		methods		= Copier.copy(prototype.getMethods());
         initalizers = Copier.copy(prototype.getInitalizers());

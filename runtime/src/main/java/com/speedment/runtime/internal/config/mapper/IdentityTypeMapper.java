@@ -18,8 +18,7 @@ package com.speedment.runtime.internal.config.mapper;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.config.typetoken.TypeToken;
-import com.speedment.runtime.util.TypeTokenFactory;
+import java.lang.reflect.Type;
 
 /**
  * A special implementation of {@link TypeMapper} that simply returns the 
@@ -39,8 +38,8 @@ public final class IdentityTypeMapper<T> implements TypeMapper<T, T> {
     }
 
     @Override
-    public <ENTITY> TypeToken getJavaType(Column column) {
-        return TypeTokenFactory.create(column.findDatabaseType());
+    public Type getJavaType(Column column) {
+        return column.findDatabaseType();
     }
 
     @Override

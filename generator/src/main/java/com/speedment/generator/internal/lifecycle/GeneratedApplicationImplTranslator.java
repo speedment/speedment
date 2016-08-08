@@ -16,13 +16,14 @@
  */
 package com.speedment.generator.internal.lifecycle;
 
+import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.internal.runtime.AbstractApplicationBuilder;
 import com.speedment.runtime.internal.runtime.AbstractSpeedment;
+import java.lang.reflect.Type;
 
 /**
  *
@@ -50,7 +51,7 @@ public final class GeneratedApplicationImplTranslator extends DefaultJavaClassTr
         return newBuilder(file, getClassOrInterfaceName())
             .forEveryProject((clazz, project) -> {
                 clazz.public_()
-                    .setSupertype(Type.of(AbstractSpeedment.class))
+                    .setSupertype(AbstractSpeedment.class)
                     .add(generatedType());
             }).build();
     }
@@ -63,7 +64,7 @@ public final class GeneratedApplicationImplTranslator extends DefaultJavaClassTr
     }
     
     private Type generatedType() {
-        return Type.of(
+        return SimpleType.create(
             getSupport().basePackageName() + ".generated.Generated" + 
             getSupport().typeName(getSupport().projectOrThrow()) + "Application"
         );

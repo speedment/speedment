@@ -23,7 +23,6 @@ import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.TranslatorSupport;
@@ -42,11 +41,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.speedment.common.codegen.internal.model.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.PARAM;
-import static com.speedment.common.codegen.internal.model.constant.DefaultJavadocTag.RETURN;
-import com.speedment.common.codegen.internal.model.constant.DefaultType;
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
+import com.speedment.common.codegen.constant.DefaultType;
+import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
+import java.lang.reflect.Type;
 
 /**
  *
@@ -68,11 +69,11 @@ public final class GeneratedManagerTranslator extends EntityAndManagerTranslator
         return newBuilder(file, getSupport().generatedManagerName())
             .forEveryTable((intf, table) -> {
                 intf.public_()
-                    .add(Type.of(SqlManager.class).add(Generic.of().add(getSupport().entityType())))
+                    .add(SimpleParameterizedType.create(SqlManager.class, getSupport().entityType()))
                     .add(generatePrimaryKeyFor(file))
-                    .add(Method.of("getManagerClass", Type.of(Class.class).add(Generic.of().add(getSupport().managerType()))).default_().add(OVERRIDE)
+                    .add(Method.of("getManagerClass", DefaultType.classOf(getSupport().managerType())).default_().add(OVERRIDE)
                         .add("return " + getSupport().managerName() + ".class;"))
-                    .add(Method.of("getEntityClass", Type.of(Class.class).add(Generic.of().add(getSupport().entityType()))).default_().add(OVERRIDE)
+                    .add(Method.of("getEntityClass", DefaultType.classOf(getSupport().entityType())).default_().add(OVERRIDE)
                         .add("return " + getSupport().entityName() + ".class;"))
                     .add(generateGetPrimaryKeyClasses(file));
             })
@@ -125,8 +126,8 @@ public final class GeneratedManagerTranslator extends EntityAndManagerTranslator
 
                 final Type returnType;
                 if (usesOptional(fu.getColumn())) {
-                    file.add(Import.of(Type.of(Optional.class)));
-                    returnType = Type.of(Optional.class).add(Generic.of().add(fu.getForeignEmt().getSupport().entityType()));
+                    file.add(Import.of(Optional.class));
+                    returnType = DefaultType.optional(fu.getForeignEmt().getSupport().entityType());
 
                 } else {
                     returnType = fu.getForeignEmt().getSupport().entityType();
@@ -209,7 +210,7 @@ public final class GeneratedManagerTranslator extends EntityAndManagerTranslator
         if (primaryKeyColumns().count() == 1) {
             method.add("return entity.get" + getSupport().typeName(primaryKeyColumns().findAny().get().findColumn().get()) + "();");
         } else {
-            file.add(Import.of(Type.of(Arrays.class)));
+            file.add(Import.of(Arrays.class));
             method.add(primaryKeyColumns()
                 .map(pkc -> "entity.get" + getSupport().typeName(pkc.findColumn().get()) + "()")
                 .collect(Collectors.joining(", ", "return Arrays.asList(", ");"))

@@ -20,6 +20,7 @@ import com.speedment.common.codegen.internal.model.AnnotationUsageImpl;
 import com.speedment.common.codegen.model.trait.HasCopy;
 import com.speedment.common.codegen.model.trait.HasType;
 import com.speedment.common.codegen.model.trait.HasValue;
+import java.lang.reflect.Type;
 
 import java.util.List;
 import java.util.Map;

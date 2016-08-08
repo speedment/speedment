@@ -66,8 +66,8 @@ import com.speedment.common.codegen.model.InterfaceMethod;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.JavadocTag;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.common.codegen.model.modifier.Modifier;
+import java.lang.reflect.Type;
 
 /**
  * Implementation of the {@link TransformFactory} interface that comes with

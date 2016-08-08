@@ -18,7 +18,6 @@ package com.speedment.generator.internal.lifecycle;
 
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Interface;
-import com.speedment.common.codegen.model.Type;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Project;
@@ -49,8 +48,7 @@ public final class GeneratedApplicationTranslator extends DefaultJavaClassTransl
     protected Interface makeCodeGenModel(File file) {
         return newBuilder(file, getClassOrInterfaceName())
             .forEveryProject((clazz, project) -> {
-                clazz.public_()
-                    .add(Type.of(Speedment.class));
+                clazz.public_().add(Speedment.class);
             }).build();
     }
 

@@ -19,7 +19,7 @@ package com.speedment.common.codegen.internal.model;
 import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
-import com.speedment.common.codegen.model.Type;
+import java.lang.reflect.Type;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +61,7 @@ public final class ClassImpl extends ClassOrInterfaceImpl<Class> implements Clas
      */
 	protected ClassImpl(Class prototype) {
 		super (prototype);
-		this.superType = prototype.getSupertype().map(Copier::copy).orElse(null);
+		this.superType = prototype.getSupertype().orElse(null);
 		this.constructors = Copier.copy(prototype.getConstructors());
 	}
 

@@ -19,8 +19,7 @@ package com.speedment.runtime.config.mapper.time;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.config.typetoken.TypeToken;
-import com.speedment.runtime.util.TypeTokenFactory;
+import java.lang.reflect.Type;
 
 import java.sql.Date;
 
@@ -38,8 +37,8 @@ public final class DateToIntMapper implements TypeMapper<Date, Integer> {
     }
     
     @Override
-    public <ENTITY> TypeToken getJavaType(Column column) {
-        return TypeTokenFactory.create(Integer.class);
+    public Type getJavaType(Column column) {
+        return Integer.class;
     }
 
     @Override
