@@ -1,6 +1,5 @@
 package com.speedment.common.codegen.constant;
 
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.File;
 import java.lang.reflect.ParameterizedType;
@@ -8,7 +7,6 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Objects;
 import static java.util.Objects.requireNonNull;
-import java.util.stream.Stream;
 
 /**
  * A very simple implementation of the java {@link ParameterizedType} interface.
@@ -46,10 +44,10 @@ public final class SimpleParameterizedType implements ParameterizedType {
      * Creates a new {@code SimpleParameterizedType} referencing the specified 
      * class in the specified file. These do not have to exist yet.
      * 
-     * @param file   the file to reference
-     * @param clazz  the class to reference
+     * @param file        the file to reference
+     * @param clazz       the class to reference
      * @param parameters  list of generic parameters to this type
-     * @return       the new simple type
+     * @return            the new simple type
      */
     public static SimpleParameterizedType create(File file, ClassOrInterface<?> clazz, Type... parameters) {
         return create(SimpleTypeUtil.nameOf(file, clazz), parameters);
@@ -74,9 +72,7 @@ public final class SimpleParameterizedType implements ParameterizedType {
 
     @Override
     public String getTypeName() {
-        return fullName + Stream.of(parameters)
-            .map(Type::getTypeName)
-            .collect(joinIfNotEmpty(",", "<", ">"));
+        return fullName;
     }
 
     @Override
@@ -96,6 +92,11 @@ public final class SimpleParameterizedType implements ParameterizedType {
         final ParameterizedType other = (ParameterizedType) obj;
         return Objects.equals(fullName, other.getTypeName())
             && Arrays.deepEquals(parameters, other.getActualTypeArguments());
+    }
+    
+    @Override
+    public String toString() {
+        return getTypeName();
     }
     
     private SimpleParameterizedType(String fullName, Type[] parameters) {

@@ -23,7 +23,6 @@ import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.codegen.model.EnumConstant;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.Javadoc;
@@ -116,7 +115,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
              * Getters
              */
             .forEveryColumn((intrf, col) -> {
-                final Type retType = typeMappers.get(col).getJavaType(col);
+                final Type retType = getterReturnType(typeMappers, col);
 
                 intrf.add(Method.of(GETTER_METHOD_PREFIX + getSupport().typeName(col), retType)
                     .set(Javadoc.of(

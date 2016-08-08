@@ -258,7 +258,7 @@ public final class Formatting {
     public static String shortName(String longName) {
         final String temp = longName.replace("$", ".");
         if (temp.contains(".")) {
-            return temp.substring(temp.lastIndexOf(".") + 1);
+            return temp.substring(stripGenerics(temp).lastIndexOf(".") + 1);
         } else {
             return temp;
         }

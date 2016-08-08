@@ -56,6 +56,11 @@ public final class SimpleType implements Type {
         return Objects.equals(typeName, other.getTypeName());
     }
     
+    @Override
+    public String toString() {
+        return getTypeName();
+    }
+    
     private SimpleType(String typeName) {
         this.typeName = requireNonNull(typeName);
     }

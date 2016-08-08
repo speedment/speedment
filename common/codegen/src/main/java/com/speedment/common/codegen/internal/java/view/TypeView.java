@@ -19,13 +19,16 @@ package com.speedment.common.codegen.internal.java.view;
 import com.speedment.common.codegen.DependencyManager;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
+import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import com.speedment.common.codegen.internal.util.Formatting;
 
 import java.util.Optional;
 
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.stream.Stream;
 
 /**
  * Transforms from a {@link Type} to java code.
@@ -42,11 +45,36 @@ public final class TypeView implements Transform<Type, String> {
         requireNonNulls(gen, model);
         
 		if (shouldUseShortName(gen, model)) {
-			return Optional.of(shortName(model.getTypeName()));
+			return Optional.of(shortName(renderTypeName(gen, model)));
 		} else {
-			return Optional.of(model.getTypeName());
+			return Optional.of(renderTypeName(gen, model));
 		}
 	}
+    
+    /**
+     * Renders the type name of the specified type, including any type 
+     * parameters it might have.
+     * 
+     * @param gen    the generator used
+     * @param model  the model
+     * @return       the rendered type name
+     */
+    private String renderTypeName(Generator gen, Type model) {
+        final StringBuilder name = new StringBuilder();
+        name.append(model.getTypeName());
+        
+        if (model instanceof ParameterizedType) {
+            final ParameterizedType hasTypes = (ParameterizedType) model;
+            name.append(
+                Stream.of(hasTypes.getActualTypeArguments())
+                    .map(gen::on)
+                    .map(Optional::get)
+                    .collect(joinIfNotEmpty(", ", "<", ">"))
+            );
+        }
+        
+        return name.toString();
+    }
     
     /**
      * Returns whether or not to use the short name for the type.

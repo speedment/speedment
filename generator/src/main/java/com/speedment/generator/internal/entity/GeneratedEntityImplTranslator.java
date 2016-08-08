@@ -39,6 +39,7 @@ import static com.speedment.common.codegen.internal.util.Formatting.tab;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.component.TypeMapperComponent;
+import static com.speedment.generator.internal.entity.GeneratedEntityTranslator.getterReturnType;
 import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
 import java.lang.reflect.Type;
 import static java.util.Objects.requireNonNull;
@@ -66,11 +67,11 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
              * Getters
              */
             .forEveryColumn((clazz, col) -> {
-                final Type retType = typeMappers.get(col).getJavaType(col);
+                final Type retType = getterReturnType(typeMappers, col);
                 final String getter;
                 if (usesOptional(col)) {
                     final String varName = getSupport().variableName(col);
-                    if (retType.getTypeName().startsWith(Optional.class.getName())) {
+                    if (retType.getTypeName().equals(Optional.class.getName())) {
                         getter = "Optional.ofNullable(" + varName + ")";
                     } else {
                         file.add(Import.of(OptionalUtil.class));

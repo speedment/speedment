@@ -19,7 +19,6 @@ package com.speedment.generator.internal;
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.model.ClassOrInterface;
-import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.generator.component.TypeMapperComponent;
@@ -62,8 +61,10 @@ public abstract class EntityAndManagerTranslator<T extends ClassOrInterface<T>>
                     "' did not contain any primary key columns."
                 ));
         
-        final Type firstType = typeMappers.get(firstColumn).getJavaType(firstColumn);
-        
+        Type firstType = typeMappers.get(firstColumn).getJavaType(firstColumn);
+        if (DefaultType.isPrimitive(firstType)) {
+            firstType = DefaultType.wrapperFor(firstType);
+        }
 
         if (pks == 1) {
             return firstType;
