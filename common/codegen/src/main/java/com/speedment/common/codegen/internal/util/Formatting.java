@@ -296,6 +296,26 @@ public final class Formatting {
     public static String classToJavaFileName(String longName) {
         return longName.replace('.', '/') + ".java";
 	}
+    
+    /**
+     * Removes the generics and array parts of a class name.
+     * 
+     * @param className  the full class name
+     * @return           class name with decorations stripped
+     */
+    public static String stripGenerics(String className) {
+        String name = className;
+        
+        if (name.contains("<")) {
+            name = name.substring(0, name.indexOf("<"));
+        }
+        
+        if (name.contains("[")) {
+            name = name.substring(0, name.indexOf("["));
+        }
+        
+        return name;
+    }
 
     private static String 
         nl = "\n",

@@ -25,6 +25,7 @@ import java.util.Optional;
 
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.Formatting.packageName;
+import static com.speedment.common.codegen.internal.util.Formatting.stripGenerics;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import java.lang.reflect.Type;
 
@@ -88,19 +89,5 @@ public final class ImportView implements Transform<Import, String> {
         return !(current.isPresent()
             && suggested.isPresent()
             && current.get().equals(suggested.get()));
-    }
-    
-    private static String stripGenerics(String className) {
-        String name = className;
-        
-        if (name.contains("<")) {
-            name = name.substring(0, name.indexOf("<"));
-        }
-        
-        if (name.contains("[")) {
-            name = name.substring(0, name.indexOf("["));
-        }
-        
-        return name;
     }
 }

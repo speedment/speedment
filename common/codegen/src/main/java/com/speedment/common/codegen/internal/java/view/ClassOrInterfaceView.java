@@ -135,7 +135,8 @@ abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements Tr
 			renderModifiers(gen, model) +
             renderDeclarationType() + 
             renderName(gen, model) + 
-            renderGenerics(gen, model) + " " +
+            renderGenerics(gen, model) + 
+            (model.getGenerics().isEmpty() ? " " : "") +
             renderSupertype(gen, model) +
 			renderInterfaces(gen, model) +
                 

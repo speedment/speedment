@@ -19,6 +19,7 @@ package com.speedment.common.codegen.internal.java.view;
 import com.speedment.common.codegen.DependencyManager;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
+import com.speedment.common.codegen.internal.util.Formatting;
 
 import java.util.Optional;
 
@@ -58,17 +59,18 @@ public final class TypeView implements Transform<Type, String> {
         requireNonNulls(gen, type);
         
         final DependencyManager mgr = gen.getDependencyMgr();
+        final String name = Formatting.stripGenerics(type.getTypeName());
         
-        if (mgr.isIgnored(type.getTypeName())) {
+        if (mgr.isIgnored(name)) {
             return true;
         }
         
-        if (mgr.isLoaded(type.getTypeName())) {
+        if (mgr.isLoaded(name)) {
             return true;
         }
         
         final Optional<String> current = mgr.getCurrentPackage();
-		return current.isPresent() && type.getTypeName().startsWith(current.get());
+		return current.isPresent() && name.startsWith(current.get());
 
 	}
 }
