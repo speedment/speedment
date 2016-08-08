@@ -391,7 +391,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
 
             column.mutator().setDatabaseType(selectedJdbcClass);
             
-            if (nullable) {
+            if (!nullable) {
                 if (selectedJdbcClass == Byte.class
                 ||  selectedJdbcClass == Short.class
                 ||  selectedJdbcClass == Integer.class
@@ -404,7 +404,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                 }
             }
             
-            if ("ENUM".equals(md.getTypeName())) {
+            if ("ENUM".equalsIgnoreCase(md.getTypeName())) {
                 final Dbms dbms = schema.getParentOrThrow();
                 final List<String> constants = enumConstantsOf(dbms, table, columnName);
                 column.mutator().setEnumConstants(constants.stream().collect(joining(",")));

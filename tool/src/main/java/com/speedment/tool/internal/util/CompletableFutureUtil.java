@@ -1,6 +1,7 @@
 package com.speedment.tool.internal.util;
 
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
+import java.lang.reflect.Array;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BinaryOperator;
@@ -22,8 +23,11 @@ public final class CompletableFutureUtil {
         
         @SuppressWarnings("unchecked")
         final CompletableFuture<Void>[] accumulators 
-            = (CompletableFuture<Void>[]) new CompletableFuture[futures.length];
-        
+            = (CompletableFuture<Void>[]) Array.newInstance(
+                CompletableFuture.class, 
+                futures.length
+            );
+
         final AtomicReference<T> result = new AtomicReference<>(defaultValue);
 
         for (int i = 0; i < futures.length; i++) {

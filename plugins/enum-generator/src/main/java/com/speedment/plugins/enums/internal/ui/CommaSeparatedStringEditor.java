@@ -23,9 +23,8 @@ public class CommaSeparatedStringEditor<T extends ColumnProperty> implements Pro
         return Stream.of(
             new AddRemoveStringItem(
                 "Enum Constants", 
-                document.enumConstantsProperty(), 
-                document.getEnumConstants().orElse(null),
-                "Used for defining what value the enum can take",
+                document.enumConstantsProperty(),
+                "Used for defining what contants the generated enum can have",
                 Bindings.equal(document.typeMapperProperty(), StringToEnumTypeMapper.class.getName())
             )
         );

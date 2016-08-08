@@ -3,19 +3,22 @@ package com.speedment.plugins.enums.internal.ui;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.tool.property.item.BaseLabelTooltipItem;
+import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
-import javafx.animation.AnimationTimer;
+import static javafx.application.Platform.runLater;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableBooleanValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -34,10 +37,11 @@ import javafx.util.StringConverter;
  * each element is separated by a comma. This editor item allows the user
  * to easily edit such a string.
  * 
- * @author Simon Jonasson
- * @since 1.0.0
+ * @author  Simon Jonasson
+ * @since   1.0.0
  */
-public class AddRemoveStringItem extends BaseLabelTooltipItem{
+public final class AddRemoveStringItem extends BaseLabelTooltipItem {
+    
     //***********************************************************
     // 				VARIABLES
     //***********************************************************   
@@ -45,7 +49,6 @@ public class AddRemoveStringItem extends BaseLabelTooltipItem{
 
     private final ObservableList<String> strings;
     private final ObservableBooleanValue enabled;
-    private final ObservableBooleanValue disabled;
     private final StringProperty cache;
     
     private final String DEFAULT_FIELD = "ENUM_CONSTANT_";
@@ -56,18 +59,33 @@ public class AddRemoveStringItem extends BaseLabelTooltipItem{
     // 				CONSTRUCTOR
     //***********************************************************
      
-    public AddRemoveStringItem(String label, StringProperty value, String oldValue, String tooltip, ObservableBooleanValue enableThis) {
-        super(label, tooltip, NO_DECORATOR);
-        this.strings = FXCollections.observableArrayList();
-        this.enabled = enableThis;
-        this.disabled = Bindings.not(enableThis);
-        this.cache = new SimpleStringProperty();
+    public AddRemoveStringItem(
+            String label,
+            StringProperty value,
+            String tooltip,
+            ObservableBooleanValue enableThis) {
         
-        StringBinding binding = Bindings.createStringBinding(() -> getFormatedString(), strings);
-        value.unbind();
-        value.bind( binding );
-       
-        setValue( oldValue );
+        super(label, tooltip, NO_DECORATOR);
+        
+        final String currentValue = value.get();
+        if (currentValue == null) {
+            this.strings  = FXCollections.observableArrayList();
+        } else {
+            this.strings  = FXCollections.observableArrayList(
+                Stream.of(currentValue.split(","))
+                    .filter(s -> !s.isEmpty())
+                    .toArray(String[]::new)
+            );
+        }
+        
+        this.enabled = enableThis;
+        this.cache   = new SimpleStringProperty();
+        
+        this.strings.addListener((ListChangeListener.Change<? extends String> c) -> {
+            @SuppressWarnings("unchecked")
+            final List<String> list = (List<String>) c.getList();
+            value.setValue(getFormatedString(list));
+        });
     }
     
     //***********************************************************
@@ -85,8 +103,8 @@ public class AddRemoveStringItem extends BaseLabelTooltipItem{
     protected Node createUndecoratedEditor() {
         final VBox container = new VBox();
         
-        ListView<String> listView = new ListView<>(strings);
-        listView.setCellFactory((ListView<String> param) -> new EnumCell());
+        final ListView<String> listView = new ListView<>(strings);
+        listView.setCellFactory(view -> new EnumCell(strings));
         listView.setEditable(true);
 
         listView.setMaxHeight(USE_PREF_SIZE);
@@ -99,15 +117,7 @@ public class AddRemoveStringItem extends BaseLabelTooltipItem{
         container.setSpacing(SPACING);
         container.getChildren().addAll(listView, controls);
         hideShowBehaviour(container);
-        
-        attachListener(disabled, (ov, was, isDisabled) -> {
-            if( isDisabled ){
-                cache.set( getFormatedString() );
-                setValue(null);
-            } else {
-                setValue( cache.get() );
-            }
-        });
+
         
         return container;
     }
@@ -116,35 +126,41 @@ public class AddRemoveStringItem extends BaseLabelTooltipItem{
     // 				PRIVATE
     //***********************************************************
     
-    private String getFormatedString() {
-        String formated = strings.stream()
+    /**
+     * Removes any empty substrings and makes sure the entire string is either
+     * {@code null} or non-empty.
+     * 
+     * @return  the formatted string
+     */
+    private String getFormatedString(List<String> newValue) {
+        final String formated = newValue.stream()
             .filter(v -> !v.isEmpty())
             .collect(Collectors.joining(","));
-        if( formated == null || formated.isEmpty() )
+        
+        if (formated == null || formated.isEmpty()) {
             return null;
-        else
+        } else {
             return formated;
+        }
     }
     
     private void setValue(String value) {
         if (value == null) {
             strings.clear();
         } else {
-            strings.setAll(
-                Stream.of(value.split(","))
-                .toArray(String[]::new)
-            );
+            strings.setAll(value.split(","));
         }
     }
     
     private void hideShowBehaviour(Node node){
         node.visibleProperty().bind(enabled);
         node.managedProperty().bind(enabled);
-        node.disableProperty().bind(disabled);
+        node.disableProperty().bind(Bindings.not(enabled));
     }
     
     private Button removeButton(final ListView<String> listView) {
         final Button button = new Button("Remove Selected");
+        
         button.setOnAction(e -> {
             final int selectedIdx = listView.getSelectionModel().getSelectedIndex();
             if (selectedIdx != -1 && listView.getItems().size() > 1) {
@@ -154,54 +170,47 @@ public class AddRemoveStringItem extends BaseLabelTooltipItem{
                 listView.getSelectionModel().select(newSelectedIdx);
             }
         });
+        
         return button;
     }
 
     private Button addButton(final ListView<String> listView) {
         final Button button = new Button("Add Item");
+        
         button.setOnAction(e -> {
             final int newIndex = listView.getItems().size();
 
             final Set<String> set = strings.stream().collect(toSet());
-            AtomicInteger i = new AtomicInteger(0);
-            while (!set.add(DEFAULT_FIELD + i.incrementAndGet())) {
-            }
+            final AtomicInteger i = new AtomicInteger(0);
+            while (!set.add(DEFAULT_FIELD + i.incrementAndGet())) {}
 
             listView.getItems().add(DEFAULT_FIELD + i.get());
             listView.scrollTo(newIndex);
             listView.getSelectionModel().select(newIndex);
-
+            
             /* There is a strange behavior in JavaFX if you try to start editing
 			 * a field on the same animation frame as another field lost focus.
 			 * 
 			 * Therefore, we wait one animation cycle before setting the field
 			 * into the editing state 
              */
-            new AnimationTimer() {
-                int frameCount = 0;
-
-                @Override
-                public void handle(long now) {
-                    frameCount++;
-                    if (frameCount > 1) {
-                        listView.edit(newIndex);
-                        stop();
-                    }
-                }
-            }.start();
+            runLater(() -> listView.edit(newIndex));
         });
+        
         return button;
     }
 
     //***********************************************************
     // 				PRIVATE CLASS : ENUM CELL
     //***********************************************************    
-    private class EnumCell extends TextFieldListCell<String> {
+    private final static class EnumCell extends TextFieldListCell<String> {
 
+        private final ObservableList<String> strings;
         private String labelString;
 
-        private EnumCell() {
+        private EnumCell(ObservableList<String> strings) {
             super();
+            this.strings = requireNonNull(strings);
             setConverter(myConverter());
         }
 
@@ -221,28 +230,30 @@ public class AddRemoveStringItem extends BaseLabelTooltipItem{
 
                 @Override
                 public String fromString(String value) {
-                    //Avoid false positives (ie showing an error that we match ourselves)
-                    if(value.equalsIgnoreCase(labelString)){
+                    // Avoid false positives (ie showing an error that we match ourselves)
+                    if (value.equalsIgnoreCase(labelString)) {
                         return value;
-                    }
-                    if(value.isEmpty()){
+                    } else if (value.isEmpty()) {
                         LOGGER.info("An enum field cannot be empty. Please remove the field instead.");
                         return labelString;
                     }
-                     //Make sure this is not a douplicate entry
+                    
+                    // Make sure this is not a douplicate entry
                     final AtomicBoolean douplicate = new AtomicBoolean(false);
                     strings.stream()
-                        .filter( elem -> elem.equalsIgnoreCase(value) )
-                        .forEach( elem -> douplicate.set(true) );
-                    if(douplicate.get()){
+                        .filter(elem -> elem.equalsIgnoreCase(value))
+                        .forEach(elem -> douplicate.set(true));
+                    if (douplicate.get()){
                         LOGGER.info("Enum cannot contain the same constant twice");
                         return labelString;
-                    //Make sure this entry contains only legal characters
+                        
+                    // Make sure this entry contains only legal characters
                     } else if ( !value.matches("([\\w\\-\\_\\ ]+)")) {
                         LOGGER.info("Enum should only contain letters, number, underscore and/or dashes");
                         return labelString;
-                    //Warn if it contains a space
-                    }  else if (value.contains(" ")) {
+                        
+                    // Warn if it contains a space
+                    } else if (value.contains(" ")) {
                         LOGGER.warn("Enum spaces will be converted to underscores in Java");
                         return value;
                     } else {
