@@ -63,16 +63,19 @@ import static java.util.Objects.requireNonNull;
  */
 public class TranslatorManagerImpl implements TranslatorManager {
 
-    private final static Logger LOGGER      = LoggerManager.getLogger(TranslatorManagerImpl.class);
+    private final static Logger LOGGER = LoggerManager.getLogger(TranslatorManagerImpl.class);
     private final static String HASH_PREFIX = ".";
     private final static String HASH_SUFFIX = ".md5";
     private final static boolean PRINT_CODE = false;
-    
+
     private final AtomicInteger fileCounter = new AtomicInteger(0);
 
-    private @Inject InfoComponent info;
-    private @Inject EventComponent eventComponent;
-    private @Inject CodeGenerationComponent codeGenerationComponent;
+    private @Inject
+    InfoComponent info;
+    private @Inject
+    EventComponent eventComponent;
+    private @Inject
+    CodeGenerationComponent codeGenerationComponent;
 
     @Override
     public void accept(Project project) {
@@ -108,10 +111,10 @@ public class TranslatorManagerImpl implements TranslatorManager {
                     }
                 });
             });
-        
+
         // Erase any previous unmodified files.
         clearExistingFiles(project);
-        
+
         // Write generated code to file.
         gen.metaOn(writeOnceTranslators.stream()
             .map(Translator::get)
@@ -138,31 +141,31 @@ public class TranslatorManagerImpl implements TranslatorManager {
             );
         }
     }
-    
+
     private void clearExistingFilesIn(Path directory) throws IOException {
         try (final DirectoryStream<Path> stream = Files.newDirectoryStream(directory)) {
             for (final Path entry : stream) {
                 if (Files.isDirectory(entry)) {
                     clearExistingFilesIn(entry);
-                    
+
                     if (isDirectoryEmpty(entry)) {
                         Files.delete(entry);
                     }
                 } else {
                     final String filename = entry.toFile().getName();
                     if (filename.startsWith(HASH_PREFIX)
-                    &&  filename.endsWith(HASH_SUFFIX)) {
-                        final Path original = 
-                            entry
-                                .getParent()                 // The hidden folder
-                                .getParent()                 // The parent folder
-                                .resolve(filename.substring( // Lookup original .java file
-                                    HASH_PREFIX.length(), 
-                                    filename.length() - HASH_SUFFIX.length()
-                                ));
-                        
+                        && filename.endsWith(HASH_SUFFIX)) {
+                        final Path original
+                            = entry
+                            .getParent() // The hidden folder
+                            .getParent() // The parent folder
+                            .resolve(filename.substring( // Lookup original .java file
+                                HASH_PREFIX.length(),
+                                filename.length() - HASH_SUFFIX.length()
+                            ));
+
                         if (original.toFile().exists()
-                        &&  HashUtil.compare(original, entry)) {
+                            && HashUtil.compare(original, entry)) {
                             delete(original);
                             delete(entry);
                         }
@@ -171,12 +174,12 @@ public class TranslatorManagerImpl implements TranslatorManager {
             }
         }
     }
-    
+
     private static void delete(Path path) throws IOException {
         LOGGER.info("Deleting '" + path.toString() + "'.");
         Files.delete(path);
     }
-    
+
     private static boolean isDirectoryEmpty(Path directory) throws IOException {
         try (final DirectoryStream<Path> dirStream = Files.newDirectoryStream(directory)) {
             return !dirStream.iterator().hasNext();
@@ -204,10 +207,10 @@ public class TranslatorManagerImpl implements TranslatorManager {
                 final Path hashPath = codePath.getParent()
                     .resolve(secretFolderName())
                     .resolve(HASH_PREFIX + codePath.getFileName().toString() + HASH_SUFFIX);
-                
+
                 write(hashPath, HashUtil.md5(content), true);
                 write(codePath, content, false);
-                
+
                 fileCounter.incrementAndGet();
             }
         } catch (final IOException ex) {
@@ -220,22 +223,21 @@ public class TranslatorManagerImpl implements TranslatorManager {
             LOGGER.info("*** END   File:" + codePath);
         }
     }
-    
+
     @Override
     public int getFilesCreated() {
         return fileCounter.get();
     }
-    
+
     private static void write(Path path, String content, boolean hidden) throws IOException {
         LOGGER.info("Creating '" + path.toString() + "'.");
-        
+
         final Path parent = path.getParent();
         try {
             if (parent != null) {
                 Files.createDirectories(parent);
-                
                 if (hidden) {
-                    Files.setAttribute(parent, "dos:hidden", true);
+                    setAttributeHidden(parent);
                 }
             }
         } catch (final SecurityException se) {
@@ -246,12 +248,20 @@ public class TranslatorManagerImpl implements TranslatorManager {
             StandardOpenOption.CREATE,
             StandardOpenOption.TRUNCATE_EXISTING
         );
-        
+
         if (hidden) {
-            Files.setAttribute(path, "dos:hidden", true);
+            setAttributeHidden(path);
         }
     }
-    
+
+    private static void setAttributeHidden(Path path) {
+        try {
+            Files.setAttribute(path, "dos:hidden", true);
+        } catch (IOException | UnsupportedOperationException e) {
+            // Ignore. Maybe this is Linux or MacOS
+        }
+    }
+
     private String secretFolderName() {
         return "." + info.title()
             .replace(" ", "")
