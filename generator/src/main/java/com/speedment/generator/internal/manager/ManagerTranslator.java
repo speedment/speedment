@@ -47,6 +47,7 @@ public final class ManagerTranslator extends EntityAndManagerTranslator<Interfac
 
     @Override
     protected String getJavadocRepresentText() {
-        return "A manager";
+        return "The main interface for the manager of every {@link " + 
+            getSupport().entityType().getTypeName() + "} entity.";
     }
 }

@@ -50,7 +50,8 @@ public final class ManagerImplTranslator extends EntityAndManagerTranslator<Clas
 
     @Override
     protected String getJavadocRepresentText() {
-        return "A manager implementation";
+        return "The default implementation for the manager of every {@link " + 
+            getSupport().entityType().getTypeName() + "} entity.";
     }
     
     public Type getImplType() {

@@ -47,6 +47,7 @@ public final class EntityImplTranslator extends EntityAndManagerTranslator<Class
 
     @Override
     protected String getJavadocRepresentText() {
-        return "An implementation";
+        return "The default implementation of the {@link " + 
+            getSupport().entityType().getTypeName() + "}-interface.";
     }
 }

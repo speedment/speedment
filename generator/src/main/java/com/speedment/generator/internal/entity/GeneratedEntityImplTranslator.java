@@ -263,7 +263,8 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
 
     @Override
     protected String getJavadocRepresentText() {
-        return "The generated base implementation";
+        return "The generated base implementation of the {@link " + 
+            getSupport().entityType().getTypeName() + "}-interface.";
     }
 
     @Override

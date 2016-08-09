@@ -45,6 +45,7 @@ public class EntityTranslator extends EntityAndManagerTranslator<Interface> {
 
     @Override
     protected String getJavadocRepresentText() {
-        return "An interface";
+        return "The main interface for entities of the {@code " + 
+            getDocument().getName() + "}-table in the database.";
     }
 }

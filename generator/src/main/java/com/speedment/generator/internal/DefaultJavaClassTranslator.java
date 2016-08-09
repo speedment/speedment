@@ -68,11 +68,9 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.GENERATED;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.common.injector.Injector;
 import com.speedment.generator.component.TypeMapperComponent;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import java.lang.reflect.Type;
 import static java.util.Objects.requireNonNull;
 
@@ -186,13 +184,8 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
             message = JAVADOC_MESSAGE;
         }
 
-        return Javadoc.of(
-            getJavadocRepresentText()
-            + " representing an entity (for example, a row) in the "
-            + getDocument().mainInterface().getSimpleName()
-            + " " + relativeName(getDocument(), Project.class, DATABASE_NAME)
-            + "." + message
-        ).add(AUTHOR.setValue(owner));
+        return Javadoc.of(getJavadocRepresentText() + message)
+            .add(AUTHOR.setValue(owner));
     }
 
     @Override

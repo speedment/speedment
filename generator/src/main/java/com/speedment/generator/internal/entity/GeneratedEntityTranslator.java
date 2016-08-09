@@ -288,7 +288,10 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
 
     @Override
     protected String getJavadocRepresentText() {
-        return "The generated base interface";
+        return "The generated base for the {@link " + 
+            getSupport().entityType().getTypeName() + 
+            "}-interface representing entities of the {@code " + 
+            getDocument().getName() + "}-table in the database.";
     }
 
     @Override

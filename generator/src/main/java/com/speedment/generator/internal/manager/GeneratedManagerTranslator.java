@@ -18,7 +18,6 @@ package com.speedment.generator.internal.manager;
 
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.Javadoc;
@@ -226,7 +225,8 @@ public final class GeneratedManagerTranslator extends EntityAndManagerTranslator
 
     @Override
     protected String getJavadocRepresentText() {
-        return "The generated base manager";
+        return "The generated base interface for the manager of every {@link " + 
+            getSupport().entityType().getTypeName() + "} entity.";
     }
 
     @Override
