@@ -14,7 +14,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -82,10 +81,6 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
                     // Return it as the enumClass or throw an exception.
                     .findAny()
                     .orElse(null)
-//                    .orElseThrow(() -> new SpeedmentException(
-//                        "Could not find the expected inner enum class in entity " + 
-//                        "inteface '" + entityType.getName() + "'."
-//                    ))
             );
 
             final Method method;
