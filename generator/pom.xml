@@ -60,7 +60,6 @@
                         <Export-Package>
                             com.speedment.generator.component.*,
                             com.speedment.generator.event.*,
-                            com.speedment.generator.typetoken.*,
                             com.speedment.generator.util.*,
                             com.speedment.generator
                         </Export-Package>

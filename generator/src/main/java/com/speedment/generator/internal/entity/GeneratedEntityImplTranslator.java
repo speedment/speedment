@@ -16,6 +16,7 @@
  */
 package com.speedment.generator.internal.entity;
 
+import com.speedment.common.codegen.constant.DefaultAnnotationUsage;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Field;
@@ -31,16 +32,23 @@ import java.util.Objects;
 import java.util.StringJoiner;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import com.speedment.common.codegen.constant.DefaultJavadocTag;
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.runtime.util.OptionalUtil;
 import java.util.Optional;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.Formatting.tab;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
+import com.speedment.common.codegen.model.Javadoc;
+import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.component.TypeMapperComponent;
 import static com.speedment.generator.internal.entity.GeneratedEntityTranslator.getterReturnType;
 import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
+import com.speedment.generator.internal.util.EntityTranslatorSupport;
+import com.speedment.generator.internal.util.FkHolder;
+import com.speedment.runtime.manager.Manager;
 import java.lang.reflect.Type;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
@@ -53,6 +61,7 @@ import static java.util.stream.Collectors.joining;
 public final class GeneratedEntityImplTranslator extends EntityAndManagerTranslator<Class> {
 
     private @Inject TypeMapperComponent typeMappers;
+    private @Inject Injector injector;
     
     public GeneratedEntityImplTranslator(Table table) {
         super(table, Class::of);
@@ -63,6 +72,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
         requireNonNull(file);
 
         return newBuilder(file, getSupport().generatedEntityImplName())
+            
             /**
              * Getters
              */
@@ -88,6 +98,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                         .add("return " + getter + ";"));
 
             })
+            
             /**
              * Setters
              */
@@ -100,6 +111,40 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                         .add("this." + getSupport().variableName(col) + " = " + getSupport().variableName(col) + ";")
                         .add("return this;"));
             })
+            
+            /**
+             * Finders
+             */
+            .forEveryColumn((clazz, col) -> {
+                final EntityTranslatorSupport.ReferenceFieldType ref = 
+                    EntityTranslatorSupport.getReferenceFieldType(
+                        file, getSupport().tableOrThrow(), col, getSupport().entityType(), injector
+                    );
+                
+                EntityTranslatorSupport.getForeignKey(
+                    getSupport().tableOrThrow(), col
+                ).ifPresent(fkc -> {
+                    final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
+                    final TranslatorSupport<Table> fuSupport = fu.getForeignEmt().getSupport();
+                    
+                    file.add(Import.of(fuSupport.entityType()));
+                    
+                    clazz.add(Method.of(FINDER_METHOD_PREFIX + getSupport().typeName(col), fuSupport.entityType())
+                        .public_()
+                        .add(DefaultAnnotationUsage.OVERRIDE)
+                        .add(Field.of("foreignManager", SimpleParameterizedType.create(
+                            Manager.class, fuSupport.entityType()
+                        )))
+                        .add(
+                            "return foreignManager.findBy(" + fuSupport.entityName() + 
+                            "." + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + 
+                            ", " + GETTER_METHOD_PREFIX + getSupport().namer().javaTypeName(col.getJavaName()) + 
+                            ").orElse(null);"
+                        )
+                    );
+                });
+            })
+            
             /**
              * Class details
              */

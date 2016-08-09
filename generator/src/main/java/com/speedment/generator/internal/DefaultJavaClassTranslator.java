@@ -89,6 +89,7 @@ public abstract class DefaultJavaClassTranslator<DOC extends Document & HasName 
     public static final String 
         GETTER_METHOD_PREFIX = "get",
         SETTER_METHOD_PREFIX = "set",
+        FINDER_METHOD_PREFIX = "find",
         JAVADOC_MESSAGE
         = "\n<p>\nThis file is safe to edit. It will not be overwritten by the "
         + "code generator.";

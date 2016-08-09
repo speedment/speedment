@@ -39,6 +39,7 @@ import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.entity.Entity;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import com.speedment.common.codegen.constant.DefaultJavadocTag;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
@@ -53,6 +54,7 @@ import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DAT
 import com.speedment.runtime.util.OptionalBoolean;
 import com.speedment.runtime.util.OptionalUtil;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
+import com.speedment.runtime.manager.Manager;
 import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.OptionalDouble;
@@ -111,6 +113,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                 .add(identifier)
                 .add(SimpleParameterizedType.create(Entity.class, getSupport().entityType()))
             )
+            
             /**
              * Getters
              */
@@ -131,6 +134,7 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                     )
                 );
             })
+            
             /**
              * Setters
              */
@@ -148,6 +152,40 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
                         .add(RETURN.setText("this " + getSupport().entityName() + " instance")))
                 );
             })
+            
+            /**
+             * Finders
+             */
+            .forEveryColumn((intrf, col) -> {
+                final EntityTranslatorSupport.ReferenceFieldType ref = 
+                    EntityTranslatorSupport.getReferenceFieldType(
+                        file, getSupport().tableOrThrow(), col, getSupport().entityType(), injector
+                    );
+                
+                EntityTranslatorSupport.getForeignKey(
+                    getSupport().tableOrThrow(), col
+                ).ifPresent(fkc -> {
+                    final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
+                    final TranslatorSupport<Table> fuSupport = fu.getForeignEmt().getSupport();
+                    
+                    file.add(Import.of(fuSupport.entityType()));
+                    
+                    intrf.add(Method.of(FINDER_METHOD_PREFIX + getSupport().typeName(col), fuSupport.entityType())
+                        .set(Javadoc.of(
+                                "Queries the specified manager for the referenced " + 
+                                fuSupport.entityName() + ". If no such " + 
+                                fuSupport.entityName() + 
+                                " exists, an {@code NullPointerException} will be thrown."
+                            ).add(DefaultJavadocTag.PARAM.setValue("foreignManager").setText("the manager to query for the entity"))
+                            .add(DefaultJavadocTag.RETURN.setText("the foreign entity referenced"))
+                        )
+                        .add(Field.of("foreignManager", SimpleParameterizedType.create(
+                            Manager.class, fuSupport.entityType()
+                        )))
+                    );
+                });
+            })
+            
             /**
              * Fields
              */
@@ -160,37 +198,47 @@ public final class GeneratedEntityTranslator extends EntityAndManagerTranslator<
 
                 final Type entityType           = getSupport().entityType();
                 final String shortEntityName    = getSupport().entityName();
-                final String shortEntityVarName = getSupport().namer().javaVariableName(shortEntityName);
+//                final String shortEntityVarName = getSupport().namer().javaVariableName(shortEntityName);
 
                 file.add(Import.of(entityType));
 
                 final String getter;
                 if (usesOptional(col)) {
-                    getter = "o -> OptionalUtil.unwrap(o.get" + getSupport().typeName(col) + "())";
+                    getter = "o -> OptionalUtil.unwrap(o." + GETTER_METHOD_PREFIX + getSupport().typeName(col) + "())";
                     file.add(Import.of(OptionalUtil.class));
                 } else {
                     getter = shortEntityName + "::get" + getSupport().typeName(col);
                 }
 
+//                final String finder = EntityTranslatorSupport.getForeignKey(getSupport().tableOrThrow(), col)
+//                    .map(fkc -> {
+//                        final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
+//                        final TranslatorSupport<Table> fuSupport = fu.getEmt().getSupport();
+//
+//                        file.add(Import.of(fuSupport.entityType()));
+//
+//                        return 
+//                            ", " + fuSupport.entityName() + "." + fuSupport.namer().javaStaticFieldName(fu.getColumn().getJavaName())
+//                            + ", (" + shortEntityVarName + ", fkManager) -> fkManager.findAny("
+//                            + fu.getForeignEmt().getSupport().entityName() + "."
+//                            + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()
+//                            ) + ", " + shortEntityVarName + ".get"
+//                            + fuSupport.namer().javaTypeName(col.getJavaName()) + "()"
+//                            + (usesOptional(col) ? ".orElse(null)" : "")
+//                            + ").orElse(null)";
+//                    }).orElse("");
+
                 final String finder = EntityTranslatorSupport.getForeignKey(getSupport().tableOrThrow(), col)
                     .map(fkc -> {
                         final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
-                        final TranslatorSupport<Table> fuSupport = fu.getEmt().getSupport();
-
-                        file.add(Import.of(fuSupport.entityType()));
-
-                        return 
-                            ", " + fuSupport.entityName() + "." + fuSupport.namer().javaStaticFieldName(fu.getColumn().getJavaName())
-                            + ", (" + shortEntityVarName + ", fkManager) -> fkManager.findAny("
-                            + fu.getForeignEmt().getSupport().entityName() + "."
-                            + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()
-                            ) + ", " + shortEntityVarName + ".get"
-                            + fuSupport.namer().javaTypeName(col.getJavaName()) + "()"
-                            + (usesOptional(col) ? ".orElse(null)" : "")
-                            + ").orElse(null)";
+                        final TranslatorSupport<Table> fuSupport = fu.getForeignEmt().getSupport();
+                        
+                        return
+                            ", " + fuSupport.entityName() + "." + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) +
+                            ", " + shortEntityName + "::" + FINDER_METHOD_PREFIX + getSupport().typeName(col);
                     }).orElse("");
 
-                final String setter = ", " + shortEntityName + "::set" + getSupport().typeName(col);
+                final String setter = ", " + shortEntityName + "::" + SETTER_METHOD_PREFIX + getSupport().typeName(col);
 
                 final String constant = getSupport().namer().javaStaticFieldName(col.getJavaName());
                 identifier.add(EnumConstant.of(constant).add(new TextValue(col.getName())));
