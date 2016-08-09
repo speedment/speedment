@@ -23,7 +23,9 @@ import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.trait.HasColumn;
 import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
+import com.speedment.runtime.internal.util.document.DocumentUtil;
 import com.speedment.tool.component.IssueComponent;
 import com.speedment.tool.rule.Issue;
 import com.speedment.tool.rule.Rule;
@@ -36,16 +38,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author Simon Jonasson
  * @since 3.0.0
  */
-public class ReferencesEnabledRule implements Rule {
+public final class ReferencesEnabledRule implements Rule {
 
-    private @Inject
-    ProjectComponent projectComponent;
-    private @Inject
-    IssueComponent issues;
+    private @Inject ProjectComponent projectComponent;
+    private @Inject IssueComponent issues;
 
     @Override
     public CompletableFuture<Boolean> verify() {
-        return CompletableFuture.supplyAsync( () -> checkRule());
+        return CompletableFuture.supplyAsync(() -> checkRule());
     }
 
     private boolean checkRule() {
@@ -53,35 +53,34 @@ public class ReferencesEnabledRule implements Rule {
         final Project project = projectComponent.getProject();
         
         DocumentDbUtil.traverseOver(project)
+            .filter(HasEnabled::test)
             .forEach(doc -> check(doc, noIssues));
         
         return noIssues.get();
     }
 
     private void check(Document document, AtomicBoolean noIssues) {
-       if( document instanceof HasColumn ){
-           final HasColumn source = (HasColumn) document;
-           final Optional<? extends Column> target = source.findColumn();
-            if ( target.isPresent() ) {
-                final Optional<HasEnabled> disabled = target.get().ancestors()
-                    .filter( doc -> doc instanceof HasEnabled )
-                    .map(HasEnabled::of)
-                    .filter( doc -> !doc.isEnabled() )
-                    .findAny();
-
-                if( disabled.isPresent() || !target.get().isEnabled() ){
+       if (document instanceof HasColumn) {
+            final HasColumn source = (HasColumn) document;
+            final Optional<? extends Column> target = source.findColumn();
+            final String sourceName = nameOf(source);
+            
+            if (target.isPresent()) {
+                if (!HasEnabled.test(target.get())) {
                     noIssues.set(false);
-                    final String targetName = target.get().getName();
-                    final String sourceName = source.getName();
+                    
+                    final String targetName = nameOf(target.get());
+                    
                     issues.post(new Issue() {
                         @Override
                         public String getTitle() {
-                            return "Reference not enabled: " + targetName;
+                            return "Reference not enabled: " + target.get().getName();
                         }
 
                         @Override
                         public String getDescription() {
-                            return "The referenced element " + targetName + ", is not enabled. Disabled elements will "
+                            return "The referenced element " + target.get().getName()
+                                + ", is not enabled. Disabled elements will "
                                 + "not be generated. Thus, referencing a disabled element "
                                 + "will result in broken code.\n"
                                 + "This might be a result of the element in question not being enabled, "
@@ -95,7 +94,33 @@ public class ReferencesEnabledRule implements Rule {
                         }
                     });
                 }
+            } else {
+                issues.post(new Issue() {
+                    @Override
+                    public String getTitle() {
+                        return "Referenced column does not exist";
+                    }
+
+                    @Override
+                    public String getDescription() {
+                        return "'" + sourceName + 
+                            "' references a column that does not exist. Make " + 
+                            "sure the name of it corresponds to the name of " + 
+                            "the referenced column in the database.";
+                    }
+
+                    @Override
+                    public Issue.Level getLevel() {
+                        return Level.ERROR;
+                    }
+                });
             }
         }
+    }
+    
+    private String nameOf(HasName doc) {
+        return DocumentUtil.relativeName(
+            doc, Project.class, DocumentUtil.Name.DATABASE_NAME
+        );
     }
 }
