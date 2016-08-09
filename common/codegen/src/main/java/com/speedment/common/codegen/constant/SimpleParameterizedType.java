@@ -20,12 +20,12 @@ public final class SimpleParameterizedType implements ParameterizedType {
      * Creates a new {@code SimpleParameterizedType} based on the class name of
      * the specified class and the specified parameters.
      * 
-     * @param clazz       the class to get the name from
+     * @param mainType    the class to get the name from
      * @param parameters  list of generic parameters to this type
      * @return            the created type
      */
-    public static SimpleParameterizedType create(Class<?> clazz, Type... parameters) {
-        return create(clazz.getName(), parameters);
+    public static SimpleParameterizedType create(Type mainType, Type... parameters) {
+        return create(mainType.getTypeName(), parameters);
     }
     
     /**

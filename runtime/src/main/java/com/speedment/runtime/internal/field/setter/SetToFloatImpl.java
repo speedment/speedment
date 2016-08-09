@@ -16,7 +16,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class SetToFloatImpl<ENTITY, D>  implements SetToFloat<ENTITY, D> {
+public final class SetToFloatImpl<ENTITY, D> implements SetToFloat<ENTITY, D> {
     
     private final HasFloatValue<ENTITY, D> field;
     private final float newValue;

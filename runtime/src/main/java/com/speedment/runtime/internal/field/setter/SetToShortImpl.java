@@ -16,7 +16,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class SetToShortImpl<ENTITY, D>  implements SetToShort<ENTITY, D> {
+public final class SetToShortImpl<ENTITY, D> implements SetToShort<ENTITY, D> {
     
     private final HasShortValue<ENTITY, D> field;
     private final short newValue;

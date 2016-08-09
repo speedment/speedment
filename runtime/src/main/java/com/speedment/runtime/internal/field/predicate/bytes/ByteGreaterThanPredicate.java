@@ -12,7 +12,7 @@ import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class ByteGreaterThanPredicate<ENTITY, D>  extends AbstractFieldPredicate<ENTITY, HasByteValue<ENTITY, D>> implements Tuple1<Byte> {
+public final class ByteGreaterThanPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasByteValue<ENTITY, D>> implements Tuple1<Byte> {
     
     private final byte value;
     

@@ -16,7 +16,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class FloatInPredicate<ENTITY, D>  extends AbstractFieldPredicate<ENTITY, HasFloatValue<ENTITY, D>> implements Tuple1<Set<Float>> {
+public final class FloatInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasFloatValue<ENTITY, D>> implements Tuple1<Set<Float>> {
     
     private final Set<Float> set;
     

@@ -17,7 +17,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class CharBetweenPredicate<ENTITY, D>  extends AbstractFieldPredicate<ENTITY, HasCharValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Character, Character> {
+public final class CharBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasCharValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Character, Character> {
     
     private final char start;
     private final char end;

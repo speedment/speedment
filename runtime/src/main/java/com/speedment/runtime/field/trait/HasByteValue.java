@@ -18,7 +18,7 @@ import com.speedment.runtime.internal.field.setter.SetToByteImpl;
  * @since  3.0.0
  */
 @Api(version = "3.0")
-public interface HasByteValue<ENTITY, D>  extends Field<ENTITY> {
+public interface HasByteValue<ENTITY, D> extends Field<ENTITY> {
     
     @Override
     ByteSetter<ENTITY> setter();

@@ -16,7 +16,7 @@ import com.speedment.runtime.field.trait.HasComparableOperators;
  * @see ReferenceField
  */
 @Api(version = "3.0")
-public interface ByteField<ENTITY, D>  extends Field<ENTITY>, HasByteValue<ENTITY, D>, HasComparableOperators<ENTITY, Byte> {
+public interface ByteField<ENTITY, D> extends Field<ENTITY>, HasByteValue<ENTITY, D>, HasComparableOperators<ENTITY, Byte> {
     
     
 }

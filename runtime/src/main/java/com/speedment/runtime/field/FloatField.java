@@ -16,7 +16,7 @@ import com.speedment.runtime.field.trait.HasFloatValue;
  * @see ReferenceField
  */
 @Api(version = "3.0")
-public interface FloatField<ENTITY, D>  extends Field<ENTITY>, HasFloatValue<ENTITY, D>, HasComparableOperators<ENTITY, Float> {
+public interface FloatField<ENTITY, D> extends Field<ENTITY>, HasFloatValue<ENTITY, D>, HasComparableOperators<ENTITY, Float> {
     
     
 }

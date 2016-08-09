@@ -16,7 +16,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class DoubleInPredicate<ENTITY, D>  extends AbstractFieldPredicate<ENTITY, HasDoubleValue<ENTITY, D>> implements Tuple1<Set<Double>> {
+public final class DoubleInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasDoubleValue<ENTITY, D>> implements Tuple1<Set<Double>> {
     
     private final Set<Double> set;
     

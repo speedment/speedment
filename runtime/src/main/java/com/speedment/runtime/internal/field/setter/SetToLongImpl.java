@@ -16,7 +16,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class SetToLongImpl<ENTITY, D>  implements SetToLong<ENTITY, D> {
+public final class SetToLongImpl<ENTITY, D> implements SetToLong<ENTITY, D> {
     
     private final HasLongValue<ENTITY, D> field;
     private final long newValue;

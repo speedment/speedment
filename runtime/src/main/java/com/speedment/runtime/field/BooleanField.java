@@ -15,7 +15,7 @@ import com.speedment.runtime.field.trait.HasBooleanValue;
  * @see ReferenceField
  */
 @Api(version = "3.0")
-public interface BooleanField<ENTITY, D>  extends Field<ENTITY>, HasBooleanValue<ENTITY, D> {
+public interface BooleanField<ENTITY, D> extends Field<ENTITY>, HasBooleanValue<ENTITY, D> {
     
     
 }

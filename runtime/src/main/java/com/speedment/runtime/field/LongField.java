@@ -16,7 +16,7 @@ import com.speedment.runtime.field.trait.HasLongValue;
  * @see ReferenceField
  */
 @Api(version = "3.0")
-public interface LongField<ENTITY, D>  extends Field<ENTITY>, HasLongValue<ENTITY, D>, HasComparableOperators<ENTITY, Long> {
+public interface LongField<ENTITY, D> extends Field<ENTITY>, HasLongValue<ENTITY, D>, HasComparableOperators<ENTITY, Long> {
     
     
 }

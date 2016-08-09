@@ -31,7 +31,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY>  implements DoubleField<ENTITY, D>, DoubleForeignKeyField<ENTITY, D, FK_ENTITY> {
+public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements DoubleField<ENTITY, D>, DoubleForeignKeyField<ENTITY, D, FK_ENTITY> {
     
     private final FieldIdentifier<ENTITY> identifier;
     private final DoubleGetter<ENTITY> getter;

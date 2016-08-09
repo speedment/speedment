@@ -11,7 +11,7 @@ import com.speedment.runtime.manager.Manager;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class FindFromDouble<ENTITY, FK_ENTITY>  extends AbstractFindFrom<ENTITY, FK_ENTITY, DoubleField<ENTITY, ?>, DoubleField<FK_ENTITY, ?>> {
+public final class FindFromDouble<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, DoubleField<ENTITY, ?>, DoubleField<FK_ENTITY, ?>> {
     
     public FindFromDouble(DoubleField<ENTITY, ?> source, DoubleField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {
         super(source, target, manager);

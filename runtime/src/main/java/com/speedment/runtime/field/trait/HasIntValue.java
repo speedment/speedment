@@ -18,7 +18,7 @@ import com.speedment.runtime.internal.field.setter.SetToIntImpl;
  * @since  3.0.0
  */
 @Api(version = "3.0")
-public interface HasIntValue<ENTITY, D>  extends Field<ENTITY> {
+public interface HasIntValue<ENTITY, D> extends Field<ENTITY> {
     
     @Override
     IntSetter<ENTITY> setter();

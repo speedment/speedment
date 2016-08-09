@@ -18,7 +18,7 @@ import com.speedment.runtime.internal.field.setter.SetToBooleanImpl;
  * @since  3.0.0
  */
 @Api(version = "3.0")
-public interface HasBooleanValue<ENTITY, D>  extends Field<ENTITY> {
+public interface HasBooleanValue<ENTITY, D> extends Field<ENTITY> {
     
     @Override
     BooleanSetter<ENTITY> setter();

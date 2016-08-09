@@ -20,7 +20,7 @@ import com.speedment.runtime.annotation.Api;
  */
 @Api(version = "3.0")
 @FunctionalInterface
-public interface IntGetter<ENTITY>  extends Getter<ENTITY> {
+public interface IntGetter<ENTITY> extends Getter<ENTITY> {
     
     /**
      * Returns the member represented by this getter in the specified instance.

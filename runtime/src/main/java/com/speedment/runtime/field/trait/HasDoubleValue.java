@@ -18,7 +18,7 @@ import com.speedment.runtime.internal.field.setter.SetToDoubleImpl;
  * @since  3.0.0
  */
 @Api(version = "3.0")
-public interface HasDoubleValue<ENTITY, D>  extends Field<ENTITY> {
+public interface HasDoubleValue<ENTITY, D> extends Field<ENTITY> {
     
     @Override
     DoubleSetter<ENTITY> setter();

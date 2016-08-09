@@ -16,7 +16,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class SetToBooleanImpl<ENTITY, D>  implements SetToBoolean<ENTITY, D> {
+public final class SetToBooleanImpl<ENTITY, D> implements SetToBoolean<ENTITY, D> {
     
     private final HasBooleanValue<ENTITY, D> field;
     private final boolean newValue;

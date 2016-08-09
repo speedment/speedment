@@ -18,7 +18,7 @@ import com.speedment.runtime.internal.field.setter.SetToShortImpl;
  * @since  3.0.0
  */
 @Api(version = "3.0")
-public interface HasShortValue<ENTITY, D>  extends Field<ENTITY> {
+public interface HasShortValue<ENTITY, D> extends Field<ENTITY> {
     
     @Override
     ShortSetter<ENTITY> setter();

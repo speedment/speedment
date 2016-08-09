@@ -16,7 +16,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class SetToCharImpl<ENTITY, D>  implements SetToChar<ENTITY, D> {
+public final class SetToCharImpl<ENTITY, D> implements SetToChar<ENTITY, D> {
     
     private final HasCharValue<ENTITY, D> field;
     private final char newValue;

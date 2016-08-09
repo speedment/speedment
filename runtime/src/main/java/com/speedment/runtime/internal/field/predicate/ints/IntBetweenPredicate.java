@@ -17,7 +17,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class IntBetweenPredicate<ENTITY, D>  extends AbstractFieldPredicate<ENTITY, HasIntValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Integer, Integer> {
+public final class IntBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasIntValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Integer, Integer> {
     
     private final int start;
     private final int end;

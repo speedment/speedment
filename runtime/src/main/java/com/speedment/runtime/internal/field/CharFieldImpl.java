@@ -25,7 +25,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class CharFieldImpl<ENTITY, D>  implements CharField<ENTITY, D> {
+public final class CharFieldImpl<ENTITY, D> implements CharField<ENTITY, D> {
     
     private final FieldIdentifier<ENTITY> identifier;
     private final CharGetter<ENTITY> getter;

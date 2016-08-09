@@ -14,7 +14,7 @@ import java.util.function.UnaryOperator;
  * @since  3.0.0
  */
 @Api(version = "3.0")
-public interface SetToChar<ENTITY, D>  extends UnaryOperator<ENTITY> {
+public interface SetToChar<ENTITY, D> extends UnaryOperator<ENTITY> {
     
     /**
      * Returns the field that this setter sets.

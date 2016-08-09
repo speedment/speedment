@@ -16,7 +16,7 @@ import com.speedment.runtime.field.trait.HasIntValue;
  * @see ReferenceField
  */
 @Api(version = "3.0")
-public interface IntField<ENTITY, D>  extends Field<ENTITY>, HasIntValue<ENTITY, D>, HasComparableOperators<ENTITY, Integer> {
+public interface IntField<ENTITY, D> extends Field<ENTITY>, HasIntValue<ENTITY, D>, HasComparableOperators<ENTITY, Integer> {
     
     
 }

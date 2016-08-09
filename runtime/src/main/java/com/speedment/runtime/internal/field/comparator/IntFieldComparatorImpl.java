@@ -12,7 +12,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class IntFieldComparatorImpl<ENTITY, D>  implements IntFieldComparator<ENTITY, D> {
+public final class IntFieldComparatorImpl<ENTITY, D> implements IntFieldComparator<ENTITY, D> {
     
     private final HasIntValue<ENTITY, D> field;
     private boolean reversed;

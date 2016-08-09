@@ -25,7 +25,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class DoubleFieldImpl<ENTITY, D>  implements DoubleField<ENTITY, D> {
+public final class DoubleFieldImpl<ENTITY, D> implements DoubleField<ENTITY, D> {
     
     private final FieldIdentifier<ENTITY> identifier;
     private final DoubleGetter<ENTITY> getter;

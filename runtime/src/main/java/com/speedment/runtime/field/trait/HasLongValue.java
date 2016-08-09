@@ -18,7 +18,7 @@ import com.speedment.runtime.internal.field.setter.SetToLongImpl;
  * @since  3.0.0
  */
 @Api(version = "3.0")
-public interface HasLongValue<ENTITY, D>  extends Field<ENTITY> {
+public interface HasLongValue<ENTITY, D> extends Field<ENTITY> {
     
     @Override
     LongSetter<ENTITY> setter();

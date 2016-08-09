@@ -16,7 +16,7 @@ import com.speedment.runtime.field.trait.HasDoubleValue;
  * @see ReferenceField
  */
 @Api(version = "3.0")
-public interface DoubleField<ENTITY, D>  extends Field<ENTITY>, HasDoubleValue<ENTITY, D>, HasComparableOperators<ENTITY, Double> {
+public interface DoubleField<ENTITY, D> extends Field<ENTITY>, HasDoubleValue<ENTITY, D>, HasComparableOperators<ENTITY, Double> {
     
     
 }

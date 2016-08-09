@@ -31,7 +31,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY>  implements ByteField<ENTITY, D>, ByteForeignKeyField<ENTITY, D, FK_ENTITY> {
+public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements ByteField<ENTITY, D>, ByteForeignKeyField<ENTITY, D, FK_ENTITY> {
     
     private final FieldIdentifier<ENTITY> identifier;
     private final ByteGetter<ENTITY> getter;

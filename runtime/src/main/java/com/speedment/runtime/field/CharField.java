@@ -16,7 +16,7 @@ import com.speedment.runtime.field.trait.HasComparableOperators;
  * @see ReferenceField
  */
 @Api(version = "3.0")
-public interface CharField<ENTITY, D>  extends Field<ENTITY>, HasCharValue<ENTITY, D>, HasComparableOperators<ENTITY, Character> {
+public interface CharField<ENTITY, D> extends Field<ENTITY>, HasCharValue<ENTITY, D>, HasComparableOperators<ENTITY, Character> {
     
     
 }

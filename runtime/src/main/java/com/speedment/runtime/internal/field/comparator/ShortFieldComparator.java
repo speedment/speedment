@@ -12,7 +12,7 @@ import java.util.Comparator;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public interface ShortFieldComparator<ENTITY, D>  extends Comparator<ENTITY> {
+public interface ShortFieldComparator<ENTITY, D> extends Comparator<ENTITY> {
     
     /**
      * Gets the field that is being compared.

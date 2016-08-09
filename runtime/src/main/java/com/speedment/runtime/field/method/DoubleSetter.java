@@ -21,7 +21,7 @@ import com.speedment.runtime.annotation.Api;
  */
 @Api(version = "3.0")
 @FunctionalInterface
-public interface DoubleSetter<ENTITY>  extends Setter<ENTITY> {
+public interface DoubleSetter<ENTITY> extends Setter<ENTITY> {
     
     /**
      * Sets the member represented by this setter in the specified instance to

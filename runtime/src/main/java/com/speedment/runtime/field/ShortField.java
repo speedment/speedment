@@ -16,7 +16,7 @@ import com.speedment.runtime.field.trait.HasShortValue;
  * @see ReferenceField
  */
 @Api(version = "3.0")
-public interface ShortField<ENTITY, D>  extends Field<ENTITY>, HasShortValue<ENTITY, D>, HasComparableOperators<ENTITY, Short> {
+public interface ShortField<ENTITY, D> extends Field<ENTITY>, HasShortValue<ENTITY, D>, HasComparableOperators<ENTITY, Short> {
     
     
 }

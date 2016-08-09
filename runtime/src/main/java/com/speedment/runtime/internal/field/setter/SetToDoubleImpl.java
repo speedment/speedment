@@ -16,7 +16,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class SetToDoubleImpl<ENTITY, D>  implements SetToDouble<ENTITY, D> {
+public final class SetToDoubleImpl<ENTITY, D> implements SetToDouble<ENTITY, D> {
     
     private final HasDoubleValue<ENTITY, D> field;
     private final double newValue;

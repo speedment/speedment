@@ -12,7 +12,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class FloatFieldComparatorImpl<ENTITY, D>  implements FloatFieldComparator<ENTITY, D> {
+public final class FloatFieldComparatorImpl<ENTITY, D> implements FloatFieldComparator<ENTITY, D> {
     
     private final HasFloatValue<ENTITY, D> field;
     private boolean reversed;

@@ -11,7 +11,7 @@ import com.speedment.runtime.manager.Manager;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class FindFromFloat<ENTITY, FK_ENTITY>  extends AbstractFindFrom<ENTITY, FK_ENTITY, FloatField<ENTITY, ?>, FloatField<FK_ENTITY, ?>> {
+public final class FindFromFloat<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, FloatField<ENTITY, ?>, FloatField<FK_ENTITY, ?>> {
     
     public FindFromFloat(FloatField<ENTITY, ?> source, FloatField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {
         super(source, target, manager);

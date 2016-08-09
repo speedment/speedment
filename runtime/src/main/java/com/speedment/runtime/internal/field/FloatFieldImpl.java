@@ -25,7 +25,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class FloatFieldImpl<ENTITY, D>  implements FloatField<ENTITY, D> {
+public final class FloatFieldImpl<ENTITY, D> implements FloatField<ENTITY, D> {
     
     private final FieldIdentifier<ENTITY> identifier;
     private final FloatGetter<ENTITY> getter;

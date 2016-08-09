@@ -12,7 +12,7 @@ import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class FloatGreaterThanPredicate<ENTITY, D>  extends AbstractFieldPredicate<ENTITY, HasFloatValue<ENTITY, D>> implements Tuple1<Float> {
+public final class FloatGreaterThanPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasFloatValue<ENTITY, D>> implements Tuple1<Float> {
     
     private final float value;
     

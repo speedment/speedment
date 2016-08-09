@@ -12,7 +12,7 @@ import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class IntGreaterOrEqualPredicate<ENTITY, D>  extends AbstractFieldPredicate<ENTITY, HasIntValue<ENTITY, D>> implements Tuple1<Integer> {
+public final class IntGreaterOrEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasIntValue<ENTITY, D>> implements Tuple1<Integer> {
     
     private final int value;
     

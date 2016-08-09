@@ -18,7 +18,7 @@ import com.speedment.runtime.field.trait.HasFinder;
  * @see ReferenceForeignKeyField
  */
 @Api(version = "3.0")
-public interface ShortForeignKeyField<ENTITY, D, FK_ENTITY>  extends ShortField<ENTITY, D>, HasFinder<ENTITY, FK_ENTITY> {
+public interface ShortForeignKeyField<ENTITY, D, FK_ENTITY> extends ShortField<ENTITY, D>, HasFinder<ENTITY, FK_ENTITY> {
     
     
 }

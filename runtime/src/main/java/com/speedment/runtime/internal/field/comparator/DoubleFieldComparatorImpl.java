@@ -12,7 +12,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class DoubleFieldComparatorImpl<ENTITY, D>  implements DoubleFieldComparator<ENTITY, D> {
+public final class DoubleFieldComparatorImpl<ENTITY, D> implements DoubleFieldComparator<ENTITY, D> {
     
     private final HasDoubleValue<ENTITY, D> field;
     private boolean reversed;

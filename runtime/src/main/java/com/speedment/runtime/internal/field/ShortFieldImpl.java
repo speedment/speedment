@@ -25,7 +25,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class ShortFieldImpl<ENTITY, D>  implements ShortField<ENTITY, D> {
+public final class ShortFieldImpl<ENTITY, D> implements ShortField<ENTITY, D> {
     
     private final FieldIdentifier<ENTITY> identifier;
     private final ShortGetter<ENTITY> getter;

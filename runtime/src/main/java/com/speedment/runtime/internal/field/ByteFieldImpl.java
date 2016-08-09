@@ -25,7 +25,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class ByteFieldImpl<ENTITY, D>  implements ByteField<ENTITY, D> {
+public final class ByteFieldImpl<ENTITY, D> implements ByteField<ENTITY, D> {
     
     private final FieldIdentifier<ENTITY> identifier;
     private final ByteGetter<ENTITY> getter;

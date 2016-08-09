@@ -18,7 +18,7 @@ import com.speedment.runtime.field.trait.HasFinder;
  * @see ReferenceForeignKeyField
  */
 @Api(version = "3.0")
-public interface BooleanForeignKeyField<ENTITY, D, FK_ENTITY>  extends BooleanField<ENTITY, D>, HasFinder<ENTITY, FK_ENTITY> {
+public interface BooleanForeignKeyField<ENTITY, D, FK_ENTITY> extends BooleanField<ENTITY, D>, HasFinder<ENTITY, FK_ENTITY> {
     
     
 }

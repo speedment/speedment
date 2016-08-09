@@ -16,7 +16,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class SetToIntImpl<ENTITY, D>  implements SetToInt<ENTITY, D> {
+public final class SetToIntImpl<ENTITY, D> implements SetToInt<ENTITY, D> {
     
     private final HasIntValue<ENTITY, D> field;
     private final int newValue;

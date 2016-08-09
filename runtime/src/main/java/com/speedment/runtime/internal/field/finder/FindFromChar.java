@@ -11,7 +11,7 @@ import com.speedment.runtime.manager.Manager;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class FindFromChar<ENTITY, FK_ENTITY>  extends AbstractFindFrom<ENTITY, FK_ENTITY, CharField<ENTITY, ?>, CharField<FK_ENTITY, ?>> {
+public final class FindFromChar<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, CharField<ENTITY, ?>, CharField<FK_ENTITY, ?>> {
     
     public FindFromChar(CharField<ENTITY, ?> source, CharField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {
         super(source, target, manager);

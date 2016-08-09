@@ -12,7 +12,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class CharFieldComparatorImpl<ENTITY, D>  implements CharFieldComparator<ENTITY, D> {
+public final class CharFieldComparatorImpl<ENTITY, D> implements CharFieldComparator<ENTITY, D> {
     
     private final HasCharValue<ENTITY, D> field;
     private boolean reversed;

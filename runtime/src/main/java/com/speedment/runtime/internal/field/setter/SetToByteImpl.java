@@ -16,7 +16,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class SetToByteImpl<ENTITY, D>  implements SetToByte<ENTITY, D> {
+public final class SetToByteImpl<ENTITY, D> implements SetToByte<ENTITY, D> {
     
     private final HasByteValue<ENTITY, D> field;
     private final byte newValue;

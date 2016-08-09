@@ -14,7 +14,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class BooleanFieldImpl<ENTITY, D>  implements BooleanField<ENTITY, D> {
+public final class BooleanFieldImpl<ENTITY, D> implements BooleanField<ENTITY, D> {
     
     private final FieldIdentifier<ENTITY> identifier;
     private final BooleanGetter<ENTITY> getter;

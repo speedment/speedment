@@ -17,7 +17,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class DoubleBetweenPredicate<ENTITY, D>  extends AbstractFieldPredicate<ENTITY, HasDoubleValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Double, Double> {
+public final class DoubleBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasDoubleValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Double, Double> {
     
     private final double start;
     private final double end;

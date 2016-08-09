@@ -12,7 +12,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-public final class ShortFieldComparatorImpl<ENTITY, D>  implements ShortFieldComparator<ENTITY, D> {
+public final class ShortFieldComparatorImpl<ENTITY, D> implements ShortFieldComparator<ENTITY, D> {
     
     private final HasShortValue<ENTITY, D> field;
     private boolean reversed;
