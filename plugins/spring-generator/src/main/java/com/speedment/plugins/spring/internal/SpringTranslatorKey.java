@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.plugins.springgenerator.internal;
+package com.speedment.plugins.spring.internal;
 
 import com.speedment.common.codegen.model.Class;
 import com.speedment.generator.TranslatorKey;

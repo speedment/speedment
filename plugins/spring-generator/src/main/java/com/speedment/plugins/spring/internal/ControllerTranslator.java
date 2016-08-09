@@ -14,45 +14,48 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.plugins.springgenerator.internal;
+package com.speedment.plugins.spring.internal;
 
 import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.File;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
-import com.speedment.runtime.config.Project;
-import org.springframework.context.annotation.Configuration;
+import com.speedment.runtime.config.Table;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
  * @author Emil Forslund
  * @since  1.0.0
  */
-public final class ConfigurationTranslator 
-extends DefaultJavaClassTranslator<Project, Class> {
+public final class ControllerTranslator extends DefaultJavaClassTranslator<Table, Class> {
 
-    public ConfigurationTranslator(Project document) {
+    public ControllerTranslator(Table document) {
         super(document, Class::of);
     }
     
     @Override
+    protected com.speedment.common.codegen.model.Class makeCodeGenModel(File file) {
+        return newBuilder(file, getClassOrInterfaceName())
+            .forEveryTable((clazz, table) -> {
+                clazz.public_();
+                clazz.add(AnnotationUsage.of(RestController.class));
+                clazz.setSupertype(SimpleType.create(
+                    getSupport().basePackageName() + ".generated.Generated" +
+                    getSupport().typeName() + "Controller"
+                ));
+                
+            }).build();
+    }
+    
+    @Override
     protected String getClassOrInterfaceName() {
-        return getSupport().typeName() + "Configuration";
+        return getSupport().typeName() + "Controller";
     }
     
     @Override
     protected String getJavadocRepresentText() {
-        return "The spring configuration file";
-    }
-
-    @Override
-    protected Class makeCodeGenModel(File file) {
-        return newBuilder(file, getClassOrInterfaceName())
-            .forEveryProject((clazz, project) -> {
-                clazz.public_();
-                clazz.add(AnnotationUsage.of(Configuration.class));
-                clazz.setSupertype(SimpleType.create(getSupport().basePackageName() + ".generated.Generated" + getSupport().typeName() + "Configuration"));
-            }).build();
+        return "REST controller logic";
     }
 }
