@@ -32,14 +32,12 @@ import java.util.Objects;
 import java.util.StringJoiner;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
-import com.speedment.common.codegen.constant.DefaultJavadocTag;
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.runtime.util.OptionalUtil;
 import java.util.Optional;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.Formatting.tab;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
-import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.TranslatorSupport;
