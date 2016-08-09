@@ -38,10 +38,6 @@
         tables.
     </description>
     
-    <properties>
-        <codegen.version>2.4.1-SNAPSHOT</codegen.version>
-    </properties>
-    
     <build>
         <plugins>
             <plugin>

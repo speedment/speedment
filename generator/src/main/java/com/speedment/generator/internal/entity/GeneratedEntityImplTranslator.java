@@ -136,10 +136,10 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
                             Manager.class, fuSupport.entityType()
                         )))
                         .add(
-                            "return foreignManager.findBy(" + fuSupport.entityName() + 
+                            "return foreignManager.findAny(" + fuSupport.entityName() + 
                             "." + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + 
                             ", " + GETTER_METHOD_PREFIX + getSupport().namer().javaTypeName(col.getJavaName()) + 
-                            ").orElse(null);"
+                            "()).orElse(null);"
                         )
                     );
                 });
