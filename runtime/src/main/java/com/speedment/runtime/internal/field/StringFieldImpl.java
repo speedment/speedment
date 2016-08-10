@@ -44,6 +44,9 @@ import com.speedment.runtime.internal.field.predicate.reference.ReferenceLessTha
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceNotBetweenPredicate;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceNotEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceNotInPredicate;
+import com.speedment.runtime.internal.field.predicate.string.StringContainsIgnoreCasePredicate;
+import com.speedment.runtime.internal.field.predicate.string.StringEndsWithIgnoreCasePredicate;
+import com.speedment.runtime.internal.field.predicate.string.StringStartsWithIgnoreCasePredicate;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -206,4 +209,20 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
     public Predicate<ENTITY> isEmpty() {
         return new StringIsEmptyPredicate<>(this);
     }
+
+    @Override
+    public Predicate<ENTITY> startsWithIgnoreCase(String value) {
+        return new StringStartsWithIgnoreCasePredicate<>(this, value);
+    }
+
+    @Override
+    public Predicate<ENTITY> endsWithIgnoreCase(String value) {
+        return new StringEndsWithIgnoreCasePredicate<>(this, value);
+    }
+
+    @Override
+    public Predicate<ENTITY> containsIgnoreCase(String value) {
+        return new StringContainsIgnoreCasePredicate<>(this, value);
+    }
+    
 }

@@ -20,16 +20,16 @@ import com.speedment.runtime.annotation.Api;
 import java.util.function.Predicate;
 
 /**
- * A representation of an Entity field that is a {@code String} type. String 
- * fields have additional methods that makes it easier to create string-related 
+ * A representation of an Entity field that is a {@code String} type. String
+ * fields have additional methods that makes it easier to create string-related
  * predicates.
- * 
- * @param <ENTITY>  the entity type
- * @param <D>       the database type
- * 
- * @author  Per Minborg
- * @author  Emil Forslund
- * @since   2.2.0
+ *
+ * @param <ENTITY> the entity type
+ * @param <D> the database type
+ *
+ * @author Per Minborg
+ * @author Emil Forslund
+ * @since 2.2.0
  */
 @Api(version = "3.0")
 public interface HasStringOperators<ENTITY, D> {
@@ -79,8 +79,8 @@ public interface HasStringOperators<ENTITY, D> {
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
-     * {@code true}, if and only if this Field <em>not starts with</em> the given
-     * value.
+     * {@code true}, if and only if this Field <em>not starts with</em> the
+     * given value.
      *
      * @param value to compare
      * @return a Predicate that will evaluate to {@code true}, if and only if
@@ -104,7 +104,7 @@ public interface HasStringOperators<ENTITY, D> {
      * @see String#endsWith(java.lang.String)
      */
     Predicate<ENTITY> endsWith(String value);
-    
+
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
      * {@code true}, if and only if this Field <em>not ends with</em> the given
@@ -132,7 +132,7 @@ public interface HasStringOperators<ENTITY, D> {
      * @see String#contains(java.lang.CharSequence)
      */
     Predicate<ENTITY> contains(String value);
-    
+
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
      * {@code true}, if and only if this Field <em>not contains</em> the given
@@ -173,4 +173,95 @@ public interface HasStringOperators<ENTITY, D> {
     default Predicate<ENTITY> isNotEmpty() {
         return isEmpty().negate();
     }
+
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field <em>starts with</em> the given
+     * value while ignoring the case of the Strings that are compared.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field <em>starts with</em> the given value while ignoring the case
+     * of the Strings that are compared
+     *
+     * @see String#startsWith(java.lang.String)
+     */
+    Predicate<ENTITY> startsWithIgnoreCase(String value);
+
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field <em>not starts with</em> the
+     * given value while ignoring the case of the Strings that are compared.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field <em>not starts with</em> the given value while ignoring the
+     * case of the Strings that are compared
+     *
+     * @see String#startsWith(java.lang.String)
+     */
+    default Predicate<ENTITY> notStartsWithIgnoreCase(String value) {
+        return startsWithIgnoreCase(value).negate();
+    }
+
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field <em>ends with</em> the given
+     * value while ignoring the case of the Strings that are compared.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field <em>ends with</em> the given value while ignoring the case of
+     * the Strings that are compared
+     *
+     * @see String#endsWith(java.lang.String)
+     */
+    Predicate<ENTITY> endsWithIgnoreCase(String value);
+
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field <em>not ends with</em> the given
+     * value while ignoring the case of the Strings that are compared.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field <em>not ends with</em> the given value while ignoring the case
+     * of the Strings that are compared
+     *
+     * @see String#startsWith(java.lang.String)
+     */
+    default Predicate<ENTITY> notEndsWithIgnoreCase(String value) {
+        return endsWithIgnoreCase(value).negate();
+    }
+
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field <em>contains</em> the given value
+     * while ignoring the case of the Strings that are compared.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field <em>contains</em> the given value while ignoring the case of
+     * the Strings that are compared
+     *
+     * @see String#contains(java.lang.CharSequence)
+     */
+    Predicate<ENTITY> containsIgnoreCase(String value);
+
+    /**
+     * Returns a {@link java.util.function.Predicate} that will evaluate to
+     * {@code true}, if and only if this Field <em>does not contain</em> the
+     * given value while ignoring the case of the Strings that are compared.
+     *
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field <em>does not contain</em> the given value while ignoring the
+     * case of the Strings that are compared
+     *
+     * @see String#contains(java.lang.CharSequence)
+     */
+    default Predicate<ENTITY> notContainsIgnoreCase(String value) {
+        return containsIgnoreCase(value).negate();
+    }
+
 }

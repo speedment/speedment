@@ -21,7 +21,7 @@ import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
 
 import java.util.Set;
 
-import static com.speedment.runtime.field.predicate.PredicateType.IN;
+import static com.speedment.runtime.field.predicate.PredicateType.NOT_IN;
 import com.speedment.runtime.field.trait.HasReferenceValue;
 import static java.util.Objects.requireNonNull;
 
@@ -41,7 +41,7 @@ public final class ReferenceNotInPredicate<ENTITY, D, V extends Comparable<? sup
     private final Set<V> set;
 
     public ReferenceNotInPredicate(HasReferenceValue<ENTITY, D, V> field, Set<V> values) {
-        super(IN, field, entity -> {
+        super(NOT_IN, field, entity -> {
             final V value = field.get(entity);
             return value != null && !values.contains(field.get(entity));
         });

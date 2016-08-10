@@ -44,25 +44,25 @@ public enum PredicateType {
     LESS_THAN,
     LESS_OR_EQUAL,
     BETWEEN,
-    NOT_BETWEEN,                 // Currently not exposed in external predicates
+    NOT_BETWEEN,
     IN,
-    NOT_IN,                      // Currently not exposed in external predicates
+    NOT_IN,
     
     // String
     EQUAL_IGNORE_CASE,
     NOT_EQUAL_IGNORE_CASE,
     STARTS_WITH,
-    NOT_STARTS_WITH,             // Currently not exposed in external predicates
+    NOT_STARTS_WITH,
     STARTS_WITH_IGNORE_CASE,
-    NOT_STARTS_WITH_IGNORE_CASE, // Currently not exposed in external predicates
+    NOT_STARTS_WITH_IGNORE_CASE,
     ENDS_WITH,
-    NOT_ENDS_WITH,               // Currently not exposed in external predicates
+    NOT_ENDS_WITH,
     ENDS_WITH_IGNORE_CASE,
-    NOT_ENDS_WITH_IGNORE_CASE,   // Currently not exposed in external predicates
+    NOT_ENDS_WITH_IGNORE_CASE,
     CONTAINS,
-    NOT_CONTAINS,                // Currently not exposed in external predicates
+    NOT_CONTAINS,
     CONTAINS_IGNORE_CASE,
-    NOT_CONTAINS_IGNORE_CASE,    // Currently not exposed in external predicates
+    NOT_CONTAINS_IGNORE_CASE,
     IS_EMPTY,
     IS_NOT_EMPTY;
 
