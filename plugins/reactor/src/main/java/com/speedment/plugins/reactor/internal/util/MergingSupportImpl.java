@@ -23,9 +23,9 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 
 import static com.speedment.plugins.reactor.internal.util.ReactorComponentUtil.validMergingColumns;
-import com.speedment.plugins.reactor.internal.component.ReactorComponentImpl;
 import com.speedment.plugins.reactor.util.MergingSupport;
 import com.speedment.generator.component.TypeMapperComponent;
+import com.speedment.plugins.reactor.ReactorComponent;
 import java.lang.reflect.Type;
 
 /**
@@ -42,7 +42,7 @@ public final class MergingSupportImpl implements MergingSupport {
     
     @Override
     public Column mergingColumn(Table table) {
-        return table.getAsString(ReactorComponentImpl.MERGE_ON)
+        return table.getAsString(ReactorComponent.MERGE_ON)
             .flatMap(str -> table.columns()
                 .filter(col -> col.getName().equals(str))
                 .findAny()

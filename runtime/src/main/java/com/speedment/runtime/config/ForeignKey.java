@@ -55,16 +55,6 @@ public interface ForeignKey extends
      */
     Stream<? extends ForeignKeyColumn> foreignKeyColumns();
 
-//    default Stream<? extends ForeignKeyColumn> foreignKeyColumns() {
-//        return children(FOREIGN_KEY_COLUMNS, foreignKeyColumnConstructor());
-//    }
-//
-//    default ForeignKeyColumn addNewForeignKeyColumn() {
-//        return foreignKeyColumnConstructor().apply(this, newDocument(this, FOREIGN_KEY_COLUMNS));
-//    }
-//
-//    BiFunction<ForeignKey, Map<String, Object>, ? extends ForeignKeyColumn> foreignKeyColumnConstructor();
-
     @Override
     default Class<ForeignKey> mainInterface() {
         return ForeignKey.class;

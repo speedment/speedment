@@ -14,57 +14,59 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.speedment.plugins.reactor.internal.component;
+package com.speedment.plugins.reactor;
 
+import com.speedment.common.injector.Injector;
 import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.IncludeInjectable;
+import com.speedment.runtime.internal.license.AbstractSoftware;
+import com.speedment.runtime.license.Software;
+import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.generator.StandardTranslatorKey;
 import com.speedment.generator.component.CodeGenerationComponent;
-import com.speedment.plugins.reactor.component.ReactorComponent;
+import com.speedment.generator.component.EventComponent;
+import com.speedment.generator.component.TypeMapperComponent;
+import com.speedment.plugins.reactor.internal.editor.MergeOnEditor;
 import com.speedment.plugins.reactor.internal.translator.GeneratedApplicationDecorator;
 import com.speedment.plugins.reactor.internal.translator.GeneratedApplicationImplDecorator;
 import com.speedment.plugins.reactor.internal.translator.GeneratedViewImplTranslator;
 import com.speedment.plugins.reactor.internal.translator.GeneratedViewTranslator;
-import com.speedment.plugins.reactor.internal.util.MergingSupportImpl;
-import com.speedment.plugins.reactor.translator.ReactorTranslatorKey;
 import com.speedment.plugins.reactor.internal.translator.ViewImplTranslator;
 import com.speedment.plugins.reactor.internal.translator.ViewTranslator;
-import com.speedment.generator.component.EventComponent;
-import com.speedment.generator.component.TypeMapperComponent;
+import com.speedment.plugins.reactor.internal.util.MergingSupportImpl;
+import com.speedment.plugins.reactor.translator.ReactorTranslatorKey;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.component.AbstractComponent;
+import static com.speedment.runtime.internal.license.OpenSourceLicense.APACHE_2;
 import com.speedment.tool.component.PropertyEditorComponent;
 import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.config.TableProperty;
 
 /**
  *
- * @author  Emil Forslund
- * @since   1.1.0
+ * @author Emil Forslund
+ * @since  1.1.0
  */
+@InjectorKey(ReactorComponent.class)
 @IncludeInjectable(MergingSupportImpl.class)
-public class ReactorComponentImpl extends AbstractComponent implements ReactorComponent {
-    
+public final class ReactorComponent extends AbstractComponent {
+
     public final static String MERGE_ON = "mergeOn";
 
     @ExecuteBefore(RESOLVED)
     void setup(
+            @WithState(RESOLVED) Injector injector,
             @WithState(RESOLVED) CodeGenerationComponent code, 
             @WithState(RESOLVED) UserInterfaceComponent ui, 
             @WithState(RESOLVED) EventComponent events,
             @WithState(RESOLVED) TypeMapperComponent typeMappers,
             @WithState(RESOLVED) PropertyEditorComponent editors) {
         
-        code.add(Project.class, StandardTranslatorKey.GENERATED_APPLICATION, new GeneratedApplicationDecorator());
-        code.add(Project.class, StandardTranslatorKey.GENERATED_APPLICATION_IMPL, new GeneratedApplicationImplDecorator());
+        code.add(Project.class, StandardTranslatorKey.GENERATED_APPLICATION, injector.inject(new GeneratedApplicationDecorator()));
+        code.add(Project.class, StandardTranslatorKey.GENERATED_APPLICATION_IMPL, injector.inject(new GeneratedApplicationImplDecorator()));
         
         code.put(Table.class, ReactorTranslatorKey.ENTITY_VIEW, ViewTranslator::new);
         code.put(Table.class, ReactorTranslatorKey.ENTITY_VIEW_IMPL, ViewImplTranslator::new);
@@ -72,35 +74,17 @@ public class ReactorComponentImpl extends AbstractComponent implements ReactorCo
         code.put(Table.class, ReactorTranslatorKey.GENERATED_ENTITY_VIEW_IMPL, GeneratedViewImplTranslator::new);
                
         editors.install(TableProperty.class, MERGE_ON, MergeOnEditor::new);
-        
-//        events.on(TreeSelectionChange.class, ev -> {
-//            ev.changeEvent()
-//                .getList()
-//                .stream()
-//                .map(TreeItem<DocumentProperty>::getValue)
-//                .findAny()
-//                .ifPresent(doc -> {
-//                    if (doc instanceof TableProperty) {
-//                        System.out.println("It was a table.");
-//                        final TableProperty table = (TableProperty) doc;
-//
-//                        ui.getProperties().add(new ChoicePropertyItem<>(
-//                            observableList(
-//                                validMergingColumns(table, typeMappers)
-//                                    .stream()
-//                                    .map(Column::getJavaName)
-//                                    .collect(toList())
-//                            ),
-//                            table.stringPropertyOf(MERGE_ON, () -> null),
-//                            new IdentityStringConverter(), 
-//                            String.class,
-//                            "Merge events on", 
-//                            "This column will be used to merge events in a " + 
-//                            "materialized object view (MOV) so that only the " + 
-//                            "most recent revision of an entity is visible."
-//                        ));
-//                    }
-//                });
-//        });
+    }
+    
+    @Override
+    public Class<ReactorComponent> getComponentClass() {
+        return ReactorComponent.class;
+    }
+
+    @Override
+    public Software asSoftware() {
+        return AbstractSoftware.with(
+            "Reactor Plugin", "1.1.0", APACHE_2
+        );
     }
 }

@@ -19,10 +19,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.plugins.reactor.internal.component;
+package com.speedment.plugins.reactor.internal.editor;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.component.TypeMapperComponent;
+import com.speedment.plugins.reactor.ReactorComponent;
 import static com.speedment.plugins.reactor.internal.util.ReactorComponentUtil.validMergingColumns;
 import com.speedment.runtime.config.Column;
 import com.speedment.tool.config.TableProperty;
@@ -31,15 +32,12 @@ import com.speedment.tool.property.item.ChoiceBoxItem;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import static javafx.collections.FXCollections.observableList;
-import static javafx.collections.FXCollections.observableList;
-import static javafx.collections.FXCollections.observableList;
-import static javafx.collections.FXCollections.observableList;
 
 /**
  *
  * @author Simon
  */
-class MergeOnEditor<T extends TableProperty> implements PropertyEditor<T>{
+public final class MergeOnEditor<T extends TableProperty> implements PropertyEditor<T>{
 
     private @Inject TypeMapperComponent typeMappers;
         
@@ -49,7 +47,7 @@ class MergeOnEditor<T extends TableProperty> implements PropertyEditor<T>{
         return Stream.of(
             new ChoiceBoxItem<>(
                 "Merge event on", 
-                document.stringPropertyOf(ReactorComponentImpl.MERGE_ON, () -> null),
+                document.stringPropertyOf(ReactorComponent.MERGE_ON, () -> null),
                 observableList(
                     validMergingColumns(document, typeMappers)
                         .stream()

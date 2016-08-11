@@ -36,7 +36,6 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.field.ComparableField;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -53,6 +52,7 @@ import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static com.speedment.common.codegen.model.Generic.BoundType.EXTENDS;
 import com.speedment.common.injector.Injector;
 import static com.speedment.generator.Translator.Phase.POST_MAKE;
+import com.speedment.runtime.field.trait.HasComparableOperators;
 import java.lang.reflect.Type;
 
 /**
@@ -136,7 +136,6 @@ public final class GeneratedApplicationImplDecorator implements TranslatorDecora
                                 "' does not appear to have a valid primary key."
                             ));
                         
-                        // Initialise reactor in start method
                         getOrCreate(clazz, "start")
                             .add("newReactor(" + support.typeName() + ".class, " + support.typeName() + "." + pkName + ", " + viewName + ");");
                     });
@@ -180,13 +179,16 @@ public final class GeneratedApplicationImplDecorator implements TranslatorDecora
                             SimpleType.create("T")
                         ))
                     )
+                    .add(Generic.of("F")
+                        .setBoundType(EXTENDS)
+                        .add(SimpleParameterizedType.create(
+                            HasComparableOperators.class,
+                            SimpleType.create("E"),
+                            SimpleType.create("T")
+                        ))
+                    )
                     .add(Field.of("entityType", DefaultType.classOf(SimpleType.create("E"))))
-                    .add(Field.of("field", SimpleParameterizedType.create(
-                        ComparableField.class,
-                        SimpleType.create("E"),
-                        WILDCARD,
-                        SimpleType.create("T")
-                    )))
+                    .add(Field.of("field", SimpleType.create("F")))
                     .add(Field.of("view", SimpleParameterizedType.create(
                         MaterializedView.class,
                         SimpleType.create("E"),

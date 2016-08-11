@@ -17,8 +17,10 @@
 package com.speedment.plugins.reactor.internal;
 
 import com.speedment.plugins.reactor.Reactor;
+import com.speedment.runtime.exception.SpeedmentException;
 import static java.util.Objects.requireNonNull;
-import java.util.Timer;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The default implementation of the {@link Reactor} interface.
@@ -28,16 +30,16 @@ import java.util.Timer;
  */
 public final class ReactorImpl implements Reactor {
     
-    private final Timer timer;
+    private final ScheduledExecutorService scheduler;
     
     /**
      * Constructs a new Reactor. This should only be called as part of the
      * builder pattern for this class and never directly.
      * 
-     * @param timer  the timer that is polling the database
+     * @param scheduler  the scheduler that is polling the database
      */
-    ReactorImpl(Timer timer) {
-        this.timer = requireNonNull(timer);
+    public ReactorImpl(ScheduledExecutorService scheduler) {
+        this.scheduler = requireNonNull(scheduler);
     }
     
     /**
@@ -45,6 +47,18 @@ public final class ReactorImpl implements Reactor {
      */
     @Override
     public void stop() {
-        timer.cancel();
+        scheduler.shutdownNow();
+        
+        try {
+            if (!scheduler.awaitTermination(2, TimeUnit.SECONDS)) {
+                throw new SpeedmentException(
+                    "Scheduler took too long to terminate."
+                );
+            }
+        } catch (final InterruptedException ex) {
+            throw new SpeedmentException(
+                "Scheduler was interrupted during termination.", ex
+            );
+        }
     }
 }

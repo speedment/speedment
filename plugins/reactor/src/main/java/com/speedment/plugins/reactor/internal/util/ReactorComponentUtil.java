@@ -59,7 +59,10 @@ public final class ReactorComponentUtil {
     }
     
     private static boolean isComparable(Type type) {
-        if (type instanceof Class<?>) {
+        if (int.class.getTypeName().equals(type.getTypeName())
+        ||  long.class.getTypeName().equals(type.getTypeName())) {
+            return true;
+        } else if (type instanceof Class<?>) {
             @SuppressWarnings("unchecked")
             final Class<?> clazz = (Class<?>) type;
             return Comparable.class.isAssignableFrom(clazz);

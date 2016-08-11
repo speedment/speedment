@@ -16,7 +16,7 @@
  */
 package com.speedment.plugins.reactor;
 
-import com.speedment.plugins.reactor.internal.ReactorBuilder;
+import com.speedment.plugins.reactor.internal.builder.ReferenceReactorBuilder;
 import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.manager.Manager;
 import java.util.List;
@@ -53,7 +53,7 @@ public interface Reactor {
             Manager<ENTITY> manager, 
             ComparableField<ENTITY, ?, T> idField) {
         
-        return new ReactorBuilder<>(manager, idField);
+        return new ReferenceReactorBuilder<>(manager, idField);
     }
     
     /**
