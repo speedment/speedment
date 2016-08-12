@@ -60,12 +60,14 @@ import java.util.stream.Stream;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
+import static com.speedment.common.codegen.internal.util.Formatting.block;
 import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.*;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static com.speedment.common.codegen.internal.util.Formatting.tab;
 import com.speedment.generator.component.TypeMapperComponent;
+import static com.speedment.generator.internal.util.ColumnUtil.optionalGetterName;
 import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import java.lang.reflect.Type;
@@ -140,7 +142,7 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
             })
             
             /**
-             * Add getter for ordinary foreign keys
+             * Add finder for ordinary foreign keys
              */
             .forEveryForeignKey((clazz, fk) -> {
                 final FkHolder fu = new FkHolder(injector, fk);
@@ -167,11 +169,17 @@ public final class GeneratedManagerImplTranslator extends EntityAndManagerTransl
                     .add(Field.of("entity", fu.getEmt().getSupport().entityType()));
                 
                 if (usesOptional(fu.getColumn())) {
-                    final String varName = getSupport().variableName(fu.getColumn()) + "_";
-                    method.add("return entity.get" + getSupport().typeName(fu.getColumn()) + "()")
-                        .add(indent(".flatMap(" + varName + " -> " + fkManagerName + ".findAny("
-                            + getSupport().typeName(fu.getForeignTable()) + "." + getSupport().namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + ", " + varName + "));"
-                        ));
+                    final String getterName = optionalGetterName(typeMappers, fu.getColumn()).get();
+                    
+                    method.add(
+                        "if (entity.get" + getSupport().typeName(fu.getColumn()) + "().isPresent()) " + block(
+                            "return " + fkManagerName + ".findAny(" +
+                                getSupport().typeName(fu.getForeignTable()) + "." + 
+                                getSupport().namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + 
+                                ", entity.get" + getSupport().typeName(fu.getColumn()) + "()" + getterName + ");"
+                        ) + " else return Optional.empty();"
+                    );
+
                 } else {
                     file.add(Import.of(SpeedmentException.class));
                     method.add("return " + fkManagerName + ".findAny("
