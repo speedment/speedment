@@ -36,7 +36,7 @@ import javafx.scene.control.TextField;
  * @since 3.0.0
  */
 @Api(version="3.0")
-public class SimpleTextFieldItem extends BaseLabelTooltipItem {
+public class SimpleTextFieldItem extends AbstractLabelTooltipItem {
     
     private final StringProperty property;
     

@@ -67,7 +67,7 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
     }
 
     @Override
-    public <ENTITY> T toJavaType(Column column, Class<ENTITY> entityType, String value) {
+    public T toJavaType(Column column, Class<?> entityType, String value) {
         if (value == null) {
             return null;
         } else {

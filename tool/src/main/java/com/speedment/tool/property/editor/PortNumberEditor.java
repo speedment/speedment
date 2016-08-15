@@ -34,19 +34,19 @@ import javafx.beans.binding.IntegerBinding;
  * @since 3.0.0
  */
 @Api(version="3.0")
-public class PortNumberEditor<T extends DbmsProperty> implements PropertyEditor<T>{
+public class PortNumberEditor<T extends DbmsProperty> implements PropertyEditor<T> {
 
     private @Inject DbmsHandlerComponent dbmsHandler;
     
     @Override
     public Stream<Item> fieldsFor(T document) {                    
         return Stream.of(new DefaultSpinnerItem(
-                "Port", 
-                defaultPortProperty(document, dbmsHandler), 
-                document.portProperty(), 
-                "The port of the database on the database host.", 
-                0, 65536)
-        );
+            "Port", 
+            defaultPortProperty(document, dbmsHandler), 
+            document.portProperty(), 
+            "The port of the database on the database host.", 
+            0, 65535
+        ));
     }
 
     private IntegerBinding defaultPortProperty(T document, DbmsHandlerComponent dbmsHandlerComponent) {

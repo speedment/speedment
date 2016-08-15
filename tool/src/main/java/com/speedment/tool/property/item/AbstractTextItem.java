@@ -24,15 +24,16 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.control.TextInputControl;
-import static java.util.Objects.requireNonNull;
 import java.util.function.UnaryOperator;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Simon Jonasson
  * @since 3.0.0
  */
-abstract class DefaultStringItem extends BaseLabelTooltipItem {
+abstract class AbstractTextItem extends AbstractLabelTooltipItem {
 
     private final ObservableStringValue defaultValue;
     private final StringProperty value;
@@ -55,7 +56,7 @@ abstract class DefaultStringItem extends BaseLabelTooltipItem {
      * @param value the property to be edited
      * @param tooltip the tooltip
      */
-    public DefaultStringItem(String label, ObservableStringValue defaultValue, StringProperty value, String tooltip) {
+    public AbstractTextItem(String label, ObservableStringValue defaultValue, StringProperty value, String tooltip) {
         this(label, defaultValue, value, tooltip, NO_DECORATOR);
     }
 
@@ -77,7 +78,7 @@ abstract class DefaultStringItem extends BaseLabelTooltipItem {
      * @param tooltip the tooltip
      * @param decorator the editor decorator
      */
-    public DefaultStringItem(String label, ObservableStringValue defaultValue, StringProperty value, String tooltip, UnaryOperator<Node> decorator) {
+    public AbstractTextItem(String label, ObservableStringValue defaultValue, StringProperty value, String tooltip, UnaryOperator<Node> decorator) {
         super(label, tooltip, decorator);
         this.defaultValue = requireNonNull(defaultValue);
         this.value = requireNonNull(value);

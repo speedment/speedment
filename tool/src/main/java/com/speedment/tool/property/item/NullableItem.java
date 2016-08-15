@@ -28,13 +28,15 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
+import static java.util.Objects.requireNonNull;
+import static javafx.collections.FXCollections.observableArrayList;
 
 /**
  *
  * @author  Emil Forslund
  * @since   3.0.0
  */
-public final class NullableItem extends BaseLabelTooltipItem {
+public final class NullableItem extends AbstractLabelTooltipItem {
     
     private final static String 
         NULLABLE_TITLE         = "Is Nullable",

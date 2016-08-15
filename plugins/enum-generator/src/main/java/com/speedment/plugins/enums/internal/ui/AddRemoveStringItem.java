@@ -18,7 +18,7 @@ package com.speedment.plugins.enums.internal.ui;
 
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
-import com.speedment.tool.property.item.BaseLabelTooltipItem;
+import com.speedment.tool.property.item.AbstractLabelTooltipItem;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.Set;
@@ -45,6 +45,7 @@ import javafx.scene.layout.HBox;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Item for generating a comma-separated string.
@@ -56,7 +57,7 @@ import javafx.util.StringConverter;
  * @author  Simon Jonasson
  * @since   1.0.0
  */
-public final class AddRemoveStringItem extends BaseLabelTooltipItem {
+public final class AddRemoveStringItem extends AbstractLabelTooltipItem {
     
     //***********************************************************
     // 				VARIABLES

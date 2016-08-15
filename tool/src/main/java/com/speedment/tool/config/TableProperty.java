@@ -16,8 +16,6 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.common.injector.Injector;
-import com.speedment.generator.TranslatorSupport;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;

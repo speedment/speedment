@@ -29,8 +29,8 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import static java.util.Objects.requireNonNull;
 import java.util.function.UnaryOperator;
+import static java.util.Objects.requireNonNull;
 
 /**
  * An editor for editing a StringProperty via an IntegerSpinner, which has a default value. The user
@@ -41,7 +41,7 @@ import java.util.function.UnaryOperator;
  * @since 3.0.0
  */
 @Api(version="3.0")
-public class DefaultSpinnerItem extends BaseLabelTooltipItem {
+public class DefaultSpinnerItem extends AbstractLabelTooltipItem {
 
     private final ObservableIntegerValue defaultValue;
     private final ObjectProperty<Integer> value;        //Output value
@@ -193,12 +193,13 @@ public class DefaultSpinnerItem extends BaseLabelTooltipItem {
         
         final TextField editor = spinner.getEditor();
         attachListener(editor.textProperty(), (ov, oldVal, newVal) -> {
-            try{
+            try {
                 Integer.parseInt(newVal);                
             } catch (final NumberFormatException ex){
                 editor.setText(oldVal);
             }
         });
+        
         attachListener(editor.focusedProperty(), (ov, wasFocused, isFocused) -> {
             if(wasFocused) {
                 try{
@@ -214,13 +215,14 @@ public class DefaultSpinnerItem extends BaseLabelTooltipItem {
             } 
         });
         
-        attachListener( svf.valueProperty(), (ov, o, n) -> {
+        attachListener(svf.valueProperty(), (ov, o, n) -> {
             if( n == null || n == defaultValue.get() ){
                 value.setValue(null);
             } else {
                 value.setValue(n);
             }
         });
+        
         container.getChildren().addAll(auto, spinner);
         return container;
     }

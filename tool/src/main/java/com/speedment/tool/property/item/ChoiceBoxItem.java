@@ -34,7 +34,7 @@ import javafx.scene.control.ChoiceBox;
  * @since 3.0.0
  */
 @Api(version = "3.0")
-public class ChoiceBoxItem<T> extends BaseLabelTooltipItem {
+public class ChoiceBoxItem<T> extends AbstractLabelTooltipItem {
 
     private final Property<T> currentValue;
     private final ObservableList<T> alternatives;

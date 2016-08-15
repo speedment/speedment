@@ -31,7 +31,7 @@ import javafx.scene.control.TextInputControl;
  * @since 3.0.0
  */
 @Api(version="3.0")
-public class DefaultTextAreaItem extends DefaultStringItem {
+public class DefaultTextAreaItem extends AbstractTextItem {
 
         /**
      * Creates a new DefaultTextFieldItem. 
