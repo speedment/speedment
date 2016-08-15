@@ -42,7 +42,7 @@ public final class StringToLocaleMapper implements TypeMapper<String, Locale> {
     }
 
     @Override
-    public <ENTITY> Locale toJavaType(Column column, Class<ENTITY> entityType, String value) {
+    public Locale toJavaType(Column column, Class<?> entityType, String value) {
        return value == null ? null : new Locale(value);
     }
 

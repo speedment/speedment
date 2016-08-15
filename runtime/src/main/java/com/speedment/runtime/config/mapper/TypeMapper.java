@@ -67,14 +67,12 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
     /**
      * Converts a value from the database domain to the java domain.
      *
-     * @param <ENTITY> the type of the entity
-     *
      * @param column      the column that is being mapped
      * @param entityType  the entity type that the mapping is for
      * @param value       the value to convert
      * @return            the converted value
      */
-    <ENTITY> JAVA_TYPE toJavaType(Column column, Class<ENTITY> entityType, DB_TYPE value);
+    JAVA_TYPE toJavaType(Column column, Class<?> entityType, DB_TYPE value);
 
     /**
      * Converts a value from the java domain to the database domain.

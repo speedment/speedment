@@ -48,7 +48,7 @@ public class TimeToLocalTimeMapper implements TypeMapper<Time, LocalTime> {
     }
 
     @Override
-    public <ENTITY> LocalTime toJavaType(Column column, Class<ENTITY> entityType, Time value) {
+    public LocalTime toJavaType(Column column, Class<?> entityType, Time value) {
         return value.toLocalTime();
     }
 

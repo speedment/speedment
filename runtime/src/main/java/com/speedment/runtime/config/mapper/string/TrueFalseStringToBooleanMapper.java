@@ -40,7 +40,7 @@ public final class TrueFalseStringToBooleanMapper implements TypeMapper<String, 
     }
     
     @Override
-    public <ENTITY> Boolean toJavaType(Column column, Class<ENTITY> entityType, String value) {
+    public Boolean toJavaType(Column column, Class<?> entityType, String value) {
         return value == null ? null : Boolean.valueOf(value);
     }
 

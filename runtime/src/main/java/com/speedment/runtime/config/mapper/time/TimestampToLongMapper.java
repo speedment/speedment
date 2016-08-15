@@ -41,7 +41,7 @@ public final class TimestampToLongMapper implements TypeMapper<Timestamp, Long> 
     }
 
     @Override
-    public <ENTITY> Long toJavaType(Column column, Class<ENTITY> entityType, Timestamp value) {
+    public Long toJavaType(Column column, Class<?> entityType, Timestamp value) {
         return value == null ? null : value.getTime();
     }
 

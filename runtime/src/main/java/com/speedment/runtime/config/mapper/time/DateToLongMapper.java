@@ -43,7 +43,7 @@ public final class DateToLongMapper implements TypeMapper<Date, Long> {
     }
 
     @Override
-    public <ENTITY> Long toJavaType(Column column, Class<ENTITY> entityType, Date value) {
+    public Long toJavaType(Column column, Class<?> entityType, Date value) {
         return value == null ? null : value.getTime();
     }
 

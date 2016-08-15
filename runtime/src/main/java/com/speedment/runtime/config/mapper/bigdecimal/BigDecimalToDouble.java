@@ -41,7 +41,7 @@ public final class BigDecimalToDouble implements TypeMapper<BigDecimal, Double> 
     }
 
     @Override
-    public <ENTITY> Double toJavaType(Column column, Class<ENTITY> entityType, BigDecimal value) {
+    public Double toJavaType(Column column, Class<?> entityType, BigDecimal value) {
         return value == null ? null : value.doubleValue();
     }
 

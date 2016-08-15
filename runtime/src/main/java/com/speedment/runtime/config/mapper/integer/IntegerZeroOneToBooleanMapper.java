@@ -40,7 +40,7 @@ public final class IntegerZeroOneToBooleanMapper implements TypeMapper<Integer, 
     }
 
     @Override
-    public <ENTITY> Boolean toJavaType(Column column, Class<ENTITY> entityType, Integer value) {
+    public Boolean toJavaType(Column column, Class<?> entityType, Integer value) {
         return value == null ? null : value != 0;
     }
 

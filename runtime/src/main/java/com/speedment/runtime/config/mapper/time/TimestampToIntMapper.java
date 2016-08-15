@@ -41,7 +41,7 @@ public final class TimestampToIntMapper implements TypeMapper<Timestamp, Integer
     }
 
     @Override
-    public <ENTITY> Integer toJavaType(Column column, Class<ENTITY> entityType, Timestamp value) {
+    public Integer toJavaType(Column column, Class<?> entityType, Timestamp value) {
         return value == null ? null : (int) (value.getTime() / 1000);
     }
 

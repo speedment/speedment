@@ -48,7 +48,7 @@ public class TimestampToLocalDateTimeMapper implements TypeMapper<Timestamp, Loc
     }
 
     @Override
-    public <ENTITY> LocalDateTime toJavaType(Column column, Class<ENTITY> entityType, Timestamp value) {
+    public LocalDateTime toJavaType(Column column, Class<?> entityType, Timestamp value) {
         return value == null ? null : value.toLocalDateTime();
     }
 

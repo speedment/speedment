@@ -48,7 +48,7 @@ public class DateToLocalDateMapper implements TypeMapper<Date, LocalDate>{
     }
 
     @Override
-    public <ENTITY> LocalDate toJavaType(Column column, Class<ENTITY> entityType, Date value) {
+    public LocalDate toJavaType(Column column, Class<?> entityType, Date value) {
         return value.toLocalDate();
     }
 

@@ -42,7 +42,7 @@ public final class DateToIntMapper implements TypeMapper<Date, Integer> {
     }
 
     @Override
-    public <ENTITY> Integer toJavaType(Column column, Class<ENTITY> entityType, Date value) {
+    public Integer toJavaType(Column column, Class<?> entityType, Date value) {
         return value == null ? null : (int) (value.getTime() / 1000);
     }
 

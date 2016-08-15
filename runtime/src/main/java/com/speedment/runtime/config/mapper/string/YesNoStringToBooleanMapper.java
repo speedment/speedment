@@ -40,7 +40,7 @@ public final class YesNoStringToBooleanMapper implements TypeMapper<String, Bool
     }
 
     @Override
-    public <ENTITY> Boolean toJavaType(Column column, Class<ENTITY> entityType, String value) {
+    public Boolean toJavaType(Column column, Class<?> entityType, String value) {
         return value == null ? null : value.equalsIgnoreCase("yes");
     }
 

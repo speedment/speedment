@@ -43,7 +43,7 @@ public final class ClobToStringMapper implements TypeMapper<Clob, String> {
     }
 
     @Override
-    public <ENTITY> String toJavaType(Column column, Class<ENTITY> entityType, Clob value) {
+    public String toJavaType(Column column, Class<?> entityType, Clob value) {
         if (value == null) {
             return null;
         } else try {

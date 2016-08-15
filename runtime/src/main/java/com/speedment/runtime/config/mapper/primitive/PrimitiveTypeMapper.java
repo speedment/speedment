@@ -53,7 +53,7 @@ public final class PrimitiveTypeMapper<T> implements TypeMapper<T, T> {
     }
 
     @Override
-    public <ENTITY> T toJavaType(Column column, Class<ENTITY> entityType, T value) {
+    public T toJavaType(Column column, Class<?> entityType, T value) {
         return value;
     }
 
