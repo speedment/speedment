@@ -14,17 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.runtime.internal.runtime.typemapping;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import com.speedment.runtime.component.resultset.ResultSetMapping;
+import java.util.function.Function;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -35,32 +28,18 @@ import static org.junit.Assert.assertEquals;
  */
 public class StandardJavaTypeMappingTest {
 
-    public StandardJavaTypeMappingTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
     @Test
     public void testParse() {
-        assertEquals(Boolean.TRUE, StandardJavaTypeMapping.BOOLEAN.parse("true"));
-        assertEquals(Boolean.FALSE, StandardJavaTypeMapping.BOOLEAN.parse("false"));
-        assertEquals(Byte.valueOf((byte) -47), StandardJavaTypeMapping.BYTE.parse("-47"));
-        assertEquals(Short.valueOf((byte) -47), StandardJavaTypeMapping.SHORT.parse("-47"));
-        assertEquals(Integer.valueOf(-47), StandardJavaTypeMapping.INTEGER.parse("-47"));
+        testMapping(Boolean.class, Boolean.TRUE, m -> m.parse("true"));
+        testMapping(Boolean.class, Boolean.FALSE, m -> m.parse("false"));
+        testMapping(Byte.class,   (byte)  -47, m -> m.parse("-47"));
+        testMapping(Short.class,  (short) -47, m -> m.parse("-47"));
+        testMapping(Integer.class,        -47, m -> m.parse("-47"));
     }
 
+    private static void testMapping(Class<?> javaType, Object expected, Function<ResultSetMapping, Object> actual) {
+        StandardJavaTypeMapping.stream()
+            .filter(m -> javaType.equals(m.getJavaClass()))
+            .forEach(m -> assertEquals(expected, actual.apply(m)));
+    }
 }
