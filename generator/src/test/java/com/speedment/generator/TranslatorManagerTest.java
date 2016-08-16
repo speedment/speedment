@@ -17,14 +17,10 @@
 package com.speedment.generator;
 
 import com.speedment.common.codegen.model.Interface;
-import com.speedment.common.injector.Injector;
 import com.speedment.generator.component.CodeGenerationComponent;
-import com.speedment.generator.internal.TranslatorManagerImpl;
 import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.config.Table;
 import org.junit.Test;
-
-import java.nio.file.Path;
 
 import static org.junit.Assert.assertTrue;
 
@@ -36,15 +32,7 @@ public class TranslatorManagerTest extends SimpleModel {
 
     @Test
     public void testAccept() {
-        
-        final TranslatorManager instance = speedment.getOrThrow(Injector.class).inject(
-            new TranslatorManagerImpl() {
-                @Override
-                public void writeToFile(Path path, String content, boolean overwriteExisting) {
-
-                }
-            }
-        );
+        final TranslatorManager instance = speedment.getOrThrow(TranslatorManager.class);
         
         try {
             instance.accept(project);

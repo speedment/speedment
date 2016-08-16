@@ -43,20 +43,11 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-Vendor>Speedment, Inc.</Bundle-Vendor>
                         <Bundle-Description>
                             An extension to Speedment Open Source that reguraly 
                             polls the database for updates to produce a 
                             materialized object view (MOV) of a table.
                         </Bundle-Description>
-                        <Import-Package>
-                            org.osgi.framework,
-                            *;resolution:=optional 
-                        </Import-Package>
-                        <Export-Package>
-                            com.speedment.plugins.reactor,
-                            com.speedment.plugins.reactor.component,
-                        </Export-Package>
                     </instructions>
                 </configuration>
             </plugin>

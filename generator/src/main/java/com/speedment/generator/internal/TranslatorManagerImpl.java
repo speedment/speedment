@@ -70,12 +70,11 @@ public class TranslatorManagerImpl implements TranslatorManager {
 
     private final AtomicInteger fileCounter = new AtomicInteger(0);
 
-    private @Inject
-    InfoComponent info;
-    private @Inject
-    EventComponent eventComponent;
-    private @Inject
-    CodeGenerationComponent codeGenerationComponent;
+    private @Inject InfoComponent info;
+    private @Inject EventComponent eventComponent;
+    private @Inject CodeGenerationComponent codeGenerationComponent;
+    
+    protected TranslatorManagerImpl() {}
 
     @Override
     public void accept(Project project) {

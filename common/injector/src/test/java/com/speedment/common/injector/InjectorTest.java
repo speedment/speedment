@@ -16,6 +16,8 @@
  */
 package com.speedment.common.injector;
 
+import com.speedment.common.injector.annotation.InjectorKey;
+import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.test_a.StringIdentityMapper;
 import com.speedment.common.injector.test_a.TypeMapperComponent;
 import com.speedment.common.injector.test_b.A;
@@ -95,8 +97,7 @@ public class InjectorTest {
                 .canInject(C.class)
                 .canInject(ChildType.class)
                 .build();
-        } catch (final Exception ex) {
-            ex.printStackTrace();
+        } catch (final NoDefaultConstructorException | InstantiationException ex) {
             throw new RuntimeException(
                 "Failed to instantiate class.", ex
             );
@@ -105,4 +106,32 @@ public class InjectorTest {
         assertNotNull(injector.getOrThrow(ParentType.class).a);
         assertNotNull(injector.getOrThrow(ChildType.class).b);
     }
+    
+    @Test
+    public void testKeyMultiples() {
+        final Injector injector;
+        
+        try {
+            injector = Injector.builder()
+                .canInject(Bar.class)
+                .canInject(Baz.class)
+                .build();
+        } catch (final NoDefaultConstructorException | InstantiationException ex) {
+            throw new RuntimeException(
+                "Failed to instantiate class.", ex
+            );
+        }
+        
+        assertNotNull("Make sure Foo has an implementation", injector.get(Foo.class).orElse(null));
+        assertNotNull("Make sure Bar had an implementation", injector.get(Bar.class).orElse(null));
+        assertNotNull("Make sure Baz had an implementation", injector.get(Baz.class).orElse(null));
+        
+        assertEquals("Make sure the default implementation is Baz.", Baz.class, injector.get(Foo.class).get().getClass());
+        assertEquals("Make sure the Bar can still be accessed",      Bar.class, injector.get(Bar.class).get().getClass());
+    }
+    
+    @InjectorKey(Foo.class)
+    private interface Foo {}
+    private final static class Bar implements Foo {}
+    private final static class Baz implements Foo {}
 }

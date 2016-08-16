@@ -276,8 +276,8 @@ public final class InjectorImpl implements Injector {
         
         private Builder(Set<Class<?>> injectables) {
             requireNonNull(injectables);
-            this.injectables = new LinkedHashMap<>();
-            this.overriddenParams = new HashMap<>();
+            this.injectables        = new LinkedHashMap<>();
+            this.overriddenParams   = new HashMap<>();
             this.configFileLocation = Paths.get("settings.properties");
             
             injectables.forEach(c -> this.injectables.put(c.getName(), c));
@@ -285,15 +285,40 @@ public final class InjectorImpl implements Injector {
 
         @Override
         public Builder canInject(Class<?> injectableType) {
-            final String key = traverseAncestors(injectableType)
-                .filter(c -> c.isAnnotationPresent(InjectorKey.class))
-                .map(c -> c.getAnnotation(InjectorKey.class))
-                .map(InjectorKey::value)
-                .findFirst()
-                .orElse(injectableType)
-                .getName();
+            requireNonNull(injectableType);
             
-            return canInject(key, injectableType);
+            // Store the injectable under every superclass in the map, as well
+            // as under every inherited InjectorKey value.
+            traverseAncestors(injectableType)
+                
+                // only include classes that has an ancestor with the 
+                // InjectorKey-annotation, or that are the original class.
+                .filter(c -> c == injectableType || traverseAncestors(c)
+                    .anyMatch(c2 -> c2.isAnnotationPresent(InjectorKey.class))
+                )
+                
+                .flatMap(c -> {
+                    final Stream<Class<?>> stream;
+                    
+                    // Include InjectorKey value
+                    if (c.isAnnotationPresent(InjectorKey.class)) {
+                        final InjectorKey key = c.getAnnotation(InjectorKey.class);
+                        stream = Stream.of(c, key.value());
+                    } else {
+                        stream = Stream.of(c);
+                    }
+                    
+                    // Recurse over other injectables
+                    if (c.isAnnotationPresent(IncludeInjectable.class)) {
+                        final IncludeInjectable incl = c.getAnnotation(IncludeInjectable.class);
+                        Stream.of(incl.value()).forEachOrdered(this::canInject);
+                    }
+                    
+                    return stream;
+                })
+                .forEachOrdered(c -> injectables.put(c.getName(), injectableType));
+            
+            return this;
         }
 
         @Override
@@ -301,7 +326,7 @@ public final class InjectorImpl implements Injector {
             requireNonNull(injectableType);
             
             injectables.put(key, injectableType);
-
+            
             ReflectionUtil.traverseAncestors(injectableType)
                 .filter(t -> t.isAnnotationPresent(IncludeInjectable.class))
                 .map(t -> t.getAnnotation(IncludeInjectable.class))
@@ -330,7 +355,7 @@ public final class InjectorImpl implements Injector {
             final File configFile = configFileLocation.toFile();
             final Properties properties = loadProperties(configFile);
             overriddenParams.forEach(properties::setProperty);
-            
+
             final Set<Class<?>> injectablesSet = unmodifiableSet(new LinkedHashSet<>(injectables.values()));
             
             final DependencyGraph graph = DependencyGraphImpl.create(injectablesSet);
@@ -365,6 +390,7 @@ public final class InjectorImpl implements Injector {
                 
                 final Object instance = newInstance(injectable, properties);
                 instances.addFirst(instance);
+//                instances.add(instance);
             }
             
             // Build the Injector

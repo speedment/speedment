@@ -43,9 +43,9 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <configuration>
-                    <instructions>
-                        <Bundle-Vendor>Speedment, Inc.</Bundle-Vendor>
+                      <configuration>
+                        <instructions>
+                          <Bundle-Vendor>Speedment, Inc.</Bundle-Vendor>
                         <Bundle-Description>
                             The graphical user interface for Speedment.
                         </Bundle-Description>

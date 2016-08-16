@@ -16,6 +16,9 @@
  */
 package com.speedment.generator;
 
+import com.speedment.common.codegen.Meta;
+import com.speedment.common.codegen.model.File;
+import com.speedment.generator.internal.TranslatorManagerImpl;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Column;
@@ -27,6 +30,9 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.internal.runtime.AbstractApplicationMetadata;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.nio.file.Path;
 import org.junit.Before;
 
 import java.util.Optional;
@@ -55,12 +61,31 @@ public abstract class SimpleModel {
     protected PrimaryKeyColumn pkColumn;
     protected Table table2;
     protected Column column2;
+    
+    private final static class SilentTranslatorManager extends TranslatorManagerImpl implements TranslatorManager {
+
+        @Override
+        public void clearExistingFiles(Project project) {}
+
+        @Override
+        public void writeToFile(Project project, Meta<File, String> meta, boolean overwriteExisting) {}
+
+        @Override
+        public void writeToFile(Project project, String filename, String content, boolean overwriteExisting) {}
+
+        @Override
+        public void writeToFile(Path location, String content, boolean overwriteExisting) {}
+
+        @Override
+        public int getFilesCreated() {return 0;}
+    }
 
     @Before
     public void simpleModelTestSetUp() {
 
         speedment = new DefaultApplicationBuilder(SimpleMetadata.class)
             .with(CodeGenerationComponentImpl.class)
+            .withInjectable(SilentTranslatorManager.class)
             .withCheckDatabaseConnectivity(false)
             .withValidateRuntimeConfig(false)
             .build();
