@@ -27,8 +27,8 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-public class SpeedmentBrand extends AbstractBrand {
-    
+public final class SpeedmentBrand implements Brand {
+
     private SpeedmentBrand() {}
 
     @Override

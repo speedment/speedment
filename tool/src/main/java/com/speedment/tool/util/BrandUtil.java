@@ -42,8 +42,10 @@ public final class BrandUtil {
     public static void applyBrand(Injector injector, Stage stage, Scene scene) {
         applyBrandToStage(injector, stage);
         
-        final Brand brand = injector.getOrThrow(Brand.class);
-        brand.apply(stage, scene);
+        final Brand brand        = injector.getOrThrow(Brand.class);
+        final InfoComponent info = injector.getOrThrow(InfoComponent.class);
+        
+        apply(brand, info, stage, scene);
     }
     
     public static void applyBrandToStage(Injector injector, Stage stage) {
@@ -57,14 +59,37 @@ public final class BrandUtil {
     }
     
     public static void applyBrandToScene(Injector injector, Scene scene) {
-        final Brand brand = injector.getOrThrow(Brand.class);
+        final Brand brand               = injector.getOrThrow(Brand.class);
         final UserInterfaceComponent ui = injector.getOrThrow(UserInterfaceComponent.class);
+        final InfoComponent info        = injector.getOrThrow(InfoComponent.class);
         
         final Stage stage = scene.getWindow() == null 
             ? ui.getStage() 
             : (Stage) scene.getWindow();
         
-        brand.apply(stage, scene);
+        apply(brand, info, stage, scene);
+    }
+    
+    private static void apply(Brand brand, InfoComponent info, Stage stage, Scene scene) {
+        if (stage != null) {
+            stage.setTitle(info.title());
+        }
+        
+        brand.logoSmall()
+            .map(Image::new)
+            .ifPresent(icon -> {
+                if (stage != null) {
+                    stage.getIcons().add(icon);
+                }
+
+                @SuppressWarnings("unchecked")
+                final Stage dialogStage = (Stage) scene.getWindow();
+                if (dialogStage != null) {
+                    dialogStage.getIcons().add(icon);
+                }
+            });
+
+        brand.stylesheets().forEachOrdered(scene.getStylesheets()::add);
     }
     
     /**

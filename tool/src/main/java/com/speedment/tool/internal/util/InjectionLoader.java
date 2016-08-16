@@ -52,7 +52,7 @@ import java.util.function.Supplier;
 
 import static com.speedment.common.injector.State.INITIALIZED;
 import com.speedment.tool.internal.controller.ProjectProblemController;
-import static java.util.Objects.requireNonNull;
+import com.speedment.tool.util.BrandUtil;
 import static javafx.stage.Modality.APPLICATION_MODAL;
 import static java.util.Objects.requireNonNull;
 
@@ -132,7 +132,7 @@ public final class InjectionLoader {
         final Scene scene = new Scene(parent);
         
         stage.hide();
-        brand.apply(stage, scene);
+        BrandUtil.applyBrand(injector, stage, scene);
         stage.setScene(scene);
         WindowSettingUtil.applySaveOnCloseMethod(stage, name);
         WindowSettingUtil.applyStoredDisplaySettings(stage, name);
@@ -147,7 +147,7 @@ public final class InjectionLoader {
         final Parent root     = (Parent) load(name);
         final Scene scene     = new Scene(root);
         
-        brand.apply(dialog, scene);
+        BrandUtil.applyBrandToScene(injector, scene);
         
         dialog.setTitle("About " + infoComponent.title());
         dialog.initModality(APPLICATION_MODAL);

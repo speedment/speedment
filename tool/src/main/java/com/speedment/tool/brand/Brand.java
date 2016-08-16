@@ -18,8 +18,6 @@ package com.speedment.tool.brand;
 
 import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -72,12 +70,4 @@ public interface Brand {
      * @return  the stream of stylesheets.
      */
     Stream<String> stylesheets();
-
-    /**
-     * Applies this brand to the specified {@link Scene}.
-     * 
-     * @param stage  the stage to style
-     * @param scene  the scene to set icons and stylesheets in
-     */
-    void apply(Stage stage, Scene scene);
 }
