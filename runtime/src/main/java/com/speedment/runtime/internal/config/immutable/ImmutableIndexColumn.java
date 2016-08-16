@@ -16,11 +16,11 @@
  */
 package com.speedment.runtime.internal.config.immutable;
 
+import com.speedment.common.lazy.LazyReference;
 import com.speedment.runtime.config.Index;
 import com.speedment.runtime.config.IndexColumn;
 import com.speedment.runtime.config.parameter.OrderType;
 import com.speedment.runtime.internal.config.IndexColumnImpl;
-import com.speedment.runtime.internal.util.Lazy;
 
 import java.util.Map;
 import java.util.Optional;
@@ -36,7 +36,7 @@ public final class ImmutableIndexColumn extends ImmutableDocument implements Ind
     private final transient String name;
     private final transient int ordinalPosition;
     private final transient OrderType orderType;
-    private final transient Lazy<Optional<ImmutableColumn>> column;
+    private final transient LazyReference<Optional<ImmutableColumn>> column;
 
     ImmutableIndexColumn(ImmutableIndex parent, Map<String, Object> ic) {
         super(parent, ic);
@@ -47,7 +47,7 @@ public final class ImmutableIndexColumn extends ImmutableDocument implements Ind
         this.ordinalPosition = prototype.getOrdinalPosition();
         this.orderType       = prototype.getOrderType();
         
-        this.column          = Lazy.create();
+        this.column          = LazyReference.create();
     }
 
     @Override

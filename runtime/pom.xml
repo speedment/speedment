@@ -64,6 +64,7 @@
                             com.speedment.runtime.manager.*,
                             com.speedment.runtime.stream.*,
                             com.speedment.runtime.util.*,
+                            com.speedment.runtime.transaction.*,
                             com.speedment.runtime
                         </Export-Package>
                     </instructions>
@@ -101,6 +102,12 @@
             <groupId>com.speedment.common</groupId>
             <artifactId>tuple</artifactId>
             <version>${tuple.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>lazy</artifactId>
+            <version>${lazy.version}</version>
         </dependency>
         
         <dependency>

@@ -68,6 +68,7 @@
         <injector.version>1.0.0-SNAPSHOT</injector.version>
         <json.version>1.0.0-SNAPSHOT</json.version>
         <tuple.version>1.0.0-SNAPSHOT</tuple.version>
+        <lazy.version>1.0.0-SNAPSHOT</lazy.version>
         <rest.version>1.0.0-SNAPSHOT</rest.version>
     </properties>
     

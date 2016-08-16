@@ -14,45 +14,40 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.util;
+package com.speedment.common.lazy.specialized;
 
+{$1}
+import com.speedment.common.lazy.Lazy;
+import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
 
-import static java.util.Objects.requireNonNull;
-
 /**
- * Generic lazy initialization class. The supplier must produce a non-null
- * value.
+ * Specialized Lazy initialization class for {$0} types.
  *
- * This class is thread safe. The Supplier is guaranteed to be called exactly
- * one time following one or several calls to 
- * {@link  #getOrCompute(java.util.function.Supplier) } by any number of
- * threads.
- *
- * @author pemi
- * @param <T> the type of the lazy initialized value
+ * @author Per Minborg
  */
-public final class Lazy<T> {
+public final class Lazy{$0} implements Lazy<{$2}> {
 
-    private volatile T value;
+    private volatile {$2} value;
 
-    private Lazy() {
+    private Lazy{$0}() {
     }
     
-    public T getOrCompute(Supplier<T> supplier) {
-        // With this local variable, we only need to do one volatile read most of the times
-        final T result = value;  
+    @Override
+    public {$2} getOrCompute(Supplier<{$2}> supplier) {
+        // With this local variable, we only need to do one volatile read
+        final {$2} result = value;
         return result == null ? maybeCompute(supplier) : result;
     }
 
-    private synchronized T maybeCompute(Supplier<T> supplier) {
+    private synchronized {$2} maybeCompute(Supplier<{$2}> supplier) {
         if (value == null) {
             value = requireNonNull(supplier.get());
         }
         return value;
     }
 
-    public static <T> Lazy<T> create() {
-        return new Lazy<>();
+    public static Lazy{$0} create() {
+        return new Lazy{$0}();
     }
 }

@@ -19,13 +19,13 @@ package com.speedment.plugins.enums;
 import com.speedment.common.injector.Injector;
 import com.speedment.plugins.enums.internal.GeneratedEnumType;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.lazy.specialized.LazyClass;
 import com.speedment.generator.internal.TranslatorManagerImpl;
 import static com.speedment.plugins.enums.internal.GeneratedEntityDecorator.FROM_DATABASE_METHOD;
 import com.speedment.plugins.enums.internal.EnumGeneratorUtil;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.util.Lazy;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
@@ -42,19 +42,17 @@ import static java.util.Objects.requireNonNull;
  */
 public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapper<String, T> {
 
-    
+    private final LazyClass cachedEnum;
     private @Inject TranslatorManagerImpl wrapped;
     
     
-    
-    private final Lazy<Class<?>> cachedEnum;
     private @Inject Injector injector;
     
     public StringToEnumTypeMapper() {
-        cachedEnum = Lazy.create();
+        cachedEnum = LazyClass.create();
     }
     
-    public Lazy<Class<?>> getLazy() {return cachedEnum;}
+    public LazyClass getLazy() {return cachedEnum;}
     
     @Override
     public String getLabel() {

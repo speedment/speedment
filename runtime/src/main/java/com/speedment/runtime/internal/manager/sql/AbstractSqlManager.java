@@ -43,7 +43,6 @@ import com.speedment.runtime.internal.manager.AbstractManager;
 import com.speedment.runtime.internal.manager.metaresult.SqlMetaResultImpl;
 import com.speedment.runtime.internal.stream.builder.ReferenceStreamBuilder;
 import com.speedment.runtime.internal.stream.builder.pipeline.PipelineImpl;
-import com.speedment.runtime.internal.util.LazyString;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
 import com.speedment.runtime.stream.StreamDecorator;
@@ -66,6 +65,7 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.injector.State.RESOLVED;
+import com.speedment.common.lazy.specialized.LazyString;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.*;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.ancestor;

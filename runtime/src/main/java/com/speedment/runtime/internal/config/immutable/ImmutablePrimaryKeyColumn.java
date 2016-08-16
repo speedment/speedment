@@ -16,10 +16,10 @@
  */
 package com.speedment.runtime.internal.config.immutable;
 
+import com.speedment.common.lazy.LazyReference;
 import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.config.PrimaryKeyColumnImpl;
-import com.speedment.runtime.internal.util.Lazy;
 
 import java.util.Map;
 import java.util.Optional;
@@ -35,7 +35,7 @@ public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implement
     private final transient String name;
     private final transient int ordinalPosition;
     
-    private final transient Lazy<Optional<ImmutableColumn>> column;
+    private final transient LazyReference<Optional<ImmutableColumn>> column;
 
     ImmutablePrimaryKeyColumn(ImmutableTable parent, Map<String, Object> pkc) {
         super(parent, pkc);
@@ -44,7 +44,7 @@ public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implement
         
         this.name            = prototype.getName();
         this.ordinalPosition = prototype.getOrdinalPosition();        
-        this.column          = Lazy.create();
+        this.column          = LazyReference.create();
     }
 
     @Override

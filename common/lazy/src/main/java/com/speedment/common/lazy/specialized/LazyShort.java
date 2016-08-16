@@ -14,43 +14,40 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.util;
+package com.speedment.common.lazy.specialized;
 
+
+import com.speedment.common.lazy.Lazy;
+import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
 
-import static java.util.Objects.requireNonNull;
-
 /**
- * String lazy initialization class. The supplier must produce a non-null value.
+ * Specialized Lazy initialization class for Short types.
  *
- * This class is thread safe. The Supplier is guaranteed to be called exactly
- * one time following one or several calls to 
- * {@link  #getOrCompute(java.util.function.Supplier) } by any number of
- * threads.
- *
- * @author pemi
+ * @author Per Minborg
  */
-public final class LazyString {
+public final class LazyShort implements Lazy<Short> {
 
-    private volatile String value;
+    private volatile Short value;
 
-    private LazyString() {
+    private LazyShort() {
     }
-
-    public String getOrCompute(Supplier<String> supplier) {
-        // With this local variable, we only need to do one volatile read most of the times
-        final String result = value;
+    
+    @Override
+    public Short getOrCompute(Supplier<Short> supplier) {
+        // With this local variable, we only need to do one volatile read
+        final Short result = value;
         return result == null ? maybeCompute(supplier) : result;
     }
 
-    private synchronized String maybeCompute(Supplier<String> supplier) {
+    private synchronized Short maybeCompute(Supplier<Short> supplier) {
         if (value == null) {
             value = requireNonNull(supplier.get());
         }
         return value;
     }
 
-    public static LazyString create() {
-        return new LazyString();
+    public static LazyShort create() {
+        return new LazyShort();
     }
 }

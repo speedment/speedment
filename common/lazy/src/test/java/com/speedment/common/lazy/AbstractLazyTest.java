@@ -14,14 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.util;
-
-import com.speedment.runtime.exception.SpeedmentException;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+package com.speedment.common.lazy;
 
 import java.util.List;
 import java.util.Set;
@@ -32,54 +25,55 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
-import java.util.stream.IntStream;
-
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
-import static org.junit.Assert.assertEquals;
+import java.util.stream.IntStream;
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * @author pemi
+ * @param <T> test type
  */
-public class LazyTest {
+public abstract class AbstractLazyTest<T> {
 
-    private static final Integer ONE = 1;
-    private static final Integer TWO = 2;
-    private static final Supplier<Integer> ONE_SUPPLIER = () -> ONE;
-    private static final Supplier<Integer> TWO_SUPPLIER = () -> TWO;
-    private static final Supplier<Integer> NULL_SUPPLIER = () -> null;
+    private final Supplier<T> NULL_SUPPLIER = () -> null;
 
-    Lazy<Integer> instance;
+    protected abstract T firstValue();
 
-    public LazyTest() {
-    }
+    protected abstract T secondValue();
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
+    protected abstract Lazy<T> newInstance();
 
-    @AfterClass
-    public static void tearDownClass() {
-    }
+    protected abstract T makeFromThread(Thread t);
+
+    protected Lazy<T> instance;
 
     @Before
     public void setUp() {
-        instance = Lazy.create();
+        instance = newInstance();
     }
 
-    @After
-    public void tearDown() {
+    @Test
+    public void checkFirstAndSecondValue() {
+        assertNotEquals(firstValue(), secondValue());
     }
 
     @Test
     public void testGetOrCompute() {
-        assertEquals(ONE, instance.getOrCompute(ONE_SUPPLIER));
-        assertEquals(ONE, instance.getOrCompute(TWO_SUPPLIER));
+        assertEquals(firstValue(), instance.getOrCompute(() -> firstValue()));
+        assertEquals(firstValue(), instance.getOrCompute(() -> secondValue()));
     }
 
     @Test(expected = NullPointerException.class)
     public void testGetOrComputeSuppliedNull() {
         instance.getOrCompute(NULL_SUPPLIER);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testGetOrComputeSupplierIsNull() {
+        instance.getOrCompute(null);
     }
 
     @Test
@@ -88,21 +82,21 @@ public class LazyTest {
         ExecutorService executorService = Executors.newFixedThreadPool(8);
 
         for (int i = 0; i < 10000; i++) {
-            final Lazy<Long> lazy = Lazy.create();
-            final Callable<Long> callable = () -> lazy.getOrCompute(() -> Thread.currentThread().getId());
-            List<Future<Long>> futures
-                    = IntStream.rangeClosed(0, threads)
-                    .mapToObj($ -> executorService.submit(callable))
-                    .collect(toList());
+            final Lazy<T> lazy = newInstance();
+            final Callable<T> callable = () -> lazy.getOrCompute(() -> makeFromThread(Thread.currentThread()));
+            List<Future<T>> futures
+                = IntStream.rangeClosed(0, threads)
+                .mapToObj($ -> executorService.submit(callable))
+                .collect(toList());
 
             while (!futures.stream().allMatch(Future::isDone)) {
             }
 
-            final Set<Long> ids = futures.stream()
-                    .map(LazyTest::getFutureValue)
-                    .collect(toSet());
+            final Set<T> results = futures.stream()
+                .map(AbstractLazyTest::getFutureValue)
+                .collect(toSet());
 
-            assertEquals("Failed at iteration " + i, 1, ids.size());
+            assertEquals("Failed at iteration " + i, 1, results.size());
 
         }
 
@@ -111,11 +105,11 @@ public class LazyTest {
 
     }
 
-    private static <T> T getFutureValue(Future<T> future) {
+    public static <T> T getFutureValue(Future<T> future) {
         try {
             return future.get();
         } catch (ExecutionException | InterruptedException e) {
-            throw new SpeedmentException(e);
+            throw new RuntimeException(e);
         }
     }
 

@@ -16,16 +16,18 @@
  */
 package com.speedment.runtime.internal.config.immutable;
 
+import com.speedment.common.lazy.LazyReference;
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.config.ForeignKeyColumnImpl;
-import com.speedment.runtime.internal.util.Lazy;
+
 
 import java.util.Map;
 import java.util.Optional;
 
 import static com.speedment.runtime.internal.util.document.DocumentUtil.toStringHelper;
+import static com.speedment.runtime.util.NullUtil.requireKeys;
 import static com.speedment.runtime.util.NullUtil.requireKeys;
 
 /**
@@ -39,9 +41,9 @@ public final class ImmutableForeignKeyColumn extends ImmutableDocument implement
     private final transient String foreignColumnName;
     private final transient String foreignTableName;
     
-    private final transient Lazy<Optional<ImmutableColumn>> foreignColumn;
-    private final transient Lazy<Optional<ImmutableTable>> foreignTable;
-    private final transient Lazy<Optional<ImmutableColumn>> column;
+    private final transient LazyReference<Optional<ImmutableColumn>> foreignColumn;
+    private final transient LazyReference<Optional<ImmutableTable>> foreignTable;
+    private final transient LazyReference<Optional<ImmutableColumn>> column;
   
     ImmutableForeignKeyColumn(ImmutableForeignKey parent, Map<String, Object> fkc) {
         super(parent, requireKeys(fkc, ForeignKeyColumn.FOREIGN_COLUMN_NAME, ForeignKeyColumn.FOREIGN_TABLE_NAME));
@@ -53,9 +55,9 @@ public final class ImmutableForeignKeyColumn extends ImmutableDocument implement
         this.foreignTableName  = prototype.getForeignTableName();
         this.foreignColumnName = prototype.getForeignColumnName();
         
-        this.foreignTable      = Lazy.create();
-        this.foreignColumn     = Lazy.create();
-        this.column            = Lazy.create();
+        this.foreignTable      = LazyReference.create();
+        this.foreignColumn     = LazyReference.create();
+        this.column            = LazyReference.create();
     }
 
     @Override

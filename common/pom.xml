@@ -45,6 +45,7 @@
         <module>codegen</module>
         <module>codegenxml</module>
         <module>injector</module>
-		<module>rest</module>
+        <module>rest</module>
+        <module>lazy</module>
     </modules>
 </project>
