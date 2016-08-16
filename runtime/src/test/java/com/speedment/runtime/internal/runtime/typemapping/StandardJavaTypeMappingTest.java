@@ -37,7 +37,7 @@ public class StandardJavaTypeMappingTest {
         testMapping(Integer.class,        -47, m -> m.parse("-47"));
     }
 
-    private static void testMapping(Class<?> javaType, Object expected, Function<ResultSetMapping, Object> actual) {
+    private static void testMapping(Class<?> javaType, Object expected, Function<ResultSetMapping<?>, Object> actual) {
         StandardJavaTypeMapping.stream()
             .filter(m -> javaType.equals(m.getJavaClass()))
             .forEach(m -> assertEquals(expected, actual.apply(m)));
