@@ -166,20 +166,19 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
                 try {
                     final Class<?> uncasted = Class.forName(component);
                         
-                    @SuppressWarnings("unchecked")
-                    final Class<Component> casted = (Class<Component>) uncasted;
-                    result.with(casted);
+                    if (Component.class.isAssignableFrom(uncasted)) {
+                        @SuppressWarnings("unchecked")
+                        final Class<? extends Component> casted = 
+                            (Class<? extends Component>) uncasted;
+                        result.with(casted);
+                    } else {
+                        result.withInjectable(uncasted);
+                    }
                 } catch (final ClassNotFoundException ex) {
                     throw new MojoExecutionException(
                         "Specified class '" + component + "' could not be " + 
                         "found on class path. Has the dependency been " + 
                         "configured properly?", ex
-                    );
-                } catch (final ClassCastException ex) {
-                    throw new MojoExecutionException(
-                        "Specified class '" + component + 
-                        "' does not implement the '" + 
-                        Component.class.getSimpleName() + "'-interface.", ex
                     );
                 }
             }
