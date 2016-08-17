@@ -41,20 +41,13 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <version>3.0.1</version>
-                <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Bundle-Vendor>Speedment, Inc.</Bundle-Vendor>
                         <Bundle-Description>
                             A collection of Tuple classes that represent sets of 
                             a fixed length where every element has a specific 
                             type.
                         </Bundle-Description>
-                        <Import-Package>
-                            org.osgi.framework,
-                            *;resolution:=optional 
-                        </Import-Package>
                         <Export-Package>com.speedment.common.tuple</Export-Package>
                     </instructions>
                 </configuration>
