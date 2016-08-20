@@ -33,7 +33,7 @@ import org.junit.Test;
  */
 public class SpeedmentVersionTest {
     
-    private static final String EXPECTED_IMPLEMENTATION_VERSION = "2.3.5";
+    private static final String EXPECTED_IMPLEMENTATION_VERSION = "2.3.6";
     private static final String EXPECTED_SPECIFICATION_VERSION = "2.3";
 
     public SpeedmentVersionTest() {
