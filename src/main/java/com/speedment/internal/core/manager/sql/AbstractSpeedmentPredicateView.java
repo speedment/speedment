@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.manager.sql;
 
-import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.field.Inclusion;
 import com.speedment.field.predicate.PredicateType;
 import static com.speedment.field.predicate.PredicateType.NOT_BETWEEN;
@@ -43,11 +42,11 @@ import static java.util.stream.Collectors.joining;
  */
 public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredicateView {
     
-    private final DatabaseNamingConvention namingConvention;
+//    private final DatabaseNamingConvention namingConvention;
     
-    protected AbstractSpeedmentPredicateView(DatabaseNamingConvention namingConvention) {
-        this.namingConvention = requireNonNull(namingConvention);
-    }
+//    protected AbstractSpeedmentPredicateView(DatabaseNamingConvention namingConvention) {
+//        this.namingConvention = requireNonNull(namingConvention);
+//    }
     
     protected abstract SqlPredicateFragment equalIgnoreCaseHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated);
 
@@ -58,14 +57,18 @@ public abstract class AbstractSpeedmentPredicateView implements SpeedmentPredica
     protected abstract SqlPredicateFragment containsHelper(String cn, SpeedmentPredicate<?, ?, ?> model, boolean negated);
 
     @Override
-    public SqlPredicateFragment transform(SpeedmentPredicate<?, ?, ?> model) {
-        return render(requireNonNull(model));
+    public SqlPredicateFragment transform(SqlManager<?> manager, SpeedmentPredicate<?, ?, ?> model) {
+        return render(requireNonNull(manager), requireNonNull(model));
     }
 
-    protected SqlPredicateFragment render(SpeedmentPredicate<?, ?, ?> model) {
+    protected SqlPredicateFragment render(SqlManager<?> manager, SpeedmentPredicate<?, ?, ?> model) {
         final PredicateType pt = model.getEffectivePredicateType();
         
-        final String cn = namingConvention.fullNameOf(model.getField().getIdentifier());
+        /// final String cn = namingConvention.fullNameOf(model.getField().getIdentifier()); Previously
+                
+        //final String cn = namingConvention.encloseField(model.getField().getIdentifier().columnName()); Doesn't work for VC
+        
+        final String cn = manager.fullColumnName(model.getField()); // Let the manager resolve the name
         
         switch (pt) {
             // Constants

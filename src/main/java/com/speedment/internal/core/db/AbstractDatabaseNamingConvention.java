@@ -39,9 +39,9 @@ public abstract class AbstractDatabaseNamingConvention
     }
 
     @Override
-    public String fullNameOf(String schemaName, String tableName) {
-        return encloseField(schemaName) + DEFAULT_DELIMITER
-                + encloseField(tableName);
+    public String fullNameOf(String parentName, String targetName) {
+        return encloseField(parentName) + DEFAULT_DELIMITER
+                + encloseField(targetName);
     }
 
 //    @Override

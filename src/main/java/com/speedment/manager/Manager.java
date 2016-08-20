@@ -469,5 +469,5 @@ public interface Manager<ENTITY> extends Lifecyclable<Manager<ENTITY>>, HasCreat
      *
      * @return the {@link Speedment} instance for this Manager
      */
-    Speedment speedment();
+    Speedment speedment();      
 }

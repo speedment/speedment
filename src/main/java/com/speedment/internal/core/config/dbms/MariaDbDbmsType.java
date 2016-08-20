@@ -48,7 +48,7 @@ public final class MariaDbDbmsType {
         .withDatabaseNamingConvention(NAMER)
         .withDbmsMapper(MySqlDbmsHandler::new)
         .withConnectionUrlGenerator(new MariaDbConnectionUrlGenerator())
-        .withSpeedmentPredicateView(new MySqlSpeedmentPredicateView(NAMER))
+        .withSpeedmentPredicateView(new MySqlSpeedmentPredicateView())
 
         // Optional parameters
         .withInitialQuery("select version() as `MariaDB version`")

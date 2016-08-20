@@ -17,6 +17,7 @@
 package com.speedment.manager;
 
 import com.speedment.field.predicate.SpeedmentPredicate;
+import com.speedment.internal.core.manager.sql.SqlManager;
 
 /**
  *
@@ -25,6 +26,6 @@ import com.speedment.field.predicate.SpeedmentPredicate;
 @FunctionalInterface
 public interface SpeedmentPredicateView {
 
-    SqlPredicateFragment transform(SpeedmentPredicate<?, ?, ?> model);
+    SqlPredicateFragment transform(SqlManager<?> manager, SpeedmentPredicate<?, ?, ?> model);
     
 }

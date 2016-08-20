@@ -550,4 +550,9 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
         return dbmsHandler().createStruct(typeName, attributes);
     }
 
+    @Override
+    public String fullColumnName(FieldTrait fieldTrait) {
+        return naming().fullNameOf(fieldTrait.getIdentifier());
+    }
+
 }

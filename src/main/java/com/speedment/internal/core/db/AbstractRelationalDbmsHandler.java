@@ -184,19 +184,10 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                 try (final ResultSet rs = connection.getMetaData().getSchemas(null, null)) {
                     while (rs.next()) {
 
-                        final String schemaName = rs.getString(dbmsType.getResultSetTableSchema());
-                        String catalogName = "";
-                        try {
-                            // This column is not there for Oracle so handle it
-                            // gracefully....
-                            catalogName = rs.getString("TABLE_CATALOG");
-                        } catch (final SQLException ex) {
-                            LOGGER.info("TABLE_CATALOG not in result set.");
-                        }
+                        final String name = readSchemaName(rs, dbmsType);
 
                         boolean schemaWasUsed = false;
-                        if (!naming.getSchemaExcludeSet().contains(schemaName)) {
-                            final String name = Optional.ofNullable(schemaName).orElse(catalogName);
+                        if (!naming.getSchemaExcludeSet().contains(name)) {
                             if (filterCriteria.test(name)) {
                                 final Schema schema = dbms.mutator().addNewSchema();
                                 schema.mutator().setName(name);
@@ -205,7 +196,7 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                         }
 
                         if (!schemaWasUsed) {
-                            discardedSchemas.add(schemaName);
+                            discardedSchemas.add(name);
                         }
                     }
                 }
@@ -274,6 +265,20 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
                     }
                 });
         });
+    }
+
+    private String readSchemaName(ResultSet rs, DbmsType dbmsType) throws SQLException {
+        final String schemaName = rs.getString(dbmsType.getResultSetTableSchema());
+        String catalogName = "";
+        try {
+            // This column is not there for Oracle so handle it
+            // gracefully....
+            catalogName = rs.getString("TABLE_CATALOG");
+        } catch (final SQLException ex) {
+            LOGGER.info("TABLE_CATALOG not in result set.");
+        }
+        return Optional.ofNullable(schemaName).orElse(catalogName);
+
     }
 
     protected CompletableFuture<Schema> tables(CompletableFuture<Map<String, Class<?>>> sqlTypeMapping, Dbms dbms, Schema schema, ProgressMeasure progressListener) {
@@ -483,6 +488,15 @@ public abstract class AbstractRelationalDbmsHandler implements DbmsHandler {
             fkcMutator.setOrdinalPosition(rs.getInt("KEY_SEQ"));
             fkcMutator.setForeignTableName(rs.getString("PKTABLE_NAME"));
             fkcMutator.setForeignColumnName(rs.getString("PKCOLUMN_NAME"));
+
+            // FKs always point to the same DBMS but can
+            // be changed to another one using the config 
+            fkcMutator.setForeignDatabaseName(dbms.getName());
+
+            // Use schema name first but if not present, use catalog name
+            fkcMutator.setForeignSchemaName(
+                Optional.ofNullable(rs.getString("FKTABLE_SCHEM")).orElse(rs.getString("PKTABLE_CAT"))
+            );
         };
 
         tableChilds(table.mutator()::addNewForeignKey, supplier, mutator, progressListener);
