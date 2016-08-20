@@ -52,7 +52,7 @@ public final class PostgresDbmsType {
         .withDatabaseNamingConvention(NAMER)
         .withDbmsMapper(PostgresDbmsHandler::new)
         .withConnectionUrlGenerator(new PostgresConnectionUrlGenerator())
-        .withSpeedmentPredicateView(new PostgresSpeedmentPredicateView(NAMER))
+        .withSpeedmentPredicateView(new PostgresSpeedmentPredicateView())
         // Optional parameters
         .withInitialQuery("select version() as \"PostgreSQL version\"")
         .withResultSetTableSchema("TABLE_SCHEM")

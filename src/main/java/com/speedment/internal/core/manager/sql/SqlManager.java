@@ -17,6 +17,7 @@
 package com.speedment.internal.core.manager.sql;
 
 import com.speedment.db.SqlFunction;
+import com.speedment.field.trait.FieldTrait;
 import com.speedment.manager.Manager;
 import java.sql.ResultSet;
 
@@ -30,5 +31,13 @@ public interface SqlManager<ENTITY> extends Manager<ENTITY> {
     SqlFunction<ResultSet, ENTITY> getEntityMapper();
 
     void setEntityMapper(SqlFunction<ResultSet, ENTITY> entityMapper);
+
+    /**
+     * Returns the fully qualified name for this field.
+     * 
+     * @param fieldTrait to use
+     * @return the fully qualified name for this field
+     */
+    String fullColumnName(FieldTrait fieldTrait);
 
 }

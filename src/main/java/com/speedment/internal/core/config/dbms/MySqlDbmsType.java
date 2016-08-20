@@ -49,7 +49,7 @@ public final class MySqlDbmsType {
         .withDatabaseNamingConvention(NAMER)
         .withDbmsMapper(MySqlDbmsHandler::new)
         .withConnectionUrlGenerator(new MySqlConnectionUrlGenerator())
-        .withSpeedmentPredicateView(new MySqlSpeedmentPredicateView(NAMER))
+        .withSpeedmentPredicateView(new MySqlSpeedmentPredicateView())
 
         // Optional parameters
         .withInitialQuery("select version() as `MySQL version`")

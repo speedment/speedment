@@ -53,11 +53,11 @@ public interface DatabaseNamingConvention {
      * with a separator, but that might be different in different
      * implementations.
      *
-     * @param schemaName schema name
-     * @param tableName table name
+     * @param parentName parent name (e.g. schema name or table bane)
+     * @param targetName target name (e.g. table name or column name)
      * @return the full name
      */
-    String fullNameOf(String schemaName, String tableName);
+    String fullNameOf(String parentName, String targetName);
 
     /**
      * Returns the full name used in the database for the specified

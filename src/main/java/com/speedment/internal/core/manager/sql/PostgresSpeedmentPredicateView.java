@@ -16,7 +16,6 @@
  */
 package com.speedment.internal.core.manager.sql;
 
-import com.speedment.db.DatabaseNamingConvention;
 import com.speedment.field.predicate.SpeedmentPredicate;
 import static com.speedment.internal.core.field.predicate.PredicateUtil.getFirstOperandAsRaw;
 import static com.speedment.internal.core.manager.sql.AbstractSpeedmentPredicateView.of;
@@ -29,10 +28,6 @@ import com.speedment.manager.SqlPredicateFragment;
  * @author  Fatih Dirlikli
  */
 public class PostgresSpeedmentPredicateView extends AbstractSpeedmentPredicateView implements SpeedmentPredicateView {
-
-    public PostgresSpeedmentPredicateView(DatabaseNamingConvention namingConvention) {
-        super(namingConvention);
-    }
     
     // Info from:
     // http://stackoverflow.com/questions/23320945/postgresql-select-if-string-contains
