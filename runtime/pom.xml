@@ -65,7 +65,49 @@
                     </instructions>
                 </configuration>
             </plugin>                            
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+                <configuration>
+                    <shadedArtifactId>speedment-all</shadedArtifactId>
+                    <createSourcesJar>true</createSourcesJar>
+                    <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+                    <createDependencyReducedPom>true</createDependencyReducedPom>
+                    <minimizeJar>false</minimizeJar>
+                    <relocations>
+                        <relocation>
+                            <pattern>com.speedment.common</pattern>
+                            <shadedPattern>com.speedment.internal.common</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>shade-artifacts</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions> 
+                    <execution> 
+                        <configuration> 
+                            <excludePackageNames>com.speedment.runtime.internal.*</excludePackageNames>
+                        </configuration> 
+                    </execution> 
+                </executions> 
+            </plugin>
+            
         </plugins>
+        
     </build>
     
     <dependencies>
@@ -104,6 +146,8 @@
             <artifactId>lazy</artifactId>
             <version>${lazy.version}</version>
         </dependency>
+        
+        <!--Test Dependencies--> 
         
         <dependency>
             <groupId>junit</groupId>
