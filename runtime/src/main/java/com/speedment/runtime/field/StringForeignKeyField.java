@@ -31,9 +31,7 @@ import com.speedment.runtime.field.trait.HasFinder;
  * @author  Emil Forslund
  * @since   2.2.0
  * 
- * @see  ReferenceFieldTrait
- * @see  ComparableFieldTrait
- * @see  StringFieldTrait
+ * @see  StringField
  * @see  HasFinder
  */
 @Api(version = "3.0")

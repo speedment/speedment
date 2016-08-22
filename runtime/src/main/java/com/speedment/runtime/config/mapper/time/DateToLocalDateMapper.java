@@ -30,8 +30,8 @@ import java.time.LocalDate;
  * be directly mapped into Java.
  * <p>
  * Example: <br>
- * In database:<t> 2016-08-01<br>
- * In Java:<t> 2016-08-01
+ * In database: 2016-08-01<br>
+ * In Java: 2016-08-01
  *
  * @author Simon Jonasson
  */

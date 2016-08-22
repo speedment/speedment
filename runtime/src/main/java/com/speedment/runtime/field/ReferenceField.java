@@ -31,7 +31,9 @@ import com.speedment.runtime.field.trait.HasReferenceValue;
  * @author  Emil Forslund
  * @since   2.2.0
  * 
- * @see  ReferenceFieldTrait
+ * @see  Field
+ * @see  HasReferenceOperators
+ * @see  HasReferenceValue
  */
 @Api(version = "3.0")
 public interface ReferenceField<ENTITY, D, V> extends 

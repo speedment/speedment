@@ -35,20 +35,20 @@ public interface Issue {
          * Indicates something the user should be aware of, but will not prevent
          * code generation
          */
-        WARNING("[Warning]"),
+        WARNING("Warning"),
         
         /**
          * Indicates a problem in the current configuration that the user has
          * to fix before code generation can be performed
          */
-        ERROR("[Error]");
+        ERROR("Error");
     
         private final String value;
         private Level(String value){
             this.value = value;
         }
         
-        public String toString(){ return value; }
+        public String toString(){ return "["+value+"]"; }
     };
     
     /**
@@ -67,8 +67,8 @@ public interface Issue {
     String getDescription();
     
     /**
-     * The severity of this issue. A {@link Level.WARNING} does not hinder code
-     * generation, whereas a {@link Level.ERROR} will hinder code generation.
+     * The severity of this issue. A {@link Level#WARNING} does not hinder code
+     * generation, whereas a {@link Level#ERROR} will hinder code generation.
      * 
      * @return  the level
      */

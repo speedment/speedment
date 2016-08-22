@@ -29,9 +29,8 @@ import com.speedment.runtime.field.trait.HasStringOperators;
  * @author  Emil Forslund
  * @since   2.2.0
  * 
- * @see  ReferenceFieldTrait
- * @see  ComparableFieldTrait
- * @see  StringFieldTrait
+ * @see  ComparableField
+ * @see  HasStringOperators
  */
 @Api(version = "3.0")
 public interface StringField<ENTITY, D> extends

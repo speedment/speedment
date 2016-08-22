@@ -47,11 +47,11 @@ public interface PropertyEditorComponent extends Component {
     /**
      * Installs a new supplier for an editor item under a certain document type and key. 
      * <P>
-     * Calls to {@see getUiVisibleProperties} will retrieve items depending on 
-     * what editors have been installed under the document's type. Installations also
-     * has to provide a unique key for the particular editor. If two editors are installed
-     * on the same document type, with the same key, only the last installed editor
-     * will be produced.
+     * Calls to {@link  #getUiVisibleProperties(com.speedment.tool.config.DocumentProperty) } 
+     * will retrieve items depending on what editors have been installed under the document's type.
+     * Installations also has to provide a unique key for the particular editor. If two 
+     * editors are installed on the same document type, with the same key, only the last
+     * installed editor will be produced.
      * 
      * @param <DOC>         the document type
      * @param documentType  the document type

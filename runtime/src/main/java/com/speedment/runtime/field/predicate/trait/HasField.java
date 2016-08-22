@@ -31,7 +31,7 @@ import com.speedment.runtime.field.Field;
 public interface HasField<ENTITY> {
 
     /**
-     * Returns the {@link FieldTrait} that was used to generate this predicate.
+     * Returns the {@link Field} that was used to generate this predicate.
      * 
      * @return  the field
      */

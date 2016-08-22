@@ -42,7 +42,7 @@ public interface HasIdentifier<ENTITY> {
     
     /**
      * Locates the column that this field is referencing by using the specified
-     * {@link Speedment} instance.
+     * {@link Project} instance.
      * 
      * @param project  the project instance
      * @return         the column

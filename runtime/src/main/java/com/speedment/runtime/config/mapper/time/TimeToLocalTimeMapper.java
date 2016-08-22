@@ -30,8 +30,8 @@ import java.time.LocalTime;
  * be directly mapped into Java.
  * <p>
  * Example: <br>
- * In database:<t> 19:22:10<br>
- * In Java:<t> 19:22:10
+ * In database: 19:22:10<br>
+ * In Java: 19:22:10
  *
  * @author Simon Jonasson
  */
