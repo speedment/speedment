@@ -35,7 +35,7 @@ import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
-import com.speedment.common.injector.annotation.Inject;
+import com.speedment.internal.common.injector.annotation.Inject;
 import com.speedment.plugins.reactor.util.MergingSupport;
 import java.lang.reflect.Type;
 

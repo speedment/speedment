@@ -39,8 +39,6 @@ import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.Formatting.tab;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import static com.speedment.common.codegen.internal.util.Formatting.block;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.component.TypeMapperComponent;
 import static com.speedment.generator.internal.entity.GeneratedEntityTranslator.getterReturnType;
@@ -48,6 +46,8 @@ import static com.speedment.generator.internal.util.ColumnUtil.optionalGetterNam
 import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
 import com.speedment.generator.internal.util.EntityTranslatorSupport;
 import com.speedment.generator.internal.util.FkHolder;
+import com.speedment.internal.common.injector.Injector;
+import com.speedment.internal.common.injector.annotation.Inject;
 import com.speedment.runtime.manager.Manager;
 import java.lang.reflect.Type;
 import static java.util.Objects.requireNonNull;

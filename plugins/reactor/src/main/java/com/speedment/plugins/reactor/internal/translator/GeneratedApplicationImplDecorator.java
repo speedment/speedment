@@ -23,7 +23,6 @@ import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.JavaClassTranslator;
 import com.speedment.generator.TranslatorDecorator;
 import com.speedment.generator.TranslatorSupport;
@@ -50,8 +49,9 @@ import com.speedment.common.codegen.constant.SimpleType;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static com.speedment.common.codegen.model.Generic.BoundType.EXTENDS;
-import com.speedment.common.injector.Injector;
 import static com.speedment.generator.Translator.Phase.POST_MAKE;
+import com.speedment.internal.common.injector.Injector;
+import com.speedment.internal.common.injector.annotation.Inject;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import java.lang.reflect.Type;
 

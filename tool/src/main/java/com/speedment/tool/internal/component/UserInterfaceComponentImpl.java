@@ -16,14 +16,17 @@
  */
 package com.speedment.tool.internal.component;
 
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.IncludeInjectable;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
-import com.speedment.common.mapstream.MapStream;
 import com.speedment.generator.TranslatorManager;
 import com.speedment.generator.TranslatorSupport;
+import com.speedment.internal.common.injector.Injector;
+import com.speedment.internal.common.injector.annotation.IncludeInjectable;
+import com.speedment.internal.common.injector.annotation.Inject;
+import static com.speedment.internal.common.logger.Level.FATAL;
+import static com.speedment.internal.common.logger.Level.TRACE;
+import static com.speedment.internal.common.logger.Level.WARN;
+import com.speedment.internal.common.logger.Logger;
+import com.speedment.internal.common.logger.LoggerManager;
+import com.speedment.internal.common.mapstream.MapStream;
 import com.speedment.runtime.component.PasswordComponent;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Dbms;

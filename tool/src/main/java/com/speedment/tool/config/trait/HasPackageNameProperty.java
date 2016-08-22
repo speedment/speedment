@@ -16,8 +16,8 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.generator.TranslatorSupport;
+import com.speedment.internal.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.trait.HasPackageName;
 import com.speedment.tool.config.DocumentProperty;

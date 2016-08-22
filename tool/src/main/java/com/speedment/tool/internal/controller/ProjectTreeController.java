@@ -16,9 +16,9 @@
  */
 package com.speedment.tool.internal.controller;
 
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.component.EventComponent;
 import com.speedment.generator.event.ProjectLoaded;
+import com.speedment.internal.common.injector.annotation.Inject;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.internal.util.document.DocumentUtil;

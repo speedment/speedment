@@ -16,9 +16,9 @@
  */
 package com.speedment.tool.internal.controller;
 
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
+import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.internal.common.logger.Logger;
+import com.speedment.internal.common.logger.LoggerManager;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.internal.util.Statistics;
 import com.speedment.tool.component.UserInterfaceComponent;

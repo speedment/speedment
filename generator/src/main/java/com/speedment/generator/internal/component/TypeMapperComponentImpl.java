@@ -16,9 +16,9 @@
  */
 package com.speedment.generator.internal.component;
 
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.component.TypeMapperComponent;
+import com.speedment.internal.common.injector.Injector;
+import com.speedment.internal.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mapper.bigdecimal.BigDecimalToDouble;

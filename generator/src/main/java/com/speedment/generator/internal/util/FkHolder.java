@@ -17,10 +17,10 @@
 package com.speedment.generator.internal.util;
 
 import com.speedment.common.codegen.model.Interface;
-import com.speedment.common.injector.Injector;
 import com.speedment.generator.JavaClassTranslator;
 import com.speedment.generator.StandardTranslatorKey;
 import com.speedment.generator.component.CodeGenerationComponent;
+import com.speedment.internal.common.injector.Injector;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;

@@ -16,8 +16,6 @@
  */
 package com.speedment.plugins.reactor.internal.util;
 
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
@@ -25,12 +23,14 @@ import com.speedment.runtime.config.Table;
 import static com.speedment.plugins.reactor.internal.util.ReactorComponentUtil.validMergingColumns;
 import com.speedment.plugins.reactor.util.MergingSupport;
 import com.speedment.generator.component.TypeMapperComponent;
+import com.speedment.internal.common.injector.Injector;
+import com.speedment.internal.common.injector.annotation.Inject;
 import com.speedment.plugins.reactor.ReactorComponent;
 import java.lang.reflect.Type;
 
 /**
  * Utility methods that are used by several translators in this package but that
- * doesn't nescessarily need to be shared with others.
+ * doesn't necessarily need to be shared with others.
  * 
  * @author Emil Forslund
  * @since  1.1.0

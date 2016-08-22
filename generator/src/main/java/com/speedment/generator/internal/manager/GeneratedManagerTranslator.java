@@ -22,8 +22,6 @@ import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
 import com.speedment.generator.internal.util.EntityTranslatorSupport;
@@ -46,6 +44,8 @@ import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
+import com.speedment.internal.common.injector.Injector;
+import com.speedment.internal.common.injector.annotation.Inject;
 import java.lang.reflect.Type;
 
 /**

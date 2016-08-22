@@ -16,8 +16,8 @@
  */
 package com.speedment.tool.component;
 
+import com.speedment.internal.common.injector.annotation.InjectorKey;
 import com.speedment.tool.property.PropertyEditor;
-import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
 import com.speedment.tool.config.DocumentProperty;

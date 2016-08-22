@@ -16,18 +16,18 @@
  */
 package com.speedment.plugins.reactor;
 
-import com.speedment.common.injector.Injector;
-import static com.speedment.common.injector.State.RESOLVED;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.IncludeInjectable;
 import com.speedment.runtime.internal.license.AbstractSoftware;
 import com.speedment.runtime.license.Software;
-import com.speedment.common.injector.annotation.InjectorKey;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.generator.StandardTranslatorKey;
 import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.generator.component.EventComponent;
 import com.speedment.generator.component.TypeMapperComponent;
+import com.speedment.internal.common.injector.Injector;
+import static com.speedment.internal.common.injector.State.RESOLVED;
+import com.speedment.internal.common.injector.annotation.ExecuteBefore;
+import com.speedment.internal.common.injector.annotation.IncludeInjectable;
+import com.speedment.internal.common.injector.annotation.InjectorKey;
+import com.speedment.internal.common.injector.annotation.WithState;
 import com.speedment.plugins.reactor.internal.editor.MergeOnEditor;
 import com.speedment.plugins.reactor.internal.translator.GeneratedApplicationDecorator;
 import com.speedment.plugins.reactor.internal.translator.GeneratedApplicationImplDecorator;
