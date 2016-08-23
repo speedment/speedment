@@ -16,8 +16,8 @@
  */
 package com.speedment.plugins.json;
 
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
+import com.speedment.internal.common.logger.Logger;
+import com.speedment.internal.common.logger.LoggerManager;
 import com.speedment.runtime.manager.Manager;
 
 import static java.util.Objects.requireNonNull;

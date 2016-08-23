@@ -16,8 +16,6 @@
  */
 package com.speedment.common.injector.annotation;
 
-import com.speedment.common.injector.Injector;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -25,27 +23,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Annotes that this type requires a number of classes to be
- * automatically injectable. All the specified types must be
- * concrete classes with a default constructor.
- * <p>
- * This annotatation will only be parsed if the class that it
- * is located on is installed in the {@link Injector}.
+ * Annotates that the specified interface or class should have the
+ * result of the {@code getName()} method on the given class as the
+ * key when organizing injectable instances.
  * 
  * @author  Emil Forslund
  * @since   1.0.0
  */
 @Inherited
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface IncludeInjectable {
-    
-    /**
-     * Implementation types that can be automatically dependency
-     * injected.
-     * 
-     * @return  implementation types that are injectable
-     */
-    Class<?>[] value();
-    
+public @interface InjectKey {
+    Class<?> value();
 }

@@ -16,8 +16,6 @@
  */
 package com.speedment.plugins.spring;
 
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.plugins.spring.internal.ConfigurationTranslator;
 import com.speedment.plugins.spring.internal.ControllerTranslator;
@@ -30,7 +28,9 @@ import com.speedment.runtime.internal.component.AbstractComponent;
 import com.speedment.runtime.internal.license.AbstractSoftware;
 import com.speedment.runtime.license.Software;
 
-import static com.speedment.common.injector.State.RESOLVED;
+import static com.speedment.internal.common.injector.State.RESOLVED;
+import com.speedment.internal.common.injector.annotation.ExecuteBefore;
+import com.speedment.internal.common.injector.annotation.WithState;
 import static com.speedment.runtime.internal.license.OpenSourceLicense.APACHE_2;
 
 /**

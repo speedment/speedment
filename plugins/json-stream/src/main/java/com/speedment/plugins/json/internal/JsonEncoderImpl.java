@@ -16,8 +16,6 @@
  */
 package com.speedment.plugins.json.internal;
 
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
 import com.speedment.plugins.json.JsonCollector;
 import com.speedment.plugins.json.JsonEncoder;
 import com.speedment.runtime.config.Column;
@@ -49,6 +47,8 @@ import com.speedment.runtime.field.trait.HasFinder;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
 import com.speedment.runtime.manager.Manager;
+import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;

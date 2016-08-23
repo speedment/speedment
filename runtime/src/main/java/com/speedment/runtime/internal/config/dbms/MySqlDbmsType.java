@@ -16,7 +16,8 @@
  */
 package com.speedment.runtime.internal.config.dbms;
 
-import com.speedment.common.injector.annotation.IncludeInjectable;
+import com.speedment.common.injector.InjectBundle;
+import static com.speedment.common.injector.InjectBundle.of;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.db.ConnectionUrlGenerator;
@@ -42,11 +43,11 @@ import com.speedment.runtime.field.predicate.FieldPredicateView;
  * @author  Per Minborg
  * @author  Emil Forslund
  */
-@IncludeInjectable({
-    MySqlDbmsMetadataHandler.class,
-    MySqlDbmsOperationHandler.class
-})
 public final class MySqlDbmsType extends AbstractDbmsType {
+    
+    public static InjectBundle include() {
+        return of(MySqlDbmsMetadataHandler.class, MySqlDbmsOperationHandler.class);
+    }
     
     private final MySqlNamingConvention namingConvention;
     private final MySqlConnectionUrlGenerator connectionUrlGenerator;

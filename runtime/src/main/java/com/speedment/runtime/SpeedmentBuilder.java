@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime;
 
+import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
@@ -331,6 +332,14 @@ public interface SpeedmentBuilder<APP extends Speedment, BUILDER extends Speedme
      * @return                 this instance
      */
     BUILDER withInjectable(String key, Class<?> injectableClass);
+    
+    /**
+     * Adds a custom bundle of injectable implementation classes.
+     *
+     * @param bundleClass      to use when adding injectables
+     * @return                 this instance
+     */    
+    public BUILDER withBundle(Class<? extends InjectBundle> bundleClass);
     
     /**
      * Builds this application.

@@ -16,10 +16,11 @@
  */
 package com.speedment.tool.internal.component;
 
-import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
+import com.speedment.generator.GeneratorBundle;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
 import com.speedment.runtime.internal.runtime.EmptyApplicationMetadata;
+import com.speedment.tool.ToolBundle;
 import com.speedment.tool.component.VersionComponent;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -40,8 +41,8 @@ public class VersionComponentImplTest {
     public void testLatestVersion() {
         System.out.println("Determining the latest version of Speedment.");
         final Speedment speedment = new DefaultApplicationBuilder(EmptyApplicationMetadata.class)
-            .with(CodeGenerationComponentImpl.class)
-            .with(UserInterfaceComponentImpl.class)
+            .withBundle(GeneratorBundle.class)
+            .withBundle(ToolBundle.class)
             .withCheckDatabaseConnectivity(false)
             .withValidateRuntimeConfig(false)
             .build();

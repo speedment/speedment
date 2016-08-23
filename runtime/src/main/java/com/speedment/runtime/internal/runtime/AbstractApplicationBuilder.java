@@ -50,6 +50,8 @@ import java.util.function.Function;
 import static com.speedment.runtime.SpeedmentVersion.getImplementationVendor;
 import static com.speedment.runtime.SpeedmentVersion.getSpecificationVersion;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
+import com.speedment.common.injector.InjectBundle;
+import com.speedment.runtime.RuntimeBundle;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -85,8 +87,9 @@ public abstract class AbstractApplicationBuilder<
             Class<? extends ApplicationMetadata> metadataClass) {
         
         this(Injector.builder()
-            .canInject(applicationImplClass)
-            .canInject(metadataClass)
+            .putInBundle(RuntimeBundle.class)
+            .put(applicationImplClass)
+            .put(metadataClass)
         );
     }
     
@@ -118,7 +121,8 @@ public abstract class AbstractApplicationBuilder<
 
     @Override
     public BUILDER withParam(String key, String value) {
-        injector.withParam(key, value);
+        requireNonNulls(key, value);
+        injector.putParam(key, value);
         return self();
     }
 
@@ -131,6 +135,7 @@ public abstract class AbstractApplicationBuilder<
 
     @Override
     public BUILDER withPassword(String dbmsName, char[] password) {
+        requireNonNull(dbmsName);
         // password nullable
         with(Dbms.class, dbmsName, (inj, dbms) -> inj.getOrThrow(PasswordComponent.class).put(dbms, password));
         return self();
@@ -144,6 +149,7 @@ public abstract class AbstractApplicationBuilder<
 
     @Override
     public BUILDER withPassword(String dbmsName, String password) {
+        requireNonNull(dbmsName);
         // password nullable
         return withPassword(dbmsName, password == null ? null : password.toCharArray());
     }
@@ -157,6 +163,7 @@ public abstract class AbstractApplicationBuilder<
 
     @Override
     public BUILDER withUsername(String dbmsName, String username) {
+        requireNonNull(dbmsName);
         // username nullable
         with(Dbms.class, dbmsName, d -> d.mutator().setUsername(username));
         return self();
@@ -171,7 +178,7 @@ public abstract class AbstractApplicationBuilder<
 
     @Override
     public BUILDER withIpAddress(String dbmsName, String ipAddress) {
-        requireNonNull(ipAddress);
+        requireNonNulls(dbmsName, ipAddress);
         with(Dbms.class, dbmsName, d -> d.mutator().setIpAddress(ipAddress));
         return self();
     }
@@ -184,6 +191,7 @@ public abstract class AbstractApplicationBuilder<
 
     @Override
     public BUILDER withPort(String dbmsName, int port) {
+        requireNonNull(dbmsName);
         with(Dbms.class, dbmsName, d -> d.mutator().setPort(port));
         return self();
     }
@@ -217,12 +225,14 @@ public abstract class AbstractApplicationBuilder<
 
     @Override
     public <C extends Component> BUILDER with(Class<C> componentImplType) {
+        requireNonNull(componentImplType);
         withInjectable(injector, componentImplType, Component::getComponentClass);
         return self();
     }
     
     @Override
     public <M extends Manager<?>> BUILDER withManager(Class<M> managerImplType) {
+        requireNonNull(managerImplType);
         withInjectable(injector, managerImplType, M::getEntityClass);
         return self();
     }
@@ -240,14 +250,23 @@ public abstract class AbstractApplicationBuilder<
     }
     
     @Override
+    public BUILDER withBundle(Class<? extends InjectBundle> bundleClass) {
+        requireNonNull(bundleClass);
+        injector.putInBundle(bundleClass);
+        return self();
+    }
+    
+    @Override
     public BUILDER withInjectable(Class<?> injectableClass) {
-        injector.canInject(injectableClass);
+        requireNonNull(injectableClass);
+        injector.put(injectableClass);
         return self();
     }
 
     @Override
     public BUILDER withInjectable(String key, Class<?> injectableClass) {
-        injector.canInject(key, injectableClass);
+        requireNonNulls(key, injectableClass);
+        injector.put(key, injectableClass);
         return self();
     }
 
@@ -372,6 +391,6 @@ public abstract class AbstractApplicationBuilder<
         }
         
         final Class<?> key = keyExtractor.apply(injectable);
-        injector.canInject(key.getName(), injectableImplType);
+        injector.put(key.getName(), injectableImplType);
     }
 }

@@ -14,35 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.config.dbms;
+package com.speedment.runtime;
 
 import com.speedment.common.injector.InjectBundle;
-import static com.speedment.common.injector.InjectBundle.of;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.runtime.config.parameter.DbmsType;
-
+import com.speedment.runtime.internal.config.dbms.MariaDbDbmsType;
+import com.speedment.runtime.internal.config.dbms.MySqlDbmsType;
+import com.speedment.runtime.internal.config.dbms.PostgresDbmsType;
+import com.speedment.runtime.internal.config.dbms.StandardDbmsTypes;
+import com.speedment.runtime.internal.runtime.AbstractSpeedment;
 import java.util.stream.Stream;
 
 /**
  *
  * @author Per Minborg
- * @author Emil Forslund
  */
-public final class StandardDbmsTypes {
+public class RuntimeBundle implements InjectBundle {
 
-    public static InjectBundle include() {
-        return of(MySqlDbmsType.class, MariaDbDbmsType.class, PostgresDbmsType.class);
-    }
-    
-    private @Inject MySqlDbmsType mysql;
-    private @Inject MariaDbDbmsType mariadb;
-    private @Inject PostgresDbmsType postgresql;
-
-    public Stream<DbmsType> stream() {
-        return Stream.of(mysql, mariadb, postgresql);
+    @Override
+    public Stream<Class<?>> injectables() {
+        return AbstractSpeedment.include()
+            .andThen(StandardDbmsTypes.include())
+            .andThen(MariaDbDbmsType.include())
+            .andThen(MySqlDbmsType.include())
+            .andThen(PostgresDbmsType.include())
+            .injectables();
     }
 
-    public DbmsType defaultType() {
-        return mysql;
-    }
 }

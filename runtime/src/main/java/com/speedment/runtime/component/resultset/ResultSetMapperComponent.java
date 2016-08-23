@@ -16,10 +16,10 @@
  */
 package com.speedment.runtime.component.resultset;
 
-import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.parameter.DbmsType;
+import com.speedment.common.injector.annotation.InjectKey;
 
 /**
  * The JavaTypeMapperComponent provides a mapping from a certain DbmsType and
@@ -30,7 +30,7 @@ import com.speedment.runtime.config.parameter.DbmsType;
  * @since   2.0.0
  */
 @Api(version = "3.0")
-@InjectorKey(ResultSetMapperComponent.class)
+@InjectKey(ResultSetMapperComponent.class)
 public interface ResultSetMapperComponent extends Component {
 
     @Override

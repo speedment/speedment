@@ -56,16 +56,17 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-
 import static com.speedment.generator.StandardTranslatorKey.*;
+import com.speedment.internal.common.injector.InjectBundle;
 import com.speedment.internal.common.injector.Injector;
 import static com.speedment.internal.common.injector.State.RESOLVED;
 import com.speedment.internal.common.injector.annotation.ExecuteBefore;
-import com.speedment.internal.common.injector.annotation.IncludeInjectable;
 import com.speedment.internal.common.injector.annotation.Inject;
 import com.speedment.internal.common.mapstream.MapStream;
 import static java.util.Objects.requireNonNull;
 
+<<<<<<< HEAD
+=======
 @IncludeInjectable({
     EventComponentImpl.class,
     TypeMapperComponentImpl.class,
@@ -74,16 +75,27 @@ import static java.util.Objects.requireNonNull;
     PathComponentImpl.class,
     JavaGenerator.class
 })
+>>>>>>> origin/develop-modules
 public final class CodeGenerationComponentImpl extends InternalOpenSourceComponent implements CodeGenerationComponent {
 
+    public static InjectBundle include() {
+        return InjectBundle.of(
+            EventComponentImpl.class,
+            TypeMapperComponentImpl.class,
+            TranslatorManagerImpl.class,
+            JavaLanguageNamerImpl.class,
+            JavaGenerator.class 
+        );
+    }
+
     private @Inject Injector injector;
-    
+
     private final Map<Class<? extends HasMainInterface>, Map<String, TranslatorSettings<?, ?>>> map;
-    
+
     public CodeGenerationComponentImpl() {
         map = new ConcurrentHashMap<>();
     }
-    
+
     @ExecuteBefore(RESOLVED)
     void installTranslators() {
         put(Table.class, ENTITY, EntityTranslator::new);
@@ -102,7 +114,7 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
         put(Project.class, GENERATED_APPLICATION_BUILDER, GeneratedApplicationBuilderTranslator::new);
         put(Project.class, GENERATED_METADATA, GeneratedMetadataTranslator::new);
     }
-    
+
     @Override
     protected String getDescription() {
         return "Generates java code for a project based on a model tree.";
@@ -143,7 +155,7 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
         Stream<? extends Translator<DOC, ?>> translators(DOC document) {
         return translators(document, s -> true);
     }
-        
+
     @Override
     public Stream<String> translatorKeys() {
         return map.values().stream()
@@ -218,11 +230,11 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
 
         public JavaClassTranslator<DOC, T> createDecorated(DOC document) {
             @SuppressWarnings("unchecked")
-            final JavaClassTranslator<DOC, T> translator = 
-                (JavaClassTranslator<DOC, T>) getConstructor().apply(document);
+            final JavaClassTranslator<DOC, T> translator
+                = (JavaClassTranslator<DOC, T>) getConstructor().apply(document);
 
             decorators.stream().forEachOrdered(dec -> dec.apply(translator));
-            
+
             return translator;
         }
     }

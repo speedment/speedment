@@ -16,7 +16,8 @@
  */
 package com.speedment.runtime.internal.config.dbms;
 
-import com.speedment.common.injector.annotation.IncludeInjectable;
+import com.speedment.common.injector.InjectBundle;
+import static com.speedment.common.injector.InjectBundle.of;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.db.ConnectionUrlGenerator;
@@ -38,26 +39,28 @@ import com.speedment.runtime.field.predicate.FieldPredicateView;
 
 /**
  *
- * @author  Per Minborg
- * @author  Emil Forslund
+ * @author Per Minborg
+ * @author Emil Forslund
  */
-@IncludeInjectable({
-    MySqlDbmsMetadataHandler.class,
-    MySqlDbmsOperationHandler.class
-})
 public final class MariaDbDbmsType extends AbstractDbmsType {
-    
+
+    public static InjectBundle include() {
+        return of(MySqlDbmsMetadataHandler.class, MySqlDbmsOperationHandler.class);
+    }
+
     private final MariaDbNamingConvention namingConvention;
     private final MariaDbConnectionUrlGenerator connectionUrlGenerator;
-    
-    private @Inject MySqlDbmsMetadataHandler metadataHandler;
-    private @Inject MySqlDbmsOperationHandler operationHandler;
-    
+
+    private @Inject
+    MySqlDbmsMetadataHandler metadataHandler;
+    private @Inject
+    MySqlDbmsOperationHandler operationHandler;
+
     private MariaDbDbmsType() {
-        namingConvention       = new MariaDbNamingConvention();
+        namingConvention = new MariaDbNamingConvention();
         connectionUrlGenerator = new MariaDbConnectionUrlGenerator();
     }
-    
+
     @Override
     public String getName() {
         return "MariaDB";
@@ -115,14 +118,13 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
 
     private final static class MariaDbNamingConvention extends AbstractDatabaseNamingConvention {
 
-        private final static String 
-            ENCLOSER = "`",
-            QUOTE    = "'";
-        
+        private final static String ENCLOSER = "`",
+            QUOTE = "'";
+
         private final static Set<String> EXCLUDE_SET = Stream.of(
             "information_schema"
         ).collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
-        
+
         @Override
         public Set<String> getSchemaExcludeSet() {
             return EXCLUDE_SET;
@@ -148,7 +150,7 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
             return ENCLOSER;
         }
     }
-    
+
     private final static class MariaDbConnectionUrlGenerator implements ConnectionUrlGenerator {
 
         @Override
@@ -156,16 +158,16 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
             final StringBuilder result = new StringBuilder()
                 .append("jdbc:mariadb://")
                 .append(dbms.getIpAddress().orElse(""));
-            
+
             dbms.getPort().ifPresent(p -> result.append(":").append(p));
             result.append(
-                "/?useUnicode=true" +
-                "&characterEncoding=UTF-8" +
-                "&useServerPrepStmts=true" +
-                "&useCursorFetch=true" +
-                "&zeroDateTimeBehavior=convertToNull"
+                "/?useUnicode=true"
+                + "&characterEncoding=UTF-8"
+                + "&useServerPrepStmts=true"
+                + "&useCursorFetch=true"
+                + "&zeroDateTimeBehavior=convertToNull"
             );
-            
+
             return result.toString();
         }
     }

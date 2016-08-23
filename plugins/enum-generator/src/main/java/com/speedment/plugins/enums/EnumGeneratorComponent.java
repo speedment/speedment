@@ -27,7 +27,7 @@ import static com.speedment.internal.common.injector.State.INITIALIZED;
 import static com.speedment.internal.common.injector.State.RESOLVED;
 import com.speedment.internal.common.injector.annotation.ExecuteBefore;
 import com.speedment.internal.common.injector.annotation.Inject;
-import com.speedment.internal.common.injector.annotation.InjectorKey;
+import com.speedment.internal.common.injector.annotation.InjectKey;
 import com.speedment.internal.common.injector.annotation.WithState;
 import com.speedment.plugins.enums.internal.ui.CommaSeparatedStringEditor;
 import com.speedment.runtime.config.Column;
@@ -51,11 +51,10 @@ import com.speedment.tool.config.ColumnProperty;
  * @author Simon Jonasson
  * @since 1.0.0
  */
-@InjectorKey(EnumGeneratorComponent.class)
+@InjectKey(EnumGeneratorComponent.class)
 public final class EnumGeneratorComponent extends AbstractComponent {
 
-    private @Inject
-    EventComponent events;
+    private @Inject EventComponent events;
 
     @ExecuteBefore(RESOLVED)
     void installDecorators(Injector injector,

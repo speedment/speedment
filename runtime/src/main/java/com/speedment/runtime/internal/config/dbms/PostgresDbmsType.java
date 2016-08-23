@@ -16,7 +16,8 @@
  */
 package com.speedment.runtime.internal.config.dbms;
 
-import com.speedment.common.injector.annotation.IncludeInjectable;
+import com.speedment.common.injector.InjectBundle;
+import static com.speedment.common.injector.InjectBundle.of;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.db.ConnectionUrlGenerator;
@@ -34,7 +35,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.db.metadata.TypeInfoMetaData.of;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 import com.speedment.runtime.field.predicate.FieldPredicateView;
@@ -47,12 +47,12 @@ import static com.speedment.runtime.db.metadata.TypeInfoMetaData.of;
  * @author  Per Minborg
  * @author  Emil Forslund
  */
-@IncludeInjectable({
-    PostgresqlDbmsMetadataHandler.class,
-    PostgresqlDbmsOperationHandler.class
-})
 public final class PostgresDbmsType extends AbstractDbmsType {
-
+ 
+    public static InjectBundle include() {
+        return of(PostgresqlDbmsMetadataHandler.class, PostgresqlDbmsOperationHandler.class);
+    }
+    
     private final PostgresNamingConvention namingConvention;
     private final PostgresConnectionUrlGenerator connectionUrlGenerator;
     

@@ -18,7 +18,7 @@ package com.speedment.generator.component;
 
 import com.speedment.generator.event.DefaultEvent;
 import com.speedment.generator.event.Event;
-import com.speedment.internal.common.injector.annotation.InjectorKey;
+import com.speedment.internal.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
 
@@ -35,7 +35,7 @@ import java.util.function.Consumer;
  * @see    DefaultEvent
  */
 @Api(version = "3.0")
-@InjectorKey(EventComponent.class)
+@InjectKey(EventComponent.class)
 public interface EventComponent extends Component {
 
     @Override

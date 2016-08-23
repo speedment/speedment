@@ -16,7 +16,6 @@
  */
 package com.speedment.common.injector;
 
-import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.test_a.StringIdentityMapper;
 import com.speedment.common.injector.test_a.TypeMapperComponent;
@@ -29,6 +28,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import com.speedment.common.injector.annotation.InjectKey;
 
 /**
  *
@@ -43,8 +43,8 @@ public class InjectorTest {
         
         try {
             injector = Injector.builder()
-                .canInject(StringIdentityMapper.class)
-                .canInject(TypeMapperComponent.class)
+                .put(StringIdentityMapper.class)
+                .put(TypeMapperComponent.class)
                 .build();
         } catch (final InstantiationException ex) {
             throw new RuntimeException(
@@ -68,9 +68,9 @@ public class InjectorTest {
         
         try {
             injector = Injector.builder()
-                .canInject(A.class)
-                .canInject(B.class)
-                .canInject(C.class)
+                .put(A.class)
+                .put(B.class)
+                .put(C.class)
                 .build();
         } catch (final InstantiationException ex) {
             throw new RuntimeException(
@@ -92,10 +92,10 @@ public class InjectorTest {
         
         try {
             injector = Injector.builder()
-                .canInject(A.class)
-                .canInject(B.class)
-                .canInject(C.class)
-                .canInject(ChildType.class)
+                .put(A.class)
+                .put(B.class)
+                .put(C.class)
+                .put(ChildType.class)
                 .build();
         } catch (final NoDefaultConstructorException | InstantiationException ex) {
             throw new RuntimeException(
@@ -113,8 +113,8 @@ public class InjectorTest {
         
         try {
             injector = Injector.builder()
-                .canInject(Bar.class)
-                .canInject(Baz.class)
+                .put(Bar.class)
+                .put(Baz.class)
                 .build();
         } catch (final NoDefaultConstructorException | InstantiationException ex) {
             throw new RuntimeException(
@@ -130,7 +130,7 @@ public class InjectorTest {
         assertEquals("Make sure the Bar can still be accessed",      Bar.class, injector.get(Bar.class).get().getClass());
     }
     
-    @InjectorKey(Foo.class)
+    @InjectKey(Foo.class)
     private interface Foo {}
     private final static class Bar implements Foo {}
     private final static class Baz implements Foo {}

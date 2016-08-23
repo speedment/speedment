@@ -35,7 +35,7 @@ import org.springframework.core.env.Environment;
 
 import com.speedment.internal.common.injector.Injector;
 import com.speedment.internal.common.injector.annotation.Inject;
-import com.speedment.internal.common.injector.annotation.InjectorKey;
+import com.speedment.internal.common.injector.annotation.InjectKey;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import java.lang.reflect.Type;
 
@@ -44,7 +44,7 @@ import java.lang.reflect.Type;
  * @author Emil Forslund
  * @since  1.0.0
  */
-@InjectorKey(GeneratedConfigurationTranslator.class)
+@InjectKey(GeneratedConfigurationTranslator.class)
 public final class GeneratedConfigurationTranslator 
 extends DefaultJavaClassTranslator<Project, Class> {
     

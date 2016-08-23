@@ -19,7 +19,6 @@ package com.speedment.generator;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
 import com.speedment.generator.internal.TranslatorManagerImpl;
-import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
@@ -30,8 +29,6 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.internal.runtime.AbstractApplicationMetadata;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.nio.file.Path;
 import org.junit.Before;
 
@@ -84,7 +81,7 @@ public abstract class SimpleModel {
     public void simpleModelTestSetUp() {
 
         speedment = new DefaultApplicationBuilder(SimpleMetadata.class)
-            .with(CodeGenerationComponentImpl.class)
+            .withBundle(GeneratorBundle.class)
             .withInjectable(SilentTranslatorManager.class)
             .withCheckDatabaseConnectivity(false)
             .withValidateRuntimeConfig(false)

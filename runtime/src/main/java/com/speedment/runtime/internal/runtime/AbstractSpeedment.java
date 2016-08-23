@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.internal.runtime;
 
+import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.IncludeInjectable;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.ManagerComponent;
@@ -45,20 +45,24 @@ import java.util.Optional;
  * @author Emil Forslund
  * @since  2.4.0
  */
-@IncludeInjectable({
-    ConnectionPoolComponentImpl.class,
-    DbmsHandlerComponentImpl.class,
-    EntityManagerImpl.class,
-    InfoComponentImpl.class,
-    ManagerComponentImpl.class,
-    NativeStreamSupplierComponentImpl.class,
-    PasswordComponentImpl.class,
-    PrimaryKeyFactoryComponentImpl.class,
-    ProjectComponentImpl.class,
-    ResultSetMapperComponentImpl.class,
-    StandardDbmsTypes.class
-})
+
 public abstract class AbstractSpeedment implements Speedment {
+    
+    public static InjectBundle include() {
+        return InjectBundle.of(
+            ConnectionPoolComponentImpl.class,
+            DbmsHandlerComponentImpl.class,
+            EntityManagerImpl.class,
+            InfoComponentImpl.class,
+            ManagerComponentImpl.class,
+            NativeStreamSupplierComponentImpl.class,
+            PasswordComponentImpl.class,
+            PrimaryKeyFactoryComponentImpl.class,
+            ProjectComponentImpl.class,
+            ResultSetMapperComponentImpl.class,
+            StandardDbmsTypes.class
+        );
+    }
     
     private @Inject ProjectComponent projectComponent;
     private @Inject ManagerComponent managerComponent;

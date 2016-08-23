@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.util;
 
-import com.speedment.common.mapstream.MapStream;
+import com.speedment.internal.common.mapstream.MapStream;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;

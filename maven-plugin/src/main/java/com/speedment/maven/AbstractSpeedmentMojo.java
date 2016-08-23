@@ -16,18 +16,19 @@
  */
 package com.speedment.maven;
 
-import static com.speedment.common.injector.State.INITIALIZED;
-import static com.speedment.common.injector.State.RESOLVED;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.InjectorKey;
-import com.speedment.common.injector.annotation.WithState;
+import com.speedment.generator.GeneratorBundle;
 import com.speedment.maven.typemapper.Mapping;
-import com.speedment.common.injector.internal.InjectorImpl;
-import com.speedment.common.logger.Level;
-import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.maven.component.MavenPathComponent;
+import static com.speedment.internal.common.injector.State.INITIALIZED;
+import static com.speedment.internal.common.injector.State.RESOLVED;
+import com.speedment.internal.common.injector.annotation.ExecuteBefore;
+import com.speedment.internal.common.injector.annotation.InjectKey;
+import com.speedment.internal.common.injector.annotation.WithState;
+import com.speedment.internal.common.injector.internal.InjectorImpl;
+import com.speedment.internal.common.logger.Level;
+import com.speedment.internal.common.logger.LoggerManager;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.SpeedmentBuilder;
 import com.speedment.runtime.component.Component;
@@ -44,6 +45,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import java.io.File;
 
 import static com.speedment.runtime.internal.runtime.DefaultApplicationMetadata.METADATA_LOCATION;
+import com.speedment.tool.ToolBundle;
 import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -161,6 +163,10 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
         }
         
         // Add mandatory components that are not included in 'runtime'
+        result
+            .withBundle(GeneratorBundle.class)
+            .withBundle(ToolBundle.class);
+                
         result.with(CodeGenerationComponentImpl.class);
         result.with(UserInterfaceComponentImpl.class);
         result.with(MavenPathComponent.class);
@@ -207,7 +213,7 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
         }
     }
     
-    @InjectorKey(TypeMapperInstaller.class)
+    @InjectKey(TypeMapperInstaller.class)
     private final static class TypeMapperInstaller {
         
         private static Mapping[] mappings;

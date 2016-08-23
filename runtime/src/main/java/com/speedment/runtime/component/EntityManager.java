@@ -16,9 +16,9 @@
  */
 package com.speedment.runtime.component;
 
-import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.exception.SpeedmentException;
+import com.speedment.common.injector.annotation.InjectKey;
 
 /**
  * An Entity Manager is be used to handle persistence for any Entity. This
@@ -29,7 +29,7 @@ import com.speedment.runtime.exception.SpeedmentException;
  * @since   2.0.0
  */
 @Api(version = "3.0")
-@InjectorKey(EntityManager.class)
+@InjectKey(EntityManager.class)
 public interface EntityManager extends Component {
 
     @Override

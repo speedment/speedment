@@ -21,7 +21,7 @@ import com.speedment.generator.Translator;
 import com.speedment.generator.TranslatorConstructor;
 import com.speedment.generator.TranslatorDecorator;
 import com.speedment.generator.TranslatorKey;
-import com.speedment.internal.common.injector.annotation.InjectorKey;
+import com.speedment.internal.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.trait.HasMainInterface;
@@ -39,7 +39,7 @@ import java.util.stream.Stream;
  * @since   2.2.0
  */
 @Api(version = "3.0")
-@InjectorKey(CodeGenerationComponent.class)
+@InjectKey(CodeGenerationComponent.class)
 public interface CodeGenerationComponent extends Component {
 
     @Override

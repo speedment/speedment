@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.brand;
 
-import com.speedment.internal.common.injector.annotation.InjectorKey;
+import com.speedment.internal.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
 
 import java.util.Optional;
@@ -29,7 +29,7 @@ import java.util.stream.Stream;
  * @since   2.3.0
  */
 @Api(version = "3.0")
-@InjectorKey(Brand.class)
+@InjectKey(Brand.class)
 public interface Brand {
 
     /**

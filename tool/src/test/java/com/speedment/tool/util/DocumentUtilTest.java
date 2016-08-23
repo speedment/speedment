@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.util;
 
-import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
+import com.speedment.generator.GeneratorBundle;
 import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
@@ -36,6 +36,7 @@ import org.junit.Test;
 
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
+import com.speedment.tool.ToolBundle;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -256,7 +257,8 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         System.out.println("Testing: relativeName(Document, Class, Name, String, Function<String, String>)");
 
         final JavaLanguageNamer namer = new DefaultApplicationBuilder(EmptyApplicationMetadata.class)
-            .with(CodeGenerationComponentImpl.class)
+            .withBundle(GeneratorBundle.class)
+            .withBundle(ToolBundle.class)
             .build()
             .getOrThrow(JavaLanguageNamer.class);
 

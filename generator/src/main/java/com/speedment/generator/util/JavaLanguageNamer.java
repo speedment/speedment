@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.internal.util.Formatting.ucfirst;
-import com.speedment.internal.common.injector.annotation.InjectorKey;
+import com.speedment.internal.common.injector.annotation.InjectKey;
 import static com.speedment.runtime.internal.util.sql.SqlUtil.unQuote;
 import static com.speedment.runtime.util.CollectorUtil.toUnmodifiableSet;
 import static com.speedment.runtime.util.CollectorUtil.unmodifiableSetOf;
@@ -39,7 +39,7 @@ import static java.util.Objects.requireNonNull;
  * @since   2.2.0
  */
 @Api(version = "3.0")
-@InjectorKey(JavaLanguageNamer.class)
+@InjectKey(JavaLanguageNamer.class)
 public interface JavaLanguageNamer {
 
     // From http://download.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html

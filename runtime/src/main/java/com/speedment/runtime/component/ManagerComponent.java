@@ -16,13 +16,13 @@
  */
 package com.speedment.runtime.component;
 
-import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.manager.Manager;
 
 import java.util.stream.Stream;
+import com.speedment.common.injector.annotation.InjectKey;
 
 /**
  * The {@code ManagerComponent} provides the mapping between entities and their
@@ -33,7 +33,7 @@ import java.util.stream.Stream;
  * @since   2.0.0
  */
 @Api(version = "3.0")
-@InjectorKey(ManagerComponent.class)
+@InjectKey(ManagerComponent.class)
 public interface ManagerComponent extends Component {
 
     @Override

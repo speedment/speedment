@@ -19,9 +19,7 @@ package com.speedment.common.injector.internal;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Config;
-import com.speedment.common.injector.annotation.IncludeInjectable;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.internal.dependency.DependencyGraph;
@@ -65,33 +63,545 @@ import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
+import com.speedment.common.injector.InjectBundle;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import com.speedment.common.injector.annotation.InjectKey;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  * The default implementation of the {@link Injector} interface.
- * 
- * @author  Emil Forslund
- * @since   1.0.0
+ *
+ * @author Emil Forslund
+ * @since 1.0.0
  */
 public final class InjectorImpl implements Injector {
-    
+
     private final static Logger LOGGER = LoggerManager.getLogger(InjectorImpl.class);
-    
+
     private final static State[] STATES = State.values();
     private final Set<Class<?>> injectables;
     private final List<Object> instances;
     private final Injector.Builder builder;
-    
+
     private InjectorImpl(Set<Class<?>> injectables, List<Object> instances, Injector.Builder builder) {
         this.injectables = requireNonNull(injectables);
-        this.instances   = requireNonNull(instances);
-        this.builder     = requireNonNull(builder);
+        this.instances = requireNonNull(instances);
+        this.builder = requireNonNull(builder);
     }
-    
+
     @Override
     public <T> T getOrThrow(Class<T> type) throws IllegalArgumentException {
         return findIn(type, true);
     }
-    
+
     @Override
     public <T> Optional<T> get(Class<T> type) {
         return Optional.ofNullable(findIn(type, false));
@@ -111,14 +621,14 @@ public final class InjectorImpl implements Injector {
     @Override
     public void stop() {
         final DependencyGraph graph = DependencyGraphImpl.create(injectables);
-        
+
         final AtomicBoolean hasAnythingChanged = new AtomicBoolean();
 
         // Loop until all nodes have been started.
         Set<DependencyNode> unfinished;
         while (!(unfinished = graph.nodes()
-                .filter(n -> n.getCurrentState() != State.STOPPED)
-                .collect(toSet())).isEmpty()) {
+            .filter(n -> n.getCurrentState() != State.STOPPED)
+            .collect(toSet())).isEmpty()) {
 
             hasAnythingChanged.set(false);
 
@@ -127,7 +637,7 @@ public final class InjectorImpl implements Injector {
 
                     // Check if all its dependencies have been satisfied.
                     // TODO: Dependencies should be resolved in the opposite order when stopping.
-                    if (n.canBe(State.STOPPED)) { 
+                    if (n.canBe(State.STOPPED)) {
 
                         printLine();
 
@@ -145,20 +655,18 @@ public final class InjectorImpl implements Injector {
 
                                 m.setAccessible(true);
 
-                                final String shortMethodName = 
-                                    n.getRepresentedType().getSimpleName() + "#" + 
-                                    m.getName() + "(" + 
-                                    Stream.of(m.getParameters())
-                                        .map(p -> p.getType().getSimpleName().substring(0, 1))
-                                        .collect(joining(", ")) + ")";
+                                final String shortMethodName
+                                    = n.getRepresentedType().getSimpleName() + "#"
+                                    + m.getName() + "("
+                                    + Stream.of(m.getParameters())
+                                    .map(p -> p.getType().getSimpleName().substring(0, 1))
+                                    .collect(joining(", ")) + ")";
 
                                 LOGGER.debug(String.format("| -> %-76s |", shortMethodName));
 
                                 try {
                                     m.invoke(instance, params);
-                                } catch (final IllegalAccessException 
-                                             | IllegalArgumentException 
-                                             | InvocationTargetException ex) {
+                                } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 
                                     throw new RuntimeException(ex);
                                 }
@@ -169,8 +677,8 @@ public final class InjectorImpl implements Injector {
                         hasAnythingChanged.set(true);
 
                         LOGGER.debug(String.format(
-                            "| %-66s %12s |", 
-                            n.getRepresentedType().getSimpleName(), 
+                            "| %-66s %12s |",
+                            n.getRepresentedType().getSimpleName(),
                             State.STOPPED.name()
                         ));
                     }
@@ -178,11 +686,11 @@ public final class InjectorImpl implements Injector {
 
             if (!hasAnythingChanged.get()) {
                 throw new IllegalStateException(
-                    "Injector appears to be stuck in an infinite loop. The following componenets have not been stopped: " + 
-                        unfinished.stream()
-                            .map(DependencyNode::getRepresentedType)
-                            .map(Class::getSimpleName)
-                            .collect(toSet())
+                    "Injector appears to be stuck in an infinite loop. The following componenets have not been stopped: "
+                    + unfinished.stream()
+                    .map(DependencyNode::getRepresentedType)
+                    .map(Class::getSimpleName)
+                    .collect(toSet())
                 );
             }
         }
@@ -192,18 +700,18 @@ public final class InjectorImpl implements Injector {
     public Injector.Builder newBuilder() {
         return builder;
     }
-    
+
     private <T> T findIn(Class<T> type, boolean required) {
         return findIn(this, type, instances, required);
     }
-    
+
     private static <T> T findIn(Injector injector, Class<T> type, List<Object> instances, boolean required) {
         if (Injector.class.isAssignableFrom(type)) {
             @SuppressWarnings("unchecked")
             final T casted = (T) injector;
             return casted;
         }
-        
+
         for (final Object inst : instances) {
             if (type.isAssignableFrom(inst.getClass())) {
                 return type.cast(inst);
@@ -214,13 +722,15 @@ public final class InjectorImpl implements Injector {
             throw new IllegalArgumentException(
                 "Could not find any installed implementation of " + type.getName() + "."
             );
-        } else return null;
+        } else {
+            return null;
+        }
     }
-    
+
     private static void printLine() {
         LOGGER.debug("+---------------------------------------------------------------------------------+");
     }
-    
+
     private static String limit(String in, int length) {
         if (in.length() < length) {
             return in;
@@ -229,17 +739,17 @@ public final class InjectorImpl implements Injector {
             return in.substring(0, breakpoint) + "..." + in.substring(length - breakpoint - 3);
         }
     }
-    
+
     private <T> void injectFields(T instance) {
         requireNonNull(instance);
-        
+
         final Set<Field> fields = traverseFields(instance.getClass())
             .filter(f -> f.isAnnotationPresent(Inject.class))
             .collect(toSet());
 
         for (final Field field : fields) {
             final Object value;
-            
+
             if (Injector.class.isAssignableFrom(field.getType())) {
                 value = this;
             } else {
@@ -251,89 +761,92 @@ public final class InjectorImpl implements Injector {
             try {
                 field.set(instance, value);
             } catch (final IllegalAccessException ex) {
-                final String err = "Could not access field '" + field.getName() + 
-                    "' in class '" + value.getClass().getName() + 
-                    "' of type '" + field.getType() + "'.";
+                final String err = "Could not access field '" + field.getName()
+                    + "' in class '" + value.getClass().getName()
+                    + "' of type '" + field.getType() + "'.";
                 LOGGER.error(ex, err);
                 throw new RuntimeException(err, ex);
             }
         }
     }
-    
+
     public static Injector.Builder builder() {
         return new Builder();
     }
-    
+
     private final static class Builder implements Injector.Builder {
-        
+
         private final Map<String, Class<?>> injectables;
         private final Map<String, String> overriddenParams;
         private Path configFileLocation;
-        
+
         private Builder() {
             this(Collections.emptySet());
         }
-        
+
         private Builder(Set<Class<?>> injectables) {
             requireNonNull(injectables);
-            this.injectables        = new LinkedHashMap<>();
-            this.overriddenParams   = new HashMap<>();
+            this.injectables = new LinkedHashMap<>();
+            this.overriddenParams = new HashMap<>();
             this.configFileLocation = Paths.get("settings.properties");
-            
+
             injectables.forEach(c -> this.injectables.put(c.getName(), c));
         }
 
         @Override
-        public Builder canInject(Class<?> injectableType) {
+        public Builder put(Class<?> injectableType) {
             requireNonNull(injectableType);
-            
+
             // Store the injectable under every superclass in the map, as well
             // as under every inherited InjectorKey value.
             traverseAncestors(injectableType)
-                
                 // only include classes that has an ancestor with the 
                 // InjectorKey-annotation, or that are the original class.
                 .filter(c -> c == injectableType || traverseAncestors(c)
-                    .anyMatch(c2 -> c2.isAnnotationPresent(InjectorKey.class))
+                    .anyMatch(c2 -> c2.isAnnotationPresent(InjectKey.class))
                 )
-                
                 .flatMap(c -> {
                     final Stream<Class<?>> stream;
-                    
+
                     // Include InjectorKey value
-                    if (c.isAnnotationPresent(InjectorKey.class)) {
-                        final InjectorKey key = c.getAnnotation(InjectorKey.class);
+                    if (c.isAnnotationPresent(InjectKey.class)) {
+                        final InjectKey key = c.getAnnotation(InjectKey.class);
                         stream = Stream.of(c, key.value());
                     } else {
                         stream = Stream.of(c);
                     }
-                    
-                    // Recurse over other injectables
-                    if (c.isAnnotationPresent(IncludeInjectable.class)) {
-                        final IncludeInjectable incl = c.getAnnotation(IncludeInjectable.class);
-                        Stream.of(incl.value()).forEachOrdered(this::canInject);
-                    }
-                    
+
                     return stream;
                 })
                 .forEachOrdered(c -> injectables.put(c.getName(), injectableType));
-            
+
             return this;
         }
 
         @Override
-        public Builder canInject(String key, Class<?> injectableType) throws NoDefaultConstructorException {
+        public Builder put(String key, Class<?> injectableType) throws NoDefaultConstructorException {
+            requireNonNull(key);
             requireNonNull(injectableType);
-            
             injectables.put(key, injectableType);
-            
-            ReflectionUtil.traverseAncestors(injectableType)
-                .filter(t -> t.isAnnotationPresent(IncludeInjectable.class))
-                .map(t -> t.getAnnotation(IncludeInjectable.class))
-                .map(IncludeInjectable::value)
-                .flatMap(Stream::of)
-                .forEach(this::canInject);
-            
+
+//            ReflectionUtil.traverseAncestors(injectableType)
+//                .filter(t -> t.isAnnotationPresent(IncludeInjectable.class))
+//                .map(t -> t.getAnnotation(IncludeInjectable.class))
+//                .map(IncludeInjectable::value)
+//                .flatMap(Stream::of)
+//                .forEach(this::canInject);
+
+            return this;
+        }
+
+        @Override
+        public Builder putInBundle(Class<? extends InjectBundle> bundleClass) {
+            try {
+                final InjectBundle bundle = bundleClass.newInstance();
+                bundle.injectables().forEach(this::put);
+            } catch (IllegalAccessException | InstantiationException e) {
+                throw new NoDefaultConstructorException(e);
+            }
             return this;
         }
 
@@ -344,7 +857,7 @@ public final class InjectorImpl implements Injector {
         }
 
         @Override
-        public Builder withParam(String key, String value) {
+        public Builder putParam(String key, String value) {
             overriddenParams.put(key, value);
             return this;
         }
@@ -357,49 +870,47 @@ public final class InjectorImpl implements Injector {
             overriddenParams.forEach(properties::setProperty);
 
             final Set<Class<?>> injectablesSet = unmodifiableSet(new LinkedHashSet<>(injectables.values()));
-            
+
             final DependencyGraph graph = DependencyGraphImpl.create(injectablesSet);
             final LinkedList<Object> instances = new LinkedList<>();
-            
+
             LOGGER.debug("Creating " + injectablesSet.size() + " injectable instances.");
             printLine();
-            
+
             // Create an instance of every injectable type
             for (final Class<?> injectable : injectablesSet) {
-                
+
                 // If we are currently debugging, print out every created instance
                 // and which configuration options are available for it.
                 if (LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
                     LOGGER.debug(String.format("| %-71s CREATED |", limit(injectable.getSimpleName(), 71)));
-                    
+
                     traverseFields(injectable)
                         .filter(f -> f.isAnnotationPresent(Config.class))
                         .map(f -> f.getAnnotation(Config.class))
-                        .map(a -> String.format("|     %-48s %26s |", limit(a.name(), 48), 
+                        .map(a -> String.format("|     %-48s %26s |", limit(a.name(), 48),
                             limit(properties.containsKey(a.name())
                                 ? properties.get(a.name()).toString()
                                 : a.value(), 26
                             )
                         ))
                         .forEachOrdered(LOGGER::debug);
-                    
+
                     printLine();
                 }
 
-                
-                
                 final Object instance = newInstance(injectable, properties);
                 instances.addFirst(instance);
 //                instances.add(instance);
             }
-            
+
             // Build the Injector
             final Injector injector = new InjectorImpl(
                 injectablesSet,
                 unmodifiableList(instances),
                 this
             );
-            
+
             // Set the auto-injected fields
             instances.forEach(instance -> {
                 final Set<Field> fields = traverseFields(instance.getClass())
@@ -408,7 +919,7 @@ public final class InjectorImpl implements Injector {
 
                 for (final Field field : fields) {
                     final Object value;
-                    
+
                     if (Inject.class.isAssignableFrom(field.getType())) {
                         value = injector;
                     } else {
@@ -421,30 +932,30 @@ public final class InjectorImpl implements Injector {
                         field.set(instance, value);
                     } catch (final IllegalAccessException ex) {
                         throw new RuntimeException(
-                            "Could not access field '" + field.getName() + 
-                            "' in class '" + value.getClass().getName() + 
-                            "' of type '" + field.getType() + 
-                            "'.", ex
+                            "Could not access field '" + field.getName()
+                            + "' in class '" + value.getClass().getName()
+                            + "' of type '" + field.getType()
+                            + "'.", ex
                         );
                     }
                 }
             });
-            
+
             final AtomicBoolean hasAnythingChanged = new AtomicBoolean();
             final AtomicInteger nextState = new AtomicInteger(0);
 
             // Loop until all nodes have been started.
             Set<DependencyNode> unfinished;
-            
+
             // Go through every state up and including STARTED.
             while (nextState.get() <= State.STARTED.ordinal()) {
-                
+
                 // Get a set of the nodes that has not yet reached that state,
                 // and operate upon it until it is empty
                 while (!(unfinished = graph.nodes()
                     .filter(n -> n.getCurrentState().ordinal() < nextState.get())
                     .collect(toSet())).isEmpty()) {
-                    
+
                     hasAnythingChanged.set(false);
 
                     unfinished.stream()
@@ -474,21 +985,19 @@ public final class InjectorImpl implements Injector {
                                         // We might want to log exactly which steps we have 
                                         // completed.
                                         if (LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                                            final String shortMethodName = 
-                                                n.getRepresentedType().getSimpleName() + "#" + 
-                                                m.getName() + "(" + 
-                                                Stream.of(m.getParameters())
-                                                    .map(p -> p.getType().getSimpleName().substring(0, 1))
-                                                    .collect(joining(", ")) + ")";
+                                            final String shortMethodName
+                                                = n.getRepresentedType().getSimpleName() + "#"
+                                                + m.getName() + "("
+                                                + Stream.of(m.getParameters())
+                                                .map(p -> p.getType().getSimpleName().substring(0, 1))
+                                                .collect(joining(", ")) + ")";
 
                                             LOGGER.debug(String.format("| -> %-76s |", limit(shortMethodName, 76)));
                                         }
-                                            
+
                                         try {
                                             m.invoke(instance, params);
-                                        } catch (final IllegalAccessException 
-                                                     | IllegalArgumentException 
-                                                     | InvocationTargetException ex) {
+                                        } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 
                                             throw new RuntimeException(ex);
                                         }
@@ -499,8 +1008,8 @@ public final class InjectorImpl implements Injector {
                                 hasAnythingChanged.set(true);
 
                                 LOGGER.debug(String.format(
-                                    "| %-66s %12s |", 
-                                    limit(n.getRepresentedType().getSimpleName(), 66), 
+                                    "| %-66s %12s |",
+                                    limit(n.getRepresentedType().getSimpleName(), 66),
                                     limit(state.name(), 12)
                                 ));
                             }
@@ -515,64 +1024,64 @@ public final class InjectorImpl implements Injector {
                         );
                     }
                 }
-                
+
                 // Every node has reached the desired state. 
                 // Begin working with the next state.
                 nextState.incrementAndGet();
             }
-            
+
             printLine();
             LOGGER.debug(String.format(
-                "| %-79s |", 
+                "| %-79s |",
                 "All " + instances.size() + " components have been configured!"
             ));
             printLine();
-            
+
             return injector;
         }
-        
+
         private static Properties loadProperties(File configFile) {
             final Properties properties = new Properties();
             if (configFile.exists() && configFile.canRead()) {
-                
+
                 try (final InputStream in = new FileInputStream(configFile)) {
                     properties.load(in);
                 } catch (final IOException ex) {
-                    final String err = "Error loading default settings from " + 
-                        configFile.getAbsolutePath() + "-file.";
+                    final String err = "Error loading default settings from "
+                        + configFile.getAbsolutePath() + "-file.";
                     LOGGER.error(ex, err);
                     throw new RuntimeException(err, ex);
                 }
             } else {
                 LOGGER.info(
-                    "No configuration file '" + 
-                    configFile.getAbsolutePath() + "' found."
+                    "No configuration file '"
+                    + configFile.getAbsolutePath() + "' found."
                 );
             }
-            
+
             return properties;
         }
-        
+
         private static <T> T newInstance(Class<T> type, Properties properties) throws InstantiationException, NoDefaultConstructorException {
             try {
                 final Constructor<T> constr = type.getDeclaredConstructor();
                 constr.setAccessible(true);
                 final T instance = constr.newInstance();
-                
+
                 traverseFields(type)
                     .filter(f -> f.isAnnotationPresent(Config.class))
                     .forEach(f -> {
                         final Config config = f.getAnnotation(Config.class);
-                        
+
                         final String serialized;
                         if (properties.containsKey(config.name())) {
                             serialized = properties.getProperty(config.name());
                         } else {
                             serialized = config.value();
                         }
-                        
+
                         f.setAccessible(true);
-                        
+
                         try {
                             if (boolean.class == f.getType() || Boolean.class.isAssignableFrom(f.getType())) {
                                 f.set(instance, Boolean.parseBoolean(serialized));
@@ -595,9 +1104,9 @@ public final class InjectorImpl implements Injector {
                                     f.set(instance, serialized.charAt(0));
                                 } else {
                                     throw new IllegalArgumentException(
-                                        "Value '" + serialized + 
-                                        "' is to long to be parsed into a field of type '" + 
-                                        f.getType().getName() + "'."
+                                        "Value '" + serialized
+                                        + "' is to long to be parsed into a field of type '"
+                                        + f.getType().getName() + "'."
                                     );
                                 }
                             } else if (File.class.isAssignableFrom(f.getType())) {
@@ -613,23 +1122,21 @@ public final class InjectorImpl implements Injector {
                             }
                         } catch (final IllegalAccessException | IllegalArgumentException ex) {
                             throw new RuntimeException(
-                                "Failed to set config parameter '" + config.name() + 
-                                "' in class '" + type.getName() + "'.", ex
+                                "Failed to set config parameter '" + config.name()
+                                + "' in class '" + type.getName() + "'.", ex
                             );
                         }
                     });
-                
+
                 return instance;
-                
+
             } catch (final NoSuchMethodException ex) {
                 throw new NoDefaultConstructorException(
                     "Could not find any default constructor for class '" + type.getName() + "'.", ex
                 );
-                
-            } catch (final IllegalAccessException 
-                         | IllegalArgumentException 
-                         | InvocationTargetException ex) {
-                
+
+            } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+
                 throw new RuntimeException(ex);
             }
         }

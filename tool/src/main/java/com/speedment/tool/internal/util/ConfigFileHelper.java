@@ -19,7 +19,7 @@ package com.speedment.tool.internal.util;
 import com.speedment.generator.TranslatorManager;
 import com.speedment.internal.common.injector.Injector;
 import com.speedment.internal.common.injector.annotation.Inject;
-import com.speedment.internal.common.injector.annotation.InjectorKey;
+import com.speedment.internal.common.injector.annotation.InjectKey;
 import com.speedment.internal.common.logger.Logger;
 import com.speedment.internal.common.logger.LoggerManager;
 import com.speedment.runtime.Speedment;
@@ -75,7 +75,7 @@ import static javafx.application.Platform.runLater;
  * @author  Emil Forslund
  * @since   2.4.0
  */
-@InjectorKey(ConfigFileHelper.class)
+@InjectKey(ConfigFileHelper.class)
 public final class ConfigFileHelper {
     
     private final static Logger LOGGER = LoggerManager.getLogger(ConfigFileHelper.class);
@@ -239,7 +239,7 @@ public final class ConfigFileHelper {
                     case CREATE_A_NEW_STAGE:
                         final Stage newStage = new Stage();
                         final Injector.Builder injectorBuilder = injector.newBuilder()
-                            .withParam(METADATA_LOCATION, DEFAULT_CONFIG_LOCATION);
+                            .putParam(METADATA_LOCATION, DEFAULT_CONFIG_LOCATION);
                         final Speedment newSpeedment = new DefaultApplicationBuilder(injectorBuilder).build();
                         
                         MainApp.setInjector(newSpeedment.getOrThrow(Injector.class));

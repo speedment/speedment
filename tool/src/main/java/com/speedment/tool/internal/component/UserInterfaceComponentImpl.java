@@ -18,8 +18,8 @@ package com.speedment.tool.internal.component;
 
 import com.speedment.generator.TranslatorManager;
 import com.speedment.generator.TranslatorSupport;
+import com.speedment.internal.common.injector.InjectBundle;
 import com.speedment.internal.common.injector.Injector;
-import com.speedment.internal.common.injector.annotation.IncludeInjectable;
 import com.speedment.internal.common.injector.annotation.Inject;
 import static com.speedment.internal.common.logger.Level.FATAL;
 import static com.speedment.internal.common.logger.Level.TRACE;
@@ -114,17 +114,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * @author Emil Forslund
  */
-@IncludeInjectable({
-    DocumentPropertyComponentImpl.class,
-    VersionComponentImpl.class,
-    SpeedmentBrand.class,
-    InjectionLoader.class,
-    ConfigFileHelper.class,
-    PropertyEditorComponentImpl.class,
-    RuleComponentImpl.class,
-    IssueComponentImpl.class
-})
 public final class UserInterfaceComponentImpl extends InternalOpenSourceComponent implements UserInterfaceComponent {
+    
+        public static InjectBundle include() {
+        return InjectBundle.of(
+            DocumentPropertyComponentImpl.class,
+            SpeedmentBrand.class,
+            InjectionLoader.class,
+            ConfigFileHelper.class,
+            PropertyEditorComponentImpl.class,
+            RuleComponentImpl.class,
+            IssueComponentImpl.class
+        );
+    }
     
     private final static Logger LOGGER = LoggerManager.getLogger(UserInterfaceComponentImpl.class);
 

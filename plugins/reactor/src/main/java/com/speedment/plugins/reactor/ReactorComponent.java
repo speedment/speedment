@@ -22,11 +22,11 @@ import com.speedment.generator.StandardTranslatorKey;
 import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.generator.component.EventComponent;
 import com.speedment.generator.component.TypeMapperComponent;
+import com.speedment.internal.common.injector.InjectBundle;
 import com.speedment.internal.common.injector.Injector;
 import static com.speedment.internal.common.injector.State.RESOLVED;
 import com.speedment.internal.common.injector.annotation.ExecuteBefore;
-import com.speedment.internal.common.injector.annotation.IncludeInjectable;
-import com.speedment.internal.common.injector.annotation.InjectorKey;
+import com.speedment.internal.common.injector.annotation.InjectKey;
 import com.speedment.internal.common.injector.annotation.WithState;
 import com.speedment.plugins.reactor.internal.editor.MergeOnEditor;
 import com.speedment.plugins.reactor.internal.translator.GeneratedApplicationDecorator;
@@ -50,10 +50,15 @@ import com.speedment.tool.config.TableProperty;
  * @author Emil Forslund
  * @since  1.1.0
  */
-@InjectorKey(ReactorComponent.class)
-@IncludeInjectable(MergingSupportImpl.class)
+@InjectKey(ReactorComponent.class)
 public final class ReactorComponent extends AbstractComponent {
 
+    public static InjectBundle include() {
+        return InjectBundle.of(
+            MergingSupportImpl.class
+        );
+    }    
+    
     public final static String MERGE_ON = "mergeOn";
 
     @ExecuteBefore(RESOLVED)
@@ -63,7 +68,8 @@ public final class ReactorComponent extends AbstractComponent {
             @WithState(RESOLVED) UserInterfaceComponent ui, 
             @WithState(RESOLVED) EventComponent events,
             @WithState(RESOLVED) TypeMapperComponent typeMappers,
-            @WithState(RESOLVED) PropertyEditorComponent editors) {
+            @WithState(RESOLVED) PropertyEditorComponent editors
+    ) {
         
         code.add(Project.class, StandardTranslatorKey.GENERATED_APPLICATION, injector.inject(new GeneratedApplicationDecorator()));
         code.add(Project.class, StandardTranslatorKey.GENERATED_APPLICATION_IMPL, injector.inject(new GeneratedApplicationImplDecorator()));

@@ -14,25 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.injector.annotation;
+package com.speedment.plugins.spring;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.speedment.internal.common.injector.InjectBundle;
+import java.util.stream.Stream;
 
 /**
- * Annotates that the specified interface or class should have the
- * result of the {@code getName()} method on the given class as the
- * key when organizing injectable instances.
- * 
- * @author  Emil Forslund
- * @since   1.0.0
+ *
+ * @author Per Minborg
  */
-@Inherited
-@Target({ElementType.TYPE})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface InjectorKey {
-    Class<?> value();
+public class SpringGeneratorBundle implements InjectBundle {
+
+    @Override
+    public Stream<Class<?>> injectables() {
+        return InjectBundle.of(SpringGeneratorComponent.class)
+            .injectables();
+    }
+
 }

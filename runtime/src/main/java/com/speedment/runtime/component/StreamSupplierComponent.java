@@ -16,13 +16,13 @@
  */
 package com.speedment.runtime.component;
 
-import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.stream.StreamDecorator;
 
 import java.util.Optional;
 import java.util.stream.Stream;
+import com.speedment.common.injector.annotation.InjectKey;
 
 /**
  * This Component interface is used to obtain streams for different tables.
@@ -31,7 +31,7 @@ import java.util.stream.Stream;
  * @since   2.2.0
  */
 @Api(version = "3.0")
-@InjectorKey(StreamSupplierComponent.class)
+@InjectKey(StreamSupplierComponent.class)
 public interface StreamSupplierComponent extends Component {
     
     /**

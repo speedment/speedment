@@ -50,7 +50,7 @@ import com.speedment.internal.common.injector.Injector;
 import static com.speedment.internal.common.injector.State.INITIALIZED;
 import com.speedment.internal.common.injector.annotation.ExecuteBefore;
 import com.speedment.internal.common.injector.annotation.Inject;
-import com.speedment.internal.common.injector.annotation.InjectorKey;
+import com.speedment.internal.common.injector.annotation.InjectKey;
 import com.speedment.internal.common.mapstream.MapStream;
 import com.speedment.tool.internal.controller.ProjectProblemController;
 import com.speedment.tool.util.BrandUtil;
@@ -62,7 +62,7 @@ import static java.util.Objects.requireNonNull;
  * @author  Emil Forslund
  * @since   1.0.0
  */
-@InjectorKey(InjectionLoader.class)
+@InjectKey(InjectionLoader.class)
 public final class InjectionLoader {
     
     private final static String 

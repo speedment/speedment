@@ -114,10 +114,14 @@ public interface Injector {
     interface Builder {
         
         /**
-         * Appends one or multiple classes that can be automatically dependency 
+         * Appends a class that can be automatically dependency 
          * injected into other classes to the builder. Classes can be appended in 
          * any order. The final injection order will be determined once the 
          * {@link #build()}-method is called.
+         * <p>
+         * If a class has already been passed as injectable with the same InjectorKey,
+         * the previous one will be replaced by this new one. The old one will
+         * never be instantiated.
          * <p>
          * This method will not replace any previous injectables.
          * 
@@ -127,15 +131,15 @@ public interface Injector {
          * @throws NoDefaultConstructorException  if the specified type does not 
          *                                        have a default constructor.
          */
-        Builder canInject(Class<?> injectableType) throws NoDefaultConstructorException;
+        Builder put(Class<?> injectableType) throws NoDefaultConstructorException;
 
         /**
-         * Appends one or multiple classes that can be automatically dependency 
+         * Appends a class that can be automatically dependency 
          * injected into other classes to the builder. Classes can be appended in 
          * any order. The final injection order will be determined once the 
          * {@link #build()}-method is called.
          * <p>
-         * If a class has already been passed as injectibale with the same key,
+         * If a class has already been passed as injectable with the same key,
          * the previous one will be replaced by this new one. The old one will
          * never be instantiated.
          * 
@@ -146,7 +150,26 @@ public interface Injector {
          * @throws NoDefaultConstructorException  if the specified type does not 
          *                                        have a default constructor.
          */
-        Builder canInject(String key, Class<?> injectableType) throws NoDefaultConstructorException;
+        Builder put(String key, Class<?> injectableType) throws NoDefaultConstructorException;
+        
+        
+         /**
+         * Puts one or multiple classes contained in an InjectBundle that can 
+         * be automatically dependency injected into other classes to the builder. 
+         * Classes can be appended in any order. The final injection order will 
+         * be determined once the {@link #build()}-method is called.
+         * <p>
+         * If an injectable class has already been passed as injectable with the same key,
+         * the previous one will be replaced by this new one. The old one will
+         * never be instantiated.
+         * 
+         * @param bundleClass     containing the injectable classes that shall be appended
+         * @return                a reference to this builder
+         * 
+         * @throws NoDefaultConstructorException  if the specified type does not 
+         *                                        have a default constructor.
+         */
+        Builder putInBundle(Class<? extends InjectBundle> bundleClass) throws NoDefaultConstructorException;        
         
         /**
          * Overrides a particular configuration parameter in the config file
@@ -156,7 +179,7 @@ public interface Injector {
          * @param value  the new value
          * @return       a reference to this builder
          */
-        Builder withParam(String key, String value);
+        Builder putParam(String key, String value);
         
         /**
          * Sets the location of the configuration file.

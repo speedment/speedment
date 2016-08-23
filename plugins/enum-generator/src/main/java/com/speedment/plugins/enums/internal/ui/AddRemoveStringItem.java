@@ -16,11 +16,10 @@
  */
 package com.speedment.plugins.enums.internal.ui;
 
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
+import com.speedment.internal.common.logger.Logger;
+import com.speedment.internal.common.logger.LoggerManager;
 import com.speedment.tool.property.item.AbstractLabelTooltipItem;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -29,7 +28,6 @@ import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
 import static javafx.application.Platform.runLater;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableBooleanValue;

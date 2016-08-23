@@ -14,25 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.plugins.reactor.util;
+package com.speedment.generator;
 
-import com.speedment.internal.common.injector.annotation.InjectKey;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Table;
-import java.lang.reflect.Type;
+import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
+import com.speedment.internal.common.injector.InjectBundle;
+import java.util.stream.Stream;
 
 /**
- * Utility methods that are used by several translators in this package but that
- * doesn't nescessarily need to be shared with others.
- * 
- * @author Emil Forslund
+ *
+ * @author Per Minborg
  */
-@InjectKey(MergingSupport.class)
-public interface MergingSupport {
-    
-    Column mergingColumn(Table table);
-    
-    String mergingColumnField(Table table);
-    
-    Type mergingColumnType(Table table);
+public class GeneratorBundle implements InjectBundle {
+
+    @Override
+    public Stream<Class<?>> injectables() {
+        return InjectBundle.of(CodeGenerationComponentImpl.class)
+            .andThen(CodeGenerationComponentImpl.include())
+            .injectables();
+    }
+
 }

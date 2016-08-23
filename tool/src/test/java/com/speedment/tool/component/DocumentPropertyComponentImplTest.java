@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.component;
 
-import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
+import com.speedment.generator.GeneratorBundle;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
@@ -26,6 +26,7 @@ import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
 import com.speedment.runtime.internal.runtime.EmptyApplicationMetadata;
 import com.speedment.runtime.internal.util.ImmutableListUtil;
+import com.speedment.tool.ToolBundle;
 import com.speedment.tool.config.AbstractChildDocumentProperty;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.config.DbmsProperty;
@@ -39,7 +40,6 @@ import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.config.SchemaProperty;
 import com.speedment.tool.config.TableProperty;
 import com.speedment.tool.internal.component.DocumentPropertyComponentImpl;
-import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -64,8 +64,8 @@ public class DocumentPropertyComponentImplTest {
     @Before
     public void setUp() {
         speedment = new DefaultApplicationBuilder(EmptyApplicationMetadata.class)
-            .with(CodeGenerationComponentImpl.class)
-            .with(UserInterfaceComponentImpl.class)
+            .withBundle(GeneratorBundle.class)
+            .withBundle(ToolBundle.class)
             .withCheckDatabaseConnectivity(false)
             .withValidateRuntimeConfig(false)
             .build();

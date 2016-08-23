@@ -16,10 +16,8 @@
  */
 package com.speedment.runtime.internal.component;
 
-import com.speedment.common.injector.annotation.IncludeInjectable;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.config.parameter.DbmsType;
-import com.speedment.runtime.internal.config.dbms.StandardDbmsTypes;
 import com.speedment.runtime.license.Software;
 
 import java.util.Map;
@@ -33,7 +31,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Per Minborg
  */
-@IncludeInjectable(StandardDbmsTypes.class)
+
 public final class DbmsHandlerComponentImpl extends InternalOpenSourceComponent implements DbmsHandlerComponent {
 
     private final Map<String, DbmsType> dbmsTypes;

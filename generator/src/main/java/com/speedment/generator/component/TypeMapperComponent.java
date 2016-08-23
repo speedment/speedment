@@ -16,7 +16,7 @@
  */
 package com.speedment.generator.component;
 
-import com.speedment.internal.common.injector.annotation.InjectorKey;
+import com.speedment.internal.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.Column;
@@ -34,7 +34,7 @@ import java.util.stream.Stream;
  * @since   2.2.0
  */
 @Api(version = "3.0")
-@InjectorKey(TypeMapperComponent.class)
+@InjectKey(TypeMapperComponent.class)
 public interface TypeMapperComponent extends Component {
     
     @Override
