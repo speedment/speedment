@@ -64,7 +64,7 @@ public enum SpeedmentIcon {
     RUN_PROJECT("/pics/runProject.png"),
     RUN_PROJECT_24("/pics/runProject24.png"),
     // Metadata Tree
-    COLUMN(SilkIcon.SCRIPT.getFileName()),
+    COLUMN("/pics/vectors_rendered/column.png"),
     DBMS(SilkIcon.BUILDING_KEY.getFileName()),
     FOREIGN_KEY(SilkIcon.TABLE_LINK.getFileName()),
     FOREIGN_KEY_COLUMN(SilkIcon.SCRIPT_LINK.getFileName()),
