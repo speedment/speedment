@@ -27,6 +27,7 @@ import com.speedment.common.logger.Level;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
+import com.speedment.maven.component.MavenPathComponent;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.SpeedmentBuilder;
 import com.speedment.runtime.component.Component;
@@ -47,6 +48,7 @@ import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_L
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Supplier;
+import org.apache.maven.project.MavenProject;
 
 /**
  * The abstract base implementation for all the Speedment Mojos.
@@ -57,6 +59,7 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
     
     private final static File DEFAULT_CONFIG = new File(DEFAULT_CONFIG_LOCATION);
 
+    protected abstract MavenProject project();
     protected abstract boolean debug();
     protected abstract String dbmsHost();
     protected abstract int dbmsPort();
@@ -77,8 +80,14 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
             LoggerManager.getLogger(InjectorImpl.class).setLevel(Level.DEBUG);
         }
         
+        final SpeedmentBuilder<?, ?> builder = createBuilder();
+        builder.withInjectable(MavenPathComponent.class);
+
+        final Speedment speedment = builder.build();
+        speedment.getOrThrow(MavenPathComponent.class).setMavenProject(project());
+        
         getLog().info(launchMessage());
-        execute(createBuilder().build());
+        execute(speedment);
     }
     
     /**
@@ -154,6 +163,7 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
         // Add mandatory components that are not included in 'runtime'
         result.with(CodeGenerationComponentImpl.class);
         result.with(UserInterfaceComponentImpl.class);
+        result.with(MavenPathComponent.class);
         
         // Add any extra type mappers requested by the user
         TypeMapperInstaller.mappings = typeMappers(); // <-- Hack to pass type mappers to class with default constructor.

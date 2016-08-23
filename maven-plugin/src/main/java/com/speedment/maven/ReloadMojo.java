@@ -27,6 +27,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
 
 /**
  * A maven goal that reloads the JSON configuration file
@@ -38,6 +39,9 @@ import org.apache.maven.plugins.annotations.Parameter;
 @Mojo(name = "reload", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public final class ReloadMojo extends AbstractSpeedmentMojo {
 
+    @Parameter(defaultValue = "${project}", required = true, readonly = true)
+    private MavenProject mavenProject;
+    
     private @Parameter(defaultValue = "false") boolean debug;
     private @Parameter(defaultValue = "${dbms.host}") String dbmsHost;
     private @Parameter(defaultValue = "${dbms.port}") int dbmsPort;
@@ -60,6 +64,11 @@ public final class ReloadMojo extends AbstractSpeedmentMojo {
             getLog().error(err);
             throw new MojoExecutionException(err, ex);
         }
+    }
+    
+    @Override
+    protected MavenProject project() {
+        return mavenProject;
     }
     
     @Override

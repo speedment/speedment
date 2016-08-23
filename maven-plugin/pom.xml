@@ -126,5 +126,18 @@
             <artifactId>tool</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
+        <!-- LICENSE INFORMATION
+        maven-project:2.2.1
+        Apache 2 License
+        http://www.apache.org/licenses/LICENSE-2.0.txt
+        2016-08-22
+        emifor
+        -->
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-project</artifactId>
+            <version>2.2.1</version>
+        </dependency>
     </dependencies>
 </project>

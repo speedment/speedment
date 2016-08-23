@@ -70,6 +70,7 @@ import static java.util.Objects.requireNonNull;
     TypeMapperComponentImpl.class,
     TranslatorManagerImpl.class,
     JavaLanguageNamerImpl.class,
+    PathComponentImpl.class,
     JavaGenerator.class
 })
 public final class CodeGenerationComponentImpl extends InternalOpenSourceComponent implements CodeGenerationComponent {

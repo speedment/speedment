@@ -30,6 +30,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import java.io.File;
 
 import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
+import org.apache.maven.project.MavenProject;
 
 /**
  *
@@ -39,6 +40,9 @@ import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_L
 @Mojo(name = "clear", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
 public final class ClearMojo extends AbstractSpeedmentMojo {
 
+    @Parameter(defaultValue = "${project}", required = true, readonly = true)
+    private MavenProject mavenProject;
+    
     private @Parameter(defaultValue = "false") boolean debug;
     private @Parameter(defaultValue = "${dbms.host}") String dbmsHost;
     private @Parameter(defaultValue = "${dbms.port}") int dbmsPort;
@@ -66,6 +70,11 @@ public final class ClearMojo extends AbstractSpeedmentMojo {
             getLog().error(err);
             throw new MojoExecutionException(err);
         }
+    }
+
+    @Override
+    protected MavenProject project() {
+        return mavenProject;
     }
 
     @Override

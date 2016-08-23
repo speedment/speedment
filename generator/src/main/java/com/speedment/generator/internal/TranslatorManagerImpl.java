@@ -41,7 +41,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +52,7 @@ import com.speedment.runtime.component.InfoComponent;
 import java.nio.file.DirectoryStream;
 import java.util.stream.Stream;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import com.speedment.generator.component.PathComponent;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import static java.util.Objects.requireNonNull;
 
@@ -71,6 +71,7 @@ public class TranslatorManagerImpl implements TranslatorManager {
     private final AtomicInteger fileCounter = new AtomicInteger(0);
 
     private @Inject InfoComponent info;
+    private @Inject PathComponent paths;
     private @Inject EventComponent eventComponent;
     private @Inject CodeGenerationComponent codeGenerationComponent;
     
@@ -130,7 +131,7 @@ public class TranslatorManagerImpl implements TranslatorManager {
 
     @Override
     public void clearExistingFiles(Project project) {
-        final Path dir = Paths.get(project.getPackageLocation());
+        final Path dir = paths.packageLocation();
 
         try {
             clearExistingFilesIn(dir);
@@ -195,8 +196,8 @@ public class TranslatorManagerImpl implements TranslatorManager {
 
     @Override
     public void writeToFile(Project project, String filename, String content, boolean overwriteExisting) {
-        final String fname = project.getPackageLocation() + "/" + filename;
-        writeToFile(Paths.get(fname), content, overwriteExisting);
+        final Path codePath = paths.packageLocation().resolve(filename);
+        writeToFile(codePath, content, overwriteExisting);
     }
 
     @Override
