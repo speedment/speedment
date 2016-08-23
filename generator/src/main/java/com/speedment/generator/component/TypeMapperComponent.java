@@ -16,7 +16,7 @@
  */
 package com.speedment.generator.component;
 
-import com.speedment.common.injector.annotation.InjectorKey;
+import com.speedment.internal.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.Column;
@@ -66,7 +66,7 @@ public interface TypeMapperComponent extends Component {
     Stream<TypeMapper<?, ?>> stream();
     
     /**
-     * Retreive and return the type mapper with the specified absolute class
+     * Retrieve and return the type mapper with the specified absolute class
      * name. If it is not installed, return an empty optional.
      * 
      * @param absoluteClassName  the name as returned by {@code Class.getName()}
@@ -80,7 +80,7 @@ public interface TypeMapperComponent extends Component {
      * specified, then an {@link IdentityTypeMapper} will be created
      * and returned.
      *
-     * @param column  the column to retreive the type mapper for
+     * @param column  the column to retrieve the type mapper for
      * @return        the mapper class
      */
     TypeMapper<?, ?> get(Column column);

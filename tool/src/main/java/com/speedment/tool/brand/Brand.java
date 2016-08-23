@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.brand;
 
-import com.speedment.common.injector.annotation.InjectorKey;
+import com.speedment.internal.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
 
 import java.util.Optional;

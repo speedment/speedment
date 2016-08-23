@@ -25,7 +25,6 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.runtime.ApplicationMetadata;
 import com.speedment.runtime.component.InfoComponent;
@@ -40,6 +39,7 @@ import java.util.stream.Stream;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
+import com.speedment.internal.common.injector.annotation.Inject;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 

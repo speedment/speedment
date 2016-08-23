@@ -16,16 +16,16 @@
  */
 package com.speedment.tool.internal.controller;
 
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.mapstream.MapStream;
-import static com.speedment.common.mapstream.MapStream.comparing;
+
 import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.generator.component.TypeMapperComponent;
+import com.speedment.internal.common.injector.Injector;
+import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.internal.common.mapstream.MapStream;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.parameter.DbmsType;
 import static com.speedment.runtime.internal.util.Cast.cast;
@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.speedment.tool.internal.util.CloseUtil.newCloseHandler;
+import static java.util.Comparator.comparing;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;

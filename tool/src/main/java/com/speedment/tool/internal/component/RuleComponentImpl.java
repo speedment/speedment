@@ -16,10 +16,10 @@
  */
 package com.speedment.tool.internal.component;
 
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.State;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
+import com.speedment.internal.common.injector.Injector;
+import com.speedment.internal.common.injector.State;
+import com.speedment.internal.common.injector.annotation.ExecuteBefore;
+import com.speedment.internal.common.injector.annotation.Inject;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.tool.component.RuleComponent;

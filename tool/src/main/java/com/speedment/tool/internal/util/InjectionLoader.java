@@ -16,11 +16,6 @@
  */
 package com.speedment.tool.internal.util;
 
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.InjectorKey;
-import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.brand.Brand;
@@ -50,7 +45,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
-import static com.speedment.common.injector.State.INITIALIZED;
+
+import com.speedment.internal.common.injector.Injector;
+import static com.speedment.internal.common.injector.State.INITIALIZED;
+import com.speedment.internal.common.injector.annotation.ExecuteBefore;
+import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.internal.common.injector.annotation.InjectorKey;
+import com.speedment.internal.common.mapstream.MapStream;
 import com.speedment.tool.internal.controller.ProjectProblemController;
 import com.speedment.tool.util.BrandUtil;
 import static javafx.stage.Modality.APPLICATION_MODAL;

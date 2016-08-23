@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.internal.controller;
 
-import com.speedment.common.injector.annotation.Inject;
+import com.speedment.internal.common.injector.annotation.Inject;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.tool.brand.Brand;
 import javafx.fxml.FXML;

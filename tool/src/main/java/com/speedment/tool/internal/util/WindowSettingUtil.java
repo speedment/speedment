@@ -16,8 +16,8 @@
  */
 package com.speedment.tool.internal.util;
 
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
+import com.speedment.internal.common.logger.Logger;
+import com.speedment.internal.common.logger.LoggerManager;
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;

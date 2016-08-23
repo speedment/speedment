@@ -18,11 +18,6 @@ package com.speedment.generator.internal.component;
 
 import com.speedment.common.codegen.internal.java.JavaGenerator;
 import com.speedment.common.codegen.model.ClassOrInterface;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.IncludeInjectable;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.mapstream.MapStream;
 import com.speedment.generator.JavaClassTranslator;
 import com.speedment.generator.Translator;
 import com.speedment.generator.TranslatorConstructor;
@@ -61,8 +56,14 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import static com.speedment.common.injector.State.RESOLVED;
+
 import static com.speedment.generator.StandardTranslatorKey.*;
+import com.speedment.internal.common.injector.Injector;
+import static com.speedment.internal.common.injector.State.RESOLVED;
+import com.speedment.internal.common.injector.annotation.ExecuteBefore;
+import com.speedment.internal.common.injector.annotation.IncludeInjectable;
+import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.internal.common.mapstream.MapStream;
 import static java.util.Objects.requireNonNull;
 
 @IncludeInjectable({

@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.common.mapstream.MapStream;
+import com.speedment.internal.common.mapstream.MapStream;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.util.OptionalUtil;

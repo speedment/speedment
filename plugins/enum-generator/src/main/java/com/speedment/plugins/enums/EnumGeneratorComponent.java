@@ -16,18 +16,19 @@
  */
 package com.speedment.plugins.enums;
 
-import com.speedment.common.injector.Injector;
+
 import com.speedment.plugins.enums.internal.GeneratedEntityDecorator;
-import static com.speedment.common.injector.State.INITIALIZED;
-import static com.speedment.common.injector.State.RESOLVED;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.InjectorKey;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.generator.StandardTranslatorKey;
 import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.generator.component.EventComponent;
 import com.speedment.generator.component.TypeMapperComponent;
+import com.speedment.internal.common.injector.Injector;
+import static com.speedment.internal.common.injector.State.INITIALIZED;
+import static com.speedment.internal.common.injector.State.RESOLVED;
+import com.speedment.internal.common.injector.annotation.ExecuteBefore;
+import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.internal.common.injector.annotation.InjectorKey;
+import com.speedment.internal.common.injector.annotation.WithState;
 import com.speedment.plugins.enums.internal.ui.CommaSeparatedStringEditor;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;

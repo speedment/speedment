@@ -16,7 +16,6 @@
  */
 package com.speedment.plugins.enums.internal;
 
-import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.internal.model.value.TextValue;
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import com.speedment.common.codegen.model.Constructor;
@@ -25,7 +24,6 @@ import com.speedment.common.codegen.model.EnumConstant;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.injector.Injector;
 import com.speedment.generator.JavaClassTranslator;
 import com.speedment.generator.TranslatorDecorator;
 import com.speedment.generator.util.JavaLanguageNamer;
@@ -33,6 +31,7 @@ import com.speedment.plugins.enums.StringToEnumTypeMapper;
 import com.speedment.runtime.config.Table;
 import java.util.List;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
+import com.speedment.internal.common.injector.Injector;
 import java.lang.reflect.Type;
 import static java.util.Objects.requireNonNull;
 

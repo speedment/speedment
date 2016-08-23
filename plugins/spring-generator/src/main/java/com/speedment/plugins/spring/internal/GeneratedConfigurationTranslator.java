@@ -24,8 +24,6 @@ import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.runtime.config.Project;
@@ -35,7 +33,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 
-import com.speedment.common.injector.Injector;
+import com.speedment.internal.common.injector.Injector;
+import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.internal.common.injector.annotation.InjectorKey;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import java.lang.reflect.Type;
 

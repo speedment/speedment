@@ -18,7 +18,7 @@ package com.speedment.maven;
 
 
 import com.speedment.maven.typemapper.Mapping;
-import com.speedment.common.injector.Injector;
+import com.speedment.internal.common.injector.Injector;
 import com.speedment.runtime.Speedment;
 import com.speedment.tool.MainApp;
 import org.apache.maven.plugin.MojoExecutionException;

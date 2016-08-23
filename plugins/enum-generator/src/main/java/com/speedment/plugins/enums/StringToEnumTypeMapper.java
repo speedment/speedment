@@ -16,11 +16,11 @@
  */
 package com.speedment.plugins.enums;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.plugins.enums.internal.GeneratedEnumType;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.lazy.specialized.LazyClass;
 import com.speedment.generator.internal.TranslatorManagerImpl;
+import com.speedment.internal.common.injector.Injector;
+import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.internal.common.lazy.specialized.LazyClass;
 import static com.speedment.plugins.enums.internal.GeneratedEntityDecorator.FROM_DATABASE_METHOD;
 import com.speedment.plugins.enums.internal.EnumGeneratorUtil;
 import com.speedment.runtime.config.Column;

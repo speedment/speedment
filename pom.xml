@@ -189,7 +189,27 @@
                         </instructions>
                     </configuration>
                 </plugin>
+
+            
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.10.4</version>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <docfilessubdirs>true</docfilessubdirs>
+                        <excludePackageNames>com.speedment.runtime.internal.*</excludePackageNames>
+                    </configuration>
+                </plugin>
             </plugins>
+            
         </pluginManagement>
         
         <plugins> 
@@ -323,23 +343,6 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.10.4</version>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <docfilessubdirs>true</docfilessubdirs>
-                            <excludePackageNames>com.speedment.runtime.internal.*</excludePackageNames>
-                        </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>

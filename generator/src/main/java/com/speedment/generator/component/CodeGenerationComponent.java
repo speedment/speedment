@@ -17,16 +17,17 @@
 package com.speedment.generator.component;
 
 import com.speedment.common.codegen.model.ClassOrInterface;
-import com.speedment.common.injector.annotation.InjectorKey;
 import com.speedment.generator.Translator;
 import com.speedment.generator.TranslatorConstructor;
 import com.speedment.generator.TranslatorDecorator;
 import com.speedment.generator.TranslatorKey;
+import com.speedment.internal.common.injector.annotation.InjectorKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
+
 
 import java.util.stream.Stream;
 

@@ -16,13 +16,11 @@
  */
 package com.speedment.tool.internal.controller;
 
-import com.speedment.common.injector.annotation.Inject;
+import com.speedment.internal.common.injector.annotation.Inject;
 import com.speedment.tool.component.IssueComponent;
 import com.speedment.tool.internal.util.ConfigFileHelper;
 import com.speedment.tool.rule.Issue;
 import java.net.URL;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanExpression;
