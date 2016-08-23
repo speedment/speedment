@@ -65,17 +65,6 @@ import com.speedment.internal.common.injector.annotation.Inject;
 import com.speedment.internal.common.mapstream.MapStream;
 import static java.util.Objects.requireNonNull;
 
-<<<<<<< HEAD
-=======
-@IncludeInjectable({
-    EventComponentImpl.class,
-    TypeMapperComponentImpl.class,
-    TranslatorManagerImpl.class,
-    JavaLanguageNamerImpl.class,
-    PathComponentImpl.class,
-    JavaGenerator.class
-})
->>>>>>> origin/develop-modules
 public final class CodeGenerationComponentImpl extends InternalOpenSourceComponent implements CodeGenerationComponent {
 
     public static InjectBundle include() {
@@ -84,6 +73,7 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
             TypeMapperComponentImpl.class,
             TranslatorManagerImpl.class,
             JavaLanguageNamerImpl.class,
+            PathComponentImpl.class,
             JavaGenerator.class 
         );
     }
