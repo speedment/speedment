@@ -58,6 +58,13 @@
               <shadedPattern>com.speedment.internal.common</shadedPattern>
             </relocation>
           </relocations>
+          <transformers>
+            <transformer>
+              <resources>
+                <resource>LazyTemplate.txt</resource>
+              </resources>
+            </transformer>
+          </transformers>
         </configuration>
       </plugin>
       <plugin>
