@@ -20,13 +20,12 @@ package com.speedment.plugins.enums;
 import com.speedment.plugins.enums.internal.GeneratedEntityDecorator;
 import com.speedment.generator.StandardTranslatorKey;
 import com.speedment.generator.component.CodeGenerationComponent;
-import com.speedment.generator.component.EventComponent;
 import com.speedment.generator.component.TypeMapperComponent;
+import com.speedment.internal.common.injector.InjectBundle;
 import com.speedment.internal.common.injector.Injector;
 import static com.speedment.internal.common.injector.State.INITIALIZED;
 import static com.speedment.internal.common.injector.State.RESOLVED;
 import com.speedment.internal.common.injector.annotation.ExecuteBefore;
-import com.speedment.internal.common.injector.annotation.Inject;
 import com.speedment.internal.common.injector.annotation.InjectKey;
 import com.speedment.internal.common.injector.annotation.WithState;
 import com.speedment.plugins.enums.internal.ui.CommaSeparatedStringEditor;
@@ -54,7 +53,13 @@ import com.speedment.tool.config.ColumnProperty;
 @InjectKey(EnumGeneratorComponent.class)
 public final class EnumGeneratorComponent extends AbstractComponent {
 
-    private @Inject EventComponent events;
+    public static InjectBundle include() {
+        return InjectBundle.of(
+            TypeMapperComponent.class, 
+            CodeGenerationComponent.class, 
+            PropertyEditorComponent.class
+        );
+    }
 
     @ExecuteBefore(RESOLVED)
     void installDecorators(Injector injector,

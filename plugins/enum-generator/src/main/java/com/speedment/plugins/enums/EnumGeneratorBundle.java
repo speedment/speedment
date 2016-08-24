@@ -23,11 +23,12 @@ import java.util.stream.Stream;
  *
  * @author Per Minborg
  */
-public class EnumGenetatorBundle implements InjectBundle {
+public class EnumGeneratorBundle implements InjectBundle {
 
     @Override
     public Stream<Class<?>> injectables() {
-        return InjectBundle.of(EnumGeneratorComponent.class)
+        return EnumGeneratorComponent.include()
+            .andThen(EnumGeneratorComponent.class)
             .injectables();
     }
 
