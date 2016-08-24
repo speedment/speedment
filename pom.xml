@@ -140,6 +140,10 @@
             <name>Simon Jonasson (GitHub:Gikkman)</name>
             <timezone>Europe/Stockholm</timezone>
         </contributor>
+        <contributor>
+            <name>Elis Minborg (GitHub:elisminborg)</name>
+            <timezone>America/Los_Angeles</timezone>
+        </contributor>
     </contributors>
 	
     <!-- Distribution Details -->
