@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.maven;
+package com.speedment.maven.abstractmojo;
 
 import com.speedment.generator.GeneratorBundle;
 import com.speedment.maven.typemapper.Mapping;
@@ -50,6 +50,7 @@ import com.speedment.tool.ToolBundle;
 import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import org.apache.maven.project.MavenProject;
 
@@ -58,34 +59,29 @@ import org.apache.maven.project.MavenProject;
  *
  * @author Emil Forslund
  */
-abstract class AbstractSpeedmentMojo extends AbstractMojo {
+public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
     private final static File DEFAULT_CONFIG = new File(DEFAULT_CONFIG_LOCATION);
+    private final static Consumer<SpeedmentBuilder<?, ?>> NOTHING = (builder) -> {};
 
+    private final Consumer<SpeedmentBuilder<?, ?>> configurer;
+    
     protected abstract MavenProject project();
-
     protected abstract boolean debug();
-
     protected abstract String dbmsHost();
-
     protected abstract int dbmsPort();
-
     protected abstract String dbmsUsername();
-
     protected abstract String dbmsPassword();
-
     protected abstract File configLocation();
-
     protected abstract String[] components();
-
     protected abstract Mapping[] typeMappers();
-
     protected abstract String launchMessage();
+    protected abstract void execute(Speedment speedment) throws MojoExecutionException, MojoFailureException;
 
-    protected abstract void execute(Speedment speedment)
-        throws MojoExecutionException, MojoFailureException;
-
-    protected AbstractSpeedmentMojo() {
+    protected AbstractSpeedmentMojo() {this(NOTHING);}
+    
+    protected AbstractSpeedmentMojo(Consumer<SpeedmentBuilder<?, ?>> configurer) {
+        this.configurer = configurer;
     }
 
     @Override
@@ -96,14 +92,14 @@ abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
         final SpeedmentBuilder<?, ?> builder = createBuilder();
         builder.withInjectable(MavenPathComponent.class);
-
+        configurer.accept(builder);
         final Speedment speedment = builder.build();
         speedment.getOrThrow(MavenPathComponent.class).setMavenProject(project());
 
         getLog().info(launchMessage());
         execute(speedment);
     }
-
+    
     /**
      * Returns {@code true} if the default configuration file is non-null,
      * exists and is readable. If, not, {@code false} is returned and an

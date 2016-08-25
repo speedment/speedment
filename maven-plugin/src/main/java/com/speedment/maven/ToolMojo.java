@@ -17,98 +17,17 @@
 package com.speedment.maven;
 
 
-import com.speedment.maven.typemapper.Mapping;
-import com.speedment.internal.common.injector.Injector;
-import com.speedment.runtime.Speedment;
-import com.speedment.tool.MainApp;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
+import com.speedment.maven.abstractmojo.AbstractToolMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-
-import java.io.File;
-
-import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
-import javafx.application.Application;
-import org.apache.maven.project.MavenProject;
 
 /**
  *
  * @author Emil Forslund
  */
 @Mojo(name = "tool", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
-public final class ToolMojo extends AbstractSpeedmentMojo {
-    
-    @Parameter(defaultValue = "${project}", required = true, readonly = true)
-    private MavenProject mavenProject;
-    
-    private @Parameter(defaultValue = "false") boolean debug;
-    private @Parameter(defaultValue = "${dbms.host}") String dbmsHost;
-    private @Parameter(defaultValue = "${dbms.port}") int dbmsPort;
-    private @Parameter(defaultValue = "${dbms.username}") String dbmsUsername;
-    private @Parameter(defaultValue = "${dbms.password}") String dbmsPassword;
-    private @Parameter String[] components;
-    private @Parameter Mapping[] typeMappers;
-    private @Parameter(defaultValue = DEFAULT_CONFIG_LOCATION) File configFile;
-
-    @Override
-    public void execute(Speedment speedment) throws MojoExecutionException, MojoFailureException {
-        final Injector injector = speedment.getOrThrow(Injector.class);
-        MainApp.setInjector(injector);
+public final class ToolMojo extends AbstractToolMojo {
         
-        if (hasConfigFile()) {
-            Application.launch(MainApp.class, configFile.getAbsolutePath());
-        } else {
-            Application.launch(MainApp.class);
-        }
-    }
-    
-    @Override
-    protected MavenProject project() {
-        return mavenProject;
-    }
-
-    @Override
-    protected String[] components() {
-        return components;
-    }
-    
-    @Override
-    protected Mapping[] typeMappers() {
-        return typeMappers;
-    }
-    
-    @Override
-    protected File configLocation() {
-        return configFile;
-    }
-    
-    @Override
-    protected boolean debug() {
-        return debug;
-    }
-
-    @Override
-    protected String dbmsHost() {
-        return dbmsHost;
-    }
-
-    @Override
-    protected int dbmsPort() {
-        return dbmsPort;
-    }
-
-    @Override
-    protected String dbmsUsername() {
-        return dbmsUsername;
-    }
-
-    @Override
-    protected String dbmsPassword() {
-        return dbmsPassword;
-    }
-    
     @Override
     protected String launchMessage() {
         return "Running speedment:tool";

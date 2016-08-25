@@ -16,105 +16,16 @@
  */
 package com.speedment.maven;
 
-import com.speedment.maven.typemapper.Mapping;
-import com.speedment.generator.TranslatorManager;
-import com.speedment.runtime.Speedment;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.exception.SpeedmentException;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
+import com.speedment.maven.abstractmojo.AbstractGenerateMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-
-import java.io.File;
-
-import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
-import org.apache.maven.project.MavenProject;
 
 /**
  *
  * @author Emil Forslund
  */
 @Mojo(name = "generate", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
-public final class GenerateMojo extends AbstractSpeedmentMojo {
-
-    @Parameter(defaultValue = "${project}", required = true, readonly = true)
-    private MavenProject mavenProject;
-    
-    private @Parameter(defaultValue = "false") boolean debug;
-    private @Parameter(defaultValue = "${dbms.host}") String dbmsHost;
-    private @Parameter(defaultValue = "${dbms.port}") int dbmsPort;
-    private @Parameter(defaultValue = "${dbms.username}") String dbmsUsername;
-    private @Parameter(defaultValue = "${dbms.password}") String dbmsPassword;
-    private @Parameter String[] components;
-    private @Parameter Mapping[] typeMappers;
-    private @Parameter(defaultValue = DEFAULT_CONFIG_LOCATION) File configFile;
-
-    @Override
-    public void execute(Speedment speedment) throws MojoExecutionException, MojoFailureException {
-        getLog().info("Generating code using JSON configuration file: '" + configFile.getAbsolutePath() + "'.");
-
-        if (hasConfigFile()) {
-            try {
-                final Project project = speedment.project();
-                speedment.getOrThrow(TranslatorManager.class).accept(project);
-            } catch (final SpeedmentException ex) {
-                final String err = "Error parsing configFile file.";
-                getLog().error(err);
-                throw new MojoExecutionException(err, ex);
-            }
-        } else {
-            final String err = "To run speedment:generate a valid configFile needs to be specified.";
-            getLog().error(err);
-            throw new MojoExecutionException(err);
-        }
-    }
-    
-    @Override
-    protected MavenProject project() {
-        return mavenProject;
-    }
-
-    @Override
-    protected String[] components() {
-        return components;
-    }
-    
-    @Override
-    protected Mapping[] typeMappers() {
-        return typeMappers;
-    }
-
-    @Override
-    protected File configLocation() {
-        return configFile;
-    }
-    
-    @Override
-    protected boolean debug() {
-        return debug;
-    }
-    
-    @Override
-    protected String dbmsHost() {
-        return dbmsHost;
-    }
-
-    @Override
-    protected int dbmsPort() {
-        return dbmsPort;
-    }
-
-    @Override
-    protected String dbmsUsername() {
-        return dbmsUsername;
-    }
-
-    @Override
-    protected String dbmsPassword() {
-        return dbmsPassword;
-    }
+public final class GenerateMojo extends AbstractGenerateMojo {
 
     @Override
     protected String launchMessage() {
