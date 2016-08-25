@@ -225,12 +225,14 @@ class RestImpl implements Rest {
     
     private CompletableFuture<Response> send(Method method, String path, Option[] options, Iterator<String> stream) {
         return send(method, path, options, out -> {
-            try (final BufferedWriter wr = new BufferedWriter(
-                    new OutputStreamWriter(out))) {
-                
-                while (stream.hasNext()) {
-                    final String data = stream.next();
-                    wr.append(data);
+            if (stream != NO_STREAM) {
+                try (final BufferedWriter wr = new BufferedWriter(
+                        new OutputStreamWriter(out))) {
+
+                    while (stream.hasNext()) {
+                        final String data = stream.next();
+                        wr.append(data);
+                    }
                 }
             }
         });
@@ -300,7 +302,7 @@ class RestImpl implements Rest {
                     text = sb.toString();
                 }
                 
-                return new Response(status, text);
+                return new Response(status, text, conn.getHeaderFields());
             } catch (final IOException ex) {
                 throw new RuntimeException("Could not send " + method.name() + "-command.", ex);
             } finally {

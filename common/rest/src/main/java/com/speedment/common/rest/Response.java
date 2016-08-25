@@ -18,6 +18,8 @@ package com.speedment.common.rest;
 
 import com.speedment.common.json.Json;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
@@ -33,10 +35,12 @@ public final class Response {
     
     private final int status;
     private final String text;
+    private final Map<String, List<String>> headers;
 
-    public Response(int status, String text) {
-        this.status = status;
-        this.text   = requireNonNull(text);
+    public Response(int status, String text, Map<String, List<String>> headers) {
+        this.status  = status;
+        this.text    = requireNonNull(text);
+        this.headers = requireNonNull(headers);
     }
 
     public int getStatus() {
@@ -45,6 +49,10 @@ public final class Response {
 
     public String getText() {
         return text;
+    }
+
+    public Map<String, List<String>> getHeaders() {
+        return headers;
     }
     
     public boolean success() {
