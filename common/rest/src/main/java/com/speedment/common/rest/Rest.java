@@ -16,6 +16,7 @@
  */
 package com.speedment.common.rest;
 
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Iterator;
@@ -56,6 +57,12 @@ public interface Rest {
     CompletableFuture<Response> delete(String path, Option... option);
     CompletableFuture<Response> put(String path, Option... option);
     CompletableFuture<Response> options(String path, Option... option);
+    
+    CompletableFuture<Response> get(String path, InputStream body, Option... option);
+    CompletableFuture<Response> post(String path, InputStream body, Option... option);
+    CompletableFuture<Response> delete(String path, InputStream body, Option... option);
+    CompletableFuture<Response> put(String path, InputStream body, Option... option);
+    CompletableFuture<Response> options(String path, InputStream body, Option... option);
     
     CompletableFuture<Response> get(String path, Iterator<String> uploader, Option... option);
     CompletableFuture<Response> post(String path, Iterator<String> uploader, Option... option);

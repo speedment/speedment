@@ -22,7 +22,9 @@ import static com.speedment.common.rest.Rest.encode;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -59,27 +61,27 @@ class RestImpl implements Rest {
     
     @Override
     public CompletableFuture<Response> get(String path, Option... option) {
-        return send(Method.GET, path, option, NO_STREAM);
+        return send(Method.GET, path, option);
     }
 
     @Override
     public CompletableFuture<Response> post(String path, Option... option) {
-        return send(Method.POST, path, option, NO_STREAM);
+        return send(Method.POST, path, option);
     }
 
     @Override
     public CompletableFuture<Response> delete(String path, Option... option) {
-        return send(Method.DELETE, path, option, NO_STREAM);
+        return send(Method.DELETE, path, option);
     }
 
     @Override
     public CompletableFuture<Response> put(String path, Option... option) {
-        return send(Method.PUT, path, option, NO_STREAM);
+        return send(Method.PUT, path, option);
     }
 
     @Override
     public CompletableFuture<Response> options(String path, Option... option) {
-        return send(Method.OPTIONS, path, option, NO_STREAM);
+        return send(Method.OPTIONS, path, option);
     }
     
     @Override
@@ -105,6 +107,31 @@ class RestImpl implements Rest {
     @Override
     public CompletableFuture<Response> options(String path, Iterator<String> uploader, Option... option) {
         return send(Method.OPTIONS, path, option, uploader);
+    }
+    
+    @Override
+    public CompletableFuture<Response> get(String path, InputStream body, Option... option) {
+        return send(Method.GET, path, option, stream(body));
+    }
+
+    @Override
+    public CompletableFuture<Response> post(String path, InputStream body, Option... option) {
+        return send(Method.POST, path, option, stream(body));
+    }
+
+    @Override
+    public CompletableFuture<Response> delete(String path, InputStream body, Option... option) {
+        return send(Method.DELETE, path, option, stream(body));
+    }
+
+    @Override
+    public CompletableFuture<Response> put(String path, InputStream body, Option... option) {
+        return send(Method.PUT, path, option, stream(body));
+    }
+
+    @Override
+    public CompletableFuture<Response> options(String path, InputStream body, Option... option) {
+        return send(Method.OPTIONS, path, option, stream(body));
     }
     
     @Override
@@ -181,7 +208,35 @@ class RestImpl implements Rest {
         }
     }
     
+    private final static int BUFFER_SIZE = 1024;
+    private StreamConsumer stream(InputStream in) {
+        return out -> {
+            final byte[] buffer = new byte[BUFFER_SIZE];
+            int len;
+            while ((len = in.read(buffer)) != -1) {
+                out.write(buffer, 0, len);
+            }
+        };
+    }
+    
+    private CompletableFuture<Response> send(Method method, String path, Option[] options) {
+        return send(method, path, options, NO_STREAM);
+    }
+    
     private CompletableFuture<Response> send(Method method, String path, Option[] options, Iterator<String> stream) {
+        return send(method, path, options, out -> {
+            try (final BufferedWriter wr = new BufferedWriter(
+                    new OutputStreamWriter(out))) {
+                
+                while (stream.hasNext()) {
+                    final String data = stream.next();
+                    wr.append(data);
+                }
+            }
+        });
+    }
+    
+    private CompletableFuture<Response> send(Method method, String path, Option[] options, StreamConsumer streamConsumer) {
         return CompletableFuture.supplyAsync(() -> {
             final Param[] params = Stream.of(options).filter(o -> o.getType() == PARAM).toArray(Param[]::new);
             final Header[] headers = Stream.of(options).filter(o -> o.getType() == HEADER).toArray(Header[]::new);
@@ -218,19 +273,15 @@ class RestImpl implements Rest {
                 conn.setUseCaches(false);
                 conn.setAllowUserInteraction(false);
                 
-                final boolean doOutput = stream != NO_STREAM;
+                final boolean doOutput = streamConsumer != StreamConsumer.IGNORE;
                 if (doOutput) {
                     conn.setDoOutput(true);
                 }
                 
                 conn.connect();
                 if (doOutput) {
-                    try (final BufferedWriter wr = new BufferedWriter(
-                        new OutputStreamWriter(conn.getOutputStream()))) {
-                        while (stream.hasNext()) {
-                            final String data = stream.next();
-                            wr.append(data);
-                        }
+                    try (final OutputStream out = conn.getOutputStream()) {
+                        streamConsumer.writeTo(out);
                     }
                 }
 
@@ -292,5 +343,11 @@ class RestImpl implements Rest {
         public T next() {
             return instance;
         }
+    }
+    
+    @FunctionalInterface
+    private interface StreamConsumer {
+        StreamConsumer IGNORE = o -> {};
+        void writeTo(OutputStream out) throws IOException;
     }
 }
