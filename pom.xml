@@ -445,7 +445,7 @@
         <dependency>
             <groupId>org.controlsfx</groupId>
             <artifactId>controlsfx</artifactId>
-            <version>8.40.10</version>
+            <version>8.40.11</version>
         </dependency>
         
         <!-- LICENSE INFORMATION
