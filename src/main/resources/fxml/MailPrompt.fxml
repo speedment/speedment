@@ -40,7 +40,7 @@
     
     <children>
         <Label alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="header" text="Welcome to The Community!" />
-        <Label maxWidth="1.7976931348623157E308" text="Please enter your email adress:" />
+        <Label maxWidth="1.7976931348623157E308" text="Please enter your email address:" />
         
         <TextField fx:id="email" promptText="Email">
             <padding>

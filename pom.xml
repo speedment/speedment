@@ -34,7 +34,7 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment</artifactId>
-    <version>2.3.6</version>
+    <version>2.3.7</version>
     <packaging>bundle</packaging>
     
     <properties>
@@ -445,7 +445,7 @@
         <dependency>
             <groupId>org.controlsfx</groupId>
             <artifactId>controlsfx</artifactId>
-            <version>8.40.10</version>
+            <version>8.40.11</version>
         </dependency>
         
         <!-- LICENSE INFORMATION

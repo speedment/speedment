@@ -57,6 +57,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
@@ -494,9 +496,15 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
                 + " " + package_.getImplementationVersion()
                 + " by " + package_.getImplementationVendor();
             LOGGER.info(javaMsg);
-            if (package_.getImplementationVersion().compareTo("1.8.0_40") < 0) {
-                LOGGER.warn("The current Java version is outdated. Please upgrate to a more recent Java version.");
+            final String versionString = package_.getImplementationVersion();
+
+            final Optional<Boolean> isVersionOk = isVersionOk(versionString);
+            if (isVersionOk.isPresent()) {
+                LOGGER.warn("The current Java version (" + versionString + ") is outdated. Please upgrade to a more recent Java version.");
+            } else {
+                LOGGER.warn("Unable to fully parse the java version. Version check skipped!");
             }
+
         } catch (Exception e) {
             LOGGER.info("Unknown Java version.");
         }
@@ -514,6 +522,48 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
     }
 
+    protected Optional<Boolean> isVersionOk(String versionString) {
+        final Pattern pattern = Pattern.compile("(\\d+)[\\\\.](\\d+)[\\\\.](\\d+)_(\\d+)");
+        final Matcher matcher = pattern.matcher(versionString);
+
+        if (matcher.find() && matcher.groupCount() >= 4) {
+            final String majorVersionString = matcher.group(1);
+            final String minorVersionString = matcher.group(2);
+            final String patchVersionString = matcher.group(3);
+            final String microVersionString = matcher.group(4);
+            try {
+                final int majorVersion = Integer.parseInt(majorVersionString);
+                final int minorVersion = Integer.parseInt(minorVersionString);
+                final int patchVersion = Integer.parseInt(patchVersionString);
+                final int microVersion = Integer.parseInt(microVersionString);
+                boolean ok = true;
+                if (majorVersion < 1) {
+                    ok = false;
+                }
+                if (majorVersion == 1) {
+                    if (minorVersion < 8) {
+                        ok = false;
+                    }
+                    if (minorVersion == 8) {
+                        if (patchVersion < 0) {
+                            ok = false;
+                        }
+                        if (patchVersion == 0) {
+                            if (microVersion < 40) {
+                                ok = false;
+                            }
+                        }
+                    }
+                }
+                return Optional.of(ok);
+            } catch (NumberFormatException nfe) {
+                return Optional.empty();
+            }
+        } else {
+            return Optional.empty();
+        }
+    }
+
     @Override
     public void onStop() {
         super.onStop();
@@ -527,7 +577,7 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
     protected void loadAndSetProject() {
         final ApplicationMetadata meta = getSpeedmentApplicationMetadata();
         final Project project;
-        
+
         if (meta != null) {
             project = DocumentTranscoder.load(meta.getMetadata());
         } else {
