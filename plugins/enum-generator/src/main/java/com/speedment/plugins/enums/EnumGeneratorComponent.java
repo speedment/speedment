@@ -21,6 +21,8 @@ import com.speedment.plugins.enums.internal.GeneratedEntityDecorator;
 import com.speedment.generator.StandardTranslatorKey;
 import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.generator.component.TypeMapperComponent;
+import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
+import com.speedment.generator.internal.component.TypeMapperComponentImpl;
 import com.speedment.internal.common.injector.InjectBundle;
 import com.speedment.internal.common.injector.Injector;
 import static com.speedment.internal.common.injector.State.INITIALIZED;
@@ -37,6 +39,7 @@ import static com.speedment.runtime.internal.license.OpenSourceLicense.APACHE_2;
 import com.speedment.runtime.license.Software;
 import com.speedment.tool.component.PropertyEditorComponent;
 import com.speedment.tool.config.ColumnProperty;
+import com.speedment.tool.internal.component.PropertyEditorComponentImpl;
 
 /**
  * A plugin for generating internal enums for columns marked as ENUM in the
@@ -55,9 +58,9 @@ public final class EnumGeneratorComponent extends AbstractComponent {
 
     public static InjectBundle include() {
         return InjectBundle.of(
-            TypeMapperComponent.class, 
-            CodeGenerationComponent.class, 
-            PropertyEditorComponent.class
+            TypeMapperComponentImpl.class, 
+            CodeGenerationComponentImpl.class, 
+            PropertyEditorComponentImpl.class
         );
     }
 
