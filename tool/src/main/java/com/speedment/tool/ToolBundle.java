@@ -28,7 +28,7 @@ import java.util.stream.Stream;
  *
  * @author Per Minborg
  */
-public class ToolBundle  implements InjectBundle {
+public class ToolBundle implements InjectBundle {
 
     @Override
     public Stream<Class<?>> injectables() {
