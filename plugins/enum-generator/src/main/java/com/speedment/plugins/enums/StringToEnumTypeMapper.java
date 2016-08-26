@@ -156,7 +156,7 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
             } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 throw new SpeedmentException(
                     "Error executing '" + FROM_DATABASE_METHOD + 
-                    "' in generated enum class '" + constant.getClass().getName() + "'."
+                    "' in generated enum class '" + constant.getClass().getName() + "'.", ex
                 );
             }
         }
