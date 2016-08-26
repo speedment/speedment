@@ -36,8 +36,8 @@ Here are a few examples of how you could use Speedment from your code:
 ###### Easy initialization
 A `HareApplication` class is generated from the database.
 ```java
-Speedment speedment = new HareApplication().withPassword("myPwd729").build();
-Manager<Hare> hares = speedment.managerOf(Hare.class);
+HareApplication app = new HareApplicationBuilder().withPassword("myPwd729").build();
+Manager<Hare> hares = app.managerOf(Hare.class);
 ```
 
 ###### Optimised predicate short-circuit
@@ -58,23 +58,13 @@ SELECT * FROM `Hare`
 ```
 
 ###### Easy persistence
-Entities can be persisted in a database using the "Active Record Pattern"
+Entities can easily be persisted in a database.
 ```java
-Hare dbHarry = hares.newEmptyEntity()
+Hare dbHarry = new HareImpl()
     .setName("Harry")
     .setColor("Gray")
     .setAge(3)
-    .persist();
-```
-
-###### JPA-style persistance if you prefer that over the "Active Record Pattern".
-```java
-Hare harry = hares.newEmptyEntity()
-    .setName("Harry")
-    .setColor("Gray")
-    .setAge(3);
-
-Hare dbHarry = EntityManager.get(speedment).persist(harry);
+    .persist(hares); // Auto-Increment-fields have been set by the database
 ```
 
 ###### Entities are linked
@@ -82,23 +72,43 @@ No need for complicated joins!
 ```java
 Optional<Carrot> carrot = hares.stream()
     .filter(NAME.equal("Harry"))
-    .flatMap(Hare::findCarrots) // Carrot is a foreign key table.
+    .flatMap(hares::findCarrots) // Carrot is a foreign key table.
     .findAny();
 ```
 
-###### Convert to JSON
+###### Convert to JSON using Plugin
+Using the JSON Stream Plugin, you can easily convert a stream into JSON:
 ```java
 // List all hares in JSON format
 hares.stream()
-    .map(Hare::toJson)
+    .map(JsonUtil::toJson)
     .forEach(System.out::println);
 ```
 
-###### Or collect the entire stream
+...or collect the entire stream:
 ```java
 // List all hares as one JSON object
 String json = hares.stream()
     .collect(CollectorUtil.toJson());
+```
+
+...or configure exactly how you want your JSON objects to look:
+```java
+// List all hares as a complex JSON object where the ID and AGE
+// is ommitted and a new field 'carrots' list the id's of all
+// carrots associated by a particular hare.
+String json = hares.stream()
+    .collect(CollectorUtil.toJson(
+        JsonEncoder.allOf(hares)
+            .remove(Hare.ID)
+            .remove(Hare.AGE)
+            .putStreamer(
+                "carrots",                  // Declare a new attribute
+                hares::findCarrots,         // How it is calculated
+                JsonEncoder.noneOf(carrots) // How it is formatted
+                    .put(Carrot.ID)
+            )
+    ));
 ```
 
 Features
@@ -150,7 +160,7 @@ If you do not want to use an archetype, for an example if you already have a pro
     ...
     <dependency>
         <groupId>com.speedment</groupId>
-        <artifactId>speedment</artifactId>
+        <artifactId>runtime</artifactId>
         <version>${speedment.version}</version>
     </dependency>
     <dependency>
@@ -167,30 +177,30 @@ To set which database connector you want to use to communicate with your databas
 #### MySQL
 ```xml
 <properties>
-    <speedment.version>2.3.7</speedment.version>
-	<db.groupId>mysql</db.groupId>
-	<db.artifactId>mysql-connector-java</db.artifactId>
-	<db.version>5.1.38</db.version>
+    <speedment.version>3.0.0</speedment.version>
+    <db.groupId>mysql</db.groupId>
+    <db.artifactId>mysql-connector-java</db.artifactId>
+    <db.version>5.1.38</db.version>
 </properties>
 ```
 
 #### PostgreSQL
 ```xml
 <properties>
-    <speedment.version>2.3.7</speedment.version>
-	<db.groupId>org.postgresql</db.groupId>
-	<db.artifactId>postgresql</db.artifactId>
-	<db.version>9.4-1206-jdbc4</db.version>
+    <speedment.version>3.0.0</speedment.version>
+    <db.groupId>org.postgresql</db.groupId>
+    <db.artifactId>postgresql</db.artifactId>
+    <db.version>9.4-1206-jdbc4</db.version>
 </properties>
 ```
 
 #### MariaDB
 ```xml
 <properties>
-    <speedment.version>2.3.7</speedment.version>
-	<db.groupId>org.mariadb.jdbc</db.groupId>
-	<db.artifactId>mariadb-java-client</db.artifactId>
-	<db.version>1.4.0</db.version>
+    <speedment.version>3.0.0</speedment.version>
+    <db.groupId>org.mariadb.jdbc</db.groupId>
+    <db.artifactId>mariadb-java-client</db.artifactId>
+    <db.version>1.4.0</db.version>
 </properties>
 ```
 

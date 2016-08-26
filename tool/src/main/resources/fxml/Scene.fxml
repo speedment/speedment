@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           xmlns="http://javafx.com/javafx/8.0.40"
+           fx:id="stack"
+           prefWidth="1280.0"
+           prefHeight="720.0"
+           fx:controller="com.speedment.tool.internal.controller.SceneController">
+    <children>
+        <BorderPane prefHeight="200.0" prefWidth="200.0">
+            <top>
+                <VBox fx:id="top" BorderPane.alignment="CENTER"></VBox>
+            </top>
+            <center>
+                <SplitPane fx:id="horizontal" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                    <items>
+                        <SplitPane fx:id="vertical" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" />
+                    </items>
+                </SplitPane>
+            </center>
+        </BorderPane>
+        <fx:include source="NotificationArea.fxml" />
+    </children>
+</StackPane>
