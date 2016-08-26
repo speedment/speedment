@@ -34,10 +34,10 @@ Examples
 Here are a few examples of how you could use Speedment from your code:
 
 ###### Easy initialization
-A `HareApplication` class is generated from the database.
+The `HareApplication`, `HareApplicationBuilder` and `HareManager` classes are generated from the database.
 ```java
 HareApplication app = new HareApplicationBuilder().withPassword("myPwd729").build();
-Manager<Hare> hares = app.managerOf(Hare.class);
+HareManager hares = app.getOrThrow(HareManager.class);
 ```
 
 ###### Optimised predicate short-circuit
