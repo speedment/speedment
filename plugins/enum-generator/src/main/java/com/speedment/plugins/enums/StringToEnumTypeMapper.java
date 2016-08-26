@@ -23,6 +23,7 @@ import com.speedment.internal.common.injector.annotation.Inject;
 import com.speedment.internal.common.lazy.specialized.LazyClass;
 import static com.speedment.plugins.enums.internal.GeneratedEntityDecorator.FROM_DATABASE_METHOD;
 import com.speedment.plugins.enums.internal.EnumGeneratorUtil;
+import static com.speedment.plugins.enums.internal.GeneratedEntityDecorator.TO_DATABASE_METHOD;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.exception.SpeedmentException;
@@ -105,9 +106,9 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
                     .orElse(null)
             );
 
-            final Method method;
+            final Method fromDatabase;
             try {
-                method = enumClass.getMethod(FROM_DATABASE_METHOD, String.class);
+                fromDatabase = enumClass.getMethod(FROM_DATABASE_METHOD, String.class);
             } catch (final NoSuchMethodException ex) {
                 throw new SpeedmentException(
                     "Could not find generated '" + FROM_DATABASE_METHOD + 
@@ -117,7 +118,7 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
 
             try {
                 @SuppressWarnings("unchecked")
-                final T result = (T) method.invoke(null, value);
+                final T result = (T) fromDatabase.invoke(null, value);
                 return result;
             } catch (final IllegalAccessException 
                          | IllegalArgumentException 
@@ -138,24 +139,25 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
         } else {
             final Class<?> enumClass = constant.getClass();
 
-            final Method method;
+            final Method toDatabase;
             try {
-                method = enumClass.getMethod(FROM_DATABASE_METHOD, String.class);
+                toDatabase = enumClass.getMethod(TO_DATABASE_METHOD);
 
             } catch (final NoSuchMethodException ex) {
                 throw new SpeedmentException(
-                    "Could not find generated '" + FROM_DATABASE_METHOD + "'-method in enum class '" + 
-                    constant.getClass().getName() + "'."
+                    "Could not find generated '" + TO_DATABASE_METHOD + 
+                    "'-method in enum class '" + 
+                    constant.getClass().getName() + "'.", ex
                 );
             }
 
             try {
                 @SuppressWarnings("unchecked")
-                final String result = (String) method.invoke(constant);
+                final String result = (String) toDatabase.invoke(constant);
                 return result;
             } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 throw new SpeedmentException(
-                    "Error executing '" + FROM_DATABASE_METHOD + 
+                    "Error executing '" + TO_DATABASE_METHOD + 
                     "' in generated enum class '" + constant.getClass().getName() + "'.", ex
                 );
             }

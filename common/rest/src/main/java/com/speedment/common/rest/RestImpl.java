@@ -21,6 +21,7 @@ import static com.speedment.common.rest.Option.Type.PARAM;
 import static com.speedment.common.rest.Rest.encode;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -224,8 +225,10 @@ class RestImpl implements Rest {
     }
     
     private CompletableFuture<Response> send(Method method, String path, Option[] options, Iterator<String> stream) {
-        return send(method, path, options, out -> {
-            if (stream != NO_STREAM) {
+        if (stream == NO_STREAM) {
+            return send(method, path, options, StreamConsumer.IGNORE);
+        } else {
+            return send(method, path, options, out -> {
                 try (final BufferedWriter wr = new BufferedWriter(
                         new OutputStreamWriter(out))) {
 
@@ -234,11 +237,11 @@ class RestImpl implements Rest {
                         wr.append(data);
                     }
                 }
-            }
-        });
+            });
+        }
     }
     
-    private CompletableFuture<Response> send(Method method, String path, Option[] options, StreamConsumer streamConsumer) {
+    private CompletableFuture<Response> send(Method method, String path, Option[] options, StreamConsumer outStreamConsumer) {
         return CompletableFuture.supplyAsync(() -> {
             final Param[] params = Stream.of(options).filter(o -> o.getType() == PARAM).toArray(Param[]::new);
             final Header[] headers = Stream.of(options).filter(o -> o.getType() == HEADER).toArray(Header[]::new);
@@ -275,23 +278,23 @@ class RestImpl implements Rest {
                 conn.setUseCaches(false);
                 conn.setAllowUserInteraction(false);
                 
-                final boolean doOutput = streamConsumer != StreamConsumer.IGNORE;
-                if (doOutput) {
-                    conn.setDoOutput(true);
-                }
+                final boolean doOutput = outStreamConsumer != StreamConsumer.IGNORE;
+                conn.setDoOutput(doOutput);
                 
                 conn.connect();
                 if (doOutput) {
                     try (final OutputStream out = conn.getOutputStream()) {
-                        streamConsumer.writeTo(out);
+                        outStreamConsumer.writeTo(out);
                     }
                 }
 
-                final int status = conn.getResponseCode();
+                int status = getResponseCodeFrom(conn);
                 final String text;
                 
                 try (final BufferedReader rd = new BufferedReader(
-                    new InputStreamReader(conn.getInputStream()))) {
+                        new InputStreamReader(status >= 400
+                            ? conn.getErrorStream()
+                            : conn.getInputStream()))) {
                     
                     final StringBuilder sb = new StringBuilder();
                     String line;
@@ -311,6 +314,14 @@ class RestImpl implements Rest {
                 }
             }
         });
+    }
+    
+    private static int getResponseCodeFrom(HttpURLConnection conn) throws IOException {
+        try {
+            return conn.getResponseCode();
+        } catch (final FileNotFoundException ex) {
+            return 404;
+        }
     }
     
     private final static Iterator<String> NO_STREAM = new Iterator<String>() {
