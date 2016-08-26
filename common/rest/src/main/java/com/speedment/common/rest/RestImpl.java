@@ -30,6 +30,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
@@ -221,21 +222,16 @@ class RestImpl implements Rest {
     }
     
     private CompletableFuture<Response> send(Method method, String path, Option[] options) {
-        return send(method, path, options, NO_STREAM);
+        return send(method, path, options, NO_ITERATOR);
     }
     
-    private CompletableFuture<Response> send(Method method, String path, Option[] options, Iterator<String> stream) {
-        if (stream == NO_STREAM) {
+    private CompletableFuture<Response> send(Method method, String path, Option[] options, Iterator<String> iterator) {
+        if (iterator == NO_ITERATOR) {
             return send(method, path, options, StreamConsumer.IGNORE);
         } else {
             return send(method, path, options, out -> {
-                try (final BufferedWriter wr = new BufferedWriter(
-                        new OutputStreamWriter(out))) {
-
-                    while (stream.hasNext()) {
-                        final String data = stream.next();
-                        wr.append(data);
-                    }
+                while (iterator.hasNext()) {
+                    out.write(iterator.next().getBytes(StandardCharsets.UTF_8));
                 }
             });
         }
@@ -324,7 +320,7 @@ class RestImpl implements Rest {
         }
     }
     
-    private final static Iterator<String> NO_STREAM = new Iterator<String>() {
+    private final static Iterator<String> NO_ITERATOR = new Iterator<String>() {
         @Override
         public boolean hasNext() {
             return false;
