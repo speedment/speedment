@@ -500,7 +500,9 @@ public abstract class SpeedmentApplicationLifecycle<T extends SpeedmentApplicati
 
             final Optional<Boolean> isVersionOk = isVersionOk(versionString);
             if (isVersionOk.isPresent()) {
-                LOGGER.warn("The current Java version (" + versionString + ") is outdated. Please upgrade to a more recent Java version.");
+                if (!isVersionOk.get()) {
+                    LOGGER.warn("The current Java version (" + versionString + ") is outdated. Please upgrade to a more recent Java version.");
+                }
             } else {
                 LOGGER.warn("Unable to fully parse the java version. Version check skipped!");
             }

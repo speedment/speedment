@@ -68,6 +68,7 @@ public class SpeedmentApplicationLifecycleTest {
         testVevtor.put("1.8.0_101", Optional.of(Boolean.TRUE));
         testVevtor.put("1.7.0_40", Optional.of(Boolean.FALSE));
         testVevtor.put("0.8.0_40", Optional.of(Boolean.FALSE));
+        testVevtor.put("1.8.0_102", Optional.of(Boolean.TRUE));
         testVevtor.put("Arne", Optional.empty());
 
         for (final Entry<String, Optional<Boolean>> e : testVevtor.entrySet()) {
