@@ -29,7 +29,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated
+@Generated(value = "Speedment")
 public interface FloatFieldComparator<ENTITY, D> extends Comparator<ENTITY> {
     
     /**

@@ -48,7 +48,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated
+@Generated(value = "Speedment")
 public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements LongField<ENTITY, D>, LongForeignKeyField<ENTITY, D, FK_ENTITY> {
     
     private final FieldIdentifier<ENTITY> identifier;

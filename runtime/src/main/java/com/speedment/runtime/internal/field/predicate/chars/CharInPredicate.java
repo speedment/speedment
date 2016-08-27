@@ -33,7 +33,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated
+@Generated(value = "Speedment")
 public final class CharInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasCharValue<ENTITY, D>> implements Tuple1<Set<Character>> {
     
     private final Set<Character> set;

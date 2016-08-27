@@ -29,7 +29,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated
+@Generated(value = "Speedment")
 public final class LongGreaterOrEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasLongValue<ENTITY, D>> implements Tuple1<Long> {
     
     private final long value;

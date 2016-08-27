@@ -36,7 +36,7 @@ import javax.annotation.Generated;
  * @since  3.0.0
  */
 @Api(version = "3.0")
-@Generated
+@Generated(value = "Speedment")
 @FunctionalInterface
 public interface IntGetter<ENTITY> extends Getter<ENTITY> {
     

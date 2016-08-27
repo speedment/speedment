@@ -29,7 +29,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated
+@Generated(value = "Speedment")
 public interface ByteFieldComparator<ENTITY, D> extends Comparator<ENTITY> {
     
     /**

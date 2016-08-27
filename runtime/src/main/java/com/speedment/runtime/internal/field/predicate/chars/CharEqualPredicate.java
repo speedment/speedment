@@ -29,7 +29,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated
+@Generated(value = "Speedment")
 public final class CharEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasCharValue<ENTITY, D>> implements Tuple1<Character> {
     
     private final char value;

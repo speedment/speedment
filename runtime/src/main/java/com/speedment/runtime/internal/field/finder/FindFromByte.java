@@ -28,7 +28,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated
+@Generated(value = "Speedment")
 public final class FindFromByte<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, ByteField<ENTITY, ?>, ByteField<FK_ENTITY, ?>> {
     
     public FindFromByte(ByteField<ENTITY, ?> source, ByteField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {

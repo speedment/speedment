@@ -33,7 +33,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated
+@Generated(value = "Speedment")
 public final class ShortInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasShortValue<ENTITY, D>> implements Tuple1<Set<Short>> {
     
     private final Set<Short> set;

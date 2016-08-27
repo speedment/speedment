@@ -33,7 +33,7 @@ import javax.annotation.Generated;
  * @see ReferenceField
  */
 @Api(version = "3.0")
-@Generated
+@Generated(value = "Speedment")
 public interface CharField<ENTITY, D> extends Field<ENTITY>, HasCharValue<ENTITY, D>, HasComparableOperators<ENTITY, Character> {
     
     

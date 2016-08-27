@@ -35,7 +35,7 @@ import javax.annotation.Generated;
  * @see ReferenceForeignKeyField
  */
 @Api(version = "3.0")
-@Generated
+@Generated(value = "Speedment")
 public interface FloatForeignKeyField<ENTITY, D, FK_ENTITY> extends FloatField<ENTITY, D>, HasFinder<ENTITY, FK_ENTITY> {
     
     

@@ -48,7 +48,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated
+@Generated(value = "Speedment")
 public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements DoubleField<ENTITY, D>, DoubleForeignKeyField<ENTITY, D, FK_ENTITY> {
     
     private final FieldIdentifier<ENTITY> identifier;

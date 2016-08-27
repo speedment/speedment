@@ -34,7 +34,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated
+@Generated(value = "Speedment")
 public final class ByteBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasByteValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Byte, Byte> {
     
     private final byte start;

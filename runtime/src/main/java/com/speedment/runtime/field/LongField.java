@@ -33,7 +33,7 @@ import javax.annotation.Generated;
  * @see ReferenceField
  */
 @Api(version = "3.0")
-@Generated
+@Generated(value = "Speedment")
 public interface LongField<ENTITY, D> extends Field<ENTITY>, HasLongValue<ENTITY, D>, HasComparableOperators<ENTITY, Long> {
     
     

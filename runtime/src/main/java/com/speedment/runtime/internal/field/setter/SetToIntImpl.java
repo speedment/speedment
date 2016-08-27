@@ -33,7 +33,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated
+@Generated(value = "Speedment")
 public final class SetToIntImpl<ENTITY, D> implements SetToInt<ENTITY, D> {
     
     private final HasIntValue<ENTITY, D> field;

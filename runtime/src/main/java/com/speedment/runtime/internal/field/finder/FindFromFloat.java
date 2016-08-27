@@ -28,7 +28,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated
+@Generated(value = "Speedment")
 public final class FindFromFloat<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, FloatField<ENTITY, ?>, FloatField<FK_ENTITY, ?>> {
     
     public FindFromFloat(FloatField<ENTITY, ?> source, FloatField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {

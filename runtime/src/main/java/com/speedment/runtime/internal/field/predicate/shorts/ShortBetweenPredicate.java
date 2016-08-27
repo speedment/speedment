@@ -34,7 +34,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated
+@Generated(value = "Speedment")
 public final class ShortBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasShortValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Short, Short> {
     
     private final short start;

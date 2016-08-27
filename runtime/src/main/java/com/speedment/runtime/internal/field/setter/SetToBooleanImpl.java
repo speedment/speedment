@@ -33,7 +33,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated
+@Generated(value = "Speedment")
 public final class SetToBooleanImpl<ENTITY, D> implements SetToBoolean<ENTITY, D> {
     
     private final HasBooleanValue<ENTITY, D> field;

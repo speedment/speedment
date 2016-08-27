@@ -28,7 +28,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated
+@Generated(value = "Speedment")
 public final class FindFromShort<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, ShortField<ENTITY, ?>, ShortField<FK_ENTITY, ?>> {
     
     public FindFromShort(ShortField<ENTITY, ?> source, ShortField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {

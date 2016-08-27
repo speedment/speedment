@@ -42,7 +42,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated
+@Generated(value = "Speedment")
 public final class DoubleFieldImpl<ENTITY, D> implements DoubleField<ENTITY, D> {
     
     private final FieldIdentifier<ENTITY> identifier;
