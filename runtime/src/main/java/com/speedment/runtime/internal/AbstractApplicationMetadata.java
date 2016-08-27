@@ -1,0 +1,55 @@
+/**
+ *
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); You may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package com.speedment.runtime.internal;
+
+import com.speedment.runtime.ApplicationMetadata;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.internal.config.ProjectImpl;
+import com.speedment.runtime.internal.util.document.DocumentTranscoder;
+
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ *
+ * @author  Emil Forslund
+ * @since   2.4.0
+ */
+public abstract class AbstractApplicationMetadata implements ApplicationMetadata {
+
+    protected AbstractApplicationMetadata() {}
+    
+    /**
+     * Returns the meta data as a String that shall be used to build up the
+     * complete Project meta data. If no metadata exists, returns an
+     * empty optional.
+     *
+     * @return the meta data or empty if none exists for this session
+     */
+    protected abstract Optional<String> getMetadata();
+    
+    @Override
+    public Project makeProject() {
+        return getMetadata().map(DocumentTranscoder::load).orElseGet(() -> {
+            final Map<String, Object> data = new ConcurrentHashMap<>();
+            data.put(HasName.NAME, "Project");
+            return new ProjectImpl(data);
+        });
+    }
+}

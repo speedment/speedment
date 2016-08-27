@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>\${groupId}</groupId>
+    <artifactId>\${artifactId}</artifactId>
+    <version>\${version}</version>
+    <packaging>jar</packaging>
+ 
+    <name>\${artifactId}</name>
+    <url>http://www.myorganization.org</url>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <speedment.version>${speedment.version}</speedment.version>
+        <mysql.version>${mysql.version}</mysql.version>
+    </properties>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.speedment</groupId>
+                <artifactId>speedment-maven-plugin</artifactId>
+                <version>\${speedment.version}</version>
+                
+                <dependencies>
+                    <!--
+                    MySQL Connector:${mysql.version}
+                    General Public License (GPL) 2.0 with FOSS exception
+                    http://www.gnu.org/licenses/gpl-2.0.html
+                    https://www.mysql.com/about/legal/licensing/foss-exception/
+                    2015-06-02
+                    emifor
+                    -->
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>\${mysql.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+ 
+    <dependencies>
+        <!-- LICENSE INFORMATION
+        speedment:${speedment.version}
+        Apache 2 License
+        http://www.apache.org/licenses/LICENSE-2.0.txt
+        2016-01-21
+        emifor
+        -->
+        <dependency>
+            <groupId>com.speedment</groupId>
+            <artifactId>runtime</artifactId>
+            <version>\${speedment.version}</version>
+        </dependency>
+        
+        <!--
+        MySQL Connector:${mysql.version}
+        General Public License (GPL) 2.0 with FOSS exception
+        http://www.gnu.org/licenses/gpl-2.0.html
+        https://www.mysql.com/about/legal/licensing/foss-exception/
+        2015-06-02
+        emifor
+        -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>\${mysql.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+</project>

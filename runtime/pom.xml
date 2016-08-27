@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+
+    Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
+
+    Licensed under the Apache License, Version 2.0 (the "License"); You may not
+    use this file except in compliance with the License. You may obtain a copy of
+    the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+    License for the specific language governing permissions and limitations under
+    the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.speedment</groupId>
+        <artifactId>speedment</artifactId>
+        <version>3.0.0-SNAPSHOT</version>
+    </parent>
+    
+    <artifactId>runtime</artifactId>
+    <packaging>bundle</packaging>
+
+    <name>Speedment - Runtime</name>
+    <description>
+        The runtime environment of Speedment that all projects must depend
+        on to use the framework.
+    </description>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Bundle-Description>
+                            The runtime environment of Speedment.
+                        </Bundle-Description>
+                        <Export-Package>
+                            com.speedment.runtime.annotation.*,
+                            com.speedment.runtime.component.*,
+                            com.speedment.runtime.config.*,
+                            com.speedment.runtime.db.*,
+                            com.speedment.runtime.exception.*,
+                            com.speedment.runtime.field.*,
+                            com.speedment.runtime.license.*,
+                            com.speedment.runtime.manager.*,
+                            com.speedment.runtime.stream.*,
+                            com.speedment.runtime.util.*,
+                            com.speedment.runtime
+                        </Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>                            
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+                <configuration>
+                    <shadedArtifactId>speedment-all</shadedArtifactId>
+                    <createSourcesJar>true</createSourcesJar>
+                    <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+                    <createDependencyReducedPom>true</createDependencyReducedPom>
+                    <minimizeJar>false</minimizeJar>
+                    <relocations>
+                        <relocation>
+                            <pattern>com.speedment.common</pattern>
+                            <shadedPattern>com.speedment.internal.common</shadedPattern>
+                        </relocation>
+                    </relocations>
+                    <transformers>
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+                            <resources>
+                                <resource>LazyTemplate.txt</resource>
+                            </resources>
+                        </transformer>
+                    </transformers>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>shade-artifacts</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions> 
+                    <execution> 
+                        <configuration> 
+                            <excludePackageNames>com.speedment.runtime.internal.*</excludePackageNames>
+                        </configuration> 
+                    </execution> 
+                </executions> 
+            </plugin>
+            
+        </plugins>
+        
+    </build>
+    
+    <dependencies>
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>mapstream</artifactId>
+            <version>${mapstream.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>logger</artifactId>
+            <version>${logger.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>injector</artifactId>
+            <version>${injector.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>json</artifactId>
+            <version>${json.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>tuple</artifactId>
+            <version>${tuple.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>lazy</artifactId>
+            <version>${lazy.version}</version>
+        </dependency>
+        
+        <!--Test Dependencies--> 
+        
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.opera</groupId>
+            <artifactId>operadriver</artifactId>
+        </dependency>
+    </dependencies>
+</project>

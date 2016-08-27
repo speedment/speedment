@@ -3,6 +3,7 @@
 **.versionsBackup
 **/nbproject/
 **/nbactions.xml
+**.iml
 /target/
 /.sonar
 /.idea
@@ -15,3 +16,9 @@ settings.properties
 /.settings/
 /.classpath
 /.project
+/runtime/target/
+/generator/target/
+/tool/target/
+/maven-plugin/target/
+/tool/nbproject/
+/runtime/nbproject/
