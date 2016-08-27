@@ -19,6 +19,7 @@ package com.speedment.runtime.field.method;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.trait.HasByteValue;
 import java.util.function.UnaryOperator;
+import javax.annotation.Generated;
 
 /**
  * Represents a set-operation with all the metadata contained.
@@ -30,6 +31,7 @@ import java.util.function.UnaryOperator;
  * @since  3.0.0
  */
 @Api(version = "3.0")
+@Generated
 public interface SetToByte<ENTITY, D> extends UnaryOperator<ENTITY> {
     
     /**

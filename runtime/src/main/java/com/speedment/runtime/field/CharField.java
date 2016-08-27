@@ -19,6 +19,7 @@ package com.speedment.runtime.field;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.trait.HasCharValue;
 import com.speedment.runtime.field.trait.HasComparableOperators;
+import javax.annotation.Generated;
 
 /**
  * A field that represents a primitive {@code char} value.
@@ -32,6 +33,7 @@ import com.speedment.runtime.field.trait.HasComparableOperators;
  * @see ReferenceField
  */
 @Api(version = "3.0")
+@Generated
 public interface CharField<ENTITY, D> extends Field<ENTITY>, HasCharValue<ENTITY, D>, HasComparableOperators<ENTITY, Character> {
     
     

@@ -18,6 +18,7 @@ package com.speedment.runtime.internal.field.comparator;
 
 import com.speedment.runtime.field.trait.HasDoubleValue;
 import java.util.Comparator;
+import javax.annotation.Generated;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -28,6 +29,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
+@Generated
 public final class DoubleFieldComparatorImpl<ENTITY, D> implements DoubleFieldComparator<ENTITY, D> {
     
     private final HasDoubleValue<ENTITY, D> field;

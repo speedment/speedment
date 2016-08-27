@@ -18,6 +18,7 @@ package com.speedment.runtime.internal.field.setter;
 
 import com.speedment.runtime.field.method.SetToBoolean;
 import com.speedment.runtime.field.trait.HasBooleanValue;
+import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -32,6 +33,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
+@Generated
 public final class SetToBooleanImpl<ENTITY, D> implements SetToBoolean<ENTITY, D> {
     
     private final HasBooleanValue<ENTITY, D> field;

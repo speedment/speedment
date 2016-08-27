@@ -32,6 +32,7 @@ import com.speedment.runtime.internal.field.predicate.longs.LongGreaterThanPredi
 import com.speedment.runtime.internal.field.predicate.longs.LongInPredicate;
 import java.util.Set;
 import java.util.function.Predicate;
+import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -41,6 +42,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
+@Generated
 public final class LongFieldImpl<ENTITY, D> implements LongField<ENTITY, D> {
     
     private final FieldIdentifier<ENTITY> identifier;

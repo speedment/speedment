@@ -18,6 +18,7 @@ package com.speedment.runtime.internal.field.comparator;
 
 import com.speedment.runtime.field.trait.HasShortValue;
 import java.util.Comparator;
+import javax.annotation.Generated;
 
 /**
  * A predicate that evaluates if a value is between two shorts.
@@ -28,6 +29,7 @@ import java.util.Comparator;
  * @author Emil Forslund
  * @since  3.0.0
  */
+@Generated
 public interface ShortFieldComparator<ENTITY, D> extends Comparator<ENTITY> {
     
     /**

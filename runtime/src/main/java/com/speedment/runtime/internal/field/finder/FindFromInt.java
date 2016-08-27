@@ -19,6 +19,7 @@ package com.speedment.runtime.internal.field.finder;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.manager.Manager;
+import javax.annotation.Generated;
 
 /**
  * @param <ENTITY>    entity type
@@ -27,6 +28,7 @@ import com.speedment.runtime.manager.Manager;
  * @author Emil Forslund
  * @since  3.0.0
  */
+@Generated
 public final class FindFromInt<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, IntField<ENTITY, ?>, IntField<FK_ENTITY, ?>> {
     
     public FindFromInt(IntField<ENTITY, ?> source, IntField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {

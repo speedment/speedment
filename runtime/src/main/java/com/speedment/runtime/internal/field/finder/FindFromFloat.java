@@ -19,6 +19,7 @@ package com.speedment.runtime.internal.field.finder;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.FloatField;
 import com.speedment.runtime.manager.Manager;
+import javax.annotation.Generated;
 
 /**
  * @param <ENTITY>    entity type
@@ -27,6 +28,7 @@ import com.speedment.runtime.manager.Manager;
  * @author Emil Forslund
  * @since  3.0.0
  */
+@Generated
 public final class FindFromFloat<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, FloatField<ENTITY, ?>, FloatField<FK_ENTITY, ?>> {
     
     public FindFromFloat(FloatField<ENTITY, ?> source, FloatField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {

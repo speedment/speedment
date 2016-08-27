@@ -18,6 +18,7 @@ package com.speedment.runtime.internal.field.comparator;
 
 import com.speedment.runtime.field.trait.HasShortValue;
 import java.util.Comparator;
+import javax.annotation.Generated;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -28,6 +29,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
+@Generated
 public final class ShortFieldComparatorImpl<ENTITY, D> implements ShortFieldComparator<ENTITY, D> {
     
     private final HasShortValue<ENTITY, D> field;

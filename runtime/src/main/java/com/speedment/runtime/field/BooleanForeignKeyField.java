@@ -18,6 +18,7 @@ package com.speedment.runtime.field;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.trait.HasFinder;
+import javax.annotation.Generated;
 
 /**
  * A field that represents a primitive {@code boolean} value that references
@@ -34,6 +35,7 @@ import com.speedment.runtime.field.trait.HasFinder;
  * @see ReferenceForeignKeyField
  */
 @Api(version = "3.0")
+@Generated
 public interface BooleanForeignKeyField<ENTITY, D, FK_ENTITY> extends BooleanField<ENTITY, D>, HasFinder<ENTITY, FK_ENTITY> {
     
     

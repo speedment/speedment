@@ -23,6 +23,7 @@ import com.speedment.runtime.field.method.IntGetter;
 import com.speedment.runtime.field.method.IntSetter;
 import com.speedment.runtime.field.method.SetToInt;
 import com.speedment.runtime.internal.field.setter.SetToIntImpl;
+import javax.annotation.Generated;
 
 /**
  * A representation of an Entity field that is a primitive {@code int} type.
@@ -34,6 +35,7 @@ import com.speedment.runtime.internal.field.setter.SetToIntImpl;
  * @since  3.0.0
  */
 @Api(version = "3.0")
+@Generated
 public interface HasIntValue<ENTITY, D> extends Field<ENTITY> {
     
     @Override

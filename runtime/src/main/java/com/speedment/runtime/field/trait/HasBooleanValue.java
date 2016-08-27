@@ -23,6 +23,7 @@ import com.speedment.runtime.field.method.BooleanGetter;
 import com.speedment.runtime.field.method.BooleanSetter;
 import com.speedment.runtime.field.method.SetToBoolean;
 import com.speedment.runtime.internal.field.setter.SetToBooleanImpl;
+import javax.annotation.Generated;
 
 /**
  * A representation of an Entity field that is a primitive {@code boolean} type.
@@ -34,6 +35,7 @@ import com.speedment.runtime.internal.field.setter.SetToBooleanImpl;
  * @since  3.0.0
  */
 @Api(version = "3.0")
+@Generated
 public interface HasBooleanValue<ENTITY, D> extends Field<ENTITY> {
     
     @Override

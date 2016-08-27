@@ -19,6 +19,7 @@ package com.speedment.runtime.field;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.field.trait.HasLongValue;
+import javax.annotation.Generated;
 
 /**
  * A field that represents a primitive {@code long} value.
@@ -32,6 +33,7 @@ import com.speedment.runtime.field.trait.HasLongValue;
  * @see ReferenceField
  */
 @Api(version = "3.0")
+@Generated
 public interface LongField<ENTITY, D> extends Field<ENTITY>, HasLongValue<ENTITY, D>, HasComparableOperators<ENTITY, Long> {
     
     

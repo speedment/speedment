@@ -32,6 +32,7 @@ import com.speedment.runtime.internal.field.predicate.floats.FloatGreaterThanPre
 import com.speedment.runtime.internal.field.predicate.floats.FloatInPredicate;
 import java.util.Set;
 import java.util.function.Predicate;
+import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -41,6 +42,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
+@Generated
 public final class FloatFieldImpl<ENTITY, D> implements FloatField<ENTITY, D> {
     
     private final FieldIdentifier<ENTITY> identifier;

@@ -19,6 +19,7 @@ package com.speedment.runtime.internal.field.finder;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.manager.Manager;
+import javax.annotation.Generated;
 
 /**
  * @param <ENTITY>    entity type
@@ -27,6 +28,7 @@ import com.speedment.runtime.manager.Manager;
  * @author Emil Forslund
  * @since  3.0.0
  */
+@Generated
 public final class FindFromByte<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, ByteField<ENTITY, ?>, ByteField<FK_ENTITY, ?>> {
     
     public FindFromByte(ByteField<ENTITY, ?> source, ByteField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {

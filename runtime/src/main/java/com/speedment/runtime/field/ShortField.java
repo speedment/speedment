@@ -19,6 +19,7 @@ package com.speedment.runtime.field;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.field.trait.HasShortValue;
+import javax.annotation.Generated;
 
 /**
  * A field that represents a primitive {@code short} value.
@@ -32,6 +33,7 @@ import com.speedment.runtime.field.trait.HasShortValue;
  * @see ReferenceField
  */
 @Api(version = "3.0")
+@Generated
 public interface ShortField<ENTITY, D> extends Field<ENTITY>, HasShortValue<ENTITY, D>, HasComparableOperators<ENTITY, Short> {
     
     
