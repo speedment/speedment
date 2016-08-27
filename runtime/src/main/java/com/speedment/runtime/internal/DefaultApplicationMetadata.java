@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.runtime;
+package com.speedment.runtime.internal;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Config;

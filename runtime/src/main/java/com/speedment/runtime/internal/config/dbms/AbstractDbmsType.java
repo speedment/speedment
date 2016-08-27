@@ -34,7 +34,7 @@ import static com.speedment.common.injector.State.INITIALIZED;
 /**
  *
  * @author  Emil Forslund
- * @since   2.4.0
+ * @since   3.0.0
  */
 public abstract class AbstractDbmsType implements DbmsType {
 

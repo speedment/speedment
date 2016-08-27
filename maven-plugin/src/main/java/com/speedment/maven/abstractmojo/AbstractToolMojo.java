@@ -19,8 +19,8 @@ package com.speedment.maven.abstractmojo;
 
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.internal.common.injector.Injector;
+import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.SpeedmentBuilder;
 import com.speedment.tool.MainApp;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -53,7 +53,7 @@ public abstract class AbstractToolMojo extends AbstractSpeedmentMojo {
 
     protected AbstractToolMojo() {}
     
-    protected AbstractToolMojo(Consumer<SpeedmentBuilder<?, ?>> configurer) { super(configurer);}
+    protected AbstractToolMojo(Consumer<ApplicationBuilder<?, ?>> configurer) { super(configurer);}
     
     @Override
     public void execute(Speedment speedment) throws MojoExecutionException, MojoFailureException {

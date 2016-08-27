@@ -48,6 +48,8 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
         return of(MySqlDbmsMetadataHandler.class, MySqlDbmsOperationHandler.class);
     }
 
+    private final static FieldPredicateView PREDICATE_VIEW = new MySqlSpeedmentPredicateView();
+    
     private final MariaDbNamingConvention namingConvention;
     private final MariaDbConnectionUrlGenerator connectionUrlGenerator;
 
@@ -107,8 +109,8 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
     }
 
     @Override
-    public FieldPredicateView getSpeedmentPredicateView() {
-        return new MySqlSpeedmentPredicateView(namingConvention);
+    public FieldPredicateView getFieldPredicateView() {
+        return PREDICATE_VIEW;
     }
 
     @Override

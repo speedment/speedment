@@ -16,10 +16,9 @@
  */
 package com.speedment.maven.abstractmojo;
 
-import com.speedment.maven.*;
 import com.speedment.maven.typemapper.Mapping;
+import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.SpeedmentBuilder;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.internal.util.ConfigFileHelper;
 import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
@@ -53,7 +52,7 @@ public abstract class AbstractReloadMojo extends AbstractSpeedmentMojo {
     
     protected AbstractReloadMojo() {}
     
-    protected AbstractReloadMojo(Consumer<SpeedmentBuilder<?, ?>> configurer) { super(configurer);}
+    protected AbstractReloadMojo(Consumer<ApplicationBuilder<?, ?>> configurer) { super(configurer);}
     
     @Override
     protected void execute(Speedment speedment) throws MojoExecutionException, MojoFailureException {

@@ -14,14 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.component;
+package com.speedment.runtime.internal.component.resultset;
 
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.common.tuple.Tuples;
 import com.speedment.runtime.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.component.resultset.ResultSetMapping;
 import com.speedment.runtime.config.parameter.DbmsType;
-import com.speedment.runtime.internal.runtime.typemapping.StandardJavaTypeMapping;
+import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.runtime.license.Software;
 
 import java.util.Map;

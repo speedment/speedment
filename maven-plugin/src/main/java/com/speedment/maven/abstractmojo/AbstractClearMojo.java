@@ -18,8 +18,8 @@ package com.speedment.maven.abstractmojo;
 
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.generator.TranslatorManager;
+import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.SpeedmentBuilder;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -53,7 +53,7 @@ public abstract class AbstractClearMojo extends AbstractSpeedmentMojo {
     
     protected AbstractClearMojo() {}
     
-    protected AbstractClearMojo(Consumer<SpeedmentBuilder<?, ?>> configurer) { super(configurer);}
+    protected AbstractClearMojo(Consumer<ApplicationBuilder<?, ?>> configurer) { super(configurer);}
     
     @Override
     public void execute(Speedment speedment) throws MojoExecutionException, MojoFailureException {

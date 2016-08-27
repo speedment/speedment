@@ -26,9 +26,7 @@ import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.internal.EntityAndManagerTranslator;
 import com.speedment.generator.internal.util.EntityTranslatorSupport;
 import com.speedment.generator.internal.util.FkHolder;
-import com.speedment.generator.util.JavaLanguageNamer;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.internal.manager.sql.SqlManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,6 +44,7 @@ import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
 import com.speedment.internal.common.injector.Injector;
 import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.runtime.manager.SqlManager;
 import java.lang.reflect.Type;
 
 /**
@@ -55,7 +54,6 @@ import java.lang.reflect.Type;
 public final class GeneratedManagerTranslator extends EntityAndManagerTranslator<Interface> {
 
     private @Inject Injector injector;
-    private @Inject JavaLanguageNamer namer;
     
     public GeneratedManagerTranslator(Table table) {
         super(table, Interface::of);

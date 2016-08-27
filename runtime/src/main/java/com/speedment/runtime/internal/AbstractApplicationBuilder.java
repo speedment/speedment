@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.runtime;
+package com.speedment.runtime.internal;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.exception.CyclicReferenceException;
@@ -25,7 +25,6 @@ import com.speedment.common.tuple.Tuple3;
 import com.speedment.common.tuple.Tuples;
 import com.speedment.runtime.ApplicationMetadata;
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.SpeedmentBuilder;
 import com.speedment.runtime.SpeedmentVersion;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.component.InfoComponent;
@@ -52,6 +51,10 @@ import static com.speedment.runtime.SpeedmentVersion.getSpecificationVersion;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.runtime.RuntimeBundle;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import com.speedment.runtime.ApplicationBuilder;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -70,7 +73,7 @@ import static java.util.Objects.requireNonNull;
 public abstract class AbstractApplicationBuilder<
         APP extends Speedment,
         BUILDER extends AbstractApplicationBuilder<APP, BUILDER>
-    > implements SpeedmentBuilder<APP, BUILDER> {
+    > implements ApplicationBuilder<APP, BUILDER> {
 
     private final static Logger LOGGER = LoggerManager.getLogger(AbstractApplicationBuilder.class);
 
@@ -341,7 +344,7 @@ public abstract class AbstractApplicationBuilder<
     protected void printWelcomeMessage(Injector injector) {
         
         final InfoComponent info = injector.getOrThrow(InfoComponent.class);
-
+        
         try {
             final Package package_ = Runtime.class.getPackage();
             final String javaMsg = package_.getSpecificationTitle()
@@ -352,10 +355,15 @@ public abstract class AbstractApplicationBuilder<
                 + " " + package_.getImplementationVersion()
                 + " by " + package_.getImplementationVendor();
             LOGGER.info(javaMsg);
-            if (package_.getImplementationVersion().compareTo("1.8.0_40") < 0) {
-                LOGGER.warn("The current Java version is outdated. Please upgrate to a more recent Java version.");
+            
+            final String versionString = package_.getImplementationVersion();
+            final Optional<Boolean> isVersionOk = isVersionOk(versionString);
+            if (isVersionOk.isPresent()) {
+                LOGGER.warn("The current Java version (" + versionString + ") is outdated. Please upgrade to a more recent Java version.");
+            } else {
+                LOGGER.warn("Unable to fully parse the java version. Version check skipped!");
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOGGER.info("Unknown Java version.");
         }
 
@@ -371,6 +379,48 @@ public abstract class AbstractApplicationBuilder<
         
         if (!SpeedmentVersion.isProductionMode()) {
             LOGGER.warn("This version is NOT INTENDED FOR PRODUCTION USE!");
+        }
+    }
+    
+    protected Optional<Boolean> isVersionOk(String versionString) {
+        final Pattern pattern = Pattern.compile("(\\d+)[\\\\.](\\d+)[\\\\.](\\d+)_(\\d+)");
+        final Matcher matcher = pattern.matcher(versionString);
+
+        if (matcher.find() && matcher.groupCount() >= 4) {
+            final String majorVersionString = matcher.group(1);
+            final String minorVersionString = matcher.group(2);
+            final String patchVersionString = matcher.group(3);
+            final String microVersionString = matcher.group(4);
+            try {
+                final int majorVersion = Integer.parseInt(majorVersionString);
+                final int minorVersion = Integer.parseInt(minorVersionString);
+                final int patchVersion = Integer.parseInt(patchVersionString);
+                final int microVersion = Integer.parseInt(microVersionString);
+                boolean ok = true;
+                if (majorVersion < 1) {
+                    ok = false;
+                }
+                if (majorVersion == 1) {
+                    if (minorVersion < 8) {
+                        ok = false;
+                    }
+                    if (minorVersion == 8) {
+                        if (patchVersion < 0) {
+                            ok = false;
+                        }
+                        if (patchVersion == 0) {
+                            if (microVersion < 40) {
+                                ok = false;
+                            }
+                        }
+                    }
+                }
+                return Optional.of(ok);
+            } catch (NumberFormatException nfe) {
+                return Optional.empty();
+            }
+        } else {
+            return Optional.empty();
         }
     }
     

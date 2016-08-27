@@ -36,7 +36,7 @@ import java.util.Set;
 public interface DatabaseNamingConvention {
 
     /**
-     * Returns the full name used in the database for the specified parameters.
+     * Returns the full name used in the database for the specified column.
      * This is typically constructed by combining the schema, table and the
      * column name with a separator, but that might be different in different
      * implementations.
@@ -44,7 +44,7 @@ public interface DatabaseNamingConvention {
      * @param schemaName schema name
      * @param tableName table name
      * @param columnName column name
-     * @return the full name
+     * @return the full name of the column
      */
     String fullNameOf(String schemaName, String tableName, String columnName);
 

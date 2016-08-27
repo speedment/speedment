@@ -21,7 +21,7 @@ import com.speedment.runtime.internal.config.dbms.MariaDbDbmsType;
 import com.speedment.runtime.internal.config.dbms.MySqlDbmsType;
 import com.speedment.runtime.internal.config.dbms.PostgresDbmsType;
 import com.speedment.runtime.internal.config.dbms.StandardDbmsTypes;
-import com.speedment.runtime.internal.runtime.AbstractSpeedment;
+import com.speedment.runtime.internal.AbstractSpeedment;
 import java.util.stream.Stream;
 
 /**

@@ -53,6 +53,8 @@ public final class PostgresDbmsType extends AbstractDbmsType {
         return of(PostgresqlDbmsMetadataHandler.class, PostgresqlDbmsOperationHandler.class);
     }
     
+    private final static FieldPredicateView PREDICATE_VIEW = new PostgresSpeedmentPredicateView();
+    
     private final PostgresNamingConvention namingConvention;
     private final PostgresConnectionUrlGenerator connectionUrlGenerator;
     
@@ -110,14 +112,9 @@ public final class PostgresDbmsType extends AbstractDbmsType {
     }
 
     @Override
-    public FieldPredicateView getSpeedmentPredicateView() {
-        return new PostgresSpeedmentPredicateView(namingConvention);
+    public FieldPredicateView getFieldPredicateView() {
+        return PREDICATE_VIEW;
     }
-
-//    @Override
-//    public String getResultSetTableSchema() {
-//        return "TABLE_SCHEMA";
-//    }
     
     @Override
     public String getInitialQuery() {

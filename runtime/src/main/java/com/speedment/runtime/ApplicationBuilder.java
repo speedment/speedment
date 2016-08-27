@@ -37,7 +37,7 @@ import java.util.function.Consumer;
  * @since   3.0.0
  */
 @Api(version = "3.0")
-public interface SpeedmentBuilder<APP extends Speedment, BUILDER extends SpeedmentBuilder<APP, BUILDER>> {
+public interface ApplicationBuilder<APP extends Speedment, BUILDER extends ApplicationBuilder<APP, BUILDER>> {
     
     /**
      * Configures a parameter for the named {@link Document} of a certain class. The

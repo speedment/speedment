@@ -154,11 +154,11 @@ public interface DbmsType {
 
     /**
      * Returns the FieldPredicateView for this database. A
- FieldPredicateView can render a SQL query given a stream pipeline.
+     * FieldPredicateView can render a SQL query given a stream pipeline.
      *
      * @return the FieldPredicateView for this database
      */
-    FieldPredicateView getSpeedmentPredicateView();
+    FieldPredicateView getFieldPredicateView();
 
     /**
      * Returns a pre-defined Set for the TypeInfoMetaData for this database

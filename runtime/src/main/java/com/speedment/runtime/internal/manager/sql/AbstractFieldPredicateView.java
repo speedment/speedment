@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.internal.manager.sql;
 
-import com.speedment.runtime.db.DatabaseNamingConvention;
+import com.speedment.runtime.manager.SqlManager;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
@@ -34,14 +34,8 @@ import static java.util.stream.Collectors.joining;
  *
  * @author Per Minborg
  */
-public abstract class AbstractSpeedmentPredicateView implements FieldPredicateView {
-    
-    private final DatabaseNamingConvention namingConvention;
-    
-    protected AbstractSpeedmentPredicateView(DatabaseNamingConvention namingConvention) {
-        this.namingConvention = requireNonNull(namingConvention);
-    }
-    
+public abstract class AbstractFieldPredicateView implements FieldPredicateView {
+
     protected abstract SqlPredicateFragment equalIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated);
 
     protected abstract SqlPredicateFragment startsWithHelper(String cn, FieldPredicate<?> model, boolean negated);
@@ -57,14 +51,18 @@ public abstract class AbstractSpeedmentPredicateView implements FieldPredicateVi
     protected abstract SqlPredicateFragment containsIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated);
 
     @Override
-    public SqlPredicateFragment transform(FieldPredicate<?> model) {
-        return render(requireNonNull(model));
+    public <ENTITY> SqlPredicateFragment transform(SqlManager<ENTITY> manager, FieldPredicate<ENTITY> model) {
+        return render(
+            requireNonNull(manager),
+            requireNonNull(model)
+        );
     }
 
-    protected SqlPredicateFragment render(FieldPredicate<?> model) {
+    protected <ENTITY> SqlPredicateFragment render(SqlManager<ENTITY> manager, FieldPredicate<ENTITY> model) {
         final PredicateType pt = model.getEffectivePredicateType();
         
-        final String cn = namingConvention.fullNameOf(model.getField().identifier());
+//        final String cn = namingConvention.fullNameOf(model.getField().identifier());
+        final String cn = manager.fullColumnName(model.getField());
         
         switch (pt) {
             // Constants
@@ -116,7 +114,6 @@ public abstract class AbstractSpeedmentPredicateView implements FieldPredicateVi
             case NOT_STARTS_WITH_IGNORE_CASE:
                 return notStartsWithIgnoreCase(cn, model);   
             
-
             case ENDS_WITH:
                 return endsWith(cn, model);
             case NOT_ENDS_WITH:

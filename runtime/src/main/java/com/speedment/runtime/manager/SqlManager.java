@@ -14,9 +14,30 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.runtime;
+package com.speedment.runtime.manager;
 
-class SpeedmentImpl extends AbstractSpeedment {
+import com.speedment.runtime.db.SqlFunction;
+import com.speedment.runtime.field.Field;
+
+import java.sql.ResultSet;
+
+/**
+ *
+ * @author pemi
+ * @param <ENTITY> Entity type for this SqlManager
+ */
+public interface SqlManager<ENTITY> extends Manager<ENTITY> {
+
+    SqlFunction<ResultSet, ENTITY> getEntityMapper();
+
+    void setEntityMapper(SqlFunction<ResultSet, ENTITY> entityMapper);
     
-    public SpeedmentImpl() {}
+    /**
+     * Returns the fully qualified name for this field.
+     * 
+     * @param field  the field
+     * @return       the fully qualified name
+     */
+    String fullColumnName(Field<ENTITY> field);
+
 }

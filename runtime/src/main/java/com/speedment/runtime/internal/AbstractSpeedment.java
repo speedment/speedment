@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.runtime;
+package com.speedment.runtime.internal;
 
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
@@ -33,7 +33,7 @@ import com.speedment.runtime.internal.component.NativeStreamSupplierComponentImp
 import com.speedment.runtime.internal.component.PasswordComponentImpl;
 import com.speedment.runtime.internal.component.PrimaryKeyFactoryComponentImpl;
 import com.speedment.runtime.internal.component.ProjectComponentImpl;
-import com.speedment.runtime.internal.component.ResultSetMapperComponentImpl;
+import com.speedment.runtime.internal.component.resultset.ResultSetMapperComponentImpl;
 import com.speedment.runtime.internal.config.dbms.StandardDbmsTypes;
 import com.speedment.runtime.manager.Manager;
 

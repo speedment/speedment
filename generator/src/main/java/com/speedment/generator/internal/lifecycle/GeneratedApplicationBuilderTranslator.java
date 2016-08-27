@@ -30,7 +30,6 @@ import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
-import com.speedment.runtime.internal.runtime.AbstractApplicationBuilder;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -48,6 +47,7 @@ import static com.speedment.generator.internal.lifecycle.GeneratedMetadataTransl
 import com.speedment.internal.common.injector.Injector;
 import com.speedment.internal.common.injector.annotation.Inject;
 import com.speedment.internal.common.mapstream.MapStream;
+import com.speedment.runtime.internal.AbstractApplicationBuilder;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import java.lang.reflect.Type;
 import static java.util.Objects.requireNonNull;

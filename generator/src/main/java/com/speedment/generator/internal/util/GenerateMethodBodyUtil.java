@@ -50,7 +50,7 @@ import static java.util.stream.Collectors.joining;
 /**
  *
  * @author  Emil Forslund
- * @since   2.4.0
+ * @since   3.0.0
  */
 public final class GenerateMethodBodyUtil {
     
@@ -66,14 +66,13 @@ public final class GenerateMethodBodyUtil {
 
         return new String[]{
             "switch ((" + support.entityName() + ".Identifier) identifier) " + block(
-            columnsSupplier.get()
-            .filter(HasEnabled::isEnabled)
-            .map(c
-            -> "case " + support.namer().javaStaticFieldName(c.getJavaName())
-            + " : return " + getterCode(file, support, c)
-            + ";"
-            ).collect(Collectors.joining(nl()))
-            + nl() + "default : throw new IllegalArgumentException(\"Unknown identifier '\" + identifier + \"'.\");"
+                columnsSupplier.get()
+                    .filter(HasEnabled::isEnabled)
+                    .map(c -> "case " + support.namer().javaStaticFieldName(c.getJavaName())
+                        + " : return " + getterCode(file, support, c)
+                        + ";"
+                    ).collect(Collectors.joining(nl()))
+                        + nl() + "default : throw new IllegalArgumentException(\"Unknown identifier '\" + identifier + \"'.\");"
             )
         };
     }

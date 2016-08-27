@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.internal.manager.sql;
 
-import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.db.AsynchronousQueryResult;
 import com.speedment.runtime.field.Field;
@@ -79,7 +78,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         return getStreamDecorator().apply(initialPipeline);
     }
     
-    public void modifySource(final List<FieldPredicate<ENTITY>> predicateBuilders, AsynchronousQueryResult<ENTITY> qr) {
+    public void modifySource(List<FieldPredicate<ENTITY>> predicateBuilders, AsynchronousQueryResult<ENTITY> qr) {
         requireNonNull(predicateBuilders);
         requireNonNull(qr);
         
@@ -87,47 +86,35 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
             // Nothing to do...
             return;
         }
-        
-        final List<TypeMapper<Object, Object>> typeMappers = predicateBuilders
-            .stream()
-            .map(FieldPredicate::getField)
-            .map(Field<ENTITY>::typeMapper)
-            .map(tm -> {
-                @SuppressWarnings("unchecked")
-                final TypeMapper<Object, Object> tm2 = (TypeMapper<Object, Object>) tm;
-                return tm2;
-            })
+
+        final FieldPredicateView spv = manager.getDbmsType().getFieldPredicateView();
+        final List<SqlPredicateFragment> fragments = predicateBuilders.stream()
+            .map(sp -> spv.transform(manager, sp))
             .collect(toList());
 
-        final FieldPredicateView spv = manager.getDbmsType().getSpeedmentPredicateView();
-        final List<SqlPredicateFragment> fragments = predicateBuilders.stream()
-            .map(spv::transform)
-            .collect(toList());
-        
-        final String sql = manager.sqlSelect() + 
-            " WHERE " +
-            fragments.stream()
+        final String sql = manager.sqlSelect()
+            + " WHERE "
+            + fragments.stream()
                 .map(SqlPredicateFragment::getSql)
-                .collect(joining(" AND "))
-        ;
+                .collect(joining(" AND "));
 
         final List<Object> values = new ArrayList<>();
         for (int i = 0; i < fragments.size(); i++) {
-            final TypeMapper<Object, Object> tm = typeMappers.get(i);
+            
+            final FieldPredicate<ENTITY> p = predicateBuilders.get(i);
+            final Field<ENTITY> referenceFieldTrait = p.getField();
+            
+            @SuppressWarnings("unchecked")
+            final TypeMapper<Object, Object> tm = (TypeMapper<Object, Object>) 
+                referenceFieldTrait.typeMapper();
             
             fragments.get(i).objects()
-                    .map(tm::toDatabaseType)
-                    .forEach(values::add);
+                .map(tm::toDatabaseType)
+                .forEach(values::add);
         }
-        
+
         qr.setSql(sql);
-            qr.setValues(values);
-        }
-    
-    private Column findColumn(String name) {
-        return manager.getTable().columns()
-                .filter(c -> name.equals(c.getName()))
-                .findAny().get();
+        qr.setValues(values);
     }
     
     @Override

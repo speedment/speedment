@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.internal.manager.sql;
 
-import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.field.predicate.SqlPredicateFragment;
 
 import static com.speedment.runtime.internal.field.predicate.PredicateUtil.getFirstOperandAsRaw;
@@ -28,11 +27,7 @@ import com.speedment.runtime.field.predicate.FieldPredicateView;
  * @author Emil Forslund
  */
 @SuppressWarnings("rawtypes")
-public final class MySqlSpeedmentPredicateView extends AbstractSpeedmentPredicateView implements FieldPredicateView {
-    
-    public MySqlSpeedmentPredicateView(DatabaseNamingConvention namingConvention) {
-        super(namingConvention);
-    }
+public final class MySqlSpeedmentPredicateView extends AbstractFieldPredicateView implements FieldPredicateView {
 
     @Override
     protected SqlPredicateFragment equalIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {

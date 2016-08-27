@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.runtime.typemapping;
+package com.speedment.runtime.internal.component.resultset;
 
 import com.speedment.runtime.component.resultset.ResultSetMapping;
 import com.speedment.runtime.config.Dbms;

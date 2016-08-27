@@ -14,20 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.runtime;
+package com.speedment.runtime.internal;
 
-import java.util.Optional;
-
-/**
- *
- * @author  Emil Forslund
- * @since   2.4.0
- */
-public final class EmptyApplicationMetadata extends AbstractApplicationMetadata {
-
-    @Override
-    protected Optional<String> getMetadata() {
-        return Optional.empty();
-    }
+class SpeedmentImpl extends AbstractSpeedment {
     
+    public SpeedmentImpl() {}
 }

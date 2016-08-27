@@ -17,6 +17,7 @@
 package com.speedment.runtime.field.predicate;
 
 import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.manager.SqlManager;
 
 /**
  *
@@ -27,6 +28,6 @@ import com.speedment.runtime.annotation.Api;
 @Api(version = "3.0")
 public interface FieldPredicateView {
 
-    SqlPredicateFragment transform(FieldPredicate<?> model);
+    <ENTITY> SqlPredicateFragment transform(SqlManager<ENTITY> manager, FieldPredicate<ENTITY> model);
     
 }

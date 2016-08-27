@@ -14,22 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.manager.sql;
+package com.speedment.runtime.internal;
 
-import com.speedment.runtime.db.SqlFunction;
-import com.speedment.runtime.manager.Manager;
-
-import java.sql.ResultSet;
+import java.util.Optional;
 
 /**
  *
- * @author pemi
- * @param <ENTITY> Entity type for this SqlManager
+ * @author  Emil Forslund
+ * @since   2.4.0
  */
-public interface SqlManager<ENTITY> extends Manager<ENTITY> {
+public final class EmptyApplicationMetadata extends AbstractApplicationMetadata {
 
-    SqlFunction<ResultSet, ENTITY> getEntityMapper();
-
-    void setEntityMapper(SqlFunction<ResultSet, ENTITY> entityMapper);
-
+    @Override
+    protected Optional<String> getMetadata() {
+        return Optional.empty();
+    }
+    
 }

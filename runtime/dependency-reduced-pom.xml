@@ -29,7 +29,6 @@
                             com.speedment.runtime.manager.*,
                             com.speedment.runtime.stream.*,
                             com.speedment.runtime.util.*,
-                            com.speedment.runtime.transaction.*,
                             com.speedment.runtime</Export-Package>
           </instructions>
         </configuration>

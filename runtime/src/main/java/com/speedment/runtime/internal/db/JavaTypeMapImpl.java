@@ -20,7 +20,7 @@ import com.speedment.runtime.db.JavaTypeMap;
 import com.speedment.runtime.db.metadata.ColumnMetaData;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.runtime.typemapping.StandardJavaTypeMapping;
+import com.speedment.runtime.internal.component.resultset.StandardJavaTypeMapping;
 
 import java.math.BigDecimal;
 import java.sql.Blob;

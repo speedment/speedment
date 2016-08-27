@@ -49,6 +49,8 @@ public final class MySqlDbmsType extends AbstractDbmsType {
         return of(MySqlDbmsMetadataHandler.class, MySqlDbmsOperationHandler.class);
     }
     
+    private final static FieldPredicateView PREDICATE_VIEW = new MySqlSpeedmentPredicateView();
+    
     private final MySqlNamingConvention namingConvention;
     private final MySqlConnectionUrlGenerator connectionUrlGenerator;
     
@@ -106,8 +108,8 @@ public final class MySqlDbmsType extends AbstractDbmsType {
     }
 
     @Override
-    public FieldPredicateView getSpeedmentPredicateView() {
-        return new MySqlSpeedmentPredicateView(namingConvention);
+    public FieldPredicateView getFieldPredicateView() {
+        return PREDICATE_VIEW;
     }
 
     @Override

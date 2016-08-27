@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.internal.manager.sql;
 
+import com.speedment.runtime.manager.SqlManager;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
@@ -222,6 +223,11 @@ public abstract class AbstractSqlManager<ENTITY> extends AbstractManager<ENTITY>
     public ENTITY remove(ENTITY entity, Consumer<MetaResult<ENTITY>> listener) throws SpeedmentException {
         requireNonNulls(entity, listener);
         return removeHelper(entity, Optional.of(listener));
+    }
+
+    @Override
+    public String fullColumnName(Field<ENTITY> field) {
+        return naming().fullNameOf(field.identifier());
     }
 
     /**

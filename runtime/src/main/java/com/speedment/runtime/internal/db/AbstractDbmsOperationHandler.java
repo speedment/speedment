@@ -54,6 +54,8 @@ import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import java.util.Collection;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

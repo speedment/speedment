@@ -18,8 +18,8 @@ package com.speedment.tool.internal.component;
 
 import com.speedment.generator.GeneratorBundle;
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
-import com.speedment.runtime.internal.runtime.EmptyApplicationMetadata;
+import com.speedment.runtime.internal.DefaultApplicationBuilder;
+import com.speedment.runtime.internal.EmptyApplicationMetadata;
 import com.speedment.tool.ToolBundle;
 import com.speedment.tool.component.VersionComponent;
 import java.util.concurrent.ExecutionException;

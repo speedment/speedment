@@ -30,13 +30,13 @@ import com.speedment.internal.common.injector.annotation.WithState;
 import com.speedment.internal.common.injector.internal.InjectorImpl;
 import com.speedment.internal.common.logger.Level;
 import com.speedment.internal.common.logger.LoggerManager;
+import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.SpeedmentBuilder;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.internal.runtime.DefaultApplicationBuilder;
-import com.speedment.runtime.internal.runtime.DefaultApplicationMetadata;
-import com.speedment.runtime.internal.runtime.EmptyApplicationMetadata;
+import com.speedment.runtime.internal.DefaultApplicationBuilder;
+import com.speedment.runtime.internal.DefaultApplicationMetadata;
+import com.speedment.runtime.internal.EmptyApplicationMetadata;
 import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
 
 import org.apache.maven.plugin.AbstractMojo;
@@ -45,7 +45,7 @@ import org.apache.maven.plugin.MojoFailureException;
 
 import java.io.File;
 
-import static com.speedment.runtime.internal.runtime.DefaultApplicationMetadata.METADATA_LOCATION;
+import static com.speedment.runtime.internal.DefaultApplicationMetadata.METADATA_LOCATION;
 import com.speedment.tool.ToolBundle;
 import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 import java.lang.reflect.Constructor;
@@ -62,9 +62,9 @@ import org.apache.maven.project.MavenProject;
 public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
     private final static File DEFAULT_CONFIG = new File(DEFAULT_CONFIG_LOCATION);
-    private final static Consumer<SpeedmentBuilder<?, ?>> NOTHING = (builder) -> {};
+    private final static Consumer<ApplicationBuilder<?, ?>> NOTHING = (builder) -> {};
 
-    private final Consumer<SpeedmentBuilder<?, ?>> configurer;
+    private final Consumer<ApplicationBuilder<?, ?>> configurer;
     
     protected abstract MavenProject project();
     protected abstract boolean debug();
@@ -80,7 +80,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
     protected AbstractSpeedmentMojo() {this(NOTHING);}
     
-    protected AbstractSpeedmentMojo(Consumer<SpeedmentBuilder<?, ?>> configurer) {
+    protected AbstractSpeedmentMojo(Consumer<ApplicationBuilder<?, ?>> configurer) {
         this.configurer = configurer;
     }
 
@@ -90,7 +90,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
             LoggerManager.getLogger(InjectorImpl.class).setLevel(Level.DEBUG);
         }
 
-        final SpeedmentBuilder<?, ?> builder = createBuilder();
+        final ApplicationBuilder<?, ?> builder = createBuilder();
         builder.withInjectable(MavenPathComponent.class);
         configurer.accept(builder);
         final Speedment speedment = builder.build();
@@ -137,8 +137,8 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
         }
     }
 
-    private SpeedmentBuilder<?, ?> createBuilder() throws MojoExecutionException {
-        SpeedmentBuilder<?, ?> result;
+    private ApplicationBuilder<?, ?> createBuilder() throws MojoExecutionException {
+        ApplicationBuilder<?, ?> result;
 
         // Configure config file location
         if (hasConfigFile()) {
