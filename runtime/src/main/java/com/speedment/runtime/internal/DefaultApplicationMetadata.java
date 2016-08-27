@@ -32,7 +32,7 @@ import java.io.File;
  * {@link Injector}.
  * 
  * @author  Emil Forslund
- * @since   2.4.0
+ * @since   3.0.0
  */
 public final class DefaultApplicationMetadata implements ApplicationMetadata {
     

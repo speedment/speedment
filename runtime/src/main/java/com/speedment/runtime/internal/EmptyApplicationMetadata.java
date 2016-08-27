@@ -21,7 +21,7 @@ import java.util.Optional;
 /**
  *
  * @author  Emil Forslund
- * @since   2.4.0
+ * @since   3.0.0
  */
 public final class EmptyApplicationMetadata extends AbstractApplicationMetadata {
 

@@ -43,7 +43,7 @@ import java.util.Optional;
  * An abstract base implementation of the {@link Speedment} interface.
  * 
  * @author Emil Forslund
- * @since  2.4.0
+ * @since  3.0.0
  */
 
 public abstract class AbstractSpeedment implements Speedment {

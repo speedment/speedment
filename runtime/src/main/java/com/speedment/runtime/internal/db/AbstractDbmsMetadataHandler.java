@@ -85,7 +85,7 @@ import static java.util.stream.Collectors.joining;
  *
  * @author  Emil Forslund
  * @author  Per Minborg
- * @since   2.4.0
+ * @since   3.0.0
  */
 public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler {
     

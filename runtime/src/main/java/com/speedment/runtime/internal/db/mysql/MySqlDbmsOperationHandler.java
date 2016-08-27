@@ -21,7 +21,7 @@ import com.speedment.runtime.internal.db.AbstractDbmsOperationHandler;
 /**
  *
  * @author  Emil Forslund
- * @since   2.4.0
+ * @since   3.0.0
  */
 public final class MySqlDbmsOperationHandler extends AbstractDbmsOperationHandler {
     

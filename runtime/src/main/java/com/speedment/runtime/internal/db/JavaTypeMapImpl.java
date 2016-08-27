@@ -42,7 +42,7 @@ import static java.util.Objects.requireNonNull;
 /**
  *
  * @author  Emil Forslund
- * @since   2.4.0
+ * @since   3.0.0
  */
 public class JavaTypeMapImpl implements JavaTypeMap {
 
