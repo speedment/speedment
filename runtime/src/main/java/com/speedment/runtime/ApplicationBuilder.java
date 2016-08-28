@@ -287,24 +287,21 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * Sets if an initial database check shall be performed upon build(). The
      * default value is <code>true</code>
      *
-     * @param <C> the component type
-     * 
      * @param checkDatabaseConnectivity  if an initial database check shall be
      *                                   performed
      * @return                           this instance
      */
-    <C extends Component> BUILDER withCheckDatabaseConnectivity(boolean checkDatabaseConnectivity);
+    BUILDER withCheckDatabaseConnectivity(boolean checkDatabaseConnectivity);
     
     /**
      * Sets if an initial validation if the configuration shall be performed
      * upon build(). The default value is <code>true</code>
      *
-     * @param <C>  the component type
      * 
      * @param validateRuntimeConfig  if the configuration shall be performed
      * @return                       this instance
      */
-    <C extends Component> BUILDER withValidateRuntimeConfig(boolean validateRuntimeConfig);
+    BUILDER withValidateRuntimeConfig(boolean validateRuntimeConfig);
     
     /**
      * Adds a custom manager.

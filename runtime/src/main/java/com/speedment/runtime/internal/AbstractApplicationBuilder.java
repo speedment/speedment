@@ -241,13 +241,13 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public <C extends Component> BUILDER withCheckDatabaseConnectivity(boolean checkDatabaseConnectivity) {
+    public BUILDER withCheckDatabaseConnectivity(boolean checkDatabaseConnectivity) {
         this.checkDatabaseConnectivity = checkDatabaseConnectivity;
         return self();
     }
 
     @Override
-    public <C extends Component> BUILDER withValidateRuntimeConfig(boolean validateRuntimeConfig) {
+    public BUILDER withValidateRuntimeConfig(boolean validateRuntimeConfig) {
         this.validateRuntimeConfig = validateRuntimeConfig;
         return self();
     }
