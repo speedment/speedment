@@ -55,25 +55,26 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.speedment.runtime.ApplicationBuilder;
+import com.speedment.runtime.component.DbmsHandlerComponent;
+import com.speedment.runtime.component.ProjectComponent;
+import com.speedment.runtime.config.parameter.DbmsType;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**
- * This abstract class is implemented by classes that can build a 
+ * This abstract class is implemented by classes that can build a
  * {@link Speedment} application.
  *
- * @param <APP>      the type that is being built
- * @param <BUILDER>  the (self) type of the AbstractApplicationBuilder
- * 
- * @author  Per Minborg
- * @author  Emil Forslund
- * @since   2.0.0
+ * @param <APP> the type that is being built
+ * @param <BUILDER> the (self) type of the AbstractApplicationBuilder
+ *
+ * @author Per Minborg
+ * @author Emil Forslund
+ * @since 2.0.0
  */
 public abstract class AbstractApplicationBuilder<
-        APP extends Speedment,
-        BUILDER extends AbstractApplicationBuilder<APP, BUILDER>
-    > implements ApplicationBuilder<APP, BUILDER> {
+        APP extends Speedment, BUILDER extends AbstractApplicationBuilder<APP, BUILDER>> implements ApplicationBuilder<APP, BUILDER> {
 
     private final static Logger LOGGER = LoggerManager.getLogger(AbstractApplicationBuilder.class);
 
@@ -82,26 +83,26 @@ public abstract class AbstractApplicationBuilder<
     private final Injector.Builder injector;
 
     // TODO Investigate why these are not used.
-    private boolean checkDatabaseConnectivity; 
+    private boolean checkDatabaseConnectivity;
     private boolean validateRuntimeConfig;
 
     protected AbstractApplicationBuilder(
-            Class<? extends APP> applicationImplClass, 
-            Class<? extends ApplicationMetadata> metadataClass) {
-        
+        Class<? extends APP> applicationImplClass,
+        Class<? extends ApplicationMetadata> metadataClass) {
+
         this(Injector.builder()
             .putInBundle(RuntimeBundle.class)
             .put(applicationImplClass)
             .put(metadataClass)
         );
     }
-    
+
     protected AbstractApplicationBuilder(Injector.Builder injector) {
-        this.injector   = requireNonNull(injector);
+        this.injector = requireNonNull(injector);
         this.withsNamed = new ArrayList<>();
-        this.withsAll   = new ArrayList<>();
+        this.withsAll = new ArrayList<>();
     }
-    
+
     protected final BUILDER self() {
         @SuppressWarnings("unchecked")
         final BUILDER builder = (BUILDER) this;
@@ -232,7 +233,7 @@ public abstract class AbstractApplicationBuilder<
         withInjectable(injector, componentImplType, Component::getComponentClass);
         return self();
     }
-    
+
     @Override
     public <M extends Manager<?>> BUILDER withManager(Class<M> managerImplType) {
         requireNonNull(managerImplType);
@@ -251,14 +252,14 @@ public abstract class AbstractApplicationBuilder<
         this.validateRuntimeConfig = validateRuntimeConfig;
         return self();
     }
-    
+
     @Override
     public BUILDER withBundle(Class<? extends InjectBundle> bundleClass) {
         requireNonNull(bundleClass);
         injector.putInBundle(bundleClass);
         return self();
     }
-    
+
     @Override
     public BUILDER withInjectable(Class<?> injectableClass) {
         requireNonNull(injectableClass);
@@ -276,42 +277,51 @@ public abstract class AbstractApplicationBuilder<
     @Override
     public final APP build() {
         final Injector inj;
-        
+
         try {
             inj = injector.build();
         } catch (final InstantiationException | CyclicReferenceException ex) {
             throw new SpeedmentException("Error in dependency injection.", ex);
         }
-        
+
         loadAndSetProject(inj);
+
+        printWelcomeMessage(inj);
+        if (validateRuntimeConfig) {
+            validateRuntimeConfig(inj);
+        }
+        if (checkDatabaseConnectivity) {
+            checkDatabaseConnectivity(inj);
+        }
+
         return build(inj);
     }
-    
+
     /**
      * Builds the application using the specified injector.
-     * 
-     * @param injector  the injector to use
-     * @return          the built instance.
+     *
+     * @param injector the injector to use
+     * @return the built instance.
      */
     protected abstract APP build(Injector injector);
 
     /**
      * Builds up the complete Project meta data tree.
-     * 
-     * @param injector  the injector to use
+     *
+     * @param injector the injector to use
      */
     protected void loadAndSetProject(Injector injector) {
-        final ApplicationMetadata meta = injector.getOrThrow(ApplicationMetadata.class);
-        final Project project = meta.makeProject();
+        //final ApplicationMetadata meta = injector.getOrThrow(ApplicationMetadata.class);
+        final Project project = injector.getOrThrow(ProjectComponent.class).getProject();
 
         // Apply overidden item (if any) for all Documents of a given class
         withsAll.forEach(t2 -> {
             final Class<? extends Document> clazz = t2.get0();
-            
+
             @SuppressWarnings("unchecked")
-            final BiConsumer<Injector, Document> consumer = 
-                (BiConsumer<Injector, Document>) t2.get1();
-            
+            final BiConsumer<Injector, Document> consumer
+                = (BiConsumer<Injector, Document>) t2.get1();
+
             DocumentDbUtil.traverseOver(project)
                 .filter(clazz::isInstance)
                 .map(Document.class::cast)
@@ -324,8 +334,8 @@ public abstract class AbstractApplicationBuilder<
             final String name = t3.get1();
 
             @SuppressWarnings("unchecked")
-            final BiConsumer<Injector, Document> consumer = 
-                (BiConsumer<Injector, Document>) t3.get2();
+            final BiConsumer<Injector, Document> consumer
+                = (BiConsumer<Injector, Document>) t3.get2();
 
             DocumentDbUtil.traverseOver(project)
                 .filter(clazz::isInstance)
@@ -335,16 +345,79 @@ public abstract class AbstractApplicationBuilder<
                 .forEachOrdered(doc -> consumer.accept(injector, doc));
         });
     }
-    
+
+    protected void validateRuntimeConfig(Injector injector) {
+        final Project project = injector.getOrThrow(ProjectComponent.class).getProject();
+        if (project == null) {
+            throw new SpeedmentException("No project defined");
+        }
+
+        project.dbmses().forEach(d -> {
+            final String typeName = d.getTypeName();
+            final Optional<DbmsType> oDbmsType = injector.getOrThrow(DbmsHandlerComponent.class).findByName(typeName);
+            if (!oDbmsType.isPresent()) {
+                throw new SpeedmentException("The database type " + typeName + " is not registered with the " + DbmsHandlerComponent.class.getSimpleName());
+            }
+            final String driverName = oDbmsType.get().getDriverName();
+            try {
+                // Make sure the driver is loaded. This is a must for some JavaEE servers.
+                Class.forName(driverName);
+            } catch (ClassNotFoundException cnfe) {
+                LOGGER.error(cnfe, "The database driver class " + driverName + " is not available. Make sure to include it in your class path (e.g. in the POM file)");
+            }
+        });
+
+    }
+
+    protected void checkDatabaseConnectivity(Injector injector) {
+        final Project project = injector.getOrThrow(ProjectComponent.class).getProject();
+        project.dbmses().forEachOrdered(dbms -> {
+//            final DbmsHandlerComponent dbmsHandlerComponent = injector.getOrThrow(DbmsHandlerComponent.class);
+//            final DbmsType dbmsType = DocumentDbUtil.dbmsTypeOf(dbmsHandlerComponent, dbms);
+//            final DbmsOperationHandler ops = dbmsType.getOperationHandler();
+//            
+//                private ConnectionPoolComponent connectionPoolComponent = injector.;
+//            
+//            
+//            Connection c = null;
+//            
+//            try {
+//                final String initialQuery = dbmsType.getInitialQuery();
+//                LOGGER.info(initialQuery);
+//
+//                final Optional<String> oInfo = ops.executeQuery(dbms, initialQuery, (rs) -> rs.getObject(1).toString()).findFirst();
+//                if (oInfo.isPresent()) {
+//                    LOGGER.warn("Unable to verify dbms connection for " + dbms.toString());
+//                } else {
+//                    LOGGER.info("Dbms " + dbms.getName() + " -> " + oInfo.get().toString());
+//                }
+////
+////                try (Connection conn = dbmsHandler.executeDelete(sql, withsAll)) {
+////                    final Optional<Map<String, String>> oInfo = dbmsHandler.executeQuery(dbmsType.getInitialQuery(), new RsMapper()).findAny();
+////                    if (!oInfo.isPresent()) {
+////                        LOGGER.warn("Unable to verify dbms connection for " + dbms.toString());
+////                    } else {
+////                        LOGGER.info("Dbms " + dbms.getName() + " -> " + oInfo.get().toString());
+////                    }
+////                } catch (Exception e) {
+////                    LOGGER.error(e, "Unable to connect to dbms " + dbms.toString());
+////                }
+//
+//            } catch (Exception e) {
+//                LOGGER.error(e, "Unable to connect to dbms " + dbms.toString());
+//            }
+        });
+    }
+
     /**
      * Prints a welcome message to the output channel.
-     * 
-     * @param injector  the injector to use
+     *
+     * @param injector the injector to use
      */
     protected void printWelcomeMessage(Injector injector) {
-        
+
         final InfoComponent info = injector.getOrThrow(InfoComponent.class);
-        
+
         try {
             final Package package_ = Runtime.class.getPackage();
             final String javaMsg = package_.getSpecificationTitle()
@@ -355,11 +428,13 @@ public abstract class AbstractApplicationBuilder<
                 + " " + package_.getImplementationVersion()
                 + " by " + package_.getImplementationVendor();
             LOGGER.info(javaMsg);
-            
+
             final String versionString = package_.getImplementationVersion();
             final Optional<Boolean> isVersionOk = isVersionOk(versionString);
             if (isVersionOk.isPresent()) {
-                LOGGER.warn("The current Java version (" + versionString + ") is outdated. Please upgrade to a more recent Java version.");
+                if (!isVersionOk.get()) {
+                    LOGGER.warn("The current Java version (" + versionString + ") is outdated. Please upgrade to a more recent Java version.");
+                }
             } else {
                 LOGGER.warn("Unable to fully parse the java version. Version check skipped!");
             }
@@ -367,21 +442,21 @@ public abstract class AbstractApplicationBuilder<
             LOGGER.info("Unknown Java version.");
         }
 
-        final String title    = info.title();
+        final String title = info.title();
         final String subTitle = info.subtitle();
-        final String version  = info.version();
+        final String version = info.version();
 
-        final String speedmentMsg = title + " (" + subTitle + ") version " + 
-            version + " by " + getImplementationVendor() + " started." +
-            " API version is " + getSpecificationVersion();
-        
+        final String speedmentMsg = title + " (" + subTitle + ") version "
+            + version + " by " + getImplementationVendor() + " started."
+            + " API version is " + getSpecificationVersion();
+
         LOGGER.info(speedmentMsg);
-        
+
         if (!SpeedmentVersion.isProductionMode()) {
             LOGGER.warn("This version is NOT INTENDED FOR PRODUCTION USE!");
         }
     }
-    
+
     protected Optional<Boolean> isVersionOk(String versionString) {
         final Pattern pattern = Pattern.compile("(\\d+)[\\\\.](\\d+)[\\\\.](\\d+)_(\\d+)");
         final Matcher matcher = pattern.matcher(versionString);
@@ -423,23 +498,20 @@ public abstract class AbstractApplicationBuilder<
             return Optional.empty();
         }
     }
-    
+
     private static <T> void withInjectable(Injector.Builder injector, Class<T> injectableImplType, Function<T, Class<?>> keyExtractor) {
         requireNonNull(injectableImplType);
-        
+
         final T injectable;
         try {
             final Constructor<T> constructor = injectableImplType.getDeclaredConstructor();
             constructor.setAccessible(true);
             injectable = constructor.newInstance();
-        } catch (InstantiationException 
-               | IllegalAccessException 
-               | NoSuchMethodException 
-               | InvocationTargetException ex) {
-            
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
+
             throw new SpeedmentException(ex);
         }
-        
+
         final Class<?> key = keyExtractor.apply(injectable);
         injector.put(key.getName(), injectableImplType);
     }
