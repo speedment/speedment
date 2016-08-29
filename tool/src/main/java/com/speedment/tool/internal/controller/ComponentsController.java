@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import static com.speedment.tool.internal.util.CloseUtil.newCloseHandler;
+import com.speedment.tool.resource.SpeedmentIcon;
 import static java.util.Comparator.comparing;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -105,7 +106,7 @@ public final class ComponentsController implements Initializable {
                 infoComponent.title() + " (0x" + Integer.toHexString(System.identityHashCode(speedment)) + ")"
             );
             setExpanded(true);
-            setGraphic(SilkIcon.BOX.view());
+            setGraphic(SpeedmentIcon.BOX.view());
             
             title.setText(infoComponent.title());
         }
@@ -119,7 +120,7 @@ public final class ComponentsController implements Initializable {
                 ")"
             );
             setExpanded(false);
-            setGraphic(SilkIcon.BRICKS.view());
+            setGraphic(SpeedmentIcon.BRICKS.view());
         }
     };
     
@@ -128,7 +129,7 @@ public final class ComponentsController implements Initializable {
         public TranslatorsItem() {
             super("Code Generators");
             setExpanded(true);
-            setGraphic(SilkIcon.BOOK_OPEN.view());
+            setGraphic(SpeedmentIcon.BOOK_OPEN.view());
         }
     };
     
@@ -137,7 +138,7 @@ public final class ComponentsController implements Initializable {
         public TranslatorItem(String translatorKey) {
             super(translatorKey);
             setExpanded(true);
-            setGraphic(SilkIcon.BOOK_NEXT.view());
+            setGraphic(SpeedmentIcon.BOOK_NEXT.view());
         }
     };
     
@@ -146,7 +147,7 @@ public final class ComponentsController implements Initializable {
         public DbmsTypesItem() {
             super("Supported Databases");
             setExpanded(true);
-            setGraphic(SilkIcon.DATABASE_CONNECT.view());
+            setGraphic(SpeedmentIcon.DATABASE_CONNECT.view());
         }
     };
     
@@ -155,7 +156,7 @@ public final class ComponentsController implements Initializable {
         public DbmsTypeItem(DbmsType dbmsType) {
             super(dbmsType.getName());
             setExpanded(true);
-            setGraphic(SilkIcon.CONNECT.view());
+            setGraphic(SpeedmentIcon.CONNECT.view());
         }
     };
     
@@ -164,7 +165,7 @@ public final class ComponentsController implements Initializable {
         public TypeMappersItem() {
             super("Installed Type Mappings");
             setExpanded(true);
-            setGraphic(SilkIcon.PAGE_WHITE_CUP.view());
+            setGraphic(SpeedmentIcon.PAGE_WHITE_CUP.view());
         }
     };
     
@@ -173,7 +174,7 @@ public final class ComponentsController implements Initializable {
         public TypeMapperItem(TypeMapper<?, ?> typeMapper) {
             super(typeMapper.getLabel());
             setExpanded(true);
-            setGraphic(SilkIcon.CUP_LINK.view());
+            setGraphic(SpeedmentIcon.CUP_LINK.view());
         }
     };
     
@@ -185,7 +186,7 @@ public final class ComponentsController implements Initializable {
             super(license.getName());
             this.license = license;
             setExpanded(true);
-            setGraphic(SilkIcon.TEXT_SIGNATURE.view());
+            setGraphic(SpeedmentIcon.TEXT_SIGNATURE.view());
         }
         
         public License getLicense() {
@@ -198,7 +199,7 @@ public final class ComponentsController implements Initializable {
         public DependenciesItem() {
             super("External Dependencies");
             setExpanded(true);
-            setGraphic(SilkIcon.SITEMAP_COLOR.view());
+            setGraphic(SpeedmentIcon.SITEMAP_COLOR.view());
         }
     }
     
@@ -207,7 +208,7 @@ public final class ComponentsController implements Initializable {
         public SoftwareItem(Software software) {
             super(software.getName() + " (" + software.getVersion() + ")");
             setExpanded(true);
-            setGraphic(SilkIcon.BOOK_LINK.view());
+            setGraphic(SpeedmentIcon.BOOK_LINK.view());
         }
     }
 

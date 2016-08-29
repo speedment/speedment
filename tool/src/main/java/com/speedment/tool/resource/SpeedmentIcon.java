@@ -85,7 +85,31 @@ public enum SpeedmentIcon {
     WALKING_MAN("/pics/dialog/walking_man.gif"),
     WALKING_MAN_SMALL("/pics/dialog/walking_man_small.png"),
     // Logotype
-    SPIRE("/images/logo.png");
+    SPIRE("/images/logo.png"),
+    //Components controller
+ SITEMAP_COLOR("pics/vectors_rendered/sitemapColor.png"),
+ BOX("pics/vectors_rendered/box.png"),
+ BRICKS("pics/vectors_rendered/bricks.png"),
+ BOOK_OPEN("pics/vectors_rendered/BookOpen.png"),
+ BOOK_NEXT("pics/vectors_rendered/bookNext.png"),
+ DATABASE_CONNECT("pics/vectors_rendered/databaseConnect.png"),
+ CONNECT("pics/vectors_rendered/connect.png"),
+ PAGE_WHITE_CUP("pics/vectors_rendered/pageWhiteCup.png"),
+ CUP_LINK("pics/vectors_rendered/cupLink"),
+ TEXT_SIGNATURE("pics/vectors_rendered/textSignature.png"),
+ BOOK_LINK("pics/vectors_rendered/bookLink.png"),
+ //MenuController
+ DISK("pics/vectors_rendered/disk.png"),
+ DISK_MULTIPLE("pics/vectors_rendered/diskMultiple.png"),
+ DOOR_IN("pics/vectors_rendered/doorIn.png"),
+ APPLICATION_SIDE_TREE("pics/vectors_rendered/applicationSideTree.png"),
+ APPLICATION_FORM("pics/vectors_rendered/applicationForm.png"),
+ APPLICATION_XP_TERMINAL("pics/vectors_rendered/applicationXpTerminal.png"),
+ USER_COMMENT("pics/vectors_rendered/userComment.png"),
+ INFORMATION("pics/vectors_rendered/information.png"),
+ HELP ("pics/vectors_rendered/help.png")
+ 
+    ;
 
     private final String filename;
 
@@ -153,7 +177,7 @@ public enum SpeedmentIcon {
             return icon.view();
         } else {
             LOGGER.error("Found no predefined icon for node type '" + node.getClass().getSimpleName() + "'.");
-            return SilkIcon.HELP.view();
+            return SpeedmentIcon.HELP.view();
         }
     }
 

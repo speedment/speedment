@@ -56,20 +56,20 @@ public final class MenubarController implements Initializable {
 
         mbNew.setGraphic(SpeedmentIcon.NEW_PROJECT.view());
         mbOpen.setGraphic(SpeedmentIcon.OPEN_PROJECT.view());
-        mbSave.setGraphic(SilkIcon.DISK.view());
-        mbSaveAs.setGraphic(SilkIcon.DISK_MULTIPLE.view());
-        mbQuit.setGraphic(SilkIcon.DOOR_IN.view());
+        mbSave.setGraphic(SpeedmentIcon.DISK.view());
+        mbSaveAs.setGraphic(SpeedmentIcon.DISK_MULTIPLE.view());
+        mbQuit.setGraphic(SpeedmentIcon.DOOR_IN.view());
 
         mbGenerate.setGraphic(SpeedmentIcon.RUN_PROJECT.view());
 
-        mbProjectTree.setGraphic(SilkIcon.APPLICATION_SIDE_TREE.view());
-        mbWorkspace.setGraphic(SilkIcon.APPLICATION_FORM.view());
-        mbOutput.setGraphic(SilkIcon.APPLICATION_XP_TERMINAL.view());
+        mbProjectTree.setGraphic(SpeedmentIcon.APPLICATION_SIDE_TREE.view());
+        mbWorkspace.setGraphic(SpeedmentIcon.APPLICATION_FORM.view());
+        mbOutput.setGraphic(SpeedmentIcon.APPLICATION_XP_TERMINAL.view());
 
-        mbGitter.setGraphic(SilkIcon.USER_COMMENT.view());
-        mbGitHub.setGraphic(SilkIcon.USER_COMMENT.view());
-        mbComponents.setGraphic(SilkIcon.BRICKS.view());
-        mbAbout.setGraphic(SilkIcon.INFORMATION.view());
+        mbGitter.setGraphic(SpeedmentIcon.USER_COMMENT.view());
+        mbGitHub.setGraphic(SpeedmentIcon.USER_COMMENT.view());
+        mbComponents.setGraphic(SpeedmentIcon.BRICKS.view());
+        mbAbout.setGraphic(SpeedmentIcon.INFORMATION.view());
 
         mbNew.setOnAction(ev -> userInterfaceComponent.newProject());
         mbOpen.setOnAction(ev -> userInterfaceComponent.openProject());

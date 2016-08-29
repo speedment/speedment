@@ -158,8 +158,8 @@ public final class ProjectTreeController implements Initializable {
     
     private <DOC extends DocumentProperty> Stream<MenuItem> createDefaultContextMenu(TreeCell<DocumentProperty> treeCell, DOC node) {
         
-        final MenuItem expandAll = new MenuItem("Expand All", SilkIcon.BOOK_OPEN.view());
-        final MenuItem collapseAll = new MenuItem("Collapse All", SilkIcon.BOOK.view());
+        final MenuItem expandAll = new MenuItem("Expand All", SpeedmentIcon.BOOK_OPEN.view());
+        final MenuItem collapseAll = new MenuItem("Collapse All", SpeedmentIcon.BOOK.view());
         
         expandAll.setOnAction(ev -> {
             DocumentUtil.traverseOver(node)
