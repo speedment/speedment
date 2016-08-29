@@ -20,8 +20,8 @@ import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.File;
 import com.speedment.generator.internal.DefaultJavaClassTranslator;
+import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.config.Project;
-import com.speedment.runtime.internal.AbstractApplicationBuilder;
 import java.lang.reflect.Type;
 
 /**
@@ -51,7 +51,7 @@ public final class ApplicationBuilderTranslator extends DefaultJavaClassTranslat
 
     @Override
     protected String getJavadocRepresentText() {
-        return "The default {@link " + AbstractApplicationBuilder.class.getName() + 
+        return "The default {@link " + ApplicationBuilder.class.getName() + 
             "} implementation class for the {@link " + Project.class.getName() + 
             "} named " + getSupport().projectOrThrow().getName() + ".";
     }
