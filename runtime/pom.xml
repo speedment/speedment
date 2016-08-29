@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment</groupId>
         <artifactId>speedment</artifactId>
-        <version>3.0.0-SNAPSHOT</version>
+        <version>3.0.0-EA</version>
     </parent>
     
     <artifactId>runtime</artifactId>

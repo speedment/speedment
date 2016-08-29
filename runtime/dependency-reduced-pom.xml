@@ -3,7 +3,7 @@
   <parent>
     <artifactId>speedment</artifactId>
     <groupId>com.speedment</groupId>
-    <version>3.0.0-SNAPSHOT</version>
+    <version>3.0.0-EA</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>speedment-all</artifactId>
