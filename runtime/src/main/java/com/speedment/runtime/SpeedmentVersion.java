@@ -29,6 +29,7 @@ import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
  * @since   2.0.0
  */
 @Api(version = "3.0")
+@Deprecated
 public final class SpeedmentVersion {
 
     private static final String IMPLEMENTATION_TITLE = "Speedment",
