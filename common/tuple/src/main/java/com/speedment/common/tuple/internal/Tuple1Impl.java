@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.tuple.impl;
+package com.speedment.common.tuple.internal;
 
 import com.speedment.common.tuple.Tuple1;
 

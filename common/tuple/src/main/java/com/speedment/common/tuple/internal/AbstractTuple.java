@@ -14,39 +14,34 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.tuple.impl;
+package com.speedment.common.tuple.internal;
 
-import com.speedment.common.tuple.Tuple3;
+import com.speedment.common.tuple.Tuple;
+
+import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
- * @param <T0> Type of 0:th argument
- * @param <T1> Type of 1:st argument
- * @param <T2> Type of 2:nd argument
  */
-public final class Tuple3Impl<T0, T1, T2> extends AbstractTuple implements Tuple3<T0, T1, T2> {
+public abstract class AbstractTuple extends BasicAbstractTuple<AbstractTuple, Object> implements Tuple {
 
-    public Tuple3Impl(T0 v0, T1 v1, T2 v2) {
-        super(Tuple3Impl.class, v0, v1, v2);
+    protected AbstractTuple(Class<? extends AbstractTuple> baseClass, Object... values) {
+        super(baseClass, values);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public T0 get0() {
-        return (T0) values[0];
+    protected boolean isNullable() {
+        return false;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public T1 get1() {
-        return (T1) values[1];
+    public Object get(int index) {
+        return values[assertIndexBounds(index)];
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public T2 get2() {
-        return (T2) values[2];
+    public Stream<Object> stream() {
+        return Stream.of(values);
     }
-
 }

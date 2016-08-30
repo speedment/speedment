@@ -14,9 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.tuple.impl;
+package com.speedment.common.tuple.internal;
 
-import com.speedment.common.tuple.Tuple5;
+import com.speedment.common.tuple.Tuple3;
 
 /**
  *
@@ -24,13 +24,11 @@ import com.speedment.common.tuple.Tuple5;
  * @param <T0> Type of 0:th argument
  * @param <T1> Type of 1:st argument
  * @param <T2> Type of 2:nd argument
- * @param <T3> Type of 3:rd argument
- * @param <T4> Type of 4:th argument
  */
-public final class Tuple5Impl<T0, T1, T2, T3, T4> extends AbstractTuple implements Tuple5<T0, T1, T2, T3, T4> {
+public final class Tuple3Impl<T0, T1, T2> extends AbstractTuple implements Tuple3<T0, T1, T2> {
 
-    public Tuple5Impl(T0 v0, T1 v1, T2 v2, T3 v3, T4 v4) {
-        super(Tuple5Impl.class, v0, v1, v2, v3, v4);
+    public Tuple3Impl(T0 v0, T1 v1, T2 v2) {
+        super(Tuple3Impl.class, v0, v1, v2);
     }
 
     @SuppressWarnings("unchecked")
@@ -49,18 +47,6 @@ public final class Tuple5Impl<T0, T1, T2, T3, T4> extends AbstractTuple implemen
     @Override
     public T2 get2() {
         return (T2) values[2];
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public T3 get3() {
-        return (T3) values[3];
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public T4 get4() {
-        return (T4) values[4];
     }
 
 }

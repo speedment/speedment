@@ -14,35 +14,35 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.tuple.impl;
+package com.speedment.common.tuple.internal;
 
-import com.speedment.common.tuple.TupleOfNullables;
+import com.speedment.common.tuple.Tuple2OfNullables;
 
 import java.util.Optional;
-import java.util.stream.Stream;
 
 /**
  *
  * @author pemi
+ * @param <T0> Type of 0:th argument
+ * @param <T1> Type of 1:st argument
  */
-public abstract class AbstractTupleOfNullables extends BasicAbstractTuple<AbstractTupleOfNullables, Optional<Object>> implements TupleOfNullables {
+public final class Tuple2OfNullablesImpl<T0, T1> extends AbstractTupleOfNullables implements Tuple2OfNullables<T0, T1> {
 
-    protected AbstractTupleOfNullables(Class<? extends AbstractTupleOfNullables> baseClass, Object... values) {
-        super(baseClass, values);
+    @SuppressWarnings("rawtypes")
+    public Tuple2OfNullablesImpl(T0 e0, T1 e1) {
+        super(Tuple2OfNullablesImpl.class, e0, e1);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    protected boolean isNullable() {
-        return true;
+    public Optional<T0> get0() {
+        return Optional.ofNullable((T0) values[0]);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Optional<Object> get(int index) {
-        return Optional.ofNullable(values[assertIndexBounds(index)]);
+    public Optional<T1> get1() {
+        return Optional.ofNullable((T1) values[1]);
     }
 
-    @Override
-    public Stream<Optional<Object>> stream() {
-        return Stream.of(values).map(Optional::ofNullable);
-    }
 }

@@ -14,9 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.tuple.impl;
+package com.speedment.common.tuple.internal;
 
-import com.speedment.common.tuple.Tuple3OfNullables;
+import com.speedment.common.tuple.Tuple6OfNullables;
 
 import java.util.Optional;
 
@@ -26,12 +26,14 @@ import java.util.Optional;
  * @param <T0> Type of 0:th argument
  * @param <T1> Type of 1:st argument
  * @param <T2> Type of 2:nd argument
+ * @param <T3> Type of 3:rd argument
+ * @param <T3> Type of 4:th argument
  */
-public final class Tuple3OfNullablesImpl<T0, T1, T2> extends AbstractTupleOfNullables implements Tuple3OfNullables<T0, T1, T2> {
+public final class Tuple6OfNullablesImpl<T0, T1, T2, T3, T4, T5> extends AbstractTupleOfNullables implements Tuple6OfNullables<T0, T1, T2, T3, T4, T5> {
 
     @SuppressWarnings("rawtypes")
-    public Tuple3OfNullablesImpl(T0 e0, T1 e1, T2 e2) {
-        super(Tuple3OfNullablesImpl.class, e0, e1, e2);
+    public Tuple6OfNullablesImpl(T0 e0, T1 e1, T2 e2, T3 e3, T4 e4, T5 e5) {
+        super(Tuple6OfNullablesImpl.class, e0, e1, e2, e3, e4, e5);
     }
 
     @SuppressWarnings("unchecked")
@@ -50,6 +52,24 @@ public final class Tuple3OfNullablesImpl<T0, T1, T2> extends AbstractTupleOfNull
     @Override
     public Optional<T2> get2() {
         return Optional.ofNullable((T2) values[2]);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Optional<T3> get3() {
+        return Optional.ofNullable((T3) values[3]);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Optional<T4> get4() {
+        return Optional.ofNullable((T4) values[4]);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Optional<T5> get5() {
+        return Optional.ofNullable((T5) values[5]);
     }
 
 }
