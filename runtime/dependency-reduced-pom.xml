@@ -66,16 +66,6 @@
           </transformers>
         </configuration>
       </plugin>
-      <plugin>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <executions>
-          <execution>
-            <configuration>
-              <excludePackageNames>com.speedment.runtime.internal.*</excludePackageNames>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
 </project>
