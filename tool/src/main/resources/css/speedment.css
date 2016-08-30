@@ -1,0 +1,486 @@
+/**
+ *
+ * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); You may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
+/*** Constants ***/
+* {
+    -fx-speedment-darkgray:    #a9a9a9;
+    
+    -fx-speedment-gray:        #cdcdcd;
+    -fx-speedment-blue:        #3267c9;
+    -fx-speedment-green:       #00cc99;
+    -fx-speedment-orange:      #e3ae2d;
+    -fx-speedment-red:         #cc4d4d;
+    
+    -fx-speedment-lightgray:   #f5f5f5;
+    -fx-speedment-lightblue:   #45a6fc;
+    -fx-speedment-lightgreen:  #1ce1b0;
+    -fx-speedment-lightred:    #ffb6c1;
+    -fx-speedment-lightorange: #fafad2;
+
+    -fx-focus-color: -fx-speedment-lightblue;
+    -fx-accent:      -fx-speedment-lightblue;
+}
+
+/*** Titles Pane ***/
+.titled-pane {
+    -fx-background-color: -fx-speedment-lightgray;
+    -fx-text-fill: white;
+}
+
+.titled-pane > .title {
+    -fx-background-color: -fx-speedment-lightblue;
+    -fx-background-radius: 0px;
+    -fx-font-size: 1.1em;
+    -fx-font-weight: bold;
+}
+
+/*** Terms and Conditions ***/
+.titled-pane.termsContainer {
+    -fx-text-fill: black;
+}
+
+.titled-pane.termsContainer > .title {
+    -fx-background-color: transparent;
+}
+
+/*** Border Panes ***/
+.border-pane {
+    -fx-border-width: 0px;
+}
+
+/*** Tree View ***/
+.tree-view {
+    -fx-font-size: 1.1em;
+    -fx-font-weight: normal;
+}
+
+.tree-view .tree-cell:selected {
+    -fx-background-color: -fx-speedment-lightblue;
+    -fx-background-radius: 0px;
+    -fx-border-width: 0px;
+    -fx-text-fill: white;
+}
+
+.tree-view .tree-cell .arrow  {
+    -fx-background-color: black;
+}
+
+.tree-view .tree-cell:selected .arrow {
+    -fx-background-color: white;
+}
+
+.tree-view .gui-disabled,
+.tree-view .gui-disabled .tree-cell {
+    -fx-text-fill: -fx-speedment-gray;
+    -fx-font-weight: bold;
+    -fx-font-style: italic;
+}
+
+/*** List View ***/
+.list-view .list-cell{
+    -fx-font-size: 1.1em;
+}
+
+.list-view .list-cell:selected:focused{
+    -fx-text-fill: white;
+    -fx-border-color: -fx-speedment-blue;
+}
+
+/*** Text Flow ***/
+.text-flow{
+    -fx-font-family: 'monospace';
+    -fx-font-size: 1.1em;
+    -fx-padding: 8px;
+}
+
+/*** Label ***/
+.label {
+    -fx-font-size: 1.1em;
+    -fx-font-weight: normal;
+}
+
+.label :pressed{
+    -fx-font-color: white;
+}
+
+/*** Headers ***/
+.header {
+    -fx-font-family: 'Advent Pro';
+    -fx-font-size: 2em;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-speedment-blue;
+}
+
+/*** Text Fields and Areas ***/
+.text-field,
+.text-area {
+    -fx-background-color: white;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-border-color: -fx-speedment-blue;
+    -fx-font-size: 1.1em;
+    -fx-font-weight: normal;
+    -fx-opacity: 1.0;
+}
+
+.text-field:focused, 
+.text-field:hover,
+.text-area:focused, 
+.text-area:hover {
+    -fx-border-color: -fx-speedment-green;
+}
+
+.text-field:disabled,
+.text-area:disabled,
+.text-area:disabled > .content {
+    -fx-text-fill: #000;
+    -fx-opacity: 0.5;
+}
+
+.text-input > .scroll-pane:disabled { /* JavaFX bug workaround */
+    -fx-opacity: 1;
+}
+
+/*** Buttons ***/
+.button {
+    -fx-background-color: -fx-speedment-green;
+    -fx-background-radius: 0px;
+    -fx-border-width: 0px;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-family: 'Advent Pro';
+    -fx-font-size: 1.5em;
+    -fx-cursor: hand;
+    -fx-graphic-text-gap: 0.7em;
+}
+
+.button:hover {
+    -fx-background-color: -fx-speedment-lightgreen;
+}
+
+.button > .glyph-icon {
+    -fx-fill: white;
+}
+
+/*** Choice Box ***/
+.choice-box {
+    -fx-background-color: white;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-border-color: -fx-speedment-blue;
+    -fx-font-size: 1.1em;
+    -fx-font-weight: normal;
+}
+
+.choice-box:focused, .choice-box:hover {
+    -fx-border-color: -fx-speedment-green;
+}
+
+/*** Tooltips ***/
+.tooltip {
+    -fx-background-radius: 0px;
+    -fx-background-color: white;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-border-color: -fx-speedment-blue;
+    -fx-text-fill: black;
+    -fx-font-size: 1.1em;
+    -fx-font-weight: normal;
+}
+
+/*** Toolbars ***/
+.tool-bar {
+    -fx-background-color: -fx-speedment-lightgray;
+}
+
+/*** Checkboxes ***/
+.check-box *.box {
+    -fx-background-color: white;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-border-color: -fx-speedment-blue;
+}
+
+.check-box *.box:hover,
+.check-box *.box:active {
+    -fx-border-color: -fx-speedment-green;
+}
+
+/*** Split Panes ***/
+.split-pane {
+    -fx-border-width: 0px;
+    -fx-background-color: transparent;
+}
+
+.split-pane-divider {
+    -fx-border-color: -fx-speedment-lightgray;
+    -fx-background-color: -fx-speedment-lightgray;
+}
+
+.split-pane-divider:hover,
+.split-pane-divider:active {
+    -fx-border-color: -fx-speedment-darkgray;
+    -fx-background-color: -fx-speedment-darkgray;
+}
+
+/*** Scroll Bars ***/
+.scroll-bar:horizontal,
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-border-width: 0px;
+}
+
+.increment-button,
+.decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: -fx-speedment-gray;
+    -fx-border-width: 0px;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: -fx-speedment-lightgray;
+    -fx-background-radius: 0px;
+    -fx-border-width: 0px;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: -fx-speedment-gray;
+    -fx-background-insets: 0, 0, 0;
+    -fx-background-radius: 0px;
+    -fx-border-width: 0px;
+}
+
+.scroll-bar:horizontal:hover .track,
+.scroll-bar:horizontal:pressed .track,
+.scroll-bar:vertical:hover .track,
+.scroll-bar:vertical:pressed .track {
+    -fx-background-color: -fx-speedment-lightgray;
+}
+
+.scroll-bar .thumb:hover,
+.scroll-bar .thumb:pressed {
+    -fx-background-color: -fx-speedment-darkgray;
+}
+
+.increment-button:hover,
+.decrement-button:hover {
+    -fx-background-color: -fx-speedment-darkgray;
+}
+
+/*** Menus ***/
+.menu-bar,
+.menu-bar .menu,
+.menu-bar .menu .menu-item {
+    -fx-background-color: -fx-speedment-lightgray;
+    -fx-text-fill: black;
+}
+
+.context-menu {
+    -fx-background-color: white;
+    -fx-background-radius: 0px;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-border-color: -fx-speedment-green;
+    -fx-text-fill: black;
+    -fx-padding: 0px;
+    -fx-font-size: 1.1em;
+    -fx-font-weight: normal;
+}
+
+.menu-bar .menu:hover,
+.menu-bar .menu:active,
+.menu-bar .menu:focused,
+.menu-bar .menu:showing,
+.menu-bar .menu:hover > .label,
+.menu-bar .menu:active > .label,
+.menu-bar .menu:focused > .label,
+.menu-bar .menu:showing > .label,
+.menu-bar .menu .menu-item:hover,
+.menu-bar .menu .menu-item:active,
+.menu-bar .menu .menu-item:focused,
+.context-menu .menu-item:hover,
+.context-menu .menu-item:focused,
+.menu-bar .menu .menu-item:hover > .label,
+.menu-bar .menu .menu-item:active > .label,
+.menu-bar .menu .menu-item:focused > .label,
+.context-menu .menu-item:hover > .label,
+.context-menu .menu-item:focused > .label,
+.menu-bar .menu .menu-item:hover *,
+.menu-bar .menu .menu-item:active *,
+.menu-bar .menu .menu-item:focused *,
+.context-menu .menu-item:hover *,
+.context-menu .menu-item:focused * {
+    -fx-background-color: -fx-speedment-green;
+    -fx-fill: white;
+    -fx-text-fill: white;
+    -fx-focus-color: white;
+}
+
+.menu-bar .menu:hover:show-mnemonics > .label > .mnemonic-underline,
+.menu-bar .menu:active:show-mnemonics > .label > .mnemonic-underline,
+.menu-bar .menu:focused:show-mnemonics > .label > .mnemonic-underline,
+.menu-bar .menu:showing:show-mnemonics > .label > .mnemonic-underline,
+.menu-bar .menu:show-mnemonics .menu-item:hover > .label > .mnemonic-underline,
+.menu-bar .menu:show-mnemonics .menu-item:active > .label > .mnemonic-underline,
+.menu-bar .menu:show-mnemonics .menu-item:focused > .label > .mnemonic-underline,
+.menu-bar .menu:show-mnemonics .menu-item:showing > .label > .mnemonic-underline {
+    -fx-stroke: white;
+}
+
+/*** Separators ***/
+.menu-bar .separator {
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-background-color: -fx-speedment-green;
+}
+
+.menu-bar .separator .line {
+    -fx-border-width: 1px 0px 0px 0px;
+    -fx-border-style: solid;
+    -fx-border-color: -fx-speedment-green;
+}
+
+/*** Toolbar buttons ***/
+#toolbar {
+    -fx-padding: 0.5em 1em 0.5em 1em;
+    -fx-spacing: 1em;
+}
+
+#toolbar .button {
+    -fx-padding: 0.8em 1.2em 0.8em 1.2em;
+}
+
+#toolbar .button:show-mnemonics .mnemonic-underline {
+    -fx-stroke: white;
+}
+
+/*** Dialog Panels ***/
+.header-panel {
+    -fx-border-width: 0px;
+}
+
+.header-panel > .label,
+.header-panel > .label > .text {
+    -fx-text-fill: white;
+    -fx-font-family: 'Advent Pro';
+    -fx-font-size: 2em;
+    -fx-font-weight: bold;
+    -fx-fill: white;
+}
+
+.header-panel > .graphic-container > .glyph-icon {
+    -fx-fill: white;
+}
+
+.error .header-panel {
+    -fx-background-color: -fx-speedment-red;
+}
+
+.warning .header-panel {
+    -fx-background-color: -fx-sencha-orange1;
+}
+
+.confirmation .header-panel {
+    -fx-background-color: -fx-speedment-orange;
+}
+
+.info .header-panel {
+    -fx-background-color: -fx-speedment-green;
+}
+
+.authentication .header-panel {
+    -fx-background-color: -fx-speedment-blue;
+}
+
+.progress .header-panel {
+    -fx-background-color: -fx-speedment-blue;
+}
+
+/*** Output messages ***/
+.label.msg {
+    -fx-font-family: 'Consolas', "Monospace";
+    -fx-text-overrun: center-ellipsis;
+    -fx-font-size: 1.1em;
+    -fx-text-fill: black;
+}
+
+.label.msg.error {
+    -fx-background-color: -fx-speedment-lightred;
+}
+
+.label.msg.warning {
+    -fx-background-color: -fx-speedment-lightorange;
+}
+
+.label.msg.success {
+    -fx-background-color: -fx-speedment-lightgreen;
+}
+
+/*** Notifications ***/
+.notification {
+    -fx-border-width: 0px 0px 0px 8px;
+    -fx-background-color: #eee; 
+    -fx-padding: 16;
+}
+
+.notification.info { -fx-border-color: -fx-speedment-lightblue; }
+.notification.info .glyph-icon { -fx-fill: -fx-speedment-lightblue; } 
+
+.notification.success { -fx-border-color: -fx-speedment-lightgreen; }
+.notification.success .glyph-icon { -fx-fill: -fx-speedment-lightgreen; } 
+
+.notification.warning { -fx-border-color: -fx-speedment-orange; }
+.notification.warning .glyph-icon { -fx-fill: -fx-speedment-orange; }
+
+.notification.error { -fx-border-color: -fx-speedment-red; }
+.notification.error .glyph-icon { -fx-fill: -fx-speedment-red; }
+
+.notification.confirmation { -fx-border-color: -fx-speedment-orange; }
+.notification.confirmation .glyph-icon { -fx-fill: -fx-speedment-orange; }
+
+.notification.authentication { -fx-border-color: -fx-speedment-blue; }
+.notification.authentication .glyph-icon { -fx-fill: -fx-speedment-blue; }
+
+/*** Properties layout ***/
+.properties-layout {
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+    -fx-padding: 15px 15px 15px 15px;
+}
+
+/*** Properties layout : left ***/
+.property-label {
+    -fx-font-size: 1.2em;
+    -fx-alignment: top-left;
+    -fx-padding: 5px 0px 5px 0px;
+}
+
+/*** Properties layout : right ***/
+.property-editor {
+    -fx-spacing: 10px;
+    -fx-fill-width: true;    
+    -fx-alignment: center-left;
+    -fx-wrap-text: true;  
+}
+
+/*** Issues ***/
+#issues .button {
+    -fx-padding: 6px 8px 6px 8px;
+}
