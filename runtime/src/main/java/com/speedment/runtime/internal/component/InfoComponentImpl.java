@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.internal.component;
 
+import com.speedment.runtime.SpeedmentVersion;
 import com.speedment.runtime.component.InfoComponent;
 
 /**
@@ -43,6 +44,6 @@ public final class InfoComponentImpl extends InternalOpenSourceComponent
 
     @Override
     public String version() {
-        return "3.0.0";
+        return SpeedmentVersion.getImplementationVersion();
     }
 }
