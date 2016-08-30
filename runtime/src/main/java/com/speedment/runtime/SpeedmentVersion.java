@@ -37,7 +37,7 @@ public final class SpeedmentVersion {
         IMPLEMENTATION_VERSION = "3.0.0-EA",
         SPECIFICATION_VERSION  = "3.0";
 
-    private static final boolean PRODUCTION_MODE = true;
+    private static final boolean PRODUCTION_MODE = false;
 
     /**
      * Returns if this version is intended for production use.
