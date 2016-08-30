@@ -50,6 +50,9 @@ import static java.util.Comparator.comparing;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.comparing;
+import static java.util.Comparator.comparing;
 
 /**
  *
@@ -156,7 +159,7 @@ public final class ComponentsController implements Initializable {
         public DbmsTypeItem(DbmsType dbmsType) {
             super(dbmsType.getName());
             setExpanded(true);
-            setGraphic(SpeedmentIcon.CONNECT.view());
+            setGraphic(SpeedmentIcon.DATABASE.view());
         }
     };
     
@@ -174,7 +177,7 @@ public final class ComponentsController implements Initializable {
         public TypeMapperItem(TypeMapper<?, ?> typeMapper) {
             super(typeMapper.getLabel());
             setExpanded(true);
-            setGraphic(SpeedmentIcon.CUP_LINK.view());
+            setGraphic(SpeedmentIcon.CUP.view());
         }
     };
     

@@ -41,17 +41,23 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  * An enumeration of all the icons available in the Speedment Icon Package.
- * 
- * @author  Emil Forslund
- * @since   2.2.0
+ *
+ * @author Emil Forslund
+ * @since 2.2.0
  */
-@Api(version="3.0")
+@Api(version = "3.0")
 public enum SpeedmentIcon {
 
     // Big buttons
+// Big buttons
+// Big buttons
+// Big buttons
     BIG_GENERATE("/images/icon-generate.png"),
     BIG_CONFIGURE("/images/icon-configure.png"),
     BIG_GENERATE_HOVER("/images/icon-generate-hover.png"),
@@ -87,29 +93,27 @@ public enum SpeedmentIcon {
     // Logotype
     SPIRE("/images/logo.png"),
     //Components controller
- SITEMAP_COLOR("pics/vectors_rendered/sitemapColor.png"),
- BOX("pics/vectors_rendered/box.png"),
- BRICKS("pics/vectors_rendered/bricks.png"),
- BOOK_OPEN("pics/vectors_rendered/BookOpen.png"),
- BOOK_NEXT("pics/vectors_rendered/bookNext.png"),
- DATABASE_CONNECT("pics/vectors_rendered/databaseConnect.png"),
- CONNECT("pics/vectors_rendered/connect.png"),
- PAGE_WHITE_CUP("pics/vectors_rendered/pageWhiteCup.png"),
- CUP_LINK("pics/vectors_rendered/cupLink"),
- TEXT_SIGNATURE("pics/vectors_rendered/textSignature.png"),
- BOOK_LINK("pics/vectors_rendered/bookLink.png"),
- //MenuController
- DISK("pics/vectors_rendered/disk.png"),
- DISK_MULTIPLE("pics/vectors_rendered/diskMultiple.png"),
- DOOR_IN("pics/vectors_rendered/doorIn.png"),
- APPLICATION_SIDE_TREE("pics/vectors_rendered/applicationSideTree.png"),
- APPLICATION_FORM("pics/vectors_rendered/applicationForm.png"),
- APPLICATION_XP_TERMINAL("pics/vectors_rendered/applicationXpTerminal.png"),
- USER_COMMENT("pics/vectors_rendered/userComment.png"),
- INFORMATION("pics/vectors_rendered/information.png"),
- HELP ("pics/vectors_rendered/help.png")
- 
-    ;
+    SITEMAP_COLOR("/pics/vectors_rendered/sitemapColor.png"),
+    BOX("/pics/vectors_rendered/box.png"),
+    BRICKS("/pics/vectors_rendered/bricks.png"),
+    BOOK_OPEN("/pics/vectors_rendered/bookOpen.png"),
+    BOOK_NEXT("/pics/vectors_rendered/bookNext.png"),
+    DATABASE_CONNECT("/pics/vectors_rendered/databaseConnect.png"),
+    DATABASE("/pics/vectors_rendered/database.png"),
+    PAGE_WHITE_CUP("/pics/vectors_rendered/pageWhiteCup.png"),
+    CUP("/pics/vectors_rendered/cup.png"),
+    TEXT_SIGNATURE("/pics/vectors_rendered/textSignature.png"),
+    BOOK_LINK("/pics/vectors_rendered/bookLink.png"),
+    //MenuController
+    DISK("/pics/vectors_rendered/disk.png"),
+    DISK_MULTIPLE("/pics/vectors_rendered/diskMultiple.png"),
+    DOOR_IN("/pics/vectors_rendered/doorIn.png"),
+    APPLICATION_SIDE_TREE("/pics/vectors_rendered/applicationSideTree.png"),
+    APPLICATION_FORM("/pics/vectors_rendered/applicationForm.png"),
+    APPLICATION_XP_TERMINAL("/pics/vectors_rendered/applicationXpTerminal.png"),
+    USER_COMMENT("/pics/vectors_rendered/userComment.png"),
+    INFORMATION("/pics/vectors_rendered/info.png"),
+    HELP("/pics/vectors_rendered/help.png");
 
     private final String filename;
 
@@ -149,9 +153,9 @@ public enum SpeedmentIcon {
         requireNonNull(node);
 
         final Optional<String> path = Optional.of(node)
-                .filter(HasIconPath.class::isInstance)
-                .map(HasIconPath.class::cast)
-                .map(HasIconPath::getIconPath);
+            .filter(HasIconPath.class::isInstance)
+            .map(HasIconPath.class::cast)
+            .map(HasIconPath::getIconPath);
 
         if (path.isPresent()) {
             final InputStream stream = SpeedmentIcon.class.getResourceAsStream(path.get());
@@ -159,18 +163,18 @@ public enum SpeedmentIcon {
                 return new ImageView(new Image(stream));
             } else {
                 LOGGER.error(
-                        "Config node '" + node.getClass().getSimpleName()
-                        + "' specified a custom icon '" + path.get() + "' that could not be loaded."
+                    "Config node '" + node.getClass().getSimpleName()
+                    + "' specified a custom icon '" + path.get() + "' that could not be loaded."
                 );
             }
         }
 
         final SpeedmentIcon icon = NODE_ICONS.get(
-                Optional.of(node)
-                    .filter(HasMainInterface.class::isInstance)
-                    .map(HasMainInterface.class::cast)
-                    .map(HasMainInterface::mainInterface)
-                    .orElse(node.getClass())
+            Optional.of(node)
+            .filter(HasMainInterface.class::isInstance)
+            .map(HasMainInterface.class::cast)
+            .map(HasMainInterface::mainInterface)
+            .orElse(node.getClass())
         );
 
         if (icon != null) {

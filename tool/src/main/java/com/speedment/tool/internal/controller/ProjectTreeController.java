@@ -57,55 +57,61 @@ import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 import static javafx.application.Platform.runLater;
 import static javafx.scene.control.SelectionMode.SINGLE;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Emil Forslund
  */
 public final class ProjectTreeController implements Initializable {
-    
-    private @Inject UserInterfaceComponent ui;
-    private @Inject EventComponent events;
-    
-    private @FXML TreeView<DocumentProperty> hierarchy;
+
+    private @Inject
+    UserInterfaceComponent ui;
+    private @Inject
+    EventComponent events;
+
+    private @FXML
+    TreeView<DocumentProperty> hierarchy;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        ui.installContextMenu(ProjectProperty.class,    this::createDefaultContextMenu);
-        ui.installContextMenu(DbmsProperty.class,       this::createDefaultContextMenu);
-        ui.installContextMenu(SchemaProperty.class,     this::createDefaultContextMenu);
-        ui.installContextMenu(TableProperty.class,      this::createDefaultContextMenu);
-        ui.installContextMenu(IndexProperty.class,      this::createDefaultContextMenu);
+        ui.installContextMenu(ProjectProperty.class, this::createDefaultContextMenu);
+        ui.installContextMenu(DbmsProperty.class, this::createDefaultContextMenu);
+        ui.installContextMenu(SchemaProperty.class, this::createDefaultContextMenu);
+        ui.installContextMenu(TableProperty.class, this::createDefaultContextMenu);
+        ui.installContextMenu(IndexProperty.class, this::createDefaultContextMenu);
         ui.installContextMenu(ForeignKeyProperty.class, this::createDefaultContextMenu);
-        
+
         runLater(() -> prepareTree(ui.projectProperty()));
     }
-    
+
     private void prepareTree(ProjectProperty project) {
         requireNonNull(project);
-        
+
         events.notify(new ProjectLoaded(project));
 
         Bindings.bindContent(ui.getSelectedTreeItems(), hierarchy.getSelectionModel().getSelectedItems());
         hierarchy.setCellFactory(view -> new DocumentPropertyCell(ui));
         hierarchy.getSelectionModel().setSelectionMode(SINGLE);
-        
+
         populateTree(project);
     }
-    
+
     private void populateTree(ProjectProperty project) {
         requireNonNull(project);
         final TreeItem<DocumentProperty> root = branch(project);
         hierarchy.setRoot(root);
         hierarchy.getSelectionModel().select(root);
     }
-    
+
     private <P extends DocumentProperty & HasExpandedProperty> TreeItem<DocumentProperty> branch(P doc) {
         requireNonNull(doc);
-        
+
         final TreeItem<DocumentProperty> branch = new TreeItem<>(doc);
         branch.expandedProperty().bindBidirectional(doc.expandedProperty());
-        
+
         final ListChangeListener<? super DocumentProperty> onListChange = (ListChangeListener.Change<? extends DocumentProperty> change) -> {
             while (change.next()) {
                 if (change.wasAdded()) {
@@ -115,7 +121,7 @@ public final class ProjectTreeController implements Initializable {
                         .map(this::branch)
                         .forEachOrdered(branch.getChildren()::add);
                 }
-                
+
                 if (change.wasRemoved()) {
                     change.getRemoved()
                         .forEach(val -> branch.getChildren()
@@ -124,21 +130,21 @@ public final class ProjectTreeController implements Initializable {
                 }
             }
         };
-        
+
         // Create a branch for every child
         doc.children()
             .filter(HasExpandedProperty.class::isInstance)
             .map(d -> (DocumentProperty & HasExpandedProperty) d)
             .map(this::branch)
             .forEachOrdered(branch.getChildren()::add);
- 
+
         //  Listen to changes in the actual map
         doc.childrenProperty().addListener((MapChangeListener.Change<? extends String, ? extends ObservableList<DocumentProperty>> change) -> {
             if (change.wasAdded()) {
-                
+
                 // Listen for changes in the added list
                 change.getValueAdded().addListener(onListChange);
-                
+
                 // Create a branch for every child
                 change.getValueAdded().stream()
                     .filter(HasExpandedProperty.class::isInstance)
@@ -147,7 +153,7 @@ public final class ProjectTreeController implements Initializable {
                     .forEachOrdered(branch.getChildren()::add);
             }
         });
-        
+
         // Listen to changes in every list inside the map
         doc.childrenProperty()
             .values()
@@ -155,39 +161,42 @@ public final class ProjectTreeController implements Initializable {
 
         return branch;
     }
-    
+
     private <DOC extends DocumentProperty> Stream<MenuItem> createDefaultContextMenu(TreeCell<DocumentProperty> treeCell, DOC node) {
-        
+
         final MenuItem expandAll = new MenuItem("Expand All", SpeedmentIcon.BOOK_OPEN.view());
-        final MenuItem collapseAll = new MenuItem("Collapse All", SpeedmentIcon.BOOK.view());
-        
+        final MenuItem collapseAll = new MenuItem("Collapse All", SilkIcon.BOOK.view());
+
         expandAll.setOnAction(ev -> {
             DocumentUtil.traverseOver(node)
                 .filter(HasExpandedProperty.class::isInstance)
                 .forEach(doc -> ((HasExpandedProperty) doc).expandedProperty().setValue(true));
         });
-        
+
         collapseAll.setOnAction(ev -> {
             DocumentUtil.traverseOver(node)
                 .filter(HasExpandedProperty.class::isInstance)
                 .forEach(doc -> ((HasExpandedProperty) doc).expandedProperty().setValue(false));
         });
-        
+
         return Stream.of(expandAll, collapseAll);
     }
-    
+
     private final static class DocumentPropertyCell extends TreeCell<DocumentProperty> {
-        
+
         private final ChangeListener<Boolean> change = (ob, o, enabled) -> {
-            if (enabled) enable(); 
-            else disable();
+            if (enabled) {
+                enable();
+            } else {
+                disable();
+            }
         };
-        
+
         private final UserInterfaceComponent ui;
-        
+
         public DocumentPropertyCell(UserInterfaceComponent ui) {
             this.ui = requireNonNull(ui);
-            
+
             // Listener should be initiated with a listener attached
             // that removes enabled-listeners attached to the previous
             // node when a new node is selected.
@@ -210,7 +219,8 @@ public final class ProjectTreeController implements Initializable {
         }
 
         private void enable() {
-            while (getStyleClass().remove("gui-disabled")) {}
+            while (getStyleClass().remove("gui-disabled")) {
+            }
         }
 
         @Override
@@ -228,16 +238,16 @@ public final class ProjectTreeController implements Initializable {
                 disable();
             } else {
                 final ImageView icon;
-                
+
                 if (item instanceof HasIconPath) {
                     final HasIconPath hasIcon = (HasIconPath) item;
                     icon = new ImageView(new Image(hasIcon.getIconPath()));
                 } else {
                     icon = SpeedmentIcon.forNode(item);
                 }
-                
+
                 setGraphic(icon);
-                
+
                 if (item instanceof HasNameProperty) {
                     @SuppressWarnings("unchecked")
                     final HasNameProperty withName = (HasNameProperty) item;
@@ -251,7 +261,7 @@ public final class ProjectTreeController implements Initializable {
                     ui.createContextMenu(this, (DocumentProperty & HasMainInterface) item)
                         .ifPresent(this::setContextMenu);
                 }
-                
+
                 if (HasEnabled.test(item)) {
                     enable();
                 } else {
