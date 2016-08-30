@@ -33,7 +33,7 @@ public final class SpeedmentVersion {
 
     private static final String IMPLEMENTATION_TITLE = "Speedment",
         IMPLEMENTATION_VENDOR  = "Speedment Inc.", // "Speedment, Inc." difficult to enter into POM because of ','
-        IMPLEMENTATION_VERSION = "3.0.0",
+        IMPLEMENTATION_VERSION = "3.0.0-EA",
         SPECIFICATION_VERSION  = "3.0";
 
     private static final boolean PRODUCTION_MODE = true;

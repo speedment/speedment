@@ -26,7 +26,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class SpeedmentVersionTest {
     
-    private static final String EXPECTED_IMPLEMENTATION_VERSION = "3.0.0";
+    private static final String EXPECTED_IMPLEMENTATION_VERSION = "3.0.0-EA";
     private static final String EXPECTED_SPECIFICATION_VERSION = "3.0";
 
     @Test
