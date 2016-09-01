@@ -338,6 +338,13 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      */    
     public BUILDER withBundle(Class<? extends InjectBundle> bundleClass);
     
+    
+    enum LogType {
+        STREAM, PERSIST, UPDATE, REMOVE; 
+    }
+    
+    public BUILDER withLoggingOf(LogType logType);
+    
     /**
      * Builds this application.
      * 

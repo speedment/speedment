@@ -50,6 +50,7 @@ import static com.speedment.runtime.SpeedmentVersion.getImplementationVendor;
 import static com.speedment.runtime.SpeedmentVersion.getSpecificationVersion;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.common.injector.InjectBundle;
+import com.speedment.common.logger.Level;
 import com.speedment.runtime.RuntimeBundle;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -58,6 +59,8 @@ import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.parameter.DbmsType;
+import com.speedment.runtime.internal.db.AbstractDbmsOperationHandler;
+import com.speedment.runtime.internal.db.AsynchronousQueryResultImpl;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -82,7 +85,6 @@ public abstract class AbstractApplicationBuilder<
     private final List<Tuple2<Class<? extends Document>, BiConsumer<Injector, ? extends Document>>> withsAll;
     private final Injector.Builder injector;
 
-    // TODO Investigate why these are not used.
     private boolean checkDatabaseConnectivity;
     private boolean validateRuntimeConfig;
 
@@ -271,6 +273,32 @@ public abstract class AbstractApplicationBuilder<
     public BUILDER withInjectable(String key, Class<?> injectableClass) {
         requireNonNulls(key, injectableClass);
         injector.put(key, injectableClass);
+        return self();
+    }
+
+    @Override
+    public BUILDER withLoggingOf(LogType logType) {
+        switch (logType) {
+            case STREAM: {
+                LoggerManager.getLogger(AsynchronousQueryResultImpl.LOGGER_SELECT_NAME).setLevel(Level.DEBUG);
+                break;
+            }
+            case PERSIST: {
+                LoggerManager.getLogger(AbstractDbmsOperationHandler.LOGGER_INSERT_NAME).setLevel(Level.DEBUG);
+                break;
+            }
+            case UPDATE: {
+                LoggerManager.getLogger(AbstractDbmsOperationHandler.LOGGER_UPDATE_NAME).setLevel(Level.DEBUG);
+                break;
+            }
+            case REMOVE: {
+                LoggerManager.getLogger(AbstractDbmsOperationHandler.LOGGER_DELETE_NAME).setLevel(Level.DEBUG);
+                break;
+            }
+            default: {
+                LOGGER.warn("The log type " + logType.name() + " is not supported.");
+            }
+        }
         return self();
     }
 

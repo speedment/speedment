@@ -47,6 +47,8 @@ import static java.util.Objects.requireNonNull;
 public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryResult<T> {
 
     private static final Logger LOGGER = LoggerManager.getLogger(AsynchronousQueryResultImpl.class);
+    public static final String LOGGER_SELECT_NAME = AsynchronousQueryResultImpl.class.getName()+"#SELECT";
+    private static final Logger LOGGER_SELECT = LoggerManager.getLogger(LOGGER_SELECT_NAME);
 
     private String sql;
     private List<?> values;
@@ -74,20 +76,19 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
         this.connectionSupplier = requireNonNull(connectionSupplier);
         parallelStrategy = ParallelStrategy.DEFAULT;
         setState(State.INIT);
-        debug();
     }
 
     @Override
     public Stream<T> stream() {
         setState(State.ESTABLISH);
         try {
+            LOGGER_SELECT.debug("sql:%s, values:%s", getSql(), getValues());
             connection = connectionSupplier.get();
             ps = connection.prepareStatement(getSql());
             int i = 1;
             for (final Object o : getValues()) {
                 ps.setObject(i++, o);
             }
-            LOGGER.debug("sql:%s, values:%s", getSql(), getValues());
             rs = ps.executeQuery();
         } catch (SQLException sqle) {
             LOGGER.error(sqle, "Error executing " + getSql() + ", values=" + getValues());
@@ -157,17 +158,14 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
 
     protected void setState(State state) {
         this.state = requireNonNull(state);
-        debug();
-    }
-
-    private void debug() {
-        // LOGGER.debug(this);
     }
     
-        public ParallelStrategy getParallelStrategy() {
+    @Override
+    public ParallelStrategy getParallelStrategy() {
         return parallelStrategy;
     }
 
+    @Override
     public void setParallelStrategy(ParallelStrategy parallelStrategy) {
         this.parallelStrategy = parallelStrategy;
     }

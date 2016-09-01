@@ -50,21 +50,26 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import java.util.Collection;
 import static java.util.Collections.singletonList;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author  Per Minborg
- * @author  Emil Forslund
+ * @author Per Minborg
+ * @author Emil Forslund
  */
 public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandler {
 
-    private final static Logger LOGGER = LoggerManager.getLogger(AbstractDbmsOperationHandler.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(AbstractDbmsOperationHandler.class);
+    public static final String LOGGER_INSERT_NAME = AbstractDbmsOperationHandler.class.getName() + "#INSERT";
+    public static final String LOGGER_UPDATE_NAME = AbstractDbmsOperationHandler.class.getName() + "#UPDATE";
+    public static final String LOGGER_DELETE_NAME = AbstractDbmsOperationHandler.class.getName() + "#DELETE";
+    protected static final Logger LOGGER_INSERT = LoggerManager.getLogger(LOGGER_INSERT_NAME);
+    protected static final Logger LOGGER_UPDATE = LoggerManager.getLogger(LOGGER_UPDATE_NAME);
+    protected static final Logger LOGGER_DELETE = LoggerManager.getLogger(LOGGER_DELETE_NAME);
+
     public static final boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
 
     private @Inject ConnectionPoolComponent connectionPoolComponent;
@@ -112,20 +117,27 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
     @Override
     public <ENTITY> void executeInsert(Dbms dbms, String sql, List<?> values, Collection<Field<ENTITY>> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
+        logOperation(LOGGER_INSERT, sql, values);
         final SqlInsertStatement<ENTITY> sqlUpdateStatement = new SqlInsertStatement<>(sql, values, generatedKeyFields, generatedKeyConsumer);
         execute(dbms, singletonList(sqlUpdateStatement));
     }
 
     @Override
     public void executeUpdate(Dbms dbms, String sql, List<?> values) throws SQLException {
+        logOperation(LOGGER_UPDATE, sql, values);
         final SqlUpdateStatement sqlUpdateStatement = new SqlUpdateStatement(sql, values);
         execute(dbms, singletonList(sqlUpdateStatement));
     }
 
     @Override
     public void executeDelete(Dbms dbms, String sql, List<?> values) throws SQLException {
+        logOperation(LOGGER_DELETE, sql, values);
         final SqlDeleteStatement sqlDeleteStatement = new SqlDeleteStatement(sql, values);
         execute(dbms, singletonList(sqlDeleteStatement));
+    }
+
+    protected void logOperation(Logger logger, final String sql, final List<?> values) {
+        logger.debug("sql:%s, values:%s", sql, values);
     }
 
     protected void execute(Dbms dbms, List<? extends SqlStatement> sqlStatementList) throws SQLException {
