@@ -340,7 +340,7 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
     
     
     enum LogType {
-        STREAM, PERSIST, UPDATE, REMOVE; 
+        STREAM, PERSIST, UPDATE, REMOVE, APPLICATION_BUILDER; 
     }
     
     public BUILDER withLoggingOf(LogType logType);

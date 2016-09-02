@@ -50,6 +50,7 @@ import static com.speedment.runtime.SpeedmentVersion.getImplementationVendor;
 import static com.speedment.runtime.SpeedmentVersion.getSpecificationVersion;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.common.injector.InjectBundle;
+import com.speedment.common.injector.internal.InjectorImpl;
 import com.speedment.common.logger.Level;
 import com.speedment.runtime.RuntimeBundle;
 import java.util.Optional;
@@ -295,6 +296,11 @@ public abstract class AbstractApplicationBuilder<
                 LoggerManager.getLogger(AbstractDbmsOperationHandler.LOGGER_DELETE_NAME).setLevel(Level.DEBUG);
                 break;
             }
+            case APPLICATION_BUILDER: {
+                LoggerManager.getLogger(InjectorImpl.class).setLevel(Level.DEBUG);
+                LOGGER.setLevel(Level.DEBUG);
+                break;
+            }
             default: {
                 LOGGER.warn("The log type " + logType.name() + " is not supported.");
             }
@@ -339,7 +345,7 @@ public abstract class AbstractApplicationBuilder<
      * @param injector the injector to use
      */
     protected void loadAndSetProject(Injector injector) {
-        //final ApplicationMetadata meta = injector.getOrThrow(ApplicationMetadata.class);
+        LOGGER.debug("Loading and Setting Project Configuration");
         final Project project = injector.getOrThrow(ProjectComponent.class).getProject();
 
         // Apply overidden item (if any) for all Documents of a given class
@@ -375,6 +381,7 @@ public abstract class AbstractApplicationBuilder<
     }
 
     protected void validateRuntimeConfig(Injector injector) {
+        LOGGER.debug("Validating Runtime Configuration");
         final Project project = injector.getOrThrow(ProjectComponent.class).getProject();
         if (project == null) {
             throw new SpeedmentException("No project defined");
@@ -398,6 +405,7 @@ public abstract class AbstractApplicationBuilder<
     }
 
     protected void checkDatabaseConnectivity(Injector injector) {
+        LOGGER.debug("Checking Database Connectivity");
         final Project project = injector.getOrThrow(ProjectComponent.class).getProject();
         project.dbmses().forEachOrdered(dbms -> {
 //            final DbmsHandlerComponent dbmsHandlerComponent = injector.getOrThrow(DbmsHandlerComponent.class);
