@@ -60,8 +60,10 @@ import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.parameter.DbmsType;
+import com.speedment.runtime.db.DbmsMetadataHandler;
 import com.speedment.runtime.internal.db.AbstractDbmsOperationHandler;
 import com.speedment.runtime.internal.db.AsynchronousQueryResultImpl;
+import java.sql.SQLException;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -86,8 +88,8 @@ public abstract class AbstractApplicationBuilder<
     private final List<Tuple2<Class<? extends Document>, BiConsumer<Injector, ? extends Document>>> withsAll;
     private final Injector.Builder injector;
 
-    private boolean checkDatabaseConnectivity;
-    private boolean validateRuntimeConfig;
+    private boolean skipCheckDatabaseConnectivity;
+    private boolean skipValidateRuntimeConfig;
 
     protected AbstractApplicationBuilder(
         Class<? extends APP> applicationImplClass,
@@ -104,6 +106,8 @@ public abstract class AbstractApplicationBuilder<
         this.injector = requireNonNull(injector);
         this.withsNamed = new ArrayList<>();
         this.withsAll = new ArrayList<>();
+        this.skipCheckDatabaseConnectivity = false;
+        this.skipValidateRuntimeConfig = false;
     }
 
     protected final BUILDER self() {
@@ -245,14 +249,14 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public BUILDER withCheckDatabaseConnectivity(boolean checkDatabaseConnectivity) {
-        this.checkDatabaseConnectivity = checkDatabaseConnectivity;
+    public BUILDER withSkipCheckDatabaseConnectivity() {
+        this.skipCheckDatabaseConnectivity = true;
         return self();
     }
 
     @Override
-    public BUILDER withValidateRuntimeConfig(boolean validateRuntimeConfig) {
-        this.validateRuntimeConfig = validateRuntimeConfig;
+    public BUILDER withSkipValidateRuntimeConfig() {
+        this.skipValidateRuntimeConfig = true;
         return self();
     }
 
@@ -321,14 +325,17 @@ public abstract class AbstractApplicationBuilder<
         loadAndSetProject(inj);
 
         printWelcomeMessage(inj);
-        if (validateRuntimeConfig) {
+        
+        if (!skipValidateRuntimeConfig) {
             validateRuntimeConfig(inj);
         }
-        if (checkDatabaseConnectivity) {
+        if (!skipCheckDatabaseConnectivity) {
             checkDatabaseConnectivity(inj);
         }
+        
+        final APP app = build(inj);
 
-        return build(inj);
+        return app;
     }
 
     /**
@@ -408,40 +415,16 @@ public abstract class AbstractApplicationBuilder<
         LOGGER.debug("Checking Database Connectivity");
         final Project project = injector.getOrThrow(ProjectComponent.class).getProject();
         project.dbmses().forEachOrdered(dbms -> {
-//            final DbmsHandlerComponent dbmsHandlerComponent = injector.getOrThrow(DbmsHandlerComponent.class);
-//            final DbmsType dbmsType = DocumentDbUtil.dbmsTypeOf(dbmsHandlerComponent, dbms);
-//            final DbmsOperationHandler ops = dbmsType.getOperationHandler();
-//            
-//                private ConnectionPoolComponent connectionPoolComponent = injector.;
-//            
-//            
-//            Connection c = null;
-//            
-//            try {
-//                final String initialQuery = dbmsType.getInitialQuery();
-//                LOGGER.info(initialQuery);
-//
-//                final Optional<String> oInfo = ops.executeQuery(dbms, initialQuery, (rs) -> rs.getObject(1).toString()).findFirst();
-//                if (oInfo.isPresent()) {
-//                    LOGGER.warn("Unable to verify dbms connection for " + dbms.toString());
-//                } else {
-//                    LOGGER.info("Dbms " + dbms.getName() + " -> " + oInfo.get().toString());
-//                }
-////
-////                try (Connection conn = dbmsHandler.executeDelete(sql, withsAll)) {
-////                    final Optional<Map<String, String>> oInfo = dbmsHandler.executeQuery(dbmsType.getInitialQuery(), new RsMapper()).findAny();
-////                    if (!oInfo.isPresent()) {
-////                        LOGGER.warn("Unable to verify dbms connection for " + dbms.toString());
-////                    } else {
-////                        LOGGER.info("Dbms " + dbms.getName() + " -> " + oInfo.get().toString());
-////                    }
-////                } catch (Exception e) {
-////                    LOGGER.error(e, "Unable to connect to dbms " + dbms.toString());
-////                }
-//
-//            } catch (Exception e) {
-//                LOGGER.error(e, "Unable to connect to dbms " + dbms.toString());
-//            }
+
+            final DbmsHandlerComponent dbmsHandlerComponent = injector.getOrThrow(DbmsHandlerComponent.class);
+            final DbmsType dbmsType = DocumentDbUtil.dbmsTypeOf(dbmsHandlerComponent, dbms);
+            final DbmsMetadataHandler handler = dbmsType.getMetadataHandler();
+
+            try {
+                LOGGER.info(handler.getDbmsInfoString(dbms));
+            } catch (SQLException sqle) {
+                throw new SpeedmentException("Unable to establish initial connection with the database named " + dbms.getName() + ".", sqle);
+            }
         });
     }
 

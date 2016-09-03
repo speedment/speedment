@@ -21,6 +21,7 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.util.ProgressMeasure;
+import java.sql.SQLException;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
@@ -55,4 +56,14 @@ public interface DbmsMetadataHandler {
         ProgressMeasure progressListener,
         Predicate<String> filterCriteria
     );
+    
+    /**
+     * Returns a string with information on the current dbms.
+     *
+     * @param dbms to get information on
+     * @return a string with information on the current dbms
+     * @throws SQLException if an error occurs
+     */
+    String getDbmsInfoString(Dbms dbms) throws SQLException;
+    
 }

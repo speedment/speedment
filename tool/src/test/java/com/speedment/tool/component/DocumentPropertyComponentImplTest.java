@@ -66,8 +66,8 @@ public class DocumentPropertyComponentImplTest {
         speedment = new DefaultApplicationBuilder(EmptyApplicationMetadata.class)
             .withBundle(GeneratorBundle.class)
             .withBundle(ToolBundle.class)
-            .withCheckDatabaseConnectivity(false)
-            .withValidateRuntimeConfig(false)
+            .withSkipCheckDatabaseConnectivity()
+            .withSkipValidateRuntimeConfig()
             .build();
         
         component = speedment.getOrThrow(DocumentPropertyComponent.class);

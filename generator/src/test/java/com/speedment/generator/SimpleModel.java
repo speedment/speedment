@@ -83,8 +83,8 @@ public abstract class SimpleModel {
         speedment = new DefaultApplicationBuilder(SimpleMetadata.class)
             .withBundle(GeneratorBundle.class)
             .withInjectable(SilentTranslatorManager.class)
-            .withCheckDatabaseConnectivity(false)
-            .withValidateRuntimeConfig(false)
+            .withSkipCheckDatabaseConnectivity()
+            .withSkipValidateRuntimeConfig()
             .build();
         
         project = speedment.project();

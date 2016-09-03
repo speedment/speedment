@@ -32,6 +32,9 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

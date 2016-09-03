@@ -69,6 +69,9 @@ import static com.speedment.tool.util.OutputUtil.success;
 import java.util.Set;
 import static java.util.stream.Collectors.toSet;
 import static javafx.application.Platform.runLater;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
 
 /**
  *

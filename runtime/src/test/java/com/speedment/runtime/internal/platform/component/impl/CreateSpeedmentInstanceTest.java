@@ -32,8 +32,8 @@ public class CreateSpeedmentInstanceTest {
     @Test
     public void createSpeedmentInstance() {
         final Speedment speedment = new DefaultApplicationBuilder(EmptyApplicationMetadata.class)
-            .withCheckDatabaseConnectivity(false)
-            .withValidateRuntimeConfig(false)
+            .withSkipCheckDatabaseConnectivity()
+            .withSkipValidateRuntimeConfig()
             .build();
         
         assertNotNull(speedment);

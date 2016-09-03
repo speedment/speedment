@@ -138,7 +138,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
     }
 
     private ApplicationBuilder<?, ?> createBuilder() throws MojoExecutionException {
-        ApplicationBuilder<?, ?> result;
+        final ApplicationBuilder<?, ?> result;
 
         // Configure config file location
         if (hasConfigFile()) {
@@ -151,35 +151,37 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
             result = new DefaultApplicationBuilder(EmptyApplicationMetadata.class);
         }
 
+        //
+        result.withSkipCheckDatabaseConnectivity();
+        
         // Configure manual database settings
         if (dbmsHost() != null) {
-            result = result.withIpAddress(dbmsHost());
+            result.withIpAddress(dbmsHost());
             getLog().info("Custom database host '" + dbmsHost() + "'.");
         }
 
         if (dbmsPort() != 0) {
-            result = result.withPort(dbmsPort());
+            result.withPort(dbmsPort());
             getLog().info("Custom database port '" + dbmsPort() + "'.");
         }
 
         if (dbmsUsername() != null) {
-            result = result.withUsername(dbmsUsername());
+            result.withUsername(dbmsUsername());
             getLog().info("Custom database username '" + dbmsUsername() + "'.");
         }
 
         if (dbmsPassword() != null) {
-            result = result.withPassword(dbmsPassword());
+            result.withPassword(dbmsPassword());
             getLog().info("Custom database password '********'.");
         }
 
         // Add mandatory components that are not included in 'runtime'
         result
             .withBundle(GeneratorBundle.class)
-            .withBundle(ToolBundle.class);
-
-        result.with(CodeGenerationComponentImpl.class);
-        result.with(UserInterfaceComponentImpl.class);
-        result.with(MavenPathComponent.class);
+            .withBundle(ToolBundle.class)
+            .with(CodeGenerationComponentImpl.class)
+            .with(UserInterfaceComponentImpl.class)
+            .with(MavenPathComponent.class);
 
         // Add any extra type mappers requested by the user
         TypeMapperInstaller.mappings = typeMappers(); // <-- Hack to pass type mappers to class with default constructor.

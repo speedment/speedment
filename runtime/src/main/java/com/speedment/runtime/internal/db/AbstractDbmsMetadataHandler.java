@@ -135,6 +135,27 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             progress.setProgress(ProgressMeasure.DONE);
         });
     }
+    
+    
+    @Override
+    public String getDbmsInfoString(Dbms dbms) throws SQLException {
+        try (final Connection conn = getConnection(dbms)) {
+            final DatabaseMetaData md = conn.getMetaData();
+            return new StringBuilder()
+                .append(md.getDatabaseProductName())
+                .append(", ")
+                .append(md.getDatabaseProductVersion())
+                .append(", ")
+                .append(md.getDriverName())
+                .append(" ")
+                .append(md.getDriverVersion())
+                .append(", JDBC version ")
+                .append(md.getJDBCMajorVersion())
+                .append(".")
+                .append(md.getJDBCMinorVersion())
+                .toString();
+        }
+    }        
 
     private CompletableFuture<Project> readSchemaMetadata(
         Project project,
@@ -174,7 +195,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
 
         // Task that downloads the schemas from the database
         final CompletableFuture<Void> schemasTask = CompletableFuture.runAsync(() -> {
-            try (final Connection connection = connectionPoolComponent.getConnection(dbms)) {
+            try (final Connection connection = getConnection(dbms)) {
                 try (final ResultSet rs = connection.getMetaData().getSchemas(null, null)) {
                     while (rs.next()) {
 
@@ -203,7 +224,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
 
         // Task that downloads the catalogs from the database
         final CompletableFuture<Void> catalogsTask = CompletableFuture.runAsync(() -> {
-            try (final Connection connection = connectionPoolComponent.getConnection(dbms)) {
+            try (final Connection connection = getConnection(dbms)) {
                 try (final ResultSet catalogResultSet = connection.getMetaData().getCatalogs()) {
                     while (catalogResultSet.next()) {
                         final String schemaName = catalogResultSet.getString(1);
@@ -285,7 +306,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         LOGGER.info(action);
         progressListener.setCurrentAction(action);
 
-        try (final Connection connection = connectionPoolComponent.getConnection(dbms)) {
+        try (final Connection connection = getConnection(dbms)) {
             try (final ResultSet rsTable = connection.getMetaData().getTables(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), null, new String[]{"TABLE"})) {
 
                 if (SHOW_METADATA) {
@@ -319,7 +340,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
 
         return CompletableFuture.allOf(
             schema.tables().map(table -> sqlTypeMapping.thenAcceptAsync(mapping -> {
-                try (final Connection connection = connectionPoolComponent.getConnection(dbms)) {
+                try (final Connection connection = getConnection(dbms)) {
                     progressListener.setCurrentAction(actionName(table));
                     columns(connection, mapping, table, progressListener);
                     indexes(connection, table, progressListener);
@@ -675,7 +696,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         requireNonNull(dbms);
 
         final List<TypeInfoMetaData> typeInfoMetaDataList = new ArrayList<>();
-        try (final Connection connection = connectionPoolComponent.getConnection(dbms)) {
+        try (final Connection connection = getConnection(dbms)) {
             try (final ResultSet rs = connection.getMetaData().getTypeInfo()) {
                 while (rs.next()) {
                     final TypeInfoMetaData typeInfo = TypeInfoMetaData.of(rs);
@@ -758,7 +779,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             naming.quoteField(columnName)
         );
         
-        try (final Connection conn = connectionPoolComponent.getConnection(dbms);
+        try (final Connection conn = getConnection(dbms);
              final PreparedStatement ps = conn.prepareStatement(sql);
              final ResultSet rs = ps.executeQuery()) {
             
@@ -782,4 +803,9 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             }
         }
     }
+    
+    private Connection getConnection(Dbms dbms) {
+        return connectionPoolComponent.getConnection(dbms);
+    }
+    
 }

@@ -37,7 +37,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -65,8 +64,8 @@ public abstract class SimpleModel {
     public void simpleModelTestSetUp() {
 
         speedment = new DefaultApplicationBuilder(SimpleMetadata.class)
-            .withCheckDatabaseConnectivity(false)
-            .withValidateRuntimeConfig(false)
+            .withSkipCheckDatabaseConnectivity()
+            .withSkipValidateRuntimeConfig()
             .build();
         
         project = speedment.project();

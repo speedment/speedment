@@ -43,8 +43,8 @@ public class VersionComponentImplTest {
         final Speedment speedment = new DefaultApplicationBuilder(EmptyApplicationMetadata.class)
             .withBundle(GeneratorBundle.class)
             .withBundle(ToolBundle.class)
-            .withCheckDatabaseConnectivity(false)
-            .withValidateRuntimeConfig(false)
+            .withSkipCheckDatabaseConnectivity()
+            .withSkipValidateRuntimeConfig()
             .build();
         
         final VersionComponent version = speedment.getOrThrow(VersionComponent.class);
