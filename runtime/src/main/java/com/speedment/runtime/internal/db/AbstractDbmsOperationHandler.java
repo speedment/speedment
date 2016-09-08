@@ -82,20 +82,26 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         requireNonNulls(sql, values, rsMapper);
 
         try (
-            final Connection connection = connectionPoolComponent.getConnection(dbms);
-            final PreparedStatement ps = connection.prepareStatement(sql)) {
-            int i = 1;
-            for (final Object o : values) {
-                ps.setObject(i++, o);
-            }
-            try (final ResultSet rs = ps.executeQuery()) {
-
-                // Todo: Make a transparent stream with closeHandler added.
-                final Stream.Builder<T> streamBuilder = Stream.builder();
-                while (rs.next()) {
-                    streamBuilder.add(rsMapper.apply(rs));
+                final Connection connection = connectionPoolComponent.getConnection(dbms);
+                final PreparedStatement ps = connection.prepareStatement(sql)
+        ) {
+            connection.setAutoCommit(false);
+            try {
+                int i = 1;
+                for (final Object o : values) {
+                    ps.setObject(i++, o);
                 }
-                return streamBuilder.build();
+                try (final ResultSet rs = ps.executeQuery()) {
+
+                    // Todo: Make a transparent stream with closeHandler added.
+                    final Stream.Builder<T> streamBuilder = Stream.builder();
+                    while (rs.next()) {
+                        streamBuilder.add(rsMapper.apply(rs));
+                    }
+                    return streamBuilder.build();
+                }
+            } finally {
+                connection.commit();
             }
         } catch (final SQLException sqle) {
             LOGGER.error(sqle, "Error querying " + sql);

@@ -84,6 +84,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
         try {
             LOGGER_SELECT.debug("sql:%s, values:%s", getSql(), getValues());
             connection = connectionSupplier.get();
+            connection.setAutoCommit(false);
             ps = connection.prepareStatement(getSql());
             int i = 1;
             for (final Object o : getValues()) {
@@ -102,6 +103,11 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
     public void close() {
         closeSilently(rs);
         closeSilently(ps);
+        try {
+            connection.commit();
+        } catch (SQLException e) {
+            LOGGER.error(e, "Failed to commit connection upon close");
+        }
         closeSilently(connection);
         setState(State.CLOSED);
     }

@@ -22,3 +22,4 @@ settings.properties
 /maven-plugin/target/
 /tool/nbproject/
 /runtime/nbproject/
+*.iws
