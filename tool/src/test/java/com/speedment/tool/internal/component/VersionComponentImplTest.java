@@ -22,6 +22,8 @@ import com.speedment.runtime.internal.DefaultApplicationBuilder;
 import com.speedment.runtime.internal.EmptyApplicationMetadata;
 import com.speedment.tool.ToolBundle;
 import com.speedment.tool.component.VersionComponent;
+
+import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -53,10 +55,25 @@ public class VersionComponentImplTest {
             final String latest = version.latestVersion().get(2, TimeUnit.SECONDS);
             System.out.println("The latest released version of Speedment is " + latest + ".");
         } catch (final ExecutionException | InterruptedException ex) {
-            throw new RuntimeException(ex);
+            if (hasCause(ex, UnknownHostException.class)) {
+                System.out.println("UnknownHostException - not connected to the Internet?");
+            } else {
+                throw new RuntimeException(ex);
+            }
         } catch (final TimeoutException ex ) {
             System.out.println("Connection timed out before a version could be established");
         }
     }
-    
+
+    private static boolean hasCause(Exception ex, Class<? extends Throwable> c) {
+        Throwable cause = ex.getCause();
+        while (cause != null) {
+            if (c.equals(cause.getClass())) {
+                return true;
+            }
+            cause = cause.getCause();
+        }
+        return false;
+    }
+
 }
