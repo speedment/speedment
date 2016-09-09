@@ -55,7 +55,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
     private Function<ResultSet, T> rsMapper;
     private final Supplier<Connection> connectionSupplier;
     private ParallelStrategy parallelStrategy;
-    private Connection connection;
+    private Connection connection;  // null allowed if the stream() method is not run
     private PreparedStatement ps;
     private ResultSet rs;
     private State state;
@@ -71,8 +71,8 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
         Supplier<Connection> connectionSupplier
     ) {
         setSql(sql); // requireNonNull in setter
-        setValues(values);
-        setRsMapper(rsMapper);
+        setValues(values); // requireNonNull in setter
+        setRsMapper(rsMapper); // requireNonNull in setter
         this.connectionSupplier = requireNonNull(connectionSupplier);
         parallelStrategy = ParallelStrategy.DEFAULT;
         setState(State.INIT);
@@ -103,16 +103,21 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
     public void close() {
         closeSilently(rs);
         closeSilently(ps);
-        try {
-            connection.commit();
-        } catch (SQLException e) {
-            LOGGER.error(e, "Failed to commit connection upon close");
-        }
-        closeSilently(connection);
+        commitSilently(connection);
         setState(State.CLOSED);
     }
 
-    protected void closeSilently(final AutoCloseable closeable) {
+    private void commitSilently(Connection connection) {
+        try {
+            if (connection != null) {
+                connection.commit();
+            }
+        } catch (SQLException e) {
+            LOGGER.error(e, "Failed to commit connection upon close");
+        }
+    }
+
+    private void closeSilently(final AutoCloseable closeable) {
         try {
             if (closeable != null) {
                 closeable.close();
