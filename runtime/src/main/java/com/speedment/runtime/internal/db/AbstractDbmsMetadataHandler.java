@@ -69,6 +69,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import static com.speedment.common.injector.State.INITIALIZED;
+import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mapper.primitive.PrimitiveTypeMapper;
 import static com.speedment.runtime.internal.db.AbstractDbmsOperationHandler.SHOW_METADATA;
 import static com.speedment.runtime.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
@@ -411,7 +412,8 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             }
 
             column.mutator().setDatabaseType(selectedJdbcClass);
-            
+                       
+//            column.mutator().setTypeMapper(TypeMapper.identity());            
             if (!nullable) {
                 if (selectedJdbcClass == Byte.class
                 ||  selectedJdbcClass == Short.class
@@ -421,7 +423,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                 ||  selectedJdbcClass == Double.class
                 ||  selectedJdbcClass == Character.class
                 ||  selectedJdbcClass == Boolean.class) {
-                    column.mutator().setTypeMapper(new PrimitiveTypeMapper<>());
+                    column.mutator().setTypeMapper(TypeMapper.primitive());
                 }
             }
             
