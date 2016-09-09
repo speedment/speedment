@@ -34,7 +34,7 @@ import com.speedment.internal.common.injector.annotation.WithState;
 import static com.speedment.runtime.internal.license.OpenSourceLicense.APACHE_2;
 
 /**
- * Plugs into the Speedment platform, generating Spring annotated classes as
+ * Plugins into the Speedment platform, generating Spring annoted classes as
  * part of the regular code generation process.
  * <p>
  * <em>Usage:</em>
