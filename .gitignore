@@ -6,7 +6,7 @@
 **.iml
 /target/
 /.sonar
-/.idea
+**/.idea
 /speedment.iml
 /nb-configuration.xml
 /sonar-project.properties
