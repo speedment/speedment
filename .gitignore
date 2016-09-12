@@ -23,3 +23,4 @@ settings.properties
 /tool/nbproject/
 /runtime/nbproject/
 *.iws
+**/.DS_Store
