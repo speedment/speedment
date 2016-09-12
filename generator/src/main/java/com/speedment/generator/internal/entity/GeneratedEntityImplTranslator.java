@@ -158,6 +158,7 @@ public final class GeneratedEntityImplTranslator extends EntityAndManagerTransla
             /**
              * Class details
              */
+            // We need to make it POST_MAKE because other plugins might add fields
             .forEveryTable(Phase.POST_MAKE, (clazz, table) -> {
                 clazz
                     .add(copyMethod(file))
