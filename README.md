@@ -2,7 +2,7 @@ Wrap your database into Java 8!
 ==========================================
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.speedment/speedment/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.speedment/speedment)
-[![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.speedment/speedment/badge.svg)](http://www.javadoc.io/doc/com.speedment/speedment)
+[![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.speedment/runtime/badge.svg)](http://www.javadoc.io/doc/com.speedment/runtime)
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg?maxAge=2592000)](https://raw.githubusercontent.com/speedment/speedment/master/LICENSE)
 [![Join the chat at https://gitter.im/speedment/speedment](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/speedment/speedment?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
