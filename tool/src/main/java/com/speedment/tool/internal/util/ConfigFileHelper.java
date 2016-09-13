@@ -17,11 +17,11 @@
 package com.speedment.tool.internal.util;
 
 import com.speedment.generator.TranslatorManager;
-import com.speedment.internal.common.injector.Injector;
-import com.speedment.internal.common.injector.annotation.Inject;
-import com.speedment.internal.common.injector.annotation.InjectKey;
-import com.speedment.internal.common.logger.Logger;
-import com.speedment.internal.common.logger.LoggerManager;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.InjectKey;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.ProjectComponent;

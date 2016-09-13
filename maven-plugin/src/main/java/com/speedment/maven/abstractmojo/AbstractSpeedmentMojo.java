@@ -20,16 +20,15 @@ import com.speedment.generator.GeneratorBundle;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
-import com.speedment.internal.common.injector.InjectBundle;
+import com.speedment.common.injector.InjectBundle;
 import com.speedment.maven.component.MavenPathComponent;
-import static com.speedment.internal.common.injector.State.INITIALIZED;
-import static com.speedment.internal.common.injector.State.RESOLVED;
-import com.speedment.internal.common.injector.annotation.ExecuteBefore;
-import com.speedment.internal.common.injector.annotation.InjectKey;
-import com.speedment.internal.common.injector.annotation.WithState;
-import com.speedment.internal.common.injector.internal.InjectorImpl;
-import com.speedment.internal.common.logger.Level;
-import com.speedment.internal.common.logger.LoggerManager;
+import static com.speedment.common.injector.State.INITIALIZED;
+import static com.speedment.common.injector.State.RESOLVED;
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.InjectKey;
+import com.speedment.common.injector.annotation.WithState;
+import com.speedment.common.logger.Level;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.Component;
@@ -86,13 +85,13 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
-        if (debug()) {
-            LoggerManager.getLogger(InjectorImpl.class).setLevel(Level.DEBUG);
-        }
 
         final ApplicationBuilder<?, ?> builder = createBuilder();
         builder.withInjectable(MavenPathComponent.class);
         configurer.accept(builder);
+        if (debug()) {
+            builder.withLoggingOf(ApplicationBuilder.LogType.APPLICATION_BUILDER);
+        }
         final Speedment speedment = builder.build();
         speedment.getOrThrow(MavenPathComponent.class).setMavenProject(project());
 

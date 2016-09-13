@@ -35,7 +35,7 @@ import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import static com.speedment.common.codegen.internal.util.Formatting.ucfirst;
 import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.generator.component.TypeMapperComponent;
-import com.speedment.internal.common.injector.Injector;
+import com.speedment.common.injector.Injector;
 import static com.speedment.runtime.config.Project.DEFAULT_PACKAGE_NAME;
 import com.speedment.runtime.config.trait.HasPackageName;
 import com.speedment.runtime.exception.SpeedmentException;

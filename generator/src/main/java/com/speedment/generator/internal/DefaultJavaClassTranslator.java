@@ -68,8 +68,8 @@ import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.GENER
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.generator.component.TypeMapperComponent;
-import com.speedment.internal.common.injector.Injector;
-import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.internal.common.mapstream.MapStream;
 import java.lang.reflect.Type;
 import static java.util.Objects.requireNonNull;

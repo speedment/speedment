@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.property.editor;
 
-import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;

@@ -57,11 +57,11 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.speedment.generator.StandardTranslatorKey.*;
-import com.speedment.internal.common.injector.InjectBundle;
-import com.speedment.internal.common.injector.Injector;
-import static com.speedment.internal.common.injector.State.RESOLVED;
-import com.speedment.internal.common.injector.annotation.ExecuteBefore;
-import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.common.injector.InjectBundle;
+import com.speedment.common.injector.Injector;
+import static com.speedment.common.injector.State.RESOLVED;
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.internal.common.mapstream.MapStream;
 import static java.util.Objects.requireNonNull;
 

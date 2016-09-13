@@ -17,7 +17,7 @@
 package com.speedment.maven.component;
 
 import com.speedment.generator.component.PathComponent;
-import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.internal.license.AbstractSoftware;

@@ -17,7 +17,7 @@
 package com.speedment.generator;
 
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
-import com.speedment.internal.common.injector.InjectBundle;
+import com.speedment.common.injector.InjectBundle;
 import java.util.stream.Stream;
 
 /**

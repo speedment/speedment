@@ -29,7 +29,12 @@
                             com.speedment.runtime.manager.*,
                             com.speedment.runtime.stream.*,
                             com.speedment.runtime.util.*,
-                            com.speedment.runtime</Export-Package>
+                            com.speedment.runtime,
+                            com.speedment.common.injector,
+                            com.speedment.common.injector.annotation.*,
+                            com.speedment.common.injector.exception.*,
+                            com.speedment.common.logger,
+                            com.speedment.common.tuple</Export-Package>
           </instructions>
         </configuration>
       </plugin>
@@ -51,10 +56,25 @@
           <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
           <createDependencyReducedPom>true</createDependencyReducedPom>
           <minimizeJar>false</minimizeJar>
+          <artifactSet>
+            <excludes>
+              <exclude>com.speedment.common:injector</exclude>
+              <exclude>com.speedment.common:logger</exclude>
+              <exclude>com.speedment.common:tuple</exclude>
+            </excludes>
+          </artifactSet>
           <relocations>
             <relocation>
-              <pattern>com.speedment.common</pattern>
-              <shadedPattern>com.speedment.internal.common</shadedPattern>
+              <pattern>com.speedment.common.lazy</pattern>
+              <shadedPattern>com.speedment.internal.common.lazy</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>com.speedment.common.mapstream</pattern>
+              <shadedPattern>com.speedment.internal.common.mapstream</shadedPattern>
+            </relocation>
+            <relocation>
+              <pattern>com.speedment.common.json</pattern>
+              <shadedPattern>com.speedment.internal.common.json</shadedPattern>
             </relocation>
           </relocations>
           <transformers>
@@ -68,5 +88,25 @@
       </plugin>
     </plugins>
   </build>
+  <dependencies>
+    <dependency>
+      <groupId>com.speedment.common</groupId>
+      <artifactId>logger</artifactId>
+      <version>1.0.1</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.speedment.common</groupId>
+      <artifactId>injector</artifactId>
+      <version>1.0.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.speedment.common</groupId>
+      <artifactId>tuple</artifactId>
+      <version>1.0.0</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
 </project>
 

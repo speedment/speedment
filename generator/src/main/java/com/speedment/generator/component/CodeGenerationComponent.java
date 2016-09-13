@@ -21,7 +21,7 @@ import com.speedment.generator.Translator;
 import com.speedment.generator.TranslatorConstructor;
 import com.speedment.generator.TranslatorDecorator;
 import com.speedment.generator.TranslatorKey;
-import com.speedment.internal.common.injector.annotation.InjectKey;
+import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.trait.HasMainInterface;

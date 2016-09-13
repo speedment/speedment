@@ -50,9 +50,9 @@ import java.nio.file.DirectoryStream;
 import java.util.stream.Stream;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.generator.component.PathComponent;
-import com.speedment.internal.common.injector.annotation.Inject;
-import com.speedment.internal.common.logger.Logger;
-import com.speedment.internal.common.logger.LoggerManager;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import static java.util.Objects.requireNonNull;
 

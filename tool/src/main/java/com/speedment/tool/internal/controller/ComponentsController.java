@@ -23,15 +23,14 @@ import com.speedment.runtime.component.Component;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.generator.component.TypeMapperComponent;
-import com.speedment.internal.common.injector.Injector;
-import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.internal.common.mapstream.MapStream;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.parameter.DbmsType;
 import static com.speedment.runtime.internal.util.Cast.cast;
 import com.speedment.runtime.license.License;
 import com.speedment.runtime.license.Software;
-import com.speedment.tool.resource.SilkIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -46,12 +45,9 @@ import java.util.ResourceBundle;
 
 import static com.speedment.tool.internal.util.CloseUtil.newCloseHandler;
 import com.speedment.tool.resource.SpeedmentIcon;
-import static java.util.Comparator.comparing;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
-import static java.util.Comparator.comparing;
-import static java.util.Comparator.comparing;
 import static java.util.Comparator.comparing;
 
 /**

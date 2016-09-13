@@ -16,10 +16,9 @@
  */
 package com.speedment.tool.internal.controller;
 
-import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.internal.util.InjectionLoader;
-import com.speedment.tool.resource.SilkIcon;
 import com.speedment.tool.resource.SpeedmentIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

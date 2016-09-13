@@ -16,7 +16,7 @@
  */
 package com.speedment.generator.component;
 
-import com.speedment.internal.common.injector.annotation.InjectKey;
+import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.component.Component;
 import java.nio.file.Path;
 

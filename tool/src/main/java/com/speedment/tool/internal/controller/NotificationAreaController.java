@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.internal.controller;
 
-import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.notification.Notification;
 import com.speedment.tool.util.LayoutAnimator;

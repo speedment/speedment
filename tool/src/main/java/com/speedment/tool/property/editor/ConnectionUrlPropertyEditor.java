@@ -17,8 +17,8 @@
 package com.speedment.tool.property.editor;
 
 import com.speedment.tool.property.item.DefaultTextAreaItem;
-import com.speedment.internal.common.injector.Injector;
-import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.exception.SpeedmentException;

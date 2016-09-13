@@ -39,7 +39,7 @@
     </description>
     
     <build>
-        <plugins>
+        <plugins>                        
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
@@ -59,11 +59,16 @@
                             com.speedment.runtime.manager.*,
                             com.speedment.runtime.stream.*,
                             com.speedment.runtime.util.*,
-                            com.speedment.runtime
+                            com.speedment.runtime,
+                            com.speedment.common.injector,
+                            com.speedment.common.injector.annotation.*,
+                            com.speedment.common.injector.exception.*,
+                            com.speedment.common.logger,
+                            com.speedment.common.tuple
                         </Export-Package>
                     </instructions>
                 </configuration>
-            </plugin>                            
+            </plugin>                                        
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -75,10 +80,27 @@
                     <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
                     <createDependencyReducedPom>true</createDependencyReducedPom>
                     <minimizeJar>false</minimizeJar>
+                    <artifactSet>
+                        <excludes>
+                            <exclude>com.speedment.common:injector</exclude>
+                            <exclude>com.speedment.common:logger</exclude>
+                            <exclude>com.speedment.common:tuple</exclude>
+                        </excludes>
+                    </artifactSet>
+                        
                     <relocations>
+                        <!--Make these packages internal to the API. They can only be used from inside runtime-->
                         <relocation>
-                            <pattern>com.speedment.common</pattern>
-                            <shadedPattern>com.speedment.internal.common</shadedPattern>
+                            <pattern>com.speedment.common.lazy</pattern>
+                            <shadedPattern>com.speedment.internal.common.lazy</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.speedment.common.mapstream</pattern>
+                            <shadedPattern>com.speedment.internal.common.mapstream</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.speedment.common.json</pattern>
+                            <shadedPattern>com.speedment.internal.common.json</shadedPattern>
                         </relocation>
                     </relocations>
                     <transformers>
@@ -99,7 +121,32 @@
                     </execution>
                 </executions>
             </plugin>
-                        
+            
+<!--            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
+                
+                <executions>
+                    <execution>
+                        <id>aggregate</id>
+                        <goals>
+                            <goal>aggregate</goal>
+                        </goals>
+                        <phase>site</phase>
+                        <configuration>
+                            <additionalDependencies>
+                                <additionalDependency>
+                                    <groupId>com.speedment.common</groupId>
+                                    <artifactId>logger</artifactId>
+                                    <version>${logger.version}</version>
+                                </additionalDependency>
+                            </additionalDependencies>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>-->
+                                
         </plugins>
         
     </build>

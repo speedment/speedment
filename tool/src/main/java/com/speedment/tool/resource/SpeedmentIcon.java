@@ -16,8 +16,8 @@
  */
 package com.speedment.tool.resource;
 
-import com.speedment.internal.common.logger.Logger;
-import com.speedment.internal.common.logger.LoggerManager;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;

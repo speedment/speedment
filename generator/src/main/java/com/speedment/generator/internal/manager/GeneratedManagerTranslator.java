@@ -42,8 +42,8 @@ import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
-import com.speedment.internal.common.injector.Injector;
-import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.manager.SqlManager;
 import java.lang.reflect.Type;
 

@@ -18,7 +18,7 @@ package com.speedment.generator;
 
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
-import com.speedment.internal.common.injector.annotation.InjectKey;
+import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Project;
 

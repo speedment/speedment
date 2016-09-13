@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
-import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.internal.AbstractApplicationMetadata;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;

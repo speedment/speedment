@@ -16,7 +16,7 @@
  */
 package com.speedment.tool;
 
-import com.speedment.internal.common.injector.InjectBundle;
+import com.speedment.common.injector.InjectBundle;
 import com.speedment.tool.internal.component.RuleComponentImpl;
 import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
 import com.speedment.tool.internal.component.VersionComponentImpl;

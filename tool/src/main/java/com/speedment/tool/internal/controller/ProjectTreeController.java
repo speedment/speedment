@@ -18,7 +18,7 @@ package com.speedment.tool.internal.controller;
 
 import com.speedment.generator.component.EventComponent;
 import com.speedment.generator.event.ProjectLoaded;
-import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
@@ -34,7 +34,6 @@ import com.speedment.tool.config.trait.HasEnabledProperty;
 import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasIconPath;
 import com.speedment.tool.config.trait.HasNameProperty;
-import com.speedment.tool.resource.SilkIcon;
 import com.speedment.tool.resource.SpeedmentIcon;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;

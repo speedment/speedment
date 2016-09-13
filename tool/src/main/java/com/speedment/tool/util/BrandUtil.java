@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.util;
 
-import com.speedment.internal.common.injector.Injector;
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.tool.brand.Brand;

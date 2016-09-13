@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.internal.util.Formatting.ucfirst;
-import com.speedment.internal.common.injector.annotation.InjectKey;
+import com.speedment.common.injector.annotation.InjectKey;
 import static com.speedment.runtime.internal.util.sql.SqlUtil.unQuote;
 import static com.speedment.runtime.util.CollectorUtil.toUnmodifiableSet;
 import static com.speedment.runtime.util.CollectorUtil.unmodifiableSetOf;

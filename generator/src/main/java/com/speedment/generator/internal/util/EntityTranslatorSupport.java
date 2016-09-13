@@ -42,7 +42,7 @@ import java.util.function.Consumer;
 import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 import com.speedment.generator.TranslatorSupport;
 import com.speedment.generator.component.TypeMapperComponent;
-import com.speedment.internal.common.injector.Injector;
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.field.BooleanField;
 import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.ByteForeignKeyField;

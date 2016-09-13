@@ -18,7 +18,7 @@ package com.speedment.generator.component;
 
 import com.speedment.generator.event.DefaultEvent;
 import com.speedment.generator.event.Event;
-import com.speedment.internal.common.injector.annotation.InjectKey;
+import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.Component;
 

@@ -18,7 +18,7 @@ package com.speedment.maven.abstractmojo;
 
 
 import com.speedment.maven.typemapper.Mapping;
-import com.speedment.internal.common.injector.Injector;
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.Speedment;
 import com.speedment.tool.MainApp;

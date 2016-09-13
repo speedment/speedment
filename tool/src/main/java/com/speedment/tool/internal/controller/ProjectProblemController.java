@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.internal.controller;
 
-import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.component.IssueComponent;
 import com.speedment.tool.internal.util.ConfigFileHelper;
 import com.speedment.tool.rule.Issue;

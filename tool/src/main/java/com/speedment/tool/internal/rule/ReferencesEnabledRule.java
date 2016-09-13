@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.internal.rule;
 
-import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Document;

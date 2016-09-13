@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.internal.component;
 
-import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.tool.component.IssueComponent;
