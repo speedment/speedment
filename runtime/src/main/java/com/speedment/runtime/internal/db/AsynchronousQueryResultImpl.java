@@ -104,6 +104,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
         closeSilently(rs);
         closeSilently(ps);
         commitSilently(connection);
+        closeSilently(connection);
         setState(State.CLOSED);
     }
 
