@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.stream;
 
+import com.speedment.runtime.stream.parallel.ParallelStrategy;
+import com.speedment.runtime.stream.parallel.HasParallelStrategy;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.internal.stream.ComposedStreamDecorator;
 import com.speedment.runtime.internal.util.Cast;

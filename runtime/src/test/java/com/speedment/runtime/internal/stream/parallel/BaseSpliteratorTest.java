@@ -19,7 +19,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.runtime.internal.stream.parallelstrategy;
+package com.speedment.runtime.internal.stream.parallel;
 
 import org.junit.Rule;
 import org.junit.Test;

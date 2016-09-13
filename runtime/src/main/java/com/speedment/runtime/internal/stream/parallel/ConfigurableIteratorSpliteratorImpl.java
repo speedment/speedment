@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.stream.parallelstrategy;
+package com.speedment.runtime.internal.stream.parallel;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -29,7 +29,7 @@ import static java.util.Objects.requireNonNull;
  * @author pemi
  * @param <T> type of {@link Spliterator} to implement
  */
-public final class ConfigurableIteratorSpliterator<T> implements Spliterator<T> {
+public final class ConfigurableIteratorSpliteratorImpl<T> implements Spliterator<T> {
 
     static final int MAX_BATCH = 1 << 25;
     private final Iterator<? extends T> iterator;
@@ -48,7 +48,7 @@ public final class ConfigurableIteratorSpliterator<T> implements Spliterator<T> 
      * elements.
      * @param batchSizes the batch sizes to use for pseudo parallelism
      */
-    public ConfigurableIteratorSpliterator(Iterator<? extends T> iterator, long size, int characteristics, int[] batchSizes) {
+    public ConfigurableIteratorSpliteratorImpl(Iterator<? extends T> iterator, long size, int characteristics, int[] batchSizes) {
         this.iterator = iterator;
         this.sizeEstimate = size;
         this.characteristics = (characteristics & Spliterator.CONCURRENT) == 0
@@ -66,7 +66,7 @@ public final class ConfigurableIteratorSpliterator<T> implements Spliterator<T> 
      * elements.
      * @param batchSizes the batch sizes to use for pseudo parallelism
      */
-    public ConfigurableIteratorSpliterator(Iterator<? extends T> iterator, int characteristics, int[] batchSizes) {
+    public ConfigurableIteratorSpliteratorImpl(Iterator<? extends T> iterator, int characteristics, int[] batchSizes) {
         this.iterator = iterator;
         this.sizeEstimate = Long.MAX_VALUE;
         this.characteristics = characteristics & ~(Spliterator.SIZED | Spliterator.SUBSIZED);

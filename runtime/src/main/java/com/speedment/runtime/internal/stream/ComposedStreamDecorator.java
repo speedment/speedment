@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.internal.stream;
 
-import com.speedment.runtime.stream.HasParallelStrategy;
+import com.speedment.runtime.stream.parallel.HasParallelStrategy;
 import com.speedment.runtime.stream.Pipeline;
 import com.speedment.runtime.stream.StreamDecorator;
 

@@ -14,9 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.stream.parallelstrategy;
+package com.speedment.runtime.internal.stream.parallel;
 
-import com.speedment.runtime.stream.ParallelStrategy;
+import com.speedment.runtime.stream.parallel.ParallelStrategy;
+import com.speedment.runtime.stream.parallel.ConfigurableIteratorSpliterator;
 
 import java.util.Iterator;
 import java.util.Spliterator;
@@ -26,15 +27,16 @@ import java.util.stream.IntStream;
  *
  * @author pemi
  */
-public final class ComputeIntensityMediumParallelStrategy implements ParallelStrategy {
+public final class ComputeIntensityHighParallelStrategy implements ParallelStrategy {
 
-    private final static int[] BATCH_SIZES = IntStream.range(4, 14)
+    private final static int[] BATCH_SIZES = IntStream.range(0, 8)
             .map(ComputeIntensityUtil::toThePowerOfTwo)
+            .flatMap(ComputeIntensityUtil::repeatOnHalfAvailableProcessors)
             .toArray();
 
     @Override
     public <T> Spliterator<T> spliteratorUnknownSize(Iterator<? extends T> iterator, int characteristics) {
-        return new ConfigurableIteratorSpliterator<>(iterator, characteristics, BATCH_SIZES);
+        return ConfigurableIteratorSpliterator.of(iterator, characteristics, BATCH_SIZES);
     }
 
 }

@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.stream;
+package com.speedment.runtime.stream.parallel;
 
 import com.speedment.runtime.annotation.Api;
 

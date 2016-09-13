@@ -14,28 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.stream.parallelstrategy;
+package com.speedment.runtime.stream.parallel;
 
-import com.speedment.runtime.stream.ParallelStrategy;
-
+import com.speedment.runtime.internal.stream.parallel.ConfigurableIteratorSpliteratorImpl;
 import java.util.Iterator;
 import java.util.Spliterator;
-import java.util.stream.IntStream;
 
 /**
  *
  * @author pemi
+ * @param <T> type of {@link Spliterator} to implement
  */
-public final class ComputeIntensityHighParallelStrategy implements ParallelStrategy {
+public interface ConfigurableIteratorSpliterator<T> extends Spliterator<T> {
 
-    private final static int[] BATCH_SIZES = IntStream.range(0, 8)
-            .map(ComputeIntensityUtil::toThePowerOfTwo)
-            .flatMap(ComputeIntensityUtil::repeatOnHalfAvailableProcessors)
-            .toArray();
+    static <T> Spliterator<T> of(Iterator<? extends T> iterator, long size, int characteristics, int[] batchSizes) {
+        return new ConfigurableIteratorSpliteratorImpl<>(iterator, size, characteristics, batchSizes);
+    }
 
-    @Override
-    public <T> Spliterator<T> spliteratorUnknownSize(Iterator<? extends T> iterator, int characteristics) {
-        return new ConfigurableIteratorSpliterator<>(iterator, characteristics, BATCH_SIZES);
+    static <T> Spliterator<T> of(Iterator<? extends T> iterator, int characteristics, int[] batchSizes) {
+        return new ConfigurableIteratorSpliteratorImpl<>(iterator, characteristics, batchSizes);
     }
 
 }

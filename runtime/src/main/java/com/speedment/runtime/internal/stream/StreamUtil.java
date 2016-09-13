@@ -22,7 +22,7 @@
 package com.speedment.runtime.internal.stream;
 
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.stream.ParallelStrategy;
+import com.speedment.runtime.stream.parallel.ParallelStrategy;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

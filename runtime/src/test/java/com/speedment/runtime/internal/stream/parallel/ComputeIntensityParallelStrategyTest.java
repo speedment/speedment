@@ -19,9 +19,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.runtime.internal.stream.parallelstrategy;
+package com.speedment.runtime.internal.stream.parallel;
 
-import com.speedment.runtime.stream.ParallelStrategy;
+import com.speedment.runtime.stream.parallel.ParallelStrategy;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

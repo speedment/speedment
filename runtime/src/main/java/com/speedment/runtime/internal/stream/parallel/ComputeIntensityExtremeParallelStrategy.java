@@ -14,9 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.stream.parallelstrategy;
+package com.speedment.runtime.internal.stream.parallel;
 
-import com.speedment.runtime.stream.ParallelStrategy;
+import com.speedment.runtime.stream.parallel.ParallelStrategy;
+import com.speedment.runtime.stream.parallel.ConfigurableIteratorSpliterator;
 
 import java.util.Iterator;
 import java.util.Spliterator;
@@ -31,7 +32,7 @@ public final class ComputeIntensityExtremeParallelStrategy implements ParallelSt
 
     @Override
     public <T> Spliterator<T> spliteratorUnknownSize(Iterator<? extends T> iterator, int characteristics) {
-        return new ConfigurableIteratorSpliterator<>(iterator, characteristics, BATCH_SIZES);
+        return ConfigurableIteratorSpliterator.of(iterator, characteristics, BATCH_SIZES);
     }
 
 }
