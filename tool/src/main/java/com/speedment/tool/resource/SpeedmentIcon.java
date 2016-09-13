@@ -41,9 +41,6 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  * An enumeration of all the icons available in the Speedment Icon Package.
@@ -96,6 +93,7 @@ public enum SpeedmentIcon {
     SITEMAP_COLOR("/pics/vectors_rendered/sitemapColor.png"),
     BOX("/pics/vectors_rendered/box.png"),
     BRICKS("/pics/vectors_rendered/bricks.png"),
+    BOOK("/pics/vectors_rendered/book.png"),
     BOOK_OPEN("/pics/vectors_rendered/bookOpen.png"),
     BOOK_NEXT("/pics/vectors_rendered/bookNext.png"),
     DATABASE_CONNECT("/pics/vectors_rendered/databaseConnect.png"),
