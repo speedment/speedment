@@ -230,3 +230,6 @@ Visit [www.speedment.org](http://www.speedment.org/) for more info.
 [![Analytics](https://ga-beacon.appspot.com/UA-64937309-1/speedment/main)](https://github.com/igrigorik/ga-beacon)
 
 [![Beacon](http://stat.speedment.com:8081/Beacon?site=GitHub&path=main)](https://some-site.com)
+
+[Github activity visualized](https://www.youtube.com/watch?v=Rmc_3lLZQpM)
+
