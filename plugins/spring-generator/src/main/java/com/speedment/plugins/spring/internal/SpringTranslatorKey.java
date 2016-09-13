@@ -17,8 +17,7 @@
 package com.speedment.plugins.spring.internal;
 
 import com.speedment.common.codegen.model.Class;
-import com.speedment.generator.TranslatorKey;
-import com.speedment.generator.internal.TranslatorKeyImpl;
+import com.speedment.generator.translator.TranslatorKey;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 
@@ -32,12 +31,12 @@ import com.speedment.runtime.config.Table;
 public final class SpringTranslatorKey {
 
     public final static TranslatorKey<Project, Class> 
-        CONFIGURATION           = new TranslatorKeyImpl<>("Configuration", Class.class),
-        GENERATED_CONFIGURATION = new TranslatorKeyImpl<>("GeneratedConfiguration", Class.class);
+        CONFIGURATION           = TranslatorKey.of("Configuration", Class.class),
+        GENERATED_CONFIGURATION = TranslatorKey.of("GeneratedConfiguration", Class.class);
     
     public final static TranslatorKey<Table, Class> 
-        CONTROLLER           = new TranslatorKeyImpl<>("Controller", Class.class),
-        GENERATED_CONTROLLER = new TranslatorKeyImpl<>("GeneratedController", Class.class);
+        CONTROLLER           = TranslatorKey.of("Controller", Class.class),
+        GENERATED_CONTROLLER = TranslatorKey.of("GeneratedController", Class.class);
     
     /**
      * This class should never be instantiated.

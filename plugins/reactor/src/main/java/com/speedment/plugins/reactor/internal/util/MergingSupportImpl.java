@@ -16,15 +16,15 @@
  */
 package com.speedment.plugins.reactor.internal.util;
 
-import com.speedment.generator.TranslatorSupport;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 
 import static com.speedment.plugins.reactor.internal.util.ReactorComponentUtil.validMergingColumns;
 import com.speedment.plugins.reactor.util.MergingSupport;
 import com.speedment.generator.component.TypeMapperComponent;
-import com.speedment.internal.common.injector.Injector;
-import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.plugins.reactor.ReactorComponent;
 import java.lang.reflect.Type;
 

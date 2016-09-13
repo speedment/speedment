@@ -19,7 +19,7 @@ package com.speedment.plugins.reactor.internal.translator;
 import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Interface;
-import com.speedment.generator.internal.DefaultJavaClassTranslator;
+import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.runtime.config.Table;
 
 
@@ -30,7 +30,7 @@ import com.speedment.runtime.config.Table;
  * @author Emil Forslund
  * @since  1.0.0
  */
-public final class ViewTranslator extends DefaultJavaClassTranslator<Table, Interface> {
+public final class ViewTranslator extends AbstractJavaClassTranslator<Table, Interface> {
 
     public ViewTranslator(Table document) {
         super(document, Interface::of);

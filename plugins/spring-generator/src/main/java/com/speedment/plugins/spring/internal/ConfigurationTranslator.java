@@ -20,7 +20,7 @@ import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.File;
-import com.speedment.generator.internal.DefaultJavaClassTranslator;
+import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.runtime.config.Project;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,8 +29,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Emil Forslund
  * @since  1.0.0
  */
-public final class ConfigurationTranslator 
-extends DefaultJavaClassTranslator<Project, Class> {
+public final class ConfigurationTranslator extends AbstractJavaClassTranslator<Project, Class> {
 
     public ConfigurationTranslator(Project document) {
         super(document, Class::of);

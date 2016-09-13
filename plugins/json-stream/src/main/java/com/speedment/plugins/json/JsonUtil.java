@@ -16,8 +16,8 @@
  */
 package com.speedment.plugins.json;
 
-import com.speedment.internal.common.logger.Logger;
-import com.speedment.internal.common.logger.LoggerManager;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.manager.Manager;
 
 import static java.util.Objects.requireNonNull;
@@ -44,7 +44,7 @@ public final class JsonUtil {
      * error is logged and {@code null} is returned.
      *
      * @param <T> the type of the entity
-     * @param entity the entity to enocde
+     * @param entity the entity to encode
      * @return the encoded string or {@code null}
      */
     @Deprecated

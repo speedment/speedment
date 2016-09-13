@@ -16,7 +16,7 @@
  */
 package com.speedment.plugins.reactor;
 
-import com.speedment.internal.common.injector.InjectBundle;
+import com.speedment.common.injector.InjectBundle;
 import java.util.stream.Stream;
 
 /**

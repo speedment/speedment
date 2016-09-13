@@ -18,8 +18,8 @@ package com.speedment.plugins.reactor.translator;
 
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Interface;
-import com.speedment.generator.TranslatorKey;
-import com.speedment.generator.internal.TranslatorKeyImpl;
+import com.speedment.generator.internal.translator.TranslatorKeyImpl;
+import com.speedment.generator.translator.TranslatorKey;
 import com.speedment.runtime.config.Table;
 
 
@@ -30,10 +30,10 @@ import com.speedment.runtime.config.Table;
  */
 public class ReactorTranslatorKey {
     public final static TranslatorKey<Table, Interface>
-        ENTITY_VIEW = new TranslatorKeyImpl<>("entity-view", Interface.class),
+        ENTITY_VIEW = TranslatorKey.of("entity-view", Interface.class),
         GENERATED_ENTITY_VIEW = new TranslatorKeyImpl<>("generated-entity-view", Interface.class);
     
     public final static TranslatorKey<Table, Class>
-        ENTITY_VIEW_IMPL = new TranslatorKeyImpl<>("entity-view-impl", Class.class),
-        GENERATED_ENTITY_VIEW_IMPL = new TranslatorKeyImpl<>("enerated-entity-view-impl", Class.class);
+        ENTITY_VIEW_IMPL = TranslatorKey.of("entity-view-impl", Class.class),
+        GENERATED_ENTITY_VIEW_IMPL = TranslatorKey.of("enerated-entity-view-impl", Class.class);
 }

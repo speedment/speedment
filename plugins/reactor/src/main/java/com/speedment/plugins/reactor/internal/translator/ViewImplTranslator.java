@@ -21,7 +21,7 @@ import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
-import com.speedment.generator.internal.DefaultJavaClassTranslator;
+import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Table;
 
@@ -30,7 +30,7 @@ import com.speedment.runtime.config.Table;
  * @author Emil Forslund
  * @since  1.1.0
  */
-public final class ViewImplTranslator extends DefaultJavaClassTranslator<Table, Class> {
+public final class ViewImplTranslator extends AbstractJavaClassTranslator<Table, Class> {
 
     public ViewImplTranslator(Table document) {
         super(document, Class::of);

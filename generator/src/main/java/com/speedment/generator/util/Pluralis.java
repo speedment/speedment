@@ -16,6 +16,7 @@
  */
 package com.speedment.generator.util;
 
+import com.speedment.generator.namer.JavaLanguageNamer;
 import com.speedment.runtime.annotation.Api;
 
 import java.util.ArrayList;

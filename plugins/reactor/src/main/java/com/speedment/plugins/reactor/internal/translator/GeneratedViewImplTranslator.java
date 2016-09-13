@@ -22,7 +22,6 @@ import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.plugins.reactor.MaterializedViewImpl;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Column;
@@ -35,7 +34,8 @@ import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
-import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.plugins.reactor.util.MergingSupport;
 import java.lang.reflect.Type;
 
@@ -44,7 +44,7 @@ import java.lang.reflect.Type;
  * @author Emil Forslund
  * @since  1.1.0
  */
-public final class GeneratedViewImplTranslator extends DefaultJavaClassTranslator<Table, Class> {
+public final class GeneratedViewImplTranslator extends AbstractJavaClassTranslator<Table, Class> {
 
     private @Inject MergingSupport merger;
     

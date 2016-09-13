@@ -22,7 +22,7 @@
 package com.speedment.plugins.reactor.internal.editor;
 
 import com.speedment.generator.component.TypeMapperComponent;
-import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.plugins.reactor.ReactorComponent;
 import static com.speedment.plugins.reactor.internal.util.ReactorComponentUtil.validMergingColumns;
 import com.speedment.runtime.config.Column;

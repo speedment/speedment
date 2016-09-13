@@ -24,8 +24,12 @@ import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.generator.TranslatorSupport;
-import com.speedment.generator.internal.DefaultJavaClassTranslator;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.InjectKey;
+import com.speedment.generator.translator.AbstractJavaClassTranslator;
+import com.speedment.generator.translator.TranslatorSupport;
+
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
@@ -33,32 +37,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 
-import com.speedment.internal.common.injector.Injector;
-import com.speedment.internal.common.injector.annotation.Inject;
-import com.speedment.internal.common.injector.annotation.InjectKey;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import java.lang.reflect.Type;
 
 /**
  *
  * @author Emil Forslund
- * @since  1.0.0
+ * @since 1.0.0
  */
 @InjectKey(GeneratedConfigurationTranslator.class)
-public final class GeneratedConfigurationTranslator 
-extends DefaultJavaClassTranslator<Project, Class> {
-    
+public final class GeneratedConfigurationTranslator extends AbstractJavaClassTranslator<Project, Class> {
+
     private @Inject Injector injector;
 
     public GeneratedConfigurationTranslator(Project document) {
         super(document, Class::of);
     }
-    
+
     @Override
     protected String getClassOrInterfaceName() {
         return "Generated" + getSupport().typeName() + "Configuration";
     }
-    
+
     @Override
     protected String getJavadocRepresentText() {
         return "The spring configuration file";
@@ -74,36 +74,36 @@ extends DefaultJavaClassTranslator<Project, Class> {
         return newBuilder(file, getClassOrInterfaceName())
             .forEveryProject((clazz, project) -> {
                 clazz.public_();
-                
+
                 // Add constants
                 clazz.add(Field.of("URL_PROPERTY", String.class)
                     .protected_().final_().static_()
                     .set(new TextValue("jdbc.url"))
                 );
-                
+
                 clazz.add(Field.of("USERNAME_PROPERTY", String.class)
                     .protected_().final_().static_()
                     .set(new TextValue("jdbc.username"))
                 );
-                
+
                 clazz.add(Field.of("PASSWORD_PROPERTY", String.class)
                     .protected_().final_().static_()
                     .set(new TextValue("jdbc.password"))
                 );
-                
+
                 // Add environment variable
                 clazz.add(Field.of("env", Environment.class)
                     .protected_()
                     .add(AnnotationUsage.of(Autowired.class))
                 );
-                
+
                 // Add application bean
-                final Type appType        = SimpleType.create(getSupport().basePackageName() + "." + getSupport().typeName() + "Application");
-                final String appBuilder   = getSupport().typeName() + "ApplicationBuilder";
+                final Type appType = SimpleType.create(getSupport().basePackageName() + "." + getSupport().typeName() + "Application");
+                final String appBuilder = getSupport().typeName() + "ApplicationBuilder";
                 final Type appBuilderType = SimpleType.create(getSupport().basePackageName() + "." + appBuilder);
-                
+
                 file.add(Import.of(appBuilderType));
-                
+
                 clazz.add(Method.of("application", appType)
                     .public_()
                     .add(AnnotationUsage.of(Bean.class))
@@ -113,36 +113,36 @@ extends DefaultJavaClassTranslator<Project, Class> {
                         "",
                         "if (env.containsProperty(URL_PROPERTY)) {",
                         "    builder.withConnectionUrl(env.getProperty(URL_PROPERTY));",
-                        "}", 
+                        "}",
                         "",
                         "if (env.containsProperty(USERNAME_PROPERTY)) {",
                         "    builder.withUsername(env.getProperty(USERNAME_PROPERTY));",
-                        "}", 
+                        "}",
                         "",
                         "if (env.containsProperty(PASSWORD_PROPERTY)) {",
                         "    builder.withPassword(env.getProperty(PASSWORD_PROPERTY));",
-                        "}", 
+                        "}",
                         "",
                         "return builder.build();"
                     )
                 );
-                
+
                 // Add manager beans
                 traverseOver(project, Table.class)
-                        .filter(HasEnabled::isEnabled)
-                        .forEachOrdered(table -> {
-                            
-                    final TranslatorSupport<Table> support = new TranslatorSupport<>(injector, table);
-                    
-                    file.add(Import.of(support.entityType()));
-                    
-                    clazz.add(Method.of(support.variableName(), support.managerType())
-                        .public_()
-                        .add(Field.of("app", appType))
-                        .add(AnnotationUsage.of(Bean.class))
-                        .add("return (" + support.managerName() + ") app.managerOf(" + support.typeName() + ".class);")
-                    );
-                });
+                    .filter(HasEnabled::isEnabled)
+                    .forEachOrdered(table -> {
+
+                        final TranslatorSupport<Table> support = new TranslatorSupport<>(injector, table);
+
+                        file.add(Import.of(support.entityType()));
+
+                        clazz.add(Method.of(support.variableName(), support.managerType())
+                            .public_()
+                            .add(Field.of("app", appType))
+                            .add(AnnotationUsage.of(Bean.class))
+                            .add("return (" + support.managerName() + ") app.managerOf(" + support.typeName() + ".class);")
+                        );
+                    });
             }).build();
     }
 }

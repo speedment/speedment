@@ -19,8 +19,8 @@ package com.speedment.plugins.reactor.internal.translator;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Interface;
-import com.speedment.generator.internal.DefaultJavaClassTranslator;
-import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.plugins.reactor.MaterializedView;
 import com.speedment.runtime.config.Table;
 import com.speedment.plugins.reactor.util.MergingSupport;
@@ -30,7 +30,7 @@ import com.speedment.plugins.reactor.util.MergingSupport;
  * @author Emil Forslund
  * @since  1.1.0
  */
-public final class GeneratedViewTranslator extends DefaultJavaClassTranslator<Table, Interface> {
+public final class GeneratedViewTranslator extends AbstractJavaClassTranslator<Table, Interface> {
 
     private @Inject MergingSupport merger;
     

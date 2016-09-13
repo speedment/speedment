@@ -21,8 +21,8 @@
  */
 package com.speedment.generator;
 
-import com.speedment.generator.internal.util.JavaLanguageNamerImpl;
-import com.speedment.generator.util.JavaLanguageNamer;
+import com.speedment.generator.namer.JavaLanguageNamer;
+import com.speedment.generator.internal.namer.JavaLanguageNamerImpl;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -30,7 +30,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static com.speedment.generator.util.JavaLanguageNamer.toHumanReadable;
+import static com.speedment.generator.namer.JavaLanguageNamer.toHumanReadable;
 import static org.junit.Assert.assertEquals;
 
 /**

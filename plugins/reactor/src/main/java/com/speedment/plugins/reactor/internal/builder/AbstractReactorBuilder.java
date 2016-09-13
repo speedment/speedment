@@ -16,8 +16,8 @@
  */
 package com.speedment.plugins.reactor.internal.builder;
 
-import com.speedment.internal.common.logger.Logger;
-import com.speedment.internal.common.logger.LoggerManager;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.plugins.reactor.Reactor;
 import com.speedment.plugins.reactor.internal.ReactorImpl;
 import com.speedment.runtime.manager.Manager;

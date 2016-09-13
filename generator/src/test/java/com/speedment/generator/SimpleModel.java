@@ -16,9 +16,10 @@
  */
 package com.speedment.generator;
 
+import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
-import com.speedment.generator.internal.TranslatorManagerImpl;
+import com.speedment.generator.internal.translator.TranslatorManagerImpl;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;

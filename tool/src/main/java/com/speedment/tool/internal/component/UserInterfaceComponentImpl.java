@@ -16,8 +16,8 @@
  */
 package com.speedment.tool.internal.component;
 
-import com.speedment.generator.TranslatorManager;
-import com.speedment.generator.TranslatorSupport;
+import com.speedment.generator.translator.TranslatorManager;
+import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;

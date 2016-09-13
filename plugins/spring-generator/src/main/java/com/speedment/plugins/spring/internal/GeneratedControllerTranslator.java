@@ -24,8 +24,6 @@ import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.generator.TranslatorSupport;
-import com.speedment.generator.internal.DefaultJavaClassTranslator;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +35,10 @@ import java.util.stream.Collectors;
 
 import static com.speedment.common.codegen.constant.DefaultType.list;
 import com.speedment.common.codegen.constant.SimpleType;
-import com.speedment.internal.common.injector.Injector;
-import com.speedment.internal.common.injector.annotation.Inject;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.translator.AbstractJavaClassTranslator;
+import com.speedment.generator.translator.TranslatorSupport;
 import java.lang.reflect.Type;
 
 /**
@@ -46,7 +46,7 @@ import java.lang.reflect.Type;
  * @author Emil Forslund
  * @since  1.0.0
  */
-public final class GeneratedControllerTranslator extends DefaultJavaClassTranslator<Table, Class> {
+public final class GeneratedControllerTranslator extends AbstractJavaClassTranslator<Table, Class> {
 
     private @Inject Injector injector;
     

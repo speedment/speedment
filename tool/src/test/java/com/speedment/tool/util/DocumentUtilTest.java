@@ -17,7 +17,7 @@
 package com.speedment.tool.util;
 
 import com.speedment.generator.GeneratorBundle;
-import com.speedment.generator.util.JavaLanguageNamer;
+import com.speedment.generator.namer.JavaLanguageNamer;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.ForeignKey;

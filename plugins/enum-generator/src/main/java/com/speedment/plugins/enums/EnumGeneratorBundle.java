@@ -16,7 +16,7 @@
  */
 package com.speedment.plugins.enums;
 
-import com.speedment.internal.common.injector.InjectBundle;
+import com.speedment.common.injector.InjectBundle;
 import java.util.stream.Stream;
 
 /**

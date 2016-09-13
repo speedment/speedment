@@ -17,7 +17,7 @@
 package com.speedment.generator.event;
 
 import com.speedment.common.codegen.Generator;
-import com.speedment.generator.TranslatorManager;
+import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.generator.event.trait.ProjectEvent;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Project;

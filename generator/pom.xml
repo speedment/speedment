@@ -49,6 +49,8 @@
                             The code generating parts of Speedment.
                         </Bundle-Description>
                         <Export-Package>
+                            com.speedment.generator.translator.*,
+                            com.speedment.generator.namer.*,
                             com.speedment.generator.component.*,
                             com.speedment.generator.event.*,
                             com.speedment.generator.util.*,

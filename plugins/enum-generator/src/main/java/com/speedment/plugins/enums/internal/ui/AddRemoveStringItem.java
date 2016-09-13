@@ -16,8 +16,8 @@
  */
 package com.speedment.plugins.enums.internal.ui;
 
-import com.speedment.internal.common.logger.Logger;
-import com.speedment.internal.common.logger.LoggerManager;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.tool.property.item.AbstractLabelTooltipItem;
 import java.util.List;
 import java.util.Set;

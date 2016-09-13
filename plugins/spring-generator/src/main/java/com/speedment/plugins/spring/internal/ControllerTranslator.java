@@ -20,7 +20,7 @@ import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.File;
-import com.speedment.generator.internal.DefaultJavaClassTranslator;
+import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.runtime.config.Table;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Emil Forslund
  * @since  1.0.0
  */
-public final class ControllerTranslator extends DefaultJavaClassTranslator<Table, Class> {
+public final class ControllerTranslator extends AbstractJavaClassTranslator<Table, Class> {
 
     public ControllerTranslator(Table document) {
         super(document, Class::of);

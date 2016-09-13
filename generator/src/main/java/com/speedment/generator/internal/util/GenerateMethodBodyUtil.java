@@ -20,7 +20,7 @@ import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.generator.TranslatorSupport;
+import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
@@ -40,11 +40,12 @@ import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.internal.util.Formatting;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
-import static com.speedment.generator.internal.DefaultJavaClassTranslator.GETTER_METHOD_PREFIX;
-import static com.speedment.generator.internal.DefaultJavaClassTranslator.SETTER_METHOD_PREFIX;
-import static com.speedment.generator.internal.manager.GeneratedManagerImplTranslator.*;
+import static com.speedment.generator.translator.AbstractJavaClassTranslator.GETTER_METHOD_PREFIX;
+import static com.speedment.generator.translator.AbstractJavaClassTranslator.SETTER_METHOD_PREFIX;
+import static com.speedment.generator.internal.translator.manager.GeneratedManagerImplTranslator.*;
 import com.speedment.runtime.util.OptionalUtil;
 import java.lang.reflect.Type;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.joining;
 
 /**

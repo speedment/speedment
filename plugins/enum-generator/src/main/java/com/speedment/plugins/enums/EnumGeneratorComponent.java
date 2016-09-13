@@ -17,19 +17,20 @@
 package com.speedment.plugins.enums;
 
 
+import com.speedment.common.injector.InjectBundle;
+import com.speedment.common.injector.Injector;
 import com.speedment.plugins.enums.internal.GeneratedEntityDecorator;
-import com.speedment.generator.StandardTranslatorKey;
 import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.generator.internal.component.TypeMapperComponentImpl;
-import com.speedment.internal.common.injector.InjectBundle;
-import com.speedment.internal.common.injector.Injector;
-import static com.speedment.internal.common.injector.State.INITIALIZED;
-import static com.speedment.internal.common.injector.State.RESOLVED;
-import com.speedment.internal.common.injector.annotation.ExecuteBefore;
-import com.speedment.internal.common.injector.annotation.InjectKey;
-import com.speedment.internal.common.injector.annotation.WithState;
+
+import static com.speedment.common.injector.State.INITIALIZED;
+import static com.speedment.common.injector.State.RESOLVED;
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.InjectKey;
+import com.speedment.common.injector.annotation.WithState;
+import com.speedment.generator.translator.StandardTranslatorKey;
 import com.speedment.plugins.enums.internal.ui.CommaSeparatedStringEditor;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
