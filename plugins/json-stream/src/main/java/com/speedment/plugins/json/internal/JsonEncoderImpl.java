@@ -275,7 +275,9 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
         
         requireNonNulls(field, encoder);
         final String columnName = jsonField(project, field.identifier());
-        return put(columnName, field::findFrom, encoder);
+        // The entity finder cannot be replaced by a method reference. See bug #260
+        final Finder<ENTITY, FK_ENTITY> entityFinder = (entity, manager) -> field.findFrom(entity, manager);
+        return put(columnName, entityFinder, encoder);
     }
 
     /**************************************************************************/
