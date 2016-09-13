@@ -105,16 +105,16 @@
             <timezone>America/Los_Angeles</timezone>
         </developer>
         <developer>
-            <id>Rajvinder</id>
-            <name>Rajvinder Kaur Janjuha</name>
-            <timezone>IST</timezone>
+            <id>lawesson</id>
+            <name>Dan Lawesson</name>
+            <email>dan@speedment.com</email>
+            <timezone>America/Los_Angeles</timezone>
         </developer>
     </developers>
     
     <contributors>
         <contributor>
             <name>Fatih Dirlikli (GitHub:orwashere)</name>
-            <email>fatihdirlikli@gmail.com</email>
             <timezone>Europe/Istanbul</timezone>
         </contributor>
         <contributor>
@@ -135,6 +135,7 @@
         </contributor>
         <contributor>
             <name>Roberts Vartins (GitHub:robertsv)</name>
+            <timezone>Europe/Riga</timezone>
         </contributor>
         <contributor>
             <name>Simon Jonasson (GitHub:Gikkman)</name>
@@ -143,6 +144,10 @@
         <contributor>
             <name>Elis Minborg (GitHub:elisminborg)</name>
             <timezone>America/Los_Angeles</timezone>
+        </contributor>
+        <contributor>
+            <name>Rajvinder Kaur Janjuha (GitHub:Rajvinder)</name>
+            <timezone>IST</timezone>
         </contributor>
     </contributors>
 	
