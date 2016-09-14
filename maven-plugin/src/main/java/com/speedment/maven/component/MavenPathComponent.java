@@ -21,7 +21,7 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.internal.license.AbstractSoftware;
-import static com.speedment.runtime.internal.license.OpenSourceLicense.APACHE_2;
+import static com.speedment.runtime.license.OpenSourceLicense.APACHE_2;
 import com.speedment.runtime.license.Software;
 import java.nio.file.Path;
 import org.apache.maven.project.MavenProject;

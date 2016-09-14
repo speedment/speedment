@@ -14,9 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.license;
-
-import com.speedment.runtime.license.License;
+package com.speedment.runtime.license;
 
 import java.net.MalformedURLException;
 import java.net.URL;

@@ -36,7 +36,7 @@ import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.runtime.internal.config.immutable.ImmutableProject;
 import com.speedment.runtime.internal.license.AbstractSoftware;
-import com.speedment.runtime.internal.license.OpenSourceLicense;
+import com.speedment.runtime.license.OpenSourceLicense;
 import com.speedment.runtime.internal.util.Settings;
 import com.speedment.runtime.license.Software;
 import com.speedment.runtime.util.ProgressMeasure;
