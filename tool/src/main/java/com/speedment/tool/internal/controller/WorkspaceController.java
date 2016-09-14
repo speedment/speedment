@@ -18,8 +18,10 @@ package com.speedment.tool.internal.controller;
 
 import com.speedment.generator.component.EventComponent;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.runtime.internal.util.Cast;
 import com.speedment.tool.component.PropertyEditorComponent;
 import com.speedment.tool.component.UserInterfaceComponent;
+import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
 import com.speedment.tool.event.TreeSelectionChange;
@@ -35,6 +37,7 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -73,11 +76,17 @@ public final class WorkspaceController implements Initializable {
                         @SuppressWarnings("unchecked")
                         final HasNameProperty withName = (HasNameProperty) property;
                         
+                        final Optional<String> extraInfo = Cast.cast(property, ColumnProperty.class)
+                            .map(ColumnProperty::findDatabaseType)
+                            .map(Class::getSimpleName)
+                            .map(s -> "("+s+")");
+                        
                         workspace.textProperty().bind(
                             Bindings.createStringBinding(() -> String.format(
-                                "Editing %s '%s'",
+                                "Editing %s '%s' %s",
                                 withName.mainInterface().getSimpleName(),
-                                withName.getName()
+                                withName.getName(),
+                                extraInfo.orElse("")
                             ), withName.nameProperty())
                         );
                        editors.getUiVisibleProperties( treeItem.getValue() )
