@@ -36,7 +36,7 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.component.AbstractComponent;
 import com.speedment.runtime.internal.license.AbstractSoftware;
-import static com.speedment.runtime.internal.license.OpenSourceLicense.APACHE_2;
+import static com.speedment.runtime.license.OpenSourceLicense.APACHE_2;
 import com.speedment.runtime.license.Software;
 import com.speedment.tool.component.PropertyEditorComponent;
 import com.speedment.tool.config.ColumnProperty;

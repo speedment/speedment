@@ -40,7 +40,7 @@ import com.speedment.plugins.reactor.translator.ReactorTranslatorKey;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.component.AbstractComponent;
-import static com.speedment.runtime.internal.license.OpenSourceLicense.APACHE_2;
+import static com.speedment.runtime.license.OpenSourceLicense.APACHE_2;
 import com.speedment.tool.component.PropertyEditorComponent;
 import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.config.TableProperty;

@@ -31,7 +31,7 @@ import com.speedment.runtime.internal.component.AbstractComponent;
 import com.speedment.runtime.internal.license.AbstractSoftware;
 import com.speedment.runtime.license.Software;
 
-import static com.speedment.runtime.internal.license.OpenSourceLicense.APACHE_2;
+import static com.speedment.runtime.license.OpenSourceLicense.APACHE_2;
 
 /**
  * Plugs into the Speedment platform, generating Spring annotated classes as
