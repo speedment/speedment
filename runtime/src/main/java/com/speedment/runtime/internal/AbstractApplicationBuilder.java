@@ -436,6 +436,20 @@ public abstract class AbstractApplicationBuilder<
     protected void printWelcomeMessage(Injector injector) {
 
         final InfoComponent info = injector.getOrThrow(InfoComponent.class);
+        final String title   = info.title();
+        final String version = info.version();
+
+        final String speedmentMsg = "\n" +
+            "   ____                   _                     _     \n" +
+            "  / ___'_ __  __  __   __| |_ __ __    __ _ __ | |    \n" +
+            "  \\___ | '_ |/  \\/  \\ / _  | '_ \\ _ \\ /  \\ '_ \\| |_   \n" +
+            "   ___)| |_)| '_/ '_/| (_| | | | | | | '_/ | | |  _|  \n" +
+            "  |____| .__|\\__\\\\__\\ \\____|_| |_| |_|\\__\\_| |_| '_   \n" +
+            "=======|_|======================================\\__|==\n" +
+            "   :: " + title + " by " + getImplementationVendor() + 
+            ":: (v" + version + ") ";
+
+        LOGGER.info(speedmentMsg);
 
         try {
             final Package package_ = Runtime.class.getPackage();
@@ -457,20 +471,10 @@ public abstract class AbstractApplicationBuilder<
             } else {
                 LOGGER.warn("Unable to fully parse the java version. Version check skipped!");
             }
-        } catch (final Exception e) {
+        } catch (final Exception ex) {
             LOGGER.info("Unknown Java version.");
         }
-
-        final String title = info.title();
-        final String subTitle = info.subtitle();
-        final String version = info.version();
-
-        final String speedmentMsg = title + " (" + subTitle + ") version "
-            + version + " by " + getImplementationVendor() + " started."
-            + " API version is " + getSpecificationVersion();
-
-        LOGGER.info(speedmentMsg);
-
+        
         if (!SpeedmentVersion.isProductionMode()) {
             LOGGER.warn("This version is NOT INTENDED FOR PRODUCTION USE!");
         }
