@@ -14,21 +14,22 @@ Speedment provides immediate relief from performance bottlenecks and speeds up a
 
 This site covers the <strong>Speedment Open Source</strong> project available under the [Apache 2 license](http://www.apache.org/licenses/LICENSE-2.0). If you are interested in the enterprise product with support for commercial databases and in-memory acceleration, check out [www.speedment.com](http://speedment.com/)!
 
+
 Quick Start
 -----------
 Assuming you have Maven installed and a relational database available, you can try out Speedment in a minute by running the following from a command-line.
 
-####### MySQL
+###### MySQL
 ```
 mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mysql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false && cd speedment-demo && mvn speedment:tool
 ```
 
-####### PostgreSQL
+###### PostgreSQL
 ```
 mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-postgresql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false && cd speedment-demo && mvn speedment:tool
 ```
 
-####### MariaDB
+###### MariaDB
 ```
 mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mariadb -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false && cd speedment-demo && mvn speedment:tool
 ```
