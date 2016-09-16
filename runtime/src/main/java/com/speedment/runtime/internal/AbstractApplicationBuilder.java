@@ -451,6 +451,10 @@ public abstract class AbstractApplicationBuilder<
 
         LOGGER.info(speedmentMsg);
 
+        if (!SpeedmentVersion.isProductionMode()) {
+            LOGGER.warn("This version is NOT INTENDED FOR PRODUCTION USE!");
+        }
+        
         try {
             final Package package_ = Runtime.class.getPackage();
             final String javaMsg = package_.getSpecificationTitle()
@@ -475,9 +479,7 @@ public abstract class AbstractApplicationBuilder<
             LOGGER.info("Unknown Java version.");
         }
         
-        if (!SpeedmentVersion.isProductionMode()) {
-            LOGGER.warn("This version is NOT INTENDED FOR PRODUCTION USE!");
-        }
+
     }
 
     protected Optional<Boolean> isVersionOk(String versionString) {
