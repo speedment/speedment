@@ -28,7 +28,7 @@ A GUI dialog will prompt for database connection details.
 
 2. Press the **Generate** button and then quit the tool. 
 
-Now you have a demo project set up with generated application code in the directory `speedment-demo`. To learn more about how to leverage the generated Speedment classes and the Speedment runtime in your project, please the the following tutorials and guides.
+Now you have a demo project set up with generated application code in the directory `speedment-demo`. To learn more about how to leverage the generated Speedment classes and the Speedment runtime in your project, please see the following tutorials and guides.
 
 ### MariaDB
 For a MariaDB database, please use the following command-line.
