@@ -1,5 +1,5 @@
-Wrap your database into Java 8!
-==========================================
+Speedment is a Stream ORM Java Toolkit and Runtime
+==================================================
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.speedment/speedment/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.speedment/speedment)
 [![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.speedment/runtime/badge.svg)](http://www.javadoc.io/doc/com.speedment/runtime)
@@ -7,10 +7,9 @@ Wrap your database into Java 8!
 [![Join the chat at https://gitter.im/speedment/speedment](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/speedment/speedment?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 <p>
-<img src="https://raw.githubusercontent.com/speedment/speedment-resources/master/src/main/resources/logo/Speedhare_240x211.png" alt="Spire the Hare" title="Spire" align="right" /><span>Speedment accelerates your development speed and makes programming so easy and fun!</span>
+<img src="https://raw.githubusercontent.com/speedment/speedment-resources/master/src/main/resources/logo/Speedhare_240x211.png" alt="Spire the Hare" title="Spire" align="right" /><span>Speedment is a Java toolkit and runtime for accelerated SQL database applications leveraging In-JVM Data Store technology.</span>
 
-When you use Speedment for database querying, you do not have to learn a new APIs or use complex ORMs. Everything is <strong>standard Java 8</strong> and works 
-out of the box!
+Speedment provides immediate relief from performance bottlenecks and speeds up application response times by orders of magnitude, gives database load reduction and application latency reduction. Speedment is modular. Speedment allows for a stepwise implementation and old legacy system can co-exist with the Speedment platform. Speedment can scale linearly with the number of CPU cores and threads. Speedment can be deployed in cloud environments/local clouds or on dedicated servers. Speedment requires Java 8 (version 1.8.0_40) or newer. Supported JVMs includes Oracle Java and OpenJDK.
 </p>
 
 This site covers the <strong>Speedment Open Source</strong> project available under the [Apache 2 license](http://www.apache.org/licenses/LICENSE-2.0). If you are interested in the enterprise product with support for commercial databases and in-memory acceleration, check out [www.speedment.com](http://speedment.com/)!
