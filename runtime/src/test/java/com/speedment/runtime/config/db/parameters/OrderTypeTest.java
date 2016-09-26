@@ -14,12 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.speedment.runtime.config.parameters;
+package com.speedment.runtime.config.db.parameters;
 
 import com.speedment.runtime.config.parameter.OrderType;
 import org.junit.After;
@@ -41,7 +36,6 @@ public class OrderTypeTest {
 
     final AtomicBoolean asc = new AtomicBoolean();
     final AtomicBoolean desc = new AtomicBoolean();
- //   final AtomicBoolean none = new AtomicBoolean();
     final Supplier<String> ascSupplier = () -> {
         asc.set(true);
         return "A";
@@ -50,10 +44,7 @@ public class OrderTypeTest {
         desc.set(true);
         return "B";
     };
-//    final Supplier<String> noneSupplier = () -> {
-//        none.set(true);
-//        return "C";
-//    };
+
 
     public OrderTypeTest() {
     }

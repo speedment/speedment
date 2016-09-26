@@ -59,7 +59,6 @@
                             com.speedment.runtime.license.*,
                             com.speedment.runtime.manager.*,
                             com.speedment.runtime.stream.*,
-                            com.speedment.runtime.transaction.*,
                             com.speedment.runtime.util.*,
                             com.speedment.runtime,
                             com.speedment.common.injector,
@@ -122,33 +121,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            
-<!--            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
-                
-                <executions>
-                    <execution>
-                        <id>aggregate</id>
-                        <goals>
-                            <goal>aggregate</goal>
-                        </goals>
-                        <phase>site</phase>
-                        <configuration>
-                            <additionalDependencies>
-                                <additionalDependency>
-                                    <groupId>com.speedment.common</groupId>
-                                    <artifactId>logger</artifactId>
-                                    <version>${logger.version}</version>
-                                </additionalDependency>
-                            </additionalDependencies>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>-->
-                                
+            </plugin>               
         </plugins>
         
     </build>
