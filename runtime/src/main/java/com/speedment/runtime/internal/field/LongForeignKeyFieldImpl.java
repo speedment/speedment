@@ -1,19 +1,3 @@
-/**
- *
- * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); You may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package com.speedment.runtime.internal.field;
 
 import com.speedment.runtime.config.identifier.FieldIdentifier;
@@ -37,7 +21,6 @@ import com.speedment.runtime.internal.field.predicate.longs.LongInPredicate;
 import com.speedment.runtime.manager.Manager;
 import java.util.Set;
 import java.util.function.Predicate;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -48,7 +31,6 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
 public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements LongField<ENTITY, D>, LongForeignKeyField<ENTITY, D, FK_ENTITY> {
     
     private final FieldIdentifier<ENTITY> identifier;
@@ -85,7 +67,7 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     }
     
     @Override
-    public FindFrom<ENTITY, FK_ENTITY> findFrom(Manager<FK_ENTITY> foreignManager) {
+    public FindFrom<ENTITY, FK_ENTITY, Long> findFrom(Manager<FK_ENTITY> foreignManager) {
         return new FindFromLong<>(this, referenced, foreignManager);
     }
     
@@ -120,27 +102,27 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     }
     
     @Override
-    public FieldPredicate<ENTITY> equal(Long value) {
+    public FieldPredicate<ENTITY, Long> equal(Long value) {
         return new LongEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterThan(Long value) {
+    public FieldPredicate<ENTITY, Long> greaterThan(Long value) {
         return new LongGreaterThanPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterOrEqual(Long value) {
+    public FieldPredicate<ENTITY, Long> greaterOrEqual(Long value) {
         return new LongGreaterOrEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Long start, Long end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY, Long> between(Long start, Long end, Inclusion inclusion) {
         return new LongBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
-    public FieldPredicate<ENTITY> in(Set<Long> set) {
+    public FieldPredicate<ENTITY, Long> in(Set<Long> set) {
         return new LongInPredicate<>(this, set);
     }
     

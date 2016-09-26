@@ -30,7 +30,7 @@ import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
  * @since   2.2.0
  */
 public final class ReferenceIsNotNullPredicate<ENTITY, D, V>
-        extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>> {
+        extends AbstractFieldPredicate<ENTITY, V, HasReferenceValue<ENTITY, D, V>> {
     
     public ReferenceIsNotNullPredicate(HasReferenceValue<ENTITY, D, V> field) {
         super(IS_NOT_NULL, field, entity -> entity != null && field.get(entity) != null);

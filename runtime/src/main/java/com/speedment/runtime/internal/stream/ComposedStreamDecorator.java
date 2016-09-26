@@ -55,8 +55,8 @@ public final class ComposedStreamDecorator implements StreamDecorator {
     }
 
     @Override
-    public <ENTITY> FieldPredicate<ENTITY> apply(FieldPredicate<ENTITY> predicate) {
-        FieldPredicate<ENTITY> s = predicate;
+    public <ENTITY, V> FieldPredicate<ENTITY, V> apply(FieldPredicate<ENTITY, V> predicate) {
+        FieldPredicate<ENTITY, V> s = predicate;
 
         for (final StreamDecorator sd : decorators) {
             s = sd.apply(s);

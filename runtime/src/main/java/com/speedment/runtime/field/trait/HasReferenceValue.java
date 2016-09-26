@@ -42,7 +42,7 @@ import com.speedment.runtime.internal.field.setter.SetToReferenceImpl;
  * @since   2.2.0
  */
 @Api(version = "3.0")
-public interface HasReferenceValue<ENTITY, D, V> extends Field<ENTITY> {
+public interface HasReferenceValue<ENTITY, D, V> extends Field<ENTITY, V> {
 
     @Override
     ReferenceSetter<ENTITY, V> setter();

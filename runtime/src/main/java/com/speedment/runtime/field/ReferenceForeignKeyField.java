@@ -36,6 +36,5 @@ import com.speedment.runtime.field.trait.HasFinder;
  * @since  ReferenceForeignKeyFieldTrait
  */
 @Api(version = "3.0")
-public interface ReferenceForeignKeyField<ENTITY, D, V, FK_ENTITY> extends
-    ReferenceField<ENTITY, D, V>, 
-    HasFinder<ENTITY, FK_ENTITY> {}
+public interface ReferenceForeignKeyField<ENTITY, D, V extends Comparable<? super V>, FK_ENTITY> 
+extends ComparableField<ENTITY, D, V>, HasFinder<ENTITY, FK_ENTITY, V> {}

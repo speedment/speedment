@@ -113,7 +113,7 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     }
 
     @Override
-    public FindFrom<ENTITY, FK_ENTITY> findFrom(Manager<FK_ENTITY> foreignManager) {
+    public FindFrom<ENTITY, FK_ENTITY, String> findFrom(Manager<FK_ENTITY> foreignManager) {
         return new FindFromReference<>(this, referenced, foreignManager);
     }
 
@@ -162,12 +162,12 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
      * **************************************************************
      */
     @Override
-    public FieldPredicate<ENTITY> isNull() {
+    public FieldPredicate<ENTITY, String> isNull() {
         return new ReferenceIsNullPredicate<>(this);
     }
 
     @Override
-    public FieldPredicate<ENTITY> equal(String value) {
+    public FieldPredicate<ENTITY, String> equal(String value) {
         return new ReferenceEqualPredicate<>(this, value);
     }
 

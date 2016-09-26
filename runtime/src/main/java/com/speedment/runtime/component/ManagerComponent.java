@@ -17,7 +17,6 @@
 package com.speedment.runtime.component;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.manager.Manager;
 
@@ -65,17 +64,6 @@ public interface ManagerComponent extends Component {
      * @throws SpeedmentException if no Manager exists for the given entityClass
      */
     <E> Manager<E> managerOf(Class<E> entityClass) throws SpeedmentException;
-
-    /**
-     * Obtains and returns the currently associated {@link Manager}
-     * implementation for the given Table.
-     *
-     * @param <E>    the Entity interface type
-     * @param table  the table to use
-     * @return       the currently associated {@link Manager} implementation for 
-     *               the given table
-     */
-    <E> Manager<E> findByTable(Table table);
 
     /**
      * Returns a {@link Stream} of all {@link Manager Managers} associated with

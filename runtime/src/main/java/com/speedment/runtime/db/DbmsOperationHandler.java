@@ -33,7 +33,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -112,7 +111,7 @@ public interface DbmsOperationHandler {
             Dbms dbms, 
             String sql,
             List<?> values,
-            Function<ResultSet, T> rsMapper
+            SqlFunction<ResultSet, T> rsMapper
     );
 
     /**
@@ -133,7 +132,7 @@ public interface DbmsOperationHandler {
             Dbms dbms,
             String sql,
             List<?> values,
-            Collection<Field<ENTITY>> generatedKeyFields,
+            Collection<Field<ENTITY, ?>> generatedKeyFields,
             Consumer<List<Long>> generatedKeyConsumer
     ) throws SQLException;
 

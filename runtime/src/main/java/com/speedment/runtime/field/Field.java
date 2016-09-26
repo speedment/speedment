@@ -26,16 +26,17 @@ import com.speedment.runtime.field.trait.HasTypeMapper;
  * The base interface for all fields.
  * 
  * @param <ENTITY>  the entity type
+ * @param <T>       the wrapper type
  * 
  * @author  Per Minborg
  * @author  Emil Forslund
  * @since   2.2.0
  */
 @Api(version = "3.0")
-public interface Field<ENTITY> extends 
+public interface Field<ENTITY, T> extends 
         HasIdentifier<ENTITY>, 
-        HasGetter<ENTITY>, 
-        HasSetter<ENTITY>, 
+        HasGetter<ENTITY, T>, 
+        HasSetter<ENTITY, T>, 
         HasTypeMapper {
   
     /**

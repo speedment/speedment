@@ -40,4 +40,5 @@ import java.util.function.BiFunction;
  */
 @Api(version = "3.0")
 @FunctionalInterface
-public interface ReferenceSetter<ENTITY, V> extends Setter<ENTITY>, BiFunction<ENTITY, V, ENTITY> {}
+public interface ReferenceSetter<ENTITY, V> 
+extends Setter<ENTITY, V>, BiFunction<ENTITY, V, ENTITY> {}

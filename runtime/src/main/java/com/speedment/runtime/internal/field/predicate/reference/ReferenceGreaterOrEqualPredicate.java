@@ -32,7 +32,7 @@ import com.speedment.runtime.field.trait.HasReferenceValue;
  * @since   2.2.0
  */
 public final class ReferenceGreaterOrEqualPredicate<ENTITY, D, V extends Comparable<? super V>>
-        extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
+        extends AbstractFieldPredicate<ENTITY, V, HasReferenceValue<ENTITY, D, V>>
         implements Tuple1<V> {
 
     private final V value;

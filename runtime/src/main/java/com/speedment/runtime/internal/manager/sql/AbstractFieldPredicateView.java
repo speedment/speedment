@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.internal.manager.sql;
 
-import com.speedment.runtime.manager.SqlManager;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
@@ -27,6 +26,9 @@ import java.util.Set;
 
 import static com.speedment.runtime.internal.field.predicate.PredicateUtil.*;
 import com.speedment.runtime.field.predicate.FieldPredicateView;
+import com.speedment.runtime.manager.ManagerSupport;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -36,29 +38,29 @@ import static java.util.stream.Collectors.joining;
  */
 public abstract class AbstractFieldPredicateView implements FieldPredicateView {
 
-    protected abstract SqlPredicateFragment equalIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated);
+    protected abstract SqlPredicateFragment equalIgnoreCaseHelper(String cn, FieldPredicate<?, ?> model, boolean negated);
 
-    protected abstract SqlPredicateFragment startsWithHelper(String cn, FieldPredicate<?> model, boolean negated);
+    protected abstract SqlPredicateFragment startsWithHelper(String cn, FieldPredicate<?, ?> model, boolean negated);
     
-    protected abstract SqlPredicateFragment startsWithIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated);
+    protected abstract SqlPredicateFragment startsWithIgnoreCaseHelper(String cn, FieldPredicate<?, ?> model, boolean negated);
 
-    protected abstract SqlPredicateFragment endsWithHelper(String cn, FieldPredicate<?> model, boolean negated);
+    protected abstract SqlPredicateFragment endsWithHelper(String cn, FieldPredicate<?, ?> model, boolean negated);
     
-    protected abstract SqlPredicateFragment endsWithIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated);
+    protected abstract SqlPredicateFragment endsWithIgnoreCaseHelper(String cn, FieldPredicate<?, ?> model, boolean negated);
 
-    protected abstract SqlPredicateFragment containsHelper(String cn, FieldPredicate<?> model, boolean negated);
+    protected abstract SqlPredicateFragment containsHelper(String cn, FieldPredicate<?, ?> model, boolean negated);
     
-    protected abstract SqlPredicateFragment containsIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated);
+    protected abstract SqlPredicateFragment containsIgnoreCaseHelper(String cn, FieldPredicate<?, ?> model, boolean negated);
 
     @Override
-    public <ENTITY> SqlPredicateFragment transform(SqlManager<ENTITY> manager, FieldPredicate<ENTITY> model) {
+    public <ENTITY, V> SqlPredicateFragment transform(ManagerSupport<ENTITY> manager, FieldPredicate<ENTITY, V> model) {
         return render(
             requireNonNull(manager),
             requireNonNull(model)
         );
     }
 
-    protected <ENTITY> SqlPredicateFragment render(SqlManager<ENTITY> manager, FieldPredicate<ENTITY> model) {
+    protected <ENTITY, V> SqlPredicateFragment render(ManagerSupport<ENTITY> manager, FieldPredicate<ENTITY, V> model) {
         final PredicateType pt = model.getEffectivePredicateType();
         
 //        final String cn = namingConvention.fullNameOf(model.getField().identifier());
@@ -159,39 +161,39 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
         return of("(" + cn + " IS NOT NULL)");
     }
 
-    protected SqlPredicateFragment equal(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment equal(String cn, FieldPredicate<?, ?> model) {
         return of("(" + cn + " = ?)").add(getFirstOperandAsRaw(model));
     }
 
-    protected SqlPredicateFragment notEqual(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment notEqual(String cn, FieldPredicate<?, ?> model) {
         return of("(NOT (" + cn + " = ?))").add(getFirstOperandAsRaw(model));
     }
 
-    protected SqlPredicateFragment greaterThan(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment greaterThan(String cn, FieldPredicate<?, ?> model) {
         return of("(" + cn + " > ?)").add(getFirstOperandAsRaw(model));
     }
 
-    protected SqlPredicateFragment greaterOrEqual(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment greaterOrEqual(String cn, FieldPredicate<?, ?> model) {
         return of("(" + cn + " >= ?)").add(getFirstOperandAsRaw(model));
     }
 
-    protected SqlPredicateFragment lessThan(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment lessThan(String cn, FieldPredicate<?, ?> model) {
         return of("(" + cn + " < ?)").add(getFirstOperandAsRaw(model));
     }
 
-    protected SqlPredicateFragment lessOrEqual(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment lessOrEqual(String cn, FieldPredicate<?, ?> model) {
         return of("(" + cn + " <= ?)").add(getFirstOperandAsRaw(model));
     }
 
-    protected SqlPredicateFragment between(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment between(String cn, FieldPredicate<?, ?> model) {
         return betweenHelper(cn, model, false);
     }
 
-    protected SqlPredicateFragment notBetween(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment notBetween(String cn, FieldPredicate<?, ?> model) {
         return betweenHelper(cn, model, true);
     }
 
-    protected SqlPredicateFragment betweenHelper(String cn, FieldPredicate<?> model, boolean negated) {
+    protected SqlPredicateFragment betweenHelper(String cn, FieldPredicate<?, ?> model, boolean negated) {
         final Inclusion inclusion = getInclusionOperand(model);
         switch (inclusion) {
             case START_EXCLUSIVE_END_EXCLUSIVE: {
@@ -210,72 +212,72 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
         throw new IllegalArgumentException("Unknown Inclusion:" + inclusion);
     }
 
-    protected SqlPredicateFragment in(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment in(String cn, FieldPredicate<?, ?> model) {
         return inHelper(cn, model, false);
     }
 
-    protected SqlPredicateFragment notIn(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment notIn(String cn, FieldPredicate<?, ?> model) {
         return inHelper(cn, model, true);
     }
 
-    protected SqlPredicateFragment inHelper(String cn, FieldPredicate<?> model, boolean negated) {
+    protected SqlPredicateFragment inHelper(String cn, FieldPredicate<?, ?> model, boolean negated) {
         final Set<?> set = getFirstOperandAsRawSet(model);
         return of("(" + cn + " IN (" + set.stream().map($ -> "?").collect(joining(",")) + "))", negated).addAll(set);
     }
 
-    protected SqlPredicateFragment equalIgnoreCase(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment equalIgnoreCase(String cn, FieldPredicate<?, ?> model) {
         return equalIgnoreCaseHelper(cn, model, false);
     }
 
-    protected SqlPredicateFragment notEqualIgnoreCase(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment notEqualIgnoreCase(String cn, FieldPredicate<?, ?> model) {
         return equalIgnoreCaseHelper(cn, model, true);
     }
 
-    protected SqlPredicateFragment startsWith(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment startsWith(String cn, FieldPredicate<?, ?> model) {
         return startsWithHelper(cn, model, false);
     }
 
-    protected SqlPredicateFragment notStartsWith(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment notStartsWith(String cn, FieldPredicate<?, ?> model) {
         return startsWithHelper(cn, model, true);
     }
     
-    protected SqlPredicateFragment startsWithIgnoreCase(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment startsWithIgnoreCase(String cn, FieldPredicate<?, ?> model) {
         return startsWithIgnoreCaseHelper(cn, model, false);
     }
 
-    protected SqlPredicateFragment notStartsWithIgnoreCase(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment notStartsWithIgnoreCase(String cn, FieldPredicate<?, ?> model) {
         return startsWithIgnoreCaseHelper(cn, model, true);
     }
 
-    protected SqlPredicateFragment endsWith(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment endsWith(String cn, FieldPredicate<?, ?> model) {
         return endsWithHelper(cn, model, false);
     }
 
-    protected SqlPredicateFragment notEndsWith(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment notEndsWith(String cn, FieldPredicate<?, ?> model) {
         return endsWithHelper(cn, model, true);
     }
     
-    protected SqlPredicateFragment endsWithIgnoreCase(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment endsWithIgnoreCase(String cn, FieldPredicate<?, ?> model) {
         return endsWithIgnoreCaseHelper(cn, model, false);
     }
 
-    protected SqlPredicateFragment notEndsWithIgnoreCase(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment notEndsWithIgnoreCase(String cn, FieldPredicate<?, ?> model) {
         return endsWithIgnoreCaseHelper(cn, model, true);
     }
 
-    protected SqlPredicateFragment contains(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment contains(String cn, FieldPredicate<?, ?> model) {
         return containsHelper(cn, model, false);
     }
 
-    protected SqlPredicateFragment notContains(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment notContains(String cn, FieldPredicate<?, ?> model) {
         return containsHelper(cn, model, true);
     }
     
-    protected SqlPredicateFragment containsIgnoreCase(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment containsIgnoreCase(String cn, FieldPredicate<?, ?> model) {
         return containsIgnoreCaseHelper(cn, model, false);
     }
 
-    protected SqlPredicateFragment notContainsIgnoreCase(String cn, FieldPredicate<?> model) {
+    protected SqlPredicateFragment notContainsIgnoreCase(String cn, FieldPredicate<?, ?> model) {
         return containsIgnoreCaseHelper(cn, model, true);
     }
 

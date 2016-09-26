@@ -90,7 +90,7 @@ implements ReferenceField<ENTITY, D, V> {
     /*****************************************************************/
 
     @Override
-    public FieldPredicate<ENTITY> isNull() {
+    public FieldPredicate<ENTITY, V> isNull() {
         return new ReferenceIsNullPredicate<>(this);
     }
 }

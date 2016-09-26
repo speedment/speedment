@@ -24,15 +24,16 @@ import java.util.function.Function;
  *
  * @param <ENTITY>     the source entity
  * @param <FK_ENTITY>  the target entity
+ * @param <V>          the wrapper type
  * 
  * @author Emil Forslund
  * @since  3.0.0
  */
-public interface FindFrom<ENTITY, FK_ENTITY> extends Function<ENTITY, FK_ENTITY> {
+public interface FindFrom<ENTITY, FK_ENTITY, V> extends Function<ENTITY, FK_ENTITY> {
     
-    Field<ENTITY> getSourceField();
+    Field<ENTITY, V> getSourceField();
     
-    Field<FK_ENTITY> getTargetField();
+    Field<FK_ENTITY, V> getTargetField();
     
     Manager<FK_ENTITY> getTargetManager();
 

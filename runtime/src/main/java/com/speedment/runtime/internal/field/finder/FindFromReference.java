@@ -17,7 +17,7 @@
 package com.speedment.runtime.internal.field.finder;
 
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.field.ReferenceField;
+import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.manager.Manager;
 
 /**
@@ -30,16 +30,18 @@ import com.speedment.runtime.manager.Manager;
  * @since   3.0.0
  */
 public class FindFromReference<ENTITY, FK_ENTITY, T extends Comparable<? super T>>
-    extends AbstractFindFrom<ENTITY, FK_ENTITY, ReferenceField<ENTITY, ?, T>, ReferenceField<FK_ENTITY, ?, T>> {
+    extends AbstractFindFrom<ENTITY, FK_ENTITY, T, ComparableField<ENTITY, ?, T>, ComparableField<FK_ENTITY, ?, T>> {
 
-    public FindFromReference(ReferenceField<ENTITY, ?, T> source, ReferenceField<FK_ENTITY, ?, T> target, Manager<FK_ENTITY> manager) {
+    public FindFromReference(ComparableField<ENTITY, ?, T> source, ComparableField<FK_ENTITY, ?, T> target, Manager<FK_ENTITY> manager) {
         super(source, target, manager);
     }
 
     @Override
     public FK_ENTITY apply(ENTITY entity) {
         final T value = getSourceField().getter().apply(entity);
-        return getTargetManager().findAny(getTargetField(), value)
+        return getTargetManager().stream()
+            .filter(getTargetField().equal(value))
+            .findAny()
             .orElseThrow(() -> new SpeedmentException(
                 "Error! Could not find any " + 
                 getTargetManager().getEntityClass().getSimpleName() + 

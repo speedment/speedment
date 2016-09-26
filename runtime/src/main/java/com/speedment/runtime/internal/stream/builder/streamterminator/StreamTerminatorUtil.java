@@ -37,15 +37,15 @@ import static java.util.Objects.requireNonNull;
  */
 public final class StreamTerminatorUtil {
 
-    public static <T extends Pipeline, ENTITY> List<FieldPredicate<ENTITY>> topLevelAndPredicates(T initialPipeline) {
-        final List<FieldPredicate<ENTITY>> andPredicateBuilders = new ArrayList<>();
+    public static <T extends Pipeline, ENTITY> List<FieldPredicate<ENTITY, ?>> topLevelAndPredicates(T initialPipeline) {
+        final List<FieldPredicate<ENTITY, ?>> andPredicateBuilders = new ArrayList<>();
 
         for (final Action<?, ?> action : initialPipeline.stream().collect(toList())) {
             @SuppressWarnings("rawtypes")
             final Optional<FilterAction> oFilterAction = Cast.cast(action, FilterAction.class);
             if (oFilterAction.isPresent()) {
                 @SuppressWarnings("unchecked")
-                final List<FieldPredicate<ENTITY>> newAndPredicates = andPredicates(oFilterAction.get());
+                final List<FieldPredicate<ENTITY, ?>> newAndPredicates = andPredicates(oFilterAction.get());
                 andPredicateBuilders.addAll(newAndPredicates);
             } else {
                 break; // We can only do initial consecutive FilterAction(s)
@@ -55,9 +55,9 @@ public final class StreamTerminatorUtil {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public static <ENTITY> List<FieldPredicate<?>> andPredicates(FilterAction<ENTITY> action) {
+    public static <ENTITY> List<FieldPredicate<?, ?>> andPredicates(FilterAction<ENTITY> action) {
         requireNonNull(action);
-        final List<FieldPredicate<?>> andPredicateBuilders = new ArrayList<>();
+        final List<FieldPredicate<?, ?>> andPredicateBuilders = new ArrayList<>();
         final Predicate<? super ENTITY> predicate = action.getPredicate();
 
         final Optional<FieldPredicate> oPredicateBuilder = Cast.cast(predicate, FieldPredicate.class);

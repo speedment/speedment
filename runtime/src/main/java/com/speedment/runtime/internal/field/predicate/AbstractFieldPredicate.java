@@ -29,13 +29,14 @@ import static java.util.Objects.requireNonNull;
  * to construct it.
  * 
  * @param <ENTITY>  the entity type that is being tested
+ * @param <V>       the wrapper type
  * @param <FIELD>   the field in the entity that is operated on
  * 
  * @author  Emil Forslund
  * @since   3.0.0
  */
-public abstract class AbstractFieldPredicate<ENTITY, FIELD extends Field<ENTITY>> 
-        extends AbstractPredicate<ENTITY> implements FieldPredicate<ENTITY> {
+public abstract class AbstractFieldPredicate<ENTITY, V, FIELD extends Field<ENTITY, V>> 
+        extends AbstractPredicate<ENTITY> implements FieldPredicate<ENTITY, V> {
     
     private final PredicateType predicateType;
     private final FIELD field;

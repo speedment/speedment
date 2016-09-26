@@ -17,7 +17,6 @@
 package com.speedment.runtime.internal.component;
 
 import com.speedment.runtime.component.ManagerComponent;
-import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.license.Software;
 import com.speedment.runtime.manager.Manager;
@@ -32,38 +31,43 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Emil Forslund
  */
-public final class ManagerComponentImpl extends InternalOpenSourceComponent implements ManagerComponent {
+public final class ManagerComponentImpl 
+extends InternalOpenSourceComponent 
+implements ManagerComponent {
 
     private final Map<Class<?>, Manager<?>> managersByEntity;
-    private final Map<Table, Manager<?>> tableMap;
 
     public ManagerComponentImpl() {
         managersByEntity = new ConcurrentHashMap<>();
-        tableMap         = new ConcurrentHashMap<>();
     }
     
     @Override
     protected String getDescription() {
-        return "Holds the manager instances used to communicate with various database tables.";
+        return "Holds the manager instances used to communicate with various " + 
+            "database tables.";
     }
 
     @Override
     public <ENTITY> void put(Manager<ENTITY> manager) {
         requireNonNull(manager);
         managersByEntity.put(manager.getEntityClass(), manager);
-        tableMap.put(manager.getTable(), manager);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <E> Manager<E> managerOf(Class<E> entityClass) throws SpeedmentException {
+    public <E> Manager<E> managerOf(Class<E> entityClass) 
+            throws SpeedmentException {
+        
         requireNonNull(entityClass);
         
         @SuppressWarnings("unchecked")
-        final Manager<E> manager = (Manager<E>) managersByEntity.get(entityClass);
+        final Manager<E> manager = (Manager<E>) 
+            managersByEntity.get(entityClass);
         
         if (manager == null) {
-            throw new SpeedmentException("No manager exists for " + entityClass);
+            throw new SpeedmentException(
+                "No manager exists for " + entityClass
+            );
         }
         
         return manager;
@@ -72,13 +76,6 @@ public final class ManagerComponentImpl extends InternalOpenSourceComponent impl
     @Override
     public Stream<Manager<?>> stream() {
         return managersByEntity.values().stream();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <ENTITY> Manager<ENTITY> findByTable(Table table) {
-        requireNonNull(table);
-        return (Manager<ENTITY>) tableMap.get(table);
     }
 
     @Override

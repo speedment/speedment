@@ -29,7 +29,7 @@ import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
  * @since   2.2.0
  */
 public final class StringIsEmptyPredicate<ENTITY, D> 
-extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, String>> {
+extends AbstractFieldPredicate<ENTITY, String, HasReferenceValue<ENTITY, D, String>> {
     
     public StringIsEmptyPredicate(HasReferenceValue<ENTITY, D, String> field) {
         super(IS_EMPTY, field, entity -> {

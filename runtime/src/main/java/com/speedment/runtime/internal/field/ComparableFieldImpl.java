@@ -125,12 +125,12 @@ implements ComparableField<ENTITY, D, V> {
     /*****************************************************************/
 
     @Override
-    public FieldPredicate<ENTITY> isNull() {
+    public FieldPredicate<ENTITY, V> isNull() {
         return new ReferenceIsNullPredicate<>(this);
     }
 
     @Override
-    public FieldPredicate<ENTITY> equal(V value) {
+    public FieldPredicate<ENTITY, V> equal(V value) {
         return new ReferenceEqualPredicate<>(this, value);
     }
 

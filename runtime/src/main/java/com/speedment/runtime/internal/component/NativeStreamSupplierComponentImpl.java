@@ -40,7 +40,7 @@ public class NativeStreamSupplierComponentImpl extends InternalOpenSourceCompone
 
     @Override
     public <ENTITY> Stream<ENTITY> stream(Class<ENTITY> entityClass, StreamDecorator decorator) {
-        return managerComponent.managerOf(entityClass).nativeStream(decorator);
+        return managerComponent.managerOf(entityClass).stream(); // TODO use decorator
     }
 
     @Override

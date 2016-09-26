@@ -21,7 +21,6 @@ import com.speedment.runtime.stream.parallel.HasParallelStrategy;
 
 import java.sql.ResultSet;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -45,8 +44,8 @@ public interface AsynchronousQueryResult<T> extends HasParallelStrategy, AutoClo
 
     void setValues(List<?> values);
 
-    Function<ResultSet, T> getRsMapper();
+    SqlFunction<ResultSet, T> getRsMapper();
 
-    void setRsMapper(Function<ResultSet, T> rsMapper);
+    void setRsMapper(SqlFunction<ResultSet, T> rsMapper);
 
 }

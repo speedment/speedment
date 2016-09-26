@@ -27,13 +27,14 @@ import com.speedment.runtime.field.method.Finder;
  * 
  * @param <ENTITY>     the entity type
  * @param <FK_ENTITY>  the foreign entity type
+ * @param <V>          the wrapper type
  * 
  * @author  Per Minborg
  * @author  Emil Forslund
  * @since   2.2.0
  */
 @Api(version = "3.0")
-public interface HasFinder<ENTITY, FK_ENTITY> {
+public interface HasFinder<ENTITY, FK_ENTITY, V> {
 
     /**
      * Returns a function that can find a foreign entity pointed out by this
@@ -50,7 +51,7 @@ public interface HasFinder<ENTITY, FK_ENTITY> {
      * @param foreignManager  the foreign manager
      * @return                finder method
      */
-    FindFrom<ENTITY, FK_ENTITY> findFrom(Manager<FK_ENTITY> foreignManager);
+    FindFrom<ENTITY, FK_ENTITY, V> findFrom(Manager<FK_ENTITY> foreignManager);
 
     /**
      * Finds the foreign entity associated by this field.
