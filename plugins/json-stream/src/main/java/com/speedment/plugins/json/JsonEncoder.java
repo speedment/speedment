@@ -18,7 +18,6 @@ package com.speedment.plugins.json;
 
 import com.speedment.runtime.manager.Manager;
 import com.speedment.runtime.field.trait.HasFinder;
-import com.speedment.plugins.json.internal.JsonEncoderImpl;
 import com.speedment.runtime.field.BooleanField;
 import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.CharField;
@@ -40,7 +39,6 @@ import com.speedment.runtime.field.method.LongGetter;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ShortGetter;
 
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -290,11 +288,13 @@ public interface JsonEncoder<ENTITY> {
      * 
      * @param <FK_ENTITY>  the type of the foreign entity
      * @param <FIELD>      the type of the field itself
+     * @param <V>          the type of the value wrapper
+     * 
      * @param field        the foreign key field
      * @param encoder      encoder for the foreign entity
      * @return             a reference to this encoder
      */
-    <FK_ENTITY, FIELD extends Field<ENTITY> & HasFinder<ENTITY, FK_ENTITY>> 
+    <FK_ENTITY, V, FIELD extends Field<ENTITY, V> & HasFinder<ENTITY, FK_ENTITY, V>> 
     JsonEncoder<ENTITY> put(FIELD field, JsonEncoder<FK_ENTITY> encoder);
 
     /**************************************************************************/
@@ -336,7 +336,7 @@ public interface JsonEncoder<ENTITY> {
      */
     <FK_ENTITY> JsonEncoder<ENTITY> putStreamer(
             String label, 
-            BiFunction<Manager<ENTITY>, ENTITY, Stream<FK_ENTITY>> streamer, 
+            Function<ENTITY, Stream<FK_ENTITY>> streamer, 
             JsonEncoder<FK_ENTITY> fkEncoder);
 
     /**
@@ -353,7 +353,7 @@ public interface JsonEncoder<ENTITY> {
      */
     <FK_ENTITY> JsonEncoder<ENTITY> putStreamer(
             String label, 
-            BiFunction<Manager<ENTITY>, ENTITY, Stream<FK_ENTITY>> streamer, 
+            Function<ENTITY, Stream<FK_ENTITY>> streamer, 
             Function<FK_ENTITY, String> fkEncoder);
 
     /**************************************************************************/
@@ -379,7 +379,7 @@ public interface JsonEncoder<ENTITY> {
      * @param field  the field to remove
      * @return       a reference to this encoder
      */
-    JsonEncoder<ENTITY> remove(Field<ENTITY> field);
+    JsonEncoder<ENTITY> remove(Field<ENTITY, ?> field);
 
     /**************************************************************************/
     /*                                  Encode                                */
@@ -400,50 +400,4 @@ public interface JsonEncoder<ENTITY> {
      * @return  the collector
      */
     JsonCollector<ENTITY> collector();
-
-    /**************************************************************************/
-    /*                         Static Factory Methods                         */
-    /**************************************************************************/
-    
-    /**
-     * Creates and return a new JsonEncoder with no fields added to the
-     * renderer.
-     *
-     * @param <ENTITY> the Entity type
-     * @param manager of the entity
-     * @return a new JsonEncoder with no fields added to the renderer
-     */
-    static <ENTITY> JsonEncoder<ENTITY> noneOf(Manager<ENTITY> manager) {
-        return JsonEncoderImpl.noneOf(manager);
-    }
-
-    /**
-     * Creates and return a new JsonEncoder with all the Entity fields added to
-     * the renderer. The field(s) will be rendered using their default class
-     * renderer.
-     *
-     * @param <ENTITY> the Entity type
-     * @param manager of the entity
-     * @return a new JsonEncoder with all the Entity fields added to the
-     * renderer
-     */
-    static <ENTITY> JsonEncoder<ENTITY> allOf(Manager<ENTITY> manager) {
-        return JsonEncoderImpl.allOf(manager);
-    }
-
-    /**
-     * Creates and return a new JsonEncoder with the provided Entity field(s)
-     * added to the renderer. The field(s) will be rendered using their default
-     * class renderer.
-     *
-     * @param <ENTITY> the Entity type
-     * @param manager of the ENTITY
-     * @param fields to add to the output renderer
-     * @return a new JsonEncoder with the specified fields added to the renderer
-     */
-    @SafeVarargs
-    @SuppressWarnings("varargs") // Using the array in a Stream.of() is safe
-    static <ENTITY> JsonEncoder<ENTITY> of(Manager<ENTITY> manager, Field<ENTITY>... fields) {
-        return JsonEncoderImpl.of(manager, fields);
-    }
 }

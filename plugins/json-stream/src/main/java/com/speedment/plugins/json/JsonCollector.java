@@ -56,7 +56,7 @@ public interface JsonCollector<ENTITY> extends Collector<ENTITY, List<String>, S
         requireNonNull(encoder);
         
         return JsonCollectorImpl.collect(
-            encoder::apply, l -> "[" + l.stream().collect(joining(", ")) + "]"
+            encoder::apply, l -> "[" + l.stream().collect(joining(",")) + "]"
         );
     }
 }
