@@ -111,7 +111,8 @@ public enum SpeedmentIcon {
     APPLICATION_XP_TERMINAL("/pics/vectors_rendered/applicationXpTerminal.png"),
     USER_COMMENT("/pics/vectors_rendered/userComment.png"),
     INFORMATION("/pics/vectors_rendered/info.png"),
-    HELP("/pics/vectors_rendered/help.png");
+    HELP("/pics/vectors_rendered/help.png"),
+    SCRIPT_ADD("/pics/vectors_rendered/scriptAdd.png");
 
     private final String filename;
 
@@ -199,5 +200,9 @@ public enum SpeedmentIcon {
         }
 
         return stream;
+    }
+
+    public String getFilename() {
+        return filename;
     }
 }
