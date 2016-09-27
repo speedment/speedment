@@ -34,5 +34,16 @@
             <goal>-P</goal>
             <goal>release</goal>
         </goals>
-    </action>   
+    </action>
+	<action>
+        <actionName>CUSTOM-Fast Build</actionName>
+        <displayName>Fast Build</displayName>
+        <goals>
+            <goal>clean</goal>
+            <goal>install</goal>
+            <goal>-Dmaven.compile.fork=true</goal>
+            <goal>-Dmaven.test.skip=true</goal>
+            <goal>-Denforcer.skip=true</goal>
+        </goals>
+    </action>
 </actions>
