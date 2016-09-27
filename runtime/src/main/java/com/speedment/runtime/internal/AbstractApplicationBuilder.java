@@ -87,6 +87,7 @@ public abstract class AbstractApplicationBuilder<
 
     private boolean skipCheckDatabaseConnectivity;
     private boolean skipValidateRuntimeConfig;
+    private boolean skipLogoPrintout;
 
     protected AbstractApplicationBuilder(
         Class<? extends APP> applicationImplClass,
@@ -258,6 +259,12 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
+    public BUILDER withSkipLogoPrintout() {
+        this.skipLogoPrintout = true;
+        return self();
+    }
+
+    @Override
     public BUILDER withBundle(Class<? extends InjectBundle> bundleClass) {
         requireNonNull(bundleClass);
         injector.putInBundle(bundleClass);
@@ -322,14 +329,14 @@ public abstract class AbstractApplicationBuilder<
         loadAndSetProject(inj);
 
         printWelcomeMessage(inj);
-        
+
         if (!skipValidateRuntimeConfig) {
             validateRuntimeConfig(inj);
         }
         if (!skipCheckDatabaseConnectivity) {
             checkDatabaseConnectivity(inj);
         }
-        
+
         final APP app = build(inj);
 
         return app;
@@ -433,25 +440,27 @@ public abstract class AbstractApplicationBuilder<
     protected void printWelcomeMessage(Injector injector) {
 
         final InfoComponent info = injector.getOrThrow(InfoComponent.class);
-        final String title   = info.title();
+        final String title = info.title();
         final String version = info.implementationVersion();
 
-        final String speedmentMsg = "\n" +
-            "   ____                   _                     _     \n" +
-            "  / ___'_ __  __  __   __| |_ __ __    __ _ __ | |    \n" +
-            "  \\___ | '_ |/  \\/  \\ / _  | '_ \\ _ \\ /  \\ '_ \\| |_   \n" +
-            "   ___)| |_)| '_/ '_/| (_| | | | | | | '_/ | | |  _|  \n" +
-            "  |____| .__|\\__\\\\__\\ \\____|_| |_| |_|\\__\\_| |_| '_   \n" +
-            "=======|_|======================================\\__|==\n" +
-            "   :: " + title + " by " + info.vendor() + 
-            ":: (v" + version + ") ";
+        if (!skipLogoPrintout) {
+            final String speedmentMsg = "\n"
+                + "   ____                   _                     _     \n"
+                + "  / ___'_ __  __  __   __| |_ __ __    __ _ __ | |    \n"
+                + "  \\___ | '_ |/  \\/  \\ / _  | '_ \\ _ \\ /  \\ '_ \\| |_   \n"
+                + "   ___)| |_)| '_/ '_/| (_| | | | | | | '_/ | | |  _|  \n"
+                + "  |____| .__|\\__\\\\__\\ \\____|_| |_| |_|\\__\\_| |_| '_   \n"
+                + "=======|_|======================================\\__|==\n"
+                + "   :: " + title + " by " + info.vendor()
+                + ":: (v" + version + ") ";
 
-        LOGGER.info(speedmentMsg);
+            LOGGER.info(speedmentMsg);
+        }
 
         if (!info.isProductionMode()) {
             LOGGER.warn("This version is NOT INTENDED FOR PRODUCTION USE!");
         }
-        
+
         try {
             final Package package_ = Runtime.class.getPackage();
             final String javaMsg = package_.getSpecificationTitle()
@@ -475,7 +484,6 @@ public abstract class AbstractApplicationBuilder<
         } catch (final Exception ex) {
             LOGGER.info("Unknown Java version.");
         }
-        
 
     }
 

@@ -287,20 +287,28 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
     <C extends Component> BUILDER with(Class<C> componentClass);
 
     /**
-     * Sets if the initial database check shall be skipped upon build().
+     * Sets that the initial database check shall be skipped upon build().
      *
      * @return this instance
      */
     BUILDER withSkipCheckDatabaseConnectivity();
 
     /**
-     * Sets if the initial validation of the configuration shall be skipped upon
-     * build(). Useful for testing.
+     * Sets that the initial validation of the configuration shall be skipped
+     * upon build(). Useful for testing.
      *
      *
      * @return this instance
      */
     BUILDER withSkipValidateRuntimeConfig();
+
+    /**
+     * Sets that the logo printout shall be skipped upon build().
+     *
+     *
+     * @return this instance
+     */
+    BUILDER withSkipLogoPrintout();
 
     /**
      * Adds a custom manager.
@@ -358,19 +366,19 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      */
     @SuppressWarnings("unchecked")
     public static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER empty() {
-        return (BUILDER)new DefaultApplicationBuilder(EmptyApplicationMetadata.class);
+        return (BUILDER) new DefaultApplicationBuilder(EmptyApplicationMetadata.class);
     }
 
     /**
      * Creates and returns a new standard ApplicationBuilder. The configuration
      * is read from a JSON file.
-     * 
+     *
      * @param <BUILDER> ApplicationBuilder type
      * @return a new standard ApplicationBuilder
      */
     @SuppressWarnings("unchecked")
     public static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER standard() {
-        return (BUILDER)new DefaultApplicationBuilder(DefaultApplicationMetadata.class);
+        return (BUILDER) new DefaultApplicationBuilder(DefaultApplicationMetadata.class);
     }
 
     /**
@@ -385,7 +393,7 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      */
     @SuppressWarnings("unchecked")
     public static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER create(Class<? extends ApplicationMetadata> applicationMetadataclass) {
-        return (BUILDER)new DefaultApplicationBuilder(applicationMetadataclass);
+        return (BUILDER) new DefaultApplicationBuilder(applicationMetadataclass);
     }
 
 }
