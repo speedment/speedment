@@ -4,9 +4,10 @@ import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.ByteForeignKeyField;
-import com.speedment.runtime.field.finder.FindFrom;
+import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.ByteGetter;
 import com.speedment.runtime.field.method.ByteSetter;
+import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.method.Finder;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
@@ -18,6 +19,7 @@ import com.speedment.runtime.internal.field.predicate.bytes.ByteEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.bytes.ByteGreaterOrEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.bytes.ByteGreaterThanPredicate;
 import com.speedment.runtime.internal.field.predicate.bytes.ByteInPredicate;
+import com.speedment.runtime.internal.field.streamer.BackwardFinderImpl;
 import com.speedment.runtime.manager.Manager;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -67,13 +69,18 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Byte
     }
     
     @Override
-    public FindFrom<ENTITY, FK_ENTITY, Byte> findFrom(Manager<FK_ENTITY> foreignManager) {
-        return new FindFromByte<>(this, referenced, foreignManager);
+    public ByteField<FK_ENTITY, ?> getReferencedField() {
+        return referenced;
     }
     
     @Override
-    public Finder<ENTITY, FK_ENTITY> finder() {
-        return finder;
+    public BackwardFinder<FK_ENTITY, ENTITY, Byte> backwardFinder(Manager<ENTITY> manager) {
+        return new BackwardFinderImpl<>(this, manager);
+    }
+    
+    @Override
+    public FindFrom<ENTITY, FK_ENTITY, Byte> finder(Manager<FK_ENTITY> foreignManager) {
+        return new FindFromByte<>(this, referenced, foreignManager);
     }
     
     @Override

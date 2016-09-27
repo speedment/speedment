@@ -4,7 +4,8 @@ import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.FloatField;
 import com.speedment.runtime.field.FloatForeignKeyField;
-import com.speedment.runtime.field.finder.FindFrom;
+import com.speedment.runtime.field.method.BackwardFinder;
+import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.method.Finder;
 import com.speedment.runtime.field.method.FloatGetter;
 import com.speedment.runtime.field.method.FloatSetter;
@@ -18,6 +19,7 @@ import com.speedment.runtime.internal.field.predicate.floats.FloatEqualPredicate
 import com.speedment.runtime.internal.field.predicate.floats.FloatGreaterOrEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.floats.FloatGreaterThanPredicate;
 import com.speedment.runtime.internal.field.predicate.floats.FloatInPredicate;
+import com.speedment.runtime.internal.field.streamer.BackwardFinderImpl;
 import com.speedment.runtime.manager.Manager;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -67,13 +69,18 @@ public final class FloatForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Flo
     }
     
     @Override
-    public FindFrom<ENTITY, FK_ENTITY, Float> findFrom(Manager<FK_ENTITY> foreignManager) {
-        return new FindFromFloat<>(this, referenced, foreignManager);
+    public FloatField<FK_ENTITY, ?> getReferencedField() {
+        return referenced;
     }
     
     @Override
-    public Finder<ENTITY, FK_ENTITY> finder() {
-        return finder;
+    public BackwardFinder<FK_ENTITY, ENTITY, Float> backwardFinder(Manager<ENTITY> manager) {
+        return new BackwardFinderImpl<>(this, manager);
+    }
+    
+    @Override
+    public FindFrom<ENTITY, FK_ENTITY, Float> finder(Manager<FK_ENTITY> foreignManager) {
+        return new FindFromFloat<>(this, referenced, foreignManager);
     }
     
     @Override

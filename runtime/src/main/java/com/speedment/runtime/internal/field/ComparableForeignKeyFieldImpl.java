@@ -18,10 +18,8 @@ package com.speedment.runtime.internal.field;
 
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.field.ComparableForeignKeyField;
-import com.speedment.runtime.field.ReferenceField;
-import com.speedment.runtime.field.finder.FindFrom;
+import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.method.Finder;
 import com.speedment.runtime.field.method.ReferenceGetter;
@@ -38,6 +36,7 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.function.Predicate;
 import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.internal.field.finder.FindFromReference;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceLessOrEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceLessThanPredicate;
@@ -45,6 +44,8 @@ import com.speedment.runtime.internal.field.predicate.reference.ReferenceNotBetw
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceNotEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceNotInPredicate;
 import com.speedment.runtime.manager.Manager;
+import com.speedment.runtime.internal.field.streamer.BackwardFinderImpl;
+import com.speedment.runtime.field.method.BackwardFinder;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -61,7 +62,7 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> {
     private final FieldIdentifier<ENTITY> identifier;
     private final ReferenceGetter<ENTITY, V> getter;
     private final ReferenceSetter<ENTITY, V> setter;
-    private final ComparableField<FK_ENTITY, ?, V> referenced;
+    private final HasComparableOperators<FK_ENTITY, V> referenced;
     private final Finder<ENTITY, FK_ENTITY> finder;
     private final TypeMapper<D, V> typeMapper;
     private final boolean unique;
@@ -70,7 +71,7 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> {
             FieldIdentifier<ENTITY> identifier,
             ReferenceGetter<ENTITY, V> getter,
             ReferenceSetter<ENTITY, V> setter,
-            ComparableField<FK_ENTITY, ?, V> referenced,
+            HasComparableOperators<FK_ENTITY, V> referenced,
             Finder<ENTITY, FK_ENTITY> finder,
             TypeMapper<D, V> typeMapper,
             boolean unique) {
@@ -104,13 +105,18 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> {
     }
 
     @Override
-    public FindFrom<ENTITY, FK_ENTITY, V> findFrom(Manager<FK_ENTITY> foreignManager) {
-        return new FindFromReference<>(this, referenced, foreignManager);
+    public HasComparableOperators<FK_ENTITY, V> getReferencedField() {
+        return referenced;
     }
     
     @Override
-    public Finder<ENTITY, FK_ENTITY> finder() {
-        return finder;
+    public BackwardFinder<FK_ENTITY, ENTITY, V> backwardFinder(Manager<ENTITY> manager) {
+        return new BackwardFinderImpl<>(this, manager);
+    }
+
+    @Override
+    public FindFrom<ENTITY, FK_ENTITY, V> finder(Manager<FK_ENTITY> foreignManager) {
+        return new FindFromReference<>(this, referenced, foreignManager);
     }
 
     @Override

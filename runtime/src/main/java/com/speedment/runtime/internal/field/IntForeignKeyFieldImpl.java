@@ -4,7 +4,8 @@ import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.field.IntForeignKeyField;
-import com.speedment.runtime.field.finder.FindFrom;
+import com.speedment.runtime.field.method.BackwardFinder;
+import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.method.Finder;
 import com.speedment.runtime.field.method.IntGetter;
 import com.speedment.runtime.field.method.IntSetter;
@@ -18,6 +19,7 @@ import com.speedment.runtime.internal.field.predicate.ints.IntEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.ints.IntGreaterOrEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.ints.IntGreaterThanPredicate;
 import com.speedment.runtime.internal.field.predicate.ints.IntInPredicate;
+import com.speedment.runtime.internal.field.streamer.BackwardFinderImpl;
 import com.speedment.runtime.manager.Manager;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -67,13 +69,18 @@ public final class IntForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements IntFi
     }
     
     @Override
-    public FindFrom<ENTITY, FK_ENTITY, Integer> findFrom(Manager<FK_ENTITY> foreignManager) {
-        return new FindFromInt<>(this, referenced, foreignManager);
+    public IntField<FK_ENTITY, ?> getReferencedField() {
+        return referenced;
     }
     
     @Override
-    public Finder<ENTITY, FK_ENTITY> finder() {
-        return finder;
+    public BackwardFinder<FK_ENTITY, ENTITY, Integer> backwardFinder(Manager<ENTITY> manager) {
+        return new BackwardFinderImpl<>(this, manager);
+    }
+    
+    @Override
+    public FindFrom<ENTITY, FK_ENTITY, Integer> finder(Manager<FK_ENTITY> foreignManager) {
+        return new FindFromInt<>(this, referenced, foreignManager);
     }
     
     @Override

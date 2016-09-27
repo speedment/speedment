@@ -4,9 +4,10 @@ import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.DoubleField;
 import com.speedment.runtime.field.DoubleForeignKeyField;
-import com.speedment.runtime.field.finder.FindFrom;
+import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.DoubleGetter;
 import com.speedment.runtime.field.method.DoubleSetter;
+import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.method.Finder;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
@@ -18,6 +19,7 @@ import com.speedment.runtime.internal.field.predicate.doubles.DoubleEqualPredica
 import com.speedment.runtime.internal.field.predicate.doubles.DoubleGreaterOrEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.doubles.DoubleGreaterThanPredicate;
 import com.speedment.runtime.internal.field.predicate.doubles.DoubleInPredicate;
+import com.speedment.runtime.internal.field.streamer.BackwardFinderImpl;
 import com.speedment.runtime.manager.Manager;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -67,13 +69,18 @@ public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Do
     }
     
     @Override
-    public FindFrom<ENTITY, FK_ENTITY, Double> findFrom(Manager<FK_ENTITY> foreignManager) {
-        return new FindFromDouble<>(this, referenced, foreignManager);
+    public DoubleField<FK_ENTITY, ?> getReferencedField() {
+        return referenced;
     }
     
     @Override
-    public Finder<ENTITY, FK_ENTITY> finder() {
-        return finder;
+    public BackwardFinder<FK_ENTITY, ENTITY, Double> backwardFinder(Manager<ENTITY> manager) {
+        return new BackwardFinderImpl<>(this, manager);
+    }
+    
+    @Override
+    public FindFrom<ENTITY, FK_ENTITY, Double> finder(Manager<FK_ENTITY> foreignManager) {
+        return new FindFromDouble<>(this, referenced, foreignManager);
     }
     
     @Override

@@ -17,9 +17,10 @@
 package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.field.finder.FindFrom;
+import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.manager.Manager;
-import com.speedment.runtime.field.method.Finder;
+import com.speedment.runtime.field.method.BackwardFinder;
 
 /**
  * A representation of an Entity field that use a foreign key to 
@@ -35,14 +36,13 @@ import com.speedment.runtime.field.method.Finder;
  */
 @Api(version = "3.0")
 public interface HasFinder<ENTITY, FK_ENTITY, V> {
-
+    
     /**
-     * Returns a function that can find a foreign entity pointed out by this
-     * field.
-     *
-     * @return the finder
+     * Returns the field referenced by this finder.
+     * 
+     * @return  the referenced field
      */
-    Finder<ENTITY, FK_ENTITY> finder();
+    Field<FK_ENTITY, V> getReferencedField();
     
     /**
      * Returns a function that can be used to find referenced entites using the
@@ -51,16 +51,14 @@ public interface HasFinder<ENTITY, FK_ENTITY, V> {
      * @param foreignManager  the foreign manager
      * @return                finder method
      */
-    FindFrom<ENTITY, FK_ENTITY, V> findFrom(Manager<FK_ENTITY> foreignManager);
-
+    FindFrom<ENTITY, FK_ENTITY, V> finder(Manager<FK_ENTITY> foreignManager);
+    
     /**
-     * Finds the foreign entity associated by this field.
-     *
-     * @param entity          this entity
-     * @param foreignManager  the foreign manager
-     * @return                the foreign entity associated by this field
+     * Returns a function that can be used to find a stream of entities 
+     * referencing this entity using the specified manager.
+     * 
+     * @param manager  the foreign manager
+     * @return                streaming method
      */
-    default FK_ENTITY findFrom(ENTITY entity, Manager<FK_ENTITY> foreignManager) {
-        return finder().apply(entity, foreignManager);
-    }
+    BackwardFinder<FK_ENTITY, ENTITY, V> backwardFinder(Manager<ENTITY> manager);
 }

@@ -17,7 +17,7 @@
 package com.speedment.runtime.internal.field.finder;
 
 import com.speedment.runtime.field.Field;
-import com.speedment.runtime.field.finder.FindFrom;
+import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.manager.Manager;
 import static java.util.Objects.requireNonNull;
 
