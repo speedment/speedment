@@ -49,6 +49,7 @@ public final class SceneController implements Initializable {
     private @Inject InfoComponent info;
     private @Inject InjectionLoader loader;
     private @Inject VersionComponent version;
+    private @Inject InfoComponent infoComponent;
     
     private @FXML VBox top;
     private @FXML SplitPane horizontal;
@@ -68,13 +69,13 @@ public final class SceneController implements Initializable {
             
             ui.toggleOutput();
             
-            Statistics.onGuiProjectLoaded();
+            Statistics.onGuiProjectLoaded(infoComponent);
             
             try {
                 version.latestVersion()
                     .thenAcceptAsync(release -> {
                         runLater(() -> {
-                            final int compare = release.compareTo(info.version());
+                            final int compare = release.compareTo(info.implementationVersion());
                             if (compare == 0) {
                                 ui.showNotification(
                                     "Your version of " + info.title() + " is up to date."
@@ -86,7 +87,7 @@ public final class SceneController implements Initializable {
                                 );
                             } else {
                                 ui.showNotification(
-                                    "Your version " + info.version() +
+                                    "Your version " + info.implementationVersion() +
                                         " of " + info.title() + " is newer than the released " +
                                         release + "."
                                 );

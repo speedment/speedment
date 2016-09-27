@@ -18,6 +18,7 @@ package com.speedment.tool.util;
 
 import com.speedment.generator.GeneratorBundle;
 import com.speedment.generator.namer.JavaLanguageNamer;
+import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.ForeignKey;
@@ -28,8 +29,6 @@ import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.internal.DefaultApplicationBuilder;
-import com.speedment.runtime.internal.EmptyApplicationMetadata;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
 import org.junit.Test;
@@ -256,7 +255,7 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
     public void testRelativeName_5args() {
         System.out.println("Testing: relativeName(Document, Class, Name, String, Function<String, String>)");
 
-        final JavaLanguageNamer namer = new DefaultApplicationBuilder(EmptyApplicationMetadata.class)
+        final JavaLanguageNamer namer = ApplicationBuilder.empty()
             .withBundle(GeneratorBundle.class)
             .withBundle(ToolBundle.class)
             .build()

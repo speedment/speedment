@@ -42,7 +42,7 @@ public interface StreamSupplierComponent extends Component {
     void start();
     
     /**
-     * Stops the componenet, releasing any resources. When this method
+     * Stops the component, releasing any resources. When this method
      * returns, the component must never be called again.
      */
     void stop();

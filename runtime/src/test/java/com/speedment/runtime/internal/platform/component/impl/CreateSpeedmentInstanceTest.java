@@ -16,9 +16,8 @@
  */
 package com.speedment.runtime.internal.platform.component.impl;
 
+import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.internal.DefaultApplicationBuilder;
-import com.speedment.runtime.internal.EmptyApplicationMetadata;
 import org.junit.Test;
 
 import static org.junit.Assert.assertNotNull;
@@ -31,7 +30,7 @@ public class CreateSpeedmentInstanceTest {
     
     @Test
     public void createSpeedmentInstance() {
-        final Speedment speedment = new DefaultApplicationBuilder(EmptyApplicationMetadata.class)
+        final Speedment speedment = ApplicationBuilder.empty()
             .withSkipCheckDatabaseConnectivity()
             .withSkipValidateRuntimeConfig()
             .build();

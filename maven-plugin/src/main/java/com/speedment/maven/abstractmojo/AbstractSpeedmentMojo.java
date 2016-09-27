@@ -27,15 +27,12 @@ import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.injector.annotation.WithState;
-import com.speedment.common.logger.Level;
-import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.internal.DefaultApplicationBuilder;
 import com.speedment.runtime.internal.DefaultApplicationMetadata;
-import com.speedment.runtime.internal.EmptyApplicationMetadata;
 import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
 
 import org.apache.maven.plugin.AbstractMojo;
@@ -142,13 +139,13 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
         // Configure config file location
         if (hasConfigFile()) {
-            result = new DefaultApplicationBuilder(DefaultApplicationMetadata.class)
+            result = ApplicationBuilder.standard()
                 .withParam(METADATA_LOCATION, configLocation().getAbsolutePath());
         } else if (hasConfigFile(DEFAULT_CONFIG)) {
-            result = new DefaultApplicationBuilder(DefaultApplicationMetadata.class)
+            result = ApplicationBuilder.standard()
                 .withParam(METADATA_LOCATION, DEFAULT_CONFIG_LOCATION);
         } else {
-            result = new DefaultApplicationBuilder(EmptyApplicationMetadata.class);
+            result = ApplicationBuilder.empty();
         }
 
         //

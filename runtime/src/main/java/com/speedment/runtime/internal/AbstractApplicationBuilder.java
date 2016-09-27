@@ -25,7 +25,6 @@ import com.speedment.common.tuple.Tuple3;
 import com.speedment.common.tuple.Tuples;
 import com.speedment.runtime.ApplicationMetadata;
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.SpeedmentVersion;
 import com.speedment.runtime.component.Component;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.component.PasswordComponent;
@@ -46,8 +45,6 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import static com.speedment.runtime.SpeedmentVersion.getImplementationVendor;
-import static com.speedment.runtime.SpeedmentVersion.getSpecificationVersion;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.internal.InjectorImpl;
@@ -437,7 +434,7 @@ public abstract class AbstractApplicationBuilder<
 
         final InfoComponent info = injector.getOrThrow(InfoComponent.class);
         final String title   = info.title();
-        final String version = info.version();
+        final String version = info.implementationVersion();
 
         final String speedmentMsg = "\n" +
             "   ____                   _                     _     \n" +
@@ -446,12 +443,12 @@ public abstract class AbstractApplicationBuilder<
             "   ___)| |_)| '_/ '_/| (_| | | | | | | '_/ | | |  _|  \n" +
             "  |____| .__|\\__\\\\__\\ \\____|_| |_| |_|\\__\\_| |_| '_   \n" +
             "=======|_|======================================\\__|==\n" +
-            "   :: " + title + " by " + getImplementationVendor() + 
+            "   :: " + title + " by " + info.vendor() + 
             ":: (v" + version + ") ";
 
         LOGGER.info(speedmentMsg);
 
-        if (!SpeedmentVersion.isProductionMode()) {
+        if (!info.isProductionMode()) {
             LOGGER.warn("This version is NOT INTENDED FOR PRODUCTION USE!");
         }
         

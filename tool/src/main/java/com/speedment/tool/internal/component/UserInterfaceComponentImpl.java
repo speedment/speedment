@@ -109,6 +109,8 @@ import com.speedment.tool.component.RuleComponent;
 import com.speedment.tool.property.PropertyEditor;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.atomic.AtomicBoolean;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

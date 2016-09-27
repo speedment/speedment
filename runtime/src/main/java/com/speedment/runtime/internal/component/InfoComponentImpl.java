@@ -16,20 +16,19 @@
  */
 package com.speedment.runtime.internal.component;
 
-import com.speedment.runtime.SpeedmentVersion;
 import com.speedment.runtime.component.InfoComponent;
 
 /**
  *
  * @author Emil Forslund
- * @since  3.0.0
+ * @since 3.0.0
  */
 public final class InfoComponentImpl extends InternalOpenSourceComponent 
     implements InfoComponent {
-
+    
     @Override
     protected String getDescription() {
-        return "Sets the name, description and version of Speedment to show in the UI.";
+        return "Sets the name, description and version of Speedment.";
     }
 
     @Override
@@ -43,7 +42,23 @@ public final class InfoComponentImpl extends InternalOpenSourceComponent
     }
 
     @Override
-    public String version() {
-        return SpeedmentVersion.getImplementationVersion();
+    public String implementationVersion() {
+        return "3.0.1-SNAPSHOT";
     }
+
+    @Override
+    public String vendor() {
+        return "Speedment, Inc.";
+    }
+
+    @Override
+    public String specificationVersion() {
+        return "3.0";
+    }
+
+    @Override
+    public boolean isProductionMode() {
+        return !implementationVersion().toUpperCase().contains("EA") && !implementationVersion().toUpperCase().contains("SNAPSHOT");
+    }
+    
 }

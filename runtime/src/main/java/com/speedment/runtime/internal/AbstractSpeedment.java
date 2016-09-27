@@ -50,10 +50,10 @@ public abstract class AbstractSpeedment implements Speedment {
     
     public static InjectBundle include() {
         return InjectBundle.of(
+            InfoComponentImpl.class,
             ConnectionPoolComponentImpl.class,
             DbmsHandlerComponentImpl.class,
-            EntityManagerImpl.class,
-            InfoComponentImpl.class,
+            EntityManagerImpl.class,            
             ManagerComponentImpl.class,
             NativeStreamSupplierComponentImpl.class,
             PasswordComponentImpl.class,

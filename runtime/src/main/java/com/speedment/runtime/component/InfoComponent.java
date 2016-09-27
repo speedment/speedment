@@ -23,38 +23,65 @@ import com.speedment.common.injector.annotation.InjectKey;
  * Contains general information about the installment like the software title
  * and version. This is used to print correct messages for an example when the
  * application launches.
- * 
- * @author  Emil Forslund
- * @since   3.0.0
+ *
+ * @author Emil Forslund
+ * @since 3.0.0
  */
 @Api(version = "3.0")
 @InjectKey(InfoComponent.class)
 public interface InfoComponent extends Component {
-    
-    /**
-     * The title of Speedment.
-     * 
-     * @return  the title
-     */
-    String title();
-    
-    /**
-     * The subtitle of Speedment.
-     * 
-     * @return  the subtitle
-     */
-    String subtitle();
-    
-    /**
-     * The version of Speedment.
-     * 
-     * @return  the version
-     */
-    String version();
 
     /**
-     * {@inheritDoc} 
+     * Returns the vendor of Speedment.
+     *
+     * @return the vendor
      */
+    String vendor();
+
+    /**
+     * Returns the title of Speedment.
+     *
+     * @return the title
+     */
+    String title();
+
+    /**
+     * Returns the subtitle of Speedment.
+     *
+     * @return the subtitle
+     */
+    String subtitle();
+
+    /**
+     * Return the non-null version of this Speedment implementation. It consists
+     * of any string assigned by the vendor of this implementation and does not
+     * have any particular syntax specified or expected by the Java runtime. It
+     * may be compared for equality with other package version strings used for
+     * this implementation by this vendor for this package.
+     *
+     * @return the non-null version of this Speedment implementation
+     */
+    String implementationVersion();
+
+    /**
+     * Returns the non-null version number of the specification that this
+     * Speedment implements. This version string must be a sequence of
+     * nonnegative decimal integers separated by "."'s and may have leading
+     * zeros. When version strings are compared the most significant numbers are
+     * compared.
+     *
+     * @return the non-null version number of the specification that this
+     * Speedment implements
+     */
+    String specificationVersion();
+
+     /**
+     * Returns if this version is intended for production use.
+     *
+     * @return if this version is intended for production use
+     */
+    boolean isProductionMode();
+
     @Override
     public default Class<InfoComponent> getComponentClass() {
         return InfoComponent.class;
