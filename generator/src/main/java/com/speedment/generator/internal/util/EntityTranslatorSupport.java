@@ -32,9 +32,7 @@ import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.ComparableForeignKeyField;
-import com.speedment.runtime.field.ReferenceForeignKeyField;
 import com.speedment.runtime.field.StringForeignKeyField;
-import com.speedment.runtime.internal.field.ReferenceForeignKeyFieldImpl;
 import com.speedment.runtime.internal.field.StringForeignKeyFieldImpl;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import java.util.Optional;
@@ -335,23 +333,10 @@ public final class EntityTranslatorSupport {
                         break;
                         
                     case REFERENCE :
-                        type = SimpleParameterizedType.create(
-                            ReferenceForeignKeyField.class,
-                            entityType,
-                            databaseType,
-                            mapping,
-                            fkType
+                        throw new UnsupportedOperationException(
+                            "Foreign key types that are not either primitive " + 
+                            "or comparable are not supported."
                         );
-
-                        implType = SimpleParameterizedType.create(
-                            ReferenceForeignKeyFieldImpl.class,
-                            entityType,
-                            databaseType,
-                            mapping,
-                            fkType
-                        );
-                        
-                        break;
                     default : throw new UnsupportedOperationException(
                         "Unknown enum constant '" + fieldType + "'."
                     );

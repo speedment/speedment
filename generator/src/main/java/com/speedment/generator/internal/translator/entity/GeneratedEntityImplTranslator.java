@@ -24,9 +24,7 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
-import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.internal.entity.AbstractEntity;
 
 import java.util.Objects;
 import java.util.StringJoiner;
@@ -35,10 +33,7 @@ import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERR
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.runtime.util.OptionalUtil;
 import java.util.Optional;
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
-import static com.speedment.common.codegen.internal.util.Formatting.tab;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
-import static com.speedment.common.codegen.internal.util.Formatting.block;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.generator.component.TypeMapperComponent;
 import static com.speedment.generator.internal.translator.entity.GeneratedEntityTranslator.getterReturnType;
@@ -50,13 +45,8 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.manager.Manager;
 import java.lang.reflect.Type;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
-import static com.speedment.common.codegen.internal.util.Formatting.tab;
 import static com.speedment.common.codegen.internal.util.Formatting.block;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -143,22 +133,39 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
                         .add(
                             col.isNullable() ?
                                 "if (" + GETTER_METHOD_PREFIX + getSupport().namer().javaTypeName(col.getJavaName()) + "()" + isPresentName + ") " + block(
-                                    "return foreignManager.findAny(" + fuSupport.entityName() + 
+                                    "return foreignManager.stream().filter(" + fuSupport.entityName() + 
                                     "." + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + 
-                                    ", " + GETTER_METHOD_PREFIX + getSupport().namer().javaTypeName(col.getJavaName()) + 
-                                    "()" + getterName + ");"
+                                    ".equal(" + GETTER_METHOD_PREFIX + getSupport().namer().javaTypeName(col.getJavaName()) + 
+                                    "()" + getterName + ")).findAny();"
                                 ) + " else " + block(
                                     "return Optional.empty();"
                                 )
                                 :
-                                "return foreignManager.findAny(" + fuSupport.entityName() + 
+                                "return foreignManager.stream().filter(" + fuSupport.entityName() + 
                                     "." + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + 
-                                    ", " + GETTER_METHOD_PREFIX + getSupport().namer().javaTypeName(col.getJavaName()) + 
-                                    "()" + getterName + ").orElse(null);"
+                                    ".equal(" + GETTER_METHOD_PREFIX + getSupport().namer().javaTypeName(col.getJavaName()) + 
+                                    "()" + getterName + ")).findAny().orElse(null);"
                         )
                     );
                 });
             })
+            
+            
+            /*
+            @Override
+            public Hare findOwner(Manager<Hare> foreignManager) {
+                return foreignManager.stream().filter(Hare.ID.equal(getOwner())).findAny().orElse(null);
+            }
+
+            @Override
+            public Optional<Hare> findRival(Manager<Hare> foreignManager) {
+                if (getRival().isPresent()) {
+                    return foreignManager.stream().filter(Hare.ID.equal(getRival().getAsInt())).findAny();
+                } else {
+                    return Optional.empty();
+                }
+            }
+            */
             
             /**
              * Class details
@@ -166,38 +173,16 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
             // We need to make it POST_MAKE because other plugins might add fields
             .forEveryTable(Phase.POST_MAKE, (clazz, table) -> {
                 clazz
-                    .add(copyMethod(file))
                     .add(toStringMethod(file))
                     .add(equalsMethod())
-                    .add(hashCodeMethod())
-                    .add(Method.of("entityClass", SimpleParameterizedType.create(java.lang.Class.class, getSupport().entityType())).public_().add(OVERRIDE)
-                        .add("return " + getSupport().entityName() + ".class;")
-                    );
+                    .add(hashCodeMethod());
             })
             .build()
             .public_()
             .abstract_()
-            .setSupertype(SimpleParameterizedType.create(AbstractEntity.class, getSupport().entityType()))
             .add(getSupport().entityType())
             .add(Constructor.of().protected_());
 
-    }
-    
-    protected Method copyMethod(File file) {
-        file.add(Import.of(getSupport().entityImplType()));
-        final Method result = Method.of("copy", getSupport().entityType())
-            .add(OVERRIDE).public_()
-            .add("return new " + getSupport().entityImplName() + "()");
-        
-        result.add(
-            getDocument().columns()
-                .map(Column::getJavaName)
-                .map(c -> ".set" + getSupport().namer().javaTypeName(c) + "(" + getSupport().namer().javaVariableName(c) + ")")
-                .collect(joining(nl() + tab(), tab(), ";"))
-                .split(nl())
-        );
-        
-        return result;
     }
 
     protected Method toStringMethod(File file) {
