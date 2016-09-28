@@ -4,6 +4,7 @@ import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.ShortField;
 import com.speedment.runtime.field.ShortForeignKeyField;
 import com.speedment.runtime.manager.Manager;
+import javax.annotation.Generated;
 
 /**
  * @param <ENTITY>    entity type
@@ -12,6 +13,7 @@ import com.speedment.runtime.manager.Manager;
  * @author Emil Forslund
  * @since  3.0.0
  */
+@Generated(value = "Speedment")
 public final class FindFromShort<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, Short, ShortForeignKeyField<ENTITY, ?, FK_ENTITY>, ShortField<FK_ENTITY, ?>> {
     
     public FindFromShort(ShortForeignKeyField<ENTITY, ?, FK_ENTITY> source, ShortField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {

@@ -7,6 +7,7 @@ import com.speedment.runtime.field.method.LongGetter;
 import com.speedment.runtime.field.method.LongSetter;
 import com.speedment.runtime.field.method.SetToLong;
 import com.speedment.runtime.internal.field.setter.SetToLongImpl;
+import javax.annotation.Generated;
 
 /**
  * A representation of an Entity field that is a primitive {@code long} type.
@@ -18,6 +19,7 @@ import com.speedment.runtime.internal.field.setter.SetToLongImpl;
  * @since  3.0.0
  */
 @Api(version = "3.0")
+@Generated(value = "Speedment")
 public interface HasLongValue<ENTITY, D> extends Field<ENTITY> {
     
     @Override

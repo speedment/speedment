@@ -4,6 +4,7 @@ import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.DoubleField;
 import com.speedment.runtime.field.DoubleForeignKeyField;
 import com.speedment.runtime.manager.Manager;
+import javax.annotation.Generated;
 
 /**
  * @param <ENTITY>    entity type
@@ -12,6 +13,7 @@ import com.speedment.runtime.manager.Manager;
  * @author Emil Forslund
  * @since  3.0.0
  */
+@Generated(value = "Speedment")
 public final class FindFromDouble<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, Double, DoubleForeignKeyField<ENTITY, ?, FK_ENTITY>, DoubleField<FK_ENTITY, ?>> {
     
     public FindFromDouble(DoubleForeignKeyField<ENTITY, ?, FK_ENTITY> source, DoubleField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {

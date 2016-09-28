@@ -7,6 +7,7 @@ import com.speedment.runtime.field.method.SetToShort;
 import com.speedment.runtime.field.method.ShortGetter;
 import com.speedment.runtime.field.method.ShortSetter;
 import com.speedment.runtime.internal.field.setter.SetToShortImpl;
+import javax.annotation.Generated;
 
 /**
  * A representation of an Entity field that is a primitive {@code short} type.
@@ -18,6 +19,7 @@ import com.speedment.runtime.internal.field.setter.SetToShortImpl;
  * @since  3.0.0
  */
 @Api(version = "3.0")
+@Generated(value = "Speedment")
 public interface HasShortValue<ENTITY, D> extends Field<ENTITY> {
     
     @Override

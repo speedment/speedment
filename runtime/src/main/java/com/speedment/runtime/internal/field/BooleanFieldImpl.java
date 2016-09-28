@@ -5,6 +5,7 @@ import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.BooleanField;
 import com.speedment.runtime.field.method.BooleanGetter;
 import com.speedment.runtime.field.method.BooleanSetter;
+import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -14,6 +15,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
+@Generated(value = "Speedment")
 public final class BooleanFieldImpl<ENTITY, D> implements BooleanField<ENTITY, D> {
     
     private final FieldIdentifier<ENTITY> identifier;

@@ -2,6 +2,7 @@ package com.speedment.runtime.internal.field.setter;
 
 import com.speedment.runtime.field.method.SetToShort;
 import com.speedment.runtime.field.trait.HasShortValue;
+import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -16,6 +17,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
+@Generated(value = "Speedment")
 public final class SetToShortImpl<ENTITY, D> implements SetToShort<ENTITY, D> {
     
     private final HasShortValue<ENTITY, D> field;

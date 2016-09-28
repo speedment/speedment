@@ -6,6 +6,7 @@ import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasDoubleValue;
 import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.internal.field.predicate.BetweenPredicate;
+import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -17,6 +18,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
+@Generated(value = "Speedment")
 public final class DoubleBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Double, HasDoubleValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Double, Double> {
     
     private final double start;

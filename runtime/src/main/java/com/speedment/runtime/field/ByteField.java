@@ -3,6 +3,7 @@ package com.speedment.runtime.field;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.trait.HasByteValue;
 import com.speedment.runtime.field.trait.HasComparableOperators;
+import javax.annotation.Generated;
 
 /**
  * A field that represents a primitive {@code byte} value.
@@ -16,6 +17,7 @@ import com.speedment.runtime.field.trait.HasComparableOperators;
  * @see ReferenceField
  */
 @Api(version = "3.0")
+@Generated(value = "Speedment")
 public interface ByteField<ENTITY, D> extends Field<ENTITY>, HasByteValue<ENTITY, D>, HasComparableOperators<ENTITY, Byte> {
     
     

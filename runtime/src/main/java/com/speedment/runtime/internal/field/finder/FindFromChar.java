@@ -4,6 +4,7 @@ import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.CharField;
 import com.speedment.runtime.field.CharForeignKeyField;
 import com.speedment.runtime.manager.Manager;
+import javax.annotation.Generated;
 
 /**
  * @param <ENTITY>    entity type
@@ -12,6 +13,7 @@ import com.speedment.runtime.manager.Manager;
  * @author Emil Forslund
  * @since  3.0.0
  */
+@Generated(value = "Speedment")
 public final class FindFromChar<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, Character, CharForeignKeyField<ENTITY, ?, FK_ENTITY>, CharField<FK_ENTITY, ?>> {
     
     public FindFromChar(CharForeignKeyField<ENTITY, ?, FK_ENTITY> source, CharField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {

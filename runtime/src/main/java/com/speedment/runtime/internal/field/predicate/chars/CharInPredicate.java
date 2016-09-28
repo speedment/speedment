@@ -5,6 +5,7 @@ import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasCharValue;
 import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
 import java.util.Set;
+import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -16,6 +17,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
+@Generated(value = "Speedment")
 public final class CharInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Character, HasCharValue<ENTITY, D>> implements Tuple1<Set<Character>> {
     
     private final Set<Character> set;

@@ -5,6 +5,7 @@ import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasIntValue;
 import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
 import java.util.Set;
+import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -16,6 +17,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
+@Generated(value = "Speedment")
 public final class IntInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Integer, HasIntValue<ENTITY, D>> implements Tuple1<Set<Integer>> {
     
     private final Set<Integer> set;

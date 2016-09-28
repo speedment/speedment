@@ -2,6 +2,7 @@ package com.speedment.runtime.internal.field.setter;
 
 import com.speedment.runtime.field.method.SetToFloat;
 import com.speedment.runtime.field.trait.HasFloatValue;
+import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -16,6 +17,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
+@Generated(value = "Speedment")
 public final class SetToFloatImpl<ENTITY, D> implements SetToFloat<ENTITY, D> {
     
     private final HasFloatValue<ENTITY, D> field;

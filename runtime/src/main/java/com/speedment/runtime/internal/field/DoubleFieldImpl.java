@@ -16,6 +16,7 @@ import com.speedment.runtime.internal.field.predicate.doubles.DoubleGreaterThanP
 import com.speedment.runtime.internal.field.predicate.doubles.DoubleInPredicate;
 import java.util.Set;
 import java.util.function.Predicate;
+import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -25,6 +26,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
+@Generated(value = "Speedment")
 public final class DoubleFieldImpl<ENTITY, D> implements DoubleField<ENTITY, D> {
     
     private final FieldIdentifier<ENTITY> identifier;
