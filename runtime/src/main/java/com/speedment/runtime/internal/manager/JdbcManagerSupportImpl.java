@@ -44,11 +44,7 @@ import com.speedment.runtime.internal.stream.builder.ReferenceStreamBuilder;
 import com.speedment.runtime.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
-<<<<<<< Updated upstream
-import com.speedment.runtime.manager.JdbcManagerSupport;
-=======
-import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
->>>>>>> Stashed changes
+
 import com.speedment.runtime.manager.Manager;
 import com.speedment.runtime.stream.StreamDecorator;
 
@@ -69,7 +65,7 @@ import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.*;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.ancestor;
+import com.speedment.runtime.manager.JdbcManagerSupport;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.function.Function.identity;
@@ -174,7 +170,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
     }
 
     private Stream<ENTITY> nativeStream(StreamDecorator decorator) {
-        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = decorator.apply(dbmsHandler().executeQueryAsync(dbms, sqlSelect(), Collections.emptyList(), entityMapper));
+        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = decorator.apply(dbmsOperationHandler.executeQueryAsync(dbms, sqlSelect(), Collections.emptyList(), entityMapper));
         final SqlStreamTerminator<ENTITY> terminator = new SqlStreamTerminator<>(injector, this, asynchronousQueryResult, decorator);
         final Supplier<BaseStream<?, ?>> initialSupplier = () -> decorator.applyOnInitial(asynchronousQueryResult.stream());
         final Stream<ENTITY> result = decorator.applyOnFinal(new ReferenceStreamBuilder<>(new PipelineImpl<>(initialSupplier), terminator));
@@ -187,7 +183,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
     
     private <T> Stream<T> synchronousStreamOf(String sql, List<Object> values, SqlFunction<ResultSet, T> rsMapper) {
         requireNonNulls(sql, values, rsMapper);
-        return dbmsHandler().executeQuery(dbms, sql, values, rsMapper);
+        return dbmsOperationHandler.executeQuery(dbms, sql, values, rsMapper);
     }
 
     /**
@@ -221,14 +217,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
         return sqlSelect.getOrCompute(() -> "SELECT " + sqlColumnList() + " FROM " + sqlTableReference());
     }
 
-    /**
-     * Short-cut for retrieving the current {@link DbmsOperationHandler}.
-     *
-     * @return the current dbms handler
-     */
-    private DbmsOperationHandler dbmsHandler() {
-        return findDbmsType(dbmsHandlerComponent, dbms).getOperationHandler();
-    }
+   
 
     /**
      * Returns the column corresponding to a particular field in an entity
@@ -464,7 +453,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
         final Optional<Consumer<MetaResult<ENTITY>>> listener
     ) throws SpeedmentException {
         executeHelper(sql, values, listener,
-            () -> dbmsHandler().executeInsert(
+            () -> dbmsOperationHandler.executeInsert(
                 dbms, sql, values, generatedFields, generatedKeyconsumer.apply(entity)
             )
         );
@@ -475,7 +464,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
         final List<Object> values,
         final Optional<Consumer<MetaResult<ENTITY>>> listener
     ) throws SpeedmentException {
-        executeHelper(sql, values, listener, () -> dbmsHandler().executeUpdate(dbms, sql, values));
+        executeHelper(sql, values, listener, () -> dbmsOperationHandler.executeUpdate(dbms, sql, values));
     }
 
     private void executeDelete(
@@ -483,7 +472,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
         final List<Object> values,
         final Optional<Consumer<MetaResult<ENTITY>>> listener
     ) throws SpeedmentException {
-        executeHelper(sql, values, listener, () -> dbmsHandler().executeDelete(dbms, sql, values));
+        executeHelper(sql, values, listener, () -> dbmsOperationHandler.executeDelete(dbms, sql, values));
     }
 
     private void executeHelper(
