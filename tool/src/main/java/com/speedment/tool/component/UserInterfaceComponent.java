@@ -18,7 +18,6 @@ package com.speedment.tool.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.component.Component;
 import com.speedment.runtime.component.PasswordComponent;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.trait.HasMainInterface;
@@ -54,7 +53,7 @@ import java.util.stream.Stream;
  */
 @Api(version = "3.0")
 @InjectKey(UserInterfaceComponent.class)
-public interface UserInterfaceComponent extends Component {
+public interface UserInterfaceComponent {
 
     /*************************************************************/
     /*                     Global properties                     */
@@ -410,8 +409,4 @@ public interface UserInterfaceComponent extends Component {
         CREATE_A_NEW_STAGE
     }
     
-    @Override
-    default Class<UserInterfaceComponent> getComponentClass() {
-        return UserInterfaceComponent.class;
-    }
 }

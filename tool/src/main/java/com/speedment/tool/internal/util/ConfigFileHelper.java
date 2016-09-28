@@ -72,6 +72,18 @@ import static javafx.application.Platform.runLater;
 import static com.speedment.runtime.internal.util.TextUtil.alignRight;
 import static com.speedment.runtime.internal.util.TextUtil.alignRight;
 import static com.speedment.runtime.internal.util.TextUtil.alignRight;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
 
 /**
  *

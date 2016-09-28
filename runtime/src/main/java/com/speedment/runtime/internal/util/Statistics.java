@@ -18,7 +18,7 @@ package com.speedment.runtime.internal.util;
 
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
-import com.speedment.runtime.SpeedmentVersion;
+import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.util.analytics.AnalyticsUtil;
 import com.speedment.runtime.internal.util.testing.TestSettings;
@@ -53,40 +53,41 @@ public final class Statistics {
     private final static Logger LOGGER = LoggerManager.getLogger(Statistics.class);
     private final static String PING_URL = "http://stat.speedment.com:8081/Beacon";
 
-    public static void onGuiStarted() {
-        notifyEvent("gui-started", includeMail());
-        AnalyticsUtil.notify(GUI_STARTED);
+    public static void onGuiStarted(InfoComponent infoComponent) {
+        notifyEvent(infoComponent, "gui-started", includeMail());
+        AnalyticsUtil.notify(GUI_STARTED, infoComponent);
     }
 
-    public static void onGuiProjectLoaded() {
-        notifyEvent("gui-project-loaded", includeMail());
-        AnalyticsUtil.notify(GUI_PROJECT_LOADED);
+    public static void onGuiProjectLoaded(InfoComponent infoComponent) {
+        notifyEvent(infoComponent, "gui-project-loaded", includeMail());
+        AnalyticsUtil.notify(GUI_PROJECT_LOADED, infoComponent);
     }
 
-    public static void onGenerate() {
-        notifyEvent("generate", includeMail());
-        AnalyticsUtil.notify(GENERATE);
+    public static void onGenerate(InfoComponent infoComponent) {
+        notifyEvent(infoComponent, "generate", includeMail());
+        AnalyticsUtil.notify(GENERATE, infoComponent);
     }
 
-    public static void onNodeStarted() {
-        notifyEvent("node-started");
-        AnalyticsUtil.notify(APP_STARTED);
+    public static void onNodeStarted(InfoComponent infoComponent) {
+        notifyEvent(infoComponent, "node-started");
+        AnalyticsUtil.notify(APP_STARTED, infoComponent);
     }
 
-    private static void notifyEvent(final String event) {
-        notifyEvent(event, emptyList());
+    private static void notifyEvent(InfoComponent infoComponent, final String event) {
+        notifyEvent(infoComponent, event, emptyList());
     }
 
-    private static void notifyEvent(final String event, final Param param) {
-        notifyEvent(event, singletonList(requireNonNull(param)));
+    private static void notifyEvent(InfoComponent infoComponent, final String event, final Param param) {
+        notifyEvent(infoComponent, event, singletonList(requireNonNull(param)));
     }
 
-    private static void notifyEvent(final String event, final Collection<Param> params) {
+    private static void notifyEvent(InfoComponent infoComponent, final String event, final Collection<Param> params) {
+        requireNonNull(infoComponent);
         requireNonNull(event);
         requireNonNullElements(params);
         final List<Param> allParams = new ArrayList<>(params);
         allParams.add(new Param("project-key", Hash.md5(System.getProperty("user.dir"))));
-        allParams.add(new Param("version", SpeedmentVersion.getImplementationVersion()));
+        allParams.add(new Param("version", infoComponent.implementationVersion()));
         allParams.add(new Param("event", event));
         sendPostRequest(allParams);
     }

@@ -30,7 +30,7 @@ public final class DefaultApplicationBuilder extends
     public DefaultApplicationBuilder(Class<? extends ApplicationMetadata> metadataClass) {
         super(SpeedmentImpl.class, metadataClass);
     }
-    
+
     public DefaultApplicationBuilder(Injector.Builder injector) {
         super(injector);
     }
@@ -41,5 +41,7 @@ public final class DefaultApplicationBuilder extends
     }
 
     @Override
-    protected void printWelcomeMessage(Injector injector) {}
+    protected void printWelcomeMessage(Injector injector) {
+    }
+
 }

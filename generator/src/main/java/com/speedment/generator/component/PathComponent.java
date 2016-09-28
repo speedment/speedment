@@ -17,7 +17,6 @@
 package com.speedment.generator.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.component.Component;
 import java.nio.file.Path;
 
 /**
@@ -28,12 +27,8 @@ import java.nio.file.Path;
  * @since  3.0.0
  */
 @InjectKey(PathComponent.class)
-public interface PathComponent extends Component {
+public interface PathComponent {
 
-    @Override
-    default Class<? extends Component> getComponentClass() {
-        return PathComponent.class;
-    }
     
     /**
      * Returns the base directory of the project (the same folder as the 

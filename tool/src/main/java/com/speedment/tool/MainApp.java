@@ -53,8 +53,8 @@ public final class MainApp extends Application {
         if (INJECTOR == null) {
             LOGGER.warn("Creating new Speedment instance for UI session.");
             INJECTOR = new DefaultApplicationBuilder(DefaultApplicationMetadata.class)
-                .with(CodeGenerationComponentImpl.class)
-                .with(UserInterfaceComponentImpl.class)
+                .withComponent(CodeGenerationComponentImpl.class)
+                .withComponent(UserInterfaceComponentImpl.class)
                 .build().getOrThrow(Injector.class);
         }
         

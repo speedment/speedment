@@ -74,13 +74,14 @@ public class TranslatorManagerImpl implements TranslatorManager {
     private @Inject PathComponent paths;
     private @Inject EventComponent eventComponent;
     private @Inject CodeGenerationComponent codeGenerationComponent;
+    private @Inject InfoComponent infoComponent;
     
     protected TranslatorManagerImpl() {}
 
     @Override
     public void accept(Project project) {
         requireNonNull(project);
-        Statistics.onGenerate();
+        Statistics.onGenerate(infoComponent);
 
         final List<Translator<?, ?>> writeOnceTranslators = new ArrayList<>();
         final List<Translator<?, ?>> writeAlwaysTranslators = new ArrayList<>();

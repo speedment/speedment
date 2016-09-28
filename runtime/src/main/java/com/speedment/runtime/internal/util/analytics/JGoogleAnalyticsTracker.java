@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.internal.util.analytics;
 
+import com.speedment.runtime.component.InfoComponent;
+
 public final class JGoogleAnalyticsTracker {
 
     private final HTTPGetMethod httpRequest = new HTTPGetMethod();
@@ -54,16 +56,16 @@ public final class JGoogleAnalyticsTracker {
 
     /**
      * Track the focusPoint in the application synchronously.
-     * <b>Please be cognizant while using this method. Since, it would have
-     * a performance hit on the actual application. Use it unless it's really
+     * <b>Please be cognizant while using this method. Since, it would have a
+     * performance hit on the actual application. Use it unless it's really
      * needed</b>
      *
      * @param focusPoint Focus point of the application like application load,
      * application module load, user actions, error events etc.
      */
-    public void trackSynchronously(FocusPoint focusPoint) {
+    public void trackSynchronously(FocusPoint focusPoint, InfoComponent infoComponent) {
         logMessage("JGoogleAnalytics: Tracking synchronously focusPoint=" + focusPoint.getEventName());
-        httpRequest.request(urlBuildingStrategy.buildURL(focusPoint));
+        httpRequest.request(urlBuildingStrategy.buildURL(focusPoint, infoComponent));
     }
 
     /**
@@ -72,9 +74,9 @@ public final class JGoogleAnalyticsTracker {
      * @param focusPoint Focus point of the application like application load,
      * application module load, user actions, error events etc.
      */
-    public void trackAsynchronously(FocusPoint focusPoint) {
+    public void trackAsynchronously(FocusPoint focusPoint, InfoComponent infoComponent) {
         logMessage("JGoogleAnalytics: Tracking Asynchronously focusPoint=" + focusPoint.getEventName());
-        new TrackingThread(focusPoint).start();
+        new TrackingThread(focusPoint, infoComponent).start();
     }
 
     private void logMessage(String message) {
@@ -94,15 +96,17 @@ public final class JGoogleAnalyticsTracker {
     private class TrackingThread extends Thread {
 
         private final FocusPoint focusPoint;
+        private final InfoComponent infoComponent;
 
-        public TrackingThread(FocusPoint focusPoint) {
+        public TrackingThread(FocusPoint focusPoint, InfoComponent infoComponent) {
             this.focusPoint = focusPoint;
+            this.infoComponent = infoComponent;
             this.setPriority(Thread.MIN_PRIORITY);
         }
 
         @Override
         public void run() {
-            httpRequest.request(urlBuildingStrategy.buildURL(focusPoint));
+            httpRequest.request(urlBuildingStrategy.buildURL(focusPoint, infoComponent));
         }
     }
 }

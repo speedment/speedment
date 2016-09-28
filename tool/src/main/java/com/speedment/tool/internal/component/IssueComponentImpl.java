@@ -17,7 +17,6 @@
 package com.speedment.tool.internal.component;
 
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.runtime.component.Component;
 import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.tool.component.IssueComponent;
 import com.speedment.tool.internal.util.InjectionLoader;
@@ -31,7 +30,7 @@ import javafx.collections.ObservableList;
  * @author Simon Jonasson
  * @since 3.0.0
  */
-public class IssueComponentImpl extends InternalOpenSourceComponent implements  IssueComponent {
+public class IssueComponentImpl extends InternalOpenSourceComponent implements IssueComponent {
     private final ObservableList<Issue> issues;
     
     private @Inject InjectionLoader loader;
@@ -62,8 +61,4 @@ public class IssueComponentImpl extends InternalOpenSourceComponent implements  
         return "Component responsible for collecting and displaying all issues that are posted during rule validation.";
     }
 
-    @Override
-    public Class<? extends Component> getComponentClass() {
-        return IssueComponent.class;
-    }
 }

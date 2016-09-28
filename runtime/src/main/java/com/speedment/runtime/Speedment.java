@@ -17,8 +17,6 @@
 package com.speedment.runtime;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.component.Component;
-import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.manager.Manager;
 
@@ -26,11 +24,11 @@ import java.util.Optional;
 
 /**
  * The {@code Platform} class acts as a generic holder of different system
- * {@link Component Components}. Using its pluggable architecture, one can
+ * Components. Using its pluggable architecture, one can
  * replace existing default implementations of existing Components or plug in
- * custom made implementation of any Interface.
+ * custom made implementation of any type.
  * <p>
- * Pluggable instances must implement the {@link Component} interface.
+ * Pluggable components must have a default constructor.
  *
  * @author  Per Minborg
  * @author  Emil Forslund
@@ -70,12 +68,6 @@ public interface Speedment {
      */
     <ENTITY> Manager<ENTITY> managerOf(Class<ENTITY> entityType);
     
-    /**
-     * Returns the project node.
-     * 
-     * @return  the project.
-     */
-    Project project();
 
     /**
      * Stops the Speedment instance and deallocates any allocated resources.

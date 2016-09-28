@@ -18,7 +18,6 @@ package com.speedment.tool.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.ForeignKey;
@@ -42,7 +41,7 @@ import static com.speedment.runtime.internal.util.ImmutableListUtil.of;
  */
 @Api(version = "3.0")
 @InjectKey(DocumentPropertyComponent.class)
-public interface DocumentPropertyComponent extends Component {
+public interface DocumentPropertyComponent {
 
     List<String>
         PROJECTS            = of(),
@@ -65,14 +64,6 @@ public interface DocumentPropertyComponent extends Component {
     @FunctionalInterface
     interface Constructor<PARENT extends DocumentProperty> {
         DocumentProperty create(PARENT parent);
-    }
-
-    /**
-     * {@inheritDoc} 
-     */
-    @Override
-    default Class<? extends Component> getComponentClass() {
-        return DocumentPropertyComponent.class;
     }
 
     /**

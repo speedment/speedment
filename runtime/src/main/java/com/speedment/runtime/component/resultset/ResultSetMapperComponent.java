@@ -17,7 +17,6 @@
 package com.speedment.runtime.component.resultset;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.common.injector.annotation.InjectKey;
 
@@ -31,12 +30,8 @@ import com.speedment.common.injector.annotation.InjectKey;
  */
 @Api(version = "3.0")
 @InjectKey(ResultSetMapperComponent.class)
-public interface ResultSetMapperComponent extends Component {
+public interface ResultSetMapperComponent {
 
-    @Override
-    default Class<ResultSetMapperComponent> getComponentClass() {
-        return ResultSetMapperComponent.class;
-    }
 
     /**
      * Gets the mapping from the javaClass to the {@link ResultSetMapping}. If a 

@@ -31,7 +31,7 @@ import com.speedment.common.injector.annotation.InjectKey;
  */
 @Api(version = "3.0")
 @InjectKey(PrimaryKeyFactoryComponent.class)
-public interface PrimaryKeyFactoryComponent extends Component {
+public interface PrimaryKeyFactoryComponent  {
 
     /**
      * Optionally creates and return a (possibly) new key for the given key. The

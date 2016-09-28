@@ -25,8 +25,6 @@ import com.speedment.common.tuple.Tuple3;
 import com.speedment.common.tuple.Tuples;
 import com.speedment.runtime.ApplicationMetadata;
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.SpeedmentVersion;
-import com.speedment.runtime.component.Component;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.component.PasswordComponent;
 import com.speedment.runtime.config.Dbms;
@@ -46,8 +44,6 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import static com.speedment.runtime.SpeedmentVersion.getImplementationVendor;
-import static com.speedment.runtime.SpeedmentVersion.getSpecificationVersion;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.internal.InjectorImpl;
@@ -90,6 +86,7 @@ public abstract class AbstractApplicationBuilder<
 
     private boolean skipCheckDatabaseConnectivity;
     private boolean skipValidateRuntimeConfig;
+    private boolean skipLogoPrintout;
 
     protected AbstractApplicationBuilder(
         Class<? extends APP> applicationImplClass,
@@ -235,13 +232,6 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public <C extends Component> BUILDER with(Class<C> componentImplType) {
-        requireNonNull(componentImplType);
-        withInjectable(injector, componentImplType, Component::getComponentClass);
-        return self();
-    }
-
-    @Override
     public <M extends Manager<?>> BUILDER withManager(Class<M> managerImplType) {
         requireNonNull(managerImplType);
         withInjectable(injector, managerImplType, M::getEntityClass);
@@ -261,6 +251,12 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
+    public BUILDER withSkipLogoPrintout() {
+        this.skipLogoPrintout = true;
+        return self();
+    }
+
+    @Override
     public BUILDER withBundle(Class<? extends InjectBundle> bundleClass) {
         requireNonNull(bundleClass);
         injector.putInBundle(bundleClass);
@@ -268,14 +264,14 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public BUILDER withInjectable(Class<?> injectableClass) {
+    public BUILDER withComponent(Class<?> injectableClass) {
         requireNonNull(injectableClass);
         injector.put(injectableClass);
         return self();
     }
 
     @Override
-    public BUILDER withInjectable(String key, Class<?> injectableClass) {
+    public BUILDER withComponent(String key, Class<?> injectableClass) {
         requireNonNulls(key, injectableClass);
         injector.put(key, injectableClass);
         return self();
@@ -325,14 +321,14 @@ public abstract class AbstractApplicationBuilder<
         loadAndSetProject(inj);
 
         printWelcomeMessage(inj);
-        
+
         if (!skipValidateRuntimeConfig) {
             validateRuntimeConfig(inj);
         }
         if (!skipCheckDatabaseConnectivity) {
             checkDatabaseConnectivity(inj);
         }
-        
+
         final APP app = build(inj);
 
         return app;
@@ -436,25 +432,27 @@ public abstract class AbstractApplicationBuilder<
     protected void printWelcomeMessage(Injector injector) {
 
         final InfoComponent info = injector.getOrThrow(InfoComponent.class);
-        final String title   = info.title();
-        final String version = info.version();
+        final String title = info.title();
+        final String version = info.implementationVersion();
 
-        final String speedmentMsg = "\n" +
-            "   ____                   _                     _     \n" +
-            "  / ___'_ __  __  __   __| |_ __ __    __ _ __ | |    \n" +
-            "  \\___ | '_ |/  \\/  \\ / _  | '_ \\ _ \\ /  \\ '_ \\| |_   \n" +
-            "   ___)| |_)| '_/ '_/| (_| | | | | | | '_/ | | |  _|  \n" +
-            "  |____| .__|\\__\\\\__\\ \\____|_| |_| |_|\\__\\_| |_| '_   \n" +
-            "=======|_|======================================\\__|==\n" +
-            "   :: " + title + " by " + getImplementationVendor() + 
-            ":: (v" + version + ") ";
+        if (!skipLogoPrintout) {
+            final String speedmentMsg = "\n"
+                + "   ____                   _                     _     \n"
+                + "  / ___'_ __  __  __   __| |_ __ __    __ _ __ | |    \n"
+                + "  \\___ | '_ |/  \\/  \\ / _  | '_ \\ _ \\ /  \\ '_ \\| |_   \n"
+                + "   ___)| |_)| '_/ '_/| (_| | | | | | | '_/ | | |  _|  \n"
+                + "  |____| .__|\\__\\\\__\\ \\____|_| |_| |_|\\__\\_| |_| '_   \n"
+                + "=======|_|======================================\\__|==\n"
+                + "   :: " + title + " by " + info.vendor()
+                + ":: (v" + version + ") ";
 
-        LOGGER.info(speedmentMsg);
+            LOGGER.info(speedmentMsg);
+        }
 
-        if (!SpeedmentVersion.isProductionMode()) {
+        if (!info.isProductionMode()) {
             LOGGER.warn("This version is NOT INTENDED FOR PRODUCTION USE!");
         }
-        
+
         try {
             final Package package_ = Runtime.class.getPackage();
             final String javaMsg = package_.getSpecificationTitle()
@@ -478,7 +476,6 @@ public abstract class AbstractApplicationBuilder<
         } catch (final Exception ex) {
             LOGGER.info("Unknown Java version.");
         }
-        
 
     }
 

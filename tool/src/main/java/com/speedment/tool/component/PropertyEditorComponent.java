@@ -19,7 +19,6 @@ package com.speedment.tool.component;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.tool.property.PropertyEditor;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.component.Component;
 import com.speedment.tool.config.DocumentProperty;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -32,7 +31,7 @@ import java.util.stream.Stream;
  */
 @Api(version="3.0")
 @InjectKey(PropertyEditorComponent.class)
-public interface PropertyEditorComponent extends Component {
+public interface PropertyEditorComponent {
     
     /**
      * Retrieves a Stream of UI editor items, that's been installed under 
@@ -60,9 +59,5 @@ public interface PropertyEditorComponent extends Component {
      */
     <DOC extends DocumentProperty> void install(Class<DOC> documentType, String propertyKey, Supplier<PropertyEditor<DOC>> factory);    
    
-    @Override
-    default Class<PropertyEditorComponent> getComponentClass(){
-        return PropertyEditorComponent.class;
-    }
     
 }

@@ -17,9 +17,8 @@
 package com.speedment.tool.internal.component;
 
 import com.speedment.generator.GeneratorBundle;
+import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.internal.DefaultApplicationBuilder;
-import com.speedment.runtime.internal.EmptyApplicationMetadata;
 import com.speedment.tool.ToolBundle;
 import com.speedment.tool.component.VersionComponent;
 
@@ -42,7 +41,7 @@ public class VersionComponentImplTest {
     @Test
     public void testLatestVersion() {
         System.out.println("Determining the latest version of Speedment.");
-        final Speedment speedment = new DefaultApplicationBuilder(EmptyApplicationMetadata.class)
+        final Speedment speedment = ApplicationBuilder.empty()
             .withBundle(GeneratorBundle.class)
             .withBundle(ToolBundle.class)
             .withSkipCheckDatabaseConnectivity()

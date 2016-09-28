@@ -27,15 +27,9 @@ import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.injector.annotation.WithState;
-import com.speedment.common.logger.Level;
-import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.internal.DefaultApplicationBuilder;
-import com.speedment.runtime.internal.DefaultApplicationMetadata;
-import com.speedment.runtime.internal.EmptyApplicationMetadata;
 import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
 
 import org.apache.maven.plugin.AbstractMojo;
@@ -87,7 +81,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
     public final void execute() throws MojoExecutionException, MojoFailureException {
 
         final ApplicationBuilder<?, ?> builder = createBuilder();
-        builder.withInjectable(MavenPathComponent.class);
+        builder.withComponent(MavenPathComponent.class);
         configurer.accept(builder);
         if (debug()) {
             builder.withLoggingOf(ApplicationBuilder.LogType.APPLICATION_BUILDER);
@@ -142,13 +136,13 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
         // Configure config file location
         if (hasConfigFile()) {
-            result = new DefaultApplicationBuilder(DefaultApplicationMetadata.class)
+            result = ApplicationBuilder.standard()
                 .withParam(METADATA_LOCATION, configLocation().getAbsolutePath());
         } else if (hasConfigFile(DEFAULT_CONFIG)) {
-            result = new DefaultApplicationBuilder(DefaultApplicationMetadata.class)
+            result = ApplicationBuilder.standard()
                 .withParam(METADATA_LOCATION, DEFAULT_CONFIG_LOCATION);
         } else {
-            result = new DefaultApplicationBuilder(EmptyApplicationMetadata.class);
+            result = ApplicationBuilder.empty();
         }
 
         //
@@ -179,13 +173,15 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
         result
             .withBundle(GeneratorBundle.class)
             .withBundle(ToolBundle.class)
-            .with(CodeGenerationComponentImpl.class)
-            .with(UserInterfaceComponentImpl.class)
-            .with(MavenPathComponent.class);
+            .withComponent(CodeGenerationComponentImpl.class)
+            .withComponent(UserInterfaceComponentImpl.class)
+            .withComponent(MavenPathComponent.class);
 
         // Add any extra type mappers requested by the user
         TypeMapperInstaller.mappings = typeMappers(); // <-- Hack to pass type mappers to class with default constructor.
-        result.withInjectable(TypeMapperInstaller.class);
+        
+        
+        result.withComponent(TypeMapperInstaller.class);
 
         // Add extra components requested by the user
         final String[] components = components();
@@ -194,18 +190,13 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
                 try {
                     final Class<?> uncasted = Class.forName(component);
 
-                    if (Component.class.isAssignableFrom(uncasted)) {
-                        @SuppressWarnings("unchecked")
-                        final Class<? extends Component> casted
-                            = (Class<? extends Component>) uncasted;
-                        result.with(casted);
-                    } else if (InjectBundle.class.isAssignableFrom(uncasted)) {
+                    if (InjectBundle.class.isAssignableFrom(uncasted)) {
                         @SuppressWarnings("unchecked")
                         final Class<? extends InjectBundle> casted
                             = (Class<? extends InjectBundle>) uncasted;
                         result.withBundle(casted);
                     } else {
-                        result.withInjectable(uncasted);
+                        result.withComponent(uncasted);
                     }
 
                 } catch (final ClassNotFoundException ex) {

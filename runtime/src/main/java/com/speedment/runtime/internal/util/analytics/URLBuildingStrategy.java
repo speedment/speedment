@@ -16,9 +16,11 @@
  */
 package com.speedment.runtime.internal.util.analytics;
 
+import com.speedment.runtime.component.InfoComponent;
+
 public interface URLBuildingStrategy {
 
-    public String buildURL(FocusPoint focusPoint);
+    public String buildURL(FocusPoint focusPoint,  InfoComponent infoComponent);
 
     public void setRefererURL(String refererURL);
 }

@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.internal.util.analytics;
 
+import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.internal.util.testing.TestSettings;
 
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
@@ -29,12 +30,13 @@ public final class AnalyticsUtil {
 
     private static final String TRACKING_CODE = "UA-54384165-1";
 
-    public static void notify(final FocusPoint focusPoint) {
+    public static void notify(final FocusPoint focusPoint, InfoComponent infoComponent) {
         requireNonNull(focusPoint);
+        requireNonNull(infoComponent);
         if (!TestSettings.isTestMode()) {
             final JGoogleAnalyticsTracker tracker = new JGoogleAnalyticsTracker(TRACKING_CODE);
             tracker.setLoggingAdapter(new LoggingAdapterImpl());
-            tracker.trackAsynchronously(focusPoint);
+            tracker.trackAsynchronously(focusPoint, infoComponent);
         }
     }
 

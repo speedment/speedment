@@ -18,7 +18,6 @@ package com.speedment.tool.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.component.Component;
 import com.speedment.tool.rule.Issue;
 import com.speedment.tool.rule.Rule;
 import javafx.collections.ObservableList;
@@ -32,7 +31,7 @@ import javafx.collections.ObservableList;
  */
 @Api(version="3.0")
 @InjectKey(IssueComponent.class)
-public interface IssueComponent extends Component {
+public interface IssueComponent {
     
     /**
      * Allows for posting an {@link Issue} that's been detected during

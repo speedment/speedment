@@ -20,6 +20,7 @@ import com.speedment.maven.typemapper.Mapping;
 import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.Speedment;
+import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -61,7 +62,7 @@ public abstract class AbstractClearMojo extends AbstractSpeedmentMojo {
 
         if (hasConfigFile()) {
             try {
-                final Project project = speedment.project();
+                final Project project = speedment.getOrThrow(ProjectComponent.class).getProject();
                 speedment.getOrThrow(TranslatorManager.class).clearExistingFiles(project);
             } catch (final SpeedmentException ex) {
                 final String err = "Error parsing configFile file.";

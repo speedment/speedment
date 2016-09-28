@@ -32,7 +32,7 @@ import com.speedment.common.injector.annotation.InjectKey;
  */
 @Api(version = "3.0")
 @InjectKey(PasswordComponent.class)
-public interface PasswordComponent extends Component {
+public interface PasswordComponent {
     
     /**
      * Stores the specified password for the specified dbmsName. 

@@ -33,12 +33,8 @@ import com.speedment.common.injector.annotation.InjectKey;
  */
 @Api(version = "3.0")
 @InjectKey(ManagerComponent.class)
-public interface ManagerComponent extends Component {
+public interface ManagerComponent {
 
-    @Override
-    default Class<ManagerComponent> getComponentClass() {
-        return ManagerComponent.class;
-    }
 
     /**
      * Puts (associates) a {@link Manager} implementation into the

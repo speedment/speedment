@@ -21,6 +21,7 @@ import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
 import com.speedment.generator.internal.translator.TranslatorManagerImpl;
 import com.speedment.runtime.Speedment;
+import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.PrimaryKeyColumn;
@@ -35,7 +36,6 @@ import org.junit.Before;
 
 import java.util.Optional;
 import java.util.stream.Stream;
-
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -83,12 +83,12 @@ public abstract class SimpleModel {
 
         speedment = new DefaultApplicationBuilder(SimpleMetadata.class)
             .withBundle(GeneratorBundle.class)
-            .withInjectable(SilentTranslatorManager.class)
+            .withComponent(SilentTranslatorManager.class)
             .withSkipCheckDatabaseConnectivity()
             .withSkipValidateRuntimeConfig()
             .build();
         
-        project = speedment.project();
+        project = speedment.getOrThrow(ProjectComponent.class).getProject();
         dbms = project.dbmses().findAny().get();
         schema = dbms.schemas().findAny().get();
         table = schema.tables().filter(t -> TABLE_NAME.equals(t.getName())).findAny().get();

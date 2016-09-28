@@ -85,11 +85,6 @@ public final class PrimaryKeyFactoryComponentImpl extends InternalOpenSourceComp
     }
 
     @Override
-    public Class<PrimaryKeyFactoryComponent> getComponentClass() {
-        return PrimaryKeyFactoryComponent.class;
-    }
-
-    @Override
     public Stream<Software> getDependencies() {
         return Stream.empty();
     }
