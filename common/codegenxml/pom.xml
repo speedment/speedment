@@ -47,10 +47,6 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-Description>
-                            An XML module for CodeGen that makes it easy to 
-                            generate XML-code in an object-oritented way.
-                        </Bundle-Description>
                         <Export-Package>
                             com.speedment.common.codegenxml,
                             com.speedment.common.codegenxml.trait

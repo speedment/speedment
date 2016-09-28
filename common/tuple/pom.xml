@@ -43,11 +43,6 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-Description>
-                            A collection of Tuple classes that represent sets of 
-                            a fixed length where every element has a specific 
-                            type.
-                        </Bundle-Description>
                         <Export-Package>com.speedment.common.tuple</Export-Package>
                     </instructions>
                 </configuration>

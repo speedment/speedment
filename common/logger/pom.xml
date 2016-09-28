@@ -42,9 +42,6 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-Description>
-                            A lightweight logging tool inspired by Tengil.
-                        </Bundle-Description>
                         <Export-Package>com.speedment.common.logger</Export-Package>
                     </instructions>
                 </configuration>

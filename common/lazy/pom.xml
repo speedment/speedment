@@ -43,10 +43,6 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-Description>
-                            A collection of Lazy classes that can be used for lazy initialization
-                            of variables.
-                        </Bundle-Description>
                         <Export-Package>
                             com.speedment.common.lazy, 
                             com.speedment.common.lazy.specialized
