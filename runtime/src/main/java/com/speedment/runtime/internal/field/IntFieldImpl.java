@@ -32,7 +32,6 @@ import com.speedment.runtime.internal.field.predicate.ints.IntGreaterThanPredica
 import com.speedment.runtime.internal.field.predicate.ints.IntInPredicate;
 import java.util.Set;
 import java.util.function.Predicate;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -42,7 +41,6 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
 public final class IntFieldImpl<ENTITY, D> implements IntField<ENTITY, D> {
     
     private final FieldIdentifier<ENTITY> identifier;
@@ -100,27 +98,27 @@ public final class IntFieldImpl<ENTITY, D> implements IntField<ENTITY, D> {
     }
     
     @Override
-    public FieldPredicate<ENTITY> equal(Integer value) {
+    public FieldPredicate<ENTITY, Integer> equal(Integer value) {
         return new IntEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterThan(Integer value) {
+    public FieldPredicate<ENTITY, Integer> greaterThan(Integer value) {
         return new IntGreaterThanPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterOrEqual(Integer value) {
+    public FieldPredicate<ENTITY, Integer> greaterOrEqual(Integer value) {
         return new IntGreaterOrEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Integer start, Integer end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY, Integer> between(Integer start, Integer end, Inclusion inclusion) {
         return new IntBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
-    public FieldPredicate<ENTITY> in(Set<Integer> set) {
+    public FieldPredicate<ENTITY, Integer> in(Set<Integer> set) {
         return new IntInPredicate<>(this, set);
     }
     

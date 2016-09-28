@@ -23,7 +23,6 @@ import com.speedment.runtime.field.method.FloatGetter;
 import com.speedment.runtime.field.method.FloatSetter;
 import com.speedment.runtime.field.method.SetToFloat;
 import com.speedment.runtime.internal.field.setter.SetToFloatImpl;
-import javax.annotation.Generated;
 
 /**
  * A representation of an Entity field that is a primitive {@code float} type.
@@ -35,8 +34,7 @@ import javax.annotation.Generated;
  * @since  3.0.0
  */
 @Api(version = "3.0")
-@Generated(value = "Speedment")
-public interface HasFloatValue<ENTITY, D> extends Field<ENTITY> {
+public interface HasFloatValue<ENTITY, D> extends Field<ENTITY, Float> {
     
     @Override
     FloatSetter<ENTITY> setter();
@@ -54,7 +52,7 @@ public interface HasFloatValue<ENTITY, D> extends Field<ENTITY> {
      * @return       the value of the field
      */
     default float getAsFloat(ENTITY entity) {
-        return getter().getAsFloat(entity);
+        return getter().applyAsFloat(entity);
     }
     
     /**

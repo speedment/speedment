@@ -17,7 +17,7 @@
 package com.speedment.runtime.internal.field.finder;
 
 import com.speedment.runtime.field.Field;
-import com.speedment.runtime.field.finder.FindFrom;
+import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.manager.Manager;
 import static java.util.Objects.requireNonNull;
 
@@ -25,6 +25,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @param <ENTITY>     the source entity
  * @param <FK_ENTITY>  the target entity
+ * @param <V>          the wrapper type
  * 
  * @author  Emil Forslund
  * @since   3.0.0
@@ -32,9 +33,10 @@ import static java.util.Objects.requireNonNull;
 abstract class AbstractFindFrom<
         ENTITY, 
         FK_ENTITY, 
-        SOURCE extends Field<ENTITY>, 
-        TARGET extends Field<FK_ENTITY>
-    > implements FindFrom<ENTITY, FK_ENTITY> {
+        V,
+        SOURCE extends Field<ENTITY, V>, 
+        TARGET extends Field<FK_ENTITY, V>
+    > implements FindFrom<ENTITY, FK_ENTITY, V> {
     
     private final SOURCE source;
     private final TARGET target;

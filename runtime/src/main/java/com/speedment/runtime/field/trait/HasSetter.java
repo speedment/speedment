@@ -22,18 +22,19 @@ import com.speedment.runtime.field.method.Setter;
 /**
  *
  * @param <ENTITY>  the entity type
+ * @param <V>       the wrapper type
  * 
  * @author  Emil Forslund
  * @since   3.0.0
  */
 @Api(version = "3.0")
-public interface HasSetter<ENTITY> {
+public interface HasSetter<ENTITY, V> {
     
     /**
      * Returns a reference to the setter for this field.
      * 
      * @return  the setter
      */
-    Setter<ENTITY> setter();
+    Setter<ENTITY, V> setter();
     
 }

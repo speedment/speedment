@@ -35,7 +35,7 @@ import static java.util.Objects.requireNonNull;
  * @since   2.2.0
  */
 public final class ReferenceInPredicate<ENTITY, D, V extends Comparable<? super V>>
-        extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
+        extends AbstractFieldPredicate<ENTITY, V, HasReferenceValue<ENTITY, D, V>>
         implements Tuple1<Set<V>> {
 
     private final Set<V> set;

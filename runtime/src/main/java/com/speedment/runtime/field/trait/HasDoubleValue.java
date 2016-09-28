@@ -23,7 +23,6 @@ import com.speedment.runtime.field.method.DoubleGetter;
 import com.speedment.runtime.field.method.DoubleSetter;
 import com.speedment.runtime.field.method.SetToDouble;
 import com.speedment.runtime.internal.field.setter.SetToDoubleImpl;
-import javax.annotation.Generated;
 
 /**
  * A representation of an Entity field that is a primitive {@code double} type.
@@ -35,8 +34,7 @@ import javax.annotation.Generated;
  * @since  3.0.0
  */
 @Api(version = "3.0")
-@Generated(value = "Speedment")
-public interface HasDoubleValue<ENTITY, D> extends Field<ENTITY> {
+public interface HasDoubleValue<ENTITY, D> extends Field<ENTITY, Double> {
     
     @Override
     DoubleSetter<ENTITY> setter();
@@ -54,7 +52,7 @@ public interface HasDoubleValue<ENTITY, D> extends Field<ENTITY> {
      * @return       the value of the field
      */
     default double getAsDouble(ENTITY entity) {
-        return getter().getAsDouble(entity);
+        return getter().applyAsDouble(entity);
     }
     
     /**

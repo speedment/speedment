@@ -21,6 +21,7 @@
  */
 package com.speedment.runtime.internal.stream;
 
+import com.speedment.runtime.db.SqlFunction;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.stream.parallel.ParallelStrategy;
 
@@ -29,7 +30,6 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Spliterator;
-import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -66,7 +66,7 @@ public final class StreamUtil {
         return StreamSupport.stream(iterable.spliterator(), parallel);
     }
 
-    public static <T> Stream<T> asStream(ResultSet resultSet, Function<ResultSet, T> mapper) {
+    public static <T> Stream<T> asStream(ResultSet resultSet, SqlFunction<ResultSet, T> mapper) {
 //        requireNonNull(resultSet);
 //        requireNonNull(mapper);
 //        final Iterator<T> iterator = new ResultSetIterator<>(resultSet, mapper);
@@ -74,7 +74,7 @@ public final class StreamUtil {
          return asStream(resultSet, mapper, ParallelStrategy.DEFAULT);
     }
     
-    public static <T> Stream<T> asStream(ResultSet resultSet, Function<ResultSet, T> mapper, ParallelStrategy parallelStrategy) {
+    public static <T> Stream<T> asStream(ResultSet resultSet, SqlFunction<ResultSet, T> mapper, ParallelStrategy parallelStrategy) {
         requireNonNull(resultSet);
         requireNonNull(mapper);
         final Iterator<T> iterator = new ResultSetIterator<>(resultSet, mapper);
@@ -89,9 +89,9 @@ public final class StreamUtil {
     private static class ResultSetIterator<T> implements Iterator<T> {
 
         private final ResultSet resultSet;
-        private final Function<ResultSet, T> mapper;
+        private final SqlFunction<ResultSet, T> mapper;
 
-        public ResultSetIterator(final ResultSet resultSet, final Function<ResultSet, T> mapper) {
+        public ResultSetIterator(final ResultSet resultSet, final SqlFunction<ResultSet, T> mapper) {
             this.resultSet = requireNonNull(resultSet);
             this.mapper = requireNonNull(mapper);
         }
@@ -107,7 +107,11 @@ public final class StreamUtil {
 
         @Override
         public T next() {
-            return mapper.apply(resultSet);
+            try {
+                return mapper.apply(resultSet);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
         }
 
     }

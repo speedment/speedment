@@ -32,7 +32,6 @@ import com.speedment.runtime.internal.field.predicate.floats.FloatGreaterThanPre
 import com.speedment.runtime.internal.field.predicate.floats.FloatInPredicate;
 import java.util.Set;
 import java.util.function.Predicate;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -42,7 +41,6 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
 public final class FloatFieldImpl<ENTITY, D> implements FloatField<ENTITY, D> {
     
     private final FieldIdentifier<ENTITY> identifier;
@@ -100,27 +98,27 @@ public final class FloatFieldImpl<ENTITY, D> implements FloatField<ENTITY, D> {
     }
     
     @Override
-    public FieldPredicate<ENTITY> equal(Float value) {
+    public FieldPredicate<ENTITY, Float> equal(Float value) {
         return new FloatEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterThan(Float value) {
+    public FieldPredicate<ENTITY, Float> greaterThan(Float value) {
         return new FloatGreaterThanPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterOrEqual(Float value) {
+    public FieldPredicate<ENTITY, Float> greaterOrEqual(Float value) {
         return new FloatGreaterOrEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Float start, Float end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY, Float> between(Float start, Float end, Inclusion inclusion) {
         return new FloatBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
-    public FieldPredicate<ENTITY> in(Set<Float> set) {
+    public FieldPredicate<ENTITY, Float> in(Set<Float> set) {
         return new FloatInPredicate<>(this, set);
     }
     

@@ -18,7 +18,6 @@ package com.speedment.runtime.internal.field.comparator;
 
 import com.speedment.runtime.field.trait.HasIntValue;
 import java.util.Comparator;
-import javax.annotation.Generated;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -29,7 +28,6 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
 public final class IntFieldComparatorImpl<ENTITY, D> implements IntFieldComparator<ENTITY, D> {
     
     private final HasIntValue<ENTITY, D> field;

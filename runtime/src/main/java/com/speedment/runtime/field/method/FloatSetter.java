@@ -17,7 +17,6 @@
 package com.speedment.runtime.field.method;
 
 import com.speedment.runtime.annotation.Api;
-import javax.annotation.Generated;
 
 /**
  * A short-cut functional reference to the {@code setXXX(value)} method for a
@@ -37,9 +36,8 @@ import javax.annotation.Generated;
  * @since  3.0.0
  */
 @Api(version = "3.0")
-@Generated(value = "Speedment")
 @FunctionalInterface
-public interface FloatSetter<ENTITY> extends Setter<ENTITY> {
+public interface FloatSetter<ENTITY> extends Setter<ENTITY, Float> {
     
     /**
      * Sets the member represented by this setter in the specified instance to
@@ -51,4 +49,9 @@ public interface FloatSetter<ENTITY> extends Setter<ENTITY> {
      * @return         a reference to that instance
      */
     ENTITY setAsFloat(ENTITY instance, float value);
+    
+    @Override
+    default ENTITY apply(ENTITY instance, Float value) {
+        return setAsFloat(instance, value);
+    }
 }

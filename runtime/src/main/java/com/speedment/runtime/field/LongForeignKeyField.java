@@ -18,7 +18,6 @@ package com.speedment.runtime.field;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.trait.HasFinder;
-import javax.annotation.Generated;
 
 /**
  * A field that represents a primitive {@code long} value that references
@@ -35,8 +34,7 @@ import javax.annotation.Generated;
  * @see ReferenceForeignKeyField
  */
 @Api(version = "3.0")
-@Generated(value = "Speedment")
-public interface LongForeignKeyField<ENTITY, D, FK_ENTITY> extends LongField<ENTITY, D>, HasFinder<ENTITY, FK_ENTITY> {
+public interface LongForeignKeyField<ENTITY, D, FK_ENTITY> extends LongField<ENTITY, D>, HasFinder<ENTITY, FK_ENTITY, Long> {
     
     
 }

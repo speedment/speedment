@@ -32,7 +32,6 @@ import com.speedment.runtime.internal.field.predicate.chars.CharGreaterThanPredi
 import com.speedment.runtime.internal.field.predicate.chars.CharInPredicate;
 import java.util.Set;
 import java.util.function.Predicate;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -42,7 +41,6 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
 public final class CharFieldImpl<ENTITY, D> implements CharField<ENTITY, D> {
     
     private final FieldIdentifier<ENTITY> identifier;
@@ -100,27 +98,27 @@ public final class CharFieldImpl<ENTITY, D> implements CharField<ENTITY, D> {
     }
     
     @Override
-    public FieldPredicate<ENTITY> equal(Character value) {
+    public FieldPredicate<ENTITY, Character> equal(Character value) {
         return new CharEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterThan(Character value) {
+    public FieldPredicate<ENTITY, Character> greaterThan(Character value) {
         return new CharGreaterThanPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterOrEqual(Character value) {
+    public FieldPredicate<ENTITY, Character> greaterOrEqual(Character value) {
         return new CharGreaterOrEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Character start, Character end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY, Character> between(Character start, Character end, Inclusion inclusion) {
         return new CharBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
-    public FieldPredicate<ENTITY> in(Set<Character> set) {
+    public FieldPredicate<ENTITY, Character> in(Set<Character> set) {
         return new CharInPredicate<>(this, set);
     }
     

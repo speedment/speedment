@@ -20,7 +20,8 @@ import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.ShortField;
 import com.speedment.runtime.field.ShortForeignKeyField;
-import com.speedment.runtime.field.finder.FindFrom;
+import com.speedment.runtime.field.method.BackwardFinder;
+import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.method.Finder;
 import com.speedment.runtime.field.method.ShortGetter;
 import com.speedment.runtime.field.method.ShortSetter;
@@ -34,10 +35,10 @@ import com.speedment.runtime.internal.field.predicate.shorts.ShortEqualPredicate
 import com.speedment.runtime.internal.field.predicate.shorts.ShortGreaterOrEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.shorts.ShortGreaterThanPredicate;
 import com.speedment.runtime.internal.field.predicate.shorts.ShortInPredicate;
+import com.speedment.runtime.internal.field.streamer.BackwardFinderImpl;
 import com.speedment.runtime.manager.Manager;
 import java.util.Set;
 import java.util.function.Predicate;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -48,7 +49,6 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
 public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements ShortField<ENTITY, D>, ShortForeignKeyField<ENTITY, D, FK_ENTITY> {
     
     private final FieldIdentifier<ENTITY> identifier;
@@ -85,13 +85,18 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Sho
     }
     
     @Override
-    public FindFrom<ENTITY, FK_ENTITY> findFrom(Manager<FK_ENTITY> foreignManager) {
-        return new FindFromShort<>(this, referenced, foreignManager);
+    public ShortField<FK_ENTITY, ?> getReferencedField() {
+        return referenced;
     }
     
     @Override
-    public Finder<ENTITY, FK_ENTITY> finder() {
-        return finder;
+    public BackwardFinder<FK_ENTITY, ENTITY, Short> backwardFinder(Manager<ENTITY> manager) {
+        return new BackwardFinderImpl<>(this, manager);
+    }
+    
+    @Override
+    public FindFrom<ENTITY, FK_ENTITY, Short> finder(Manager<FK_ENTITY> foreignManager) {
+        return new FindFromShort<>(this, referenced, foreignManager);
     }
     
     @Override
@@ -120,27 +125,27 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Sho
     }
     
     @Override
-    public FieldPredicate<ENTITY> equal(Short value) {
+    public FieldPredicate<ENTITY, Short> equal(Short value) {
         return new ShortEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterThan(Short value) {
+    public FieldPredicate<ENTITY, Short> greaterThan(Short value) {
         return new ShortGreaterThanPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterOrEqual(Short value) {
+    public FieldPredicate<ENTITY, Short> greaterOrEqual(Short value) {
         return new ShortGreaterOrEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Short start, Short end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY, Short> between(Short start, Short end, Inclusion inclusion) {
         return new ShortBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
-    public FieldPredicate<ENTITY> in(Set<Short> set) {
+    public FieldPredicate<ENTITY, Short> in(Set<Short> set) {
         return new ShortInPredicate<>(this, set);
     }
     

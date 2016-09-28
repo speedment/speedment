@@ -20,9 +20,10 @@ import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.CharField;
 import com.speedment.runtime.field.CharForeignKeyField;
-import com.speedment.runtime.field.finder.FindFrom;
+import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.CharGetter;
 import com.speedment.runtime.field.method.CharSetter;
+import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.method.Finder;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
@@ -34,10 +35,10 @@ import com.speedment.runtime.internal.field.predicate.chars.CharEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.chars.CharGreaterOrEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.chars.CharGreaterThanPredicate;
 import com.speedment.runtime.internal.field.predicate.chars.CharInPredicate;
+import com.speedment.runtime.internal.field.streamer.BackwardFinderImpl;
 import com.speedment.runtime.manager.Manager;
 import java.util.Set;
 import java.util.function.Predicate;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -48,7 +49,6 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
 public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements CharField<ENTITY, D>, CharForeignKeyField<ENTITY, D, FK_ENTITY> {
     
     private final FieldIdentifier<ENTITY> identifier;
@@ -85,13 +85,18 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
     }
     
     @Override
-    public FindFrom<ENTITY, FK_ENTITY> findFrom(Manager<FK_ENTITY> foreignManager) {
-        return new FindFromChar<>(this, referenced, foreignManager);
+    public CharField<FK_ENTITY, ?> getReferencedField() {
+        return referenced;
     }
     
     @Override
-    public Finder<ENTITY, FK_ENTITY> finder() {
-        return finder;
+    public BackwardFinder<FK_ENTITY, ENTITY, Character> backwardFinder(Manager<ENTITY> manager) {
+        return new BackwardFinderImpl<>(this, manager);
+    }
+    
+    @Override
+    public FindFrom<ENTITY, FK_ENTITY, Character> finder(Manager<FK_ENTITY> foreignManager) {
+        return new FindFromChar<>(this, referenced, foreignManager);
     }
     
     @Override
@@ -120,27 +125,27 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
     }
     
     @Override
-    public FieldPredicate<ENTITY> equal(Character value) {
+    public FieldPredicate<ENTITY, Character> equal(Character value) {
         return new CharEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterThan(Character value) {
+    public FieldPredicate<ENTITY, Character> greaterThan(Character value) {
         return new CharGreaterThanPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterOrEqual(Character value) {
+    public FieldPredicate<ENTITY, Character> greaterOrEqual(Character value) {
         return new CharGreaterOrEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Character start, Character end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY, Character> between(Character start, Character end, Inclusion inclusion) {
         return new CharBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
-    public FieldPredicate<ENTITY> in(Set<Character> set) {
+    public FieldPredicate<ENTITY, Character> in(Set<Character> set) {
         return new CharInPredicate<>(this, set);
     }
     

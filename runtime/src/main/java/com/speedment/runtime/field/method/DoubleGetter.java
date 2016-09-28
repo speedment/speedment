@@ -17,7 +17,7 @@
 package com.speedment.runtime.field.method;
 
 import com.speedment.runtime.annotation.Api;
-import javax.annotation.Generated;
+import java.util.function.ToDoubleFunction;
 
 /**
  * A short-cut functional reference to the {@code getXXX(value)} method for a
@@ -36,9 +36,8 @@ import javax.annotation.Generated;
  * @since  3.0.0
  */
 @Api(version = "3.0")
-@Generated(value = "Speedment")
 @FunctionalInterface
-public interface DoubleGetter<ENTITY> extends Getter<ENTITY> {
+public interface DoubleGetter<ENTITY> extends Getter<ENTITY, Double>, ToDoubleFunction<ENTITY> {
     
     /**
      * Returns the member represented by this getter in the specified instance.
@@ -46,5 +45,11 @@ public interface DoubleGetter<ENTITY> extends Getter<ENTITY> {
      * @param instance the instance to get from
      * @return         the value
      */
-    double getAsDouble(ENTITY instance);
+    @Override
+    double applyAsDouble(ENTITY instance);
+    
+    @Override
+    default Double apply(ENTITY instance) {
+        return applyAsDouble(instance);
+    }
 }

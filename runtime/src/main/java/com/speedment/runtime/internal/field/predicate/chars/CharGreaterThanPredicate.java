@@ -20,7 +20,6 @@ import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasCharValue;
 import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
-import javax.annotation.Generated;
 
 /**
  * @param <ENTITY> entity type
@@ -29,8 +28,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
-public final class CharGreaterThanPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasCharValue<ENTITY, D>> implements Tuple1<Character> {
+public final class CharGreaterThanPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Character, HasCharValue<ENTITY, D>> implements Tuple1<Character> {
     
     private final char value;
     

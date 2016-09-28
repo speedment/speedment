@@ -19,7 +19,6 @@ package com.speedment.runtime.internal.field.finder;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.DoubleField;
 import com.speedment.runtime.manager.Manager;
-import javax.annotation.Generated;
 
 /**
  * @param <ENTITY>    entity type
@@ -28,8 +27,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
-public final class FindFromDouble<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, DoubleField<ENTITY, ?>, DoubleField<FK_ENTITY, ?>> {
+public final class FindFromDouble<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, Double, DoubleField<ENTITY, ?>, DoubleField<FK_ENTITY, ?>> {
     
     public FindFromDouble(DoubleField<ENTITY, ?> source, DoubleField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {
         super(source, target, manager);
@@ -37,8 +35,10 @@ public final class FindFromDouble<ENTITY, FK_ENTITY> extends AbstractFindFrom<EN
     
     @Override
     public FK_ENTITY apply(ENTITY entity) {
-        final double value = getSourceField().getter().getAsDouble(entity);
-        return getTargetManager().findAny(getTargetField(), value)
+        final double value = getSourceField().getter().applyAsDouble(entity);
+        return getTargetManager().stream()
+            .filter(getTargetField().equal(value))
+            .findAny()
             .orElseThrow(() -> new SpeedmentException(
                 "Error! Could not find any " + 
                 getTargetManager().getEntityClass().getSimpleName() + 

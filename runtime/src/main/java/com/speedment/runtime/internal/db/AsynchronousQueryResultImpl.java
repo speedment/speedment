@@ -24,6 +24,7 @@ package com.speedment.runtime.internal.db;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.db.AsynchronousQueryResult;
+import com.speedment.runtime.db.SqlFunction;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.stream.StreamUtil;
 import com.speedment.runtime.stream.parallel.ParallelStrategy;
@@ -33,7 +34,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -52,7 +52,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
 
     private String sql;
     private List<?> values;
-    private Function<ResultSet, T> rsMapper;
+    private SqlFunction<ResultSet, T> rsMapper;
     private final Supplier<Connection> connectionSupplier;
     private ParallelStrategy parallelStrategy;
     private Connection connection;  // null allowed if the stream() method is not run
@@ -67,7 +67,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
     public AsynchronousQueryResultImpl(
         final String sql,
         final List<?> values,
-        final Function<ResultSet, T> rsMapper,
+        final SqlFunction<ResultSet, T> rsMapper,
         Supplier<Connection> connectionSupplier
     ) {
         setSql(sql); // requireNonNull in setter
@@ -155,12 +155,12 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
     }
 
     @Override
-    public Function<ResultSet, T> getRsMapper() {
+    public SqlFunction<ResultSet, T> getRsMapper() {
         return rsMapper;
     }
 
     @Override
-    public void setRsMapper(Function<ResultSet, T> rsMapper) {
+    public void setRsMapper(SqlFunction<ResultSet, T> rsMapper) {
         this.rsMapper = requireNonNull(rsMapper);
     }
 

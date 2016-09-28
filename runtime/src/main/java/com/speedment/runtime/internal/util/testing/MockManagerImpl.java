@@ -16,18 +16,10 @@
  */
 package com.speedment.runtime.internal.util.testing;
 
-import com.speedment.common.tuple.Tuple;
-import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.manager.Manager;
-import com.speedment.runtime.stream.StreamDecorator;
 
-import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -41,17 +33,16 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
 
     private final Manager<ENTITY> inner;
     private Supplier<ENTITY> instanceSupplier;
-    private Function<StreamDecorator, Stream<ENTITY>> nativeStreamer;
-    private Function<StreamDecorator, Stream<ENTITY>> streamer;
+    private Supplier<Stream<ENTITY>> streamer;
     private Function<ENTITY, ENTITY> persister;
     private Function<ENTITY, ENTITY> updater;
     private Function<ENTITY, ENTITY> remover;
-    private BiFunction<Field<ENTITY>, Comparable<?>, Optional<ENTITY>> finder;
+//    private BiFunction<Field<ENTITY, ?>, Comparable<?>, Optional<ENTITY>> finder;
 
     public MockManagerImpl(Manager<ENTITY> inner) {
         this.inner = inner;
         this.instanceSupplier = inner::newEmptyEntity;
-        this.nativeStreamer = inner::nativeStream;
+//        this.nativeStreamer = inner::nativeStream;
         this.streamer = inner::stream;
         this.persister = inner::persist;
         this.updater = inner::update;
@@ -64,15 +55,16 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
         instanceSupplier = factory;
         return this;
     }
+//
+//    @Override
+//    public MockManager<ENTITY> setNativeStreamer(Function<StreamDecorator, Stream<ENTITY>> nativeStreamer) {
+//        throw new UnsupportedOperationException("Not implemented yet.");
+////        this.nativeStreamer = nativeStreamer;
+////        return this;
+//    }
 
     @Override
-    public MockManager<ENTITY> setNativeStreamer(Function<StreamDecorator, Stream<ENTITY>> nativeStreamer) {
-        this.nativeStreamer = nativeStreamer;
-        return this;
-    }
-
-    @Override
-    public MockManager<ENTITY> setStreamer(Function<StreamDecorator, Stream<ENTITY>> streamer) {
+    public MockManager<ENTITY> setStreamer(Supplier<Stream<ENTITY>> streamer) {
         this.streamer = streamer;
         return this;
     }
@@ -94,39 +86,39 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
         this.remover = remover;
         return this;
     }
-
-    @Override
-    public <V extends Comparable<? super V>> MockManager<ENTITY> setFinder(
-            BiFunction<Field<ENTITY>, V, Optional<ENTITY>> finder) {
-        
-        @SuppressWarnings("unchecked")
-        final BiFunction<Field<ENTITY>, Comparable<?>, Optional<ENTITY>> castedFinder
-            = (BiFunction<Field<ENTITY>, Comparable<?>, Optional<ENTITY>>) finder;
-        this.finder = castedFinder;
-
-        return this;
-    }
-
-    // Manager
-    @Override
-    public Object primaryKeyFor(ENTITY entity) {
-        return inner.primaryKeyFor(entity);
-    }
-
-    @Override
-    public Object get(ENTITY entity, FieldIdentifier<ENTITY> identifier) {
-        return inner.get(entity, identifier);
-    }
-
-    @Override
-    public void set(ENTITY entity, FieldIdentifier<ENTITY> identifier, Object value) {
-        inner.set(entity, identifier, value);
-    }
-
-    @Override
-    public Table getTable() {
-        return inner.getTable();
-    }
+//
+//    @Override
+//    public <V extends Comparable<? super V>> MockManager<ENTITY> setFinder(
+//            BiFunction<Field<ENTITY, ?>, V, Optional<ENTITY>> finder) {
+//        
+//        @SuppressWarnings("unchecked")
+//        final BiFunction<Field<ENTITY, ?>, Comparable<?>, Optional<ENTITY>> castedFinder
+//            = (BiFunction<Field<ENTITY, ?>, Comparable<?>, Optional<ENTITY>>) finder;
+//        this.finder = castedFinder;
+//
+//        return this;
+//    }
+//
+//    // Manager
+//    @Override
+//    public Object primaryKeyFor(ENTITY entity) {
+//        return inner.primaryKeyFor(entity);
+//    }
+//
+//    @Override
+//    public Object get(ENTITY entity, FieldIdentifier<ENTITY> identifier) {
+//        return inner.get(entity, identifier);
+//    }
+//
+//    @Override
+//    public void set(ENTITY entity, FieldIdentifier<ENTITY> identifier, Object value) {
+//        inner.set(entity, identifier, value);
+//    }
+//
+//    @Override
+//    public Table getTable() {
+//        return inner.getTable();
+//    }
 
     @Override
     public ENTITY newEmptyEntity() {
@@ -137,26 +129,26 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     public Class<ENTITY> getEntityClass() {
         return inner.getEntityClass();
     }
-
-    @Override
-    public Class<? extends Manager<ENTITY>> getManagerClass() {
-        return inner.getManagerClass();
-    }
-
-    @Override
-    public Tuple getPrimaryKeyClasses() {
-        return inner.getPrimaryKeyClasses();
-    }
-
-    @Override
-    public Stream<ENTITY> stream(StreamDecorator decorator) {
-        return streamer.apply(decorator);
-    }
-
-    @Override
-    public Stream<ENTITY> nativeStream(StreamDecorator decorator) {
-        return nativeStreamer.apply(decorator);
-    }
+//
+//    @Override
+//    public Class<? extends Manager<ENTITY>> getManagerClass() {
+//        return inner.getManagerClass();
+//    }
+//
+//    @Override
+//    public Tuple getPrimaryKeyClasses() {
+//        return inner.getPrimaryKeyClasses();
+//    }
+//
+//    @Override
+//    public Stream<ENTITY> stream(StreamDecorator decorator) {
+//        return streamer.apply(decorator);
+//    }
+//
+//    @Override
+//    public Stream<ENTITY> nativeStream(StreamDecorator decorator) {
+//        return nativeStreamer.apply(decorator);
+//    }
 
     @Override
     public ENTITY persist(ENTITY entity) throws SpeedmentException {
@@ -173,38 +165,68 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
         return remover.apply(entity);
     }
 
-    @Override
-    public <V extends Comparable<? super V>> Optional<ENTITY> findAny(Field<ENTITY> field, V value) {
-        return finder.apply(field, value);
-    }
-
-    @Override
-    public ENTITY persist(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException {
-        return inner.persist(entity, consumer);
-    }
-
-    @Override
-    public ENTITY update(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException {
-        return inner.update(entity, consumer);
-    }
-
-    @Override
-    public ENTITY remove(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException {
-        return inner.remove(entity, consumer);
-    }
-
-    @Override
-    public Stream<Field<ENTITY>> fields() {
-        return inner.fields();
-    }
-
-    @Override
-    public Stream<Field<ENTITY>> primaryKeyFields() {
-        return inner.primaryKeyFields();
-    }
+//    @Override
+//    public <V extends Comparable<? super V>> Optional<ENTITY> findAny(Field<ENTITY> field, V value) {
+//        return finder.apply(field, value);
+//    }
+//
+//    @Override
+//    public ENTITY persist(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException {
+//        return inner.persist(entity, consumer);
+//    }
+//
+//    @Override
+//    public ENTITY update(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException {
+//        return inner.update(entity, consumer);
+//    }
+//
+//    @Override
+//    public ENTITY remove(ENTITY entity, Consumer<MetaResult<ENTITY>> consumer) throws SpeedmentException {
+//        return inner.remove(entity, consumer);
+//    }
+//
+//    @Override
+//    public Stream<Field<ENTITY>> fields() {
+//        return inner.fields();
+//    }
+//
+//    @Override
+//    public Stream<Field<ENTITY>> primaryKeyFields() {
+//        return inner.primaryKeyFields();
+//    }
 
     @Override
     public ENTITY newCopyOf(ENTITY source) {
         return inner.newCopyOf(source);
+    }
+
+    @Override
+    public String getDbmsName() {
+        return inner.getDbmsName();
+    }
+
+    @Override
+    public String getSchemaName() {
+        return inner.getSchemaName();
+    }
+
+    @Override
+    public String getTableName() {
+        return inner.getTableName();
+    }
+
+    @Override
+    public Stream<Field<ENTITY, ?>> fields() {
+        return inner.fields();
+    }
+
+    @Override
+    public Stream<Field<ENTITY, ?>> primaryKeyFields() {
+        return inner.primaryKeyFields();
+    }
+
+    @Override
+    public Stream<ENTITY> stream() {
+        return streamer.get();
     }
 }

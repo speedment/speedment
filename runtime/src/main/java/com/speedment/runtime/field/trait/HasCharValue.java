@@ -23,7 +23,6 @@ import com.speedment.runtime.field.method.CharGetter;
 import com.speedment.runtime.field.method.CharSetter;
 import com.speedment.runtime.field.method.SetToChar;
 import com.speedment.runtime.internal.field.setter.SetToCharImpl;
-import javax.annotation.Generated;
 
 /**
  * A representation of an Entity field that is a primitive {@code char} type.
@@ -35,8 +34,7 @@ import javax.annotation.Generated;
  * @since  3.0.0
  */
 @Api(version = "3.0")
-@Generated(value = "Speedment")
-public interface HasCharValue<ENTITY, D> extends Field<ENTITY> {
+public interface HasCharValue<ENTITY, D> extends Field<ENTITY, Character> {
     
     @Override
     CharSetter<ENTITY> setter();
@@ -54,7 +52,7 @@ public interface HasCharValue<ENTITY, D> extends Field<ENTITY> {
      * @return       the value of the field
      */
     default char getAsChar(ENTITY entity) {
-        return getter().getAsChar(entity);
+        return getter().applyAsChar(entity);
     }
     
     /**

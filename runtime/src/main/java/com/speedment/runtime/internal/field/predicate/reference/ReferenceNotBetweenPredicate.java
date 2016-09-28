@@ -35,7 +35,7 @@ import static java.util.Objects.requireNonNull;
  * @since   2.2.0
  */
 public final class ReferenceNotBetweenPredicate<ENTITY, D, V extends Comparable<? super V>>
-        extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
+        extends AbstractFieldPredicate<ENTITY, V, HasReferenceValue<ENTITY, D, V>>
         implements BetweenPredicate, Tuple2<V, V> {
 
     private final V start;

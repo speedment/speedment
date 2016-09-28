@@ -28,7 +28,7 @@ import java.util.function.Predicate;
  * @param <ENTITY> the entity type
  */
 abstract class AbstractStringPredicate<ENTITY, D> 
-extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, String>> 
+extends AbstractFieldPredicate<ENTITY, String, HasReferenceValue<ENTITY, D, String>> 
 implements Tuple1<String> {
 
     private final String operand;

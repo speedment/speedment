@@ -34,7 +34,6 @@ import com.speedment.generator.internal.util.FkHolder;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.entity.Entity;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.common.codegen.constant.DefaultJavadocTag;
@@ -54,7 +53,6 @@ import com.speedment.runtime.config.mapper.primitive.PrimitiveTypeMapper;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.runtime.util.OptionalBoolean;
 import com.speedment.runtime.util.OptionalUtil;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import com.speedment.runtime.manager.Manager;
 import java.lang.reflect.Type;
 import java.util.Optional;
@@ -82,7 +80,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
     @Override
     protected Interface makeCodeGenModel(File file) {
 
-        final Enum identifier = Enum.of(IDENTIFIER_NAME)
+        final Enum identifierEnum = Enum.of(IDENTIFIER_NAME)
             .add(Field.of("columnName", String.class).private_().final_())
             .add(SimpleParameterizedType.create(FieldIdentifier.class, getSupport().entityType()))
             .add(Constructor.of()
@@ -110,11 +108,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
             /**
              * General
              */
-            .forEveryTable((intrf, col)
-                -> intrf.public_()
-                .add(identifier)
-                .add(SimpleParameterizedType.create(Entity.class, getSupport().entityType()))
-            )
+            .forEveryTable((intrf, col) -> intrf.public_().add(identifierEnum))
             
             /**
              * Getters
@@ -229,7 +223,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                 final String setter = ", " + shortEntityName + "::" + SETTER_METHOD_PREFIX + getSupport().typeName(col);
 
                 final String constant = getSupport().namer().javaStaticFieldName(col.getJavaName());
-                identifier.add(EnumConstant.of(constant).add(new TextValue(col.getName())));
+                identifierEnum.add(EnumConstant.of(constant).add(new TextValue(col.getName())));
 
                 final String typeMapperCode;
                 if (col.getTypeMapper().isPresent()) {

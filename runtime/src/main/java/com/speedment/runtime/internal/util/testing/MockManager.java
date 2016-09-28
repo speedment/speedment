@@ -16,12 +16,7 @@
  */
 package com.speedment.runtime.internal.util.testing;
 
-import com.speedment.runtime.field.Field;
 import com.speedment.runtime.manager.Manager;
-import com.speedment.runtime.stream.StreamDecorator;
-
-import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -42,17 +37,17 @@ public interface MockManager<ENTITY> extends Manager<ENTITY> {
      * @return this instance
      */
     MockManager<ENTITY> setInstanceFactory(Supplier<ENTITY> factory);
-
-    /**
-     * Sets the native streamer of this {@code MockManager}.
-     *
-     * The native streamer is invoked each time a Managers 
-     * {@link Manager#nativeStream(StreamDecorator)} method is called.
-     *
-     * @param nativeStreamer the new native streamer supplier
-     * @return this instance
-     */
-    MockManager<ENTITY> setNativeStreamer(Function<StreamDecorator, Stream<ENTITY>> nativeStreamer);
+//
+//    /**
+//     * Sets the native streamer of this {@code MockManager}.
+//     *
+//     * The native streamer is invoked each time a Managers 
+//     * {@link Manager#nativeStream(StreamDecorator)} method is called.
+//     *
+//     * @param nativeStreamer the new native streamer supplier
+//     * @return this instance
+//     */
+//    MockManager<ENTITY> setNativeStreamer(Function<StreamDecorator, Stream<ENTITY>> nativeStreamer);
 
     /**
      * Sets the streamer of this {@code MockManager}.
@@ -63,7 +58,7 @@ public interface MockManager<ENTITY> extends Manager<ENTITY> {
      * @param streamer the new streamer supplier
      * @return this instance
      */
-    MockManager<ENTITY> setStreamer(Function<StreamDecorator, Stream<ENTITY>> streamer);
+    MockManager<ENTITY> setStreamer(Supplier<Stream<ENTITY>> streamer);
 
     /**
      * Sets the streamer of this {@code MockManager}.
@@ -97,21 +92,21 @@ public interface MockManager<ENTITY> extends Manager<ENTITY> {
      * @return this instance
      */
     MockManager<ENTITY> setRemover(Function<ENTITY, ENTITY> remover);
-
-    /**
-     * Sets the finder of this {@code MockManager}.
-     *
-     * The finder is invoked each time a Managers 
-     * {@code Manager#findAny(F, Comparable)} method is called.
-     *
-     * @param <D>     the database type
-     * @param <V>     the value type
-     * @param <F>     the field type
-     * @param finder  the new finder supplier
-     * @return        this instance
-     */
-    <V extends Comparable<? super V>> MockManager<ENTITY> 
-    setFinder(BiFunction<Field<ENTITY>, V, Optional<ENTITY>> finder);
+//
+//    /**
+//     * Sets the finder of this {@code MockManager}.
+//     *
+//     * The finder is invoked each time a Managers 
+//     * {@code Manager#findAny(F, Comparable)} method is called.
+//     *
+//     * @param <D>     the database type
+//     * @param <V>     the value type
+//     * @param <F>     the field type
+//     * @param finder  the new finder supplier
+//     * @return        this instance
+//     */
+//    <V extends Comparable<? super V>> MockManager<ENTITY> 
+//    setFinder(BiFunction<Field<ENTITY, ?>, V, Optional<ENTITY>> finder);
 
     /**
      * Wraps the specified manager in a new {@link MockManager}.

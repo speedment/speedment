@@ -32,7 +32,6 @@ import com.speedment.runtime.internal.field.predicate.bytes.ByteGreaterThanPredi
 import com.speedment.runtime.internal.field.predicate.bytes.ByteInPredicate;
 import java.util.Set;
 import java.util.function.Predicate;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -42,7 +41,6 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
 public final class ByteFieldImpl<ENTITY, D> implements ByteField<ENTITY, D> {
     
     private final FieldIdentifier<ENTITY> identifier;
@@ -100,27 +98,27 @@ public final class ByteFieldImpl<ENTITY, D> implements ByteField<ENTITY, D> {
     }
     
     @Override
-    public FieldPredicate<ENTITY> equal(Byte value) {
+    public FieldPredicate<ENTITY, Byte> equal(Byte value) {
         return new ByteEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterThan(Byte value) {
+    public FieldPredicate<ENTITY, Byte> greaterThan(Byte value) {
         return new ByteGreaterThanPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterOrEqual(Byte value) {
+    public FieldPredicate<ENTITY, Byte> greaterOrEqual(Byte value) {
         return new ByteGreaterOrEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Byte start, Byte end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY, Byte> between(Byte start, Byte end, Inclusion inclusion) {
         return new ByteBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
-    public FieldPredicate<ENTITY> in(Set<Byte> set) {
+    public FieldPredicate<ENTITY, Byte> in(Set<Byte> set) {
         return new ByteInPredicate<>(this, set);
     }
     

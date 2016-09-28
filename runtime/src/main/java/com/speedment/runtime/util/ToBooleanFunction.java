@@ -14,22 +14,24 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.plugins.reactor;
-
-import com.speedment.common.injector.InjectBundle;
-import java.util.stream.Stream;
+package com.speedment.runtime.util;
 
 /**
- *
- * @author Per Minborg
+ * A specialized function for {@code boolean} types.
+ * 
+ * @param <T> the type of the input to the function
+ * 
+ * @author  Emil Forslund
+ * @since   1.0.0
  */
-public class ReactorBundle implements InjectBundle {
+@FunctionalInterface
+public interface ToBooleanFunction<T> {
 
-    @Override
-    public Stream<Class<?>> injectables() {
-        return InjectBundle.of(ReactorComponent.class)
-            .andThen(ReactorComponent.include())
-            .injectables();
-    }
-
+    /**
+     * Applies this function to the given argument.
+     *
+     * @param value the function argument
+     * @return the function result
+     */
+    boolean applyAsBoolean(T value);
 }

@@ -17,7 +17,6 @@
 package com.speedment.runtime.field.method;
 
 import com.speedment.runtime.annotation.Api;
-import javax.annotation.Generated;
 
 /**
  * A short-cut functional reference to the {@code getXXX(value)} method for a
@@ -36,9 +35,8 @@ import javax.annotation.Generated;
  * @since  3.0.0
  */
 @Api(version = "3.0")
-@Generated(value = "Speedment")
 @FunctionalInterface
-public interface FloatGetter<ENTITY> extends Getter<ENTITY> {
+public interface FloatGetter<ENTITY> extends Getter<ENTITY, Float> {
     
     /**
      * Returns the member represented by this getter in the specified instance.
@@ -46,5 +44,10 @@ public interface FloatGetter<ENTITY> extends Getter<ENTITY> {
      * @param instance the instance to get from
      * @return         the value
      */
-    float getAsFloat(ENTITY instance);
+    float applyAsFloat(ENTITY instance);
+    
+    @Override
+    default Float apply(ENTITY instance) {
+        return applyAsFloat(instance);
+    }
 }

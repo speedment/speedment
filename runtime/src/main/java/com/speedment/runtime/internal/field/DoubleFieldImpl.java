@@ -32,7 +32,6 @@ import com.speedment.runtime.internal.field.predicate.doubles.DoubleGreaterThanP
 import com.speedment.runtime.internal.field.predicate.doubles.DoubleInPredicate;
 import java.util.Set;
 import java.util.function.Predicate;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -42,7 +41,6 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
 public final class DoubleFieldImpl<ENTITY, D> implements DoubleField<ENTITY, D> {
     
     private final FieldIdentifier<ENTITY> identifier;
@@ -100,27 +98,27 @@ public final class DoubleFieldImpl<ENTITY, D> implements DoubleField<ENTITY, D> 
     }
     
     @Override
-    public FieldPredicate<ENTITY> equal(Double value) {
+    public FieldPredicate<ENTITY, Double> equal(Double value) {
         return new DoubleEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterThan(Double value) {
+    public FieldPredicate<ENTITY, Double> greaterThan(Double value) {
         return new DoubleGreaterThanPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterOrEqual(Double value) {
+    public FieldPredicate<ENTITY, Double> greaterOrEqual(Double value) {
         return new DoubleGreaterOrEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Double start, Double end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY, Double> between(Double start, Double end, Inclusion inclusion) {
         return new DoubleBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
-    public FieldPredicate<ENTITY> in(Set<Double> set) {
+    public FieldPredicate<ENTITY, Double> in(Set<Double> set) {
         return new DoubleInPredicate<>(this, set);
     }
     

@@ -46,7 +46,6 @@ import java.sql.Struct;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
@@ -54,6 +53,7 @@ import java.util.Collection;
 import static java.util.Collections.singletonList;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Function;
 
 /**
  *
@@ -111,7 +111,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
     @Override
     public <T> AsynchronousQueryResult<T> executeQueryAsync(
-        Dbms dbms, String sql, List<?> values, Function<ResultSet, T> rsMapper) {
+        Dbms dbms, String sql, List<?> values, SqlFunction<ResultSet, T> rsMapper) {
 
         return new AsynchronousQueryResultImpl<>(
             Objects.requireNonNull(sql),
@@ -122,7 +122,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     }
 
     @Override
-    public <ENTITY> void executeInsert(Dbms dbms, String sql, List<?> values, Collection<Field<ENTITY>> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
+    public <ENTITY> void executeInsert(Dbms dbms, String sql, List<?> values, Collection<Field<ENTITY, ?>> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
         logOperation(LOGGER_INSERT, sql, values);
         final SqlInsertStatement<ENTITY> sqlUpdateStatement = new SqlInsertStatement<>(sql, values, generatedKeyFields, generatedKeyConsumer);
         execute(dbms, singletonList(sqlUpdateStatement));

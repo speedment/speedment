@@ -20,7 +20,7 @@ import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.field.StringForeignKeyField;
-import com.speedment.runtime.field.finder.FindFrom;
+import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.method.Finder;
 import com.speedment.runtime.field.method.ReferenceGetter;
@@ -52,6 +52,8 @@ import com.speedment.runtime.internal.field.predicate.string.StringContainsIgnor
 import com.speedment.runtime.internal.field.predicate.string.StringEndsWithIgnoreCasePredicate;
 import com.speedment.runtime.internal.field.predicate.string.StringStartsWithIgnoreCasePredicate;
 import com.speedment.runtime.manager.Manager;
+import com.speedment.runtime.internal.field.streamer.BackwardFinderImpl;
+import com.speedment.runtime.field.method.BackwardFinder;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -68,7 +70,6 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     private final ReferenceGetter<ENTITY, String> getter;
     private final ReferenceSetter<ENTITY, String> setter;
     private final StringField<FK_ENTITY, ?> referenced;
-    private final Finder<ENTITY, FK_ENTITY> finder;
     private final TypeMapper<D, String> typeMapper;
     private final boolean unique;
 
@@ -85,7 +86,6 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
         this.getter = requireNonNull(getter);
         this.setter = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
-        this.finder = requireNonNull(finder);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique = unique;
     }
@@ -113,13 +113,18 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     }
 
     @Override
-    public FindFrom<ENTITY, FK_ENTITY> findFrom(Manager<FK_ENTITY> foreignManager) {
-        return new FindFromReference<>(this, referenced, foreignManager);
+    public StringField<FK_ENTITY, ?> getReferencedField() {
+        return referenced;
+    }
+    
+    @Override
+    public BackwardFinder<FK_ENTITY, ENTITY, String> backwardFinder(Manager<ENTITY> manager) {
+        return new BackwardFinderImpl<>(this, manager);
     }
 
     @Override
-    public Finder<ENTITY, FK_ENTITY> finder() {
-        return finder;
+    public FindFrom<ENTITY, FK_ENTITY, String> finder(Manager<FK_ENTITY> foreignManager) {
+        return new FindFromReference<>(this, referenced, foreignManager);
     }
 
     @Override
@@ -162,12 +167,12 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
      * **************************************************************
      */
     @Override
-    public FieldPredicate<ENTITY> isNull() {
+    public FieldPredicate<ENTITY, String> isNull() {
         return new ReferenceIsNullPredicate<>(this);
     }
 
     @Override
-    public FieldPredicate<ENTITY> equal(String value) {
+    public FieldPredicate<ENTITY, String> equal(String value) {
         return new ReferenceEqualPredicate<>(this, value);
     }
 

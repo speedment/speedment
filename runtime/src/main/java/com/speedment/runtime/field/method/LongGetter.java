@@ -17,7 +17,7 @@
 package com.speedment.runtime.field.method;
 
 import com.speedment.runtime.annotation.Api;
-import javax.annotation.Generated;
+import java.util.function.ToLongFunction;
 
 /**
  * A short-cut functional reference to the {@code getXXX(value)} method for a
@@ -36,9 +36,8 @@ import javax.annotation.Generated;
  * @since  3.0.0
  */
 @Api(version = "3.0")
-@Generated(value = "Speedment")
 @FunctionalInterface
-public interface LongGetter<ENTITY> extends Getter<ENTITY> {
+public interface LongGetter<ENTITY> extends Getter<ENTITY, Long>, ToLongFunction<ENTITY> {
     
     /**
      * Returns the member represented by this getter in the specified instance.
@@ -46,5 +45,11 @@ public interface LongGetter<ENTITY> extends Getter<ENTITY> {
      * @param instance the instance to get from
      * @return         the value
      */
-    long getAsLong(ENTITY instance);
+    @Override
+    long applyAsLong(ENTITY instance);
+    
+    @Override
+    default Long apply(ENTITY instance) {
+        return applyAsLong(instance);
+    }
 }

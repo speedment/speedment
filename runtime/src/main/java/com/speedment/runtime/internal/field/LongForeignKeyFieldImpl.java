@@ -20,7 +20,8 @@ import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.LongField;
 import com.speedment.runtime.field.LongForeignKeyField;
-import com.speedment.runtime.field.finder.FindFrom;
+import com.speedment.runtime.field.method.BackwardFinder;
+import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.method.Finder;
 import com.speedment.runtime.field.method.LongGetter;
 import com.speedment.runtime.field.method.LongSetter;
@@ -34,10 +35,10 @@ import com.speedment.runtime.internal.field.predicate.longs.LongEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.longs.LongGreaterOrEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.longs.LongGreaterThanPredicate;
 import com.speedment.runtime.internal.field.predicate.longs.LongInPredicate;
+import com.speedment.runtime.internal.field.streamer.BackwardFinderImpl;
 import com.speedment.runtime.manager.Manager;
 import java.util.Set;
 import java.util.function.Predicate;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -48,7 +49,6 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
 public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements LongField<ENTITY, D>, LongForeignKeyField<ENTITY, D, FK_ENTITY> {
     
     private final FieldIdentifier<ENTITY> identifier;
@@ -85,13 +85,18 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     }
     
     @Override
-    public FindFrom<ENTITY, FK_ENTITY> findFrom(Manager<FK_ENTITY> foreignManager) {
-        return new FindFromLong<>(this, referenced, foreignManager);
+    public LongField<FK_ENTITY, ?> getReferencedField() {
+        return referenced;
     }
     
     @Override
-    public Finder<ENTITY, FK_ENTITY> finder() {
-        return finder;
+    public BackwardFinder<FK_ENTITY, ENTITY, Long> backwardFinder(Manager<ENTITY> manager) {
+        return new BackwardFinderImpl<>(this, manager);
+    }
+    
+    @Override
+    public FindFrom<ENTITY, FK_ENTITY, Long> finder(Manager<FK_ENTITY> foreignManager) {
+        return new FindFromLong<>(this, referenced, foreignManager);
     }
     
     @Override
@@ -120,27 +125,27 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     }
     
     @Override
-    public FieldPredicate<ENTITY> equal(Long value) {
+    public FieldPredicate<ENTITY, Long> equal(Long value) {
         return new LongEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterThan(Long value) {
+    public FieldPredicate<ENTITY, Long> greaterThan(Long value) {
         return new LongGreaterThanPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterOrEqual(Long value) {
+    public FieldPredicate<ENTITY, Long> greaterOrEqual(Long value) {
         return new LongGreaterOrEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Long start, Long end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY, Long> between(Long start, Long end, Inclusion inclusion) {
         return new LongBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
-    public FieldPredicate<ENTITY> in(Set<Long> set) {
+    public FieldPredicate<ENTITY, Long> in(Set<Long> set) {
         return new LongInPredicate<>(this, set);
     }
     

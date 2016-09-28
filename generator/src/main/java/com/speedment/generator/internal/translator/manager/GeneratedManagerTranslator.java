@@ -37,6 +37,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import com.speedment.common.codegen.constant.DefaultJavadocTag;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
 import com.speedment.common.codegen.constant.DefaultType;
@@ -44,8 +45,12 @@ import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.runtime.manager.SqlManager;
+import com.speedment.generator.component.TypeMapperComponent;
+import com.speedment.generator.util.Primitives;
+import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.manager.Manager;
 import java.lang.reflect.Type;
+import com.speedment.runtime.field.method.BackwardFinder;
 
 /**
  *
@@ -54,6 +59,7 @@ import java.lang.reflect.Type;
 public final class GeneratedManagerTranslator extends AbstractEntityAndManagerTranslator<Interface> {
 
     private @Inject Injector injector;
+    private @Inject TypeMapperComponent typeMappers;
     
     public GeneratedManagerTranslator(Table table) {
         super(table, Interface::of);
@@ -66,13 +72,10 @@ public final class GeneratedManagerTranslator extends AbstractEntityAndManagerTr
         return newBuilder(file, getSupport().generatedManagerName())
             .forEveryTable((intf, table) -> {
                 intf.public_()
-                    .add(SimpleParameterizedType.create(SqlManager.class, getSupport().entityType()))
-                    .add(generatePrimaryKeyFor(file))
-                    .add(Method.of("getManagerClass", DefaultType.classOf(getSupport().managerType())).default_().add(OVERRIDE)
-                        .add("return " + getSupport().managerName() + ".class;"))
+                    .add(SimpleParameterizedType.create(Manager.class, getSupport().entityType()))
                     .add(Method.of("getEntityClass", DefaultType.classOf(getSupport().entityType())).default_().add(OVERRIDE)
-                        .add("return " + getSupport().entityName() + ".class;"))
-                    .add(generateGetPrimaryKeyClasses(file));
+                        .add("return " + getSupport().entityName() + ".class;")
+                    );
             })
            
             /*** Add streamers from back pointing FK:s ***/
@@ -114,6 +117,26 @@ public final class GeneratedManagerTranslator extends AbstractEntityAndManagerTr
                 );
 
                 intrf.add(method);
+                
+                /*** Create an additional method for producing a Streamer ***/
+                intrf.add(Method.of(methodName, SimpleParameterizedType.create(BackwardFinder.class,
+                        fu.getForeignEmt().getSupport().entityType(), 
+                        fu.getEmt().getSupport().entityType(), 
+                        Primitives.orWrapper(typeMappers.get(fu.getColumn()).getJavaType(fu.getColumn()))
+                    )).set(Javadoc.of(
+                            "Creates and returns a {@link Streamer}-operation that " + 
+                            "will look up all the {@link " + 
+                            fu.getForeignEmt().getSupport().entityType().getTypeName() + 
+                            " " + 
+                            EntityTranslatorSupport.pluralis(fu.getForeignTable(), fu.getForeignEmt().getSupport().namer()) +
+                            "} for every given {@link " +
+                            fu.getEmt().getSupport().entityType().getTypeName() + 
+                            " " + 
+                            EntityTranslatorSupport.pluralis(fu.getTable(), fu.getEmt().getSupport().namer()) +
+                            "} using the {@code " + fu.getColumn().getName() + "-column."
+                        ).add(DefaultJavadocTag.RETURN.setValue("the stream operation"))
+                    )
+                );
             })
             
             /*** Add ordinary finders ***/

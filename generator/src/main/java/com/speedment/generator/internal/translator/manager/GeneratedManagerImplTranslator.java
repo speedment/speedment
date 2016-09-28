@@ -16,7 +16,6 @@
  */
 package com.speedment.generator.internal.translator.manager;
 
-import com.speedment.common.codegen.internal.model.value.ReferenceValue;
 import com.speedment.common.codegen.internal.util.Formatting;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
@@ -37,7 +36,6 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.manager.sql.AbstractSqlManager;
 import com.speedment.runtime.internal.util.sql.ResultSetUtil;
 
 import java.sql.ResultSet;
@@ -57,27 +55,25 @@ import java.util.stream.Stream;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
-import static com.speedment.common.codegen.internal.util.Formatting.block;
 import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.*;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
-import static com.speedment.common.codegen.internal.util.Formatting.indent;
-import static com.speedment.common.codegen.internal.util.Formatting.tab;
 import com.speedment.generator.component.TypeMapperComponent;
 import static com.speedment.generator.internal.util.ColumnUtil.optionalGetterName;
 import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.tuple.Tuples;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import java.lang.reflect.Type;
 import java.util.Optional;
-import static java.util.stream.Collectors.joining;
 import static com.speedment.common.codegen.internal.util.Formatting.block;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static com.speedment.common.codegen.internal.util.Formatting.tab;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
-import static java.util.stream.Collectors.joining;
+import com.speedment.generator.util.Primitives;
+import com.speedment.runtime.internal.util.document.DocumentDbUtil;
+import com.speedment.runtime.manager.AbstractManager;
+import com.speedment.runtime.manager.JdbcManagerSupport;
+import com.speedment.runtime.manager.Manager;
+import com.speedment.runtime.manager.ManagerSupport;
+import com.speedment.runtime.field.method.BackwardFinder;
 
 /**
  *
@@ -88,13 +84,8 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
     public final static String 
         NEW_ENTITY_FROM_METHOD         = "newEntityFrom",
         NEW_EMPTY_ENTITY_METHOD        = "newEmptyEntity",
-        GET_PRIMARY_KEY_CLASSES_METHOD = "getPrimaryKeyClasses",
         FIELDS_METHOD                  = "fields",
-        PRIMARY_KEYS_FIELDS_METHOD     = "primaryKeyFields",
-        GET_METHOD                     = "get",
-        SET_METHOD                     = "set",
-        SPEEDMENT_VARIABLE_NAME        = "speedment",
-        PRIMARY_KEY_CLASSES            = "PRIMARY_KEY_CLASSES";
+        PRIMARY_KEYS_FIELDS_METHOD     = "primaryKeyFields";
 
     private @Inject ResultSetMapperComponent resultSetMapperComponent;
     private @Inject DbmsHandlerComponent dbmsHandlerComponent;
@@ -113,12 +104,13 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
         final Set<Type> fkManagersReferencingThis = new HashSet<>();
         
         return newBuilder(file, getSupport().generatedManagerImplName())
-
+            
             /**
              * Add streamers from back pointing foreign keys
              */
             .forEveryForeignKeyReferencingThis((clazz, fk) -> {
                 final FkHolder fu = new FkHolder(injector, fk);
+                
                 final String methodName = EntityTranslatorSupport.FIND
                     + EntityTranslatorSupport.pluralis(fu.getTable(), getSupport().namer())
                     + "By" + getSupport().typeName(fu.getColumn());
@@ -137,13 +129,22 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
                 final Method method = Method.of(methodName, returnType)
                     .public_().add(OVERRIDE)
                     .add(Field.of("entity", fu.getForeignEmt().getSupport().entityType()))
-                    .add("return " + fkManagerName + ".stream()")
-                    .add(tab() + ".filter(" + getSupport().typeName(fu.getTable()) + 
-                        "." + getSupport().namer().javaStaticFieldName(fu.getColumn().getJavaName()) + 
-                        ".equal(entity." + GETTER_METHOD_PREFIX + 
-                        getSupport().typeName(fu.getForeignColumn()) + "()));"
-                    );
+                    .add("return " + methodName + "().apply(entity);");
                 clazz.add(method);
+                
+                // Create corresponding streamer method
+                clazz.add(Method.of(methodName, SimpleParameterizedType.create(BackwardFinder.class,
+                        fu.getForeignEmt().getSupport().entityType(), 
+                        fu.getEmt().getSupport().entityType(), 
+                        Primitives.orWrapper(typeMappers.get(fu.getColumn()).getJavaType(fu.getColumn()))
+                    ))
+                    .public_().add(OVERRIDE)
+                    .add("return " + 
+                        fu.getEmt().getSupport().entityName() + "." +
+                        getSupport().namer().javaStaticFieldName(fu.getColumn().getJavaName()) +
+                        ".backwardFinder(" + fkManagerName + ");"
+                    )
+                );
             })
             
             /**
@@ -178,24 +179,24 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
                     
                     method.add(
                         "if (entity.get" + getSupport().typeName(fu.getColumn()) + "().isPresent()) " + block(
-                            "return " + fkManagerName + ".findAny(" +
+                            "return " + fkManagerName + ".stream().filter(" +
                                 getSupport().typeName(fu.getForeignTable()) + "." + 
                                 getSupport().namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + 
-                                ", entity.get" + getSupport().typeName(fu.getColumn()) + "()" + getterName + ");"
+                                ".equal(entity.get" + getSupport().typeName(fu.getColumn()) + "()" + getterName + ")).findAny();"
                         ) + " else return Optional.empty();"
                     );
 
                 } else {
                     file.add(Import.of(SpeedmentException.class));
-                    method.add("return " + fkManagerName + ".findAny("
-                        + getSupport().typeName(fu.getForeignTable()) + "." + getSupport().namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + ", entity.get" + getSupport().typeName(fu.getColumn()) + "())\n"
+                    method.add("return " + fkManagerName + ".stream().filter("
+                        + getSupport().typeName(fu.getForeignTable()) + "." + getSupport().namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + ".equal(entity.get" + getSupport().typeName(fu.getColumn()) + "())).findAny()\n"
                         + indent(".orElseThrow(() -> new SpeedmentException(\n"
                             + indent(
                                 "\"Foreign key constraint error. "
                                 + getSupport().typeName(fu.getForeignTable())
                                 + " is set to \" + entity.get"
                                 + getSupport().typeName(fu.getColumn()) + "()\n"
-                            ) + "));\n"
+                            ) + "));"
                         )
                     );
                 }
@@ -210,30 +211,42 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
                     .public_()
                     .abstract_()
                     .setSupertype(SimpleParameterizedType.create(
-                        AbstractSqlManager.class,
+                        AbstractManager.class,
                         getSupport().entityType()
                     ))
                     .add(getSupport().generatedManagerType())
                     .add(Field.of("projectComponent", ProjectComponent.class).add(AnnotationUsage.of(Inject.class)).private_())
-                    .add(Constructor.of()
-                        .protected_()
-                        .add("setEntityMapper(this::" + NEW_ENTITY_FROM_METHOD + ");")
+                    
+                    .add(Constructor.of().protected_())
+                    
+                    .add(Method.of("createSupport", SimpleParameterizedType.create(ManagerSupport.class, getSupport().entityType()))
+                        .protected_().add(OVERRIDE)
+                        .add(Field.of("injector", Injector.class))
+                        .add("return " + JdbcManagerSupport.class.getSimpleName() + ".create(injector, this, this::" + NEW_ENTITY_FROM_METHOD + ");")
+                        .call(() -> file.add(Import.of(JdbcManagerSupport.class)))
                     )
-                    .add(Method.of("getTable", Table.class)
+                    
+                    .add(Method.of("getDbmsName", String.class)
                         .public_().add(OVERRIDE)
-                        .add("return projectComponent.getProject().findTableByName(\"" +
-                            relativeName(getSupport().tableOrThrow(), Dbms.class, DATABASE_NAME) + "\");")
+                        .add("return \"" + getSupport().dbmsOrThrow().getName() + "\";")
                     )
+                    
+                    .add(Method.of("getSchemaName", String.class)
+                        .public_().add(OVERRIDE)
+                        .add("return \"" + getSupport().schemaOrThrow().getName() + "\";")
+                    )
+                    
+                    .add(Method.of("getTableName", String.class)
+                        .public_().add(OVERRIDE)
+                        .add("return \"" + getSupport().tableOrThrow().getName() + "\";")
+                    )
+                    
                     .add(generateNewEntityFrom(getSupport(), file, table::columns))
                     .add(generateNewEmptyEntity(getSupport(), file, table::columns))
-                    .add(generateGet(getSupport(), file, table::columns))
-                    .add(generateSet(getSupport(), file, table::columns))
                     .add(generateFields(getSupport(), file, FIELDS_METHOD, table::columns))
                     .add(generateFields(getSupport(), file, PRIMARY_KEYS_FIELDS_METHOD,
                         () -> table.columns().filter(GeneratedManagerImplTranslator::isPrimaryKey))
                     )
-                    .add(generateGetPrimaryKeyClassesField(file))
-                    .add(generateGetPrimaryKeyClasses())
                     .add(generateNewCopyOf(file));
             })
             
@@ -312,15 +325,17 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
 
         final boolean isIdentityMapper = !c.getTypeMapper().isPresent();
 
+        file.add(Import.of(DocumentDbUtil.class));
+        
         final StringBuilder sb = new StringBuilder();
         if (!isIdentityMapper) {
             sb
                 .append(typeMapperName(support, c))
-                .append(".toJavaType(getColumn(")
+                .append(".toJavaType(DocumentDbUtil.referencedColumn(projectComponent.getProject(), ")
                 .append(support.entityName())
                 .append(".")
                 .append(support.namer().javaStaticFieldName(c.getJavaName()))
-                .append("), getEntityClass(), ");
+                .append(".identifier()), getEntityClass(), ");
         }
         final String getterName = "get" + mapping.getResultSetMethodName(dbms);
 
@@ -382,42 +397,6 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
         });
 
         return result.add("", "return " + entityName + ";");
-    }
-    
-    private Field generateGetPrimaryKeyClassesField(File file) {
-        file.add(Import.of(Tuples.class));
-        final Field field = Field.of(PRIMARY_KEY_CLASSES, pkTupleType())
-            .private_()
-            .static_()
-            .final_();
-
-        final String parameters = primaryKeyColumns()
-            .map(pkc -> {
-                final Column col = pkc.findColumn().orElseThrow(() -> new SpeedmentException(
-                    "Could not find any column associated with primary key column '" + 
-                    pkc.getName() + "'."
-                ));
-                
-                final Type type = typeMappers.get(col).getJavaType(col);
-                file.add(Import.of(type));
-                
-                return Formatting.shortName(type.getTypeName());
-            })
-            .map(javaType -> javaType + ".class")
-            .collect(joining(", "));
-
-        field.set(new ReferenceValue(Tuples.class.getSimpleName() + ".of(" + parameters + ")"));
-
-        return field;
-    }
-
-    private Method generateGetPrimaryKeyClasses() {
-
-        final Method method = Method.of(GET_PRIMARY_KEY_CLASSES_METHOD, pkTupleType())
-            .public_()
-            .add(OVERRIDE)
-            .add("return " + PRIMARY_KEY_CLASSES + ";");
-        return method;
     }
 
     private static String typeMapperName(TranslatorSupport<Table> support, Column col) {

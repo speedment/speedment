@@ -14,25 +14,21 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.plugins.reactor.util;
+package com.speedment.plugins.json;
 
-import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Table;
-import java.lang.reflect.Type;
+import com.speedment.common.injector.InjectBundle;
+import com.speedment.plugins.json.internal.JsonComponentImpl;
+import java.util.stream.Stream;
 
 /**
- * Utility methods that are used by several translators in this package but that
- * doesn't necessary need to be shared with others.
- * 
- * @author Emil Forslund
+ *
+ * @author  Emil Forslund
+ * @since   3.0.1
  */
-@InjectKey(MergingSupport.class)
-public interface MergingSupport {
-    
-    Column mergingColumn(Table table);
-    
-    String mergingColumnField(Table table);
-    
-    Type mergingColumnType(Table table);
+public final class JsonBundle implements InjectBundle {
+
+    @Override
+    public Stream<Class<?>> injectables() {
+        return Stream.of(JsonComponentImpl.class);
+    }
 }

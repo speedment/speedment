@@ -18,10 +18,8 @@ package com.speedment.plugins.json.internal;
 
 import com.speedment.plugins.json.JsonCollector;
 import com.speedment.plugins.json.JsonEncoder;
-import com.speedment.runtime.config.Column;
+import static com.speedment.plugins.json.internal.JsonUtil.jsonField;
 import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.BooleanField;
 import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.CharField;
@@ -44,20 +42,15 @@ import com.speedment.runtime.field.method.LongGetter;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ShortGetter;
 import com.speedment.runtime.field.trait.HasFinder;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
-import com.speedment.runtime.internal.util.document.DocumentUtil;
 import com.speedment.runtime.manager.Manager;
-import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
 
 /**
@@ -68,7 +61,7 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   1.0.0
  */
-public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
+final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
     
     private final Map<String, Function<ENTITY, String>> getters;
     private final Project project;
@@ -78,7 +71,7 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      * Constructs an empty JsonEncoder with no fields added to the output
      * renderer.
      */
-    private JsonEncoderImpl(Project project, Manager<ENTITY> manager) {
+    JsonEncoderImpl(Project project, Manager<ENTITY> manager) {
         this.getters = new LinkedHashMap<>();
         this.project = requireNonNull(project);
         this.manager = requireNonNull(manager);
@@ -172,7 +165,7 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
         return putHelper(field, BooleanField::getter, this::putBoolean);
     }
     
-    private <F extends Field<ENTITY>, G extends Getter<ENTITY>> JsonEncoder<ENTITY> putHelper(
+    private <V, F extends Field<ENTITY, V>, G extends Getter<ENTITY, V>> JsonEncoder<ENTITY> putHelper(
         F field, Function<F, G> getter, BiFunction<String, G, JsonEncoder<ENTITY>> putter) {
         
         requireNonNulls(field, getter, putter);
@@ -197,7 +190,7 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      */
     @Override
     public JsonEncoder<ENTITY> putByte(String label, ByteGetter<ENTITY> getter) {
-        return putHelper(label, e -> jsonValue(getter.getAsByte(e)));
+        return putHelper(label, e -> jsonValue(getter.applyAsByte(e)));
     }
     
     /**
@@ -205,7 +198,7 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      */
     @Override
     public JsonEncoder<ENTITY> putShort(String label, ShortGetter<ENTITY> getter) {
-        return putHelper(label, e -> jsonValue(getter.getAsShort(e)));
+        return putHelper(label, e -> jsonValue(getter.applyAsShort(e)));
     }
     
     /**
@@ -213,7 +206,7 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      */
     @Override
     public JsonEncoder<ENTITY> putInt(String label, IntGetter<ENTITY> getter) {
-        return putHelper(label, e -> jsonValue(getter.getAsInt(e)));
+        return putHelper(label, e -> jsonValue(getter.applyAsInt(e)));
     }
     
     /**
@@ -221,7 +214,7 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      */
     @Override
     public JsonEncoder<ENTITY> putLong(String label, LongGetter<ENTITY> getter) {
-        return putHelper(label, e -> jsonValue(getter.getAsLong(e)));
+        return putHelper(label, e -> jsonValue(getter.applyAsLong(e)));
     }
     
     /**
@@ -229,7 +222,7 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      */
     @Override
     public JsonEncoder<ENTITY> putFloat(String label, FloatGetter<ENTITY> getter) {
-        return putHelper(label, e -> jsonValue(getter.getAsFloat(e)));
+        return putHelper(label, e -> jsonValue(getter.applyAsFloat(e)));
     }
     
     /**
@@ -237,7 +230,7 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      */
     @Override
     public JsonEncoder<ENTITY> putDouble(String label, DoubleGetter<ENTITY> getter) {
-        return putHelper(label, e -> jsonValue(getter.getAsDouble(e)));
+        return putHelper(label, e -> jsonValue(getter.applyAsDouble(e)));
     }
     
     /**
@@ -245,7 +238,7 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      */
     @Override
     public JsonEncoder<ENTITY> putChar(String label, CharGetter<ENTITY> getter) {
-        return putHelper(label, e -> jsonValue(getter.getAsChar(e)));
+        return putHelper(label, e -> jsonValue(getter.applyAsChar(e)));
     }
     
     /**
@@ -253,7 +246,7 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      */
     @Override
     public JsonEncoder<ENTITY> putBoolean(String label, BooleanGetter<ENTITY> getter) {
-        return putHelper(label, e -> jsonValue(getter.getAsBoolean(e)));
+        return putHelper(label, e -> jsonValue(getter.applyAsBoolean(e)));
     }
     
     private JsonEncoder<ENTITY> putHelper(String label, Function<ENTITY, String> jsonValue) {
@@ -270,13 +263,11 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      * {@inheritDoc}
      */
     @Override
-    public <FK_ENTITY, FIELD extends Field<ENTITY> & HasFinder<ENTITY, FK_ENTITY>> 
+    public <FK_ENTITY, V, FIELD extends Field<ENTITY, V> & HasFinder<ENTITY, FK_ENTITY, V>> 
     JsonEncoder<ENTITY> put(FIELD field, JsonEncoder<FK_ENTITY> encoder) {
-        
         requireNonNulls(field, encoder);
         final String columnName = jsonField(project, field.identifier());
-        // The entity finder cannot be replaced by a method reference. See bug #260
-        final Finder<ENTITY, FK_ENTITY> entityFinder = (entity, manager) -> field.findFrom(entity, manager);
+        final Finder<ENTITY, FK_ENTITY> entityFinder = (e, m) -> field.finder(m).apply(e);
         return put(columnName, entityFinder, encoder);
     }
 
@@ -311,12 +302,12 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
     @Override
     public <FK_ENTITY> JsonEncoder<ENTITY> putStreamer(
             String label, 
-            BiFunction<Manager<ENTITY>, ENTITY, Stream<FK_ENTITY>> streamer, 
+            Function<ENTITY, Stream<FK_ENTITY>> streamer, 
             JsonEncoder<FK_ENTITY> fkEncoder) {
         
         requireNonNulls(label, streamer, fkEncoder);
         getters.put(label, e -> "\"" + label + "\":[" + 
-            streamer.apply(manager, e).map(fkEncoder::apply).collect(joining(",")) + 
+            streamer.apply(e).map(fkEncoder::apply).collect(joining(",")) + 
             "]"
         );
         
@@ -329,12 +320,12 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
     @Override
     public <FK_ENTITY> JsonEncoder<ENTITY> putStreamer(
             String label, 
-            BiFunction<Manager<ENTITY>, ENTITY, Stream<FK_ENTITY>> streamer, 
+            Function<ENTITY, Stream<FK_ENTITY>> streamer, 
             Function<FK_ENTITY, String> fkEncoder) {
         
         requireNonNulls(label, streamer, fkEncoder);
         getters.put(label, e -> "\"" + label + "\":[" + 
-            streamer.apply(manager, e).map(fkEncoder).collect(joining(",")) +
+            streamer.apply(e).map(fkEncoder).collect(joining(",")) +
             "]"
         );
         
@@ -359,7 +350,7 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      * {@inheritDoc}
      */
     @Override
-    public JsonEncoder<ENTITY> remove(Field<ENTITY> field) {
+    public JsonEncoder<ENTITY> remove(Field<ENTITY, ?> field) {
         requireNonNull(field);
         getters.remove(jsonField(project, field.identifier()));
         return this;
@@ -390,108 +381,16 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
     }
 
     /**************************************************************************/
-    /*                         Static Factory Methods                         */
-    /**************************************************************************/
-    
-    /**
-     * Creates and return a new JsonEncoder with no fields added to the
-     * renderer.
-     *
-     * @param <ENTITY>  the Entity type
-     * @param manager   of the entity
-     * @return          a new JsonEncoder with no fields added to the renderer
-     */
-    public static <ENTITY> JsonEncoder<ENTITY> noneOf(Manager<ENTITY> manager) {
-        return new JsonEncoderImpl<>(projectOf(manager), manager);
-    }
-
-    /**
-     * Creates and return a new JsonEncoder with all the Entity fields added to
-     * the renderer. The field(s) will be rendered using their default class
-     * renderer.
-     *
-     * @param <ENTITY>  the Entity type
-     * @param manager   of the entity
-     * @return          a new JsonEncoder with all the Entity fields added to 
-     *                  the renderer
-     */
-    public static <ENTITY> JsonEncoder<ENTITY> allOf(Manager<ENTITY> manager) {
-        requireNonNull(manager);
-
-        final JsonEncoder<ENTITY> formatter = noneOf(manager);
-
-        manager.fields()
-            .map(Field<ENTITY>::identifier)
-            .forEachOrdered(fi -> {
-                formatter.put(
-                    jsonField(projectOf(manager), fi),
-                    entity -> manager.get(entity, fi)
-                );
-            });
-
-        return formatter;
-    }
-
-    /**
-     * Creates and return a new JsonEncoder with the provided Entity field(s)
-     * added to the renderer. The field(s) will be rendered using their default
-     * class renderer.
-     *
-     * @param <ENTITY>  the Entity type
-     * @param manager   of the ENTITY
-     * @param fields    to add to the output renderer
-     * @return          a new JsonEncoder with the specified fields added to the 
-     *                  renderer
-     */
-    @SafeVarargs
-    @SuppressWarnings("varargs") // Using the array in a Stream.of() is safe
-    public static <ENTITY> JsonEncoder<ENTITY> of(Manager<ENTITY> manager, Field<ENTITY>... fields) {
-        requireNonNull(manager);
-        requireNonNullElements(fields);
-        final JsonEncoder<ENTITY> formatter = noneOf(manager);
-
-        final Set<String> fieldNames = Stream.of(fields)
-            .map(Field<ENTITY>::identifier)
-            .map(FieldIdentifier<ENTITY>::columnName)
-            .collect(toSet());
-
-        manager.fields()
-            .filter(f -> fieldNames.contains(f.identifier().columnName()))
-            .map(Field<ENTITY>::identifier)
-            .forEachOrdered(fi
-                -> formatter.put(
-                    jsonField(projectOf(manager), fi),
-                    entity -> manager.get(entity, fi)
-                )
-            );
-
-        return formatter;
-    }
-    
-    /**************************************************************************/
     /*                  Protected and Private Helper Methods                  */
     /**************************************************************************/
-    
-    /**
-     * Determines the JSON label for the specified field identifier. This will
-     * be the result of {@link Column#getJavaName()}.
-     * 
-     * @param project     the project that the identifier is referencing
-     * @param identifier  the identifier for the field to name
-     * @return            the JSON label of that field
-     */
-    protected static String jsonField(Project project, FieldIdentifier<?> identifier) {
-        requireNonNulls(project, identifier);
-        return referencedColumn(project, identifier).getJavaName();
-    }
-    
+
     /**
      * Parse the specified value into JSON.
      * 
      * @param value  the value
      * @return       the JSON encoded value
      */
-    protected static String jsonValue(byte value) {
+    private static String jsonValue(byte value) {
         return String.valueOf(value);
     }
     
@@ -501,7 +400,7 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      * @param value  the value
      * @return       the JSON encoded value
      */
-    protected static String jsonValue(short value) {
+    private static String jsonValue(short value) {
         return String.valueOf(value);
     }
     
@@ -511,7 +410,7 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      * @param value  the value
      * @return       the JSON encoded value
      */
-    protected static String jsonValue(int value) {
+    private static String jsonValue(int value) {
         return String.valueOf(value);
     }
     
@@ -521,7 +420,7 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      * @param value  the value
      * @return       the JSON encoded value
      */
-    protected static String jsonValue(long value) {
+    private static String jsonValue(long value) {
         return String.valueOf(value);
     }
     
@@ -531,7 +430,7 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      * @param value  the value
      * @return       the JSON encoded value
      */
-    protected static String jsonValue(float value) {
+    private static String jsonValue(float value) {
         return String.valueOf(value);
     }
     
@@ -541,7 +440,7 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      * @param value  the value
      * @return       the JSON encoded value
      */
-    protected static String jsonValue(double value) {
+    private static String jsonValue(double value) {
         return String.valueOf(value);
     }
     
@@ -551,7 +450,7 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      * @param value  the value
      * @return       the JSON encoded value
      */
-    protected static String jsonValue(char value) {
+    private static String jsonValue(char value) {
         return String.valueOf(value);
     }
     
@@ -561,7 +460,7 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      * @param value  the value
      * @return       the JSON encoded value
      */
-    protected static String jsonValue(boolean value) {
+    private static String jsonValue(boolean value) {
         return String.valueOf(value);
     }
 
@@ -571,7 +470,7 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      * @param in  the value
      * @return    the JSON encoded value
      */
-    protected static String jsonValue(Object in) {
+    private static String jsonValue(Object in) {
         // in is nullable, a field can certainly be null
         final String value;
 
@@ -593,21 +492,5 @@ public final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
         }
 
         return value;
-    }
-
-    /**
-     * Find the project of the specified {@link Manager}, throwing an exception
-     * if it can't be found.
-     * 
-     * @param <ENTITY>  the entity type
-     * @param manager   the manager
-     * @return          the project
-     */
-    private static <ENTITY> Project projectOf(Manager<ENTITY> manager) {
-        return DocumentUtil.ancestor(manager.getTable(), Project.class)
-            .orElseThrow(() -> new SpeedmentException(
-                "Could not find a project root to table '"
-                + manager.getTable().toString() + "'."
-            ));
     }
 }

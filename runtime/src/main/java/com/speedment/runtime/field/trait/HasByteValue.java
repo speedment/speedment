@@ -23,7 +23,6 @@ import com.speedment.runtime.field.method.ByteGetter;
 import com.speedment.runtime.field.method.ByteSetter;
 import com.speedment.runtime.field.method.SetToByte;
 import com.speedment.runtime.internal.field.setter.SetToByteImpl;
-import javax.annotation.Generated;
 
 /**
  * A representation of an Entity field that is a primitive {@code byte} type.
@@ -35,8 +34,7 @@ import javax.annotation.Generated;
  * @since  3.0.0
  */
 @Api(version = "3.0")
-@Generated(value = "Speedment")
-public interface HasByteValue<ENTITY, D> extends Field<ENTITY> {
+public interface HasByteValue<ENTITY, D> extends Field<ENTITY, Byte> {
     
     @Override
     ByteSetter<ENTITY> setter();
@@ -54,7 +52,7 @@ public interface HasByteValue<ENTITY, D> extends Field<ENTITY> {
      * @return       the value of the field
      */
     default byte getAsByte(ENTITY entity) {
-        return getter().getAsByte(entity);
+        return getter().applyAsByte(entity);
     }
     
     /**

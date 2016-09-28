@@ -16,28 +16,30 @@
  */
 package com.speedment.runtime.manager;
 
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.db.SqlFunction;
-import com.speedment.runtime.field.Field;
-
+import com.speedment.runtime.internal.manager.JdbcManagerSupportImpl;
 import java.sql.ResultSet;
 
 /**
  *
- * @author pemi
- * @param <ENTITY> Entity type for this SqlManager
+ * @param <ENTITY>  the entity type
+ * 
+ * @author  Emil Forslund
+ * @since   1.0.0
  */
-public interface SqlManager<ENTITY> extends Manager<ENTITY> {
+public interface JdbcManagerSupport<ENTITY> extends ManagerSupport<ENTITY> {
 
-    SqlFunction<ResultSet, ENTITY> getEntityMapper();
-
-    void setEntityMapper(SqlFunction<ResultSet, ENTITY> entityMapper);
+    static <ENTITY> JdbcManagerSupport<ENTITY> create(
+            Injector injector, 
+            Manager<ENTITY> manager, 
+            SqlFunction<ResultSet, ENTITY> entityMapper) {
+        
+        return new JdbcManagerSupportImpl<>(injector, manager, entityMapper);
+    }
     
-    /**
-     * Returns the fully qualified name for this field.
-     * 
-     * @param field  the field
-     * @return       the fully qualified name
-     */
-    String fullColumnName(Field<ENTITY> field);
-
+    String sqlSelect();
+    
+    long sqlCount();
+    
 }

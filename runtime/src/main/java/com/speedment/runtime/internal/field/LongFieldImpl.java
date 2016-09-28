@@ -32,7 +32,6 @@ import com.speedment.runtime.internal.field.predicate.longs.LongGreaterThanPredi
 import com.speedment.runtime.internal.field.predicate.longs.LongInPredicate;
 import java.util.Set;
 import java.util.function.Predicate;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -42,7 +41,6 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
 public final class LongFieldImpl<ENTITY, D> implements LongField<ENTITY, D> {
     
     private final FieldIdentifier<ENTITY> identifier;
@@ -100,27 +98,27 @@ public final class LongFieldImpl<ENTITY, D> implements LongField<ENTITY, D> {
     }
     
     @Override
-    public FieldPredicate<ENTITY> equal(Long value) {
+    public FieldPredicate<ENTITY, Long> equal(Long value) {
         return new LongEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterThan(Long value) {
+    public FieldPredicate<ENTITY, Long> greaterThan(Long value) {
         return new LongGreaterThanPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterOrEqual(Long value) {
+    public FieldPredicate<ENTITY, Long> greaterOrEqual(Long value) {
         return new LongGreaterOrEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Long start, Long end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY, Long> between(Long start, Long end, Inclusion inclusion) {
         return new LongBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
-    public FieldPredicate<ENTITY> in(Set<Long> set) {
+    public FieldPredicate<ENTITY, Long> in(Set<Long> set) {
         return new LongInPredicate<>(this, set);
     }
     

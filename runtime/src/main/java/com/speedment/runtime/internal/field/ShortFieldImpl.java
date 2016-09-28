@@ -32,7 +32,6 @@ import com.speedment.runtime.internal.field.predicate.shorts.ShortGreaterThanPre
 import com.speedment.runtime.internal.field.predicate.shorts.ShortInPredicate;
 import java.util.Set;
 import java.util.function.Predicate;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -42,7 +41,6 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
 public final class ShortFieldImpl<ENTITY, D> implements ShortField<ENTITY, D> {
     
     private final FieldIdentifier<ENTITY> identifier;
@@ -100,27 +98,27 @@ public final class ShortFieldImpl<ENTITY, D> implements ShortField<ENTITY, D> {
     }
     
     @Override
-    public FieldPredicate<ENTITY> equal(Short value) {
+    public FieldPredicate<ENTITY, Short> equal(Short value) {
         return new ShortEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterThan(Short value) {
+    public FieldPredicate<ENTITY, Short> greaterThan(Short value) {
         return new ShortGreaterThanPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> greaterOrEqual(Short value) {
+    public FieldPredicate<ENTITY, Short> greaterOrEqual(Short value) {
         return new ShortGreaterOrEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY> between(Short start, Short end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY, Short> between(Short start, Short end, Inclusion inclusion) {
         return new ShortBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
-    public FieldPredicate<ENTITY> in(Set<Short> set) {
+    public FieldPredicate<ENTITY, Short> in(Set<Short> set) {
         return new ShortInPredicate<>(this, set);
     }
     

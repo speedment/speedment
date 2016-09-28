@@ -32,23 +32,23 @@ import static java.util.Objects.requireNonNull;
  */
 public final class SqlInsertStatement<ENTITY> extends SqlStatement {
 
-    private final Collection<Field<ENTITY>> generatedColumnFields;
+    private final Collection<Field<ENTITY, ?>> generatedColumnFields;
     private final List<Long> generatedKeys;
     private final Consumer<List<Long>> generatedKeysConsumer;
 
     public SqlInsertStatement(
-        final String sql,
-        final List<?> values,
-        final Collection<Field<ENTITY>> generatedColumnFields,
-        final Consumer<List<Long>> generatedKeysConsumer
-    ) {
+            String sql,
+            List<?> values,
+            Collection<Field<ENTITY, ?>> generatedColumnFields,
+            Consumer<List<Long>> generatedKeysConsumer) {
+        
         super(sql, values);
         this.generatedKeys = new ArrayList<>();
         this.generatedKeysConsumer = requireNonNull(generatedKeysConsumer);
         this.generatedColumnFields = requireNonNull(generatedColumnFields);
     }
 
-    public Collection<Field<ENTITY>> getGeneratedColumnFields() {
+    public Collection<Field<ENTITY, ?>> getGeneratedColumnFields() {
         return generatedColumnFields;
     }
 
@@ -68,5 +68,4 @@ public final class SqlInsertStatement<ENTITY> extends SqlStatement {
     public Type getType() {
         return Type.INSERT;
     }
-
 }

@@ -19,7 +19,6 @@ package com.speedment.runtime.internal.field.finder;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.manager.Manager;
-import javax.annotation.Generated;
 
 /**
  * @param <ENTITY>    entity type
@@ -28,8 +27,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
-public final class FindFromInt<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, IntField<ENTITY, ?>, IntField<FK_ENTITY, ?>> {
+public final class FindFromInt<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, Integer, IntField<ENTITY, ?>, IntField<FK_ENTITY, ?>> {
     
     public FindFromInt(IntField<ENTITY, ?> source, IntField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {
         super(source, target, manager);
@@ -37,8 +35,10 @@ public final class FindFromInt<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTIT
     
     @Override
     public FK_ENTITY apply(ENTITY entity) {
-        final int value = getSourceField().getter().getAsInt(entity);
-        return getTargetManager().findAny(getTargetField(), value)
+        final int value = getSourceField().getter().applyAsInt(entity);
+        return getTargetManager().stream()
+            .filter(getTargetField().equal(value))
+            .findAny()
             .orElseThrow(() -> new SpeedmentException(
                 "Error! Could not find any " + 
                 getTargetManager().getEntityClass().getSimpleName() + 
