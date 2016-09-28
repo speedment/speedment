@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.field.trait.HasGetter;
 import com.speedment.runtime.field.trait.HasIdentifier;
 import com.speedment.runtime.field.trait.HasSetter;
@@ -31,7 +31,7 @@ import com.speedment.runtime.field.trait.HasTypeMapper;
  * @author  Emil Forslund
  * @since   2.2.0
  */
-@Api(version = "3.0")
+
 public interface Field<ENTITY> extends 
         HasIdentifier<ENTITY>, 
         HasGetter<ENTITY>, 

@@ -16,8 +16,6 @@
  */
 package com.speedment.runtime.field.method;
 
-import com.speedment.runtime.annotation.Api;
-
 import javax.annotation.Generated;
 import java.util.function.ToLongFunction;
 
@@ -37,7 +35,6 @@ import java.util.function.ToLongFunction;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Api(version = "3.0")
 @Generated(value = "Speedment")
 @FunctionalInterface
 public interface LongGetter<ENTITY> extends Getter<ENTITY>, ToLongFunction<ENTITY> {

@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.config.trait;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Document;
 
 import static com.speedment.runtime.config.trait.HasName.NAME;
@@ -28,7 +28,7 @@ import static com.speedment.runtime.config.trait.HasName.NAME;
  * @author  Per Minborg
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public interface HasChildren extends Document {
 
     /**

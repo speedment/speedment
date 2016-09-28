@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.property.item;
 
-import com.speedment.runtime.annotation.Api;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableStringValue;
 import javafx.scene.Node;
@@ -33,7 +32,6 @@ import java.util.function.UnaryOperator;
  * @author Simon Jonasson
  * @since 3.0.0
  */
-@Api(version="3.0")
 public class DefaultTextFieldItem  extends AbstractTextItem {
 
     /**

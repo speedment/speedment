@@ -19,7 +19,6 @@ package com.speedment.generator.translator;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Project;
 
 import java.nio.file.Path;
@@ -28,7 +27,7 @@ import java.nio.file.Path;
  *
  * @author Per Minborg
  */
-@Api(version = "3.0")
+
 @InjectKey(TranslatorManager.class)
 public interface TranslatorManager {
 

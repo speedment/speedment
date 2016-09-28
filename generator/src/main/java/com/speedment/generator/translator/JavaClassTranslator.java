@@ -18,7 +18,6 @@ package com.speedment.generator.translator;
 
 import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.File;
-import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
@@ -35,7 +34,7 @@ import java.util.function.Supplier;
  * @param <T>    the codegen model type
  * @since        2.0.0
  */
-@Api(version = "3.0")
+
 public interface JavaClassTranslator<DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> 
     extends Translator<DOC, T> {
 

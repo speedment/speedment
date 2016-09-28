@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.config.parameter;
 
-import com.speedment.runtime.annotation.Api;
+
 
 import java.util.function.Supplier;
 
@@ -24,7 +24,7 @@ import java.util.function.Supplier;
  *
  * @author  Per Minborg
  */
-@Api(version = "3.0")
+
 public enum OrderType {
     ASC {
         @Override

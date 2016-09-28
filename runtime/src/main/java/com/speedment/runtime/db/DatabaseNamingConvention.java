@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.db;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Schema;
@@ -32,7 +32,7 @@ import java.util.Set;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public interface DatabaseNamingConvention {
 
     /**

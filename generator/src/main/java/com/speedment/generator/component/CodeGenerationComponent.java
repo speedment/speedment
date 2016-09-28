@@ -22,7 +22,6 @@ import com.speedment.generator.translator.Translator;
 import com.speedment.generator.translator.TranslatorConstructor;
 import com.speedment.generator.translator.TranslatorDecorator;
 import com.speedment.generator.translator.TranslatorKey;
-import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
@@ -36,7 +35,6 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   2.2.0
  */
-@Api(version = "3.0")
 @InjectKey(CodeGenerationComponent.class)
 public interface CodeGenerationComponent {
 

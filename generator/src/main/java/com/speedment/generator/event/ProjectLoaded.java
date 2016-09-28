@@ -17,7 +17,6 @@
 package com.speedment.generator.event;
 
 import com.speedment.generator.event.trait.ProjectEvent;
-import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Project;
 
 import static java.util.Objects.requireNonNull;
@@ -28,7 +27,7 @@ import static java.util.Objects.requireNonNull;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public final class ProjectLoaded implements ProjectEvent {
 
     private final Project project;

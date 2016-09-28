@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.property.item;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.tool.property.PropertyEditor;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -40,7 +40,6 @@ import static java.util.Objects.requireNonNull;
  * @author Simon Jonasson
  * @since 3.0.0
  */
-@Api(version="3.0")
 public abstract class AbstractLabelTooltipItem implements PropertyEditor.Item {
     
     protected final static UnaryOperator<Node> NO_DECORATOR = n -> {return n;};

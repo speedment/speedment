@@ -17,7 +17,6 @@
 package com.speedment.runtime.internal.util.document;
 
 import com.speedment.common.json.Json;
-import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.config.ProjectImpl;
@@ -38,7 +37,7 @@ import static java.util.Objects.requireNonNull;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "2.3")
+
 public final class DocumentTranscoder {
 
     public static final String ROOT = "config";

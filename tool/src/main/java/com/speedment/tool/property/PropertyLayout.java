@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.property;
 
-import com.speedment.runtime.annotation.Api;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -35,7 +34,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Simon Jonasson
  * @since 3.0.0
  */
-@Api(version="3.0")
 final class PropertyLayout extends GridPane {
     private final static int MIN_LABEL_WIDTH = 150;
     private final static int MIN_EDITOR_WIDTH = 450;

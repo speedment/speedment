@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.field.trait.HasFinder;
 
 /**
@@ -35,6 +35,6 @@ import com.speedment.runtime.field.trait.HasFinder;
  * @since  ReferenceFieldTrait
  * @since  ReferenceForeignKeyFieldTrait
  */
-@Api(version = "3.0")
+
 public interface ReferenceForeignKeyField<ENTITY, D, V extends Comparable<? super V>, FK_ENTITY> 
 extends ComparableField<ENTITY, D, V>, HasFinder<ENTITY, FK_ENTITY> {}

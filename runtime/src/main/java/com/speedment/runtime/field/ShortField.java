@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.field;
 
-import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.field.trait.HasShortValue;
 
@@ -33,7 +32,6 @@ import javax.annotation.Generated;
  * 
  * @see ReferenceField
  */
-@Api(version = "3.0")
 @Generated(value = "Speedment")
 public interface ShortField<ENTITY, D> extends Field<ENTITY>, HasShortValue<ENTITY, D>, HasComparableOperators<ENTITY, Short> {
     

@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config.mutator.trait;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.mutator.trait.HasOrdinalPositionMutator;
 import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
 
@@ -27,7 +27,7 @@ import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public interface HasOrdinalPositionPropertyMutator<DOC extends HasOrdinalPositionProperty> extends HasOrdinalPositionMutator<DOC> {
     
     @Override

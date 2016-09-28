@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.util;
 
-import com.speedment.runtime.annotation.Api;
+
 
 /**
  * Support class for classes that only contains static methods and fields.
@@ -24,7 +24,7 @@ import com.speedment.runtime.annotation.Api;
  *
  * @author  Per Minborg
  */
-@Api(version = "3.0")
+
 public final class StaticClassUtil {
 
     /**

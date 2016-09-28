@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.db;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.db.metadata.ColumnMetaData;
 import com.speedment.runtime.internal.db.JavaTypeMapImpl;
 
@@ -30,7 +30,7 @@ import java.util.Optional;
  * @author  Emil Forslund
  * @since   3.0.0
  */
-@Api(version = "3.0")
+
 public interface JavaTypeMap {
     
     /**

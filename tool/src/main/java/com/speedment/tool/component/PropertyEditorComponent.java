@@ -17,7 +17,6 @@
 package com.speedment.tool.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.property.PropertyEditor;
 
@@ -27,10 +26,9 @@ import java.util.stream.Stream;
 /**
  * A component for drawing certain editable UI properties.
  *
- * @author Simon Jonasson
- * @since 3.0.0
+ * @author  Simon Jonasson
+ * @since   3.0.0
  */
-@Api(version="3.0")
 @InjectKey(PropertyEditorComponent.class)
 public interface PropertyEditorComponent {
     

@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.config;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.mutator.ProjectMutator;
 import com.speedment.runtime.config.trait.HasChildren;
@@ -40,7 +40,7 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   2.0.0
  */
-@Api(version = "3.0")
+
 public interface Project extends
         Document,
         HasEnabled,

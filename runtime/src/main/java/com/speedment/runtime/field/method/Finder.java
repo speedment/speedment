@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field.method;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.manager.Manager;
 
 import java.util.function.BiFunction;
@@ -38,7 +38,7 @@ import java.util.function.BiFunction;
  * @author  Emil Forslund
  * @since   2.2.0
  */
-@Api(version = "3.0")
+
 @FunctionalInterface
 public interface Finder<ENTITY, FK_ENTITY> extends 
     BiFunction<ENTITY, Manager<FK_ENTITY>, FK_ENTITY> {}

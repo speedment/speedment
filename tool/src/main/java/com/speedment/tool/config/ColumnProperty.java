@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.tool.component.DocumentPropertyComponent;
@@ -43,7 +43,7 @@ import static javafx.beans.binding.Bindings.createObjectBinding;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public final class ColumnProperty extends AbstractChildDocumentProperty<Table, ColumnProperty> implements
     Column,
     HasEnabledProperty,

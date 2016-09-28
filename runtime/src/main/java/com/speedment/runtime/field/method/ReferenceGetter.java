@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field.method;
 
-import com.speedment.runtime.annotation.Api;
+
 
 import java.util.function.Function;
 
@@ -37,7 +37,7 @@ import java.util.function.Function;
  * @author  Emil Forslund
  * @since   2.2.0
  */
-@Api(version = "3.0")
+
 @FunctionalInterface
 public interface ReferenceGetter<ENTITY, V> 
 extends Getter<ENTITY>, Function<ENTITY, V> {}

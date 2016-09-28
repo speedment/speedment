@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.config.mapper.largeobject;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.exception.SpeedmentException;
@@ -29,7 +29,7 @@ import java.sql.SQLException;
  *
  * @author Per Minborg
  */
-@Api(version = "3.0")
+
 public final class ClobToStringMapper implements TypeMapper<Clob, String> {
 
     @Override

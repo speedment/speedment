@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.util;
 
-import com.speedment.runtime.annotation.Api;
+
 import javafx.animation.TranslateTransition;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
@@ -39,7 +39,6 @@ import java.util.Map;
  * @since   2.3.0
  * @see     <a href="https://gist.github.com/jewelsea/5683558">Original Gist</a>
  */
-@Api(version="3.0")
 public final class LayoutAnimator implements ChangeListener<Number>, ListChangeListener<Node> {
 
     private final Map<Node, TranslateTransition> nodeXTransitions = new HashMap<>();

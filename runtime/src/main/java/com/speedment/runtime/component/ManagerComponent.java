@@ -17,7 +17,6 @@
 package com.speedment.runtime.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.manager.Manager;
 
@@ -31,7 +30,6 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   2.0.0
  */
-@Api(version = "3.0")
 @InjectKey(ManagerComponent.class)
 public interface ManagerComponent {
 

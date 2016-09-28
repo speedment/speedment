@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.field.method;
 
-import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.trait.HasFloatValue;
 
 import javax.annotation.Generated;
@@ -31,7 +30,6 @@ import java.util.function.UnaryOperator;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Api(version = "3.0")
 @Generated(value = "Speedment")
 public interface SetToFloat<ENTITY, D> extends UnaryOperator<ENTITY> {
     

@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.config.trait;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Table;
@@ -36,7 +36,7 @@ import static com.speedment.runtime.internal.util.document.TraitUtil.viewOf;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public interface HasColumn extends Document, HasName {
 
     /**

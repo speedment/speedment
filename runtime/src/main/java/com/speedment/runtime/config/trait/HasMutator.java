@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.config.trait;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 
@@ -30,7 +30,7 @@ import com.speedment.runtime.config.mutator.DocumentMutator;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 @FunctionalInterface
 public interface HasMutator<T extends DocumentMutator<?>> {
 

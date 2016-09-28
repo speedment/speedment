@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.property.item;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.exception.SpeedmentException;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -42,7 +42,6 @@ import static java.util.Objects.requireNonNull;
  * @author Simon Jonasson
  * @since 3.0.0
  */
-@Api(version="3.0")
 public class DefaultSpinnerItem extends AbstractLabelTooltipItem {
 
     private final ObservableIntegerValue defaultValue;

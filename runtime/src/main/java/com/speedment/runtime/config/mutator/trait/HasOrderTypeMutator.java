@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.config.mutator.trait;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.parameter.OrderType;
 import com.speedment.runtime.config.trait.HasOrderType;
@@ -26,7 +26,7 @@ import com.speedment.runtime.config.trait.HasOrderType;
  * @author       Per Minborg
  * @param <DOC>  document type
  */
-@Api(version = "3.0")
+
 public interface HasOrderTypeMutator<DOC extends HasOrderType> extends DocumentMutator<DOC> {
     
     default void setOrderType(OrderType orderType) {

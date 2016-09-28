@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field.trait;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.predicate.Inclusion;
 
@@ -38,7 +38,7 @@ import static java.util.stream.Collectors.toSet;
  * @author  Emil Forslund
  * @since   2.2.0
  */
-@Api(version = "3.0")
+
 public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>> extends Field<ENTITY> {
 
     /**

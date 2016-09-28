@@ -19,7 +19,6 @@ package com.speedment.tool.property.editor;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.internal.common.mapstream.MapStream;
-import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.property.PropertyEditor;
@@ -42,9 +41,8 @@ import static java.util.stream.Collectors.toList;
  * @param <T>  the document type
  * @since 3.0.0
  */
-@Api(version="3.0")
 public class TypeMapperPropertyEditor<T extends ColumnProperty> implements PropertyEditor<T> {
-    
+
     private final static String IDENTITY_MAPPER = "(Use Identity Mapper)";
 
     private final StringProperty outputValue;

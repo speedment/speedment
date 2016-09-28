@@ -16,8 +16,6 @@
  */
 package com.speedment.runtime.util;
 
-import com.speedment.runtime.annotation.Api;
-
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
@@ -28,10 +26,9 @@ import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 /**
  * A utility class for converting optional types to their boxed equivalents.
  * 
- * @author Emil Forslund
- * @author Simon Jonasson
+ * @author  Emil Forslund
+ * @author  Simon Jonasson
  */
-@Api(version = "3.0")
 public final class OptionalUtil {
 
     /**

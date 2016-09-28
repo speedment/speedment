@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.property.editor;
 
-import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.property.PropertyEditor;
 import com.speedment.tool.property.item.DefaultTextFieldItem;
@@ -28,12 +27,12 @@ import static com.speedment.runtime.config.Project.DEFAULT_PACKAGE_LOCATION;
 
 /**
  *
- * @author Simon Jonasson
  * @param <T>  the document type
- * @since 3.0.0
+ * 
+ * @author  Simon Jonasson
+ * @since   3.0.0
  */
-@Api(version="3.0")
-public class PackageLocationPropertyEditor <T extends ProjectProperty> implements PropertyEditor<T>{
+public class PackageLocationPropertyEditor<T extends ProjectProperty> implements PropertyEditor<T> {
 
     @Override
     public Stream<Item> fieldsFor(T document) {

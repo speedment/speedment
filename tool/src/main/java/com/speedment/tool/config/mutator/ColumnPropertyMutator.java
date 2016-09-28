@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config.mutator;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.mutator.ColumnMutator;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.config.mutator.trait.HasAliasPropertyMutator;
@@ -29,7 +29,7 @@ import com.speedment.tool.config.mutator.trait.HasOrdinalPositionPropertyMutator
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public final class ColumnPropertyMutator extends ColumnMutator<ColumnProperty> implements 
         HasEnabledPropertyMutator<ColumnProperty>, 
         HasNamePropertyMutator<ColumnProperty>, 

@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.trait.HasNullable;
 import com.speedment.tool.config.DocumentProperty;
 import javafx.beans.binding.Bindings;
@@ -33,7 +33,7 @@ import javafx.util.StringConverter;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public interface HasNullableProperty extends DocumentProperty, HasNullable {
 
     /**

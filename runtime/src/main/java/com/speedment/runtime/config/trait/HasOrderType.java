@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.config.trait;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.parameter.OrderType;
 import com.speedment.runtime.internal.util.document.TraitUtil.AbstractTraitView;
@@ -32,7 +32,7 @@ import static com.speedment.runtime.internal.util.document.TraitUtil.viewOf;
  * @author   Emil Forslund
  * @version  2.3.0
  */
-@Api(version = "3.0")
+
 public interface HasOrderType extends Document {
     
     /**

@@ -17,7 +17,6 @@
 package com.speedment.tool.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.rule.Issue;
 import com.speedment.tool.rule.Rule;
 
@@ -34,7 +33,6 @@ import java.util.function.Supplier;
  * @author Simon Jonasson
  * @since 3.0.0
  */
-@Api(version="3.0")
 @InjectKey(RuleComponent.class)
 public interface RuleComponent {
         

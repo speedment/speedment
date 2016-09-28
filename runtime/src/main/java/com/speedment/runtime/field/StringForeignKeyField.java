@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.field.trait.HasFinder;
 
 /**
@@ -34,7 +34,7 @@ import com.speedment.runtime.field.trait.HasFinder;
  * @see  StringField
  * @see  HasFinder
  */
-@Api(version = "3.0")
+
 public interface StringForeignKeyField<ENTITY, D, FK_ENTITY> extends
     StringField<ENTITY, D>, 
     HasFinder<ENTITY, FK_ENTITY> {}

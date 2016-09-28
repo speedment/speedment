@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.field.trait;
 
-import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.method.SetToShort;
@@ -35,7 +34,6 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Api(version = "3.0")
 @Generated(value = "Speedment")
 public interface HasShortValue<ENTITY, D> extends Field<ENTITY> {
     

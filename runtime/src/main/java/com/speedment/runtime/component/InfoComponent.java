@@ -17,17 +17,15 @@
 package com.speedment.runtime.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.annotation.Api;
 
 /**
  * Contains general information about the installment like the software title
  * and version. This is used to print correct messages for an example when the
  * application launches.
  *
- * @author Emil Forslund
- * @since 3.0.0
+ * @author  Emil Forslund
+ * @since   3.0.0
  */
-@Api(version = "3.0")
 @InjectKey(InfoComponent.class)
 public interface InfoComponent  {
 

@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.util;
 
-import com.speedment.runtime.annotation.Api;
+
 import javafx.util.StringConverter;
 
 /**
@@ -25,7 +25,6 @@ import javafx.util.StringConverter;
  * @author  Emil Forslund
  * @since   3.0.0
  */
-@Api(version="3.0")
 public final class IdentityStringConverter extends StringConverter<String> {
 
     @Override

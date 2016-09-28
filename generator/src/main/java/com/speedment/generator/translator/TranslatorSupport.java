@@ -20,7 +20,6 @@ import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.injector.Injector;
 import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.generator.namer.JavaLanguageNamer;
-import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;
@@ -56,7 +55,6 @@ import static java.util.Objects.requireNonNull;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
 public final class TranslatorSupport<DOC extends Document & HasName & HasMainInterface> {
     
     public final static String 

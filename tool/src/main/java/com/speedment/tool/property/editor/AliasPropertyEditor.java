@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.property.editor;
 
-import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.config.trait.HasAliasProperty;
 import com.speedment.tool.property.PropertyEditor;
 import com.speedment.tool.property.item.DefaultTextFieldItem;
@@ -25,11 +24,11 @@ import java.util.stream.Stream;
 
 /**
  *
- * @author Simon Jonassons
  * @param <T>  the document type
- * @since 3.0.0
+ * 
+ * @author  Simon Jonassons
+ * @since   3.0.0
  */
-@Api(version="3.0")
 public class AliasPropertyEditor<T extends HasAliasProperty> implements PropertyEditor<T> {
 
     @Override

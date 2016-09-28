@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.config.parameter;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.db.ConnectionUrlGenerator;
 import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.db.DbmsMetadataHandler;
@@ -39,7 +39,7 @@ import static com.speedment.common.mapstream.MapStream.comparing;
  * @author  Per Minborg
  * @since   2.0.0
  */
-@Api(version = "3.0")
+
 public interface DbmsType {
 
     final Comparator<DbmsType> COMPARATOR = comparing(DbmsType::getName);

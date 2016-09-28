@@ -17,7 +17,6 @@
 package com.speedment.generator.util;
 
 import com.speedment.generator.namer.JavaLanguageNamer;
-import com.speedment.runtime.annotation.Api;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +41,7 @@ import static java.util.Objects.requireNonNull;
  * @author  Per Minborg
  * @since   2.1.0
  */
-@Api(version = "3.0")
+
 public enum Pluralis {
 
     INSTANCE;

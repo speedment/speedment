@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field.predicate.trait;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.field.Field;
 
 /**
@@ -27,7 +27,7 @@ import com.speedment.runtime.field.Field;
  * @author  Per Minborg
  * @since   2.2.0
  */
-@Api(version = "3.0")
+
 public interface HasField<ENTITY> {
 
     /**

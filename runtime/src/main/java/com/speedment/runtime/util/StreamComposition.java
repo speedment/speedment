@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.util;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.internal.stream.autoclose.AutoClosingDoubleStream;
 import com.speedment.runtime.internal.stream.autoclose.AutoClosingIntStream;
 import com.speedment.runtime.internal.stream.autoclose.AutoClosingLongStream;
@@ -37,7 +37,7 @@ import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
  *
  * @author  Per Minborg
  */
-@Api(version = "3.0")
+
 public class StreamComposition {
 
     /**

@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.property.editor;
 
-import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.property.PropertyEditor;
 import com.speedment.tool.property.item.ItemUtil;
@@ -30,7 +29,6 @@ import java.util.stream.Stream;
  * @param <T>  the document type
  * @since 3.0.0
  */
-@Api(version="3.0")
 public class AutoIncrementPropertyEditor<T extends ColumnProperty> implements PropertyEditor<T>{
 
     @Override

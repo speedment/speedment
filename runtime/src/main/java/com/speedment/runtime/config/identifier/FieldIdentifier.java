@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.config.identifier;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Schema;
@@ -42,7 +42,7 @@ import com.speedment.runtime.internal.util.document.DocumentDbUtil;
  * @author  Emil Forslund
  * @since   2.3
  */
-@Api(version = "3.0")
+
 public interface FieldIdentifier<ENTITY> {
     
     /**

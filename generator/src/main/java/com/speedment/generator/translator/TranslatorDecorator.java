@@ -17,7 +17,6 @@
 package com.speedment.generator.translator;
 
 import com.speedment.common.codegen.model.ClassOrInterface;
-import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 
@@ -31,7 +30,7 @@ import com.speedment.runtime.config.trait.HasName;
  * @param <T>    the codegen model type
  * @since        2.3.0
  */
-@Api(version = "3.0")
+
 @FunctionalInterface
 public interface TranslatorDecorator<DOC extends HasName & HasMainInterface, T extends ClassOrInterface<T>> {
     

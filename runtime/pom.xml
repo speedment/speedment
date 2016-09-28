@@ -49,7 +49,6 @@
                             The runtime environment of Speedment.
                         </Bundle-Description>
                         <Export-Package>
-                            com.speedment.runtime.annotation.*,
                             com.speedment.runtime.component.*,
                             com.speedment.runtime.config.*,
                             com.speedment.runtime.db.*,

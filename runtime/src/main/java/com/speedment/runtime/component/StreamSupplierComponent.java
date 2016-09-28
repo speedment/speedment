@@ -17,7 +17,6 @@
 package com.speedment.runtime.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.stream.StreamDecorator;
 
@@ -30,7 +29,6 @@ import java.util.stream.Stream;
  * @author  Per Minborg
  * @since   2.2.0
  */
-@Api(version = "3.0")
 @InjectKey(StreamSupplierComponent.class)
 public interface StreamSupplierComponent {
     

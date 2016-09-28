@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.field.trait.HasStringOperators;
 
 /**
@@ -32,7 +32,7 @@ import com.speedment.runtime.field.trait.HasStringOperators;
  * @see  ComparableField
  * @see  HasStringOperators
  */
-@Api(version = "3.0")
+
 public interface StringField<ENTITY, D> extends
     ComparableField<ENTITY, D, String>, 
     HasStringOperators<ENTITY, D> {}

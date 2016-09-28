@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.property.editor;
 
-import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.property.PropertyEditor;
 import com.speedment.tool.property.item.DefaultTextFieldItem;
@@ -26,11 +25,11 @@ import java.util.stream.Stream;
 
 /**
  *
- * @author Simon Jonasson
  * @param <T>  the document type
- * @since 3.0.0
+ * 
+ * @author  Simon Jonasson
+ * @since   3.0.0
  */
-@Api(version="3.0")
 public class IpAdressPropertyEditor<T extends DbmsProperty> implements PropertyEditor<T> {
 
     @Override

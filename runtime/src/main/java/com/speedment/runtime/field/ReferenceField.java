@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.field.trait.HasReferenceOperators;
 import com.speedment.runtime.field.trait.HasReferenceValue;
 
@@ -35,7 +35,7 @@ import com.speedment.runtime.field.trait.HasReferenceValue;
  * @see  HasReferenceOperators
  * @see  HasReferenceValue
  */
-@Api(version = "3.0")
+
 public interface ReferenceField<ENTITY, D, V> extends 
     Field<ENTITY>, 
     HasReferenceOperators<ENTITY>,

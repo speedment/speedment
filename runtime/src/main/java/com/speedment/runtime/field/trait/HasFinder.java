@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field.trait;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.FindFrom;
@@ -33,7 +33,7 @@ import com.speedment.runtime.manager.Manager;
  * @author  Emil Forslund
  * @since   2.2.0
  */
-@Api(version = "3.0")
+
 public interface HasFinder<ENTITY, FK_ENTITY> {
     
     /**

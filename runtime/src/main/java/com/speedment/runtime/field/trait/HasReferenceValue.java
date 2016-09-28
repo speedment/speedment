@@ -14,14 +14,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.runtime.field.trait;
 
-import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.method.ReferenceGetter;
@@ -41,7 +35,6 @@ import com.speedment.runtime.internal.field.setter.SetToReferenceImpl;
  * @author  Emil Forslund
  * @since   2.2.0
  */
-@Api(version = "3.0")
 public interface HasReferenceValue<ENTITY, D, V> extends Field<ENTITY> {
 
     @Override

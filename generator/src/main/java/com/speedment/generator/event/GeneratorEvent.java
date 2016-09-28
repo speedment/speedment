@@ -18,14 +18,14 @@ package com.speedment.generator.event;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.generator.translator.TranslatorManager;
-import com.speedment.runtime.annotation.Api;
+
 
 /**
  *
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public interface GeneratorEvent extends Event {
     Generator generator();
     TranslatorManager translatorManager();

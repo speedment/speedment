@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.property.editor;
 
-import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.property.PropertyEditor;
 import com.speedment.tool.property.item.SimpleTextFieldItem;
@@ -29,7 +28,6 @@ import java.util.stream.Stream;
  * @param <T>  the document type
  * @since 3.0.0
  */
-@Api(version="3.0")
 public class UsernamePropertyEditor<T extends DbmsProperty> implements PropertyEditor<T>{
 
     @Override

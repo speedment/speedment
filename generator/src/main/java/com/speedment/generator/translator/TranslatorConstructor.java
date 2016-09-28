@@ -17,7 +17,6 @@
 package com.speedment.generator.translator;
 
 import com.speedment.common.codegen.model.ClassOrInterface;
-import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.trait.HasMainInterface;
 
 /**
@@ -30,7 +29,7 @@ import com.speedment.runtime.config.trait.HasMainInterface;
  * @param <T>    codegen model type
  * @since        2.3.0
  */
-@Api(version = "3.0")
+
 @FunctionalInterface
 public interface TranslatorConstructor<DOC extends HasMainInterface, T extends ClassOrInterface<T>> {
     

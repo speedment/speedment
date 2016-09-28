@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.tool.config.DocumentProperty;
 import javafx.beans.property.BooleanProperty;
 
@@ -25,7 +25,7 @@ import javafx.beans.property.BooleanProperty;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public interface HasExpandedProperty extends DocumentProperty {
     
     final String EXPANDED = "expanded";

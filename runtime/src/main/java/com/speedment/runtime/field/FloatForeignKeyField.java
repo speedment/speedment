@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.field;
 
-import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.trait.HasFinder;
 
 import javax.annotation.Generated;
@@ -35,7 +34,6 @@ import javax.annotation.Generated;
  * @see ReferenceField
  * @see ReferenceForeignKeyField
  */
-@Api(version = "3.0")
 @Generated(value = "Speedment")
 public interface FloatForeignKeyField<ENTITY, D, FK_ENTITY> extends FloatField<ENTITY, D>, HasFinder<ENTITY, FK_ENTITY> {
     

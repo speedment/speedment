@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field.method;
 
-import com.speedment.runtime.annotation.Api;
+
 
 import java.util.function.BiFunction;
 
@@ -38,7 +38,7 @@ import java.util.function.BiFunction;
  * @author  Emil Forslund
  * @since   2.2.0
  */
-@Api(version = "3.0")
+
 @FunctionalInterface
 public interface ReferenceSetter<ENTITY, V> 
 extends Setter<ENTITY>, BiFunction<ENTITY, V, ENTITY> {

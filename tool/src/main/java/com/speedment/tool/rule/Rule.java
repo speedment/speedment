@@ -16,8 +16,6 @@
  */
 package com.speedment.tool.rule;
 
-import com.speedment.runtime.annotation.Api;
-
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -29,9 +27,8 @@ import java.util.concurrent.CompletableFuture;
  * users own risk.
  * 
  * @author Simon Jonasson
- *  * @since 3.0.0
+ * @since 3.0.0
  */
-@Api(version="3.0")
 public interface Rule {
     
     /**
