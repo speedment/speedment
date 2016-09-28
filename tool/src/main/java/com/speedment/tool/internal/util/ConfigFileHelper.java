@@ -44,7 +44,6 @@ import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.component.UserInterfaceComponent.ReuseStage;
 import com.speedment.tool.config.DbmsProperty;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -61,7 +60,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 
 import com.speedment.runtime.internal.util.ProgressMeasurerImpl;
-import static com.speedment.runtime.internal.util.TextUtil.alignRight;
 import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.util.OutputUtil;
 import static com.speedment.tool.util.OutputUtil.error;
@@ -70,20 +68,7 @@ import java.util.Set;
 import static java.util.stream.Collectors.toSet;
 import static javafx.application.Platform.runLater;
 import static com.speedment.runtime.internal.util.TextUtil.alignRight;
-import static com.speedment.runtime.internal.util.TextUtil.alignRight;
-import static com.speedment.runtime.internal.util.TextUtil.alignRight;
-import static com.speedment.runtime.internal.util.TextUtil.alignRight;
-import static com.speedment.runtime.internal.util.TextUtil.alignRight;
-import static com.speedment.runtime.internal.util.TextUtil.alignRight;
-import static com.speedment.runtime.internal.util.TextUtil.alignRight;
-import static com.speedment.runtime.internal.util.TextUtil.alignRight;
-import static com.speedment.runtime.internal.util.TextUtil.alignRight;
-import static com.speedment.runtime.internal.util.TextUtil.alignRight;
-import static com.speedment.runtime.internal.util.TextUtil.alignRight;
-import static com.speedment.runtime.internal.util.TextUtil.alignRight;
-import static com.speedment.runtime.internal.util.TextUtil.alignRight;
-import static com.speedment.runtime.internal.util.TextUtil.alignRight;
-import static com.speedment.runtime.internal.util.TextUtil.alignRight;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 
 /**
  *

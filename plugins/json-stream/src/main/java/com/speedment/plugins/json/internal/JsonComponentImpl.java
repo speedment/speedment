@@ -63,8 +63,10 @@ public final class JsonComponentImpl implements JsonComponent {
         return formatter;
     }
 
+    @SafeVarargs
+    @SuppressWarnings("varargs")
     @Override
-    public <ENTITY> JsonEncoder<ENTITY> of(Manager<ENTITY> manager, Field<ENTITY>... fields) {
+    public final <ENTITY> JsonEncoder<ENTITY> of(Manager<ENTITY> manager, Field<ENTITY>... fields) {
         requireNonNull(manager);
         requireNonNullElements(fields);
         final JsonEncoder<ENTITY> formatter = noneOf(manager);

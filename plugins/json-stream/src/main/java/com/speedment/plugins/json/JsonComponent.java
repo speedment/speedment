@@ -60,7 +60,7 @@ public interface JsonComponent {
      * @param fields to add to the output renderer
      * @return a new JsonEncoder with the specified fields added to the renderer
      */
-    @SuppressWarnings("varargs") // Using the array in a Stream.of() is safe
+    @SuppressWarnings ({"unchecked", "varargs"})
     <ENTITY> JsonEncoder<ENTITY> of(Manager<ENTITY> manager, Field<ENTITY>... fields);
     
 }
