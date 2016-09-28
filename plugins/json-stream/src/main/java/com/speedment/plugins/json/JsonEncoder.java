@@ -288,13 +288,12 @@ public interface JsonEncoder<ENTITY> {
      * 
      * @param <FK_ENTITY>  the type of the foreign entity
      * @param <FIELD>      the type of the field itself
-     * @param <V>          the type of the value wrapper
      * 
      * @param field        the foreign key field
      * @param encoder      encoder for the foreign entity
      * @return             a reference to this encoder
      */
-    <FK_ENTITY, V, FIELD extends Field<ENTITY, V> & HasFinder<ENTITY, FK_ENTITY, V>> 
+    <FK_ENTITY, FIELD extends Field<ENTITY> & HasFinder<ENTITY, FK_ENTITY>> 
     JsonEncoder<ENTITY> put(FIELD field, JsonEncoder<FK_ENTITY> encoder);
 
     /**************************************************************************/
@@ -379,7 +378,7 @@ public interface JsonEncoder<ENTITY> {
      * @param field  the field to remove
      * @return       a reference to this encoder
      */
-    JsonEncoder<ENTITY> remove(Field<ENTITY, ?> field);
+    JsonEncoder<ENTITY> remove(Field<ENTITY> field);
 
     /**************************************************************************/
     /*                                  Encode                                */

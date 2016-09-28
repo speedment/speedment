@@ -30,23 +30,23 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
  */
 public final class PredicateUtil {
 
-    public static Object getFirstOperandAsRaw(FieldPredicate<?, ?> p) {
+    public static Object getFirstOperandAsRaw(FieldPredicate<?> p) {
         return Cast.castOrFail(p, Tuple.class).get(0);
     }
 
-    public static Set<?> getFirstOperandAsRawSet(FieldPredicate<?, ?> p) {
+    public static Set<?> getFirstOperandAsRawSet(FieldPredicate<?> p) {
         return Cast.castOrFail(getFirstOperandAsRaw(p), Set.class);
     }
 
-    public static Object getSecondOperand(FieldPredicate<?, ?> p) {
+    public static Object getSecondOperand(FieldPredicate<?> p) {
         return Cast.castOrFail(p, Tuple.class).get(1);
     }
 
-    public static Object getThirdOperand(FieldPredicate<?, ?> p) {
+    public static Object getThirdOperand(FieldPredicate<?> p) {
         return Cast.castOrFail(p, Tuple.class).get(2);
     }
 
-    public static Inclusion getInclusionOperand(FieldPredicate<?, ?> p) {
+    public static Inclusion getInclusionOperand(FieldPredicate<?> p) {
         return Cast.castOrFail(p, BetweenPredicate.class).getInclusion();
     }
 

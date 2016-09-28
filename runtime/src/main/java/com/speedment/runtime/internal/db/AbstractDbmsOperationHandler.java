@@ -53,7 +53,6 @@ import java.util.Collection;
 import static java.util.Collections.singletonList;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
-import java.util.function.Function;
 
 /**
  *
@@ -122,7 +121,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     }
 
     @Override
-    public <ENTITY> void executeInsert(Dbms dbms, String sql, List<?> values, Collection<Field<ENTITY, ?>> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
+    public <ENTITY> void executeInsert(Dbms dbms, String sql, List<?> values, Collection<Field<ENTITY>> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
         logOperation(LOGGER_INSERT, sql, values);
         final SqlInsertStatement<ENTITY> sqlUpdateStatement = new SqlInsertStatement<>(sql, values, generatedKeyFields, generatedKeyConsumer);
         execute(dbms, singletonList(sqlUpdateStatement));

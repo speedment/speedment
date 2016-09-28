@@ -110,12 +110,12 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> {
     }
     
     @Override
-    public BackwardFinder<FK_ENTITY, ENTITY, V> backwardFinder(Manager<ENTITY> manager) {
+    public BackwardFinder<FK_ENTITY, ENTITY> backwardFinder(Manager<ENTITY> manager) {
         return new BackwardFinderImpl<>(this, manager);
     }
 
     @Override
-    public FindFrom<ENTITY, FK_ENTITY, V> finder(Manager<FK_ENTITY> foreignManager) {
+    public FindFrom<ENTITY, FK_ENTITY> finder(Manager<FK_ENTITY> foreignManager) {
         return new FindFromReference<>(this, referenced, foreignManager);
     }
 
@@ -153,12 +153,12 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> {
     /*****************************************************************/
 
     @Override
-    public FieldPredicate<ENTITY, V> isNull() {
+    public FieldPredicate<ENTITY> isNull() {
         return new ReferenceIsNullPredicate<>(this);
     }
 
     @Override
-    public FieldPredicate<ENTITY, V> equal(V value) {
+    public FieldPredicate<ENTITY> equal(V value) {
         return new ReferenceEqualPredicate<>(this, value);
     }
 

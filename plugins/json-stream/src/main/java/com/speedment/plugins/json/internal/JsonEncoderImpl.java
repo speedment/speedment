@@ -165,7 +165,7 @@ final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
         return putHelper(field, BooleanField::getter, this::putBoolean);
     }
     
-    private <V, F extends Field<ENTITY, V>, G extends Getter<ENTITY, V>> JsonEncoder<ENTITY> putHelper(
+    private <F extends Field<ENTITY>, G extends Getter<ENTITY>> JsonEncoder<ENTITY> putHelper(
         F field, Function<F, G> getter, BiFunction<String, G, JsonEncoder<ENTITY>> putter) {
         
         requireNonNulls(field, getter, putter);
@@ -263,7 +263,7 @@ final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      * {@inheritDoc}
      */
     @Override
-    public <FK_ENTITY, V, FIELD extends Field<ENTITY, V> & HasFinder<ENTITY, FK_ENTITY, V>> 
+    public <FK_ENTITY, FIELD extends Field<ENTITY> & HasFinder<ENTITY, FK_ENTITY>> 
     JsonEncoder<ENTITY> put(FIELD field, JsonEncoder<FK_ENTITY> encoder) {
         requireNonNulls(field, encoder);
         final String columnName = jsonField(project, field.identifier());
@@ -350,7 +350,7 @@ final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
      * {@inheritDoc}
      */
     @Override
-    public JsonEncoder<ENTITY> remove(Field<ENTITY, ?> field) {
+    public JsonEncoder<ENTITY> remove(Field<ENTITY> field) {
         requireNonNull(field);
         getters.remove(jsonField(project, field.identifier()));
         return this;

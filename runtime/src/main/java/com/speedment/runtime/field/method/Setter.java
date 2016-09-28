@@ -19,12 +19,11 @@ package com.speedment.runtime.field.method;
 /**
  *
  * @param  <ENTITY>  the entity type
- * @param  <T>       the wrapper type
  * 
  * @author  Emil Forslund
  * @since   3.0.0
  */
-public interface Setter<ENTITY, T> {
+public interface Setter<ENTITY> {
     
     /**
      * A generic (untyped) set-method. Will throw a {@code ClassCastException}
@@ -33,7 +32,9 @@ public interface Setter<ENTITY, T> {
      * @param entity  the entity to set in
      * @param value   the value to set to
      * @return        a reference to the entity
+     * 
+     * @throws ClassCastException  if the specified value is of the wrong type
      */
-    ENTITY apply(ENTITY entity, T value);
+    ENTITY set(ENTITY entity, Object value) throws ClassCastException;
     
 }

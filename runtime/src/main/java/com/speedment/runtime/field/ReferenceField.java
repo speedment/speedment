@@ -37,6 +37,8 @@ import com.speedment.runtime.field.trait.HasReferenceValue;
  */
 @Api(version = "3.0")
 public interface ReferenceField<ENTITY, D, V> extends 
-    Field<ENTITY, V>, 
-    HasReferenceOperators<ENTITY, V>,
-    HasReferenceValue<ENTITY, D, V> {}
+    Field<ENTITY>, 
+    HasReferenceOperators<ENTITY>,
+    HasReferenceValue<ENTITY, D, V> {
+    
+}

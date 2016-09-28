@@ -45,7 +45,7 @@ public interface ManagerSupport<ENTITY> {
      * @param field  the field
      * @return       the fully qualified name
      */
-    String fullColumnName(Field<ENTITY, ?> field);
+    String fullColumnName(Field<ENTITY> field);
     
     /**
      * Creates a stream of entities. For full documentation, see 

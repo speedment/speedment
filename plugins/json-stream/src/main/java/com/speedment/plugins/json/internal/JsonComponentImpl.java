@@ -21,13 +21,10 @@ import com.speedment.plugins.json.JsonComponent;
 import com.speedment.plugins.json.JsonEncoder;
 import static com.speedment.plugins.json.internal.JsonUtil.jsonField;
 import com.speedment.runtime.component.ProjectComponent;
-import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.field.Field;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
 import com.speedment.runtime.manager.Manager;
 import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import static java.util.stream.Collectors.toSet;
@@ -67,7 +64,7 @@ public final class JsonComponentImpl implements JsonComponent {
     }
 
     @Override
-    public <ENTITY> JsonEncoder<ENTITY> of(Manager<ENTITY> manager, Field<ENTITY, ?>... fields) {
+    public <ENTITY> JsonEncoder<ENTITY> of(Manager<ENTITY> manager, Field<ENTITY>... fields) {
         requireNonNull(manager);
         requireNonNullElements(fields);
         final JsonEncoder<ENTITY> formatter = noneOf(manager);

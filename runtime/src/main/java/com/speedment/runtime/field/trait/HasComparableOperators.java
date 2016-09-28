@@ -37,7 +37,7 @@ import static java.util.stream.Collectors.toSet;
  * @since   2.2.0
  */
 @Api(version = "3.0")
-public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>> extends Field<ENTITY, V> {
+public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>> extends Field<ENTITY> {
 
     /**
      * Returns a {@link Comparator} that will compare to this field using this

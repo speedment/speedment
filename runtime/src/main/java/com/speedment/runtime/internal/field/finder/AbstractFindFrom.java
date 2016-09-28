@@ -18,6 +18,8 @@ package com.speedment.runtime.internal.field.finder;
 
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.method.FindFrom;
+import com.speedment.runtime.field.trait.HasComparableOperators;
+import com.speedment.runtime.field.trait.HasFinder;
 import com.speedment.runtime.manager.Manager;
 import static java.util.Objects.requireNonNull;
 
@@ -32,11 +34,11 @@ import static java.util.Objects.requireNonNull;
  */
 abstract class AbstractFindFrom<
         ENTITY, 
-        FK_ENTITY, 
-        V,
-        SOURCE extends Field<ENTITY, V>, 
-        TARGET extends Field<FK_ENTITY, V>
-    > implements FindFrom<ENTITY, FK_ENTITY, V> {
+        FK_ENTITY,
+        V extends Comparable<? super V>,
+        SOURCE extends Field<ENTITY> & HasComparableOperators<ENTITY, V> & HasFinder<ENTITY, FK_ENTITY>,
+        TARGET extends Field<FK_ENTITY> & HasComparableOperators<FK_ENTITY, V>
+    > implements FindFrom<ENTITY, FK_ENTITY> {
     
     private final SOURCE source;
     private final TARGET target;

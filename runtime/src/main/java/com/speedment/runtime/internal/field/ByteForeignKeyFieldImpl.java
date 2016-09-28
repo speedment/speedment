@@ -1,19 +1,3 @@
-/**
- *
- * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); You may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package com.speedment.runtime.internal.field;
 
 import com.speedment.runtime.config.identifier.FieldIdentifier;
@@ -90,12 +74,12 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Byte
     }
     
     @Override
-    public BackwardFinder<FK_ENTITY, ENTITY, Byte> backwardFinder(Manager<ENTITY> manager) {
+    public BackwardFinder<FK_ENTITY, ENTITY> backwardFinder(Manager<ENTITY> manager) {
         return new BackwardFinderImpl<>(this, manager);
     }
     
     @Override
-    public FindFrom<ENTITY, FK_ENTITY, Byte> finder(Manager<FK_ENTITY> foreignManager) {
+    public FindFrom<ENTITY, FK_ENTITY> finder(Manager<FK_ENTITY> foreignManager) {
         return new FindFromByte<>(this, referenced, foreignManager);
     }
     
@@ -125,27 +109,27 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Byte
     }
     
     @Override
-    public FieldPredicate<ENTITY, Byte> equal(Byte value) {
+    public FieldPredicate<ENTITY> equal(Byte value) {
         return new ByteEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY, Byte> greaterThan(Byte value) {
+    public FieldPredicate<ENTITY> greaterThan(Byte value) {
         return new ByteGreaterThanPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY, Byte> greaterOrEqual(Byte value) {
+    public FieldPredicate<ENTITY> greaterOrEqual(Byte value) {
         return new ByteGreaterOrEqualPredicate<>(this, value);
     }
     
     @Override
-    public FieldPredicate<ENTITY, Byte> between(Byte start, Byte end, Inclusion inclusion) {
+    public FieldPredicate<ENTITY> between(Byte start, Byte end, Inclusion inclusion) {
         return new ByteBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
-    public FieldPredicate<ENTITY, Byte> in(Set<Byte> set) {
+    public FieldPredicate<ENTITY> in(Set<Byte> set) {
         return new ByteInPredicate<>(this, set);
     }
     

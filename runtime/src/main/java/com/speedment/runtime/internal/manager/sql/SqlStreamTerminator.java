@@ -84,7 +84,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
     @Override
     public <P extends Pipeline> P optimize(P initialPipeline) {
         requireNonNull(initialPipeline);
-        final List<FieldPredicate<ENTITY, ?>> andPredicateBuilders = StreamTerminatorUtil.topLevelAndPredicates(initialPipeline);
+        final List<FieldPredicate<ENTITY>> andPredicateBuilders = StreamTerminatorUtil.topLevelAndPredicates(initialPipeline);
         
         if (!andPredicateBuilders.isEmpty()) {
             modifySource(andPredicateBuilders, asynchronousQueryResult);
@@ -93,7 +93,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         return getStreamDecorator().apply(initialPipeline);
     }
     
-    public void modifySource(List<FieldPredicate<ENTITY, ?>> predicateBuilders, AsynchronousQueryResult<ENTITY> qr) {
+    public void modifySource(List<FieldPredicate<ENTITY>> predicateBuilders, AsynchronousQueryResult<ENTITY> qr) {
         requireNonNull(predicateBuilders);
         requireNonNull(qr);
         
@@ -122,8 +122,8 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         final List<Object> values = new ArrayList<>();
         for (int i = 0; i < fragments.size(); i++) {
             
-            final FieldPredicate<ENTITY, ?> p = predicateBuilders.get(i);
-            final Field<ENTITY, ?> referenceFieldTrait = p.getField();
+            final FieldPredicate<ENTITY> p = predicateBuilders.get(i);
+            final Field<ENTITY> referenceFieldTrait = p.getField();
             
             @SuppressWarnings("unchecked")
             final TypeMapper<Object, Object> tm = (TypeMapper<Object, Object>) 

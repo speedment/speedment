@@ -32,12 +32,11 @@ import java.util.function.Function;
  * 
  * @param <ENTITY>     the source entity
  * @param <FK_ENTITY>  the target entity
- * @param <V>          the wrapper type
  * 
  * @author Emil Forslund
  * @since  3.0.0
  */
-public interface FindFrom<ENTITY, FK_ENTITY, V> extends Function<ENTITY, FK_ENTITY> {
+public interface FindFrom<ENTITY, FK_ENTITY> extends Function<ENTITY, FK_ENTITY> {
     
     /**
      * Returns the field that the stream originates from. 
@@ -51,7 +50,7 @@ public interface FindFrom<ENTITY, FK_ENTITY, V> extends Function<ENTITY, FK_ENTI
      * 
      * @return  the source field
      */
-    Field<ENTITY, V> getSourceField();
+    Field<ENTITY> getSourceField();
     
     /**
      * Returns the field that the stream references. 
@@ -65,7 +64,7 @@ public interface FindFrom<ENTITY, FK_ENTITY, V> extends Function<ENTITY, FK_ENTI
      * 
      * @return  the target field
      */
-    Field<FK_ENTITY, V> getTargetField();
+    Field<FK_ENTITY> getTargetField();
     
     /**
      * Returns the manager used for the referenced (foreign) table.

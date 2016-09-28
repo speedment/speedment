@@ -27,7 +27,7 @@ import java.util.function.Predicate;
  * @since   3.0.0
  */
 @Api(version = "3.0")
-public interface HasReferenceOperators<ENTITY, V> {
+public interface HasReferenceOperators<ENTITY> {
     
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to

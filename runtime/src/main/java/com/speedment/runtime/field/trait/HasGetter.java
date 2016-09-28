@@ -22,19 +22,18 @@ import com.speedment.runtime.field.method.Getter;
 /**
  *
  * @param <ENTITY>  the entity type
- * @param <T>       the wrapper type
  * 
  * @author  Emil Forslund
  * @since   3.0.0
  */
 @Api(version = "3.0")
-public interface HasGetter<ENTITY, T> {
+public interface HasGetter<ENTITY> {
     
     /**
      * Returns a reference to the getter for this field.
      * 
      * @return  the getter
      */
-    Getter<ENTITY, T> getter();
+    Getter<ENTITY> getter();
     
 }

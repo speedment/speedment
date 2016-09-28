@@ -35,8 +35,8 @@ import static java.util.Objects.requireNonNull;
  * @author  Emil Forslund
  * @since   3.0.0
  */
-public abstract class AbstractFieldPredicate<ENTITY, V, FIELD extends Field<ENTITY, V>> 
-        extends AbstractPredicate<ENTITY> implements FieldPredicate<ENTITY, V> {
+public abstract class AbstractFieldPredicate<ENTITY, V, FIELD extends Field<ENTITY>> 
+        extends AbstractPredicate<ENTITY> implements FieldPredicate<ENTITY> {
     
     private final PredicateType predicateType;
     private final FIELD field;

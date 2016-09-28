@@ -131,12 +131,12 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
     /*****************************************************************/
 
     @Override
-    public FieldPredicate<ENTITY, String> isNull() {
+    public FieldPredicate<ENTITY> isNull() {
         return new ReferenceIsNullPredicate<>(this);
     }
 
     @Override
-    public FieldPredicate<ENTITY, String> equal(String value) {
+    public FieldPredicate<ENTITY> equal(String value) {
         return new ReferenceEqualPredicate<>(this, value);
     }
 

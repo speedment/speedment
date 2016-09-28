@@ -37,4 +37,4 @@ import com.speedment.runtime.field.trait.HasFinder;
 @Api(version = "3.0")
 public interface StringForeignKeyField<ENTITY, D, FK_ENTITY> extends
     StringField<ENTITY, D>, 
-    HasFinder<ENTITY, FK_ENTITY, String> {}
+    HasFinder<ENTITY, FK_ENTITY> {}

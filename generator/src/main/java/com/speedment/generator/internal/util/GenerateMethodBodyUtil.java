@@ -51,8 +51,7 @@ public final class GenerateMethodBodyUtil {
                 DefaultType.stream(
                     SimpleParameterizedType.create(
                         com.speedment.runtime.field.Field.class,
-                        support.entityType(),
-                        DefaultType.WILDCARD
+                        support.entityType()
                     )
                 )
             )

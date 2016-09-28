@@ -28,21 +28,20 @@ import com.speedment.runtime.field.method.BackwardFinder;
  * 
  * @param <ENTITY>     the entity type
  * @param <FK_ENTITY>  the foreign entity type
- * @param <V>          the wrapper type
  * 
  * @author  Per Minborg
  * @author  Emil Forslund
  * @since   2.2.0
  */
 @Api(version = "3.0")
-public interface HasFinder<ENTITY, FK_ENTITY, V> {
+public interface HasFinder<ENTITY, FK_ENTITY> {
     
     /**
      * Returns the field referenced by this finder.
      * 
      * @return  the referenced field
      */
-    Field<FK_ENTITY, V> getReferencedField();
+    Field<FK_ENTITY> getReferencedField();
     
     /**
      * Returns a function that can be used to find referenced entites using the
@@ -51,7 +50,7 @@ public interface HasFinder<ENTITY, FK_ENTITY, V> {
      * @param foreignManager  the foreign manager
      * @return                finder method
      */
-    FindFrom<ENTITY, FK_ENTITY, V> finder(Manager<FK_ENTITY> foreignManager);
+    FindFrom<ENTITY, FK_ENTITY> finder(Manager<FK_ENTITY> foreignManager);
     
     /**
      * Returns a function that can be used to find a stream of entities 
@@ -60,5 +59,5 @@ public interface HasFinder<ENTITY, FK_ENTITY, V> {
      * @param manager  the foreign manager
      * @return                streaming method
      */
-    BackwardFinder<FK_ENTITY, ENTITY, V> backwardFinder(Manager<ENTITY> manager);
+    BackwardFinder<FK_ENTITY, ENTITY> backwardFinder(Manager<ENTITY> manager);
 }

@@ -36,12 +36,11 @@ import java.util.stream.Stream;
  * 
  * @param <ENTITY>     the source entity
  * @param <FK_ENTITY>  the target entity
- * @param <V>          the wrapper type
  * 
  * @author  Emil Forslund
  * @since   3.0.1
  */
-public interface BackwardFinder<ENTITY, FK_ENTITY, V> 
+public interface BackwardFinder<ENTITY, FK_ENTITY> 
     extends Function<ENTITY, Stream<FK_ENTITY>> {
     
     /**
@@ -56,7 +55,7 @@ public interface BackwardFinder<ENTITY, FK_ENTITY, V>
      * 
      * @return  the target field
      */
-    HasFinder<FK_ENTITY, ENTITY, V> getField();
+    HasFinder<FK_ENTITY, ENTITY> getField();
     
     /**
      * Returns the manager used for the referenced (foreign) table.

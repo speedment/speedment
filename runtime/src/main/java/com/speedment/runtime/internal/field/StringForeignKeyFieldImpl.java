@@ -118,12 +118,12 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     }
     
     @Override
-    public BackwardFinder<FK_ENTITY, ENTITY, String> backwardFinder(Manager<ENTITY> manager) {
+    public BackwardFinder<FK_ENTITY, ENTITY> backwardFinder(Manager<ENTITY> manager) {
         return new BackwardFinderImpl<>(this, manager);
     }
 
     @Override
-    public FindFrom<ENTITY, FK_ENTITY, String> finder(Manager<FK_ENTITY> foreignManager) {
+    public FindFrom<ENTITY, FK_ENTITY> finder(Manager<FK_ENTITY> foreignManager) {
         return new FindFromReference<>(this, referenced, foreignManager);
     }
 
@@ -167,12 +167,12 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
      * **************************************************************
      */
     @Override
-    public FieldPredicate<ENTITY, String> isNull() {
+    public FieldPredicate<ENTITY> isNull() {
         return new ReferenceIsNullPredicate<>(this);
     }
 
     @Override
-    public FieldPredicate<ENTITY, String> equal(String value) {
+    public FieldPredicate<ENTITY> equal(String value) {
         return new ReferenceEqualPredicate<>(this, value);
     }
 

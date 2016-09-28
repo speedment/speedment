@@ -41,4 +41,13 @@ import java.util.function.BiFunction;
 @Api(version = "3.0")
 @FunctionalInterface
 public interface ReferenceSetter<ENTITY, V> 
-extends Setter<ENTITY, V>, BiFunction<ENTITY, V, ENTITY> {}
+extends Setter<ENTITY>, BiFunction<ENTITY, V, ENTITY> {
+
+    @Override
+    default ENTITY set(ENTITY entity, Object value) throws ClassCastException {
+        @SuppressWarnings("unchecked")
+        final V casted = (V) value;
+        return apply(entity, casted);
+    }
+    
+}

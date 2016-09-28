@@ -63,7 +63,6 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import com.speedment.runtime.stream.StreamDecorator;
-import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.isSame;
@@ -87,7 +86,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
     private final LazyString sqlColumnList;
     private final LazyString sqlTableReference;
     private final LazyString sqlSelect;
-    private final Map<String, Field<ENTITY, ?>> fieldMap;
+    private final Map<String, Field<ENTITY>> fieldMap;
     private final boolean hasPrimaryKeyColumns;
 
     private final SqlFunction<ResultSet, ENTITY> entityMapper;
@@ -148,12 +147,12 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
     }
 
     @Override
-    public String fullColumnName(Field field) {
+    public String fullColumnName(Field<ENTITY> field) {
         return naming().fullNameOf(field.identifier());
     }
 
     @Override
-    public Stream stream() {
+    public Stream<ENTITY> stream() {
         return nativeStream(StreamDecorator.IDENTITY);
     }
 
@@ -294,7 +293,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
      * @param field  the field
      * @return       the corresponding Column
      */
-    private Column getColumn(Field<ENTITY, ?> field) {
+    private Column getColumn(Field<ENTITY> field) {
         return field.findColumn(project)
             .orElseThrow(() -> new SpeedmentException(
                 "Could not find column '" + field.identifier() + "'."
@@ -372,7 +371,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
         return sqlTableReference.getOrCompute(() -> naming().fullNameOf(getTable()));
     }
 
-    private <V, F extends Field<ENTITY, V>> Object toDatabaseType(F field, ENTITY entity) {
+    private <F extends Field<ENTITY>> Object toDatabaseType(F field, ENTITY entity) {
         final Object javaValue = field.getter().apply(entity);
         
         @SuppressWarnings("unchecked")
@@ -397,10 +396,9 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
             .collect(toList());
  
         @SuppressWarnings("unchecked")
-        final Map<Field<ENTITY, Object>, Column> generatedFields = MapStream.fromKeys(manager.fields(), 
+        final Map<Field<ENTITY>, Column> generatedFields = MapStream.fromKeys(manager.fields(), 
             f -> DocumentDbUtil.referencedColumn(project, f.identifier()))
                 .filterValue(Column::isAutoIncrement)
-                .mapKey(f -> (Field<ENTITY, Object>) f)
                 .toMap();
 
         final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer = newEntity -> {
@@ -420,13 +418,13 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
                             final Object javaValue = ((TypeMapper<Object, Object>) 
                                 f.typeMapper()).toJavaType(col, manager.getEntityClass(), val);
                             
-                            f.setter().apply(newEntity, javaValue);
+                            f.setter().set(newEntity, javaValue);
                         });
                 }
             };
         };
 
-        executeInsert(entity, sb.toString(), values, (Set<Field<ENTITY, ?>>) (Set<?>) generatedFields.keySet(), generatedKeyconsumer, listener);
+        executeInsert(entity, sb.toString(), values, generatedFields.keySet(), generatedKeyconsumer, listener);
         return entity;
     }
 
@@ -504,7 +502,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
      */
     protected boolean isPersistColumn(ENTITY entity, Column c) {
         if (c.isAutoIncrement()) {
-            final Field<ENTITY, ?> field = fieldMap.get(c.getName());
+            final Field<ENTITY> field = fieldMap.get(c.getName());
             if (field != null) {
                 final Object colValue = field.getter().apply(entity);
                 if (colValue != null) {
@@ -520,7 +518,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
         final ENTITY entity,
         final String sql,
         final List<Object> values,
-        final Collection<Field<ENTITY, ?>> generatedFields,
+        final Collection<Field<ENTITY>> generatedFields,
         final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer,
         final Optional<Consumer<MetaResult<ENTITY>>> listener
     ) throws SpeedmentException {

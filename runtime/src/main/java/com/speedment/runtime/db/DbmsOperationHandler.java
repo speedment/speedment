@@ -132,7 +132,7 @@ public interface DbmsOperationHandler {
             Dbms dbms,
             String sql,
             List<?> values,
-            Collection<Field<ENTITY, ?>> generatedKeyFields,
+            Collection<Field<ENTITY>> generatedKeyFields,
             Consumer<List<Long>> generatedKeyConsumer
     ) throws SQLException;
 

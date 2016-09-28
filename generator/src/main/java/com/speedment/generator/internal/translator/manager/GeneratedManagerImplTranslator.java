@@ -66,12 +66,9 @@ import java.lang.reflect.Type;
 import java.util.Optional;
 import static com.speedment.common.codegen.internal.util.Formatting.block;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
-import static com.speedment.common.codegen.internal.util.Formatting.tab;
-import com.speedment.generator.util.Primitives;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.manager.AbstractManager;
 import com.speedment.runtime.manager.JdbcManagerSupport;
-import com.speedment.runtime.manager.Manager;
 import com.speedment.runtime.manager.ManagerSupport;
 import com.speedment.runtime.field.method.BackwardFinder;
 
@@ -135,8 +132,7 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
                 // Create corresponding streamer method
                 clazz.add(Method.of(methodName, SimpleParameterizedType.create(BackwardFinder.class,
                         fu.getForeignEmt().getSupport().entityType(), 
-                        fu.getEmt().getSupport().entityType(), 
-                        Primitives.orWrapper(typeMappers.get(fu.getColumn()).getJavaType(fu.getColumn()))
+                        fu.getEmt().getSupport().entityType()
                     ))
                     .public_().add(OVERRIDE)
                     .add("return " + 

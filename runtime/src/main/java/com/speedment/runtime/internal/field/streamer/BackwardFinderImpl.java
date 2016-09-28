@@ -33,8 +33,8 @@ import static java.util.Objects.requireNonNull;
  * @author  Emil Forslund
  * @since   3.0.0
  */
-public class BackwardFinderImpl<ENTITY, FK_ENTITY, T extends Comparable<? super T>, FIELD extends Field<FK_ENTITY, T> & HasComparableOperators<FK_ENTITY, T> & HasFinder<FK_ENTITY, ENTITY, T>>
-    implements BackwardFinder<ENTITY, FK_ENTITY, T> {
+public class BackwardFinderImpl<ENTITY, FK_ENTITY, T extends Comparable<? super T>, FIELD extends Field<FK_ENTITY> & HasComparableOperators<FK_ENTITY, T> & HasFinder<FK_ENTITY, ENTITY>>
+    implements BackwardFinder<ENTITY, FK_ENTITY> {
 
     private final FIELD target;
     private final Manager<FK_ENTITY> manager;
@@ -56,7 +56,8 @@ public class BackwardFinderImpl<ENTITY, FK_ENTITY, T extends Comparable<? super 
 
     @Override
     public Stream<FK_ENTITY> apply(ENTITY entity) {
-        final T value = getField().getReferencedField().getter().apply(entity);
+        @SuppressWarnings("unchecked")
+        final T value = (T) getField().getReferencedField().getter().apply(entity);
         if (value == null) {
             return null;
         } else {

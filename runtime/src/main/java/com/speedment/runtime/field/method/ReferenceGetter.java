@@ -40,4 +40,4 @@ import java.util.function.Function;
 @Api(version = "3.0")
 @FunctionalInterface
 public interface ReferenceGetter<ENTITY, V> 
-extends Getter<ENTITY, V>, Function<ENTITY, V> {}
+extends Getter<ENTITY>, Function<ENTITY, V> {}

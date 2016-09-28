@@ -29,7 +29,7 @@ import com.speedment.runtime.field.predicate.PredicateType;
  * @author  Per Minborg
  * @since   2.2.0
  */
-public final class AlwaysTruePredicate<ENTITY, V, FIELD extends Field<ENTITY, V>> 
+public final class AlwaysTruePredicate<ENTITY, V, FIELD extends Field<ENTITY>> 
         extends AbstractFieldPredicate<ENTITY, V, FIELD> {
 
     public AlwaysTruePredicate(FIELD field) {

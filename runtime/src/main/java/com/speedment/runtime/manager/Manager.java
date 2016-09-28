@@ -90,7 +90,7 @@ public interface Manager<ENTITY> {
      *
      * @return a stream fo all fields
      */
-    Stream<Field<ENTITY, ?>> fields();
+    Stream<Field<ENTITY>> fields();
     
     /**
      * Returns a stream of the fields that are included in the primary key of
@@ -98,7 +98,7 @@ public interface Manager<ENTITY> {
      *
      * @return the primary key fields
      */
-    Stream<Field<ENTITY, ?>> primaryKeyFields();
+    Stream<Field<ENTITY>> primaryKeyFields();
     
     /**
      * Creates and returns a new {@link Stream} over all entities in the

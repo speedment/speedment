@@ -28,6 +28,6 @@ import com.speedment.runtime.manager.ManagerSupport;
 @Api(version = "3.0")
 public interface FieldPredicateView {
 
-    <ENTITY, V> SqlPredicateFragment transform(ManagerSupport<ENTITY> manager, FieldPredicate<ENTITY, V> model);
+    <ENTITY> SqlPredicateFragment transform(ManagerSupport<ENTITY> manager, FieldPredicate<ENTITY> model);
     
 }

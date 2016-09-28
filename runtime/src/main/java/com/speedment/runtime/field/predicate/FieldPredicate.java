@@ -29,15 +29,14 @@ import com.speedment.runtime.field.predicate.trait.HasField;
  * Speedment entity fields.
  * 
  * @param <ENTITY>  the entity type that is being tested
- * @param <V>       the wrapper type
  * 
  * @author  Per Minborg
  * @since   2.1.0
  */
 @Api(version = "3.0")
-public interface FieldPredicate<ENTITY, V> extends
+public interface FieldPredicate<ENTITY> extends
         Predicate<ENTITY>,
         HasPredicateType,
         HasEffectivePredicateType,
-        HasField<ENTITY, V>,
+        HasField<ENTITY>,
         HasNegated {}

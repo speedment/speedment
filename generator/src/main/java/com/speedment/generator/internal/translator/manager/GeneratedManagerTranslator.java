@@ -45,9 +45,6 @@ import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.generator.component.TypeMapperComponent;
-import com.speedment.generator.util.Primitives;
-import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.manager.Manager;
 import java.lang.reflect.Type;
 import com.speedment.runtime.field.method.BackwardFinder;
@@ -59,7 +56,6 @@ import com.speedment.runtime.field.method.BackwardFinder;
 public final class GeneratedManagerTranslator extends AbstractEntityAndManagerTranslator<Interface> {
 
     private @Inject Injector injector;
-    private @Inject TypeMapperComponent typeMappers;
     
     public GeneratedManagerTranslator(Table table) {
         super(table, Interface::of);
@@ -121,11 +117,11 @@ public final class GeneratedManagerTranslator extends AbstractEntityAndManagerTr
                 /*** Create an additional method for producing a Streamer ***/
                 intrf.add(Method.of(methodName, SimpleParameterizedType.create(BackwardFinder.class,
                         fu.getForeignEmt().getSupport().entityType(), 
-                        fu.getEmt().getSupport().entityType(), 
-                        Primitives.orWrapper(typeMappers.get(fu.getColumn()).getJavaType(fu.getColumn()))
+                        fu.getEmt().getSupport().entityType()
                     )).set(Javadoc.of(
-                            "Creates and returns a {@link Streamer}-operation that " + 
-                            "will look up all the {@link " + 
+                            "Creates and returns a {@link " + 
+                            BackwardFinder.class.getSimpleName() + 
+                            "}-operation that will look up all the {@link " + 
                             fu.getForeignEmt().getSupport().entityType().getTypeName() + 
                             " " + 
                             EntityTranslatorSupport.pluralis(fu.getForeignTable(), fu.getForeignEmt().getSupport().namer()) +

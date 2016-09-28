@@ -64,7 +64,7 @@ public interface StreamDecorator {
         return stream;
     }
 
-    default <ENTITY, V> FieldPredicate<ENTITY, V> apply(FieldPredicate<ENTITY, V> predicate) {
+    default <ENTITY> FieldPredicate<ENTITY> apply(FieldPredicate<ENTITY> predicate) {
         return predicate;
     }
 

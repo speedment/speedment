@@ -19,12 +19,11 @@ package com.speedment.runtime.field.method;
 /**
  *
  * @param  <ENTITY>  the entity type
- * @param  <T>       the wrapper type
  * 
  * @author  Emil Forslund
  * @since   3.0.0
  */
-public interface Getter<ENTITY, T> {
+public interface Getter<ENTITY> {
     
     /**
      * A generic (untyped) get method.
@@ -32,6 +31,6 @@ public interface Getter<ENTITY, T> {
      * @param entity  the entity to get from
      * @return        the value
      */
-    T apply(ENTITY entity);
+    Object apply(ENTITY entity);
     
 }
