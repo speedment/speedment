@@ -28,9 +28,9 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static com.speedment.plugins.json.internal.JsonUtil.jsonField;
+import static java.util.stream.Collectors.toSet;
 import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toSet;
 
 /**
  *
@@ -56,8 +56,7 @@ public final class JsonComponentImpl implements JsonComponent {
 
         manager.fields()
             .forEachOrdered(f -> {
-                formatter.put(
-                    jsonField(projectComponent.getProject(), f.identifier()),
+                formatter.put(jsonField(projectComponent.getProject(), f.identifier()),
                     f.getter()::apply
                 );
             });
@@ -75,14 +74,13 @@ public final class JsonComponentImpl implements JsonComponent {
 
         final Set<String> fieldNames = Stream.of(fields)
             .map(Field::identifier)
-            .map(FieldIdentifier::columnName)
+            .map(FieldIdentifier::getColumnName)
             .collect(toSet());
 
         manager.fields()
-            .filter(f -> fieldNames.contains(f.identifier().columnName()))
+            .filter(f -> fieldNames.contains(f.identifier().getColumnName()))
             .forEachOrdered(f
-                -> formatter.put(
-                    jsonField(projectComponent.getProject(), f.identifier()),
+                -> formatter.put(jsonField(projectComponent.getProject(), f.identifier()),
                     f.getter()::apply
                 )
             );

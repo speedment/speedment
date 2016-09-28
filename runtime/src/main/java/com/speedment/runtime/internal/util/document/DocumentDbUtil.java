@@ -260,19 +260,19 @@ public final class DocumentDbUtil {
     }
     
     public static Optional<? extends Column> referencedColumnIfPresent(Project project, FieldIdentifier<?> identifier) {
-        return referencedColumnIfPresent(project, identifier.dbmsName(), identifier.schemaName(), identifier.tableName(), identifier.columnName());
+        return referencedColumnIfPresent(project, identifier.getDbmsName(), identifier.getSchemaName(), identifier.getTableName(), identifier.getColumnName());
     }
     
     public static Optional<? extends Table> referencedTableIfPresent(Project project, FieldIdentifier<?> identifier) {
-        return referencedTableIfPresent(project, identifier.dbmsName(), identifier.schemaName(), identifier.tableName());
+        return referencedTableIfPresent(project, identifier.getDbmsName(), identifier.getSchemaName(), identifier.getTableName());
     }
     
     public static Optional<? extends Schema> referencedSchemaIfPresent(Project project, FieldIdentifier<?> identifier) {
-        return referencedSchemaIfPresent(project, identifier.dbmsName(), identifier.schemaName());
+        return referencedSchemaIfPresent(project, identifier.getDbmsName(), identifier.getSchemaName());
     }
     
     public static Optional<? extends Dbms> referencedDbmsIfPresent(Project project, FieldIdentifier<?> identifier) {
-        return referencedDbmsIfPresent(project, identifier.dbmsName());
+        return referencedDbmsIfPresent(project, identifier.getDbmsName());
     }
     
     public static Optional<? extends Column> referencedColumnIfPresent(Project project, String dbmsName, String schemaName, String tableName, String columnName) {
@@ -301,19 +301,19 @@ public final class DocumentDbUtil {
     }
     
     public static Column referencedColumn(Project project, FieldIdentifier<?> identifier) {
-        return referencedColumn(project, identifier.dbmsName(), identifier.schemaName(), identifier.tableName(), identifier.columnName());
+        return referencedColumn(project, identifier.getDbmsName(), identifier.getSchemaName(), identifier.getTableName(), identifier.getColumnName());
     }
     
     public static Table referencedTable(Project project, FieldIdentifier<?> identifier) {
-        return referencedTable(project, identifier.dbmsName(), identifier.schemaName(), identifier.tableName());
+        return referencedTable(project, identifier.getDbmsName(), identifier.getSchemaName(), identifier.getTableName());
     }
     
     public static Schema referencedSchema(Project project, FieldIdentifier<?> identifier) {
-        return referencedSchema(project, identifier.dbmsName(), identifier.schemaName());
+        return referencedSchema(project, identifier.getDbmsName(), identifier.getSchemaName());
     }
     
     public static Dbms referencedDbms(Project project, FieldIdentifier<?> identifier) {
-        return referencedDbms(project, identifier.dbmsName());
+        return referencedDbms(project, identifier.getDbmsName());
     }
     
     public static Column referencedColumn(Project project, String dbmsName, String schemaName, String tableName, String columnName) {

@@ -70,7 +70,7 @@ public interface DatabaseNamingConvention {
      * @return the full name
      */
     default String fullNameOf(FieldIdentifier<?> fieldIdentifier) {
-        return fullNameOf(fieldIdentifier.schemaName(), fieldIdentifier.tableName(), fieldIdentifier.columnName());
+        return fullNameOf(fieldIdentifier.getSchemaName(), fieldIdentifier.getTableName(), fieldIdentifier.getColumnName());
     }
 
     /**

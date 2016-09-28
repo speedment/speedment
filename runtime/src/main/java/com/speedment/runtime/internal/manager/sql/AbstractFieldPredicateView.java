@@ -137,7 +137,7 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
                 return isNotEmpty(cn);
             default:
                 throw new UnsupportedOperationException(
-                    "Unknown PredicateType  " + pt.name() + ". Column name:" + model.getField().identifier().columnName()
+                    "Unknown PredicateType  " + pt.name() + ". Column name:" + model.getField().identifier().getColumnName()
                 );
         }
     }

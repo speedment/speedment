@@ -50,26 +50,26 @@ public interface FieldIdentifier<ENTITY> {
      * 
      * @return  the {@link Dbms} name
      */
-    String dbmsName();
+    String getDbmsName();
     
     /**
      * Returns the database name of the {@link Schema} that this field is in.
      * 
      * @return  the {@link Schema} name
      */
-    String schemaName();
+    String getSchemaName();
     
     /**
      * Returns the database name of the {@link Table} that this field is in.
      * 
      * @return  the {@link Table} name
      */
-    String tableName();
+    String getTableName();
     
     /**
      * Returns the database name of the {@link Column} that this field is in.
      * 
      * @return  the {@link Column} name
      */
-    String columnName();
+    String getColumnName();
 }

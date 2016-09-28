@@ -66,10 +66,11 @@ import java.util.stream.Stream;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.*;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.runtime.manager.JdbcManagerSupport;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.*;
+
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -136,7 +137,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
                 .map(c -> c.getParent())
                 .map(t -> isSame(table, t.get()))
                 .orElse(false)
-            ).collect(toMap(f -> f.identifier().columnName(), identity()));
+            ).collect(toMap(f -> f.identifier().getColumnName(), identity()));
     }
 
     @Override
