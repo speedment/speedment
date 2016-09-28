@@ -51,13 +51,4 @@ public final class MavenPathComponent implements PathComponent {
         return baseDir().resolve(project.getPackageLocation());
     }
 
-    @Override
-    public Software asSoftware() {
-        return AbstractSoftware.with("Maven Path Component", "3.0.0", APACHE_2);
-    }
-
-    @Override
-    public boolean isInternal() {
-        return true;
-    }
 }

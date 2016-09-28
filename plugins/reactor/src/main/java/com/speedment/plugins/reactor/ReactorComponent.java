@@ -39,7 +39,6 @@ import com.speedment.plugins.reactor.internal.util.MergingSupportImpl;
 import com.speedment.plugins.reactor.translator.ReactorTranslatorKey;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.internal.component.AbstractComponent;
 import static com.speedment.runtime.license.OpenSourceLicense.APACHE_2;
 import com.speedment.tool.component.PropertyEditorComponent;
 import com.speedment.tool.component.UserInterfaceComponent;
@@ -51,7 +50,7 @@ import com.speedment.tool.config.TableProperty;
  * @since  1.1.0
  */
 @InjectKey(ReactorComponent.class)
-public final class ReactorComponent extends AbstractComponent {
+public final class ReactorComponent {
 
     public static InjectBundle include() {
         return InjectBundle.of(
@@ -82,15 +81,4 @@ public final class ReactorComponent extends AbstractComponent {
         editors.install(TableProperty.class, MERGE_ON, MergeOnEditor::new);
     }
     
-    @Override
-    public Class<ReactorComponent> getComponentClass() {
-        return ReactorComponent.class;
-    }
-
-    @Override
-    public Software asSoftware() {
-        return AbstractSoftware.with(
-            "Reactor Plugin", "1.1.0", APACHE_2
-        );
-    }
 }

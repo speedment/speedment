@@ -29,12 +29,7 @@ import com.speedment.common.injector.annotation.InjectKey;
  */
 @Api(version = "3.0")
 @InjectKey(ProjectComponent.class)
-public interface ProjectComponent extends Component {
-
-    @Override
-    default Class<ProjectComponent> getComponentClass() {
-        return ProjectComponent.class;
-    }
+public interface ProjectComponent  {
 
     /**
      * Returns the current {@link Project}.

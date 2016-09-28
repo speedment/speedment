@@ -20,7 +20,6 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.runtime.component.Component;
 import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.tool.component.RuleComponent;
 import com.speedment.tool.internal.rule.ProtectedNameRule;
@@ -73,8 +72,4 @@ public class RuleComponentImpl extends InternalOpenSourceComponent implements  R
         return "Component responsible for validating all installed rules, and generating issues if said rules aren't followed.";
     }
 
-    @Override
-    public Class<? extends Component> getComponentClass() {
-        return RuleComponent.class;
-    }
 }

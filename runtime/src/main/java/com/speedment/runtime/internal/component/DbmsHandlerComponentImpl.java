@@ -45,10 +45,6 @@ public final class DbmsHandlerComponentImpl extends InternalOpenSourceComponent 
         return "Holds references to the various database managers that is currently supported.";
     }
 
-    @Override
-    public Class<DbmsHandlerComponent> getComponentClass() {
-        return DbmsHandlerComponent.class;
-    }
 
     @Override
     public void install(DbmsType dbmsType) {

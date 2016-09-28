@@ -18,7 +18,6 @@ package com.speedment.generator.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.internal.config.mapper.IdentityTypeMapper;
@@ -35,12 +34,7 @@ import java.util.stream.Stream;
  */
 @Api(version = "3.0")
 @InjectKey(TypeMapperComponent.class)
-public interface TypeMapperComponent extends Component {
-    
-    @Override
-    default Class<TypeMapperComponent> getComponentClass() {
-        return TypeMapperComponent.class;
-    }
+public interface TypeMapperComponent {
     
     /**
      * Installs the specified type mapper in this component.

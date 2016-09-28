@@ -47,7 +47,7 @@ public final class ReflectionUtil {
     }
     
     public static Stream<Class<?>> traverseAncestors(Class<?> clazz) {
-        if (clazz.getSuperclass() == null) {
+        if (clazz.getSuperclass() == null) { // We have reached Object.class
             return Stream.of(clazz);
         } else {
             return Stream.concat(

@@ -20,7 +20,6 @@ import com.speedment.generator.event.DefaultEvent;
 import com.speedment.generator.event.Event;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.component.Component;
 
 import java.util.function.Consumer;
 
@@ -36,12 +35,8 @@ import java.util.function.Consumer;
  */
 @Api(version = "3.0")
 @InjectKey(EventComponent.class)
-public interface EventComponent extends Component {
+public interface EventComponent {
 
-    @Override
-    public default Class<? extends Component> getComponentClass() {
-        return EventComponent.class;
-    }
     
     /**
      * Notifies all listeners for this type of event.

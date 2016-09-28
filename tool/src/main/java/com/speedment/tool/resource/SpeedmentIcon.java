@@ -112,7 +112,8 @@ public enum SpeedmentIcon {
     USER_COMMENT("/pics/vectors_rendered/userComment.png"),
     INFORMATION("/pics/vectors_rendered/info.png"),
     HELP("/pics/vectors_rendered/help.png"),
-    SCRIPT_ADD("/pics/vectors_rendered/scriptAdd.png");
+    SCRIPT_ADD("/pics/vectors_rendered/scriptAdd.png"),
+    SCRIPT_DELETE("/pics/vectors_rendered/scriptDelete.png");
 
     private final String filename;
 

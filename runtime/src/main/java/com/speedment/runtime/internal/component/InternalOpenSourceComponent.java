@@ -18,7 +18,6 @@ package com.speedment.runtime.internal.component;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.InfoComponent;
-import com.speedment.runtime.internal.license.AbstractSoftware;
 import com.speedment.runtime.license.OpenSourceLicense;
 import com.speedment.runtime.license.License;
 import com.speedment.runtime.license.Software;
@@ -29,30 +28,26 @@ import java.util.stream.Stream;
  *
  * @author Emil Forslund
  */
-public abstract class InternalOpenSourceComponent extends AbstractComponent {
+public abstract class InternalOpenSourceComponent {
 
     private @Inject InfoComponent infoComponent;
 
     protected InternalOpenSourceComponent() {}
 
-    @Override
-    public final boolean isInternal() {
-        return true;
-    }
 
-    @Override
-    public final Software asSoftware() {
-        return AbstractSoftware.with(getTitle(),
-            getImplementationVersion(),
-            getDescription(),
-            getLicense(),
-            isInternal(),
-            getDependencies().toArray(Software[]::new));
-    }
+//    @Override
+//    public final Software asSoftware() {
+//        return AbstractSoftware.with(getTitle(),
+//            getImplementationVersion(),
+//            getDescription(),
+//            getLicense(),
+//            isInternal(),
+//            getDependencies().toArray(Software[]::new));
+//    }
 
-    protected String getTitle() {
-        return getComponentClass().getSimpleName();
-    }
+//    protected String getTitle() {
+//        return getComponentClass().getSimpleName();
+//    }
 
     protected abstract String getDescription();
 

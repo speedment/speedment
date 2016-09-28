@@ -18,7 +18,6 @@ package com.speedment.tool.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.component.Component;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -31,20 +30,16 @@ import java.util.concurrent.CompletableFuture;
  */
 @Api(version = "3.0")
 @InjectKey(VersionComponent.class)
-public interface VersionComponent extends Component {
+public interface VersionComponent {
 
     /**
      * Attempts to determine the latest released version of this software by
      * contacting the source code repository. The operation might never finish
-     * for an example if there is no internet connection or if the repository
+     * for an example if there is no Internet connection or if the repository
      * is down.
      * 
      * @return  a future in which the latest version has been established
      */
     CompletableFuture<String> latestVersion();
     
-    @Override
-    default Class<VersionComponent> getComponentClass() {
-        return VersionComponent.class;
-    }
 }

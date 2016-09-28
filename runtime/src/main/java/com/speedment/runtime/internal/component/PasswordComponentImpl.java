@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.internal.component;
 
-import com.speedment.runtime.component.Component;
 import com.speedment.runtime.component.PasswordComponent;
 import com.speedment.runtime.license.Software;
 
@@ -40,11 +39,6 @@ public final class PasswordComponentImpl extends InternalOpenSourceComponent imp
     @Override
     protected String getDescription() {
         return "Holds the database password under this session.";
-    }
-
-    @Override
-    public Class<? extends Component> getComponentClass() {
-        return PasswordComponent.class;
     }
 
     @Override

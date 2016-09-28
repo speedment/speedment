@@ -32,7 +32,7 @@ import com.speedment.common.injector.annotation.InjectKey;
  */
 @Api(version = "3.0")
 @InjectKey(StreamSupplierComponent.class)
-public interface StreamSupplierComponent extends Component {
+public interface StreamSupplierComponent {
     
     /**
      * Does all the preparations required to start serving streams 
@@ -90,8 +90,4 @@ public interface StreamSupplierComponent extends Component {
         return false;
     }
     
-    @Override
-    default Class<StreamSupplierComponent> getComponentClass() {
-        return StreamSupplierComponent.class;
-    }
 }

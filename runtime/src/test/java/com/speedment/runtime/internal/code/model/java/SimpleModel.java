@@ -22,6 +22,7 @@
 package com.speedment.runtime.internal.code.model.java;
 
 import com.speedment.runtime.Speedment;
+import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.PrimaryKeyColumn;
@@ -68,7 +69,7 @@ public abstract class SimpleModel {
             .withSkipValidateRuntimeConfig()
             .build();
         
-        project = speedment.project();
+        project = speedment.getOrThrow(ProjectComponent.class).getProject();
         dbms = project.dbmses().findAny().get();
         schema = dbms.schemas().findAny().get();
         table = schema.tables().filter(t -> TABLE_NAME.equals(t.getName())).findAny().get();

@@ -25,7 +25,6 @@ import com.speedment.common.tuple.Tuple3;
 import com.speedment.common.tuple.Tuples;
 import com.speedment.runtime.ApplicationMetadata;
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.component.Component;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.component.PasswordComponent;
 import com.speedment.runtime.config.Dbms;
@@ -233,13 +232,6 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public <C extends Component> BUILDER with(Class<C> componentImplType) {
-        requireNonNull(componentImplType);
-        withInjectable(injector, componentImplType, Component::getComponentClass);
-        return self();
-    }
-
-    @Override
     public <M extends Manager<?>> BUILDER withManager(Class<M> managerImplType) {
         requireNonNull(managerImplType);
         withInjectable(injector, managerImplType, M::getEntityClass);
@@ -272,14 +264,14 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public BUILDER withInjectable(Class<?> injectableClass) {
+    public BUILDER withComponent(Class<?> injectableClass) {
         requireNonNull(injectableClass);
         injector.put(injectableClass);
         return self();
     }
 
     @Override
-    public BUILDER withInjectable(String key, Class<?> injectableClass) {
+    public BUILDER withComponent(String key, Class<?> injectableClass) {
         requireNonNulls(key, injectableClass);
         injector.put(key, injectableClass);
         return self();

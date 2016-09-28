@@ -92,10 +92,6 @@ public class PrimaryKeyFactoryComponentImplTest {
         assertEquals(expResult, result);
     }
 
-    @Test
-    public void testGetComponentClass() {
-        assertEquals(PrimaryKeyFactoryComponent.class, instance.getComponentClass());
-    }
 
     @Test
     public void testImmutability() {

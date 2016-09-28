@@ -30,12 +30,7 @@ import com.speedment.common.injector.annotation.InjectKey;
  */
 @Api(version = "3.0")
 @InjectKey(EntityManager.class)
-public interface EntityManager extends Component {
-
-    @Override
-    default Class<EntityManager> getComponentClass() {
-        return EntityManager.class;
-    }
+public interface EntityManager  {
 
     // Persistence
     /**

@@ -34,7 +34,6 @@ import com.speedment.generator.translator.StandardTranslatorKey;
 import com.speedment.plugins.enums.internal.ui.CommaSeparatedStringEditor;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.internal.component.AbstractComponent;
 import com.speedment.runtime.internal.license.AbstractSoftware;
 import static com.speedment.runtime.license.OpenSourceLicense.APACHE_2;
 import com.speedment.runtime.license.Software;
@@ -55,7 +54,7 @@ import com.speedment.tool.internal.component.PropertyEditorComponentImpl;
  * @since 1.0.0
  */
 @InjectKey(EnumGeneratorComponent.class)
-public final class EnumGeneratorComponent extends AbstractComponent {
+public final class EnumGeneratorComponent {
 
     public static InjectBundle include() {
         return InjectBundle.of(
@@ -78,18 +77,4 @@ public final class EnumGeneratorComponent extends AbstractComponent {
         
     }
 
-    @Override
-    public Class<EnumGeneratorComponent> getComponentClass() {
-        return EnumGeneratorComponent.class;
-    }
-
-    @Override
-    public Software asSoftware() {
-        return AbstractSoftware.with(
-            "Enum Generator",
-            "1.0.0",
-            "Generate enum implementations for columns marked as ENUM in the database.",
-            APACHE_2
-        );
-    }
 }

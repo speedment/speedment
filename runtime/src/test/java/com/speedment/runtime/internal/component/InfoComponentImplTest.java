@@ -47,7 +47,7 @@ public class InfoComponentImplTest {
 
     @Before
     public void setUp() {
-        speedment = ApplicationBuilder.empty().with(InfoComponentImpl.class).build();
+        speedment = ApplicationBuilder.empty().withComponent(InfoComponentImpl.class).build();
         instance = speedment.getOrThrow(InfoComponent.class);
     }
 

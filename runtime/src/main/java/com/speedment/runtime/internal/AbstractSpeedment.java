@@ -22,7 +22,6 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.component.ProjectComponent;
-import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.component.ConnectionPoolComponentImpl;
 import com.speedment.runtime.internal.component.DbmsHandlerComponentImpl;
@@ -64,7 +63,6 @@ public abstract class AbstractSpeedment implements Speedment {
         );
     }
     
-    private @Inject ProjectComponent projectComponent;
     private @Inject ManagerComponent managerComponent;
     private @Inject Injector injector;
     
@@ -90,11 +88,6 @@ public abstract class AbstractSpeedment implements Speedment {
     @Override
     public <ENTITY> Manager<ENTITY> managerOf(Class<ENTITY> entityType) {
         return managerComponent.managerOf(entityType);
-    }
-
-    @Override
-    public Project project() {
-        return projectComponent.getProject();
     }
 
     @Override

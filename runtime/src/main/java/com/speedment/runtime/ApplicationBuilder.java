@@ -19,7 +19,6 @@ package com.speedment.runtime;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.internal.DefaultApplicationBuilder;
@@ -275,17 +274,7 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      */
     BUILDER withConnectionUrl(String dbmsName, String connectionUrl);
 
-    /**
-     * Adds a (and replaces any existing) {@link Component} to the Speedment
-     * runtime platform.
-     *
-     * @param <C> the component implementation type
-     *
-     * @param componentClass the component implementation type
-     * @return this instance
-     */
-    <C extends Component> BUILDER with(Class<C> componentClass);
-
+    
     /**
      * Sets that the initial database check shall be skipped upon build().
      *
@@ -321,21 +310,21 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
     <M extends Manager<?>> BUILDER withManager(Class<M> managerImplType);
 
     /**
-     * Adds a custom injectable implementation class.
+     * Adds a custom component implementation class.
      *
-     * @param injectableClass the implementation class
+     * @param componentClass the implementation class
      * @return this instance
      */
-    BUILDER withInjectable(Class<?> injectableClass);
+    BUILDER withComponent(Class<?> componentClass);
 
     /**
-     * Adds a custom injectable implementation class.
+     * Adds a custom component implementation class.
      *
      * @param key the key to store it under
-     * @param injectableClass the implementation class
+     * @param componentClass the implementation class
      * @return this instance
      */
-    BUILDER withInjectable(String key, Class<?> injectableClass);
+    BUILDER withComponent(String key, Class<?> componentClass);
 
     /**
      * Adds a custom bundle of injectable implementation classes.

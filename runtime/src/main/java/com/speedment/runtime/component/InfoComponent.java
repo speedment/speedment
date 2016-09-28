@@ -29,7 +29,7 @@ import com.speedment.common.injector.annotation.InjectKey;
  */
 @Api(version = "3.0")
 @InjectKey(InfoComponent.class)
-public interface InfoComponent extends Component {
+public interface InfoComponent  {
 
     /**
      * Returns the vendor of Speedment.
@@ -82,8 +82,4 @@ public interface InfoComponent extends Component {
      */
     boolean isProductionMode();
 
-    @Override
-    public default Class<InfoComponent> getComponentClass() {
-        return InfoComponent.class;
-    }
 }

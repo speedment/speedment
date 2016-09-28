@@ -75,7 +75,7 @@ import java.util.function.Supplier;
  * @author Simon Jonasson
  * @since 3.0.0
  */
-public final class PropertyEditorComponentImpl extends InternalOpenSourceComponent implements PropertyEditorComponent{
+public final class PropertyEditorComponentImpl extends InternalOpenSourceComponent implements PropertyEditorComponent {
     
     private final Map<Class<?>, Map<String, Supplier<PropertyEditor<?>>>> factoryMap; // Ordered based on insert
     private @Inject Injector injector;
@@ -126,10 +126,6 @@ public final class PropertyEditorComponentImpl extends InternalOpenSourceCompone
             .flatMap(factory -> factory.fieldsFor(document));                   // Stream<PropertyEditor.Item>
     }
 
-    @Override
-    public Class<PropertyEditorComponent> getComponentClass() {
-        return PropertyEditorComponent.class;
-    }
 
     @Override
     protected String getDescription() {

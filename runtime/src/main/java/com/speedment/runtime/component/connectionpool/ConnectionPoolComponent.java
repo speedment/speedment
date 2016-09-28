@@ -17,7 +17,6 @@
 package com.speedment.runtime.component.connectionpool;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.runtime.component.Component;
 import com.speedment.runtime.config.Dbms;
 
 import java.sql.Connection;
@@ -27,37 +26,32 @@ import com.speedment.common.injector.annotation.InjectKey;
  * This Component interface is used for holding the connection pool that is
  * being used by Speedment.
  *
- * @author  pemi
- * @since   2.1.0
+ * @author pemi
+ * @since 2.1.0
  */
 @Api(version = "3.0")
 @InjectKey(ConnectionPoolComponent.class)
-public interface ConnectionPoolComponent extends Component {
-
-    @Override
-    default Class<ConnectionPoolComponent> getComponentClass() {
-        return ConnectionPoolComponent.class;
-    }
+public interface ConnectionPoolComponent {
 
     /**
      * Returns a {link PoolableConnection} from this connection pool. If a
      * connection is not present in the connection pool, a new one will be
      * created.
      *
-     * @param uri       the connection URI for the connector
-     * @param username  the user for the connector
-     * @param password  the password for the connector
-     * @return          a {@link PoolableConnection} from this connection pool
+     * @param uri the connection URI for the connector
+     * @param username the user for the connector
+     * @param password the password for the connector
+     * @return a {@link PoolableConnection} from this connection pool
      */
     PoolableConnection getConnection(String uri, String username, char[] password);
-    
+
     /**
      * Returns a {link PoolableConnection} from this connection pool. If a
      * connection is not present in the connection pool, a new one will be
      * created.
      *
-     * @param dbms  the dbms to connect to
-     * @return      a {@link PoolableConnection} from this connection pool
+     * @param dbms the dbms to connect to
+     * @return a {@link PoolableConnection} from this connection pool
      */
     PoolableConnection getConnection(Dbms dbms);
 
@@ -66,23 +60,23 @@ public interface ConnectionPoolComponent extends Component {
      * This method is called whenever the pool needs to allocate a new
      * Connection.
      *
-     * @param uri       the connection URI for the connector
-     * @param username  the user for the connector
-     * @param password  the password for the connector
-     * @return          a new {@link Connection} for the given parameters
+     * @param uri the connection URI for the connector
+     * @param username the user for the connector
+     * @param password the password for the connector
+     * @return a new {@link Connection} for the given parameters
      */
     Connection newConnection(String uri, String username, char[] password);
-    
+
     /**
      * Creates and returns a new {@link Connection} for the given parameters.
      * This method is called whenever the pool needs to allocate a new
      * Connection.
      *
-     * @param dbms  the dbms to connect to
-     * @return      a new {@link Connection} for the given parameters
+     * @param dbms the dbms to connect to
+     * @return a new {@link Connection} for the given parameters
      */
     Connection newConnection(Dbms dbms);
-    
+
     /**
      * Returns a {@link PoolableConnection} to the pool. If the
      * PoolableConnection has expired or has a closed underlying connection, it

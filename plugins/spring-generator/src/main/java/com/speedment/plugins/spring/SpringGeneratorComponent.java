@@ -27,11 +27,6 @@ import com.speedment.plugins.spring.internal.GeneratedControllerTranslator;
 import com.speedment.plugins.spring.internal.SpringTranslatorKey;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.internal.component.AbstractComponent;
-import com.speedment.runtime.internal.license.AbstractSoftware;
-import com.speedment.runtime.license.Software;
-
-import static com.speedment.runtime.license.OpenSourceLicense.APACHE_2;
 
 /**
  * Plugs into the Speedment platform, generating Spring annotated classes as
@@ -48,7 +43,7 @@ import static com.speedment.runtime.license.OpenSourceLicense.APACHE_2;
  * @author Emil Forslund
  * @since  1.0.0
  */
-public final class SpringGeneratorComponent extends AbstractComponent {
+public final class SpringGeneratorComponent {
 
     @ExecuteBefore(RESOLVED)
     void onResolve(@WithState(RESOLVED) CodeGenerationComponent code) {
@@ -73,13 +68,4 @@ public final class SpringGeneratorComponent extends AbstractComponent {
         );
     }
 
-    @Override
-    public Class<SpringGeneratorComponent> getComponentClass() {
-        return SpringGeneratorComponent.class;
-    }
-
-    @Override
-    public Software asSoftware() {
-        return AbstractSoftware.with("Spring Generator", "1.0.0", APACHE_2);
-    }
 }

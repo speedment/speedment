@@ -32,7 +32,7 @@ import com.speedment.common.injector.annotation.InjectKey;
  */
 @Api(version = "3.0")
 @InjectKey(DbmsHandlerComponent.class)
-public interface DbmsHandlerComponent extends Component {
+public interface DbmsHandlerComponent  {
 
     /**
      * Installs a new {@link DbmsType} so that handlers can be located using the
