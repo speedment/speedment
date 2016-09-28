@@ -16,10 +16,12 @@
  */
 package com.speedment.common.injector.internal;
 
+import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.internal.dependency.DependencyGraph;
@@ -59,11 +61,9 @@ import static com.speedment.common.injector.internal.util.ReflectionUtil.travers
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Collections.unmodifiableSet;
-import static java.util.stream.Collectors.toSet;
-import com.speedment.common.injector.InjectBundle;
-import com.speedment.common.injector.annotation.InjectKey;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * The default implementation of the {@link Injector} interface.
@@ -121,57 +121,56 @@ public final class InjectorImpl implements Injector {
 
             hasAnythingChanged.set(false);
 
-            unfinished.stream()
-                .forEach(n -> {
+            unfinished.forEach(n -> {
 
-                    // Check if all its dependencies have been satisfied.
-                    // TODO: Dependencies should be resolved in the opposite order when stopping.
-                    if (n.canBe(State.STOPPED)) {
+                // Check if all its dependencies have been satisfied.
+                // TODO: Dependencies should be resolved in the opposite order when stopping.
+                if (n.canBe(State.STOPPED)) {
 
-                        printLine();
+                    printLine();
 
-                        // Retreive the instance for that node
-                        final Object instance = findIn(n.getRepresentedType(), true);
+                    // Retreive the instance for that node
+                    final Object instance = findIn(n.getRepresentedType(), true);
 
-                        // Execute all the executions for the next step.
-                        n.getExecutions().stream()
-                            .filter(e -> e.getState() == State.STOPPED)
-                            .map(Execution::getMethod)
-                            .forEach(m -> {
-                                final Object[] params = Stream.of(m.getParameters())
-                                    .map(p -> findIn(p.getType(), p.getAnnotation(WithState.class) != null))
-                                    .toArray(Object[]::new);
+                    // Execute all the executions for the next step.
+                    n.getExecutions().stream()
+                        .filter(e -> e.getState() == State.STOPPED)
+                        .map(Execution::getMethod)
+                        .forEach(m -> {
+                            final Object[] params = Stream.of(m.getParameters())
+                                .map(p -> findIn(p.getType(), p.getAnnotation(WithState.class) != null))
+                                .toArray(Object[]::new);
 
-                                m.setAccessible(true);
+                            m.setAccessible(true);
 
-                                final String shortMethodName
-                                    = n.getRepresentedType().getSimpleName() + "#"
-                                    + m.getName() + "("
-                                    + Stream.of(m.getParameters())
-                                    .map(p -> p.getType().getSimpleName().substring(0, 1))
-                                    .collect(joining(", ")) + ")";
+                            final String shortMethodName
+                                = n.getRepresentedType().getSimpleName() + "#"
+                                + m.getName() + "("
+                                + Stream.of(m.getParameters())
+                                .map(p -> p.getType().getSimpleName().substring(0, 1))
+                                .collect(joining(", ")) + ")";
 
-                                LOGGER.debug(String.format("| -> %-76s |", shortMethodName));
+                            LOGGER.debug(String.format("| -> %-76s |", shortMethodName));
 
-                                try {
-                                    m.invoke(instance, params);
-                                } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                            try {
+                                m.invoke(instance, params);
+                            } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 
-                                    throw new RuntimeException(ex);
-                                }
-                            });
+                                throw new RuntimeException(ex);
+                            }
+                        });
 
-                        // Update its state to the new state.
-                        n.setState(State.STOPPED);
-                        hasAnythingChanged.set(true);
+                    // Update its state to the new state.
+                    n.setState(State.STOPPED);
+                    hasAnythingChanged.set(true);
 
-                        LOGGER.debug(String.format(
-                            "| %-66s %12s |",
-                            n.getRepresentedType().getSimpleName(),
-                            State.STOPPED.name()
-                        ));
-                    }
-                });
+                    LOGGER.debug(String.format(
+                        "| %-66s %12s |",
+                        n.getRepresentedType().getSimpleName(),
+                        State.STOPPED.name()
+                    ));
+                }
+            });
 
             if (!hasAnythingChanged.get()) {
                 throw new IllegalStateException(
@@ -447,62 +446,61 @@ public final class InjectorImpl implements Injector {
 
                     hasAnythingChanged.set(false);
 
-                    unfinished.stream()
-                        .forEach(n -> {
-                            // Determine the next state of this node.
-                            final State state = STATES[n.getCurrentState().ordinal() + 1];
+                    unfinished.forEach(n -> {
+                        // Determine the next state of this node.
+                        final State state = STATES[n.getCurrentState().ordinal() + 1];
 
-                            // Check if all its dependencies have been satisfied.
-                            if (n.canBe(state)) {
+                        // Check if all its dependencies have been satisfied.
+                        if (n.canBe(state)) {
 
-                                printLine();
+                            printLine();
 
-                                // Retreive the instance for that node
-                                final Object instance = findIn(injector, n.getRepresentedType(), instances, true);
+                            // Retreive the instance for that node
+                            final Object instance = findIn(injector, n.getRepresentedType(), instances, true);
 
-                                // Execute all the executions for the next step.
-                                n.getExecutions().stream()
-                                    .filter(e -> e.getState() == state)
-                                    .map(Execution::getMethod)
-                                    .forEach(m -> {
-                                        final Object[] params = Stream.of(m.getParameters())
-                                            .map(p -> findIn(injector, p.getType(), instances, p.getAnnotation(WithState.class) != null))
-                                            .toArray(Object[]::new);
+                            // Execute all the executions for the next step.
+                            n.getExecutions().stream()
+                                .filter(e -> e.getState() == state)
+                                .map(Execution::getMethod)
+                                .forEach(m -> {
+                                    final Object[] params = Stream.of(m.getParameters())
+                                        .map(p -> findIn(injector, p.getType(), instances, p.getAnnotation(WithState.class) != null))
+                                        .toArray(Object[]::new);
 
-                                        m.setAccessible(true);
+                                    m.setAccessible(true);
 
-                                        // We might want to log exactly which steps we have 
-                                        // completed.
-                                        if (LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                                            final String shortMethodName
-                                                = n.getRepresentedType().getSimpleName() + "#"
-                                                + m.getName() + "("
-                                                + Stream.of(m.getParameters())
-                                                .map(p -> p.getType().getSimpleName().substring(0, 1))
-                                                .collect(joining(", ")) + ")";
+                                    // We might want to log exactly which steps we have
+                                    // completed.
+                                    if (LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
+                                        final String shortMethodName
+                                            = n.getRepresentedType().getSimpleName() + "#"
+                                            + m.getName() + "("
+                                            + Stream.of(m.getParameters())
+                                            .map(p -> p.getType().getSimpleName().substring(0, 1))
+                                            .collect(joining(", ")) + ")";
 
-                                            LOGGER.debug(String.format("| -> %-76s |", limit(shortMethodName, 76)));
-                                        }
+                                        LOGGER.debug(String.format("| -> %-76s |", limit(shortMethodName, 76)));
+                                    }
 
-                                        try {
-                                            m.invoke(instance, params);
-                                        } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                                    try {
+                                        m.invoke(instance, params);
+                                    } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
 
-                                            throw new RuntimeException(ex);
-                                        }
-                                    });
+                                        throw new RuntimeException(ex);
+                                    }
+                                });
 
-                                // Update its state to the new state.
-                                n.setState(state);
-                                hasAnythingChanged.set(true);
+                            // Update its state to the new state.
+                            n.setState(state);
+                            hasAnythingChanged.set(true);
 
-                                LOGGER.debug(String.format(
-                                    "| %-66s %12s |",
-                                    limit(n.getRepresentedType().getSimpleName(), 66),
-                                    limit(state.name(), 12)
-                                ));
-                            }
-                        });
+                            LOGGER.debug(String.format(
+                                "| %-66s %12s |",
+                                limit(n.getRepresentedType().getSimpleName(), 66),
+                                limit(state.name(), 12)
+                            ));
+                        }
+                    });
 
                     // The set was not empty when we entered the 'while' clause, and
                     // yet nothing has changed. This means that we are stuck in an

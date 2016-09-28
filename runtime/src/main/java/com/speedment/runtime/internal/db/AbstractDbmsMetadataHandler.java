@@ -34,6 +34,7 @@ import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mutator.ForeignKeyColumnMutator;
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.config.parameter.OrderType;
@@ -54,6 +55,7 @@ import com.speedment.runtime.util.ProgressMeasure;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -67,20 +69,17 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.INITIALIZED;
-import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.config.mapper.primitive.PrimitiveTypeMapper;
 import static com.speedment.runtime.internal.db.AbstractDbmsOperationHandler.SHOW_METADATA;
 import static com.speedment.runtime.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
-import java.sql.PreparedStatement;
-import static java.util.Objects.nonNull;
-import static java.util.stream.Collectors.toList;
-import java.util.stream.Stream;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -142,19 +141,17 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     public String getDbmsInfoString(Dbms dbms) throws SQLException {
         try (final Connection conn = getConnection(dbms)) {
             final DatabaseMetaData md = conn.getMetaData();
-            return new StringBuilder()
-                .append(md.getDatabaseProductName())
-                .append(", ")
-                .append(md.getDatabaseProductVersion())
-                .append(", ")
-                .append(md.getDriverName())
-                .append(" ")
-                .append(md.getDriverVersion())
-                .append(", JDBC version ")
-                .append(md.getJDBCMajorVersion())
-                .append(".")
-                .append(md.getJDBCMinorVersion())
-                .toString();
+            return md.getDatabaseProductName() +
+                ", " +
+                md.getDatabaseProductVersion() +
+                ", " +
+                md.getDriverName() +
+                " " +
+                md.getDriverVersion() +
+                ", JDBC version " +
+                md.getJDBCMajorVersion() +
+                "." +
+                md.getJDBCMinorVersion();
         }
     }        
 
@@ -577,8 +574,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                     final ResultSetMetaData rsmd = rsChild.getMetaData();
                     final int numberOfColumns = rsmd.getColumnCount();
                     for (int x = 1; x <= numberOfColumns; x++) {
-                        final Object val;
-                        val = rsChild.getObject(x);
+                        final Object val = rsChild.getObject(x);
                         LOGGER.info(x + ":" + rsmd.getColumnName(x) + ":'" + val + "'");
                     }
                 }
@@ -751,13 +747,11 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     }
 
     private <P extends HasName, D extends Document & HasName & HasMainInterface & HasParent<P>> String actionName(D doc) {
-        return new StringBuilder()
-            .append(doc.mainInterface().getSimpleName())
-            .append(" ")
-            .append(doc.getName())
-            .append(" in ")
-            .append(doc.getParentOrThrow().getName())
-            .toString();
+        return doc.mainInterface().getSimpleName() +
+            " " +
+            doc.getName() +
+            " in " +
+            doc.getParentOrThrow().getName();
     }
     
     /**

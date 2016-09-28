@@ -20,6 +20,7 @@ import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.File;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.runtime.config.Table;
+
 import java.lang.reflect.Type;
 
 /**

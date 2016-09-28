@@ -20,6 +20,7 @@ import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasReferenceValue;
 import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
+
 import java.util.function.Predicate;
 
 /**

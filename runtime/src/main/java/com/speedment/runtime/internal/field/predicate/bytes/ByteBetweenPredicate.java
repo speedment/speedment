@@ -22,7 +22,9 @@ import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasByteValue;
 import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.internal.field.predicate.BetweenPredicate;
+
 import javax.annotation.Generated;
+
 import static java.util.Objects.requireNonNull;
 
 /**

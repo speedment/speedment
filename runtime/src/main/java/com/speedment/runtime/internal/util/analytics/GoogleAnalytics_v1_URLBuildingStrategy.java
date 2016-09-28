@@ -17,6 +17,7 @@
 package com.speedment.runtime.internal.util.analytics;
 
 import com.speedment.runtime.component.InfoComponent;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Date;
@@ -51,23 +52,22 @@ public final class GoogleAnalytics_v1_URLBuildingStrategy implements URLBuilding
         final int randomValue = RANDOM.nextInt(2147483647) - 1;
         final long now = new Date().getTime();
 
-        StringBuilder url = new StringBuilder(TRACKING_URL_PREFIX);
-        url.append("?utmwv=1"); //Urchin/Analytics version
-        url.append("&utmn=").append(RANDOM.nextInt());
-        url.append("&utmcs=UTF-8"); //document encoding
-        url.append("&utmsr=1440x900"); //screen resolution
-        url.append("&utmsc=32-bit"); //color depth
-        url.append("&utmul=en-us"); //user language
-        url.append("&utmje=1"); //java enabled
-        url.append("&utmfl=9.0%20%20r28"); //flash
-        url.append("&utmcr=1"); //carriage return
-        url.append("&utmdt=").append(focusPoint.getEventName()); //The optimum keyword density //document title
-        url.append("&utmhn=").append(HOST_NAME);//document hostname
-        url.append("&utmr=").append(refererURL); //referer URL
-        url.append("&utmp=").append(focusPoint.getContentURI(infoComponent));//document page URL
-        url.append("&utmac=").append(googleAnalyticsTrackingCode);//Google Analytics account
-        url.append("&utmcc=__utma%3D'").append(cookie).append(".").append(randomValue).append(".").append(now).append(".").append(now).append(".").append(now).append(".2%3B%2B__utmb%3D").append(cookie).append("%3B%2B__utmc%3D").append(cookie).append("%3B%2B__utmz%3D").append(cookie).append(".").append(now).append(".2.2.utmccn%3D(direct)%7Cutmcsr%3D(direct)%7Cutmcmd%3D(none)%3B%2B__utmv%3D").append(cookie);
-        return url.toString();
+        String url = TRACKING_URL_PREFIX + "?utmwv=1" + //Urchin/Analytics version
+            "&utmn=" + RANDOM.nextInt() +
+            "&utmcs=UTF-8" + //document encoding
+            "&utmsr=1440x900" + //screen resolution
+            "&utmsc=32-bit" + //color depth
+            "&utmul=en-us" + //user language
+            "&utmje=1" + //java enabled
+            "&utmfl=9.0%20%20r28" + //flash
+            "&utmcr=1" + //carriage return
+            "&utmdt=" + focusPoint.getEventName() + //The optimum keyword density //document title
+            "&utmhn=" + HOST_NAME +//document hostname
+            "&utmr=" + refererURL + //referer URL
+            "&utmp=" + focusPoint.getContentURI(infoComponent) +//document page URL
+            "&utmac=" + googleAnalyticsTrackingCode +//Google Analytics account
+            "&utmcc=__utma%3D'" + cookie + "." + randomValue + "." + now + "." + now + "." + now + ".2%3B%2B__utmb%3D" + cookie + "%3B%2B__utmc%3D" + cookie + "%3B%2B__utmz%3D" + cookie + "." + now + ".2.2.utmccn%3D(direct)%7Cutmcsr%3D(direct)%7Cutmcmd%3D(none)%3B%2B__utmv%3D" + cookie;
+        return url;
     }
 
     @Override

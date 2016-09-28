@@ -21,6 +21,7 @@ import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.field.trait.HasFinder;
 import com.speedment.runtime.manager.Manager;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -44,10 +45,10 @@ abstract class AbstractFindFrom<
     private final TARGET target;
     private final Manager<FK_ENTITY> manager;
 
-    protected AbstractFindFrom(
-            SOURCE source, 
-            TARGET target, 
-            Manager<FK_ENTITY> manager) {
+    AbstractFindFrom(
+        SOURCE source,
+        TARGET target,
+        Manager<FK_ENTITY> manager) {
         
         this.source  = requireNonNull(source);
         this.target  = requireNonNull(target);

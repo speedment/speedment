@@ -25,6 +25,8 @@ import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.db.AsynchronousQueryResult;
 import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.field.predicate.FieldPredicateView;
 import com.speedment.runtime.field.predicate.SqlPredicateFragment;
 import com.speedment.runtime.internal.stream.builder.pipeline.DoublePipeline;
 import com.speedment.runtime.internal.stream.builder.pipeline.IntPipeline;
@@ -32,6 +34,8 @@ import com.speedment.runtime.internal.stream.builder.pipeline.LongPipeline;
 import com.speedment.runtime.internal.stream.builder.pipeline.ReferencePipeline;
 import com.speedment.runtime.internal.stream.builder.streamterminator.StreamTerminator;
 import com.speedment.runtime.internal.stream.builder.streamterminator.StreamTerminatorUtil;
+import com.speedment.runtime.internal.util.document.DocumentDbUtil;
+import com.speedment.runtime.manager.JdbcManagerSupport;
 import com.speedment.runtime.stream.Pipeline;
 import com.speedment.runtime.stream.StreamDecorator;
 import com.speedment.runtime.stream.action.Action;
@@ -43,14 +47,10 @@ import java.util.function.Predicate;
 
 import static com.speedment.runtime.stream.action.Property.SIZE;
 import static com.speedment.runtime.stream.action.Verb.PRESERVE;
-import static java.util.stream.Collectors.toList;
-import com.speedment.runtime.field.predicate.FieldPredicate;
-import com.speedment.runtime.field.predicate.FieldPredicateView;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
-import com.speedment.runtime.manager.JdbcManagerSupport;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 /**
  *

@@ -22,12 +22,10 @@ import com.speedment.runtime.config.ForeignKeyColumn;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.config.ForeignKeyColumnImpl;
 
-
 import java.util.Map;
 import java.util.Optional;
 
 import static com.speedment.runtime.internal.util.document.DocumentUtil.toStringHelper;
-import static com.speedment.runtime.util.NullUtil.requireKeys;
 import static com.speedment.runtime.util.NullUtil.requireKeys;
 
 /**

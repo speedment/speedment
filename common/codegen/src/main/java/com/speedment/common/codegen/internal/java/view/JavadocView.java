@@ -20,23 +20,22 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.internal.java.view.trait.HasJavadocTagsView;
 import com.speedment.common.codegen.internal.util.Formatting;
-import static com.speedment.common.codegen.internal.util.Formatting.dnl;
 import com.speedment.common.codegen.model.Javadoc;
-import java.util.Optional;
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
-import static com.speedment.common.codegen.internal.util.Formatting.repeat;
-import static com.speedment.common.codegen.internal.util.Formatting.tab;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.common.codegen.model.JavadocTag;
 import com.speedment.common.codegen.model.trait.HasJavadoc;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
+
+import static com.speedment.common.codegen.internal.util.Formatting.*;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import static java.util.stream.Collectors.joining;
 
 /**
  * Transforms from a {@link Javadoc} to java code.

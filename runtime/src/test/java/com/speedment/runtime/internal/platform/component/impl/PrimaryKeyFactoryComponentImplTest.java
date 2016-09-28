@@ -21,7 +21,6 @@
  */
 package com.speedment.runtime.internal.platform.component.impl;
 
-import com.speedment.runtime.component.PrimaryKeyFactoryComponent;
 import com.speedment.runtime.internal.component.PrimaryKeyFactoryComponentImpl;
 import org.junit.Before;
 import org.junit.Test;

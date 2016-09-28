@@ -23,6 +23,7 @@ import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.internal.AbstractApplicationBuilder;
 import com.speedment.runtime.internal.AbstractSpeedment;
+
 import java.lang.reflect.Type;
 
 /**

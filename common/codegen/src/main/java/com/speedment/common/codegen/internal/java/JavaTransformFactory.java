@@ -67,6 +67,7 @@ import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.JavadocTag;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.modifier.Modifier;
+
 import java.lang.reflect.Type;
 
 /**

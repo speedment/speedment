@@ -17,7 +17,6 @@
 package com.speedment.common.codegen.internal.util;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
@@ -28,7 +27,6 @@ import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNull
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
 
 /**
  *

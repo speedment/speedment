@@ -17,35 +17,35 @@
 package com.speedment.generator.internal.translator.entity;
 
 import com.speedment.common.codegen.constant.DefaultAnnotationUsage;
+import com.speedment.common.codegen.constant.DefaultType;
+import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.component.TypeMapperComponent;
+import com.speedment.generator.internal.util.EntityTranslatorSupport;
+import com.speedment.generator.internal.util.FkHolder;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
+import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.config.Table;
+import com.speedment.runtime.manager.Manager;
+import com.speedment.runtime.util.OptionalUtil;
 
+import java.lang.reflect.Type;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
-import com.speedment.common.codegen.constant.DefaultType;
-import com.speedment.runtime.util.OptionalUtil;
-import java.util.Optional;
-import com.speedment.common.codegen.constant.SimpleParameterizedType;
-import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.generator.component.TypeMapperComponent;
+import static com.speedment.common.codegen.internal.util.Formatting.block;
 import static com.speedment.generator.internal.translator.entity.GeneratedEntityTranslator.getterReturnType;
 import static com.speedment.generator.internal.util.ColumnUtil.optionalGetterName;
 import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
-import com.speedment.generator.internal.util.EntityTranslatorSupport;
-import com.speedment.generator.internal.util.FkHolder;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.runtime.manager.Manager;
-import java.lang.reflect.Type;
-import static com.speedment.common.codegen.internal.util.Formatting.block;
 import static java.util.Objects.requireNonNull;
 
 /**

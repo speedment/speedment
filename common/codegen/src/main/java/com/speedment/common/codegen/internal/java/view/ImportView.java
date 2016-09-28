@@ -21,13 +21,13 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.Import;
 
+import java.lang.reflect.Type;
 import java.util.Optional;
 
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.Formatting.packageName;
 import static com.speedment.common.codegen.internal.util.Formatting.stripGenerics;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-import java.lang.reflect.Type;
 
 /**
  * Transforms from an {@link Import} to java code.

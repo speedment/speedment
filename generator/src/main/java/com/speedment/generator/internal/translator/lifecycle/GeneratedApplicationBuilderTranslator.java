@@ -16,6 +16,8 @@
  */
 package com.speedment.generator.internal.translator.lifecycle;
 
+import com.speedment.common.codegen.constant.SimpleParameterizedType;
+import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.internal.model.JavadocImpl;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
@@ -24,13 +26,18 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.generator.translator.TranslatorSupport;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
+import com.speedment.generator.translator.TranslatorSupport;
+import com.speedment.internal.common.mapstream.MapStream;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.runtime.internal.AbstractApplicationBuilder;
 
+import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -39,24 +46,13 @@ import java.util.stream.Collectors;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
-import com.speedment.common.codegen.constant.SimpleParameterizedType;
-import com.speedment.common.codegen.constant.SimpleType;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import static com.speedment.generator.internal.translator.lifecycle.GeneratedMetadataTranslator.METADATA;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.internal.common.mapstream.MapStream;
-import com.speedment.runtime.internal.AbstractApplicationBuilder;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
-import java.lang.reflect.Type;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
 
 /**
  *

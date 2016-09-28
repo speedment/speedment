@@ -16,11 +16,11 @@
  */
 package com.speedment.common.codegen.model;
 
-import com.speedment.common.codegen.internal.model.GenericImpl;
 import com.speedment.common.codegen.constant.DefaultType;
+import com.speedment.common.codegen.internal.model.GenericImpl;
 import com.speedment.common.codegen.model.trait.HasCopy;
-import java.lang.reflect.Type;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,9 +40,9 @@ public interface Generic extends HasCopy<Generic> {
      * it means that the lower bound is an ancestor of the upper bound. Both
      * bound types also accept identical types.
      */
-    public static enum BoundType {
+    enum BoundType {
         EXTENDS, SUPER
-    };
+    }
 
     /**
      * Sets the lower bound of this generic.

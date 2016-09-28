@@ -17,7 +17,9 @@
 package com.speedment.runtime.internal.field.comparator;
 
 import com.speedment.runtime.field.trait.HasReferenceValue;
+
 import java.util.Comparator;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -77,7 +79,7 @@ public final class ReferenceFieldComparatorImpl<ENTITY, D, V extends Comparable<
     }
 
     private enum Parameter {
-        FIRST, SECOND;
+        FIRST, SECOND
     }
 
     private int forNull(Parameter parameter) {

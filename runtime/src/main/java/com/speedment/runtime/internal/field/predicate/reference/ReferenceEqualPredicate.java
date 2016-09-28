@@ -17,11 +17,12 @@
 package com.speedment.runtime.internal.field.predicate.reference;
 
 import com.speedment.common.tuple.Tuple1;
+import com.speedment.runtime.field.trait.HasReferenceValue;
 import com.speedment.runtime.internal.field.predicate.AbstractFieldPredicate;
 
-import static com.speedment.runtime.field.predicate.PredicateType.EQUAL;
-import com.speedment.runtime.field.trait.HasReferenceValue;
 import java.util.Objects;
+
+import static com.speedment.runtime.field.predicate.PredicateType.EQUAL;
 
 /**
  *

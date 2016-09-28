@@ -16,17 +16,17 @@
  */
 package com.speedment.runtime.internal.manager.sql;
 
-import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.field.predicate.FieldPredicateView;
+import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.predicate.SqlPredicateFragment;
+import com.speedment.runtime.manager.ManagerSupport;
 
 import java.util.Collection;
 import java.util.Set;
 
 import static com.speedment.runtime.internal.field.predicate.PredicateUtil.*;
-import com.speedment.runtime.field.predicate.FieldPredicateView;
-import com.speedment.runtime.manager.ManagerSupport;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 

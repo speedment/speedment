@@ -19,8 +19,9 @@ package com.speedment.plugins.enums.internal.ui;
 import com.speedment.plugins.enums.StringToEnumTypeMapper;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.property.PropertyEditor;
-import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
+
+import java.util.stream.Stream;
 
 /**
  * Editor for generating a comma-separated string.

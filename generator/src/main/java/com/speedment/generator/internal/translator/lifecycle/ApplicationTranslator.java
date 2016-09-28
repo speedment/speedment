@@ -22,6 +22,7 @@ import com.speedment.common.codegen.model.Interface;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.config.Project;
+
 import java.lang.reflect.Type;
 
 /**

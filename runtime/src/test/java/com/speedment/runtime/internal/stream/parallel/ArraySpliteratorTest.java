@@ -21,7 +21,6 @@
  */
 package com.speedment.runtime.internal.stream.parallel;
 
-import com.speedment.runtime.internal.stream.parallel.ArraySpliterator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

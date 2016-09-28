@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.internal.stream.builder.streamterminator;
 
+import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.internal.field.predicate.AbstractCombinedPredicate;
 import com.speedment.runtime.internal.stream.builder.action.reference.FilterAction;
 import com.speedment.runtime.internal.util.Cast;
@@ -27,9 +28,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import static java.util.stream.Collectors.toList;
-import com.speedment.runtime.field.predicate.FieldPredicate;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  *

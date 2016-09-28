@@ -20,6 +20,7 @@ import com.speedment.common.codegen.internal.util.Formatting;
 import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.trait.HasClasses;
+
 import java.util.Optional;
 
 /**
@@ -39,19 +40,15 @@ final class SimpleTypeUtil {
      * @return       the full name of the class
      */
     public static String nameOf(File file, ClassOrInterface<?> clazz) {
-        final StringBuilder name = new StringBuilder(
-            Formatting.fileToClassName(file.getName())
-                .flatMap(Formatting::packageName)
-                .orElseThrow(
+        String name = Formatting.fileToClassName(file.getName())
+            .flatMap(Formatting::packageName)
+            .orElseThrow(
                 () -> new RuntimeException(
                     "File did not have appropriate name."
                 )
-            )
-        );
-        
-        name.append(".").append(pathTo(file, clazz.getName()));
-        
-        return name.toString();
+            ) + "." + pathTo(file, clazz.getName());
+
+        return name;
     }
     
     private static String pathTo(HasClasses<?> parent, String needle) {
