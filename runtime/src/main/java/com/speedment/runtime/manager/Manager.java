@@ -16,35 +16,34 @@
  */
 package com.speedment.runtime.manager;
 
-
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.Field;
 import java.util.stream.Stream;
 
 /**
- * A Manager is responsible for abstracting away an Entity's data source. Entity
- * sources can be RDBMSes, files or other data sources.
+ * A Manager is responsible for abstracting away an Entity's data source CRUD
+ * operations. Entity sources can be RDBMSes, files or other data sources.
  *
  * A Manager must be thread safe and be able to handle several reading and
  * writing threads at the same time.
  *
- * @param <ENTITY>  entity type for this Manager
- * 
- * @author  Per Minborg
- * @author  Emil Forslund
- * @since   2.0.0
+ * @param <ENTITY> entity type for this Manager
+ *
+ * @author Per Minborg
+ * @author Emil Forslund
+ * @since 2.0.0
  */
-
 public interface Manager<ENTITY> {
-    
+
     /**
      * Creates an returns a new entity. The new entity will have all its fields
-     * initialized to (@code null}.
+     * initialized to its default Java type value (e.g. (@code null},
+     * {@code false} or 0).
      *
      * @return a new entity
      */
     ENTITY newEmptyEntity();
-    
+
     /**
      * Creates an returns a new entity. The new entity will have all its fields
      * initialized to the values of the provided source entity.
@@ -53,45 +52,46 @@ public interface Manager<ENTITY> {
      * @return a new entity
      */
     ENTITY newCopyOf(ENTITY source);
-    
+
     /**
-     * Returns the name of the dbms that this {@code manager} handles entities 
+     * Returns the name of the dbms that this {@code manager} handles entities
      * for.
-     * 
-     * @return  the dbms database name
+     *
+     * @return the dbms database name
      */
     String getDbmsName();
-    
+
     /**
-     * Returns the name of the schema that this {@code manager} handles entities 
+     * Returns the name of the schema that this {@code manager} handles entities
      * for.
-     * 
-     * @return  the schema database name
+     *
+     * @return the schema database name
      */
     String getSchemaName();
-    
+
     /**
-     * Returns the name of the table that this {@code manager} handles entities 
+     * Returns the name of the table that this {@code manager} handles entities
      * for.
-     * 
-     * @return  the table database name
+     *
+     * @return the table database name
      */
     String getTableName();
-    
+
     /**
      * Returns the entity class for this Manager.
      *
      * @return the entity class
      */
     Class<ENTITY> getEntityClass();
-    
+
     /**
-     * Returns a stream of the fields that every entity in this contains.
+     * Returns a stream of the fields that every entity in this {@code Manager}
+     * contains.
      *
-     * @return a stream fo all fields
+     * @return a stream of all fields
      */
     Stream<Field<ENTITY>> fields();
-    
+
     /**
      * Returns a stream of the fields that are included in the primary key of
      * the table represented by this {@code Manager}.
@@ -99,7 +99,7 @@ public interface Manager<ENTITY> {
      * @return the primary key fields
      */
     Stream<Field<ENTITY>> primaryKeyFields();
-    
+
     /**
      * Creates and returns a new {@link Stream} over all entities in the
      * underlying database. This is the main query API for Speedment.
@@ -191,7 +191,7 @@ public interface Manager<ENTITY> {
      * @see Stream
      */
     Stream<ENTITY> stream();
-    
+
     /**
      * Persists the provided entity to the underlying database and returns a
      * potentially updated entity. If the persistence fails for any reason, an
@@ -213,7 +213,7 @@ public interface Manager<ENTITY> {
      * @throws SpeedmentException if the underlying database throws an exception
      * (e.g. SQLException)
      */
-    ENTITY persist(ENTITY entity) throws SpeedmentException;                    // Delegates to a helper class
+    ENTITY persist(ENTITY entity) throws SpeedmentException;
 
     /**
      * Updates the provided entity in the underlying database and returns a
@@ -238,7 +238,7 @@ public interface Manager<ENTITY> {
      * @throws SpeedmentException if the underlying database throws an exception
      * (e.g. SQLException)
      */
-    ENTITY update(ENTITY entity) throws SpeedmentException;                     // Delegates to a helper class
+    ENTITY update(ENTITY entity) throws SpeedmentException;
 
     /**
      * Removes the provided entity from the underlying database and returns the
