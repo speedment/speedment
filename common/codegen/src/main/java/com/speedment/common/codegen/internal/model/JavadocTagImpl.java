@@ -250,10 +250,7 @@ abstract class JavadocTagBase implements JavadocTag {
         if (!Objects.equals(this.value, other.value)) {
             return false;
         }
-        if (!Objects.equals(this.text, other.text)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.text, other.text);
     }
 
 }

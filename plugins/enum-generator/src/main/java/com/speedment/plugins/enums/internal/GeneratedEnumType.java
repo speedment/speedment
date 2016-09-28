@@ -18,8 +18,9 @@ package com.speedment.plugins.enums.internal;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import static java.util.Collections.unmodifiableList;
 import java.util.List;
+
+import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
 
 /**

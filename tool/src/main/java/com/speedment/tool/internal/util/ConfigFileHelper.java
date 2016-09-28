@@ -16,12 +16,12 @@
  */
 package com.speedment.tool.internal.util;
 
-import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
+import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.ProjectComponent;
@@ -31,10 +31,10 @@ import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.db.DbmsMetadataHandler;
 import com.speedment.runtime.exception.SpeedmentException;
+import com.speedment.runtime.internal.DefaultApplicationBuilder;
 import com.speedment.runtime.internal.config.DbmsImpl;
 import com.speedment.runtime.internal.config.immutable.ImmutableProject;
-import com.speedment.runtime.internal.DefaultApplicationBuilder;
-import static com.speedment.runtime.internal.DefaultApplicationMetadata.METADATA_LOCATION;
+import com.speedment.runtime.internal.util.ProgressMeasurerImpl;
 import com.speedment.runtime.internal.util.Settings;
 import com.speedment.runtime.internal.util.document.DocumentTranscoder;
 import com.speedment.runtime.util.ProgressMeasure;
@@ -44,6 +44,9 @@ import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.component.UserInterfaceComponent.ReuseStage;
 import com.speedment.tool.config.DbmsProperty;
+import com.speedment.tool.config.ProjectProperty;
+import com.speedment.tool.util.OutputUtil;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -54,21 +57,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 
-import com.speedment.runtime.internal.util.ProgressMeasurerImpl;
-import com.speedment.tool.config.ProjectProperty;
-import com.speedment.tool.util.OutputUtil;
+import static com.speedment.runtime.internal.DefaultApplicationMetadata.METADATA_LOCATION;
+import static com.speedment.runtime.internal.util.TextUtil.alignRight;
 import static com.speedment.tool.util.OutputUtil.error;
 import static com.speedment.tool.util.OutputUtil.success;
-import java.util.Set;
 import static java.util.stream.Collectors.toSet;
 import static javafx.application.Platform.runLater;
-import static com.speedment.runtime.internal.util.TextUtil.alignRight;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 
 /**
  *

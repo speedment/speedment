@@ -29,9 +29,9 @@ import com.speedment.common.codegen.model.trait.HasMethods;
 import com.speedment.common.codegen.model.trait.HasSupertype;
 import com.speedment.common.codegen.model.trait.HasThrows;
 import com.speedment.common.codegen.model.trait.HasType;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;

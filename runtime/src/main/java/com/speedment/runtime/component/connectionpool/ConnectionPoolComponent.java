@@ -16,11 +16,11 @@
  */
 package com.speedment.runtime.component.connectionpool;
 
+import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Dbms;
 
 import java.sql.Connection;
-import com.speedment.common.injector.annotation.InjectKey;
 
 /**
  * This Component interface is used for holding the connection pool that is

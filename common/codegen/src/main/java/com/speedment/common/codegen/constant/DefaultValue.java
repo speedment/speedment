@@ -44,7 +44,7 @@ public final class DefaultValue {
      * @param text  the inner text
      * @return      a value representing that string
      */
-    public static final Value<String> string(String text) {
+    public static Value<String> string(String text) {
 		return new TextValue(requireNonNull(text));
 	}
 }

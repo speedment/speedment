@@ -18,11 +18,12 @@ package com.speedment.generator.internal.component;
 
 import com.speedment.common.codegen.internal.java.JavaGenerator;
 import com.speedment.common.codegen.model.ClassOrInterface;
-import com.speedment.generator.translator.JavaClassTranslator;
-import com.speedment.generator.translator.Translator;
-import com.speedment.generator.translator.TranslatorConstructor;
-import com.speedment.generator.translator.TranslatorDecorator;
+import com.speedment.common.injector.InjectBundle;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.component.CodeGenerationComponent;
+import com.speedment.generator.internal.namer.JavaLanguageNamerImpl;
 import com.speedment.generator.internal.translator.TranslatorManagerImpl;
 import com.speedment.generator.internal.translator.entity.EntityImplTranslator;
 import com.speedment.generator.internal.translator.entity.EntityTranslator;
@@ -39,7 +40,11 @@ import com.speedment.generator.internal.translator.manager.GeneratedManagerImplT
 import com.speedment.generator.internal.translator.manager.GeneratedManagerTranslator;
 import com.speedment.generator.internal.translator.manager.ManagerImplTranslator;
 import com.speedment.generator.internal.translator.manager.ManagerTranslator;
-import com.speedment.generator.internal.namer.JavaLanguageNamerImpl;
+import com.speedment.generator.translator.JavaClassTranslator;
+import com.speedment.generator.translator.Translator;
+import com.speedment.generator.translator.TranslatorConstructor;
+import com.speedment.generator.translator.TranslatorDecorator;
+import com.speedment.internal.common.mapstream.MapStream;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasMainInterface;
@@ -54,13 +59,8 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import static com.speedment.generator.translator.StandardTranslatorKey.*;
-import com.speedment.common.injector.InjectBundle;
-import com.speedment.common.injector.Injector;
 import static com.speedment.common.injector.State.RESOLVED;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.internal.common.mapstream.MapStream;
+import static com.speedment.generator.translator.StandardTranslatorKey.*;
 import static java.util.Objects.requireNonNull;
 
 public final class CodeGenerationComponentImpl implements CodeGenerationComponent {

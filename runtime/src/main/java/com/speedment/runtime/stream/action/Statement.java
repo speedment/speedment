@@ -64,10 +64,7 @@ public final class Statement {
         if (this.getVerb() != other.getVerb()) {
             return false;
         }
-        if (this.getProperty() != other.getProperty()) {
-            return false;
-        }
-        return true;
+        return this.getProperty() == other.getProperty();
     }
 
     public Verb getVerb() {

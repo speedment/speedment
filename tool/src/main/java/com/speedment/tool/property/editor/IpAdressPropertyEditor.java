@@ -17,11 +17,12 @@
 package com.speedment.tool.property.editor;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.tool.property.item.DefaultTextFieldItem;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.property.PropertyEditor;
-import java.util.stream.Stream;
+import com.speedment.tool.property.item.DefaultTextFieldItem;
 import javafx.beans.property.SimpleStringProperty;
+
+import java.util.stream.Stream;
 
 /**
  *

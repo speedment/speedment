@@ -18,6 +18,7 @@ package com.speedment.plugins.json.internal;
 
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
+
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 

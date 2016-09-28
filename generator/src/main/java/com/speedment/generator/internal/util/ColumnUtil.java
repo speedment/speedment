@@ -19,9 +19,11 @@ package com.speedment.generator.internal.util;
 import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.trait.HasNullable;
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
+
 import java.lang.reflect.Type;
 import java.util.Optional;
+
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  *

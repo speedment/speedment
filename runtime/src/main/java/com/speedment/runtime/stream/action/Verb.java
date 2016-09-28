@@ -25,5 +25,5 @@ import com.speedment.runtime.annotation.Api;
  */
 @Api(version = "3.0")
 public enum Verb {
-    SET, CLEAR, PRESERVE;
+    SET, CLEAR, PRESERVE
 }

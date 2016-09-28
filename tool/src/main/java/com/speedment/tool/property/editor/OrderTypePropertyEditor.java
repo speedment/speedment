@@ -22,9 +22,10 @@ import com.speedment.tool.config.trait.HasOrderTypeProperty;
 import com.speedment.tool.property.PropertyEditor;
 import com.speedment.tool.property.item.ChoiceBoxItem;
 import com.speedment.tool.property.item.ItemUtil;
-import java.util.stream.Stream;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.util.stream.Stream;
 
 /**
  *

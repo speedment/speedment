@@ -17,16 +17,15 @@
 package com.speedment.common.codegen.internal.model;
 
 import com.speedment.common.codegen.constant.SimpleType;
-import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.Generic;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
-import java.lang.reflect.Type;
 import static java.util.Arrays.asList;
 
 /**
@@ -191,10 +190,7 @@ public final class GenericImpl implements Generic {
         if (!Objects.equals(this.upperBounds, other.upperBounds)) {
             return false;
         }
-        if (this.type != other.type) {
-            return false;
-        }
-        return true;
+        return this.type == other.type;
     }
 
 

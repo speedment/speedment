@@ -16,14 +16,14 @@
  */
 package com.speedment.runtime.internal.field;
 
+import com.speedment.runtime.field.method.ReferenceGetter;
+import com.speedment.runtime.field.method.ReferenceSetter;
 import org.junit.Test;
 
 import java.util.List;
 
 import static com.speedment.runtime.internal.field.Entity.NAME;
 import static org.junit.Assert.assertEquals;
-import com.speedment.runtime.field.method.ReferenceGetter;
-import com.speedment.runtime.field.method.ReferenceSetter;
 
 /**
  *

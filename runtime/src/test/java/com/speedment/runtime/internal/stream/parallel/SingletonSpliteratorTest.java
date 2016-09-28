@@ -21,7 +21,6 @@
  */
 package com.speedment.runtime.internal.stream.parallel;
 
-import com.speedment.runtime.internal.stream.parallel.SingletonSpliterator;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -29,7 +28,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -71,7 +70,7 @@ public class SingletonSpliteratorTest extends BaseSpliteratorTest {
     @Test
     public void testForEachRemaining() {
         printTestName();
-        final List<Integer> expected = Arrays.asList(VALUE);
+        final List<Integer> expected = Collections.singletonList(VALUE);
         final List<Integer> list = new ArrayList<>();
         instance.forEachRemaining(list::add);
         assertEquals(expected, list);

@@ -17,11 +17,13 @@
 package com.speedment.runtime.internal.field.streamer;
 
 import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.field.trait.HasFinder;
 import com.speedment.runtime.manager.Manager;
+
 import java.util.stream.Stream;
-import com.speedment.runtime.field.method.BackwardFinder;
+
 import static java.util.Objects.requireNonNull;
 
 /**

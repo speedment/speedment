@@ -161,10 +161,7 @@ public final class FileImpl implements File {
         if (!Objects.equals(this.imports, other.imports)) {
             return false;
         }
-        if (!Objects.equals(this.classes, other.classes)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.classes, other.classes);
     }
 
 }

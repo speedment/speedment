@@ -16,10 +16,10 @@
  */
 package com.speedment.runtime.component;
 
+import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
 
 import java.util.List;
-import com.speedment.common.injector.annotation.InjectKey;
 
 /**
  * The PrimaryKeyFactoryComponent is responsible for generating primary keys. By

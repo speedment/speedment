@@ -45,7 +45,7 @@ public abstract class AbstractLoggerFactory implements LoggerFactory {
     private final Set<LoggerEventListener> listeners;
     private LoggerFormatter formatter;
 
-    protected AbstractLoggerFactory() {
+    AbstractLoggerFactory() {
         loggers = new ConcurrentHashMap<>();
         formatter = StandardFormatters.PLAIN_FORMATTER;
         listeners = Collections.newSetFromMap(new ConcurrentHashMap<>());

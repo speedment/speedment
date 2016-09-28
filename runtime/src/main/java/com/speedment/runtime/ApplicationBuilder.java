@@ -332,13 +332,13 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * @param bundleClass to use when adding injectables
      * @return this instance
      */
-    public BUILDER withBundle(Class<? extends InjectBundle> bundleClass);
+    BUILDER withBundle(Class<? extends InjectBundle> bundleClass);
 
     enum LogType {
-        STREAM, PERSIST, UPDATE, REMOVE, APPLICATION_BUILDER;
+        STREAM, PERSIST, UPDATE, REMOVE, APPLICATION_BUILDER
     }
 
-    public BUILDER withLoggingOf(LogType logType);
+    BUILDER withLoggingOf(LogType logType);
 
     /**
      * Builds this application.
@@ -354,7 +354,7 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * @return a new empty ApplicationBuilder
      */
     @SuppressWarnings("unchecked")
-    public static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER empty() {
+    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER empty() {
         return (BUILDER) new DefaultApplicationBuilder(EmptyApplicationMetadata.class);
     }
 
@@ -366,7 +366,7 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * @return a new standard ApplicationBuilder
      */
     @SuppressWarnings("unchecked")
-    public static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER standard() {
+    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER standard() {
         return (BUILDER) new DefaultApplicationBuilder(DefaultApplicationMetadata.class);
     }
 
@@ -381,7 +381,7 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * ApplicationMetadata class
      */
     @SuppressWarnings("unchecked")
-    public static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER create(Class<? extends ApplicationMetadata> applicationMetadataclass) {
+    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER create(Class<? extends ApplicationMetadata> applicationMetadataclass) {
         return (BUILDER) new DefaultApplicationBuilder(applicationMetadataclass);
     }
 

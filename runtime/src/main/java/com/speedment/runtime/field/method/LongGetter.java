@@ -17,8 +17,9 @@
 package com.speedment.runtime.field.method;
 
 import com.speedment.runtime.annotation.Api;
-import java.util.function.ToLongFunction;
+
 import javax.annotation.Generated;
+import java.util.function.ToLongFunction;
 
 /**
  * A short-cut functional reference to the {@code getXXX(value)} method for a

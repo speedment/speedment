@@ -16,6 +16,10 @@
  */
 package com.speedment.common.lazy;
 
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -24,13 +28,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.IntStream;
+
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
-import java.util.stream.IntStream;
 import static org.junit.Assert.assertEquals;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
 
 /**
  * @author pemi

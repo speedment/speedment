@@ -31,6 +31,7 @@ import org.junit.rules.TestName;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -100,7 +101,7 @@ public class StreamCompositionTest {
         Optional<String> result = StreamComposition.concatAndAutoClose(a, b, c).findFirst();
         assertEquals(Optional.of("A"), result);
 
-        assertEquals(Arrays.asList("A"), producedItems);
+        assertEquals(Collections.singletonList("A"), producedItems);
         assertAllClosed();
     }
 
@@ -166,7 +167,7 @@ public class StreamCompositionTest {
                 .boxed()
                 .collect(toList());
 
-        assertEquals(Arrays.asList(1), result);
+        assertEquals(Collections.singletonList(1), result);
         assertTrue(fClosed.get());
     }
 

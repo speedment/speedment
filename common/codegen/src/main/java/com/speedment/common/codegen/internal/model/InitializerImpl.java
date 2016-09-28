@@ -111,10 +111,7 @@ public final class InitializerImpl implements Initializer {
         if (!Objects.equals(this.code, other.code)) {
             return false;
         }
-        if (!Objects.equals(this.modifiers, other.modifiers)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.modifiers, other.modifiers);
     }
 
 

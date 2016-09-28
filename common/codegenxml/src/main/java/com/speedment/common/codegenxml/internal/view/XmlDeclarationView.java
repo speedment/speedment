@@ -32,11 +32,9 @@ public class XmlDeclarationView implements Transform<XmlDeclaration, String>,
 
     @Override
     public Optional<String> transform(Generator gen, XmlDeclaration model) {
-        return Optional.of(new StringBuilder()
-            .append("<?xml")
-            .append(transformAttributes(gen, model))
-            .append("?>")
-            .toString()
+        return Optional.of("<?xml" +
+            transformAttributes(gen, model) +
+            "?>"
         );
     }
 }

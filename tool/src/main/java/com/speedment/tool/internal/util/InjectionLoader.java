@@ -16,6 +16,11 @@
  */
 package com.speedment.tool.internal.util;
 
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.InjectKey;
+import com.speedment.internal.common.mapstream.MapStream;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.brand.Brand;
@@ -27,10 +32,12 @@ import com.speedment.tool.internal.controller.MailPromptController;
 import com.speedment.tool.internal.controller.MenubarController;
 import com.speedment.tool.internal.controller.NotificationAreaController;
 import com.speedment.tool.internal.controller.OutputController;
+import com.speedment.tool.internal.controller.ProjectProblemController;
 import com.speedment.tool.internal.controller.ProjectTreeController;
 import com.speedment.tool.internal.controller.SceneController;
 import com.speedment.tool.internal.controller.ToolbarController;
 import com.speedment.tool.internal.controller.WorkspaceController;
+import com.speedment.tool.util.BrandUtil;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -45,17 +52,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
-
-import com.speedment.common.injector.Injector;
 import static com.speedment.common.injector.State.INITIALIZED;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.internal.common.mapstream.MapStream;
-import com.speedment.tool.internal.controller.ProjectProblemController;
-import com.speedment.tool.util.BrandUtil;
-import static javafx.stage.Modality.APPLICATION_MODAL;
 import static java.util.Objects.requireNonNull;
+import static javafx.stage.Modality.APPLICATION_MODAL;
 
 /**
  *

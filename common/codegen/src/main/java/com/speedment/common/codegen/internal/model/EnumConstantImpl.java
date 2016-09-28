@@ -119,10 +119,7 @@ public final class EnumConstantImpl implements EnumConstant {
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
-        if (!Objects.equals(this.values, other.values)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.values, other.values);
     }
 
 

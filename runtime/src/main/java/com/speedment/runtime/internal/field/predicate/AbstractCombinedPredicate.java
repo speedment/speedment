@@ -178,11 +178,10 @@ public abstract class AbstractCombinedPredicate<ENTITY> extends AbstractPredicat
 
     @Override
     public String toString() {
-        return new StringBuilder("{type=")
-            .append(type.name())
-            .append(", predicates=")
-            .append(predicates.toString())
-            .append("}")
-            .toString();
+        return "{type=" +
+            type.name() +
+            ", predicates=" +
+            predicates.toString() +
+            "}";
     }
 }

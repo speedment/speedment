@@ -18,6 +18,7 @@ package com.speedment.runtime.field;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.trait.HasFinder;
+
 import javax.annotation.Generated;
 
 /**

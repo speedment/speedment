@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.component;
 
+import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.parameter.DbmsType;
 
 import java.util.Optional;
 import java.util.stream.Stream;
-import com.speedment.common.injector.annotation.InjectKey;
 
 /**
  * This class holds the various {@link DbmsType DbmsTypes} 

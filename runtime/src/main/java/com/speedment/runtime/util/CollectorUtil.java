@@ -170,11 +170,10 @@ public final class CollectorUtil {
         }
 
         public GroupHolder<C, T> merge(GroupHolder<C, T> holder) {
-            holder.elements.entrySet().stream()
-                    .forEach(e
-                            -> elements.computeIfAbsent(e.getKey(), createList)
-                            .addAll(e.getValue())
-                    );
+            holder.elements.entrySet().forEach(e
+                -> elements.computeIfAbsent(e.getKey(), createList)
+                .addAll(e.getValue())
+            );
 
             return this;
         }

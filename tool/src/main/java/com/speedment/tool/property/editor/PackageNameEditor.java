@@ -22,6 +22,7 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.config.trait.HasPackageNameProperty;
 import com.speedment.tool.property.PropertyEditor;
 import com.speedment.tool.property.item.DefaultTextFieldItem;
+
 import java.util.stream.Stream;
 
 /**

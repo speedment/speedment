@@ -23,8 +23,8 @@ import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.modifier.Modifier;
-import java.lang.reflect.Type;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -252,10 +252,7 @@ public final class MethodImpl implements Method {
         if (!Objects.equals(this.modifiers, other.modifiers)) {
             return false;
         }
-        if (!Objects.equals(this.exceptions, other.exceptions)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.exceptions, other.exceptions);
     }
 
 }

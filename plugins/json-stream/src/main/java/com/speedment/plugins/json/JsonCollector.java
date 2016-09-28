@@ -17,6 +17,7 @@
 package com.speedment.plugins.json;
 
 import com.speedment.plugins.json.internal.JsonCollectorImpl;
+
 import java.util.List;
 import java.util.stream.Collector;
 

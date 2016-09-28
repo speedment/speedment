@@ -23,6 +23,7 @@ import com.speedment.runtime.field.method.LongGetter;
 import com.speedment.runtime.field.method.LongSetter;
 import com.speedment.runtime.field.method.SetToLong;
 import com.speedment.runtime.internal.field.setter.SetToLongImpl;
+
 import javax.annotation.Generated;
 
 /**

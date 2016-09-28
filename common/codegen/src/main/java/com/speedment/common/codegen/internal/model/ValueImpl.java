@@ -86,10 +86,7 @@ public abstract class ValueImpl<V> implements Value<V> {
             return false;
         }
         final ValueImpl<?> other = (ValueImpl<?>) obj;
-        if (!Objects.equals(this.value, other.value)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.value, other.value);
     }
 
 

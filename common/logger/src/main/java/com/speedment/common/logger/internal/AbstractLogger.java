@@ -30,7 +30,6 @@ import com.speedment.common.logger.LoggerFormatter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collections;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
@@ -39,16 +38,16 @@ import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author pemi
+ * @author  Per Minborg
  */
-public abstract class AbstractLogger implements Logger {
+abstract class AbstractLogger implements Logger {
 
     private final String name;
     private Level level;
     private LoggerFormatter formatter;
     private final Set<LoggerEventListener> listeners;
 
-    protected AbstractLogger(final String name, final LoggerFormatter formatter) {
+    AbstractLogger(final String name, final LoggerFormatter formatter) {
         this.name = requireNonNull(name);
         this.level = Level.defaultLevel();
         this.formatter = requireNonNull(formatter);
@@ -56,61 +55,6 @@ public abstract class AbstractLogger implements Logger {
     }
 
     protected abstract void output(String message);
-
-    @Override
-    public void log(Level level, Optional<Throwable> throwable, String message) {
-        log(level, throwable, () -> message);
-    }
-
-    @Override
-    public void log(Level level, Optional<Throwable> throwable, String message, Object arg) {
-        log(level, throwable, () -> String.format(message, arg));
-    }
-
-    @Override
-    public void log(Level level, Optional<Throwable> throwable, String message, Object arg1, Object arg2) {
-        log(level, throwable, () -> String.format(message, arg1, arg2));
-    }
-
-    @Override
-    public void log(Level level, Optional<Throwable> throwable, String message, Object arg1, Object arg2, Object arg3) {
-        log(level, throwable, () -> String.format(message, arg1, arg2, arg3));
-    }
-
-    @Override
-    public void log(Level level, Optional<Throwable> throwable, String message, Object arg1, Object arg2, Object arg3, Object... args) {
-        log(level, throwable, () -> {
-            final Object[] params = new Object[args.length + 3];
-            params[0] = arg1;
-            params[1] = arg2;
-            params[2] = arg3;
-            System.arraycopy(args, 0, params, 3, args.length);
-            return String.format(message, params);
-        });
-    }
-
-    protected void log(Level msgLevel, Optional<Throwable> throwable, Supplier<String> supplier) {
-        if (msgLevel.isEqualOrHigherThan(this.level)) {
-            final String logMsg = supplier.get();
-            final String outputMessage = fixMessage(msgLevel, logMsg, throwable);
-            output(outputMessage);
-            if (!listeners.isEmpty()) {
-                final LoggerEvent loggerEvent = new LoggerEventImpl(msgLevel, name, outputMessage);
-                listeners.stream().forEach(l -> l.accept(loggerEvent));
-            }
-        }
-    }
-
-    protected String fixMessage(Level level, String msg, Optional<Throwable> throwable) {
-        final StringBuilder sb = new StringBuilder(formatter.apply(level, name, msg));
-        throwable.ifPresent(t -> {
-            final StringWriter writer = new StringWriter();
-            final PrintWriter pipe = new PrintWriter(writer);
-            t.printStackTrace(pipe);
-            sb.append("\n").append(writer.toString());
-        });
-        return sb.toString();
-    }
 
     @Override
     public Level getLevel() {
@@ -148,4 +92,387 @@ public abstract class AbstractLogger implements Logger {
         listeners.remove(listener);
     }
 
+    @Override
+    public void trace(String message) {
+        log(Level.TRACE, NO_THROWABLE, message);
+    }
+
+    @Override
+    public void trace(Throwable throwable) {
+        log(Level.TRACE, throwable, (throwable == NO_THROWABLE) ? NO_EXCEPTION_TEXT : throwable.getMessage());
+    }
+
+    @Override
+    public void trace(String format, Object arg) {
+        log(Level.TRACE, NO_THROWABLE, format, arg);
+    }
+
+    @Override
+    public void trace(String format, Object arg1, Object arg2) {
+        log(Level.TRACE, NO_THROWABLE, format, arg1, arg2);
+    }
+
+    @Override
+    public void trace(String format, Object arg1, Object arg2, Object arg3) {
+        log(Level.TRACE, NO_THROWABLE, format, arg1, arg2, arg3);
+    }
+
+    @Override
+    public void trace(String format, Object arg1, Object arg2, Object arg3, Object... args) {
+        log(Level.TRACE, NO_THROWABLE, format, arg1, arg2, arg3, args);
+    }
+
+    @Override
+    public void trace(Throwable throwable, String message) {
+        log(Level.TRACE, throwable, message);
+    }
+
+    @Override
+    public void trace(Throwable throwable, String format, Object arg) {
+        log(Level.TRACE, throwable, format, arg);
+    }
+
+    @Override
+    public void trace(Throwable throwable, String format, Object arg1, Object arg2) {
+        log(Level.TRACE, throwable, format, arg1, arg2);
+    }
+
+    @Override
+    public void trace(Throwable throwable, String format, Object arg1, Object arg2, Object arg3) {
+        log(Level.TRACE, throwable, format, arg1, arg2, arg3);
+    }
+
+    @Override
+    public void trace(Throwable throwable, String format, Object arg1, Object arg2, Object arg3, Object... args) {
+        log(Level.TRACE, throwable, format, arg1, arg2, arg3, args);
+    }
+
+    @Override
+    public void debug(String message) {
+        log(Level.DEBUG, NO_THROWABLE, message);
+    }
+
+    @Override
+    public void debug(Throwable throwable) {
+        log(Level.DEBUG, throwable, (throwable == NO_THROWABLE) ? NO_EXCEPTION_TEXT : throwable.getMessage());
+    }
+
+    @Override
+    public void debug(String format, Object arg) {
+        log(Level.DEBUG, NO_THROWABLE, format, arg);
+    }
+
+    @Override
+    public void debug(String format, Object arg1, Object arg2) {
+        log(Level.DEBUG, NO_THROWABLE, format, arg1, arg2);
+    }
+
+    @Override
+    public void debug(String format, Object arg1, Object arg2, Object arg3) {
+        log(Level.DEBUG, NO_THROWABLE, format, arg1, arg2, arg3);
+    }
+
+    @Override
+    public void debug(String format, Object arg1, Object arg2, Object arg3, Object... args) {
+        log(Level.DEBUG, NO_THROWABLE, format, arg1, arg2, arg3, args);
+    }
+
+    @Override
+    public void debug(Throwable throwable, String message) {
+        log(Level.DEBUG, throwable, message);
+    }
+
+    @Override
+    public void debug(Throwable throwable, String format, Object arg) {
+        log(Level.DEBUG, throwable, format, arg);
+    }
+
+    @Override
+    public void debug(Throwable throwable, String format, Object arg1, Object arg2) {
+        log(Level.DEBUG, throwable, format, arg1, arg2);
+    }
+
+    @Override
+    public void debug(Throwable throwable, String format, Object arg1, Object arg2, Object arg3) {
+        log(Level.DEBUG, throwable, format, arg1, arg2, arg3);
+    }
+
+    @Override
+    public void debug(Throwable throwable, String format, Object arg1, Object arg2, Object arg3, Object... args) {
+        log(Level.DEBUG, throwable, format, arg1, arg2, arg3, args);
+    }
+
+    @Override
+    public void info(String message) {
+        log(Level.INFO, NO_THROWABLE, message);
+    }
+
+    @Override
+    public void info(Throwable throwable) {
+        log(Level.INFO, throwable, (throwable == NO_THROWABLE) ? NO_EXCEPTION_TEXT : throwable.getMessage());
+    }
+
+    @Override
+    public void info(String format, Object arg) {
+        log(Level.INFO, NO_THROWABLE, format, arg);
+    }
+
+    @Override
+    public void info(String format, Object arg1, Object arg2) {
+        log(Level.INFO, NO_THROWABLE, format, arg1, arg2);
+    }
+
+    @Override
+    public void info(String format, Object arg1, Object arg2, Object arg3) {
+        log(Level.INFO, NO_THROWABLE, format, arg1, arg2, arg3);
+    }
+
+    @Override
+    public void info(String format, Object arg1, Object arg2, Object arg3, Object... args) {
+        log(Level.INFO, NO_THROWABLE, format, arg1, arg2, arg3, args);
+    }
+
+    @Override
+    public void info(Throwable throwable, String message) {
+        log(Level.INFO, throwable, message);
+    }
+
+    @Override
+    public void info(Throwable throwable, String format, Object arg) {
+        log(Level.INFO, throwable, format, arg);
+    }
+
+    @Override
+    public void info(Throwable throwable, String format, Object arg1, Object arg2) {
+        log(Level.INFO, throwable, format, arg1, arg2);
+    }
+
+    @Override
+    public void info(Throwable throwable, String format, Object arg1, Object arg2, Object arg3) {
+        log(Level.INFO, throwable, format, arg1, arg2, arg3);
+    }
+
+    @Override
+    public void info(Throwable throwable, String format, Object arg1, Object arg2, Object arg3, Object... args) {
+        log(Level.INFO, throwable, format, arg1, arg2, arg3, args);
+    }
+
+    @Override
+    public void warn(String message) {
+        log(Level.WARN, NO_THROWABLE, message);
+    }
+
+    @Override
+    public void warn(Throwable throwable) {
+        log(Level.WARN, throwable, (throwable == NO_THROWABLE) ? NO_EXCEPTION_TEXT : throwable.getMessage());
+    }
+
+    @Override
+    public void warn(String format, Object arg) {
+        log(Level.WARN, NO_THROWABLE, format, arg);
+    }
+
+    @Override
+    public void warn(String format, Object arg1, Object arg2) {
+        log(Level.WARN, NO_THROWABLE, format, arg1, arg2);
+    }
+
+    @Override
+    public void warn(String format, Object arg1, Object arg2, Object arg3) {
+        log(Level.WARN, NO_THROWABLE, format, arg1, arg2, arg3);
+    }
+
+    @Override
+    public void warn(String format, Object arg1, Object arg2, Object arg3, Object... args) {
+        log(Level.WARN, NO_THROWABLE, format, arg1, arg2, arg3, args);
+    }
+
+    @Override
+    public void warn(Throwable throwable, String message) {
+        log(Level.WARN, throwable, message);
+    }
+
+    @Override
+    public void warn(Throwable throwable, String format, Object arg) {
+        log(Level.WARN, throwable, format, arg);
+    }
+
+    @Override
+    public void warn(Throwable throwable, String format, Object arg1, Object arg2) {
+        log(Level.WARN, throwable, format, arg1, arg2);
+    }
+
+    @Override
+    public void warn(Throwable throwable, String format, Object arg1, Object arg2, Object arg3) {
+        log(Level.WARN, throwable, format, arg1, arg2, arg3);
+    }
+
+    @Override
+    public void warn(Throwable throwable, String format, Object arg1, Object arg2, Object arg3, Object... args) {
+        log(Level.WARN, throwable, format, arg1, arg2, arg3, args);
+    }
+
+    @Override
+    public void error(String message) {
+        log(Level.ERROR, NO_THROWABLE, message);
+    }
+
+    @Override
+    public void error(Throwable throwable) {
+        log(Level.ERROR, throwable, (throwable == NO_THROWABLE) ? NO_EXCEPTION_TEXT : throwable.getMessage());
+    }
+
+    @Override
+    public void error(String format, Object arg) {
+        log(Level.ERROR, NO_THROWABLE, format, arg);
+    }
+
+    @Override
+    public void error(String format, Object arg1, Object arg2) {
+        log(Level.ERROR, NO_THROWABLE, format, arg1, arg2);
+    }
+
+    @Override
+    public void error(String format, Object arg1, Object arg2, Object arg3) {
+        log(Level.ERROR, NO_THROWABLE, format, arg1, arg2, arg3);
+    }
+
+    @Override
+    public void error(String format, Object arg1, Object arg2, Object arg3, Object... args) {
+        log(Level.ERROR, NO_THROWABLE, format, arg1, arg2, arg3, args);
+    }
+
+    @Override
+    public void error(Throwable throwable, String message) {
+        log(Level.ERROR, throwable, message);
+    }
+
+    @Override
+    public void error(Throwable throwable, String format, Object arg) {
+        log(Level.ERROR, throwable, format, arg);
+    }
+
+    @Override
+    public void error(Throwable throwable, String format, Object arg1, Object arg2) {
+        log(Level.ERROR, throwable, format, arg1, arg2);
+    }
+
+    @Override
+    public void error(Throwable throwable, String format, Object arg1, Object arg2, Object arg3) {
+        log(Level.ERROR, throwable, format, arg1, arg2, arg3);
+    }
+
+    @Override
+    public void error(Throwable throwable, String format, Object arg1, Object arg2, Object arg3, Object... args) {
+        log(Level.ERROR, throwable, format, arg1, arg2, arg3, args);
+    }
+
+    @Override
+    public void fatal(String message) {
+        log(Level.FATAL, NO_THROWABLE, message);
+    }
+
+    @Override
+    public void fatal(Throwable throwable) {
+        log(Level.FATAL, throwable, (throwable == NO_THROWABLE) ? NO_EXCEPTION_TEXT : throwable.getMessage());
+    }
+
+    @Override
+    public void fatal(String format, Object arg) {
+        log(Level.FATAL, NO_THROWABLE, format, arg);
+    }
+
+    @Override
+    public void fatal(String format, Object arg1, Object arg2) {
+        log(Level.FATAL, NO_THROWABLE, format, arg1, arg2);
+    }
+
+    @Override
+    public void fatal(String format, Object arg1, Object arg2, Object arg3) {
+        log(Level.FATAL, NO_THROWABLE, format, arg1, arg2, arg3);
+    }
+
+    @Override
+    public void fatal(String format, Object arg1, Object arg2, Object arg3, Object... args) {
+        log(Level.FATAL, NO_THROWABLE, format, arg1, arg2, arg3, args);
+    }
+
+    @Override
+    public void fatal(Throwable throwable, String message) {
+        log(Level.FATAL, throwable, message);
+    }
+
+    @Override
+    public void fatal(Throwable throwable, String format, Object arg1, Object arg2) {
+        log(Level.FATAL, throwable, format, arg1, arg2);
+    }
+
+    @Override
+    public void fatal(Throwable throwable, String format, Object arg) {
+        log(Level.FATAL, throwable, format, arg);
+    }
+
+    @Override
+    public void fatal(Throwable throwable, String format, Object arg1, Object arg2, Object arg3) {
+        log(Level.FATAL, throwable, format, arg1, arg2, arg3);
+    }
+
+    @Override
+    public void fatal(Throwable throwable, String format, Object arg1, Object arg2, Object arg3, Object... args) {
+        log(Level.FATAL, throwable, format, arg1, arg2, arg3, args);
+    }
+
+    protected void log(Level level, Throwable throwable, String message) {
+        log(level, throwable, () -> message);
+    }
+
+    protected void log(Level level, Throwable throwable, String message, Object arg) {
+        log(level, throwable, () -> String.format(message, arg));
+    }
+
+    protected void log(Level level, Throwable throwable, String message, Object arg1, Object arg2) {
+        log(level, throwable, () -> String.format(message, arg1, arg2));
+    }
+
+    protected void log(Level level, Throwable throwable, String message, Object arg1, Object arg2, Object arg3) {
+        log(level, throwable, () -> String.format(message, arg1, arg2, arg3));
+    }
+
+    protected void log(Level level, Throwable throwable, String message, Object arg1, Object arg2, Object arg3, Object... args) {
+        log(level, throwable, () -> {
+            final Object[] params = new Object[args.length + 3];
+            params[0] = arg1;
+            params[1] = arg2;
+            params[2] = arg3;
+            System.arraycopy(args, 0, params, 3, args.length);
+            return String.format(message, params);
+        });
+    }
+
+    protected void log(Level msgLevel, Throwable throwable, Supplier<String> supplier) {
+        if (msgLevel.isEqualOrHigherThan(this.level)) {
+            final String logMsg = supplier.get();
+            final String outputMessage = fixMessage(msgLevel, logMsg, throwable);
+            output(outputMessage);
+            if (!listeners.isEmpty()) {
+                final LoggerEvent loggerEvent = new LoggerEventImpl(msgLevel, name, outputMessage);
+                listeners.forEach(l -> l.accept(loggerEvent));
+            }
+        }
+    }
+
+    private String fixMessage(Level level, String msg, Throwable throwable) {
+        final StringBuilder sb = new StringBuilder(formatter.apply(level, name, msg));
+
+        if (NO_THROWABLE != throwable) {
+            final StringWriter writer = new StringWriter();
+            final PrintWriter pipe = new PrintWriter(writer);
+            throwable.printStackTrace(pipe);
+            sb.append("\n").append(writer.toString());
+        }
+
+        return sb.toString();
+    }
+
+    private final static Throwable NO_THROWABLE = null;
 }

@@ -23,6 +23,7 @@ import com.speedment.runtime.field.method.ByteGetter;
 import com.speedment.runtime.field.method.ByteSetter;
 import com.speedment.runtime.field.method.SetToByte;
 import com.speedment.runtime.internal.field.setter.SetToByteImpl;
+
 import javax.annotation.Generated;
 
 /**

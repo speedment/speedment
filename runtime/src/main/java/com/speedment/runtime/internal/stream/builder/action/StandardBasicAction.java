@@ -103,7 +103,7 @@ public enum StandardBasicAction implements BasicAction {
 
     private final Statement[] statements;
 
-    private StandardBasicAction(Statement... statements) {
+    StandardBasicAction(Statement... statements) {
         this.statements = requireNonNullElements(statements);
     }
 

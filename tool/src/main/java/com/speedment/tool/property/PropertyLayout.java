@@ -17,9 +17,6 @@
 package com.speedment.tool.property;
 
 import com.speedment.runtime.annotation.Api;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -27,8 +24,10 @@ import javafx.scene.Node;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
-import static javafx.scene.layout.Region.USE_PREF_SIZE;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * GridPane which takes responsibility for the layout of editor items.
@@ -81,7 +80,7 @@ final class PropertyLayout extends GridPane {
     }
 
     void remove() {
-        items.stream().forEach( PropertyEditor.Item::onRemove );
+        items.forEach(PropertyEditor.Item::onRemove);
         getChildren().clear();
     }
 }

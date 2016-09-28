@@ -58,7 +58,7 @@ public final class PipelineImpl<E> implements Pipeline, ReferencePipeline<E>, In
     }
 
     @SuppressWarnings("unchecked")
-    public <E, S extends BaseStream<E, S>> BaseStream<E, S> getAsBaseStream() {
+    public <S extends BaseStream<E, S>> BaseStream<E, S> getAsBaseStream() {
         return (BaseStream<E, S>) getStream();
     }
 

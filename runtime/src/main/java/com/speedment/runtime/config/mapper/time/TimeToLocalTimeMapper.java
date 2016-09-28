@@ -18,6 +18,7 @@ package com.speedment.runtime.config.mapper.time;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
+
 import java.lang.reflect.Type;
 import java.sql.Time;
 import java.time.LocalTime;

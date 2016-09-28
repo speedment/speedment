@@ -25,6 +25,7 @@ import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.tool.component.IssueComponent;
 import com.speedment.tool.rule.Issue;
 import com.speedment.tool.rule.Rule;
+
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;

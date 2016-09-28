@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.component;
 
-import com.speedment.runtime.annotation.Api;
 import com.speedment.common.injector.annotation.InjectKey;
+import com.speedment.runtime.annotation.Api;
 
 /**
  * Contains general information about the installment like the software title

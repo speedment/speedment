@@ -21,12 +21,12 @@
  */
 package com.speedment.runtime.field.trait;
 
-import com.speedment.runtime.field.Field;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.field.method.SetToReference;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
+import com.speedment.runtime.field.method.SetToReference;
 import com.speedment.runtime.internal.field.setter.SetToReferenceImpl;
 
 /**

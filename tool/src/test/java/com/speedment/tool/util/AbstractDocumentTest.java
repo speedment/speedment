@@ -52,7 +52,7 @@ import static java.util.stream.Collectors.toList;
  */
 public abstract class AbstractDocumentTest {
 
-    protected Project project;
+    Project project;
     protected Dbms dbmsA, dbmsB;
     protected Schema schemaA, schemaB;
     protected Table tableA, tableB, tableC, tableD;

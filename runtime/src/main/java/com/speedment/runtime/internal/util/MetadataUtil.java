@@ -33,13 +33,13 @@ public final class MetadataUtil {
         requireNonNull(consumer);
         return meta -> {
             meta.getSqlMetaResult().ifPresent(sql -> {
-                final StringBuilder sb = new StringBuilder();
-                sb.append("sql = ").append(sql.getQuery()).append("\n");
-                sb.append("params = ").append(sql.getParameters()).append("\n");
-                sb.append("throwable = ").append(sql.getThrowable()
+                String sb = "sql = " + sql.getQuery() + "\n" +
+                    "params = " + sql.getParameters() + "\n" +
+                    "throwable = " + sql.getThrowable()
                     .map(t -> t.getMessage())
-                    .orElse("")).append("\n");
-                consumer.accept(sb.toString());
+                    .orElse("") +
+                    "\n";
+                consumer.accept(sb);
             });
         };
     }

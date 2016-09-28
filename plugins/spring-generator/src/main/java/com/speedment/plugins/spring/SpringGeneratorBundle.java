@@ -17,6 +17,7 @@
 package com.speedment.plugins.spring;
 
 import com.speedment.common.injector.InjectBundle;
+
 import java.util.stream.Stream;
 
 /**

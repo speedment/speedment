@@ -18,7 +18,6 @@ package com.speedment.plugins.json.internal;
 
 import com.speedment.plugins.json.JsonCollector;
 import com.speedment.plugins.json.JsonEncoder;
-import static com.speedment.plugins.json.internal.JsonUtil.jsonField;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.field.BooleanField;
 import com.speedment.runtime.field.ByteField;
@@ -43,15 +42,18 @@ import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ShortGetter;
 import com.speedment.runtime.field.trait.HasFinder;
 import com.speedment.runtime.manager.Manager;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
+
+import static com.speedment.plugins.json.internal.JsonUtil.jsonField;
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 
 /**
  * The default implementation of the {@link JsonEncoder} interface.

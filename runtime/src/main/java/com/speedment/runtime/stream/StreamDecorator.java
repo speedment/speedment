@@ -16,14 +16,14 @@
  */
 package com.speedment.runtime.stream;
 
-import com.speedment.runtime.stream.parallel.ParallelStrategy;
-import com.speedment.runtime.stream.parallel.HasParallelStrategy;
 import com.speedment.runtime.annotation.Api;
+import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.internal.stream.ComposedStreamDecorator;
 import com.speedment.runtime.internal.util.Cast;
+import com.speedment.runtime.stream.parallel.HasParallelStrategy;
+import com.speedment.runtime.stream.parallel.ParallelStrategy;
 
 import java.util.stream.Stream;
-import com.speedment.runtime.field.predicate.FieldPredicate;
 
 /**
  * Decorator that is applied to a various part of the custom streams of

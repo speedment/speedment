@@ -16,10 +16,7 @@
  */
 package com.speedment.common.logger.internal;
 
-import com.speedment.common.logger.Level;
 import com.speedment.common.logger.internal.formatter.StandardFormatters;
-
-import java.util.Optional;
 
 /**
  *
@@ -32,32 +29,5 @@ public final class NoOpLogger extends AbstractLogger {
     }
 
     @Override
-    protected void output(String message) {
-    }
-
-    @Override
-    public void log(Level level, Optional<Throwable> throwable, String message) {
-
-    }
-
-    @Override
-    public void log(Level level, Optional<Throwable> throwable, String message, Object arg) {
-
-    }
-
-    @Override
-    public void log(Level level, Optional<Throwable> throwable, String message, Object arg1, Object arg2) {
-
-    }
-
-    @Override
-    public void log(Level level, Optional<Throwable> throwable, String message, Object arg1, Object arg2, Object arg3) {
-
-    }
-
-    @Override
-    public void log(Level level, Optional<Throwable> throwable, String message, Object arg1, Object arg2, Object arg3, Object... args) {
-
-    }
-
+    protected void output(String message) {}
 }

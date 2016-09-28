@@ -16,7 +16,6 @@
  */
 package com.speedment.plugins.spring;
 
-import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.generator.component.CodeGenerationComponent;
@@ -27,6 +26,8 @@ import com.speedment.plugins.spring.internal.GeneratedControllerTranslator;
 import com.speedment.plugins.spring.internal.SpringTranslatorKey;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
+
+import static com.speedment.common.injector.State.RESOLVED;
 
 /**
  * Plugs into the Speedment platform, generating Spring annotated classes as

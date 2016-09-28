@@ -17,11 +17,12 @@
 package com.speedment.tool.property;
 
 import com.speedment.runtime.annotation.Api;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.BorderPane;
+
 import static java.util.Objects.requireNonNull;
-import javafx.collections.FXCollections;
 
 /**
  * Container for a view of editable properties

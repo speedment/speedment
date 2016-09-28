@@ -20,8 +20,8 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.primitive.PrimitiveTypeMapper;
 import com.speedment.runtime.internal.config.mapper.IdentityTypeMapper;
-import java.lang.reflect.Type;
 
+import java.lang.reflect.Type;
 import java.util.Comparator;
 
 import static java.util.Comparator.comparing;

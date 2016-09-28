@@ -16,16 +16,18 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.common.injector.Injector;
+import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.trait.HasPackageName;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.config.ProjectProperty;
-import java.util.Optional;
-import static javafx.beans.binding.Bindings.createStringBinding;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableStringValue;
+
+import java.util.Optional;
+
+import static javafx.beans.binding.Bindings.createStringBinding;
 
 /**
  *

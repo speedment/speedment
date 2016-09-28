@@ -37,7 +37,7 @@ abstract class AbstractPredicate<T> implements HasNegated, Predicate<T> {
 
     private boolean negated;
 
-    protected AbstractPredicate() {
+    AbstractPredicate() {
         this.negated = false;
     }
 

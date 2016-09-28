@@ -16,6 +16,10 @@
  */
 package com.speedment.generator.translator;
 
+import com.speedment.common.codegen.constant.SimpleType;
+import com.speedment.common.injector.Injector;
+import com.speedment.generator.component.TypeMapperComponent;
+import com.speedment.generator.namer.JavaLanguageNamer;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
@@ -26,22 +30,18 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.trait.HasPackageName;
+import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
 
+import java.lang.reflect.Type;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import static com.speedment.common.codegen.internal.util.Formatting.ucfirst;
-import com.speedment.common.codegen.constant.SimpleType;
-import com.speedment.generator.component.TypeMapperComponent;
-import com.speedment.common.injector.Injector;
-import com.speedment.generator.namer.JavaLanguageNamer;
 import static com.speedment.runtime.config.Project.DEFAULT_PACKAGE_NAME;
-import com.speedment.runtime.config.trait.HasPackageName;
-import com.speedment.runtime.exception.SpeedmentException;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
-import java.lang.reflect.Type;
-import java.util.function.Supplier;
 import static java.util.Objects.requireNonNull;
 
 /**

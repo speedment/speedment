@@ -16,9 +16,9 @@
  */
 package com.speedment.tool.internal.controller;
 
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.component.EventComponent;
 import com.speedment.generator.event.ProjectLoaded;
-import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
@@ -56,9 +56,6 @@ import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 import static javafx.application.Platform.runLater;
 import static javafx.scene.control.SelectionMode.SINGLE;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -257,7 +254,7 @@ public final class ProjectTreeController implements Initializable {
                 }
 
                 if (item instanceof HasMainInterface) {
-                    ui.createContextMenu(this, (DocumentProperty & HasMainInterface) item)
+                    ui.createContextMenu(this, item)
                         .ifPresent(this::setContextMenu);
                 }
 

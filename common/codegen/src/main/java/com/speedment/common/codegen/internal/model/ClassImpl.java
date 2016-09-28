@@ -19,8 +19,8 @@ package com.speedment.common.codegen.internal.model;
 import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
-import java.lang.reflect.Type;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -121,10 +121,7 @@ public final class ClassImpl extends ClassOrInterfaceImpl<Class> implements Clas
         if (!Objects.equals(this.superType, other.superType)) {
             return false;
         }
-        if (!Objects.equals(this.constructors, other.constructors)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.constructors, other.constructors);
     }
 
 

@@ -157,7 +157,7 @@ public enum Pluralis {
 
     protected void addUncountable(String... words) {
         requireNonNullElements(words);
-        Arrays.asList(words).stream().map(normalizeMapper()).forEach(uncountables::add);
+        Arrays.stream(words).map(normalizeMapper()).forEach(uncountables::add);
     }
 
     private String normalize(String input) {
@@ -250,10 +250,7 @@ public enum Pluralis {
             if (!Objects.equals(this.expression, other.expression)) {
                 return false;
             }
-            if (!Objects.equals(this.replacement, other.replacement)) {
-                return false;
-            }
-            return true;
+            return Objects.equals(this.replacement, other.replacement);
         }
 
         @Override

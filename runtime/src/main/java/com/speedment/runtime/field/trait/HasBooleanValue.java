@@ -23,6 +23,7 @@ import com.speedment.runtime.field.method.BooleanGetter;
 import com.speedment.runtime.field.method.BooleanSetter;
 import com.speedment.runtime.field.method.SetToBoolean;
 import com.speedment.runtime.internal.field.setter.SetToBooleanImpl;
+
 import javax.annotation.Generated;
 
 /**

@@ -50,8 +50,8 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
 
     private final Logger logger = LoggerManager.getLogger(ConnectionPoolComponentImpl.class);
 
-    private final long DEFAULT_MAX_AGE = 30_000;
-    private final int DEFAULT_MIN_POOL_SIZE_PER_DB = 32;
+    private final static long DEFAULT_MAX_AGE = 30_000;
+    private final static int DEFAULT_MIN_POOL_SIZE_PER_DB = 32;
 
     private long maxAge;
     private int maxRetainSize;

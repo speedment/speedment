@@ -138,30 +138,30 @@ public final class JsonDeserializer implements AutoCloseable {
         }
 
         // Parse each remaining entry
-        nextEntry: while ((nextNonBlankspace()) == 0x22) { // "
+        while ((nextNonBlankspace()) == 0x22) { // "
             final CloseMethod close = parseEntryInto(object);
-            
+
             switch (close) {
-                case EXIT_FROM_PARENT   : 
+                case EXIT_FROM_PARENT:
                     if (character == 0x7D) { // }
                         return object;
                     } else {
                         throw unexpectedCharacterException();
                     }
-                    
-                case CONTINUE_IN_PARENT : 
+
+                case CONTINUE_IN_PARENT:
                     continue;
-                    
-                case NOT_DECIDED : 
+
+                case NOT_DECIDED:
                     switch (nextNonBlankspace()) {
-                        case 0x2C : // , (continue with next entry)
+                        case 0x2C: // , (continue with next entry)
                             continue;
-                        case 0x7D : // } (close the map)
+                        case 0x7D: // } (close the map)
                             return object;
-                        default :
+                        default:
                             throw unexpectedCharacterException();
                     }
-                default :
+                default:
                     throw new IllegalStateException(
                         "Unknown enum constant '" + close + "'."
                     );
@@ -376,74 +376,82 @@ public final class JsonDeserializer implements AutoCloseable {
         }
 
         // Parse each remaining entry
-        nextEntry: while (true) {
+        while (true) {
             switch (nextNonBlankspace()) {
-                case 0x7B : // { (begin parsing object)
+                case 0x7B: // { (begin parsing object)
                     list.add(parseObject());
                     break;
 
-                case 0x5B : // [ (begin parsing array)
+                case 0x5B: // [ (begin parsing array)
                     list.add(parseArray());
                     break;
 
-                case 0x22 : // " (begin parsing string)
+                case 0x22: // " (begin parsing string)
                     list.add(parseString());
                     break;
-                    
-                case 0x66 : // f (begin parsing false)
+
+                case 0x66: // f (begin parsing false)
                     list.add(parseFalse());
                     break;
-                
-                case 0x74 : // t (begin parsing true)
+
+                case 0x74: // t (begin parsing true)
                     list.add(parseTrue());
                     break;
 
-                case 0x6E : // n (begin parsing null)
+                case 0x6E: // n (begin parsing null)
                     list.add(parseNull());
                     break;
 
                 // Digit '0 - 9'
-                case 0x30 : case 0x31 : case 0x32 : case 0x33 : case 0x34 :
-                case 0x35 : case 0x36 : case 0x37 : case 0x38 : case 0x39 :
-                case 0x2E : // . (decimal sign)
+                case 0x30:
+                case 0x31:
+                case 0x32:
+                case 0x33:
+                case 0x34:
+                case 0x35:
+                case 0x36:
+                case 0x37:
+                case 0x38:
+                case 0x39:
+                case 0x2E: // . (decimal sign)
                     final CloseMethod method = parseNumber(list::add);
                     switch (method) {
-                        case CONTINUE_IN_PARENT :
+                        case CONTINUE_IN_PARENT:
                             continue; // nextEntry
 
-                        case EXIT_FROM_PARENT :
+                        case EXIT_FROM_PARENT:
                             if (character == 0x5D) { // ]
                                 return list;
                             } else {
                                 throw unexpectedCharacterException();
                             }
 
-                        case NOT_DECIDED :
+                        case NOT_DECIDED:
                             switch (nextNonBlankspace()) {
-                                case 0x2C : // , (continue with next element)
+                                case 0x2C: // , (continue with next element)
                                     continue; // nextEntry
-                                case 0x5D : // ] (close the list)
+                                case 0x5D: // ] (close the list)
                                     return list;
-                                default :
+                                default:
                                     throw unexpectedCharacterException();
                             }
 
-                        default :
+                        default:
                             throw new IllegalStateException(
                                 "Unknown enum constant '" + method + "'."
                             );
                     }
 
-                default :
+                default:
                     throw unexpectedCharacterException();
             }
-            
+
             switch (nextNonBlankspace()) {
-                case 0x2C : // , (continue with next element)
+                case 0x2C: // , (continue with next element)
                     continue; // nextEntry
-                case 0x5D : // ] (close the list)
+                case 0x5D: // ] (close the list)
                     return list;
-                default :
+                default:
                     throw unexpectedCharacterException();
             }
         }
@@ -451,22 +459,22 @@ public final class JsonDeserializer implements AutoCloseable {
     
     private String parseString() throws IOException {
         final StringBuilder builder = new StringBuilder();
-        
-        parse: while (true) {
+
+        while (true) {
             switch (next()) {
-                
+
                 // If this is an escape character, add the following character
                 // without parsing it.
-                case 0x5C : // backslash
+                case 0x5C: // backslash
                     builder.append(Character.toChars(next()));
                     continue;
-                    
-                // If this terminates the string, break the loop.
-                case 0x22 : // " (end key)
+
+                    // If this terminates the string, break the loop.
+                case 0x22: // " (end key)
                     return builder.toString();
-                    
+
                 // Every other character should be added to the key.
-                default :
+                default:
                     builder.append(Character.toChars(character));
             }
         }

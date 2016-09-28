@@ -19,14 +19,6 @@ package com.speedment.plugins.enums.internal.ui;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.tool.property.item.AbstractLabelTooltipItem;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
-import static java.util.stream.Collectors.toSet;
-import java.util.stream.Stream;
-import static javafx.application.Platform.runLater;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -40,10 +32,20 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.HBox;
-import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
+
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toSet;
+import static javafx.application.Platform.runLater;
+import static javafx.scene.layout.Region.USE_PREF_SIZE;
 
 /**
  * Item for generating a comma-separated string.
@@ -64,6 +66,7 @@ public final class AddRemoveStringItem extends AbstractLabelTooltipItem {
 
     private final ObservableList<String> strings;
     private final ObservableBooleanValue enabled;
+    @SuppressWarnings("FieldCanBeLocal")
     private final StringProperty cache;
     
     private final String DEFAULT_FIELD = "ENUM_CONSTANT_";

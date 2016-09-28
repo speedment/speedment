@@ -23,6 +23,7 @@ import com.speedment.runtime.field.method.SetToShort;
 import com.speedment.runtime.field.method.ShortGetter;
 import com.speedment.runtime.field.method.ShortSetter;
 import com.speedment.runtime.internal.field.setter.SetToShortImpl;
+
 import javax.annotation.Generated;
 
 /**

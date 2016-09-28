@@ -17,6 +17,7 @@
 package com.speedment.runtime.internal.util.testing;
 
 import com.speedment.runtime.manager.Manager;
+
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;

@@ -26,7 +26,7 @@ import java.util.Optional;
  * @param <ENTITY> the entity type
  * @param <T> Type
  */
-public abstract class AbstractMetaResult<ENTITY, T extends AbstractMetaResult<ENTITY, T>> implements MetaResult<ENTITY> {
+abstract class AbstractMetaResult<ENTITY, T extends AbstractMetaResult<ENTITY, T>> implements MetaResult<ENTITY> {
 
     private Throwable throwable;
 

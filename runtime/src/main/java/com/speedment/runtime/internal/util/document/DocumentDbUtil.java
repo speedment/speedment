@@ -39,7 +39,6 @@ import java.util.stream.Stream;
 
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.joining;
 
 /**
  *

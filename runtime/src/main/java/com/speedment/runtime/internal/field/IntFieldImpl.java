@@ -30,9 +30,11 @@ import com.speedment.runtime.internal.field.predicate.ints.IntEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.ints.IntGreaterOrEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.ints.IntGreaterThanPredicate;
 import com.speedment.runtime.internal.field.predicate.ints.IntInPredicate;
+
+import javax.annotation.Generated;
 import java.util.Set;
 import java.util.function.Predicate;
-import javax.annotation.Generated;
+
 import static java.util.Objects.requireNonNull;
 
 /**

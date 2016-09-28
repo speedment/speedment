@@ -40,7 +40,7 @@ public final class StopwatchImpl implements Stopwatch {
 
     @Override
     public long elapsedMillis() {
-        return elapsedNanos() / 1_000_000l;
+        return elapsedNanos() / 1_000_000L;
     }
 
     @Override

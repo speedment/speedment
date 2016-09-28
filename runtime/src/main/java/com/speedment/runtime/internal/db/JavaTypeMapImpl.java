@@ -148,7 +148,7 @@ public class JavaTypeMapImpl implements JavaTypeMap {
     private void assertJavaTypesKnown() {
         final Map<String, Class<?>> unmapped = new LinkedHashMap<>();
         
-        inner.entrySet().stream().forEach((entry) -> {
+        inner.entrySet().forEach((entry) -> {
             final String key = entry.getKey();
             final Class<?> clazz = entry.getValue();
             if (!StandardJavaTypeMapping.stream().anyMatch(jtm -> jtm.getJavaClass().equals(clazz))) {

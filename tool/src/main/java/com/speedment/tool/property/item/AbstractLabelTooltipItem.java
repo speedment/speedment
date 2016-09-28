@@ -18,14 +18,16 @@ package com.speedment.tool.property.item;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.property.PropertyEditor;
-import java.util.HashMap;
-import java.util.Map;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.UnaryOperator;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -41,7 +43,7 @@ import static java.util.Objects.requireNonNull;
 @Api(version="3.0")
 public abstract class AbstractLabelTooltipItem implements PropertyEditor.Item {
     
-    public final static UnaryOperator<Node> NO_DECORATOR = n -> {return n;};
+    protected final static UnaryOperator<Node> NO_DECORATOR = n -> {return n;};
     
     private final String label;
     private final String tooltip;

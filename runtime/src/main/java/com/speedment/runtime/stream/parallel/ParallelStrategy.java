@@ -38,27 +38,27 @@ public interface ParallelStrategy {
      * <code>Spliterator</code> converter. It favors relatively large sets (in
      * the ten thousands or more) with low computational overhead.
      */
-    static final ParallelStrategy DEFAULT = Spliterators::spliteratorUnknownSize;
+    ParallelStrategy DEFAULT = Spliterators::spliteratorUnknownSize;
     /**
      * A Parallel Strategy that favors relatively small to medium sets with
      * medium computational overhead.
      */
-    static final ParallelStrategy COMPUTE_INTENSITY_MEDIUM = new ComputeIntensityMediumParallelStrategy();
+    ParallelStrategy COMPUTE_INTENSITY_MEDIUM = new ComputeIntensityMediumParallelStrategy();
     /**
      * A Parallel Strategy that favors relatively small to medium sets with high
      * computational overhead.
      */
-    static final ParallelStrategy COMPUTE_INTENSITY_HIGH = new ComputeIntensityHighParallelStrategy();
+    ParallelStrategy COMPUTE_INTENSITY_HIGH = new ComputeIntensityHighParallelStrategy();
     /**
      * A Parallel Strategy that favors small sets with extremely high computational
      * overhead. The set will be split up in solitary elements that are executed
      * separately in their own thread.
      */
-    static final ParallelStrategy COMPUTE_INTENSITY_EXTREME = new ComputeIntensityExtremeParallelStrategy();
+    ParallelStrategy COMPUTE_INTENSITY_EXTREME = new ComputeIntensityExtremeParallelStrategy();
 
     <T> Spliterator<T> spliteratorUnknownSize(Iterator<? extends T> iterator, int characteristics);
 
-    public static <T> ParallelStrategy of(final int... batchSizes)  {
+    static ParallelStrategy of(final int... batchSizes)  {
         return new ParallelStrategy() {
             @Override
             public <T> Spliterator<T> spliteratorUnknownSize(Iterator<? extends T> iterator, int characteristics) {

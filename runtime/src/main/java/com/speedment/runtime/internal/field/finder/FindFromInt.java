@@ -20,6 +20,7 @@ import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.field.IntForeignKeyField;
 import com.speedment.runtime.manager.Manager;
+
 import javax.annotation.Generated;
 
 /**

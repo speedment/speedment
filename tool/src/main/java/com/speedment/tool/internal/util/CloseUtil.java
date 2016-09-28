@@ -16,11 +16,12 @@
  */
 package com.speedment.tool.internal.util;
 
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.stage.Stage;
+
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  *

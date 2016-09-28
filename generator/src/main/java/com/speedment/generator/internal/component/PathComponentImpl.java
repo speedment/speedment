@@ -16,10 +16,11 @@
  */
 package com.speedment.generator.internal.component;
 
-import com.speedment.generator.component.PathComponent;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.component.PathComponent;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Project;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 

@@ -21,5 +21,5 @@ package com.speedment.runtime.internal.stream.builder;
  * @author pemi
  */
 public enum StreamType {
-    REFERENCE, INTEGER, LONG, DOUBLE;
+    REFERENCE, INTEGER, LONG, DOUBLE
 }

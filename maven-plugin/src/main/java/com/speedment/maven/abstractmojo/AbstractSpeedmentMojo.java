@@ -16,36 +16,35 @@
  */
 package com.speedment.maven.abstractmojo;
 
-import com.speedment.generator.GeneratorBundle;
-import com.speedment.maven.typemapper.Mapping;
-import com.speedment.generator.component.TypeMapperComponent;
-import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.common.injector.InjectBundle;
-import com.speedment.maven.component.MavenPathComponent;
-import static com.speedment.common.injector.State.INITIALIZED;
-import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.injector.annotation.WithState;
+import com.speedment.generator.GeneratorBundle;
+import com.speedment.generator.component.TypeMapperComponent;
+import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
+import com.speedment.maven.component.MavenPathComponent;
+import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.tool.ToolBundle;
 import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
-
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
 
 import java.io.File;
-
-import static com.speedment.runtime.internal.DefaultApplicationMetadata.METADATA_LOCATION;
-import com.speedment.tool.ToolBundle;
-import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import org.apache.maven.project.MavenProject;
+
+import static com.speedment.common.injector.State.INITIALIZED;
+import static com.speedment.common.injector.State.RESOLVED;
+import static com.speedment.runtime.internal.DefaultApplicationMetadata.METADATA_LOCATION;
+import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 
 /**
  * The abstract base implementation for all the Speedment Mojos.
@@ -71,9 +70,9 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
     protected abstract String launchMessage();
     protected abstract void execute(Speedment speedment) throws MojoExecutionException, MojoFailureException;
 
-    protected AbstractSpeedmentMojo() {this(NOTHING);}
+    AbstractSpeedmentMojo() {this(NOTHING);}
     
-    protected AbstractSpeedmentMojo(Consumer<ApplicationBuilder<?, ?>> configurer) {
+    AbstractSpeedmentMojo(Consumer<ApplicationBuilder<?, ?>> configurer) {
         this.configurer = configurer;
     }
 
@@ -233,8 +232,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
                 for (final Mapping mapping : mappings) {
                     final Class<?> databaseType;
                     try {
-                        final Class<?> casted = Class.forName(mapping.getDatabaseType());
-                        databaseType = casted;
+                        databaseType = Class.forName(mapping.getDatabaseType());
                     } catch (final ClassNotFoundException ex) {
                         throw new MojoExecutionException(
                             "Specified database type '" + mapping.getDatabaseType() + "' "

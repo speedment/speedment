@@ -18,6 +18,7 @@ package com.speedment.tool.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
+
 import java.util.concurrent.CompletableFuture;
 
 /**

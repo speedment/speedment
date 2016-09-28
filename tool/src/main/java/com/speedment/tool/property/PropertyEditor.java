@@ -17,8 +17,9 @@
 package com.speedment.tool.property;
 
 import com.speedment.runtime.annotation.Api;
-import java.util.stream.Stream;
 import javafx.scene.Node;
+
+import java.util.stream.Stream;
 
 /**
  * Base interface for all property editors

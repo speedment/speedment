@@ -21,6 +21,7 @@ import com.speedment.tool.config.IndexProperty;
 import com.speedment.tool.property.PropertyEditor;
 import com.speedment.tool.property.item.ItemUtil;
 import com.speedment.tool.property.item.SimpleCheckBoxItem;
+
 import java.util.stream.Stream;
 
 /**

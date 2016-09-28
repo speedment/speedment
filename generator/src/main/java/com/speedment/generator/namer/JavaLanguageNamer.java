@@ -16,6 +16,7 @@
  */
 package com.speedment.generator.namer;
 
+import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
 
 import java.util.function.Function;
@@ -23,7 +24,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.internal.util.Formatting.ucfirst;
-import com.speedment.common.injector.annotation.InjectKey;
 import static com.speedment.runtime.internal.util.sql.SqlUtil.unQuote;
 import static java.util.Objects.requireNonNull;
 

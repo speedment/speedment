@@ -16,8 +16,8 @@
  */
 package com.speedment.generator.event;
 
-import com.speedment.runtime.annotation.Api;
 import com.speedment.generator.component.EventComponent;
+import com.speedment.runtime.annotation.Api;
 
 /**
  * An event passed to the {@link EventComponent}.

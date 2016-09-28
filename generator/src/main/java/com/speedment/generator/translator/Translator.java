@@ -297,8 +297,8 @@ public interface Translator<DOC extends Document & HasMainInterface, T> extends 
      * @since   2.3
      */
     @Api(version = "2.3")
-    enum Phase { PRE_MAKE, MAKE, POST_MAKE };
-    
+    enum Phase { PRE_MAKE, MAKE, POST_MAKE }
+
     /**
      * A general interface for all builder implementations used by this 
      * {@link Translator}. A builder is finalized using the {@link #build()} 

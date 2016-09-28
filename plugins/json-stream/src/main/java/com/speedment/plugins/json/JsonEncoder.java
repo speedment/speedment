@@ -16,8 +16,6 @@
  */
 package com.speedment.plugins.json;
 
-import com.speedment.runtime.manager.Manager;
-import com.speedment.runtime.field.trait.HasFinder;
 import com.speedment.runtime.field.BooleanField;
 import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.CharField;
@@ -38,6 +36,8 @@ import com.speedment.runtime.field.method.IntGetter;
 import com.speedment.runtime.field.method.LongGetter;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ShortGetter;
+import com.speedment.runtime.field.trait.HasFinder;
+import com.speedment.runtime.manager.Manager;
 
 import java.util.function.Function;
 import java.util.stream.Stream;

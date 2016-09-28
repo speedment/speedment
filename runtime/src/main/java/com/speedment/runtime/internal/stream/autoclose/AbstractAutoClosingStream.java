@@ -43,7 +43,7 @@ public abstract class AbstractAutoClosingStream implements AutoCloseable {
 
     private final Set<BaseStream<?, ?>> streamSet;
 
-    protected AbstractAutoClosingStream(Set<BaseStream<?, ?>> streamSet) {
+    AbstractAutoClosingStream(Set<BaseStream<?, ?>> streamSet) {
         this.streamSet = streamSet;
     }
 

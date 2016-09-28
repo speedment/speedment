@@ -17,11 +17,11 @@
 package com.speedment.runtime.internal.field.predicate;
 
 import com.speedment.common.tuple.Tuple;
+import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.internal.util.Cast;
 
 import java.util.Set;
-import com.speedment.runtime.field.predicate.FieldPredicate;
 
 /**
  *

@@ -30,7 +30,7 @@ public abstract class SqlStatement {
     private final List<?> values;
 
     public enum Type {
-        INSERT, UPDATE, DELETE;
+        INSERT, UPDATE, DELETE
     }
 
     public SqlStatement(final String sql, final List<?> values) {

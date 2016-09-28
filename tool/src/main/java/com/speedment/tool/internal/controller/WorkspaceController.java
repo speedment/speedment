@@ -16,8 +16,8 @@
  */
 package com.speedment.tool.internal.controller;
 
-import com.speedment.generator.component.EventComponent;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.component.EventComponent;
 import com.speedment.runtime.internal.util.Cast;
 import com.speedment.tool.component.PropertyEditorComponent;
 import com.speedment.tool.component.UserInterfaceComponent;

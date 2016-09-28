@@ -16,6 +16,8 @@
  */
 package com.speedment.generator.internal.translator.manager;
 
+import com.speedment.common.codegen.constant.DefaultType;
+import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.internal.util.Formatting;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
@@ -24,10 +26,13 @@ import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.generator.internal.util.EntityTranslatorSupport;
 import com.speedment.generator.internal.util.FkHolder;
+import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
+import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.component.resultset.ResultSetMapperComponent;
@@ -36,8 +41,14 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
+import com.speedment.runtime.field.method.BackwardFinder;
+import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.internal.util.sql.ResultSetUtil;
+import com.speedment.runtime.manager.AbstractManager;
+import com.speedment.runtime.manager.JdbcManagerSupport;
+import com.speedment.runtime.manager.ManagerSupport;
 
+import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -45,6 +56,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
@@ -53,24 +65,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
-import com.speedment.common.codegen.constant.DefaultType;
-import com.speedment.common.codegen.constant.SimpleParameterizedType;
-import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.*;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
-import com.speedment.generator.component.TypeMapperComponent;
-import static com.speedment.generator.internal.util.ColumnUtil.optionalGetterName;
-import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
-import java.lang.reflect.Type;
-import java.util.Optional;
 import static com.speedment.common.codegen.internal.util.Formatting.block;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
-import com.speedment.runtime.manager.AbstractManager;
-import com.speedment.runtime.manager.JdbcManagerSupport;
-import com.speedment.runtime.manager.ManagerSupport;
-import com.speedment.runtime.field.method.BackwardFinder;
+import static com.speedment.generator.internal.util.ColumnUtil.optionalGetterName;
+import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
+import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.*;
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
 
 /**
  *
@@ -250,19 +250,19 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
              * Create aggregate streaming functions, if any
              */
             .forEveryTable(Phase.POST_MAKE, (clazz, table) -> {
-                fkStreamers.keySet().stream().forEach(referencingTable -> {
+                fkStreamers.keySet().forEach(referencingTable -> {
                     final List<String> methodNames = fkStreamers.get(referencingTable);
                     final TranslatorSupport<Table> foreignSupport = new TranslatorSupport<>(injector, referencingTable);
-                    
+
                     if (!methodNames.isEmpty()) {
                         final Method method = Method.of(
-                            EntityTranslatorSupport.FIND + 
-                            EntityTranslatorSupport.pluralis(referencingTable, getSupport().namer()),
+                            EntityTranslatorSupport.FIND +
+                                EntityTranslatorSupport.pluralis(referencingTable, getSupport().namer()),
                             DefaultType.stream(foreignSupport.entityType())
                         ).public_().add(OVERRIDE);
 
                         method.add(Field.of("entity", getSupport().entityType()));
-                        
+
                         if (methodNames.size() == 1) {
                             method.add("return " + methodNames.get(0) + "(entity);");
                         } else {

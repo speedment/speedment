@@ -185,7 +185,7 @@ public enum SpeedmentIcon {
         }
     }
 
-    private SpeedmentIcon(String filename) {
+    SpeedmentIcon(String filename) {
         this.filename = requireNonNull(filename);
     }
 

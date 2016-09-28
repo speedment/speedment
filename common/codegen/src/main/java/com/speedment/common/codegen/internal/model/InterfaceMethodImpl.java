@@ -23,8 +23,8 @@ import com.speedment.common.codegen.model.InterfaceMethod;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.modifier.Modifier;
-import java.lang.reflect.Type;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -175,10 +175,7 @@ public final class InterfaceMethodImpl implements InterfaceMethod {
             return false;
         }
         final InterfaceMethodImpl other = (InterfaceMethodImpl) obj;
-        if (!Objects.equals(this.m, other.m)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.m, other.m);
     }
     
 

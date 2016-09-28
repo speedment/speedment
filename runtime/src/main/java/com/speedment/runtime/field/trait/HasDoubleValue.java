@@ -23,6 +23,7 @@ import com.speedment.runtime.field.method.DoubleGetter;
 import com.speedment.runtime.field.method.DoubleSetter;
 import com.speedment.runtime.field.method.SetToDouble;
 import com.speedment.runtime.internal.field.setter.SetToDoubleImpl;
+
 import javax.annotation.Generated;
 
 /**

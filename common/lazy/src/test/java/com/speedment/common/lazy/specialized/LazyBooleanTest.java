@@ -18,8 +18,9 @@ package com.speedment.common.lazy.specialized;
 
 import com.speedment.common.lazy.AbstractLazyTest;
 import com.speedment.common.lazy.Lazy;
-import java.util.concurrent.ExecutionException;
 import org.junit.Ignore;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author pemi

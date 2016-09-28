@@ -17,7 +17,6 @@
 package com.speedment.runtime.internal.config.dbms;
 
 import com.speedment.common.injector.InjectBundle;
-import static com.speedment.common.injector.InjectBundle.of;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.db.ConnectionUrlGenerator;
@@ -25,6 +24,7 @@ import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.db.DbmsMetadataHandler;
 import com.speedment.runtime.db.DbmsOperationHandler;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;
+import com.speedment.runtime.field.predicate.FieldPredicateView;
 import com.speedment.runtime.internal.db.AbstractDatabaseNamingConvention;
 import com.speedment.runtime.internal.db.postgresql.PostgresqlDbmsMetadataHandler;
 import com.speedment.runtime.internal.db.postgresql.PostgresqlDbmsOperationHandler;
@@ -35,10 +35,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static com.speedment.common.injector.InjectBundle.of;
+import static com.speedment.runtime.db.metadata.TypeInfoMetaData.of;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
-import com.speedment.runtime.field.predicate.FieldPredicateView;
-import static com.speedment.runtime.db.metadata.TypeInfoMetaData.of;
 
 /**
  * Created by fdirlikl on 11/13/2015.
@@ -179,11 +179,11 @@ public final class PostgresDbmsType extends AbstractDbmsType {
         }
     }
 
-    public static Optional<Class<? extends Object>> pgLineClass() {
+    public static Optional<Class<?>> pgLineClass() {
         return findClass("org.postgresql.geometric.PGline");
     }
 
-    private static Optional<Class<? extends Object>> findClass(String name) {
+    private static Optional<Class<?>> findClass(String name) {
         try {
             return Optional.of(Class.forName(name));
         } catch (ClassNotFoundException e) {

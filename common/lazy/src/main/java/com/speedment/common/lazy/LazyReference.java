@@ -16,8 +16,8 @@
  */
 package com.speedment.common.lazy;
 
-import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
+
 import static java.util.Objects.requireNonNull;
 
 /**

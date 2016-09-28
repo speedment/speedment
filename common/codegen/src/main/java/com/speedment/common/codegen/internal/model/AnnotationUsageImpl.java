@@ -19,8 +19,8 @@ package com.speedment.common.codegen.internal.model;
 import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Value;
-import java.lang.reflect.Type;
 
+import java.lang.reflect.Type;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -202,10 +202,7 @@ abstract class AnnotationUsageBase implements AnnotationUsage {
         if (!Objects.equals(this.value, other.value)) {
             return false;
         }
-        if (!Objects.equals(this.values, other.values)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.values, other.values);
     }
 
 }

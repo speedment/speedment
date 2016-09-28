@@ -17,8 +17,10 @@
 package com.speedment.runtime.internal.field.comparator;
 
 import com.speedment.runtime.field.trait.HasShortValue;
-import java.util.Comparator;
+
 import javax.annotation.Generated;
+import java.util.Comparator;
+
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 

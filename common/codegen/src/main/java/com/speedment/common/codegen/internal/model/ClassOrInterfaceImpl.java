@@ -25,8 +25,8 @@ import com.speedment.common.codegen.model.Initializer;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.modifier.Modifier;
-import java.lang.reflect.Type;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -62,7 +62,7 @@ public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>>
      * 
      * @param name  the name
      */
-	public ClassOrInterfaceImpl(String name) {
+    ClassOrInterfaceImpl(String name) {
 		this.name		 = requireNonNull(name);
 		this.javadoc	 = null;
 		this.annotations = new ArrayList<>();
@@ -80,7 +80,7 @@ public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>>
      * 
      * @param prototype  the prototype
      */
-	protected ClassOrInterfaceImpl(ClassOrInterface<T> prototype) {
+    ClassOrInterfaceImpl(ClassOrInterface<T> prototype) {
 		name		= requireNonNull(prototype).getName();
 		javadoc		= prototype.getJavadoc().map(Copier::copy).orElse(null);
 		annotations	= Copier.copy(prototype.getAnnotations());
@@ -248,10 +248,7 @@ public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>>
         if (!Objects.equals(this.classes, other.classes)) {
             return false;
         }
-        if (!Objects.equals(this.modifiers, other.modifiers)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.modifiers, other.modifiers);
     }
 
   

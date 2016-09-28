@@ -31,11 +31,11 @@ import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
+import com.speedment.tool.ToolBundle;
 import org.junit.Test;
 
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.JAVA_NAME;
-import com.speedment.tool.ToolBundle;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

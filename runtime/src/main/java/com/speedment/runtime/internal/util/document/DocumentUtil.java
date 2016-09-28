@@ -63,7 +63,7 @@ public final class DocumentUtil {
         requireNonNull(document);
         return Trees.traverse(
             document,
-            d -> (Stream<Document>) d.children(),
+            d -> d.children(),
             Trees.TraversalOrder.DEPTH_FIRST_PRE
         );
     }

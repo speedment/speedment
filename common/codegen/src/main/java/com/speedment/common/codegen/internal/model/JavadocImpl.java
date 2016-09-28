@@ -131,10 +131,7 @@ public final class JavadocImpl implements Javadoc {
         if (!Objects.equals(this.text, other.text)) {
             return false;
         }
-        if (!Objects.equals(this.tags, other.tags)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.tags, other.tags);
     }
 
 

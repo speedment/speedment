@@ -19,6 +19,7 @@ package com.speedment.runtime.manager;
 import com.speedment.common.injector.Injector;
 import com.speedment.runtime.db.SqlFunction;
 import com.speedment.runtime.internal.manager.JdbcManagerSupportImpl;
+
 import java.sql.ResultSet;
 
 /**

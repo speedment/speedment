@@ -16,6 +16,10 @@
  */
 package com.speedment.generator.internal.translator.entity;
 
+import com.speedment.common.codegen.constant.DefaultJavadocTag;
+import com.speedment.common.codegen.constant.DefaultType;
+import com.speedment.common.codegen.constant.SimpleParameterizedType;
+import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.internal.model.value.ReferenceValue;
 import com.speedment.common.codegen.internal.model.value.TextValue;
 import com.speedment.common.codegen.model.Constructor;
@@ -27,38 +31,36 @@ import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.generator.internal.util.EntityTranslatorSupport;
 import com.speedment.generator.internal.util.FkHolder;
+import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
+import com.speedment.generator.translator.TranslatorSupport;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
-import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
-import com.speedment.common.codegen.constant.DefaultJavadocTag;
-import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
-import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
-import com.speedment.common.codegen.constant.DefaultType;
-import com.speedment.common.codegen.constant.SimpleParameterizedType;
-import com.speedment.common.codegen.constant.SimpleType;
-import static com.speedment.common.codegen.internal.util.Formatting.shortName;
-import com.speedment.generator.component.TypeMapperComponent;
-import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mapper.primitive.PrimitiveTypeMapper;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
+import com.speedment.runtime.internal.util.document.DocumentDbUtil;
+import com.speedment.runtime.manager.Manager;
 import com.speedment.runtime.util.OptionalBoolean;
 import com.speedment.runtime.util.OptionalUtil;
-import com.speedment.runtime.manager.Manager;
+
 import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
+
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
+import static com.speedment.common.codegen.internal.util.Formatting.shortName;
+import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 
 /**
@@ -104,12 +106,12 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                 .add("return this.columnName;")
             );
 
-        final Interface iface = newBuilder(file, getSupport().generatedEntityName())
+        return newBuilder(file, getSupport().generatedEntityName())
             /**
              * General
              */
             .forEveryTable((intrf, col) -> intrf.public_().add(identifierEnum))
-            
+
             /**
              * Getters
              */
@@ -130,7 +132,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                     )
                 );
             })
-            
+
             /**
              * Setters
              */
@@ -147,8 +149,8 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                         .add(PARAM.setValue(getSupport().variableName(col)).setText("to set of this " + getSupport().entityName()))
                         .add(RETURN.setText("this " + getSupport().entityName() + " instance")))
                 );
-            }) 
-            
+            })
+
             /**
              * Finders
              */
@@ -158,18 +160,18 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                 ).ifPresent(fkc -> {
                     final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
                     final TranslatorSupport<Table> fuSupport = fu.getForeignEmt().getSupport();
-                    
+
                     file.add(Import.of(fuSupport.entityType()));
-                    
-                    intrf.add(Method.of(FINDER_METHOD_PREFIX + getSupport().typeName(col), 
-                            col.isNullable() 
-                                ? DefaultType.optional(fuSupport.entityType()) 
+
+                    intrf.add(Method.of(FINDER_METHOD_PREFIX + getSupport().typeName(col),
+                            col.isNullable()
+                                ? DefaultType.optional(fuSupport.entityType())
                                 : fuSupport.entityType()
                         )
                         .set(Javadoc.of(
-                                "Queries the specified manager for the referenced " + 
-                                fuSupport.entityName() + ". If no such " + 
-                                fuSupport.entityName() + 
+                                "Queries the specified manager for the referenced " +
+                                fuSupport.entityName() + ". If no such " +
+                                fuSupport.entityName() +
                                 " exists, an {@code NullPointerException} will be thrown."
                             ).add(DefaultJavadocTag.PARAM.setValue("foreignManager").setText("the manager to query for the entity"))
                             .add(DefaultJavadocTag.RETURN.setText("the foreign entity referenced"))
@@ -180,13 +182,13 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                     );
                 });
             })
-            
+
             /**
              * Fields
              */
             .forEveryColumn((intrf, col) -> {
 
-                final EntityTranslatorSupport.ReferenceFieldType ref = 
+                final EntityTranslatorSupport.ReferenceFieldType ref =
                     EntityTranslatorSupport.getReferenceFieldType(
                         file, getSupport().tableOrThrow(), col, getSupport().entityType(), injector
                     );
@@ -264,8 +266,6 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                     )));
             })
             .build();
-
-        return iface;
     }
 
     @Override

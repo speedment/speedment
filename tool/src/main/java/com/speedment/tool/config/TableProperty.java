@@ -26,6 +26,7 @@ import com.speedment.tool.config.trait.HasAliasProperty;
 import com.speedment.tool.config.trait.HasEnabledProperty;
 import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
+import com.speedment.tool.config.trait.HasPackageNameProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
@@ -33,7 +34,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
-import com.speedment.tool.config.trait.HasPackageNameProperty;
 
 /**
  *

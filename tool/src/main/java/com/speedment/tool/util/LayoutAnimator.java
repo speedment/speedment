@@ -56,7 +56,7 @@ public final class LayoutAnimator implements ChangeListener<Number>, ListChangeL
      * @param nodes  the nodes to observe
      */
     public void observe(ObservableList<Node> nodes) {
-        nodes.stream().forEach((node) -> {
+        nodes.forEach((node) -> {
             this.observe(node);
         });
         nodes.addListener(this);

@@ -56,6 +56,6 @@ public enum UIEvent implements Event {
     /**
      * The "About Window" has just been opened.
      */
-    OPEN_ABOUT_WINDOW;
-    
+    OPEN_ABOUT_WINDOW
+
 }

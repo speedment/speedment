@@ -56,6 +56,6 @@ public enum Palette {
      * A special color to use when asking for user credentials required for an
      * example when connecting to a database.
      */
-    AUTHENTICATION;
+    AUTHENTICATION
 
 }

@@ -17,13 +17,13 @@
 package com.speedment.runtime.internal.config.dbms;
 
 import com.speedment.common.injector.InjectBundle;
-import static com.speedment.common.injector.InjectBundle.of;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.db.ConnectionUrlGenerator;
 import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.db.DbmsMetadataHandler;
 import com.speedment.runtime.db.DbmsOperationHandler;
+import com.speedment.runtime.field.predicate.FieldPredicateView;
 import com.speedment.runtime.internal.db.AbstractDatabaseNamingConvention;
 import com.speedment.runtime.internal.db.mysql.MySqlDbmsMetadataHandler;
 import com.speedment.runtime.internal.db.mysql.MySqlDbmsOperationHandler;
@@ -33,9 +33,9 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static com.speedment.common.injector.InjectBundle.of;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
-import com.speedment.runtime.field.predicate.FieldPredicateView;
 
 /**
  *

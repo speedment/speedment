@@ -17,7 +17,7 @@
 package com.speedment.generator.internal.util;
 
 import com.speedment.runtime.exception.SpeedmentException;
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -27,6 +27,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -67,7 +69,7 @@ public final class HashUtil {
     private static String md5(List<String> rows) {
         return md5(rows.stream()
             .map(String::trim)
-            .flatMap(s -> Arrays.asList(s.split("\\s+")).stream())
+            .flatMap(s -> Arrays.stream(s.split("\\s+")))
             .collect(joining())
             .getBytes(CHARSET)
         );

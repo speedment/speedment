@@ -18,9 +18,9 @@ package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.manager.Manager;
-import com.speedment.runtime.field.method.BackwardFinder;
 
 /**
  * A representation of an Entity field that use a foreign key to 

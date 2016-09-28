@@ -23,9 +23,10 @@ import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.property.PropertyEditor;
 import com.speedment.tool.property.item.DefaultSpinnerItem;
-import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.IntegerBinding;
+
+import java.util.stream.Stream;
 
 /**
  *

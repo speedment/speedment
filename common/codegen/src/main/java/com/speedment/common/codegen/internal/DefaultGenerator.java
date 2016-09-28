@@ -26,7 +26,6 @@ import com.speedment.common.codegen.TransformFactory;
 
 import java.util.LinkedList;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
@@ -105,7 +104,7 @@ public class DefaultGenerator implements Generator {
             .map(t -> (Transform<A, B>) t)
             .map(t -> transform(t, from, factory))
             .filter(Optional::isPresent)
-            .map((Function<Optional<Meta<A, B>>, Meta<A, B>>) Optional::get)
+            .map(Optional::get)
         ;
     }
     

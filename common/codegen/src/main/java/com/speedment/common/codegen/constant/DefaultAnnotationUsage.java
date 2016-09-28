@@ -26,13 +26,13 @@ import java.lang.annotation.Native;
 import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import static com.speedment.common.codegen.constant.DefaultValue.string;
-import java.lang.reflect.Type;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -67,7 +67,7 @@ public enum DefaultAnnotationUsage implements AnnotationUsage {
      * 
      * @param type  the type
      */
-	private DefaultAnnotationUsage(Type type) {
+	DefaultAnnotationUsage(Type type) {
 		this (type, null);
 	}
     
@@ -76,7 +76,7 @@ public enum DefaultAnnotationUsage implements AnnotationUsage {
      * 
      * @param type  the type
      */
-    private DefaultAnnotationUsage(Type type, Value<?> value) {
+    DefaultAnnotationUsage(Type type, Value<?> value) {
 		this.type	= requireNonNull(type);
 		this.value	= value;
 	}

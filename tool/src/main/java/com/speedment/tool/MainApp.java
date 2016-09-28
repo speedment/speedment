@@ -16,10 +16,10 @@
  */
 package com.speedment.tool;
 
-import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
+import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.internal.DefaultApplicationBuilder;
 import com.speedment.runtime.internal.DefaultApplicationMetadata;

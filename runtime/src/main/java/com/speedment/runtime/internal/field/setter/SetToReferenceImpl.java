@@ -18,6 +18,7 @@ package com.speedment.runtime.internal.field.setter;
 
 import com.speedment.runtime.field.method.SetToReference;
 import com.speedment.runtime.field.trait.HasReferenceValue;
+
 import static java.util.Objects.requireNonNull;
 
 /**

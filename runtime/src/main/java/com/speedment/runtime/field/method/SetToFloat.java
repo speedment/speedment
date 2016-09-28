@@ -18,8 +18,9 @@ package com.speedment.runtime.field.method;
 
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.trait.HasFloatValue;
-import java.util.function.UnaryOperator;
+
 import javax.annotation.Generated;
+import java.util.function.UnaryOperator;
 
 /**
  * Represents a set-operation with all the metadata contained.

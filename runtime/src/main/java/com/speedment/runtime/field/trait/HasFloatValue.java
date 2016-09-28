@@ -23,6 +23,7 @@ import com.speedment.runtime.field.method.FloatGetter;
 import com.speedment.runtime.field.method.FloatSetter;
 import com.speedment.runtime.field.method.SetToFloat;
 import com.speedment.runtime.internal.field.setter.SetToFloatImpl;
+
 import javax.annotation.Generated;
 
 /**

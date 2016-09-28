@@ -18,6 +18,7 @@ package com.speedment.common.lazy.specialized;
 
 import com.speedment.common.lazy.AbstractLazyTest;
 import com.speedment.common.lazy.Lazy;
+
 import java.math.BigInteger;
 
 /**

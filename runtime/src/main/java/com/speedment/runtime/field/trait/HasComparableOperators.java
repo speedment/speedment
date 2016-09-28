@@ -19,10 +19,12 @@ package com.speedment.runtime.field.trait;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.predicate.Inclusion;
+
 import java.util.Comparator;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+
 import static java.util.stream.Collectors.toSet;
 
 /**

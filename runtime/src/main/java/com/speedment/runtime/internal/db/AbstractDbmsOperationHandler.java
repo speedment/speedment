@@ -43,15 +43,15 @@ import java.sql.SQLException;
 import java.sql.SQLXML;
 import java.sql.Statement;
 import java.sql.Struct;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
-import java.util.Collection;
-import static java.util.Collections.singletonList;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 
 /**

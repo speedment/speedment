@@ -17,10 +17,11 @@
 package com.speedment.tool.property.editor;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.tool.property.item.SimpleCheckBoxItem;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.property.PropertyEditor;
 import com.speedment.tool.property.item.ItemUtil;
+import com.speedment.tool.property.item.SimpleCheckBoxItem;
+
 import java.util.stream.Stream;
 
 /**

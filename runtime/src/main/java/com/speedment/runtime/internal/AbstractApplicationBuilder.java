@@ -16,50 +16,50 @@
  */
 package com.speedment.runtime.internal;
 
+import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.exception.CyclicReferenceException;
+import com.speedment.common.injector.internal.InjectorImpl;
+import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.common.tuple.Tuple3;
 import com.speedment.common.tuple.Tuples;
+import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.ApplicationMetadata;
+import com.speedment.runtime.RuntimeBundle;
 import com.speedment.runtime.Speedment;
+import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.component.PasswordComponent;
+import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.db.DbmsMetadataHandler;
 import com.speedment.runtime.exception.SpeedmentException;
+import com.speedment.runtime.internal.db.AbstractDbmsOperationHandler;
+import com.speedment.runtime.internal.db.AsynchronousQueryResultImpl;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.manager.Manager;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
-
-import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
-import com.speedment.common.injector.InjectBundle;
-import com.speedment.common.injector.internal.InjectorImpl;
-import com.speedment.common.logger.Level;
-import com.speedment.runtime.RuntimeBundle;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import com.speedment.runtime.ApplicationBuilder;
-import com.speedment.runtime.component.DbmsHandlerComponent;
-import com.speedment.runtime.component.ProjectComponent;
-import com.speedment.runtime.config.parameter.DbmsType;
-import com.speedment.runtime.db.DbmsMetadataHandler;
-import com.speedment.runtime.internal.db.AbstractDbmsOperationHandler;
-import com.speedment.runtime.internal.db.AsynchronousQueryResultImpl;
-import java.sql.SQLException;
+
+import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -107,7 +107,7 @@ public abstract class AbstractApplicationBuilder<
         this.skipValidateRuntimeConfig = false;
     }
 
-    protected final BUILDER self() {
+    private BUILDER self() {
         @SuppressWarnings("unchecked")
         final BUILDER builder = (BUILDER) this;
         return builder;
@@ -329,9 +329,7 @@ public abstract class AbstractApplicationBuilder<
             checkDatabaseConnectivity(inj);
         }
 
-        final APP app = build(inj);
-
-        return app;
+        return build(inj);
     }
 
     /**

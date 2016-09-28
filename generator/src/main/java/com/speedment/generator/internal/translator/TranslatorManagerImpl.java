@@ -21,13 +21,19 @@ import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.internal.java.JavaGenerator;
 import com.speedment.common.codegen.internal.util.Formatting;
 import com.speedment.common.codegen.model.File;
-import com.speedment.generator.translator.Translator;
-import com.speedment.generator.translator.TranslatorManager;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.component.CodeGenerationComponent;
+import com.speedment.generator.component.EventComponent;
+import com.speedment.generator.component.PathComponent;
 import com.speedment.generator.event.AfterGenerate;
 import com.speedment.generator.event.BeforeGenerate;
 import com.speedment.generator.event.FileGenerated;
-import com.speedment.generator.component.EventComponent;
+import com.speedment.generator.internal.util.HashUtil;
+import com.speedment.generator.translator.Translator;
+import com.speedment.generator.translator.TranslatorManager;
+import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
@@ -36,6 +42,7 @@ import com.speedment.runtime.internal.util.Statistics;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -43,16 +50,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-
-import com.speedment.generator.internal.util.HashUtil;
-import com.speedment.runtime.component.InfoComponent;
-import java.nio.file.DirectoryStream;
 import java.util.stream.Stream;
+
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-import com.speedment.generator.component.PathComponent;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
 import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 import static java.util.Objects.requireNonNull;
 

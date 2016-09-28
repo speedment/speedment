@@ -17,10 +17,11 @@
 package com.speedment.tool.property.item;
 
 import com.speedment.runtime.annotation.Api;
-import java.util.function.UnaryOperator;
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
+
+import java.util.function.UnaryOperator;
 
 /**
  * A simple editor which will let the user edit a BooleanProperty via a

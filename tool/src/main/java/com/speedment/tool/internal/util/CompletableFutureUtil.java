@@ -16,11 +16,12 @@
  */
 package com.speedment.tool.internal.util;
 
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import java.lang.reflect.Array;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BinaryOperator;
+
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  *

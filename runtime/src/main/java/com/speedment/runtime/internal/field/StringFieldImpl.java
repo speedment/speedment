@@ -19,9 +19,10 @@ package com.speedment.runtime.internal.field;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.StringField;
-import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
+import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.internal.field.comparator.NullOrder;
 import com.speedment.runtime.internal.field.comparator.ReferenceFieldComparatorImpl;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceBetweenPredicate;
@@ -30,23 +31,24 @@ import com.speedment.runtime.internal.field.predicate.reference.ReferenceGreater
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceGreaterThanPredicate;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceInPredicate;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceIsNullPredicate;
-import com.speedment.runtime.internal.field.predicate.string.StringContainsPredicate;
-import com.speedment.runtime.internal.field.predicate.string.StringEndsWithPredicate;
-import com.speedment.runtime.internal.field.predicate.string.StringEqualIgnoreCasePredicate;
-import com.speedment.runtime.internal.field.predicate.string.StringIsEmptyPredicate;
-import com.speedment.runtime.internal.field.predicate.string.StringStartsWithPredicate;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.function.Predicate;
-import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceLessOrEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceLessThanPredicate;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceNotBetweenPredicate;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceNotEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceNotInPredicate;
 import com.speedment.runtime.internal.field.predicate.string.StringContainsIgnoreCasePredicate;
+import com.speedment.runtime.internal.field.predicate.string.StringContainsPredicate;
 import com.speedment.runtime.internal.field.predicate.string.StringEndsWithIgnoreCasePredicate;
+import com.speedment.runtime.internal.field.predicate.string.StringEndsWithPredicate;
+import com.speedment.runtime.internal.field.predicate.string.StringEqualIgnoreCasePredicate;
+import com.speedment.runtime.internal.field.predicate.string.StringIsEmptyPredicate;
 import com.speedment.runtime.internal.field.predicate.string.StringStartsWithIgnoreCasePredicate;
+import com.speedment.runtime.internal.field.predicate.string.StringStartsWithPredicate;
+
+import java.util.Comparator;
+import java.util.Set;
+import java.util.function.Predicate;
+
 import static java.util.Objects.requireNonNull;
 
 /**

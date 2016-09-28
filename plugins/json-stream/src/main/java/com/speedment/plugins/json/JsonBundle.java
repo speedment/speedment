@@ -18,6 +18,7 @@ package com.speedment.plugins.json;
 
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.plugins.json.internal.JsonComponentImpl;
+
 import java.util.stream.Stream;
 
 /**

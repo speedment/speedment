@@ -16,14 +16,14 @@
  */
 package com.speedment.runtime.internal.stream;
 
-import com.speedment.runtime.stream.parallel.HasParallelStrategy;
+import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.stream.Pipeline;
 import com.speedment.runtime.stream.StreamDecorator;
+import com.speedment.runtime.stream.parallel.HasParallelStrategy;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
-import com.speedment.runtime.field.predicate.FieldPredicate;
 
 /**
  *

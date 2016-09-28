@@ -18,7 +18,9 @@ package com.speedment.runtime.internal.field.setter;
 
 import com.speedment.runtime.field.method.SetToBoolean;
 import com.speedment.runtime.field.trait.HasBooleanValue;
+
 import javax.annotation.Generated;
+
 import static java.util.Objects.requireNonNull;
 
 /**

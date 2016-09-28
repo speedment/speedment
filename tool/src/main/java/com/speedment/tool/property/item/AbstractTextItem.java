@@ -21,11 +21,12 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableStringValue;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.control.TextInputControl;
+
 import java.util.function.UnaryOperator;
-import static java.util.Objects.requireNonNull;
+
 import static java.util.Objects.requireNonNull;
 
 /**

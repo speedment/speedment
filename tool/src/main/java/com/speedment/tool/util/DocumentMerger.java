@@ -22,6 +22,8 @@ import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.config.BaseDocument;
 import com.speedment.tool.config.DocumentProperty;
+import javafx.beans.property.Property;
+import javafx.collections.ObservableList;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -30,8 +32,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
-import javafx.beans.property.Property;
-import javafx.collections.ObservableList;
 
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;

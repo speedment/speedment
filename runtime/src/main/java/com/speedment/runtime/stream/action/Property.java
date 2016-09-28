@@ -39,5 +39,5 @@ public enum Property {
     /**
      * Does this action have a side effect (like peek() might).
      */
-    SIDE_EFFECT;
+    SIDE_EFFECT
 }

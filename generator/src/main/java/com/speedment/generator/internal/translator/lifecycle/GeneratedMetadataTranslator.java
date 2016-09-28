@@ -16,8 +16,8 @@
  */
 package com.speedment.generator.internal.translator.lifecycle;
 
-import com.speedment.common.codegen.internal.model.JavadocImpl;
 import com.speedment.common.codegen.constant.DefaultType;
+import com.speedment.common.codegen.internal.model.JavadocImpl;
 import com.speedment.common.codegen.internal.model.value.ReferenceValue;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Field;
@@ -25,10 +25,12 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Method;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.runtime.ApplicationMetadata;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.config.Project;
+import com.speedment.runtime.internal.AbstractApplicationMetadata;
 import com.speedment.runtime.internal.util.document.DocumentTranscoder;
 
 import java.util.ArrayList;
@@ -38,12 +40,8 @@ import java.util.stream.Stream;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.runtime.internal.AbstractApplicationMetadata;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
-import static com.speedment.common.codegen.internal.util.Formatting.indent;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -122,18 +120,16 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
         metadataField.set(new ReferenceValue("init()"));
         getMetadata.add("return Optional.of(METADATA);");
 
-        final Class result = newBuilder(file, getClassOrInterfaceName())
+        return newBuilder(file, getClassOrInterfaceName())
             .forEveryProject((clazz, project) -> {
                 clazz.public_()
                     .setSupertype(AbstractApplicationMetadata.class)
                     .add(metadataField)
                     .add(initializer)
                     .add(getMetadata);
-                
+
                 subInitializers.forEach(clazz::add);
             }).build();
-        
-        return result;
     }
 
     private Method addNewSubMethod(List<Method> methods) {

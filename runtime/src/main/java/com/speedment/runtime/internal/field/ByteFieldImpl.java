@@ -30,9 +30,11 @@ import com.speedment.runtime.internal.field.predicate.bytes.ByteEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.bytes.ByteGreaterOrEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.bytes.ByteGreaterThanPredicate;
 import com.speedment.runtime.internal.field.predicate.bytes.ByteInPredicate;
+
+import javax.annotation.Generated;
 import java.util.Set;
 import java.util.function.Predicate;
-import javax.annotation.Generated;
+
 import static java.util.Objects.requireNonNull;
 
 /**

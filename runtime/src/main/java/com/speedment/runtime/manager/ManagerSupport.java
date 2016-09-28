@@ -19,6 +19,7 @@ package com.speedment.runtime.manager;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.Field;
+
 import java.util.stream.Stream;
 
 /**

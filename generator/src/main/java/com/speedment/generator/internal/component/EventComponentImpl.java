@@ -79,10 +79,9 @@ public final class EventComponentImpl implements EventComponent {
     }
 
     private <E extends Event> Set<Consumer<Event>> listeners(Class<E> event) {
-        final Set<Consumer<Event>> set = otherEventListeners
-            .computeIfAbsent(event, ev -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
 
-        return set;
+        return otherEventListeners
+            .computeIfAbsent(event, ev -> Collections.newSetFromMap(new ConcurrentHashMap<>()));
     }
 
     private Set<Consumer<DefaultEvent>> defaultListeners(DefaultEvent event) {

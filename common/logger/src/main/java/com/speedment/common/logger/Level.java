@@ -92,7 +92,7 @@ public enum Level {
 
     private final String text;
 
-    private Level(String text) {
+    Level(String text) {
         this.text = text;
     }
 

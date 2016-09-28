@@ -197,11 +197,8 @@ public final class AnnotationImpl implements Annotation {
         if (!Objects.equals(this.imports, other.imports)) {
             return false;
         }
-        if (!Objects.equals(this.modifiers, other.modifiers)) {
-            return false;
-        }
-        return true;
-    }
+		return Objects.equals(this.modifiers, other.modifiers);
+	}
 
 
 }

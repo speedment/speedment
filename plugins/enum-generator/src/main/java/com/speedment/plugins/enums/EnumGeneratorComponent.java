@@ -19,24 +19,24 @@ package com.speedment.plugins.enums;
 
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
-import com.speedment.plugins.enums.internal.GeneratedEntityDecorator;
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.InjectKey;
+import com.speedment.common.injector.annotation.WithState;
 import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.generator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.generator.internal.component.TypeMapperComponentImpl;
-
-import static com.speedment.common.injector.State.INITIALIZED;
-import static com.speedment.common.injector.State.RESOLVED;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.generator.translator.StandardTranslatorKey;
+import com.speedment.plugins.enums.internal.GeneratedEntityDecorator;
 import com.speedment.plugins.enums.internal.ui.CommaSeparatedStringEditor;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.tool.component.PropertyEditorComponent;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.internal.component.PropertyEditorComponentImpl;
+
+import static com.speedment.common.injector.State.INITIALIZED;
+import static com.speedment.common.injector.State.RESOLVED;
 
 /**
  * A plugin for generating internal enums for columns marked as ENUM in the

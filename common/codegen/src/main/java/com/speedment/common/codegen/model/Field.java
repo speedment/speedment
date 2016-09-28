@@ -25,6 +25,7 @@ import com.speedment.common.codegen.model.trait.HasJavadoc;
 import com.speedment.common.codegen.model.trait.HasName;
 import com.speedment.common.codegen.model.trait.HasType;
 import com.speedment.common.codegen.model.trait.HasValue;
+
 import java.lang.reflect.Type;
 
 /**

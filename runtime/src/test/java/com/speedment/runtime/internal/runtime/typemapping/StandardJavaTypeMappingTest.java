@@ -14,12 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.internal.typemapping;
+package com.speedment.runtime.internal.runtime.typemapping;
 
-import com.speedment.runtime.internal.component.resultset.StandardJavaTypeMapping;
 import com.speedment.runtime.component.resultset.ResultSetMapping;
-import java.util.function.Function;
+import com.speedment.runtime.internal.component.resultset.StandardJavaTypeMapping;
 import org.junit.Test;
+
+import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
 

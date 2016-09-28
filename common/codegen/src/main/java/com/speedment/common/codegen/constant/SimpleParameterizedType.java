@@ -18,10 +18,12 @@ package com.speedment.common.codegen.constant;
 
 import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.File;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Objects;
+
 import static java.util.Objects.requireNonNull;
 
 /**

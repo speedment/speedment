@@ -16,10 +16,12 @@
  */
 package com.speedment.common.lazy.specialized;
 
-import java.util.UUID;
 import com.speedment.common.lazy.Lazy;
-import static java.util.Objects.requireNonNull;
+
+import java.util.UUID;
 import java.util.function.Supplier;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Specialized Lazy initialization class for UUID types.

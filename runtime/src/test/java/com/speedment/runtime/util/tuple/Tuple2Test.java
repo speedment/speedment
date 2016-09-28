@@ -30,6 +30,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -134,7 +135,7 @@ public class Tuple2Test {
     public void testStreamOf() {
         final Tuple2<Integer, String> newInstance = Tuples.of(FIRST, "Olle");
         List<Integer> content = newInstance.streamOf(Integer.class).collect(toList());
-        List<Integer> expected = Arrays.asList(FIRST);
+        List<Integer> expected = Collections.singletonList(FIRST);
         assertEquals(expected, content);
     }
 

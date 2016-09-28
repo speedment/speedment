@@ -27,6 +27,7 @@ import com.speedment.common.codegen.model.trait.HasMethods;
 import com.speedment.common.codegen.model.trait.HasName;
 import com.speedment.common.codegen.model.trait.HasSupertype;
 
+import java.lang.reflect.Type;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -35,10 +36,8 @@ import java.util.stream.Collectors;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
-import static com.speedment.common.codegen.constant.DefaultType.*;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.Formatting.tab;
-import java.lang.reflect.Type;
 import static java.util.Objects.requireNonNull;
 
 /**

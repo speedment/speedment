@@ -4,4 +4,4 @@
  * This package is part of the API. Modifications to classes here should only
  * (if ever) be done in major releases.
  */
-package com.speedment.runtime.event.trait;
+package com.speedment.generator.event.trait;

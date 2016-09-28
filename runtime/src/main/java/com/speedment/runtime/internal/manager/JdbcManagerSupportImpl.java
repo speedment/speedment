@@ -42,12 +42,11 @@ import com.speedment.runtime.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.internal.stream.builder.ReferenceStreamBuilder;
 import com.speedment.runtime.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.findDbmsType;
 import com.speedment.runtime.internal.util.document.DocumentUtil;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.ancestor;
+import com.speedment.runtime.manager.JdbcManagerSupport;
 import com.speedment.runtime.manager.Manager;
+import com.speedment.runtime.stream.StreamDecorator;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -58,20 +57,18 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import static java.util.function.Function.identity;
-import java.util.stream.Collectors;
-import static java.util.stream.Collectors.toList;
-import java.util.stream.Stream;
-import com.speedment.runtime.stream.StreamDecorator;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.isSame;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedTable;
-import com.speedment.runtime.manager.JdbcManagerSupport;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static com.speedment.runtime.internal.util.document.DocumentDbUtil.*;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
+import static com.speedment.runtime.internal.util.document.DocumentUtil.ancestor;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toMap;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.*;
 
 /**
  *
@@ -382,11 +379,10 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
 
     private ENTITY persistHelp(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
         final List<Column> cols = persistColumns(entity);
-        final StringBuilder sb = new StringBuilder();
-        sb.append("INSERT INTO ").append(sqlTableReference());
-        sb.append(" (").append(persistColumnList(cols)).append(")");
-        sb.append(" VALUES ");
-        sb.append("(").append(persistColumnListWithQuestionMarks(cols)).append(")");
+        String sb = "INSERT INTO " + sqlTableReference() +
+            " (" + persistColumnList(cols) + ")" +
+            " VALUES " +
+            "(" + persistColumnListWithQuestionMarks(cols) + ")";
 
         @SuppressWarnings("unchecked")
         final List<Object> values = cols.stream()
@@ -424,17 +420,16 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
             };
         };
 
-        executeInsert(entity, sb.toString(), values, generatedFields.keySet(), generatedKeyconsumer, listener);
+        executeInsert(entity, sb, values, generatedFields.keySet(), generatedKeyconsumer, listener);
         return entity;
     }
 
     private ENTITY updateHelper(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
         assertHasPrimaryKeyColumns();
-        final StringBuilder sb = new StringBuilder();
-        sb.append("UPDATE ").append(sqlTableReference()).append(" SET ");
-        sb.append(sqlColumnList(n -> n + " = ?"));
-        sb.append(" WHERE ");
-        sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
+        String sb = "UPDATE " + sqlTableReference() + " SET " +
+            sqlColumnList(n -> n + " = ?") +
+            " WHERE " +
+            sqlPrimaryKeyColumnList(pk -> pk + " = ?");
 
         final List<Object> values = manager.fields()
             .map(f -> toDatabaseType(f, entity))
@@ -444,22 +439,21 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
             .map(f -> f.getter().apply(entity))
             .forEachOrdered(values::add);
 
-        executeUpdate(sb.toString(), values, listener);
+        executeUpdate(sb, values, listener);
         return entity;
     }
 
     private ENTITY removeHelper(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
         assertHasPrimaryKeyColumns();
-        final StringBuilder sb = new StringBuilder();
-        sb.append("DELETE FROM ").append(sqlTableReference());
-        sb.append(" WHERE ");
-        sb.append(sqlPrimaryKeyColumnList(pk -> pk + " = ?"));
+        String sb = "DELETE FROM " + sqlTableReference() +
+            " WHERE " +
+            sqlPrimaryKeyColumnList(pk -> pk + " = ?");
 
         final List<Object> values = manager.primaryKeyFields()
             .map(f -> toDatabaseType(f, entity))
             .collect(toList());
 
-        executeDelete(sb.toString(), values, listener);
+        executeDelete(sb, values, listener);
         return entity;
     }
 

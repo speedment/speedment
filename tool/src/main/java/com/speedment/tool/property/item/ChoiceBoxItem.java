@@ -17,12 +17,13 @@
 package com.speedment.tool.property.item;
 
 import com.speedment.runtime.annotation.Api;
-import java.util.function.UnaryOperator;
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
+
+import java.util.function.UnaryOperator;
 
 /**
  * An editor for editing a property via a ChoiceBox. 

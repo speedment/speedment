@@ -25,6 +25,6 @@ package com.speedment.runtime.internal.field.comparator;
  */
 public enum NullOrder {
 
-    NONE, FIRST, LAST;
+    NONE, FIRST, LAST
 
 }

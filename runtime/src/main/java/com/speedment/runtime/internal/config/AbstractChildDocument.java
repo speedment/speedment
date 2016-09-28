@@ -31,7 +31,7 @@ import static com.speedment.runtime.internal.util.document.DocumentUtil.toString
  */
 public abstract class AbstractChildDocument<PARENT extends Document> extends BaseDocument implements HasParent<PARENT> {
 
-    public AbstractChildDocument(PARENT parent, Map<String, Object> data) {
+    AbstractChildDocument(PARENT parent, Map<String, Object> data) {
         super(parent, data);
     }
     

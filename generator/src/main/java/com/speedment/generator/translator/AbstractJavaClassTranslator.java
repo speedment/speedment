@@ -28,9 +28,10 @@ import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.Javadoc;
-import com.speedment.generator.translator.JavaClassTranslator;
-import com.speedment.generator.translator.Translator;
-import com.speedment.generator.translator.TranslatorSupport;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.component.TypeMapperComponent;
+import com.speedment.internal.common.mapstream.MapStream;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
@@ -53,6 +54,7 @@ import com.speedment.runtime.internal.config.ProjectImpl;
 import com.speedment.runtime.internal.config.SchemaImpl;
 import com.speedment.runtime.internal.config.TableImpl;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -66,11 +68,6 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.GENERATED;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
-import com.speedment.generator.component.TypeMapperComponent;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.internal.common.mapstream.MapStream;
-import java.lang.reflect.Type;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -395,7 +392,7 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasName
     }
 
     public enum CopyConstructorMode {
-        SETTER, FIELD;
+        SETTER, FIELD
     }
 
     public Constructor copyConstructor(Type type, CopyConstructorMode mode) {

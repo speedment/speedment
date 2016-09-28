@@ -16,11 +16,11 @@
  */
 package com.speedment.runtime.component;
 
+import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Dbms;
 
 import java.util.Optional;
-import com.speedment.common.injector.annotation.InjectKey;
 
 /**
  * A component that stores the password for all the connected 

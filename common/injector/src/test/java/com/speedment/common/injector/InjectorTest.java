@@ -16,6 +16,7 @@
  */
 package com.speedment.common.injector;
 
+import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.test_a.StringIdentityMapper;
 import com.speedment.common.injector.test_a.TypeMapperComponent;
@@ -28,7 +29,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import com.speedment.common.injector.annotation.InjectKey;
 
 /**
  *

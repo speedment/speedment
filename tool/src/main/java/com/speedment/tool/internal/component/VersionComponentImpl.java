@@ -18,6 +18,7 @@ package com.speedment.tool.internal.component;
 
 import com.speedment.common.rest.Rest;
 import com.speedment.tool.component.VersionComponent;
+
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;

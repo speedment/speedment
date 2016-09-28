@@ -16,15 +16,12 @@
  */
 package com.speedment.tool.internal.component;
 
-import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
-import static com.speedment.common.logger.Level.FATAL;
-import static com.speedment.common.logger.Level.TRACE;
-import static com.speedment.common.logger.Level.WARN;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
+import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.internal.common.mapstream.MapStream;
 import com.speedment.runtime.component.PasswordComponent;
 import com.speedment.runtime.component.ProjectComponent;
@@ -38,6 +35,7 @@ import com.speedment.runtime.util.ProgressMeasure;
 import com.speedment.tool.MainApp;
 import com.speedment.tool.brand.Palette;
 import com.speedment.tool.component.DocumentPropertyComponent;
+import com.speedment.tool.component.RuleComponent;
 import com.speedment.tool.component.UserInterfaceComponent;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.DocumentProperty;
@@ -47,6 +45,7 @@ import com.speedment.tool.internal.notification.NotificationImpl;
 import com.speedment.tool.internal.util.ConfigFileHelper;
 import com.speedment.tool.internal.util.InjectionLoader;
 import com.speedment.tool.notification.Notification;
+import com.speedment.tool.property.PropertyEditor;
 import com.speedment.tool.util.BrandUtil;
 import com.speedment.tool.util.OutputUtil;
 import de.jensd.fx.glyphs.GlyphsDude;
@@ -94,15 +93,13 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 
-import static java.util.stream.Collectors.toList;
-import static javafx.application.Platform.runLater;
-import com.speedment.tool.component.RuleComponent;
-import com.speedment.tool.property.PropertyEditor;
-import java.util.concurrent.atomic.AtomicBoolean;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
+import static javafx.application.Platform.runLater;
 
 /**
  *

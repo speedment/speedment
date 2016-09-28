@@ -18,18 +18,20 @@ package com.speedment.plugins.enums;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.plugins.enums.internal.GeneratedEnumType;
 import com.speedment.internal.common.lazy.specialized.LazyClass;
-import static com.speedment.plugins.enums.internal.GeneratedEntityDecorator.FROM_DATABASE_METHOD;
 import com.speedment.plugins.enums.internal.EnumGeneratorUtil;
-import static com.speedment.plugins.enums.internal.GeneratedEntityDecorator.TO_DATABASE_METHOD;
+import com.speedment.plugins.enums.internal.GeneratedEnumType;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.exception.SpeedmentException;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.stream.Stream;
+
+import static com.speedment.plugins.enums.internal.GeneratedEntityDecorator.FROM_DATABASE_METHOD;
+import static com.speedment.plugins.enums.internal.GeneratedEntityDecorator.TO_DATABASE_METHOD;
 import static java.util.Objects.requireNonNull;
 
 /**

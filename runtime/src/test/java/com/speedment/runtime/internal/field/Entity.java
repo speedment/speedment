@@ -17,9 +17,9 @@
 package com.speedment.runtime.internal.field;
 
 import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.internal.config.mapper.IdentityTypeMapper;
 import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.field.StringField;
+import com.speedment.runtime.internal.config.mapper.IdentityTypeMapper;
 
 /**
  *

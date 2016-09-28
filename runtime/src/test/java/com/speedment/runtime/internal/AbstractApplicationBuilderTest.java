@@ -18,13 +18,15 @@ package com.speedment.runtime.internal;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.runtime.Speedment;
+import org.junit.Before;
+import org.junit.Test;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+
 import static org.junit.Assert.assertEquals;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  *

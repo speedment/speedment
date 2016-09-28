@@ -22,11 +22,11 @@
 package com.speedment.tool.property.item;
 
 import com.speedment.runtime.annotation.Api;
-import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
+
+import java.util.function.UnaryOperator;
 
 /**
  * A simple editor item which will let the user edit a StringProperty via a

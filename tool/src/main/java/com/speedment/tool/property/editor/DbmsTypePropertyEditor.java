@@ -17,15 +17,17 @@
 package com.speedment.tool.property.editor;
 
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.tool.property.item.ChoiceBoxItem;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.property.PropertyEditor;
-import static java.util.stream.Collectors.toList;
-import java.util.stream.Stream;
+import com.speedment.tool.property.item.ChoiceBoxItem;
 import javafx.collections.ObservableList;
+
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 import static javafx.collections.FXCollections.observableList;
 
 /**

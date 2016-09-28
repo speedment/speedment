@@ -23,6 +23,7 @@ import com.speedment.runtime.field.method.CharGetter;
 import com.speedment.runtime.field.method.CharSetter;
 import com.speedment.runtime.field.method.SetToChar;
 import com.speedment.runtime.internal.field.setter.SetToCharImpl;
+
 import javax.annotation.Generated;
 
 /**

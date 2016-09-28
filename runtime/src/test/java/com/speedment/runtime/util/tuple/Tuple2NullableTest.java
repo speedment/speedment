@@ -30,6 +30,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -147,7 +148,7 @@ public class Tuple2NullableTest {
     public void testStreamOf() {
         final Tuple2OfNullables<Integer, Integer> newInstance = Tuples.ofNullables(FIRST, null);
         List<Integer> content = newInstance.streamOf(Integer.class).collect(toList());
-        List<Integer> expected = Arrays.asList(FIRST);
+        List<Integer> expected = Collections.singletonList(FIRST);
         assertEquals(expected, content);
     }
 
@@ -155,7 +156,7 @@ public class Tuple2NullableTest {
     public void testStreamOf2() {
         final Tuple2OfNullables<Integer, String> newInstance = Tuples.ofNullables(FIRST, "Tryggve");
         List<Integer> content = newInstance.streamOf(Integer.class).collect(toList());
-        List<Integer> expected = Arrays.asList(FIRST);
+        List<Integer> expected = Collections.singletonList(FIRST);
         assertEquals(expected, content);
     }
 

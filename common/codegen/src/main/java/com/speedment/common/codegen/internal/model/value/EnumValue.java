@@ -18,8 +18,8 @@ package com.speedment.common.codegen.internal.model.value;
 
 import com.speedment.common.codegen.internal.model.ValueImpl;
 import com.speedment.common.codegen.model.trait.HasType;
-import java.lang.reflect.Type;
 
+import java.lang.reflect.Type;
 import java.util.Objects;
 
 /**
@@ -75,10 +75,7 @@ public final class EnumValue extends ValueImpl<String>
             return false;
         }
         final EnumValue other = (EnumValue) obj;
-        if (!Objects.equals(this.type, other.type)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.type, other.type);
     }
 
 

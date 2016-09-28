@@ -16,6 +16,8 @@
  */
 package com.speedment.generator.internal.util;
 
+import com.speedment.common.codegen.constant.DefaultType;
+import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
@@ -33,10 +35,8 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
-import com.speedment.common.codegen.constant.DefaultType;
-import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
-import static com.speedment.generator.internal.translator.manager.GeneratedManagerImplTranslator.*;
+import static com.speedment.generator.internal.translator.manager.GeneratedManagerImplTranslator.NEW_EMPTY_ENTITY_METHOD;
 import static java.util.stream.Collectors.joining;
 
 /**

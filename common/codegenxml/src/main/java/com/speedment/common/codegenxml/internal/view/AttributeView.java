@@ -33,12 +33,11 @@ public class AttributeView implements Transform<Attribute, String>,
 
     @Override
     public Optional<String> transform(Generator gen, Attribute model) {
-        return Optional.of(new StringBuilder(transformName(model))
-            .append((model.isEscape()
-                    ? transformValue(model)
-                    : model.getValue()
-                ).map(s -> "=\"" + s + "\"").orElse("")
-            ).toString()
+        return Optional.of(transformName(model) +
+            (model.isEscape()
+                ? transformValue(model)
+                : model.getValue()
+            ).map(s -> "=\"" + s + "\"").orElse("")
         );
     }
 }

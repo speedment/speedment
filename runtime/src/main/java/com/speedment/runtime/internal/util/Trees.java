@@ -42,14 +42,14 @@ public final class Trees {
         DEPTH_FIRST_PRE,
         /*DEPTH_FIRST_IN, Supported only for left/right trees*/
         DEPTH_FIRST_POST,
-        BREADTH_FIRST;
+        BREADTH_FIRST
     }
 
     /**
      * The walking order of the tree.
      */
     public enum WalkingOrder {
-        FORWARD, BACKWARD;
+        FORWARD, BACKWARD
     }
 
     public static <T> Stream<? extends T> walk(T first, Function<T, T> traverser) {

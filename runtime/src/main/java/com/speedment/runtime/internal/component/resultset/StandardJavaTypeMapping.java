@@ -56,7 +56,7 @@ public final class StandardJavaTypeMapping {
 
     private static final ResultSetMapping<?>[] VALUES = {
         new JavaTypeMappingImpl<>(
-            Object.class, "Object", s -> (Object) s, l -> (Object) l
+            Object.class, "Object", s -> s, l -> l
         ),
         
         new JavaTypeMappingImpl<>(

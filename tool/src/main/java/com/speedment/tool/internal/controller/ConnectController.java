@@ -16,9 +16,9 @@
  */
 package com.speedment.tool.internal.controller;
 
-import com.speedment.runtime.component.DbmsHandlerComponent;
-import com.speedment.generator.component.EventComponent;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.component.EventComponent;
+import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.PasswordComponent;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.parameter.DbmsType;

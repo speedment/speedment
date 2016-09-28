@@ -16,9 +16,9 @@
  */
 package com.speedment.runtime.component;
 
+import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Project;
-import com.speedment.common.injector.annotation.InjectKey;
 
 /**
  * This Component interface is used for holding the current {@link Project} that is being

@@ -21,7 +21,6 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.ManagerComponent;
-import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.component.ConnectionPoolComponentImpl;
 import com.speedment.runtime.internal.component.DbmsHandlerComponentImpl;

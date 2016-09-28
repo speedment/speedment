@@ -21,9 +21,9 @@
  */
 package com.speedment.generator;
 
+import com.speedment.common.injector.Injector;
 import com.speedment.generator.namer.JavaLanguageNamer;
 import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.common.injector.Injector;
 import com.speedment.runtime.config.Table;
 import org.junit.After;
 import org.junit.AfterClass;

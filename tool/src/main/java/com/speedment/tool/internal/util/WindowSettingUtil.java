@@ -18,10 +18,12 @@ package com.speedment.tool.internal.util;
 
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
+import javafx.stage.Stage;
+
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
-import javafx.stage.Stage;
+
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  * Utility class for method related to window settings, such as size, position 

@@ -30,11 +30,9 @@ public final class DocTypeView implements Transform<DocType, String> {
 
     @Override
     public Optional<String> transform(Generator gen, DocType model) {
-        return Optional.of(new StringBuilder()
-            .append("<!DOCTYPE ")
-            .append(model.getRootType())
-            .append('>')
-            .toString()
+        return Optional.of("<!DOCTYPE " +
+            model.getRootType() +
+            '>'
         );
     }
     

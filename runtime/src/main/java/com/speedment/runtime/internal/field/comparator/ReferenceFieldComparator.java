@@ -17,6 +17,7 @@
 package com.speedment.runtime.internal.field.comparator;
 
 import com.speedment.runtime.field.trait.HasReferenceValue;
+
 import java.util.Comparator;
 
 /**

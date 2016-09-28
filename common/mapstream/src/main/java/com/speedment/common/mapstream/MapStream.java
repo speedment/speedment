@@ -22,6 +22,7 @@ import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -55,7 +56,6 @@ import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static java.util.Collections.newSetFromMap;
-import java.util.LinkedHashMap;
 
 /**
  * A java {@code Stream} wrapper that stream over Key-Value pairs. With this

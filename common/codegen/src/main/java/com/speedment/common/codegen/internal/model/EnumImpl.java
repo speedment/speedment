@@ -111,10 +111,7 @@ public final class EnumImpl extends ClassOrInterfaceImpl<Enum> implements Enum {
         if (!Objects.equals(this.constants, other.constants)) {
             return false;
         }
-        if (!Objects.equals(this.constructors, other.constructors)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.constructors, other.constructors);
     }
 
 

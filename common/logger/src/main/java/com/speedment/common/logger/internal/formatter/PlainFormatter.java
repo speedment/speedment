@@ -32,8 +32,7 @@ public final class PlainFormatter implements LoggerFormatter {
     @Override
     public String apply(Level level, String name, String message) {
         requireNonNulls(level, name);
-        final StringBuilder sb = new StringBuilder(Instant.now() +" "+level.toText()+" ["+Thread.currentThread().getName()+"] (").append(name).append(") - ").append(message);
-        return sb.toString();
+        return Instant.now() + " " + level.toText() + " [" + Thread.currentThread().getName() + "] (" + name + ") - " + message;
     }
 
 }

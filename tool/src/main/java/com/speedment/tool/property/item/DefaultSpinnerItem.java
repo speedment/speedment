@@ -29,7 +29,9 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+
 import java.util.function.UnaryOperator;
+
 import static java.util.Objects.requireNonNull;
 
 /**

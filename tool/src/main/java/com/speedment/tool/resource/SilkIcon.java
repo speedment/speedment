@@ -1036,7 +1036,7 @@ public enum SilkIcon {
 	private final static String ICONS_DIRECTORY = "/com/famfamfam/silk/";
 	private final String icon;
 	
-	private SilkIcon(String icon) {
+	SilkIcon(String icon) {
 		this.icon = requireNonNull(icon);
 	}
 	

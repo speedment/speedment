@@ -17,10 +17,8 @@
 package com.speedment.tool.property.item;
 
 import com.speedment.runtime.config.trait.HasNullable.ImplementAs;
-import static java.util.Objects.requireNonNull;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
-import static javafx.collections.FXCollections.observableArrayList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
@@ -28,6 +26,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
+
 import static java.util.Objects.requireNonNull;
 import static javafx.collections.FXCollections.observableArrayList;
 

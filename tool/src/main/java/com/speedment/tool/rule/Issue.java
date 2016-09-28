@@ -44,13 +44,14 @@ public interface Issue {
         ERROR("Error");
     
         private final String value;
-        private Level(String value){
+
+        Level(String value){
             this.value = value;
         }
         
         public String toString(){ return "["+value+"]"; }
-    };
-    
+    }
+
     /**
      * The title of the issue. Consider this the Issue summary
      * 

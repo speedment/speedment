@@ -30,9 +30,11 @@ import com.speedment.runtime.internal.field.predicate.doubles.DoubleEqualPredica
 import com.speedment.runtime.internal.field.predicate.doubles.DoubleGreaterOrEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.doubles.DoubleGreaterThanPredicate;
 import com.speedment.runtime.internal.field.predicate.doubles.DoubleInPredicate;
+
+import javax.annotation.Generated;
 import java.util.Set;
 import java.util.function.Predicate;
-import javax.annotation.Generated;
+
 import static java.util.Objects.requireNonNull;
 
 /**

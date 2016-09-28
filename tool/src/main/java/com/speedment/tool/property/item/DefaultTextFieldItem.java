@@ -17,13 +17,13 @@
 package com.speedment.tool.property.item;
 
 import com.speedment.runtime.annotation.Api;
-import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableStringValue;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
+
+import java.util.function.UnaryOperator;
 
 /**
  * An editor for editing a StringProperty via a TextField, which has a default value. The user

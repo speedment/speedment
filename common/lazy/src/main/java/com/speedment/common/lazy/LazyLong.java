@@ -16,8 +16,9 @@
  */
 package com.speedment.common.lazy;
 
-import static java.util.Objects.requireNonNull;
 import java.util.function.LongSupplier;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Lazy initialization class for {@link long}.

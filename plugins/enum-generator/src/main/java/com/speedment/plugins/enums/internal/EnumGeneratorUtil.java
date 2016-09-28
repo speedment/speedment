@@ -21,10 +21,12 @@ import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.exception.SpeedmentException;
-import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
+
 import java.util.List;
-import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+
+import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
+import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -45,9 +47,8 @@ public final class EnumGeneratorUtil {
     public static String enumNameOf(Column column, Injector injector) {
         final TranslatorSupport<Table> support = new TranslatorSupport<>(injector, column.getParentOrThrow());
         final String shortName = support.namer().javaTypeName(column.getJavaName());
-        final String fullName  = support.generatedEntityType().getTypeName() + "." + shortName;
-        
-        return fullName;
+
+        return support.generatedEntityType().getTypeName() + "." + shortName;
     }
     
     /**

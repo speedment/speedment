@@ -16,18 +16,26 @@
  */
 package com.speedment.generator.internal.translator.manager;
 
+import com.speedment.common.codegen.constant.DefaultJavadocTag;
+import com.speedment.common.codegen.constant.DefaultType;
+import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.internal.util.EntityTranslatorSupport;
 import com.speedment.generator.internal.util.FkHolder;
+import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
+import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.config.Table;
+import com.speedment.runtime.field.method.BackwardFinder;
+import com.speedment.runtime.manager.Manager;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -37,17 +45,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
-import com.speedment.common.codegen.constant.DefaultJavadocTag;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
-import com.speedment.common.codegen.constant.DefaultType;
-import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.runtime.manager.Manager;
-import java.lang.reflect.Type;
-import com.speedment.runtime.field.method.BackwardFinder;
 
 /**
  *
@@ -175,25 +175,25 @@ public final class GeneratedManagerTranslator extends AbstractEntityAndManagerTr
             
             .forEveryTable(Phase.POST_MAKE, (intrf, table) -> {
                 /*** Create aggregate streaming functions, if any ***/
-                fkStreamers.keySet().stream().forEach((referencingTable) -> {
+                fkStreamers.keySet().forEach((referencingTable) -> {
                     final List<String> methodNames = fkStreamers.get(referencingTable);
                     final TranslatorSupport<Table> foreignSupport = new TranslatorSupport<>(injector, referencingTable);
 
                     if (!methodNames.isEmpty()) {
                         final Method method = Method.of(
-                            EntityTranslatorSupport.FIND + 
-                            EntityTranslatorSupport.pluralis(referencingTable, getSupport().namer()),
+                            EntityTranslatorSupport.FIND +
+                                EntityTranslatorSupport.pluralis(referencingTable, getSupport().namer()),
                             DefaultType.stream(foreignSupport.entityType())
                         );
 
                         method.add(Field.of("entity", getSupport().entityType()));
 
                         method.set(Javadoc.of(
-                                "Creates and returns a <em>distinct</em> {@link Stream} of all " +
-                                "{@link " + getSupport().typeName(referencingTable) + "} Entities that "+
-                                "references this Entity by a foreign key. The order of the "+
-                                "Entities are undefined and may change from time to time.\n"+
-                                "<p>\n"+
+                            "Creates and returns a <em>distinct</em> {@link Stream} of all " +
+                                "{@link " + getSupport().typeName(referencingTable) + "} Entities that " +
+                                "references this Entity by a foreign key. The order of the " +
+                                "Entities are undefined and may change from time to time.\n" +
+                                "<p>\n" +
                                 "Note that the Stream is <em>distinct</em>, meaning that " +
                                 "referencing Entities will only appear once in the Stream, even " +
                                 "though they may reference this Entity by several columns.\n" +
@@ -203,12 +203,12 @@ public final class GeneratedManagerTranslator extends AbstractEntityAndManagerTr
                                 "<p>\n" +
                                 "N.B. The current implementation supports lazy-loading of the referencing Entities."
                             )
-                            .add(PARAM.setValue("entity").setText("where to read the column value from"))
-                            .add(RETURN.setText(
-                                "a <em>distinct</em> {@link Stream} of all {@link " + 
-                                getSupport().typeName(referencingTable) + "} " +
-                                "Entities that references this Entity by a foreign key"
-                            ))
+                                .add(PARAM.setValue("entity").setText("where to read the column value from"))
+                                .add(RETURN.setText(
+                                    "a <em>distinct</em> {@link Stream} of all {@link " +
+                                        getSupport().typeName(referencingTable) + "} " +
+                                        "Entities that references this Entity by a foreign key"
+                                ))
                         );
 
                         intrf.add(method);

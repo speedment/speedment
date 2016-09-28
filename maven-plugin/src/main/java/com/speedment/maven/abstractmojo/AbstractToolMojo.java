@@ -17,21 +17,21 @@
 package com.speedment.maven.abstractmojo;
 
 
-import com.speedment.maven.typemapper.Mapping;
 import com.speedment.common.injector.Injector;
+import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.Speedment;
 import com.speedment.tool.MainApp;
+import javafx.application.Application;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.apache.maven.project.MavenProject;
 
 import java.io.File;
+import java.util.function.Consumer;
 
 import static com.speedment.tool.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
-import java.util.function.Consumer;
-import javafx.application.Application;
-import org.apache.maven.project.MavenProject;
 
 /**
  *

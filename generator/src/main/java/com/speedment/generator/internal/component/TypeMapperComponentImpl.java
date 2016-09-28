@@ -16,9 +16,9 @@
  */
 package com.speedment.generator.internal.component;
 
-import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.mapper.bigdecimal.BigDecimalToDouble;
@@ -38,6 +38,7 @@ import com.speedment.runtime.config.mapper.time.TimestampToIntMapper;
 import com.speedment.runtime.config.mapper.time.TimestampToLocalDateTimeMapper;
 import com.speedment.runtime.config.mapper.time.TimestampToLongMapper;
 import com.speedment.runtime.exception.SpeedmentException;
+
 import java.math.BigDecimal;
 import java.sql.Clob;
 import java.sql.Date;
@@ -46,7 +47,6 @@ import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;

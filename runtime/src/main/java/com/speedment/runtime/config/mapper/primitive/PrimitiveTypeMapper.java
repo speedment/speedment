@@ -18,6 +18,7 @@ package com.speedment.runtime.config.mapper.primitive;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
+
 import java.lang.reflect.Type;
 
 /**

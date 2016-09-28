@@ -25,6 +25,7 @@ import com.speedment.tool.internal.rule.ProtectedNameRule;
 import com.speedment.tool.internal.rule.ReferencesEnabledRule;
 import com.speedment.tool.internal.util.CompletableFutureUtil;
 import com.speedment.tool.rule.Rule;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;

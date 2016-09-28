@@ -17,7 +17,7 @@
 package com.speedment.tool.rule;
 
 import com.speedment.runtime.annotation.Api;
-import com.speedment.tool.rule.Issue.Level;
+
 import java.util.concurrent.CompletableFuture;
 
 /**

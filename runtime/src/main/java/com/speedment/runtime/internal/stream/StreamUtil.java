@@ -42,7 +42,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class StreamUtil {
     
-    public static <T> Stream<T> streamOfOptional(Optional<T> element) {
+    public static <T> Stream<T> streamOfOptional(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<T> element) {
         return Stream.of(element.orElse(null)).filter(e -> e != null);
     }
 
@@ -81,7 +81,7 @@ public final class StreamUtil {
         return StreamSupport.stream(parallelStrategy.spliteratorUnknownSize(iterator, Spliterator.IMMUTABLE + Spliterator.NONNULL), false);
     }
 
-    public static <T> Stream<T> from(Optional<T> optional) {
+    public static <T> Stream<T> from(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<T> optional) {
         requireNonNull(optional);
         return optional.isPresent() ? Stream.of(optional.get()) : Stream.empty();
     }

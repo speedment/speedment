@@ -57,15 +57,12 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
     protected final StreamTerminator streamTerminator;
     protected final Set<BaseStream<?, ?>> streamSet; // Keeps track of the chain of streams so that we can auto-close them all
     private final List<Runnable> closeHandlers;  // The close handlers for this particular stream
-//    private boolean parallel;
-//    private boolean ordered;
     private boolean closed;
 
-    protected AbstractStreamBuilder(PipelineImpl<?> pipeline, StreamTerminator streamTerminator, Set<BaseStream<?, ?>> streamSet) {
+    AbstractStreamBuilder(PipelineImpl<?> pipeline, StreamTerminator streamTerminator, Set<BaseStream<?, ?>> streamSet) {
         this.pipeline = requireNonNull(pipeline);
         this.streamTerminator = requireNonNull(streamTerminator);
         this.closeHandlers = new ArrayList<>();
-//        this.ordered = true;
         this.streamSet = streamSet;
     }
 
@@ -119,10 +116,6 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
         }
     }
 
-    public boolean isOrdered() {
-        return pipeline.isOrdered();
-    }
-
     protected P pipeline() {
         @SuppressWarnings("unchecked")
         final P result = (P) pipeline;
@@ -135,7 +128,7 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
         return thizz;
     }
 
-    protected <T> boolean finallyClose(BooleanSupplier bs) {
+    protected boolean finallyClose(BooleanSupplier bs) {
         try {
             return bs.getAsBoolean();
         } catch (Exception e) {
@@ -146,7 +139,7 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
         }
     }
 
-    protected <T> long finallyClose(LongSupplier lp) {
+    protected long finallyClose(LongSupplier lp) {
         try {
             return lp.getAsLong();
         } catch (Exception e) {
@@ -157,7 +150,7 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
         }
     }
 
-    protected <T> int finallyClose(IntSupplier is) {
+    protected int finallyClose(IntSupplier is) {
         try {
             return is.getAsInt();
         } catch (Exception e) {
@@ -168,7 +161,7 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
         }
     }
 
-    protected <T> double finallyClose(DoubleSupplier ds) {
+    protected double finallyClose(DoubleSupplier ds) {
         try {
             return ds.getAsDouble();
         } catch (Exception e) {
@@ -179,7 +172,7 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
         }
     }
 
-    protected <T> void finallyClose(Runnable r) {
+    protected void finallyClose(Runnable r) {
         try {
             r.run();
         } catch (Exception e) {

@@ -16,9 +16,9 @@
  */
 package com.speedment.runtime.component;
 
+import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.common.injector.annotation.InjectKey;
 
 /**
  * An Entity Manager is be used to handle persistence for any Entity. This

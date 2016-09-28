@@ -22,6 +22,7 @@ import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
 import com.speedment.tool.internal.component.VersionComponentImpl;
 import com.speedment.tool.internal.util.ConfigFileHelper;
 import com.speedment.tool.internal.util.InjectionLoader;
+
 import java.util.stream.Stream;
 
 /**

@@ -93,7 +93,7 @@ public final class ResultSetMapperComponentImpl implements ResultSetMapperCompon
         final Stream.Builder<Stream<Tuple2<Optional<DbmsType>, ResultSetMapping<?>>>> sb = Stream.builder();
         sb.add(s0);
 
-        dbmsTypeMap.entrySet().stream().forEach(e -> {
+        dbmsTypeMap.entrySet().forEach(e -> {
             final DbmsType dbmsType = e.getKey();
             Stream<Tuple2<Optional<DbmsType>, ResultSetMapping<?>>> sn = e.getValue().values().stream().map(v -> Tuples.of(Optional.of(dbmsType), v));
             sb.add(sn);

@@ -16,17 +16,17 @@
  */
 package com.speedment.tool.internal.controller;
 
-import com.speedment.generator.component.CodeGenerationComponent;
-import com.speedment.runtime.Speedment;
-import com.speedment.runtime.component.DbmsHandlerComponent;
-import com.speedment.runtime.component.InfoComponent;
-import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectKey;
-import static com.speedment.internal.common.mapstream.MapStream.comparing;
+import com.speedment.generator.component.CodeGenerationComponent;
+import com.speedment.generator.component.TypeMapperComponent;
+import com.speedment.runtime.Speedment;
+import com.speedment.runtime.component.DbmsHandlerComponent;
+import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.parameter.DbmsType;
+import com.speedment.tool.resource.SpeedmentIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -37,14 +37,14 @@ import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
-
-import static com.speedment.tool.internal.util.CloseUtil.newCloseHandler;
-import com.speedment.tool.resource.SpeedmentIcon;
 import java.util.Objects;
 import java.util.Optional;
-import static java.util.stream.Collectors.toList;
+import java.util.ResourceBundle;
 import java.util.stream.Stream;
+
+import static com.speedment.internal.common.mapstream.MapStream.comparing;
+import static com.speedment.tool.internal.util.CloseUtil.newCloseHandler;
+import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -103,7 +103,7 @@ public final class ComponentsController implements Initializable {
             setExpanded(false);
             setGraphic(SpeedmentIcon.BRICKS.view());
         }
-    };
+    }
 
     private static Optional<Class<?>> injectorKeyValue(Class<?> clazz) {
         return traverseAncestors(clazz)
@@ -131,7 +131,7 @@ public final class ComponentsController implements Initializable {
             setExpanded(true);
             setGraphic(SpeedmentIcon.BOOK_OPEN.view());
         }
-    };
+    }
 
     private static class TranslatorItem extends TreeItem<String> {
 
@@ -140,7 +140,7 @@ public final class ComponentsController implements Initializable {
             setExpanded(true);
             setGraphic(SpeedmentIcon.BOOK_NEXT.view());
         }
-    };
+    }
 
     private static class DbmsTypesItem extends TreeItem<String> {
 
@@ -149,7 +149,7 @@ public final class ComponentsController implements Initializable {
             setExpanded(true);
             setGraphic(SpeedmentIcon.DATABASE_CONNECT.view());
         }
-    };
+    }
 
     private static class DbmsTypeItem extends TreeItem<String> {
 
@@ -158,7 +158,7 @@ public final class ComponentsController implements Initializable {
             setExpanded(true);
             setGraphic(SpeedmentIcon.DATABASE.view());
         }
-    };
+    }
 
     private static class TypeMappersItem extends TreeItem<String> {
 
@@ -167,7 +167,7 @@ public final class ComponentsController implements Initializable {
             setExpanded(true);
             setGraphic(SpeedmentIcon.PAGE_WHITE_CUP.view());
         }
-    };
+    }
 
     private static class TypeMapperItem extends TreeItem<String> {
 
@@ -176,7 +176,7 @@ public final class ComponentsController implements Initializable {
             setExpanded(true);
             setGraphic(SpeedmentIcon.CUP.view());
         }
-    };
+    }
 
     private TreeItem<String> treeItem(Class<?> comp) {
         final ComponentItem item = new ComponentItem(comp);

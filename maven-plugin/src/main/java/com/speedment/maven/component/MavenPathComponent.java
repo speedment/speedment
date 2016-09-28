@@ -16,12 +16,13 @@
  */
 package com.speedment.maven.component;
 
-import com.speedment.generator.component.PathComponent;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.component.PathComponent;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Project;
-import java.nio.file.Path;
 import org.apache.maven.project.MavenProject;
+
+import java.nio.file.Path;
 
 /**
  *

@@ -17,6 +17,7 @@
 package com.speedment.runtime.util;
 
 import com.speedment.runtime.annotation.Api;
+
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
@@ -56,7 +57,7 @@ public final class OptionalUtil {
      * @param optional  the optional
      * @return          the inner value or {@code null}
      */
-    public static <T> T unwrap(Optional<T> optional) {
+    public static <T> T unwrap(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<T> optional) {
         if (optional == null) {
             return null;
         }
@@ -70,7 +71,7 @@ public final class OptionalUtil {
      * @param optional  the optional value (or null)
      * @return          the inner value or {@code null}
      */
-    public static Integer unwrap(OptionalInt optional) {
+    public static Integer unwrap(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") OptionalInt optional) {
         return optional == null 
             ? null 
             : optional.isPresent() ? optional.getAsInt() : null;
@@ -96,7 +97,7 @@ public final class OptionalUtil {
      * @param optional  the optional value (or null)
      * @return          the inner value or {@code null}
      */
-    public static Long unwrap(OptionalLong optional) {
+    public static Long unwrap(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") OptionalLong optional) {
         return optional == null 
             ? null 
             : optional.isPresent() ? optional.getAsLong() : null;
@@ -109,7 +110,7 @@ public final class OptionalUtil {
      * @param optional  the optional value (or null)
      * @return          the inner value or {@code null}
      */
-    public static Double unwrap(OptionalDouble optional) {
+    public static Double unwrap(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") OptionalDouble optional) {
         return optional == null 
             ? null 
             : optional.isPresent() ? optional.getAsDouble() : null;

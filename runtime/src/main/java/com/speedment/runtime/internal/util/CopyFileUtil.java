@@ -23,7 +23,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Optional;
 
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 
@@ -39,7 +38,7 @@ public final class CopyFileUtil {
         final Path writePath = Paths.get(destFilename);
         try {
             try {
-                final boolean created = Optional.ofNullable(writePath.getParent()).map(p -> p.toFile().mkdirs()).orElse(false);
+                writePath.getParent().toFile().mkdirs();
             } catch (SecurityException se) {
                 throw new SpeedmentException("Unable to create directory " + writePath.toString(), se);
             }

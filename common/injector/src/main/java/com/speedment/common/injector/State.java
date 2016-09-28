@@ -43,5 +43,5 @@ public enum State {
     /**
      * The Injectable has been initialized, resolved, started and stopped.
      */
-    STOPPED;
+    STOPPED
 }

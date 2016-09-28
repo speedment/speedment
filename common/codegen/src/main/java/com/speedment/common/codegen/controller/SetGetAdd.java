@@ -16,24 +16,24 @@
  */
 package com.speedment.common.codegen.controller;
 
+import com.speedment.common.codegen.constant.SimpleParameterizedType;
+import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.JavadocTag;
 import com.speedment.common.codegen.model.Method;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
-import com.speedment.common.codegen.constant.SimpleParameterizedType;
-import com.speedment.common.codegen.constant.SimpleType;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Generic;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import static java.util.Objects.requireNonNull;
 
 /**

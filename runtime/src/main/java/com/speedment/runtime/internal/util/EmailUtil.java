@@ -37,10 +37,7 @@ public final class EmailUtil {
         if (storedEmail == null) {
             return false;
         }
-        if (DEFAULT_EMAIL.equals(storedEmail)) {
-            return false;
-        }
-        return true;
+        return !DEFAULT_EMAIL.equals(storedEmail);
     }
 
     public static String getEmail() {

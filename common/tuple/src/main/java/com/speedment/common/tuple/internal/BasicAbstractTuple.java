@@ -39,7 +39,7 @@ public abstract class BasicAbstractTuple<T extends BasicTuple<R>, R> implements 
     protected final Class<? extends T> baseClass;
 
     @SuppressWarnings("rawtypes")
-    protected BasicAbstractTuple(Class<? extends T> baseClass, Object... values) {
+    BasicAbstractTuple(Class<? extends T> baseClass, Object... values) {
         this.baseClass = baseClass;
         if (!isNullable()) {
             if (Stream.of(values).filter(Objects::isNull).findAny().isPresent()) {

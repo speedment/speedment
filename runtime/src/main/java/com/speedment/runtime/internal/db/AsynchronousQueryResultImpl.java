@@ -61,7 +61,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
     private State state;
 
     public enum State {
-        INIT, ESTABLISH, OPEN, CLOSED;
+        INIT, ESTABLISH, OPEN, CLOSED
     }
 
     public AsynchronousQueryResultImpl(

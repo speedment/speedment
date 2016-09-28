@@ -29,8 +29,9 @@ import com.speedment.runtime.config.trait.HasOrdinalPosition;
 import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.exception.SpeedmentException;
 
-import static com.speedment.runtime.internal.util.document.DocumentUtil.newNoSuchElementExceptionFor;
 import java.util.Optional;
+
+import static com.speedment.runtime.internal.util.document.DocumentUtil.newNoSuchElementExceptionFor;
 
 /**
  * A typed {@link Document} that represents a column in the database. A

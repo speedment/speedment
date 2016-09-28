@@ -16,23 +16,25 @@
  */
 package com.speedment.tool.property.editor;
 
-import com.speedment.tool.property.item.ChoiceBoxItem;
-import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.internal.common.mapstream.MapStream;
 import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.property.PropertyEditor;
-import java.util.Map;
-import static java.util.stream.Collectors.toList;
-import java.util.stream.Stream;
+import com.speedment.tool.property.item.ChoiceBoxItem;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
+import java.util.Map;
+import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -41,14 +43,17 @@ import javafx.collections.ObservableList;
  * @since 3.0.0
  */
 @Api(version="3.0")
-public class TypeMapperPropertyEditor<T extends ColumnProperty> implements PropertyEditor<T>{
-    public final static String IDENTITY_MAPPER = "(Use Identity Mapper)";
+public class TypeMapperPropertyEditor<T extends ColumnProperty> implements PropertyEditor<T> {
+    
+    private final static String IDENTITY_MAPPER = "(Use Identity Mapper)";
+
+    private final StringProperty outputValue;
     
     private @Inject TypeMapperComponent typeMappers;
-    private final StringProperty outputValue;
+    
     private StringBinding binding;
     
-    public TypeMapperPropertyEditor(){
+    public TypeMapperPropertyEditor() {
         this.outputValue = new SimpleStringProperty();
     }
     

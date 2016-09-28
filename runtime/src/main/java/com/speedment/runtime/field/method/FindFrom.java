@@ -18,6 +18,7 @@ package com.speedment.runtime.field.method;
 
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.manager.Manager;
+
 import java.util.function.Function;
 
 /**

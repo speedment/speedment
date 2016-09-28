@@ -21,6 +21,7 @@ import com.speedment.tool.config.ForeignKeyColumnProperty;
 import com.speedment.tool.property.PropertyEditor;
 import com.speedment.tool.property.item.ItemUtil;
 import com.speedment.tool.property.item.SimpleTextFieldItem;
+
 import java.util.stream.Stream;
 
 /**

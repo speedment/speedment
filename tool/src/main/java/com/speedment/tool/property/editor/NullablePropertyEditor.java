@@ -20,6 +20,7 @@ import com.speedment.runtime.annotation.Api;
 import com.speedment.tool.config.trait.HasNullableProperty;
 import com.speedment.tool.property.PropertyEditor;
 import com.speedment.tool.property.item.NullableItem;
+
 import java.util.stream.Stream;
 
 /**

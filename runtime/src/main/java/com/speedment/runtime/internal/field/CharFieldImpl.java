@@ -30,9 +30,11 @@ import com.speedment.runtime.internal.field.predicate.chars.CharEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.chars.CharGreaterOrEqualPredicate;
 import com.speedment.runtime.internal.field.predicate.chars.CharGreaterThanPredicate;
 import com.speedment.runtime.internal.field.predicate.chars.CharInPredicate;
+
+import javax.annotation.Generated;
 import java.util.Set;
 import java.util.function.Predicate;
-import javax.annotation.Generated;
+
 import static java.util.Objects.requireNonNull;
 
 /**

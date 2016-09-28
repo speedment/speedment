@@ -223,5 +223,5 @@ public final class JsonSerializer {
         SPACE        = 0x20; // space
     
     
-    private final int PRETTY_TAB_SIZE = 2;
+    private final static int PRETTY_TAB_SIZE = 2;
 }

@@ -16,10 +16,10 @@
  */
 package com.speedment.generator;
 
-import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
 import com.speedment.generator.internal.translator.TranslatorManagerImpl;
+import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Column;
@@ -31,11 +31,12 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.internal.AbstractApplicationMetadata;
 import com.speedment.runtime.internal.DefaultApplicationBuilder;
-import java.nio.file.Path;
 import org.junit.Before;
 
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.stream.Stream;
+
 import static java.util.stream.Collectors.joining;
 
 /**

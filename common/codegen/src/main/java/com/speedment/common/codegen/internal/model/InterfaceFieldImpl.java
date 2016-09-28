@@ -22,8 +22,8 @@ import com.speedment.common.codegen.model.InterfaceField;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Value;
 import com.speedment.common.codegen.model.modifier.Modifier;
-import java.lang.reflect.Type;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -160,10 +160,7 @@ public final class InterfaceFieldImpl implements InterfaceField {
             return false;
         }
         final InterfaceFieldImpl other = (InterfaceFieldImpl) obj;
-        if (!Objects.equals(this.f, other.f)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.f, other.f);
     }
 
 

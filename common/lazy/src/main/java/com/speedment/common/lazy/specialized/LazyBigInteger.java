@@ -16,10 +16,12 @@
  */
 package com.speedment.common.lazy.specialized;
 
-import java.math.BigInteger;
 import com.speedment.common.lazy.Lazy;
-import static java.util.Objects.requireNonNull;
+
+import java.math.BigInteger;
 import java.util.function.Supplier;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Specialized Lazy initialization class for BigInteger types.

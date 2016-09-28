@@ -16,6 +16,7 @@
  */
 package com.speedment.plugins.spring.internal;
 
+import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.internal.model.value.ReferenceValue;
 import com.speedment.common.codegen.internal.model.value.TextValue;
 import com.speedment.common.codegen.model.AnnotationUsage;
@@ -24,6 +25,10 @@ import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.translator.AbstractJavaClassTranslator;
+import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +36,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.lang.reflect.Type;
 import java.util.stream.Collectors;
 
 import static com.speedment.common.codegen.constant.DefaultType.list;
-import com.speedment.common.codegen.constant.SimpleType;
-import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.annotation.Inject;
-import com.speedment.generator.translator.AbstractJavaClassTranslator;
-import com.speedment.generator.translator.TranslatorSupport;
-import java.lang.reflect.Type;
 
 /**
  *

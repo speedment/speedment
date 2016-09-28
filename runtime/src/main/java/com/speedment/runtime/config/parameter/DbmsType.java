@@ -22,13 +22,13 @@ import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.db.DbmsMetadataHandler;
 import com.speedment.runtime.db.DbmsOperationHandler;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;
+import com.speedment.runtime.field.predicate.FieldPredicateView;
 
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 
 import static com.speedment.common.mapstream.MapStream.comparing;
-import com.speedment.runtime.field.predicate.FieldPredicateView;
 
 /**
  * The {@code DbmsType} interface defines unique properties for different Dbms

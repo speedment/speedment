@@ -34,7 +34,7 @@ public enum FocusPoint {
     
     private final String eventName;
     
-    private FocusPoint(String name) {
+    FocusPoint(String name) {
         this.eventName = name;
     }
     

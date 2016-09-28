@@ -36,19 +36,16 @@ public class TagElementView implements Transform<TagElement, String>,
 
     @Override
     public Optional<String> transform(Generator gen, TagElement model) {
-        return Optional.of(new StringBuilder()
-            .append('<')
-            .append(transformName(model))
-            .append(transformAttributes(gen, model))
-            .append(model.elements().isEmpty() ? '/' : "")
-            .append('>')
-            .append(transformElements(gen, model))
-            .append(model.elements().isEmpty() ? "" : new StringBuilder()
+        return Optional.of("<" +
+            transformName(model) +
+            transformAttributes(gen, model) +
+            (model.elements().isEmpty() ? '/' : "") +
+            '>' +
+            transformElements(gen, model) +
+            (model.elements().isEmpty() ? "" : new StringBuilder()
                 .append("</")
                 .append(transformName(model))
-                .append('>')
-            )
-            .toString()
+                .append('>'))
         );
     }
 }

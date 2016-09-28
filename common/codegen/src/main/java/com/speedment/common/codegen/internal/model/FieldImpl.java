@@ -22,8 +22,8 @@ import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Value;
 import com.speedment.common.codegen.model.modifier.Modifier;
-import java.lang.reflect.Type;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -214,10 +214,7 @@ public final class FieldImpl implements Field {
         if (!Objects.equals(this.annotations, other.annotations)) {
             return false;
         }
-        if (!Objects.equals(this.modifiers, other.modifiers)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.modifiers, other.modifiers);
     }
 
 

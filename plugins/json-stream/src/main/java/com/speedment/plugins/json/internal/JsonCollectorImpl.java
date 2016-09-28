@@ -17,17 +17,19 @@
 package com.speedment.plugins.json.internal;
 
 import com.speedment.plugins.json.JsonCollector;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
+
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collector.Characteristics.CONCURRENT;
 
 /**
@@ -49,19 +51,15 @@ public final class JsonCollectorImpl<ENTITY> implements JsonCollector<ENTITY> {
     @Override
     public BiConsumer<List<String>, ENTITY> accumulator() {
         return (l, t) -> {
-            synchronized (l) {
-                l.add(converter.apply(t));
-            }
+            l.add(converter.apply(t));
         };
     }
 
     @Override
     public BinaryOperator<List<String>> combiner() {
         return (l1, l2) -> {
-            synchronized (l1) {
-                l1.addAll(l2);
-                return l1;
-            }
+            l1.addAll(l2);
+            return l1;
         };
     }
 

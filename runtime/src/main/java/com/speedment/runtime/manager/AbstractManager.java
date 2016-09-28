@@ -17,19 +17,20 @@
 package com.speedment.runtime.manager;
 
 import com.speedment.common.injector.Injector;
-import static com.speedment.common.injector.State.INITIALIZED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
-import com.speedment.runtime.component.ManagerComponent;
-
-import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.runtime.component.DbmsHandlerComponent;
+import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.exception.SpeedmentException;
+
+import java.util.stream.Stream;
+
+import static com.speedment.common.injector.State.INITIALIZED;
+import static com.speedment.common.injector.State.RESOLVED;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
-import java.util.stream.Stream;
 
 /**
  *

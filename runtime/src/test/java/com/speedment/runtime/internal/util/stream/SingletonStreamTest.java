@@ -28,7 +28,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -80,7 +80,7 @@ public class SingletonStreamTest {
     public void testOf() {
         final SingletonStream<String> ss = SingletonStream.of("B");
         final List<String> s = ss.collect(toList());
-        assertEquals(Arrays.asList("B"), s);
+        assertEquals(Collections.singletonList("B"), s);
     }
 
     /**

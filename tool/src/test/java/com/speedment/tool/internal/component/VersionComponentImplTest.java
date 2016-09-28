@@ -21,12 +21,12 @@ import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.Speedment;
 import com.speedment.tool.ToolBundle;
 import com.speedment.tool.component.VersionComponent;
+import org.junit.Test;
 
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import org.junit.Test;
 
 /**
  *

@@ -21,8 +21,8 @@
  */
 package com.speedment.generator;
 
-import com.speedment.generator.namer.JavaLanguageNamer;
 import com.speedment.generator.internal.namer.JavaLanguageNamerImpl;
+import com.speedment.generator.namer.JavaLanguageNamer;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

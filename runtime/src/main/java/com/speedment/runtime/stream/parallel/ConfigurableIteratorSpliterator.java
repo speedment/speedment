@@ -17,6 +17,7 @@
 package com.speedment.runtime.stream.parallel;
 
 import com.speedment.runtime.internal.stream.parallel.ConfigurableIteratorSpliteratorImpl;
+
 import java.util.Iterator;
 import java.util.Spliterator;
 

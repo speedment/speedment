@@ -17,6 +17,7 @@
 package com.speedment.common.rest;
 
 import java.util.Objects;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -30,7 +31,7 @@ abstract class AbstractOption implements Option {
     private final String key;
     private final String value;
     
-    protected AbstractOption(String key, String value) {
+    AbstractOption(String key, String value) {
         this.key   = requireNonNull(key);
         this.value = requireNonNull(value);
     }
