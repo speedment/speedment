@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.component;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.common.injector.annotation.InjectKey;
 
 /**
@@ -27,7 +27,7 @@ import com.speedment.common.injector.annotation.InjectKey;
  * @author Emil Forslund
  * @since 3.0.0
  */
-@Api(version = "3.0")
+
 @InjectKey(InfoComponent.class)
 public interface InfoComponent  {
 

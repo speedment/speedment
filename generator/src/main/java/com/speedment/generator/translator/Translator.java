@@ -21,7 +21,7 @@ import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;
@@ -57,7 +57,7 @@ import static java.util.Objects.requireNonNull;
  * @see          Document
  * @since        2.3.0
  */
-@Api(version = "3.0")
+
 public interface Translator<DOC extends Document & HasMainInterface, T> extends Supplier<File> {
 
     /**
@@ -296,7 +296,7 @@ public interface Translator<DOC extends Document & HasMainInterface, T> extends 
      * @author  Per Minborg
      * @since   2.3
      */
-    @Api(version = "2.3")
+    
     enum Phase { PRE_MAKE, MAKE, POST_MAKE };
     
     /**
@@ -311,7 +311,7 @@ public interface Translator<DOC extends Document & HasMainInterface, T> extends 
      * @author  Emil Forslund
      * @since   2.3
      */
-    @Api(version = "2.3")
+    
     interface Builder<T> {
         
         /**

@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.config.mapper.time;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import java.lang.reflect.Type;
@@ -28,7 +28,7 @@ import java.sql.Date;
  *
  * @author Emil Forslund
  */
-@Api(version = "3.0")
+
 public final class DateToIntMapper implements TypeMapper<Date, Integer> {
 
     @Override

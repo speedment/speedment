@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Document;
 
 import java.util.Optional;
@@ -29,7 +29,7 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public abstract class AbstractRootDocumentProperty<THIS extends AbstractRootDocumentProperty<? super THIS>>
     extends AbstractDocumentProperty<THIS> {
 

@@ -19,7 +19,7 @@ package com.speedment.generator.event;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
 import com.speedment.generator.event.trait.ProjectEvent;
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Project;
 
 import static java.util.Objects.requireNonNull;
@@ -29,7 +29,7 @@ import static java.util.Objects.requireNonNull;
  * @author  Emil Forslund
  * @since   3.0.0
  */
-@Api(version = "3.0")
+
 public final class FileGenerated implements ProjectEvent, Event {
     
     private final Project project;

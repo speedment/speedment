@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.db.metadata;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.db.metadata.TypeInfoMetaDataImpl;
 
@@ -31,7 +31,7 @@ import java.util.Optional;
  *
  * @author  Per Minborg
  */
-@Api(version = "3.0")
+
 public interface TypeInfoMetaData {
 
     public final class Hidden {

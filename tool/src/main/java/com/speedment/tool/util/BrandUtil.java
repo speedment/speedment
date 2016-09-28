@@ -17,7 +17,7 @@
 package com.speedment.tool.util;
 
 import com.speedment.common.injector.Injector;
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.tool.brand.Brand;
 import com.speedment.tool.component.UserInterfaceComponent;
@@ -32,7 +32,6 @@ import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version="3.0")
 public final class BrandUtil {
     
     public static void applyBrand(Injector injector, Stage stage) {

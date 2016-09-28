@@ -18,7 +18,7 @@ package com.speedment.tool.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.tool.property.PropertyEditor;
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.tool.config.DocumentProperty;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -29,7 +29,6 @@ import java.util.stream.Stream;
  * @author Simon Jonasson
  * @since 3.0.0
  */
-@Api(version="3.0")
 @InjectKey(PropertyEditorComponent.class)
 public interface PropertyEditorComponent {
     

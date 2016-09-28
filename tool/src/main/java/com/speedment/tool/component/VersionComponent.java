@@ -17,7 +17,7 @@
 package com.speedment.tool.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.annotation.Api;
+
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -28,7 +28,7 @@ import java.util.concurrent.CompletableFuture;
  * @author  Emil Forslund
  * @since   3.0.0
  */
-@Api(version = "3.0")
+
 @InjectKey(VersionComponent.class)
 public interface VersionComponent {
 

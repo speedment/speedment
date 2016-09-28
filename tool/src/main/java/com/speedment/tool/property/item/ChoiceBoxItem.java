@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.property.item;
 
-import com.speedment.runtime.annotation.Api;
+
 import java.util.function.UnaryOperator;
 import javafx.beans.property.Property;
 import javafx.collections.FXCollections;
@@ -33,7 +33,7 @@ import javafx.scene.control.ChoiceBox;
  * @author Simon Jonasson
  * @since 3.0.0
  */
-@Api(version = "3.0")
+
 public class ChoiceBoxItem<T> extends AbstractLabelTooltipItem {
 
     private final Property<T> currentValue;

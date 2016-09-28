@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field.method;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.field.trait.HasReferenceValue;
 
 import java.util.function.UnaryOperator;
@@ -32,7 +32,7 @@ import java.util.function.UnaryOperator;
  * @author  Per Minborg
  * @since   2.2.0
  */
-@Api(version = "3.0")
+
 public interface SetToReference<ENTITY, D, V> extends UnaryOperator<ENTITY> {
 
     /**

@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.util.ImmutableListUtil;
@@ -46,7 +46,7 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public final class ProjectProperty extends AbstractRootDocumentProperty<ProjectProperty>
     implements Project, HasEnabledProperty, HasExpandedProperty, HasNameProperty, HasPackageNameProperty {
 

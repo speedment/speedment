@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config.mutator;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.mutator.ForeignKeyMutator;
 import com.speedment.tool.config.ForeignKeyColumnProperty;
 import com.speedment.tool.config.ForeignKeyProperty;
@@ -28,7 +28,7 @@ import com.speedment.tool.config.mutator.trait.HasNamePropertyMutator;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public final class ForeignKeyPropertyMutator extends ForeignKeyMutator<ForeignKeyProperty> implements 
         HasEnabledPropertyMutator<ForeignKeyProperty>, 
         HasNamePropertyMutator<ForeignKeyProperty> {

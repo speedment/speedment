@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.property;
 
-import com.speedment.runtime.annotation.Api;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.BorderPane;
@@ -29,7 +28,6 @@ import javafx.collections.FXCollections;
  * @author Simon Jonasson
  * @since 3.0.0
  */
-@Api(version="3.0")
 public final class PropertySheet extends BorderPane {
     private final ObservableList<PropertyEditor.Item> properties; 
     private PropertyLayout layout;

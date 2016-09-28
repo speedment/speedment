@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.component.connectionpool;
 
-import com.speedment.runtime.annotation.Api;
 import com.speedment.runtime.config.Dbms;
 
 import java.sql.Connection;
@@ -29,7 +28,6 @@ import com.speedment.common.injector.annotation.InjectKey;
  * @author pemi
  * @since 2.1.0
  */
-@Api(version = "3.0")
 @InjectKey(ConnectionPoolComponent.class)
 public interface ConnectionPoolComponent {
 

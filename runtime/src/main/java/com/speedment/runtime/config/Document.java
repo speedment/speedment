@@ -17,7 +17,7 @@
 package com.speedment.runtime.config;
 
 import com.speedment.common.mapstream.MapStream;
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.internal.util.document.DocumentUtil;
 import com.speedment.runtime.util.OptionalBoolean;
 
@@ -57,7 +57,7 @@ import java.util.stream.Stream;
  * @author  Emil Forsund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public interface Document {
 
     /**

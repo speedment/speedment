@@ -17,7 +17,7 @@
 package com.speedment.tool.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.ForeignKey;
@@ -39,7 +39,7 @@ import static com.speedment.runtime.internal.util.ImmutableListUtil.of;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 @InjectKey(DocumentPropertyComponent.class)
 public interface DocumentPropertyComponent {
 

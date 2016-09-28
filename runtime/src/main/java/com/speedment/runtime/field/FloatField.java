@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.field.trait.HasFloatValue;
 import javax.annotation.Generated;
@@ -32,7 +32,7 @@ import javax.annotation.Generated;
  * 
  * @see ReferenceField
  */
-@Api(version = "3.0")
+
 @Generated(value = "Speedment")
 public interface FloatField<ENTITY, D> extends Field<ENTITY>, HasFloatValue<ENTITY, D>, HasComparableOperators<ENTITY, Float> {
     

@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.component;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Dbms;
 
 import java.util.Optional;
@@ -30,7 +30,7 @@ import com.speedment.common.injector.annotation.InjectKey;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 @InjectKey(PasswordComponent.class)
 public interface PasswordComponent {
     

@@ -17,7 +17,7 @@
 package com.speedment.tool.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.tool.rule.Issue;
 import com.speedment.tool.rule.Rule;
 import javafx.collections.ObservableList;
@@ -29,7 +29,6 @@ import javafx.collections.ObservableList;
  * @author Simon Jonasson
  * @since 3.0.0
  */
-@Api(version="3.0")
 @InjectKey(IssueComponent.class)
 public interface IssueComponent {
     

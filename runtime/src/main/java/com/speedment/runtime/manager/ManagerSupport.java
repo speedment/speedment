@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.manager;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.Field;
 import java.util.stream.Stream;
@@ -29,7 +29,7 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   3.0.1
  */
-@Api(version = "3.0")
+
 public interface ManagerSupport<ENTITY> {
 
     /**

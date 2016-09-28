@@ -17,7 +17,7 @@
 package com.speedment.tool.config;
 
 import com.speedment.internal.common.mapstream.MapStream;
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.util.OptionalUtil;
 import com.speedment.runtime.util.FloatSupplier;
@@ -71,7 +71,7 @@ import static javafx.collections.FXCollections.observableMap;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProperty<? super THIS>> 
     implements DocumentProperty {
  

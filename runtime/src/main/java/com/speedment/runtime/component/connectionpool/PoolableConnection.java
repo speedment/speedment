@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.component.connectionpool;
 
-import com.speedment.runtime.annotation.Api;
+
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -29,7 +29,7 @@ import java.sql.SQLException;
  * @author  Per Minborg
  * @since   2.2.0
  */
-@Api(version = "3.0")
+
 public interface PoolableConnection extends Connection {
 
     long getId();

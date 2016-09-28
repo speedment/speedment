@@ -17,7 +17,7 @@
 package com.speedment.tool.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.component.PasswordComponent;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.trait.HasMainInterface;
@@ -51,7 +51,7 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 @InjectKey(UserInterfaceComponent.class)
 public interface UserInterfaceComponent {
 

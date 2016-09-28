@@ -19,7 +19,7 @@ package com.speedment.generator.translator;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.Interface;
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 
@@ -36,7 +36,7 @@ import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanc
  * @author  Per Minborg
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public final class StandardTranslatorKey {
     
     public final static TranslatorKey<Project, Interface> 

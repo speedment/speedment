@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field.method;
 
-import com.speedment.runtime.annotation.Api;
+
 import javax.annotation.Generated;
 
 /**
@@ -35,7 +35,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Api(version = "3.0")
+
 @Generated(value = "Speedment")
 @FunctionalInterface
 public interface FloatGetter<ENTITY> extends Getter<ENTITY> {

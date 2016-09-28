@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.config.mapper.bigdecimal;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import java.lang.reflect.Type;
@@ -27,7 +27,7 @@ import java.math.BigDecimal;
  *
  * @author Per Minborg
  */
-@Api(version = "3.0")
+
 public final class BigDecimalToDouble implements TypeMapper<BigDecimal, Double> {
 
     @Override

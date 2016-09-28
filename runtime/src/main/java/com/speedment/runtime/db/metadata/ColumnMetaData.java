@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.db.metadata;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.internal.db.metadata.ColumnMetaDataImpl;
 
 import java.sql.ResultSet;
@@ -25,7 +25,7 @@ import java.sql.ResultSet;
  *
  * @author Per Minborg
  */
-@Api(version = "3.0")
+
 public interface ColumnMetaData {
 
     /**

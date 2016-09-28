@@ -17,7 +17,7 @@
 package com.speedment.generator.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.internal.config.mapper.IdentityTypeMapper;
@@ -32,7 +32,7 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   2.2.0
  */
-@Api(version = "3.0")
+
 @InjectKey(TypeMapperComponent.class)
 public interface TypeMapperComponent {
     

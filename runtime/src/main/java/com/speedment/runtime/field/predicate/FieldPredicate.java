@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field.predicate;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.field.predicate.trait.HasEffectivePredicateType;
 import com.speedment.runtime.field.predicate.trait.HasNegated;
 import com.speedment.runtime.field.predicate.trait.HasPredicateType;
@@ -33,7 +33,7 @@ import com.speedment.runtime.field.predicate.trait.HasField;
  * @author  Per Minborg
  * @since   2.1.0
  */
-@Api(version = "3.0")
+
 public interface FieldPredicate<ENTITY> extends
         Predicate<ENTITY>,
         HasPredicateType,

@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Table;
 import com.speedment.tool.component.DocumentPropertyComponent;
@@ -36,7 +36,7 @@ import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public final class PrimaryKeyColumnProperty
     extends AbstractChildDocumentProperty<Table, PrimaryKeyColumnProperty>
     implements

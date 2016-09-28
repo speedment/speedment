@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.util;
 
-import com.speedment.runtime.annotation.Api;
+
 
 /**
  *
@@ -24,7 +24,7 @@ import com.speedment.runtime.annotation.Api;
  * @since   2.3.0
  */
 @FunctionalInterface
-@Api(version = "3.0")
+
 public interface FloatSupplier {
     
     /**

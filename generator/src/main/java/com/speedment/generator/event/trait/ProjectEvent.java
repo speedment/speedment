@@ -17,7 +17,7 @@
 package com.speedment.generator.event.trait;
 
 import com.speedment.generator.event.Event;
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Project;
 
 /**
@@ -26,7 +26,7 @@ import com.speedment.runtime.config.Project;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public interface ProjectEvent extends Event {
     
     /**

@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.db;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.exception.SpeedmentException;
 
 import java.sql.SQLException;
@@ -32,7 +32,7 @@ import static java.util.Objects.requireNonNull;
  * 
  * @author  Per Minborg
  */
-@Api(version = "3.0")
+
 @FunctionalInterface
 public interface SqlFunction<T, R> {
 

@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.util;
 
-import com.speedment.runtime.annotation.Api;
+
 
 import java.util.Map;
 import java.util.stream.Stream;
@@ -32,7 +32,7 @@ import java.util.stream.Stream;
  * @author  Per Minborg
  * @since   2.2.0
  */
-@Api(version = "3.0")
+
 public interface ClassMapper<V> {
 
     /**

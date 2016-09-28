@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.stream.action;
 
-import com.speedment.runtime.annotation.Api;
+
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -38,7 +38,7 @@ import static java.util.Objects.requireNonNull;
  * @author  Per Minborg
  * @since   2.1.0
  */
-@Api(version = "3.0")
+
 public abstract class Action<T extends BaseStream<?, T>, R extends BaseStream<?, R>> implements Supplier<Function<T, R>> {
 
     private final Function<T, R> mapper;

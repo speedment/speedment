@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.rule;
 
-import com.speedment.runtime.annotation.Api;
+
 
 /**
  * Represents an issue that has been encountered during validation of the installed
@@ -25,7 +25,6 @@ import com.speedment.runtime.annotation.Api;
  * @author Simon Jonasson
  * @since 3.0.0
  */
-@Api(version="3.0")
 public interface Issue {
     /**
      * A measure of severity of the Issue

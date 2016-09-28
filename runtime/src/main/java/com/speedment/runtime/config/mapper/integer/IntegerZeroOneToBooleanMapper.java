@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.config.mapper.integer;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import java.lang.reflect.Type;
@@ -26,7 +26,7 @@ import java.lang.reflect.Type;
  * @author  Roberts Vartins
  * @since   2.3.5
  */
-@Api(version = "3.0")
+
 public final class IntegerZeroOneToBooleanMapper implements TypeMapper<Integer, Boolean> {
 
     @Override

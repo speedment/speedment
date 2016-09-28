@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field.method;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.util.ToBooleanFunction;
 import javax.annotation.Generated;
 
@@ -36,7 +36,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Api(version = "3.0")
+
 @Generated(value = "Speedment")
 @FunctionalInterface
 public interface BooleanGetter<ENTITY> extends Getter<ENTITY>, ToBooleanFunction<ENTITY> {

@@ -16,7 +16,7 @@
  */
 package com.speedment.generator.namer;
 
-import com.speedment.runtime.annotation.Api;
+
 
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -32,7 +32,7 @@ import static java.util.Objects.requireNonNull;
  * @author  Per Minborg
  * @since   2.2.0
  */
-@Api(version = "3.0")
+
 @InjectKey(JavaLanguageNamer.class)
 public interface JavaLanguageNamer {
 

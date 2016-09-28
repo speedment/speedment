@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.manager.Manager;
 
@@ -34,7 +34,7 @@ import java.util.Optional;
  * @author  Emil Forslund
  * @since   2.0.0
  */
-@Api(version = "3.0")
+
 public interface Speedment {
     
     /**

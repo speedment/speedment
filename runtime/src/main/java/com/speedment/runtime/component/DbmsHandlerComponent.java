@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.component;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.parameter.DbmsType;
 
 import java.util.Optional;
@@ -30,7 +30,7 @@ import com.speedment.common.injector.annotation.InjectKey;
  * @author  Per Minborg
  * @since   2.0.0
  */
-@Api(version = "3.0")
+
 @InjectKey(DbmsHandlerComponent.class)
 public interface DbmsHandlerComponent  {
 

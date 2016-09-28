@@ -22,7 +22,7 @@
 package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.field.Field;
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.field.method.SetToReference;
 import com.speedment.runtime.field.method.ReferenceGetter;
@@ -41,7 +41,7 @@ import com.speedment.runtime.internal.field.setter.SetToReferenceImpl;
  * @author  Emil Forslund
  * @since   2.2.0
  */
-@Api(version = "3.0")
+
 public interface HasReferenceValue<ENTITY, D, V> extends Field<ENTITY> {
 
     @Override

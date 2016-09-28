@@ -18,7 +18,7 @@ package com.speedment.tool.resource;
 
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;
@@ -48,7 +48,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since 2.2.0
  */
-@Api(version = "3.0")
+
 public enum SpeedmentIcon {
 
     // Big buttons

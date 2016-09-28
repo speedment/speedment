@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.property;
 
-import com.speedment.runtime.annotation.Api;
 import java.util.stream.Stream;
 import javafx.scene.Node;
 
@@ -27,7 +26,6 @@ import javafx.scene.Node;
  * @param <T>  the document type
  * @since 3.0.0
  */
-@Api(version="3.0")
 public interface PropertyEditor<T> {
     
     /**

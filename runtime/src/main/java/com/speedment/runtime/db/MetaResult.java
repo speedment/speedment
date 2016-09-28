@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.db;
 
-import com.speedment.runtime.annotation.Api;
+
 
 import java.util.Optional;
 
@@ -26,7 +26,7 @@ import java.util.Optional;
  * 
  * @author  Per Minborg
  */
-@Api(version = "3.0")
+
 public interface MetaResult<ENTITY> {
 
     default Optional<? extends SqlMetaResult<ENTITY, ?>> getSqlMetaResult() {

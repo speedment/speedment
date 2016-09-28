@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.component;
 
-import com.speedment.runtime.annotation.Api;
+
 
 import java.util.List;
 import com.speedment.common.injector.annotation.InjectKey;
@@ -29,7 +29,7 @@ import com.speedment.common.injector.annotation.InjectKey;
  * @author  Per Minborg
  * @since   2.0.0
  */
-@Api(version = "3.0")
+
 @InjectKey(PrimaryKeyFactoryComponent.class)
 public interface PrimaryKeyFactoryComponent  {
 

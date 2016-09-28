@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.config.DocumentProperty;
@@ -27,7 +27,7 @@ import javafx.beans.property.StringProperty;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public interface HasNameProperty extends DocumentProperty {
 
     default StringProperty nameProperty() {

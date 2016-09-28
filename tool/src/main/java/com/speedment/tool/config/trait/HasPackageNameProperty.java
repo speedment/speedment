@@ -18,7 +18,7 @@ package com.speedment.tool.config.trait;
 
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.common.injector.Injector;
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.trait.HasPackageName;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.config.ProjectProperty;
@@ -32,7 +32,7 @@ import javafx.beans.value.ObservableStringValue;
  * @author Simon Jonasson
  * @since 3.0.0
  */
-@Api(version = "3.0")
+
 public interface HasPackageNameProperty extends DocumentProperty, HasPackageName, HasNameProperty {
     
     default StringProperty packageNameProperty(){

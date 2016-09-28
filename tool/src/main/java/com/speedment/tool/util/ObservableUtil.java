@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.util;
 
-import com.speedment.runtime.annotation.Api;
+
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.IntegerBinding;
 import javafx.beans.property.ObjectProperty;
@@ -31,7 +31,6 @@ import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
  *
  * @author Emil Forslund
  */
-@Api(version="3.0")
 public final class ObservableUtil {
 
     public static void bind(ObjectProperty<Integer> property, IntegerBinding binding) {

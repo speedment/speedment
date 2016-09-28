@@ -17,7 +17,7 @@
 package com.speedment.tool.event;
 
 import com.speedment.generator.event.Event;
-import com.speedment.runtime.annotation.Api;
+
 
 /**
  * An enumeration of standard events caused by the user interface.
@@ -25,7 +25,6 @@ import com.speedment.runtime.annotation.Api;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version="3.0")
 public enum UIEvent implements Event {
     
     /**

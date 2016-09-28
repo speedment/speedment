@@ -17,7 +17,7 @@
 package com.speedment.runtime.internal.config;
 
 import com.speedment.common.mapstream.MapStream;
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.util.OptionalBoolean;
 
@@ -35,7 +35,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Emil Forslund
  */
-@Api(version = "2.3")
+
 public class BaseDocument implements Document {
     
     private final transient Document parent; // Nullable

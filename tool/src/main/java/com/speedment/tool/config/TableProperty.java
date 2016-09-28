@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
 import com.speedment.tool.component.DocumentPropertyComponent;
@@ -40,7 +40,7 @@ import com.speedment.tool.config.trait.HasPackageNameProperty;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public final class TableProperty
     extends AbstractChildDocumentProperty<Schema, TableProperty>
     implements

@@ -20,7 +20,7 @@ import com.speedment.tool.property.item.ChoiceBoxItem;
 import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.internal.common.mapstream.MapStream;
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.property.PropertyEditor;
@@ -40,7 +40,6 @@ import javafx.collections.ObservableList;
  * @param <T>  the document type
  * @since 3.0.0
  */
-@Api(version="3.0")
 public class TypeMapperPropertyEditor<T extends ColumnProperty> implements PropertyEditor<T>{
     public final static String IDENTITY_MAPPER = "(Use Identity Mapper)";
     

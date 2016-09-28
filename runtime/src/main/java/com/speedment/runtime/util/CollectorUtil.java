@@ -17,7 +17,7 @@
 package com.speedment.runtime.util;
 
 import com.speedment.common.mapstream.MapStream;
-import com.speedment.runtime.annotation.Api;
+
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -49,7 +49,7 @@ import static java.util.Objects.requireNonNull;
  * @author  Emil Forslund
  * @since   2.1.0
  */
-@Api(version = "3.0")
+
 public final class CollectorUtil {
 
     private static final String NULL_TEXT = " must not be null";

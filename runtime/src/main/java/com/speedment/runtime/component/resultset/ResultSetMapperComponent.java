@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.component.resultset;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.parameter.DbmsType;
 import com.speedment.common.injector.annotation.InjectKey;
 
@@ -28,7 +28,7 @@ import com.speedment.common.injector.annotation.InjectKey;
  * @author  Per Minborg
  * @since   2.0.0
  */
-@Api(version = "3.0")
+
 @InjectKey(ResultSetMapperComponent.class)
 public interface ResultSetMapperComponent {
 

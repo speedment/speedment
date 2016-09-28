@@ -16,16 +16,15 @@
  */
 package com.speedment.generator.event;
 
-import com.speedment.runtime.annotation.Api;
+
 
 /**
  * A default event. This file may be subject to change in an 
- * upcomming version.
+ * up coming version.
  * 
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0", snapshot = true)
 public enum DefaultEvent implements Event {
     // May be added further on.
 }

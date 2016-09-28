@@ -21,7 +21,7 @@
  */
 package com.speedment.runtime.field.predicate;
 
-import com.speedment.runtime.annotation.Api;
+
 
 /**
  * Determines if a range of resuls should be start and/or end-inclusive.
@@ -59,7 +59,7 @@ import com.speedment.runtime.annotation.Api;
  * @author  Emil Forslund
  * @since   2.2.0
  */
-@Api(version = "3.0")
+
 public enum Inclusion {
 
     START_INCLUSIVE_END_INCLUSIVE(true, true),

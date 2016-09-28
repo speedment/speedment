@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.internal.util.ImmutableListUtil;
 import com.speedment.tool.config.trait.HasExpandedProperty;
@@ -32,7 +32,7 @@ import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public final class DefaultDocumentProperty extends 
     AbstractDocumentProperty<DefaultDocumentProperty> implements HasExpandedProperty, HasNameProperty {
     

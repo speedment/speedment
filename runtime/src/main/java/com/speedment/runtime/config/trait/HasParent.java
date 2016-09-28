@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.config.trait;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Document;
 
 import java.util.Optional;
@@ -29,7 +29,7 @@ import java.util.Optional;
  * @author   Emil Forslund
  * @version  2.3.0
  */
-@Api(version = "3.0")
+
 public interface HasParent<PARENT extends Document> extends Document {
 
     /**

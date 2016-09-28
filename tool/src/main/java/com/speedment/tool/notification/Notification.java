@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.notification;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.tool.brand.Palette;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 
@@ -26,7 +26,6 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version="3.0")
 public interface Notification {
     
     /**

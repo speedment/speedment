@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.util;
 
-import com.speedment.runtime.annotation.Api;
+
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
@@ -30,7 +30,7 @@ import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
  * @author Emil Forslund
  * @author Simon Jonasson
  */
-@Api(version = "3.0")
+
 public final class OptionalUtil {
 
     /**

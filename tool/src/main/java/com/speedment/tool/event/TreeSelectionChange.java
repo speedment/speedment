@@ -17,7 +17,7 @@
 package com.speedment.tool.event;
 
 import com.speedment.generator.event.Event;
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.property.PropertyEditor;
 import javafx.collections.ListChangeListener;
@@ -34,7 +34,6 @@ import static java.util.Objects.requireNonNull;
  * @author  Emil Forslund
  * @since   2.2.0
  */
-@Api(version="3.0")
 public final class TreeSelectionChange implements Event {
 
     private final ListChangeListener.Change<? extends TreeItem<DocumentProperty>> changeEvent;

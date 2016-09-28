@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field.predicate.trait;
 
-import com.speedment.runtime.annotation.Api;
+
 
 /**
  * A trait for predicates the implement the {@link #isNegated()} method.
@@ -24,7 +24,7 @@ import com.speedment.runtime.annotation.Api;
  * @author  Per Minborg
  * @since   2.2.0
  */
-@Api(version = "3.0")
+
 public interface HasNegated {
 
     /**

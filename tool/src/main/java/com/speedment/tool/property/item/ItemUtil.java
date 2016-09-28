@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.property.item;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.util.StaticClassUtil;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -32,7 +32,7 @@ import javafx.scene.layout.StackPane;
  * @author Simon Jonasson
  * @since 3.0.0
  */
-@Api(version = "3.0")
+
 public class ItemUtil {
 
     public static final String DATABASE_RELATION_TOOLTIP = 

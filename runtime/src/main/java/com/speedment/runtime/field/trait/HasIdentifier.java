@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field.trait;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.FieldIdentifier;
@@ -30,7 +30,7 @@ import java.util.Optional;
  * @author  Emil Forslund
  * @since   3.0.0
  */
-@Api(version = "3.0")
+
 public interface HasIdentifier<ENTITY> {
     
     /**

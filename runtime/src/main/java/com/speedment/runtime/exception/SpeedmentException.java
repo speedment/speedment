@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.exception;
 
-import com.speedment.runtime.annotation.Api;
+
 
 /**
  * {@code SpeedmentException} is the superclass of those exceptions that can be
@@ -33,7 +33,7 @@ import com.speedment.runtime.annotation.Api;
  * @author  Per Minborg
  * @since   2.0.0
  */
-@Api(version = "3.0")
+
 public final class SpeedmentException extends RuntimeException {
 
     static final long serialVersionUID = -623523923713561356L;

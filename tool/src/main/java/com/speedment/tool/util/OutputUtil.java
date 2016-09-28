@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.util;
 
-import com.speedment.runtime.annotation.Api;
+
 import javafx.scene.control.Label;
 
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
@@ -25,7 +25,6 @@ import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
  *
  * @author Emil Forslund
  */
-@Api(version="3.0")
 public final class OutputUtil {
 
     public static Label info(String message) {

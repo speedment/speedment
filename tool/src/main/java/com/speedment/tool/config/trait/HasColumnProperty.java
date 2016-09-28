@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config.trait;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.trait.HasColumn;
 import com.speedment.tool.config.DocumentProperty;
@@ -31,7 +31,7 @@ import static javafx.beans.binding.Bindings.createObjectBinding;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-@Api(version = "3.0")
+
 public interface HasColumnProperty extends DocumentProperty, HasColumn, HasNameProperty {
     
     default ObjectBinding<Column> columnProperty() {

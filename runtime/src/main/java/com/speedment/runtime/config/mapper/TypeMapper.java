@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.config.mapper;
 
-import com.speedment.runtime.annotation.Api;
+
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.mapper.primitive.PrimitiveTypeMapper;
 import com.speedment.runtime.internal.config.mapper.IdentityTypeMapper;
@@ -37,7 +37,7 @@ import static java.util.Comparator.comparing;
  * @author  Emil Forslund
  * @since   2.2.0
  */
-@Api(version = "3.0")
+
 public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
 
     /**
