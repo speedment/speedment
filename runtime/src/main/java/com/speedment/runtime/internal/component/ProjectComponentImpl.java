@@ -25,19 +25,13 @@ import com.speedment.runtime.config.Project;
 import static com.speedment.common.injector.State.INITIALIZED;
 import static java.util.Objects.requireNonNull;
 
-public final class ProjectComponentImpl extends InternalOpenSourceComponent implements ProjectComponent {
+public final class ProjectComponentImpl implements ProjectComponent {
 
     private Project project;
     
     @ExecuteBefore(INITIALIZED)
     void loadProjectFromMetadata(@WithState(INITIALIZED) ApplicationMetadata metadata) {
         project = metadata.makeProject();
-    }
-
-    @Override
-    protected String getDescription() {
-        return "Holds a reference to the project node where all the project-specific " + 
-            "configuration data is stored.";
     }
 
     @Override

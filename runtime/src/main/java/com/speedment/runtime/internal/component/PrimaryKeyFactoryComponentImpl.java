@@ -17,7 +17,6 @@
 package com.speedment.runtime.internal.component;
 
 import com.speedment.runtime.component.PrimaryKeyFactoryComponent;
-import com.speedment.runtime.license.Software;
 
 import java.util.AbstractList;
 import java.util.Arrays;
@@ -31,7 +30,6 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
-import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
@@ -39,7 +37,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Per Minborg
  */
-public final class PrimaryKeyFactoryComponentImpl extends InternalOpenSourceComponent implements PrimaryKeyFactoryComponent {
+public final class PrimaryKeyFactoryComponentImpl implements PrimaryKeyFactoryComponent {
 
     @Override
     public <K0, K1> List<?> make(K0 k0, K1 k1) {
@@ -77,16 +75,6 @@ public final class PrimaryKeyFactoryComponentImpl extends InternalOpenSourceComp
         keys[4] = k4;
         System.arraycopy(restOfTheKeys, 0, keys, 5, restOfTheKeys.length);
         return makeHelper(keys);
-    }
-    
-    @Override
-    protected String getDescription() {
-        return "Factory used to produce primary key instances.";
-    }
-
-    @Override
-    public Stream<Software> getDependencies() {
-        return Stream.empty();
     }
 
     private List<?> makeHelper(Object... keys) {

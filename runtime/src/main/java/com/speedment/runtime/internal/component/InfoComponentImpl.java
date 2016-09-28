@@ -23,14 +23,8 @@ import com.speedment.runtime.component.InfoComponent;
  * @author Emil Forslund
  * @since 3.0.0
  */
-public final class InfoComponentImpl extends InternalOpenSourceComponent 
-    implements InfoComponent {
+public final class InfoComponentImpl implements InfoComponent {
     
-    @Override
-    protected String getDescription() {
-        return "Sets the name, description and version of Speedment.";
-    }
-
     @Override
     public String title() {
         return "Speedment";

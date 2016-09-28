@@ -18,7 +18,6 @@ package com.speedment.runtime.internal.component;
 
 import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.license.Software;
 import com.speedment.runtime.manager.Manager;
 
 import java.util.Map;
@@ -31,20 +30,12 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Emil Forslund
  */
-public final class ManagerComponentImpl 
-extends InternalOpenSourceComponent 
-implements ManagerComponent {
+public final class ManagerComponentImpl implements ManagerComponent {
 
     private final Map<Class<?>, Manager<?>> managersByEntity;
 
     public ManagerComponentImpl() {
         managersByEntity = new ConcurrentHashMap<>();
-    }
-    
-    @Override
-    protected String getDescription() {
-        return "Holds the manager instances used to communicate with various " + 
-            "database tables.";
     }
 
     @Override
@@ -76,10 +67,5 @@ implements ManagerComponent {
     @Override
     public Stream<Manager<?>> stream() {
         return managersByEntity.values().stream();
-    }
-
-    @Override
-    public Stream<Software> getDependencies() {
-        return Stream.empty();
     }
 }

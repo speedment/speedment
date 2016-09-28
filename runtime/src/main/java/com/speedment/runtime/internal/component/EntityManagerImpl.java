@@ -20,11 +20,9 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.EntityManager;
 import com.speedment.runtime.component.ManagerComponent;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.license.Software;
 import com.speedment.runtime.manager.Manager;
 
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -33,16 +31,10 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Emil Forslund
  */
-public final class EntityManagerImpl extends InternalOpenSourceComponent implements EntityManager {
+public final class EntityManagerImpl implements EntityManager {
 
     private @Inject ManagerComponent managerComponent;
     
-    @Override
-    protected String getDescription() {
-        return "Handles persistence for any Entity. This Component provides an interface similar " + 
-            "to JPA but is not used for any other purpose.";
-    }
-
     @Override
     public <ENTITY> void persist(ENTITY entity) throws SpeedmentException {
         requireNonNull(entity);
@@ -59,11 +51,6 @@ public final class EntityManagerImpl extends InternalOpenSourceComponent impleme
     public <ENTITY> void remove(ENTITY entity) throws SpeedmentException {
         requireNonNull(entity);
         managerOf(entity).remove(entity);
-    }
-
-    @Override
-    public Stream<Software> getDependencies() {
-        return Stream.empty();
     }
 
     private <ENTITY> Manager<ENTITY> managerOf(ENTITY entity) {

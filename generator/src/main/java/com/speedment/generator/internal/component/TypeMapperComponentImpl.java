@@ -38,8 +38,6 @@ import com.speedment.runtime.config.mapper.time.TimestampToIntMapper;
 import com.speedment.runtime.config.mapper.time.TimestampToLocalDateTimeMapper;
 import com.speedment.runtime.config.mapper.time.TimestampToLongMapper;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
-import com.speedment.runtime.license.Software;
 import java.math.BigDecimal;
 import java.sql.Clob;
 import java.sql.Date;
@@ -60,7 +58,7 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   2.2.0
  */
-public final class TypeMapperComponentImpl extends InternalOpenSourceComponent implements TypeMapperComponent {
+public final class TypeMapperComponentImpl implements TypeMapperComponent {
 
     private final Map<String, List<Supplier<TypeMapper<?, ?>>>> mappers;
     private @Inject Injector injector;
@@ -105,12 +103,6 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
         install(Double.class,    PrimitiveTypeMapper<Double>::new);
         install(Boolean.class,   PrimitiveTypeMapper<Boolean>::new);
         install(Character.class, PrimitiveTypeMapper<Character>::new);
-    }
-    
-    @Override
-    protected String getDescription() {
-        return "Holds all the type mappers that have been installed into the Speedment Platform. " + 
-            "A Type Mapper is used to convert between database types and java types.";
     }
 
     @Override
@@ -158,10 +150,5 @@ public final class TypeMapperComponentImpl extends InternalOpenSourceComponent i
                 }
             }).orElseGet(TypeMapper::identity)
         );
-    }
-
-    @Override
-    public Stream<Software> getDependencies() {
-        return Stream.empty();
     }
 }

@@ -17,7 +17,6 @@
 package com.speedment.tool.internal.component;
 
 import com.speedment.common.rest.Rest;
-import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.tool.component.VersionComponent;
 import java.util.Comparator;
 import java.util.Map;
@@ -31,14 +30,8 @@ import java.util.concurrent.CompletableFuture;
  * @author  Emil Forslund
  * @since   3.0.0
  */
-public final class VersionComponentImpl extends InternalOpenSourceComponent implements VersionComponent {
+public final class VersionComponentImpl implements VersionComponent {
 
-    @Override
-    protected String getDescription() {
-        return "Communicates with the GitHub API to determine if there are " +
-            " any new versions of the software.";
-    }
-    
     @Override
     public CompletableFuture<String> latestVersion() {
         return Rest.connectHttps("api.github.com")

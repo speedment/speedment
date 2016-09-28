@@ -17,28 +17,21 @@
 package com.speedment.runtime.internal.component;
 
 import com.speedment.runtime.component.PasswordComponent;
-import com.speedment.runtime.license.Software;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class PasswordComponentImpl extends InternalOpenSourceComponent implements PasswordComponent {
+public final class PasswordComponentImpl implements PasswordComponent {
 
     private final transient Map<String, char[]> passwords;
 
     public PasswordComponentImpl() {
         this.passwords = new ConcurrentHashMap<>();
-    }
-    
-    @Override
-    protected String getDescription() {
-        return "Holds the database password under this session.";
     }
 
     @Override
@@ -49,10 +42,5 @@ public final class PasswordComponentImpl extends InternalOpenSourceComponent imp
     @Override
     public Optional<char[]> get(String dbmsName) {
         return Optional.ofNullable(passwords.get(dbmsName));
-    }
-
-    @Override
-    public Stream<Software> getDependencies() {
-        return Stream.empty();
     }
 }

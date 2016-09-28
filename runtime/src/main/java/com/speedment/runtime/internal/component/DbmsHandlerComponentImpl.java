@@ -18,7 +18,6 @@ package com.speedment.runtime.internal.component;
 
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.config.parameter.DbmsType;
-import com.speedment.runtime.license.Software;
 
 import java.util.Map;
 import java.util.Optional;
@@ -32,19 +31,13 @@ import static java.util.Objects.requireNonNull;
  * @author Per Minborg
  */
 
-public final class DbmsHandlerComponentImpl extends InternalOpenSourceComponent implements DbmsHandlerComponent {
+public final class DbmsHandlerComponentImpl implements DbmsHandlerComponent {
 
     private final Map<String, DbmsType> dbmsTypes;
 
     public DbmsHandlerComponentImpl() {
         this.dbmsTypes = new ConcurrentHashMap<>();
     }
-    
-    @Override
-    protected String getDescription() {
-        return "Holds references to the various database managers that is currently supported.";
-    }
-
 
     @Override
     public void install(DbmsType dbmsType) {
@@ -65,10 +58,5 @@ public final class DbmsHandlerComponentImpl extends InternalOpenSourceComponent 
         return Optional.ofNullable(
             dbmsTypes.get(dbmsTypeName)
         );
-    }
-    
-    @Override
-    public Stream<Software> getDependencies() {
-        return Stream.empty();
     }
 }

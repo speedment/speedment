@@ -55,7 +55,6 @@
                             com.speedment.runtime.db.*,
                             com.speedment.runtime.exception.*,
                             com.speedment.runtime.field.*,
-                            com.speedment.runtime.license.*,
                             com.speedment.runtime.manager.*,
                             com.speedment.runtime.stream.*,
                             com.speedment.runtime.util.*,

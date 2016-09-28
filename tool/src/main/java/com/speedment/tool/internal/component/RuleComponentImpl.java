@@ -20,7 +20,6 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.tool.component.RuleComponent;
 import com.speedment.tool.internal.rule.ProtectedNameRule;
 import com.speedment.tool.internal.rule.ReferencesEnabledRule;
@@ -36,7 +35,7 @@ import java.util.function.Supplier;
  * @author Simon Jonasson
  * @since 3.0.0
  */
-public class RuleComponentImpl extends InternalOpenSourceComponent implements  RuleComponent{
+public class RuleComponentImpl implements RuleComponent {
     
     private @Inject Injector injector;
     private final List<Rule> rules;
@@ -46,7 +45,7 @@ public class RuleComponentImpl extends InternalOpenSourceComponent implements  R
     }
     
     @ExecuteBefore(State.RESOLVED)
-    private void installRules(){
+    void installRules(){
         install(ProtectedNameRule::new);
         install(ReferencesEnabledRule::new);
     }
@@ -66,10 +65,4 @@ public class RuleComponentImpl extends InternalOpenSourceComponent implements  R
 
         return CompletableFutureUtil.allOf(Boolean.TRUE, Boolean::logicalAnd, futures);
     }
-    
-    @Override
-    protected String getDescription() {
-        return "Component responsible for validating all installed rules, and generating issues if said rules aren't followed.";
-    }
-
 }

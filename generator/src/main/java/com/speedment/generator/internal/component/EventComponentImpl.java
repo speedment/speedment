@@ -19,8 +19,6 @@ package com.speedment.generator.internal.component;
 import com.speedment.generator.component.EventComponent;
 import com.speedment.generator.event.DefaultEvent;
 import com.speedment.generator.event.Event;
-import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
-import com.speedment.runtime.license.Software;
 
 import java.util.Collections;
 import java.util.EnumMap;
@@ -28,13 +26,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class EventComponentImpl extends InternalOpenSourceComponent implements EventComponent {
+public final class EventComponentImpl implements EventComponent {
 
     private final Map<DefaultEvent, Set<Consumer<DefaultEvent>>> defaultEventListeners;
     private final Map<Class<? extends Event>, Set<Consumer<Event>>> otherEventListeners;
@@ -51,12 +48,6 @@ public final class EventComponentImpl extends InternalOpenSourceComponent implem
         defaultEventListeners = Collections.unmodifiableMap(defaultListeners);
         otherEventListeners   = new ConcurrentHashMap<>();
         anyEventListeners     = Collections.newSetFromMap(new ConcurrentHashMap<>());
-    }
-    
-    @Override
-    protected String getDescription() {
-        return "An event bus that can be used by Speedment plugins to " + 
-            "attach logic on various channels.";
     }
 
     @Override
@@ -85,11 +76,6 @@ public final class EventComponentImpl extends InternalOpenSourceComponent implem
     @Override
     public void onAny(Consumer<Event> action) {
         anyEventListeners.add(action);
-    }
-
-    @Override
-    public Stream<Software> getDependencies() {
-        return Stream.empty();
     }
 
     private <E extends Event> Set<Consumer<Event>> listeners(Class<E> event) {

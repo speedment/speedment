@@ -20,7 +20,6 @@ import com.speedment.generator.component.PathComponent;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.config.Project;
-import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -30,7 +29,7 @@ import java.nio.file.Paths;
  * @author  Emil Forslund
  * @since   3.0.0
  */
-public final class PathComponentImpl extends InternalOpenSourceComponent implements PathComponent {
+public final class PathComponentImpl implements PathComponent {
 
     private @Inject ProjectComponent projectComponent;
     
@@ -43,10 +42,5 @@ public final class PathComponentImpl extends InternalOpenSourceComponent impleme
     public Path packageLocation() {
         final Project project = projectComponent.getProject();
         return Paths.get("", project.getPackageLocation().split("/"));
-    }
-    
-    @Override
-    protected String getDescription() {
-        return "A component that can be used to determine the path to the project.";
     }
 }

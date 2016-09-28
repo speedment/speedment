@@ -34,9 +34,6 @@ import com.speedment.generator.translator.StandardTranslatorKey;
 import com.speedment.plugins.enums.internal.ui.CommaSeparatedStringEditor;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.internal.license.AbstractSoftware;
-import static com.speedment.runtime.license.OpenSourceLicense.APACHE_2;
-import com.speedment.runtime.license.Software;
 import com.speedment.tool.component.PropertyEditorComponent;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.internal.component.PropertyEditorComponentImpl;
@@ -76,5 +73,4 @@ public final class EnumGeneratorComponent {
         editors.install(ColumnProperty.class, Column.ENUM_CONSTANTS, CommaSeparatedStringEditor::new);
         
     }
-
 }

@@ -32,7 +32,6 @@ import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasNullable;
 import com.speedment.runtime.config.trait.HasOrderType;
 import com.speedment.runtime.config.trait.HasPackageName;
-import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.tool.property.editor.NamePropertyEditor;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
@@ -75,7 +74,7 @@ import java.util.function.Supplier;
  * @author Simon Jonasson
  * @since 3.0.0
  */
-public final class PropertyEditorComponentImpl extends InternalOpenSourceComponent implements PropertyEditorComponent {
+public final class PropertyEditorComponentImpl implements PropertyEditorComponent {
     
     private final Map<Class<?>, Map<String, Supplier<PropertyEditor<?>>>> factoryMap; // Ordered based on insert
     private @Inject Injector injector;
@@ -124,12 +123,6 @@ public final class PropertyEditorComponentImpl extends InternalOpenSourceCompone
                 return casted;
             })
             .flatMap(factory -> factory.fieldsFor(document));                   // Stream<PropertyEditor.Item>
-    }
-
-
-    @Override
-    protected String getDescription() {
-        return "Component responsible for building fields for editing properties.";
     }
 
     @Override

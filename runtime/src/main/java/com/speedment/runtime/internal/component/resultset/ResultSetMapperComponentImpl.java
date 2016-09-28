@@ -21,8 +21,6 @@ import com.speedment.common.tuple.Tuples;
 import com.speedment.runtime.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.component.resultset.ResultSetMapping;
 import com.speedment.runtime.config.parameter.DbmsType;
-import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
-import com.speedment.runtime.license.Software;
 
 import java.util.Map;
 import java.util.Optional;
@@ -33,10 +31,8 @@ import java.util.stream.Stream;
 
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 
-public final class ResultSetMapperComponentImpl extends InternalOpenSourceComponent implements ResultSetMapperComponent {
+public final class ResultSetMapperComponentImpl implements ResultSetMapperComponent {
 
     private final Map<Class<?>, ResultSetMapping<?>> map;
     private final Map<DbmsType, Map<Class<?>, ResultSetMapping<?>>> dbmsTypeMap;
@@ -45,11 +41,6 @@ public final class ResultSetMapperComponentImpl extends InternalOpenSourceCompon
         map = newConcurrentMap();
         dbmsTypeMap = newConcurrentMap();
         StandardJavaTypeMapping.stream().forEach(this::put);
-    }
-
-    @Override
-    protected String getDescription() {
-        return "Maps JDBC result-sets to Speedment entities.";
     }
 
     public ResultSetMapping<?> put(ResultSetMapping<?> item) {
@@ -72,11 +63,6 @@ public final class ResultSetMapperComponentImpl extends InternalOpenSourceCompon
     public <T> ResultSetMapping<T> apply(Class<T> javaClass) {
         requireNonNull(javaClass);
         return getFromMapOrThrow(map, javaClass, javaClass::getName);
-    }
-
-    @Override
-    public Stream<Software> getDependencies() {
-        return Stream.empty();
     }
 
     @SuppressWarnings("unchecked")

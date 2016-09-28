@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.internal.component;
 
-import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
@@ -33,12 +32,8 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.trait.HasMainInterface;
-import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.runtime.internal.config.immutable.ImmutableProject;
-import com.speedment.runtime.internal.license.AbstractSoftware;
-import com.speedment.runtime.license.OpenSourceLicense;
 import com.speedment.runtime.internal.util.Settings;
-import com.speedment.runtime.license.Software;
 import com.speedment.runtime.util.ProgressMeasure;
 import com.speedment.tool.MainApp;
 import com.speedment.tool.brand.Palette;
@@ -100,14 +95,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static javafx.application.Platform.runLater;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import com.speedment.tool.component.RuleComponent;
 import com.speedment.tool.property.PropertyEditor;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.atomic.AtomicBoolean;
 import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -116,7 +108,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Emil Forslund
  */
-public final class UserInterfaceComponentImpl extends InternalOpenSourceComponent implements UserInterfaceComponent {
+public final class UserInterfaceComponentImpl implements UserInterfaceComponent {
     
         public static InjectBundle include() {
         return InjectBundle.of(
@@ -158,7 +150,6 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
     private final AtomicBoolean canGenerate;
     
     private @Inject DocumentPropertyComponent documentPropertyComponent;
-    private @Inject TranslatorManager translatorManager;
     private @Inject PasswordComponent passwordComponent;
     private @Inject ProjectComponent projectComponent;
     private @Inject ConfigFileHelper configFileHelper;
@@ -212,24 +203,6 @@ public final class UserInterfaceComponentImpl extends InternalOpenSourceComponen
         if (loaded != null) {
             project.merge(documentPropertyComponent, loaded);
         }
-    }
-    
-    /*************************************************************/
-    /*                      Component Methods                    */
-    /*************************************************************/
-    
-    @Override
-    protected String getDescription() {
-        return "Allows various parts of the user interface to communicate with each other.";
-    }
-    
-    @Override
-    public Stream<Software> getDependencies() {
-        return Stream.of(
-            AbstractSoftware.with("Silk",          "1.3",     OpenSourceLicense.CC_BY_2_5),
-            AbstractSoftware.with("ControlsFX",    "8.40.10", OpenSourceLicense.BSD_3_CLAUSE),
-            AbstractSoftware.with("FontawesomeFX", "8.9",     OpenSourceLicense.APACHE_2)
-        );
     }
     
     /*************************************************************/

@@ -27,9 +27,6 @@ import com.speedment.common.injector.annotation.InjectKey;
 import static com.speedment.internal.common.mapstream.MapStream.comparing;
 import com.speedment.runtime.config.mapper.TypeMapper;
 import com.speedment.runtime.config.parameter.DbmsType;
-import static com.speedment.runtime.internal.util.Cast.cast;
-import com.speedment.runtime.license.License;
-import com.speedment.runtime.license.Software;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -82,28 +79,7 @@ public final class ComponentsController implements Initializable {
             .sorted(comparing(TreeItem<String>::getValue))
             .collect(toList());
     }
-//    private List<TreeItem<String>> components() {
-//        return MapStream.of(
-//            injector.injectables()
-//                .filter(Component.class::isAssignableFrom)
-//                .map(injector::get)
-//                .filter(Optional::isPresent)
-//                .map(Optional::get)
-//                .map(Component.class::cast)
-//                .collect(Collectors.groupingBy(c -> c.asSoftware().getLicense()))
-//            ).sortedByKey(License.COMPARATOR)
-//            .map((license, components) -> {
-//            final LicenseItem l = new LicenseItem(license);
-//            
-//            components.stream()
-//                .sorted(comparing(c -> c.asSoftware().getName()))
-//                .map(this::treeItem)
-//                .forEachOrdered(l.getChildren()::add);
-//            
-//            return l;
-//        }).collect(toList());
-//    }
-
+    
     private class RootItem extends TreeItem<String> {
 
         public RootItem(Speedment speedment) {
@@ -201,40 +177,6 @@ public final class ComponentsController implements Initializable {
             setGraphic(SpeedmentIcon.CUP.view());
         }
     };
-
-    private static class LicenseItem extends TreeItem<String> {
-
-        private final License license;
-
-        public LicenseItem(License license) {
-            super(license.getName());
-            this.license = license;
-            setExpanded(true);
-            setGraphic(SpeedmentIcon.TEXT_SIGNATURE.view());
-        }
-
-        public License getLicense() {
-            return license;
-        }
-    }
-
-    private static class DependenciesItem extends TreeItem<String> {
-
-        public DependenciesItem() {
-            super("External Dependencies");
-            setExpanded(true);
-            setGraphic(SpeedmentIcon.SITEMAP_COLOR.view());
-        }
-    }
-
-    private static class SoftwareItem extends TreeItem<String> {
-
-        public SoftwareItem(Software software) {
-            super(software.getName() + " (" + software.getVersion() + ")");
-            setExpanded(true);
-            setGraphic(SpeedmentIcon.BOOK_LINK.view());
-        }
-    }
 
     private TreeItem<String> treeItem(Class<?> comp) {
         final ComponentItem item = new ComponentItem(comp);

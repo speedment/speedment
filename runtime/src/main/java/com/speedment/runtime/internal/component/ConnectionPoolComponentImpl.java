@@ -27,7 +27,6 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.pool.PoolableConnectionImpl;
 import com.speedment.runtime.internal.util.document.DocumentDbUtil;
-import com.speedment.runtime.license.Software;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -38,7 +37,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.stream.Stream;
 
 import static com.speedment.runtime.util.OptionalUtil.unwrap;
 import static java.util.Objects.requireNonNull;
@@ -48,7 +46,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Per Minborg
  */
-public class ConnectionPoolComponentImpl extends InternalOpenSourceComponent implements ConnectionPoolComponent {
+public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
 
     private final Logger logger = LoggerManager.getLogger(ConnectionPoolComponentImpl.class);
 
@@ -69,11 +67,6 @@ public class ConnectionPoolComponentImpl extends InternalOpenSourceComponent imp
         maxRetainSize = DEFAULT_MIN_POOL_SIZE_PER_DB;
         pools = new ConcurrentHashMap<>();
         leasedConnections = new ConcurrentHashMap<>();
-    }
-    
-    @Override
-    protected String getDescription() {
-        return "Allows connections to the database to be recycled.";
     }
     
     @Override
@@ -246,10 +239,5 @@ public class ConnectionPoolComponentImpl extends InternalOpenSourceComponent imp
 
     private Logger getLogger() {
         return logger;
-    }
-
-    @Override
-    public Stream<Software> getDependencies() {
-        return Stream.empty();
     }
 }

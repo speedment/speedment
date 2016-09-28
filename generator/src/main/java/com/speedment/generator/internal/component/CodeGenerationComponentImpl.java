@@ -45,8 +45,6 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
-import com.speedment.runtime.license.Software;
 
 import java.util.List;
 import java.util.Map;
@@ -65,7 +63,7 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.internal.common.mapstream.MapStream;
 import static java.util.Objects.requireNonNull;
 
-public final class CodeGenerationComponentImpl extends InternalOpenSourceComponent implements CodeGenerationComponent {
+public final class CodeGenerationComponentImpl implements CodeGenerationComponent {
 
     public static InjectBundle include() {
         return InjectBundle.of(
@@ -103,11 +101,6 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
         put(Project.class, GENERATED_APPLICATION_IMPL, GeneratedApplicationImplTranslator::new);
         put(Project.class, GENERATED_APPLICATION_BUILDER, GeneratedApplicationBuilderTranslator::new);
         put(Project.class, GENERATED_METADATA, GeneratedMetadataTranslator::new);
-    }
-
-    @Override
-    protected String getDescription() {
-        return "Generates java code for a project based on a model tree.";
     }
 
     @SuppressWarnings("unchecked")
@@ -176,11 +169,6 @@ public final class CodeGenerationComponentImpl extends InternalOpenSourceCompone
             .filter(s -> s.getConstructor() != null)
             .map(settings -> settings.createDecorated(document))
             .map(injector::inject);
-    }
-
-    @Override
-    public Stream<Software> getDependencies() {
-        return Stream.empty();
     }
 
     private static Supplier<SpeedmentException> noTranslatorFound(HasMainInterface doc, String key) {

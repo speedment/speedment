@@ -22,9 +22,7 @@ import com.speedment.runtime.config.Index;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.internal.component.InternalOpenSourceComponent;
 import com.speedment.runtime.internal.util.ImmutableListUtil;
-import com.speedment.runtime.license.Software;
 import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.config.AbstractDocumentProperty;
 import com.speedment.tool.config.ColumnProperty;
@@ -51,8 +49,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Emil Forslund
  */
-public final class DocumentPropertyComponentImpl extends InternalOpenSourceComponent 
-    implements DocumentPropertyComponent {
+public final class DocumentPropertyComponentImpl implements DocumentPropertyComponent {
 
     private final Branch root;
 
@@ -78,12 +75,6 @@ public final class DocumentPropertyComponentImpl extends InternalOpenSourceCompo
     }
     
     @Override
-    protected String getDescription() {
-        return "Determines which implementations should be used for the " + 
-            "observable version of the document configuration tree.";
-    }
-    
-    @Override
     public <PARENT extends DocumentProperty> void setConstructor(Constructor<PARENT> constructor, List<String> keyPath) {
         root.find(keyPath).set(constructor);
     }
@@ -92,11 +83,6 @@ public final class DocumentPropertyComponentImpl extends InternalOpenSourceCompo
     @SuppressWarnings("unchecked")
     public <PARENT extends DocumentProperty> Constructor<PARENT> getConstructor(List<String> keyPath) {
         return (Constructor<PARENT>) root.find(keyPath).get();
-    }
-
-    @Override
-    public Stream<Software> getDependencies() {
-        return Stream.empty();
     }
 
     private final static class Branch {
