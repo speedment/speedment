@@ -16,8 +16,7 @@
  */
 package com.speedment.runtime.internal.field;
 
-import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.method.ByteGetter;
 import com.speedment.runtime.field.method.ByteSetter;
@@ -36,6 +35,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import static java.util.Objects.requireNonNull;
+import com.speedment.common.dbmodel.identifier.ColumnIdentifier;
+import static java.util.Objects.requireNonNull;
 
 /**
  * @param <ENTITY> entity type
@@ -47,13 +48,13 @@ import static java.util.Objects.requireNonNull;
 @Generated(value = "Speedment")
 public final class ByteFieldImpl<ENTITY, D> implements ByteField<ENTITY, D> {
     
-    private final FieldIdentifier<ENTITY> identifier;
+    private final ColumnIdentifier<ENTITY> identifier;
     private final ByteGetter<ENTITY> getter;
     private final ByteSetter<ENTITY> setter;
     private final TypeMapper<D, Byte> typeMapper;
     private final boolean unique;
     
-    public ByteFieldImpl(FieldIdentifier<ENTITY> identifier, ByteGetter<ENTITY> getter, ByteSetter<ENTITY> setter, TypeMapper<D, Byte> typeMapper, boolean unique) {
+    public ByteFieldImpl(ColumnIdentifier<ENTITY> identifier, ByteGetter<ENTITY> getter, ByteSetter<ENTITY> setter, TypeMapper<D, Byte> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
@@ -62,7 +63,7 @@ public final class ByteFieldImpl<ENTITY, D> implements ByteField<ENTITY, D> {
     }
     
     @Override
-    public FieldIdentifier<ENTITY> identifier() {
+    public ColumnIdentifier<ENTITY> identifier() {
         return identifier;
     }
     

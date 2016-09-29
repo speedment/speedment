@@ -17,7 +17,7 @@
 package com.speedment.generator.event.trait;
 
 import com.speedment.generator.event.Event;
-import com.speedment.runtime.config.Project;
+import com.speedment.common.dbmodel.Project;
 
 /**
  * An event that has something to do with a particular project.

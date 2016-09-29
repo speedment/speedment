@@ -18,7 +18,7 @@ package com.speedment.plugins.json.internal;
 
 import com.speedment.plugins.json.JsonCollector;
 import com.speedment.plugins.json.JsonEncoder;
-import com.speedment.runtime.config.Project;
+import com.speedment.common.dbmodel.Project;
 import com.speedment.runtime.field.BooleanField;
 import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.CharField;
@@ -51,7 +51,10 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static com.speedment.plugins.json.internal.JsonUtil.jsonField;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 

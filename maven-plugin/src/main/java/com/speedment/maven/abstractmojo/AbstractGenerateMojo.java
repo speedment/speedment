@@ -21,7 +21,7 @@ import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.ProjectComponent;
-import com.speedment.runtime.config.Project;
+import com.speedment.common.dbmodel.Project;
 import com.speedment.runtime.exception.SpeedmentException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;

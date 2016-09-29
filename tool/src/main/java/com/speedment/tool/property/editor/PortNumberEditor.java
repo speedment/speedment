@@ -18,7 +18,7 @@ package com.speedment.tool.property.editor;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.DbmsHandlerComponent;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
+import com.speedment.runtime.util.DatabaseUtil;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.property.PropertyEditor;
 import com.speedment.tool.property.item.DefaultSpinnerItem;
@@ -50,7 +50,7 @@ public class PortNumberEditor<T extends DbmsProperty> implements PropertyEditor<
 
     private IntegerBinding defaultPortProperty(T document, DbmsHandlerComponent dbmsHandlerComponent) {
         return Bindings.createIntegerBinding(() -> 
-            DocumentDbUtil.findDbmsType(dbmsHandlerComponent, document).getDefaultPort(),
+            DatabaseUtil.findDbmsType(dbmsHandlerComponent, document).getDefaultPort(),
             document.typeNameProperty()
         );
     }    

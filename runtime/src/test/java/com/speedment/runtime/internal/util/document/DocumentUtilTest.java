@@ -16,18 +16,19 @@
  */
 package com.speedment.runtime.internal.util.document;
 
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.ForeignKey;
-import com.speedment.runtime.config.ForeignKeyColumn;
-import com.speedment.runtime.config.Index;
-import com.speedment.runtime.config.IndexColumn;
-import com.speedment.runtime.config.PrimaryKeyColumn;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.trait.HasName;
+import com.speedment.common.dbmodel.util.DocumentUtil;
+import com.speedment.common.dbmodel.Column;
+import com.speedment.common.dbmodel.Dbms;
+import com.speedment.common.dbmodel.Document;
+import com.speedment.common.dbmodel.ForeignKey;
+import com.speedment.common.dbmodel.ForeignKeyColumn;
+import com.speedment.common.dbmodel.Index;
+import com.speedment.common.dbmodel.IndexColumn;
+import com.speedment.common.dbmodel.PrimaryKeyColumn;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.Schema;
+import com.speedment.common.dbmodel.Table;
+import com.speedment.common.dbmodel.trait.HasName;
 import com.speedment.runtime.util.TestUtil;
 import org.junit.Ignore;
 import org.junit.Test;

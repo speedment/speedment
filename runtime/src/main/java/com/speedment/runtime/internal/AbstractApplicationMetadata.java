@@ -16,11 +16,12 @@
  */
 package com.speedment.runtime.internal;
 
+import com.speedment.common.json.Json;
 import com.speedment.runtime.ApplicationMetadata;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.trait.HasName;
-import com.speedment.runtime.internal.config.ProjectImpl;
-import com.speedment.runtime.internal.util.document.DocumentTranscoder;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.trait.HasName;
+import com.speedment.common.dbmodel.internal.ProjectImpl;
+import com.speedment.common.dbmodel.util.DocumentTranscoder;
 
 import java.util.Map;
 import java.util.Optional;
@@ -46,10 +47,16 @@ public abstract class AbstractApplicationMetadata implements ApplicationMetadata
     
     @Override
     public Project makeProject() {
-        return getMetadata().map(DocumentTranscoder::load).orElseGet(() -> {
+        return getMetadata().map(json -> DocumentTranscoder.load(json, this::fromJson)).orElseGet(() -> {
             final Map<String, Object> data = new ConcurrentHashMap<>();
             data.put(HasName.NAME, "Project");
             return new ProjectImpl(data);
         });
+    }
+    
+    private Map<String, Object> fromJson(String json) {
+        @SuppressWarnings("unchecked")
+        final Map<String, Object> parsed = (Map<String, Object>) Json.fromJson(json);
+        return parsed;
     }
 }

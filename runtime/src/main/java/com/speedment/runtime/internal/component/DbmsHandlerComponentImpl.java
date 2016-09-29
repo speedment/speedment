@@ -17,7 +17,7 @@
 package com.speedment.runtime.internal.component;
 
 import com.speedment.runtime.component.DbmsHandlerComponent;
-import com.speedment.runtime.config.parameter.DbmsType;
+import com.speedment.runtime.db.DbmsType;
 
 import java.util.Map;
 import java.util.Optional;

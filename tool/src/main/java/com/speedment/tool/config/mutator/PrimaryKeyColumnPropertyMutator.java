@@ -17,7 +17,7 @@
 package com.speedment.tool.config.mutator;
 
 
-import com.speedment.runtime.config.mutator.PrimaryKeyColumnMutator;
+import com.speedment.common.dbmodel.mutator.PrimaryKeyColumnMutator;
 import com.speedment.tool.config.PrimaryKeyColumnProperty;
 import com.speedment.tool.config.mutator.trait.HasNamePropertyMutator;
 import com.speedment.tool.config.mutator.trait.HasOrdinalPositionPropertyMutator;

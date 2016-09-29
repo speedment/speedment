@@ -20,7 +20,6 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.plugins.json.JsonComponent;
 import com.speedment.plugins.json.JsonEncoder;
 import com.speedment.runtime.component.ProjectComponent;
-import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.manager.Manager;
 
@@ -28,9 +27,10 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static com.speedment.plugins.json.internal.JsonUtil.jsonField;
-import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toSet;
+import com.speedment.common.dbmodel.identifier.ColumnIdentifier;
+import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -75,11 +75,11 @@ public final class JsonComponentImpl implements JsonComponent {
 
         final Set<String> fieldNames = Stream.of(fields)
             .map(Field::identifier)
-            .map(FieldIdentifier::columnName)
+            .map(ColumnIdentifier::getColumnName)
             .collect(toSet());
 
         manager.fields()
-            .filter(f -> fieldNames.contains(f.identifier().columnName()))
+            .filter(f -> fieldNames.contains(f.identifier().getColumnName()))
             .forEachOrdered(f
                 -> formatter.put(
                     jsonField(projectComponent.getProject(), f.identifier()),

@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.injector.State.RESOLVED;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**

@@ -17,7 +17,7 @@
 package com.speedment.tool.config.mutator;
 
 
-import com.speedment.runtime.config.mutator.ForeignKeyColumnMutator;
+import com.speedment.common.dbmodel.mutator.ForeignKeyColumnMutator;
 import com.speedment.tool.config.ForeignKeyColumnProperty;
 import com.speedment.tool.config.mutator.trait.HasNamePropertyMutator;
 import com.speedment.tool.config.mutator.trait.HasOrdinalPositionPropertyMutator;

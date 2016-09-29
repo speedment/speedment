@@ -17,7 +17,7 @@
 package com.speedment.runtime.internal.component.resultset;
 
 import com.speedment.runtime.component.resultset.ResultSetMapping;
-import com.speedment.runtime.config.Dbms;
+import com.speedment.common.dbmodel.Dbms;
 
 import java.util.function.Function;
 

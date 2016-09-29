@@ -30,7 +30,7 @@ import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.stream.autoclose.AbstractAutoClosingStream.composedClose;
-import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
 
 /**
  * Utility methods for making sure composed streams are closed properly.

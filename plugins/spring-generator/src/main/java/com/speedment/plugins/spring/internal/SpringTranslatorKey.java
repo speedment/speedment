@@ -18,8 +18,8 @@ package com.speedment.plugins.spring.internal;
 
 import com.speedment.common.codegen.model.Class;
 import com.speedment.generator.translator.TranslatorKey;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Table;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.Table;
 
 /**
  * Holds the static instances representing the different classes and interfaces

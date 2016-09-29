@@ -51,7 +51,7 @@ public class FindFromReference<ENTITY, FK_ENTITY, V extends Comparable<? super V
                 .orElseThrow(() -> new SpeedmentException(
                     "Error! Could not find any " + 
                     getTargetManager().getEntityClass().getSimpleName() + 
-                    " with '" + getTargetField().identifier().columnName() + 
+                    " with '" + getTargetField().identifier().getColumnName() + 
                     "' = '" + value + "'."
                 ));
         }

@@ -17,7 +17,7 @@
 package com.speedment.runtime.component.resultset;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.config.parameter.DbmsType;
+import com.speedment.runtime.db.DbmsType;
 
 /**
  * The JavaTypeMapperComponent provides a mapping from a certain DbmsType and

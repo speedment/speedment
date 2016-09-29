@@ -34,18 +34,17 @@ import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.runtime.component.PasswordComponent;
 import com.speedment.runtime.component.ProjectComponent;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.parameter.DbmsType;
-import com.speedment.runtime.config.trait.HasEnabled;
-import com.speedment.runtime.config.trait.HasName;
+import com.speedment.common.dbmodel.Dbms;
+import com.speedment.common.dbmodel.Document;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.Schema;
+import com.speedment.runtime.db.DbmsType;
+import com.speedment.common.dbmodel.trait.HasEnabled;
+import com.speedment.common.dbmodel.trait.HasName;
 import com.speedment.runtime.db.DbmsMetadataHandler;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.db.AbstractDbmsOperationHandler;
 import com.speedment.runtime.internal.db.AsynchronousQueryResultImpl;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.manager.Manager;
 
 import java.lang.reflect.Constructor;
@@ -59,9 +58,11 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.common.dbmodel.util.DocumentUtil.Name.DATABASE_NAME;
+import static com.speedment.common.dbmodel.util.DocumentUtil.relativeName;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import com.speedment.common.dbmodel.util.DocumentDbUtil;
+import com.speedment.runtime.util.DatabaseUtil;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -411,7 +412,7 @@ public abstract class AbstractApplicationBuilder<
         project.dbmses().forEachOrdered(dbms -> {
 
             final DbmsHandlerComponent dbmsHandlerComponent = injector.getOrThrow(DbmsHandlerComponent.class);
-            final DbmsType dbmsType = DocumentDbUtil.dbmsTypeOf(dbmsHandlerComponent, dbms);
+            final DbmsType dbmsType = DatabaseUtil.dbmsTypeOf(dbmsHandlerComponent, dbms);
             final DbmsMetadataHandler handler = dbmsType.getMetadataHandler();
 
             try {

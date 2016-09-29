@@ -17,8 +17,8 @@
 package com.speedment.generator.internal.util;
 
 import com.speedment.generator.component.TypeMapperComponent;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.trait.HasNullable;
+import com.speedment.common.dbmodel.Column;
+import com.speedment.common.dbmodel.trait.HasNullable;
 
 import java.lang.reflect.Type;
 import java.util.Optional;

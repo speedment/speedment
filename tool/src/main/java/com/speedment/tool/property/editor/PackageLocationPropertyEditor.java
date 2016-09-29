@@ -23,7 +23,7 @@ import javafx.beans.property.SimpleStringProperty;
 
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.config.Project.DEFAULT_PACKAGE_LOCATION;
+import static com.speedment.common.dbmodel.Project.DEFAULT_PACKAGE_LOCATION;
 
 /**
  *

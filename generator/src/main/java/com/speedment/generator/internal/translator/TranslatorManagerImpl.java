@@ -34,9 +34,9 @@ import com.speedment.generator.internal.util.HashUtil;
 import com.speedment.generator.translator.Translator;
 import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.runtime.component.InfoComponent;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.Table;
+import com.speedment.common.dbmodel.trait.HasEnabled;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.util.Statistics;
 
@@ -53,7 +53,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
+import static com.speedment.common.dbmodel.util.DocumentDbUtil.traverseOver;
 import static java.util.Objects.requireNonNull;
 
 /**

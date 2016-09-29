@@ -1,0 +1,75 @@
+/**
+ *
+ * Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); You may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package com.speedment.common.dbmodel.identifier;
+
+
+import com.speedment.common.dbmodel.Column;
+import com.speedment.common.dbmodel.Dbms;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.Schema;
+import com.speedment.common.dbmodel.Table;
+import com.speedment.common.dbmodel.util.DocumentDbUtil;
+
+/**
+ * Identifies a particular field in an entity. The identifier is a immutable
+ * non-complex object that only contains the names of the nodes required to
+ * uniquely identify it in the database.
+ * <p>
+ * To find the actual documents refered to by the identifier, the following
+ * utility methods can be used:
+ * <ul>
+ *      <li>{@link DocumentDbUtil#referencedColumn(Project, FieldIdentifier)}
+ *      <li>{@link DocumentDbUtil#referencedTable(Project, FieldIdentifier)}
+ *      <li>{@link DocumentDbUtil#referencedSchema(Project, FieldIdentifier)}
+ *      <li>{@link DocumentDbUtil#referencedDbms(Project, FieldIdentifier)}
+ * </ul>
+ * 
+ * @param <ENTITY>  the entity type
+ * 
+ * @author  Emil Forslund
+ * @since   2.3
+ */
+public interface ColumnIdentifier<ENTITY> {
+    
+    /**
+     * Returns the database name of the {@link Dbms} that this field is in.
+     * 
+     * @return  the {@link Dbms} name
+     */
+    String getDbmsName();
+    
+    /**
+     * Returns the database name of the {@link Schema} that this field is in.
+     * 
+     * @return  the {@link Schema} name
+     */
+    String getSchemaName();
+    
+    /**
+     * Returns the database name of the {@link Table} that this field is in.
+     * 
+     * @return  the {@link Table} name
+     */
+    String getTableName();
+    
+    /**
+     * Returns the database name of the {@link Column} that this field is in.
+     * 
+     * @return  the {@link Column} name
+     */
+    String getColumnName();
+}

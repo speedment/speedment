@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.internal.db.postgresql;
 
-import com.speedment.runtime.config.Column;
+import com.speedment.common.dbmodel.Column;
 import com.speedment.runtime.db.JavaTypeMap;
 import com.speedment.runtime.db.metadata.ColumnMetaData;
 import com.speedment.runtime.internal.db.AbstractDbmsMetadataHandler;

@@ -22,21 +22,22 @@ import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.translator.TranslatorManager;
+import com.speedment.internal.common.json.Json;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.ProjectComponent;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.parameter.DbmsType;
+import com.speedment.common.dbmodel.Dbms;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.Schema;
+import com.speedment.runtime.db.DbmsType;
 import com.speedment.runtime.db.DbmsMetadataHandler;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.DefaultApplicationBuilder;
-import com.speedment.runtime.internal.config.DbmsImpl;
-import com.speedment.runtime.internal.config.immutable.ImmutableProject;
+import com.speedment.common.dbmodel.internal.DbmsImpl;
+import com.speedment.common.dbmodel.internal.immutable.ImmutableProject;
+import com.speedment.common.dbmodel.util.DocumentTranscoder;
 import com.speedment.runtime.internal.util.ProgressMeasurerImpl;
 import com.speedment.runtime.internal.util.Settings;
-import com.speedment.runtime.internal.util.document.DocumentTranscoder;
 import com.speedment.runtime.util.ProgressMeasure;
 import com.speedment.tool.MainApp;
 import com.speedment.tool.brand.Palette;
@@ -254,7 +255,7 @@ public final class ConfigFileHelper {
                         break;
 
                     case USE_EXISTING_STAGE:
-                        final Project p = DocumentTranscoder.load(file.toPath());
+                        final Project p = DocumentTranscoder.load(file.toPath(), this::fromJson);
                         userInterfaceComponent.projectProperty().merge(documentPropertyComponent, p);
                         break;
 
@@ -278,6 +279,12 @@ public final class ConfigFileHelper {
                 null
             );
         }
+    }
+    
+    private Map<String, Object> fromJson(String json) {
+        @SuppressWarnings("unchecked")
+        final Map<String, Object> parsed = (Map<String, Object>) Json.fromJson(json);
+        return parsed;
     }
 
     public void saveConfigFile() {
@@ -339,7 +346,7 @@ public final class ConfigFileHelper {
                 Files.createDirectories(parent);
             }
 
-            DocumentTranscoder.save(project, path);
+            DocumentTranscoder.save(project, Json::toJson);
 
             final String absolute = file.getAbsolutePath();
             Settings.inst().set("project_location", absolute);

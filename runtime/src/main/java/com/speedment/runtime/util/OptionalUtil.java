@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.util;
 
+import com.speedment.common.function.OptionalBoolean;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;

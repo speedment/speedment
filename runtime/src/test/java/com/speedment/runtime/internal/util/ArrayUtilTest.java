@@ -21,7 +21,7 @@
  */
 package com.speedment.runtime.internal.util;
 
-import com.speedment.runtime.util.NullUtil;
+import com.speedment.common.invariant.NullUtil;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

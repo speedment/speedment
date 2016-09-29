@@ -17,7 +17,7 @@
 package com.speedment.tool.config;
 
 
-import com.speedment.runtime.config.Document;
+import com.speedment.common.dbmodel.Document;
 
 import java.util.Optional;
 import java.util.stream.Stream;

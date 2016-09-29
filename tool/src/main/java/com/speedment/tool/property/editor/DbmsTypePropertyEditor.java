@@ -18,7 +18,7 @@ package com.speedment.tool.property.editor;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.DbmsHandlerComponent;
-import com.speedment.runtime.config.parameter.DbmsType;
+import com.speedment.runtime.db.DbmsType;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.property.PropertyEditor;
 import com.speedment.tool.property.item.ChoiceBoxItem;

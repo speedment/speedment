@@ -16,8 +16,7 @@
  */
 package com.speedment.runtime.internal.field;
 
-import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.field.StringForeignKeyField;
 import com.speedment.runtime.field.method.BackwardFinder;
@@ -57,6 +56,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import static java.util.Objects.requireNonNull;
+import com.speedment.common.dbmodel.identifier.ColumnIdentifier;
+import static java.util.Objects.requireNonNull;
 
 /**
  * @param <ENTITY> the entity type
@@ -68,7 +69,7 @@ import static java.util.Objects.requireNonNull;
 public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     StringForeignKeyField<ENTITY, D, FK_ENTITY> {
 
-    private final FieldIdentifier<ENTITY> identifier;
+    private final ColumnIdentifier<ENTITY> identifier;
     private final ReferenceGetter<ENTITY, String> getter;
     private final ReferenceSetter<ENTITY, String> setter;
     private final StringField<FK_ENTITY, ?> referenced;
@@ -76,7 +77,7 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     private final boolean unique;
 
     public StringForeignKeyFieldImpl(
-        FieldIdentifier<ENTITY> identifier,
+        ColumnIdentifier<ENTITY> identifier,
         ReferenceGetter<ENTITY, String> getter,
         ReferenceSetter<ENTITY, String> setter,
         StringField<FK_ENTITY, ?> referenced,
@@ -100,7 +101,7 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
      * **************************************************************
      */
     @Override
-    public FieldIdentifier<ENTITY> identifier() {
+    public ColumnIdentifier<ENTITY> identifier() {
         return identifier;
     }
 

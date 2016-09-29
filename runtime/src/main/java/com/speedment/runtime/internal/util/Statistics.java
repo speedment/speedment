@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static com.speedment.runtime.internal.util.analytics.FocusPoint.*;
-import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;

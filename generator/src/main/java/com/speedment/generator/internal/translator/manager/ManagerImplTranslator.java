@@ -19,7 +19,7 @@ package com.speedment.generator.internal.translator.manager;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.File;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
-import com.speedment.runtime.config.Table;
+import com.speedment.common.dbmodel.Table;
 
 import java.lang.reflect.Type;
 

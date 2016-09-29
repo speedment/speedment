@@ -16,12 +16,12 @@
  */
 package com.speedment.tool.internal.component;
 
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.ForeignKey;
-import com.speedment.runtime.config.Index;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
+import com.speedment.common.dbmodel.Dbms;
+import com.speedment.common.dbmodel.ForeignKey;
+import com.speedment.common.dbmodel.Index;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.Schema;
+import com.speedment.common.dbmodel.Table;
 import com.speedment.runtime.internal.util.ImmutableListUtil;
 import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.config.AbstractDocumentProperty;

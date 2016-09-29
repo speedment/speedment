@@ -29,16 +29,16 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.Table;
+import com.speedment.common.dbmodel.trait.HasEnabled;
+import static com.speedment.common.dbmodel.util.DocumentDbUtil.traverseOver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 
 import java.lang.reflect.Type;
 
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.traverseOver;
 
 /**
  *

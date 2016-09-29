@@ -17,7 +17,7 @@
 package com.speedment.tool.config.mutator;
 
 
-import com.speedment.runtime.config.mutator.TableMutator;
+import com.speedment.common.dbmodel.mutator.TableMutator;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.config.ForeignKeyProperty;
 import com.speedment.tool.config.IndexProperty;

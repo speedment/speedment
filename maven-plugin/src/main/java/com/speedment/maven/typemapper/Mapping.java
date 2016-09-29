@@ -16,7 +16,7 @@
  */
 package com.speedment.maven.typemapper;
 
-import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.typemapper.TypeMapper;
 
 /**
  * A mapping between a particular database type and a {@link TypeMapper}.

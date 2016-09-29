@@ -17,7 +17,7 @@
 package com.speedment.tool.config.mutator.trait;
 
 
-import com.speedment.runtime.config.mutator.trait.HasAliasMutator;
+import com.speedment.common.dbmodel.mutator.trait.HasAliasMutator;
 import com.speedment.tool.config.trait.HasAliasProperty;
 
 /**

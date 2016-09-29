@@ -19,10 +19,10 @@ package com.speedment.runtime.internal.manager.sql;
 import com.speedment.common.injector.Injector;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.ProjectComponent;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.config.parameter.DbmsType;
+import com.speedment.common.dbmodel.Dbms;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.runtime.typemapper.TypeMapper;
+import com.speedment.runtime.db.DbmsType;
 import com.speedment.runtime.db.AsynchronousQueryResult;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.predicate.FieldPredicate;
@@ -34,7 +34,6 @@ import com.speedment.runtime.internal.stream.builder.pipeline.LongPipeline;
 import com.speedment.runtime.internal.stream.builder.pipeline.ReferencePipeline;
 import com.speedment.runtime.internal.stream.builder.streamterminator.StreamTerminator;
 import com.speedment.runtime.internal.stream.builder.streamterminator.StreamTerminatorUtil;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.manager.JdbcManagerSupport;
 import com.speedment.runtime.stream.Pipeline;
 import com.speedment.runtime.stream.StreamDecorator;
@@ -47,7 +46,9 @@ import java.util.function.Predicate;
 
 import static com.speedment.runtime.stream.action.Property.SIZE;
 import static com.speedment.runtime.stream.action.Verb.PRESERVE;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import com.speedment.common.dbmodel.util.DocumentDbUtil;
+import com.speedment.runtime.util.DatabaseUtil;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
@@ -106,7 +107,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         final DbmsHandlerComponent dbmsHandler = injector.getOrThrow(DbmsHandlerComponent.class);
         final String dbmsName                  = support.getManager().getDbmsName();
         final Dbms dbms                        = DocumentDbUtil.referencedDbms(project, dbmsName);
-        final DbmsType dbmsType                = DocumentDbUtil.findDbmsType(dbmsHandler, dbms);
+        final DbmsType dbmsType                = DatabaseUtil.findDbmsType(dbmsHandler, dbms);
 
         final FieldPredicateView spv = dbmsType.getFieldPredicateView();
         final List<SqlPredicateFragment> fragments = predicateBuilders.stream()

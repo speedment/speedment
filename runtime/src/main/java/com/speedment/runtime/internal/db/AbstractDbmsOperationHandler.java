@@ -21,7 +21,7 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.connectionpool.ConnectionPoolComponent;
-import com.speedment.runtime.config.Dbms;
+import com.speedment.common.dbmodel.Dbms;
 import com.speedment.runtime.db.AsynchronousQueryResult;
 import com.speedment.runtime.db.DbmsOperationHandler;
 import com.speedment.runtime.db.SqlFunction;
@@ -49,8 +49,8 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.DatabaseUtil.dbmsTypeOf;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
 

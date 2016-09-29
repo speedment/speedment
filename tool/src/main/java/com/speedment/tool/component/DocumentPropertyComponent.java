@@ -17,13 +17,13 @@
 package com.speedment.tool.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.ForeignKey;
-import com.speedment.runtime.config.Index;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
+import com.speedment.common.dbmodel.Dbms;
+import com.speedment.common.dbmodel.Document;
+import com.speedment.common.dbmodel.ForeignKey;
+import com.speedment.common.dbmodel.Index;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.Schema;
+import com.speedment.common.dbmodel.Table;
 import com.speedment.tool.config.DocumentProperty;
 
 import java.util.List;

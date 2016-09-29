@@ -32,7 +32,7 @@ import com.speedment.generator.internal.util.EntityTranslatorSupport;
 import com.speedment.generator.internal.util.FkHolder;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.runtime.config.Table;
+import com.speedment.common.dbmodel.Table;
 import com.speedment.runtime.manager.Manager;
 import com.speedment.runtime.util.OptionalUtil;
 

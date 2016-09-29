@@ -16,8 +16,7 @@
  */
 package com.speedment.runtime.internal.field;
 
-import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.field.LongField;
 import com.speedment.runtime.field.method.LongGetter;
 import com.speedment.runtime.field.method.LongSetter;
@@ -36,6 +35,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import static java.util.Objects.requireNonNull;
+import com.speedment.common.dbmodel.identifier.ColumnIdentifier;
+import static java.util.Objects.requireNonNull;
 
 /**
  * @param <ENTITY> entity type
@@ -47,13 +48,13 @@ import static java.util.Objects.requireNonNull;
 @Generated(value = "Speedment")
 public final class LongFieldImpl<ENTITY, D> implements LongField<ENTITY, D> {
     
-    private final FieldIdentifier<ENTITY> identifier;
+    private final ColumnIdentifier<ENTITY> identifier;
     private final LongGetter<ENTITY> getter;
     private final LongSetter<ENTITY> setter;
     private final TypeMapper<D, Long> typeMapper;
     private final boolean unique;
     
-    public LongFieldImpl(FieldIdentifier<ENTITY> identifier, LongGetter<ENTITY> getter, LongSetter<ENTITY> setter, TypeMapper<D, Long> typeMapper, boolean unique) {
+    public LongFieldImpl(ColumnIdentifier<ENTITY> identifier, LongGetter<ENTITY> getter, LongSetter<ENTITY> setter, TypeMapper<D, Long> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
@@ -62,7 +63,7 @@ public final class LongFieldImpl<ENTITY, D> implements LongField<ENTITY, D> {
     }
     
     @Override
-    public FieldIdentifier<ENTITY> identifier() {
+    public ColumnIdentifier<ENTITY> identifier() {
         return identifier;
     }
     

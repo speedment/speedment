@@ -37,12 +37,11 @@ import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.component.resultset.ResultSetMapping;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Table;
+import com.speedment.common.dbmodel.Column;
+import com.speedment.common.dbmodel.Dbms;
+import com.speedment.common.dbmodel.Table;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.method.BackwardFinder;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.internal.util.sql.ResultSetUtil;
 import com.speedment.runtime.manager.AbstractManager;
 import com.speedment.runtime.manager.JdbcManagerSupport;
@@ -70,7 +69,8 @@ import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static com.speedment.generator.internal.util.ColumnUtil.optionalGetterName;
 import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
 import static com.speedment.generator.internal.util.GenerateMethodBodyUtil.*;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
+import com.speedment.common.dbmodel.util.DocumentDbUtil;
+import static com.speedment.runtime.util.DatabaseUtil.dbmsTypeOf;
 
 /**
  *

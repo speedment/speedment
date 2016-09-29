@@ -23,12 +23,12 @@
     <parent>
         <groupId>com.speedment</groupId>
         <artifactId>speedment</artifactId>
-        <version>3.0.0-EA</version>
+        <version>3.0.1-SNAPSHOT</version>
     </parent>
     
     <groupId>com.speedment.common</groupId>
     <artifactId>common</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     
     <packaging>pom</packaging>
     
@@ -38,6 +38,8 @@
     </description>
 	
     <modules>
+        <module>invariant</module>
+        <module>function</module>
         <module>json</module>
         <module>tuple</module>
         <module>logger</module>
@@ -47,5 +49,6 @@
         <module>injector</module>
         <module>rest</module>
         <module>lazy</module>
+        <module>dbmodel</module>
     </modules>
 </project>

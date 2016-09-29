@@ -17,9 +17,9 @@
 package com.speedment.runtime.db;
 
 
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
+import com.speedment.common.dbmodel.Dbms;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.Schema;
 import com.speedment.runtime.util.ProgressMeasure;
 
 import java.sql.SQLException;

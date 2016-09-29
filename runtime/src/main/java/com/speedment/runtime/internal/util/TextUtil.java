@@ -24,8 +24,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;

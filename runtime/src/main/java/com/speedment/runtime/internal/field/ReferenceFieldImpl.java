@@ -16,14 +16,15 @@
  */
 package com.speedment.runtime.internal.field;
 
-import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.internal.field.predicate.reference.ReferenceIsNullPredicate;
 
+import static java.util.Objects.requireNonNull;
+import com.speedment.common.dbmodel.identifier.ColumnIdentifier;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -37,14 +38,14 @@ import static java.util.Objects.requireNonNull;
 public final class ReferenceFieldImpl<ENTITY, D, V> 
 implements ReferenceField<ENTITY, D, V> {
 
-    private final FieldIdentifier<ENTITY> identifier;
+    private final ColumnIdentifier<ENTITY> identifier;
     private final ReferenceGetter<ENTITY, V> getter;
     private final ReferenceSetter<ENTITY, V> setter;
     private final TypeMapper<D, V> typeMapper;
     private final boolean unique;
 
     public ReferenceFieldImpl(
-            FieldIdentifier<ENTITY> identifier,
+            ColumnIdentifier<ENTITY> identifier,
             ReferenceGetter<ENTITY, V> getter,
             ReferenceSetter<ENTITY, V> setter,
             TypeMapper<D, V> typeMapper,
@@ -62,7 +63,7 @@ implements ReferenceField<ENTITY, D, V> {
     /*****************************************************************/
 
     @Override
-    public FieldIdentifier<ENTITY> identifier() {
+    public ColumnIdentifier<ENTITY> identifier() {
         return identifier;
     }
 

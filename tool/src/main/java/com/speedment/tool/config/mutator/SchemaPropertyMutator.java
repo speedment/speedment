@@ -17,7 +17,7 @@
 package com.speedment.tool.config.mutator;
 
 
-import com.speedment.runtime.config.mutator.SchemaMutator;
+import com.speedment.common.dbmodel.mutator.SchemaMutator;
 import com.speedment.tool.config.SchemaProperty;
 import com.speedment.tool.config.TableProperty;
 import com.speedment.tool.config.mutator.trait.HasAliasPropertyMutator;

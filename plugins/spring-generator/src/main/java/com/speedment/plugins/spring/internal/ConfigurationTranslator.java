@@ -21,7 +21,7 @@ import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.File;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
-import com.speedment.runtime.config.Project;
+import com.speedment.common.dbmodel.Project;
 import org.springframework.context.annotation.Configuration;
 
 /**

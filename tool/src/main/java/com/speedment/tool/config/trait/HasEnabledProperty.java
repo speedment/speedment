@@ -17,7 +17,7 @@
 package com.speedment.tool.config.trait;
 
 
-import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.common.dbmodel.trait.HasEnabled;
 import com.speedment.tool.config.DocumentProperty;
 import javafx.beans.property.BooleanProperty;
 

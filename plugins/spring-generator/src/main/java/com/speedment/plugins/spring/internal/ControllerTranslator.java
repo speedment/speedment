@@ -21,7 +21,7 @@ import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.File;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
-import com.speedment.runtime.config.Table;
+import com.speedment.common.dbmodel.Table;
 import org.springframework.web.bind.annotation.RestController;
 
 /**

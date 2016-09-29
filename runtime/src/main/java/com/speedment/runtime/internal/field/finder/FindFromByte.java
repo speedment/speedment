@@ -46,7 +46,7 @@ public final class FindFromByte<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTI
             .orElseThrow(() -> new SpeedmentException(
                 "Error! Could not find any " + 
                 getTargetManager().getEntityClass().getSimpleName() + 
-                " with '" + getTargetField().identifier().columnName() + 
+                " with '" + getTargetField().identifier().getColumnName() + 
                 "' = '" + value + "'."
             ));
     }

@@ -24,7 +24,7 @@ import com.speedment.runtime.manager.Manager;
 
 import java.util.Optional;
 
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**

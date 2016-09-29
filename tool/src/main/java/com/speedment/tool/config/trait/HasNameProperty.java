@@ -17,7 +17,7 @@
 package com.speedment.tool.config.trait;
 
 
-import com.speedment.runtime.config.trait.HasName;
+import com.speedment.common.dbmodel.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.config.DocumentProperty;
 import javafx.beans.property.StringProperty;

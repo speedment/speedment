@@ -18,8 +18,8 @@ package com.speedment.plugins.enums.internal;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Table;
+import com.speedment.common.dbmodel.Column;
+import com.speedment.common.dbmodel.Table;
 import com.speedment.runtime.exception.SpeedmentException;
 
 import java.util.List;

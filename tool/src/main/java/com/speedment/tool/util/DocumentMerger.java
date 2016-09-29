@@ -17,10 +17,10 @@
 package com.speedment.tool.util;
 
 
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.trait.HasName;
+import com.speedment.common.dbmodel.Document;
+import com.speedment.common.dbmodel.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.config.BaseDocument;
+import com.speedment.common.dbmodel.internal.BaseDocument;
 import com.speedment.tool.config.DocumentProperty;
 import javafx.beans.property.Property;
 import javafx.collections.ObservableList;

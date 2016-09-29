@@ -17,8 +17,8 @@
 package com.speedment.tool.config;
 
 
-import com.speedment.runtime.config.Index;
-import com.speedment.runtime.config.IndexColumn;
+import com.speedment.common.dbmodel.Index;
+import com.speedment.common.dbmodel.IndexColumn;
 import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.IndexColumnPropertyMutator;

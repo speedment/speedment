@@ -18,8 +18,8 @@ package com.speedment.tool.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.component.PasswordComponent;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.trait.HasMainInterface;
+import com.speedment.common.dbmodel.Dbms;
+import com.speedment.common.dbmodel.trait.HasMainInterface;
 import com.speedment.runtime.util.ProgressMeasure;
 import com.speedment.tool.brand.Palette;
 import com.speedment.tool.config.DbmsProperty;

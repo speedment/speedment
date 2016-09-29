@@ -22,8 +22,8 @@ import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.generator.component.TypeMapperComponent;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Table;
+import com.speedment.common.dbmodel.Column;
+import com.speedment.common.dbmodel.Table;
 import com.speedment.runtime.exception.SpeedmentException;
 
 import java.lang.reflect.Type;

@@ -16,8 +16,7 @@
  */
 package com.speedment.runtime.internal.field;
 
-import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
@@ -42,6 +41,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import static java.util.Objects.requireNonNull;
+import com.speedment.common.dbmodel.identifier.ColumnIdentifier;
+import static java.util.Objects.requireNonNull;
 
 /**
  * @param <ENTITY> the entity type
@@ -54,14 +55,14 @@ import static java.util.Objects.requireNonNull;
 public final class ComparableFieldImpl<ENTITY, D, V extends Comparable<? super V>> 
 implements ComparableField<ENTITY, D, V> {
 
-    private final FieldIdentifier<ENTITY> identifier;
+    private final ColumnIdentifier<ENTITY> identifier;
     private final ReferenceGetter<ENTITY, V> getter;
     private final ReferenceSetter<ENTITY, V> setter;
     private final TypeMapper<D, V> typeMapper;
     private final boolean unique;
 
     public ComparableFieldImpl(
-            FieldIdentifier<ENTITY> identifier,
+            ColumnIdentifier<ENTITY> identifier,
             ReferenceGetter<ENTITY, V> getter,
             ReferenceSetter<ENTITY, V> setter,
             TypeMapper<D, V> typeMapper,
@@ -79,7 +80,7 @@ implements ComparableField<ENTITY, D, V> {
     /*****************************************************************/
 
     @Override
-    public FieldIdentifier<ENTITY> identifier() {
+    public ColumnIdentifier<ENTITY> identifier() {
         return identifier;
     }
 

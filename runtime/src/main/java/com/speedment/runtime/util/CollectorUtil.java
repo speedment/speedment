@@ -37,7 +37,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
 import static com.speedment.runtime.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
 

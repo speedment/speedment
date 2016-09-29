@@ -16,8 +16,7 @@
  */
 package com.speedment.runtime.internal.field;
 
-import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.field.ShortField;
 import com.speedment.runtime.field.method.ShortGetter;
 import com.speedment.runtime.field.method.ShortSetter;
@@ -36,6 +35,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import static java.util.Objects.requireNonNull;
+import com.speedment.common.dbmodel.identifier.ColumnIdentifier;
+import static java.util.Objects.requireNonNull;
 
 /**
  * @param <ENTITY> entity type
@@ -47,13 +48,13 @@ import static java.util.Objects.requireNonNull;
 @Generated(value = "Speedment")
 public final class ShortFieldImpl<ENTITY, D> implements ShortField<ENTITY, D> {
     
-    private final FieldIdentifier<ENTITY> identifier;
+    private final ColumnIdentifier<ENTITY> identifier;
     private final ShortGetter<ENTITY> getter;
     private final ShortSetter<ENTITY> setter;
     private final TypeMapper<D, Short> typeMapper;
     private final boolean unique;
     
-    public ShortFieldImpl(FieldIdentifier<ENTITY> identifier, ShortGetter<ENTITY> getter, ShortSetter<ENTITY> setter, TypeMapper<D, Short> typeMapper, boolean unique) {
+    public ShortFieldImpl(ColumnIdentifier<ENTITY> identifier, ShortGetter<ENTITY> getter, ShortSetter<ENTITY> setter, TypeMapper<D, Short> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
@@ -62,7 +63,7 @@ public final class ShortFieldImpl<ENTITY, D> implements ShortField<ENTITY, D> {
     }
     
     @Override
-    public FieldIdentifier<ENTITY> identifier() {
+    public ColumnIdentifier<ENTITY> identifier() {
         return identifier;
     }
     

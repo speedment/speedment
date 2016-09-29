@@ -17,14 +17,14 @@
 package com.speedment.runtime.db;
 
 
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.PrimaryKeyColumn;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.identifier.FieldIdentifier;
+import com.speedment.common.dbmodel.Column;
+import com.speedment.common.dbmodel.PrimaryKeyColumn;
+import com.speedment.common.dbmodel.Schema;
+import com.speedment.common.dbmodel.Table;
 import com.speedment.runtime.exception.SpeedmentException;
 
 import java.util.Set;
+import com.speedment.common.dbmodel.identifier.ColumnIdentifier;
 
 /**
  * Regulates how the full name of a database entity is constructed.
@@ -62,15 +62,15 @@ public interface DatabaseNamingConvention {
 
     /**
      * Returns the full name used in the database for the specified
-     * FieldIdentifier. This is typically constructed by combining the schema,
+ ColumnIdentifier. This is typically constructed by combining the schema,
      * table and column name with a separator, but that might be different in
      * different implementations.
      *
      * @param fieldIdentifier to use
      * @return the full name
      */
-    default String fullNameOf(FieldIdentifier<?> fieldIdentifier) {
-        return fullNameOf(fieldIdentifier.schemaName(), fieldIdentifier.tableName(), fieldIdentifier.columnName());
+    default String fullNameOf(ColumnIdentifier<?> fieldIdentifier) {
+        return fullNameOf(fieldIdentifier.getSchemaName(), fieldIdentifier.getTableName(), fieldIdentifier.getColumnName());
     }
 
     /**

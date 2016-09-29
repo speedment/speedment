@@ -17,7 +17,7 @@
 package com.speedment.tool.config.trait;
 
 
-import com.speedment.runtime.config.trait.HasAlias;
+import com.speedment.common.dbmodel.trait.HasAlias;
 import com.speedment.tool.config.DocumentProperty;
 import javafx.beans.property.StringProperty;
 

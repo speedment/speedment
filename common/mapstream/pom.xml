@@ -44,10 +44,6 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-Description>
-                            An extension of the Java 8 Stream API to make it 
-                            possible to stream over key-value pairs more easily.
-                        </Bundle-Description>
                         <Export-Package>
                             com.speedment.common.mapstream
                         </Export-Package>

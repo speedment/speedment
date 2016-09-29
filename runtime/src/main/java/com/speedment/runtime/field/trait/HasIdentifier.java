@@ -17,12 +17,12 @@
 package com.speedment.runtime.field.trait;
 
 
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
+import com.speedment.common.dbmodel.Column;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.util.DocumentDbUtil;
 
 import java.util.Optional;
+import com.speedment.common.dbmodel.identifier.ColumnIdentifier;
 
 /**
  *
@@ -39,7 +39,7 @@ public interface HasIdentifier<ENTITY> {
      * 
      * @return  the identifier
      */
-    FieldIdentifier<ENTITY> identifier();
+    ColumnIdentifier<ENTITY> identifier();
     
     /**
      * Locates the column that this field is referencing by using the specified

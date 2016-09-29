@@ -17,7 +17,7 @@
 package com.speedment.runtime.db;
 
 
-import com.speedment.runtime.config.Dbms;
+import com.speedment.common.dbmodel.Dbms;
 
 /**
  * A functional interface that given a certain {@link Dbms} instance can produce

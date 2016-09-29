@@ -18,10 +18,10 @@ package com.speedment.runtime;
 
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.runtime.internal.AbstractSpeedment;
-import com.speedment.runtime.internal.config.dbms.MariaDbDbmsType;
-import com.speedment.runtime.internal.config.dbms.MySqlDbmsType;
-import com.speedment.runtime.internal.config.dbms.PostgresDbmsType;
-import com.speedment.runtime.internal.config.dbms.StandardDbmsTypes;
+import com.speedment.runtime.internal.db.mariadb.MariaDbDbmsType;
+import com.speedment.runtime.internal.db.mysql.MySqlDbmsType;
+import com.speedment.runtime.internal.db.postgresql.PostgresqlDbmsType;
+import com.speedment.runtime.internal.db.StandardDbmsTypes;
 
 import java.util.stream.Stream;
 
@@ -37,7 +37,7 @@ public class RuntimeBundle implements InjectBundle {
             .andThen(StandardDbmsTypes.include())
             .andThen(MariaDbDbmsType.include())
             .andThen(MySqlDbmsType.include())
-            .andThen(PostgresDbmsType.include())
+            .andThen(PostgresqlDbmsType.include())
             .injectables();
     }
 

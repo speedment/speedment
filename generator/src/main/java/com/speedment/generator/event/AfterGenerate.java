@@ -19,7 +19,7 @@ package com.speedment.generator.event;
 import com.speedment.common.codegen.Generator;
 import com.speedment.generator.event.trait.ProjectEvent;
 import com.speedment.generator.translator.TranslatorManager;
-import com.speedment.runtime.config.Project;
+import com.speedment.common.dbmodel.Project;
 
 import static java.util.Objects.requireNonNull;
 

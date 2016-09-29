@@ -17,8 +17,8 @@
 package com.speedment.generator.translator;
 
 import com.speedment.common.codegen.model.ClassOrInterface;
-import com.speedment.runtime.config.trait.HasMainInterface;
-import com.speedment.runtime.config.trait.HasName;
+import com.speedment.common.dbmodel.trait.HasMainInterface;
+import com.speedment.common.dbmodel.trait.HasName;
 
 /**
  * This interface describes a functional reference to something that decorates

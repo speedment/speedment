@@ -22,7 +22,7 @@ import com.speedment.generator.namer.JavaLanguageNamer;
 import com.speedment.generator.translator.StandardTranslatorKey;
 import com.speedment.generator.translator.Translator;
 import com.speedment.generator.translator.TranslatorManager;
-import com.speedment.runtime.config.Table;
+import com.speedment.common.dbmodel.Table;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;

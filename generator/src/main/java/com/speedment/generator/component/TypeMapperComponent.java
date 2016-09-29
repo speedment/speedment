@@ -17,9 +17,9 @@
 package com.speedment.generator.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.internal.config.mapper.IdentityTypeMapper;
+import com.speedment.common.dbmodel.Column;
+import com.speedment.runtime.typemapper.TypeMapper;
+import com.speedment.runtime.internal.typemapper.IdentityTypeMapper;
 
 import java.util.Optional;
 import java.util.function.Supplier;

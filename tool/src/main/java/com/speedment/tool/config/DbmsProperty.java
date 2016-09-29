@@ -18,10 +18,9 @@ package com.speedment.tool.config;
 
 
 import com.speedment.runtime.component.DbmsHandlerComponent;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Project;
+import com.speedment.common.dbmodel.Dbms;
+import com.speedment.common.dbmodel.Project;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 import com.speedment.runtime.util.OptionalUtil;
 import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DbmsPropertyMutator;
@@ -43,6 +42,7 @@ import java.util.OptionalInt;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.internal.util.ImmutableListUtil.concat;
+import com.speedment.runtime.util.DatabaseUtil;
 
 /**
  *
@@ -81,7 +81,7 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
     
     protected IntegerBinding defaultPortProperty(DbmsHandlerComponent dbmsHandlerComponent) {
         return Bindings.createIntegerBinding(() -> 
-            DocumentDbUtil.findDbmsType(dbmsHandlerComponent, this).getDefaultPort(),
+            DatabaseUtil.findDbmsType(dbmsHandlerComponent, this).getDefaultPort(),
             typeNameProperty()
         );
     }
@@ -102,7 +102,7 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
 
     protected StringBinding defaultConnectionUrlProperty(DbmsHandlerComponent dbmsHandlerComponent) throws SpeedmentException {
         return Bindings.createStringBinding(() -> 
-            DocumentDbUtil.findDbmsType(dbmsHandlerComponent, this).getConnectionUrlGenerator().from(this), 
+            DatabaseUtil.findDbmsType(dbmsHandlerComponent, this).getConnectionUrlGenerator().from(this), 
             typeNameProperty(),
             ipAddressProperty(),
             portProperty(),

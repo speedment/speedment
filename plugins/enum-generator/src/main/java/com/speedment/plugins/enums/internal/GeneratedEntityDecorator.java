@@ -28,7 +28,7 @@ import com.speedment.generator.namer.JavaLanguageNamer;
 import com.speedment.generator.translator.JavaClassTranslator;
 import com.speedment.generator.translator.TranslatorDecorator;
 import com.speedment.plugins.enums.StringToEnumTypeMapper;
-import com.speedment.runtime.config.Table;
+import com.speedment.common.dbmodel.Table;
 
 import java.lang.reflect.Type;
 import java.util.List;

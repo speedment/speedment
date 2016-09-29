@@ -17,7 +17,7 @@
 package com.speedment.runtime.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.config.parameter.DbmsType;
+import com.speedment.runtime.db.DbmsType;
 
 import java.util.Optional;
 import java.util.stream.Stream;

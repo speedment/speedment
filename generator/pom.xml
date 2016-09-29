@@ -68,6 +68,12 @@
             <artifactId>runtime</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>dbmodel</artifactId>
+            <version>${dbmodel.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.speedment.common</groupId>

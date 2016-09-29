@@ -38,15 +38,13 @@ import com.speedment.generator.internal.util.EntityTranslatorSupport;
 import com.speedment.generator.internal.util.FkHolder;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.config.mapper.primitive.PrimitiveTypeMapper;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
+import com.speedment.common.dbmodel.Column;
+import com.speedment.common.dbmodel.Dbms;
+import com.speedment.common.dbmodel.Table;
+import com.speedment.runtime.typemapper.TypeMapper;
+import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
 import com.speedment.runtime.manager.Manager;
-import com.speedment.runtime.util.OptionalBoolean;
+import com.speedment.common.function.OptionalBoolean;
 import com.speedment.runtime.util.OptionalUtil;
 
 import java.lang.reflect.Type;
@@ -60,8 +58,10 @@ import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import static com.speedment.generator.internal.util.ColumnUtil.usesOptional;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.relativeName;
+import com.speedment.common.dbmodel.util.DocumentDbUtil;
+import static com.speedment.common.dbmodel.util.DocumentUtil.Name.DATABASE_NAME;
+import com.speedment.common.dbmodel.identifier.ColumnIdentifier;
+import static com.speedment.common.dbmodel.util.DocumentUtil.relativeName;
 
 /**
  *
@@ -84,7 +84,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
 
         final Enum identifierEnum = Enum.of(IDENTIFIER_NAME)
             .add(Field.of("columnName", String.class).private_().final_())
-            .add(SimpleParameterizedType.create(FieldIdentifier.class, getSupport().entityType()))
+            .add(SimpleParameterizedType.create(ColumnIdentifier.class, getSupport().entityType()))
             .add(Constructor.of()
                 .add(Field.of("columnName", String.class))
                 .add("this.columnName = columnName;")

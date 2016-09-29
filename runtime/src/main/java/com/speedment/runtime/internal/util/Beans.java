@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.internal.util;
 
-import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

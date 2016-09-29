@@ -21,13 +21,13 @@ import com.speedment.common.injector.Injector;
 import com.speedment.generator.component.CodeGenerationComponent;
 import com.speedment.generator.translator.JavaClassTranslator;
 import com.speedment.generator.translator.StandardTranslatorKey;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.ForeignKey;
-import com.speedment.runtime.config.ForeignKeyColumn;
-import com.speedment.runtime.config.Table;
+import com.speedment.common.dbmodel.Column;
+import com.speedment.common.dbmodel.ForeignKey;
+import com.speedment.common.dbmodel.ForeignKeyColumn;
+import com.speedment.common.dbmodel.Table;
 import com.speedment.runtime.exception.SpeedmentException;
 
-import static com.speedment.runtime.internal.util.document.DocumentUtil.ancestor;
+import static com.speedment.common.dbmodel.util.DocumentUtil.ancestor;
 import static java.util.Objects.requireNonNull;
 
 /**

@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.config.db.parameters;
 
-import com.speedment.runtime.config.parameter.OrderType;
+import com.speedment.common.dbmodel.parameter.OrderType;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

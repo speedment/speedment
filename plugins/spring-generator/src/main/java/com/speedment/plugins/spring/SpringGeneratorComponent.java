@@ -24,8 +24,8 @@ import com.speedment.plugins.spring.internal.ControllerTranslator;
 import com.speedment.plugins.spring.internal.GeneratedConfigurationTranslator;
 import com.speedment.plugins.spring.internal.GeneratedControllerTranslator;
 import com.speedment.plugins.spring.internal.SpringTranslatorKey;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Table;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.Table;
 
 import static com.speedment.common.injector.State.RESOLVED;
 

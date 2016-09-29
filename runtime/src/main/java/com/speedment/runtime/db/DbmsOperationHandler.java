@@ -17,7 +17,7 @@
 package com.speedment.runtime.db;
 
 
-import com.speedment.runtime.config.Dbms;
+import com.speedment.common.dbmodel.Dbms;
 import com.speedment.runtime.field.Field;
 
 import java.sql.Array;

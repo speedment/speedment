@@ -107,6 +107,12 @@
             <artifactId>rest</artifactId>
             <version>${rest.version}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>dbmodel</artifactId>
+            <version>${dbmodel.version}</version>
+        </dependency>
         	        
         <!-- LICENSE INFORMATION
         FontawesomeFX:8.9

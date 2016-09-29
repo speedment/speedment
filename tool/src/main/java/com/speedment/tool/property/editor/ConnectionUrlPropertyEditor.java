@@ -20,7 +20,7 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
+import com.speedment.runtime.util.DatabaseUtil;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.property.PropertyEditor;
 import com.speedment.tool.property.item.DefaultTextAreaItem;
@@ -57,7 +57,7 @@ public class ConnectionUrlPropertyEditor<T extends DbmsProperty> implements Prop
     
     protected StringBinding defaultConnectionUrlProperty(T document, DbmsHandlerComponent dbmsHandlerComponent) throws SpeedmentException {
         return Bindings.createStringBinding(() -> 
-            DocumentDbUtil.findDbmsType(dbmsHandlerComponent, document).getConnectionUrlGenerator().from(document), 
+            DatabaseUtil.findDbmsType(dbmsHandlerComponent, document).getConnectionUrlGenerator().from(document), 
                 document.typeNameProperty(),
                 document.ipAddressProperty(),
                 document.portProperty(),

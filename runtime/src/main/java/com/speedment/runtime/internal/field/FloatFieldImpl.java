@@ -16,8 +16,7 @@
  */
 package com.speedment.runtime.internal.field;
 
-import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.field.FloatField;
 import com.speedment.runtime.field.method.FloatGetter;
 import com.speedment.runtime.field.method.FloatSetter;
@@ -36,6 +35,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import static java.util.Objects.requireNonNull;
+import com.speedment.common.dbmodel.identifier.ColumnIdentifier;
+import static java.util.Objects.requireNonNull;
 
 /**
  * @param <ENTITY> entity type
@@ -47,13 +48,13 @@ import static java.util.Objects.requireNonNull;
 @Generated(value = "Speedment")
 public final class FloatFieldImpl<ENTITY, D> implements FloatField<ENTITY, D> {
     
-    private final FieldIdentifier<ENTITY> identifier;
+    private final ColumnIdentifier<ENTITY> identifier;
     private final FloatGetter<ENTITY> getter;
     private final FloatSetter<ENTITY> setter;
     private final TypeMapper<D, Float> typeMapper;
     private final boolean unique;
     
-    public FloatFieldImpl(FieldIdentifier<ENTITY> identifier, FloatGetter<ENTITY> getter, FloatSetter<ENTITY> setter, TypeMapper<D, Float> typeMapper, boolean unique) {
+    public FloatFieldImpl(ColumnIdentifier<ENTITY> identifier, FloatGetter<ENTITY> getter, FloatSetter<ENTITY> setter, TypeMapper<D, Float> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
@@ -62,7 +63,7 @@ public final class FloatFieldImpl<ENTITY, D> implements FloatField<ENTITY, D> {
     }
     
     @Override
-    public FieldIdentifier<ENTITY> identifier() {
+    public ColumnIdentifier<ENTITY> identifier() {
         return identifier;
     }
     

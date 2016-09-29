@@ -27,11 +27,11 @@ import com.speedment.generator.component.TypeMapperComponent;
 import com.speedment.generator.namer.JavaLanguageNamer;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.generator.util.Pluralis;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.ForeignKey;
-import com.speedment.runtime.config.ForeignKeyColumn;
-import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.common.dbmodel.Column;
+import com.speedment.common.dbmodel.ForeignKey;
+import com.speedment.common.dbmodel.ForeignKeyColumn;
+import com.speedment.common.dbmodel.Table;
+import com.speedment.common.dbmodel.trait.HasEnabled;
 import com.speedment.runtime.db.MetaResult;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.field.BooleanField;
@@ -74,14 +74,14 @@ import com.speedment.runtime.internal.field.ShortFieldImpl;
 import com.speedment.runtime.internal.field.ShortForeignKeyFieldImpl;
 import com.speedment.runtime.internal.field.StringFieldImpl;
 import com.speedment.runtime.internal.field.StringForeignKeyFieldImpl;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
 
 import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.function.Consumer;
 
 import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import com.speedment.common.dbmodel.util.DocumentDbUtil;
 import static java.util.Objects.requireNonNull;
 
 /**

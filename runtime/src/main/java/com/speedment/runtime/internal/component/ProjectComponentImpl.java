@@ -20,7 +20,7 @@ import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.ApplicationMetadata;
 import com.speedment.runtime.component.ProjectComponent;
-import com.speedment.runtime.config.Project;
+import com.speedment.common.dbmodel.Project;
 
 import static com.speedment.common.injector.State.INITIALIZED;
 import static java.util.Objects.requireNonNull;

@@ -22,9 +22,9 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.common.dbmodel.Column;
+import com.speedment.common.dbmodel.Table;
+import com.speedment.common.dbmodel.trait.HasEnabled;
 import com.speedment.runtime.exception.SpeedmentException;
 
 import java.sql.SQLException;

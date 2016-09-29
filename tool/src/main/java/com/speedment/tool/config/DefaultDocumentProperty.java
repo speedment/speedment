@@ -17,7 +17,7 @@
 package com.speedment.tool.config;
 
 
-import com.speedment.runtime.config.Document;
+import com.speedment.common.dbmodel.Document;
 import com.speedment.runtime.internal.util.ImmutableListUtil;
 import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasNameProperty;

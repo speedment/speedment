@@ -21,7 +21,7 @@ import com.speedment.runtime.field.trait.HasFloatValue;
 import javax.annotation.Generated;
 import java.util.Comparator;
 
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**

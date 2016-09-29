@@ -16,8 +16,7 @@
  */
 package com.speedment.runtime;
 
-
-import com.speedment.runtime.config.Project;
+import com.speedment.common.dbmodel.Project;
 
 /**
  * This interface defines how a Speedment application can obtain its

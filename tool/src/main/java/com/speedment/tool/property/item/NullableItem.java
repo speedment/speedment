@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.property.item;
 
-import com.speedment.runtime.config.trait.HasNullable.ImplementAs;
+import com.speedment.common.dbmodel.trait.HasNullable.ImplementAs;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Pos;

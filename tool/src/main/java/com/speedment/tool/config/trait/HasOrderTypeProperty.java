@@ -17,8 +17,8 @@
 package com.speedment.tool.config.trait;
 
 
-import com.speedment.runtime.config.parameter.OrderType;
-import com.speedment.runtime.config.trait.HasOrderType;
+import com.speedment.common.dbmodel.parameter.OrderType;
+import com.speedment.common.dbmodel.trait.HasOrderType;
 import com.speedment.tool.config.DocumentProperty;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;

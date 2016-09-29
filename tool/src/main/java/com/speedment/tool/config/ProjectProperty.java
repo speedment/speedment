@@ -17,7 +17,7 @@
 package com.speedment.tool.config;
 
 
-import com.speedment.runtime.config.Project;
+import com.speedment.common.dbmodel.Project;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.util.ImmutableListUtil;
 import com.speedment.tool.component.DocumentPropertyComponent;

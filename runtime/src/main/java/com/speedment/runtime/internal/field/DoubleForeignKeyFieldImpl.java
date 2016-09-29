@@ -16,8 +16,7 @@
  */
 package com.speedment.runtime.internal.field;
 
-import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.field.DoubleField;
 import com.speedment.runtime.field.DoubleForeignKeyField;
 import com.speedment.runtime.field.method.BackwardFinder;
@@ -43,6 +42,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import static java.util.Objects.requireNonNull;
+import com.speedment.common.dbmodel.identifier.ColumnIdentifier;
+import static java.util.Objects.requireNonNull;
 
 /**
  * @param <ENTITY>    entity type
@@ -55,7 +56,7 @@ import static java.util.Objects.requireNonNull;
 @Generated(value = "Speedment")
 public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements DoubleField<ENTITY, D>, DoubleForeignKeyField<ENTITY, D, FK_ENTITY> {
     
-    private final FieldIdentifier<ENTITY> identifier;
+    private final ColumnIdentifier<ENTITY> identifier;
     private final DoubleGetter<ENTITY> getter;
     private final DoubleSetter<ENTITY> setter;
     private final DoubleField<FK_ENTITY, ?> referenced;
@@ -63,7 +64,7 @@ public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Do
     private final TypeMapper<D, Double> typeMapper;
     private final boolean unique;
     
-    public DoubleForeignKeyFieldImpl(FieldIdentifier<ENTITY> identifier, DoubleGetter<ENTITY> getter, DoubleSetter<ENTITY> setter, DoubleField<FK_ENTITY, ?> referenced, Finder<ENTITY, FK_ENTITY> finder, TypeMapper<D, Double> typeMapper, boolean unique) {
+    public DoubleForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, DoubleGetter<ENTITY> getter, DoubleSetter<ENTITY> setter, DoubleField<FK_ENTITY, ?> referenced, Finder<ENTITY, FK_ENTITY> finder, TypeMapper<D, Double> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
@@ -74,7 +75,7 @@ public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Do
     }
     
     @Override
-    public FieldIdentifier<ENTITY> identifier() {
+    public ColumnIdentifier<ENTITY> identifier() {
         return identifier;
     }
     

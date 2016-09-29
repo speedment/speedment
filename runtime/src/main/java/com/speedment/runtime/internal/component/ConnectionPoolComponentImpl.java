@@ -23,10 +23,11 @@ import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.PasswordComponent;
 import com.speedment.runtime.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.component.connectionpool.PoolableConnection;
-import com.speedment.runtime.config.Dbms;
+import com.speedment.common.dbmodel.Dbms;
+import com.speedment.common.dbmodel.util.DocumentDbUtil;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.runtime.internal.pool.PoolableConnectionImpl;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
+import com.speedment.runtime.util.DatabaseUtil;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -72,7 +73,7 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
     @Override
     public PoolableConnection getConnection(Dbms dbms) {
         
-        final String uri      = DocumentDbUtil.findConnectionUrl(dbmsHandlerComponent, dbms);
+        final String uri      = DatabaseUtil.findConnectionUrl(dbmsHandlerComponent, dbms);
         final String username = unwrap(dbms.getUsername());
         final char[] password = unwrap(passwordComponent.get(dbms));
 
@@ -103,7 +104,7 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
     @Override
     public Connection newConnection(Dbms dbms) {
         
-        final String uri      = DocumentDbUtil.findConnectionUrl(dbmsHandlerComponent, dbms);
+        final String uri      = DatabaseUtil.findConnectionUrl(dbmsHandlerComponent, dbms);
         final String username = unwrap(dbms.getUsername());
         final char[] password = unwrap(passwordComponent.get(dbms));
         

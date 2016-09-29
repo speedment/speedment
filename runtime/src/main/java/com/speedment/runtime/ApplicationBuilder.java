@@ -18,8 +18,8 @@ package com.speedment.runtime;
 
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.common.dbmodel.Document;
+import com.speedment.common.dbmodel.trait.HasEnabled;
 import com.speedment.runtime.internal.DefaultApplicationBuilder;
 import com.speedment.runtime.internal.DefaultApplicationMetadata;
 import com.speedment.runtime.internal.EmptyApplicationMetadata;

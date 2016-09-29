@@ -29,9 +29,9 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.runtime.ApplicationMetadata;
 import com.speedment.runtime.component.InfoComponent;
-import com.speedment.runtime.config.Project;
+import com.speedment.common.dbmodel.Project;
 import com.speedment.runtime.internal.AbstractApplicationMetadata;
-import com.speedment.runtime.internal.util.document.DocumentTranscoder;
+import com.speedment.common.dbmodel.util.DocumentTranscoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +40,7 @@ import java.util.stream.Stream;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
+import com.speedment.internal.common.json.Json;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
@@ -78,7 +79,7 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
 
         final Method initializer = Method.of("init", String.class).static_().private_();
 
-        final List<String> lines = Stream.of(DocumentTranscoder.save(getSupport().projectOrThrow()).split("\\R")).collect(toList());
+        final List<String> lines = Stream.of(DocumentTranscoder.save(getSupport().projectOrThrow(), Json::toJson).split("\\R")).collect(toList());
         final List<List<String>> segments = new ArrayList<>();
         List<String> segment = new ArrayList<>();
         segments.add(segment);

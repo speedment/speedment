@@ -16,8 +16,7 @@
  */
 package com.speedment.runtime.internal.field;
 
-import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
@@ -50,6 +49,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import static java.util.Objects.requireNonNull;
+import com.speedment.common.dbmodel.identifier.ColumnIdentifier;
+import static java.util.Objects.requireNonNull;
 
 /**
  * @param <ENTITY> the entity type
@@ -60,14 +61,14 @@ import static java.util.Objects.requireNonNull;
  */
 public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> {
 
-    private final FieldIdentifier<ENTITY> identifier;
+    private final ColumnIdentifier<ENTITY> identifier;
     private final ReferenceGetter<ENTITY, String> getter;
     private final ReferenceSetter<ENTITY, String> setter;
     private final TypeMapper<D, String> typeMapper;
     private final boolean unique;
 
     public StringFieldImpl(
-            FieldIdentifier<ENTITY> identifier,
+            ColumnIdentifier<ENTITY> identifier,
             ReferenceGetter<ENTITY, String> getter,
             ReferenceSetter<ENTITY, String> setter,
             TypeMapper<D, String> typeMapper,
@@ -85,7 +86,7 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
     /*****************************************************************/
 
     @Override
-    public FieldIdentifier<ENTITY> identifier() {
+    public ColumnIdentifier<ENTITY> identifier() {
         return identifier;
     }
 

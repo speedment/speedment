@@ -17,7 +17,7 @@
 package com.speedment.runtime.component.resultset;
 
 
-import com.speedment.runtime.config.Dbms;
+import com.speedment.common.dbmodel.Dbms;
 
 /**
  * A mapping that defined how a JDBC {@code ResultSet} or 

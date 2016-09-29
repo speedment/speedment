@@ -18,7 +18,7 @@ package com.speedment.tool.config.trait;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.runtime.config.trait.HasPackageName;
+import com.speedment.common.dbmodel.trait.HasPackageName;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.config.ProjectProperty;
 import javafx.beans.property.StringProperty;

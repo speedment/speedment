@@ -32,7 +32,7 @@ import com.speedment.runtime.internal.component.PasswordComponentImpl;
 import com.speedment.runtime.internal.component.PrimaryKeyFactoryComponentImpl;
 import com.speedment.runtime.internal.component.ProjectComponentImpl;
 import com.speedment.runtime.internal.component.resultset.ResultSetMapperComponentImpl;
-import com.speedment.runtime.internal.config.dbms.StandardDbmsTypes;
+import com.speedment.runtime.internal.db.StandardDbmsTypes;
 import com.speedment.runtime.manager.Manager;
 
 import java.util.Optional;

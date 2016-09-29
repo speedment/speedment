@@ -22,14 +22,14 @@ import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.component.resultset.ResultSetMapperComponent;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.PrimaryKeyColumn;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.config.parameter.DbmsType;
+import com.speedment.common.dbmodel.Column;
+import com.speedment.common.dbmodel.Dbms;
+import com.speedment.common.dbmodel.PrimaryKeyColumn;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.Schema;
+import com.speedment.common.dbmodel.Table;
+import com.speedment.runtime.typemapper.TypeMapper;
+import com.speedment.runtime.db.DbmsType;
 import com.speedment.runtime.db.AsynchronousQueryResult;
 import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.db.DbmsOperationHandler;
@@ -42,8 +42,7 @@ import com.speedment.runtime.internal.manager.metaresult.SqlMetaResultImpl;
 import com.speedment.runtime.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.internal.stream.builder.ReferenceStreamBuilder;
 import com.speedment.runtime.internal.stream.builder.pipeline.PipelineImpl;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
-import com.speedment.runtime.internal.util.document.DocumentUtil;
+import com.speedment.common.dbmodel.util.DocumentUtil;
 
 import com.speedment.runtime.manager.Manager;
 import com.speedment.runtime.stream.StreamDecorator;
@@ -63,13 +62,20 @@ import java.util.stream.BaseStream;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.*;
-import static com.speedment.runtime.internal.util.document.DocumentUtil.Name.DATABASE_NAME;
+import static com.speedment.common.dbmodel.util.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.runtime.manager.JdbcManagerSupport;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.*;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import com.speedment.common.dbmodel.util.DocumentDbUtil;
+import static com.speedment.common.dbmodel.util.DocumentDbUtil.isSame;
+import static com.speedment.common.dbmodel.util.DocumentDbUtil.referencedTable;
+import static com.speedment.runtime.util.DatabaseUtil.dbmsTypeOf;
+import static java.util.Objects.requireNonNull;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import static com.speedment.common.dbmodel.util.DocumentDbUtil.isSame;
+import static com.speedment.common.dbmodel.util.DocumentDbUtil.referencedTable;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -136,7 +142,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
                 .map(c -> c.getParent())
                 .map(t -> isSame(table, t.get()))
                 .orElse(false)
-            ).collect(toMap(f -> f.identifier().columnName(), identity()));
+            ).collect(toMap(f -> f.identifier().getColumnName(), identity()));
     }
 
     @Override

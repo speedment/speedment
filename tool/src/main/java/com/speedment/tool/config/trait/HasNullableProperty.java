@@ -17,7 +17,7 @@
 package com.speedment.tool.config.trait;
 
 
-import com.speedment.runtime.config.trait.HasNullable;
+import com.speedment.common.dbmodel.trait.HasNullable;
 import com.speedment.tool.config.DocumentProperty;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;

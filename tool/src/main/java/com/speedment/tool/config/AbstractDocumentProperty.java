@@ -17,9 +17,9 @@
 package com.speedment.tool.config;
 
 import com.speedment.internal.common.mapstream.MapStream;
-import com.speedment.runtime.config.Document;
+import com.speedment.common.dbmodel.Document;
 import com.speedment.runtime.util.FloatSupplier;
-import com.speedment.runtime.util.OptionalBoolean;
+import com.speedment.common.function.OptionalBoolean;
 import com.speedment.runtime.util.OptionalUtil;
 import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.util.NumericProperty;
@@ -58,7 +58,7 @@ import java.util.function.LongSupplier;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.internal.util.document.DocumentUtil.toStringHelper;
+import static com.speedment.common.dbmodel.util.DocumentUtil.toStringHelper;
 import static java.util.Collections.newSetFromMap;
 import static javafx.collections.FXCollections.observableList;
 import static javafx.collections.FXCollections.observableMap;

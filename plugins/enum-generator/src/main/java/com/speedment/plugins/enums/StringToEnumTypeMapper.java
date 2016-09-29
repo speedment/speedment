@@ -21,8 +21,8 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.internal.common.lazy.specialized.LazyClass;
 import com.speedment.plugins.enums.internal.EnumGeneratorUtil;
 import com.speedment.plugins.enums.internal.GeneratedEnumType;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.common.dbmodel.Column;
+import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.exception.SpeedmentException;
 
 import java.lang.reflect.InvocationTargetException;

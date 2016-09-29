@@ -19,8 +19,8 @@ package com.speedment.generator.translator;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.Interface;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Table;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.Table;
 
 import java.util.stream.Stream;
 

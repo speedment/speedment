@@ -23,24 +23,24 @@ import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.component.connectionpool.ConnectionPoolComponent;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.ForeignKey;
-import com.speedment.runtime.config.ForeignKeyColumn;
-import com.speedment.runtime.config.Index;
-import com.speedment.runtime.config.IndexColumn;
-import com.speedment.runtime.config.PrimaryKeyColumn;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.mapper.TypeMapper;
-import com.speedment.runtime.config.mutator.ForeignKeyColumnMutator;
-import com.speedment.runtime.config.parameter.DbmsType;
-import com.speedment.runtime.config.parameter.OrderType;
-import com.speedment.runtime.config.trait.HasMainInterface;
-import com.speedment.runtime.config.trait.HasName;
-import com.speedment.runtime.config.trait.HasParent;
+import com.speedment.common.dbmodel.Column;
+import com.speedment.common.dbmodel.Dbms;
+import com.speedment.common.dbmodel.Document;
+import com.speedment.common.dbmodel.ForeignKey;
+import com.speedment.common.dbmodel.ForeignKeyColumn;
+import com.speedment.common.dbmodel.Index;
+import com.speedment.common.dbmodel.IndexColumn;
+import com.speedment.common.dbmodel.PrimaryKeyColumn;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.Schema;
+import com.speedment.common.dbmodel.Table;
+import com.speedment.runtime.typemapper.TypeMapper;
+import com.speedment.common.dbmodel.mutator.ForeignKeyColumnMutator;
+import com.speedment.runtime.db.DbmsType;
+import com.speedment.common.dbmodel.parameter.OrderType;
+import com.speedment.common.dbmodel.trait.HasMainInterface;
+import com.speedment.common.dbmodel.trait.HasName;
+import com.speedment.common.dbmodel.trait.HasParent;
 import com.speedment.runtime.db.DatabaseNamingConvention;
 import com.speedment.runtime.db.DbmsMetadataHandler;
 import com.speedment.runtime.db.JavaTypeMap;
@@ -49,8 +49,8 @@ import com.speedment.runtime.db.SqlSupplier;
 import com.speedment.runtime.db.metadata.ColumnMetaData;
 import com.speedment.runtime.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.exception.SpeedmentException;
-import com.speedment.runtime.internal.config.ProjectImpl;
-import com.speedment.runtime.internal.util.document.DocumentUtil;
+import com.speedment.common.dbmodel.internal.ProjectImpl;
+import com.speedment.common.dbmodel.util.DocumentUtil;
 import com.speedment.runtime.util.ProgressMeasure;
 
 import java.sql.Connection;
@@ -74,8 +74,8 @@ import java.util.stream.Stream;
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.runtime.internal.db.AbstractDbmsOperationHandler.SHOW_METADATA;
 import static com.speedment.runtime.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.dbmsTypeOf;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import static com.speedment.runtime.util.DatabaseUtil.dbmsTypeOf;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
@@ -420,7 +420,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                 ||  selectedJdbcClass == Double.class
                 ||  selectedJdbcClass == Character.class
                 ||  selectedJdbcClass == Boolean.class) {
-                    column.mutator().setTypeMapper(TypeMapper.primitive());
+                    column.mutator().setTypeMapper(TypeMapper.primitive().getClass());
                 }
             }
             

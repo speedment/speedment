@@ -20,11 +20,11 @@
           <instructions>
             <Bundle-Description>The runtime environment of Speedment.</Bundle-Description>
             <Export-Package>com.speedment.runtime.component.*,
-                            com.speedment.runtime.config.*,
                             com.speedment.runtime.db.*,
                             com.speedment.runtime.exception.*,
                             com.speedment.runtime.field.*,
                             com.speedment.runtime.manager.*,
+                            com.speedment.runtime.typemapper.*,
                             com.speedment.runtime.stream.*,
                             com.speedment.runtime.util.*,
                             com.speedment.runtime,
@@ -32,7 +32,8 @@
                             com.speedment.common.injector.annotation.*,
                             com.speedment.common.injector.exception.*,
                             com.speedment.common.logger,
-                            com.speedment.common.tuple</Export-Package>
+                            com.speedment.common.tuple,
+                            com.speedment.common.dbmodel.*</Export-Package>
           </instructions>
         </configuration>
       </plugin>

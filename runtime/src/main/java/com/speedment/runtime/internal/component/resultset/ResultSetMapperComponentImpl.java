@@ -20,7 +20,7 @@ import com.speedment.common.tuple.Tuple2;
 import com.speedment.common.tuple.Tuples;
 import com.speedment.runtime.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.component.resultset.ResultSetMapping;
-import com.speedment.runtime.config.parameter.DbmsType;
+import com.speedment.runtime.db.DbmsType;
 
 import java.util.Map;
 import java.util.Optional;
@@ -29,7 +29,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 public final class ResultSetMapperComponentImpl implements ResultSetMapperComponent {

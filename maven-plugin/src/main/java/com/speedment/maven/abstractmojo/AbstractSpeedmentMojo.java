@@ -27,7 +27,7 @@ import com.speedment.maven.component.MavenPathComponent;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.ApplicationBuilder;
 import com.speedment.runtime.Speedment;
-import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.tool.ToolBundle;
 import com.speedment.tool.internal.component.UserInterfaceComponentImpl;
 import org.apache.maven.plugin.AbstractMojo;

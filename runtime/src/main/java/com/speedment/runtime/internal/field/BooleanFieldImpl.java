@@ -16,14 +16,15 @@
  */
 package com.speedment.runtime.internal.field;
 
-import com.speedment.runtime.config.identifier.FieldIdentifier;
-import com.speedment.runtime.config.mapper.TypeMapper;
+import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.field.BooleanField;
 import com.speedment.runtime.field.method.BooleanGetter;
 import com.speedment.runtime.field.method.BooleanSetter;
 
 import javax.annotation.Generated;
 
+import static java.util.Objects.requireNonNull;
+import com.speedment.common.dbmodel.identifier.ColumnIdentifier;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -36,13 +37,13 @@ import static java.util.Objects.requireNonNull;
 @Generated(value = "Speedment")
 public final class BooleanFieldImpl<ENTITY, D> implements BooleanField<ENTITY, D> {
     
-    private final FieldIdentifier<ENTITY> identifier;
+    private final ColumnIdentifier<ENTITY> identifier;
     private final BooleanGetter<ENTITY> getter;
     private final BooleanSetter<ENTITY> setter;
     private final TypeMapper<D, Boolean> typeMapper;
     private final boolean unique;
     
-    public BooleanFieldImpl(FieldIdentifier<ENTITY> identifier, BooleanGetter<ENTITY> getter, BooleanSetter<ENTITY> setter, TypeMapper<D, Boolean> typeMapper, boolean unique) {
+    public BooleanFieldImpl(ColumnIdentifier<ENTITY> identifier, BooleanGetter<ENTITY> getter, BooleanSetter<ENTITY> setter, TypeMapper<D, Boolean> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
@@ -51,7 +52,7 @@ public final class BooleanFieldImpl<ENTITY, D> implements BooleanField<ENTITY, D
     }
     
     @Override
-    public FieldIdentifier<ENTITY> identifier() {
+    public ColumnIdentifier<ENTITY> identifier() {
         return identifier;
     }
     

@@ -16,11 +16,11 @@
  */
 package com.speedment.plugins.json.internal;
 
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.identifier.FieldIdentifier;
-
-import static com.speedment.runtime.internal.util.document.DocumentDbUtil.referencedColumn;
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.Column;
+import com.speedment.common.dbmodel.identifier.ColumnIdentifier;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import static com.speedment.common.dbmodel.util.DocumentDbUtil.referencedColumn;
 
 /**
  *
@@ -37,7 +37,7 @@ public final class JsonUtil {
      * @param identifier  the identifier for the field to name
      * @return            the JSON label of that field
      */
-    public static String jsonField(Project project, FieldIdentifier<?> identifier) {
+    public static String jsonField(Project project, ColumnIdentifier<?> identifier) {
         requireNonNulls(project, identifier);
         return referencedColumn(project, identifier).getJavaName();
     }

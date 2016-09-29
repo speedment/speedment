@@ -18,7 +18,7 @@ package com.speedment.generator.translator;
 
 import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.generator.internal.translator.TranslatorKeyImpl;
-import com.speedment.runtime.config.trait.HasMainInterface;
+import com.speedment.common.dbmodel.trait.HasMainInterface;
 
 /**
  * A key associated with a specific {@link Translator}. This is used to 

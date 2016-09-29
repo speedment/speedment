@@ -17,9 +17,9 @@
 package com.speedment.tool.config;
 
 
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.trait.HasMainInterface;
-import com.speedment.runtime.config.trait.HasName;
+import com.speedment.common.dbmodel.Document;
+import com.speedment.common.dbmodel.trait.HasMainInterface;
+import com.speedment.common.dbmodel.trait.HasName;
 import com.speedment.runtime.util.FloatSupplier;
 import com.speedment.tool.config.trait.HasUiVisibleProperties;
 import javafx.beans.Observable;

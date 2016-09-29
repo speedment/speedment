@@ -17,7 +17,7 @@
 package com.speedment.tool.config.mutator;
 
 
-import com.speedment.runtime.config.mutator.DbmsMutator;
+import com.speedment.common.dbmodel.mutator.DbmsMutator;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.SchemaProperty;
 import com.speedment.tool.config.mutator.trait.HasEnabledPropertyMutator;

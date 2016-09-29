@@ -18,11 +18,13 @@ package com.speedment.runtime.internal;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Config;
+import com.speedment.common.json.Json;
 import com.speedment.runtime.ApplicationMetadata;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.internal.util.document.DocumentTranscoder;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.util.DocumentTranscoder;
 
 import java.io.File;
+import java.util.Map;
 
 /**
  * The default implementation of the {@link ApplicationMetadata} interface.
@@ -54,6 +56,12 @@ public final class DefaultApplicationMetadata implements ApplicationMetadata {
 
     @Override
     public Project makeProject() {
-        return DocumentTranscoder.load(metadataLocation.toPath());
+        return DocumentTranscoder.load(metadataLocation.toPath(), this::fromJson);
+    }
+    
+    private Map<String, Object> fromJson(String json) {
+        @SuppressWarnings("unchecked")
+        final Map<String, Object> parsed = (Map<String, Object>) Json.fromJson(json);
+        return parsed;
     }
 }

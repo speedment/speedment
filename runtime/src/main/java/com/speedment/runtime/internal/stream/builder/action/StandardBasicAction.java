@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 import static com.speedment.runtime.stream.action.Property.*;
 import static com.speedment.runtime.stream.action.Verb.PRESERVE;
 import static com.speedment.runtime.stream.action.Verb.SET;
-import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
 
 
 /**

@@ -19,7 +19,7 @@ package com.speedment.generator.translator;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.config.Project;
+import com.speedment.common.dbmodel.Project;
 
 import java.nio.file.Path;
 

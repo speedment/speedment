@@ -18,10 +18,10 @@ package com.speedment.tool.internal.rule;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.component.ProjectComponent;
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.trait.HasAlias;
-import com.speedment.runtime.internal.util.document.DocumentDbUtil;
+import com.speedment.common.dbmodel.Document;
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.trait.HasAlias;
+import com.speedment.common.dbmodel.util.DocumentDbUtil;
 import com.speedment.tool.component.IssueComponent;
 import com.speedment.tool.rule.Issue;
 import com.speedment.tool.rule.Rule;

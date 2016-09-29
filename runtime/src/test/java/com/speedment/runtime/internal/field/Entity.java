@@ -16,10 +16,10 @@
  */
 package com.speedment.runtime.internal.field;
 
-import com.speedment.runtime.config.identifier.FieldIdentifier;
 import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.field.StringField;
-import com.speedment.runtime.internal.config.mapper.IdentityTypeMapper;
+import com.speedment.runtime.internal.typemapper.IdentityTypeMapper;
+import com.speedment.common.dbmodel.identifier.ColumnIdentifier;
 
 /**
  *
@@ -27,7 +27,7 @@ import com.speedment.runtime.internal.config.mapper.IdentityTypeMapper;
  */
 public interface Entity {
     
-    enum Identifier implements FieldIdentifier<Entity> {
+    enum Identifier implements ColumnIdentifier<Entity> {
         ID("id"), NAME("name");
         
         private final String columnName;
@@ -37,22 +37,22 @@ public interface Entity {
         }
 
         @Override
-        public String columnName() {
+        public String getColumnName() {
             return columnName;
         }
 
         @Override
-        public String dbmsName() {
+        public String getDbmsName() {
             return "my_dbms";
         }
 
         @Override
-        public String schemaName() {
+        public String getSchemaName() {
             return "my_schema";
         }
 
         @Override
-        public String tableName() {
+        public String getTableName() {
             return "my_table";
         }
     }

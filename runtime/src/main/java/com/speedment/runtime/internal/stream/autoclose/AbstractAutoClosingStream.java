@@ -33,7 +33,7 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
 
 /**
  *

@@ -22,8 +22,8 @@ import com.speedment.generator.translator.Translator;
 import com.speedment.generator.translator.TranslatorConstructor;
 import com.speedment.generator.translator.TranslatorDecorator;
 import com.speedment.generator.translator.TranslatorKey;
-import com.speedment.runtime.config.trait.HasMainInterface;
-import com.speedment.runtime.config.trait.HasName;
+import com.speedment.common.dbmodel.trait.HasMainInterface;
+import com.speedment.common.dbmodel.trait.HasName;
 import com.speedment.runtime.exception.SpeedmentException;
 
 import java.util.stream.Stream;

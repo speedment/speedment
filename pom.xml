@@ -70,6 +70,9 @@
         <tuple.version>1.0.0</tuple.version>
         <lazy.version>1.0.0</lazy.version>
         <rest.version>1.0.0</rest.version>
+        <function.version>1.0.0-SNAPSHOT</function.version>
+        <dbmodel.version>1.0.0-SNAPSHOT</dbmodel.version>
+        <invariant.version>1.0.0-SNAPSHOT</invariant.version>
     </properties>
     
     <organization>

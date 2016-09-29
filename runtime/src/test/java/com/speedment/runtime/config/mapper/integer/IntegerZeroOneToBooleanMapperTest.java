@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.config.mapper.integer;
 
+import com.speedment.runtime.typemapper.integer.IntegerZeroOneToBooleanMapper;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

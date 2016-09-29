@@ -17,7 +17,7 @@
 package com.speedment.tool.property.editor;
 
 
-import com.speedment.runtime.config.parameter.OrderType;
+import com.speedment.common.dbmodel.parameter.OrderType;
 import com.speedment.tool.config.trait.HasOrderTypeProperty;
 import com.speedment.tool.property.PropertyEditor;
 import com.speedment.tool.property.item.ChoiceBoxItem;

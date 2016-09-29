@@ -17,8 +17,8 @@
 package com.speedment.tool.config;
 
 
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Table;
+import com.speedment.common.dbmodel.Column;
+import com.speedment.common.dbmodel.Table;
 import com.speedment.tool.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.ColumnPropertyMutator;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;

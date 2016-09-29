@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>com.speedment.common</groupId>
+        <artifactId>common</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+    
+    <artifactId>function</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>bundle</packaging>
+    
+    <name>Speedment - Common - Function</name>
+    <description>
+        A complement to the java.util and java.util.function packages that add
+        missing primitive specializations of common interfaces.
+    </description>
+    <url>https://www.github.com/speedment/speedment/wiki/Function/</url>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Export-Package>
+                            com.speedment.common.function
+                        </Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>                            
+        </plugins>
+    </build>
+</project>

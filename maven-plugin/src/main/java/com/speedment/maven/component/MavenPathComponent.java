@@ -19,7 +19,7 @@ package com.speedment.maven.component;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.component.PathComponent;
 import com.speedment.runtime.component.ProjectComponent;
-import com.speedment.runtime.config.Project;
+import com.speedment.common.dbmodel.Project;
 import org.apache.maven.project.MavenProject;
 
 import java.nio.file.Path;
