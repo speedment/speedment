@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.TreeView?>
+
 <TitledPane id="projectTree"
             animated="false"
             collapsible="false"
@@ -12,7 +13,7 @@
             text="Node hierarchy"
             xmlns="http://javafx.com/javafx/8.0.40"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.speedment.tool.internal.controller.ProjectTreeController">
+            fx:controller="com.speedment.tool.core.internal.controller.ProjectTreeController">
     <content>
         <TreeView fx:id="hierarchy" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
     </content>

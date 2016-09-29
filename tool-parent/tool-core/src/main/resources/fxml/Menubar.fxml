@@ -8,7 +8,7 @@
 <MenuBar BorderPane.alignment="CENTER"
          xmlns="http://javafx.com/javafx/8.0.40"
          xmlns:fx="http://javafx.com/fxml/1"
-         fx:controller="com.speedment.tool.internal.controller.MenubarController">
+         fx:controller="com.speedment.tool.core.internal.controller.MenubarController">
     <menus>
         <Menu fx:id="menuFile" mnemonicParsing="false" text="File">
             <items>

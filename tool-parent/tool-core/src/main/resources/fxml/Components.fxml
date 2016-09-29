@@ -33,7 +33,7 @@
       spacing="8.0"
       xmlns="http://javafx.com/javafx/8.0.40"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.speedment.tool.internal.controller.ComponentsController">
+      fx:controller="com.speedment.tool.core.internal.controller.ComponentsController">
     <children>
         <Label fx:id="title" alignment="TOP_CENTER" maxWidth="1.7976931348623157E308" styleClass="header" textAlignment="CENTER" />
         <Label fx:id="header" alignment="CENTER" maxWidth="1.7976931348623157E308" text="Components" />

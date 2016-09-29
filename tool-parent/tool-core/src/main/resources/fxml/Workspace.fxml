@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.TitledPane?>
+
 <TitledPane id="workspace"
             fx:id="workspace"
             collapsible="false"
@@ -12,5 +13,5 @@
             text="Workspace"
             xmlns="http://javafx.com/javafx/8.0.40"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.speedment.tool.internal.controller.WorkspaceController">
+            fx:controller="com.speedment.tool.core.internal.controller.WorkspaceController">
 </TitledPane>

@@ -24,13 +24,15 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+
 <HBox alignment="CENTER"
       prefHeight="38.0"
       prefWidth="900.0"
       spacing="8.0"
       xmlns="http://javafx.com/javafx/8.0.40"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.speedment.tool.internal.controller.ToolbarController">
+      fx:controller="com.speedment.tool.core.internal.controller.ToolbarController">
+    
     <children>
         <Button fx:id="buttonReload" alignment="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Reload" textAlignment="CENTER">
             <padding>

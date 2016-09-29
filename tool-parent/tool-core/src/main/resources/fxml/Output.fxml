@@ -13,7 +13,7 @@
             text="Output"
             xmlns="http://javafx.com/javafx/8.0.40"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.speedment.tool.internal.controller.OutputController">
+            fx:controller="com.speedment.tool.core.internal.controller.OutputController">
     <content>
         <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
             <content>
