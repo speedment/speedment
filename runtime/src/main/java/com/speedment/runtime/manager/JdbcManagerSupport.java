@@ -16,7 +16,11 @@
  */
 package com.speedment.runtime.manager;
 
+import com.speedment.common.dbmodel.Project;
+import com.speedment.common.dbmodel.Table;
+import static com.speedment.common.dbmodel.util.DocumentDbUtil.referencedTable;
 import com.speedment.common.injector.Injector;
+import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.db.SqlFunction;
 import com.speedment.runtime.internal.manager.JdbcManagerSupportImpl;
 
@@ -24,23 +28,30 @@ import java.sql.ResultSet;
 
 /**
  *
- * @param <ENTITY>  the entity type
- * 
- * @author  Emil Forslund
- * @since   1.0.0
+ * @param <ENTITY> the entity type
+ *
+ * @author Emil Forslund
+ * @since 1.0.0
  */
 public interface JdbcManagerSupport<ENTITY> extends ManagerSupport<ENTITY> {
 
     static <ENTITY> JdbcManagerSupport<ENTITY> create(
-            Injector injector, 
-            Manager<ENTITY> manager, 
-            SqlFunction<ResultSet, ENTITY> entityMapper) {
-        
-        return new JdbcManagerSupportImpl<>(injector, manager, entityMapper);
+        Injector injector,
+        Manager<ENTITY> manager,
+        SqlFunction<ResultSet, ENTITY> entityMapper) {
+
+        final Project project = injector.getOrThrow(ProjectComponent.class).getProject();
+        final Table table = referencedTable(project,
+            manager.getDbmsName(),
+            manager.getSchemaName(),
+            manager.getTableName()
+        );
+
+        return new JdbcManagerSupportImpl<>(injector, manager.getEntityClass(), manager::fields, manager::primaryKeyFields, table, entityMapper);
     }
-    
+
     String sqlSelect();
-    
+
     long sqlCount();
-    
+
 }

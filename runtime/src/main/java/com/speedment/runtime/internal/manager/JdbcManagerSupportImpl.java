@@ -22,7 +22,6 @@ import com.speedment.common.lazy.LazyReference;
 import com.speedment.common.lazy.specialized.LazyString;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.component.DbmsHandlerComponent;
-import com.speedment.runtime.component.ProjectComponent;
 import com.speedment.runtime.component.resultset.ResultSetMapperComponent;
 import com.speedment.common.dbmodel.Column;
 import com.speedment.common.dbmodel.Dbms;
@@ -46,7 +45,6 @@ import com.speedment.runtime.internal.stream.builder.ReferenceStreamBuilder;
 import com.speedment.runtime.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.common.dbmodel.util.DocumentUtil;
 
-import com.speedment.runtime.manager.Manager;
 import com.speedment.runtime.stream.StreamDecorator;
 
 import java.sql.ResultSet;
@@ -72,19 +70,21 @@ import com.speedment.common.dbmodel.util.DocumentDbUtil;
 import static com.speedment.runtime.util.DatabaseUtil.dbmsTypeOf;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.common.dbmodel.util.DocumentDbUtil.isSame;
-import static com.speedment.common.dbmodel.util.DocumentDbUtil.referencedTable;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author  Emil Forslund
- * @since   3.0.1
+ * @author Emil Forslund
+ * @since 3.0.1
  */
 public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<ENTITY> {
-    
+
     private final Injector injector;
-    private final Manager<ENTITY> manager;
-    
+    private final Class<?> entityClass;
+    private final Supplier<Stream<Field<ENTITY>>> fieldSupplier;
+    private final Supplier<Stream<Field<ENTITY>>> pkFieldSupplier;
+    private final Table table;
+
     private final LazyString sqlColumnList;
     private final LazyString sqlTableReference;
     private final LazyString sqlSelect;
@@ -95,57 +95,52 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
 
     private final DbmsHandlerComponent dbmsHandlerComponent;
     private final ResultSetMapperComponent resultSetMapperComponent;
-    
+
     private final Project project;
-    private final Table table;
     private final Schema schema;
     private final Dbms dbms;
     private final Lazy<DbmsType> dbmsType;
     private final Lazy<DbmsOperationHandler> dbmsOperationHandler;
-    
-    public JdbcManagerSupportImpl(
-            Injector injector, 
-            Manager<ENTITY> manager, 
-            SqlFunction<ResultSet, ENTITY> entityMapper
-    ) {
-        this.injector     = requireNonNull(injector);
-        this.manager      = requireNonNull(manager);
-        this.entityMapper = requireNonNull(entityMapper);
-        
-        this.sqlColumnList     = LazyString.create();
-        this.sqlTableReference = LazyString.create();
-        this.sqlSelect         = LazyString.create();
 
-        this.hasPrimaryKeyColumns = manager.primaryKeyFields().findAny().isPresent();
-        
-        this.dbmsHandlerComponent     = injector.getOrThrow(DbmsHandlerComponent.class);
+    public JdbcManagerSupportImpl(
+        Injector injector,
+        Class<?> entityClass,
+        Supplier<Stream<Field<ENTITY>>> fieldSupplier,
+        Supplier<Stream<Field<ENTITY>>> pkFieldSupplier,
+        Table table,
+        SqlFunction<ResultSet, ENTITY> entityMapper
+    ) {
+        this.injector = requireNonNull(injector);
+        this.entityClass = requireNonNull(entityClass);
+        this.fieldSupplier = requireNonNull(fieldSupplier);
+        this.pkFieldSupplier = requireNonNull(pkFieldSupplier);
+        this.table = requireNonNull(table);
+        this.entityMapper = requireNonNull(entityMapper);
+        //
+        this.sqlColumnList = LazyString.create();
+        this.sqlTableReference = LazyString.create();
+        this.sqlSelect = LazyString.create();
+
+        this.hasPrimaryKeyColumns = pkFieldSupplier.get().findAny().isPresent();
+
+        this.dbmsHandlerComponent = injector.getOrThrow(DbmsHandlerComponent.class);
         this.resultSetMapperComponent = injector.getOrThrow(ResultSetMapperComponent.class);
-        
-        this.project = injector.getOrThrow(ProjectComponent.class).getProject();
-        this.table   = referencedTable(project, 
-            manager.getDbmsName(), 
-            manager.getSchemaName(), 
-            manager.getTableName()
-        );
+
         this.schema = table.getParentOrThrow();
-        this.dbms = schema.getParentOrThrow();       
+        this.dbms = schema.getParentOrThrow();
         this.dbmsType = LazyReference.create();
         this.dbmsOperationHandler = LazyReference.create();
-        
+        this.project = dbms.getParentOrThrow();
+
         // Only include fields that point towards a column in this table.
         // In the future we might add fields that reference columns in foreign
         // tables.
-        this.fieldMap = manager.fields()
+        this.fieldMap = fieldSupplier.get()
             .filter(f -> f.findColumn(project)
                 .map(c -> c.getParent())
                 .map(t -> isSame(table, t.get()))
                 .orElse(false)
             ).collect(toMap(f -> f.identifier().getColumnName(), identity()));
-    }
-
-    @Override
-    public Manager<ENTITY> getManager() {
-        return manager;
     }
 
     @Override
@@ -184,7 +179,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
 
         return result;
     }
-    
+
     private <T> Stream<T> synchronousStreamOf(String sql, List<Object> values, SqlFunction<ResultSet, T> rsMapper) {
         requireNonNulls(sql, values, rsMapper);
         return dbmsOperationHandler().executeQuery(dbms, sql, values, rsMapper);
@@ -224,28 +219,26 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
     private DbmsType dbmsType() {
         return dbmsType.getOrCompute(() -> dbmsTypeOf(dbmsHandlerComponent, dbms));
     }
-    
-    private DbmsOperationHandler dbmsOperationHandler() {
-        return dbmsOperationHandler.getOrCompute(()-> dbmsType().getOperationHandler());
-    }
-    
 
+    private DbmsOperationHandler dbmsOperationHandler() {
+        return dbmsOperationHandler.getOrCompute(() -> dbmsType().getOperationHandler());
+    }
 
     /**
      * Returns the column corresponding to a particular field in an entity
      * managed by this manager.
-     * 
-     * @param field  the field
-     * @return       the corresponding Column
+     *
+     * @param field the field
+     * @return the corresponding Column
      */
     private Column getColumn(Field<ENTITY> field) {
         return field.findColumn(project)
             .orElseThrow(() -> new SpeedmentException(
                 "Could not find column '" + field.identifier() + "'."
             )
-        );
+            );
     }
-    
+
     /**
      * Short-cut for retrieving the current {@link DatabaseNamingConvention}.
      *
@@ -316,21 +309,21 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
         return sqlTableReference.getOrCompute(() -> naming().fullNameOf(table));
     }
 
-    private <F extends Field<ENTITY>> Object toDatabaseType(F field, ENTITY entity) {
+    private <F extends Field<ENTITY>>  Object toDatabaseType(F field, ENTITY entity) {
         final Object javaValue = field.getter().apply(entity);
-        
+
         @SuppressWarnings("unchecked")
         final Object dbValue = ((TypeMapper<Object, Object>) field.typeMapper()).toDatabaseType(javaValue);
-        
+
         return dbValue;
     }
 
     private ENTITY persistHelp(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
         final List<Column> cols = persistColumns(entity);
-        String sb = "INSERT INTO " + sqlTableReference() +
-            " (" + persistColumnList(cols) + ")" +
-            " VALUES " +
-            "(" + persistColumnListWithQuestionMarks(cols) + ")";
+        String sb = "INSERT INTO " + sqlTableReference()
+            + " (" + persistColumnList(cols) + ")"
+            + " VALUES "
+            + "(" + persistColumnListWithQuestionMarks(cols) + ")";
 
         @SuppressWarnings("unchecked")
         final List<Object> values = cols.stream()
@@ -338,12 +331,12 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
             .map(fieldMap::get)
             .map(f -> toDatabaseType(f, entity))
             .collect(toList());
- 
+
         @SuppressWarnings("unchecked")
-        final Map<Field<ENTITY>, Column> generatedFields = MapStream.fromKeys(manager.fields(), 
+        final Map<Field<ENTITY>, Column> generatedFields = MapStream.fromKeys(fieldSupplier.get(),
             f -> DocumentDbUtil.referencedColumn(project, f.identifier()))
-                .filterValue(Column::isAutoIncrement)
-                .toMap();
+            .filterValue(Column::isAutoIncrement)
+            .toMap();
 
         final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer = newEntity -> {
             return l -> {
@@ -359,9 +352,8 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
                                 .parse(l.get(cnt.getAndIncrement()));
 
                             @SuppressWarnings("unchecked")
-                            final Object javaValue = ((TypeMapper<Object, Object>) 
-                                f.typeMapper()).toJavaType(col, manager.getEntityClass(), val);
-                            
+                            final Object javaValue = ((TypeMapper<Object, Object>) f.typeMapper()).toJavaType(col, entityClass, val);
+
                             f.setter().set(newEntity, javaValue);
                         });
                 }
@@ -374,16 +366,16 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
 
     private ENTITY updateHelper(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
         assertHasPrimaryKeyColumns();
-        String sb = "UPDATE " + sqlTableReference() + " SET " +
-            sqlColumnList(n -> n + " = ?") +
-            " WHERE " +
-            sqlPrimaryKeyColumnList(pk -> pk + " = ?");
+        String sb = "UPDATE " + sqlTableReference() + " SET "
+            + sqlColumnList(n -> n + " = ?")
+            + " WHERE "
+            + sqlPrimaryKeyColumnList(pk -> pk + " = ?");
 
-        final List<Object> values = manager.fields()
+        final List<Object> values = fieldSupplier.get()
             .map(f -> toDatabaseType(f, entity))
             .collect(Collectors.toList());
 
-        manager.primaryKeyFields()
+        pkFieldSupplier.get()
             .map(f -> f.getter().apply(entity))
             .forEachOrdered(values::add);
 
@@ -393,11 +385,11 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
 
     private ENTITY removeHelper(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
         assertHasPrimaryKeyColumns();
-        String sb = "DELETE FROM " + sqlTableReference() +
-            " WHERE " +
-            sqlPrimaryKeyColumnList(pk -> pk + " = ?");
+        String sb = "DELETE FROM " + sqlTableReference()
+            + " WHERE "
+            + sqlPrimaryKeyColumnList(pk -> pk + " = ?");
 
-        final List<Object> values = manager.primaryKeyFields()
+        final List<Object> values = pkFieldSupplier.get()
             .map(f -> toDatabaseType(f, entity))
             .collect(toList());
 
@@ -435,8 +427,8 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
 
     /**
      * Returns if a columns that shall be used in an insert/update statement.
-     * Some database types (e.g. PostgreSQL) does not allow auto increment columns
-     * that are null in an insert/update statement.
+     * Some database types (e.g. PostgreSQL) does not allow auto increment
+     * columns that are null in an insert/update statement.
      *
      * @param entity to be inserted/updated
      * @param c column

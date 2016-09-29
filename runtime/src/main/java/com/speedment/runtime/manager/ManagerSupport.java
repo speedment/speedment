@@ -33,12 +33,6 @@ import java.util.stream.Stream;
 
 public interface ManagerSupport<ENTITY> {
 
-    /**
-     * Returns the manager that this was created for.
-     * 
-     * @return  the manager
-     */
-    Manager<ENTITY> getManager();
     
     /**
      * Returns the fully qualified name for this field.
