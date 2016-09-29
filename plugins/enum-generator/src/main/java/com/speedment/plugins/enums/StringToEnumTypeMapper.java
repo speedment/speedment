@@ -18,7 +18,7 @@ package com.speedment.plugins.enums;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.internal.common.lazy.specialized.LazyClass;
+import com.speedment.common.lazy.specialized.LazyClass;
 import com.speedment.plugins.enums.internal.EnumGeneratorUtil;
 import com.speedment.plugins.enums.internal.GeneratedEnumType;
 import com.speedment.common.dbmodel.Column;
