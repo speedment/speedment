@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"  x="0px" y="0px"
+	 viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#7D8FF9;stroke:#253CAF;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st1{fill:#00CC99;stroke:#128463;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st2{fill:#ED7E7E;stroke:#661D1D;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+<g>
+	<g>
+		<polygon class="st0" points="6.1,17.3 6.1,23.1 11.5,19.7 11.5,13.9 		"/>
+		<polygon class="st0" points="6.1,17.3 6.1,23.1 0.8,19.7 0.8,13.9 		"/>
+		<polygon class="st0" points="11.5,13.9 6.1,10.5 0.8,13.9 6.1,17.3 		"/>
+	</g>
+	<g>
+		<polygon class="st1" points="17.9,17.3 17.9,23.2 23.2,19.8 23.2,13.9 		"/>
+		<polygon class="st1" points="17.9,17.3 17.9,23.1 12.5,19.7 12.5,13.9 		"/>
+		<polygon class="st1" points="23.2,13.9 17.9,10.5 12.5,13.9 17.9,17.3 		"/>
+	</g>
+</g>
+<polygon class="st2" points="12,7.5 12,13.4 17.4,10 17.4,4.1 "/>
+<polygon class="st2" points="12,7.5 12,13.4 6.6,10 6.6,4.1 "/>
+<polygon class="st2" points="17.4,4.1 12,0.7 6.6,4.1 12,7.5 "/>
+</svg>

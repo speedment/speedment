@@ -33,7 +33,7 @@
     <!-- -->
     
     <groupId>com.speedment</groupId>
-    <artifactId>speedment</artifactId>
+    <artifactId>speedment-parent</artifactId>
     <version>3.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     
@@ -46,13 +46,14 @@
     
     <!-- Modules -->
     <modules>
-        <module>common</module>
-        <module>runtime</module>
-        <module>generator</module>
-        <module>tool</module>
-        <module>maven-plugin</module>
-        <module>plugins</module>
-        <module>archetypes</module>
+        <module>common-parent</module>
+        <module>runtime-parent</module>
+        <module>generator-parent</module>
+        <module>tool-parent</module>
+        <module>build-parent</module>
+        <module>plugin-parent</module>
+        <module>archetype-parent</module>
+        
     </modules>
     
     <!-- Properties -->
@@ -62,17 +63,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         
         <speedment.version>${project.version}</speedment.version>
-        <codegen.version>2.4.1</codegen.version>
-        <mapstream.version>2.3.3</mapstream.version>
-        <logger.version>1.0.1</logger.version>
-        <injector.version>1.0.0</injector.version>
-        <json.version>1.0.0</json.version>
-        <tuple.version>1.0.0</tuple.version>
-        <lazy.version>1.0.0</lazy.version>
-        <rest.version>1.0.0</rest.version>
-        <function.version>1.0.0-SNAPSHOT</function.version>
-        <dbmodel.version>1.0.0-SNAPSHOT</dbmodel.version>
-        <invariant.version>1.0.0-SNAPSHOT</invariant.version>
+        <common.version>1.0.1-SNAPSHOT</common.version>
     </properties>
     
     <organization>
@@ -200,13 +191,32 @@
                             </Import-Package>
                         </instructions>
                     </configuration>
+                    <executions>
+                        <execution>
+                            <id>generate-manifest</id>
+                            <phase>process-classes</phase>
+                            <goals>
+                                <goal>manifest</goal>
+                            </goals>
+                            <configuration>
+                                <supportedProjectTypes>
+                                    <supportedProjectType>jar</supportedProjectType>
+                                    <supportedProjectType>bundle</supportedProjectType>
+                                </supportedProjectTypes>
+                                <instructions>
+                                    <Export-Package>${project.groupId}.*</Export-Package>
+                                    <!-- override "internal" private package convention -->
+                                    <Private-Package>!*</Private-Package>
+                                </instructions>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
-            
             </plugins>
             
         </pluginManagement>
         
-        <plugins> 
+        <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -215,6 +225,16 @@
                     <compilerArgument>-Xlint:all</compilerArgument>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
+                    
+                    <fork>true</fork>
+                    <optimize>true</optimize>
+                    <showDeprecation>true</showDeprecation>
+                    <showWarnings>true</showWarnings>
+                    <meminitial>256m</meminitial>
+                    <maxmem>1024m</maxmem>
+                    <excludes>
+                        <exclude>**/package-info.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
 

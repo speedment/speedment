@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+
+    Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
+
+    Licensed under the Apache License, Version 2.0 (the "License"); You may not
+    use this file except in compliance with the License. You may obtain a copy of
+    the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+    License for the specific language governing permissions and limitations under
+    the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>com.speedment.common</groupId>
+        <artifactId>common-parent</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+    </parent>
+    
+    <artifactId>common-all</artifactId>
+    <version>1.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    
+    <name>Speedment - Common - All</name>
+    <description>
+        A combined pom artifact to make it easier to depend on the latest 
+        version of all common modules.
+    </description>
+    
+    <properties>
+        <invariant.version>1.0.0-SNAPSHOT</invariant.version>
+        <function.version>1.0.0-SNAPSHOT</function.version>
+        <json.version>1.0.1-SNAPSHOT</json.version>
+        <tuple.version>1.0.1-SNAPSHOT</tuple.version>
+        <logger.version>1.0.2-SNAPSHOT</logger.version>
+        <mapstream.version>2.3.4-SNAPSHOT</mapstream.version>
+        <codegen.version>2.4.2-SNAPSHOT</codegen.version>
+        <codegenxml.version>1.0.1-SNAPSHOT</codegenxml.version>
+        <injector.version>1.0.1-SNAPSHOT</injector.version>
+        <rest.version>1.0.1-SNAPSHOT</rest.version>
+        <lazy.version>1.0.1-SNAPSHOT</lazy.version>
+    </properties>
+    
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>invariant</artifactId>
+                <version>${invariant.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>function</artifactId>
+                <version>${function.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>json</artifactId>
+                <version>${json.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>tuple</artifactId>
+                <version>${tuple.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>logger</artifactId>
+                <version>${logger.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>mapstream</artifactId>
+                <version>${mapstream.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>codegen</artifactId>
+                <version>${codegen.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>codegenxml</artifactId>
+                <version>${codegenxml.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>injector</artifactId>
+                <version>${injector.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>rest</artifactId>
+                <version>${rest.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>lazy</artifactId>
+                <version>${lazy.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

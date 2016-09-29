@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+
+    Copyright (c) 2006-2016, Speedment, Inc. All Rights Reserved.
+
+    Licensed under the Apache License, Version 2.0 (the "License"); You may not
+    use this file except in compliance with the License. You may obtain a copy of
+    the License at:
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+    License for the specific language governing permissions and limitations under
+    the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+	
+    <parent>
+        <groupId>com.speedment</groupId>
+        <artifactId>speedment-parent</artifactId>
+        <version>3.0.1-SNAPSHOT</version>
+    </parent>
+    
+    <groupId>com.speedment.build</groupId>
+    <artifactId>build-parent</artifactId>
+    <packaging>pom</packaging>
+	
+    <name>Speedment - Build</name>
+    <description>
+        Common parent for modules that bundle togather multiple modules.
+    </description>
+    
+    <modules>
+        <module>speedment</module>
+        <module>speedment-all</module>
+        <module>maven-plugin</module>
+    </modules>
+    
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>common-all</artifactId>
+                <version>${common.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.speedment.runtime</groupId>
+                <artifactId>runtime-all</artifactId>
+                <version>${speedment.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.speedment.generator</groupId>
+                <artifactId>generator-all</artifactId>
+                <version>${speedment.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.speedment.tool</groupId>
+                <artifactId>tool-all</artifactId>
+                <version>${speedment.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <configuration>
+<!--                        <instructions>
+                            <Export-Package>
+                                com.speedment.runtime.config.*,
+                                com.speedment.runtime.core.*
+                            </Export-Package>
+                            <Import-Package>
+                                com.speedment.runtime.config.*,
+                                com.speedment.runtime.core.*
+                            </Import-Package>
+                        </instructions>-->
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
