@@ -68,18 +68,11 @@ import static com.speedment.common.dbmodel.util.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.runtime.manager.JdbcManagerSupport;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.*;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import com.speedment.common.dbmodel.util.DocumentDbUtil;
-import static com.speedment.common.dbmodel.util.DocumentDbUtil.isSame;
-import static com.speedment.common.dbmodel.util.DocumentDbUtil.referencedTable;
 import static com.speedment.runtime.util.DatabaseUtil.dbmsTypeOf;
-import static java.util.Objects.requireNonNull;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.common.dbmodel.util.DocumentDbUtil.isSame;
 import static com.speedment.common.dbmodel.util.DocumentDbUtil.referencedTable;
-import static java.util.Objects.requireNonNull;
-
-import static com.speedment.runtime.util.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**
