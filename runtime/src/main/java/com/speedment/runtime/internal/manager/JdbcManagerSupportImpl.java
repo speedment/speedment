@@ -17,6 +17,8 @@
 package com.speedment.runtime.internal.manager;
 
 import com.speedment.common.injector.Injector;
+import com.speedment.common.lazy.Lazy;
+import com.speedment.common.lazy.LazyReference;
 import com.speedment.common.lazy.specialized.LazyString;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.component.DbmsHandlerComponent;
@@ -77,6 +79,9 @@ import static com.speedment.common.dbmodel.util.DocumentDbUtil.isSame;
 import static com.speedment.common.dbmodel.util.DocumentDbUtil.referencedTable;
 import static java.util.Objects.requireNonNull;
 
+import static com.speedment.runtime.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+
 /**
  *
  * @author  Emil Forslund
@@ -102,8 +107,8 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
     private final Table table;
     private final Schema schema;
     private final Dbms dbms;
-    private final DbmsType dbmsType;
-    private final DbmsOperationHandler dbmsOperationHandler;
+    private final Lazy<DbmsType> dbmsType;
+    private final Lazy<DbmsOperationHandler> dbmsOperationHandler;
     
     public JdbcManagerSupportImpl(
             Injector injector, 
@@ -131,8 +136,8 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
         );
         this.schema = table.getParentOrThrow();
         this.dbms = schema.getParentOrThrow();       
-        this.dbmsType = dbmsTypeOf(dbmsHandlerComponent, dbms);
-        this.dbmsOperationHandler = dbmsType.getOperationHandler();
+        this.dbmsType = LazyReference.create();
+        this.dbmsOperationHandler = LazyReference.create();
         
         // Only include fields that point towards a column in this table.
         // In the future we might add fields that reference columns in foreign
@@ -176,7 +181,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
     }
 
     private Stream<ENTITY> nativeStream(StreamDecorator decorator) {
-        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = decorator.apply(dbmsOperationHandler.executeQueryAsync(dbms, sqlSelect(), Collections.emptyList(), entityMapper));
+        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = decorator.apply(dbmsOperationHandler().executeQueryAsync(dbms, sqlSelect(), Collections.emptyList(), entityMapper));
         final SqlStreamTerminator<ENTITY> terminator = new SqlStreamTerminator<>(injector, this, asynchronousQueryResult, decorator);
         final Supplier<BaseStream<?, ?>> initialSupplier = () -> decorator.applyOnInitial(asynchronousQueryResult.stream());
         final Stream<ENTITY> result = decorator.applyOnFinal(new ReferenceStreamBuilder<>(new PipelineImpl<>(initialSupplier), terminator));
@@ -189,7 +194,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
     
     private <T> Stream<T> synchronousStreamOf(String sql, List<Object> values, SqlFunction<ResultSet, T> rsMapper) {
         requireNonNulls(sql, values, rsMapper);
-        return dbmsOperationHandler.executeQuery(dbms, sql, values, rsMapper);
+        return dbmsOperationHandler().executeQuery(dbms, sql, values, rsMapper);
     }
 
     /**
@@ -223,7 +228,15 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
         return sqlSelect.getOrCompute(() -> "SELECT " + sqlColumnList() + " FROM " + sqlTableReference());
     }
 
-   
+    private DbmsType dbmsType() {
+        return dbmsType.getOrCompute(() -> dbmsTypeOf(dbmsHandlerComponent, dbms));
+    }
+    
+    private DbmsOperationHandler dbmsOperationHandler() {
+        return dbmsOperationHandler.getOrCompute(()-> dbmsType().getOperationHandler());
+    }
+    
+
 
     /**
      * Returns the column corresponding to a particular field in an entity
@@ -246,7 +259,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
      * @return the current naming convention
      */
     private DatabaseNamingConvention naming() {
-        return dbmsType.getDatabaseNamingConvention();
+        return dbmsType().getDatabaseNamingConvention();
     }
 
     /**
@@ -459,7 +472,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
         final Optional<Consumer<MetaResult<ENTITY>>> listener
     ) throws SpeedmentException {
         executeHelper(sql, values, listener,
-            () -> dbmsOperationHandler.executeInsert(
+            () -> dbmsOperationHandler().executeInsert(
                 dbms, sql, values, generatedFields, generatedKeyconsumer.apply(entity)
             )
         );
@@ -470,7 +483,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
         final List<Object> values,
         final Optional<Consumer<MetaResult<ENTITY>>> listener
     ) throws SpeedmentException {
-        executeHelper(sql, values, listener, () -> dbmsOperationHandler.executeUpdate(dbms, sql, values));
+        executeHelper(sql, values, listener, () -> dbmsOperationHandler().executeUpdate(dbms, sql, values));
     }
 
     private void executeDelete(
@@ -478,7 +491,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
         final List<Object> values,
         final Optional<Consumer<MetaResult<ENTITY>>> listener
     ) throws SpeedmentException {
-        executeHelper(sql, values, listener, () -> dbmsOperationHandler.executeDelete(dbms, sql, values));
+        executeHelper(sql, values, listener, () -> dbmsOperationHandler().executeDelete(dbms, sql, values));
     }
 
     private void executeHelper(

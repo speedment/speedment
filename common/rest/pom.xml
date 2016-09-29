@@ -47,10 +47,6 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-Description>
-                            A library for asynchronously invoking 
-                            functions in a public REST API.
-                        </Bundle-Description>
                         <Export-Package>com.speedment.common.rest</Export-Package>
                     </instructions>
                 </configuration>

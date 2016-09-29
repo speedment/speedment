@@ -56,8 +56,7 @@ public final class JsonComponentImpl implements JsonComponent {
 
         manager.fields()
             .forEachOrdered(f -> {
-                formatter.put(
-                    jsonField(projectComponent.getProject(), f.identifier()),
+                formatter.put(jsonField(projectComponent.getProject(), f.identifier()),
                     f.getter()::apply
                 );
             });
@@ -81,8 +80,7 @@ public final class JsonComponentImpl implements JsonComponent {
         manager.fields()
             .filter(f -> fieldNames.contains(f.identifier().getColumnName()))
             .forEachOrdered(f
-                -> formatter.put(
-                    jsonField(projectComponent.getProject(), f.identifier()),
+                -> formatter.put(jsonField(projectComponent.getProject(), f.identifier()),
                     f.getter()::apply
                 )
             );

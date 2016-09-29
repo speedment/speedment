@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.db;
 
-
 import com.speedment.common.dbmodel.Column;
 import com.speedment.common.dbmodel.PrimaryKeyColumn;
 import com.speedment.common.dbmodel.Schema;
@@ -32,7 +31,6 @@ import com.speedment.common.dbmodel.identifier.ColumnIdentifier;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-
 public interface DatabaseNamingConvention {
 
     /**
@@ -62,7 +60,7 @@ public interface DatabaseNamingConvention {
 
     /**
      * Returns the full name used in the database for the specified
- ColumnIdentifier. This is typically constructed by combining the schema,
+     * ColumnIdentifier. This is typically constructed by combining the schema,
      * table and column name with a separator, but that might be different in
      * different implementations.
      *

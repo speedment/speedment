@@ -43,11 +43,6 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-Description>
-                            A lightweight JSON serializer and deserializer made 
-                            with the ambition to reduce complexity for 
-                            non-performance critical parsing situations.
-                        </Bundle-Description>
                         <Export-Package>com.speedment.common.json</Export-Package>
                     </instructions>
                 </configuration>

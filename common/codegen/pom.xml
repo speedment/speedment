@@ -43,11 +43,6 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-Description>
-                            An object-oriented code generator for Java that is 
-                            built using the Model-View-Controller (MVC) design 
-                            philosophy.
-                        </Bundle-Description>
                         <Export-Package>
                             com.speedment.common.codegen,
                             com.speedment.common.codegen.controller,
