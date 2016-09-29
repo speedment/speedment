@@ -44,7 +44,7 @@ import com.speedment.generator.translator.JavaClassTranslator;
 import com.speedment.generator.translator.Translator;
 import com.speedment.generator.translator.TranslatorConstructor;
 import com.speedment.generator.translator.TranslatorDecorator;
-import com.speedment.internal.common.mapstream.MapStream;
+import com.speedment.common.mapstream.MapStream;
 import com.speedment.common.dbmodel.Project;
 import com.speedment.common.dbmodel.Table;
 import com.speedment.common.dbmodel.trait.HasMainInterface;

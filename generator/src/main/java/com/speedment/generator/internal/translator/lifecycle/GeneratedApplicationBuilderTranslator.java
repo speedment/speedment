@@ -30,7 +30,7 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.internal.common.mapstream.MapStream;
+import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.component.InfoComponent;
 import com.speedment.common.dbmodel.Project;
 import com.speedment.common.dbmodel.Table;
