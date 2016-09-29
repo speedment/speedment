@@ -42,7 +42,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
-import static com.speedment.internal.common.mapstream.MapStream.comparing;
+import static com.speedment.common.mapstream.MapStream.comparing;
 import static com.speedment.tool.internal.util.CloseUtil.newCloseHandler;
 import static java.util.stream.Collectors.toList;
 

@@ -18,7 +18,7 @@ package com.speedment.tool.property.editor;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.component.TypeMapperComponent;
-import com.speedment.internal.common.mapstream.MapStream;
+import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.exception.SpeedmentException;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.property.PropertyEditor;

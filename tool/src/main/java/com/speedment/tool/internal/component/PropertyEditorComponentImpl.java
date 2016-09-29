@@ -20,7 +20,7 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.internal.common.mapstream.MapStream;
+import com.speedment.common.mapstream.MapStream;
 import com.speedment.common.dbmodel.Column;
 import com.speedment.common.dbmodel.Dbms;
 import com.speedment.common.dbmodel.ForeignKeyColumn;

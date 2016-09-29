@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.internal.common.mapstream.MapStream;
+import com.speedment.common.mapstream.MapStream;
 import com.speedment.common.dbmodel.Document;
 import com.speedment.runtime.util.FloatSupplier;
 import com.speedment.common.function.OptionalBoolean;

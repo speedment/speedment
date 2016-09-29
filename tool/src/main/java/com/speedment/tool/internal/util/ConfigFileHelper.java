@@ -22,7 +22,7 @@ import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.translator.TranslatorManager;
-import com.speedment.internal.common.json.Json;
+import com.speedment.common.json.Json;
 import com.speedment.runtime.Speedment;
 import com.speedment.runtime.component.DbmsHandlerComponent;
 import com.speedment.runtime.component.ProjectComponent;
