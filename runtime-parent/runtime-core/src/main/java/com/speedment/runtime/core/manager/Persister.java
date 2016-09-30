@@ -17,6 +17,7 @@
 package com.speedment.runtime.core.manager;
 
 import com.speedment.runtime.core.exception.SpeedmentException;
+import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 /**
@@ -24,10 +25,16 @@ import java.util.function.UnaryOperator;
  * @author Per Minborg
  */
 @FunctionalInterface
-public interface Persister<ENTITY> extends UnaryOperator<ENTITY>  {
+public interface Persister<ENTITY> extends UnaryOperator<ENTITY>, Consumer<ENTITY>  {
+
 
     @Override
     public ENTITY apply(ENTITY t) throws SpeedmentException;
+
+    @Override
+    public default void accept(ENTITY t) {
+        apply(t);
+    }
     
     
 }

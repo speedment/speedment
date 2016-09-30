@@ -22,6 +22,7 @@ import java.util.function.Supplier;
  *
  * @author Per Minborg
  */
+@FunctionalInterface
 public interface EntityCreator<ENTITY> extends Supplier<ENTITY> {
 
 }
