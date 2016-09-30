@@ -29,6 +29,10 @@ import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.config.identifier.trait.HasColumnName;
+import com.speedment.runtime.config.identifier.trait.HasDbmsName;
+import com.speedment.runtime.config.identifier.trait.HasSchemaName;
+import com.speedment.runtime.config.identifier.trait.HasTableName;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -241,19 +245,19 @@ public final class DocumentDbUtil {
         return project.dbmses().filter(dbms -> dbmsName.equals(dbms.getName())).findAny();
     }
     
-    public static Column referencedColumn(Project project, ColumnIdentifier<?> identifier) {
+    public static <T extends HasDbmsName & HasSchemaName & HasTableName & HasColumnName> Column referencedColumn(Project project, T identifier) {
         return referencedColumn(project, identifier.getDbmsName(), identifier.getSchemaName(), identifier.getTableName(), identifier.getColumnName());
     }
     
-    public static Table referencedTable(Project project, ColumnIdentifier<?> identifier) {
+    public static <T extends HasDbmsName & HasSchemaName & HasTableName> Table referencedTable(Project project, T identifier) {
         return referencedTable(project, identifier.getDbmsName(), identifier.getSchemaName(), identifier.getTableName());
     }
     
-    public static Schema referencedSchema(Project project, ColumnIdentifier<?> identifier) {
+    public static <T extends HasDbmsName & HasSchemaName> Schema referencedSchema(Project project, T identifier) {
         return referencedSchema(project, identifier.getDbmsName(), identifier.getSchemaName());
     }
     
-    public static Dbms referencedDbms(Project project, ColumnIdentifier<?> identifier) {
+    public static Dbms referencedDbms(Project project, HasDbmsName identifier) {
         return referencedDbms(project, identifier.getDbmsName());
     }
     

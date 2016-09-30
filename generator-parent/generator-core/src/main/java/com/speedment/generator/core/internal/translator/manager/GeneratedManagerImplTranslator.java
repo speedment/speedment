@@ -71,6 +71,8 @@ import com.speedment.runtime.core.exception.SpeedmentException;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import static com.speedment.common.codegen.internal.util.Formatting.block;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
+import com.speedment.runtime.config.identifier.TableIdentifier;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -78,41 +80,43 @@ import static com.speedment.common.codegen.internal.util.Formatting.indent;
  */
 public final class GeneratedManagerImplTranslator extends AbstractEntityAndManagerTranslator<Class> {
 
-    public final static String 
-        ENTITY_COPY_METHOD_NAME        = "entityCopy",
-        ENTITY_CREATE_METHOD_NAME      = "entityCreate",
-        FIELDS_METHOD                  = "fields",
-        PRIMARY_KEYS_FIELDS_METHOD     = "primaryKeyFields";
+    public final static String ENTITY_COPY_METHOD_NAME = "entityCopy",
+        ENTITY_CREATE_METHOD_NAME = "entityCreate",
+        FIELDS_METHOD = "fields",
+        PRIMARY_KEYS_FIELDS_METHOD = "primaryKeyFields";
 
-    private @Inject ResultSetMapperComponent resultSetMapperComponent;
-    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject TypeMapperComponent typeMappers;
-    private @Inject Injector injector;
-    
+    private @Inject
+    ResultSetMapperComponent resultSetMapperComponent;
+    private @Inject
+    DbmsHandlerComponent dbmsHandlerComponent;
+    private @Inject
+    TypeMapperComponent typeMappers;
+    private @Inject
+    Injector injector;
+
     public GeneratedManagerImplTranslator(Table table) {
         super(table, Class::of);
     }
 
     @Override
     protected Class makeCodeGenModel(File file) {
-        
+
         final Map<Table, List<String>> fkStreamers = new HashMap<>();
         final Set<Type> fkManagers = new HashSet<>();
         final Set<Type> fkManagersReferencingThis = new HashSet<>();
-        
+
         return newBuilder(file, getSupport().generatedManagerImplName())
-            
             /**
              * Add streamers from back pointing foreign keys
              */
             .forEveryForeignKeyReferencingThis((clazz, fk) -> {
                 final FkHolder fu = new FkHolder(injector, fk);
-                
+
                 final String methodName = EntityTranslatorSupport.FIND
                     + EntityTranslatorSupport.pluralis(fu.getTable(), getSupport().namer())
                     + "By" + getSupport().typeName(fu.getColumn());
                 fkStreamers.computeIfAbsent(fu.getTable(), t -> new ArrayList<>()).add(methodName);
-                
+
                 final Type manager = fu.getEmt().getSupport().managerType();
                 final String fkManagerName = getSupport().namer().javaVariableName(Formatting.shortName(manager.getTypeName()));
                 if (fkManagersReferencingThis.add(manager)) {
@@ -121,34 +125,33 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
                         .add(AnnotationUsage.of(Inject.class))
                     );
                 }
-                
+
                 final Type returnType = DefaultType.stream(fu.getEmt().getSupport().entityType());
                 final Method method = Method.of(methodName, returnType)
                     .public_().add(OVERRIDE)
                     .add(Field.of("entity", fu.getForeignEmt().getSupport().entityType()))
                     .add("return " + methodName + "().apply(entity);");
                 clazz.add(method);
-                
+
                 // Create corresponding streamer method
                 clazz.add(Method.of(methodName, SimpleParameterizedType.create(BackwardFinder.class,
-                        fu.getForeignEmt().getSupport().entityType(), 
-                        fu.getEmt().getSupport().entityType()
-                    ))
+                    fu.getForeignEmt().getSupport().entityType(),
+                    fu.getEmt().getSupport().entityType()
+                ))
                     .public_().add(OVERRIDE)
-                    .add("return " + 
-                        fu.getEmt().getSupport().entityName() + "." +
-                        getSupport().namer().javaStaticFieldName(fu.getColumn().getJavaName()) +
-                        ".backwardFinder(" + fkManagerName + ");"
+                    .add("return "
+                        + fu.getEmt().getSupport().entityName() + "."
+                        + getSupport().namer().javaStaticFieldName(fu.getColumn().getJavaName())
+                        + ".backwardFinder(" + fkManagerName + ");"
                     )
                 );
             })
-            
             /**
              * Add finder for ordinary foreign keys
              */
             .forEveryForeignKey((clazz, fk) -> {
                 final FkHolder fu = new FkHolder(injector, fk);
-                
+
                 final Type manager = fu.getForeignEmt().getSupport().managerType();
                 final String fkManagerName = getSupport().namer().javaVariableName(Formatting.shortName(manager.getTypeName()));
                 if (fkManagers.add(manager)) {
@@ -169,17 +172,17 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
                 final Method method = Method.of("find" + getSupport().typeName(fu.getColumn()), returnType)
                     .public_().add(OVERRIDE)
                     .add(Field.of("entity", fu.getEmt().getSupport().entityType()));
-                
+
                 if (usesOptional(fu.getColumn())) {
                     final String getterName = optionalGetterName(typeMappers, fu.getColumn()).get();
-                    
+
                     method.add(
                         "if (entity.get" + getSupport().typeName(fu.getColumn()) + "().isPresent()) " + block(
-                            "return " + fkManagerName + ".stream().filter(" +
-                                getSupport().typeName(fu.getForeignTable()) + "." + 
-                                getSupport().namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + 
-                                ".equal(entity.get" + getSupport().typeName(fu.getColumn()) + "()" + getterName + ")).findAny();"
-                        ) + " else return Optional.empty();"
+                        "return " + fkManagerName + ".stream().filter("
+                        + getSupport().typeName(fu.getForeignTable()) + "."
+                        + getSupport().namer().javaStaticFieldName(fu.getForeignColumn().getJavaName())
+                        + ".equal(entity.get" + getSupport().typeName(fu.getColumn()) + "()" + getterName + ")).findAny();"
+                    ) + " else return Optional.empty();"
                     );
 
                 } else {
@@ -198,7 +201,6 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
                 }
                 clazz.add(method);
             })
-            
             /**
              * The table specific methods.
              */
@@ -212,31 +214,39 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
                     ))
                     .add(getSupport().generatedManagerType())
                     .add(Field.of("projectComponent", ProjectComponent.class).add(AnnotationUsage.of(Inject.class)).private_())
-                    
-                    .add(Constructor.of().protected_())
-                    
+                    .add(Field.of("tableIdentifier", SimpleParameterizedType.create(TableIdentifier.class, getSupport().entityType())).private_().final_())
+                    .add(Constructor.of().protected_()
+                        //                        .add("this.tableIdentifier = "+TableIdentifier.class.getSimpleName()+".of(\\\"\" + getSupport().dbmsOrThrow().getName() + \"\\\");
+                        .add("this.tableIdentifier = " + TableIdentifier.class.getSimpleName() + ".of("
+                            + Stream.of(getSupport().dbmsOrThrow().getName(), getSupport().schemaOrThrow().getName(), getSupport().tableOrThrow().getName())
+                            .map(s -> "\"" + s + "\"").collect(joining(", ")) 
+                            + ");")
+                    )
                     .add(Method.of("createSupport", SimpleParameterizedType.create(ManagerSupport.class, getSupport().entityType()))
                         .protected_().add(OVERRIDE)
                         .add(Field.of("injector", Injector.class))
                         .add("return " + JdbcManagerSupport.class.getSimpleName() + ".create(injector, this, this::" + ENTITY_COPY_METHOD_NAME + ");")
                         .call(() -> file.add(Import.of(JdbcManagerSupport.class)))
                     )
-                    
-                    .add(Method.of("getDbmsName", String.class)
+                    .add(Method.of("getTableIdentifier", SimpleParameterizedType.create(TableIdentifier.class, getSupport().entityType()))
                         .public_().add(OVERRIDE)
-                        .add("return \"" + getSupport().dbmsOrThrow().getName() + "\";")
+                        .add("return tableIdentifier;")
                     )
-                    
-                    .add(Method.of("getSchemaName", String.class)
-                        .public_().add(OVERRIDE)
-                        .add("return \"" + getSupport().schemaOrThrow().getName() + "\";")
-                    )
-                    
-                    .add(Method.of("getTableName", String.class)
-                        .public_().add(OVERRIDE)
-                        .add("return \"" + getSupport().tableOrThrow().getName() + "\";")
-                    )
-                    
+                    //                    .add(Method.of("getDbmsName", String.class)
+                    //                        .public_().add(OVERRIDE)
+                    //                        .add("return \"" + getSupport().dbmsOrThrow().getName() + "\";")
+                    //                    )
+                    //                    
+                    //                    .add(Method.of("getSchemaName", String.class)
+                    //                        .public_().add(OVERRIDE)
+                    //                        .add("return \"" + getSupport().schemaOrThrow().getName() + "\";")
+                    //                    )
+                    //                    
+                    //                    .add(Method.of("getTableName", String.class)
+                    //                        .public_().add(OVERRIDE)
+                    //                        .add("return \"" + getSupport().tableOrThrow().getName() + "\";")
+                    //                    )
+
                     .add(generateNewEntityFrom(getSupport(), file, table::columns))
                     .add(generateNewEmptyEntity(getSupport(), file, table::columns))
                     .add(generateFields(getSupport(), file, FIELDS_METHOD, table::columns))
@@ -245,7 +255,6 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
                     )
                     .add(generateNewCopyOf(file));
             })
-            
             /**
              * Create aggregate streaming functions, if any
              */
@@ -256,8 +265,8 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
 
                     if (!methodNames.isEmpty()) {
                         final Method method = Method.of(
-                            EntityTranslatorSupport.FIND +
-                                EntityTranslatorSupport.pluralis(referencingTable, getSupport().namer()),
+                            EntityTranslatorSupport.FIND
+                            + EntityTranslatorSupport.pluralis(referencingTable, getSupport().namer()),
                             DefaultType.stream(foreignSupport.entityType())
                         ).public_().add(OVERRIDE);
 
@@ -275,15 +284,14 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
                     }
                 });
             })
-            
             .build()
             .call(i -> file.add(Import.of(getSupport().entityImplType())));
     }
 
     @Override
     protected String getJavadocRepresentText() {
-        return "The generated base implementation for the manager of every {@link " + 
-            getSupport().entityType().getTypeName() + "} entity.";
+        return "The generated base implementation for the manager of every {@link "
+            + getSupport().entityType().getTypeName() + "} entity.";
     }
 
     @Override
@@ -299,7 +307,7 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
     public Type getImplType() {
         return getSupport().managerImplType();
     }
-    
+
     private Method generateNewEntityFrom(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
         return Method.of(ENTITY_COPY_METHOD_NAME, support.entityType())
             .protected_()
@@ -308,12 +316,12 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
             .add(Field.of("resultSet", ResultSet.class))
             .add(generateNewEntityFromBody(this::readFromResultSet, support, file, columnsSupplier));
     }
-    
+
     private String readFromResultSet(File file, Column c, AtomicInteger position) {
-        
+
         final TranslatorSupport<Table> support = new TranslatorSupport<>(injector, c.getParentOrThrow());
         final Dbms dbms = c.getParentOrThrow().getParentOrThrow().getParentOrThrow();
-        
+
         final ResultSetMapping<?> mapping = resultSetMapperComponent.apply(
             dbmsTypeOf(dbmsHandlerComponent, c.getParentOrThrow().getParentOrThrow().getParentOrThrow()),
             c.findDatabaseType()
@@ -322,7 +330,7 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
         final boolean isIdentityMapper = !c.getTypeMapper().isPresent();
 
         file.add(Import.of(DocumentDbUtil.class));
-        
+
         final StringBuilder sb = new StringBuilder();
         if (!isIdentityMapper) {
             sb
@@ -371,8 +379,8 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
         final String entityName = "copy";
         final Method result = Method.of(ENTITY_COPY_METHOD_NAME, getSupport().entityType()).public_().add(OVERRIDE)
             .add(Field.of(varName, getSupport().entityType()))
-            .add("final " + getSupport().entityName() + " " + entityName + 
-                " = new " + getSupport().entityImplName() + "();"
+            .add("final " + getSupport().entityName() + " " + entityName
+                + " = new " + getSupport().entityImplName() + "();"
             );
 
         columns().forEachOrdered(c -> {

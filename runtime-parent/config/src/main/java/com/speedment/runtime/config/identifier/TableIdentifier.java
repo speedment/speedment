@@ -17,14 +17,14 @@
 package com.speedment.runtime.config.identifier;
 
 import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.identifier.trait.HasColumnName;
 import com.speedment.runtime.config.identifier.trait.HasDbmsName;
 import com.speedment.runtime.config.identifier.trait.HasSchemaName;
 import com.speedment.runtime.config.identifier.trait.HasTableName;
+import com.speedment.runtime.config.internal.identifier.TableIdentifierImpl;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 
 /**
- * Identifies a particular Column. The identifier is an immutable non-complex
+ * Identifies a particular Table. The identifier is an immutable non-complex
  * object that only contains the names of the nodes required to uniquely
  * identify it in the database.
  * <p>
@@ -42,8 +42,13 @@ import com.speedment.runtime.config.util.DocumentDbUtil;
  * @author Emil Forslund
  * @since 2.3
  */
-public interface ColumnIdentifier<ENTITY> extends
+public interface TableIdentifier<ENTITY> extends
     HasDbmsName,
     HasSchemaName,
-    HasTableName,
-    HasColumnName {}
+    HasTableName {
+
+    static <ENTITY> TableIdentifier<ENTITY> of(String dbmsName, String schemaName, String tableName) {
+        return new TableIdentifierImpl<>(dbmsName, schemaName, tableName);
+    }
+
+}

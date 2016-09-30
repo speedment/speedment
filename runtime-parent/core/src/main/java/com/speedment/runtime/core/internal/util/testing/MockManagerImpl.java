@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.core.internal.util.testing;
 
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.field.Field;
 import com.speedment.runtime.core.manager.EntityCopier;
@@ -25,7 +26,7 @@ import com.speedment.runtime.core.manager.Persister;
 import com.speedment.runtime.core.manager.Remover;
 import com.speedment.runtime.core.manager.Updater;
 
-import java.util.function.Function;
+
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -129,18 +130,8 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public String getDbmsName() {
-        return inner.getDbmsName();
-    }
-
-    @Override
-    public String getSchemaName() {
-        return inner.getSchemaName();
-    }
-
-    @Override
-    public String getTableName() {
-        return inner.getTableName();
+    public TableIdentifier<ENTITY> getTableIdentifier() {
+        return inner.getTableIdentifier();
     }
 
     @Override

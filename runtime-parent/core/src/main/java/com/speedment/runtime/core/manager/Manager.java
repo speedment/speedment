@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.core.manager;
 
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.field.Field;
 
@@ -59,28 +60,12 @@ public interface Manager<ENTITY> {
     EntityCopier<ENTITY> entityCopier();
 
     /**
-     * Returns the name of the dbms that this {@code manager} handles entities
-     * for.
+     * Returns an identifier for the table that this {@code Manager} handles
+     * entities for.
      *
-     * @return the dbms database name
+     * @return the table identifier
      */
-    String getDbmsName();
-
-    /**
-     * Returns the name of the schema that this {@code manager} handles entities
-     * for.
-     *
-     * @return the schema database name
-     */
-    String getSchemaName();
-
-    /**
-     * Returns the name of the table that this {@code manager} handles entities
-     * for.
-     *
-     * @return the table database name
-     */
-    String getTableName();
+    TableIdentifier<ENTITY> getTableIdentifier();
 
     /**
      * Returns the entity class for this Manager.
