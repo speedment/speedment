@@ -80,12 +80,6 @@
                 <groupId>com.speedment.common</groupId>
                 <artifactId>logger</artifactId>
                 <version>${logger.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.speedment.common</groupId>
-                        <artifactId>logger</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
@@ -116,6 +110,12 @@
                 <groupId>com.speedment.common</groupId>
                 <artifactId>injector</artifactId>
                 <version>${injector.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.speedment.common</groupId>
+                        <artifactId>logger</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>

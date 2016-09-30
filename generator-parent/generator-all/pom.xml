@@ -75,6 +75,11 @@
                         <groupId>com.speedment.common</groupId>
                         <artifactId>function</artifactId>
                     </exclusion>
+                    
+                    <exclusion>
+                        <groupId>com.speedment.common</groupId>
+                        <artifactId>logger</artifactId>
+                    </exclusion>
 
                     <exclusion>
                         <groupId>com.speedment.common</groupId>

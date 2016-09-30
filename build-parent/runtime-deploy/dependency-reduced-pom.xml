@@ -9,7 +9,7 @@
   <groupId>com.speedment</groupId>
   <artifactId>speedment-all</artifactId>
   <packaging>bundle</packaging>
-  <name>Speedment - Build - Bundle All</name>
+  <name>Speedment - Build - Runtime Deploy</name>
   <description>A Speedment bundle that shades all dependencies into one jar. This is 
         useful when deploying an application on a server.</description>
   <build>

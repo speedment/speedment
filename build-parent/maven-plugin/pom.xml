@@ -37,11 +37,10 @@
 
     <build>
         <plugins>
-            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-plugin-plugin</artifactId>
-                <version>3.4</version>
+                <version>3.5</version>
                 
                 <configuration>
                     <goalPrefix>speedment</goalPrefix>
@@ -91,7 +90,7 @@
     <dependencies>
         <dependency>
             <groupId>com.speedment</groupId>
-            <artifactId>speedment</artifactId>
+            <artifactId>runtime</artifactId>
             <version>${speedment.version}</version>
         </dependency>
         
@@ -133,6 +132,11 @@
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>lazy</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>logger</artifactId>
         </dependency>
 
         <dependency>

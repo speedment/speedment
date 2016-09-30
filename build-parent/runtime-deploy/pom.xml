@@ -30,10 +30,10 @@
     </parent>
     
     <groupId>com.speedment</groupId>
-    <artifactId>speedment-all</artifactId>
+    <artifactId>runtime-deploy</artifactId>
     <packaging>bundle</packaging>
     
-    <name>Speedment - Build - Bundle All</name>
+    <name>Speedment - Build - Runtime Deploy</name>
     <description>
         A Speedment bundle that shades all dependencies into one jar. This is 
         useful when deploying an application on a server.
@@ -79,7 +79,7 @@
     <dependencies>
         <dependency>
             <groupId>com.speedment</groupId>
-            <artifactId>speedment</artifactId>
+            <artifactId>runtime</artifactId>
             <version>${speedment.version}</version>
         </dependency>
     </dependencies>

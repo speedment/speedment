@@ -30,12 +30,13 @@
     </parent>
     
     <groupId>com.speedment</groupId>
-    <artifactId>speedment</artifactId>
+    <artifactId>runtime</artifactId>
     <packaging>bundle</packaging>
     
-    <name>Speedment - Build - Bundle</name>
+    <name>Speedment - Build - Runtime</name>
     <description>
-        The main Speedment bundle that contains all the runtime dependencies.
+        The main Speedment bundle that contains all the runtime dependencies
+        that should be exposed to the end user.
     </description>
     
     <build>
@@ -52,6 +53,11 @@
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>injector</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>function</artifactId>
         </dependency>
         
         <dependency>
@@ -102,7 +108,7 @@
         
         <dependency>
             <groupId>com.speedment.common</groupId>
-            <artifactId>function</artifactId>
+            <artifactId>logger</artifactId>
             <scope>runtime</scope>
         </dependency>
     </dependencies>

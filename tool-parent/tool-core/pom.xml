@@ -108,6 +108,11 @@
             <artifactId>invariant</artifactId>
         </dependency>
         
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>logger</artifactId>
+        </dependency>
+        
         <!-- com.speedment.runtime -->
         <dependency>
             <groupId>com.speedment.runtime</groupId>
