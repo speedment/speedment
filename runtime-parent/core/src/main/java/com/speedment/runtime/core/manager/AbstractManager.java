@@ -34,40 +34,60 @@ import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @param <ENTITY>  entity type
- * 
- * @author  Emil Forslund
- * @since   2.0.0
+ * @param <ENTITY> entity type
+ *
+ * @author Emil Forslund
+ * @since 2.0.0
  */
 public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
     private ManagerSupport<ENTITY> support;
+    // Hold these fields internally so that exposing methods may be compared by equality
+    private final EntityCreator<ENTITY> entityCreator = this::entityCreate;
+    private final EntityCopier<ENTITY> entityCopier = this::entityCopy;
+    private Persister<ENTITY> persister;
+    private Updater<ENTITY> updater;
+    private Remover<ENTITY> remover;
 
-    protected AbstractManager() {}
-    
+    protected AbstractManager() {
+    }
+
     @ExecuteBefore(INITIALIZED)
     final void createSupport(
-            Injector injector, 
-            @WithState(INITIALIZED) ProjectComponent projectComponent,
-            @WithState(INITIALIZED) ResultSetMapperComponent resultSetComponent,
-            @WithState(INITIALIZED) DbmsHandlerComponent dbmsHandlerComponent) {
-        
+        Injector injector,
+        @WithState(INITIALIZED) ProjectComponent projectComponent,
+        @WithState(INITIALIZED) ResultSetMapperComponent resultSetComponent,
+        @WithState(INITIALIZED) DbmsHandlerComponent dbmsHandlerComponent) {
+
         // Make sure this is initialized after these components.
         requireNonNulls(projectComponent, resultSetComponent, dbmsHandlerComponent);
         this.support = createSupport(injector);
+        persister = support::persist;
+        updater = support::update;
+        updater = support::remove;
     }
-    
+
     @ExecuteBefore(RESOLVED)
     final void install(
-            @WithState(INITIALIZED) ManagerComponent managerComponent,
-            @WithState(INITIALIZED) ProjectComponent projectComponent) {
-        
+        @WithState(INITIALIZED) ManagerComponent managerComponent,
+        @WithState(INITIALIZED) ProjectComponent projectComponent) {
+
         requireNonNull(projectComponent); // Must be initialized first.
         managerComponent.put(this);
     }
-    
+
     protected abstract ManagerSupport<ENTITY> createSupport(Injector injector);
-    
+
+    @Override
+    public EntityCreator<ENTITY> entityCreator() {
+        return entityCreator;
+    }
+
+    @Override
+    public EntityCopier<ENTITY> entityCopier() {
+        return entityCopier;
+    }
+
     @Override
     public final Stream<ENTITY> stream() {
         return support.stream();
@@ -79,12 +99,28 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
+    public Persister<ENTITY> persister() {
+        return persister;
+    }
+
+    @Override
     public final ENTITY update(ENTITY entity) throws SpeedmentException {
         return support.update(entity);
+    }
+
+    @Override
+    public Updater<ENTITY> updater() {
+        return updater;
     }
 
     @Override
     public final ENTITY remove(ENTITY entity) throws SpeedmentException {
         return support.remove(entity);
     }
+
+    @Override
+    public final Remover<ENTITY> remover() {
+        return remover;
+    }
+
 }

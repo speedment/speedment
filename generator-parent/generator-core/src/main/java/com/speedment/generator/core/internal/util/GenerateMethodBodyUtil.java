@@ -36,7 +36,10 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
-import static com.speedment.generator.core.internal.translator.manager.GeneratedManagerImplTranslator.NEW_EMPTY_ENTITY_METHOD;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.joining;
+import static com.speedment.generator.core.internal.translator.manager.GeneratedManagerImplTranslator.ENTITY_CREATE_METHOD_NAME;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -77,7 +80,7 @@ public final class GenerateMethodBodyUtil {
     }
     
     public static Method generateNewEmptyEntity(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        return Method.of(NEW_EMPTY_ENTITY_METHOD, support.entityType())
+        return Method.of(ENTITY_CREATE_METHOD_NAME, support.entityType())
             .public_().add(OVERRIDE)
             .add(generateNewEmptyEntityBody(support, file, columnsSupplier));
 
@@ -98,7 +101,7 @@ public final class GenerateMethodBodyUtil {
     public static String[] generateNewEntityFromBody(ReadFromResultSet readFromResultSet, TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
 
         final List<String> rows = new LinkedList<>();
-        rows.add("final " + support.entityName() + " entity = " + NEW_EMPTY_ENTITY_METHOD + "();");
+        rows.add("final " + support.entityName() + " entity = " + ENTITY_CREATE_METHOD_NAME + "();");
 
         final Stream.Builder<String> streamBuilder = Stream.builder();
 

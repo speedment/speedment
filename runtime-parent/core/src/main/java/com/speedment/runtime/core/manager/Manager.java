@@ -43,16 +43,20 @@ public interface Manager<ENTITY> {
      *
      * @return a new entity
      */
-    ENTITY newEmptyEntity();
+    ENTITY entityCreate();
+
+    EntityCreator<ENTITY> entityCreator();
 
     /**
-     * Creates an returns a new entity. The new entity will have all its fields
-     * initialized to the values of the provided source entity.
+     * Creates an returns a new entity copy. The new entity will have all its
+     * fields initialized to the values of the provided source entity.
      *
      * @param source entity
      * @return a new entity
      */
-    ENTITY newCopyOf(ENTITY source);
+    ENTITY entityCopy(ENTITY source);
+
+    EntityCopier<ENTITY> entityCopier();
 
     /**
      * Returns the name of the dbms that this {@code manager} handles entities
@@ -216,6 +220,8 @@ public interface Manager<ENTITY> {
      */
     ENTITY persist(ENTITY entity) throws SpeedmentException;
 
+    Persister<ENTITY> persister();
+
     /**
      * Updates the provided entity in the underlying database and returns a
      * potentially updated entity. If the update fails for any reason, an
@@ -241,6 +247,8 @@ public interface Manager<ENTITY> {
      */
     ENTITY update(ENTITY entity) throws SpeedmentException;
 
+    Updater<ENTITY> updater();
+
     /**
      * Removes the provided entity from the underlying database and returns the
      * provided entity instance. If the deletion fails for any reason, an
@@ -254,4 +262,7 @@ public interface Manager<ENTITY> {
      * (e.g. SQLException)
      */
     ENTITY remove(ENTITY entity) throws SpeedmentException;
+
+    Remover<ENTITY> remover();
+
 }

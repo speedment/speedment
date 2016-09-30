@@ -18,7 +18,12 @@ package com.speedment.runtime.core.internal.util.testing;
 
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.field.Field;
+import com.speedment.runtime.core.manager.EntityCopier;
+import com.speedment.runtime.core.manager.EntityCreator;
 import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.core.manager.Persister;
+import com.speedment.runtime.core.manager.Remover;
+import com.speedment.runtime.core.manager.Updater;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -32,25 +37,25 @@ import java.util.stream.Stream;
 public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
 
     private final Manager<ENTITY> inner;
-    private Supplier<ENTITY> instanceSupplier;
+    private EntityCreator<ENTITY> entityCreator;
     private Supplier<Stream<ENTITY>> streamer;
-    private Function<ENTITY, ENTITY> persister;
-    private Function<ENTITY, ENTITY> updater;
-    private Function<ENTITY, ENTITY> remover;
+    private Persister<ENTITY> persister;
+    private Updater<ENTITY> updater;
+    private Remover<ENTITY> remover;
 
     public MockManagerImpl(Manager<ENTITY> inner) {
         this.inner = inner;
-        this.instanceSupplier = inner::newEmptyEntity;
+        this.entityCreator = inner.entityCreator();
         this.streamer = inner::stream;
-        this.persister = inner::persist;
-        this.updater = inner::update;
-        this.remover = inner::remove;
+        this.persister = inner.persister();
+        this.updater = inner.updater();
+        this.remover = inner.remover();
     }
 
     // MockManager
     @Override
-    public MockManager<ENTITY> setInstanceFactory(Supplier<ENTITY> factory) {
-        instanceSupplier = factory;
+    public MockManager<ENTITY> setEntityCreator(EntityCreator<ENTITY> factory) {
+        entityCreator = factory;
         return this;
     }
 
@@ -61,26 +66,31 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public MockManager<ENTITY> setPersister(Function<ENTITY, ENTITY> persister) {
+    public MockManager<ENTITY> setPersister(Persister<ENTITY> persister) {
         this.persister = persister;
         return this;
     }
 
     @Override
-    public MockManager<ENTITY> setUpdater(Function<ENTITY, ENTITY> updater) {
+    public MockManager<ENTITY> setUpdater(Updater<ENTITY> updater) {
         this.updater = updater;
         return this;
     }
 
     @Override
-    public MockManager<ENTITY> setRemover(Function<ENTITY, ENTITY> remover) {
+    public MockManager<ENTITY> setRemover(Remover<ENTITY> remover) {
         this.remover = remover;
         return this;
     }
 
     @Override
-    public ENTITY newEmptyEntity() {
-        return instanceSupplier.get();
+    public ENTITY entityCreate() {
+        return entityCreator.get();
+    }
+
+    @Override
+    public EntityCreator<ENTITY> entityCreator() {
+        return entityCreator;
     }
 
     @Override
@@ -99,13 +109,23 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
+    public Persister<ENTITY> persister() {
+        return persister;
+    }
+
+    @Override
     public ENTITY remove(ENTITY entity) throws SpeedmentException {
         return remover.apply(entity);
     }
 
     @Override
-    public ENTITY newCopyOf(ENTITY source) {
-        return inner.newCopyOf(source);
+    public Remover<ENTITY> remover() {
+        return remover;
+    }
+
+    @Override
+    public ENTITY entityCopy(ENTITY source) {
+        return inner.entityCopy(source);
     }
 
     @Override
@@ -137,4 +157,17 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     public Stream<ENTITY> stream() {
         return streamer.get();
     }
+
+    @Override
+    public EntityCopier<ENTITY> entityCopier() {
+        return inner.entityCopier();
+    }
+
+    @Override
+    public Updater<ENTITY> updater() {
+        return updater;
+    }
+    
+    
+    
 }

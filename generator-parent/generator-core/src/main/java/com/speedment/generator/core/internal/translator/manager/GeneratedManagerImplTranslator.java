@@ -63,14 +63,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.internal.util.Formatting.block;
-import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static com.speedment.generator.core.internal.util.ColumnUtil.optionalGetterName;
 import static com.speedment.generator.core.internal.util.ColumnUtil.usesOptional;
 import static com.speedment.generator.core.internal.util.GenerateMethodBodyUtil.*;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
+import static com.speedment.common.codegen.internal.util.Formatting.block;
+import static com.speedment.common.codegen.internal.util.Formatting.indent;
 
 /**
  *
@@ -79,8 +79,8 @@ import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 public final class GeneratedManagerImplTranslator extends AbstractEntityAndManagerTranslator<Class> {
 
     public final static String 
-        NEW_ENTITY_FROM_METHOD         = "newEntityFrom",
-        NEW_EMPTY_ENTITY_METHOD        = "newEmptyEntity",
+        ENTITY_COPY_METHOD_NAME        = "entityCopy",
+        ENTITY_CREATE_METHOD_NAME      = "entityCreate",
         FIELDS_METHOD                  = "fields",
         PRIMARY_KEYS_FIELDS_METHOD     = "primaryKeyFields";
 
@@ -218,7 +218,7 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
                     .add(Method.of("createSupport", SimpleParameterizedType.create(ManagerSupport.class, getSupport().entityType()))
                         .protected_().add(OVERRIDE)
                         .add(Field.of("injector", Injector.class))
-                        .add("return " + JdbcManagerSupport.class.getSimpleName() + ".create(injector, this, this::" + NEW_ENTITY_FROM_METHOD + ");")
+                        .add("return " + JdbcManagerSupport.class.getSimpleName() + ".create(injector, this, this::" + ENTITY_COPY_METHOD_NAME + ");")
                         .call(() -> file.add(Import.of(JdbcManagerSupport.class)))
                     )
                     
@@ -301,7 +301,7 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
     }
     
     private Method generateNewEntityFrom(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        return Method.of(NEW_ENTITY_FROM_METHOD, support.entityType())
+        return Method.of(ENTITY_COPY_METHOD_NAME, support.entityType())
             .protected_()
             .add(SQLException.class)
             .add(SpeedmentException.class)
@@ -369,7 +369,7 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
 
         final String varName = "source";
         final String entityName = "copy";
-        final Method result = Method.of("newCopyOf", getSupport().entityType()).public_().add(OVERRIDE)
+        final Method result = Method.of(ENTITY_COPY_METHOD_NAME, getSupport().entityType()).public_().add(OVERRIDE)
             .add(Field.of(varName, getSupport().entityType()))
             .add("final " + getSupport().entityName() + " " + entityName + 
                 " = new " + getSupport().entityImplName() + "();"

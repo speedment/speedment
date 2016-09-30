@@ -16,9 +16,12 @@
  */
 package com.speedment.runtime.core.internal.util.testing;
 
+import com.speedment.runtime.core.manager.EntityCreator;
 import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.core.manager.Persister;
+import com.speedment.runtime.core.manager.Remover;
 
-import java.util.function.Function;
+import com.speedment.runtime.core.manager.Updater;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -31,13 +34,13 @@ public interface MockManager<ENTITY> extends Manager<ENTITY> {
 
     /**
      * Sets the instance factory of this {@code MockManager}. The instance
-     * factory is invoked each time a Managers {@link Manager#newEmptyEntity() }
+     * factory is invoked each time a Managers {@link Manager#entityCreate() }
      * method is called.
      *
      * @param factory the new instance factory to use
      * @return this instance
      */
-    MockManager<ENTITY> setInstanceFactory(Supplier<ENTITY> factory);
+    MockManager<ENTITY> setEntityCreator(EntityCreator<ENTITY> factory);
 //
 //    /**
 //     * Sets the native streamer of this {@code MockManager}.
@@ -70,7 +73,7 @@ public interface MockManager<ENTITY> extends Manager<ENTITY> {
      * @param persister the new streamer supplier
      * @return this instance
      */
-    MockManager<ENTITY> setPersister(Function<ENTITY, ENTITY> persister);
+    MockManager<ENTITY> setPersister(Persister<ENTITY> persister);
 
     /**
      * Sets the updater of this {@code MockManager}.
@@ -81,7 +84,7 @@ public interface MockManager<ENTITY> extends Manager<ENTITY> {
      * @param updater the new streamer supplier
      * @return this instance
      */
-    MockManager<ENTITY> setUpdater(Function<ENTITY, ENTITY> updater);
+    MockManager<ENTITY> setUpdater(Updater<ENTITY> updater);
 
     /**
      * Sets the remover of this {@code MockManager}.
@@ -92,7 +95,7 @@ public interface MockManager<ENTITY> extends Manager<ENTITY> {
      * @param remover the new streamer supplier
      * @return this instance
      */
-    MockManager<ENTITY> setRemover(Function<ENTITY, ENTITY> remover);
+    MockManager<ENTITY> setRemover(Remover<ENTITY> remover);
 //
 //    /**
 //     * Sets the finder of this {@code MockManager}.
