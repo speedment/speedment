@@ -206,20 +206,15 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                     getter = shortEntityName + "::get" + getSupport().typeName(col);
                 }
 
-                final String finder = EntityTranslatorSupport.getForeignKey(getSupport().tableOrThrow(), col)
+                final String referenced = EntityTranslatorSupport.getForeignKey(getSupport().tableOrThrow(), col)
                     .map(fkc -> {
                         final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
                         final TranslatorSupport<Table> fuSupport = fu.getForeignEmt().getSupport();
-
-                        if (col.isNullable()) {
-                            return
-                                ", " + fuSupport.entityName() + "." + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) +
-                                ", (entity, fkManager) -> OptionalUtil.unwrap(entity." + FINDER_METHOD_PREFIX + getSupport().typeName(col) + "(fkManager))";
-                        } else {
-                            return
-                                ", " + fuSupport.entityName() + "." + fuSupport.namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) +
-                                ", " + shortEntityName + "::" + FINDER_METHOD_PREFIX + getSupport().typeName(col);
-                        }
+                        
+                        return ", " + fuSupport.entityName() + "." + 
+                            fuSupport.namer().javaStaticFieldName(
+                                fu.getForeignColumn().getJavaName()
+                            );
                     }).orElse("");
 
                 final String setter = ", " + shortEntityName + "::" + SETTER_METHOD_PREFIX + getSupport().typeName(col);
@@ -253,7 +248,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                         + ", "
                         + getter
                         + setter
-                        + finder
+                        + referenced
                         + ", "
                         + typeMapperCode
                         + ", "
