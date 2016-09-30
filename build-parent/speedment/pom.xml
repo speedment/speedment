@@ -48,6 +48,12 @@
     </build>
     
     <dependencies>
+        <!-- Compile time dependencies -->
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>injector</artifactId>
+        </dependency>
+        
         <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-core</artifactId>
@@ -61,6 +67,43 @@
         <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-config</artifactId>
+        </dependency>
+        
+        <!-- Runtime dependencies -->
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>invariant</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>tuple</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>json</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>lazy</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>mapstream</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>function</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 </project>

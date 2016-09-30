@@ -72,6 +72,11 @@
         </dependency>
         
         <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-typemapper</artifactId>
+        </dependency>
+        
+        <dependency>
             <groupId>com.speedment.tool</groupId>
             <artifactId>tool-config</artifactId>
             <version>${speedment.version}</version>

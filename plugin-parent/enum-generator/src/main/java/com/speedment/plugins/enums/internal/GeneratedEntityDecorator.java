@@ -37,10 +37,6 @@ import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import static java.util.Objects.requireNonNull;
 
-//import com.speedment.generator.JavaClassTranslator;
-//import com.speedment.generator.TranslatorDecorator;
-//import com.speedment.generator.util.JavaLanguageNamer;
-
 /**
  *
  * @author  Emil Forslund

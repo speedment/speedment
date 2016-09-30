@@ -18,7 +18,6 @@ package com.speedment.generator.core.internal.util;
 
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
-import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;

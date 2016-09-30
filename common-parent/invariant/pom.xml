@@ -47,7 +47,7 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            com.speedment.common.invariant.*
+                            com.speedment.common.invariant
                         </Export-Package>
                     </instructions>
                 </configuration>

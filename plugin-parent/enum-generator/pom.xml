@@ -60,8 +60,28 @@
         </dependency>
         
         <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>codegen</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>lazy</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-config</artifactId>
+        </dependency>
+        
+        <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-typemapper</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.generator</groupId>
+            <artifactId>generator-core</artifactId>
         </dependency>
         
         <dependency>

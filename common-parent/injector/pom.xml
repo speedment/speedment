@@ -63,10 +63,13 @@
             <artifactId>logger</artifactId>
             <version>${logger.version}</version>
         </dependency>
+        
+        <!-- Test dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
+        
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>

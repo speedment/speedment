@@ -44,6 +44,58 @@
                 <groupId>com.speedment.generator</groupId>
                 <artifactId>generator-core</artifactId>
                 <version>${speedment.version}</version>
+                
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.speedment.common</groupId>
+                        <artifactId>injector</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.speedment.common</groupId>
+                        <artifactId>codegen</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.speedment.common</groupId>
+                        <artifactId>json</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.speedment.common</groupId>
+                        <artifactId>mapstream</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.speedment.common</groupId>
+                        <artifactId>tuple</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.speedment.common</groupId>
+                        <artifactId>function</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.speedment.common</groupId>
+                        <artifactId>invariant</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.speedment.runtime</groupId>
+                        <artifactId>runtime-config</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.speedment.runtime</groupId>
+                        <artifactId>runtime-typemapper</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.speedment.runtime</groupId>
+                        <artifactId>runtime-core</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>

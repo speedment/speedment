@@ -34,9 +34,7 @@
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - Logger</name>
-    <description>
-        A lightweight logging tool inspired by Tengil.
-    </description>
+    <description>A lightweight logging tool inspired by Tengil.</description>
     
     <build>
         <plugins>

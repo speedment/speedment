@@ -62,6 +62,16 @@
     <dependencies>
         <!-- Compile Time Dependencies -->
         <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>injector</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>codegen</artifactId>
+        </dependency>
+        
+        <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-config</artifactId>
         </dependency>

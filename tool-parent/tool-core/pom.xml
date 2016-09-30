@@ -46,16 +46,15 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            com.speedment.tool.core.brand.*,
-                            com.speedment.tool.core.component.*,
-                            com.speedment.tool.core.config.*,
-                            com.speedment.tool.core.event.*,
-                            com.speedment.tool.core.notification.*,
-                            com.speedment.tool.core.property.*,
-                            com.speedment.tool.core.resource.*,
-                            com.speedment.tool.core.rule.*,
-                            com.speedment.tool.core.util.*,
-                            com.speedment.tool.core.*
+                            com.speedment.tool.core.brand,
+                            com.speedment.tool.core.component,
+                            com.speedment.tool.core.event,
+                            com.speedment.tool.core.exception,
+                            com.speedment.tool.core.notification,
+                            com.speedment.tool.core.resource,
+                            com.speedment.tool.core.rule,
+                            com.speedment.tool.core.util,
+                            com.speedment.tool.core
                         </Export-Package>
                     </instructions>
                 </configuration>
@@ -88,6 +87,7 @@
     </build>
     
     <dependencies>
+        <!-- com.speedment.common -->
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>injector</artifactId>
@@ -98,6 +98,17 @@
             <artifactId>rest</artifactId>
         </dependency>
         
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>json</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>invariant</artifactId>
+        </dependency>
+        
+        <!-- com.speedment.runtime -->
         <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-config</artifactId>
@@ -113,11 +124,13 @@
             <artifactId>runtime-core</artifactId>
         </dependency>
         
+        <!-- com.speedment.generator -->
         <dependency>
             <groupId>com.speedment.generator</groupId>
             <artifactId>generator-core</artifactId>
         </dependency>
         
+        <!-- com.speedment.tool -->
         <dependency>
             <groupId>com.speedment.tool</groupId>
             <artifactId>tool-config</artifactId>
@@ -157,6 +170,18 @@
         <dependency>
             <groupId>com.opera</groupId>
             <artifactId>operadriver</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>codegen</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>tuple</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

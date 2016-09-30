@@ -80,6 +80,12 @@
                 <groupId>com.speedment.common</groupId>
                 <artifactId>logger</artifactId>
                 <version>${logger.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.speedment.common</groupId>
+                        <artifactId>logger</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -98,6 +104,12 @@
                 <groupId>com.speedment.common</groupId>
                 <artifactId>codegenxml</artifactId>
                 <version>${codegenxml.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.speedment.common</groupId>
+                        <artifactId>codegen</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -110,6 +122,12 @@
                 <groupId>com.speedment.common</groupId>
                 <artifactId>rest</artifactId>
                 <version>${rest.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.speedment.common</groupId>
+                        <artifactId>json</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>

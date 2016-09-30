@@ -62,6 +62,41 @@
     
     <dependencies>
         <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>injector</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>codegen</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>json</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>mapstream</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>tuple</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>function</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>invariant</artifactId>
+        </dependency>
+        
+        <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-config</artifactId>
         </dependency>
@@ -76,16 +111,6 @@
             <artifactId>runtime-core</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>codegen</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>injector</artifactId>
-        </dependency>
-        
         <!-- Test dependencies -->
         <dependency>
             <groupId>junit</groupId>
