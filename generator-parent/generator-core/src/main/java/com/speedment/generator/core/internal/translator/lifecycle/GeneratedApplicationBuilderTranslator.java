@@ -49,10 +49,10 @@ import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.internal.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
 import static com.speedment.generator.core.internal.translator.lifecycle.GeneratedMetadataTranslator.METADATA;
+import static java.util.stream.Collectors.toSet;
 import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toSet;
 
 /**
  *
@@ -146,7 +146,7 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
     
     @Override
     protected Javadoc getJavaDoc() {
-        final String owner = infoComponent.title();
+        final String owner = infoComponent.getTitle();
         return new JavadocImpl(getJavadocRepresentText() + getGeneratedJavadocMessage())
             .add(AUTHOR.setValue(owner));
     }

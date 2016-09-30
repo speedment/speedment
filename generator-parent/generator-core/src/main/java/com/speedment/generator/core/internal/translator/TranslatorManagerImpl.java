@@ -266,7 +266,7 @@ public class TranslatorManagerImpl implements TranslatorManager {
     }
 
     private String secretFolderName() {
-        return "." + info.title()
+        return "." + info.getTitle()
             .replace(" ", "")
             .replace(".", "")
             .replace("/", "")

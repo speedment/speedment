@@ -50,7 +50,7 @@ public final class BrandUtil {
         final InfoComponent info = injector.getOrThrow(InfoComponent.class);
         final Brand brand = injector.getOrThrow(Brand.class);
         
-        stage.setTitle(info.title());
+        stage.setTitle(info.getTitle());
         brand.logoSmall()
             .map(Image::new)
             .ifPresent(stage.getIcons()::add);
@@ -70,7 +70,7 @@ public final class BrandUtil {
     
     private static void apply(Brand brand, InfoComponent info, Stage stage, Scene scene) {
         if (stage != null) {
-            stage.setTitle(info.title());
+            stage.setTitle(info.getTitle());
         }
         
         brand.logoSmall()

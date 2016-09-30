@@ -53,8 +53,9 @@ import java.util.function.Supplier;
 
 import static com.speedment.common.injector.State.INITIALIZED;
 import com.speedment.tool.core.exception.SpeedmentToolException;
-import static java.util.Objects.requireNonNull;
 import static javafx.stage.Modality.APPLICATION_MODAL;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -149,7 +150,7 @@ public final class InjectionLoader {
         
         BrandUtil.applyBrandToScene(injector, scene);
         
-        dialog.setTitle("About " + infoComponent.title());
+        dialog.setTitle("About " + infoComponent.getTitle());
         dialog.initModality(APPLICATION_MODAL);
         brand.logoSmall().map(Image::new).ifPresent(dialog.getIcons()::add);
         dialog.initOwner(mainStage);

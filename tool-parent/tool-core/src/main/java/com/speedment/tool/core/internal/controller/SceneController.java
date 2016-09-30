@@ -75,20 +75,20 @@ public final class SceneController implements Initializable {
                 version.latestVersion()
                     .thenAcceptAsync(release -> {
                         runLater(() -> {
-                            final int compare = release.compareTo(info.implementationVersion());
+                            final int compare = release.compareTo(info.getImplementationVersion());
                             if (compare == 0) {
                                 ui.showNotification(
-                                    "Your version of " + info.title() + " is up to date."
+                                    "Your version of " + info.getTitle() + " is up to date."
                                 );
                             } else if (compare > 0) {
                                 ui.showNotification(
                                     "A new version " + release +
-                                        " of " + info.title() + " is available."
+                                        " of " + info.getTitle() + " is available."
                                 );
                             } else {
                                 ui.showNotification(
-                                    "Your version " + info.implementationVersion() +
-                                        " of " + info.title() + " is newer than the released " +
+                                    "Your version " + info.getImplementationVersion() +
+                                        " of " + info.getTitle() + " is newer than the released " +
                                         release + "."
                                 );
                             }

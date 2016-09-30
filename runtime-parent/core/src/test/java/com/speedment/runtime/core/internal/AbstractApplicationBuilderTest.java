@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.internal;
 
-import com.speedment.runtime.core.internal.AbstractApplicationBuilder;
 import com.speedment.common.injector.Injector;
 import com.speedment.runtime.core.Speedment;
 import org.junit.Before;
@@ -24,7 +23,6 @@ import org.junit.Test;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -53,11 +51,11 @@ public class AbstractApplicationBuilderTest {
         testVector.put("0.8.0_40", Optional.of(Boolean.FALSE));
         testVector.put("Arne", Optional.empty());
 
-        for (final Entry<String, Optional<Boolean>> e : testVector.entrySet()) {
+        testVector.entrySet().forEach((e) -> {
             final Optional<Boolean> expected = e.getValue();
             final Optional<Boolean> result = instance.isVersionOk(e.getKey());
             assertEquals(e.getKey(), expected, result);
-        }
+        });
 
     }
 

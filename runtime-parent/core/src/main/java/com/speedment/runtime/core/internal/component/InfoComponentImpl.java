@@ -26,33 +26,33 @@ import com.speedment.runtime.core.component.InfoComponent;
 public final class InfoComponentImpl implements InfoComponent {
     
     @Override
-    public String title() {
+    public String getTitle() {
         return "Speedment";
     }
 
     @Override
-    public String subtitle() {
+    public String getSubtitle() {
         return "Open Source";
     }
 
     @Override
-    public String implementationVersion() {
+    public String getImplementationVersion() {
         return "3.0.1-SNAPSHOT";
     }
 
     @Override
-    public String vendor() {
+    public String getVendor() {
         return "Speedment, Inc.";
     }
 
     @Override
-    public String specificationVersion() {
+    public String getSpecificationVersion() {
         return "3.0";
     }
 
     @Override
     public boolean isProductionMode() {
-        return !implementationVersion().toUpperCase().contains("EA") && !implementationVersion().toUpperCase().contains("SNAPSHOT");
+        return !getImplementationVersion().toUpperCase().contains("EA") && !getImplementationVersion().toUpperCase().contains("SNAPSHOT");
     }
     
 }

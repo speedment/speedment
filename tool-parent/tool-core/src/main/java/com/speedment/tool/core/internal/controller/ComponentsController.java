@@ -84,12 +84,12 @@ public final class ComponentsController implements Initializable {
 
         public RootItem(Speedment speedment) {
             super(
-                infoComponent.title() + " (0x" + Integer.toHexString(System.identityHashCode(speedment)) + ")"
+                infoComponent.getTitle() + " (0x" + Integer.toHexString(System.identityHashCode(speedment)) + ")"
             );
             setExpanded(true);
             setGraphic(SpeedmentIcon.BOX.view());
 
-            title.setText(infoComponent.title());
+            title.setText(infoComponent.getTitle());
         }
     }
 

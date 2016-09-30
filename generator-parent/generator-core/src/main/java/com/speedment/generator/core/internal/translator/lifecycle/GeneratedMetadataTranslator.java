@@ -41,8 +41,8 @@ import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERR
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import com.speedment.common.json.Json;
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -143,7 +143,7 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
 
     @Override
     protected Javadoc getJavaDoc() {
-        final String owner = infoComponent.title();
+        final String owner = infoComponent.getTitle();
         return new JavadocImpl(getJavadocRepresentText() + getGeneratedJavadocMessage())
             .add(AUTHOR.setValue(owner));
     }

@@ -43,9 +43,8 @@ public enum FocusPoint {
     }
 
     public String getContentURI(InfoComponent infoComponent) {
-        return Stream.of(
-            infoComponent.title(),
-            infoComponent.implementationVersion(),
+        return Stream.of(infoComponent.getTitle(),
+            infoComponent.getImplementationVersion(),
             eventName,
             EmailUtil.getEmail()
         ).collect(joining(SEPARATOR));

@@ -37,10 +37,10 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static com.speedment.runtime.core.internal.util.analytics.FocusPoint.*;
-import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
 import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -87,7 +87,7 @@ public final class Statistics {
         requireNonNullElements(params);
         final List<Param> allParams = new ArrayList<>(params);
         allParams.add(new Param("project-key", Hash.md5(System.getProperty("user.dir"))));
-        allParams.add(new Param("version", infoComponent.implementationVersion()));
+        allParams.add(new Param("version", infoComponent.getImplementationVersion()));
         allParams.add(new Param("event", event));
         sendPostRequest(allParams);
     }

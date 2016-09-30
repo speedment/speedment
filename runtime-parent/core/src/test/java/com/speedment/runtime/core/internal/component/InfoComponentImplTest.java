@@ -61,28 +61,28 @@ public class InfoComponentImplTest {
 
     @Test
     public void testVendor() {
-        assertEquals("Speedment, Inc.", instance.vendor());
+        assertEquals("Speedment, Inc.", instance.getVendor());
     }
 
     @Test
     public void testTitle() {
-        assertNotNull(instance.title());
+        assertNotNull(instance.getTitle());
     }
 
     @Test
     public void testSubtitle() {
-        assertNotNull(instance.subtitle());
+        assertNotNull(instance.getSubtitle());
     }
 
     @Test
     public void testImplementationVersion() {
-        assertEquals(versionFromPom(), instance.implementationVersion());
+        assertEquals(versionFromPom(), instance.getImplementationVersion());
     }
 
     @Test
     public void testSpecificationVersion() {
-        assertNotNull(instance.specificationVersion());
-        assertTrue(instance.implementationVersion().contains(instance.specificationVersion()));
+        assertNotNull(instance.getSpecificationVersion());
+        assertTrue(instance.getImplementationVersion().contains(instance.getSpecificationVersion()));
     }
 
     // This truly sucks...

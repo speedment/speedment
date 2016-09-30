@@ -34,21 +34,21 @@ public interface InfoComponent  {
      *
      * @return the vendor
      */
-    String vendor();
+    String getVendor();
 
     /**
      * Returns the title of Speedment.
      *
      * @return the title
      */
-    String title();
+    String getTitle();
 
     /**
      * Returns the subtitle of Speedment.
      *
      * @return the subtitle
      */
-    String subtitle();
+    String getSubtitle();
 
     /**
      * Return the non-null version of this Speedment implementation. It consists
@@ -59,7 +59,7 @@ public interface InfoComponent  {
      *
      * @return the non-null version of this Speedment implementation
      */
-    String implementationVersion();
+    String getImplementationVersion();
 
     /**
      * Returns the non-null version number of the specification that this
@@ -71,7 +71,7 @@ public interface InfoComponent  {
      * @return the non-null version number of the specification that this
      * Speedment implements
      */
-    String specificationVersion();
+    String getSpecificationVersion();
 
      /**
      * Returns if this version is intended for production use.

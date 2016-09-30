@@ -59,10 +59,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.core.util.DatabaseUtil;
+import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -431,8 +431,8 @@ public abstract class AbstractApplicationBuilder<
     protected void printWelcomeMessage(Injector injector) {
 
         final InfoComponent info = injector.getOrThrow(InfoComponent.class);
-        final String title = info.title();
-        final String version = info.implementationVersion();
+        final String title = info.getTitle();
+        final String version = info.getImplementationVersion();
 
         if (!skipLogoPrintout) {
             final String speedmentMsg = "\n"
@@ -442,11 +442,17 @@ public abstract class AbstractApplicationBuilder<
                 + "   ___)| |_)| '_/ '_/| (_| | | | | | | '_/ | | |  _|  \n"
                 + "  |____| .__|\\__\\\\__\\ \\____|_| |_| |_|\\__\\_| |_| '_   \n"
                 + "=======|_|======================================\\__|==\n"
-                + "   :: " + title + " by " + info.vendor()
-                + ":: (v" + version + ") ";
+                + "   :: " + title + " by " + info.getVendor()
+                + ":: (v" + version + ") \n";
 
             LOGGER.info(speedmentMsg);
-        }
+        } 
+        final String msg = title + " (" + info.getSubtitle()
+            + ") version " + version
+            + " by " + info.getVendor()
+            + " Specification version "
+            + info.getSpecificationVersion();
+        LOGGER.info(msg);
 
         if (!info.isProductionMode()) {
             LOGGER.warn("This version is NOT INTENDED FOR PRODUCTION USE!");

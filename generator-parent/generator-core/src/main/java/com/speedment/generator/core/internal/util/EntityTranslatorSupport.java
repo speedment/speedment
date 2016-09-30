@@ -32,7 +32,6 @@ import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
-import com.speedment.runtime.core.db.MetaResult;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.field.BooleanField;
 import com.speedment.runtime.core.field.ByteField;
@@ -77,7 +76,6 @@ import com.speedment.runtime.core.internal.field.StringForeignKeyFieldImpl;
 
 import java.lang.reflect.Type;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
@@ -549,16 +547,16 @@ public final class EntityTranslatorSupport {
         return Method.of(name, entityType).add(SpeedmentException.class);
     }
 
-    public static Method dbMethodWithListener(String name, Type entityType) {
-        requireNonNulls(name, entityType);
-        return Method.of(name, entityType).add(SpeedmentException.class)
-            .add(Field.of(
-                CONSUMER_NAME, 
-                SimpleParameterizedType.create(Consumer.class,
-                    SimpleParameterizedType.create(MetaResult.class, entityType)
-                )
-            ));
-    }
+//    public static Method dbMethodWithListener(String name, Type entityType) {
+//        requireNonNulls(name, entityType);
+//        return Method.of(name, entityType).add(SpeedmentException.class)
+//            .add(Field.of(
+//                CONSUMER_NAME, 
+//                SimpleParameterizedType.create(Consumer.class,
+//                    SimpleParameterizedType.create(MetaResult.class, entityType)
+//                )
+//            ));
+//    }
 
     public static Method persist(Type entityType) {
         return EntityTranslatorSupport.dbMethod("persist", requireNonNull(entityType));
@@ -572,17 +570,17 @@ public final class EntityTranslatorSupport {
         return EntityTranslatorSupport.dbMethod("remove", requireNonNull(entityType));
     }
 
-    public static Method persistWithListener(Type entityType) {
-        return EntityTranslatorSupport.dbMethodWithListener("persist", requireNonNull(entityType));
-    }
-
-    public static Method updateWithListener(Type entityType) {
-        return EntityTranslatorSupport.dbMethodWithListener("update", requireNonNull(entityType));
-    }
-
-    public static Method removeWithListener(Type entityType) {
-        return EntityTranslatorSupport.dbMethodWithListener("remove", requireNonNull(entityType));
-    }
+//    public static Method persistWithListener(Type entityType) {
+//        return EntityTranslatorSupport.dbMethodWithListener("persist", requireNonNull(entityType));
+//    }
+//
+//    public static Method updateWithListener(Type entityType) {
+//        return EntityTranslatorSupport.dbMethodWithListener("update", requireNonNull(entityType));
+//    }
+//
+//    public static Method removeWithListener(Type entityType) {
+//        return EntityTranslatorSupport.dbMethodWithListener("remove", requireNonNull(entityType));
+//    }
     
     private EntityTranslatorSupport() {
         instanceNotAllowed(getClass());

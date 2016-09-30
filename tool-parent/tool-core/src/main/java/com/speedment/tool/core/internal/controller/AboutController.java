@@ -49,8 +49,8 @@ public final class AboutController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         brand.logoLarge().map(Image::new).ifPresent(titleImage::setImage);
-        license.setText(license.getText().replace("{title}", infoComponent.title()));
-        version.setText(infoComponent.implementationVersion());
+        license.setText(license.getText().replace("{title}", infoComponent.getTitle()));
+        version.setText(infoComponent.getImplementationVersion());
         
         close.setOnAction(newCloseHandler());
     }
