@@ -14,38 +14,36 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.plugins.enums.internal.ui;
+package com.speedment.tool.propertyeditor.editor;
 
-import com.speedment.plugins.enums.StringToEnumTypeMapper;
-import com.speedment.tool.config.ColumnProperty;
+import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.propertyeditor.PropertyEditor;
-import javafx.beans.binding.Bindings;
+import com.speedment.tool.propertyeditor.item.DefaultTextFieldItem;
+import javafx.beans.property.SimpleStringProperty;
 
 import java.util.stream.Stream;
 
+import static com.speedment.runtime.config.Project.DEFAULT_PACKAGE_LOCATION;
+
 /**
- * Editor for generating a comma-separated string.
- * <p>
- * We parse what values an enum should be able to take from a string, where
- * each element is separated by a comma. This editor allows the user
- * to easily edit such a string.
- * 
- * @param <T>  the column property type
+ *
+ * @param <T>  the document type
  * 
  * @author  Simon Jonasson
  * @since   3.0.0
  */
-public class CommaSeparatedStringEditor<T extends ColumnProperty> implements PropertyEditor<T>{
+public class PackageLocationPropertyEditor<T extends ProjectProperty> implements PropertyEditor<T> {
 
     @Override
     public Stream<Item> fieldsFor(T document) {
         return Stream.of(
-            new AddRemoveStringItem(
-                "Enum Constants", 
-                document.enumConstantsProperty(),
-                "Used for defining what contants the generated enum can have",
-                Bindings.equal(document.typeMapperProperty(), StringToEnumTypeMapper.class.getName())
+            new DefaultTextFieldItem(
+                "Package Location",
+                new SimpleStringProperty(DEFAULT_PACKAGE_LOCATION),
+                document.packageLocationProperty(),
+                "The folder to store all generated files in. This should be a relative name from the working directory."
             )
         );
     }
+    
 }

@@ -18,7 +18,7 @@ package com.speedment.plugins.enums.internal.ui;
 
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
-import com.speedment.tool.core.property.item.AbstractLabelTooltipItem;
+import com.speedment.tool.propertyeditor.item.AbstractLabelTooltipItem;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -62,10 +62,11 @@ public final class AddRemoveStringItem extends AbstractLabelTooltipItem {
     //***********************************************************
     // 				VARIABLES
     //***********************************************************   
-    private final static Logger LOGGER = LoggerManager.getLogger(CommaSeparatedStringEditor.class);
+    private final static Logger LOGGER = LoggerManager.getLogger(AddRemoveStringItem.class);
 
     private final ObservableList<String> strings;
     private final ObservableBooleanValue enabled;
+    
     @SuppressWarnings("FieldCanBeLocal")
     private final StringProperty cache;
     

@@ -28,7 +28,6 @@ import java.util.concurrent.CompletableFuture;
  * @author  Emil Forslund
  * @since   3.0.0
  */
-
 @InjectKey(VersionComponent.class)
 public interface VersionComponent {
 

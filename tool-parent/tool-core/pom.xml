@@ -90,6 +90,11 @@
     <dependencies>
         <dependency>
             <groupId>com.speedment.common</groupId>
+            <artifactId>injector</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
             <artifactId>rest</artifactId>
         </dependency>
         
@@ -116,6 +121,12 @@
         <dependency>
             <groupId>com.speedment.tool</groupId>
             <artifactId>tool-config</artifactId>
+            <version>${speedment.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.tool</groupId>
+            <artifactId>tool-propertyeditor</artifactId>
             <version>${speedment.version}</version>
         </dependency>
         	        

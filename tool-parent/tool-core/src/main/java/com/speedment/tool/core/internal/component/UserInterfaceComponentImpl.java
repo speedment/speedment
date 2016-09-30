@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.core.internal.component;
 
+import com.speedment.tool.propertyeditor.internal.component.PropertyEditorComponentImpl;
 import com.speedment.tool.config.internal.component.DocumentPropertyComponentImpl;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
@@ -46,7 +47,7 @@ import com.speedment.tool.core.internal.notification.NotificationImpl;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.internal.util.InjectionLoader;
 import com.speedment.tool.core.notification.Notification;
-import com.speedment.tool.core.property.PropertyEditor;
+import com.speedment.tool.propertyeditor.PropertyEditor;
 import com.speedment.tool.core.util.BrandUtil;
 import com.speedment.tool.core.util.OutputUtil;
 import de.jensd.fx.glyphs.GlyphsDude;

@@ -26,7 +26,7 @@ import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.core.notification.Notification;
-import com.speedment.tool.core.property.PropertyEditor;
+import com.speedment.tool.propertyeditor.PropertyEditor;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -50,7 +50,6 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-
 @InjectKey(UserInterfaceComponent.class)
 public interface UserInterfaceComponent {
 
