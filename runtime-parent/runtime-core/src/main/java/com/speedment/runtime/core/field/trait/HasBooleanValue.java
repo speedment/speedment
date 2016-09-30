@@ -16,13 +16,12 @@
  */
 package com.speedment.runtime.core.field.trait;
 
-import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.core.field.Field;
 import com.speedment.runtime.core.field.method.BooleanGetter;
 import com.speedment.runtime.core.field.method.BooleanSetter;
 import com.speedment.runtime.core.field.method.SetToBoolean;
 import com.speedment.runtime.core.internal.field.setter.SetToBooleanImpl;
-
+import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 
 /**

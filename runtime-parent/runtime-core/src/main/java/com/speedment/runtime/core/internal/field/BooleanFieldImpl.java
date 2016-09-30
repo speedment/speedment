@@ -16,15 +16,12 @@
  */
 package com.speedment.runtime.core.internal.field;
 
-import com.speedment.runtime.typemapper.TypeMapper;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.field.BooleanField;
 import com.speedment.runtime.core.field.method.BooleanGetter;
 import com.speedment.runtime.core.field.method.BooleanSetter;
-
+import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
-
-import static java.util.Objects.requireNonNull;
-import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import static java.util.Objects.requireNonNull;
 
 /**

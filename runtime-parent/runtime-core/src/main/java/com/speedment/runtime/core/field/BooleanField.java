@@ -17,7 +17,6 @@
 package com.speedment.runtime.core.field;
 
 import com.speedment.runtime.core.field.trait.HasBooleanValue;
-
 import javax.annotation.Generated;
 
 /**

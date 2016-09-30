@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.core.internal.field;
 
-import com.speedment.runtime.typemapper.TypeMapper;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.field.LongField;
 import com.speedment.runtime.core.field.method.LongGetter;
 import com.speedment.runtime.core.field.method.LongSetter;
@@ -29,13 +29,10 @@ import com.speedment.runtime.core.internal.field.predicate.longs.LongEqualPredic
 import com.speedment.runtime.core.internal.field.predicate.longs.LongGreaterOrEqualPredicate;
 import com.speedment.runtime.core.internal.field.predicate.longs.LongGreaterThanPredicate;
 import com.speedment.runtime.core.internal.field.predicate.longs.LongInPredicate;
-
-import javax.annotation.Generated;
+import com.speedment.runtime.typemapper.TypeMapper;
 import java.util.Set;
 import java.util.function.Predicate;
-
-import static java.util.Objects.requireNonNull;
-import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**

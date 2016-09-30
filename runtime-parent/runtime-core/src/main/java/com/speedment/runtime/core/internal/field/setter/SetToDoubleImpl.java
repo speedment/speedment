@@ -18,9 +18,7 @@ package com.speedment.runtime.core.internal.field.setter;
 
 import com.speedment.runtime.core.field.method.SetToDouble;
 import com.speedment.runtime.core.field.trait.HasDoubleValue;
-
 import javax.annotation.Generated;
-
 import static java.util.Objects.requireNonNull;
 
 /**

@@ -20,10 +20,8 @@ import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.core.field.predicate.PredicateType;
 import com.speedment.runtime.core.field.trait.HasIntValue;
 import com.speedment.runtime.core.internal.field.predicate.AbstractFieldPredicate;
-
-import javax.annotation.Generated;
 import java.util.Set;
-
+import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**

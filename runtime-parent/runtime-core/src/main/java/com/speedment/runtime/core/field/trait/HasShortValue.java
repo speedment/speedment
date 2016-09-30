@@ -16,13 +16,12 @@
  */
 package com.speedment.runtime.core.field.trait;
 
-import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.core.field.Field;
 import com.speedment.runtime.core.field.method.SetToShort;
 import com.speedment.runtime.core.field.method.ShortGetter;
 import com.speedment.runtime.core.field.method.ShortSetter;
 import com.speedment.runtime.core.internal.field.setter.SetToShortImpl;
-
+import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 
 /**

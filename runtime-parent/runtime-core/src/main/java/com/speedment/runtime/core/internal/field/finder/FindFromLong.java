@@ -20,7 +20,6 @@ import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.field.LongField;
 import com.speedment.runtime.core.field.LongForeignKeyField;
 import com.speedment.runtime.core.manager.Manager;
-
 import javax.annotation.Generated;
 
 /**

@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.core.field.method;
 
-import javax.annotation.Generated;
 import java.util.function.ToIntFunction;
+import javax.annotation.Generated;
 
 /**
  * A short-cut functional reference to the {@code getXXX(value)} method for a

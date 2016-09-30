@@ -17,9 +17,8 @@
 package com.speedment.runtime.core.field.method;
 
 import com.speedment.runtime.core.field.trait.HasCharValue;
-
-import javax.annotation.Generated;
 import java.util.function.UnaryOperator;
+import javax.annotation.Generated;
 
 /**
  * Represents a set-operation with all the metadata contained.

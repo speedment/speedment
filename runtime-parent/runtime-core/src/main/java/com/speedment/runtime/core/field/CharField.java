@@ -18,7 +18,6 @@ package com.speedment.runtime.core.field;
 
 import com.speedment.runtime.core.field.trait.HasCharValue;
 import com.speedment.runtime.core.field.trait.HasComparableOperators;
-
 import javax.annotation.Generated;
 
 /**

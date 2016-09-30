@@ -20,7 +20,6 @@ import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.core.field.predicate.PredicateType;
 import com.speedment.runtime.core.field.trait.HasDoubleValue;
 import com.speedment.runtime.core.internal.field.predicate.AbstractFieldPredicate;
-
 import javax.annotation.Generated;
 
 /**

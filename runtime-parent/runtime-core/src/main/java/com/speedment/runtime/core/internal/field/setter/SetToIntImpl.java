@@ -18,9 +18,7 @@ package com.speedment.runtime.core.internal.field.setter;
 
 import com.speedment.runtime.core.field.method.SetToInt;
 import com.speedment.runtime.core.field.trait.HasIntValue;
-
 import javax.annotation.Generated;
-
 import static java.util.Objects.requireNonNull;
 
 /**

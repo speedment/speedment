@@ -20,7 +20,6 @@ import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.field.DoubleField;
 import com.speedment.runtime.core.field.DoubleForeignKeyField;
 import com.speedment.runtime.core.manager.Manager;
-
 import javax.annotation.Generated;
 
 /**

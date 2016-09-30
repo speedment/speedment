@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.core.internal.field;
 
-import com.speedment.runtime.typemapper.TypeMapper;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.field.ByteField;
 import com.speedment.runtime.core.field.method.ByteGetter;
 import com.speedment.runtime.core.field.method.ByteSetter;
@@ -29,13 +29,10 @@ import com.speedment.runtime.core.internal.field.predicate.bytes.ByteEqualPredic
 import com.speedment.runtime.core.internal.field.predicate.bytes.ByteGreaterOrEqualPredicate;
 import com.speedment.runtime.core.internal.field.predicate.bytes.ByteGreaterThanPredicate;
 import com.speedment.runtime.core.internal.field.predicate.bytes.ByteInPredicate;
-
-import javax.annotation.Generated;
+import com.speedment.runtime.typemapper.TypeMapper;
 import java.util.Set;
 import java.util.function.Predicate;
-
-import static java.util.Objects.requireNonNull;
-import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**

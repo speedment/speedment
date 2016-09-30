@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.core.internal.field;
 
-import com.speedment.runtime.typemapper.TypeMapper;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.field.FloatField;
 import com.speedment.runtime.core.field.FloatForeignKeyField;
 import com.speedment.runtime.core.field.method.BackwardFinder;
@@ -36,13 +36,10 @@ import com.speedment.runtime.core.internal.field.predicate.floats.FloatGreaterTh
 import com.speedment.runtime.core.internal.field.predicate.floats.FloatInPredicate;
 import com.speedment.runtime.core.internal.field.streamer.BackwardFinderImpl;
 import com.speedment.runtime.core.manager.Manager;
-
-import javax.annotation.Generated;
+import com.speedment.runtime.typemapper.TypeMapper;
 import java.util.Set;
 import java.util.function.Predicate;
-
-import static java.util.Objects.requireNonNull;
-import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**

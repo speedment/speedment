@@ -17,7 +17,6 @@
 package com.speedment.runtime.core.field.method;
 
 import javax.annotation.Generated;
-
 import static java.util.Objects.requireNonNull;
 
 /**
