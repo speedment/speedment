@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
     
     <parent>
-        <groupId>com.speedment.plugin</groupId>
+        <groupId>com.speedment.plugins</groupId>
         <artifactId>plugin-parent</artifactId>
         <version>3.0.1-SNAPSHOT</version>
     </parent>
