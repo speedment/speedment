@@ -46,6 +46,13 @@ public interface Manager<ENTITY> {
      */
     ENTITY entityCreate();
 
+    /**
+     * Returns an {@link EntityCreator} that when its
+     * {@link EntityCreator#get()} method is called, will produce the same
+     * result as {@link Manager#entityCreate() }
+     *
+     * @return an EntityCreator
+     */
     EntityCreator<ENTITY> entityCreator();
 
     /**
@@ -57,6 +64,13 @@ public interface Manager<ENTITY> {
      */
     ENTITY entityCopy(ENTITY source);
 
+    /**
+     * Returns an {@link EntityCopier} that when its
+     * {@link EntityCopier#apply(java.lang.Object) } method is called, will
+     * produce the same result as {@link Manager#entityCopy(java.lang.Object) }
+     *
+     * @return an EntityCreator
+     */
     EntityCopier<ENTITY> entityCopier();
 
     /**
@@ -205,6 +219,13 @@ public interface Manager<ENTITY> {
      */
     ENTITY persist(ENTITY entity) throws SpeedmentException;
 
+    /**
+     * Returns a {@link Persister} that when its
+     * {@link Persister#apply(java.lang.Object) } method is called, will produce
+     * the same result as {@link #persist(java.lang.Object) }
+     *
+     * @return a Persister
+     */
     Persister<ENTITY> persister();
 
     /**
@@ -232,6 +253,13 @@ public interface Manager<ENTITY> {
      */
     ENTITY update(ENTITY entity) throws SpeedmentException;
 
+    /**
+     * Returns an {@link Updater} that when its
+     * {@link Persister#apply(java.lang.Object) } method is called, will produce
+     * the same result as {@link #update(java.lang.Object) }
+     *
+     * @return an Updater
+     */
     Updater<ENTITY> updater();
 
     /**
@@ -248,6 +276,13 @@ public interface Manager<ENTITY> {
      */
     ENTITY remove(ENTITY entity) throws SpeedmentException;
 
+    /**
+     * Returns a {@link Remover} that when its
+     * {@link Persister#apply(java.lang.Object) } method is called, will produce
+     * the same result as {@link #remove(java.lang.Object) }
+     *
+     * @return a Remover
+     */
     Remover<ENTITY> remover();
 
 }

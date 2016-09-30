@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.config.identifier;
 
-import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.trait.HasColumnName;
 import com.speedment.runtime.config.identifier.trait.HasDbmsName;
 import com.speedment.runtime.config.identifier.trait.HasSchemaName;
@@ -31,16 +30,17 @@ import com.speedment.runtime.config.util.DocumentDbUtil;
  * To find the actual documents referred to by the identifier, the following
  * utility methods can be used:
  * <ul>
- * <li>{@link DocumentDbUtil#referencedColumn(Project, ColumnIdentifier)}
- * <li>{@link DocumentDbUtil#referencedTable(Project, ColumnIdentifier)}
- * <li>{@link DocumentDbUtil#referencedSchema(Project, ColumnIdentifier)}
- * <li>{@link DocumentDbUtil#referencedDbms(Project, ColumnIdentifier)}
+ * <li>DocumentDbUtil#referencedColumn(Project, ColumnIdentifier)
+ * <li>DocumentDbUtil#referencedTable(Project, Project, ColumnIdentifier)
+ * <li>DocumentDbUtil#referencedSchema(Project, Project, ColumnIdentifier)
+ * <li>DocumentDbUtil#referencedDbms(Project, ColumnIdentifier)
  * </ul>
  *
  * @param <ENTITY> the entity type
  *
  * @author Emil Forslund
  * @since 2.3
+ * @see DocumentDbUtil
  */
 public interface ColumnIdentifier<ENTITY> extends
     HasDbmsName,
