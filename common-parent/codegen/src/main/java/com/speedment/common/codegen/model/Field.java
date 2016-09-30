@@ -35,9 +35,15 @@ import java.lang.reflect.Type;
  * @author Emil Forslund
  * @since  2.0
  */
-public interface Field extends HasCopy<Field>, HasCall<Field>, HasName<Field>,
-    HasType<Field>, HasJavadoc<Field>, HasValue<Field>, HasAnnotationUsage<Field>,
-    FieldModifier<Field> {
+public interface Field extends 
+        HasCopy<Field>, 
+        HasCall<Field>, 
+        HasName<Field>,
+        HasType<Field>, 
+        HasJavadoc<Field>, 
+        HasValue<Field>, 
+        HasAnnotationUsage<Field>,
+        FieldModifier<Field> {
 
     /**
      * Creates a new instance implementing this interface by using the default

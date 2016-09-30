@@ -30,8 +30,13 @@ import com.speedment.common.codegen.model.trait.HasName;
  * @author Emil Forslund
  * @since  2.0
  */
-public interface File extends HasCopy<File>, HasName<File>,
-    HasJavadoc<File>, HasImports<File>, HasClasses<File>, HasCall<File> {
+public interface File extends 
+        HasCopy<File>, 
+        HasName<File>,
+        HasJavadoc<File>, 
+        HasImports<File>, 
+        HasClasses<File>, 
+        HasCall<File> {
 
     /**
      * Creates a new instance implementing this interface by using the default
