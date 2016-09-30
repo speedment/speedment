@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  * Various utility methods for transcoding and decoding documents into JSON.

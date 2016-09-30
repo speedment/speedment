@@ -346,7 +346,7 @@ public final class ConfigFileHelper {
                 Files.createDirectories(parent);
             }
 
-            DocumentTranscoder.save(project, Json::toJson);
+            DocumentTranscoder.save(project, path, Json::toJson);
 
             final String absolute = file.getAbsolutePath();
             Settings.inst().set("project_location", absolute);
