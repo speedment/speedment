@@ -45,9 +45,6 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-Description>
-                            The code generating parts of Speedment.
-                        </Bundle-Description>
                         <Export-Package>
                             com.speedment.generator.core.exception.*,
                             com.speedment.generator.core.translator.*,

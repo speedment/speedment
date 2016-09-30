@@ -41,6 +41,13 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Export-Package>
+                            com.speedment.plugins.enums.*
+                        </Export-Package>
+                    </instructions>
+                </configuration>
             </plugin>
         </plugins>
     </build>
