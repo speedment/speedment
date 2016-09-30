@@ -23,7 +23,6 @@ import com.speedment.runtime.core.field.method.BackwardFinder;
 import com.speedment.runtime.core.field.method.CharGetter;
 import com.speedment.runtime.core.field.method.CharSetter;
 import com.speedment.runtime.core.field.method.FindFrom;
-import com.speedment.runtime.core.field.method.Finder;
 import com.speedment.runtime.core.field.predicate.FieldPredicate;
 import com.speedment.runtime.core.field.predicate.Inclusion;
 import com.speedment.runtime.core.internal.field.comparator.CharFieldComparator;
@@ -57,16 +56,14 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
     private final CharGetter<ENTITY> getter;
     private final CharSetter<ENTITY> setter;
     private final CharField<FK_ENTITY, ?> referenced;
-    private final Finder<ENTITY, FK_ENTITY> finder;
     private final TypeMapper<D, Character> typeMapper;
     private final boolean unique;
     
-    public CharForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, CharGetter<ENTITY> getter, CharSetter<ENTITY> setter, CharField<FK_ENTITY, ?> referenced, Finder<ENTITY, FK_ENTITY> finder, TypeMapper<D, Character> typeMapper, boolean unique) {
+    public CharForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, CharGetter<ENTITY> getter, CharSetter<ENTITY> setter, CharField<FK_ENTITY, ?> referenced, TypeMapper<D, Character> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
-        this.finder     = requireNonNull(finder);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
     }

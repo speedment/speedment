@@ -23,7 +23,6 @@ import com.speedment.runtime.core.field.method.BackwardFinder;
 import com.speedment.runtime.core.field.method.DoubleGetter;
 import com.speedment.runtime.core.field.method.DoubleSetter;
 import com.speedment.runtime.core.field.method.FindFrom;
-import com.speedment.runtime.core.field.method.Finder;
 import com.speedment.runtime.core.field.predicate.FieldPredicate;
 import com.speedment.runtime.core.field.predicate.Inclusion;
 import com.speedment.runtime.core.internal.field.comparator.DoubleFieldComparator;
@@ -57,16 +56,14 @@ public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Do
     private final DoubleGetter<ENTITY> getter;
     private final DoubleSetter<ENTITY> setter;
     private final DoubleField<FK_ENTITY, ?> referenced;
-    private final Finder<ENTITY, FK_ENTITY> finder;
     private final TypeMapper<D, Double> typeMapper;
     private final boolean unique;
     
-    public DoubleForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, DoubleGetter<ENTITY> getter, DoubleSetter<ENTITY> setter, DoubleField<FK_ENTITY, ?> referenced, Finder<ENTITY, FK_ENTITY> finder, TypeMapper<D, Double> typeMapper, boolean unique) {
+    public DoubleForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, DoubleGetter<ENTITY> getter, DoubleSetter<ENTITY> setter, DoubleField<FK_ENTITY, ?> referenced, TypeMapper<D, Double> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
-        this.finder     = requireNonNull(finder);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
     }

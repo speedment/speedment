@@ -21,7 +21,6 @@ import com.speedment.runtime.core.field.LongField;
 import com.speedment.runtime.core.field.LongForeignKeyField;
 import com.speedment.runtime.core.field.method.BackwardFinder;
 import com.speedment.runtime.core.field.method.FindFrom;
-import com.speedment.runtime.core.field.method.Finder;
 import com.speedment.runtime.core.field.method.LongGetter;
 import com.speedment.runtime.core.field.method.LongSetter;
 import com.speedment.runtime.core.field.predicate.FieldPredicate;
@@ -57,16 +56,14 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     private final LongGetter<ENTITY> getter;
     private final LongSetter<ENTITY> setter;
     private final LongField<FK_ENTITY, ?> referenced;
-    private final Finder<ENTITY, FK_ENTITY> finder;
     private final TypeMapper<D, Long> typeMapper;
     private final boolean unique;
     
-    public LongForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, LongGetter<ENTITY> getter, LongSetter<ENTITY> setter, LongField<FK_ENTITY, ?> referenced, Finder<ENTITY, FK_ENTITY> finder, TypeMapper<D, Long> typeMapper, boolean unique) {
+    public LongForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, LongGetter<ENTITY> getter, LongSetter<ENTITY> setter, LongField<FK_ENTITY, ?> referenced, TypeMapper<D, Long> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
-        this.finder     = requireNonNull(finder);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
     }

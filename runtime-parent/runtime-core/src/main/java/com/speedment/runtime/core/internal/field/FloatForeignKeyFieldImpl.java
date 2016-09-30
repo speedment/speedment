@@ -21,7 +21,6 @@ import com.speedment.runtime.core.field.FloatField;
 import com.speedment.runtime.core.field.FloatForeignKeyField;
 import com.speedment.runtime.core.field.method.BackwardFinder;
 import com.speedment.runtime.core.field.method.FindFrom;
-import com.speedment.runtime.core.field.method.Finder;
 import com.speedment.runtime.core.field.method.FloatGetter;
 import com.speedment.runtime.core.field.method.FloatSetter;
 import com.speedment.runtime.core.field.predicate.FieldPredicate;
@@ -57,16 +56,14 @@ public final class FloatForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Flo
     private final FloatGetter<ENTITY> getter;
     private final FloatSetter<ENTITY> setter;
     private final FloatField<FK_ENTITY, ?> referenced;
-    private final Finder<ENTITY, FK_ENTITY> finder;
     private final TypeMapper<D, Float> typeMapper;
     private final boolean unique;
     
-    public FloatForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, FloatGetter<ENTITY> getter, FloatSetter<ENTITY> setter, FloatField<FK_ENTITY, ?> referenced, Finder<ENTITY, FK_ENTITY> finder, TypeMapper<D, Float> typeMapper, boolean unique) {
+    public FloatForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, FloatGetter<ENTITY> getter, FloatSetter<ENTITY> setter, FloatField<FK_ENTITY, ?> referenced, TypeMapper<D, Float> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
-        this.finder     = requireNonNull(finder);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
     }

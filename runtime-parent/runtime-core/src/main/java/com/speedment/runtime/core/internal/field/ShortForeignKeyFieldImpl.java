@@ -21,7 +21,6 @@ import com.speedment.runtime.core.field.ShortField;
 import com.speedment.runtime.core.field.ShortForeignKeyField;
 import com.speedment.runtime.core.field.method.BackwardFinder;
 import com.speedment.runtime.core.field.method.FindFrom;
-import com.speedment.runtime.core.field.method.Finder;
 import com.speedment.runtime.core.field.method.ShortGetter;
 import com.speedment.runtime.core.field.method.ShortSetter;
 import com.speedment.runtime.core.field.predicate.FieldPredicate;
@@ -57,16 +56,14 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Sho
     private final ShortGetter<ENTITY> getter;
     private final ShortSetter<ENTITY> setter;
     private final ShortField<FK_ENTITY, ?> referenced;
-    private final Finder<ENTITY, FK_ENTITY> finder;
     private final TypeMapper<D, Short> typeMapper;
     private final boolean unique;
     
-    public ShortForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, ShortGetter<ENTITY> getter, ShortSetter<ENTITY> setter, ShortField<FK_ENTITY, ?> referenced, Finder<ENTITY, FK_ENTITY> finder, TypeMapper<D, Short> typeMapper, boolean unique) {
+    public ShortForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, ShortGetter<ENTITY> getter, ShortSetter<ENTITY> setter, ShortField<FK_ENTITY, ?> referenced, TypeMapper<D, Short> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
-        this.finder     = requireNonNull(finder);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
     }

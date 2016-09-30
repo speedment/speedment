@@ -23,7 +23,6 @@ import com.speedment.runtime.core.field.method.BackwardFinder;
 import com.speedment.runtime.core.field.method.ByteGetter;
 import com.speedment.runtime.core.field.method.ByteSetter;
 import com.speedment.runtime.core.field.method.FindFrom;
-import com.speedment.runtime.core.field.method.Finder;
 import com.speedment.runtime.core.field.predicate.FieldPredicate;
 import com.speedment.runtime.core.field.predicate.Inclusion;
 import com.speedment.runtime.core.internal.field.comparator.ByteFieldComparator;
@@ -57,16 +56,14 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Byte
     private final ByteGetter<ENTITY> getter;
     private final ByteSetter<ENTITY> setter;
     private final ByteField<FK_ENTITY, ?> referenced;
-    private final Finder<ENTITY, FK_ENTITY> finder;
     private final TypeMapper<D, Byte> typeMapper;
     private final boolean unique;
     
-    public ByteForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, ByteGetter<ENTITY> getter, ByteSetter<ENTITY> setter, ByteField<FK_ENTITY, ?> referenced, Finder<ENTITY, FK_ENTITY> finder, TypeMapper<D, Byte> typeMapper, boolean unique) {
+    public ByteForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, ByteGetter<ENTITY> getter, ByteSetter<ENTITY> setter, ByteField<FK_ENTITY, ?> referenced, TypeMapper<D, Byte> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
-        this.finder     = requireNonNull(finder);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
     }

@@ -21,7 +21,6 @@ import com.speedment.runtime.core.field.IntField;
 import com.speedment.runtime.core.field.IntForeignKeyField;
 import com.speedment.runtime.core.field.method.BackwardFinder;
 import com.speedment.runtime.core.field.method.FindFrom;
-import com.speedment.runtime.core.field.method.Finder;
 import com.speedment.runtime.core.field.method.IntGetter;
 import com.speedment.runtime.core.field.method.IntSetter;
 import com.speedment.runtime.core.field.predicate.FieldPredicate;
@@ -57,16 +56,14 @@ public final class IntForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements IntFi
     private final IntGetter<ENTITY> getter;
     private final IntSetter<ENTITY> setter;
     private final IntField<FK_ENTITY, ?> referenced;
-    private final Finder<ENTITY, FK_ENTITY> finder;
     private final TypeMapper<D, Integer> typeMapper;
     private final boolean unique;
     
-    public IntForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, IntGetter<ENTITY> getter, IntSetter<ENTITY> setter, IntField<FK_ENTITY, ?> referenced, Finder<ENTITY, FK_ENTITY> finder, TypeMapper<D, Integer> typeMapper, boolean unique) {
+    public IntForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, IntGetter<ENTITY> getter, IntSetter<ENTITY> setter, IntField<FK_ENTITY, ?> referenced, TypeMapper<D, Integer> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
-        this.finder     = requireNonNull(finder);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
     }
