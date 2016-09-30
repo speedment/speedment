@@ -36,8 +36,8 @@
     </description>
     
     <modules>
-        <module>speedment</module>
-        <module>speedment-all</module>
+        <module>runtime</module>
+        <module>runtime-deploy</module>
         <module>maven-plugin</module>
     </modules>
     
