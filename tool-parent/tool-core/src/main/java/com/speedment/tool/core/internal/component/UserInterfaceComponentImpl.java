@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.core.internal.component;
 
+import com.speedment.tool.config.internal.component.DocumentPropertyComponentImpl;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
@@ -34,12 +35,12 @@ import com.speedment.runtime.core.internal.util.Settings;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.tool.core.MainApp;
 import com.speedment.tool.core.brand.Palette;
-import com.speedment.tool.core.component.DocumentPropertyComponent;
+import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.core.component.RuleComponent;
 import com.speedment.tool.core.component.UserInterfaceComponent;
-import com.speedment.tool.core.config.DbmsProperty;
-import com.speedment.tool.core.config.DocumentProperty;
-import com.speedment.tool.core.config.ProjectProperty;
+import com.speedment.tool.config.DbmsProperty;
+import com.speedment.tool.config.DocumentProperty;
+import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.core.internal.brand.SpeedmentBrand;
 import com.speedment.tool.core.internal.notification.NotificationImpl;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;

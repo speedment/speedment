@@ -19,7 +19,7 @@ package com.speedment.runtime.config.trait;
 
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.exception.DatabaseModelException;
+import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.util.TraitUtil.AbstractTraitView;
 import static com.speedment.runtime.config.util.TraitUtil.viewOf;
 
@@ -46,13 +46,13 @@ public interface HasName extends Document, HasMainInterface {
      * Gets the name of this Document. If no name is present, this method might
      * create a name if the parent implements the {@link HasChildren} interface.
      * If it does not and this document is unnamed, an
-     * {@link DatabaseModelException} is called.
+     * {@link SpeedmentConfigException} is called.
      *
      * @return the name of this Document
-     * @throws DatabaseModelException if no name is specified and the parent can't
+     * @throws SpeedmentConfigException if no name is specified and the parent can't
      * generate one
      */
-    default String getName() throws DatabaseModelException {
+    default String getName() throws SpeedmentConfigException {
         final Optional<String> name = getAsString(NAME);
 
         if (name.isPresent()) {
@@ -72,7 +72,7 @@ public interface HasName extends Document, HasMainInterface {
         } else if (this instanceof Project) {
             return Project.class.getSimpleName();
         } else {
-            throw new DatabaseModelException(
+            throw new SpeedmentConfigException(
                 "A name is required for node of type '" + getClass().getSimpleName() + "'."
             );
         }

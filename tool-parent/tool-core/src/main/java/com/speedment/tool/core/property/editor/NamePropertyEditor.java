@@ -18,7 +18,7 @@ package com.speedment.tool.core.property.editor;
 
 
 import com.speedment.runtime.config.Project;
-import com.speedment.tool.core.config.trait.HasNameProperty;
+import com.speedment.tool.config.trait.HasNameProperty;
 import com.speedment.tool.core.property.PropertyEditor;
 import com.speedment.tool.core.property.item.ItemUtil;
 import com.speedment.tool.core.property.item.SimpleTextFieldItem;

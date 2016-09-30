@@ -25,7 +25,7 @@ import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.internal.util.Settings;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import com.speedment.tool.core.component.UserInterfaceComponent;
-import com.speedment.tool.core.config.DbmsProperty;
+import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.core.event.UIEvent;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.internal.util.InjectionLoader;

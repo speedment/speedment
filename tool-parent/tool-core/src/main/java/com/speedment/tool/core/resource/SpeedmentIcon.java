@@ -30,7 +30,7 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasMainInterface;
-import com.speedment.tool.core.config.trait.HasIconPath;
+import com.speedment.tool.config.trait.HasIconPath;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 

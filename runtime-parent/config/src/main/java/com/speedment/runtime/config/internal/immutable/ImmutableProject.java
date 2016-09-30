@@ -19,7 +19,7 @@ package com.speedment.runtime.config.internal.immutable;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.exception.DatabaseModelException;
+import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.config.util.DocumentUtil;
@@ -110,7 +110,7 @@ public final class ImmutableProject extends ImmutableDocument implements Project
         final ImmutableTable table = tablesByName.get(fullName);
         
         if (table == null) {
-            throw new DatabaseModelException(
+            throw new SpeedmentConfigException(
                 "Unable to find table '" + 
                 fullName + 
                 "' in immutable config model."

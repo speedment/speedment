@@ -17,7 +17,7 @@
 package com.speedment.tool.core.property.editor;
 
 
-import com.speedment.tool.core.config.ProjectProperty;
+import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.core.property.PropertyEditor;
 import com.speedment.tool.core.property.item.SimpleTextFieldItem;
 

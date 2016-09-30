@@ -18,7 +18,7 @@ package com.speedment.tool.core.property.editor;
 
 
 import com.speedment.runtime.config.parameter.OrderType;
-import com.speedment.tool.core.config.trait.HasOrderTypeProperty;
+import com.speedment.tool.config.trait.HasOrderTypeProperty;
 import com.speedment.tool.core.property.PropertyEditor;
 import com.speedment.tool.core.property.item.ChoiceBoxItem;
 import com.speedment.tool.core.property.item.ItemUtil;

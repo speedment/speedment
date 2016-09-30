@@ -31,7 +31,7 @@ import com.speedment.plugins.enums.internal.ui.CommaSeparatedStringEditor;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.tool.core.component.PropertyEditorComponent;
-import com.speedment.tool.core.config.ColumnProperty;
+import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.core.internal.component.PropertyEditorComponentImpl;
 
 import static com.speedment.common.injector.State.INITIALIZED;

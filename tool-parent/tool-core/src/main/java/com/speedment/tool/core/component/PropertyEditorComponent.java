@@ -17,7 +17,7 @@
 package com.speedment.tool.core.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.tool.core.config.DocumentProperty;
+import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.core.property.PropertyEditor;
 
 import java.util.function.Supplier;

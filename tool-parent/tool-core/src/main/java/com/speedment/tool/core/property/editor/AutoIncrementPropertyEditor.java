@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.core.property.editor;
 
-import com.speedment.tool.core.config.ColumnProperty;
+import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.core.property.PropertyEditor;
 import com.speedment.tool.core.property.item.ItemUtil;
 import com.speedment.tool.core.property.item.SimpleCheckBoxItem;

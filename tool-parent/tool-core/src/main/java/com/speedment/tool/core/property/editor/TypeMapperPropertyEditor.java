@@ -19,7 +19,7 @@ package com.speedment.tool.core.property.editor;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.core.component.TypeMapperComponent;
 import com.speedment.common.mapstream.MapStream;
-import com.speedment.tool.core.config.ColumnProperty;
+import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.core.exception.SpeedmentToolException;
 import com.speedment.tool.core.property.PropertyEditor;
 import com.speedment.tool.core.property.item.ChoiceBoxItem;

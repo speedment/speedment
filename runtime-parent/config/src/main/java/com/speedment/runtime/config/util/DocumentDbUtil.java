@@ -27,7 +27,7 @@ import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.exception.DatabaseModelException;
+import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 
 import java.util.Optional;
@@ -175,9 +175,9 @@ public final class DocumentDbUtil {
      * 
      * @param column               the column
      * @return                     {@code true} if unique, else {@code false}
-     * @throws DatabaseModelException  if an index or PK could not be traversed
+     * @throws SpeedmentConfigException  if an index or PK could not be traversed
      */
-    public static boolean isUnique(Column column) throws DatabaseModelException {
+    public static boolean isUnique(Column column) throws SpeedmentConfigException {
         final Table table = column.getParentOrThrow();
         
         return
@@ -259,7 +259,7 @@ public final class DocumentDbUtil {
     
     public static Column referencedColumn(Project project, String dbmsName, String schemaName, String tableName, String columnName) {
         return referencedColumnIfPresent(project, dbmsName, schemaName, tableName, columnName)
-            .orElseThrow(() -> new DatabaseModelException(
+            .orElseThrow(() -> new SpeedmentConfigException(
                 "Could not find referenced " + Column.class.getSimpleName() + 
                 " with name '" + columnName + "'."
             ));
@@ -268,7 +268,7 @@ public final class DocumentDbUtil {
     public static Table referencedTable(Project project, String dbmsName, String schemaName, String tableName) {
         return referencedSchema(project, dbmsName, schemaName)
             .tables().filter(table -> tableName.equals(table.getName()))
-            .findAny().orElseThrow(() -> new DatabaseModelException(
+            .findAny().orElseThrow(() -> new SpeedmentConfigException(
                 "Could not find referenced " + Table.class.getSimpleName() + 
                 " with name '" + tableName + "'."
             ));
@@ -277,7 +277,7 @@ public final class DocumentDbUtil {
     public static Schema referencedSchema(Project project, String dbmsName, String schemaName) {
         return referencedDbms(project, dbmsName)
             .schemas().filter(schema -> schemaName.equals(schema.getName()))
-            .findAny().orElseThrow(() -> new DatabaseModelException(
+            .findAny().orElseThrow(() -> new SpeedmentConfigException(
                 "Could not find referenced " + Schema.class.getSimpleName() + 
                 " with name '" + schemaName + "'."
             ));
@@ -286,7 +286,7 @@ public final class DocumentDbUtil {
     public static Dbms referencedDbms(Project project, String dbmsName) {
         return project
             .dbmses().filter(dbms -> dbmsName.equals(dbms.getName()))
-            .findAny().orElseThrow(() -> new DatabaseModelException(
+            .findAny().orElseThrow(() -> new SpeedmentConfigException(
                 "Could not find referenced " + Dbms.class.getSimpleName() + 
                 " with name '" + dbmsName + "'."
             ));

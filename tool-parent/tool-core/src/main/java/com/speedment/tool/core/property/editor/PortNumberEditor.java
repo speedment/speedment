@@ -19,7 +19,7 @@ package com.speedment.tool.core.property.editor;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.util.DatabaseUtil;
-import com.speedment.tool.core.config.DbmsProperty;
+import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.core.property.PropertyEditor;
 import com.speedment.tool.core.property.item.DefaultSpinnerItem;
 import javafx.beans.binding.Bindings;

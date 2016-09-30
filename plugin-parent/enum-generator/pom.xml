@@ -65,6 +65,11 @@
             <artifactId>tool-core</artifactId>
         </dependency>
         
+        <dependency>
+            <groupId>com.speedment.tool</groupId>
+            <artifactId>tool-config</artifactId>
+        </dependency>
+        
         <!-- Test Dependencies -->
         <dependency>
             <groupId>junit</groupId>

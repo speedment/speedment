@@ -17,7 +17,7 @@
 package com.speedment.runtime.config;
 
 
-import com.speedment.runtime.config.exception.DatabaseModelException;
+import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.mutator.DbmsMutator;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.trait.HasAlias;
@@ -67,7 +67,7 @@ public interface Dbms extends
      * @return  the type name
      */
     default String getTypeName() {
-        return getAsString(TYPE_NAME).orElseThrow(() -> new DatabaseModelException(
+        return getAsString(TYPE_NAME).orElseThrow(() -> new SpeedmentConfigException(
             "Every " + Dbms.class.getSimpleName() + 
             " document is required to have the '" + 
             TYPE_NAME + "' attribute."

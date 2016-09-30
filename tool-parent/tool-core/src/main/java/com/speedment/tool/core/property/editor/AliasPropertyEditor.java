@@ -16,7 +16,7 @@
  */
 package com.speedment.tool.core.property.editor;
 
-import com.speedment.tool.core.config.trait.HasAliasProperty;
+import com.speedment.tool.config.trait.HasAliasProperty;
 import com.speedment.tool.core.property.PropertyEditor;
 import com.speedment.tool.core.property.item.DefaultTextFieldItem;
 

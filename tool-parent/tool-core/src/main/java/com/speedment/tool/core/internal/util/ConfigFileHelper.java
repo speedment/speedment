@@ -40,11 +40,11 @@ import com.speedment.runtime.core.internal.util.Settings;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.tool.core.MainApp;
 import com.speedment.tool.core.brand.Palette;
-import com.speedment.tool.core.component.DocumentPropertyComponent;
+import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.component.UserInterfaceComponent.ReuseStage;
-import com.speedment.tool.core.config.DbmsProperty;
-import com.speedment.tool.core.config.ProjectProperty;
+import com.speedment.tool.config.DbmsProperty;
+import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.core.util.OutputUtil;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.stage.FileChooser;
@@ -74,7 +74,7 @@ import static javafx.application.Platform.runLater;
 /**
  *
  * @author  Emil Forslund
- * @since   2.4.0
+ * @since   3.0.0
  */
 @InjectKey(ConfigFileHelper.class)
 public final class ConfigFileHelper {

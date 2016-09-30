@@ -17,7 +17,7 @@
 package com.speedment.runtime.config;
 
 
-import com.speedment.runtime.config.exception.DatabaseModelException;
+import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.mutator.ColumnMutator;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.trait.HasAlias;
@@ -110,7 +110,7 @@ public interface Column extends
         try {
             return Class.forName(name);
         } catch (final ClassNotFoundException ex) {
-            throw new DatabaseModelException("Could not find database type: '" + name + "'.", ex);
+            throw new SpeedmentConfigException("Could not find database type: '" + name + "'.", ex);
         }
     }
 

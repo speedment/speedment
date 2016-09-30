@@ -17,7 +17,7 @@
 package com.speedment.tool.core.event;
 
 import com.speedment.generator.core.event.Event;
-import com.speedment.tool.core.config.DocumentProperty;
+import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.core.property.PropertyEditor;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;

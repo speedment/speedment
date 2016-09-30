@@ -17,7 +17,7 @@
 package com.speedment.plugins.enums.internal.ui;
 
 import com.speedment.plugins.enums.StringToEnumTypeMapper;
-import com.speedment.tool.core.config.ColumnProperty;
+import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.core.property.PropertyEditor;
 import javafx.beans.binding.Bindings;
 

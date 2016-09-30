@@ -17,7 +17,7 @@
 package com.speedment.runtime.config.util;
 
 import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.exception.DatabaseModelException;
+import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.internal.ProjectImpl;
 
 import java.io.IOException;
@@ -27,6 +27,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.Objects.requireNonNull;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -56,9 +57,9 @@ public final class DocumentTranscoder {
      * @param encoder  the encoder to use
      * @return         the JSON representation
      * 
-     * @throws DatabaseModelException  if the inputed object is not valid
+     * @throws SpeedmentConfigException  if the inputed object is not valid
      */
-    public static String save(Project project, Encoder encoder) throws DatabaseModelException {
+    public static String save(Project project, Encoder encoder) throws SpeedmentConfigException {
         if (project == null) {
             return "null";
         } else {
@@ -67,7 +68,7 @@ public final class DocumentTranscoder {
                 root.put(ROOT, project.getData());
                 return encoder.encode(root);
             } catch (final IllegalArgumentException ex) {
-                throw new DatabaseModelException(ex);
+                throw new SpeedmentConfigException(ex);
             }
         }
     }
@@ -79,13 +80,13 @@ public final class DocumentTranscoder {
      * @param encoder   the encoder to use
      * @param location  for the UTF-8 encoded file
      * 
-     * @throws DatabaseModelException if the file could not be saved
+     * @throws SpeedmentConfigException if the file could not be saved
      */
-    public static void save(Project project, Path location, Encoder encoder) throws DatabaseModelException {
+    public static void save(Project project, Path location, Encoder encoder) throws SpeedmentConfigException {
         try {
             Files.write(location, save(project, encoder).getBytes(StandardCharsets.UTF_8));
         } catch (final IOException ex) {
-            throw new DatabaseModelException(
+            throw new SpeedmentConfigException(
                 "Could not save json-file to path '" + location + "'.", ex
             );
         }
@@ -98,9 +99,9 @@ public final class DocumentTranscoder {
      * @param decoder   the decoder to use
      * @return          the parsed project
      * 
-     * @throws DatabaseModelException  if the file couldn't be loaded
+     * @throws SpeedmentConfigException  if the file couldn't be loaded
      */
-    public static Project load(String json, Decoder decoder) throws DatabaseModelException {
+    public static Project load(String json, Decoder decoder) throws SpeedmentConfigException {
         requireNonNull(json, "No json value specified.");
         try {
             final Map<String, Object> root = decoder.decode(json);
@@ -110,7 +111,7 @@ public final class DocumentTranscoder {
             
             return new ProjectImpl(data);
         } catch (final Exception ex) {
-            throw new DatabaseModelException(ex);
+            throw new SpeedmentConfigException(ex);
         }
     }
 
@@ -121,14 +122,14 @@ public final class DocumentTranscoder {
      * @param decoder   the decoder to use
      * @return          that was loaded
      * 
-     * @throws DatabaseModelException if the file could not be loaded
+     * @throws SpeedmentConfigException if the file could not be loaded
      */
-    public static Project load(Path location, Decoder decoder) throws DatabaseModelException {
+    public static Project load(Path location, Decoder decoder) throws SpeedmentConfigException {
         try {
             final byte[] content = Files.readAllBytes(location);
             return load(new String(content, StandardCharsets.UTF_8), decoder);
         } catch (final IOException ex) {
-            throw new DatabaseModelException(
+            throw new SpeedmentConfigException(
                 "Could not load json-file from path '" + location + "'.", ex
             );
         }
