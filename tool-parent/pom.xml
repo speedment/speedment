@@ -36,6 +36,7 @@
     </description>
     
     <modules>
+        <module>tool-config</module>
         <module>tool-core</module>
         <module>tool-all</module>
     </modules>

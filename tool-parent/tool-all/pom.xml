@@ -42,6 +42,12 @@
         <dependencies>
             <dependency>
                 <groupId>com.speedment.tool</groupId>
+                <artifactId>tool-config</artifactId>
+                <version>${speedment.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.speedment.tool</groupId>
                 <artifactId>tool-core</artifactId>
                 <version>${speedment.version}</version>
             </dependency>

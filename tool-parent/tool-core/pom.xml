@@ -59,7 +59,7 @@
                         </Export-Package>
                     </instructions>
                 </configuration>
-            </plugin>  
+            </plugin>
             
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -111,6 +111,12 @@
         <dependency>
             <groupId>com.speedment.generator</groupId>
             <artifactId>generator-core</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.tool</groupId>
+            <artifactId>tool-config</artifactId>
+            <version>${speedment.version}</version>
         </dependency>
         	        
         <!-- LICENSE INFORMATION
