@@ -3,6 +3,7 @@
 **.versionsBackup
 **/nbproject/
 **/nbactions.xml
+**/dependency-reduced-pom.xml
 **.iml
 /target/
 /.sonar

@@ -90,73 +90,8 @@
     <dependencies>
         <dependency>
             <groupId>com.speedment</groupId>
-            <artifactId>runtime</artifactId>
+            <artifactId>tool</artifactId>
             <version>${speedment.version}</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>codegen</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>rest</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>tuple</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>invariant</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>mapstream</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>function</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>json</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>lazy</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>logger</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.speedment.generator</groupId>
-            <artifactId>generator-core</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.tool</groupId>
-            <artifactId>tool-config</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.tool</groupId>
-            <artifactId>tool-propertyeditor</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.tool</groupId>
-            <artifactId>tool-core</artifactId>
         </dependency>
 
         <dependency>

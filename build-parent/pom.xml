@@ -38,6 +38,10 @@
     <modules>
         <module>runtime</module>
         <module>runtime-deploy</module>
+        <module>generator</module>
+        <module>generator-deploy</module>
+        <module>tool</module>
+        <module>tool-deploy</module>
         <module>maven-plugin</module>
     </modules>
     
@@ -76,27 +80,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>maven-bundle-plugin</artifactId>
-                    <configuration>
-<!--                        <instructions>
-                            <Export-Package>
-                                com.speedment.runtime.config.*,
-                                com.speedment.runtime.core.*
-                            </Export-Package>
-                            <Import-Package>
-                                com.speedment.runtime.config.*,
-                                com.speedment.runtime.core.*
-                            </Import-Package>
-                        </instructions>-->
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
 </project>
