@@ -35,12 +35,10 @@ import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
-import com.speedment.runtime.core.db.MetaResult;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.db.SqlRunnable;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.field.Field;
-import com.speedment.runtime.core.internal.manager.metaresult.SqlMetaResultImpl;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.ReferenceStreamBuilder;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.PipelineImpl;
@@ -160,17 +158,17 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
 
     @Override
     public ENTITY persist(ENTITY entity) throws SpeedmentException {
-        return persistHelp(entity, Optional.empty());
+        return persistHelp(entity);
     }
 
     @Override
     public ENTITY update(ENTITY entity) throws SpeedmentException {
-        return updateHelper(entity, Optional.empty());
+        return updateHelper(entity);
     }
 
     @Override
     public ENTITY remove(ENTITY entity) throws SpeedmentException {
-        return removeHelper(entity, Optional.empty());
+        return removeHelper(entity);
     }
 
     private Stream<ENTITY> nativeStream(StreamDecorator decorator) {
@@ -325,7 +323,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
         return dbValue;
     }
 
-    private ENTITY persistHelp(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
+    private ENTITY persistHelp(ENTITY entity) throws SpeedmentException {
         final List<Column> cols = persistColumns(entity);
         String sb = "INSERT INTO " + sqlTableReference() +
             " (" + persistColumnList(cols) + ")" +
@@ -368,11 +366,11 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
             };
         };
 
-        executeInsert(entity, sb, values, generatedFields.keySet(), generatedKeyconsumer, listener);
+        executeInsert(entity, sb, values, generatedFields.keySet(), generatedKeyconsumer);
         return entity;
     }
 
-    private ENTITY updateHelper(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
+    private ENTITY updateHelper(ENTITY entity) throws SpeedmentException {
         assertHasPrimaryKeyColumns();
         String sb = "UPDATE " + sqlTableReference() + " SET " +
             sqlColumnList(n -> n + " = ?") +
@@ -387,11 +385,11 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
             .map(f -> f.getter().apply(entity))
             .forEachOrdered(values::add);
 
-        executeUpdate(sb, values, listener);
+        executeUpdate(sb, values);
         return entity;
     }
 
-    private ENTITY removeHelper(ENTITY entity, Optional<Consumer<MetaResult<ENTITY>>> listener) throws SpeedmentException {
+    private ENTITY removeHelper(ENTITY entity) throws SpeedmentException {
         assertHasPrimaryKeyColumns();
         String sb = "DELETE FROM " + sqlTableReference() +
             " WHERE " +
@@ -401,7 +399,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
             .map(f -> toDatabaseType(f, entity))
             .collect(toList());
 
-        executeDelete(sb, values, listener);
+        executeDelete(sb, values);
         return entity;
     }
 
@@ -461,10 +459,9 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
         final String sql,
         final List<Object> values,
         final Collection<Field<ENTITY>> generatedFields,
-        final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer,
-        final Optional<Consumer<MetaResult<ENTITY>>> listener
+        final Function<ENTITY, Consumer<List<Long>>> generatedKeyconsumer
     ) throws SpeedmentException {
-        executeHelper(sql, values, listener,
+        executeHelper(sql, values, 
             () -> dbmsOperationHandler().executeInsert(
                 dbms, sql, values, generatedFields, generatedKeyconsumer.apply(entity)
             )
@@ -473,43 +470,28 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
 
     private void executeUpdate(
         final String sql,
-        final List<Object> values,
-        final Optional<Consumer<MetaResult<ENTITY>>> listener
+        final List<Object> values
     ) throws SpeedmentException {
-        executeHelper(sql, values, listener, () -> dbmsOperationHandler().executeUpdate(dbms, sql, values));
+        executeHelper(sql, values, () -> dbmsOperationHandler().executeUpdate(dbms, sql, values));
     }
 
     private void executeDelete(
         final String sql,
-        final List<Object> values,
-        final Optional<Consumer<MetaResult<ENTITY>>> listener
+        final List<Object> values
     ) throws SpeedmentException {
-        executeHelper(sql, values, listener, () -> dbmsOperationHandler().executeDelete(dbms, sql, values));
+        executeHelper(sql, values,  () -> dbmsOperationHandler().executeDelete(dbms, sql, values));
     }
 
     private void executeHelper(
         String sql,
         List<Object> values,
-        Optional<Consumer<MetaResult<ENTITY>>> listener,
         SqlRunnable action
     ) throws SpeedmentException {
-        requireNonNulls(sql, values, listener, action);
-
-        final SqlMetaResultImpl<ENTITY> meta = listener.isPresent()
-            ? new SqlMetaResultImpl<ENTITY>()
-            .setQuery(sql)
-            .setParameters(values)
-            : null;
-
+        requireNonNulls(sql, values, action);
         try {
             action.run();
         } catch (final SQLException sqle) {
-            if (meta != null) {
-                meta.setThrowable(sqle);
-            }
             throw new SpeedmentException(sqle);
-        } finally {
-            listener.ifPresent(c -> c.accept(meta));
         }
     }
 
