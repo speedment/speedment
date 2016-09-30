@@ -36,9 +36,9 @@
     </description>
     
     <modules>
-        <module>config</module>
-        <module>typemapper</module>
-        <module>core</module>
+        <module>runtime-config</module>
+        <module>runtime-typemapper</module>
+        <module>runtime-core</module>
         <module>runtime-all</module>
     </modules>
     
