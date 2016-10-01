@@ -17,6 +17,7 @@
 package com.speedment.runtime.config.internal.identifier;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import java.util.Objects;
 
 /**
  *
@@ -25,11 +26,13 @@ import com.speedment.runtime.config.identifier.TableIdentifier;
 public final class TableIdentifierImpl<ENTITY> implements TableIdentifier<ENTITY> {
 
     private final String dbmsName, schemaName, tableName;
+    private final int hashCode;
 
     public TableIdentifierImpl(String dbmsName, String schemaName, String tableName) {
         this.dbmsName = dbmsName;
         this.schemaName = schemaName;
         this.tableName = tableName;
+        this.hashCode = privateHashCode();
     }
 
     @Override
@@ -45,6 +48,47 @@ public final class TableIdentifierImpl<ENTITY> implements TableIdentifier<ENTITY
     @Override
     public String getTableName() {
         return tableName;
+    }
+
+    @Override
+    public int hashCode() {
+        return hashCode;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        if (this.hashCode != obj.hashCode()) {
+            return false;
+        }
+        final TableIdentifierImpl<?> other = (TableIdentifierImpl<?>) obj;
+
+        if (!Objects.equals(this.dbmsName, other.dbmsName)) {
+            return false;
+        }
+        if (!Objects.equals(this.schemaName, other.schemaName)) {
+            return false;
+        }
+        if (!Objects.equals(this.tableName, other.tableName)) {
+            return false;
+        }
+        return true;
+    }
+
+    private int privateHashCode() {
+        int hash = 5;
+        hash = 53 * hash + Objects.hashCode(this.dbmsName);
+        hash = 53 * hash + Objects.hashCode(this.schemaName);
+        hash = 53 * hash + Objects.hashCode(this.tableName);
+        return hash;
     }
 
 }
