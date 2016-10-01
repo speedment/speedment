@@ -30,7 +30,7 @@ import java.util.stream.Stream;
  */
 public class SqlStreamSupplierComponentImpl implements SqlStreamSupplierComponent {
 
-    private final Map<TableIdentifier, SqlStreamSupplierComponent.Support> supportMap;
+    private final Map<TableIdentifier, SqlStreamSupplierComponentImpl> supportMap;
 
     public SqlStreamSupplierComponentImpl() {
         this.supportMap = new ConcurrentHashMap<>();
@@ -38,12 +38,16 @@ public class SqlStreamSupplierComponentImpl implements SqlStreamSupplierComponen
 
     @Override
     public <ENTITY> Stream<ENTITY> stream(TableIdentifier<ENTITY> tableIdentifier, StreamDecorator decorator) {
-        final SqlStreamSupplierComponent.Support support = supportMap.computeIfAbsent(tableIdentifier, this::makeSupport);
+        final SqlStreamSupplierComponentImpl support = supportMap.computeIfAbsent(tableIdentifier, this::makeSupport);
 
         return Stream.empty(); // Todo: Generate stream.
     }
 
-    private SqlStreamSupplierComponent.Support makeSupport(TableIdentifier<?> tableIdentifier) {
+    private SqlStreamSupplierComponentImpl makeSupport(TableIdentifier<?> tableIdentifier) {
+        
+        SqlStreamSupplierComponent.Support externalSupport = injector....find()
+        SqlStreamSupplierComponentImpl support = new SqlStreamSupplierComponentImplSupport(externalSupport);
+        
         // Calculate stuff from the TableIdentifier and some other components...
         return null;
     }

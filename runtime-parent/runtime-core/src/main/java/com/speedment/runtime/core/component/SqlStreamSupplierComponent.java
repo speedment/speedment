@@ -13,9 +13,7 @@ import java.sql.ResultSet;
  */
 public interface SqlStreamSupplierComponent extends StreamSupplierComponent {
 
-    public interface Support<ENTITY> {
-
-        String getSql();
+    public interface Support<ENTITY> {        
         
         ENTITY from(ResultSet rs);
 
