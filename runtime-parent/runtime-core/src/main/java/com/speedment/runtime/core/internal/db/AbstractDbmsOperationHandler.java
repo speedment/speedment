@@ -62,9 +62,9 @@ import static java.util.Objects.requireNonNull;
 public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandler {
 
     private static final Logger LOGGER = LoggerManager.getLogger(AbstractDbmsOperationHandler.class);
-    public static final String LOGGER_INSERT_NAME = AbstractDbmsOperationHandler.class.getName() + "#INSERT";
-    public static final String LOGGER_UPDATE_NAME = AbstractDbmsOperationHandler.class.getName() + "#UPDATE";
-    public static final String LOGGER_DELETE_NAME = AbstractDbmsOperationHandler.class.getName() + "#DELETE";
+    public static final String LOGGER_INSERT_NAME = "#INSERT";
+    public static final String LOGGER_UPDATE_NAME = "#UPDATE";
+    public static final String LOGGER_DELETE_NAME = "#DELETE";
     protected static final Logger LOGGER_INSERT = LoggerManager.getLogger(LOGGER_INSERT_NAME);
     protected static final Logger LOGGER_UPDATE = LoggerManager.getLogger(LOGGER_UPDATE_NAME);
     protected static final Logger LOGGER_DELETE = LoggerManager.getLogger(LOGGER_DELETE_NAME);
@@ -142,7 +142,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     }
 
     protected void logOperation(Logger logger, final String sql, final List<?> values) {
-        logger.debug("sql:%s, values:%s", sql, values);
+        logger.debug("%s, values:%s", sql, values);
     }
 
     protected void execute(Dbms dbms, List<? extends SqlStatement> sqlStatementList) throws SQLException {

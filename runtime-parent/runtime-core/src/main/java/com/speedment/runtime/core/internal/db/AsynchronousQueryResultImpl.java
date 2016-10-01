@@ -42,7 +42,7 @@ import static java.util.Objects.requireNonNull;
 public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryResult<T> {
 
     private static final Logger LOGGER = LoggerManager.getLogger(AsynchronousQueryResultImpl.class);
-    public static final String LOGGER_SELECT_NAME = AsynchronousQueryResultImpl.class.getName()+"#SELECT";
+    public static final String LOGGER_SELECT_NAME = "#SELECT";
     private static final Logger LOGGER_SELECT = LoggerManager.getLogger(LOGGER_SELECT_NAME);
 
     private String sql;
@@ -77,7 +77,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
     public Stream<T> stream() {
         setState(State.ESTABLISH);
         try {
-            LOGGER_SELECT.debug("sql:%s, values:%s", getSql(), getValues());
+            LOGGER_SELECT.debug("%s, values:%s", getSql(), getValues());
             connection = connectionSupplier.get();
             connection.setAutoCommit(false);
             ps = connection.prepareStatement(getSql());

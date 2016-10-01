@@ -64,7 +64,7 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
         this.support = createSupport(injector);
         persister = support::persist;
         updater = support::update;
-        updater = support::remove;
+        remover = support::remove;
     }
 
     @ExecuteBefore(RESOLVED)
