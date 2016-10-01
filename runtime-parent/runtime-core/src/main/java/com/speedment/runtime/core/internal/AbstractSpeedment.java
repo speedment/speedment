@@ -27,7 +27,7 @@ import com.speedment.runtime.core.internal.component.DbmsHandlerComponentImpl;
 import com.speedment.runtime.core.internal.component.EntityManagerImpl;
 import com.speedment.runtime.core.internal.component.InfoComponentImpl;
 import com.speedment.runtime.core.internal.component.ManagerComponentImpl;
-import com.speedment.runtime.core.internal.component.NativeStreamSupplierComponentImpl;
+import com.speedment.runtime.core.internal.component.SqlStreamSupplierComponentImpl;
 import com.speedment.runtime.core.internal.component.PasswordComponentImpl;
 import com.speedment.runtime.core.internal.component.PrimaryKeyFactoryComponentImpl;
 import com.speedment.runtime.core.internal.component.ProjectComponentImpl;
@@ -47,13 +47,12 @@ import java.util.Optional;
 public abstract class AbstractSpeedment implements Speedment {
     
     public static InjectBundle include() {
-        return InjectBundle.of(
-            InfoComponentImpl.class,
+        return InjectBundle.of(InfoComponentImpl.class,
             ConnectionPoolComponentImpl.class,
             DbmsHandlerComponentImpl.class,
             EntityManagerImpl.class,            
             ManagerComponentImpl.class,
-            NativeStreamSupplierComponentImpl.class,
+            SqlStreamSupplierComponentImpl.class,
             PasswordComponentImpl.class,
             PrimaryKeyFactoryComponentImpl.class,
             ProjectComponentImpl.class,

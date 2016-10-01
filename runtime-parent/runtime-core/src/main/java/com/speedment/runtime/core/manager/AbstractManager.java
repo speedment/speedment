@@ -30,6 +30,8 @@ import java.util.stream.Stream;
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.injector.State.RESOLVED;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import com.speedment.runtime.core.component.StreamSupplierComponent;
+import com.speedment.runtime.core.stream.StreamDecorator;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -41,7 +43,9 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
-    private ManagerSupport<ENTITY> support;
+    private StreamSupplierComponent streamSupplierComponent;
+    
+    private ManagerSupport<ENTITY> support; // Move to SqlStreamSupplierComponent and CudComponent
     // Hold these fields internally so that exposing methods may be compared by equality
     private final EntityCreator<ENTITY> entityCreator = this::entityCreate;
     private final EntityCopier<ENTITY> entityCopier = this::entityCopy;
@@ -56,6 +60,7 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     final void createSupport(
         Injector injector,
         @WithState(INITIALIZED) ProjectComponent projectComponent,
+        @WithState(INITIALIZED) StreamSupplierComponent streamSupplierComponent,
         @WithState(INITIALIZED) ResultSetMapperComponent resultSetComponent,
         @WithState(INITIALIZED) DbmsHandlerComponent dbmsHandlerComponent) {
 
@@ -65,6 +70,7 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
         persister = support::persist;
         updater = support::update;
         remover = support::remove;
+        this.streamSupplierComponent = streamSupplierComponent;
     }
 
     @ExecuteBefore(RESOLVED)
@@ -72,7 +78,7 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
         @WithState(INITIALIZED) ManagerComponent managerComponent,
         @WithState(INITIALIZED) ProjectComponent projectComponent) {
 
-        requireNonNull(projectComponent); // Must be initialized first.
+        requireNonNull(projectComponent); // Must be initialized first.  // Not really now...!!
         managerComponent.put(this);
     }
 
@@ -89,8 +95,8 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
-    public final Stream<ENTITY> stream() {
-        return support.stream();
+    public Stream<ENTITY> stream(StreamDecorator decorator) {
+        return streamSupplierComponent.stream(getTableIdentifier(), StreamDecorator.identity());
     }
 
     @Override

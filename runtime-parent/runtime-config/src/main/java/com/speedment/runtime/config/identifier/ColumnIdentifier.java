@@ -46,4 +46,10 @@ public interface ColumnIdentifier<ENTITY> extends
     HasDbmsName,
     HasSchemaName,
     HasTableName,
-    HasColumnName {}
+    HasColumnName {
+
+    default TableIdentifier<ENTITY> asTableIdentifier() {
+        return TableIdentifier.of(getDbmsName(), getSchemaName(), getTableName());
+    }
+
+}

@@ -69,7 +69,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
         setValues(values); // requireNonNull in setter
         setRsMapper(rsMapper); // requireNonNull in setter
         this.connectionSupplier = requireNonNull(connectionSupplier);
-        parallelStrategy = ParallelStrategy.DEFAULT;
+        parallelStrategy = ParallelStrategy.computeIntensityDefault();
         setState(State.INIT);
     }
 

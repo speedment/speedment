@@ -17,6 +17,7 @@
 package com.speedment.runtime.core.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.field.trait.HasComparableOperators;
 import com.speedment.runtime.core.stream.StreamDecorator;
 
@@ -33,47 +34,34 @@ import java.util.stream.Stream;
 public interface StreamSupplierComponent {
     
     /**
-     * Does all the preparations required to start serving streams 
-     * before returning. The component must never be called before
-     * this method has returned.
-     */
-    void start();
-    
-    /**
-     * Stops the component, releasing any resources. When this method
-     * returns, the component must never be called again.
-     */
-    void stop();
-
-    /**
      * Basic stream over all entities.
      *
-     * @param <ENTITY>     entity type
-     * @param entityClass  the entity class
-     * @param decorator    decorates the stream before building it
-     * @return             a stream for the given entity class
+     * @param <ENTITY>        entity type
+     * @param tableIdentifier the identifier to use
+     * @param decorator       decorates the stream before building it
+     * @return                a stream for the given entity class
      */
-    <ENTITY> Stream<ENTITY> stream(Class<ENTITY> entityClass, StreamDecorator decorator);
+    <ENTITY> Stream<ENTITY> stream(TableIdentifier<ENTITY>  tableIdentifier, StreamDecorator decorator);
 
     /**
      * Finds a particular entity in the source where the specified field has 
      * the specified value. This is a form of key-value lookup than can 
      * potentially be more efficient with for an example foreign key references.
      * 
-     * @param <ENTITY>     the entity type
-     * @param <V>          the java type of the column
-     * @param entityClass  the entity interface .class
-     * @param field        the field to select on
-     * @param value        the value of that field for the entity to return
-     * @return             entity found or empty if none existed with that value
+     * @param <ENTITY>        the entity type
+     * @param <V>             the java type of the column
+     * @param tableIdentifier the identifier to use
+     * @param field           the field to select on
+     * @param value           the value of that field for the entity to return
+     * @return                entity found or empty if none existed with that value
      */
     default <ENTITY, V extends Comparable<? super V>> 
     Optional<ENTITY> findAny(
-            Class<ENTITY> entityClass, 
+            TableIdentifier<ENTITY>  tableIdentifier, 
             HasComparableOperators<ENTITY, V> field, 
             V value) {
         
-        return stream(entityClass, StreamDecorator.IDENTITY)
+        return stream(tableIdentifier, StreamDecorator.identity())
             .filter(field.equal(value))
             .findAny();
     }

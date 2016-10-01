@@ -188,10 +188,10 @@ public class ComputeIntensityParallelStrategyTest {
 
     private Stream<ParallelStrategy> strategies() {
         return Stream.of(
-                ParallelStrategy.DEFAULT,
-                ParallelStrategy.COMPUTE_INTENSITY_MEDIUM,
-                ParallelStrategy.COMPUTE_INTENSITY_HIGH,
-                ParallelStrategy.COMPUTE_INTENSITY_EXTREME
+                ParallelStrategy.computeIntensityDefault(),
+                ParallelStrategy.computeIntensityMedium(),
+                ParallelStrategy.computeIntensityHigh(),
+                ParallelStrategy.computeIntensityExtreme()
         );
     }
 

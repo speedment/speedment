@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.stream.parallel;
 
-
 import com.speedment.runtime.core.internal.stream.parallel.ComputeIntensityExtremeParallelStrategy;
 import com.speedment.runtime.core.internal.stream.parallel.ComputeIntensityHighParallelStrategy;
 import com.speedment.runtime.core.internal.stream.parallel.ComputeIntensityMediumParallelStrategy;
@@ -27,7 +26,7 @@ import java.util.Spliterators;
 
 /**
  *
- * @author  Per Minborg
+ * @author Per Minborg
  */
 @FunctionalInterface
 
@@ -37,28 +36,47 @@ public interface ParallelStrategy {
      * A Parallel Strategy that is Java's default <code>Iterator</code> to
      * <code>Spliterator</code> converter. It favors relatively large sets (in
      * the ten thousands or more) with low computational overhead.
+     *
+     * @return a ParallelStrategy
      */
-    ParallelStrategy DEFAULT = Spliterators::spliteratorUnknownSize;
+    static ParallelStrategy computeIntensityDefault() {
+        return Hidden.COMPUTE_INTENSITY_DEFAULT;
+    }
+
     /**
      * A Parallel Strategy that favors relatively small to medium sets with
      * medium computational overhead.
+     * 
+     * @return a ParallelStrategy
      */
-    ParallelStrategy COMPUTE_INTENSITY_MEDIUM = new ComputeIntensityMediumParallelStrategy();
+    static ParallelStrategy computeIntensityMedium() {
+        return Hidden.COMPUTE_INTENSITY_MEDIUM;
+    }
+
     /**
      * A Parallel Strategy that favors relatively small to medium sets with high
      * computational overhead.
+     * 
+     * @return a ParallelStrategy
      */
-    ParallelStrategy COMPUTE_INTENSITY_HIGH = new ComputeIntensityHighParallelStrategy();
+    static ParallelStrategy computeIntensityHigh() {
+        return Hidden.COMPUTE_INTENSITY_HIGH;
+    }
+
     /**
-     * A Parallel Strategy that favors small sets with extremely high computational
-     * overhead. The set will be split up in solitary elements that are executed
-     * separately in their own thread.
+     * A Parallel Strategy that favors small sets with extremely high
+     * computational overhead. The set will be split up in solitary elements
+     * that are executed separately in their own thread.
+     * 
+     * @return a ParallelStrategy
      */
-    ParallelStrategy COMPUTE_INTENSITY_EXTREME = new ComputeIntensityExtremeParallelStrategy();
+    static ParallelStrategy computeIntensityExtreme() {
+        return Hidden.COMPUTE_INTENSITY_EXTREME;
+    }
 
     <T> Spliterator<T> spliteratorUnknownSize(Iterator<? extends T> iterator, int characteristics);
 
-    static ParallelStrategy of(final int... batchSizes)  {
+    static ParallelStrategy of(final int... batchSizes) {
         return new ParallelStrategy() {
             @Override
             public <T> Spliterator<T> spliteratorUnknownSize(Iterator<? extends T> iterator, int characteristics) {
@@ -66,5 +84,16 @@ public interface ParallelStrategy {
             }
         };
     }
-    
+
+    static class Hidden {
+
+        private static final ParallelStrategy COMPUTE_INTENSITY_DEFAULT = Spliterators::spliteratorUnknownSize;
+
+        private static final ParallelStrategy COMPUTE_INTENSITY_MEDIUM = new ComputeIntensityMediumParallelStrategy();
+
+        private static final ParallelStrategy COMPUTE_INTENSITY_HIGH = new ComputeIntensityHighParallelStrategy();
+
+        private static final ParallelStrategy COMPUTE_INTENSITY_EXTREME = new ComputeIntensityExtremeParallelStrategy();
+    }
+
 }

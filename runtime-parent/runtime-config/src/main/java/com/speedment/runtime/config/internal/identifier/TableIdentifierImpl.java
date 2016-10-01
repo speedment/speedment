@@ -66,18 +66,18 @@ public final class TableIdentifierImpl<ENTITY> implements TableIdentifier<ENTITY
         if (getClass() != obj.getClass()) {
             return false;
         }
-        if (this.hashCode != obj.hashCode()) {
+        if (hashCode != obj.hashCode()) {
             return false;
         }
         final TableIdentifierImpl<?> other = (TableIdentifierImpl<?>) obj;
 
-        if (!Objects.equals(this.dbmsName, other.dbmsName)) {
+        if (!Objects.equals(dbmsName, other.dbmsName)) {
             return false;
         }
-        if (!Objects.equals(this.schemaName, other.schemaName)) {
+        if (!Objects.equals(schemaName, other.schemaName)) {
             return false;
         }
-        if (!Objects.equals(this.tableName, other.tableName)) {
+        if (!Objects.equals(tableName, other.tableName)) {
             return false;
         }
         return true;
@@ -85,9 +85,9 @@ public final class TableIdentifierImpl<ENTITY> implements TableIdentifier<ENTITY
 
     private int privateHashCode() {
         int hash = 5;
-        hash = 53 * hash + Objects.hashCode(this.dbmsName);
-        hash = 53 * hash + Objects.hashCode(this.schemaName);
-        hash = 53 * hash + Objects.hashCode(this.tableName);
+        hash = 53 * hash + Objects.hashCode(dbmsName);
+        hash = 53 * hash + Objects.hashCode(schemaName);
+        hash = 53 * hash + Objects.hashCode(tableName);
         return hash;
     }
 

@@ -61,6 +61,7 @@ import static com.speedment.generator.core.internal.util.ColumnUtil.usesOptional
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
 
 /**
@@ -69,9 +70,9 @@ import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
  * @author Per-Åke Minborg
  */
 public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTranslator<Interface> {
-    
+
     public final static String IDENTIFIER_NAME = "Identifier";
-    
+
     private @Inject Injector injector;
     private @Inject TypeMapperComponent typeMappers;
 
@@ -82,12 +83,16 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
     @Override
     protected Interface makeCodeGenModel(File file) {
 
+        final Type tableIdentifierType = SimpleParameterizedType.create(TableIdentifier.class, getSupport().entityType());
+
         final Enum identifierEnum = Enum.of(IDENTIFIER_NAME)
             .add(Field.of("columnName", String.class).private_().final_())
+            .add(Field.of("tableIdentifier", tableIdentifierType).private_().final_())
             .add(SimpleParameterizedType.create(ColumnIdentifier.class, getSupport().entityType()))
             .add(Constructor.of()
                 .add(Field.of("columnName", String.class))
                 .add("this.columnName = columnName;")
+                .add("this.tableIdentifier = TableIdentifier.of(getDbmsName(), getSchemaName(), getTableName());")
             )
             .add(Method.of("getDbmsName", String.class).public_()
                 .add(OVERRIDE)
@@ -104,6 +109,10 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
             .add(Method.of("getColumnName", String.class).public_()
                 .add(OVERRIDE)
                 .add("return this.columnName;")
+            )
+            .add(Method.of("asTableIdentifier", tableIdentifierType).public_()
+                .add(OVERRIDE)
+                .add("return this.tableIdentifier;")
             );
 
         return newBuilder(file, getSupport().generatedEntityName())
@@ -111,7 +120,6 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
              * General
              */
             .forEveryTable((intrf, col) -> intrf.public_().add(identifierEnum))
-
             /**
              * Getters
              */
@@ -132,7 +140,6 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                     )
                 );
             })
-
             /**
              * Setters
              */
@@ -150,7 +157,6 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                         .add(RETURN.setText("this " + getSupport().entityName() + " instance")))
                 );
             })
-
             /**
              * Finders
              */
@@ -164,16 +170,16 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                     file.add(Import.of(fuSupport.entityType()));
 
                     intrf.add(Method.of(FINDER_METHOD_PREFIX + getSupport().typeName(col),
-                            col.isNullable()
-                                ? DefaultType.optional(fuSupport.entityType())
-                                : fuSupport.entityType()
-                        )
+                        col.isNullable()
+                            ? DefaultType.optional(fuSupport.entityType())
+                            : fuSupport.entityType()
+                    )
                         .set(Javadoc.of(
-                                "Queries the specified manager for the referenced " +
-                                fuSupport.entityName() + ". If no such " +
-                                fuSupport.entityName() +
-                                " exists, an {@code NullPointerException} will be thrown."
-                            ).add(DefaultJavadocTag.PARAM.setValue("foreignManager").setText("the manager to query for the entity"))
+                            "Queries the specified manager for the referenced "
+                            + fuSupport.entityName() + ". If no such "
+                            + fuSupport.entityName()
+                            + " exists, an {@code NullPointerException} will be thrown."
+                        ).add(DefaultJavadocTag.PARAM.setValue("foreignManager").setText("the manager to query for the entity"))
                             .add(DefaultJavadocTag.RETURN.setText("the foreign entity referenced"))
                         )
                         .add(Field.of("foreignManager", SimpleParameterizedType.create(
@@ -182,18 +188,17 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                     );
                 });
             })
-
             /**
              * Fields
              */
             .forEveryColumn((intrf, col) -> {
 
-                final EntityTranslatorSupport.ReferenceFieldType ref =
-                    EntityTranslatorSupport.getReferenceFieldType(
+                final EntityTranslatorSupport.ReferenceFieldType ref
+                    = EntityTranslatorSupport.getReferenceFieldType(
                         file, getSupport().tableOrThrow(), col, getSupport().entityType(), injector
                     );
 
-                final Type entityType        = getSupport().entityType();
+                final Type entityType = getSupport().entityType();
                 final String shortEntityName = getSupport().entityName();
 
                 file.add(Import.of(entityType));
@@ -210,9 +215,9 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                     .map(fkc -> {
                         final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
                         final TranslatorSupport<Table> fuSupport = fu.getForeignEmt().getSupport();
-                        
-                        return ", " + fuSupport.entityName() + "." + 
-                            fuSupport.namer().javaStaticFieldName(
+
+                        return ", " + fuSupport.entityName() + "."
+                            + fuSupport.namer().javaStaticFieldName(
                                 fu.getForeignColumn().getJavaName()
                             );
                     }).orElse("");
@@ -265,10 +270,10 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
 
     @Override
     protected String getJavadocRepresentText() {
-        return "The generated base for the {@link " + 
-            getSupport().entityType().getTypeName() + 
-            "}-interface representing entities of the {@code " + 
-            getDocument().getName() + "}-table in the database.";
+        return "The generated base for the {@link "
+            + getSupport().entityType().getTypeName()
+            + "}-interface representing entities of the {@code "
+            + getDocument().getName() + "}-table in the database.";
     }
 
     @Override
@@ -296,7 +301,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                 retType = OptionalBoolean.class;
             } else {
                 retType = SimpleParameterizedType.create(Optional.class, type);
-            } 
+            }
         } else {
             retType = type;
         }

@@ -21,6 +21,9 @@ import com.speedment.runtime.config.identifier.trait.HasSchemaName;
 import com.speedment.runtime.config.identifier.trait.HasTableName;
 import com.speedment.runtime.config.internal.identifier.TableIdentifierImpl;
 import com.speedment.runtime.config.util.DocumentDbUtil;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 /**
  * Identifies a particular Table. The identifier is an immutable non-complex
@@ -30,7 +33,7 @@ import com.speedment.runtime.config.util.DocumentDbUtil;
  * To find the actual documents referred to by the identifier, the following
  * utility methods can be used:
  * <ul>
-
+ *
  * <li>DocumentDbUtil#referencedTable(Project, Project, TableIdentifier)
  * <li>DocumentDbUtil#referencedSchema(Project, Project, TableIdentifier)
  * <li>DocumentDbUtil#referencedDbms(Project, TableIdentifier)
@@ -47,8 +50,16 @@ public interface TableIdentifier<ENTITY> extends
     HasSchemaName,
     HasTableName {
 
+    static class Hidden {
+
+        private static final Map<TableIdentifier, TableIdentifier> INTERNED = new ConcurrentHashMap<>();
+
+    }
+
     static <ENTITY> TableIdentifier<ENTITY> of(String dbmsName, String schemaName, String tableName) {
-        return new TableIdentifierImpl<>(dbmsName, schemaName, tableName);
+        final TableIdentifier<ENTITY> newTableIdentity = new TableIdentifierImpl<>(dbmsName, schemaName, tableName);
+        Hidden.INTERNED.putIfAbsent(newTableIdentity, newTableIdentity);
+        return Hidden.INTERNED.get(newTableIdentity);
     }
 
 }

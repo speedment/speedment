@@ -149,7 +149,7 @@ public final class JdbcManagerSupportImpl<ENTITY> implements JdbcManagerSupport<
 
     @Override
     public Stream<ENTITY> stream() {
-        return nativeStream(StreamDecorator.IDENTITY);
+        return nativeStream(StreamDecorator.identity());
     }
 
     @Override

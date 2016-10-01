@@ -29,18 +29,19 @@ import java.util.stream.Stream;
  * Speedment before execution. This can for an example be used to perform
  * optimizations.
  *
- * @author  Emil Forslund
- * @since   2.2.0
+ * @author Emil Forslund
+ * @since 2.2.0
  */
 public interface StreamDecorator {
 
-    final static StreamDecorator IDENTITY = new StreamDecorator() {
-        @Override
-        public StreamDecorator and(StreamDecorator other) {
-            return other;
-        }
-
-    };
+    /**
+     * Returns a StreamDecorator which does not alter the Stream in any way.
+     *
+     * @return a StreamDecorator which does not alter the Stream in any way
+     */
+    static StreamDecorator identity() {
+        return Hidden.IDENTITY;
+    }
 
     default StreamDecorator and(StreamDecorator other) {
         if (this instanceof ComposedStreamDecorator) {
@@ -49,14 +50,14 @@ public interface StreamDecorator {
         return new ComposedStreamDecorator(this, other);
     }
 
-     /**
+    /**
      * Method to be used to modify or configure the final stream before it is
      * returned to the application.
      *
-     * @param <ENTITY>  the entity type
-     * @param <S>       the stream type
-     * @param stream    final stream before it is returned to the application
-     * @return          the modified or configured final stream
+     * @param <ENTITY> the entity type
+     * @param <S> the stream type
+     * @param stream final stream before it is returned to the application
+     * @return the modified or configured final stream
      */
     default <ENTITY, S extends Stream<ENTITY>> S applyOnFinal(S stream) {
         return stream;
@@ -74,10 +75,10 @@ public interface StreamDecorator {
      * Method to be used to modify or configure the initial stream from the data
      * source.
      *
-     * @param <ENTITY>  the entity type
-     * @param <S>       the stream type
-     * @param stream    from the data source
-     * @return          the modified or configured stream
+     * @param <ENTITY> the entity type
+     * @param <S> the stream type
+     * @param stream from the data source
+     * @return the modified or configured stream
      */
     default <ENTITY, S extends Stream<ENTITY>> S applyOnInitial(S stream) {
         return stream;
@@ -88,10 +89,10 @@ public interface StreamDecorator {
      * {@link ParallelStrategy} defines how parallel streams are divided amongst
      * the available execution threads.
      *
-     * @param <H>                  type of strategy receiver
-     * @param hasParallelStrategy  to apply the strategy on
-     * @return                     the object {@link HasParallelStrategy} to use 
-     *                             for this {@link Stream}
+     * @param <H> type of strategy receiver
+     * @param hasParallelStrategy to apply the strategy on
+     * @return the object {@link HasParallelStrategy} to use for this
+     * {@link Stream}
      */
     default <H extends HasParallelStrategy> H apply(H hasParallelStrategy) {
         return hasParallelStrategy;
@@ -102,27 +103,36 @@ public interface StreamDecorator {
      * {@link ParallelStrategy#COMPUTE_INTENSITY_MEDIUM COMPUTE_INTENSITY_MEDIUM}
      * parallel strategy.
      *
+     * @return a StreamDecorator
      * @see ParallelStrategy#COMPUTE_INTENSITY_MEDIUM COMPUTE_INTENSITY_MEDIUM
      */
-    final static StreamDecorator COMPUTE_INTENSITY_MEDIUM = of(ParallelStrategy.COMPUTE_INTENSITY_MEDIUM);
-    
+    static StreamDecorator computeIntensityMedium() {
+        return Hidden.COMPUTE_INTENSITY_MEDIUM;
+    }
+
     /**
      * A {@link StreamDecorator} that modifies the stream according to the
      * {@link ParallelStrategy#COMPUTE_INTENSITY_HIGH COMPUTE_INTENSITY_HIGH}
      * parallel strategy.
      *
+     * @return a StreamDecorator
      * @see ParallelStrategy#COMPUTE_INTENSITY_HIGH COMPUTE_INTENSITY_HIGH
      */
-    final static StreamDecorator COMPUTE_INTENSITY_HIGH = of(ParallelStrategy.COMPUTE_INTENSITY_HIGH);
-    
+    static StreamDecorator computeIntensityHigh() {
+        return Hidden.COMPUTE_INTENSITY_HIGH;
+    }
+
     /**
      * A {@link StreamDecorator} that modifies the stream according to the
      * {@link ParallelStrategy#COMPUTE_INTENSITY_EXTREME COMPUTE_INTENSITY_EXTREME}
      * parallel strategy.
      *
+     * @return a StreamDecorator
      * @see ParallelStrategy#COMPUTE_INTENSITY_EXTREME COMPUTE_INTENSITY_EXTREME
      */
-    final static StreamDecorator COMPUTE_INTENSITY_EXTREAM = of(ParallelStrategy.COMPUTE_INTENSITY_EXTREME);
+    static StreamDecorator computeIntensityExtreme() {
+        return Hidden.COMPUTE_INTENSITY_EXTREME;
+    }
 
     static StreamDecorator of(final ParallelStrategy parallelStrategy) {
         return new StreamDecorator() {
@@ -134,4 +144,23 @@ public interface StreamDecorator {
 
         };
     }
+
+    static class Hidden {
+
+        final static StreamDecorator IDENTITY = new StreamDecorator() {
+            @Override
+            public StreamDecorator and(StreamDecorator other) {
+                return other;
+            }
+
+        };
+
+        final static StreamDecorator COMPUTE_INTENSITY_MEDIUM = of(ParallelStrategy.computeIntensityMedium());
+
+        final static StreamDecorator COMPUTE_INTENSITY_HIGH = of(ParallelStrategy.computeIntensityHigh());
+
+        final static StreamDecorator COMPUTE_INTENSITY_EXTREME = of(ParallelStrategy.computeIntensityExtreme());
+
+    }
+
 }

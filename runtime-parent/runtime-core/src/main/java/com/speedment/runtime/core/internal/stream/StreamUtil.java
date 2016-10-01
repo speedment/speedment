@@ -71,7 +71,7 @@ public final class StreamUtil {
 //        requireNonNull(mapper);
 //        final Iterator<T> iterator = new ResultSetIterator<>(resultSet, mapper);
 //        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.IMMUTABLE + Spliterator.NONNULL), false);
-         return asStream(resultSet, mapper, ParallelStrategy.DEFAULT);
+         return asStream(resultSet, mapper, ParallelStrategy.computeIntensityDefault());
     }
     
     public static <T> Stream<T> asStream(ResultSet resultSet, SqlFunction<ResultSet, T> mapper, ParallelStrategy parallelStrategy) {
