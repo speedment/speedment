@@ -23,7 +23,6 @@ import com.speedment.runtime.config.internal.identifier.TableIdentifierImpl;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 
 /**
  * Identifies a particular Table. The identifier is an immutable non-complex
@@ -41,9 +40,9 @@ import java.util.function.Function;
  *
  * @param <ENTITY> the entity type
  *
- * @author Emil Forslund
- * @since 2.3
- * @see DocumentDbUtil
+ * @author  Per Minborg
+ * @since   3.0.1
+ * @see     DocumentDbUtil
  */
 public interface TableIdentifier<ENTITY> extends
     HasDbmsName,
@@ -52,14 +51,16 @@ public interface TableIdentifier<ENTITY> extends
 
     static class Hidden {
 
-        private static final Map<TableIdentifier, TableIdentifier> INTERNED = new ConcurrentHashMap<>();
+        private static final Map<TableIdentifier<?>, TableIdentifier<?>> INTERNED = new ConcurrentHashMap<>();
 
     }
 
     static <ENTITY> TableIdentifier<ENTITY> of(String dbmsName, String schemaName, String tableName) {
         final TableIdentifier<ENTITY> newTableIdentity = new TableIdentifierImpl<>(dbmsName, schemaName, tableName);
         Hidden.INTERNED.putIfAbsent(newTableIdentity, newTableIdentity);
-        return Hidden.INTERNED.get(newTableIdentity);
+        
+        @SuppressWarnings("unchecked")
+        final TableIdentifier<ENTITY> result = (TableIdentifier<ENTITY>) Hidden.INTERNED.get(newTableIdentity);
+        return result;
     }
-
 }
