@@ -49,7 +49,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
     private List<?> values;
     private SqlFunction<ResultSet, T> rsMapper;
     private final Supplier<Connection> connectionSupplier;
-    private ParallelStrategy parallelStrategy;
+    private final ParallelStrategy parallelStrategy;
     private Connection connection;  // null allowed if the stream() method is not run
     private PreparedStatement ps;
     private ResultSet rs;
@@ -63,13 +63,14 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
         final String sql,
         final List<?> values,
         final SqlFunction<ResultSet, T> rsMapper,
-        Supplier<Connection> connectionSupplier
+        final Supplier<Connection> connectionSupplier,
+        final ParallelStrategy parallelStrategy
     ) {
         setSql(sql); // requireNonNull in setter
         setValues(values); // requireNonNull in setter
         setRsMapper(rsMapper); // requireNonNull in setter
         this.connectionSupplier = requireNonNull(connectionSupplier);
-        parallelStrategy = ParallelStrategy.computeIntensityDefault();
+        this.parallelStrategy   = requireNonNull(parallelStrategy);
         setState(State.INIT);
     }
 
@@ -166,16 +167,4 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
     protected void setState(State state) {
         this.state = requireNonNull(state);
     }
-    
-    @Override
-    public ParallelStrategy getParallelStrategy() {
-        return parallelStrategy;
-    }
-
-    @Override
-    public void setParallelStrategy(ParallelStrategy parallelStrategy) {
-        this.parallelStrategy = parallelStrategy;
-    }
-    
-
 }

@@ -16,22 +16,21 @@
  */
 package com.speedment.runtime.core.manager;
 
-import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
-import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.core.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
 
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.injector.State.RESOLVED;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.core.component.PersistenceComponent;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
-import com.speedment.runtime.core.stream.StreamDecorator;
+import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -43,34 +42,27 @@ import static java.util.Objects.requireNonNull;
  */
 public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
-    private StreamSupplierComponent streamSupplierComponent;
-    
-    private ManagerSupport<ENTITY> support; // Move to SqlStreamSupplierComponent and CudComponent
+    private @Inject StreamSupplierComponent streamSupplierComponent;
+
     // Hold these fields internally so that exposing methods may be compared by equality
     private final EntityCreator<ENTITY> entityCreator = this::entityCreate;
     private final EntityCopier<ENTITY> entityCopier = this::entityCopy;
+    
     private Persister<ENTITY> persister;
     private Updater<ENTITY> updater;
     private Remover<ENTITY> remover;
 
-    protected AbstractManager() {
-    }
+    protected AbstractManager() {}
 
     @ExecuteBefore(INITIALIZED)
     final void createSupport(
-        Injector injector,
-        @WithState(INITIALIZED) ProjectComponent projectComponent,
-        @WithState(INITIALIZED) StreamSupplierComponent streamSupplierComponent,
-        @WithState(INITIALIZED) ResultSetMapperComponent resultSetComponent,
-        @WithState(INITIALIZED) DbmsHandlerComponent dbmsHandlerComponent) {
+        @WithState(INITIALIZED) PersistenceComponent persistenceComponent) {
+        
+        final TableIdentifier<ENTITY> tableId = getTableIdentifier();
 
-        // Make sure this is initialized after these components.
-        requireNonNulls(projectComponent, resultSetComponent, dbmsHandlerComponent);
-        this.support = createSupport(injector);
-        persister = support::persist;
-        updater = support::update;
-        remover = support::remove;
-        this.streamSupplierComponent = streamSupplierComponent;
+        this.persister = persistenceComponent.persister(tableId);
+        this.updater   = persistenceComponent.updater(tableId);
+        this.remover   = persistenceComponent.remover(tableId);
     }
 
     @ExecuteBefore(RESOLVED)
@@ -81,8 +73,6 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
         requireNonNull(projectComponent); // Must be initialized first.  // Not really now...!!
         managerComponent.put(this);
     }
-
-    protected abstract ManagerSupport<ENTITY> createSupport(Injector injector);
 
     @Override
     public EntityCreator<ENTITY> entityCreator() {
@@ -95,13 +85,16 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
-    public Stream<ENTITY> stream(StreamDecorator decorator) {
-        return streamSupplierComponent.stream(getTableIdentifier(), StreamDecorator.identity());
+    public Stream<ENTITY> stream() {
+        return streamSupplierComponent.stream(
+            getTableIdentifier(), 
+            ParallelStrategy.computeIntensityDefault()
+        );
     }
 
     @Override
     public final ENTITY persist(ENTITY entity) throws SpeedmentException {
-        return support.persist(entity);
+        return persister().apply(entity);
     }
 
     @Override
@@ -111,7 +104,7 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
     @Override
     public final ENTITY update(ENTITY entity) throws SpeedmentException {
-        return support.update(entity);
+        return updater().apply(entity);
     }
 
     @Override
@@ -121,12 +114,11 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
     @Override
     public final ENTITY remove(ENTITY entity) throws SpeedmentException {
-        return support.remove(entity);
+        return remover().apply(entity);
     }
 
     @Override
-    public final Remover<ENTITY> remover() {
+    public Remover<ENTITY> remover() {
         return remover;
     }
-
 }

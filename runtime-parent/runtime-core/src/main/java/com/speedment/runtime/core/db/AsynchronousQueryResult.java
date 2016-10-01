@@ -16,9 +16,6 @@
  */
 package com.speedment.runtime.core.db;
 
-
-import com.speedment.runtime.core.stream.parallel.HasParallelStrategy;
-
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.stream.Stream;
@@ -29,7 +26,7 @@ import java.util.stream.Stream;
  * @param <T>  the type that the {@code ResultSet} shall be mapped to
  */
 
-public interface AsynchronousQueryResult<T> extends HasParallelStrategy, AutoCloseable {
+public interface AsynchronousQueryResult<T> extends AutoCloseable {
 
     Stream<T> stream();
 

@@ -17,7 +17,6 @@
 package com.speedment.runtime.core.internal.stream.builder.streamterminator;
 
 import com.speedment.runtime.core.stream.Pipeline;
-import com.speedment.runtime.core.stream.StreamDecorator;
 
 /**
  *
@@ -26,9 +25,7 @@ import com.speedment.runtime.core.stream.StreamDecorator;
 public interface BaseStreamTerminator {
 
     default <P extends Pipeline> P optimize(P initialPipeline) {
-        return getStreamDecorator().apply(initialPipeline);
+        return initialPipeline;
     }
-    
-    StreamDecorator getStreamDecorator();
 
 }

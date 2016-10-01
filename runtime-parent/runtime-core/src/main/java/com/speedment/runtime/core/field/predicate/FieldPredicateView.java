@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.core.field.predicate;
 
-
-import com.speedment.runtime.core.manager.ManagerSupport;
+import com.speedment.runtime.core.field.Field;
+import java.util.function.Function;
 
 /**
  *
@@ -28,6 +28,6 @@ import com.speedment.runtime.core.manager.ManagerSupport;
 
 public interface FieldPredicateView {
 
-    <ENTITY> SqlPredicateFragment transform(ManagerSupport<ENTITY> manager, FieldPredicate<ENTITY> model);
+    <ENTITY> SqlPredicateFragment transform(Function<Field<ENTITY>, String> columnNamer, FieldPredicate<ENTITY> model);
     
 }

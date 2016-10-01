@@ -16,80 +16,19 @@
  */
 package com.speedment.runtime.core.internal.manager.sql;
 
+import com.speedment.runtime.core.field.Field;
 import com.speedment.runtime.core.field.predicate.FieldPredicate;
 import com.speedment.runtime.core.field.predicate.FieldPredicateView;
 import com.speedment.runtime.core.field.predicate.Inclusion;
 import com.speedment.runtime.core.field.predicate.PredicateType;
 import com.speedment.runtime.core.field.predicate.SqlPredicateFragment;
-import com.speedment.runtime.core.manager.ManagerSupport;
 
 import java.util.Collection;
 import java.util.Set;
 
 import static com.speedment.runtime.core.internal.field.predicate.PredicateUtil.*;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.joining;
-import static java.util.Objects.requireNonNull;
+import java.util.function.Function;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -113,17 +52,17 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
     protected abstract SqlPredicateFragment containsIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated);
 
     @Override
-    public <ENTITY> SqlPredicateFragment transform(ManagerSupport<ENTITY> manager, FieldPredicate<ENTITY> model) {
+    public <ENTITY> SqlPredicateFragment transform(Function<Field<ENTITY>, String> columnNamer, FieldPredicate<ENTITY> model) {
         return render(
-            requireNonNull(manager),
+            requireNonNull(columnNamer),
             requireNonNull(model)
         );
     }
 
-    protected <ENTITY> SqlPredicateFragment render(ManagerSupport<ENTITY> manager, FieldPredicate<ENTITY> model) {
-        final PredicateType pt = model.getEffectivePredicateType();
+    protected <ENTITY> SqlPredicateFragment render(Function<Field<ENTITY>, String> columnNamer, FieldPredicate<ENTITY> predicate) {
+        final PredicateType pt = predicate.getEffectivePredicateType();
         
-        final String cn = manager.fullColumnName(model.getField());
+        final String cn = columnNamer.apply(predicate.getField());
         
         switch (pt) {
             // Constants
@@ -140,58 +79,58 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
                 
             // Comparable
             case EQUAL:
-                return equal(cn, model);
+                return equal(cn, predicate);
             case NOT_EQUAL:
-                return notEqual(cn, model);
+                return notEqual(cn, predicate);
             case GREATER_THAN:
-                return greaterThan(cn, model);
+                return greaterThan(cn, predicate);
             case GREATER_OR_EQUAL:
-                return greaterOrEqual(cn, model);
+                return greaterOrEqual(cn, predicate);
             case LESS_THAN:
-                return lessThan(cn, model);
+                return lessThan(cn, predicate);
             case LESS_OR_EQUAL:
-                return lessOrEqual(cn, model);
+                return lessOrEqual(cn, predicate);
             case BETWEEN:
-                return between(cn, model);
+                return between(cn, predicate);
             case NOT_BETWEEN:
-                return notBetween(cn, model);
+                return notBetween(cn, predicate);
             case IN:
-                return in(cn, model);
+                return in(cn, predicate);
             case NOT_IN:
-                return notIn(cn, model);
+                return notIn(cn, predicate);
 
             // String
             case EQUAL_IGNORE_CASE:
-                return equalIgnoreCase(cn, model);
+                return equalIgnoreCase(cn, predicate);
             case NOT_EQUAL_IGNORE_CASE:
-                return notEqualIgnoreCase(cn, model);
+                return notEqualIgnoreCase(cn, predicate);
 
             case STARTS_WITH:
-                return startsWith(cn, model);
+                return startsWith(cn, predicate);
             case NOT_STARTS_WITH:
-                return notStartsWith(cn, model);
+                return notStartsWith(cn, predicate);
             case STARTS_WITH_IGNORE_CASE:
-                return startsWithIgnoreCase(cn, model);
+                return startsWithIgnoreCase(cn, predicate);
             case NOT_STARTS_WITH_IGNORE_CASE:
-                return notStartsWithIgnoreCase(cn, model);   
+                return notStartsWithIgnoreCase(cn, predicate);   
             
             case ENDS_WITH:
-                return endsWith(cn, model);
+                return endsWith(cn, predicate);
             case NOT_ENDS_WITH:
-                return notEndsWith(cn, model);
+                return notEndsWith(cn, predicate);
             case ENDS_WITH_IGNORE_CASE:
-                return endsWithIgnoreCase(cn, model);
+                return endsWithIgnoreCase(cn, predicate);
             case NOT_ENDS_WITH_IGNORE_CASE:
-                return notEndsWithIgnoreCase(cn, model);
+                return notEndsWithIgnoreCase(cn, predicate);
 
             case CONTAINS:
-                return contains(cn, model);
+                return contains(cn, predicate);
             case NOT_CONTAINS:
-                return notContains(cn, model);
+                return notContains(cn, predicate);
             case CONTAINS_IGNORE_CASE:
-                return containsIgnoreCase(cn, model);
+                return containsIgnoreCase(cn, predicate);
             case NOT_CONTAINS_IGNORE_CASE:
-                return notContainsIgnoreCase(cn, model);
+                return notContainsIgnoreCase(cn, predicate);
 
             case IS_EMPTY:
                 return isEmpty(cn);
@@ -199,7 +138,7 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
                 return isNotEmpty(cn);
             default:
                 throw new UnsupportedOperationException(
-                    "Unknown PredicateType  " + pt.name() + ". Column name:" + model.getField().identifier().getColumnName()
+                    "Unknown PredicateType  " + pt.name() + ". Column name:" + predicate.getField().identifier().getColumnName()
                 );
         }
     }

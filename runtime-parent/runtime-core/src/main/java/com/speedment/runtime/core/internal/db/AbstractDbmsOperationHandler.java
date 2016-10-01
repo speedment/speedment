@@ -50,6 +50,7 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
@@ -110,13 +111,18 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
     @Override
     public <T> AsynchronousQueryResult<T> executeQueryAsync(
-        Dbms dbms, String sql, List<?> values, SqlFunction<ResultSet, T> rsMapper) {
+            Dbms dbms, 
+            String sql, 
+            List<?> values, 
+            SqlFunction<ResultSet, T> rsMapper,
+            ParallelStrategy parallelStrategy) {
 
         return new AsynchronousQueryResultImpl<>(
             Objects.requireNonNull(sql),
             Objects.requireNonNull(values),
             Objects.requireNonNull(rsMapper),
-            () -> connectionPoolComponent.getConnection(dbms)
+            () -> connectionPoolComponent.getConnection(dbms),
+            parallelStrategy
         );
     }
 

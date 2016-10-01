@@ -14,33 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.manager;
+package com.speedment.runtime.core.component.sql;
 
-import com.speedment.common.injector.Injector;
+import com.speedment.runtime.core.component.StreamSupplierComponent;
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.db.SqlFunction;
-import com.speedment.runtime.core.internal.manager.JdbcManagerSupportImpl;
-
 import java.sql.ResultSet;
 
 /**
  *
- * @param <ENTITY>  the entity type
- * 
- * @author  Emil Forslund
- * @since   1.0.0
+ * @author Per Minborg
  */
-public interface JdbcManagerSupport<ENTITY> extends ManagerSupport<ENTITY> {
+public interface SqlStreamSupplierComponent extends StreamSupplierComponent {
 
-    static <ENTITY> JdbcManagerSupport<ENTITY> create(
-            Injector injector, 
-            Manager<ENTITY> manager, 
-            SqlFunction<ResultSet, ENTITY> entityMapper) {
-        
-        return new JdbcManagerSupportImpl<>(injector, manager, entityMapper);
-    }
-    
-    String sqlSelect();
-    
-    long sqlCount();
-    
+    <ENTITY> void install(TableIdentifier<ENTITY> tableIdentifier, SqlFunction<ResultSet, ENTITY> entityMapper);
 }

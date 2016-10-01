@@ -27,6 +27,7 @@ import com.speedment.runtime.core.manager.Manager;
  * @param <ENTITY>     the source entity
  * @param <FK_ENTITY>  the target entity
  * @param <V>          the column type
+ * @param <SOURCE>     the source field type
  * 
  * @author  Emil Forslund
  * @since   3.0.0

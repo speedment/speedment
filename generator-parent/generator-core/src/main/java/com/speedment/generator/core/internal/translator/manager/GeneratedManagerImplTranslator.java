@@ -43,8 +43,6 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.core.field.method.BackwardFinder;
 import com.speedment.runtime.core.internal.util.sql.ResultSetUtil;
 import com.speedment.runtime.core.manager.AbstractManager;
-import com.speedment.runtime.core.manager.JdbcManagerSupport;
-import com.speedment.runtime.core.manager.ManagerSupport;
 
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
@@ -221,12 +219,6 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
                             + Stream.of(getSupport().dbmsOrThrow().getName(), getSupport().schemaOrThrow().getName(), getSupport().tableOrThrow().getName())
                             .map(s -> "\"" + s + "\"").collect(joining(", ")) 
                             + ");")
-                    )
-                    .add(Method.of("createSupport", SimpleParameterizedType.create(ManagerSupport.class, getSupport().entityType()))
-                        .protected_().add(OVERRIDE)
-                        .add(Field.of("injector", Injector.class))
-                        .add("return " + JdbcManagerSupport.class.getSimpleName() + ".create(injector, this, this::" + ENTITY_COPY_METHOD_NAME + ");")
-                        .call(() -> file.add(Import.of(JdbcManagerSupport.class)))
                     )
                     .add(Method.of("getTableIdentifier", SimpleParameterizedType.create(TableIdentifier.class, getSupport().entityType()))
                         .public_().add(OVERRIDE)

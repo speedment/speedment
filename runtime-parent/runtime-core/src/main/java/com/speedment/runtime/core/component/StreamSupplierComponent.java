@@ -19,7 +19,7 @@ package com.speedment.runtime.core.component;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.field.trait.HasComparableOperators;
-import com.speedment.runtime.core.stream.StreamDecorator;
+import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -38,10 +38,10 @@ public interface StreamSupplierComponent {
      *
      * @param <ENTITY>        entity type
      * @param tableIdentifier the identifier to use
-     * @param decorator       decorates the stream before building it
+     * @param strategy        decorates the stream before building it
      * @return                a stream for the given entity class
      */
-    <ENTITY> Stream<ENTITY> stream(TableIdentifier<ENTITY>  tableIdentifier, StreamDecorator decorator);
+    <ENTITY> Stream<ENTITY> stream(TableIdentifier<ENTITY> tableIdentifier, ParallelStrategy strategy);
 
     /**
      * Finds a particular entity in the source where the specified field has 
@@ -61,7 +61,7 @@ public interface StreamSupplierComponent {
             HasComparableOperators<ENTITY, V> field, 
             V value) {
         
-        return stream(tableIdentifier, StreamDecorator.identity())
+        return stream(tableIdentifier, ParallelStrategy.computeIntensityDefault())
             .filter(field.equal(value))
             .findAny();
     }
@@ -75,5 +75,4 @@ public interface StreamSupplierComponent {
     default boolean isImmutable() {
         return false;
     }
-    
 }

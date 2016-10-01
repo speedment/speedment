@@ -14,19 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.stream.parallel;
+package com.speedment.runtime.core.internal.component.sql;
 
-
+import com.speedment.runtime.core.exception.SpeedmentException;
 
 /**
  *
- * @author  Per Minborg
+ * @param <ENTITY>  the entity type
+ * 
+ * @author  Emil Forslund
+ * @since   1.0.0
  */
+interface SqlPersistence<ENTITY> {
 
-public interface HasParallelStrategy {
+    ENTITY persist(ENTITY entity) throws SpeedmentException;
 
-    ParallelStrategy getParallelStrategy();
+    ENTITY update(ENTITY entity) throws SpeedmentException;
 
-    void setParallelStrategy(ParallelStrategy parallelStrategy);
-
+    ENTITY remove(ENTITY entity) throws SpeedmentException;
+    
 }

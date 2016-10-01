@@ -16,11 +16,6 @@
  */
 package com.speedment.runtime.core.internal.manager.sql;
 
-import com.speedment.common.injector.Injector;
-import com.speedment.runtime.core.component.DbmsHandlerComponent;
-import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Project;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
@@ -34,9 +29,7 @@ import com.speedment.runtime.core.internal.stream.builder.pipeline.LongPipeline;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.ReferencePipeline;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil;
-import com.speedment.runtime.core.manager.JdbcManagerSupport;
 import com.speedment.runtime.core.stream.Pipeline;
-import com.speedment.runtime.core.stream.StreamDecorator;
 import com.speedment.runtime.core.stream.action.Action;
 
 import java.util.ArrayList;
@@ -46,9 +39,8 @@ import java.util.function.Predicate;
 
 import static com.speedment.runtime.core.stream.action.Property.SIZE;
 import static com.speedment.runtime.core.stream.action.Verb.PRESERVE;
-import com.speedment.runtime.config.util.DocumentDbUtil;
-import com.speedment.runtime.core.util.DatabaseUtil;
 import static java.util.stream.Collectors.toList;
+import java.util.function.Function;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
@@ -60,26 +52,24 @@ import static java.util.stream.Collectors.joining;
  */
 public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
     
-    private final Injector injector;
-    private final JdbcManagerSupport<ENTITY> support;
+    private final DbmsType dbmsType;
+    private final String sqlSelect;
+    private final LongSupplier sqlCounter;
+    private final Function<Field<ENTITY>, String> sqlColumnNamer;
     private final AsynchronousQueryResult<ENTITY> asynchronousQueryResult;
-    private final StreamDecorator decorator;
     
     public SqlStreamTerminator(
-            Injector injector,
-            JdbcManagerSupport<ENTITY> support, 
-            AsynchronousQueryResult<ENTITY> asynchronousQueryResult, 
-            StreamDecorator decorator) {
+            DbmsType dbmsType,
+            String sqlSelect,
+            LongSupplier sqlCounter,
+            Function<Field<ENTITY>, String> sqlColumnNamer,
+            AsynchronousQueryResult<ENTITY> asynchronousQueryResult) {
         
-        this.injector                = requireNonNull(injector);
-        this.support                 = requireNonNull(support);
+        this.dbmsType                = requireNonNull(dbmsType);
+        this.sqlSelect               = requireNonNull(sqlSelect);
+        this.sqlCounter              = requireNonNull(sqlCounter);
+        this.sqlColumnNamer          = requireNonNull(sqlColumnNamer);
         this.asynchronousQueryResult = requireNonNull(asynchronousQueryResult);
-        this.decorator               = requireNonNull(decorator);
-    }
-    
-    @Override
-    public StreamDecorator getStreamDecorator() {
-        return decorator;
     }
     
     @Override
@@ -91,7 +81,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
             modifySource(andPredicateBuilders, asynchronousQueryResult);
         }
         
-        return getStreamDecorator().apply(initialPipeline);
+        return initialPipeline;
     }
     
     public void modifySource(List<FieldPredicate<ENTITY>> predicateBuilders, AsynchronousQueryResult<ENTITY> qr) {
@@ -102,20 +92,13 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
             // Nothing to do...
             return;
         }
-        
-        final Project project                  = injector.getOrThrow(ProjectComponent.class).getProject();
-        final DbmsHandlerComponent dbmsHandler = injector.getOrThrow(DbmsHandlerComponent.class);
-        final String dbmsName                  = support.getManager().getTableIdentifier().getDbmsName();
-        final Dbms dbms                        = DocumentDbUtil.referencedDbms(project, dbmsName);
-        final DbmsType dbmsType                = DatabaseUtil.findDbmsType(dbmsHandler, dbms);
 
         final FieldPredicateView spv = dbmsType.getFieldPredicateView();
         final List<SqlPredicateFragment> fragments = predicateBuilders.stream()
-            .map(sp -> spv.transform(support, sp))
+            .map(sp -> spv.transform(sqlColumnNamer, sp))
             .collect(toList());
 
-        final String sql = support.sqlSelect()
-            + " WHERE "
+        final String sql = sqlSelect + " WHERE "
             + fragments.stream()
                 .map(SqlPredicateFragment::getSql)
                 .collect(joining(" AND "));
@@ -177,8 +160,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         requireNonNulls(pipeline, fallbackSupplier);
         
         if (pipeline.stream().allMatch(CHECK_RETAIN_SIZE)) {
-            return support.sqlCount();
+            return sqlCounter.getAsLong();
         } else return fallbackSupplier.getAsLong();
     }
-    
 }

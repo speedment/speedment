@@ -22,6 +22,7 @@ import java.util.Objects;
 /**
  *
  * @author Per Minborg
+ * @param <ENTITY>  the entity type
  */
 public final class TableIdentifierImpl<ENTITY> implements TableIdentifier<ENTITY> {
 
@@ -91,4 +92,8 @@ public final class TableIdentifierImpl<ENTITY> implements TableIdentifier<ENTITY
         return hash;
     }
 
+    @Override
+    public String toString() {
+        return dbmsName + "." + schemaName + "." + tableName;
+    }
 }

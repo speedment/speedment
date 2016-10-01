@@ -19,6 +19,7 @@ package com.speedment.runtime.core.db;
 
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.field.Field;
+import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 
 import java.sql.Array;
 import java.sql.Blob;
@@ -105,13 +106,16 @@ public interface DbmsOperationHandler {
      * SQL command
      * @param rsMapper the non-null mapper to use when iterating over the
      * {@link ResultSet}
+     * @param parallelStrategy  strategy to use if constructing a parallel 
+     * stream
      * @return a stream of the mapped objects
      */
     <T> AsynchronousQueryResult<T> executeQueryAsync(
             Dbms dbms, 
             String sql,
             List<?> values,
-            SqlFunction<ResultSet, T> rsMapper
+            SqlFunction<ResultSet, T> rsMapper,
+            ParallelStrategy parallelStrategy
     );
 
     /**

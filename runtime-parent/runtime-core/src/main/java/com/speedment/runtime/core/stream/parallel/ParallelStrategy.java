@@ -29,7 +29,6 @@ import java.util.Spliterators;
  * @author Per Minborg
  */
 @FunctionalInterface
-
 public interface ParallelStrategy {
 
     /**

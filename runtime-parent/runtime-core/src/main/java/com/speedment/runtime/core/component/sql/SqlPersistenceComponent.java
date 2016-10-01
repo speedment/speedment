@@ -14,27 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.manager;
+package com.speedment.runtime.core.component.sql;
 
-import com.speedment.runtime.core.exception.SpeedmentException;
-import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
+import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.core.component.PersistenceComponent;
 
 /**
  *
- * @param <ENTITY>  the entity type
- * 
- * @author  Per Minborg
+ * @author  Emil Forslund
  * @since   3.0.1
  */
-@FunctionalInterface
-public interface Persister<ENTITY> extends UnaryOperator<ENTITY>, Consumer<ENTITY>  {
-
-    @Override
-    public ENTITY apply(ENTITY t) throws SpeedmentException;
-
-    @Override
-    public default void accept(ENTITY t) {
-        apply(t);
-    }
+public interface SqlPersistenceComponent extends PersistenceComponent {
+    
+    <ENTITY> void install(TableIdentifier<ENTITY> tableIdentifier);
+    
 }

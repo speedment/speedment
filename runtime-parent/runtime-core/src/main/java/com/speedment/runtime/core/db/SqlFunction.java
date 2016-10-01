@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.db;
 
-
 import com.speedment.runtime.core.exception.SpeedmentException;
 
 import java.sql.SQLException;
@@ -32,7 +31,6 @@ import static java.util.Objects.requireNonNull;
  * 
  * @author  Per Minborg
  */
-
 @FunctionalInterface
 public interface SqlFunction<T, R> {
 

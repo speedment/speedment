@@ -36,6 +36,11 @@ public final class ProjectComponentImpl implements ProjectComponent {
 
     @Override
     public Project getProject() {
+        requireNonNull(project, 
+            "Metadata has not yet been loaded! This is probably due to an " + 
+            "incorrect initialization order."
+        );
+        
         return project;
     }
 

@@ -158,7 +158,4 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     public Updater<ENTITY> updater() {
         return updater;
     }
-    
-    
-    
 }

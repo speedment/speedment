@@ -14,27 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.manager;
+package com.speedment.runtime.core.internal.component.sql;
 
-import com.speedment.runtime.core.exception.SpeedmentException;
-import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
+import com.speedment.runtime.core.field.trait.HasComparableOperators;
+import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  *
- * @param <ENTITY>  the entity type
- * 
- * @author  Per Minborg
+ * @author  Emil Forslund
  * @since   3.0.1
  */
-@FunctionalInterface
-public interface Persister<ENTITY> extends UnaryOperator<ENTITY>, Consumer<ENTITY>  {
+interface SqlStreamSupplier<ENTITY> {
 
-    @Override
-    public ENTITY apply(ENTITY t) throws SpeedmentException;
-
-    @Override
-    public default void accept(ENTITY t) {
-        apply(t);
-    }
+    Stream<ENTITY> stream(ParallelStrategy parallelStrategy);
+    
+    <V extends Comparable<? super V>> Optional<ENTITY> findAny(
+            HasComparableOperators<ENTITY, V> field, V value);
 }
