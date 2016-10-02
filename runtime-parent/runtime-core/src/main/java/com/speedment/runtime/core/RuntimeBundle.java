@@ -34,10 +34,10 @@ public class RuntimeBundle implements InjectBundle {
     @Override
     public Stream<Class<?>> injectables() {
         return AbstractSpeedment.include()
-            .andThen(StandardDbmsTypes.include())
-            .andThen(MariaDbDbmsType.include())
-            .andThen(MySqlDbmsType.include())
-            .andThen(PostgresqlDbmsType.include())
+            .withBundle(StandardDbmsTypes.include())
+            .withBundle(MariaDbDbmsType.include())
+            .withBundle(MySqlDbmsType.include())
+            .withBundle(PostgresqlDbmsType.include())
             .injectables();
     }
 

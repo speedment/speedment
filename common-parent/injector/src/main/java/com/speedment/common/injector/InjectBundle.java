@@ -19,6 +19,13 @@ package com.speedment.common.injector;
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -43,13 +50,13 @@ public interface InjectBundle {
         return () -> Stream.of(classes);
     }
 
-    default InjectBundle andThen(InjectBundle next) {
+    default InjectBundle withBundle(InjectBundle next) {
         requireNonNull(next);
         return () -> Stream.concat(injectables(), next.injectables());
     }
 
-    default InjectBundle andThen(Class<?> nextClass) {
+    default InjectBundle withComponent(Class<?> nextClass) {
         requireNonNull(nextClass);
-        return andThen(of(nextClass));
+        return withBundle(of(nextClass));
     }
 }

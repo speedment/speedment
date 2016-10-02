@@ -29,7 +29,7 @@ import com.speedment.runtime.config.trait.HasName;
 import java.util.stream.Stream;
 
 /**
- * This Component interface is used for Speedmens's code generation.
+ * This Component interface is used for Speedments's code generation.
  *
  * @author  Per Minborg
  * @author  Emil Forslund

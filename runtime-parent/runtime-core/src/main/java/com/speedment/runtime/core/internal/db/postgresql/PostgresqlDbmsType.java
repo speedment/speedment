@@ -38,6 +38,13 @@ import static com.speedment.common.injector.InjectBundle.of;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
+import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
+import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
+import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
+import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
+import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
+import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
+import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
 
 /**
  * Created by fdirlikl on 11/13/2015.

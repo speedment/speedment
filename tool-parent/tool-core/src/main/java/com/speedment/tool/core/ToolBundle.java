@@ -34,11 +34,11 @@ public class ToolBundle implements InjectBundle {
     @Override
     public Stream<Class<?>> injectables() {
         return InjectBundle.of(UserInterfaceComponentImpl.class)
-            .andThen(UserInterfaceComponentImpl.include())
-            .andThen(VersionComponentImpl.class)
-            .andThen(RuleComponentImpl.class)
-            .andThen(ConfigFileHelper.class)
-            .andThen(InjectionLoader.class)
+            .withBundle(UserInterfaceComponentImpl.include())
+            .withComponent(VersionComponentImpl.class)
+            .withComponent(RuleComponentImpl.class)
+            .withComponent(ConfigFileHelper.class)
+            .withComponent(InjectionLoader.class)
             .injectables();
     }
     

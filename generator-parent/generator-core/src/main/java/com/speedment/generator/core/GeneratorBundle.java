@@ -37,8 +37,8 @@ public class GeneratorBundle implements InjectBundle {
                 EventComponentImpl.class,
                 TranslatorManagerImpl.class,
                 PathComponentImpl.class
-            ).andThen(TranslatorBundle.class)
-            .andThen(StandardTranslatorBundle.class)
+            ).withBundle(new TranslatorBundle())
+            .withBundle(new StandardTranslatorBundle())
             .injectables();
     }
 }

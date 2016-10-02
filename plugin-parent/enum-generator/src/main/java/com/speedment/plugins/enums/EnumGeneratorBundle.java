@@ -29,7 +29,7 @@ public class EnumGeneratorBundle implements InjectBundle {
     @Override
     public Stream<Class<?>> injectables() {
         return EnumGeneratorComponent.include()
-            .andThen(EnumGeneratorComponent.class)
+            .withComponent(EnumGeneratorComponent.class)
             .injectables();
     }
 
