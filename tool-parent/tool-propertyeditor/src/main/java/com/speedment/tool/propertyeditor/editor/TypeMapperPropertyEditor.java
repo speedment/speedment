@@ -17,7 +17,7 @@
 package com.speedment.tool.propertyeditor.editor;
 
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.generator.core.component.TypeMapperComponent;
+import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.propertyeditor.PropertyEditor;

@@ -17,7 +17,7 @@
 package com.speedment.generator.core.event;
 
 import com.speedment.common.codegen.Generator;
-import com.speedment.generator.core.translator.TranslatorManager;
+import com.speedment.generator.translator.TranslatorManager;
 
 
 /**

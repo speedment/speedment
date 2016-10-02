@@ -37,6 +37,7 @@
     
     <modules>
         <module>generator-translator</module>
+        <module>generator-standard</module>
         <module>generator-core</module>
         <module>generator-all</module>
     </modules>

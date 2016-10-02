@@ -19,7 +19,7 @@ package com.speedment.tool.core;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
-import com.speedment.generator.core.internal.component.CodeGenerationComponentImpl;
+import com.speedment.generator.translator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.internal.DefaultApplicationBuilder;
 import com.speedment.runtime.core.internal.DefaultApplicationMetadata;

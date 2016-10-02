@@ -110,6 +110,11 @@
         
         <dependency>
             <groupId>com.speedment.common</groupId>
+            <artifactId>mapstream</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
             <artifactId>logger</artifactId>
         </dependency>
         
@@ -132,6 +137,11 @@
         <!-- com.speedment.generator -->
         <dependency>
             <groupId>com.speedment.generator</groupId>
+            <artifactId>generator-translator</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.generator</groupId>
             <artifactId>generator-core</artifactId>
         </dependency>
         
@@ -140,12 +150,24 @@
             <groupId>com.speedment.tool</groupId>
             <artifactId>tool-config</artifactId>
             <version>${speedment.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         
         <dependency>
             <groupId>com.speedment.tool</groupId>
             <artifactId>tool-propertyeditor</artifactId>
             <version>${speedment.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         	        
         <!-- LICENSE INFORMATION

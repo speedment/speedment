@@ -22,7 +22,7 @@ import com.speedment.runtime.config.Schema;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.JAVA_NAME;
 import com.speedment.generator.core.GeneratorBundle;
-import com.speedment.generator.core.namer.JavaLanguageNamer;
+import com.speedment.generator.translator.namer.JavaLanguageNamer;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.tool.core.ToolBundle;
 import static org.junit.Assert.assertEquals;

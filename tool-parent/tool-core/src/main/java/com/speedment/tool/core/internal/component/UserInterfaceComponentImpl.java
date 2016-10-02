@@ -23,7 +23,7 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
-import com.speedment.generator.core.translator.TranslatorSupport;
+import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;

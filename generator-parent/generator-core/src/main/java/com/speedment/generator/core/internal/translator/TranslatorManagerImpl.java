@@ -24,15 +24,14 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
-import com.speedment.generator.core.component.CodeGenerationComponent;
 import com.speedment.generator.core.component.EventComponent;
 import com.speedment.generator.core.component.PathComponent;
 import com.speedment.generator.core.event.AfterGenerate;
 import com.speedment.generator.core.event.BeforeGenerate;
 import com.speedment.generator.core.event.FileGenerated;
 import com.speedment.generator.core.internal.util.HashUtil;
-import com.speedment.generator.core.translator.Translator;
-import com.speedment.generator.core.translator.TranslatorManager;
+import com.speedment.generator.translator.Translator;
+import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
@@ -53,6 +52,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import com.speedment.generator.translator.component.CodeGenerationComponent;
 import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
 import static java.util.Objects.requireNonNull;
 

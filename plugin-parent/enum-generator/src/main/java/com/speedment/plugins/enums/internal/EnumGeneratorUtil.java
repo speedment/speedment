@@ -17,7 +17,7 @@
 package com.speedment.plugins.enums.internal;
 
 import com.speedment.common.injector.Injector;
-import com.speedment.generator.core.translator.TranslatorSupport;
+import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 

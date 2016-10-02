@@ -24,9 +24,9 @@ import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.common.injector.Injector;
-import com.speedment.generator.core.namer.JavaLanguageNamer;
-import com.speedment.generator.core.translator.JavaClassTranslator;
-import com.speedment.generator.core.translator.TranslatorDecorator;
+import com.speedment.generator.translator.namer.JavaLanguageNamer;
+import com.speedment.generator.translator.JavaClassTranslator;
+import com.speedment.generator.translator.TranslatorDecorator;
 import com.speedment.plugins.enums.StringToEnumTypeMapper;
 import com.speedment.runtime.config.Table;
 

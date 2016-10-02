@@ -18,7 +18,7 @@ package com.speedment.plugins.spring;
 
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
-import com.speedment.generator.core.component.CodeGenerationComponent;
+import com.speedment.generator.translator.component.CodeGenerationComponent;
 import com.speedment.plugins.spring.internal.ConfigurationTranslator;
 import com.speedment.plugins.spring.internal.ControllerTranslator;
 import com.speedment.plugins.spring.internal.GeneratedConfigurationTranslator;

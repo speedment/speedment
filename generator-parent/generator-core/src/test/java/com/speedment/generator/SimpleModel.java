@@ -20,7 +20,7 @@ import com.speedment.generator.core.GeneratorBundle;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
 import com.speedment.generator.core.internal.translator.TranslatorManagerImpl;
-import com.speedment.generator.core.translator.TranslatorManager;
+import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.config.Column;

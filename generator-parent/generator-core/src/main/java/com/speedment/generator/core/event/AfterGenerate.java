@@ -18,7 +18,7 @@ package com.speedment.generator.core.event;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.generator.core.event.trait.ProjectEvent;
-import com.speedment.generator.core.translator.TranslatorManager;
+import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.runtime.config.Project;
 
 import static java.util.Objects.requireNonNull;

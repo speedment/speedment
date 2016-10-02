@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>com.speedment.generator</groupId>
+        <artifactId>generator-parent</artifactId>
+        <version>3.0.1-SNAPSHOT</version>
+    </parent>
+    
+    <artifactId>generator-standard</artifactId>
+    <packaging>bundle</packaging>
+    
+    <name>Speedment - Generator - Standard Translator</name>
+    <description>
+        Standard Translators used by the Speedment ORM.
+    </description>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Export-Package>com.speedment.generator.standard.*</Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>                            
+        </plugins>
+    </build>
+    
+    <dependencies>
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>function</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>codegen</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>injector</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>invariant</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>mapstream</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>json</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-config</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-typemapper</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-core</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.generator</groupId>
+            <artifactId>generator-translator</artifactId>
+            <version>${speedment.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+</project>

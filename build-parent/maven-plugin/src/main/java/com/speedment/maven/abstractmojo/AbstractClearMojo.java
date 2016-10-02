@@ -16,7 +16,7 @@
  */
 package com.speedment.maven.abstractmojo;
 
-import com.speedment.generator.core.translator.TranslatorManager;
+import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;

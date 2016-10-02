@@ -78,6 +78,11 @@
         
         <dependency>
             <groupId>com.speedment.generator</groupId>
+            <artifactId>generator-translator</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.generator</groupId>
             <artifactId>generator-core</artifactId>
         </dependency>
         
