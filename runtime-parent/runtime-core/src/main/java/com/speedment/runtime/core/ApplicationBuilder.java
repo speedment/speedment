@@ -337,7 +337,7 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
         STREAM, PERSIST, UPDATE, REMOVE, APPLICATION_BUILDER
     }
 
-    BUILDER withLoggingOf(LogType logType);
+    BUILDER withLogging(LogType logType);
 
     /**
      * Builds this application.

@@ -25,7 +25,6 @@ import com.speedment.runtime.core.exception.SpeedmentException;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.INITIALIZED;
-import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.PersistenceComponent;
@@ -65,7 +64,7 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
         this.remover   = persistenceComponent.remover(tableId);
     }
 
-    @ExecuteBefore(RESOLVED)
+    @ExecuteBefore(INITIALIZED)
     final void install(
         @WithState(INITIALIZED) ManagerComponent managerComponent,
         @WithState(INITIALIZED) ProjectComponent projectComponent) {

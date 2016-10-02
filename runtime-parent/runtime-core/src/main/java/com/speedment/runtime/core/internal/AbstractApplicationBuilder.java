@@ -67,96 +67,6 @@ import static java.util.Objects.requireNonNull;
 import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 
 /**
  * This abstract class is implemented by classes that can build a
@@ -372,7 +282,7 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public BUILDER withLoggingOf(LogType logType) {
+    public BUILDER withLogging(LogType logType) {
         switch (logType) {
             case STREAM: {
                 LoggerManager.getLogger(AsynchronousQueryResultImpl.LOGGER_SELECT_NAME).setLevel(Level.DEBUG);

@@ -14,9 +14,9 @@
  */
 package com.speedment.runtime.core.component.sql;
 
-import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.core.field.Field;
 import com.speedment.runtime.core.internal.component.sql.SqlTypeMapperHelperImpl;
-import com.speedment.runtime.typemapper.TypeMapper;
 
 /**
  *
@@ -32,10 +32,10 @@ public interface SqlTypeMapperHelper<DB_TYPE, JAVA_TYPE> {
     
     static <ENTITY, DB_TYPE, JAVA_TYPE> 
     SqlTypeMapperHelper<DB_TYPE, JAVA_TYPE> create(
-        TypeMapper<DB_TYPE, JAVA_TYPE> typeMapper,
-        Column column,
-        Class<ENTITY> entityClass) {
+            Project project,
+            Field<ENTITY> field, 
+            Class<ENTITY> entityClass) {
         
-        return new SqlTypeMapperHelperImpl<>(typeMapper, column, entityClass);
+        return new SqlTypeMapperHelperImpl<>(project, field, entityClass);
     }
 }

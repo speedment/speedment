@@ -83,7 +83,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
         builder.withComponent(MavenPathComponent.class);
         configurer.accept(builder);
         if (debug()) {
-            builder.withLoggingOf(ApplicationBuilder.LogType.APPLICATION_BUILDER);
+            builder.withLogging(ApplicationBuilder.LogType.APPLICATION_BUILDER);
         }
         builder.withSkipCheckDatabaseConnectivity();
         final Speedment speedment = builder.build();

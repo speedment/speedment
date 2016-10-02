@@ -15,7 +15,10 @@
 package com.speedment.runtime.core.internal.component.sql;
 
 import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.Project;
+import static com.speedment.runtime.config.util.DocumentDbUtil.referencedColumn;
 import com.speedment.runtime.core.component.sql.SqlTypeMapperHelper;
+import com.speedment.runtime.core.field.Field;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 /**
@@ -35,12 +38,16 @@ implements SqlTypeMapperHelper<DB_TYPE, JAVA_TYPE> {
     private final Class<ENTITY> entityClass;
 
     public SqlTypeMapperHelperImpl(
-            TypeMapper<DB_TYPE, JAVA_TYPE> typeMapper,
-            Column column,
+            Project project,
+            Field<ENTITY> field,
             Class<ENTITY> entityClass) {
 
-        this.typeMapper  = typeMapper;
-        this.column      = column;
+        @SuppressWarnings("unchecked")
+        final TypeMapper<DB_TYPE, JAVA_TYPE> casted = 
+            (TypeMapper<DB_TYPE, JAVA_TYPE>) field.typeMapper();
+        
+        this.typeMapper  = casted;
+        this.column      = referencedColumn(project, field.identifier());
         this.entityClass = entityClass;
     }
 
