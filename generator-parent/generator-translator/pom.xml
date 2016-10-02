@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>com.speedment.generator</groupId>
+        <artifactId>generator-parent</artifactId>
+        <version>3.0.1-SNAPSHOT</version>
+    </parent>
+    
+    <artifactId>generator-translator</artifactId>
+    <packaging>bundle</packaging>
+    
+    <name>Speedment - Generator - Translator</name>
+    <description>
+        Translates between a database configuration model and a CodeGen model
+        that can be used to produce code files.
+    </description>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Export-Package>com.speedment.generator.translator.*</Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>                            
+        </plugins>
+    </build>
+</project>
