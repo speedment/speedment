@@ -59,12 +59,14 @@ public final class StandardTranslatorKey {
     public final static TranslatorKey<Table, Class>
         ENTITY_IMPL            = TranslatorKey.of("EntityImpl", Class.class),
         MANAGER_IMPL           = TranslatorKey.of("ManagerImpl", Class.class),
+        SQL_ADAPTER            = TranslatorKey.of("SqlAdapter", Class.class),
         GENERATED_ENTITY_IMPL  = TranslatorKey.of("GeneratedEntityImpl", Class.class),
-        GENERATED_MANAGER_IMPL = TranslatorKey.of("GeneratedManagerImpl", Class.class);
+        GENERATED_MANAGER_IMPL = TranslatorKey.of("GeneratedManagerImpl", Class.class),
+        GENERATED_SQL_ADAPTER  = TranslatorKey.of("GeneratedSqlAdapter", Class.class);
 
     /**
      * Returns a stream of the standard {@link TranslatorKey Translator Keys}
-     * that is used on a 'per project' basis.
+     * that is used on a per project basis.
      * 
      * @return  stream of standard project {@link TranslatorKey Translator Keys}
      */

@@ -36,10 +36,7 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.internal.util.Formatting.*;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.joining;
 import static com.speedment.generator.standard.manager.GeneratedManagerImplTranslator.ENTITY_CREATE_METHOD_NAME;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -101,7 +98,7 @@ public final class GenerateMethodBodyUtil {
     public static String[] generateNewEntityFromBody(ReadFromResultSet readFromResultSet, TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
 
         final List<String> rows = new LinkedList<>();
-        rows.add("final " + support.entityName() + " entity = " + ENTITY_CREATE_METHOD_NAME + "();");
+        rows.add("final " + support.entityName() + " entity = manager." + ENTITY_CREATE_METHOD_NAME + "();");
 
         final Stream.Builder<String> streamBuilder = Stream.builder();
 

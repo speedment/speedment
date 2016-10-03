@@ -32,16 +32,18 @@ import com.speedment.generator.standard.lifecycle.GeneratedApplicationTranslator
 import com.speedment.generator.standard.lifecycle.GeneratedMetadataTranslator;
 import com.speedment.generator.standard.manager.GeneratedManagerImplTranslator;
 import com.speedment.generator.standard.manager.GeneratedManagerTranslator;
+import com.speedment.generator.standard.manager.GeneratedSqlAdapterTranslator;
 import com.speedment.generator.standard.manager.ManagerImplTranslator;
 import com.speedment.generator.standard.manager.ManagerTranslator;
+import com.speedment.generator.standard.manager.SqlAdapterTranslator;
 import com.speedment.generator.translator.component.CodeGenerationComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 
 /**
  *
- * @author  Emil Forslund
- * @since   3.0.1
+ * @author Emil Forslund
+ * @since 3.0.1
  */
 public final class StandardTranslatorComponent {
 
@@ -51,10 +53,12 @@ public final class StandardTranslatorComponent {
         codeGen.put(Table.class, ENTITY_IMPL, EntityImplTranslator::new);
         codeGen.put(Table.class, MANAGER, ManagerTranslator::new);
         codeGen.put(Table.class, MANAGER_IMPL, ManagerImplTranslator::new);
+        codeGen.put(Table.class, SQL_ADAPTER, SqlAdapterTranslator::new);
         codeGen.put(Table.class, GENERATED_ENTITY, GeneratedEntityTranslator::new);
         codeGen.put(Table.class, GENERATED_ENTITY_IMPL, GeneratedEntityImplTranslator::new);
         codeGen.put(Table.class, GENERATED_MANAGER, GeneratedManagerTranslator::new);
         codeGen.put(Table.class, GENERATED_MANAGER_IMPL, GeneratedManagerImplTranslator::new);
+        codeGen.put(Table.class, GENERATED_SQL_ADAPTER, GeneratedSqlAdapterTranslator::new);
         codeGen.put(Project.class, APPLICATION, ApplicationTranslator::new);
         codeGen.put(Project.class, APPLICATION_IMPL, ApplicationImplTranslator::new);
         codeGen.put(Project.class, APPLICATION_BUILDER, ApplicationBuilderTranslator::new);

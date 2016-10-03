@@ -241,7 +241,7 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
                     //                        .add("return \"" + getSupport().tableOrThrow().getName() + "\";")
                     //                    )
 
-                    .add(generateNewEntityFrom(getSupport(), file, table::columns))
+                    //.add(generateNewEntityFrom(getSupport(), file, table::columns))
                     .add(generateNewEmptyEntity(getSupport(), file, table::columns))
                     .add(generateFields(getSupport(), file, FIELDS_METHOD, table::columns))
                     .add(generateFields(getSupport(), file, PRIMARY_KEYS_FIELDS_METHOD,
@@ -302,14 +302,14 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
         return getSupport().managerImplType();
     }
 
-    private Method generateNewEntityFrom(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        return Method.of(ENTITY_COPY_METHOD_NAME, support.entityType())
-            .protected_()
-            .add(SQLException.class)
-            .add(SpeedmentException.class)
-            .add(Field.of("resultSet", ResultSet.class))
-            .add(generateNewEntityFromBody(this::readFromResultSet, support, file, columnsSupplier));
-    }
+//    private Method generateNewEntityFrom(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+//        return Method.of(ENTITY_COPY_METHOD_NAME, support.entityType())
+//            .protected_()
+//            .add(SQLException.class)
+//            .add(SpeedmentException.class)
+//            .add(Field.of("resultSet", ResultSet.class))
+//            .add(generateNewEntityFromBody(this::readFromResultSet, support, file, columnsSupplier));
+//    }
 
     private String readFromResultSet(File file, Column c, AtomicInteger position) {
 

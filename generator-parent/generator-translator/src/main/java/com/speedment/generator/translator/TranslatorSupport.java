@@ -61,7 +61,8 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
         IMPL_SUFFIX       = "Impl",
         MANAGER_SUFFIX    = "Manager",
         GENERATED_PACKAGE = "generated",
-        GENERATED_PREFIX  = "Generated";
+        GENERATED_PREFIX  = "Generated",
+        SQL_ADAPTER_SUFFIX= "SqlAdapter";
     
     private final DOC document;
     private final Injector injector;
@@ -116,6 +117,14 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
         return shortName(generatedManagerImplType().getTypeName());
     }
     
+    public String sqlAdapterName() {
+        return shortName(sqlAdapterType().getTypeName());
+    }
+    
+    public String generatedSqlAdapterName() {
+        return shortName(generatedSqlAdapterType().getTypeName());
+    }
+    
     public Type entityType() {
         return SimpleType.create(fullyQualifiedTypeName());
     }
@@ -146,6 +155,14 @@ public final class TranslatorSupport<DOC extends Document & HasName & HasMainInt
     
     public Type generatedManagerImplType() {
         return SimpleType.create(fullyQualifiedTypeName(GENERATED_PACKAGE, GENERATED_PREFIX) + MANAGER_SUFFIX + IMPL_SUFFIX);
+    }
+    
+    public Type sqlAdapterType() {
+        return SimpleType.create(fullyQualifiedTypeName() + SQL_ADAPTER_SUFFIX);
+    }
+    
+    public Type generatedSqlAdapterType() {
+        return SimpleType.create(fullyQualifiedTypeName(GENERATED_PACKAGE, GENERATED_PREFIX) + SQL_ADAPTER_SUFFIX);
     }
 
     /**

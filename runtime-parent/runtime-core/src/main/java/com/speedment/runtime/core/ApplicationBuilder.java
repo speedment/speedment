@@ -37,7 +37,6 @@ import java.util.function.Consumer;
  * @author Emil Forslund
  * @since 3.0.0
  */
-
 public interface ApplicationBuilder<APP extends Speedment, BUILDER extends ApplicationBuilder<APP, BUILDER>> {
 
     /**
@@ -273,7 +272,6 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      */
     BUILDER withConnectionUrl(String dbmsName, String connectionUrl);
 
-    
     /**
      * Sets that the initial database check shall be skipped upon build().
      *
@@ -337,7 +335,23 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
         STREAM, PERSIST, UPDATE, REMOVE, APPLICATION_BUILDER
     }
 
+    /**
+     * Adds a logging configuration to the application.
+     *
+     * @param logType to turn on
+     * @return this instance
+     */
     BUILDER withLogging(LogType logType);
+
+//    /**
+//     * Adds a custom installer class and then installs it in the parent
+//     *
+//     * @param <T> install class type
+//     * @param parent class type
+//     * @param installClass to be added and installed
+//     * @return this instance
+//     */
+//    <T> BUILDER withInstall(Class<HasInstall<T>> parent, Class<T> installClass);
 
     /**
      * Builds this application.

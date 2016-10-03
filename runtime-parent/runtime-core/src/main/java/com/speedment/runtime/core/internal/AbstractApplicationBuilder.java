@@ -64,9 +64,6 @@ import com.speedment.runtime.core.util.DatabaseUtil;
 import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 
 /**
  * This abstract class is implemented by classes that can build a
