@@ -111,8 +111,9 @@ public final class GenerateMethodBodyUtil {
                 streamBuilder.add("entity.set" + support.namer().javaTypeName(c.getJavaName()) + "(" + readFromResultSet.readFromResultSet(file, c, position) + ");");
             });
 
-        rows.add("try " + block(streamBuilder.build()));
-        rows.add("catch (final " + SQLException.class.getSimpleName() + " sqle) " + block(
+        rows.add(
+            "try " + block(streamBuilder.build()) +
+            "catch (final " + SQLException.class.getSimpleName() + " sqle) " + block(
             "throw new " + SpeedmentException.class.getSimpleName() + "(sqle);"
         ));
         rows.add("return entity;");
