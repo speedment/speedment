@@ -11,6 +11,7 @@ import com.speedment.runtime.core.manager.Persister;
 import com.speedment.runtime.core.manager.Remover;
 import com.speedment.runtime.core.manager.Updater;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
+import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
 
 /**
@@ -27,9 +28,9 @@ public class ConfiguredManager<ENTITY> implements Manager<ENTITY> {
     private final ParallelStrategy parallelStrategy;
 
     public ConfiguredManager(StreamSupplierComponent streamSupplierComponent, Manager<ENTITY> manager, ParallelStrategy parallelStrategy) {
-        this.streamSupplierComponent = streamSupplierComponent;
-        this.manager = manager;
-        this.parallelStrategy = parallelStrategy;
+        this.streamSupplierComponent = requireNonNull(streamSupplierComponent);
+        this.manager = requireNonNull(manager);
+        this.parallelStrategy = requireNonNull(parallelStrategy);
     }
 
     @Override
