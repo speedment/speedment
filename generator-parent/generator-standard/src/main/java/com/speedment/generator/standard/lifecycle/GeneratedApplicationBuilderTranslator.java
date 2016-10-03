@@ -57,12 +57,14 @@ import static java.util.stream.Collectors.joining;
 /**
  *
  * @author Per Minborg
- * @since  2.4.0
+ * @since 2.4.0
  */
 public final class GeneratedApplicationBuilderTranslator extends AbstractJavaClassTranslator<Project, Class> {
-    
-    private @Inject InfoComponent infoComponent;
-    private @Inject Injector injector;
+
+    private @Inject
+    InfoComponent infoComponent;
+    private @Inject
+    Injector injector;
 
     public GeneratedApplicationBuilderTranslator(Project doc) {
         super(doc, Class::of);
@@ -72,14 +74,14 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
     public boolean isInGeneratedPackage() {
         return true;
     }
-    
+
     @Override
     protected Class makeCodeGenModel(File file) {
         requireNonNull(file);
-        
+
         return newBuilder(file, getClassOrInterfaceName())
             .forEveryProject((clazz, project) -> {
-                
+
                 final Map<String, List<Table>> nameMap = traverseOver(project, Table.class)
                     .filter(HasEnabled::test)
                     .collect(Collectors.groupingBy(Table::getName));
@@ -88,49 +90,64 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
                     .filterValue(l -> l.size() > 1)
                     .keys()
                     .collect(toSet());
-                
+
                 final List<String> managerImpls = new LinkedList<>();
+                final List<String> sqlAdapters = new LinkedList<>();
 
                 traverseOver(project, Table.class)
                     .filter(HasEnabled::test)
                     .forEachOrdered(t -> {
                         final TranslatorSupport<Table> support = new TranslatorSupport<>(injector, t);
                         final Type managerImplType = support.managerImplType();
-                        
+                        final Type sqlAdapterType = support.sqlAdapterType();
+
                         if (ambigousNames.contains(t.getName())) {
                             managerImpls.add(managerImplType.getTypeName());
+                            sqlAdapters.add(sqlAdapterType.getTypeName());
                         } else {
                             file.add(Import.of(managerImplType));
+                            file.add(Import.of(sqlAdapterType));
                             managerImpls.add(shortName(managerImplType.getTypeName()));
+                            sqlAdapters.add(shortName(sqlAdapterType.getTypeName()));
                         }
                     });
-                
+
                 file.add(Import.of(applicationType()));
                 file.add(Import.of(applicationImplType()));
-                
+
                 final Method build = Method.of("build", applicationType())
                     .public_().add(OVERRIDE)
                     .add(Field.of("injector", Injector.class))
                     .add("return injector.getOrThrow(" + getSupport().typeName(getSupport().projectOrThrow()) + "Application.class);");
 
                 final Constructor constr = Constructor.of().protected_();
-                
+
                 final StringBuilder constructorBody = new StringBuilder("super(");
                 constructorBody.append(getSupport().typeName(getSupport().projectOrThrow())).append("ApplicationImpl.class, ");
                 constructorBody.append("Generated").append(getSupport().typeName(getSupport().projectOrThrow())).append(METADATA).append(".class);").append(nl());
-                
+
                 final String separator = nl();
                 if (!managerImpls.isEmpty()) {
-                    
+
                     constructorBody.append(
                         managerImpls.stream()
-                            .map(s -> "withManager(" + s + ".class);")
-                            .collect(joining(separator))
+                        .map(s -> "withManager(" + s + ".class);")
+                        .collect(joining(separator, "", separator))
+                    );
+                    
+                }
+
+                if (!sqlAdapters.isEmpty()) {
+
+                    constructorBody.append(
+                        sqlAdapters.stream()
+                        .map(s -> "withComponent(" + s + ".class);")
+                        .collect(joining(separator))
                     );
                 }
-                
+
                 constr.add(constructorBody.toString());
-                
+
                 clazz.public_().abstract_()
                     .setSupertype(
                         SimpleParameterizedType.create(
@@ -143,44 +160,44 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
                     .add(build);
             }).build();
     }
-    
+
     @Override
     protected Javadoc getJavaDoc() {
         final String owner = infoComponent.getTitle();
         return new JavadocImpl(getJavadocRepresentText() + getGeneratedJavadocMessage())
             .add(AUTHOR.setValue(owner));
     }
-    
+
     @Override
     protected String getJavadocRepresentText() {
-        return "A generated base {@link " + AbstractApplicationBuilder.class.getName() + 
-            "} class for the {@link " + Project.class.getName() + 
-            "} named " + getSupport().projectOrThrow().getName() + ".";
+        return "A generated base {@link " + AbstractApplicationBuilder.class.getName()
+            + "} class for the {@link " + Project.class.getName()
+            + "} named " + getSupport().projectOrThrow().getName() + ".";
     }
-    
+
     @Override
     protected String getClassOrInterfaceName() {
         return "Generated" + getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationBuilder";
     }
-    
+
     private Type builderType() {
         return SimpleType.create(
-            getSupport().basePackageName() + "." + 
-            getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationBuilder"
+            getSupport().basePackageName() + "."
+            + getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationBuilder"
         );
     }
-    
+
     private Type applicationType() {
         return SimpleType.create(
-            getSupport().basePackageName() + "." + 
-            getSupport().typeName(getSupport().projectOrThrow()) + "Application"
+            getSupport().basePackageName() + "."
+            + getSupport().typeName(getSupport().projectOrThrow()) + "Application"
         );
     }
-    
+
     private Type applicationImplType() {
         return SimpleType.create(
-            getSupport().basePackageName() + "." + 
-            getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationImpl"
+            getSupport().basePackageName() + "."
+            + getSupport().typeName(getSupport().projectOrThrow()) + "ApplicationImpl"
         );
     }
 }

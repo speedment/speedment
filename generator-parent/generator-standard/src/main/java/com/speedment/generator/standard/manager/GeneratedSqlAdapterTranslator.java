@@ -93,9 +93,11 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
                     .public_()
                     .abstract_()
                     .add(Field.of("manager", getSupport().managerType()).add(inject()).private_())
+                    .add(Field.of("tableIdentifier", SimpleParameterizedType.create(TableIdentifier.class, getSupport().entityType())).private_().final_())
+                    .add(Field.of("project", Project.class).private_())
                     .add(Method.of("createHelpers", void.class)
                         .add(Field.of("projectComponent", ProjectComponent.class).add(withStateInitialized(file)))
-                        .add("final Project project = projectComponent.getProject();")
+                        .add("this.project = projectComponent.getProject();")
                     )
                     .add(Method.of("install", void.class)
                         .add("")
@@ -105,7 +107,6 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
                         .add("streamSupplierComponent.install(tableIdentifier, this::apply);")
                         .add("persistenceComponent.install(tableIdentifier);")
                     )
-                    .add(Field.of("tableIdentifier", SimpleParameterizedType.create(TableIdentifier.class, getSupport().entityType())).private_().final_())
                     .add(Constructor.of().protected_()
                         //                        .add("this.tableIdentifier = "+TableIdentifier.class.getSimpleName()+".of(\\\"\" + getSupport().dbmsOrThrow().getName() + \"\\\");
                         .add("this.tableIdentifier = " + TableIdentifier.class.getSimpleName() + ".of("
@@ -181,11 +182,11 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
         if (!isIdentityMapper) {
             sb
                 .append(typeMapperName(support, c))
-                .append(".toJavaType(DocumentDbUtil.referencedColumn(projectComponent.getProject(), ")
+                .append(".toJavaType(DocumentDbUtil.referencedColumn(project, ")
                 .append(support.entityName())
                 .append(".")
                 .append(support.namer().javaStaticFieldName(c.getJavaName()))
-                .append(".identifier()), getEntityClass(), ");
+                .append(".identifier()), manager.getEntityClass(), ");
         }
         final String getterName = "get" + mapping.getResultSetMethodName(dbms);
 
