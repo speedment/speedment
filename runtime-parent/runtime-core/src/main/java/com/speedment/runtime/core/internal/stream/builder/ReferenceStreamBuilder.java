@@ -201,7 +201,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      */
     @Override
     public Object[] toArray() {
-        return finallyClose(() -> streamTerminator.toArray(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.toArray(pipeline()));
     }
 
     /**
@@ -215,7 +215,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public <A> A[] toArray(IntFunction<A[]> generator) {
         requireNonNull(generator);
-        return finallyClose(() -> streamTerminator.toArray(pipeline(), generator));
+        return finallyCloseReference(() -> streamTerminator.toArray(pipeline(), generator));
     }
 
     /**
@@ -230,7 +230,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     public T reduce(T identity, BinaryOperator<T> accumulator) {
         requireNonNull(identity);
         requireNonNull(accumulator);
-        return finallyClose(() -> streamTerminator.reduce(pipeline(), identity, accumulator));
+        return finallyCloseReference(() -> streamTerminator.reduce(pipeline(), identity, accumulator));
     }
 
     /**
@@ -244,7 +244,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public Optional<T> reduce(BinaryOperator<T> accumulator) {
         requireNonNull(accumulator);
-        return finallyClose(() -> streamTerminator.reduce(pipeline(), accumulator));
+        return finallyCloseReference(() -> streamTerminator.reduce(pipeline(), accumulator));
     }
 
     /**
@@ -260,7 +260,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
         requireNonNull(identity);
         requireNonNull(accumulator);
         requireNonNull(combiner);
-        return finallyClose(() -> streamTerminator.reduce(pipeline(), identity, accumulator, combiner));
+        return finallyCloseReference(() -> streamTerminator.reduce(pipeline(), identity, accumulator, combiner));
     }
 
     /**
@@ -276,7 +276,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
         requireNonNull(supplier);
         requireNonNull(accumulator);
         requireNonNull(combiner);
-        return finallyClose(() -> streamTerminator.collect(pipeline(), supplier, accumulator, combiner));
+        return finallyCloseReference(() -> streamTerminator.collect(pipeline(), supplier, accumulator, combiner));
     }
 
     /**
@@ -290,7 +290,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public <R, A> R collect(Collector<? super T, A, R> collector) {
         requireNonNull(collector);
-        return finallyClose(() -> streamTerminator.collect(pipeline(), collector));
+        return finallyCloseReference(() -> streamTerminator.collect(pipeline(), collector));
     }
 
     /**
@@ -304,7 +304,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public Optional<T> min(Comparator<? super T> comparator) {
         requireNonNull(comparator);
-        return finallyClose(() -> streamTerminator.min(pipeline(), comparator));
+        return finallyCloseReference(() -> streamTerminator.min(pipeline(), comparator));
     }
 
     /**
@@ -318,7 +318,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public Optional<T> max(Comparator<? super T> comparator) {
         requireNonNull(comparator);
-        return finallyClose(() -> streamTerminator.max(pipeline(), comparator));
+        return finallyCloseReference(() -> streamTerminator.max(pipeline(), comparator));
     }
 
     /**
@@ -331,7 +331,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      */
     @Override
     public long count() {
-        return finallyClose(() -> streamTerminator.count(pipeline()));
+        return finallyCloseLong(() -> streamTerminator.count(pipeline()));
     }
 
     /**
@@ -345,7 +345,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public boolean anyMatch(Predicate<? super T> predicate) {
         requireNonNull(predicate);
-        return finallyClose(() -> streamTerminator.anyMatch(pipeline(), predicate));
+        return finallyCloseBoolean(() -> streamTerminator.anyMatch(pipeline(), predicate));
     }
 
     /**
@@ -359,7 +359,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public boolean allMatch(Predicate<? super T> predicate) {
         requireNonNull(predicate);
-        return finallyClose(() -> streamTerminator.allMatch(pipeline(), predicate));
+        return finallyCloseBoolean(() -> streamTerminator.allMatch(pipeline(), predicate));
     }
 
     /**
@@ -373,7 +373,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     @Override
     public boolean noneMatch(Predicate<? super T> predicate) {
         requireNonNull(predicate);
-        return finallyClose(() -> streamTerminator.noneMatch(pipeline(), predicate));
+        return finallyCloseBoolean(() -> streamTerminator.noneMatch(pipeline(), predicate));
     }
 
     /**
@@ -386,7 +386,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      */
     @Override
     public Optional<T> findFirst() {
-        return finallyClose(() -> streamTerminator.findFirst(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.findFirst(pipeline()));
     }
 
     /**
@@ -399,7 +399,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      */
     @Override
     public Optional<T> findAny() {
-        return finallyClose(() -> streamTerminator.findAny(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.findAny(pipeline()));
     }
 
     /**

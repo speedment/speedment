@@ -128,7 +128,7 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
         return thizz;
     }
 
-    protected boolean finallyClose(BooleanSupplier bs) {
+    protected boolean finallyCloseBoolean(BooleanSupplier bs) {
         try {
             return bs.getAsBoolean();
         } catch (Exception e) {
@@ -139,7 +139,7 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
         }
     }
 
-    protected long finallyClose(LongSupplier lp) {
+    protected long finallyCloseLong(LongSupplier lp) {
         try {
             return lp.getAsLong();
         } catch (Exception e) {
@@ -150,7 +150,7 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
         }
     }
 
-    protected int finallyClose(IntSupplier is) {
+    protected int finallyCloseInt(IntSupplier is) {
         try {
             return is.getAsInt();
         } catch (Exception e) {
@@ -161,7 +161,7 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
         }
     }
 
-    protected double finallyClose(DoubleSupplier ds) {
+    protected double finallyCloseDouble(DoubleSupplier ds) {
         try {
             return ds.getAsDouble();
         } catch (Exception e) {
@@ -183,7 +183,7 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
         }
     }
 
-    protected <T> T finallyClose(Supplier<T> s) {
+    protected <T> T finallyCloseReference(Supplier<T> s) {
         try {
             return s.get();
         } catch (Exception e) {

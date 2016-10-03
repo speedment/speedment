@@ -208,7 +208,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
     @Override
     public long reduce(long identity, LongBinaryOperator op) {
         requireNonNull(op);
-        return finallyClose(() -> streamTerminator.reduce(pipeline(), identity, op));
+        return finallyCloseLong(() -> streamTerminator.reduce(pipeline(), identity, op));
     }
 
     /**
@@ -222,7 +222,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
     @Override
     public OptionalLong reduce(LongBinaryOperator op) {
         requireNonNull(op);
-        return finallyClose(() -> streamTerminator.reduce(pipeline(), op));
+        return finallyCloseReference(() -> streamTerminator.reduce(pipeline(), op));
     }
 
     /**
@@ -236,7 +236,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
     @Override
     public <R> R collect(Supplier<R> supplier, ObjLongConsumer<R> accumulator, BiConsumer<R, R> combiner) {
         requireNonNull(supplier);
-        return finallyClose(() -> streamTerminator.collect(pipeline(), supplier, accumulator, combiner));
+        return finallyCloseReference(() -> streamTerminator.collect(pipeline(), supplier, accumulator, combiner));
     }
 
     /**
@@ -249,7 +249,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
      */
     @Override
     public long sum() {
-        return finallyClose(() -> streamTerminator.sum(pipeline()));
+        return finallyCloseLong(() -> streamTerminator.sum(pipeline()));
     }
 
     /**
@@ -262,7 +262,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
      */
     @Override
     public OptionalLong min() {
-        return finallyClose(() -> streamTerminator.min(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.min(pipeline()));
     }
 
     /**
@@ -275,7 +275,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
      */
     @Override
     public OptionalLong max() {
-        return finallyClose(() -> streamTerminator.max(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.max(pipeline()));
     }
 
     /**
@@ -288,7 +288,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
      */
     @Override
     public long count() {
-        return finallyClose(() -> streamTerminator.count(pipeline()));
+        return finallyCloseLong(() -> streamTerminator.count(pipeline()));
     }
 
     /**
@@ -301,7 +301,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
      */
     @Override
     public OptionalDouble average() {
-        return finallyClose(() -> streamTerminator.average(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.average(pipeline()));
     }
 
     /**
@@ -314,7 +314,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
      */
     @Override
     public LongSummaryStatistics summaryStatistics() {
-        return finallyClose(() -> streamTerminator.summaryStatistics(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.summaryStatistics(pipeline()));
     }
 
     /**
@@ -328,7 +328,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
     @Override
     public boolean anyMatch(LongPredicate predicate) {
         requireNonNull(predicate);
-        return finallyClose(() -> streamTerminator.anyMatch(pipeline(), predicate));
+        return finallyCloseBoolean(() -> streamTerminator.anyMatch(pipeline(), predicate));
     }
 
     /**
@@ -342,7 +342,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
     @Override
     public boolean allMatch(LongPredicate predicate) {
         requireNonNull(predicate);
-        return finallyClose(() -> streamTerminator.allMatch(pipeline(), predicate));
+        return finallyCloseBoolean(() -> streamTerminator.allMatch(pipeline(), predicate));
     }
 
     /**
@@ -356,7 +356,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
     @Override
     public boolean noneMatch(LongPredicate predicate) {
         requireNonNull(predicate);
-        return finallyClose(() -> streamTerminator.noneMatch(pipeline(), predicate));
+        return finallyCloseBoolean(() -> streamTerminator.noneMatch(pipeline(), predicate));
     }
 
     /**
@@ -369,7 +369,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
      */
     @Override
     public OptionalLong findFirst() {
-        return finallyClose(() -> streamTerminator.findFirst(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.findFirst(pipeline()));
     }
 
     /**
@@ -382,7 +382,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
      */
     @Override
     public OptionalLong findAny() {
-        return finallyClose(() -> streamTerminator.findAny(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.findAny(pipeline()));
     }
 
     /**

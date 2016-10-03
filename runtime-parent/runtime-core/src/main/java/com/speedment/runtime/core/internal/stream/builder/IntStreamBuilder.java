@@ -232,7 +232,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
     @Override
     public OptionalInt reduce(IntBinaryOperator op) {
         requireNonNull(op);
-        return finallyClose(() -> streamTerminator.reduce(pipeline(), op));
+        return finallyCloseReference(() -> streamTerminator.reduce(pipeline(), op));
     }
 
     /**
@@ -248,7 +248,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
         requireNonNull(supplier);
         requireNonNull(accumulator);
         requireNonNull(combiner);
-        return finallyClose(() -> streamTerminator.collect(pipeline(), supplier, accumulator, combiner));
+        return finallyCloseReference(() -> streamTerminator.collect(pipeline(), supplier, accumulator, combiner));
     }
 
     /**
@@ -261,7 +261,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public int sum() {
-        return finallyClose(() -> streamTerminator.sum(pipeline()));
+        return finallyCloseInt(() -> streamTerminator.sum(pipeline()));
 
     }
 
@@ -275,7 +275,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public OptionalInt min() {
-        return finallyClose(() -> streamTerminator.min(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.min(pipeline()));
     }
 
     /**
@@ -288,7 +288,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public OptionalInt max() {
-        return finallyClose(() -> streamTerminator.max(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.max(pipeline()));
     }
 
     /**
@@ -301,7 +301,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public long count() {
-        return finallyClose(() -> streamTerminator.count(pipeline()));
+        return finallyCloseLong(() -> streamTerminator.count(pipeline()));
     }
 
     /**
@@ -314,7 +314,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public OptionalDouble average() {
-        return finallyClose(() -> streamTerminator.average(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.average(pipeline()));
     }
 
     /**
@@ -327,7 +327,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public IntSummaryStatistics summaryStatistics() {
-        return finallyClose(() -> streamTerminator.summaryStatistics(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.summaryStatistics(pipeline()));
     }
 
     /**
@@ -341,7 +341,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
     @Override
     public boolean anyMatch(IntPredicate predicate) {
         requireNonNull(predicate);
-        return finallyClose(() -> streamTerminator.anyMatch(pipeline(), predicate));
+        return finallyCloseBoolean(() -> streamTerminator.anyMatch(pipeline(), predicate));
     }
 
     /**
@@ -355,7 +355,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
     @Override
     public boolean allMatch(IntPredicate predicate) {
         requireNonNull(predicate);
-        return finallyClose(() -> streamTerminator.allMatch(pipeline(), predicate));
+        return finallyCloseBoolean(() -> streamTerminator.allMatch(pipeline(), predicate));
     }
 
     /**
@@ -369,7 +369,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
     @Override
     public boolean noneMatch(IntPredicate predicate) {
         requireNonNull(predicate);
-        return finallyClose(() -> streamTerminator.noneMatch(pipeline(), predicate));
+        return finallyCloseBoolean(() -> streamTerminator.noneMatch(pipeline(), predicate));
     }
 
     /**
@@ -382,7 +382,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public OptionalInt findFirst() {
-        return finallyClose(() -> streamTerminator.findFirst(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.findFirst(pipeline()));
     }
 
     /**
@@ -395,7 +395,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public OptionalInt findAny() {
-        return finallyClose(() -> streamTerminator.findAny(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.findAny(pipeline()));
     }
 
     /**

@@ -220,7 +220,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
     @Override
     public OptionalDouble reduce(DoubleBinaryOperator op) {
         requireNonNull(op);
-        return finallyClose(() -> streamTerminator.reduce(pipeline(), op));
+        return finallyCloseReference(() -> streamTerminator.reduce(pipeline(), op));
     }
 
     /**
@@ -236,7 +236,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
         requireNonNull(supplier);
         requireNonNull(accumulator);
         requireNonNull(combiner);
-        return finallyClose(() -> streamTerminator.collect(pipeline(), supplier, accumulator, combiner));
+        return finallyCloseReference(() -> streamTerminator.collect(pipeline(), supplier, accumulator, combiner));
     }
 
     /**
@@ -249,7 +249,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public double sum() {
-        return finallyClose(() -> streamTerminator.sum(pipeline()));
+        return finallyCloseDouble(() -> streamTerminator.sum(pipeline()));
     }
 
     /**
@@ -262,7 +262,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public OptionalDouble min() {
-        return finallyClose(() -> streamTerminator.min(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.min(pipeline()));
     }
 
     /**
@@ -275,7 +275,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public OptionalDouble max() {
-        return finallyClose(() -> streamTerminator.max(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.max(pipeline()));
     }
 
     /**
@@ -288,7 +288,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public long count() {
-        return finallyClose(() -> streamTerminator.count(pipeline()));
+        return finallyCloseLong(() -> streamTerminator.count(pipeline()));
     }
 
     /**
@@ -301,7 +301,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public OptionalDouble average() {
-        return finallyClose(() -> streamTerminator.average(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.average(pipeline()));
     }
 
     /**
@@ -314,7 +314,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public DoubleSummaryStatistics summaryStatistics() {
-        return finallyClose(() -> streamTerminator.summaryStatistics(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.summaryStatistics(pipeline()));
     }
 
     /**
@@ -328,7 +328,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
     @Override
     public boolean anyMatch(DoublePredicate predicate) {
         requireNonNull(predicate);
-        return finallyClose(() -> streamTerminator.anyMatch(pipeline(), predicate));
+        return finallyCloseBoolean(() -> streamTerminator.anyMatch(pipeline(), predicate));
     }
 
     /**
@@ -341,7 +341,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public boolean allMatch(DoublePredicate predicate) {
-        return finallyClose(() -> streamTerminator.allMatch(pipeline(), predicate));
+        return finallyCloseBoolean(() -> streamTerminator.allMatch(pipeline(), predicate));
     }
 
     /**
@@ -354,7 +354,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public boolean noneMatch(DoublePredicate predicate) {
-        return finallyClose(() -> streamTerminator.noneMatch(pipeline(), predicate));
+        return finallyCloseBoolean(() -> streamTerminator.noneMatch(pipeline(), predicate));
     }
 
     /**
@@ -367,7 +367,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public OptionalDouble findFirst() {
-        return finallyClose(() -> streamTerminator.findFirst(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.findFirst(pipeline()));
     }
 
     /**
@@ -380,7 +380,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public OptionalDouble findAny() {
-        return finallyClose(() -> streamTerminator.findAny(pipeline()));
+        return finallyCloseReference(() -> streamTerminator.findAny(pipeline()));
     }
 
     /**
