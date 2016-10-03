@@ -95,8 +95,10 @@ public final class GenerateMethodBodyUtil {
         String readFromResultSet(File file, Column c, AtomicInteger position);
     }
 
-    public static String[] generateNewEntityFromBody(ReadFromResultSet readFromResultSet, TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+    public static String[] generateApplyResultSetBody(ReadFromResultSet readFromResultSet, TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
 
+        file.add(Import.of(SQLException.class));
+        
         final List<String> rows = new LinkedList<>();
         rows.add("final " + support.entityName() + " entity = manager." + ENTITY_CREATE_METHOD_NAME + "();");
 
@@ -110,7 +112,7 @@ public final class GenerateMethodBodyUtil {
             });
 
         rows.add("try " + block(streamBuilder.build()));
-        rows.add("catch (" + SQLException.class.getSimpleName() + " sqle) " + block(
+        rows.add("catch (final " + SQLException.class.getSimpleName() + " sqle) " + block(
             "throw new " + SpeedmentException.class.getSimpleName() + "(sqle);"
         ));
         rows.add("return entity;");

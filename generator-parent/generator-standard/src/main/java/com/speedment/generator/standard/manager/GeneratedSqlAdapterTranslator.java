@@ -24,7 +24,6 @@ import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
@@ -39,47 +38,45 @@ import com.speedment.runtime.core.internal.util.sql.ResultSetUtil;
 
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import com.speedment.common.codegen.internal.model.value.ReferenceValue;
-import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.WithState;
-import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
-import static com.speedment.generator.standard.internal.util.ColumnUtil.usesOptional;
-import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateNewEntityFromBody;
 import com.speedment.generator.translator.component.TypeMapperComponent;
+import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.component.sql.SqlPersistenceComponent;
 import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
+import com.speedment.runtime.core.component.sql.SqlTypeMapperHelper;
+import com.speedment.runtime.typemapper.TypeMapper;
 import static java.util.stream.Collectors.joining;
+import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateApplyResultSetBody;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   3.0.1
  */
 public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManagerTranslator<Class> {
 
-    public final static String ENTITY_COPY_METHOD_NAME = "entityCopy",
-        ENTITY_CREATE_METHOD_NAME = "entityCreate",
-        FIELDS_METHOD = "fields",
+    public final static String 
+        CREATE_HELPERS_METHOD_NAME = "createHelpers",
+        INSTALL_METHOD_NAME        = "installMethodName",
+        ENTITY_COPY_METHOD_NAME    = "entityCopy",
+        ENTITY_CREATE_METHOD_NAME  = "entityCreate",
+        FIELDS_METHOD              = "fields",
         PRIMARY_KEYS_FIELDS_METHOD = "primaryKeyFields";
 
-    private @Inject
-    ResultSetMapperComponent resultSetMapperComponent;
-    private @Inject
-    DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject
-    TypeMapperComponent typeMappers;
-    private @Inject
-    Injector injector;
+    private @Inject ResultSetMapperComponent resultSetMapperComponent;
+    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
+    private @Inject TypeMapperComponent typeMapperComponent;
 
     public GeneratedSqlAdapterTranslator(Table table) {
         super(table, Class::of);
@@ -87,54 +84,94 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
 
     @Override
     protected Class makeCodeGenModel(File file) {
-        file.add(Import.of(Project.class));
+        final Type tableIdentifierType = SimpleParameterizedType
+            .create(TableIdentifier.class, getSupport().entityType());
+        
         return newBuilder(file, getClassOrInterfaceName())
             .forEveryTable((clazz, table) -> {
-                clazz
-                    .public_()
-                    .abstract_()
-                    .add(Field.of("manager", getSupport().managerType()).add(inject()).private_())
-                    .add(Field.of("tableIdentifier", SimpleParameterizedType.create(TableIdentifier.class, getSupport().entityType())).private_().final_())
-                    .add(Field.of("project", Project.class).private_())
-                    .add(Method.of("createHelpers", void.class).add(withExecuteBefore(file))
-                        .add(Field.of("projectComponent", ProjectComponent.class))
-                        .add("this.project = projectComponent.getProject();")
+                final Method createHelpers = Method.of(CREATE_HELPERS_METHOD_NAME, void.class)
+                    .add(withExecuteBefore(file))
+                    .add(Field.of("projectComponent", ProjectComponent.class))
+                    .add("final Project project = projectComponent.getProject();");
+                
+                clazz.public_().abstract_()
+                    
+                    // Generate conxtructor
+                    .add(Constructor.of().protected_()
+                        .add("this.tableIdentifier = "
+                            + TableIdentifier.class.getSimpleName() + ".of("
+                            + Stream.of(
+                                getSupport().dbmsOrThrow().getName(), 
+                                getSupport().schemaOrThrow().getName(), 
+                                getSupport().tableOrThrow().getName()
+                            ).map(s -> "\"" + s + "\"").collect(joining(", "))
+                            + ");")
                     )
-                    .add(Method.of("install", void.class).add(withExecuteBefore(file))
-                        .add("")
-                        .add(Field.of("manager", getSupport().managerType()))
+                    
+                    // Generate member fields
+                    .add(Field.of("tableIdentifier", tableIdentifierType).private_().final_())
+                    .add(Field.of("manager", getSupport().managerType()).add(inject()).private_())
+                    
+                    // Generate methods
+                    .add(Method.of(INSTALL_METHOD_NAME, void.class).add(withExecuteBefore(file))
                         .add(Field.of("streamSupplierComponent", SqlStreamSupplierComponent.class))
                         .add(Field.of("persistenceComponent", SqlPersistenceComponent.class))
                         .add("streamSupplierComponent.install(tableIdentifier, this::apply);")
                         .add("persistenceComponent.install(tableIdentifier);")
                     )
-                    .add(Constructor.of().protected_()
-                        //                        .add("this.tableIdentifier = "+TableIdentifier.class.getSimpleName()+".of(\\\"\" + getSupport().dbmsOrThrow().getName() + \"\\\");
-                        .add("this.tableIdentifier = " + TableIdentifier.class.getSimpleName() + ".of("
-                            + Stream.of(getSupport().dbmsOrThrow().getName(), getSupport().schemaOrThrow().getName(), getSupport().tableOrThrow().getName())
-                            .map(s -> "\"" + s + "\"").collect(joining(", "))
-                            + ");")
-                    )
-                    .add(generateNewEntityFrom(getSupport(), file, table::columns));
+                    
+                    .add(generateApplyResultSet(getSupport(), file, table::columns))
+                    
+                    .call(() -> {
+                        // Operate on enabled columns that has a type mapper
+                        // that is not either empty, an identity mapper or a
+                        // primitive mapper.
+                        table.columns()
+                            .filter(HasEnabled::test)
+                            .filter(c -> c.getTypeMapper()
+                                .filter(tm -> !"".equals(tm))
+                                .filter(tm -> !tm.equals(TypeMapper.identity().getClass().getName()))
+                                .filter(tm -> !tm.equals(TypeMapper.primitive().getClass().getName()))
+                                .isPresent()
+                            ).forEachOrdered(col -> {
+                                // If the method has not yet been added, add it
+                                if (clazz.getMethods().stream()
+                                        .map(Method::getName)
+                                        .noneMatch(CREATE_HELPERS_METHOD_NAME::equals)) {
+                                    file.add(Import.of(Project.class));
+                                    clazz.add(createHelpers);
+                                }
+                                
+                                // Append the line for this helper to the method
+                                final String tmName = col.getTypeMapper().get();
+                                final TypeMapper<?, ?> tm = typeMapperComponent.get(col);
+                                
+                                final String tmsName = helperName(col);
+                                final Type tmsType = SimpleParameterizedType.create(
+                                    SqlTypeMapperHelper.class,
+                                    typeMapperComponent.findDatabaseTypeOf(tm)
+                                        .orElseThrow(() -> new SpeedmentTranslatorException(
+                                            "Could not find appropriate " + 
+                                            "database type for column '" + col + 
+                                            "'."
+                                        )),
+                                    tm.getJavaType(col)
+                                );
+                                
+                                clazz.add(Field.of(tmsName, tmsType).private_());
+                                
+                                createHelpers
+                                    .add(tmsName + " = " + SqlTypeMapperHelper.class.getSimpleName() + 
+                                        ".create(project, " + getSupport().entityName() + 
+                                        "." + getSupport().namer().javaStaticFieldName(col.getJavaName()) + 
+                                        ", " + getSupport().entityName() + ".class);"
+                                    );
+                            });
+                    })
+                    ;
             })
-            .build()
-            .call(i -> file.add(Import.of(getSupport().entityImplType())));
+            .build();
     }
-
-//    private Method generateApplyMethod(File file, Table table) {
-//        return Method.of("apply", getSupport().entityType()).protected_()
-//            .add("final " + getSupport().entityName() + " entity = manager.entityCreate();")
-//            .add("try {")
-//            .add(indent(fieldsss(table)))
-//            .add("} catch (final SQLException sqle) {")
-//            .add(indent("throw new SpeedmentException(sqle);"))
-//            .add("}")
-//            .add("return entity;");
-//    }
-
-//    private String[] fieldsss(Table table) {
-//        throw new UnsupportedOperationException("Todo");
-//    }
 
     @Override
     protected String getJavadocRepresentText() {
@@ -156,18 +193,15 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
         return getSupport().managerImplType();
     }
 
-    private Method generateNewEntityFrom(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+    private Method generateApplyResultSet(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
         return Method.of("apply", support.entityType())
             .protected_()
-            .add(SQLException.class)
             .add(SpeedmentException.class)
             .add(Field.of("resultSet", ResultSet.class))
-            .add(generateNewEntityFromBody(this::readFromResultSet, support, file, columnsSupplier));
+            .add(generateApplyResultSetBody(this::readFromResultSet, support, file, columnsSupplier));
     }
 
     private String readFromResultSet(File file, Column c, AtomicInteger position) {
-
-        final TranslatorSupport<Table> support = new TranslatorSupport<>(injector, c.getParentOrThrow());
         final Dbms dbms = c.getParentOrThrow().getParentOrThrow().getParentOrThrow();
 
         final ResultSetMapping<?> mapping = resultSetMapperComponent.apply(
@@ -175,60 +209,34 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
             c.findDatabaseType()
         );
 
-        final boolean isIdentityMapper = !c.getTypeMapper().isPresent();
-
-        file.add(Import.of(DocumentDbUtil.class));
+        final java.lang.Class<?> typeMapperClass = typeMapperComponent.get(c).getClass();
+        final boolean isCustomTypeMapper = c.getTypeMapper().isPresent()
+            && !TypeMapper.identity().getClass().isAssignableFrom(typeMapperClass)
+            && !TypeMapper.primitive().getClass().isAssignableFrom(typeMapperClass);
 
         final StringBuilder sb = new StringBuilder();
-        if (!isIdentityMapper) {
-            sb
-                .append(typeMapperName(support, c))
-                .append(".toJavaType(DocumentDbUtil.referencedColumn(project, ")
-                .append(support.entityName())
-                .append(".")
-                .append(support.namer().javaStaticFieldName(c.getJavaName()))
-                .append(".identifier()), manager.getEntityClass(), ");
+        if (isCustomTypeMapper) {
+            sb.append(helperName(c)).append(".apply(");
         }
+        
         final String getterName = "get" + mapping.getResultSetMethodName(dbms);
-
-        final boolean isResultSetMethod = Stream.of(ResultSet.class.getMethods())
-            .map(java.lang.reflect.Method::getName)
-            .anyMatch(getterName::equals);
-
-        final boolean isResultSetMethodReturnsPrimitive = Stream.of(ResultSet.class.getMethods())
-            .filter(m -> m.getName().equals(getterName))
-            .anyMatch(m -> m.getReturnType().isPrimitive());
-
-        if (isResultSetMethod && !(usesOptional(c) && isResultSetMethodReturnsPrimitive)) {
-            sb
-                .append("resultSet.")
-                .append("get")
-                .append(mapping.getResultSetMethodName(dbms))
-                .append("(").append(position.getAndIncrement()).append(")");
-        } else {
+        if (c.isNullable()) {
+            
             file.add(Import.of(ResultSetUtil.class).static_().setStaticMember("*"));
-            sb
-                .append("get")
-                .append(mapping.getResultSetMethodName(dbms))
-                .append("(resultSet, ")
+            sb.append(getterName).append("(resultSet, ")
                 .append(position.getAndIncrement()).append(")");
+        } else {
+            sb.append("resultSet.").append(getterName)
+                .append("(").append(position.getAndIncrement()).append(")");
         }
-        if (!isIdentityMapper) {
+        
+        if (isCustomTypeMapper) {
             sb.append(")");
         }
 
         return sb.toString();
     }
 
-    private static String typeMapperName(TranslatorSupport<Table> support, Column col) {
-        return support.entityName() + "." + support.namer().javaStaticFieldName(col.getJavaName()) + ".typeMapper()";
-    }
-
-//    private static boolean isPrimaryKey(Column column) {
-//        return column.getParentOrThrow().findPrimaryKeyColumn(column.getName()).isPresent();
-//    }
-
-    
     private AnnotationUsage withExecuteBefore(File file) {
         file.add(Import.of(State.class).static_().setStaticMember("RESOLVED"));
         return AnnotationUsage.of(ExecuteBefore.class).set(new ReferenceValue("RESOLVED"));
@@ -237,5 +245,30 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
     private AnnotationUsage inject() {
         return AnnotationUsage.of(Inject.class);
     }
-
+    
+    private String helperName(Column column) {
+        return getSupport().namer()
+            .javaVariableName(column.getJavaName()) + "Helper";
+    }
+    
+    private enum TypeMapperType {
+        IDENTITY, PRIMITIVE, OTHER;
+        
+        static TypeMapperType of(TypeMapperComponent mappers, Column col) {
+            
+            if (!col.getTypeMapper().isPresent()) {
+                return IDENTITY;
+            }
+            
+            final TypeMapper<?, ?> mapper = mappers.get(col);
+            
+            if (TypeMapper.identity().getClass().isAssignableFrom(mapper.getClass())) {
+                return IDENTITY;
+            } else if (TypeMapper.primitive().getClass().isAssignableFrom(mapper.getClass())) {
+                return PRIMITIVE;
+            } else {
+                return OTHER;
+            }
+        }
+    }
 }

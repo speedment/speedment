@@ -433,5 +433,4 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
         throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
         //return streamTerminator.spliterator(pipeline());
     }
-
 }

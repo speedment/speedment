@@ -23,6 +23,7 @@ import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.bigdecimal.BigDecimalToDouble;
+import com.speedment.runtime.typemapper.exception.SpeedmentTypeMapperException;
 import com.speedment.runtime.typemapper.integer.IntegerZeroOneToBooleanMapper;
 import com.speedment.runtime.typemapper.largeobject.ClobToStringMapper;
 import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
@@ -150,5 +151,35 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
                 }
             }).orElseGet(TypeMapper::identity)
         );
+    }
+
+    @Override
+    public <DB_TYPE, JAVA_TYPE> Optional<Class<DB_TYPE>> findDatabaseTypeOf(TypeMapper<DB_TYPE, JAVA_TYPE> typeMapper) {
+        final Class<?> needle = typeMapper.getClass();
+        return mappers.entrySet().stream()
+            .filter(e -> e.getValue().stream()
+                .map(Supplier<TypeMapper<?, ?>>::get)
+                .map(TypeMapper::getClass)
+                .anyMatch(needle::equals)
+            )
+            .map(Map.Entry::getKey)
+            .findAny()
+            .map(key -> {
+                try {
+                    @SuppressWarnings("unchecked")
+                    final Class<DB_TYPE> result = (Class<DB_TYPE>) Class.forName(key);
+                    return result;
+                } catch (final ClassNotFoundException ex) {
+                    throw new SpeedmentTranslatorException(
+                        "Could not find installed type mapper key '" + key + 
+                        "' on class path.", ex
+                    );
+                } catch (final ClassCastException ex) {
+                    throw new SpeedmentTranslatorException(
+                        "An error occured when an installed type mapper key " + 
+                        "was thrown to the expected type '" + key + "'.", ex
+                    );
+                }
+            });
     }
 }

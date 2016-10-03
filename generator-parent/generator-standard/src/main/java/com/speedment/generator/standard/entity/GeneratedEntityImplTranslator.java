@@ -69,6 +69,16 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
         return newBuilder(file, getSupport().generatedEntityImplName())
             
             /**
+             * Class details
+             */
+            .forEveryTable((clazz, table) -> {
+                clazz.public_()
+                    .abstract_()
+                    .add(getSupport().entityType())
+                    .add(Constructor.of().protected_());
+            })
+            
+            /**
              * Getters
              */
             .forEveryColumn((clazz, col) -> {
@@ -99,7 +109,7 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
             .forEveryColumn((clazz, col) -> {
                 clazz
                     .add(Method.of(SETTER_METHOD_PREFIX + getSupport().typeName(col), getSupport().entityType())
-                        .public_().final_()
+                        .public_()
                         .add(OVERRIDE)
                         .add(fieldFor(col))
                         .add("this." + getSupport().variableName(col) + " = " + getSupport().variableName(col) + ";")
@@ -149,10 +159,7 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
                     );
                 });
             })
-
-            /**
-             * Class details
-             */
+            
             // We need to make it POST_MAKE because other plugins might add fields
             .forEveryTable(Phase.POST_MAKE, (clazz, table) -> {
                 clazz
@@ -160,11 +167,7 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
                     .add(equalsMethod())
                     .add(hashCodeMethod());
             })
-            .build()
-            .public_()
-            .abstract_()
-            .add(getSupport().generatedEntityType())
-            .add(Constructor.of().protected_());
+            .build();
 
     }
 

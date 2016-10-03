@@ -75,4 +75,22 @@ public interface TypeMapperComponent {
      * @return        the mapper class
      */
     TypeMapper<?, ?> get(Column column);
+    
+    /**
+     * Locates the specified type mapper in the store and returns the database
+     * type that it is been installed for. If the same {@code TypeMapper} has
+     * been installed for multiple classes, the returned class is unspecified
+     * but will be one of the installed types.
+     * <p>
+     * If the specified type mapper has not been installed in this component,
+     * an empty optional is returned.
+     * <p>
+     * Warning! This is potentially a very expensive operation.
+     * 
+     * @param <DB_TYPE>    the database type
+     * @param <JAVA_TYPE>  the java type
+     * @param typeMapper   the type mapper to locate
+     * @return             a database type for which the mapper is used
+     */
+    <DB_TYPE, JAVA_TYPE> Optional<Class<DB_TYPE>> findDatabaseTypeOf(TypeMapper<DB_TYPE, JAVA_TYPE> typeMapper);
 }
