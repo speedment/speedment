@@ -47,6 +47,7 @@ import java.util.stream.Stream;
 import com.speedment.common.codegen.internal.model.value.ReferenceValue;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.core.exception.SpeedmentException;
@@ -95,15 +96,15 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
                     .add(Field.of("manager", getSupport().managerType()).add(inject()).private_())
                     .add(Field.of("tableIdentifier", SimpleParameterizedType.create(TableIdentifier.class, getSupport().entityType())).private_().final_())
                     .add(Field.of("project", Project.class).private_())
-                    .add(Method.of("createHelpers", void.class)
-                        .add(Field.of("projectComponent", ProjectComponent.class).add(withStateInitialized(file)))
+                    .add(Method.of("createHelpers", void.class).add(withExecuteBefore(file))
+                        .add(Field.of("projectComponent", ProjectComponent.class))
                         .add("this.project = projectComponent.getProject();")
                     )
-                    .add(Method.of("install", void.class)
+                    .add(Method.of("install", void.class).add(withExecuteBefore(file))
                         .add("")
-                        .add(Field.of("manager", getSupport().managerType()).add(withStateInitialized(file)))
-                        .add(Field.of("streamSupplierComponent", SqlStreamSupplierComponent.class).add(withStateInitialized(file)))
-                        .add(Field.of("persistenceComponent", SqlPersistenceComponent.class).add(withStateInitialized(file)))
+                        .add(Field.of("manager", getSupport().managerType()))
+                        .add(Field.of("streamSupplierComponent", SqlStreamSupplierComponent.class))
+                        .add(Field.of("persistenceComponent", SqlPersistenceComponent.class))
                         .add("streamSupplierComponent.install(tableIdentifier, this::apply);")
                         .add("persistenceComponent.install(tableIdentifier);")
                     )
@@ -120,20 +121,20 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
             .call(i -> file.add(Import.of(getSupport().entityImplType())));
     }
 
-    private Method generateApplyMethod(File file, Table table) {
-        return Method.of("apply", getSupport().entityType()).protected_()
-            .add("final " + getSupport().entityName() + " entity = manager.entityCreate();")
-            .add("try {")
-            .add(indent(fieldsss(table)))
-            .add("} catch (final SQLException sqle) {")
-            .add(indent("throw new SpeedmentException(sqle);"))
-            .add("}")
-            .add("return entity;");
-    }
+//    private Method generateApplyMethod(File file, Table table) {
+//        return Method.of("apply", getSupport().entityType()).protected_()
+//            .add("final " + getSupport().entityName() + " entity = manager.entityCreate();")
+//            .add("try {")
+//            .add(indent(fieldsss(table)))
+//            .add("} catch (final SQLException sqle) {")
+//            .add(indent("throw new SpeedmentException(sqle);"))
+//            .add("}")
+//            .add("return entity;");
+//    }
 
-    private String[] fieldsss(Table table) {
-        throw new UnsupportedOperationException("Todo");
-    }
+//    private String[] fieldsss(Table table) {
+//        throw new UnsupportedOperationException("Todo");
+//    }
 
     @Override
     protected String getJavadocRepresentText() {
@@ -223,13 +224,14 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
         return support.entityName() + "." + support.namer().javaStaticFieldName(col.getJavaName()) + ".typeMapper()";
     }
 
-    private static boolean isPrimaryKey(Column column) {
-        return column.getParentOrThrow().findPrimaryKeyColumn(column.getName()).isPresent();
-    }
+//    private static boolean isPrimaryKey(Column column) {
+//        return column.getParentOrThrow().findPrimaryKeyColumn(column.getName()).isPresent();
+//    }
 
-    private AnnotationUsage withStateInitialized(File file) {
-        file.add(Import.of(State.class).static_().setStaticMember("INITIALIZED"));
-        return AnnotationUsage.of(WithState.class).set(new ReferenceValue("INITIALIZED"));
+    
+    private AnnotationUsage withExecuteBefore(File file) {
+        file.add(Import.of(State.class).static_().setStaticMember("RESOLVED"));
+        return AnnotationUsage.of(ExecuteBefore.class).set(new ReferenceValue("RESOLVED"));
     }
 
     private AnnotationUsage inject() {
