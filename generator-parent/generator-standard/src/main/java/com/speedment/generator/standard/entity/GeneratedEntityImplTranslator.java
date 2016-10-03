@@ -149,24 +149,7 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
                     );
                 });
             })
-            
-            
-            /*
-            @Override
-            public Hare findOwner(Manager<Hare> foreignManager) {
-                return foreignManager.stream().filter(Hare.ID.equal(getOwner())).findAny().orElse(null);
-            }
 
-            @Override
-            public Optional<Hare> findRival(Manager<Hare> foreignManager) {
-                if (getRival().isPresent()) {
-                    return foreignManager.stream().filter(Hare.ID.equal(getRival().getAsInt())).findAny();
-                } else {
-                    return Optional.empty();
-                }
-            }
-            */
-            
             /**
              * Class details
              */
@@ -180,7 +163,7 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
             .build()
             .public_()
             .abstract_()
-            .add(getSupport().entityType())
+            .add(getSupport().generatedEntityType())
             .add(Constructor.of().protected_());
 
     }
