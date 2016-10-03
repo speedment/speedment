@@ -43,7 +43,6 @@ import com.speedment.runtime.core.manager.AbstractManager;
 
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -53,7 +52,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -69,7 +67,6 @@ import com.speedment.generator.standard.internal.util.EntityTranslatorSupport;
 import com.speedment.generator.standard.internal.util.FkHolder;
 import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateFields;
 import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateNewEmptyEntity;
-import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateNewEntityFromBody;
 import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import static java.util.stream.Collectors.joining;
@@ -77,22 +74,21 @@ import static java.util.stream.Collectors.joining;
 /**
  *
  * @author Emil Forslund
+ * @since  2.3.0
  */
-public final class GeneratedManagerImplTranslator extends AbstractEntityAndManagerTranslator<Class> {
+public final class GeneratedManagerImplTranslator 
+        extends AbstractEntityAndManagerTranslator<Class> {
 
-    public final static String ENTITY_COPY_METHOD_NAME = "entityCopy",
-        ENTITY_CREATE_METHOD_NAME = "entityCreate",
-        FIELDS_METHOD = "fields",
+    public final static String 
+        ENTITY_COPY_METHOD_NAME    = "entityCopy",
+        ENTITY_CREATE_METHOD_NAME  = "entityCreate",
+        FIELDS_METHOD              = "fields",
         PRIMARY_KEYS_FIELDS_METHOD = "primaryKeyFields";
 
-    private @Inject
-    ResultSetMapperComponent resultSetMapperComponent;
-    private @Inject
-    DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject
-    TypeMapperComponent typeMappers;
-    private @Inject
-    Injector injector;
+    private @Inject ResultSetMapperComponent resultSetMapperComponent;
+    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
+    private @Inject TypeMapperComponent typeMappers;
+    private @Inject Injector injector;
 
     public GeneratedManagerImplTranslator(Table table) {
         super(table, Class::of);
@@ -213,10 +209,9 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
                         getSupport().entityType()
                     ))
                     .add(getSupport().generatedManagerType())
-                    .add(Field.of("projectComponent", ProjectComponent.class).add(AnnotationUsage.of(Inject.class)).private_())
                     .add(Field.of("tableIdentifier", SimpleParameterizedType.create(TableIdentifier.class, getSupport().entityType())).private_().final_())
+                    .add(Field.of("projectComponent", ProjectComponent.class).add(AnnotationUsage.of(Inject.class)).private_())
                     .add(Constructor.of().protected_()
-                        //                        .add("this.tableIdentifier = "+TableIdentifier.class.getSimpleName()+".of(\\\"\" + getSupport().dbmsOrThrow().getName() + \"\\\");
                         .add("this.tableIdentifier = " + TableIdentifier.class.getSimpleName() + ".of("
                             + Stream.of(getSupport().dbmsOrThrow().getName(), getSupport().schemaOrThrow().getName(), getSupport().tableOrThrow().getName())
                             .map(s -> "\"" + s + "\"").collect(joining(", ")) 
@@ -226,22 +221,6 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
                         .public_().add(OVERRIDE)
                         .add("return tableIdentifier;")
                     )
-                    //                    .add(Method.of("getDbmsName", String.class)
-                    //                        .public_().add(OVERRIDE)
-                    //                        .add("return \"" + getSupport().dbmsOrThrow().getName() + "\";")
-                    //                    )
-                    //                    
-                    //                    .add(Method.of("getSchemaName", String.class)
-                    //                        .public_().add(OVERRIDE)
-                    //                        .add("return \"" + getSupport().schemaOrThrow().getName() + "\";")
-                    //                    )
-                    //                    
-                    //                    .add(Method.of("getTableName", String.class)
-                    //                        .public_().add(OVERRIDE)
-                    //                        .add("return \"" + getSupport().tableOrThrow().getName() + "\";")
-                    //                    )
-
-                    //.add(generateNewEntityFrom(getSupport(), file, table::columns))
                     .add(generateNewEmptyEntity(getSupport(), file, table::columns))
                     .add(generateFields(getSupport(), file, FIELDS_METHOD, table::columns))
                     .add(generateFields(getSupport(), file, PRIMARY_KEYS_FIELDS_METHOD,
@@ -301,15 +280,6 @@ public final class GeneratedManagerImplTranslator extends AbstractEntityAndManag
     public Type getImplType() {
         return getSupport().managerImplType();
     }
-
-//    private Method generateNewEntityFrom(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-//        return Method.of(ENTITY_COPY_METHOD_NAME, support.entityType())
-//            .protected_()
-//            .add(SQLException.class)
-//            .add(SpeedmentException.class)
-//            .add(Field.of("resultSet", ResultSet.class))
-//            .add(generateNewEntityFromBody(this::readFromResultSet, support, file, columnsSupplier));
-//    }
 
     private String readFromResultSet(File file, Column c, AtomicInteger position) {
 
