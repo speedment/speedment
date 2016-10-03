@@ -8,6 +8,7 @@
 /target/
 /.sonar
 **/.idea
+**/.xml.versionsBackup
 /speedment.iml
 /nb-configuration.xml
 /sonar-project.properties
