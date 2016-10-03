@@ -21,6 +21,7 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.ManagerComponent;
+import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.component.ConnectionPoolComponentImpl;
 import com.speedment.runtime.core.internal.component.DbmsHandlerComponentImpl;
@@ -34,23 +35,26 @@ import com.speedment.runtime.core.internal.component.ProjectComponentImpl;
 import com.speedment.runtime.core.internal.component.resultset.ResultSetMapperComponentImpl;
 import com.speedment.runtime.core.internal.component.sql.SqlPersistanceComponentImpl;
 import com.speedment.runtime.core.internal.db.StandardDbmsTypes;
+import com.speedment.runtime.core.internal.manager.ManagerConfiguratorImpl;
 import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.core.manager.ManagerConfigurator;
+import static java.util.Objects.requireNonNull;
 
 import java.util.Optional;
 
 /**
  * An abstract base implementation of the {@link Speedment} interface.
- * 
+ *
  * @author Emil Forslund
- * @since  3.0.0
+ * @since 3.0.0
  */
 public abstract class AbstractSpeedment implements Speedment {
-    
+
     public static InjectBundle include() {
         return InjectBundle.of(InfoComponentImpl.class,
             ConnectionPoolComponentImpl.class,
             DbmsHandlerComponentImpl.class,
-            EntityManagerImpl.class,            
+            EntityManagerImpl.class,
             ManagerComponentImpl.class,
             SqlStreamSupplierComponentImpl.class,
             PasswordComponentImpl.class,
@@ -61,10 +65,10 @@ public abstract class AbstractSpeedment implements Speedment {
             StandardDbmsTypes.class
         );
     }
-    
+
     private @Inject ManagerComponent managerComponent;
     private @Inject Injector injector;
-    
+
     protected AbstractSpeedment() {}
 
     @Override
@@ -78,8 +82,8 @@ public abstract class AbstractSpeedment implements Speedment {
             return injector.getOrThrow(componentClass);
         } catch (final IllegalArgumentException ex) {
             throw new SpeedmentException(
-                "Specified component '" + componentClass.getSimpleName() + 
-                "' is not installed in the platform.", ex
+                "Specified component '" + componentClass.getSimpleName()
+                + "' is not installed in the platform.", ex
             );
         }
     }
@@ -87,6 +91,12 @@ public abstract class AbstractSpeedment implements Speedment {
     @Override
     public <ENTITY> Manager<ENTITY> managerOf(Class<ENTITY> entityType) {
         return managerComponent.managerOf(entityType);
+    }
+
+    @Override
+    public <ENTITY> ManagerConfigurator<ENTITY> configure(Class<? extends Manager<ENTITY>> managerClass) {
+        requireNonNull(managerClass);
+        return new ManagerConfiguratorImpl<>(getOrThrow(StreamSupplierComponent.class), getOrThrow(managerClass));
     }
 
     @Override

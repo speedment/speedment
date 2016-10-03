@@ -45,7 +45,7 @@ public interface ParallelStrategy {
     /**
      * A Parallel Strategy that favors relatively small to medium sets with
      * medium computational overhead.
-     * 
+     *
      * @return a ParallelStrategy
      */
     static ParallelStrategy computeIntensityMedium() {
@@ -55,7 +55,7 @@ public interface ParallelStrategy {
     /**
      * A Parallel Strategy that favors relatively small to medium sets with high
      * computational overhead.
-     * 
+     *
      * @return a ParallelStrategy
      */
     static ParallelStrategy computeIntensityHigh() {
@@ -66,7 +66,7 @@ public interface ParallelStrategy {
      * A Parallel Strategy that favors small sets with extremely high
      * computational overhead. The set will be split up in solitary elements
      * that are executed separately in their own thread.
-     * 
+     *
      * @return a ParallelStrategy
      */
     static ParallelStrategy computeIntensityExtreme() {

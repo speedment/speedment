@@ -18,6 +18,7 @@ package com.speedment.runtime.core;
 
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.core.manager.ManagerConfigurator;
 
 import java.util.Optional;
 
@@ -67,6 +68,17 @@ public interface Speedment {
     <ENTITY> Manager<ENTITY> managerOf(Class<ENTITY> entityType);
     
 
+    /**
+     * Creates and Returns a manager configurator that can be used to configure
+     * an existing manager. When the manager configurator's build() method is 
+     * called, a new configured manager will be returned.
+     * 
+     * @param <ENTITY>    the entity type
+     * @param manager     to configure
+     * @return            a manager configurator 
+     */
+    <ENTITY> ManagerConfigurator<ENTITY> configure(Class<? extends Manager<ENTITY>> manager);
+    
     /**
      * Stops the Speedment instance and deallocates any allocated resources.
      * After stop() has been called, the Speedment instance can not be called
