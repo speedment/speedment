@@ -14,10 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.field.setter;
+package com.speedment.runtime.core.internal.field.method;
 
-import com.speedment.runtime.core.field.method.SetToDouble;
-import com.speedment.runtime.core.field.trait.HasDoubleValue;
+import com.speedment.runtime.core.field.method.SetToFloat;
+import com.speedment.runtime.core.field.trait.HasFloatValue;
 import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
@@ -25,7 +25,7 @@ import static java.util.Objects.requireNonNull;
  * A {@code set} operation that will apply a value {@link #getValue()} to the
  * field {@link #getField()} of any instance passed to it.
  * <p>
- * This particular implementation is for values of type {@code double}.
+ * This particular implementation is for values of type {@code float}.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type
@@ -34,28 +34,28 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @Generated(value = "Speedment")
-public final class SetToDoubleImpl<ENTITY, D> implements SetToDouble<ENTITY, D> {
+public final class SetToFloatImpl<ENTITY, D> implements SetToFloat<ENTITY, D> {
     
-    private final HasDoubleValue<ENTITY, D> field;
-    private final double newValue;
+    private final HasFloatValue<ENTITY, D> field;
+    private final float newValue;
     
-    public SetToDoubleImpl(HasDoubleValue<ENTITY, D> field, double newValue) {
+    public SetToFloatImpl(HasFloatValue<ENTITY, D> field, float newValue) {
         this.field    = requireNonNull(field);
         this.newValue = requireNonNull(newValue);
     }
     
     @Override
-    public HasDoubleValue<ENTITY, D> getField() {
+    public HasFloatValue<ENTITY, D> getField() {
         return field;
     }
     
     @Override
-    public double getValue() {
+    public float getValue() {
         return newValue;
     }
     
     @Override
     public ENTITY apply(ENTITY entity) {
-        return field.setter().setAsDouble(entity, newValue);
+        return field.setter().setAsFloat(entity, newValue);
     }
 }

@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.field.setter;
+package com.speedment.runtime.core.internal.field.method;
 
 import com.speedment.runtime.core.field.method.SetToReference;
 import com.speedment.runtime.core.field.trait.HasReferenceValue;

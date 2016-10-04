@@ -27,7 +27,7 @@ import com.speedment.runtime.core.field.predicate.FieldPredicate;
 import com.speedment.runtime.core.field.predicate.Inclusion;
 import com.speedment.runtime.core.internal.field.comparator.NullOrder;
 import com.speedment.runtime.core.internal.field.comparator.ReferenceFieldComparatorImpl;
-import com.speedment.runtime.core.internal.field.finder.FindFromReference;
+import com.speedment.runtime.core.internal.field.method.FindFromReference;
 import com.speedment.runtime.core.internal.field.predicate.reference.ReferenceBetweenPredicate;
 import com.speedment.runtime.core.internal.field.predicate.reference.ReferenceEqualPredicate;
 import com.speedment.runtime.core.internal.field.predicate.reference.ReferenceGreaterOrEqualPredicate;
@@ -47,7 +47,7 @@ import com.speedment.runtime.core.internal.field.predicate.string.StringEqualIgn
 import com.speedment.runtime.core.internal.field.predicate.string.StringIsEmptyPredicate;
 import com.speedment.runtime.core.internal.field.predicate.string.StringStartsWithIgnoreCasePredicate;
 import com.speedment.runtime.core.internal.field.predicate.string.StringStartsWithPredicate;
-import com.speedment.runtime.core.internal.field.streamer.BackwardFinderImpl;
+import com.speedment.runtime.core.internal.field.method.BackwardFinderImpl;
 import com.speedment.runtime.core.manager.Manager;
 
 import java.util.Comparator;

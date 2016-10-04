@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.field.finder;
+package com.speedment.runtime.core.internal.field.method;
 
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.field.Field;

@@ -14,11 +14,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.field.finder;
+package com.speedment.runtime.core.internal.field.method;
 
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.field.ByteField;
-import com.speedment.runtime.core.field.ByteForeignKeyField;
+import com.speedment.runtime.core.field.IntField;
+import com.speedment.runtime.core.field.IntForeignKeyField;
 import com.speedment.runtime.core.manager.Manager;
 import javax.annotation.Generated;
 
@@ -30,15 +30,15 @@ import javax.annotation.Generated;
  * @since  3.0.0
  */
 @Generated(value = "Speedment")
-public final class FindFromByte<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, Byte, ByteForeignKeyField<ENTITY, ?, FK_ENTITY>, ByteField<FK_ENTITY, ?>> {
+public final class FindFromInt<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, Integer, IntForeignKeyField<ENTITY, ?, FK_ENTITY>, IntField<FK_ENTITY, ?>> {
     
-    public FindFromByte(ByteForeignKeyField<ENTITY, ?, FK_ENTITY> source, ByteField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {
+    public FindFromInt(IntForeignKeyField<ENTITY, ?, FK_ENTITY> source, IntField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {
         super(source, target, manager);
     }
     
     @Override
     public FK_ENTITY apply(ENTITY entity) {
-        final byte value = getSourceField().getter().applyAsByte(entity);
+        final int value = getSourceField().getter().applyAsInt(entity);
         return getTargetManager().stream()
             .filter(getTargetField().equal(value))
             .findAny()

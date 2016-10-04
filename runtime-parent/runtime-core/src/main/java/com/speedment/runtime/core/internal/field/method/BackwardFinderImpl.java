@@ -14,13 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.field.finder;
+package com.speedment.runtime.core.internal.field.method;
 
 import com.speedment.runtime.core.field.Field;
-import com.speedment.runtime.core.field.method.FindFrom;
+import com.speedment.runtime.core.field.method.BackwardFinder;
 import com.speedment.runtime.core.field.trait.HasComparableOperators;
 import com.speedment.runtime.core.field.trait.HasFinder;
 import com.speedment.runtime.core.manager.Manager;
+
+import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
@@ -28,45 +30,41 @@ import static java.util.Objects.requireNonNull;
  *
  * @param <ENTITY>     the source entity
  * @param <FK_ENTITY>  the target entity
- * @param <V>          the wrapper type
+ * @param <T>          the column type
+ * @param <FIELD>      the field type
  * 
  * @author  Emil Forslund
  * @since   3.0.0
  */
-abstract class AbstractFindFrom<
-        ENTITY, 
-        FK_ENTITY,
-        V extends Comparable<? super V>,
-        SOURCE extends Field<ENTITY> & HasComparableOperators<ENTITY, V> & HasFinder<ENTITY, FK_ENTITY>,
-        TARGET extends Field<FK_ENTITY> & HasComparableOperators<FK_ENTITY, V>
-    > implements FindFrom<ENTITY, FK_ENTITY> {
-    
-    private final SOURCE source;
-    private final TARGET target;
-    private final Manager<FK_ENTITY> manager;
+public final class BackwardFinderImpl<ENTITY, FK_ENTITY, T extends Comparable<? super T>, FIELD extends Field<FK_ENTITY> & HasComparableOperators<FK_ENTITY, T> & HasFinder<FK_ENTITY, ENTITY>>
+    implements BackwardFinder<ENTITY, FK_ENTITY> {
 
-    AbstractFindFrom(
-        SOURCE source,
-        TARGET target,
-        Manager<FK_ENTITY> manager) {
-        
-        this.source  = requireNonNull(source);
+    private final FIELD target;
+    private final Manager<FK_ENTITY> manager;
+    
+    public BackwardFinderImpl(FIELD target, Manager<FK_ENTITY> manager) {
         this.target  = requireNonNull(target);
         this.manager = requireNonNull(manager);
     }
-
+    
     @Override
-    public final SOURCE getSourceField() {
-        return source;
-    }
-
-    @Override
-    public final TARGET getTargetField() {
+    public final FIELD getField() {
         return target;
     }
 
     @Override
     public final Manager<FK_ENTITY> getTargetManager() {
         return manager;
+    }
+
+    @Override
+    public Stream<FK_ENTITY> apply(ENTITY entity) {
+        @SuppressWarnings("unchecked")
+        final T value = (T) getField().getReferencedField().getter().apply(entity);
+        if (value == null) {
+            return null;
+        } else {
+            return getTargetManager().stream().filter(getField().equal(value));
+        }
     }
 }

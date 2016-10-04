@@ -14,10 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.field.setter;
+package com.speedment.runtime.core.internal.field.method;
 
-import com.speedment.runtime.core.field.method.SetToChar;
-import com.speedment.runtime.core.field.trait.HasCharValue;
+import com.speedment.runtime.core.field.method.SetToByte;
+import com.speedment.runtime.core.field.trait.HasByteValue;
 import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
@@ -25,7 +25,7 @@ import static java.util.Objects.requireNonNull;
  * A {@code set} operation that will apply a value {@link #getValue()} to the
  * field {@link #getField()} of any instance passed to it.
  * <p>
- * This particular implementation is for values of type {@code char}.
+ * This particular implementation is for values of type {@code byte}.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type
@@ -34,28 +34,28 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @Generated(value = "Speedment")
-public final class SetToCharImpl<ENTITY, D> implements SetToChar<ENTITY, D> {
+public final class SetToByteImpl<ENTITY, D> implements SetToByte<ENTITY, D> {
     
-    private final HasCharValue<ENTITY, D> field;
-    private final char newValue;
+    private final HasByteValue<ENTITY, D> field;
+    private final byte newValue;
     
-    public SetToCharImpl(HasCharValue<ENTITY, D> field, char newValue) {
+    public SetToByteImpl(HasByteValue<ENTITY, D> field, byte newValue) {
         this.field    = requireNonNull(field);
         this.newValue = requireNonNull(newValue);
     }
     
     @Override
-    public HasCharValue<ENTITY, D> getField() {
+    public HasByteValue<ENTITY, D> getField() {
         return field;
     }
     
     @Override
-    public char getValue() {
+    public byte getValue() {
         return newValue;
     }
     
     @Override
     public ENTITY apply(ENTITY entity) {
-        return field.setter().setAsChar(entity, newValue);
+        return field.setter().setAsByte(entity, newValue);
     }
 }

@@ -14,10 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.field.setter;
+package com.speedment.runtime.core.internal.field.method;
 
-import com.speedment.runtime.core.field.method.SetToByte;
-import com.speedment.runtime.core.field.trait.HasByteValue;
+import com.speedment.runtime.core.field.method.SetToShort;
+import com.speedment.runtime.core.field.trait.HasShortValue;
 import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
@@ -25,7 +25,7 @@ import static java.util.Objects.requireNonNull;
  * A {@code set} operation that will apply a value {@link #getValue()} to the
  * field {@link #getField()} of any instance passed to it.
  * <p>
- * This particular implementation is for values of type {@code byte}.
+ * This particular implementation is for values of type {@code short}.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type
@@ -34,28 +34,28 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @Generated(value = "Speedment")
-public final class SetToByteImpl<ENTITY, D> implements SetToByte<ENTITY, D> {
+public final class SetToShortImpl<ENTITY, D> implements SetToShort<ENTITY, D> {
     
-    private final HasByteValue<ENTITY, D> field;
-    private final byte newValue;
+    private final HasShortValue<ENTITY, D> field;
+    private final short newValue;
     
-    public SetToByteImpl(HasByteValue<ENTITY, D> field, byte newValue) {
+    public SetToShortImpl(HasShortValue<ENTITY, D> field, short newValue) {
         this.field    = requireNonNull(field);
         this.newValue = requireNonNull(newValue);
     }
     
     @Override
-    public HasByteValue<ENTITY, D> getField() {
+    public HasShortValue<ENTITY, D> getField() {
         return field;
     }
     
     @Override
-    public byte getValue() {
+    public short getValue() {
         return newValue;
     }
     
     @Override
     public ENTITY apply(ENTITY entity) {
-        return field.setter().setAsByte(entity, newValue);
+        return field.setter().setAsShort(entity, newValue);
     }
 }

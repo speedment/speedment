@@ -20,7 +20,7 @@ import com.speedment.runtime.core.field.Field;
 import com.speedment.runtime.core.field.method.IntGetter;
 import com.speedment.runtime.core.field.method.IntSetter;
 import com.speedment.runtime.core.field.method.SetToInt;
-import com.speedment.runtime.core.internal.field.setter.SetToIntImpl;
+import com.speedment.runtime.core.internal.field.method.SetToIntImpl;
 import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 

@@ -20,7 +20,7 @@ import com.speedment.runtime.core.field.Field;
 import com.speedment.runtime.core.field.method.FloatGetter;
 import com.speedment.runtime.core.field.method.FloatSetter;
 import com.speedment.runtime.core.field.method.SetToFloat;
-import com.speedment.runtime.core.internal.field.setter.SetToFloatImpl;
+import com.speedment.runtime.core.internal.field.method.SetToFloatImpl;
 import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 

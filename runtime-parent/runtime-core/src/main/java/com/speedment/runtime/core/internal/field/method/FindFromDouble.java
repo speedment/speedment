@@ -14,11 +14,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.field.finder;
+package com.speedment.runtime.core.internal.field.method;
 
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.field.IntField;
-import com.speedment.runtime.core.field.IntForeignKeyField;
+import com.speedment.runtime.core.field.DoubleField;
+import com.speedment.runtime.core.field.DoubleForeignKeyField;
 import com.speedment.runtime.core.manager.Manager;
 import javax.annotation.Generated;
 
@@ -30,15 +30,15 @@ import javax.annotation.Generated;
  * @since  3.0.0
  */
 @Generated(value = "Speedment")
-public final class FindFromInt<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, Integer, IntForeignKeyField<ENTITY, ?, FK_ENTITY>, IntField<FK_ENTITY, ?>> {
+public final class FindFromDouble<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, Double, DoubleForeignKeyField<ENTITY, ?, FK_ENTITY>, DoubleField<FK_ENTITY, ?>> {
     
-    public FindFromInt(IntForeignKeyField<ENTITY, ?, FK_ENTITY> source, IntField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {
+    public FindFromDouble(DoubleForeignKeyField<ENTITY, ?, FK_ENTITY> source, DoubleField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {
         super(source, target, manager);
     }
     
     @Override
     public FK_ENTITY apply(ENTITY entity) {
-        final int value = getSourceField().getter().applyAsInt(entity);
+        final double value = getSourceField().getter().applyAsDouble(entity);
         return getTargetManager().stream()
             .filter(getTargetField().equal(value))
             .findAny()

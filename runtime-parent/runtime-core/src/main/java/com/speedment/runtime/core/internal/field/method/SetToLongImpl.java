@@ -14,10 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.field.setter;
+package com.speedment.runtime.core.internal.field.method;
 
-import com.speedment.runtime.core.field.method.SetToInt;
-import com.speedment.runtime.core.field.trait.HasIntValue;
+import com.speedment.runtime.core.field.method.SetToLong;
+import com.speedment.runtime.core.field.trait.HasLongValue;
 import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
@@ -25,7 +25,7 @@ import static java.util.Objects.requireNonNull;
  * A {@code set} operation that will apply a value {@link #getValue()} to the
  * field {@link #getField()} of any instance passed to it.
  * <p>
- * This particular implementation is for values of type {@code int}.
+ * This particular implementation is for values of type {@code long}.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type
@@ -34,28 +34,28 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @Generated(value = "Speedment")
-public final class SetToIntImpl<ENTITY, D> implements SetToInt<ENTITY, D> {
+public final class SetToLongImpl<ENTITY, D> implements SetToLong<ENTITY, D> {
     
-    private final HasIntValue<ENTITY, D> field;
-    private final int newValue;
+    private final HasLongValue<ENTITY, D> field;
+    private final long newValue;
     
-    public SetToIntImpl(HasIntValue<ENTITY, D> field, int newValue) {
+    public SetToLongImpl(HasLongValue<ENTITY, D> field, long newValue) {
         this.field    = requireNonNull(field);
         this.newValue = requireNonNull(newValue);
     }
     
     @Override
-    public HasIntValue<ENTITY, D> getField() {
+    public HasLongValue<ENTITY, D> getField() {
         return field;
     }
     
     @Override
-    public int getValue() {
+    public long getValue() {
         return newValue;
     }
     
     @Override
     public ENTITY apply(ENTITY entity) {
-        return field.setter().setAsInt(entity, newValue);
+        return field.setter().setAsLong(entity, newValue);
     }
 }

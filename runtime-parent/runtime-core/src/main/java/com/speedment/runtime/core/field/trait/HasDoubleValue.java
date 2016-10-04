@@ -20,7 +20,7 @@ import com.speedment.runtime.core.field.Field;
 import com.speedment.runtime.core.field.method.DoubleGetter;
 import com.speedment.runtime.core.field.method.DoubleSetter;
 import com.speedment.runtime.core.field.method.SetToDouble;
-import com.speedment.runtime.core.internal.field.setter.SetToDoubleImpl;
+import com.speedment.runtime.core.internal.field.method.SetToDoubleImpl;
 import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 

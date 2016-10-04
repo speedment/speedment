@@ -14,10 +14,10 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.field.setter;
+package com.speedment.runtime.core.internal.field.method;
 
-import com.speedment.runtime.core.field.method.SetToShort;
-import com.speedment.runtime.core.field.trait.HasShortValue;
+import com.speedment.runtime.core.field.method.SetToBoolean;
+import com.speedment.runtime.core.field.trait.HasBooleanValue;
 import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
@@ -25,7 +25,7 @@ import static java.util.Objects.requireNonNull;
  * A {@code set} operation that will apply a value {@link #getValue()} to the
  * field {@link #getField()} of any instance passed to it.
  * <p>
- * This particular implementation is for values of type {@code short}.
+ * This particular implementation is for values of type {@code boolean}.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type
@@ -34,28 +34,28 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @Generated(value = "Speedment")
-public final class SetToShortImpl<ENTITY, D> implements SetToShort<ENTITY, D> {
+public final class SetToBooleanImpl<ENTITY, D> implements SetToBoolean<ENTITY, D> {
     
-    private final HasShortValue<ENTITY, D> field;
-    private final short newValue;
+    private final HasBooleanValue<ENTITY, D> field;
+    private final boolean newValue;
     
-    public SetToShortImpl(HasShortValue<ENTITY, D> field, short newValue) {
+    public SetToBooleanImpl(HasBooleanValue<ENTITY, D> field, boolean newValue) {
         this.field    = requireNonNull(field);
         this.newValue = requireNonNull(newValue);
     }
     
     @Override
-    public HasShortValue<ENTITY, D> getField() {
+    public HasBooleanValue<ENTITY, D> getField() {
         return field;
     }
     
     @Override
-    public short getValue() {
+    public boolean getValue() {
         return newValue;
     }
     
     @Override
     public ENTITY apply(ENTITY entity) {
-        return field.setter().setAsShort(entity, newValue);
+        return field.setter().setAsBoolean(entity, newValue);
     }
 }

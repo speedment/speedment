@@ -20,7 +20,7 @@ import com.speedment.runtime.core.field.Field;
 import com.speedment.runtime.core.field.method.LongGetter;
 import com.speedment.runtime.core.field.method.LongSetter;
 import com.speedment.runtime.core.field.method.SetToLong;
-import com.speedment.runtime.core.internal.field.setter.SetToLongImpl;
+import com.speedment.runtime.core.internal.field.method.SetToLongImpl;
 import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 
