@@ -17,7 +17,12 @@
 package com.speedment.runtime.core.field;
 
 
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.core.field.method.ReferenceGetter;
+import com.speedment.runtime.core.field.method.ReferenceSetter;
 import com.speedment.runtime.core.field.trait.HasStringOperators;
+import com.speedment.runtime.core.internal.field.StringFieldImpl;
+import com.speedment.runtime.typemapper.TypeMapper;
 
 /**
  * A field that represents a string column.
@@ -35,4 +40,31 @@ import com.speedment.runtime.core.field.trait.HasStringOperators;
 
 public interface StringField<ENTITY, D> extends
     ComparableField<ENTITY, D, String>, 
-    HasStringOperators<ENTITY, D> {}
+    HasStringOperators<ENTITY, D> {
+
+    /**
+     * Creates a new {@link StringField} using the default implementation. 
+     * 
+     * @param <ENTITY>    the entity type
+     * @param <D>         the database type
+     * @param identifier  the column that this field represents
+     * @param getter      method reference to the getter in the entity
+     * @param setter      method reference to the setter in the entity
+     * @param typeMapper  the type mapper that is applied
+     * @param unique      represented column only contains unique values
+     * 
+     * @return            the created field
+     */
+    static <ENTITY, D> StringField<ENTITY, D> create(
+            ColumnIdentifier<ENTITY> identifier,
+            ReferenceGetter<ENTITY, String> getter,
+            ReferenceSetter<ENTITY, String> setter,
+            TypeMapper<D, String> typeMapper,
+            boolean unique) {
+        
+        return new StringFieldImpl<>(
+            identifier, getter, setter, typeMapper, unique
+        );
+    }
+    
+}

@@ -48,7 +48,6 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import static java.util.Objects.requireNonNull;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import static java.util.Objects.requireNonNull;
 
@@ -57,6 +56,7 @@ import static java.util.Objects.requireNonNull;
  * @param <D>      the database type
  * 
  * @author  Per Minborg
+ * @author  Emil Forslund
  * @since   2.2.0
  */
 public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> {

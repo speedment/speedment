@@ -16,8 +16,13 @@
  */
 package com.speedment.runtime.core.field;
 
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.core.field.method.ByteGetter;
+import com.speedment.runtime.core.field.method.ByteSetter;
 import com.speedment.runtime.core.field.trait.HasByteValue;
 import com.speedment.runtime.core.field.trait.HasComparableOperators;
+import com.speedment.runtime.core.internal.field.ByteFieldImpl;
+import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 
 /**
@@ -34,5 +39,21 @@ import javax.annotation.Generated;
 @Generated(value = "Speedment")
 public interface ByteField<ENTITY, D> extends Field<ENTITY>, HasByteValue<ENTITY, D>, HasComparableOperators<ENTITY, Byte> {
     
-    
+    /**
+     * Creates a new {@link ByteField} using the default implementation.
+     * 
+     * @param <ENTITY>   entity type
+     * @param <D>        database type
+     * @param identifier column that this field represents
+     * @param getter     method reference to the getter in the entity
+     * @param setter     method reference to the setter in the entity
+     * @param typeMapper type mapper that is applied
+     * @param unique     if represented column only contains unique values
+     * @return           the created field
+     */
+    static <ENTITY, D> ByteField<ENTITY, D> create(ColumnIdentifier<ENTITY> identifier, ByteGetter<ENTITY> getter, ByteSetter<ENTITY> setter, TypeMapper<D, Byte> typeMapper, boolean unique) {
+        return new ByteFieldImpl<>(
+            identifier, getter, setter, typeMapper, unique
+        );
+    }
 }

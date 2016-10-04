@@ -55,11 +55,11 @@ public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Do
     private final ColumnIdentifier<ENTITY> identifier;
     private final DoubleGetter<ENTITY> getter;
     private final DoubleSetter<ENTITY> setter;
-    private final DoubleField<FK_ENTITY, ?> referenced;
+    private final DoubleField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, Double> typeMapper;
     private final boolean unique;
     
-    public DoubleForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, DoubleGetter<ENTITY> getter, DoubleSetter<ENTITY> setter, DoubleField<FK_ENTITY, ?> referenced, TypeMapper<D, Double> typeMapper, boolean unique) {
+    public DoubleForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, DoubleGetter<ENTITY> getter, DoubleSetter<ENTITY> setter, DoubleField<FK_ENTITY, D> referenced, TypeMapper<D, Double> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
@@ -84,7 +84,7 @@ public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Do
     }
     
     @Override
-    public DoubleField<FK_ENTITY, ?> getReferencedField() {
+    public DoubleField<FK_ENTITY, D> getReferencedField() {
         return referenced;
     }
     

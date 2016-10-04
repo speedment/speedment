@@ -55,11 +55,11 @@ public final class IntForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements IntFi
     private final ColumnIdentifier<ENTITY> identifier;
     private final IntGetter<ENTITY> getter;
     private final IntSetter<ENTITY> setter;
-    private final IntField<FK_ENTITY, ?> referenced;
+    private final IntField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, Integer> typeMapper;
     private final boolean unique;
     
-    public IntForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, IntGetter<ENTITY> getter, IntSetter<ENTITY> setter, IntField<FK_ENTITY, ?> referenced, TypeMapper<D, Integer> typeMapper, boolean unique) {
+    public IntForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, IntGetter<ENTITY> getter, IntSetter<ENTITY> setter, IntField<FK_ENTITY, D> referenced, TypeMapper<D, Integer> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
@@ -84,7 +84,7 @@ public final class IntForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements IntFi
     }
     
     @Override
-    public IntField<FK_ENTITY, ?> getReferencedField() {
+    public IntField<FK_ENTITY, D> getReferencedField() {
         return referenced;
     }
     

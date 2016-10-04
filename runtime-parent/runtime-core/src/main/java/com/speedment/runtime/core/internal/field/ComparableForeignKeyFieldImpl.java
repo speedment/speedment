@@ -55,7 +55,10 @@ import static java.util.Objects.requireNonNull;
  * @param <V>          the field type
  * @param <FK_ENTITY>  the foreign entity type
  * 
- * @author Per Minborg
+ * @author  Emil Forslund
+ * @author  Per Minborg
+ * 
+ * @since  2.2.0
  */
 public final class ComparableForeignKeyFieldImpl<ENTITY, D, V extends Comparable<? super V>, FK_ENTITY> 
 implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> {

@@ -16,7 +16,12 @@
  */
 package com.speedment.runtime.core.field;
 
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.core.field.method.DoubleGetter;
+import com.speedment.runtime.core.field.method.DoubleSetter;
 import com.speedment.runtime.core.field.trait.HasFinder;
+import com.speedment.runtime.core.internal.field.DoubleForeignKeyFieldImpl;
+import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 
 /**
@@ -31,10 +36,29 @@ import javax.annotation.Generated;
  * @since  3.0.0
  * 
  * @see ReferenceField
- * @see ReferenceForeignKeyField
+ * @see ComparableForeignKeyField
  */
 @Generated(value = "Speedment")
 public interface DoubleForeignKeyField<ENTITY, D, FK_ENTITY> extends DoubleField<ENTITY, D>, HasFinder<ENTITY, FK_ENTITY> {
     
-    
+    /**
+     * Creates a new {@link DoubleForeignKeyField} using the default
+     * implementation.
+     * 
+     * @param <ENTITY>    entity type
+     * @param <D>         database type
+     * @param <FK_ENTITY> foreign entity type
+     * @param identifier  column that this field represents
+     * @param getter      method reference to the getter in the entity
+     * @param setter      method reference to the setter in the entity
+     * @param referenced  field in the foreign entity that is referenced
+     * @param typeMapper  type mapper that is applied
+     * @param unique      if represented column only contains unique values
+     * @return            the created field
+     */
+    static <ENTITY, D, FK_ENTITY> DoubleForeignKeyField<ENTITY, D, FK_ENTITY> create(ColumnIdentifier<ENTITY> identifier, DoubleGetter<ENTITY> getter, DoubleSetter<ENTITY> setter, DoubleField<FK_ENTITY, D> referenced, TypeMapper<D, Double> typeMapper, boolean unique) {
+        return new DoubleForeignKeyFieldImpl<>(
+            identifier, getter, setter, referenced, typeMapper, unique
+        );
+    }
 }

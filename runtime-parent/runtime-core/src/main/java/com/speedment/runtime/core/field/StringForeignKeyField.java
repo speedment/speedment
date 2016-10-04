@@ -17,7 +17,12 @@
 package com.speedment.runtime.core.field;
 
 
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.core.field.method.ReferenceGetter;
+import com.speedment.runtime.core.field.method.ReferenceSetter;
 import com.speedment.runtime.core.field.trait.HasFinder;
+import com.speedment.runtime.core.internal.field.StringForeignKeyFieldImpl;
+import com.speedment.runtime.typemapper.TypeMapper;
 
 /**
  * A field that represents a string column with a foreign key to 
@@ -35,6 +40,36 @@ import com.speedment.runtime.core.field.trait.HasFinder;
  * @see  HasFinder
  */
 
-public interface StringForeignKeyField<ENTITY, D, FK_ENTITY> extends
-    StringField<ENTITY, D>, 
-    HasFinder<ENTITY, FK_ENTITY> {}
+public interface StringForeignKeyField<ENTITY, D, FK_ENTITY> 
+extends StringField<ENTITY, D>, 
+        HasFinder<ENTITY, FK_ENTITY> {
+
+    /**
+     * Creates a new {@link StringForeignKeyField} using the default 
+     * implementation. 
+     * 
+     * @param <ENTITY>    entity type
+     * @param <D>         database type
+     * @param <FK>        foreign entity type
+     * @param identifier  column that this field represents
+     * @param getter      method reference to the getter in the entity
+     * @param setter      method reference to the setter in the entity
+     * @param referenced  field in the foreign entity that is referenced
+     * @param typeMapper  type mapper that is applied
+     * @param unique      represented column only contains unique values
+     * 
+     * @return            the created field
+     */
+    static <ENTITY, D, FK> StringForeignKeyField<ENTITY, D, FK> create(
+            ColumnIdentifier<ENTITY> identifier,
+            ReferenceGetter<ENTITY, String> getter,
+            ReferenceSetter<ENTITY, String> setter,
+            StringField<FK, D> referenced,
+            TypeMapper<D, String> typeMapper,
+            boolean unique) {
+        
+        return new StringForeignKeyFieldImpl<>(
+            identifier, getter, setter, referenced, typeMapper, unique
+        );
+    }
+}

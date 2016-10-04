@@ -16,8 +16,13 @@
  */
 package com.speedment.runtime.core.field;
 
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.core.field.method.ShortGetter;
+import com.speedment.runtime.core.field.method.ShortSetter;
 import com.speedment.runtime.core.field.trait.HasComparableOperators;
 import com.speedment.runtime.core.field.trait.HasShortValue;
+import com.speedment.runtime.core.internal.field.ShortFieldImpl;
+import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 
 /**
@@ -34,5 +39,21 @@ import javax.annotation.Generated;
 @Generated(value = "Speedment")
 public interface ShortField<ENTITY, D> extends Field<ENTITY>, HasShortValue<ENTITY, D>, HasComparableOperators<ENTITY, Short> {
     
-    
+    /**
+     * Creates a new {@link ShortField} using the default implementation.
+     * 
+     * @param <ENTITY>   entity type
+     * @param <D>        database type
+     * @param identifier column that this field represents
+     * @param getter     method reference to the getter in the entity
+     * @param setter     method reference to the setter in the entity
+     * @param typeMapper type mapper that is applied
+     * @param unique     if represented column only contains unique values
+     * @return           the created field
+     */
+    static <ENTITY, D> ShortField<ENTITY, D> create(ColumnIdentifier<ENTITY> identifier, ShortGetter<ENTITY> getter, ShortSetter<ENTITY> setter, TypeMapper<D, Short> typeMapper, boolean unique) {
+        return new ShortFieldImpl<>(
+            identifier, getter, setter, typeMapper, unique
+        );
+    }
 }

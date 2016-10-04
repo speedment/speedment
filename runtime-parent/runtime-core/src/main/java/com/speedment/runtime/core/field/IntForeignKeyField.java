@@ -16,7 +16,12 @@
  */
 package com.speedment.runtime.core.field;
 
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.core.field.method.IntGetter;
+import com.speedment.runtime.core.field.method.IntSetter;
 import com.speedment.runtime.core.field.trait.HasFinder;
+import com.speedment.runtime.core.internal.field.IntForeignKeyFieldImpl;
+import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 
 /**
@@ -31,10 +36,29 @@ import javax.annotation.Generated;
  * @since  3.0.0
  * 
  * @see ReferenceField
- * @see ReferenceForeignKeyField
+ * @see ComparableForeignKeyField
  */
 @Generated(value = "Speedment")
 public interface IntForeignKeyField<ENTITY, D, FK_ENTITY> extends IntField<ENTITY, D>, HasFinder<ENTITY, FK_ENTITY> {
     
-    
+    /**
+     * Creates a new {@link IntForeignKeyField} using the default
+     * implementation.
+     * 
+     * @param <ENTITY>    entity type
+     * @param <D>         database type
+     * @param <FK_ENTITY> foreign entity type
+     * @param identifier  column that this field represents
+     * @param getter      method reference to the getter in the entity
+     * @param setter      method reference to the setter in the entity
+     * @param referenced  field in the foreign entity that is referenced
+     * @param typeMapper  type mapper that is applied
+     * @param unique      if represented column only contains unique values
+     * @return            the created field
+     */
+    static <ENTITY, D, FK_ENTITY> IntForeignKeyField<ENTITY, D, FK_ENTITY> create(ColumnIdentifier<ENTITY> identifier, IntGetter<ENTITY> getter, IntSetter<ENTITY> setter, IntField<FK_ENTITY, D> referenced, TypeMapper<D, Integer> typeMapper, boolean unique) {
+        return new IntForeignKeyFieldImpl<>(
+            identifier, getter, setter, referenced, typeMapper, unique
+        );
+    }
 }

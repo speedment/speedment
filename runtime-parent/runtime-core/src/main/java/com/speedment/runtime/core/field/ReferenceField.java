@@ -16,9 +16,13 @@
  */
 package com.speedment.runtime.core.field;
 
-
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.core.field.method.ReferenceGetter;
+import com.speedment.runtime.core.field.method.ReferenceSetter;
 import com.speedment.runtime.core.field.trait.HasReferenceOperators;
 import com.speedment.runtime.core.field.trait.HasReferenceValue;
+import com.speedment.runtime.core.internal.field.ReferenceFieldImpl;
+import com.speedment.runtime.typemapper.TypeMapper;
 
 /**
  * A field that represents an object value.
@@ -35,10 +39,35 @@ import com.speedment.runtime.core.field.trait.HasReferenceValue;
  * @see  HasReferenceOperators
  * @see  HasReferenceValue
  */
-
-public interface ReferenceField<ENTITY, D, V> extends 
-    Field<ENTITY>, 
-    HasReferenceOperators<ENTITY>,
-    HasReferenceValue<ENTITY, D, V> {
+public interface ReferenceField<ENTITY, D, V> 
+extends Field<ENTITY>, 
+        HasReferenceOperators<ENTITY>,
+        HasReferenceValue<ENTITY, D, V> {
+    
+    /**
+     * Creates a new {@link ReferenceField} using the default implementation. 
+     * 
+     * @param <ENTITY>    the entity type
+     * @param <D>         the database type
+     * @param <V>         the field value type
+     * @param identifier  the column that this field represents
+     * @param getter      method reference to the getter in the entity
+     * @param setter      method reference to the setter in the entity
+     * @param typeMapper  the type mapper that is applied
+     * @param unique      represented column only contains unique values
+     * 
+     * @return            the created field
+     */
+    static <ENTITY, D, V> ReferenceField<ENTITY, D, V> create(
+            ColumnIdentifier<ENTITY> identifier,
+            ReferenceGetter<ENTITY, V> getter,
+            ReferenceSetter<ENTITY, V> setter,
+            TypeMapper<D, V> typeMapper,
+            boolean unique) {
+        
+        return new ReferenceFieldImpl<>(
+            identifier, getter, setter, typeMapper, unique
+        );
+    }
     
 }

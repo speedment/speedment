@@ -16,8 +16,13 @@
  */
 package com.speedment.runtime.core.field;
 
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.core.field.method.FloatGetter;
+import com.speedment.runtime.core.field.method.FloatSetter;
 import com.speedment.runtime.core.field.trait.HasComparableOperators;
 import com.speedment.runtime.core.field.trait.HasFloatValue;
+import com.speedment.runtime.core.internal.field.FloatFieldImpl;
+import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 
 /**
@@ -34,5 +39,21 @@ import javax.annotation.Generated;
 @Generated(value = "Speedment")
 public interface FloatField<ENTITY, D> extends Field<ENTITY>, HasFloatValue<ENTITY, D>, HasComparableOperators<ENTITY, Float> {
     
-    
+    /**
+     * Creates a new {@link FloatField} using the default implementation.
+     * 
+     * @param <ENTITY>   entity type
+     * @param <D>        database type
+     * @param identifier column that this field represents
+     * @param getter     method reference to the getter in the entity
+     * @param setter     method reference to the setter in the entity
+     * @param typeMapper type mapper that is applied
+     * @param unique     if represented column only contains unique values
+     * @return           the created field
+     */
+    static <ENTITY, D> FloatField<ENTITY, D> create(ColumnIdentifier<ENTITY> identifier, FloatGetter<ENTITY> getter, FloatSetter<ENTITY> setter, TypeMapper<D, Float> typeMapper, boolean unique) {
+        return new FloatFieldImpl<>(
+            identifier, getter, setter, typeMapper, unique
+        );
+    }
 }

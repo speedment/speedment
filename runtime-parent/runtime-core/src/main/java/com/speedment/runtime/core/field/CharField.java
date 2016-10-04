@@ -16,8 +16,13 @@
  */
 package com.speedment.runtime.core.field;
 
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.core.field.method.CharGetter;
+import com.speedment.runtime.core.field.method.CharSetter;
 import com.speedment.runtime.core.field.trait.HasCharValue;
 import com.speedment.runtime.core.field.trait.HasComparableOperators;
+import com.speedment.runtime.core.internal.field.CharFieldImpl;
+import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 
 /**
@@ -34,5 +39,21 @@ import javax.annotation.Generated;
 @Generated(value = "Speedment")
 public interface CharField<ENTITY, D> extends Field<ENTITY>, HasCharValue<ENTITY, D>, HasComparableOperators<ENTITY, Character> {
     
-    
+    /**
+     * Creates a new {@link CharField} using the default implementation.
+     * 
+     * @param <ENTITY>   entity type
+     * @param <D>        database type
+     * @param identifier column that this field represents
+     * @param getter     method reference to the getter in the entity
+     * @param setter     method reference to the setter in the entity
+     * @param typeMapper type mapper that is applied
+     * @param unique     if represented column only contains unique values
+     * @return           the created field
+     */
+    static <ENTITY, D> CharField<ENTITY, D> create(ColumnIdentifier<ENTITY> identifier, CharGetter<ENTITY> getter, CharSetter<ENTITY> setter, TypeMapper<D, Character> typeMapper, boolean unique) {
+        return new CharFieldImpl<>(
+            identifier, getter, setter, typeMapper, unique
+        );
+    }
 }

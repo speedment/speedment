@@ -16,8 +16,12 @@
  */
 package com.speedment.runtime.core.field;
 
-
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.core.field.method.ReferenceGetter;
+import com.speedment.runtime.core.field.method.ReferenceSetter;
 import com.speedment.runtime.core.field.trait.HasComparableOperators;
+import com.speedment.runtime.core.internal.field.ComparableFieldImpl;
+import com.speedment.runtime.typemapper.TypeMapper;
 
 /**
  * A field that represents an object value that implements {@code Comparable}.
@@ -32,8 +36,34 @@ import com.speedment.runtime.core.field.trait.HasComparableOperators;
  * 
  * @see    ReferenceField
  */
+public interface ComparableField<ENTITY, D, V extends Comparable<? super V>> 
+extends ReferenceField<ENTITY, D, V>,
+        HasComparableOperators<ENTITY, V> {
 
-public interface ComparableField<ENTITY, D, V extends Comparable<? super V>> extends
-    ReferenceField<ENTITY, D, V>,
-    HasComparableOperators<ENTITY, V> {
+    /**
+     * Creates a new {@link ComparableField} using the default implementation. 
+     * 
+     * @param <ENTITY>    the entity type
+     * @param <D>         the database type
+     * @param <V>         the field value type
+     * @param identifier  the column that this field represents
+     * @param getter      method reference to the getter in the entity
+     * @param setter      method reference to the setter in the entity
+     * @param typeMapper  the type mapper that is applied
+     * @param unique      represented column only contains unique values
+     * 
+     * @return            the created field
+     */
+    static <ENTITY, D, V extends Comparable<? super V>> 
+    ComparableField<ENTITY, D, V> create(
+            ColumnIdentifier<ENTITY> identifier,
+            ReferenceGetter<ENTITY, V> getter,
+            ReferenceSetter<ENTITY, V> setter,
+            TypeMapper<D, V> typeMapper,
+            boolean unique) {
+        
+        return new ComparableFieldImpl<>(
+            identifier, getter, setter, typeMapper, unique
+        );
+    }
 }

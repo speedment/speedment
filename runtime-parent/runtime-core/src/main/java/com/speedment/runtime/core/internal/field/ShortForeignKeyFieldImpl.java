@@ -46,8 +46,8 @@ import static java.util.Objects.requireNonNull;
  * @param <D>         database type
  * @param <FK_ENTITY> foreign entity type
  * 
- * @author Emil Forslund
- * @since  3.0.0
+ * @author  Emil Forslund
+ * @since   3.0.0
  */
 @Generated(value = "Speedment")
 public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements ShortField<ENTITY, D>, ShortForeignKeyField<ENTITY, D, FK_ENTITY> {
@@ -55,11 +55,11 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Sho
     private final ColumnIdentifier<ENTITY> identifier;
     private final ShortGetter<ENTITY> getter;
     private final ShortSetter<ENTITY> setter;
-    private final ShortField<FK_ENTITY, ?> referenced;
+    private final ShortField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, Short> typeMapper;
     private final boolean unique;
     
-    public ShortForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, ShortGetter<ENTITY> getter, ShortSetter<ENTITY> setter, ShortField<FK_ENTITY, ?> referenced, TypeMapper<D, Short> typeMapper, boolean unique) {
+    public ShortForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, ShortGetter<ENTITY> getter, ShortSetter<ENTITY> setter, ShortField<FK_ENTITY, D> referenced, TypeMapper<D, Short> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
@@ -84,7 +84,7 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Sho
     }
     
     @Override
-    public ShortField<FK_ENTITY, ?> getReferencedField() {
+    public ShortField<FK_ENTITY, D> getReferencedField() {
         return referenced;
     }
     

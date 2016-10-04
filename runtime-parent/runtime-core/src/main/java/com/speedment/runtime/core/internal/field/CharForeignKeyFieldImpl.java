@@ -55,11 +55,11 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
     private final ColumnIdentifier<ENTITY> identifier;
     private final CharGetter<ENTITY> getter;
     private final CharSetter<ENTITY> setter;
-    private final CharField<FK_ENTITY, ?> referenced;
+    private final CharField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, Character> typeMapper;
     private final boolean unique;
     
-    public CharForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, CharGetter<ENTITY> getter, CharSetter<ENTITY> setter, CharField<FK_ENTITY, ?> referenced, TypeMapper<D, Character> typeMapper, boolean unique) {
+    public CharForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, CharGetter<ENTITY> getter, CharSetter<ENTITY> setter, CharField<FK_ENTITY, D> referenced, TypeMapper<D, Character> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
@@ -84,7 +84,7 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
     }
     
     @Override
-    public CharField<FK_ENTITY, ?> getReferencedField() {
+    public CharField<FK_ENTITY, D> getReferencedField() {
         return referenced;
     }
     

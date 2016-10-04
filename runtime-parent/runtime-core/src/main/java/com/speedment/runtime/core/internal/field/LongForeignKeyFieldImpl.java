@@ -55,11 +55,11 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     private final ColumnIdentifier<ENTITY> identifier;
     private final LongGetter<ENTITY> getter;
     private final LongSetter<ENTITY> setter;
-    private final LongField<FK_ENTITY, ?> referenced;
+    private final LongField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, Long> typeMapper;
     private final boolean unique;
     
-    public LongForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, LongGetter<ENTITY> getter, LongSetter<ENTITY> setter, LongField<FK_ENTITY, ?> referenced, TypeMapper<D, Long> typeMapper, boolean unique) {
+    public LongForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, LongGetter<ENTITY> getter, LongSetter<ENTITY> setter, LongField<FK_ENTITY, D> referenced, TypeMapper<D, Long> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
@@ -84,7 +84,7 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     }
     
     @Override
-    public LongField<FK_ENTITY, ?> getReferencedField() {
+    public LongField<FK_ENTITY, D> getReferencedField() {
         return referenced;
     }
     

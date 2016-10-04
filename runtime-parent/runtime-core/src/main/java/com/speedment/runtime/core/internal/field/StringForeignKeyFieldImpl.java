@@ -21,7 +21,6 @@ import com.speedment.runtime.core.field.StringField;
 import com.speedment.runtime.core.field.StringForeignKeyField;
 import com.speedment.runtime.core.field.method.BackwardFinder;
 import com.speedment.runtime.core.field.method.FindFrom;
-import com.speedment.runtime.core.field.method.Finder;
 import com.speedment.runtime.core.field.method.ReferenceGetter;
 import com.speedment.runtime.core.field.method.ReferenceSetter;
 import com.speedment.runtime.core.field.predicate.FieldPredicate;
@@ -55,16 +54,17 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import static java.util.Objects.requireNonNull;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import static java.util.Objects.requireNonNull;
 
 /**
- * @param <ENTITY> the entity type
- * @param <D> the database type
- *
- * @author Per Minborg
- * @since 2.2.0
+ * @param <ENTITY>     the entity type
+ * @param <D>          the database type
+ * @param <FK_ENTITY>  the foreign entity type
+ * 
+ * @author  Per Minborg
+ * @author  Emil Forslund
+ * @since   2.2.0
  */
 public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     StringForeignKeyField<ENTITY, D, FK_ENTITY> {
@@ -72,7 +72,7 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     private final ColumnIdentifier<ENTITY> identifier;
     private final ReferenceGetter<ENTITY, String> getter;
     private final ReferenceSetter<ENTITY, String> setter;
-    private final StringField<FK_ENTITY, ?> referenced;
+    private final StringField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, String> typeMapper;
     private final boolean unique;
 
@@ -80,8 +80,7 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
         ColumnIdentifier<ENTITY> identifier,
         ReferenceGetter<ENTITY, String> getter,
         ReferenceSetter<ENTITY, String> setter,
-        StringField<FK_ENTITY, ?> referenced,
-        Finder<ENTITY, FK_ENTITY> finder,
+        StringField<FK_ENTITY, D> referenced,
         TypeMapper<D, String> typeMapper,
         boolean unique) {
 
@@ -93,13 +92,9 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
         this.unique = unique;
     }
 
-    /**
-     * **************************************************************
-     */
-    /*                           Getters                             */
-    /**
-     * **************************************************************
-     */
+    /**************************************************************************/
+    /*                                Getters                                 */
+    /**************************************************************************/
     @Override
     public ColumnIdentifier<ENTITY> identifier() {
         return identifier;
@@ -116,7 +111,7 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     }
 
     @Override
-    public StringField<FK_ENTITY, ?> getReferencedField() {
+    public StringField<FK_ENTITY, D> getReferencedField() {
         return referenced;
     }
     
@@ -140,13 +135,9 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
         return unique;
     }
 
-    /**
-     * **************************************************************
-     */
-    /*                         Comparators                           */
-    /**
-     * **************************************************************
-     */
+    /**************************************************************************/
+    /*                              Comparators                               */
+    /**************************************************************************/
     @Override
     public Comparator<ENTITY> comparator() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.NONE);
@@ -162,13 +153,9 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.LAST);
     }
 
-    /**
-     * **************************************************************
-     */
-    /*                           Operators                           */
-    /**
-     * **************************************************************
-     */
+    /**************************************************************************/
+    /*                               Operators                                */
+    /**************************************************************************/
     @Override
     public FieldPredicate<ENTITY> isNull() {
         return new ReferenceIsNullPredicate<>(this);

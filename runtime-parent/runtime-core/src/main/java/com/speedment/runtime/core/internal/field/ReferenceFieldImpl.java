@@ -23,7 +23,6 @@ import com.speedment.runtime.core.field.method.ReferenceSetter;
 import com.speedment.runtime.core.field.predicate.FieldPredicate;
 import com.speedment.runtime.core.internal.field.predicate.reference.ReferenceIsNullPredicate;
 
-import static java.util.Objects.requireNonNull;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import static java.util.Objects.requireNonNull;
 
@@ -33,6 +32,7 @@ import static java.util.Objects.requireNonNull;
  * @param <V>      the field value type
  * 
  * @author  Per Minborg
+ * @author  Emil Forslund
  * @since   2.2.0
  */
 public final class ReferenceFieldImpl<ENTITY, D, V> 

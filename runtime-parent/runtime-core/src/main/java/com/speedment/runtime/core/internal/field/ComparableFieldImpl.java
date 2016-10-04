@@ -49,6 +49,8 @@ import static java.util.Objects.requireNonNull;
  * @param <V>      the field value type
  * 
  * @author  Per Minborg
+ * @author  Emil Forslund
+ * 
  * @since   2.2.0
  */
 public final class ComparableFieldImpl<ENTITY, D, V extends Comparable<? super V>> 

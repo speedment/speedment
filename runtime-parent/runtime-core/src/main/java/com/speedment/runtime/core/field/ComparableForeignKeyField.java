@@ -16,8 +16,13 @@
  */
 package com.speedment.runtime.core.field;
 
-
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.core.field.method.ReferenceGetter;
+import com.speedment.runtime.core.field.method.ReferenceSetter;
+import com.speedment.runtime.core.field.trait.HasComparableOperators;
 import com.speedment.runtime.core.field.trait.HasFinder;
+import com.speedment.runtime.core.internal.field.ComparableForeignKeyFieldImpl;
+import com.speedment.runtime.typemapper.TypeMapper;
 
 /**
  * A field that represents an object value that implements {@code Comparable}
@@ -35,7 +40,37 @@ import com.speedment.runtime.core.field.trait.HasFinder;
  * @see  ComparableField
  * @see  HasFinder
  */
+public interface ComparableForeignKeyField<ENTITY, D, V extends Comparable<? super V>, FK> 
+extends ComparableField<ENTITY, D, V>, 
+        HasFinder<ENTITY, FK> {
 
-public interface ComparableForeignKeyField<ENTITY, D, V extends Comparable<? super V>, FK> extends
-    ComparableField<ENTITY, D, V>, 
-    HasFinder<ENTITY, FK> {}
+    /**
+     * Creates a new {@link ComparableField} using the default implementation. 
+     * 
+     * @param <ENTITY>    entity type
+     * @param <D>         database type
+     * @param <V>         field value type
+     * @param <FK>        foreign entity type
+     * @param identifier  column that this field represents
+     * @param getter      method reference to the getter in the entity
+     * @param setter      method reference to the setter in the entity
+     * @param referenced  field in the foreign entity that is referenced
+     * @param typeMapper  type mapper that is applied
+     * @param unique      represented column only contains unique values
+     * 
+     * @return            the created field
+     */
+    static <ENTITY, D, V extends Comparable<? super V>, FK> 
+    ComparableForeignKeyField<ENTITY, D, V, FK> create(
+            ColumnIdentifier<ENTITY> identifier,
+            ReferenceGetter<ENTITY, V> getter,
+            ReferenceSetter<ENTITY, V> setter,
+            HasComparableOperators<FK, V> referenced,
+            TypeMapper<D, V> typeMapper,
+            boolean unique) {
+        
+        return new ComparableForeignKeyFieldImpl<>(
+            identifier, getter, setter, referenced, typeMapper, unique
+        );
+    }
+}

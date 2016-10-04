@@ -55,11 +55,11 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Byte
     private final ColumnIdentifier<ENTITY> identifier;
     private final ByteGetter<ENTITY> getter;
     private final ByteSetter<ENTITY> setter;
-    private final ByteField<FK_ENTITY, ?> referenced;
+    private final ByteField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, Byte> typeMapper;
     private final boolean unique;
     
-    public ByteForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, ByteGetter<ENTITY> getter, ByteSetter<ENTITY> setter, ByteField<FK_ENTITY, ?> referenced, TypeMapper<D, Byte> typeMapper, boolean unique) {
+    public ByteForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, ByteGetter<ENTITY> getter, ByteSetter<ENTITY> setter, ByteField<FK_ENTITY, D> referenced, TypeMapper<D, Byte> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
         this.getter     = requireNonNull(getter);
         this.setter     = requireNonNull(setter);
@@ -84,7 +84,7 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Byte
     }
     
     @Override
-    public ByteField<FK_ENTITY, ?> getReferencedField() {
+    public ByteField<FK_ENTITY, D> getReferencedField() {
         return referenced;
     }
     
