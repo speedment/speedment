@@ -120,6 +120,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
              * General
              */
             .forEveryTable((intrf, col) -> intrf.public_().add(identifierEnum))
+            
             /**
              * Getters
              */
@@ -140,6 +141,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                     )
                 );
             })
+            
             /**
              * Setters
              */
@@ -157,6 +159,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                         .add(RETURN.setText("this " + getSupport().entityName() + " instance")))
                 );
             })
+            
             /**
              * Finders
              */
@@ -188,6 +191,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                     );
                 });
             })
+            
             /**
              * Fields
              */
@@ -243,12 +247,11 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                     file.add(Import.of(TypeMapper.class));
                 }
 
-                file.add(Import.of(ref.implType));
                 intrf.add(Field.of(getSupport().namer().javaStaticFieldName(col.getJavaName()), ref.type)
                     .final_()
                     .set(new ReferenceValue(
-                        "new " + shortName(ref.implType.getTypeName())
-                        + "<>(Identifier."
+                        shortName(ref.type.getTypeName())
+                        + ".create(Identifier."
                         + constant
                         + ", "
                         + getter
