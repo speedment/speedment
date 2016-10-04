@@ -41,6 +41,11 @@
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>2.10.4</version>
+        <configuration>
+          <includeDependencySources>true</includeDependencySources>
+          <docfilessubdirs>true</docfilessubdirs>
+          <excludePackageNames>*.internal.*</excludePackageNames>
+        </configuration>
       </plugin>
     </plugins>
   </build>

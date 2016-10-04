@@ -19,7 +19,6 @@ package com.speedment.runtime.core.internal.util.testing;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.field.Field;
-import com.speedment.runtime.core.manager.EntityCopier;
 import com.speedment.runtime.core.manager.EntityCreator;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.manager.Persister;
@@ -28,6 +27,7 @@ import com.speedment.runtime.core.manager.Updater;
 
 
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 /**
@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
 
     private final Manager<ENTITY> inner;
-    private EntityCreator<ENTITY> entityCreator;
+    private Supplier<ENTITY> entityCreator;
     private Supplier<Stream<ENTITY>> streamer;
     private Persister<ENTITY> persister;
     private Updater<ENTITY> updater;
@@ -90,7 +90,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public EntityCreator<ENTITY> entityCreator() {
+    public Supplier<ENTITY> entityCreator() {
         return entityCreator;
     }
 
@@ -150,7 +150,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     @Override
-    public EntityCopier<ENTITY> entityCopier() {
+    public UnaryOperator<ENTITY> entityCopier() {
         return inner.entityCopier();
     }
 

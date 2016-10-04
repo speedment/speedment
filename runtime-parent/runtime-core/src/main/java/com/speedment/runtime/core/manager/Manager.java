@@ -19,6 +19,11 @@ package com.speedment.runtime.core.manager;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.field.Field;
+import com.speedment.runtime.core.field.trait.HasFinder;
+import com.speedment.runtime.core.internal.util.stream.SingletonStream;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 import java.util.stream.Stream;
 
@@ -53,7 +58,7 @@ public interface Manager<ENTITY> {
      *
      * @return an EntityCreator
      */
-    EntityCreator<ENTITY> entityCreator();
+    Supplier<ENTITY> entityCreator();
 
     /**
      * Creates an returns a new entity copy. The new entity will have all its
@@ -71,7 +76,7 @@ public interface Manager<ENTITY> {
      *
      * @return an EntityCreator
      */
-    EntityCopier<ENTITY> entityCopier();
+    UnaryOperator<ENTITY> entityCopier();
 
     /**
      * Returns an identifier for the table that this {@code Manager} handles
@@ -284,5 +289,107 @@ public interface Manager<ENTITY> {
      * @return a Remover
      */
     Remover<ENTITY> remover();
+
+    /**
+     * Returns a Function that, when it is applied, will produce an equivalent
+     * result as if {@link #findByNullable(com.speedment.runtime.core.field.trait.HasFinder, java.lang.Object)
+     * } was called.
+     *
+     * @param <FK_ENTITY> the type of the foreign entity
+     * @param fkField the foreign key field
+     * @return an Entity (if any) that matches the given a foreign key relation
+     * (foreign field and entity)
+     * @see #findByNullable(com.speedment.runtime.core.field.trait.HasFinder,
+     * java.lang.Object)
+     */
+    default <FK_ENTITY> Function<FK_ENTITY, ENTITY> finderBy(HasFinder<FK_ENTITY, ENTITY> fkField) {
+        return fkField.finder(this);
+    }
+
+    /**
+     * Retrieves and returns an Entity that matches the given a foreign key
+     * relation (foreign field and entity). For example, if there is an entity
+     * Carrot with a FK to Hare using the column "hare", then
+     * hares.find(Carrot.HARE, carrot) will return the Hare that the Carrot.HARE
+     * field is pointing to.
+     *
+     * @param <FK_ENTITY> the type of the foreign entity
+     * @param fkField the foreign key field
+     * @param fkEntity the foreign key entity
+     * @return an Entity (if any) that matches the given a foreign key relation
+     * (foreign field and entity)
+     */
+    default <FK_ENTITY> ENTITY findBy(HasFinder<FK_ENTITY, ENTITY> fkField, FK_ENTITY fkEntity) {
+        return finderBy(fkField).apply(fkEntity);
+    }
+
+    /**
+     * Returns a Function that, when it is applied, will produce an equivalent
+     * result as if {@link #findByNullable(com.speedment.runtime.core.field.trait.HasFinder, java.lang.Object)
+     * } was called.
+     *
+     * @param <FK_ENTITY> the type of the foreign entity
+     * @param fkField the foreign key field
+     * @return an Entity (if any) that matches the given a foreign key relation
+     * (foreign field and entity)
+     * @see #findByNullable(com.speedment.runtime.core.field.trait.HasFinder,
+     * java.lang.Object)
+     */
+    default <FK_ENTITY> Function<FK_ENTITY, Stream<ENTITY>> finderByNullable(HasFinder<FK_ENTITY, ENTITY> fkField) {
+        return fkEntity -> SingletonStream.ofNullable(fkField.finder(this).apply(fkEntity));
+    }
+
+    /**
+     * Retrieves and returns a stream of Entities (with one or zero elements)
+     * that matches the given a foreign key relation (foreign field and entity).
+     * For example, if there is an entity Carrot with a FK to Hare using the
+     * column "hare", then hares.find(Carrot.HARE, carrot) will return a stream
+     * with the Hare that the Carrot.HARE field is pointing to or Stream.empty()
+     * if the hare column in carrot was null. I.e. The returned Stream will
+     * contain either zero or one element.
+     *
+     * @param <FK_ENTITY> the type of the foreign entity
+     * @param fkField the foreign key field
+     * @param fkEntity the foreign key entity
+     * @return an Entity (if any) that matches the given a foreign key relation
+     * (foreign field and entity)
+     */
+    default <FK_ENTITY> Stream<ENTITY> findByNullable(HasFinder<FK_ENTITY, ENTITY> fkField, FK_ENTITY fkEntity) {
+        return finderByNullable(fkField).apply(fkEntity);
+    }
+
+    // Function<ENTITY, Stream<FK_ENTITY>>
+    /**
+     * Returns a Function that, when it is applied, will produce an equivalent
+     * result as if {@link #findBackwardsBy(com.speedment.runtime.core.field.trait.HasFinder, java.lang.Object)
+     * } was called.
+     *
+     * @param <FK_ENTITY> the type of the foreign entity
+     * @param fkField the foreign key field
+     * @return an Entity (if any) that matches the given a foreign key relation
+     * (foreign field and entity)
+     * @see #findBackwardsBy(com.speedment.runtime.core.field.trait.HasFinder,
+     * java.lang.Object)
+     */
+    default <FK_ENTITY> Function<FK_ENTITY, Stream<ENTITY>> finderBackwardsBy(HasFinder<ENTITY, FK_ENTITY> fkField) {
+        return fkField.backwardFinder(this);
+    }
+
+    /**
+     * Retrieves and returns a stream of matching entities that matches the
+     * given a foreign key relation (foreign field and entity). For example, if
+     * there is an entity Carrot with a FK to Hare using the column "hare", then
+     * carrots.findBackwardsBy(Carrot.HARE, hare) will produce a Stream of all
+     * the Carrots that points to the given hare using the Carrot.HARE column.
+     *
+     * @param <FK_ENTITY> the type of the foreign entity
+     * @param fkField the foreign key field
+     * @param fkEntity the foreign key entity
+     * @return an Entity (if any) that matches the given a foreign key relation
+     * (foreign field and entity)
+     */
+    default <FK_ENTITY> Stream<ENTITY> findBackwardsBy(HasFinder<ENTITY, FK_ENTITY> fkField, FK_ENTITY fkEntity) {
+        return finderBackwardsBy(fkField).apply(fkEntity);
+    }
 
 }

@@ -52,6 +52,21 @@ import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import static com.speedment.runtime.config.util.DocumentDbUtil.isSame;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toMap;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import static com.speedment.runtime.config.util.DocumentDbUtil.isSame;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toMap;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import static com.speedment.runtime.config.util.DocumentDbUtil.isSame;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toMap;
 
 /**
  *

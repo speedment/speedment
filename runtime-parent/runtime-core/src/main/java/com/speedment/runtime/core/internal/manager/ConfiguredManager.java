@@ -20,15 +20,15 @@ import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.field.Field;
-import com.speedment.runtime.core.manager.EntityCopier;
-import com.speedment.runtime.core.manager.EntityCreator;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.manager.Persister;
 import com.speedment.runtime.core.manager.Remover;
 import com.speedment.runtime.core.manager.Updater;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
-import static java.util.Objects.requireNonNull;
 import java.util.stream.Stream;
+import static java.util.Objects.requireNonNull;
+import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 /**
  *
@@ -55,7 +55,7 @@ public class ConfiguredManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
-    public EntityCreator<ENTITY> entityCreator() {
+    public Supplier<ENTITY> entityCreator() {
         return manager.entityCreator();
     }
 
@@ -65,7 +65,7 @@ public class ConfiguredManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
-    public EntityCopier<ENTITY> entityCopier() {
+    public UnaryOperator<ENTITY> entityCopier() {
         return manager.entityCopier();
     }
 
