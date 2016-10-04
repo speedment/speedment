@@ -17,11 +17,11 @@
 package com.speedment.runtime.field;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.field.internal.ShortFieldImpl;
 import com.speedment.runtime.field.method.ShortGetter;
 import com.speedment.runtime.field.method.ShortSetter;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.field.trait.HasShortValue;
-import com.speedment.runtime.field.internal.ShortFieldImpl;
 import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 

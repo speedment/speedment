@@ -17,11 +17,11 @@
 package com.speedment.runtime.field;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.field.internal.CharFieldImpl;
 import com.speedment.runtime.field.method.CharGetter;
 import com.speedment.runtime.field.method.CharSetter;
 import com.speedment.runtime.field.trait.HasCharValue;
 import com.speedment.runtime.field.trait.HasComparableOperators;
-import com.speedment.runtime.field.internal.CharFieldImpl;
 import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 

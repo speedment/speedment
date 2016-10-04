@@ -17,10 +17,10 @@
 package com.speedment.runtime.field;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.field.internal.BooleanFieldImpl;
 import com.speedment.runtime.field.method.BooleanGetter;
 import com.speedment.runtime.field.method.BooleanSetter;
 import com.speedment.runtime.field.trait.HasBooleanValue;
-import com.speedment.runtime.field.internal.BooleanFieldImpl;
 import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 

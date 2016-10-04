@@ -17,10 +17,10 @@
 package com.speedment.runtime.field;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.field.internal.LongForeignKeyFieldImpl;
 import com.speedment.runtime.field.method.LongGetter;
 import com.speedment.runtime.field.method.LongSetter;
 import com.speedment.runtime.field.trait.HasFinder;
-import com.speedment.runtime.field.internal.LongForeignKeyFieldImpl;
 import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 

@@ -17,9 +17,9 @@
 package com.speedment.runtime.field.internal.predicate.doubles;
 
 import com.speedment.common.tuple.Tuple1;
+import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasDoubleValue;
-import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import javax.annotation.Generated;
 
 /**

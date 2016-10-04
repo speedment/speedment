@@ -18,10 +18,6 @@ package com.speedment.runtime.field.internal;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.DoubleField;
-import com.speedment.runtime.field.method.DoubleGetter;
-import com.speedment.runtime.field.method.DoubleSetter;
-import com.speedment.runtime.field.predicate.FieldPredicate;
-import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.internal.comparator.DoubleFieldComparator;
 import com.speedment.runtime.field.internal.comparator.DoubleFieldComparatorImpl;
 import com.speedment.runtime.field.internal.predicate.doubles.DoubleBetweenPredicate;
@@ -29,6 +25,10 @@ import com.speedment.runtime.field.internal.predicate.doubles.DoubleEqualPredica
 import com.speedment.runtime.field.internal.predicate.doubles.DoubleGreaterOrEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.doubles.DoubleGreaterThanPredicate;
 import com.speedment.runtime.field.internal.predicate.doubles.DoubleInPredicate;
+import com.speedment.runtime.field.method.DoubleGetter;
+import com.speedment.runtime.field.method.DoubleSetter;
+import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
 import java.util.Set;
 import java.util.function.Predicate;

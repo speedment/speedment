@@ -17,10 +17,10 @@
 package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.internal.method.SetToLongImpl;
 import com.speedment.runtime.field.method.LongGetter;
 import com.speedment.runtime.field.method.LongSetter;
 import com.speedment.runtime.field.method.SetToLong;
-import com.speedment.runtime.field.internal.method.SetToLongImpl;
 import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 

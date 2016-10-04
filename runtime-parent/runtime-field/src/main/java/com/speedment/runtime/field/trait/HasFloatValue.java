@@ -17,10 +17,10 @@
 package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.internal.method.SetToFloatImpl;
 import com.speedment.runtime.field.method.FloatGetter;
 import com.speedment.runtime.field.method.FloatSetter;
 import com.speedment.runtime.field.method.SetToFloat;
-import com.speedment.runtime.field.internal.method.SetToFloatImpl;
 import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 

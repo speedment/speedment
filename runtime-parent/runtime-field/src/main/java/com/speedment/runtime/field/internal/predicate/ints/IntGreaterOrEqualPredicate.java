@@ -17,9 +17,9 @@
 package com.speedment.runtime.field.internal.predicate.ints;
 
 import com.speedment.common.tuple.Tuple1;
+import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasIntValue;
-import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import javax.annotation.Generated;
 
 /**

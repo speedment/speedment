@@ -18,10 +18,6 @@ package com.speedment.runtime.field.internal;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.FloatField;
-import com.speedment.runtime.field.method.FloatGetter;
-import com.speedment.runtime.field.method.FloatSetter;
-import com.speedment.runtime.field.predicate.FieldPredicate;
-import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.internal.comparator.FloatFieldComparator;
 import com.speedment.runtime.field.internal.comparator.FloatFieldComparatorImpl;
 import com.speedment.runtime.field.internal.predicate.floats.FloatBetweenPredicate;
@@ -29,6 +25,10 @@ import com.speedment.runtime.field.internal.predicate.floats.FloatEqualPredicate
 import com.speedment.runtime.field.internal.predicate.floats.FloatGreaterOrEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.floats.FloatGreaterThanPredicate;
 import com.speedment.runtime.field.internal.predicate.floats.FloatInPredicate;
+import com.speedment.runtime.field.method.FloatGetter;
+import com.speedment.runtime.field.method.FloatSetter;
+import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
 import java.util.Set;
 import java.util.function.Predicate;

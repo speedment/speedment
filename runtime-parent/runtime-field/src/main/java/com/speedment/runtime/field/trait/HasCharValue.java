@@ -17,10 +17,10 @@
 package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.internal.method.SetToCharImpl;
 import com.speedment.runtime.field.method.CharGetter;
 import com.speedment.runtime.field.method.CharSetter;
 import com.speedment.runtime.field.method.SetToChar;
-import com.speedment.runtime.field.internal.method.SetToCharImpl;
 import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 
