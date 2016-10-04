@@ -27,13 +27,13 @@ import com.speedment.runtime.core.field.predicate.FieldPredicate;
 import com.speedment.runtime.core.field.predicate.Inclusion;
 import com.speedment.runtime.core.internal.field.comparator.ShortFieldComparator;
 import com.speedment.runtime.core.internal.field.comparator.ShortFieldComparatorImpl;
+import com.speedment.runtime.core.internal.field.method.BackwardFinderImpl;
 import com.speedment.runtime.core.internal.field.method.FindFromShort;
 import com.speedment.runtime.core.internal.field.predicate.shorts.ShortBetweenPredicate;
 import com.speedment.runtime.core.internal.field.predicate.shorts.ShortEqualPredicate;
 import com.speedment.runtime.core.internal.field.predicate.shorts.ShortGreaterOrEqualPredicate;
 import com.speedment.runtime.core.internal.field.predicate.shorts.ShortGreaterThanPredicate;
 import com.speedment.runtime.core.internal.field.predicate.shorts.ShortInPredicate;
-import com.speedment.runtime.core.internal.field.method.BackwardFinderImpl;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.typemapper.TypeMapper;
 import java.util.Set;
@@ -46,8 +46,8 @@ import static java.util.Objects.requireNonNull;
  * @param <D>         database type
  * @param <FK_ENTITY> foreign entity type
  * 
- * @author  Emil Forslund
- * @since   3.0.0
+ * @author Emil Forslund
+ * @since  3.0.0
  */
 @Generated(value = "Speedment")
 public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements ShortField<ENTITY, D>, ShortForeignKeyField<ENTITY, D, FK_ENTITY> {
