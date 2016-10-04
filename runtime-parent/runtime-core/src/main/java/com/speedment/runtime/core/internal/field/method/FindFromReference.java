@@ -16,11 +16,13 @@
  */
 package com.speedment.runtime.core.internal.field.method;
 
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.field.Field;
 import com.speedment.runtime.core.field.trait.HasComparableOperators;
 import com.speedment.runtime.core.field.trait.HasFinder;
-import com.speedment.runtime.core.manager.Manager;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  *
@@ -35,8 +37,8 @@ import com.speedment.runtime.core.manager.Manager;
 public class FindFromReference<ENTITY, FK_ENTITY, V extends Comparable<? super V>, SOURCE extends Field<ENTITY> & HasComparableOperators<ENTITY, V> & HasFinder<ENTITY, FK_ENTITY>>
     extends AbstractFindFrom<ENTITY, FK_ENTITY, V, SOURCE, HasComparableOperators<FK_ENTITY, V>> {
 
-    public FindFromReference(SOURCE source, HasComparableOperators<FK_ENTITY, V> target, Manager<FK_ENTITY> manager) {
-        super(source, target, manager);
+    public FindFromReference(SOURCE source, HasComparableOperators<FK_ENTITY, V> target, TableIdentifier<FK_ENTITY> identifier, Supplier<Stream<FK_ENTITY>> streamSupplier) {
+        super(source, target, identifier, streamSupplier);
     }
 
     @Override
@@ -46,13 +48,13 @@ public class FindFromReference<ENTITY, FK_ENTITY, V extends Comparable<? super V
         if (value == null) {
             return null;
         } else {
-            return getTargetManager().stream()
+            return stream()
                 .filter(getTargetField().equal(value))
                 .findAny()
                 .orElseThrow(() -> new SpeedmentException(
-                    "Error! Could not find any " + 
-                    getTargetManager().getEntityClass().getSimpleName() + 
-                    " with '" + getTargetField().identifier().getColumnName() + 
+                    "Error! Could not find any entities in table '" + 
+                    getTableIdentifier() + 
+                    "' with '" + getTargetField().identifier().getColumnName() + 
                     "' = '" + value + "'."
                 ));
         }

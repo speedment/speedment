@@ -17,10 +17,12 @@
 package com.speedment.runtime.core.field.trait;
 
 
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.field.Field;
 import com.speedment.runtime.core.field.method.BackwardFinder;
 import com.speedment.runtime.core.field.method.FindFrom;
-import com.speedment.runtime.core.manager.Manager;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * A representation of an Entity field that use a foreign key to 
@@ -47,17 +49,19 @@ public interface HasFinder<ENTITY, FK_ENTITY> {
      * Returns a function that can be used to find referenced entites using the
      * specified manager.
      * 
-     * @param foreignManager  the foreign manager
+     * @param identifier      the table identifier
+     * @param streamSupplier  the stream supplier
      * @return                finder method
      */
-    FindFrom<ENTITY, FK_ENTITY> finder(Manager<FK_ENTITY> foreignManager);
+    FindFrom<ENTITY, FK_ENTITY> finder(TableIdentifier<FK_ENTITY> identifier, Supplier<Stream<FK_ENTITY>> streamSupplier);
     
     /**
      * Returns a function that can be used to find a stream of entities 
      * referencing this entity using the specified manager.
      * 
-     * @param manager  the foreign manager
+     * @param identifier      the table identifier
+     * @param streamSupplier  the stream supplier
      * @return                streaming method
      */
-    BackwardFinder<FK_ENTITY, ENTITY> backwardFinder(Manager<ENTITY> manager);
+    BackwardFinder<FK_ENTITY, ENTITY> backwardFinder(TableIdentifier<ENTITY> identifier, Supplier<Stream<ENTITY>> streamSupplier);
 }

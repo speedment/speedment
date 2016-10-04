@@ -48,14 +48,16 @@ import com.speedment.runtime.core.internal.field.predicate.string.StringIsEmptyP
 import com.speedment.runtime.core.internal.field.predicate.string.StringStartsWithIgnoreCasePredicate;
 import com.speedment.runtime.core.internal.field.predicate.string.StringStartsWithPredicate;
 import com.speedment.runtime.core.internal.field.method.BackwardFinderImpl;
-import com.speedment.runtime.core.manager.Manager;
 
 import java.util.Comparator;
 import java.util.Set;
 import java.util.function.Predicate;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * @param <ENTITY>     the entity type
@@ -116,13 +118,13 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     }
     
     @Override
-    public BackwardFinder<FK_ENTITY, ENTITY> backwardFinder(Manager<ENTITY> manager) {
-        return new BackwardFinderImpl<>(this, manager);
+    public BackwardFinder<FK_ENTITY, ENTITY> backwardFinder(TableIdentifier<ENTITY> identifier, Supplier<Stream<ENTITY>> streamSupplier) {
+        return new BackwardFinderImpl<>(this, identifier, streamSupplier);
     }
-
+    
     @Override
-    public FindFrom<ENTITY, FK_ENTITY> finder(Manager<FK_ENTITY> foreignManager) {
-        return new FindFromReference<>(this, referenced, foreignManager);
+    public FindFrom<ENTITY, FK_ENTITY> finder(TableIdentifier<FK_ENTITY> identifier, Supplier<Stream<FK_ENTITY>> streamSupplier) {
+        return new FindFromReference<>(this, referenced, identifier, streamSupplier);
     }
 
     @Override

@@ -16,13 +16,15 @@
  */
 package com.speedment.runtime.core.internal.field.method;
 
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.field.Field;
 import com.speedment.runtime.core.field.method.FindFrom;
 import com.speedment.runtime.core.field.trait.HasComparableOperators;
 import com.speedment.runtime.core.field.trait.HasFinder;
-import com.speedment.runtime.core.manager.Manager;
 
 import static java.util.Objects.requireNonNull;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  *
@@ -43,16 +45,19 @@ abstract class AbstractFindFrom<
     
     private final SOURCE source;
     private final TARGET target;
-    private final Manager<FK_ENTITY> manager;
+    private final TableIdentifier<FK_ENTITY> identifier;
+    private final Supplier<Stream<FK_ENTITY>> streamSupplier;
 
     AbstractFindFrom(
         SOURCE source,
         TARGET target,
-        Manager<FK_ENTITY> manager) {
+        TableIdentifier<FK_ENTITY> identifier,
+        Supplier<Stream<FK_ENTITY>> streamSupplier) {
         
-        this.source  = requireNonNull(source);
-        this.target  = requireNonNull(target);
-        this.manager = requireNonNull(manager);
+        this.source         = requireNonNull(source);
+        this.target         = requireNonNull(target);
+        this.identifier     = requireNonNull(identifier);
+        this.streamSupplier = requireNonNull(streamSupplier);
     }
 
     @Override
@@ -66,7 +71,11 @@ abstract class AbstractFindFrom<
     }
 
     @Override
-    public final Manager<FK_ENTITY> getTargetManager() {
-        return manager;
+    public final TableIdentifier<FK_ENTITY> getTableIdentifier() {
+        return identifier;
+    }
+    
+    protected final Stream<FK_ENTITY> stream() {
+        return streamSupplier.get();
     }
 }

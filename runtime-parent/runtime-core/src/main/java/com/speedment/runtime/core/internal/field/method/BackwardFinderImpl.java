@@ -16,15 +16,16 @@
  */
 package com.speedment.runtime.core.internal.field.method;
 
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.field.Field;
 import com.speedment.runtime.core.field.method.BackwardFinder;
 import com.speedment.runtime.core.field.trait.HasComparableOperators;
 import com.speedment.runtime.core.field.trait.HasFinder;
-import com.speedment.runtime.core.manager.Manager;
 
 import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
+import java.util.function.Supplier;
 
 /**
  *
@@ -46,11 +47,17 @@ public final class BackwardFinderImpl<
 implements BackwardFinder<ENTITY, FK_ENTITY> {
 
     private final FIELD target;
-    private final Manager<FK_ENTITY> manager;
+    private final TableIdentifier<FK_ENTITY> identifier;
+    private final Supplier<Stream<FK_ENTITY>> streamSupplier;
     
-    public BackwardFinderImpl(FIELD target, Manager<FK_ENTITY> manager) {
-        this.target  = requireNonNull(target);
-        this.manager = requireNonNull(manager);
+    public BackwardFinderImpl(
+            FIELD target, 
+            TableIdentifier<FK_ENTITY> identifier, 
+            Supplier<Stream<FK_ENTITY>> streamSupplier) {
+        
+        this.target         = requireNonNull(target);
+        this.identifier     = requireNonNull(identifier);
+        this.streamSupplier = requireNonNull(streamSupplier);
     }
     
     @Override
@@ -59,8 +66,8 @@ implements BackwardFinder<ENTITY, FK_ENTITY> {
     }
 
     @Override
-    public final Manager<FK_ENTITY> getTargetManager() {
-        return manager;
+    public final TableIdentifier<FK_ENTITY> getTableIdentifier() {
+        return identifier;
     }
 
     @Override
@@ -70,7 +77,7 @@ implements BackwardFinder<ENTITY, FK_ENTITY> {
         if (value == null) {
             return null;
         } else {
-            return getTargetManager().stream().filter(getField().equal(value));
+            return streamSupplier.get().filter(getField().equal(value));
         }
     }
 }

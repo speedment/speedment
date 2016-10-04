@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.core.field.method;
 
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.field.Field;
-import com.speedment.runtime.core.manager.Manager;
 
 import java.util.function.Function;
 
@@ -68,10 +68,10 @@ public interface FindFrom<ENTITY, FK_ENTITY> extends Function<ENTITY, FK_ENTITY>
     Field<FK_ENTITY> getTargetField();
     
     /**
-     * Returns the manager used for the referenced (foreign) table.
+     * Returns the identifier for the referenced (foreign) table.
      * 
-     * @return  target (foreign) manager
+     * @return  target (foreign) table identifier
      */
-    Manager<FK_ENTITY> getTargetManager();
+    TableIdentifier<FK_ENTITY> getTableIdentifier();
 
 }

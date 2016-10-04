@@ -16,10 +16,12 @@
  */
 package com.speedment.runtime.core.internal.field.method;
 
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.field.CharField;
 import com.speedment.runtime.core.field.CharForeignKeyField;
-import com.speedment.runtime.core.manager.Manager;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 import javax.annotation.Generated;
 
 /**
@@ -32,20 +34,20 @@ import javax.annotation.Generated;
 @Generated(value = "Speedment")
 public final class FindFromChar<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, Character, CharForeignKeyField<ENTITY, ?, FK_ENTITY>, CharField<FK_ENTITY, ?>> {
     
-    public FindFromChar(CharForeignKeyField<ENTITY, ?, FK_ENTITY> source, CharField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {
-        super(source, target, manager);
+    public FindFromChar(CharForeignKeyField<ENTITY, ?, FK_ENTITY> source, CharField<FK_ENTITY, ?> target, TableIdentifier<FK_ENTITY> identifier, Supplier<Stream<FK_ENTITY>> streamSupplier) {
+        super(source, target, identifier, streamSupplier);
     }
     
     @Override
     public FK_ENTITY apply(ENTITY entity) {
         final char value = getSourceField().getter().applyAsChar(entity);
-        return getTargetManager().stream()
+        return stream()
             .filter(getTargetField().equal(value))
             .findAny()
             .orElseThrow(() -> new SpeedmentException(
-                "Error! Could not find any " + 
-                getTargetManager().getEntityClass().getSimpleName() + 
-                " with '" + getTargetField().identifier().getColumnName() + 
+                "Error! Could not find any entities in table '" + 
+                getTableIdentifier() + 
+                "' with '" + getTargetField().identifier().getColumnName() + 
                 "' = '" + value + "'."
             ));
     }

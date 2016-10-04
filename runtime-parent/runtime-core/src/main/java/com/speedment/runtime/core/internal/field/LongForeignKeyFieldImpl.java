@@ -17,6 +17,7 @@
 package com.speedment.runtime.core.internal.field;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.field.LongField;
 import com.speedment.runtime.core.field.LongForeignKeyField;
 import com.speedment.runtime.core.field.method.BackwardFinder;
@@ -34,10 +35,11 @@ import com.speedment.runtime.core.internal.field.predicate.longs.LongEqualPredic
 import com.speedment.runtime.core.internal.field.predicate.longs.LongGreaterOrEqualPredicate;
 import com.speedment.runtime.core.internal.field.predicate.longs.LongGreaterThanPredicate;
 import com.speedment.runtime.core.internal.field.predicate.longs.LongInPredicate;
-import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.typemapper.TypeMapper;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
@@ -89,13 +91,13 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     }
     
     @Override
-    public BackwardFinder<FK_ENTITY, ENTITY> backwardFinder(Manager<ENTITY> manager) {
-        return new BackwardFinderImpl<>(this, manager);
+    public BackwardFinder<FK_ENTITY, ENTITY> backwardFinder(TableIdentifier<ENTITY> identifier, Supplier<Stream<ENTITY>> streamSupplier) {
+        return new BackwardFinderImpl<>(this, identifier, streamSupplier);
     }
     
     @Override
-    public FindFrom<ENTITY, FK_ENTITY> finder(Manager<FK_ENTITY> foreignManager) {
-        return new FindFromLong<>(this, referenced, foreignManager);
+    public FindFrom<ENTITY, FK_ENTITY> finder(TableIdentifier<FK_ENTITY> identifier, Supplier<Stream<FK_ENTITY>> streamSupplier) {
+        return new FindFromLong<>(this, referenced, identifier, streamSupplier);
     }
     
     @Override

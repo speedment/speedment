@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.core.field.method;
 
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.field.trait.HasFinder;
-import com.speedment.runtime.core.manager.Manager;
 
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -59,9 +59,9 @@ public interface BackwardFinder<ENTITY, FK_ENTITY>
     HasFinder<FK_ENTITY, ENTITY> getField();
     
     /**
-     * Returns the manager used for the referenced (foreign) table.
+     * Returns the identifier for the foreign table that is referenced.
      * 
-     * @return  target (foreign) manager
+     * @return  target (foreign) table identifier
      */
-    Manager<FK_ENTITY> getTargetManager();
+    TableIdentifier<FK_ENTITY> getTableIdentifier();
 }

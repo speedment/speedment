@@ -16,10 +16,12 @@
  */
 package com.speedment.runtime.core.internal.field.method;
 
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.field.FloatField;
 import com.speedment.runtime.core.field.FloatForeignKeyField;
-import com.speedment.runtime.core.manager.Manager;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 import javax.annotation.Generated;
 
 /**
@@ -32,20 +34,20 @@ import javax.annotation.Generated;
 @Generated(value = "Speedment")
 public final class FindFromFloat<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, Float, FloatForeignKeyField<ENTITY, ?, FK_ENTITY>, FloatField<FK_ENTITY, ?>> {
     
-    public FindFromFloat(FloatForeignKeyField<ENTITY, ?, FK_ENTITY> source, FloatField<FK_ENTITY, ?> target, Manager<FK_ENTITY> manager) {
-        super(source, target, manager);
+    public FindFromFloat(FloatForeignKeyField<ENTITY, ?, FK_ENTITY> source, FloatField<FK_ENTITY, ?> target, TableIdentifier<FK_ENTITY> identifier, Supplier<Stream<FK_ENTITY>> streamSupplier) {
+        super(source, target, identifier, streamSupplier);
     }
     
     @Override
     public FK_ENTITY apply(ENTITY entity) {
         final float value = getSourceField().getter().applyAsFloat(entity);
-        return getTargetManager().stream()
+        return stream()
             .filter(getTargetField().equal(value))
             .findAny()
             .orElseThrow(() -> new SpeedmentException(
-                "Error! Could not find any " + 
-                getTargetManager().getEntityClass().getSimpleName() + 
-                " with '" + getTargetField().identifier().getColumnName() + 
+                "Error! Could not find any entities in table '" + 
+                getTableIdentifier() + 
+                "' with '" + getTargetField().identifier().getColumnName() + 
                 "' = '" + value + "'."
             ));
     }
