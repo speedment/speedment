@@ -16,28 +16,28 @@
  */
 package com.speedment.plugins.json;
 
-import com.speedment.runtime.core.field.BooleanField;
-import com.speedment.runtime.core.field.ByteField;
-import com.speedment.runtime.core.field.CharField;
-import com.speedment.runtime.core.field.DoubleField;
-import com.speedment.runtime.core.field.Field;
-import com.speedment.runtime.core.field.FloatField;
-import com.speedment.runtime.core.field.IntField;
-import com.speedment.runtime.core.field.LongField;
-import com.speedment.runtime.core.field.ReferenceField;
-import com.speedment.runtime.core.field.ShortField;
-import com.speedment.runtime.core.field.method.BooleanGetter;
-import com.speedment.runtime.core.field.method.ByteGetter;
-import com.speedment.runtime.core.field.method.CharGetter;
-import com.speedment.runtime.core.field.method.DoubleGetter;
-import com.speedment.runtime.core.field.method.Finder;
-import com.speedment.runtime.core.field.method.FloatGetter;
-import com.speedment.runtime.core.field.method.IntGetter;
-import com.speedment.runtime.core.field.method.LongGetter;
-import com.speedment.runtime.core.field.method.ReferenceGetter;
-import com.speedment.runtime.core.field.method.ShortGetter;
-import com.speedment.runtime.core.field.trait.HasFinder;
+import com.speedment.runtime.field.BooleanField;
+import com.speedment.runtime.field.ByteField;
+import com.speedment.runtime.field.CharField;
+import com.speedment.runtime.field.DoubleField;
+import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.FloatField;
+import com.speedment.runtime.field.IntField;
+import com.speedment.runtime.field.LongField;
+import com.speedment.runtime.field.ReferenceField;
+import com.speedment.runtime.field.ShortField;
+import com.speedment.runtime.field.method.BooleanGetter;
+import com.speedment.runtime.field.method.ByteGetter;
+import com.speedment.runtime.field.method.CharGetter;
+import com.speedment.runtime.field.method.DoubleGetter;
+import com.speedment.runtime.field.method.FloatGetter;
+import com.speedment.runtime.field.method.IntGetter;
+import com.speedment.runtime.field.method.LongGetter;
+import com.speedment.runtime.field.method.ReferenceGetter;
+import com.speedment.runtime.field.method.ShortGetter;
+import com.speedment.runtime.field.trait.HasFinder;
 import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.field.method.FindFrom;
 
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -314,7 +314,7 @@ public interface JsonEncoder<ENTITY> {
      */
     <FK_ENTITY> JsonEncoder<ENTITY> put(
             String label, 
-            Finder<ENTITY, FK_ENTITY> finder, 
+            FindFrom<ENTITY, FK_ENTITY> finder, 
             JsonEncoder<FK_ENTITY> fkEncoder);
 
     /**************************************************************************/

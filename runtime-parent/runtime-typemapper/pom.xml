@@ -45,7 +45,14 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            com.speedment.runtime.typemapper.*
+                            com.speedment.runtime.typemapper.bigdecimal,
+                            com.speedment.runtime.typemapper.exception,
+                            com.speedment.runtime.typemapper.integer,
+                            com.speedment.runtime.typemapper.largeobject,
+                            com.speedment.runtime.typemapper.primitive,
+                            com.speedment.runtime.typemapper.string,
+                            com.speedment.runtime.typemapper.time,
+                            com.speedment.runtime.typemapper
                         </Export-Package>
                     </instructions>
                 </configuration>
@@ -58,6 +65,13 @@
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-config</artifactId>
             <version>${speedment.version}</version>
+            
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>

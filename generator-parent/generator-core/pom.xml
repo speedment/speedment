@@ -49,7 +49,6 @@
                             com.speedment.generator.core.exception.*,
                             com.speedment.generator.core.component.*,
                             com.speedment.generator.core.event.*,
-                            com.speedment.generator.core.util.*,
                             com.speedment.generator.core.*
                         </Export-Package>
                     </instructions>
@@ -152,6 +151,12 @@
         <dependency>
             <groupId>com.opera</groupId>
             <artifactId>operadriver</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-field</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

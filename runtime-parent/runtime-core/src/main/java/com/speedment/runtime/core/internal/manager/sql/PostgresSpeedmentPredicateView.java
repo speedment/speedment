@@ -16,10 +16,10 @@
  */
 package com.speedment.runtime.core.internal.manager.sql;
 
-import com.speedment.runtime.core.field.predicate.FieldPredicate;
-import com.speedment.runtime.core.field.predicate.FieldPredicateView;
-import com.speedment.runtime.core.field.predicate.SqlPredicateFragment;
-import static com.speedment.runtime.core.internal.field.predicate.PredicateUtil.getFirstOperandAsRaw;
+import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.core.db.FieldPredicateView;
+import com.speedment.runtime.core.db.SqlPredicateFragment;
+import static com.speedment.runtime.field.internal.predicate.PredicateUtil.getFirstOperandAsRaw;
 
 /**
  * Created by fdirlikl on 11/18/2015.

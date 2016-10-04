@@ -185,6 +185,11 @@
                         <groupId>com.speedment.runtime</groupId>
                         <artifactId>runtime-typemapper</artifactId>
                     </exclusion>
+                    
+                    <exclusion>
+                        <groupId>com.speedment.runtime</groupId>
+                        <artifactId>runtime-field</artifactId>
+                    </exclusion>
 
                     <exclusion>
                         <groupId>com.speedment.runtime</groupId>

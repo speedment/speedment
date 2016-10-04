@@ -50,7 +50,7 @@ public final class GenerateMethodBodyUtil {
         return Method.of(methodName, 
                 DefaultType.stream(
                     SimpleParameterizedType.create(
-                        com.speedment.runtime.core.field.Field.class,
+                        com.speedment.runtime.field.Field.class,
                         support.entityType()
                     )
                 )

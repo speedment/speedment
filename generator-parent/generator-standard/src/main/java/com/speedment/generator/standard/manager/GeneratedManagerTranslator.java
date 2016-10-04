@@ -30,7 +30,7 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.core.field.method.BackwardFinder;
+import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.core.manager.Manager;
 
 import java.lang.reflect.Type;

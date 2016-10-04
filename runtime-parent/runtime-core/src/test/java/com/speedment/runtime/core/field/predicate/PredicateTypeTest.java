@@ -21,7 +21,7 @@
  */
 package com.speedment.runtime.core.field.predicate;
 
-import com.speedment.runtime.core.field.predicate.PredicateType;
+import com.speedment.runtime.field.predicate.PredicateType;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -32,7 +32,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.speedment.runtime.core.field.predicate.PredicateType.*;
+import static com.speedment.runtime.field.predicate.PredicateType.*;
 import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 

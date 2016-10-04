@@ -19,7 +19,7 @@ package com.speedment.runtime.core.internal.manager;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.field.Field;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.manager.Persister;
 import com.speedment.runtime.core.manager.Remover;
