@@ -269,7 +269,7 @@ final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
     JsonEncoder<ENTITY> put(FIELD field, JsonEncoder<FK_ENTITY> encoder) {
         requireNonNulls(field, encoder);
         final String columnName = jsonField(project, field.identifier());
-        final Finder<ENTITY, FK_ENTITY> entityFinder = (e, m) -> field.finder(m).apply(e);
+        final Finder<ENTITY, FK_ENTITY> entityFinder = (e, m) -> field.finder(m.getTableIdentifier(), m::stream).apply(e);
         return put(columnName, entityFinder, encoder);
     }
 
