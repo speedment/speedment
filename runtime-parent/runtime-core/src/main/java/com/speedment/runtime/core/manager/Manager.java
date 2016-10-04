@@ -345,7 +345,8 @@ public interface Manager<ENTITY> {
      * For example, if there is an entity Carrot with a FK to Hare using the
      * column "hare", then hares.find(Carrot.HARE, carrot) will return a stream
      * with the Hare that the Carrot.HARE field is pointing to or Stream.empty()
-     * if the hare column in carrot was null.
+     * if the hare column in carrot was null. I.e. The returned Stream will
+     * contain either zero or one element.
      *
      * @param <FK_ENTITY> the type of the foreign entity
      * @param fkField the foreign key field
