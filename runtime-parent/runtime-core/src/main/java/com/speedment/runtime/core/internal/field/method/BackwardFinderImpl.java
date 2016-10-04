@@ -36,8 +36,14 @@ import static java.util.Objects.requireNonNull;
  * @author  Emil Forslund
  * @since   3.0.0
  */
-public final class BackwardFinderImpl<ENTITY, FK_ENTITY, T extends Comparable<? super T>, FIELD extends Field<FK_ENTITY> & HasComparableOperators<FK_ENTITY, T> & HasFinder<FK_ENTITY, ENTITY>>
-    implements BackwardFinder<ENTITY, FK_ENTITY> {
+public final class BackwardFinderImpl<
+        ENTITY, 
+        FK_ENTITY, 
+        T extends Comparable<? super T>, 
+        FIELD extends Field<FK_ENTITY> 
+                    & HasComparableOperators<FK_ENTITY, T> 
+                    & HasFinder<FK_ENTITY, ENTITY>>
+implements BackwardFinder<ENTITY, FK_ENTITY> {
 
     private final FIELD target;
     private final Manager<FK_ENTITY> manager;
