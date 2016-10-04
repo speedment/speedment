@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.manager;
 
-import com.speedment.runtime.core.exception.SpeedmentException;
 import java.util.function.UnaryOperator;
 
 /**
@@ -26,7 +25,5 @@ import java.util.function.UnaryOperator;
 @FunctionalInterface
 public interface EntityCopier<ENTITY> extends UnaryOperator<ENTITY> {
 
-    @Override
-    public ENTITY apply(ENTITY t) throws SpeedmentException;
 
 }

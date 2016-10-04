@@ -97,106 +97,106 @@ public final class GeneratedManagerImplTranslator
     @Override
     protected Class makeCodeGenModel(File file) {
 
-        final Map<Table, List<String>> fkStreamers = new HashMap<>();
-        final Set<Type> fkManagers = new HashSet<>();
-        final Set<Type> fkManagersReferencingThis = new HashSet<>();
+//        final Map<Table, List<String>> fkStreamers = new HashMap<>();
+//        final Set<Type> fkManagers = new HashSet<>();
+//        final Set<Type> fkManagersReferencingThis = new HashSet<>();
 
         return newBuilder(file, getSupport().generatedManagerImplName())
-            /**
-             * Add streamers from back pointing foreign keys
-             */
-            .forEveryForeignKeyReferencingThis((clazz, fk) -> {
-                final FkHolder fu = new FkHolder(injector, fk);
-
-                final String methodName = EntityTranslatorSupport.FIND
-                    + EntityTranslatorSupport.pluralis(fu.getTable(), getSupport().namer())
-                    + "By" + getSupport().typeName(fu.getColumn());
-                fkStreamers.computeIfAbsent(fu.getTable(), t -> new ArrayList<>()).add(methodName);
-
-                final Type manager = fu.getEmt().getSupport().managerType();
-                final String fkManagerName = getSupport().namer().javaVariableName(Formatting.shortName(manager.getTypeName()));
-                if (fkManagersReferencingThis.add(manager)) {
-                    clazz.add(Field.of(fkManagerName, manager)
-                        .private_()
-                        .add(AnnotationUsage.of(Inject.class))
-                    );
-                }
-
-                final Type returnType = DefaultType.stream(fu.getEmt().getSupport().entityType());
-                final Method method = Method.of(methodName, returnType)
-                    .public_().add(OVERRIDE)
-                    .add(Field.of("entity", fu.getForeignEmt().getSupport().entityType()))
-                    .add("return " + methodName + "().apply(entity);");
-                clazz.add(method);
-
-                // Create corresponding streamer method
-                clazz.add(Method.of(methodName, SimpleParameterizedType.create(BackwardFinder.class,
-                    fu.getForeignEmt().getSupport().entityType(),
-                    fu.getEmt().getSupport().entityType()
-                ))
-                    .public_().add(OVERRIDE)
-                    .add("return "
-                        + fu.getEmt().getSupport().entityName() + "."
-                        + getSupport().namer().javaStaticFieldName(fu.getColumn().getJavaName())
-                        + ".backwardFinder(" + fkManagerName + ");"
-                    )
-                );
-            })
-            /**
-             * Add finder for ordinary foreign keys
-             */
-            .forEveryForeignKey((clazz, fk) -> {
-                final FkHolder fu = new FkHolder(injector, fk);
-
-                final Type manager = fu.getForeignEmt().getSupport().managerType();
-                final String fkManagerName = getSupport().namer().javaVariableName(Formatting.shortName(manager.getTypeName()));
-                if (fkManagers.add(manager)) {
-                    clazz.add(Field.of(fkManagerName, manager)
-                        .private_()
-                        .add(AnnotationUsage.of(Inject.class))
-                    );
-                }
-
-                final Type returnType;
-                if (usesOptional(fu.getColumn())) {
-                    file.add(Import.of(Optional.class));
-                    returnType = DefaultType.optional(fu.getForeignEmt().getSupport().entityType());
-                } else {
-                    returnType = fu.getForeignEmt().getSupport().entityType();
-                }
-
-                final Method method = Method.of("find" + getSupport().typeName(fu.getColumn()), returnType)
-                    .public_().add(OVERRIDE)
-                    .add(Field.of("entity", fu.getEmt().getSupport().entityType()));
-
-                if (usesOptional(fu.getColumn())) {
-                    final String getterName = optionalGetterName(typeMappers, fu.getColumn()).get();
-
-                    method.add(
-                        "if (entity.get" + getSupport().typeName(fu.getColumn()) + "().isPresent()) " + block(
-                        "return " + fkManagerName + ".stream().filter("
-                        + getSupport().typeName(fu.getForeignTable()) + "."
-                        + getSupport().namer().javaStaticFieldName(fu.getForeignColumn().getJavaName())
-                        + ".equal(entity.get" + getSupport().typeName(fu.getColumn()) + "()" + getterName + ")).findAny();"
-                    ) + " else return Optional.empty();"
-                    );
-
-                } else {
-                    file.add(Import.of(SpeedmentException.class));
-                    method.add("return " + fkManagerName + ".stream().filter("
-                        + getSupport().typeName(fu.getForeignTable()) + "." + getSupport().namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + ".equal(entity.get" + getSupport().typeName(fu.getColumn()) + "())).findAny()\n"
-                        + indent(".orElseThrow(() -> new SpeedmentException(\n"
-                            + indent(
-                                "\"Foreign key constraint error. "
-                                + getSupport().typeName(fu.getForeignTable())
-                                + " is set to \" + entity.get"
-                                + getSupport().typeName(fu.getColumn()) + "()\n"
-                            ) + "));"
-                        )
-                    );
-                }
-                clazz.add(method);
-            })
+//            /**
+//             * Add streamers from back pointing foreign keys
+//             */
+//            .forEveryForeignKeyReferencingThis((clazz, fk) -> {
+//                final FkHolder fu = new FkHolder(injector, fk);
+//
+//                final String methodName = EntityTranslatorSupport.FIND
+//                    + EntityTranslatorSupport.pluralis(fu.getTable(), getSupport().namer())
+//                    + "By" + getSupport().typeName(fu.getColumn());
+//                fkStreamers.computeIfAbsent(fu.getTable(), t -> new ArrayList<>()).add(methodName);
+//
+//                final Type manager = fu.getEmt().getSupport().managerType();
+//                final String fkManagerName = getSupport().namer().javaVariableName(Formatting.shortName(manager.getTypeName()));
+//                if (fkManagersReferencingThis.add(manager)) {
+//                    clazz.add(Field.of(fkManagerName, manager)
+//                        .private_()
+//                        .add(AnnotationUsage.of(Inject.class))
+//                    );
+//                }
+//
+//                final Type returnType = DefaultType.stream(fu.getEmt().getSupport().entityType());
+//                final Method method = Method.of(methodName, returnType)
+//                    .public_().add(OVERRIDE)
+//                    .add(Field.of("entity", fu.getForeignEmt().getSupport().entityType()))
+//                    .add("return " + methodName + "().apply(entity);");
+//                clazz.add(method);
+//
+//                // Create corresponding streamer method
+//                clazz.add(Method.of(methodName, SimpleParameterizedType.create(BackwardFinder.class,
+//                    fu.getForeignEmt().getSupport().entityType(),
+//                    fu.getEmt().getSupport().entityType()
+//                ))
+//                    .public_().add(OVERRIDE)
+//                    .add("return "
+//                        + fu.getEmt().getSupport().entityName() + "."
+//                        + getSupport().namer().javaStaticFieldName(fu.getColumn().getJavaName())
+//                        + ".backwardFinder(" + fkManagerName + ");"
+//                    )
+//                );
+//            })
+//            /**
+//             * Add finder for ordinary foreign keys
+//             */
+//            .forEveryForeignKey((clazz, fk) -> {
+//                final FkHolder fu = new FkHolder(injector, fk);
+//
+//                final Type manager = fu.getForeignEmt().getSupport().managerType();
+//                final String fkManagerName = getSupport().namer().javaVariableName(Formatting.shortName(manager.getTypeName()));
+//                if (fkManagers.add(manager)) {
+//                    clazz.add(Field.of(fkManagerName, manager)
+//                        .private_()
+//                        .add(AnnotationUsage.of(Inject.class))
+//                    );
+//                }
+//
+//                final Type returnType;
+//                if (usesOptional(fu.getColumn())) {
+//                    file.add(Import.of(Optional.class));
+//                    returnType = DefaultType.optional(fu.getForeignEmt().getSupport().entityType());
+//                } else {
+//                    returnType = fu.getForeignEmt().getSupport().entityType();
+//                }
+//
+//                final Method method = Method.of("find" + getSupport().typeName(fu.getColumn()), returnType)
+//                    .public_().add(OVERRIDE)
+//                    .add(Field.of("entity", fu.getEmt().getSupport().entityType()));
+//
+//                if (usesOptional(fu.getColumn())) {
+//                    final String getterName = optionalGetterName(typeMappers, fu.getColumn()).get();
+//
+//                    method.add(
+//                        "if (entity.get" + getSupport().typeName(fu.getColumn()) + "().isPresent()) " + block(
+//                        "return " + fkManagerName + ".stream().filter("
+//                        + getSupport().typeName(fu.getForeignTable()) + "."
+//                        + getSupport().namer().javaStaticFieldName(fu.getForeignColumn().getJavaName())
+//                        + ".equal(entity.get" + getSupport().typeName(fu.getColumn()) + "()" + getterName + ")).findAny();"
+//                    ) + " else return Optional.empty();"
+//                    );
+//
+//                } else {
+//                    file.add(Import.of(SpeedmentException.class));
+//                    method.add("return " + fkManagerName + ".stream().filter("
+//                        + getSupport().typeName(fu.getForeignTable()) + "." + getSupport().namer().javaStaticFieldName(fu.getForeignColumn().getJavaName()) + ".equal(entity.get" + getSupport().typeName(fu.getColumn()) + "())).findAny()\n"
+//                        + indent(".orElseThrow(() -> new SpeedmentException(\n"
+//                            + indent(
+//                                "\"Foreign key constraint error. "
+//                                + getSupport().typeName(fu.getForeignTable())
+//                                + " is set to \" + entity.get"
+//                                + getSupport().typeName(fu.getColumn()) + "()\n"
+//                            ) + "));"
+//                        )
+//                    );
+//                }
+//                clazz.add(method);
+//            })
             /**
              * The table specific methods.
              */
@@ -228,35 +228,35 @@ public final class GeneratedManagerImplTranslator
                     )
                     .add(generateNewCopyOf(file));
             })
-            /**
-             * Create aggregate streaming functions, if any
-             */
-            .forEveryTable(Phase.POST_MAKE, (clazz, table) -> {
-                fkStreamers.keySet().forEach(referencingTable -> {
-                    final List<String> methodNames = fkStreamers.get(referencingTable);
-                    final TranslatorSupport<Table> foreignSupport = new TranslatorSupport<>(injector, referencingTable);
-
-                    if (!methodNames.isEmpty()) {
-                        final Method method = Method.of(
-                            EntityTranslatorSupport.FIND
-                            + EntityTranslatorSupport.pluralis(referencingTable, getSupport().namer()),
-                            DefaultType.stream(foreignSupport.entityType())
-                        ).public_().add(OVERRIDE);
-
-                        method.add(Field.of("entity", getSupport().entityType()));
-
-                        if (methodNames.size() == 1) {
-                            method.add("return " + methodNames.get(0) + "(entity);");
-                        } else {
-                            file.add(Import.of(Function.class));
-                            method.add("return Stream.of("
-                                + methodNames.stream().map(n -> n + "(entity)").collect(Collectors.joining(", "))
-                                + ").flatMap(Function.identity()).distinct();");
-                        }
-                        clazz.add(method);
-                    }
-                });
-            })
+//            /**
+//             * Create aggregate streaming functions, if any
+//             */
+//            .forEveryTable(Phase.POST_MAKE, (clazz, table) -> {
+//                fkStreamers.keySet().forEach(referencingTable -> {
+//                    final List<String> methodNames = fkStreamers.get(referencingTable);
+//                    final TranslatorSupport<Table> foreignSupport = new TranslatorSupport<>(injector, referencingTable);
+//
+//                    if (!methodNames.isEmpty()) {
+//                        final Method method = Method.of(
+//                            EntityTranslatorSupport.FIND
+//                            + EntityTranslatorSupport.pluralis(referencingTable, getSupport().namer()),
+//                            DefaultType.stream(foreignSupport.entityType())
+//                        ).public_().add(OVERRIDE);
+//
+//                        method.add(Field.of("entity", getSupport().entityType()));
+//
+//                        if (methodNames.size() == 1) {
+//                            method.add("return " + methodNames.get(0) + "(entity);");
+//                        } else {
+//                            file.add(Import.of(Function.class));
+//                            method.add("return Stream.of("
+//                                + methodNames.stream().map(n -> n + "(entity)").collect(Collectors.joining(", "))
+//                                + ").flatMap(Function.identity()).distinct();");
+//                        }
+//                        clazz.add(method);
+//                    }
+//                });
+//            })
             .build()
             .call(i -> file.add(Import.of(getSupport().entityImplType())));
     }

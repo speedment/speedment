@@ -31,7 +31,7 @@ public class SingletonUtil {
     private static final Logger LOGGER = LoggerManager.getLogger(SingletonUtil.class);
 
     static final int SIZE = 1;
-    static final boolean STRICT = false;
+    static final boolean STRICT = true;
 
     private static final String TRIPWIRE_PROPERTY = "org.openjdk.java.util.stream.tripwire";
 
