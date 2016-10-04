@@ -31,7 +31,7 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>runtime-deploy</artifactId>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
     
     <name>Speedment - Build - Runtime Deploy</name>
     <description>
@@ -41,11 +41,6 @@
     
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-            </plugin>
-            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>

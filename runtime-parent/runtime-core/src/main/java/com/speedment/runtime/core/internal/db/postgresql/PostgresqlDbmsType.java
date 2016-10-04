@@ -24,7 +24,7 @@ import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
-import com.speedment.runtime.core.field.predicate.FieldPredicateView;
+import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.internal.db.AbstractDatabaseNamingConvention;
 import com.speedment.runtime.core.internal.db.AbstractDbmsType;
 import com.speedment.runtime.core.internal.manager.sql.PostgresSpeedmentPredicateView;

@@ -18,8 +18,8 @@ package com.speedment.runtime.core.manager;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.field.Field;
-import com.speedment.runtime.core.field.trait.HasFinder;
+import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.trait.HasFinder;
 import com.speedment.runtime.core.internal.util.stream.SingletonStream;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -303,7 +303,7 @@ public interface Manager<ENTITY> {
      * java.lang.Object)
      */
     default <FK_ENTITY> Function<FK_ENTITY, ENTITY> finderBy(HasFinder<FK_ENTITY, ENTITY> fkField) {
-        return fkField.finder(this);
+        return fkField.finder(getTableIdentifier(), this::stream);
     }
 
     /**
@@ -336,7 +336,7 @@ public interface Manager<ENTITY> {
      * java.lang.Object)
      */
     default <FK_ENTITY> Function<FK_ENTITY, Stream<ENTITY>> finderByNullable(HasFinder<FK_ENTITY, ENTITY> fkField) {
-        return fkEntity -> SingletonStream.ofNullable(fkField.finder(this).apply(fkEntity));
+        return fkEntity -> SingletonStream.ofNullable(finderBy(fkField).apply(fkEntity));
     }
 
     /**
@@ -372,7 +372,7 @@ public interface Manager<ENTITY> {
      * java.lang.Object)
      */
     default <FK_ENTITY> Function<FK_ENTITY, Stream<ENTITY>> finderBackwardsBy(HasFinder<ENTITY, FK_ENTITY> fkField) {
-        return fkField.backwardFinder(this);
+        return fkField.backwardFinder(getTableIdentifier(), this::stream);
     }
 
     /**

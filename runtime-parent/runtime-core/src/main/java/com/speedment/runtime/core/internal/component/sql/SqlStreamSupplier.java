@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.core.internal.component.sql;
 
-import com.speedment.runtime.core.field.trait.HasComparableOperators;
+import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import java.util.Optional;
 import java.util.stream.Stream;

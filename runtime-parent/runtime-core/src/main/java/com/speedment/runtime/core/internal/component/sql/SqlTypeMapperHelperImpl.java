@@ -20,7 +20,7 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Project;
 import static com.speedment.runtime.config.util.DocumentDbUtil.referencedColumn;
 import com.speedment.runtime.core.component.sql.SqlTypeMapperHelper;
-import com.speedment.runtime.core.field.Field;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 /**

@@ -43,13 +43,12 @@ public interface PropertyEditorComponent {
     <DOC extends DocumentProperty> Stream<PropertyEditor.Item> getUiVisibleProperties(DOC document);
     
     /**
-     * Installs a new supplier for an editor item under a certain document type and key. 
+     * Installs a new supplier for an editor item under a certain document type 
+     * and key. 
      * <P>
-     * Calls to {@link #getUiVisibleProperties(com.speedment.tool.core.config.DocumentProperty)} 
-     * will retrieve items depending on what editors have been installed under the document's type.
-     * Installations also has to provide a unique key for the particular editor. If two 
-     * editors are installed on the same document type, with the same key, only the last
-     * installed editor will be produced.
+     * Installations also has to provide a unique key for the particular editor. 
+     * If two editors are installed on the same document type, with the same 
+     * key, only the last installed editor will be produced.
      * 
      * @param <DOC>         the document type
      * @param documentType  the document type
@@ -57,6 +56,5 @@ public interface PropertyEditorComponent {
      * @param factory       supplier for creating the editor
      */
     <DOC extends DocumentProperty> void install(Class<DOC> documentType, String propertyKey, Supplier<PropertyEditor<DOC>> factory);    
-   
     
 }

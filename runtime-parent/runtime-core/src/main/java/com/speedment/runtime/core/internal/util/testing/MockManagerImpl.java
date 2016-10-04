@@ -18,7 +18,7 @@ package com.speedment.runtime.core.internal.util.testing;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.field.Field;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.core.manager.EntityCreator;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.manager.Persister;

@@ -20,7 +20,7 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.plugins.json.JsonComponent;
 import com.speedment.plugins.json.JsonEncoder;
 import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.core.field.Field;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.core.manager.Manager;
 
 import java.util.Set;

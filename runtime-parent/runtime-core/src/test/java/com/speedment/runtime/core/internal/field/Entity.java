@@ -16,10 +16,10 @@
  */
 package com.speedment.runtime.core.internal.field;
 
-import com.speedment.runtime.core.internal.field.StringFieldImpl;
-import com.speedment.runtime.core.internal.field.ComparableFieldImpl;
-import com.speedment.runtime.core.field.ComparableField;
-import com.speedment.runtime.core.field.StringField;
+import com.speedment.runtime.field.internal.StringFieldImpl;
+import com.speedment.runtime.field.internal.ComparableFieldImpl;
+import com.speedment.runtime.field.ComparableField;
+import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.typemapper.internal.IdentityTypeMapper;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 

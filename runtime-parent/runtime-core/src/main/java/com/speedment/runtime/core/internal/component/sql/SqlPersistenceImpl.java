@@ -36,7 +36,7 @@ import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.field.Field;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.DatabaseUtil;
 import com.speedment.runtime.typemapper.TypeMapper;

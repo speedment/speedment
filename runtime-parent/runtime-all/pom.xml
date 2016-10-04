@@ -79,6 +79,39 @@
             
             <dependency>
                 <groupId>com.speedment.runtime</groupId>
+                <artifactId>runtime-field</artifactId>
+                <version>${speedment.version}</version>
+                
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.speedment.common</groupId>
+                        <artifactId>invariant</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.speedment.common</groupId>
+                        <artifactId>tuple</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.speedment.common</groupId>
+                        <artifactId>function</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.speedment.runtime</groupId>
+                        <artifactId>runtime-config</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.speedment.runtime</groupId>
+                        <artifactId>runtime-typemapper</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.speedment.runtime</groupId>
                 <artifactId>runtime-core</artifactId>
                 <version>${speedment.version}</version>
                 
@@ -91,6 +124,11 @@
                     <exclusion>
                         <groupId>com.speedment.runtime</groupId>
                         <artifactId>runtime-typemapper</artifactId>
+                    </exclusion>
+                    
+                    <exclusion>
+                        <groupId>com.speedment.runtime</groupId>
+                        <artifactId>runtime-field</artifactId>
                     </exclusion>
 
                     <exclusion>

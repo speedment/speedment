@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.core.internal.manager.sql;
 
-import com.speedment.runtime.core.field.Field;
+import com.speedment.runtime.field.Field;
 
 import java.util.ArrayList;
 import java.util.Collection;

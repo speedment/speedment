@@ -37,7 +37,7 @@ import com.speedment.runtime.core.component.resultset.ResultSetMapping;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.core.field.method.BackwardFinder;
+import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.core.internal.util.sql.ResultSetUtil;
 import com.speedment.runtime.core.manager.AbstractManager;
 

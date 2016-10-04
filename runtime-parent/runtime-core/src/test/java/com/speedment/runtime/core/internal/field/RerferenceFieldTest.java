@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.core.internal.field;
 
-import com.speedment.runtime.core.field.method.ReferenceGetter;
-import com.speedment.runtime.core.field.method.ReferenceSetter;
+import com.speedment.runtime.field.method.ReferenceGetter;
+import com.speedment.runtime.field.method.ReferenceSetter;
 import org.junit.Test;
 
 import java.util.List;

@@ -22,7 +22,6 @@ import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
-import com.speedment.runtime.core.field.predicate.FieldPredicateView;
 
 import java.util.Comparator;
 import java.util.Optional;

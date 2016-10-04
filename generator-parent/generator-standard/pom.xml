@@ -94,6 +94,11 @@
         
         <dependency>
             <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-field</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-core</artifactId>
         </dependency>
         

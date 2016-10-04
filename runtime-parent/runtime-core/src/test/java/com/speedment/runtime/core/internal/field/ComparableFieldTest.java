@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.core.field.predicate.Inclusion.*;
+import static com.speedment.runtime.field.predicate.Inclusion.*;
 import static com.speedment.runtime.core.internal.field.Entity.ID;
 import static com.speedment.runtime.core.internal.field.Entity.NAME;
 import static java.util.Comparator.*;

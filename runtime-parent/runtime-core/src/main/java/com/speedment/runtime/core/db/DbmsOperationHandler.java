@@ -18,7 +18,7 @@ package com.speedment.runtime.core.db;
 
 
 import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.core.field.Field;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 
 import java.sql.Array;

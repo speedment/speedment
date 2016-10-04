@@ -17,7 +17,7 @@
 package com.speedment.runtime.core.component.sql;
 
 import com.speedment.runtime.config.Project;
-import com.speedment.runtime.core.field.Field;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.core.internal.component.sql.SqlTypeMapperHelperImpl;
 
 /**
