@@ -44,7 +44,7 @@
     
     <dependencyManagement>
         <dependencies>
-			<dependency>
+            <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>common-all</artifactId>
                 <version>${common.version}</version>
@@ -52,7 +52,7 @@
                 <type>pom</type>
             </dependency>
 			
-			<dependency>
+            <dependency>
                 <groupId>com.speedment.runtime</groupId>
                 <artifactId>runtime-all</artifactId>
                 <version>${speedment.version}</version>

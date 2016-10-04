@@ -31,7 +31,6 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>generator-deploy</artifactId>
-    <packaging>bundle</packaging>
     
     <name>Speedment - Build - Generator Deploy</name>
     <description>
@@ -41,11 +40,6 @@
     
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-            </plugin>
-            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
