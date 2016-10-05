@@ -53,7 +53,12 @@
             <id>release</id>
             <build>
                 <plugins>
-                    <plugin>
+                    <plugin><!-- Create a sources .jar-file -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                    
+                    <plugin><!-- Generate documentation -->
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         

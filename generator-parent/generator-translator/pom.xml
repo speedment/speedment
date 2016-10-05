@@ -45,12 +45,42 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Export-Package>com.speedment.generator.translator.*</Export-Package>
+                        <Export-Package>
+                            com.speedment.generator.translator,
+                            com.speedment.generator.translator.component,
+                            com.speedment.generator.translator.exception,
+                            com.speedment.generator.translator.namer,
+                            com.speedment.generator.translator.util
+                        </Export-Package>
                     </instructions>
                 </configuration>
             </plugin>                            
         </plugins>
     </build>
+    
+    <profiles>
+        <profile>
+            <id>release</id>
+            
+            <build>
+                <plugins>
+                    <plugin><!-- Generate sources jar -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                    
+                    <plugin><!-- Generate javadoc jar -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        
+                        <configuration>
+                            <excludePackageNames>com.speedment.common.*:com.speedment.runtime.*</excludePackageNames>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     
     <dependencies>
         <dependency>

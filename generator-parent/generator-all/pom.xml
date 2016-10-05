@@ -100,6 +100,16 @@
                         <groupId>com.speedment.runtime</groupId>
                         <artifactId>runtime-core</artifactId>
                     </exclusion>
+                    
+                    <exclusion>
+                        <groupId>com.speedment.generator</groupId>
+                        <artifactId>generator-translator</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.speedment.generator</groupId>
+                        <artifactId>generator-standard</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             
@@ -194,6 +204,11 @@
                     <exclusion>
                         <groupId>com.speedment.runtime</groupId>
                         <artifactId>runtime-core</artifactId>
+                    </exclusion>
+                    
+                    <exclusion>
+                        <groupId>com.speedment.generator</groupId>
+                        <artifactId>generator-translator</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>

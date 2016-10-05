@@ -47,7 +47,10 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            com.speedment.tool.propertyeditor.*
+                            com.speedment.tool.propertyeditor,
+                            com.speedment.tool.propertyeditor.component,
+                            com.speedment.tool.propertyeditor.editor,
+                            com.speedment.tool.propertyeditor.item
                         </Export-Package>
                     </instructions>
                 </configuration>
@@ -55,7 +58,34 @@
         </plugins>
     </build>
     
+    <profiles>
+        <profile>
+            <id>release</id>
+            
+            <build>
+                <plugins>
+                    <plugin><!-- Generate sources jar -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                    
+                    <plugin><!-- Generate javadoc jar -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        
+                        <configuration>
+                            <dependencySourceIncludes>
+                                <dependencySourceInclude>com.speedment.tool:tool-propertyeditor</dependencySourceInclude>
+                            </dependencySourceIncludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    
     <dependencies>
+        <!-- Common dependencies -->
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>injector</artifactId>
@@ -66,6 +96,7 @@
             <artifactId>mapstream</artifactId>
         </dependency>
         
+        <!-- Runtime dependencies -->
         <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-config</artifactId>
@@ -81,11 +112,13 @@
             <artifactId>runtime-core</artifactId>
         </dependency>
         
+        <!-- Generator dependencies -->
         <dependency>
             <groupId>com.speedment.generator</groupId>
             <artifactId>generator-translator</artifactId>
         </dependency>
         
+        <!-- Tool dependencies -->
         <dependency>
             <groupId>com.speedment.tool</groupId>
             <artifactId>tool-config</artifactId>

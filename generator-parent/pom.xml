@@ -44,7 +44,7 @@
     
     <dependencyManagement>
         <dependencies>
-			<dependency>
+            <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>common-all</artifactId>
                 <version>${common.version}</version>
@@ -52,7 +52,7 @@
                 <type>pom</type>
             </dependency>
 			
-			<dependency>
+            <dependency>
                 <groupId>com.speedment.runtime</groupId>
                 <artifactId>runtime-all</artifactId>
                 <version>${speedment.version}</version>
@@ -61,4 +61,27 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            
+                            <inherited>true</inherited>
+                            
+                            <configuration>
+                                <excludePackageNames>*.internal.*:com.speedment.common.*:com.speedment.runtime.*</excludePackageNames>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
 </project>

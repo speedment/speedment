@@ -68,5 +68,4 @@ public final class SpringGeneratorComponent {
             GeneratedControllerTranslator::new
         );
     }
-
 }

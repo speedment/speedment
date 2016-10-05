@@ -37,17 +37,36 @@
     <description>
         Common parent for modules that bundle togather multiple modules.
     </description>
-    
-    <modules>
-        <module>runtime</module>
-        <module>runtime-deploy</module>
-        <module>generator</module>
-        <module>generator-deploy</module>
-        <module>tool</module>
-        <module>tool-deploy</module>
-        <module>maven-plugin</module>
-    </modules>
-    
+
+    <profiles>
+        <!-- Only build "-deploy"-modules wen we are in the release profile. -->
+        <profile>
+            <id>release</id>
+            <modules>
+                <module>runtime</module>
+                <module>runtime-deploy</module>
+                <module>generator</module>
+                <module>generator-deploy</module>
+                <module>tool</module>
+                <module>tool-deploy</module>
+                <module>maven-plugin</module>
+            </modules>
+        </profile>
+        
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>runtime</module>
+                <module>generator</module>
+                <module>tool</module>
+                <module>maven-plugin</module>
+            </modules>
+        </profile>
+    </profiles>
+ 
     <dependencyManagement>
         <dependencies>
             <dependency>

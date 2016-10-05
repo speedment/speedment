@@ -46,6 +46,8 @@
         <common.mapstream.version>2.3.4-SNAPSHOT</common.mapstream.version>
         <common.logger.version>1.0.2-SNAPSHOT</common.logger.version>
         <common.invariant.version>1.0.0-SNAPSHOT</common.invariant.version>
+        <common.function.version>1.0.0-SNAPSHOT</common.function.version>
+        <common.injector.version>1.0.1-SNAPSHOT</common.injector.version>
     </properties>
     
     <build>
@@ -130,9 +132,15 @@
     <profiles>
         <profile>
             <id>release</id>
+            
             <build>
                 <plugins>
-                    <plugin>
+                    <plugin><!-- Generate sources jar -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                    
+                    <plugin><!-- Generate documentation -->
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         
@@ -159,50 +167,59 @@
                                     <packages>com.speedment.common.*</packages>
                                 </group>
                             </groups>
-                            
-                            <additionalDependencies>
-                                <additionalDependency>
-                                    <groupId>com.speedment.common</groupId>
-                                    <artifactId>tuple</artifactId>
-                                    <version>${common.tuple.version}</version>
-                                    <scope>compile</scope>
-                                </additionalDependency>
 
+                            <additionalDependencies>
                                 <additionalDependency>
                                     <groupId>com.speedment.common</groupId>
                                     <artifactId>json</artifactId>
                                     <version>${common.json.version}</version>
-                                    <scope>compile</scope>
                                 </additionalDependency>
-
+                                
                                 <additionalDependency>
                                     <groupId>com.speedment.common</groupId>
-                                    <artifactId>lazy</artifactId>
-                                    <version>${common.lazy.version}</version>
-                                    <scope>compile</scope>
-                                </additionalDependency>
-
-                                <additionalDependency>
-                                    <groupId>com.speedment.common</groupId>
-                                    <artifactId>mapstream</artifactId>
-                                    <version>${common.mapstream.version}</version>
-                                    <scope>compile</scope>
+                                    <artifactId>tuple</artifactId>
+                                    <version>${common.tuple.version}</version>
                                 </additionalDependency>
 
                                 <additionalDependency>
                                     <groupId>com.speedment.common</groupId>
                                     <artifactId>logger</artifactId>
                                     <version>${common.logger.version}</version>
-                                    <scope>compile</scope>
+                                </additionalDependency>
+                                
+                                <additionalDependency>
+                                    <groupId>com.speedment.common</groupId>
+                                    <artifactId>mapstream</artifactId>
+                                    <version>${common.mapstream.version}</version>
                                 </additionalDependency>
 
                                 <additionalDependency>
                                     <groupId>com.speedment.common</groupId>
                                     <artifactId>invariant</artifactId>
                                     <version>${common.invariant.version}</version>
-                                    <scope>compile</scope>
+                                </additionalDependency>
+                                
+                                <additionalDependency>
+                                    <groupId>com.speedment.common</groupId>
+                                    <artifactId>function</artifactId>
+                                    <version>${common.function.version}</version>
+                                </additionalDependency>
+                                
+                                <additionalDependency>
+                                    <groupId>com.speedment.common</groupId>
+                                    <artifactId>injector</artifactId>
+                                    <version>${common.injector.version}</version>
                                 </additionalDependency>
                             </additionalDependencies>
+                            
+                            <includeDependencySources>true</includeDependencySources>
+                            
+                            <dependencySourceIncludes>
+                                <!--<dependencySourceInclude>com.speedment.common:function</dependencySourceInclude>-->
+                                <!--<dependencySourceInclude>com.speedment.common:injector</dependencySourceInclude>-->
+                                <dependencySourceInclude>com.speedment.common:*</dependencySourceInclude>
+                                <dependencySourceInclude>com.speedment.runtime:*</dependencySourceInclude>
+                            </dependencySourceIncludes>
                         </configuration>
                     </plugin>
                 </plugins>
