@@ -51,7 +51,7 @@ abstract class AbstractLogger implements Logger {
         this.name = requireNonNull(name);
         this.level = Level.defaultLevel();
         this.formatter = requireNonNull(formatter);
-        listeners = Collections.newSetFromMap(new ConcurrentHashMap<LoggerEventListener, Boolean>());
+        listeners = Collections.newSetFromMap(new ConcurrentHashMap<>());
     }
 
     protected abstract void output(String message);
