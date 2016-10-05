@@ -75,4 +75,15 @@ public interface StreamSupplierComponent {
     default boolean isImmutable() {
         return false;
     }
+    
+    /**
+     * Starts the stream suppler and initialized any resources needed for its
+     * operation.
+     */
+    default void start(){};
+    
+    /**
+     * Stops the stream suppler and releases any previously allocated resources.
+     */
+    default void stop(){};
 }

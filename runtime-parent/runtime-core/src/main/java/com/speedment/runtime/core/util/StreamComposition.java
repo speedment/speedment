@@ -103,7 +103,8 @@ public class StreamComposition {
     @SuppressWarnings("varargs")
     @SafeVarargs // Creating a Stream of an array is safe.
     private static <T extends BaseStream<?, ?>> T configureAutoCloseStream(T concatStream, T... streams) {
-        final boolean parallel = Stream.of(streams).anyMatch(T::isParallel);
+        @SuppressWarnings("rawtypes")
+        final boolean parallel = Stream.of(streams).anyMatch(BaseStream::isParallel); // T:::isParallel gives IDE warning
         if (parallel) {
             concatStream.parallel();
         }

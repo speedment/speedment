@@ -5,6 +5,7 @@
 **/.project/
 **/.sonar/
 **/.DS_Store/
+**/.idea/
 
 **/nbactions.xml
 **/nb-configuration.xml
