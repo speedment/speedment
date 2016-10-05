@@ -49,25 +49,25 @@ public class ConfiguredManager<ENTITY> implements Manager<ENTITY> {
         this.parallelStrategy = requireNonNull(parallelStrategy);
     }
 
-    @Override
-    public ENTITY entityCreate() {
-        return manager.entityCreate();
-    }
-
-    @Override
-    public Supplier<ENTITY> entityCreator() {
-        return manager.entityCreator();
-    }
-
-    @Override
-    public ENTITY entityCopy(ENTITY source) {
-        return manager.entityCopy(source);
-    }
-
-    @Override
-    public UnaryOperator<ENTITY> entityCopier() {
-        return manager.entityCopier();
-    }
+//    @Override
+//    public ENTITY entityCreate() {
+//        return manager.entityCreate();
+//    }
+//
+//    @Override
+//    public Supplier<ENTITY> entityCreator() {
+//        return manager.entityCreator();
+//    }
+//
+//    @Override
+//    public ENTITY entityCopy(ENTITY source) {
+//        return manager.entityCopy(source);
+//    }
+//
+//    @Override
+//    public UnaryOperator<ENTITY> entityCopier() {
+//        return manager.entityCopier();
+//    }
 
     @Override
     public TableIdentifier<ENTITY> getTableIdentifier() {

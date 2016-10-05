@@ -31,9 +31,6 @@ import com.speedment.runtime.core.component.PersistenceComponent;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -47,8 +44,8 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     private @Inject StreamSupplierComponent streamSupplierComponent;
 
     // Hold these fields internally so that exposing methods may be compared by equality
-    private final EntityCreator<ENTITY> entityCreator = this::entityCreate;
-    private final EntityCopier<ENTITY> entityCopier = this::entityCopy;
+//    private final EntityCreator<ENTITY> entityCreator = this::entityCreate;
+//    private final EntityCopier<ENTITY> entityCopier = this::entityCopy;
     
     private Persister<ENTITY> persister;
     private Updater<ENTITY> updater;
@@ -76,15 +73,15 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
         managerComponent.put(this);
     }
 
-    @Override
-    public EntityCreator<ENTITY> entityCreator() {
-        return entityCreator;
-    }
-
-    @Override
-    public EntityCopier<ENTITY> entityCopier() {
-        return entityCopier;
-    }
+//    @Override
+//    public EntityCreator<ENTITY> entityCreator() {
+//        return entityCreator;
+//    }
+//
+//    @Override
+//    public EntityCopier<ENTITY> entityCopier() {
+//        return entityCopier;
+//    }
 
     @Override
     public Stream<ENTITY> stream() {

@@ -110,7 +110,7 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
                     
                     // Generate member fields
                     .add(Field.of("tableIdentifier", tableIdentifierType).private_().final_())
-                    .add(Field.of("manager", getSupport().managerType()).add(inject()).private_())
+//                    .add(Field.of("manager", getSupport().managerType()).add(inject()).private_())
                     
                     // Generate methods
                     .add(Method.of(INSTALL_METHOD_NAME, void.class).add(withExecuteBefore(file))
@@ -121,6 +121,7 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
                     )
                     
                     .add(generateApplyResultSet(getSupport(), file, table::columns))
+                    .add(generateCreateEntity(file))
                     
                     .call(() -> {
                         // Operate on enabled columns that has a type mapper
@@ -172,7 +173,14 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
             })
             .build();
     }
-
+    
+    private Method generateCreateEntity(File file) {
+        final Type entityImplType = getSupport().entityImplType();
+        file.add(Import.of(entityImplType));
+        return Method.of("createEntity", entityImplType).protected_()
+            .add("return new "+getSupport().entityImplName()+"();");
+    }
+    
     @Override
     protected String getJavadocRepresentText() {
         return "The generated Sql Adapter for a {@link "
