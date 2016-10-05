@@ -48,6 +48,41 @@
         </plugins>
     </build>
     
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        
+                        <configuration>
+                            <groups>
+                                <group>
+                                    <title>Translator System</title>
+                                    <packages>com.speedment.generator.translator:com.speedment.generator.translator.*</packages>
+                                </group>
+                                <group>
+                                    <title>Built-In Translators</title>
+                                    <packages>com.speedment.generator.standard:com.speedment.generator.standard.*</packages>
+                                </group>
+                                <group>
+                                    <title>Generator Core</title>
+                                    <packages>com.speedment.generator.core:com.speedment.generator.core.*</packages>
+                                </group>
+                                <group>
+                                    <title>Commons Library</title>
+                                    <packages>com.speedment.common.*</packages>
+                                </group>
+                            </groups>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    
     <dependencies>
         <dependency>
             <groupId>com.speedment</groupId>

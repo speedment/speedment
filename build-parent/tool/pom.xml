@@ -48,6 +48,41 @@
         </plugins>
     </build>
     
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        
+                        <configuration>
+                            <groups>
+                                <group>
+                                    <title>Configuration</title>
+                                    <packages>com.speedment.tool.config:com.speedment.tool.config.*</packages>
+                                </group>
+                                <group>
+                                    <title>Property Editor</title>
+                                    <packages>com.speedment.tool.propertyeditor:com.speedment.tool.propertyeditor.*</packages>
+                                </group>
+                                <group>
+                                    <title>Graphical Tool Core</title>
+                                    <packages>com.speedment.tool.core:com.speedment.tool.core.*</packages>
+                                </group>
+                                <group>
+                                    <title>Commons Library</title>
+                                    <packages>com.speedment.common.*</packages>
+                                </group>
+                            </groups>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    
     <dependencies>
         <dependency>
             <groupId>com.speedment</groupId>

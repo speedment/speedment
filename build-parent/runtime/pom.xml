@@ -83,12 +83,6 @@
         <!-- Runtime dependencies -->
         <dependency>
             <groupId>com.speedment.common</groupId>
-            <artifactId>invariant</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
             <artifactId>tuple</artifactId>
             <scope>runtime</scope>
         </dependency>
@@ -116,5 +110,94 @@
             <artifactId>logger</artifactId>
             <scope>runtime</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>invariant</artifactId>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
+    
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        
+                        <configuration>
+                            <groups>
+                                <group>
+                                    <title>Database Model</title>
+                                    <packages>com.speedment.runtime.config:com.speedment.runtime.config.*</packages>
+                                </group>
+                                <group>
+                                    <title>Type Mappers</title>
+                                    <packages>com.speedment.runtime.typemapper:com.speedment.runtime.typemapper.*</packages>
+                                </group>
+                                <group>
+                                    <title>Fields and Predicates</title>
+                                    <packages>com.speedment.runtime.field:com.speedment.runtime.field.*</packages>
+                                </group>
+                                <group>
+                                    <title>Runtime Core</title>
+                                    <packages>com.speedment.runtime.core:com.speedment.runtime.core.*</packages>
+                                </group>
+                                <group>
+                                    <title>Commons Library</title>
+                                    <packages>com.speedment.common.*</packages>
+                                </group>
+                            </groups>
+                            
+                            <additionalDependencies>
+                                <additionalDependency>
+                                    <groupId>com.speedment.common</groupId>
+                                    <artifactId>tuple</artifactId>
+                                    <version>1.0.1-SNAPSHOT</version>
+                                    <scope>compile</scope>
+                                </additionalDependency>
+
+                                <additionalDependency>
+                                    <groupId>com.speedment.common</groupId>
+                                    <artifactId>json</artifactId>
+                                    <version>1.0.1-SNAPSHOT</version>
+                                    <scope>compile</scope>
+                                </additionalDependency>
+
+                                <additionalDependency>
+                                    <groupId>com.speedment.common</groupId>
+                                    <artifactId>lazy</artifactId>
+                                    <version>1.0.1-SNAPSHOT</version>
+                                    <scope>compile</scope>
+                                </additionalDependency>
+
+                                <additionalDependency>
+                                    <groupId>com.speedment.common</groupId>
+                                    <artifactId>mapstream</artifactId>
+                                    <version>2.3.4-SNAPSHOT</version>
+                                    <scope>compile</scope>
+                                </additionalDependency>
+
+                                <additionalDependency>
+                                    <groupId>com.speedment.common</groupId>
+                                    <artifactId>logger</artifactId>
+                                    <version>1.0.2-SNAPSHOT</version>
+                                    <scope>compile</scope>
+                                </additionalDependency>
+
+                                <additionalDependency>
+                                    <groupId>com.speedment.common</groupId>
+                                    <artifactId>invariant</artifactId>
+                                    <version>1.0.0-SNAPSHOT</version>
+                                    <scope>compile</scope>
+                                </additionalDependency>
+                            </additionalDependencies>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

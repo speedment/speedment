@@ -44,46 +44,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.3</version>
                 <configuration>
-                    <shadedArtifactId>speedment-all</shadedArtifactId>
-                    <createSourcesJar>true</createSourcesJar>
-                    <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
-                    <createDependencyReducedPom>true</createDependencyReducedPom>
-                    <minimizeJar>false</minimizeJar>
+                    <shadedArtifactId>runtime-all</shadedArtifactId>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>shade-artifacts</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
-                                    
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
-                <configuration>
-                    <includeDependencySources>true</includeDependencySources>
-                    <docfilessubdirs>true</docfilessubdirs>
-                    <excludePackageNames>*.internal.*</excludePackageNames>
-                </configuration>
-                <!--                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <docfilessubdirs>true</docfilessubdirs>
-                    <excludePackageNames>*.internal.*</excludePackageNames>
-                </configuration>-->
             </plugin>
         </plugins>
     </build>
@@ -93,6 +61,36 @@
             <groupId>com.speedment</groupId>
             <artifactId>runtime</artifactId>
             <version>${speedment.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>tuple</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>json</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>lazy</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>mapstream</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>logger</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>invariant</artifactId>
         </dependency>
     </dependencies>
 </project>

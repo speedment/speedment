@@ -178,6 +178,7 @@
                     <artifactId>maven-bundle-plugin</artifactId>
                     <version>3.2.0</version>
                     <extensions>true</extensions>
+                    
                     <configuration>
                         <instructions>
                             <Bundle-Vendor>Speedment, Inc.</Bundle-Vendor>
@@ -187,6 +188,7 @@
                             </Import-Package>
                         </instructions>
                     </configuration>
+                    
                     <executions>
                         <execution>
                             <id>generate-manifest</id>
@@ -205,6 +207,47 @@
                                     <Private-Package>!*</Private-Package>
                                 </instructions>
                             </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.10.4</version>
+                    
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    
+                    <configuration>
+                        <aggregate>true</aggregate>
+                        <keywords>true</keywords>
+                        <docfilessubdirs>true</docfilessubdirs>
+                        <excludePackageNames>*.internal.*</excludePackageNames>
+                        <includeDependencySources>true</includeDependencySources>
+                        
+                        <additionalJOptions>
+                            <additionalJOption>-J-Xmx1g</additionalJOption>
+                        </additionalJOptions>
+                    </configuration>
+                </plugin>
+                
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.0.1</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
                         </execution>
                     </executions>
                 </plugin>
@@ -257,6 +300,36 @@
             </plugin>
         </plugins>
     </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
+                
+                <configuration>
+                    <docfilessubdirs>true</docfilessubdirs>
+                    <excludePackageNames>*.internal.*</excludePackageNames>
+                </configuration>
+                
+                <reportSets>
+                    <reportSet>
+                        <id>aggregate</id>
+                        <reports>
+                            <report>aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>3.0.4</version>
+            </plugin>
+        </plugins>
+    </reporting>
     
     <profiles>
         <profile> 
@@ -331,7 +404,7 @@
                                                 <limit implementation="org.jacoco.report.check.Limit">
                                                     <counter>COMPLEXITY</counter>
                                                     <value>COVEREDRATIO</value>
-                                                    <minimum>0.10</minimum>
+                                                    <minimum>0.01</minimum>
                                                 </limit>
                                             </limits>
                                         </rule>
@@ -341,36 +414,6 @@
                         </executions>
                     </plugin>
                     
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.10.4</version>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <docfilessubdirs>true</docfilessubdirs>
-                            <excludePackageNames>*.internal.*</excludePackageNames>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>3.0.1</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
@@ -427,16 +470,6 @@
             </build>
         </profile>
     </profiles>
-	
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.4</version>
-            </plugin>
-        </plugins>
-    </reporting>
     
     <dependencyManagement>
         <dependencies>

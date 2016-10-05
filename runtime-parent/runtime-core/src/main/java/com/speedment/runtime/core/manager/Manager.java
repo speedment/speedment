@@ -292,15 +292,14 @@ public interface Manager<ENTITY> {
 
     /**
      * Returns a Function that, when it is applied, will produce an equivalent
-     * result as if {@link #findByNullable(com.speedment.runtime.core.field.trait.HasFinder, java.lang.Object)
-     * } was called.
+     * result as if {@link #finderByNullable(HasFinder)} was called.
      *
      * @param <FK_ENTITY> the type of the foreign entity
      * @param fkField the foreign key field
      * @return an Entity (if any) that matches the given a foreign key relation
      * (foreign field and entity)
-     * @see #findByNullable(com.speedment.runtime.core.field.trait.HasFinder,
-     * java.lang.Object)
+     * 
+     * @see #finderByNullable(HasFinder)
      */
     default <FK_ENTITY> Function<FK_ENTITY, ENTITY> finderBy(HasFinder<FK_ENTITY, ENTITY> fkField) {
         return fkField.finder(getTableIdentifier(), this::stream);
@@ -325,15 +324,14 @@ public interface Manager<ENTITY> {
 
     /**
      * Returns a Function that, when it is applied, will produce an equivalent
-     * result as if {@link #findByNullable(com.speedment.runtime.core.field.trait.HasFinder, java.lang.Object)
-     * } was called.
+     * result as if {@link #findByNullable(HasFinder, Object)} was called.
      *
      * @param <FK_ENTITY> the type of the foreign entity
      * @param fkField the foreign key field
      * @return an Entity (if any) that matches the given a foreign key relation
      * (foreign field and entity)
-     * @see #findByNullable(com.speedment.runtime.core.field.trait.HasFinder,
-     * java.lang.Object)
+     * 
+     * @see #findByNullable(HasFinder, Object)
      */
     default <FK_ENTITY> Function<FK_ENTITY, Stream<ENTITY>> finderByNullable(HasFinder<FK_ENTITY, ENTITY> fkField) {
         return fkEntity -> SingletonStream.ofNullable(finderBy(fkField).apply(fkEntity));
@@ -358,18 +356,15 @@ public interface Manager<ENTITY> {
         return finderByNullable(fkField).apply(fkEntity);
     }
 
-    // Function<ENTITY, Stream<FK_ENTITY>>
     /**
      * Returns a Function that, when it is applied, will produce an equivalent
-     * result as if {@link #findBackwardsBy(com.speedment.runtime.core.field.trait.HasFinder, java.lang.Object)
-     * } was called.
+     * result as if {@link #findBackwardsBy(HasFinder, Object)} was called.
      *
      * @param <FK_ENTITY> the type of the foreign entity
      * @param fkField the foreign key field
      * @return an Entity (if any) that matches the given a foreign key relation
      * (foreign field and entity)
-     * @see #findBackwardsBy(com.speedment.runtime.core.field.trait.HasFinder,
-     * java.lang.Object)
+     * @see #findBackwardsBy(HasFinder, Object)
      */
     default <FK_ENTITY> Function<FK_ENTITY, Stream<ENTITY>> finderBackwardsBy(HasFinder<ENTITY, FK_ENTITY> fkField) {
         return fkField.backwardFinder(getTableIdentifier(), this::stream);
