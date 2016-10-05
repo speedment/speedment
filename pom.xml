@@ -305,6 +305,57 @@
                             </executions>
 
                             <configuration>
+                                <groups>
+                                    <group>
+                                        <title>Code Generator</title>
+                                        <packages>com.speedment.common.codegen:com.speedment.common.codegen.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Runtime Database Model</title>
+                                        <packages>com.speedment.runtime.config:com.speedment.runtime.config.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Runtime Type Mappers</title>
+                                        <packages>com.speedment.runtime.typemapper:com.speedment.runtime.typemapper.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Runtime Fields and Predicates</title>
+                                        <packages>com.speedment.runtime.field:com.speedment.runtime.field.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Runtime Core</title>
+                                        <packages>com.speedment.runtime.core:com.speedment.runtime.core.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Generator Translator System</title>
+                                        <packages>com.speedment.generator.translator:com.speedment.generator.translator.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Generator Built-In Translators</title>
+                                        <packages>com.speedment.generator.standard:com.speedment.generator.standard.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Generator Core</title>
+                                        <packages>com.speedment.generator.core:com.speedment.generator.core.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Tool Configuration</title>
+                                        <packages>com.speedment.tool.config:com.speedment.tool.config.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Tool Property Editor</title>
+                                        <packages>com.speedment.tool.propertyeditor:com.speedment.tool.propertyeditor.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Tool Core</title>
+                                        <packages>com.speedment.tool.core:com.speedment.tool.core.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Commons Library</title>
+                                        <packages>com.speedment.common.*</packages>
+                                    </group>
+                                </groups>
+                                
                                 <aggregate>true</aggregate>
                                 <keywords>true</keywords>
                                 <docfilessubdirs>true</docfilessubdirs>

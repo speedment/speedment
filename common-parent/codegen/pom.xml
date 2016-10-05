@@ -64,20 +64,12 @@
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <configuration>
-                            <groups>
-                                <group>
-                                    <title>Code Generator</title>
-                                    <packages>com.speedment.common.codegen:com.speedment.common.codegen.*</packages>
-                                </group>
-                            </groups>
-                        </configuration>
+                        <artifactId>maven-source-plugin</artifactId>
                     </plugin>
                     
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>

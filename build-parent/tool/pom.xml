@@ -48,53 +48,21 @@
         </plugins>
     </build>
     
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin><!-- Create a sources .jar-file -->
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                    </plugin>
-                    
-                    <plugin><!-- Generate documentation -->
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        
-                        <configuration>
-                            <groups>
-                                <group>
-                                    <title>Configuration</title>
-                                    <packages>com.speedment.tool.config:com.speedment.tool.config.*</packages>
-                                </group>
-                                <group>
-                                    <title>Property Editor</title>
-                                    <packages>com.speedment.tool.propertyeditor:com.speedment.tool.propertyeditor.*</packages>
-                                </group>
-                                <group>
-                                    <title>Graphical Tool Core</title>
-                                    <packages>com.speedment.tool.core:com.speedment.tool.core.*</packages>
-                                </group>
-                                <group>
-                                    <title>Commons Library</title>
-                                    <packages>com.speedment.common.*</packages>
-                                </group>
-                            </groups>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-    
     <dependencies>
+        <!-- Common dependencies -->
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>rest</artifactId>
+        </dependency>
+        
+        <!-- Generator Build dependencies -->
         <dependency>
             <groupId>com.speedment</groupId>
             <artifactId>generator</artifactId>
             <version>${speedment.version}</version>
         </dependency>
 
+        <!-- Tool dependencies -->
         <dependency>
             <groupId>com.speedment.tool</groupId>
             <artifactId>tool-config</artifactId>
@@ -108,12 +76,6 @@
         <dependency>
             <groupId>com.speedment.tool</groupId>
             <artifactId>tool-core</artifactId>
-        </dependency>
-        
-        <!-- Runtime Dependencies -->
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>rest</artifactId>
         </dependency>
     </dependencies>
 </project>
