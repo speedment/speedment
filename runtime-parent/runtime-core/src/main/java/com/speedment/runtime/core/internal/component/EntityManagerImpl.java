@@ -16,7 +16,8 @@
  */
 package com.speedment.runtime.core.internal.component;
 
-import com.speedment.common.injector.annotation.Inject;
+import static com.speedment.common.injector.State.RESOLVED;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.core.component.EntityManager;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
@@ -25,261 +26,9 @@ import com.speedment.runtime.core.manager.Manager;
 import java.util.Optional;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import java.util.Map;
 import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -287,8 +36,18 @@ import static java.util.Objects.requireNonNull;
  */
 public final class EntityManagerImpl implements EntityManager {
 
-    private @Inject ManagerComponent managerComponent;
-    
+    private final Map<Class<?>, Manager<?>> managers;
+
+    public EntityManagerImpl() {
+        this.managers = new ConcurrentHashMap<>();
+    }
+
+    @ExecuteBefore(RESOLVED)
+    void installManagers(ManagerComponent managerComponent) {
+        managerComponent.stream()
+            .forEach(m -> managers.put(m.getEntityClass(), m));
+    }
+
     @Override
     public <ENTITY> void persist(ENTITY entity) throws SpeedmentException {
         requireNonNull(entity);
@@ -309,10 +68,10 @@ public final class EntityManagerImpl implements EntityManager {
 
     private <ENTITY> Manager<ENTITY> managerOf(ENTITY entity) {
         requireNonNull(entity);
-        
+
         @SuppressWarnings("rawtypes")
-        final Optional<Manager> manager = managerOf(entity.getClass(), managerComponent);
-        
+        final Optional<Manager> manager = lookup(entity.getClass());
+
         if (manager.isPresent()) {
             @SuppressWarnings("unchecked")
             final Manager<ENTITY> result = (Manager<ENTITY>) manager.get();
@@ -322,22 +81,23 @@ public final class EntityManagerImpl implements EntityManager {
     }
 
     @SuppressWarnings("rawtypes")
-    private static Optional<Manager> managerOf(Class<?> entityInterface, ManagerComponent managerComponent) {
-        requireNonNulls(entityInterface, managerComponent);
-        
-        final Manager manager = managerComponent.managerOf(entityInterface);
+    private <ENTITY> Optional<Manager> lookup(Class<ENTITY> entityClass) {
+        requireNonNulls(entityClass);
+
+        // Base case in recursion
+        @SuppressWarnings("unchecked")
+        final Manager<ENTITY> manager = (Manager<ENTITY>)managers.get(entityClass);
         if (manager != null) {
             return Optional.of(manager);
         }
-        
-        for (final Class<?> parentEntityInterface : entityInterface.getInterfaces()) {
+
+        for (final Class<?> parentEntityInterface : entityClass.getInterfaces()) {
             // Recuresively explore...
-            final Optional<Manager> parentManager = managerOf(parentEntityInterface, managerComponent);
+            final Optional<Manager> parentManager = lookup(parentEntityInterface);
             if (parentManager.isPresent()) {
                 return parentManager;
             }
         }
-        
         return Optional.empty();
     }
 
