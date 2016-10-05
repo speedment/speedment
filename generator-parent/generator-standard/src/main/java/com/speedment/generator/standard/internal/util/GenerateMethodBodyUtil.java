@@ -100,7 +100,7 @@ public final class GenerateMethodBodyUtil {
         file.add(Import.of(SQLException.class));
         
         final List<String> rows = new LinkedList<>();
-        rows.add("final " + support.entityName() + " entity = manager." + ENTITY_CREATE_METHOD_NAME + "();");
+        rows.add("final " + support.entityName() + " entity = createEntity();");
 
         final Stream.Builder<String> streamBuilder = Stream.builder();
 
@@ -113,7 +113,7 @@ public final class GenerateMethodBodyUtil {
 
         rows.add(
             "try " + block(streamBuilder.build()) +
-            "catch (final " + SQLException.class.getSimpleName() + " sqle) " + block(
+            " catch (final " + SQLException.class.getSimpleName() + " sqle) " + block(
             "throw new " + SpeedmentException.class.getSimpleName() + "(sqle);"
         ));
         rows.add("return entity;");

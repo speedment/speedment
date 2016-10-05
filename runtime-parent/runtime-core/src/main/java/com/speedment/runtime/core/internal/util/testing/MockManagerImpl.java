@@ -46,7 +46,7 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
 
     public MockManagerImpl(Manager<ENTITY> inner) {
         this.inner = inner;
-        this.entityCreator = inner.entityCreator();
+//        this.entityCreator = inner.entityCreator();
         this.streamer = inner::stream;
         this.persister = inner.persister();
         this.updater = inner.updater();
@@ -54,11 +54,11 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     }
 
     // MockManager
-    @Override
-    public MockManager<ENTITY> setEntityCreator(EntityCreator<ENTITY> factory) {
-        entityCreator = factory;
-        return this;
-    }
+//    @Override
+//    public MockManager<ENTITY> setEntityCreator(EntityCreator<ENTITY> factory) {
+//        entityCreator = factory;
+//        return this;
+//    }
 
     @Override
     public MockManager<ENTITY> setStreamer(Supplier<Stream<ENTITY>> streamer) {
@@ -84,15 +84,15 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
         return this;
     }
 
-    @Override
-    public ENTITY entityCreate() {
-        return entityCreator.get();
-    }
-
-    @Override
-    public Supplier<ENTITY> entityCreator() {
-        return entityCreator;
-    }
+//    @Override
+//    public ENTITY entityCreate() {
+//        return entityCreator.get();
+//    }
+//
+//    @Override
+//    public Supplier<ENTITY> entityCreator() {
+//        return entityCreator;
+//    }
 
     @Override
     public Class<ENTITY> getEntityClass() {
@@ -123,11 +123,11 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
     public Remover<ENTITY> remover() {
         return remover;
     }
-
-    @Override
-    public ENTITY entityCopy(ENTITY source) {
-        return inner.entityCopy(source);
-    }
+//
+//    @Override
+//    public ENTITY entityCopy(ENTITY source) {
+//        return inner.entityCopy(source);
+//    }
 
     @Override
     public TableIdentifier<ENTITY> getTableIdentifier() {
@@ -149,10 +149,10 @@ public class MockManagerImpl<ENTITY> implements MockManager<ENTITY> {
         return streamer.get();
     }
 
-    @Override
-    public UnaryOperator<ENTITY> entityCopier() {
-        return inner.entityCopier();
-    }
+//    @Override
+//    public UnaryOperator<ENTITY> entityCopier() {
+//        return inner.entityCopier();
+//    }
 
     @Override
     public Updater<ENTITY> updater() {
