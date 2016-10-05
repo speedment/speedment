@@ -39,6 +39,15 @@
         that should be exposed to the end user.
     </description>
     
+    <properties>
+        <common.tuple.version>1.0.1-SNAPSHOT</common.tuple.version>
+        <common.json.version>1.0.1-SNAPSHOT</common.json.version>
+        <common.lazy.version>1.0.1-SNAPSHOT</common.lazy.version>
+        <common.mapstream.version>2.3.4-SNAPSHOT</common.mapstream.version>
+        <common.logger.version>1.0.2-SNAPSHOT</common.logger.version>
+        <common.invariant.version>1.0.0-SNAPSHOT</common.invariant.version>
+    </properties>
+    
     <build>
         <plugins>
             <plugin>
@@ -155,42 +164,42 @@
                                 <additionalDependency>
                                     <groupId>com.speedment.common</groupId>
                                     <artifactId>tuple</artifactId>
-                                    <version>1.0.1-SNAPSHOT</version>
+                                    <version>${common.tuple.version}</version>
                                     <scope>compile</scope>
                                 </additionalDependency>
 
                                 <additionalDependency>
                                     <groupId>com.speedment.common</groupId>
                                     <artifactId>json</artifactId>
-                                    <version>1.0.1-SNAPSHOT</version>
+                                    <version>${common.json.version}</version>
                                     <scope>compile</scope>
                                 </additionalDependency>
 
                                 <additionalDependency>
                                     <groupId>com.speedment.common</groupId>
                                     <artifactId>lazy</artifactId>
-                                    <version>1.0.1-SNAPSHOT</version>
+                                    <version>${common.lazy.version}</version>
                                     <scope>compile</scope>
                                 </additionalDependency>
 
                                 <additionalDependency>
                                     <groupId>com.speedment.common</groupId>
                                     <artifactId>mapstream</artifactId>
-                                    <version>2.3.4-SNAPSHOT</version>
+                                    <version>${common.mapstream.version}</version>
                                     <scope>compile</scope>
                                 </additionalDependency>
 
                                 <additionalDependency>
                                     <groupId>com.speedment.common</groupId>
                                     <artifactId>logger</artifactId>
-                                    <version>1.0.2-SNAPSHOT</version>
+                                    <version>${common.logger.version}</version>
                                     <scope>compile</scope>
                                 </additionalDependency>
 
                                 <additionalDependency>
                                     <groupId>com.speedment.common</groupId>
                                     <artifactId>invariant</artifactId>
-                                    <version>1.0.0-SNAPSHOT</version>
+                                    <version>${common.invariant.version}</version>
                                     <scope>compile</scope>
                                 </additionalDependency>
                             </additionalDependencies>
