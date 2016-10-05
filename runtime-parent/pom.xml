@@ -54,4 +54,27 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    
+    <profiles>
+        <profile>
+            <id>release</id>
+            
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            
+                            <inherited>true</inherited>
+                            
+                            <configuration>
+                                <excludePackageNames>*.internal.*:com.speedment.common.*</excludePackageNames>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
 </project>

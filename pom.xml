@@ -177,7 +177,9 @@
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
                     <version>3.2.0</version>
+                    
                     <extensions>true</extensions>
+                    <inherited>true</inherited>
                     
                     <configuration>
                         <instructions>
@@ -210,47 +212,6 @@
                         </execution>
                     </executions>
                 </plugin>
-                
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.10.4</version>
-                    
-                    <executions>
-                        <execution>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    
-                    <configuration>
-                        <aggregate>true</aggregate>
-                        <keywords>true</keywords>
-                        <docfilessubdirs>true</docfilessubdirs>
-                        <excludePackageNames>*.internal.*</excludePackageNames>
-                        <includeDependencySources>true</includeDependencySources>
-                        
-                        <additionalJOptions>
-                            <additionalJOption>-J-Xmx1g</additionalJOption>
-                        </additionalJOptions>
-                    </configuration>
-                </plugin>
-                
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>3.0.1</version>
-                    <executions>
-                        <execution>
-                            <id>attach-sources</id>
-                            <goals>
-                                <goal>jar-no-fork</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
             </plugins>
         </pluginManagement>
         
@@ -259,6 +220,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5.1</version>
+                
                 <configuration>
                     <compilerArgument>-Xlint:all</compilerArgument>
                     <showWarnings>true</showWarnings>
@@ -292,54 +254,100 @@
                     <trimStackTrace>false</trimStackTrace>
                 </configuration>
             </plugin>
-            
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>3.0.2</version>
-            </plugin>
         </plugins>
     </build>
 
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.4</version>
-                
-                <configuration>
-                    <docfilessubdirs>true</docfilessubdirs>
-                    <excludePackageNames>*.internal.*</excludePackageNames>
-                </configuration>
-                
-                <reportSets>
-                    <reportSet>
-                        <id>aggregate</id>
-                        <reports>
-                            <report>aggregate</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-            
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.4</version>
-            </plugin>
-        </plugins>
-    </reporting>
-    
     <profiles>
         <profile> 
             <id>release</id>
-            <build>
+            
+            <reporting>
                 <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+
+                        <reportSets>
+                            <reportSet>
+                                <id>aggregate</id>
+                                <reports>
+                                    <report>aggregate</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>findbugs-maven-plugin</artifactId>
+                        <version>3.0.4</version>
+                    </plugin>
+                </plugins>
+            </reporting>
+            
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            <version>2.10.4</version>
+                            
+                            <inherited>true</inherited>
+
+                            <executions>
+                                <execution>
+                                    <phase>package</phase>
+                                    <goals>
+                                        <goal>jar</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+
+                            <configuration>
+                                <aggregate>true</aggregate>
+                                <keywords>true</keywords>
+                                <docfilessubdirs>true</docfilessubdirs>
+                                <excludePackageNames>*.internal.*</excludePackageNames>
+                                <includeDependencySources>true</includeDependencySources>
+
+                                <additionalJOptions>
+                                    <additionalJOption>-J-Xmx1g</additionalJOption>
+                                </additionalJOptions>
+                            </configuration>
+                        </plugin>
+
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-source-plugin</artifactId>
+                            <version>3.0.1</version>
+                            
+                            <inherited>true</inherited>
+                            
+                            <executions>
+                                <execution>
+                                    <id>attach-sources</id>
+                                    <goals>
+                                        <goal>jar-no-fork</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+                
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonarsource.scanner.maven</groupId>
+                        <artifactId>sonar-maven-plugin</artifactId>
+                        <version>3.0.2</version>
+                    </plugin>
+                    
                     <plugin>
                         <groupId>com.mycila</groupId>
                         <artifactId>license-maven-plugin</artifactId>
-                        <version>2.11</version>
+                        <version>3.0</version>
+                        
                         <configuration>
                             <header>license_header.txt</header>
                             <properties>
@@ -361,6 +369,7 @@
                                 <exclude>nbproject/**</exclude>
                             </excludes>
                         </configuration>
+                        
                         <executions>
                             <execution>
                                 <goals>
@@ -375,6 +384,7 @@
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
                         <version>0.7.7.201606060606</version>
+                        
                         <executions>
                             <execution>
                                 <id>default-prepare-agent</id>
@@ -418,6 +428,7 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
                         <version>1.6</version>
+                        
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -427,6 +438,7 @@
                                 </goals>
                             </execution>
                         </executions>
+                        
                         <configuration>
                             <keyname>${gpg.keyname}</keyname>
                             <passphrase>${gpg.passphrase}</passphrase>
@@ -438,6 +450,7 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-deploy-plugin</artifactId>
                         <version>2.8.2</version>
+                        
                         <configuration>
                             <!-- Deployment is already handled by nexus-staging-maven-plugin -->
                             <skip>true</skip>
@@ -448,6 +461,7 @@
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
                         <version>1.6.7</version>
+                        
                         <extensions>true</extensions>
                         
                         <executions>

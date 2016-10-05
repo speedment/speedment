@@ -44,12 +44,36 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Export-Package>com.speedment.generator.standard.*</Export-Package>
+                        <Export-Package>
+                            com.speedment.generator.standard,
+                            com.speedment.generator.standard.entity,
+                            com.speedment.generator.standard.manager,
+                            com.speedment.generator.standard.lifecycle
+                        </Export-Package>
                     </instructions>
                 </configuration>
             </plugin>                            
         </plugins>
     </build>
+    
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin><!-- Generate sources jar -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                    
+                    <plugin><!-- Generate javadoc jar -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     
     <dependencies>
         <dependency>

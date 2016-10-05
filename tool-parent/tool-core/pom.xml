@@ -62,6 +62,32 @@
         </plugins>
     </build>
     
+    <profiles>
+        <profile>
+            <id>release</id>
+
+            <build>
+                <plugins>
+                    <plugin><!-- Generate sources jar -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                    
+                    <plugin><!-- Generate javadoc jar -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        
+                        <configuration>
+                            <dependencySourceIncludes>
+                                <dependencySourceInclude>com.speedment.tool:tool-core</dependencySourceInclude>
+                            </dependencySourceIncludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    
     <dependencies>
         <!-- com.speedment.common -->
         <dependency>
@@ -184,6 +210,12 @@
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>tuple</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.generator</groupId>
+            <artifactId>generator-standard</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -74,6 +74,11 @@
                             </groups>
                         </configuration>
                     </plugin>
+                    
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
                 </plugins>
             </build>
         </profile>

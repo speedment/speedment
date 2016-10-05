@@ -17,7 +17,10 @@
     the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
     <modelVersion>4.0.0</modelVersion>
     
     <parent>
@@ -137,4 +140,85 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    
+    <profiles>
+        <profile>
+            <id>release</id>
+            
+            <dependencies>
+                <dependency>
+                    <groupId>com.speedment.common</groupId>
+                    <artifactId>invariant</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>com.speedment.common</groupId>
+                    <artifactId>function</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>com.speedment.common</groupId>
+                    <artifactId>json</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>com.speedment.common</groupId>
+                    <artifactId>tuple</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>com.speedment.common</groupId>
+                    <artifactId>logger</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>com.speedment.common</groupId>
+                    <artifactId>mapstream</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>com.speedment.common</groupId>
+                    <artifactId>codegen</artifactId>
+                </dependency>
+
+                <dependency>
+                    <groupId>com.speedment.common</groupId>
+                    <artifactId>codegenxml</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>com.speedment.common</groupId>
+                            <artifactId>codegen</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+
+                <dependency>
+                    <groupId>com.speedment.common</groupId>
+                    <artifactId>injector</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>com.speedment.common</groupId>
+                            <artifactId>logger</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+
+                <dependency>
+                    <groupId>com.speedment.common</groupId>
+                    <artifactId>rest</artifactId>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>com.speedment.common</groupId>
+                            <artifactId>json</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+
+                <dependency>
+                    <groupId>com.speedment.common</groupId>
+                    <artifactId>lazy</artifactId>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 </project>

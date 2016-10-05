@@ -47,13 +47,40 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            com.speedment.runtime.config.*
+                            com.speedment.runtime.config,
+                            com.speedment.runtime.config.exception,
+                            com.speedment.runtime.config.identifier,
+                            com.speedment.runtime.config.identifier.trait,
+                            com.speedment.runtime.config.mutator,
+                            com.speedment.runtime.config.mutator.trait,
+                            com.speedment.runtime.config.parameter,
+                            com.speedment.runtime.config.trait,
+                            com.speedment.runtime.config.util
                         </Export-Package>
                     </instructions>
                 </configuration>
             </plugin>                            
         </plugins>
     </build>
+    
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin><!-- Generate sources jar -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                    
+                    <plugin><!-- Generate javadoc jar -->
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     
     <dependencies>
         <!-- Common Dependencies -->
