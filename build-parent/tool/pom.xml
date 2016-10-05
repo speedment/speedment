@@ -31,22 +31,13 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>tool</artifactId>
-    <packaging>bundle</packaging>
+    <packaging>pom</packaging>
     
     <name>Speedment - Build - Tool</name>
     <description>
         The main Speedment bundle that contains all the tool dependencies
         that should be exposed to the end user.
     </description>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
     
     <dependencies>
         <!-- Common dependencies -->

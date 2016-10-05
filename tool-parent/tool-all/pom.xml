@@ -100,6 +100,21 @@
                     </exclusion>
 
                     <exclusion>
+                        <groupId>com.speedment.runtime</groupId>
+                        <artifactId>runtime-typemapper</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.speedment.runtime</groupId>
+                        <artifactId>runtime-core</artifactId>
+                    </exclusion>
+
+                    <exclusion>
+                        <groupId>com.speedment.generator</groupId>
+                        <artifactId>generator-translator</artifactId>
+                    </exclusion>
+
+                    <exclusion>
                         <groupId>com.speedment.tool</groupId>
                         <artifactId>tool-config</artifactId>
                     </exclusion>
