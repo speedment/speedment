@@ -49,16 +49,17 @@
  
     <dependencies>
         <!-- LICENSE INFORMATION
-        speedment:${speedment.version}
+        speedment:runtime:${speedment.version}
         Apache 2 License
         http://www.apache.org/licenses/LICENSE-2.0.txt
-        2016-01-21
+        2016-10-06
         emifor
         -->
         <dependency>
             <groupId>com.speedment</groupId>
             <artifactId>runtime</artifactId>
             <version>\${speedment.version}</version>
+            <type>pom</type>
         </dependency>
         
         <!--
