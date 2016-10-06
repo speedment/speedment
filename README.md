@@ -92,11 +92,11 @@ SELECT * FROM `Hare`
 ###### Easy persistence
 Entities can easily be persisted in a database.
 ```java
-Hare h = new HareImpl();
-h.setName("Harry");
-h.setColor("Gray");
-h.setAge(3);
-h = hares.persist(harry); // Auto-Increment-fields have been set by the database
+Hare harry = new HareImpl();
+harry.setName("Harry");
+harry.setColor("Gray");
+harry.setAge(3);
+Hare persisted = hares.persist(harry); // Auto-Increment-fields have been set by the database
 ```
 
 ###### Entities are linked
