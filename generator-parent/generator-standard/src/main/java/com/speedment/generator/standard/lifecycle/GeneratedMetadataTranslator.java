@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
-import static com.speedment.common.codegen.internal.util.Formatting.indent;
+import static com.speedment.common.codegen.util.Formatting.indent;
 import com.speedment.common.codegen.model.Value;
 import com.speedment.common.json.Json;
 import static java.util.stream.Collectors.toList;

@@ -35,8 +35,8 @@ import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import static com.speedment.common.codegen.internal.util.Formatting.shortName;
-import static com.speedment.common.codegen.internal.util.Formatting.ucfirst;
+import static com.speedment.common.codegen.util.Formatting.shortName;
+import static com.speedment.common.codegen.util.Formatting.ucfirst;
 import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
 import static com.speedment.runtime.config.Project.DEFAULT_PACKAGE_NAME;

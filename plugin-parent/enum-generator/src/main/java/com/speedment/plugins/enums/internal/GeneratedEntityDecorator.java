@@ -32,8 +32,8 @@ import com.speedment.runtime.config.Table;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import static com.speedment.common.codegen.internal.util.Formatting.indent;
-import static com.speedment.common.codegen.internal.util.Formatting.shortName;
+import static com.speedment.common.codegen.util.Formatting.indent;
+import static com.speedment.common.codegen.util.Formatting.shortName;
 import com.speedment.common.codegen.model.Value;
 import static java.util.Objects.requireNonNull;
 

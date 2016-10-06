@@ -20,7 +20,7 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasJavadoc;
 
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
+import static com.speedment.common.codegen.util.Formatting.nl;
 
 /**
  * A trait with the functionality to render models with the trait 

@@ -36,8 +36,8 @@ import java.util.stream.Collectors;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
-import static com.speedment.common.codegen.internal.util.Formatting.tab;
+import static com.speedment.common.codegen.util.Formatting.nl;
+import static com.speedment.common.codegen.util.Formatting.tab;
 import static java.util.Objects.requireNonNull;
 
 /**

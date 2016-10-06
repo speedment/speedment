@@ -22,12 +22,12 @@ import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.internal.java.view.trait.HasClassesView;
 import com.speedment.common.codegen.internal.java.view.trait.HasImportsView;
 import com.speedment.common.codegen.internal.java.view.trait.HasJavadocView;
-import com.speedment.common.codegen.internal.util.Formatting;
+import com.speedment.common.codegen.util.Formatting;
 import com.speedment.common.codegen.model.File;
 
 import java.util.Optional;
 
-import static com.speedment.common.codegen.internal.util.Formatting.*;
+import static com.speedment.common.codegen.util.Formatting.*;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 
 /**

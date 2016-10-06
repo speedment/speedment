@@ -19,7 +19,7 @@ package com.speedment.common.codegen.internal.java.view;
 import com.speedment.common.codegen.DependencyManager;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegen.internal.util.Formatting;
+import com.speedment.common.codegen.util.Formatting;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -27,7 +27,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
-import static com.speedment.common.codegen.internal.util.Formatting.shortName;
+import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 
 /**

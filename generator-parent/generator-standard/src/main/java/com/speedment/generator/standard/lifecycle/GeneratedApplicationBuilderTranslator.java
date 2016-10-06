@@ -46,8 +46,8 @@ import java.util.stream.Collectors;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
-import static com.speedment.common.codegen.internal.util.Formatting.shortName;
+import static com.speedment.common.codegen.util.Formatting.nl;
+import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.generator.standard.lifecycle.GeneratedMetadataTranslator.METADATA;
 import static java.util.stream.Collectors.toSet;
 import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;

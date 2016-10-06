@@ -33,7 +33,7 @@ import com.speedment.common.codegen.model.ClassOrInterface;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.speedment.common.codegen.internal.util.Formatting.*;
+import static com.speedment.common.codegen.util.Formatting.*;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import static java.util.stream.Collectors.joining;

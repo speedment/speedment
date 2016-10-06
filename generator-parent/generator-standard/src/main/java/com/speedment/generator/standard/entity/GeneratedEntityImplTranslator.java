@@ -41,7 +41,7 @@ import java.util.Optional;
 import java.util.StringJoiner;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.internal.util.Formatting.block;
+import static com.speedment.common.codegen.util.Formatting.block;
 import static com.speedment.generator.standard.entity.GeneratedEntityTranslator.getterReturnType;
 import static com.speedment.generator.standard.internal.util.ColumnUtil.optionalGetterName;
 import static com.speedment.generator.standard.internal.util.ColumnUtil.usesOptional;

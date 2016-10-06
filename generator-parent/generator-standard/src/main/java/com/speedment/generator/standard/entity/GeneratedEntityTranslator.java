@@ -53,7 +53,7 @@ import java.util.OptionalLong;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
-import static com.speedment.common.codegen.internal.util.Formatting.shortName;
+import static com.speedment.common.codegen.util.Formatting.shortName;
 import com.speedment.common.codegen.model.Value;
 import static com.speedment.generator.standard.internal.util.ColumnUtil.usesOptional;
 import com.speedment.generator.translator.component.TypeMapperComponent;

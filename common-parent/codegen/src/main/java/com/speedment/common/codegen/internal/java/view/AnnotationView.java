@@ -25,7 +25,7 @@ import com.speedment.common.codegen.model.Annotation;
 
 import java.util.Optional;
 
-import static com.speedment.common.codegen.internal.util.Formatting.*;
+import static com.speedment.common.codegen.util.Formatting.*;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import static java.util.stream.Collectors.joining;
 

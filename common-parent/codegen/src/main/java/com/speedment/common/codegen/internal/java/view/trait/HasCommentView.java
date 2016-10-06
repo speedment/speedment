@@ -22,7 +22,7 @@ import com.speedment.common.codegen.model.trait.HasComment;
 
 import java.util.stream.Stream;
 
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
+import static com.speedment.common.codegen.util.Formatting.nl;
 import static java.util.stream.Collectors.joining;
 
 /**

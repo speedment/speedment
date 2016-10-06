@@ -22,7 +22,7 @@ import com.speedment.common.codegen.model.trait.HasInitalizers;
 
 import java.util.stream.Collectors;
 
-import static com.speedment.common.codegen.internal.util.Formatting.dnl;
+import static com.speedment.common.codegen.util.Formatting.dnl;
 
 /**
  * A trait with the functionality to render models with the trait 

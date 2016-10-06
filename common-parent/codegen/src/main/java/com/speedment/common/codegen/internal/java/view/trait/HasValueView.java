@@ -20,7 +20,7 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasValue;
 
-import static com.speedment.common.codegen.internal.util.Formatting.ifelse;
+import static com.speedment.common.codegen.util.Formatting.ifelse;
 
 /**
  * A trait with the functionality to render models with the trait 

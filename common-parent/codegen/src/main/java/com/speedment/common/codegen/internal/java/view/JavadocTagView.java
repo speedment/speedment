@@ -22,7 +22,7 @@ import com.speedment.common.codegen.model.JavadocTag;
 
 import java.util.Optional;
 
-import static com.speedment.common.codegen.internal.util.Formatting.ifelse;
+import static com.speedment.common.codegen.util.Formatting.ifelse;
 import static java.util.Objects.requireNonNull;
 
 /**

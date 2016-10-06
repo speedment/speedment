@@ -33,7 +33,7 @@ import java.util.Optional;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
-import static com.speedment.common.codegen.internal.util.Formatting.*;
+import static com.speedment.common.codegen.util.Formatting.*;
 import static java.util.Objects.requireNonNull;
 
 /**

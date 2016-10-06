@@ -19,7 +19,7 @@ package com.speedment.common.codegen.model.trait;
 import java.util.Collections;
 import java.util.List;
 
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
+import static com.speedment.common.codegen.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
 
 /**

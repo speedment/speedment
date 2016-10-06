@@ -20,8 +20,8 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.Enum;
 
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
-import static com.speedment.common.codegen.internal.util.Formatting.dnl;
-import static com.speedment.common.codegen.internal.util.Formatting.nl;
+import static com.speedment.common.codegen.util.Formatting.dnl;
+import static com.speedment.common.codegen.util.Formatting.nl;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import static java.util.stream.Collectors.joining;
 

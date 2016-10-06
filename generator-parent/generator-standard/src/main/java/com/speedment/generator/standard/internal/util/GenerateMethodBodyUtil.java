@@ -35,7 +35,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.internal.util.Formatting.*;
+import static com.speedment.common.codegen.util.Formatting.*;
 import static com.speedment.generator.standard.manager.GeneratedManagerImplTranslator.ENTITY_CREATE_METHOD_NAME;
 import static java.util.stream.Collectors.joining;
 

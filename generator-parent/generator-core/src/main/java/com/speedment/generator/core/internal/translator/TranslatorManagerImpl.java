@@ -19,7 +19,7 @@ package com.speedment.generator.core.internal.translator;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.internal.java.JavaGenerator;
-import com.speedment.common.codegen.internal.util.Formatting;
+import com.speedment.common.codegen.util.Formatting;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;

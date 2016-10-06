@@ -16,6 +16,7 @@
  */
 package com.speedment.common.codegen.internal.util;
 
+import com.speedment.common.codegen.util.Formatting;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;

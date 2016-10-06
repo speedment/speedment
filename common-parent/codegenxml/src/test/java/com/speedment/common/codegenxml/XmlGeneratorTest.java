@@ -16,7 +16,7 @@
  */
 package com.speedment.common.codegenxml;
 
-import com.speedment.common.codegen.internal.util.Formatting;
+import com.speedment.common.codegen.util.Formatting;
 import org.junit.Test;
 
 import static com.speedment.common.codegenxml.Elements.*;
