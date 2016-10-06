@@ -112,9 +112,9 @@ final HareApplication app = new HareApplicationBuilder()
     .withPassword("myPwd729")
     .build();
     
-final Manager<Hare> hares = app.managerOf(Hare.class);
+final Manager<Hare>   hares   = app.managerOf(Hare.class);
 final Manager<Carrot> carrots = app.managerOf(Carrot.class);
-final Manager<Human> humans = app.managerOf(Human.class);
+final Manager<Human>  humans  = app.managerOf(Human.class);
 final Manager<Friend> friends = app.managerOf(Friend.class);
 ```
 
