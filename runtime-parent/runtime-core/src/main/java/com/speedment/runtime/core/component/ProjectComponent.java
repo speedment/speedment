@@ -20,8 +20,8 @@ import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.config.Project;
 
 /**
- * This Component interface is used for holding the current {@link Project} that is being
- * used by Speedment.
+ * This Component interface is used for holding the current {@link Project} that 
+ * is being used by Speedment.
  *
  * @author  Emil Forslund
  * @since   2.0.0

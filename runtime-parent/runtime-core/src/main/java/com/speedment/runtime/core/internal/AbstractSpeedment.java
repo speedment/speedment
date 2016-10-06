@@ -39,22 +39,22 @@ import static java.util.Objects.requireNonNull;
 /**
  * An abstract base implementation of the {@link Speedment} interface.
  *
- * @author Emil Forslund
- * @since 3.0.0
+ * @author  Emil Forslund
+ * @since   3.0.0
  */
 public abstract class AbstractSpeedment implements Speedment {
 
     public static InjectBundle include() {
-        return InjectBundle.of(InfoComponentImpl.class,
+        return InjectBundle.of(
+            InfoComponentImpl.class,
             ConnectionPoolComponentImpl.class,
             DbmsHandlerComponentImpl.class,
             EntityManagerImpl.class,
             ManagerComponentImpl.class,
-            SqlStreamSupplierComponentImpl.class,
             PasswordComponentImpl.class,
-            PrimaryKeyFactoryComponentImpl.class,
             ProjectComponentImpl.class,
             ResultSetMapperComponentImpl.class,
+            SqlStreamSupplierComponentImpl.class,
             SqlPersistanceComponentImpl.class,
             StandardDbmsTypes.class
         );
