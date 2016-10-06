@@ -21,11 +21,7 @@
  */
 package com.speedment.common.logger.internal;
 
-import com.speedment.common.logger.Level;
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerEvent;
-import com.speedment.common.logger.LoggerEventListener;
-import com.speedment.common.logger.LoggerFormatter;
+import com.speedment.common.logger.*;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

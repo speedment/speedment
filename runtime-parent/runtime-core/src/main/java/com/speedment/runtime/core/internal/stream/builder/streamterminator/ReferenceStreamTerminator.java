@@ -22,13 +22,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.Spliterator;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.BinaryOperator;
-import java.util.function.Consumer;
-import java.util.function.IntFunction;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Collector;
 
 import static java.util.Objects.requireNonNull;

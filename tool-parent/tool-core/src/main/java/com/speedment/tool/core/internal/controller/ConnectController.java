@@ -18,15 +18,15 @@ package com.speedment.tool.core.internal.controller;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.core.component.EventComponent;
+import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
-import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.internal.util.Settings;
-import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
-import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.config.DbmsProperty;
+import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.event.UIEvent;
+import com.speedment.tool.core.exception.SpeedmentToolException;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.internal.util.InjectionLoader;
 import de.jensd.fx.glyphs.GlyphsDude;
@@ -47,8 +47,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
+import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import static com.speedment.tool.core.component.UserInterfaceComponent.ReuseStage.USE_EXISTING_STAGE;
-import com.speedment.tool.core.exception.SpeedmentToolException;
 import static com.speedment.tool.core.internal.controller.ToolbarController.ICON_SIZE;
 import static java.util.stream.Collectors.toCollection;
 import static javafx.beans.binding.Bindings.createBooleanBinding;

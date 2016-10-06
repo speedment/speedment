@@ -23,6 +23,7 @@ import com.speedment.runtime.field.method.LongSetter;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.field.trait.HasLongValue;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import javax.annotation.Generated;
 
 /**

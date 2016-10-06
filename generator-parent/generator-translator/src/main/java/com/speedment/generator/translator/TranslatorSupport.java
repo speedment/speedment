@@ -18,12 +18,9 @@ package com.speedment.generator.translator;
 
 import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.injector.Injector;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
+import com.speedment.generator.translator.component.TypeMapperComponent;
+import com.speedment.generator.translator.namer.JavaLanguageNamer;
+import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
@@ -37,8 +34,6 @@ import java.util.function.Supplier;
 
 import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.common.codegen.util.Formatting.ucfirst;
-import com.speedment.generator.translator.component.TypeMapperComponent;
-import com.speedment.generator.translator.namer.JavaLanguageNamer;
 import static com.speedment.runtime.config.Project.DEFAULT_PACKAGE_NAME;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.JAVA_NAME;
 import static java.util.Objects.requireNonNull;

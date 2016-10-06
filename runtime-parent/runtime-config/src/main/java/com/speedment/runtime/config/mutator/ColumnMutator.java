@@ -22,6 +22,7 @@ import com.speedment.runtime.config.mutator.trait.HasAliasMutator;
 import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 import com.speedment.runtime.config.mutator.trait.HasOrdinalPositionMutator;
+
 import static com.speedment.runtime.config.Column.*;
 import static com.speedment.runtime.config.trait.HasNullable.NULLABLE;
 

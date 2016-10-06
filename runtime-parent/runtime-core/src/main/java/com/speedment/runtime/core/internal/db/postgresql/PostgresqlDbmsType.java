@@ -19,12 +19,8 @@ package com.speedment.runtime.core.internal.db.postgresql;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.core.db.ConnectionUrlGenerator;
-import com.speedment.runtime.core.db.DatabaseNamingConvention;
-import com.speedment.runtime.core.db.DbmsMetadataHandler;
-import com.speedment.runtime.core.db.DbmsOperationHandler;
+import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
-import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.internal.db.AbstractDatabaseNamingConvention;
 import com.speedment.runtime.core.internal.db.AbstractDbmsType;
 import com.speedment.runtime.core.internal.manager.sql.PostgresSpeedmentPredicateView;
@@ -35,16 +31,9 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.InjectBundle.of;
+import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
-import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
-import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
-import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
-import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
-import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
-import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
-import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
-import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
 
 /**
  * Created by fdirlikl on 11/13/2015.

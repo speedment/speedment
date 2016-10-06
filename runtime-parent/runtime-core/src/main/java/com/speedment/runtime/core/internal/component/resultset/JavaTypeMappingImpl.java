@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.core.internal.component.resultset;
 
-import com.speedment.runtime.core.component.resultset.ResultSetMapping;
 import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.core.component.resultset.ResultSetMapping;
 
 import java.util.function.Function;
 

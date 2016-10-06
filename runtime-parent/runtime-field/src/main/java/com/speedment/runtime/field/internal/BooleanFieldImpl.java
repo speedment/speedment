@@ -21,7 +21,9 @@ import com.speedment.runtime.field.BooleanField;
 import com.speedment.runtime.field.method.BooleanGetter;
 import com.speedment.runtime.field.method.BooleanSetter;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import javax.annotation.Generated;
+
 import static java.util.Objects.requireNonNull;
 
 /**

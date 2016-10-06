@@ -20,7 +20,6 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.value.NumberValue;
 
-
 import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;

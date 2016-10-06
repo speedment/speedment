@@ -16,31 +16,21 @@
  */
 package com.speedment.generator.standard.internal;
 
-import static com.speedment.common.injector.State.INITIALIZED;
-import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
-import static com.speedment.generator.standard.StandardTranslatorKey.*;
 import com.speedment.generator.standard.entity.EntityImplTranslator;
 import com.speedment.generator.standard.entity.EntityTranslator;
 import com.speedment.generator.standard.entity.GeneratedEntityImplTranslator;
 import com.speedment.generator.standard.entity.GeneratedEntityTranslator;
-import com.speedment.generator.standard.lifecycle.ApplicationBuilderTranslator;
-import com.speedment.generator.standard.lifecycle.ApplicationImplTranslator;
-import com.speedment.generator.standard.lifecycle.ApplicationTranslator;
-import com.speedment.generator.standard.lifecycle.GeneratedApplicationBuilderTranslator;
-import com.speedment.generator.standard.lifecycle.GeneratedApplicationImplTranslator;
-import com.speedment.generator.standard.lifecycle.GeneratedApplicationTranslator;
-import com.speedment.generator.standard.lifecycle.GeneratedMetadataTranslator;
-import com.speedment.generator.standard.manager.GeneratedManagerImplTranslator;
-import com.speedment.generator.standard.manager.GeneratedManagerTranslator;
-import com.speedment.generator.standard.manager.GeneratedSqlAdapterTranslator;
-import com.speedment.generator.standard.manager.ManagerImplTranslator;
-import com.speedment.generator.standard.manager.ManagerTranslator;
-import com.speedment.generator.standard.manager.SqlAdapterTranslator;
+import com.speedment.generator.standard.lifecycle.*;
+import com.speedment.generator.standard.manager.*;
 import com.speedment.generator.translator.component.CodeGenerationComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
+
+import static com.speedment.common.injector.State.INITIALIZED;
+import static com.speedment.common.injector.State.RESOLVED;
+import static com.speedment.generator.standard.StandardTranslatorKey.*;
 
 /**
  *

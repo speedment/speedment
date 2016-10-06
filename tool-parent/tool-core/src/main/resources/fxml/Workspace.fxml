@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.TitledPane?>
-
 <TitledPane id="workspace"
             fx:id="workspace"
             collapsible="false"

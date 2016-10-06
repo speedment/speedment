@@ -18,6 +18,7 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Table;
+import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.PrimaryKeyColumnPropertyMutator;
 import com.speedment.tool.config.trait.HasColumnProperty;
@@ -28,7 +29,6 @@ import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
 import java.util.List;
 
 import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
-import com.speedment.tool.config.component.DocumentPropertyComponent;
 
 /**
  *

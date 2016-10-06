@@ -18,17 +18,19 @@ package com.speedment.runtime.core.internal.component.sql;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.core.component.sql.SqlPersistenceComponent;
-import com.speedment.runtime.core.exception.SpeedmentException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.resultset.ResultSetMapperComponent;
+import com.speedment.runtime.core.component.sql.SqlPersistenceComponent;
+import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Persister;
 import com.speedment.runtime.core.manager.Remover;
 import com.speedment.runtime.core.manager.Updater;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import static java.util.Objects.requireNonNull;
 
 /**

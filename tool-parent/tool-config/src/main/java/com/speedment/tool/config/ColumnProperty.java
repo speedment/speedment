@@ -18,14 +18,10 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
+import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.ColumnPropertyMutator;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
-import com.speedment.tool.config.trait.HasAliasProperty;
-import com.speedment.tool.config.trait.HasEnabledProperty;
-import com.speedment.tool.config.trait.HasExpandedProperty;
-import com.speedment.tool.config.trait.HasNameProperty;
-import com.speedment.tool.config.trait.HasNullableProperty;
-import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
+import com.speedment.tool.config.trait.*;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
@@ -34,7 +30,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
-import com.speedment.tool.config.component.DocumentPropertyComponent;
 import static javafx.beans.binding.Bindings.createObjectBinding;
 
 /**

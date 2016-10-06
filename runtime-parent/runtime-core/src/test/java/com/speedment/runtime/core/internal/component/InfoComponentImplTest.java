@@ -21,7 +21,6 @@
  */
 package com.speedment.runtime.core.internal.component;
 
-import com.speedment.runtime.core.internal.component.InfoComponentImpl;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.InfoComponent;

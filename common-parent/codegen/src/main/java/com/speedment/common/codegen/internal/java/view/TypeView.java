@@ -27,8 +27,8 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
-import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.common.codegen.util.Formatting.shortName;
 
 /**
  * Transforms from a {@link Type} to java code.

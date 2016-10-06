@@ -16,28 +16,10 @@
  */
 package com.speedment.plugins.json;
 
-import com.speedment.runtime.field.BooleanField;
-import com.speedment.runtime.field.ByteField;
-import com.speedment.runtime.field.CharField;
-import com.speedment.runtime.field.DoubleField;
-import com.speedment.runtime.field.Field;
-import com.speedment.runtime.field.FloatField;
-import com.speedment.runtime.field.IntField;
-import com.speedment.runtime.field.LongField;
-import com.speedment.runtime.field.ReferenceField;
-import com.speedment.runtime.field.ShortField;
-import com.speedment.runtime.field.method.BooleanGetter;
-import com.speedment.runtime.field.method.ByteGetter;
-import com.speedment.runtime.field.method.CharGetter;
-import com.speedment.runtime.field.method.DoubleGetter;
-import com.speedment.runtime.field.method.FloatGetter;
-import com.speedment.runtime.field.method.IntGetter;
-import com.speedment.runtime.field.method.LongGetter;
-import com.speedment.runtime.field.method.ReferenceGetter;
-import com.speedment.runtime.field.method.ShortGetter;
-import com.speedment.runtime.field.trait.HasFinder;
 import com.speedment.runtime.core.manager.Manager;
-import com.speedment.runtime.field.method.FindFrom;
+import com.speedment.runtime.field.*;
+import com.speedment.runtime.field.method.*;
+import com.speedment.runtime.field.trait.HasFinder;
 
 import java.util.function.Function;
 import java.util.stream.Stream;

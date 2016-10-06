@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.internal.util.sql;
 
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.PrimaryKeyColumn;
@@ -25,10 +24,13 @@ import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
+
 import java.util.Collections;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
+
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
 /**

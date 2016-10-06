@@ -16,11 +16,8 @@
  */
 package com.speedment.runtime.core.internal.manager.sql;
 
-import com.speedment.runtime.typemapper.TypeMapper;
-import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
-import com.speedment.runtime.field.Field;
-import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.DoublePipeline;
@@ -31,19 +28,22 @@ import com.speedment.runtime.core.internal.stream.builder.streamterminator.Strea
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
+import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.LongSupplier;
 import java.util.function.Predicate;
 
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.runtime.core.stream.action.Property.SIZE;
 import static com.speedment.runtime.core.stream.action.Verb.PRESERVE;
-import static java.util.stream.Collectors.toList;
-import java.util.function.Function;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 /**
  *

@@ -18,6 +18,7 @@ package com.speedment.runtime.core.db;
 
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.predicate.FieldPredicate;
+
 import java.util.function.Function;
 
 /**

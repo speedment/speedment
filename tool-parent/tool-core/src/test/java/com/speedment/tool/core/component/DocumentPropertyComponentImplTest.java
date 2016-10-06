@@ -16,29 +16,18 @@
  */
 package com.speedment.tool.core.component;
 
-import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.generator.core.GeneratorBundle;
-import com.speedment.runtime.core.ApplicationBuilder;
-import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.mutator.DbmsMutator;
+import com.speedment.runtime.core.ApplicationBuilder;
+import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.internal.util.ImmutableListUtil;
-import com.speedment.tool.core.ToolBundle;
-import com.speedment.tool.config.AbstractChildDocumentProperty;
-import com.speedment.tool.config.ColumnProperty;
-import com.speedment.tool.config.DbmsProperty;
-import com.speedment.tool.config.DocumentProperty;
-import com.speedment.tool.config.ForeignKeyColumnProperty;
-import com.speedment.tool.config.ForeignKeyProperty;
-import com.speedment.tool.config.IndexColumnProperty;
-import com.speedment.tool.config.IndexProperty;
-import com.speedment.tool.config.PrimaryKeyColumnProperty;
-import com.speedment.tool.config.ProjectProperty;
-import com.speedment.tool.config.SchemaProperty;
-import com.speedment.tool.config.TableProperty;
+import com.speedment.tool.config.*;
+import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.internal.component.DocumentPropertyComponentImpl;
+import com.speedment.tool.core.ToolBundle;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

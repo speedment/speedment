@@ -17,12 +17,8 @@
 package com.speedment.plugins.spring.internal;
 
 import com.speedment.common.codegen.constant.SimpleType;
-import com.speedment.common.codegen.model.AnnotationUsage;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Method;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
@@ -38,9 +34,6 @@ import java.lang.reflect.Type;
 import java.util.stream.Collectors;
 
 import static com.speedment.common.codegen.constant.DefaultType.list;
-import com.speedment.common.codegen.model.Value;
-import com.speedment.common.codegen.model.value.ReferenceValue;
-import com.speedment.common.codegen.model.value.TextValue;
 
 /**
  *

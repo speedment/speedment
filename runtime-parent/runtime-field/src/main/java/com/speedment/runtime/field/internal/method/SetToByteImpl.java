@@ -18,7 +18,9 @@ package com.speedment.runtime.field.internal.method;
 
 import com.speedment.runtime.field.method.SetToByte;
 import com.speedment.runtime.field.trait.HasByteValue;
+
 import javax.annotation.Generated;
+
 import static java.util.Objects.requireNonNull;
 
 /**

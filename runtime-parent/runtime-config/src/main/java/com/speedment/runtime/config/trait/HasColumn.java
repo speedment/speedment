@@ -20,10 +20,11 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.util.TraitUtil.AbstractTraitView;
-import static com.speedment.runtime.config.util.TraitUtil.viewOf;
 
 import java.util.Map;
 import java.util.Optional;
+
+import static com.speedment.runtime.config.util.TraitUtil.viewOf;
 
 /**
  * Trait for {@link Document} implementations that reference another 

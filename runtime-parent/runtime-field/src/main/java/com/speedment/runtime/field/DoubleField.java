@@ -23,6 +23,7 @@ import com.speedment.runtime.field.method.DoubleSetter;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.field.trait.HasDoubleValue;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import javax.annotation.Generated;
 
 /**

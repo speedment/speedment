@@ -17,10 +17,10 @@
 package com.speedment.runtime.field;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.field.internal.ComparableFieldImpl;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.trait.HasComparableOperators;
-import com.speedment.runtime.field.internal.ComparableFieldImpl;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 /**

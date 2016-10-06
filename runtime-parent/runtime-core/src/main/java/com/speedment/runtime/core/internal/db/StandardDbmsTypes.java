@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.core.internal.db;
 
-import com.speedment.runtime.core.internal.db.postgresql.PostgresqlDbmsType;
-import com.speedment.runtime.core.internal.db.mysql.MySqlDbmsType;
-import com.speedment.runtime.core.internal.db.mariadb.MariaDbDbmsType;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.core.db.DbmsType;
+import com.speedment.runtime.core.internal.db.mariadb.MariaDbDbmsType;
+import com.speedment.runtime.core.internal.db.mysql.MySqlDbmsType;
+import com.speedment.runtime.core.internal.db.postgresql.PostgresqlDbmsType;
 
 import java.util.stream.Stream;
 

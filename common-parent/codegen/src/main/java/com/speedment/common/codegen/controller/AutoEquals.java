@@ -16,16 +16,8 @@
  */
 package com.speedment.common.codegen.controller;
 
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Javadoc;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.trait.HasFields;
-import com.speedment.common.codegen.model.trait.HasImports;
-import com.speedment.common.codegen.model.trait.HasMethods;
-import com.speedment.common.codegen.model.trait.HasName;
-import com.speedment.common.codegen.model.trait.HasSupertype;
+import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.model.trait.*;
 
 import java.lang.reflect.Type;
 import java.util.Objects;

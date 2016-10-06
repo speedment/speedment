@@ -18,10 +18,10 @@ package com.speedment.runtime.core;
 
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.runtime.core.internal.AbstractSpeedment;
+import com.speedment.runtime.core.internal.db.StandardDbmsTypes;
 import com.speedment.runtime.core.internal.db.mariadb.MariaDbDbmsType;
 import com.speedment.runtime.core.internal.db.mysql.MySqlDbmsType;
 import com.speedment.runtime.core.internal.db.postgresql.PostgresqlDbmsType;
-import com.speedment.runtime.core.internal.db.StandardDbmsTypes;
 
 import java.util.stream.Stream;
 

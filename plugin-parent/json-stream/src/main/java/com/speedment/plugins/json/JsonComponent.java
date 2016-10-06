@@ -17,8 +17,8 @@
 package com.speedment.plugins.json;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.field.Field;
 import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.field.Field;
 
 /**
  *

@@ -20,11 +20,7 @@ import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.Initializer;
 import com.speedment.common.codegen.model.modifier.Modifier;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.Objects.requireNonNull;
 

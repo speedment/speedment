@@ -23,6 +23,7 @@ import com.speedment.runtime.field.method.ByteSetter;
 import com.speedment.runtime.field.trait.HasByteValue;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import javax.annotation.Generated;
 
 /**

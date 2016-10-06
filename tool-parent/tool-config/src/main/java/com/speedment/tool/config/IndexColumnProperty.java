@@ -18,18 +18,14 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.config.Index;
 import com.speedment.runtime.config.IndexColumn;
+import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.IndexColumnPropertyMutator;
-import com.speedment.tool.config.trait.HasColumnProperty;
-import com.speedment.tool.config.trait.HasExpandedProperty;
-import com.speedment.tool.config.trait.HasNameProperty;
-import com.speedment.tool.config.trait.HasOrderTypeProperty;
-import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
+import com.speedment.tool.config.trait.*;
 
 import java.util.List;
 
 import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
-import com.speedment.tool.config.component.DocumentPropertyComponent;
 
 /**
  *

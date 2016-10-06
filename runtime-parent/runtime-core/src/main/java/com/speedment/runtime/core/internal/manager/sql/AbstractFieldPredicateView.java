@@ -16,19 +16,19 @@
  */
 package com.speedment.runtime.core.internal.manager.sql;
 
+import com.speedment.runtime.core.db.FieldPredicateView;
+import com.speedment.runtime.core.db.SqlPredicateFragment;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.predicate.FieldPredicate;
-import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
-import com.speedment.runtime.core.db.SqlPredicateFragment;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.function.Function;
 
 import static com.speedment.runtime.field.internal.predicate.PredicateUtil.*;
 import static java.util.Objects.requireNonNull;
-import java.util.function.Function;
 import static java.util.stream.Collectors.joining;
 
 /**

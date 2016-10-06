@@ -24,8 +24,8 @@ import com.speedment.runtime.config.internal.ForeignKeyColumnImpl;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
 import static com.speedment.common.invariant.NullUtil.requireKeys;
+import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
 
 /**
  *

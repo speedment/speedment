@@ -18,9 +18,9 @@ package com.speedment.runtime.core.internal.component;
 
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
+import com.speedment.runtime.config.Project;
 import com.speedment.runtime.core.ApplicationMetadata;
 import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.config.Project;
 
 import static com.speedment.common.injector.State.INITIALIZED;
 import static java.util.Objects.requireNonNull;

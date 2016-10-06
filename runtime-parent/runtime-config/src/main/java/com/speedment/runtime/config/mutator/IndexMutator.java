@@ -19,9 +19,10 @@ package com.speedment.runtime.config.mutator;
 
 import com.speedment.runtime.config.Index;
 import com.speedment.runtime.config.IndexColumn;
+import com.speedment.runtime.config.internal.IndexColumnImpl;
 import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
-import com.speedment.runtime.config.internal.IndexColumnImpl;
+
 import static com.speedment.runtime.config.Index.INDEX_COLUMNS;
 import static com.speedment.runtime.config.Index.UNIQUE;
 import static com.speedment.runtime.config.util.DocumentUtil.newDocument;

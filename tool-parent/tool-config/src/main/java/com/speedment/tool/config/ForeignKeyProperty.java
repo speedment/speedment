@@ -18,6 +18,7 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.Table;
+import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.ForeignKeyPropertyMutator;
 import com.speedment.tool.config.trait.HasEnabledProperty;
@@ -29,7 +30,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
-import com.speedment.tool.config.component.DocumentPropertyComponent;
 
 /**
  *

@@ -18,18 +18,10 @@ package com.speedment.runtime.core.db;
 
 
 import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.field.Field;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
+import com.speedment.runtime.field.Field;
 
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.NClob;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
-import java.sql.SQLXML;
-import java.sql.Struct;
+import java.sql.*;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;

@@ -16,28 +16,14 @@
  */
 package com.speedment.runtime.core.internal.util.document;
 
-import com.speedment.runtime.config.util.DocumentUtil;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.ForeignKey;
-import com.speedment.runtime.config.ForeignKeyColumn;
-import com.speedment.runtime.config.Index;
-import com.speedment.runtime.config.IndexColumn;
-import com.speedment.runtime.config.PrimaryKeyColumn;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.util.DocumentUtil;
 import com.speedment.runtime.core.util.TestUtil;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;

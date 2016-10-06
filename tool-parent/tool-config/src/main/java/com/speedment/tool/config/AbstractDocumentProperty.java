@@ -16,49 +16,28 @@
  */
 package com.speedment.tool.config;
 
-import com.speedment.common.mapstream.MapStream;
-import com.speedment.runtime.config.Document;
 import com.speedment.common.function.FloatSupplier;
 import com.speedment.common.function.OptionalBoolean;
+import com.speedment.common.mapstream.MapStream;
+import com.speedment.runtime.config.Document;
 import com.speedment.runtime.core.util.OptionalUtil;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
+import com.speedment.tool.config.util.NumericProperty;
+import com.speedment.tool.config.util.SimpleNumericProperty;
 import javafx.beans.InvalidationListener;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.FloatProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.OptionalDouble;
-import java.util.OptionalInt;
-import java.util.OptionalLong;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.BiFunction;
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-import java.util.function.Function;
-import java.util.function.IntSupplier;
-import java.util.function.LongSupplier;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
-import com.speedment.tool.config.util.NumericProperty;
-import com.speedment.tool.config.util.SimpleNumericProperty;
 import static java.util.Collections.newSetFromMap;
 import static javafx.collections.FXCollections.observableList;
 import static javafx.collections.FXCollections.observableMap;

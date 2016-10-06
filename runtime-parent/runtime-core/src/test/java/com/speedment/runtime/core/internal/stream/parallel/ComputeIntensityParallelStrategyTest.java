@@ -22,12 +22,7 @@
 package com.speedment.runtime.core.internal.stream.parallel;
 
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.TestName;
 
 import java.util.Collection;

@@ -19,12 +19,13 @@ package com.speedment.generator.translator.internal.component;
 import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.generator.translator.component.CodeGenerationComponent;
+import com.speedment.common.mapstream.MapStream;
 import com.speedment.generator.translator.JavaClassTranslator;
 import com.speedment.generator.translator.Translator;
 import com.speedment.generator.translator.TranslatorConstructor;
 import com.speedment.generator.translator.TranslatorDecorator;
-import com.speedment.common.mapstream.MapStream;
+import com.speedment.generator.translator.component.CodeGenerationComponent;
+import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 
@@ -36,7 +37,6 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
 import static java.util.Objects.requireNonNull;
 
 public final class CodeGenerationComponentImpl implements CodeGenerationComponent {

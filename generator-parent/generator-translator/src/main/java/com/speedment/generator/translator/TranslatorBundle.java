@@ -21,6 +21,7 @@ import com.speedment.common.injector.InjectBundle;
 import com.speedment.generator.translator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.generator.translator.internal.component.TypeMapperComponentImpl;
 import com.speedment.generator.translator.internal.namer.JavaLanguageNamerImpl;
+
 import java.util.stream.Stream;
 
 /**

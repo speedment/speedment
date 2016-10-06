@@ -17,11 +17,11 @@
 package com.speedment.runtime.core.internal;
 
 import com.speedment.common.json.Json;
-import com.speedment.runtime.core.ApplicationMetadata;
 import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.internal.ProjectImpl;
+import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.util.DocumentTranscoder;
+import com.speedment.runtime.core.ApplicationMetadata;
 
 import java.util.Map;
 import java.util.Optional;

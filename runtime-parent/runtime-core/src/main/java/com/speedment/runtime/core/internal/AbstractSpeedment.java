@@ -23,24 +23,18 @@ import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.internal.component.ConnectionPoolComponentImpl;
-import com.speedment.runtime.core.internal.component.DbmsHandlerComponentImpl;
-import com.speedment.runtime.core.internal.component.EntityManagerImpl;
-import com.speedment.runtime.core.internal.component.InfoComponentImpl;
-import com.speedment.runtime.core.internal.component.ManagerComponentImpl;
-import com.speedment.runtime.core.internal.component.sql.SqlStreamSupplierComponentImpl;
-import com.speedment.runtime.core.internal.component.PasswordComponentImpl;
-import com.speedment.runtime.core.internal.component.PrimaryKeyFactoryComponentImpl;
-import com.speedment.runtime.core.internal.component.ProjectComponentImpl;
+import com.speedment.runtime.core.internal.component.*;
 import com.speedment.runtime.core.internal.component.resultset.ResultSetMapperComponentImpl;
 import com.speedment.runtime.core.internal.component.sql.SqlPersistanceComponentImpl;
+import com.speedment.runtime.core.internal.component.sql.SqlStreamSupplierComponentImpl;
 import com.speedment.runtime.core.internal.db.StandardDbmsTypes;
 import com.speedment.runtime.core.internal.manager.ManagerConfiguratorImpl;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.manager.ManagerConfigurator;
-import static java.util.Objects.requireNonNull;
 
 import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * An abstract base implementation of the {@link Speedment} interface.

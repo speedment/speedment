@@ -16,11 +16,7 @@
  */
 package com.speedment.common.codegen.internal.model;
 
-import com.speedment.common.codegen.model.AnnotationUsage;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.InterfaceField;
-import com.speedment.common.codegen.model.Javadoc;
-import com.speedment.common.codegen.model.Value;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.modifier.Modifier;
 
 import java.lang.reflect.Type;

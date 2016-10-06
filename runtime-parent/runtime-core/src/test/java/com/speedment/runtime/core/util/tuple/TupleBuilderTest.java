@@ -24,11 +24,7 @@ package com.speedment.runtime.core.util.tuple;
 import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleBuilder;
 import com.speedment.common.tuple.Tuples;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;

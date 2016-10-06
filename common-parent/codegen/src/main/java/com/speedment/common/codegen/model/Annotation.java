@@ -18,12 +18,7 @@ package com.speedment.common.codegen.model;
 
 import com.speedment.common.codegen.internal.model.AnnotationImpl;
 import com.speedment.common.codegen.model.modifier.AnnotationModifier;
-import com.speedment.common.codegen.model.trait.HasAnnotationUsage;
-import com.speedment.common.codegen.model.trait.HasCopy;
-import com.speedment.common.codegen.model.trait.HasFields;
-import com.speedment.common.codegen.model.trait.HasImports;
-import com.speedment.common.codegen.model.trait.HasJavadoc;
-import com.speedment.common.codegen.model.trait.HasName;
+import com.speedment.common.codegen.model.trait.*;
 
 /**
  * A model that represents an annotation in code.

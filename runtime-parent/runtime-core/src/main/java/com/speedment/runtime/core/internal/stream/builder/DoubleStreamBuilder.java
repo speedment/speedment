@@ -16,42 +16,14 @@
  */
 package com.speedment.runtime.core.internal.stream.builder;
 
-import com.speedment.runtime.core.internal.stream.builder.action.doubles.DoubleBoxedAction;
-import com.speedment.runtime.core.internal.stream.builder.action.doubles.DoubleDistinctAction;
-import com.speedment.runtime.core.internal.stream.builder.action.doubles.DoubleFilterAction;
-import com.speedment.runtime.core.internal.stream.builder.action.doubles.DoubleFlatMapAction;
-import com.speedment.runtime.core.internal.stream.builder.action.doubles.DoubleLimitAction;
-import com.speedment.runtime.core.internal.stream.builder.action.doubles.DoubleMapAction;
-import com.speedment.runtime.core.internal.stream.builder.action.doubles.DoubleMapToIntAction;
-import com.speedment.runtime.core.internal.stream.builder.action.doubles.DoubleMapToLongAction;
-import com.speedment.runtime.core.internal.stream.builder.action.doubles.DoubleMapToObjAction;
-import com.speedment.runtime.core.internal.stream.builder.action.doubles.DoublePeekAction;
-import com.speedment.runtime.core.internal.stream.builder.action.doubles.DoubleSkipAction;
-import com.speedment.runtime.core.internal.stream.builder.action.doubles.DoubleSortedAction;
+import com.speedment.runtime.core.internal.stream.builder.action.doubles.*;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.DoublePipeline;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminator;
 
-import java.util.DoubleSummaryStatistics;
-import java.util.OptionalDouble;
-import java.util.PrimitiveIterator;
-import java.util.Set;
-import java.util.Spliterator;
-import java.util.function.BiConsumer;
-import java.util.function.DoubleBinaryOperator;
-import java.util.function.DoubleConsumer;
-import java.util.function.DoubleFunction;
-import java.util.function.DoublePredicate;
-import java.util.function.DoubleToIntFunction;
-import java.util.function.DoubleToLongFunction;
-import java.util.function.DoubleUnaryOperator;
-import java.util.function.ObjDoubleConsumer;
-import java.util.function.Supplier;
-import java.util.stream.BaseStream;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
-import java.util.stream.LongStream;
-import java.util.stream.Stream;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
 
 import static java.util.Objects.requireNonNull;
 

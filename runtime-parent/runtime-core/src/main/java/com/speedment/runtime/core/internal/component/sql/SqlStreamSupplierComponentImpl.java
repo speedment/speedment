@@ -24,11 +24,12 @@ import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
+
 import java.sql.ResultSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import java.util.stream.Stream;
+
 import static java.util.Objects.requireNonNull;
 
 /**

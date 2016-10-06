@@ -17,8 +17,8 @@
 package com.speedment.runtime.config.util;
 
 import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.internal.BaseDocument;
+import com.speedment.runtime.config.trait.HasMainInterface;
 
 import java.util.Map;
 

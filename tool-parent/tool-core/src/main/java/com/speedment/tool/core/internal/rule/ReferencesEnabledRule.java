@@ -17,7 +17,6 @@
 package com.speedment.tool.core.internal.rule;
 
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Project;
@@ -26,6 +25,7 @@ import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.config.util.DocumentUtil;
+import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.tool.core.component.IssueComponent;
 import com.speedment.tool.core.rule.Issue;
 import com.speedment.tool.core.rule.Rule;

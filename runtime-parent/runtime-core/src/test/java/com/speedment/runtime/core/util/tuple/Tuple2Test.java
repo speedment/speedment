@@ -23,11 +23,7 @@ package com.speedment.runtime.core.util.tuple;
 
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.common.tuple.Tuples;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.Arrays;
 import java.util.Collections;

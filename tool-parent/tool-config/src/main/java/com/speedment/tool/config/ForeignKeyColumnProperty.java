@@ -18,6 +18,7 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;
+import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.ForeignKeyColumnPropertyMutator;
 import com.speedment.tool.config.trait.HasColumnProperty;
@@ -31,7 +32,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
-import com.speedment.tool.config.component.DocumentPropertyComponent;
 import static javafx.beans.binding.Bindings.createObjectBinding;
 
 /**

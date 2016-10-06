@@ -19,14 +19,7 @@ package com.speedment.runtime.config;
 
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.mutator.TableMutator;
-import com.speedment.runtime.config.trait.HasAlias;
-import com.speedment.runtime.config.trait.HasChildren;
-import com.speedment.runtime.config.trait.HasEnabled;
-import com.speedment.runtime.config.trait.HasMainInterface;
-import com.speedment.runtime.config.trait.HasMutator;
-import com.speedment.runtime.config.trait.HasName;
-import com.speedment.runtime.config.trait.HasPackageName;
-import com.speedment.runtime.config.trait.HasParent;
+import com.speedment.runtime.config.trait.*;
 
 import java.util.Optional;
 import java.util.stream.Stream;

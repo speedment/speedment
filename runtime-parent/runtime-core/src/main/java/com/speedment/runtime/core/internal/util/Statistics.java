@@ -36,11 +36,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
 import static com.speedment.runtime.core.internal.util.analytics.FocusPoint.*;
 import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 

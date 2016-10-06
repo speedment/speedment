@@ -18,24 +18,15 @@ package com.speedment.common.codegen.internal.java.view;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegen.internal.java.view.trait.HasAnnotationUsageView;
-import com.speedment.common.codegen.internal.java.view.trait.HasClassesView;
-import com.speedment.common.codegen.internal.java.view.trait.HasFieldsView;
-import com.speedment.common.codegen.internal.java.view.trait.HasGenericsView;
-import com.speedment.common.codegen.internal.java.view.trait.HasImplementsView;
-import com.speedment.common.codegen.internal.java.view.trait.HasInitalizersView;
-import com.speedment.common.codegen.internal.java.view.trait.HasJavadocView;
-import com.speedment.common.codegen.internal.java.view.trait.HasMethodsView;
-import com.speedment.common.codegen.internal.java.view.trait.HasModifiersView;
-import com.speedment.common.codegen.internal.java.view.trait.HasNameView;
+import com.speedment.common.codegen.internal.java.view.trait.*;
 import com.speedment.common.codegen.model.ClassOrInterface;
 
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.speedment.common.codegen.util.Formatting.*;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.common.codegen.util.Formatting.*;
 import static java.util.stream.Collectors.joining;
 
 

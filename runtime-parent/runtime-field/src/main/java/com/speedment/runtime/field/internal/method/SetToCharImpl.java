@@ -18,7 +18,9 @@ package com.speedment.runtime.field.internal.method;
 
 import com.speedment.runtime.field.method.SetToChar;
 import com.speedment.runtime.field.trait.HasCharValue;
+
 import javax.annotation.Generated;
+
 import static java.util.Objects.requireNonNull;
 
 /**

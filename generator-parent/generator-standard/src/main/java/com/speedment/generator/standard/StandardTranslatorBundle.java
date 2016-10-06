@@ -18,6 +18,7 @@ package com.speedment.generator.standard;
 
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.generator.standard.internal.StandardTranslatorComponent;
+
 import java.util.stream.Stream;
 
 /**

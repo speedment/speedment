@@ -16,19 +16,19 @@
  */
 package com.speedment.runtime.core.internal.component;
 
-import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.core.component.EntityManager;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Manager;
 
-import java.util.Optional;
-
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static com.speedment.common.injector.State.RESOLVED;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  *

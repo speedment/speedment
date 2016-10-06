@@ -16,15 +16,11 @@
  */
 package com.speedment.runtime.config.internal;
 
+import com.speedment.common.function.OptionalBoolean;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.Document;
-import com.speedment.common.function.OptionalBoolean;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.OptionalDouble;
-import java.util.OptionalInt;
-import java.util.OptionalLong;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.config.util.DocumentUtil.childrenOf;

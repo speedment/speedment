@@ -1,25 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
-
-<VBox id="issues" 
-      alignment="TOP_RIGHT" 
-      maxHeight="-Infinity" 
-      maxWidth="-Infinity" 
-      minHeight="-Infinity" 
-      minWidth="-Infinity" 
-      prefHeight="400.0" 
-      prefWidth="600.0" 
-      spacing="8.0" 
+<VBox id="issues"
+      alignment="TOP_RIGHT"
+      maxHeight="-Infinity"
+      maxWidth="-Infinity"
+      minHeight="-Infinity"
+      minWidth="-Infinity"
+      prefHeight="400.0"
+      prefWidth="600.0"
+      spacing="8.0"
       xmlns="http://javafx.com/javafx/8.0.65"
-      xmlns:fx="http://javafx.com/fxml/1" 
+      xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.speedment.tool.core.internal.controller.ProjectProblemController">
     
    <children>

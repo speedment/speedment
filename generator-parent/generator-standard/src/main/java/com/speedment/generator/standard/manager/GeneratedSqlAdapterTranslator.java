@@ -17,25 +17,31 @@
 package com.speedment.generator.standard.manager;
 
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
-import com.speedment.common.codegen.model.AnnotationUsage;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Constructor;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Value;
+import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
+import com.speedment.generator.translator.component.TypeMapperComponent;
+import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.core.component.resultset.ResultSetMapping;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Table;
+import com.speedment.runtime.core.component.sql.SqlPersistenceComponent;
+import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
+import com.speedment.runtime.core.component.sql.SqlTypeMapperHelper;
+import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.util.sql.ResultSetUtil;
+import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
@@ -43,22 +49,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-
-import com.speedment.common.injector.State;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.runtime.core.exception.SpeedmentException;
-import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
-import com.speedment.generator.translator.component.TypeMapperComponent;
-import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.config.trait.HasEnabled;
-import com.speedment.runtime.core.component.sql.SqlPersistenceComponent;
-import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
-import com.speedment.runtime.core.component.sql.SqlTypeMapperHelper;
-import com.speedment.runtime.typemapper.TypeMapper;
-import static java.util.stream.Collectors.joining;
 import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateApplyResultSetBody;
+import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
+import static java.util.stream.Collectors.joining;
 
 /**
  *

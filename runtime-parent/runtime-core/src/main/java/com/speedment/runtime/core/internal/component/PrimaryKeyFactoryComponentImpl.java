@@ -18,16 +18,7 @@ package com.speedment.runtime.core.internal.component;
 
 import com.speedment.runtime.core.component.PrimaryKeyFactoryComponent;
 
-import java.util.AbstractList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-import java.util.RandomAccess;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 

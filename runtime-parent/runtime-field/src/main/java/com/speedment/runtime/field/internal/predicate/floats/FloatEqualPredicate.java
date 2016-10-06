@@ -20,6 +20,7 @@ import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasFloatValue;
+
 import javax.annotation.Generated;
 
 /**

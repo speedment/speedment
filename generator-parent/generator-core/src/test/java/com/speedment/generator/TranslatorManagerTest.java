@@ -17,11 +17,11 @@
 package com.speedment.generator;
 
 import com.speedment.common.codegen.model.Interface;
-import com.speedment.generator.translator.namer.JavaLanguageNamer;
 import com.speedment.generator.standard.StandardTranslatorKey;
 import com.speedment.generator.translator.Translator;
 import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.generator.translator.component.CodeGenerationComponent;
+import com.speedment.generator.translator.namer.JavaLanguageNamer;
 import com.speedment.runtime.config.Table;
 import org.junit.Test;
 

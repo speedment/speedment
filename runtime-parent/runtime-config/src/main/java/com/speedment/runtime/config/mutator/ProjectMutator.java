@@ -19,9 +19,10 @@ package com.speedment.runtime.config.mutator;
 
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.internal.DbmsImpl;
 import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
-import com.speedment.runtime.config.internal.DbmsImpl;
+
 import static com.speedment.runtime.config.Project.*;
 import static com.speedment.runtime.config.util.DocumentUtil.newDocument;
 

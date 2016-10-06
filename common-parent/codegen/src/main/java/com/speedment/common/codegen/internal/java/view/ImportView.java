@@ -25,9 +25,9 @@ import java.lang.reflect.Type;
 import java.util.Optional;
 
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import static com.speedment.common.codegen.util.Formatting.packageName;
 import static com.speedment.common.codegen.util.Formatting.stripGenerics;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 
 /**
  * Transforms from an {@link Import} to java code.

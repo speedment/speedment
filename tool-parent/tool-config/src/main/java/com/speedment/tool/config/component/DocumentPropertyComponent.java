@@ -17,13 +17,7 @@
 package com.speedment.tool.config.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.ForeignKey;
-import com.speedment.runtime.config.Index;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.*;
 import com.speedment.tool.config.DocumentProperty;
 
 import java.util.List;

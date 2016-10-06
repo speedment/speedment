@@ -19,12 +19,7 @@ package com.speedment.runtime.config;
 
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.mutator.PrimaryKeyColumnMutator;
-import com.speedment.runtime.config.trait.HasColumn;
-import com.speedment.runtime.config.trait.HasMainInterface;
-import com.speedment.runtime.config.trait.HasMutator;
-import com.speedment.runtime.config.trait.HasName;
-import com.speedment.runtime.config.trait.HasOrdinalPosition;
-import com.speedment.runtime.config.trait.HasParent;
+import com.speedment.runtime.config.trait.*;
 
 /**
  * A typed {@link Document} that represents the primary key column instance in

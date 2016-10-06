@@ -21,6 +21,7 @@ import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.FindFrom;
+
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 

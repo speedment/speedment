@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.core.internal.stream.builder.streamterminator;
 
-import com.speedment.runtime.field.predicate.FieldPredicate;
-import com.speedment.runtime.field.internal.predicate.AbstractCombinedPredicate;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
 import com.speedment.runtime.core.internal.util.Cast;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
+import com.speedment.runtime.field.internal.predicate.AbstractCombinedPredicate;
+import com.speedment.runtime.field.predicate.FieldPredicate;
 
 import java.util.ArrayList;
 import java.util.List;

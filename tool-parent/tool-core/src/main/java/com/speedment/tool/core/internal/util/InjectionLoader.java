@@ -24,18 +24,8 @@ import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.tool.core.brand.Brand;
 import com.speedment.tool.core.component.UserInterfaceComponent;
-import com.speedment.tool.core.internal.controller.AboutController;
-import com.speedment.tool.core.internal.controller.ComponentsController;
-import com.speedment.tool.core.internal.controller.ConnectController;
-import com.speedment.tool.core.internal.controller.MailPromptController;
-import com.speedment.tool.core.internal.controller.MenubarController;
-import com.speedment.tool.core.internal.controller.NotificationAreaController;
-import com.speedment.tool.core.internal.controller.OutputController;
-import com.speedment.tool.core.internal.controller.ProjectProblemController;
-import com.speedment.tool.core.internal.controller.ProjectTreeController;
-import com.speedment.tool.core.internal.controller.SceneController;
-import com.speedment.tool.core.internal.controller.ToolbarController;
-import com.speedment.tool.core.internal.controller.WorkspaceController;
+import com.speedment.tool.core.exception.SpeedmentToolException;
+import com.speedment.tool.core.internal.controller.*;
 import com.speedment.tool.core.util.BrandUtil;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -52,10 +42,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 import static com.speedment.common.injector.State.INITIALIZED;
-import com.speedment.tool.core.exception.SpeedmentToolException;
-import static javafx.stage.Modality.APPLICATION_MODAL;
-
 import static java.util.Objects.requireNonNull;
+import static javafx.stage.Modality.APPLICATION_MODAL;
 
 /**
  *

@@ -16,21 +16,16 @@
  */
 package com.speedment.generator;
 
-import com.speedment.generator.core.GeneratorBundle;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
+import com.speedment.generator.core.GeneratorBundle;
 import com.speedment.generator.core.internal.translator.TranslatorManagerImpl;
 import com.speedment.generator.translator.TranslatorManager;
-import com.speedment.runtime.core.Speedment;
-import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.config.Column;
-import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.PrimaryKeyColumn;
-import com.speedment.runtime.config.Project;
-import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.core.ApplicationBuilder;
+import com.speedment.runtime.core.Speedment;
+import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.internal.AbstractApplicationMetadata;
 import com.speedment.runtime.core.internal.DefaultApplicationBuilder;
 import org.junit.Before;

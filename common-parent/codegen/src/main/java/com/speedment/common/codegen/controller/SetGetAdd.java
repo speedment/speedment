@@ -19,12 +19,7 @@ package com.speedment.common.codegen.controller;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Generic;
-import com.speedment.common.codegen.model.Javadoc;
-import com.speedment.common.codegen.model.JavadocTag;
-import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.*;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

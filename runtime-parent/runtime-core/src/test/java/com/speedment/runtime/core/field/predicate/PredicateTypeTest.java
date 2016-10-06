@@ -22,11 +22,7 @@
 package com.speedment.runtime.core.field.predicate;
 
 import com.speedment.runtime.field.predicate.PredicateType;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.EnumMap;
 import java.util.List;

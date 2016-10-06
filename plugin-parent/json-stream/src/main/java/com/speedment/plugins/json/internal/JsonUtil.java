@@ -16,9 +16,10 @@
  */
 package com.speedment.plugins.json.internal;
 
-import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
+
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.runtime.config.util.DocumentDbUtil.referencedColumn;
 

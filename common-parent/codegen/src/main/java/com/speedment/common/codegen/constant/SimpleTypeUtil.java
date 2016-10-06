@@ -16,10 +16,10 @@
  */
 package com.speedment.common.codegen.constant;
 
-import com.speedment.common.codegen.util.Formatting;
 import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.trait.HasClasses;
+import com.speedment.common.codegen.util.Formatting;
 
 import java.util.Optional;
 

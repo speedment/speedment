@@ -18,6 +18,7 @@ package com.speedment.runtime.config.trait;
 
 
 import com.speedment.runtime.config.Document;
+
 import static com.speedment.runtime.config.trait.HasName.NAME;
 
 /**

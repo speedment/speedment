@@ -19,10 +19,11 @@ package com.speedment.runtime.config.mutator;
 
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.internal.TableImpl;
 import com.speedment.runtime.config.mutator.trait.HasAliasMutator;
 import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
-import com.speedment.runtime.config.internal.TableImpl;
+
 import static com.speedment.runtime.config.Schema.DEFAULT_SCHEMA;
 import static com.speedment.runtime.config.Schema.TABLES;
 import static com.speedment.runtime.config.util.DocumentUtil.newDocument;

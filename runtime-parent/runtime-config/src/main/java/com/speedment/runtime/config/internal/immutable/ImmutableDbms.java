@@ -26,8 +26,8 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
 import static com.speedment.common.invariant.NullUtil.requireKeys;
+import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
 import static java.util.Collections.unmodifiableList;
 import static java.util.stream.Collectors.toList;
 

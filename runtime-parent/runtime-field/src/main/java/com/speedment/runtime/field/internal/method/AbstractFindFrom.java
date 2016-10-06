@@ -22,9 +22,10 @@ import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.field.trait.HasFinder;
 
-import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  *

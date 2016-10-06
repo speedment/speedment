@@ -21,6 +21,7 @@ import com.speedment.runtime.config.identifier.trait.HasSchemaName;
 import com.speedment.runtime.config.identifier.trait.HasTableName;
 import com.speedment.runtime.config.internal.identifier.TableIdentifierImpl;
 import com.speedment.runtime.config.util.DocumentDbUtil;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

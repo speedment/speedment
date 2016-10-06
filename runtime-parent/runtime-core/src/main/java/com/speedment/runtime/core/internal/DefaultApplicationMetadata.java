@@ -19,9 +19,9 @@ package com.speedment.runtime.core.internal;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.json.Json;
-import com.speedment.runtime.core.ApplicationMetadata;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.util.DocumentTranscoder;
+import com.speedment.runtime.core.ApplicationMetadata;
 
 import java.io.File;
 import java.util.Map;

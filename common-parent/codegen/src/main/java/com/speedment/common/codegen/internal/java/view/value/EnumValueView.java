@@ -18,11 +18,11 @@ package com.speedment.common.codegen.internal.java.view.value;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
+import com.speedment.common.codegen.model.value.EnumValue;
 
 import java.util.Optional;
 
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-import com.speedment.common.codegen.model.value.EnumValue;
 
 /**
  * Transforms from an {@link EnumValue} to java code.

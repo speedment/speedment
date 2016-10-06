@@ -16,38 +16,22 @@
  */
 package com.speedment.generator.standard.manager;
 
-import com.speedment.common.codegen.constant.DefaultJavadocTag;
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Interface;
-import com.speedment.common.codegen.model.Javadoc;
-import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
-import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.core.manager.Manager;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
-import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
-import static com.speedment.generator.standard.internal.util.ColumnUtil.usesOptional;
-import com.speedment.generator.standard.internal.util.EntityTranslatorSupport;
-import com.speedment.generator.standard.internal.util.FkHolder;
 
 /**
  *

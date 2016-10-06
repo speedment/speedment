@@ -17,11 +17,11 @@
 package com.speedment.runtime.field;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.field.internal.ReferenceFieldImpl;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.trait.HasReferenceOperators;
 import com.speedment.runtime.field.trait.HasReferenceValue;
-import com.speedment.runtime.field.internal.ReferenceFieldImpl;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 /**

@@ -18,11 +18,7 @@ package com.speedment.tool.config.mutator;
 
 
 import com.speedment.runtime.config.mutator.TableMutator;
-import com.speedment.tool.config.ColumnProperty;
-import com.speedment.tool.config.ForeignKeyProperty;
-import com.speedment.tool.config.IndexProperty;
-import com.speedment.tool.config.PrimaryKeyColumnProperty;
-import com.speedment.tool.config.TableProperty;
+import com.speedment.tool.config.*;
 import com.speedment.tool.config.mutator.trait.HasAliasPropertyMutator;
 import com.speedment.tool.config.mutator.trait.HasEnabledPropertyMutator;
 import com.speedment.tool.config.mutator.trait.HasNamePropertyMutator;

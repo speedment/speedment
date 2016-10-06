@@ -17,6 +17,7 @@
 package com.speedment.runtime.core.manager;
 
 import com.speedment.runtime.core.exception.SpeedmentException;
+
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 

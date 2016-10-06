@@ -22,7 +22,9 @@ import com.speedment.runtime.field.internal.predicate.BetweenPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasShortValue;
+
 import javax.annotation.Generated;
+
 import static java.util.Objects.requireNonNull;
 
 /**

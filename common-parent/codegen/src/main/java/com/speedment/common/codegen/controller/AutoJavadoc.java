@@ -20,12 +20,7 @@ import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.JavadocTag;
 import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.trait.HasClasses;
-import com.speedment.common.codegen.model.trait.HasConstructors;
-import com.speedment.common.codegen.model.trait.HasFields;
-import com.speedment.common.codegen.model.trait.HasGenerics;
-import com.speedment.common.codegen.model.trait.HasJavadoc;
-import com.speedment.common.codegen.model.trait.HasMethods;
+import com.speedment.common.codegen.model.trait.*;
 
 import java.util.function.Consumer;
 

@@ -16,10 +16,11 @@
  */
 package com.speedment.runtime.core.util;
 
-import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.exception.SpeedmentException;
+
 import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.stream.Collectors.joining;
 

@@ -17,10 +17,6 @@
 package com.speedment.runtime.core.db;
 
 
-import com.speedment.runtime.core.db.ConnectionUrlGenerator;
-import com.speedment.runtime.core.db.DatabaseNamingConvention;
-import com.speedment.runtime.core.db.DbmsMetadataHandler;
-import com.speedment.runtime.core.db.DbmsOperationHandler;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 
 import java.util.Comparator;

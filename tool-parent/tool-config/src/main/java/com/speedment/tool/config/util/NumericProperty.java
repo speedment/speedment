@@ -17,11 +17,7 @@
 package com.speedment.tool.config.util;
 
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.FloatProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.Property;
+import javafx.beans.property.*;
 
 /**
  * A type of {@link Property} that holds values that implement {@link Number}.

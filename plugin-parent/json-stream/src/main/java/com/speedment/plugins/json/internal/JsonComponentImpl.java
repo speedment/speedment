@@ -19,24 +19,18 @@ package com.speedment.plugins.json.internal;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.plugins.json.JsonComponent;
 import com.speedment.plugins.json.JsonEncoder;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.field.Field;
 import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.field.Field;
 
 import java.util.Set;
 import java.util.stream.Stream;
 
+import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
 import static com.speedment.plugins.json.internal.JsonUtil.jsonField;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toSet;
-import com.speedment.runtime.config.identifier.ColumnIdentifier;
-import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
-import static java.util.Objects.requireNonNull;
-import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

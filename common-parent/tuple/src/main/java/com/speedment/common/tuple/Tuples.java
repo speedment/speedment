@@ -16,20 +16,7 @@
  */
 package com.speedment.common.tuple;
 
-import com.speedment.common.tuple.internal.Tuple0Impl;
-import com.speedment.common.tuple.internal.Tuple0OfNullablesImpl;
-import com.speedment.common.tuple.internal.Tuple1Impl;
-import com.speedment.common.tuple.internal.Tuple1OfNullablesImpl;
-import com.speedment.common.tuple.internal.Tuple2Impl;
-import com.speedment.common.tuple.internal.Tuple2OfNullablesImpl;
-import com.speedment.common.tuple.internal.Tuple3Impl;
-import com.speedment.common.tuple.internal.Tuple3OfNullablesImpl;
-import com.speedment.common.tuple.internal.Tuple4Impl;
-import com.speedment.common.tuple.internal.Tuple4OfNullablesImpl;
-import com.speedment.common.tuple.internal.Tuple5Impl;
-import com.speedment.common.tuple.internal.Tuple5OfNullablesImpl;
-import com.speedment.common.tuple.internal.Tuple6Impl;
-import com.speedment.common.tuple.internal.Tuple6OfNullablesImpl;
+import com.speedment.common.tuple.internal.*;
 
 /**
  * Basic convenience factory for Tuples.

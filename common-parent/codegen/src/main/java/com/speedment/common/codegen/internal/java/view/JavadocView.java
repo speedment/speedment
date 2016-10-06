@@ -19,22 +19,18 @@ package com.speedment.common.codegen.internal.java.view;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.internal.java.view.trait.HasJavadocTagsView;
-import com.speedment.common.codegen.util.Formatting;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.JavadocTag;
 import com.speedment.common.codegen.model.trait.HasJavadoc;
+import com.speedment.common.codegen.util.Formatting;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.speedment.common.codegen.util.Formatting.*;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.common.codegen.util.Formatting.*;
 import static java.util.stream.Collectors.joining;
 
 /**

@@ -17,6 +17,7 @@
 package com.speedment.common.codegen.constant;
 
 import com.speedment.common.codegen.model.Value;
+
 import static java.util.Objects.requireNonNull;
 
 /**

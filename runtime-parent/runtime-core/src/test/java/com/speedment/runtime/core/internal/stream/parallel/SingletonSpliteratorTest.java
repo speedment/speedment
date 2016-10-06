@@ -21,12 +21,7 @@
  */
 package com.speedment.runtime.core.internal.stream.parallel;
 
-import com.speedment.runtime.core.internal.stream.parallel.SingletonSpliterator;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.ArrayList;
 import java.util.Collections;

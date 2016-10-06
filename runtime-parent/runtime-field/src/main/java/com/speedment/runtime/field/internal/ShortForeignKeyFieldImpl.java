@@ -24,11 +24,7 @@ import com.speedment.runtime.field.internal.comparator.ShortFieldComparator;
 import com.speedment.runtime.field.internal.comparator.ShortFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromShort;
-import com.speedment.runtime.field.internal.predicate.shorts.ShortBetweenPredicate;
-import com.speedment.runtime.field.internal.predicate.shorts.ShortEqualPredicate;
-import com.speedment.runtime.field.internal.predicate.shorts.ShortGreaterOrEqualPredicate;
-import com.speedment.runtime.field.internal.predicate.shorts.ShortGreaterThanPredicate;
-import com.speedment.runtime.field.internal.predicate.shorts.ShortInPredicate;
+import com.speedment.runtime.field.internal.predicate.shorts.*;
 import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.method.ShortGetter;
@@ -36,11 +32,13 @@ import com.speedment.runtime.field.method.ShortSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
+
+import javax.annotation.Generated;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import javax.annotation.Generated;
+
 import static java.util.Objects.requireNonNull;
 
 /**

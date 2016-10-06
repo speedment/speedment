@@ -16,9 +16,9 @@
  */
 package com.speedment.runtime.field.internal.predicate;
 
-import com.speedment.runtime.field.predicate.trait.HasNegated;
 import com.speedment.runtime.field.internal.predicate.AbstractCombinedPredicate.AndCombinedBasePredicate;
 import com.speedment.runtime.field.internal.predicate.AbstractCombinedPredicate.OrCombinedBasePredicate;
+import com.speedment.runtime.field.predicate.trait.HasNegated;
 
 import java.util.function.Predicate;
 

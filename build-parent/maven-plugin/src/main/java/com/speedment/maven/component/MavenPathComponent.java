@@ -18,8 +18,8 @@ package com.speedment.maven.component;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.core.component.PathComponent;
-import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.config.Project;
+import com.speedment.runtime.core.component.ProjectComponent;
 import org.apache.maven.project.MavenProject;
 
 import java.nio.file.Path;

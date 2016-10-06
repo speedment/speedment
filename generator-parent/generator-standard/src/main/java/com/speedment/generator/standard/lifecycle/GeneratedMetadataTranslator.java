@@ -19,18 +19,15 @@ package com.speedment.generator.standard.lifecycle;
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.internal.model.JavadocImpl;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Javadoc;
-import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.json.Json;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.util.DocumentTranscoder;
 import com.speedment.runtime.core.ApplicationMetadata;
 import com.speedment.runtime.core.component.InfoComponent;
-import com.speedment.runtime.config.Project;
 import com.speedment.runtime.core.internal.AbstractApplicationMetadata;
-import com.speedment.runtime.config.util.DocumentTranscoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +36,8 @@ import java.util.stream.Stream;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.util.Formatting.indent;
-import com.speedment.common.codegen.model.Value;
-import com.speedment.common.json.Json;
-import static java.util.stream.Collectors.toList;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 /**
  *

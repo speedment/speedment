@@ -18,8 +18,8 @@ package com.speedment.runtime.config.internal.immutable;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.trait.HasNullable;
 import com.speedment.runtime.config.internal.ColumnImpl;
+import com.speedment.runtime.config.trait.HasNullable;
 
 import java.util.Map;
 import java.util.Optional;

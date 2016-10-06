@@ -18,8 +18,8 @@ package com.speedment.runtime.core.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
+import com.speedment.runtime.field.trait.HasComparableOperators;
 
 import java.util.Optional;
 import java.util.stream.Stream;

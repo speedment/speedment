@@ -18,16 +18,12 @@ package com.speedment.runtime.config.util;
 
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.Document;
+import com.speedment.runtime.config.internal.util.Trees;
 import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
-import com.speedment.runtime.config.internal.util.Trees;
 
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiFunction;

@@ -18,7 +18,9 @@ package com.speedment.runtime.field.internal.method;
 
 import com.speedment.runtime.field.method.SetToShort;
 import com.speedment.runtime.field.trait.HasShortValue;
+
 import javax.annotation.Generated;
+
 import static java.util.Objects.requireNonNull;
 
 /**

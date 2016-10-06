@@ -24,12 +24,7 @@ import com.speedment.common.codegen.model.Value;
 import com.speedment.common.codegen.model.modifier.Modifier;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.Objects.requireNonNull;
 

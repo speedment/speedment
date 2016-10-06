@@ -19,19 +19,14 @@ package com.speedment.tool.config.util;
 
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
-import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.internal.BaseDocument;
+import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.tool.config.DocumentProperty;
 import javafx.beans.property.Property;
 import javafx.collections.ObservableList;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 
 import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;

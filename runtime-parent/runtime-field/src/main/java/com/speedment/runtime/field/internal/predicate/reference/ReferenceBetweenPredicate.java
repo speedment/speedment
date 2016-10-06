@@ -17,10 +17,11 @@
 package com.speedment.runtime.field.internal.predicate.reference;
 
 import com.speedment.common.tuple.Tuple2;
-import com.speedment.runtime.field.predicate.Inclusion;
-import com.speedment.runtime.field.trait.HasReferenceValue;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.internal.predicate.BetweenPredicate;
+import com.speedment.runtime.field.predicate.Inclusion;
+import com.speedment.runtime.field.trait.HasReferenceValue;
+
 import static com.speedment.runtime.field.predicate.PredicateType.BETWEEN;
 import static java.util.Objects.requireNonNull;
 

@@ -20,21 +20,16 @@ import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.internal.model.JavadocImpl;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Constructor;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Javadoc;
-import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.mapstream.MapStream;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
-import com.speedment.common.mapstream.MapStream;
-import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.internal.AbstractApplicationBuilder;
 
 import java.lang.reflect.Type;
@@ -49,10 +44,10 @@ import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.util.Formatting.nl;
 import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.generator.standard.lifecycle.GeneratedMetadataTranslator.METADATA;
-import static java.util.stream.Collectors.toSet;
 import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toSet;
 
 /**
  *

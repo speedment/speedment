@@ -20,8 +20,8 @@ import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.File;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
-import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.config.Project;
+import com.speedment.runtime.core.ApplicationBuilder;
 
 import java.lang.reflect.Type;
 

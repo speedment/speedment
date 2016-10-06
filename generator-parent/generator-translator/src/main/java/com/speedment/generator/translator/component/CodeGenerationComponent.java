@@ -18,11 +18,11 @@ package com.speedment.generator.translator.component;
 
 import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
 import com.speedment.generator.translator.Translator;
 import com.speedment.generator.translator.TranslatorConstructor;
 import com.speedment.generator.translator.TranslatorDecorator;
 import com.speedment.generator.translator.TranslatorKey;
+import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 

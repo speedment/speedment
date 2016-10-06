@@ -21,12 +21,8 @@ import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Value;
 
 import java.lang.reflect.Type;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Objects;
-import java.util.Optional;
 
 import static java.util.Objects.requireNonNull;
 

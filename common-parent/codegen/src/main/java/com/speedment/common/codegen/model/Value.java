@@ -17,21 +17,10 @@
 package com.speedment.common.codegen.model;
 
 
-import com.speedment.common.codegen.internal.model.value.ArrayValueImpl;
-import com.speedment.common.codegen.internal.model.value.BooleanValueImpl;
-import com.speedment.common.codegen.internal.model.value.EnumValueImpl;
-import com.speedment.common.codegen.internal.model.value.NullValueImpl;
-import com.speedment.common.codegen.internal.model.value.NumberValueImpl;
-import com.speedment.common.codegen.internal.model.value.ReferenceValueImpl;
-import com.speedment.common.codegen.internal.model.value.TextValueImpl;
+import com.speedment.common.codegen.internal.model.value.*;
 import com.speedment.common.codegen.model.trait.HasCopy;
-import com.speedment.common.codegen.model.value.ArrayValue;
-import com.speedment.common.codegen.model.value.BooleanValue;
-import com.speedment.common.codegen.model.value.EnumValue;
-import com.speedment.common.codegen.model.value.NullValue;
-import com.speedment.common.codegen.model.value.NumberValue;
-import com.speedment.common.codegen.model.value.ReferenceValue;
-import com.speedment.common.codegen.model.value.TextValue;
+import com.speedment.common.codegen.model.value.*;
+
 import java.lang.reflect.Type;
 import java.util.List;
 

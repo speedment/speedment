@@ -16,12 +16,11 @@
  */
 package com.speedment.runtime.core.internal.util.testing;
 
-import com.speedment.runtime.core.manager.EntityCreator;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.manager.Persister;
 import com.speedment.runtime.core.manager.Remover;
-
 import com.speedment.runtime.core.manager.Updater;
+
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 

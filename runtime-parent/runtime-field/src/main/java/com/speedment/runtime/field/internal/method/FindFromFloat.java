@@ -20,9 +20,10 @@ import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.FloatField;
 import com.speedment.runtime.field.FloatForeignKeyField;
 import com.speedment.runtime.field.exception.SpeedmentFieldException;
+
+import javax.annotation.Generated;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import javax.annotation.Generated;
 
 /**
  * @param <ENTITY>    entity type

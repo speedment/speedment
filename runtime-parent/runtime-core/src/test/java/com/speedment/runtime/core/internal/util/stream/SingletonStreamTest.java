@@ -21,13 +21,7 @@
  */
 package com.speedment.runtime.core.internal.util.stream;
 
-import com.speedment.runtime.core.internal.util.stream.SingletonStream;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.Collections;
 import java.util.List;

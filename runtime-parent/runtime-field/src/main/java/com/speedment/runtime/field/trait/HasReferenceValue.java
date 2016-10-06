@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.field.trait;
 
-import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.internal.method.SetToReferenceImpl;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.method.SetToReference;
-import com.speedment.runtime.field.internal.method.SetToReferenceImpl;
+import com.speedment.runtime.typemapper.TypeMapper;
 
 /**
  * A representation of an Entity field that is a reference type (eg 

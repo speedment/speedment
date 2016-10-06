@@ -18,10 +18,10 @@ package com.speedment.maven.abstractmojo;
 
 import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.maven.typemapper.Mapping;
+import com.speedment.runtime.config.Project;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.config.Project;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;

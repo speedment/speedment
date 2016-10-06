@@ -19,10 +19,9 @@ package com.speedment.runtime.core.internal.db;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
-import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
+import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
-import com.speedment.runtime.core.internal.db.DefaultDatabaseNamingConvention;
 
 import java.util.Collections;
 import java.util.Optional;

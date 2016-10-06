@@ -21,6 +21,7 @@ import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.exception.SpeedmentFieldException;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.field.trait.HasFinder;
+
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 

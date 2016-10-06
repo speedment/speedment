@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.TreeView?>
-
 <TitledPane id="projectTree"
             animated="false"
             collapsible="false"

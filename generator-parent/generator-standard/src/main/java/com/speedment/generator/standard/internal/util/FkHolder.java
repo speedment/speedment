@@ -18,9 +18,9 @@ package com.speedment.generator.standard.internal.util;
 
 import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.injector.Injector;
-import com.speedment.generator.translator.component.CodeGenerationComponent;
-import com.speedment.generator.translator.JavaClassTranslator;
 import com.speedment.generator.standard.StandardTranslatorKey;
+import com.speedment.generator.translator.JavaClassTranslator;
+import com.speedment.generator.translator.component.CodeGenerationComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.ForeignKey;
 import com.speedment.runtime.config.ForeignKeyColumn;

@@ -19,8 +19,8 @@ package com.speedment.runtime.config.internal.immutable;
 import com.speedment.common.lazy.LazyReference;
 import com.speedment.runtime.config.Index;
 import com.speedment.runtime.config.IndexColumn;
-import com.speedment.runtime.config.parameter.OrderType;
 import com.speedment.runtime.config.internal.IndexColumnImpl;
+import com.speedment.runtime.config.parameter.OrderType;
 
 import java.util.Map;
 import java.util.Optional;

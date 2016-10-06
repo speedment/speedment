@@ -17,8 +17,9 @@
 package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.runtime.field.trait.HasIntValue;
-import java.util.Comparator;
+
 import javax.annotation.Generated;
+import java.util.Comparator;
 
 /**
  * A predicate that evaluates if a value is between two ints.

@@ -17,26 +17,21 @@
 package com.speedment.tool.core.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.trait.HasMainInterface;
+import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.util.ProgressMeasure;
-import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.config.ProjectProperty;
+import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.core.notification.Notification;
 import com.speedment.tool.propertyeditor.PropertyEditor;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.util.Optional;

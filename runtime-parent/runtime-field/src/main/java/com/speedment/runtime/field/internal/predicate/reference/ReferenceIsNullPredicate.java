@@ -16,8 +16,9 @@
  */
 package com.speedment.runtime.field.internal.predicate.reference;
 
-import com.speedment.runtime.field.trait.HasReferenceValue;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
+import com.speedment.runtime.field.trait.HasReferenceValue;
+
 import static com.speedment.runtime.field.predicate.PredicateType.IS_NULL;
 
 /**

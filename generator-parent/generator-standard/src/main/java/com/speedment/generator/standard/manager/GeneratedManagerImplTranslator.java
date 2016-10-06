@@ -18,14 +18,11 @@ package com.speedment.generator.standard.manager;
 
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Constructor;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.*;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.AbstractManager;
 
 import java.lang.reflect.Type;
@@ -33,7 +30,6 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateFields;
-import com.speedment.runtime.config.identifier.TableIdentifier;
 import static java.util.stream.Collectors.joining;
 
 /**

@@ -16,31 +16,21 @@
  */
 package com.speedment.runtime.field.internal;
 
-import com.speedment.runtime.typemapper.TypeMapper;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.ComparableField;
+import com.speedment.runtime.field.internal.comparator.NullOrder;
+import com.speedment.runtime.field.internal.comparator.ReferenceFieldComparatorImpl;
+import com.speedment.runtime.field.internal.predicate.reference.*;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
-import com.speedment.runtime.field.internal.comparator.NullOrder;
-import com.speedment.runtime.field.internal.comparator.ReferenceFieldComparatorImpl;
-import com.speedment.runtime.field.internal.predicate.reference.ReferenceBetweenPredicate;
-import com.speedment.runtime.field.internal.predicate.reference.ReferenceEqualPredicate;
-import com.speedment.runtime.field.internal.predicate.reference.ReferenceGreaterOrEqualPredicate;
-import com.speedment.runtime.field.internal.predicate.reference.ReferenceGreaterThanPredicate;
-import com.speedment.runtime.field.internal.predicate.reference.ReferenceInPredicate;
-import com.speedment.runtime.field.internal.predicate.reference.ReferenceIsNullPredicate;
-import com.speedment.runtime.field.internal.predicate.reference.ReferenceLessOrEqualPredicate;
-import com.speedment.runtime.field.internal.predicate.reference.ReferenceLessThanPredicate;
-import com.speedment.runtime.field.internal.predicate.reference.ReferenceNotBetweenPredicate;
-import com.speedment.runtime.field.internal.predicate.reference.ReferenceNotEqualPredicate;
-import com.speedment.runtime.field.internal.predicate.reference.ReferenceNotInPredicate;
+import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.util.Comparator;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import static java.util.Objects.requireNonNull;
 
 /**

@@ -16,11 +16,7 @@
  */
 package com.speedment.common.codegenxml.internal;
 
-import com.speedment.common.codegenxml.DocType;
-import com.speedment.common.codegenxml.Document;
-import com.speedment.common.codegenxml.Element;
-import com.speedment.common.codegenxml.TagElement;
-import com.speedment.common.codegenxml.XmlDeclaration;
+import com.speedment.common.codegenxml.*;
 
 import java.util.ArrayList;
 import java.util.List;

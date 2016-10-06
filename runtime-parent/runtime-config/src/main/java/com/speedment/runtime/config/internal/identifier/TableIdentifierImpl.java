@@ -17,6 +17,7 @@
 package com.speedment.runtime.config.internal.identifier;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
+
 import java.util.Objects;
 
 /**
