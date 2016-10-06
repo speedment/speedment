@@ -165,7 +165,7 @@ If you do not want to use an archetype, for an example if you already have a pro
 ```xml
 <build>
     <plugins>
-        ...
+        
         <plugin>
             <groupId>com.speedment</groupId>
             <artifactId>speedment-maven-plugin</artifactId>
@@ -178,11 +178,11 @@ If you do not want to use an archetype, for an example if you already have a pro
                 </dependency>
             </dependencies> 
         </plugin>
-        ...
+        
     </plugins>
 </build>
 <dependencies>
-    ...
+    
     <dependency>
         <groupId>com.speedment</groupId>
         <artifactId>runtime</artifactId>
@@ -194,7 +194,7 @@ If you do not want to use an archetype, for an example if you already have a pro
         <artifactId>${db.artifactId}</artifactId>
         <version>${db.version}</version>
     </dependency>
-    ...
+    
 </dependencies>
 ```
 
@@ -203,6 +203,9 @@ To set which database connector you want to use to communicate with your databas
 #### MySQL
 ```xml
 <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
     <speedment.version>3.0.0-EA2</speedment.version>
     <db.groupId>mysql</db.groupId>
     <db.artifactId>mysql-connector-java</db.artifactId>
@@ -213,6 +216,9 @@ To set which database connector you want to use to communicate with your databas
 #### PostgreSQL
 ```xml
 <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
     <speedment.version>3.0.0-EA2</speedment.version>
     <db.groupId>org.postgresql</db.groupId>
     <db.artifactId>postgresql</db.artifactId>
@@ -223,6 +229,9 @@ To set which database connector you want to use to communicate with your databas
 #### MariaDB
 ```xml
 <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
     <speedment.version>3.0.0-EA2</speedment.version>
     <db.groupId>org.mariadb.jdbc</db.groupId>
     <db.artifactId>mariadb-java-client</db.artifactId>
