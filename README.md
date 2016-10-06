@@ -150,7 +150,7 @@ Hare persistedHare = hares.persist(newHare); // Auto-Increment-fields have been 
 ```java
 hares.stream()
     .filter(Hare.ID.equal(42))  // Find all Hares with ID = 42 (just one)
-    .map(Hare.AGE.setTo(10))    // Set the age to 10
+    .map(Hare.AGE.setTo(10))    // Applies a setter that sets the age to 10
     .forEach(hares.updater());  // Applies the updater function
 ```
 
@@ -166,7 +166,7 @@ Construct a Map with all Hares and their corresponding Carrots
 ```java
 Map<Hare, List<Carrot>> join = carrots.stream()
     .collect(
-        groupingBy(hares.finderBy(Carrot.OWNER)) // Applies the finderBy(Carrot.OWNER) finder
+        groupingBy(hares.finderBy(Carrot.OWNER)) // Applies the finderBy(Carrot.OWNER) classifier
     );        
 ```
 
@@ -175,7 +175,7 @@ Construct a Map with all Humans and their corresponding Friend Hares
 ```java
 Map<Human, List<Hare>> humanFriends = friends.stream()
     .collect(
-        groupingBy(humans.finderBy(Friend.HUMAN), // Applies the Friend to Human finder
+        groupingBy(humans.finderBy(Friend.HUMAN), // Applies the Friend to Human classifier
             mapping(
                 hares.finderBy(Friend.HARE),      // Applies the Friend to Hare finder
                 toList()                          // Use a List collector for downstream aggregation.
