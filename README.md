@@ -63,53 +63,124 @@ You can read the [the API quick start here](https://github.com/speedment/speedme
 
 Examples
 --------
-Here are a few examples of how you could use Speedment from your code:
+Here are a few examples of how you could use Speedment from your code assuming that you have an exemplary database that looks like this:
+```sql
+CREATE TABLE `hares`.`hare` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `color` varchar(45) NOT NULL,
+  `age` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=100;
+
+CREATE TABLE IF NOT EXISTS `hares`.`carrot` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `owner` int(11) NOT NULL,
+  `rival` int(11),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=100;
+
+CREATE TABLE IF NOT EXISTS `hares`.`human` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=100;
+
+CREATE TABLE `hares`.`friend` (
+  `hare` int(11) NOT NULL,
+  `human` int(11) NOT NULL,
+  PRIMARY KEY (`hare`, `human`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `hares`.`carrot`
+  ADD CONSTRAINT `carrot_owner_to_hare_id` FOREIGN KEY (`owner`) REFERENCES `hare` (`id`);
+ALTER TABLE `hares`.`carrot`
+  ADD CONSTRAINT `carrot_rival_to_hare_id` FOREIGN KEY (`rival`) REFERENCES `hare` (`id`);
+
+ALTER TABLE `hares`.`friend`
+  ADD CONSTRAINT `friend_hare_to_hare_id` FOREIGN KEY (`hare`) REFERENCES `hare` (`id`);
+ALTER TABLE `hares`.`friend`
+  ADD CONSTRAINT `friend_human_to_human_id` FOREIGN KEY (`human`) REFERENCES `human` (`id`);
+
+```
 
 ###### Easy initialization
-The `HareApplication`, `HareApplicationBuilder` and `HareManager` classes are generated from the database.
+The `HareApplication`, `HareApplicationBuilder` and `HareManager` classes are generated automatically from the database.
 ```java
-HareApplication app = new HareApplicationBuilder().withPassword("myPwd729").build();
-HareManager hares = app.getOrThrow(HareManager.class);
+final HareApplication app = new HareApplicationBuilder()
+    .withPassword("myPwd729")
+    .build();
+    
+final Manager<Hare> hares = app.managerOf(Hare.class);
+final Manager<Carrot> carrots = app.managerOf(Carrot.class);
+final Manager<Human> humans = app.managerOf(Human.class);
+final Manager<Friend> friends = app.managerOf(Friend.class);
 ```
 
-###### Full Transparency
-By appending a logger to the builder, you can follow exactly what happens behind the scenes.
-```java
-HareApplication app = new HareApplicationBuilder()
-    .withPassword("myPwd729")
-    .withLogging(ApplicationBuilder.LogType.STREAM)
-    .withLogging(ApplicationBuilder.LogType.PERSIST)
-    .withLogging(ApplicationBuilder.LogType.UPDATE)
-    .withLogging(ApplicationBuilder.LogType.REMOVE)
-    .build();
-HareManager hares = app.getOrThrow(HareManager.class);
-```
 
 ###### Optimised predicate short-circuit
 Search for Hares by a certain age:
 ```java
 // Searches are optimized in the background!
 Optional<Hare> harry = hares.stream()
-    .filter(AGE.greaterThan(5))
+    .filter(Hare.AGE.greaterThan(5))
     .findAny();
-```
 
 Results in the following SQL query:
 ```sql
 SELECT * FROM `Hare` 
-    WHERE `Hare`.`name` = "Harry"
-    AND `Hare`.`age` < 5
+    WHERE  `Hare`.`age` > 5
     LIMIT 1;
 ```
 
 ###### Easy persistence
 Entities can easily be persisted in a database.
 ```java
-Hare harry = new HareImpl();
-harry.setName("Harry");
-harry.setColor("Gray");
-harry.setAge(3);
-Hare persisted = hares.persist(harry); // Auto-Increment-fields have been set by the database
+Hare newHare = new HareImpl();  // Creates a new empty Hare
+newHare.setName("Harry");
+newHare.setColor("Gray");
+newHare.setAge(3);
+
+Hare persistedHare = hares.persist(newHare); // Auto-Increment-fields have been set by the database
+```
+
+###### Update
+```java
+hares.stream()
+    .filter(Hare.ID.equal(42))  // Find all Hares with ID = 42 (just one)
+    .map(Hare.AGE.setTo(10))    // Set the age to 10
+    .forEach(hares.updater());  // Applies the updater function
+```
+
+###### Remove
+```java
+hares.stream()
+    .filter(Hare.ID.equal(71))  // Find all Hares with ID = 71 (just one)
+    .forEach(hares.remover());  // Applies the remover function
+```
+
+###### Join
+Construct a Map with all Hares and their corresponding Carrots
+```java
+Map<Hare, List<Carrot>> join = carrots.stream()
+    .collect(
+        groupingBy(hares.finderBy(Carrot.OWNER)) // Applies the finderBy(Carrot.OWNER) finder
+    );        
+```
+
+###### Many-to-many
+Construct a Map with all Humans and their corresponding Friend Hares
+```java
+Map<Human, List<Hare>> humanFriends = friends.stream()
+    .collect(
+        groupingBy(humans.finderBy(Friend.HUMAN), // Applies the Friend to Human finder
+            mapping(
+                hares.finderBy(Friend.HARE),      // Applies the Friend to Hare finder
+                toList()                          // Use a List collector for downstream aggregation.
+            )
+        )
+    );        
 ```
 
 ###### Entities are linked
@@ -126,6 +197,18 @@ Optional<Carrot> carrot = hares.stream()
     .filter(Hare.NAME.equal("Harry"))
     .flatMap(carrots.finderBackwardsBy(Carrot.OWNER)) // Carrot is a foreign key table.
     .findAny();
+```
+
+###### Full Transparency
+By appending a logger to the builder, you can follow exactly what happens behind the scenes.
+```java
+HareApplication app = new HareApplicationBuilder()
+    .withPassword("myPwd729")
+    .withLogging(ApplicationBuilder.LogType.STREAM)
+    .withLogging(ApplicationBuilder.LogType.PERSIST)
+    .withLogging(ApplicationBuilder.LogType.UPDATE)
+    .withLogging(ApplicationBuilder.LogType.REMOVE)
+    .build();
 ```
 
 ###### Convert to JSON using Plugin
