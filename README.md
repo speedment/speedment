@@ -126,6 +126,7 @@ Search for Hares by a certain age:
 Optional<Hare> harry = hares.stream()
     .filter(Hare.AGE.greaterThan(5))
     .findAny();
+``` 
 
 Results in the following SQL query:
 ```sql
