@@ -18,10 +18,10 @@ package com.speedment.tool.core.internal.component;
 
 import com.speedment.common.rest.Rest;
 import com.speedment.tool.core.component.VersionComponent;
+import com.speedment.tool.core.exception.SpeedmentToolException;
 
 import java.util.Comparator;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -39,7 +39,7 @@ public final class VersionComponentImpl implements VersionComponent {
             .get("repos/speedment/speedment/releases")
             .thenApplyAsync(res -> {
                 if (res.success()) {
-                    final Optional<String> latest = res.decodeJsonArray()
+                    return res.decodeJsonArray()
                         .map(o -> {
                             @SuppressWarnings("unchecked")
                             final Map<String, Object> map = (Map<String, Object>) o;
@@ -49,18 +49,14 @@ public final class VersionComponentImpl implements VersionComponent {
                         .map(m -> m.get("tag_name"))
                         .map(String.class::cast)
                         .sorted(Comparator.reverseOrder())
-                        .findFirst();
-                    
-                    if (latest.isPresent()) {
-                        return latest.get();
-                    } else {
-                        throw new RuntimeException(
+                        .findFirst()
+                        .orElseThrow(() -> new SpeedmentToolException(
                             "Could not establish the latest version."
-                        );
-                    } 
+                        ));
                 } else {
-                    throw new RuntimeException(
-                        "Received an error '" + res.getText() + "' from the GitHub API."
+                    throw new SpeedmentToolException(
+                        "Received an error '" + res.getText() + 
+                        "' from the GitHub API."
                     );
                 }
             });

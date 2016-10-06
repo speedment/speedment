@@ -31,6 +31,7 @@ import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -71,34 +72,36 @@ public final class SceneController implements Initializable {
             
             Statistics.onGuiProjectLoaded(infoComponent);
             
-            try {
-                version.latestVersion()
-                    .thenAcceptAsync(release -> {
-                        runLater(() -> {
-                            final int compare = release.compareTo(info.getImplementationVersion());
-                            if (compare == 0) {
-                                ui.showNotification(
-                                    "Your version of " + info.getTitle() + " is up to date."
-                                );
-                            } else if (compare > 0) {
-                                ui.showNotification(
-                                    "A new version " + release +
-                                        " of " + info.getTitle() + " is available."
-                                );
-                            } else {
-                                ui.showNotification(
-                                    "Your version " + info.getImplementationVersion() +
-                                        " of " + info.getTitle() + " is newer than the released " +
-                                        release + "."
-                                );
-                            }
-                        });
-                    }).get(3, TimeUnit.SECONDS);
-            } catch (final InterruptedException | ExecutionException ex) {
-                LOGGER.debug(ex, "Error loading last released version.");
-            } catch (final TimeoutException ex) {
-                LOGGER.debug(ex, "Request for latest released version timed out.");
-            }
+            CompletableFuture.runAsync(() -> {
+                try {
+                    version.latestVersion()
+                        .thenAcceptAsync(release -> {
+                            runLater(() -> {
+                                final int compare = release.compareTo(info.getImplementationVersion());
+                                if (compare == 0) {
+                                    ui.showNotification(
+                                        "Your version of " + info.getTitle() + " is up to date."
+                                    );
+                                } else if (compare > 0) {
+                                    ui.showNotification(
+                                        "A new version " + release +
+                                            " of " + info.getTitle() + " is available."
+                                    );
+                                } else {
+                                    ui.showNotification(
+                                        "Your version " + info.getImplementationVersion() +
+                                            " of " + info.getTitle() + " is newer than the released " +
+                                            release + "."
+                                    );
+                                }
+                            });
+                        }).get(3, TimeUnit.SECONDS);
+                } catch (final InterruptedException | ExecutionException ex) {
+                    LOGGER.debug(ex, "Error loading last released version.");
+                } catch (final TimeoutException ex) {
+                    LOGGER.debug(ex, "Request for latest released version timed out.");
+                }
+            });
         });
     }
 }
