@@ -92,52 +92,45 @@ SELECT * FROM `Hare`
 ###### Easy persistence
 Entities can easily be persisted in a database.
 ```java
-Hare dbHarry = new HareImpl()
-    .setName("Harry")
-    .setColor("Gray")
-    .setAge(3)
-    .persist(hares); // Auto-Increment-fields have been set by the database
+Hare h = new HareImpl();
+h.setName("Harry");
+h.setColor("Gray");
+h.setAge(3);
+h = hares.persist(harry); // Auto-Increment-fields have been set by the database
 ```
 
 ###### Entities are linked
 No need for complicated joins!
 ```java
+// Find the owner of the orange carrot
+Optional<Hare> hare = carrots.stream()
+    .filter(Carrot.NAME.equal("Orange"))
+    .map(hares.finderBy(Carrot.OWNER))
+    .findAny();
+
+// Find one carrot owned by Harry
 Optional<Carrot> carrot = hares.stream()
-    .filter(NAME.equal("Harry"))
-    .flatMap(hares::findCarrots) // Carrot is a foreign key table.
+    .filter(Hare.NAME.equal("Harry"))
+    .flatMap(carrots.finderBackwardsBy(Carrot.OWNER)) // Carrot is a foreign key table.
     .findAny();
 ```
 
 ###### Convert to JSON using Plugin
 Using the JSON Stream Plugin, you can easily convert a stream into JSON:
 ```java
-// List all hares in JSON format
-hares.stream()
-    .map(JsonUtil::toJson)
-    .forEach(System.out::println);
-```
-
-...or collect the entire stream:
-```java
-// List all hares as one JSON object
-String json = hares.stream()
-    .collect(CollectorUtil.toJson());
-```
-
-...or configure exactly how you want your JSON objects to look:
-```java
 // List all hares as a complex JSON object where the ID and AGE
 // is ommitted and a new field 'carrots' list the id's of all
 // carrots associated by a particular hare.
+JsonComponent json = app.getOrThrow(JsonComponent.class);
 String json = hares.stream()
-    .collect(CollectorUtil.toJson(
-        JsonEncoder.allOf(hares)
+    .collect(json.toJson(
+        json.allOf(hares)
             .remove(Hare.ID)
             .remove(Hare.AGE)
             .putStreamer(
-                "carrots",                  // Declare a new attribute
-                hares::findCarrots,         // How it is calculated
-                JsonEncoder.noneOf(carrots) // How it is formatted
+                "carrots",                             // Declare a new attribute
+                hares.finderBackwardsBy(Carrot.OWNER), // How it is calculated
+                json.noneOf(carrots)                   // How it is formatted
                     .put(Carrot.ID)
             )
     ));
@@ -172,7 +165,7 @@ If you do not want to use an archetype, for an example if you already have a pro
 ```xml
 <build>
     <plugins>
-        ...
+        
         <plugin>
             <groupId>com.speedment</groupId>
             <artifactId>speedment-maven-plugin</artifactId>
@@ -185,22 +178,23 @@ If you do not want to use an archetype, for an example if you already have a pro
                 </dependency>
             </dependencies> 
         </plugin>
-        ...
+        
     </plugins>
 </build>
 <dependencies>
-    ...
+    
     <dependency>
         <groupId>com.speedment</groupId>
         <artifactId>runtime</artifactId>
         <version>${speedment.version}</version>
+        <type>pom</type>
     </dependency>
     <dependency>
         <groupId>${db.groupId}</groupId>
         <artifactId>${db.artifactId}</artifactId>
         <version>${db.version}</version>
     </dependency>
-    ...
+    
 </dependencies>
 ```
 
@@ -209,17 +203,23 @@ To set which database connector you want to use to communicate with your databas
 #### MySQL
 ```xml
 <properties>
-    <speedment.version>3.0.0</speedment.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <speedment.version>3.0.0-EA2</speedment.version>
     <db.groupId>mysql</db.groupId>
     <db.artifactId>mysql-connector-java</db.artifactId>
-    <db.version>5.1.38</db.version>
+    <db.version>5.1.39</db.version>
 </properties>
 ```
 
 #### PostgreSQL
 ```xml
 <properties>
-    <speedment.version>3.0.0</speedment.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <speedment.version>3.0.0-EA2</speedment.version>
     <db.groupId>org.postgresql</db.groupId>
     <db.artifactId>postgresql</db.artifactId>
     <db.version>9.4-1206-jdbc4</db.version>
@@ -229,7 +229,10 @@ To set which database connector you want to use to communicate with your databas
 #### MariaDB
 ```xml
 <properties>
-    <speedment.version>3.0.0</speedment.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <speedment.version>3.0.0-EA2</speedment.version>
     <db.groupId>org.mariadb.jdbc</db.groupId>
     <db.artifactId>mariadb-java-client</db.artifactId>
     <db.version>1.4.0</db.version>
