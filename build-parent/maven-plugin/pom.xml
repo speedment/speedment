@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.build</groupId>
         <artifactId>build-parent</artifactId>
-        <version>3.0.1-SNAPSHOT</version>
+        <version>3.0.0-EA2</version>
     </parent>
     
     <groupId>com.speedment</groupId>
@@ -43,6 +43,7 @@
             <groupId>com.speedment</groupId>
             <artifactId>tool</artifactId>
             <version>${speedment.version}</version>
+            <type>pom</type>
         </dependency>
 
         <dependency>
@@ -54,7 +55,7 @@
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
-            <version>3.4</version>
+            <version>3.5</version>
         </dependency>
 
         <dependency>

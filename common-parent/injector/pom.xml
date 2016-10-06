@@ -23,11 +23,11 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
     
     <artifactId>injector</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - Injector</name>
@@ -36,7 +36,7 @@
     </description>
     
     <properties>
-        <logger.version>1.0.2-SNAPSHOT</logger.version>
+        <logger.version>1.0.2</logger.version>
     </properties>
     
     <build>
