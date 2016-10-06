@@ -194,6 +194,7 @@ If you do not want to use an archetype, for an example if you already have a pro
         <groupId>com.speedment</groupId>
         <artifactId>runtime</artifactId>
         <version>${speedment.version}</version>
+        <pom>pom</pom>
     </dependency>
     <dependency>
         <groupId>${db.groupId}</groupId>
