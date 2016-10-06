@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.core.manager;
 
+import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
@@ -33,11 +34,21 @@ import static com.speedment.common.injector.State.INITIALIZED;
 import static java.util.Objects.requireNonNull;
 
 /**
- *
+ * An abstract base implementation of all {@link Manager Managers}. 
+ * <p>
+ * This default implementation uses the plugged in 
+ * {@link StreamSupplierComponent} and {@link PersistenceComponent} to stream 
+ * over entities and make changes to them in the data store. It also installs
+ * itself in the plugged in {@link ManagerComponent}.
+ * 
  * @param <ENTITY> entity type
  *
  * @author Emil Forslund
  * @since 2.0.0
+ * 
+ * @see StreamSupplierComponent
+ * @see PersistenceComponent
+ * @see ManagerComponent
  */
 public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
@@ -49,6 +60,16 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
     protected AbstractManager() {}
 
+    /**
+     * In the {@link State#INITIALIZED}-phase, create an instance of each of the
+     * three interfaces {@link Persister}, {@link Updater} and {@link Remover} 
+     * to use when making changes to the data store.
+     * <p>
+     * THIS METHOD IS INTENDED TO BE INVOCED AUTOMATICALLY BY THE DEPENDENCY
+     * INJECTOR. IT SHOULD THEREFORE NEVER BE CALLED DIRECTLY!
+     * 
+     * @param persistenceComponent  auto-injected persistenceComponent
+     */
     @ExecuteBefore(INITIALIZED)
     final void createSupport(
             @WithState(INITIALIZED) PersistenceComponent persistenceComponent) {
@@ -60,6 +81,17 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
         this.remover   = persistenceComponent.remover(tableId);
     }
 
+    /**
+     * In the {@link State#INITIALIZED}-phase, install this {@link Manager} in 
+     * the {@link ManagerComponent} so that it can be found by other parts of
+     * the system.
+     * <p>
+     * THIS METHOD IS INTENDED TO BE INVOCED AUTOMATICALLY BY THE DEPENDENCY
+     * INJECTOR. IT SHOULD THEREFORE NEVER BE CALLED DIRECTLY!
+     * 
+     * @param persistenceComponent  auto-injected managerComponent
+     * @param projectComponent      auto-injected projectComponent
+     */
     @ExecuteBefore(INITIALIZED)
     final void install(
             @WithState(INITIALIZED) ManagerComponent managerComponent,

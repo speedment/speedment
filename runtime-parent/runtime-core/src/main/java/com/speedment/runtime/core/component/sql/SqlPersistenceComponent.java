@@ -20,12 +20,32 @@ import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.PersistenceComponent;
 
 /**
- *
+ * A component responsible for persisting, updating and removing entities in the
+ * database. This is a general component for entity management that is invoked
+ * by the generated entity managers that Speedment creates.
+ * <p>
+ * This specialization of the {@link PersistenceComponent}-interface is used for
+ * relational SQL databases. If the managers work with other data sources, a
+ * different specialization should be used.
+ * 
  * @author  Emil Forslund
  * @since   3.0.1
+ * 
+ * @see PersistenceComponent
  */
 public interface SqlPersistenceComponent extends PersistenceComponent {
     
+    /**
+     * Install the specified table in this component. This method may be used by
+     * the implementation to setup the inner storage structure so that requests
+     * can be completed with higher efficiency later.
+     * <p>
+     * Managers that represent a SQL table are required to execute this method
+     * as part of their initialization cycle.
+     * 
+     * @param <ENTITY>         the entity type
+     * @param tableIdentifier  identifier for the table to prepare
+     */
     <ENTITY> void install(TableIdentifier<ENTITY> tableIdentifier);
     
 }

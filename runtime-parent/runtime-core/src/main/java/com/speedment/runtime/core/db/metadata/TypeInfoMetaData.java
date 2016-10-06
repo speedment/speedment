@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.db.metadata;
 
-
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.db.metadata.TypeInfoMetaDataImpl;
 
@@ -31,7 +30,6 @@ import java.util.Optional;
  *
  * @author  Per Minborg
  */
-
 public interface TypeInfoMetaData {
 
     final class Hidden {

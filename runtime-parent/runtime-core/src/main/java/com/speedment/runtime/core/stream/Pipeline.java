@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.stream;
 
-
 import com.speedment.runtime.core.stream.action.Action;
 
 import java.util.NoSuchElementException;
@@ -28,7 +27,6 @@ import java.util.stream.Stream;
  *
  * @author  Per Minborg
  */
-
 public interface Pipeline extends Iterable<Action<?, ?>> {
 
     Action<?, ?> getFirst();

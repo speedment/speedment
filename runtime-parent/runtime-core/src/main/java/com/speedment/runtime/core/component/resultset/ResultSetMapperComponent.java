@@ -20,16 +20,18 @@ import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.core.db.DbmsType;
 
 /**
- * The JavaTypeMapperComponent provides a mapping from a certain DbmsType and
- * Class to a certain JavaTypeMapping. By implementing custom implementation of
- * this interface, arbitrary mappings may be carried out.
+ * The {@code ResultSetMapperComponent} provides a mapping from a certain 
+ * {@link DbmsType} and {@code Class} to a certain {@link ResultSetMapping}. 
+ * By implementing this interface, arbitrary mappings may be carried out.
+ * <p>
+ * This component is primarily used by custom database connectors so that 
+ * non-standard JDBC mappings can be used.
  *
  * @author  Per Minborg
  * @since   2.0.0
  */
 @InjectKey(ResultSetMapperComponent.class)
 public interface ResultSetMapperComponent {
-
 
     /**
      * Gets the mapping from the javaClass to the {@link ResultSetMapping}. If a 

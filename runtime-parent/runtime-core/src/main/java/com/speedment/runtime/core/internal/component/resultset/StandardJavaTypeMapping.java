@@ -29,8 +29,6 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static com.speedment.runtime.core.component.resultset.ResultSetMapping.unableToMapLong;
-import static com.speedment.runtime.core.component.resultset.ResultSetMapping.unableToMapString;
 import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
 
 public final class StandardJavaTypeMapping {
@@ -43,6 +41,18 @@ public final class StandardJavaTypeMapping {
      */
     public static Stream<ResultSetMapping<?>> stream() {
         return Stream.of(VALUES);
+    }
+    
+    private static <T> T unableToMapString(Class<T> clazz) {
+        return unableToMap(String.class, clazz);
+    }
+
+    private static <T> T unableToMapLong(Class<T> clazz) {
+        return unableToMap(Long.class, clazz);
+    }
+
+    private static <T> T unableToMap(Class<?> from, Class<T> to) {
+        throw new IllegalArgumentException("Unable to parse a " + from.toString() + " and make it " + to.toString());
     }
 
     private static final ResultSetMapping<?>[] VALUES = {

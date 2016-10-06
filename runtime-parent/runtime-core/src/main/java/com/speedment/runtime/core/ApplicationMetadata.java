@@ -25,7 +25,6 @@ import com.speedment.runtime.config.Project;
  * @author  Per Minborg
  * @since   2.0.0
  */
-
 public interface ApplicationMetadata {
 
     /**

@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.db;
 
-
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
@@ -34,7 +33,6 @@ import java.util.function.Predicate;
  * @author  Emil Forslund
  * @since   2.0.0
  */
-
 public interface DbmsMetadataHandler {
 
     /**

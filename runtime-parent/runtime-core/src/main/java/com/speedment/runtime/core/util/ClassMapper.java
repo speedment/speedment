@@ -16,8 +16,6 @@
  */
 package com.speedment.runtime.core.util;
 
-
-
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -32,7 +30,6 @@ import java.util.stream.Stream;
  * @author  Per Minborg
  * @since   2.2.0
  */
-
 public interface ClassMapper<V> {
 
     /**

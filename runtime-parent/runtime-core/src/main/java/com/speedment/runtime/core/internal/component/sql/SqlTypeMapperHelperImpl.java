@@ -25,7 +25,8 @@ import com.speedment.runtime.typemapper.TypeMapper;
 import static com.speedment.runtime.config.util.DocumentDbUtil.referencedColumn;
 
 /**
- *
+ * Default implementation of the {@link SqlTypeMapperHelper}-interface.
+ * 
  * @param <ENTITY>     the entity type
  * @param <DB_TYPE>    the JDBC type of the field
  * @param <JAVA_TYPE>  the java type of the field

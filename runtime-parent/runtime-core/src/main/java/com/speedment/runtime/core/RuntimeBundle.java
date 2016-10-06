@@ -26,8 +26,10 @@ import com.speedment.runtime.core.internal.db.postgresql.PostgresqlDbmsType;
 import java.util.stream.Stream;
 
 /**
- *
- * @author Per Minborg
+ * The {@link InjectBundle} for the "runtime"-module.
+ * 
+ * @author  Per Minborg
+ * @since   3.0.1
  */
 public class RuntimeBundle implements InjectBundle {
 

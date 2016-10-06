@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.core.internal.component.sql;
 
+import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 
@@ -23,14 +24,38 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- *
+ * The common interface for table specific stream handlers that is managed by a 
+ * {@link SqlStreamSupplierComponent}.
+ * 
  * @author  Emil Forslund
  * @since   3.0.1
  */
 interface SqlStreamSupplier<ENTITY> {
 
+    /**
+     * Produces a stream over the entities in the managed table. The 
+     * implementation of this method is free to produce a mutable stream that 
+     * can be modified before terminating, for an example by converting parts or
+     * the whole stream into a SQL query.
+     * 
+     * @param parallelStrategy  the parallel strategy to use
+     * @return                  the entity stream
+     */
     Stream<ENTITY> stream(ParallelStrategy parallelStrategy);
     
+    /**
+     * Finds a particular entity based on an ordinary key-value search. This is
+     * potentially faster than using the 
+     * {@link #stream(ParallelStrategy)}-method.
+     * <p>
+     * If multiple entities exist with the specified value for the specified 
+     * field, any one of them might be returned. Which one is not defined.
+     * 
+     * @param <V>    the value type
+     * @param field  the field to select by
+     * @param value  the value to look for
+     * @return       one entity that matches the search or empty
+     */
     <V extends Comparable<? super V>> Optional<ENTITY> findAny(
-            HasComparableOperators<ENTITY, V> field, V value);
+        HasComparableOperators<ENTITY, V> field, V value);
 }

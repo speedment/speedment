@@ -23,10 +23,27 @@ import com.speedment.runtime.core.db.SqlFunction;
 import java.sql.ResultSet;
 
 /**
- *
- * @author Per Minborg
+ * A specialization of the {@link StreamSupplierComponent}-interface that 
+ * specializes in producing streams from a relational SQL database.
+ * 
+ * @author  Per Minborg
+ * @since   3.0.1
  */
 public interface SqlStreamSupplierComponent extends StreamSupplierComponent {
 
-    <ENTITY> void install(TableIdentifier<ENTITY> tableIdentifier, SqlFunction<ResultSet, ENTITY> entityMapper);
+    /**
+     * Installs the specified entity mapper for the specified table in this 
+     * component.
+     * <p>
+     * Every manager that represents a SQL table is required to invoke this 
+     * method as part of its configuration cycle.
+     * 
+     * @param <ENTITY>         the entity type
+     * @param tableIdentifier  identifier for the table
+     * @param entityMapper     the mapper between SQL result and entity to use
+     */
+    <ENTITY> void install(
+            TableIdentifier<ENTITY> tableIdentifier, 
+            SqlFunction<ResultSet, ENTITY> entityMapper
+    );
 }

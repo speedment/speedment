@@ -19,14 +19,30 @@ package com.speedment.runtime.core.manager;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 
 /**
- *
- * @author Per Minborg
- * @param <ENTITY> Entity type
+ * This class makes it possible to decorate a manager with a special 
+ * parallelization strategy by using a builder pattern.
+ * 
+ * @param <ENTITY>  the entity type
+ * 
+ * @author  Per Minborg
+ * @since   3.0.1
  */
 public interface ManagerConfigurator<ENTITY> {
 
+    /**
+     * Set the parallelization strategy to use in the built manager.
+     * 
+     * @param parallelStrategy  the parallelization strategy
+     * @return                  a reference to this instance
+     */
     ManagerConfigurator<ENTITY> withParallelStrategy(ParallelStrategy parallelStrategy);
 
+    /**
+     * Builds a new manager that might delegate some methods to the pre-existing 
+     * manager, but where the specified settings will be applied upon execution.
+     * 
+     * @return  the built manager
+     */
     Manager<ENTITY> build();
 
 }

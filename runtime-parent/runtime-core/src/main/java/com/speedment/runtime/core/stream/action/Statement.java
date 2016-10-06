@@ -16,8 +16,6 @@
  */
 package com.speedment.runtime.core.stream.action;
 
-
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -30,7 +28,6 @@ import static java.util.Objects.requireNonNull;
  * @author  Per Minborg
  * @since   2.1.0
  */
-
 public final class Statement {
 
     private final Verb verb;

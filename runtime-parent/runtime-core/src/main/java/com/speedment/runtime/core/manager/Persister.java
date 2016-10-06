@@ -22,7 +22,10 @@ import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 /**
- *
+ * An action that takes an entity and persists it to a data store. This 
+ * interface extends the standard {@code UnaryOperator}- and 
+ * {@code Consumer}-interfaces so that it can be used inside a {@code Stream}.
+ * 
  * @param <ENTITY>  the entity type
  * 
  * @author  Per Minborg
@@ -31,11 +34,28 @@ import java.util.function.UnaryOperator;
 @FunctionalInterface
 public interface Persister<ENTITY> extends UnaryOperator<ENTITY>, Consumer<ENTITY>  {
 
+    /**
+     * Persists the entity in the data store, returning the same or a different
+     * entity with any auto-generated fields updated.
+     * 
+     * @param entity  the entity to persist
+     * @return        the persisted entity (same instance or new is not defined)
+     * 
+     * @throws SpeedmentException  if persisting the entity failed
+     */
     @Override
-    ENTITY apply(ENTITY t) throws SpeedmentException;
+    ENTITY apply(ENTITY entity) throws SpeedmentException;
 
+    /**
+     * Persists the entity in the data store. The specified instance might be
+     * modified by this method in some implementations.
+     * 
+     * @param entity  the entity to persist
+     * 
+     * @throws SpeedmentException  if persisting the entity failed
+     */
     @Override
-    default void accept(ENTITY t) {
-        apply(t);
+    default void accept(ENTITY entity) {
+        apply(entity);
     }
 }

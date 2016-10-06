@@ -35,7 +35,6 @@ import static java.util.Objects.requireNonNull;
  * @author  Emil Forslund
  * @since   2.1.0
  */
-
 public final class CollectorUtil {
 
     private static final String NULL_TEXT = " must not be null";

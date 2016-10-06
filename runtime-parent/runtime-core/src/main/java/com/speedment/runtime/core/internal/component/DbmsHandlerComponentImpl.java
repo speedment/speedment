@@ -30,7 +30,6 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Per Minborg
  */
-
 public final class DbmsHandlerComponentImpl implements DbmsHandlerComponent {
 
     private final Map<String, DbmsType> dbmsTypes;

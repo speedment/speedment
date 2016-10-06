@@ -35,5 +35,4 @@ public interface ConfigurableIteratorSpliterator<T> extends Spliterator<T> {
     static <T> Spliterator<T> of(Iterator<? extends T> iterator, int characteristics, int[] batchSizes) {
         return new ConfigurableIteratorSpliteratorImpl<>(iterator, characteristics, batchSizes);
     }
-
 }

@@ -16,14 +16,11 @@
  */
 package com.speedment.runtime.core.stream.action;
 
-
-
 /**
  *
  * @author  Per Minborg
  * @since   2.1.0
  */
-
 public enum Property {
 
     ORDER,

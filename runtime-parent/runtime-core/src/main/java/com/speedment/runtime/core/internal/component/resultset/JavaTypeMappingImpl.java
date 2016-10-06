@@ -25,8 +25,10 @@ import static java.util.Objects.requireNonNull;
 
 /**
  *
- * @author pemi
- * @param <T> the Java Class to map
+ * @param <T> the Java class to map
+ * 
+ * @author  Per Minborg
+ * @since   2.0.0
  */
 public final class JavaTypeMappingImpl<T> implements ResultSetMapping<T> {
 
@@ -36,15 +38,15 @@ public final class JavaTypeMappingImpl<T> implements ResultSetMapping<T> {
     private final Function<Long, ? extends T> longMapper;
 
     public JavaTypeMappingImpl(
-        Class<T> clazz,
-        String resultSetMethodName,
-        Function<String, ? extends T> stringMapper,
-        Function<Long, ? extends T> longMapper
-    ) {
-        this.clazz = requireNonNull(clazz);
+            Class<T> clazz,
+            String resultSetMethodName,
+            Function<String, ? extends T> stringMapper,
+            Function<Long, ? extends T> longMapper) {
+        
+        this.clazz               = requireNonNull(clazz);
         this.resultSetMethodName = requireNonNull(resultSetMethodName);
-        this.stringMapper = requireNonNull(stringMapper);
-        this.longMapper = requireNonNull(longMapper);
+        this.stringMapper        = requireNonNull(stringMapper);
+        this.longMapper          = requireNonNull(longMapper);
     }
 
     @Override
@@ -69,7 +71,8 @@ public final class JavaTypeMappingImpl<T> implements ResultSetMapping<T> {
 
     @Override
     public String toString() {
-        return JavaTypeMappingImpl.class.getSimpleName() + " {class=" + getJavaClass().getName() + ", rsmName=" + resultSetMethodName + "}";
+        return JavaTypeMappingImpl.class.getSimpleName() + 
+            " {class=" + getJavaClass().getName() + 
+            ", rsmName=" + resultSetMethodName + "}";
     }
-
 }

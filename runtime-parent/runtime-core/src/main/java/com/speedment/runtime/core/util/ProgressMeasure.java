@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.util;
 
-
 import com.speedment.runtime.core.internal.util.ProgressMeasurerImpl;
 
 import java.util.function.Consumer;
@@ -27,7 +26,6 @@ import java.util.function.Consumer;
  * @author  Per Minborg
  * @since   2.3.0
  */
-
 public interface ProgressMeasure {
     
     double

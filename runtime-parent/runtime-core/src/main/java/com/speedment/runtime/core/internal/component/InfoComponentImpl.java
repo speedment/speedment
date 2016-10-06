@@ -19,9 +19,10 @@ package com.speedment.runtime.core.internal.component;
 import com.speedment.runtime.core.component.InfoComponent;
 
 /**
- *
- * @author Emil Forslund
- * @since 3.0.0
+ * Default implementation of the {@link InfoComponent}-interface.
+ * 
+ * @author  Emil Forslund
+ * @since   3.0.0
  */
 public final class InfoComponentImpl implements InfoComponent {
     
@@ -52,7 +53,7 @@ public final class InfoComponentImpl implements InfoComponent {
 
     @Override
     public boolean isProductionMode() {
-        return !getImplementationVersion().toUpperCase().contains("EA") && !getImplementationVersion().toUpperCase().contains("SNAPSHOT");
+        return !getImplementationVersion().toUpperCase().contains("EA") 
+            && !getImplementationVersion().toUpperCase().contains("SNAPSHOT");
     }
-    
 }

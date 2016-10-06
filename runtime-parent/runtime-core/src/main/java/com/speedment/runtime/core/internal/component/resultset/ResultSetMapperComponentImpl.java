@@ -38,7 +38,7 @@ public final class ResultSetMapperComponentImpl implements ResultSetMapperCompon
     private final Map<DbmsType, Map<Class<?>, ResultSetMapping<?>>> dbmsTypeMap;
 
     public ResultSetMapperComponentImpl() {
-        map = newConcurrentMap();
+        map         = newConcurrentMap();
         dbmsTypeMap = newConcurrentMap();
         StandardJavaTypeMapping.stream().forEach(this::put);
     }

@@ -40,42 +40,6 @@ import java.util.stream.Stream;
  */
 public interface Manager<ENTITY> {
 
-//    /**
-//     * Creates an returns a new entity. The new entity will have all its fields
-//     * initialized to its default Java type value (e.g. (@code null},
-//     * {@code false} or 0).
-//     *
-//     * @return a new entity
-//     */
-//    ENTITY entityCreate();
-//
-//    /**
-//     * Returns an {@link EntityCreator} that when its
-//     * {@link EntityCreator#get()} method is called, will produce the same
-//     * result as {@link Manager#entityCreate() }
-//     *
-//     * @return an EntityCreator
-//     */
-//    Supplier<ENTITY> entityCreator();
-//
-//    /**
-//     * Creates an returns a new entity copy. The new entity will have all its
-//     * fields initialized to the values of the provided source entity.
-//     *
-//     * @param source entity
-//     * @return a new entity
-//     */
-//    ENTITY entityCopy(ENTITY source);
-//
-//    /**
-//     * Returns an {@link EntityCopier} that when its
-//     * {@link EntityCopier#apply(java.lang.Object) } method is called, will
-//     * produce the same result as {@link Manager#entityCopy(java.lang.Object) }
-//     *
-//     * @return an EntityCreator
-//     */
-//    UnaryOperator<ENTITY> entityCopier();
-
     /**
      * Returns an identifier for the table that this {@code Manager} handles
      * entities for.

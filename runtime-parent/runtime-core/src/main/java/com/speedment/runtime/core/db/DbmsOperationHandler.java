@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.db;
 
-
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.Field;
@@ -36,7 +35,6 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   2.0.0
  */
-
 public interface DbmsOperationHandler {
     
     /**

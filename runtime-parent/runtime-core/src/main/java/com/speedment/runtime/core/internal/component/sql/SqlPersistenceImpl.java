@@ -52,11 +52,12 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 /**
- *
+ * Default implementation of the {@link SqlPersistence}-interface.
+ * 
  * @param <ENTITY>  the entity type
  * 
  * @author  Emil Forslund
- * @since   1.0.0
+ * @since   3.0.1
  */
 final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
 

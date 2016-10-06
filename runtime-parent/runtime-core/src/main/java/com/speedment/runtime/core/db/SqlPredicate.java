@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.db;
 
-
 import com.speedment.runtime.core.exception.SpeedmentException;
 
 import java.sql.SQLException;
@@ -26,12 +25,13 @@ import java.util.function.Predicate;
 import static java.util.Objects.requireNonNull;
 
 /**
- *
+ * A variation of the standard {@code java.util.function.Predicate} that throws
+ * a {@code SQLException} if an error occured while the predicate was tested.
+ * 
  * @param <T>  input type
  * 
  * @author  Per Minborg
  */
-
 @FunctionalInterface
 public interface SqlPredicate<T> {
 

@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.component.resultset;
 
-
 import com.speedment.runtime.config.Dbms;
 
 /**
@@ -28,7 +27,6 @@ import com.speedment.runtime.config.Dbms;
  * @author  Per Minborg
  * @since   2.0.0
  */
-
 public interface ResultSetMapping<T> {
 
     /**
@@ -77,29 +75,4 @@ public interface ResultSetMapping<T> {
      * {@code String}
      */
     T parse(long input);
-
-    static <T> T unableToMapString(Class<T> clazz) {
-        return unableToMap(String.class, clazz);
-    }
-
-    static <T> T unableToMapLong(Class<T> clazz) {
-        return unableToMap(Long.class, clazz);
-    }
-
-    static <T> T unableToMap(Class<?> from, Class<T> to) {
-        throw new IllegalArgumentException("Unable to parse a " + from.toString() + " and make it " + to.toString());
-    }
-
-    /**
-     * Returns if this type must use a support method to read from the ResulSet
-     * rather than just calling a ResultSet method directly (for example, there is no
-     * {@code rs.getUuid()} method).
-     *
-     * @return if this type must use a support method to read from the ResulSet
-     * rather than just calling a ResultSet method directly
-     */
-    default boolean isMustUseSupportMethod() {
-        return false;
-    }
-
 }

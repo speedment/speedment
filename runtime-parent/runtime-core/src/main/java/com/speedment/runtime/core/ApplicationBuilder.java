@@ -18,6 +18,8 @@ package com.speedment.runtime.core;
 
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.internal.DefaultApplicationBuilder;
@@ -31,24 +33,56 @@ import java.util.function.Consumer;
 /**
  * Builder class for producing new {@link Speedment} instances.
  *
- * @param <APP> application that is built
- * @param <BUILDER> the type of this builder
+ * @param <APP>      application that is built
+ * @param <BUILDER>  the type of this builder
  *
- * @author Emil Forslund
- * @since 3.0.0
+ * @author  Emil Forslund
+ * @since   3.0.0
  */
 public interface ApplicationBuilder<APP extends Speedment, BUILDER extends ApplicationBuilder<APP, BUILDER>> {
+    
+    /**
+     * The type of logging to change the settings for.
+     */
+    enum LogType {
+        
+        /**
+         * Logging related to querying the data source.
+         */
+        STREAM, 
+        
+        /**
+         * Logging related to persisting new entities into the data source.
+         */
+        PERSIST, 
+        
+        /**
+         * Logging related to updating existing entities in the data source.
+         */
+        UPDATE, 
+        
+        /**
+         * Logging related to removing entities from the data source.
+         */
+        REMOVE, 
+        
+        /**
+         * Logging related to configurating the application platform, dependency 
+         * injection, component configuration etc.
+         */
+        APPLICATION_BUILDER
+    }
 
     /**
      * Configures a parameter for the named {@link Document} of a certain class.
      * The consumer will then be applied after the configuration has been read
      * and after the System properties have been applied.
      *
-     * @param <C> the type of {@link Document} that is to be used
-     * @param type the class of the type of {@link Document} that is to be used
-     * @param name the fully qualified name of the {@link Document}.
-     * @param consumer the consumer to apply
-     * @return this instance
+     * @param <C>       the type of {@link Document} that is to be used
+     * @param type      the class of the type of {@link Document} that is to be used
+     * @param name      the fully qualified name of the {@link Document}.
+     * @param consumer  the consumer to apply
+     * @return          this instance
      */
     default <C extends Document & HasEnabled> BUILDER with(Class<C> type, String name, Consumer<C> consumer) {
         return with(type, name, (app, t) -> consumer.accept(t));
@@ -59,11 +93,11 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * The consumer will then be applied after the configuration has been read
      * and after the System properties have been applied.
      *
-     * @param <C> the type of {@link Document} that is to be used
-     * @param type the class of the type of {@link Document} that is to be used
-     * @param name the fully qualified name of the {@link Document}.
-     * @param consumer the consumer to apply
-     * @return this instance
+     * @param <C>       the type of {@link Document} that is to be used
+     * @param type      the class of the type of {@link Document} that is to be used
+     * @param name      the fully qualified name of the {@link Document}.
+     * @param consumer  the consumer to apply
+     * @return          this instance
      */
     <C extends Document & HasEnabled> BUILDER with(Class<C> type, String name, BiConsumer<Injector, C> consumer);
 
@@ -72,10 +106,10 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * consumer will then be applied after the configuration has been read and
      * after the System properties have been applied.
      *
-     * @param <C> the type of {@link Document} that is to be used
-     * @param type the class of the type of {@link Document} that is to be used
-     * @param consumer the consumer to apply
-     * @return this instance
+     * @param <C>       the type of {@link Document} that is to be used
+     * @param type      the class of the type of {@link Document} that is to be used
+     * @param consumer  the consumer to apply
+     * @return          this instance
      */
     default <C extends Document & HasEnabled> BUILDER with(Class<C> type, Consumer<C> consumer) {
         return with(type, (app, t) -> consumer.accept(t));
@@ -86,10 +120,10 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * consumer will then be applied after the configuration has been read and
      * after the System properties have been applied.
      *
-     * @param <C> the type of {@link Document} that is to be used
-     * @param type the class of the type of {@link Document} that is to be used
-     * @param consumer the consumer to apply
-     * @return this instance
+     * @param <C>       the type of {@link Document} that is to be used
+     * @param type      the class of the type of {@link Document} that is to be used
+     * @param consumer  the consumer to apply
+     * @return          this instance
      */
     <C extends Document & HasEnabled> BUILDER with(Class<C> type, BiConsumer<Injector, C> consumer);
 
@@ -98,9 +132,9 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * created during initialization. This parameter can override settings in
      * the settings file.
      *
-     * @param key the key to set
-     * @param value the new value
-     * @return this instance
+     * @param key    the key to set
+     * @param value  the new value
+     * @return       this instance
      */
     BUILDER withParam(String key, String value);
 
@@ -111,8 +145,8 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * <p>
      * This will not be saved in any configuration files!
      *
-     * @param password to use for all dbms:es in this project
-     * @return this instance
+     * @param password  to use for all dbms:es in this project
+     * @return          this instance
      */
     BUILDER withPassword(char[] password);
 
@@ -123,9 +157,9 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * <p>
      * This will not be saved in any configuration files!
      *
-     * @param dbmsName the name of the dbms
-     * @param password to use for the named dbms
-     * @return this instance
+     * @param dbmsName  the name of the dbms
+     * @param password  to use for the named dbms
+     * @return          this instance
      */
     BUILDER withPassword(String dbmsName, char[] password);
 
@@ -136,8 +170,8 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * <p>
      * This will not be saved in any configuration files!
      *
-     * @param password to use for all dbms:es in this project
-     * @return this instance
+     * @param password  to use for all dbms:es in this project
+     * @return          this instance
      */
     BUILDER withPassword(String password);
 
@@ -148,9 +182,9 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * <p>
      * This will not be saved in any configuration files!
      *
-     * @param dbmsName the name of the dbms
-     * @param password to use for the named dbms
-     * @return this instance
+     * @param dbmsName  the name of the dbms
+     * @param password  to use for the named dbms
+     * @return          this instance
      */
     BUILDER withPassword(String dbmsName, String password);
 
@@ -159,8 +193,8 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * then be applied after the configuration has been read and after the
      * System properties have been applied.
      *
-     * @param username to use for all dbms:es in this project
-     * @return this instance
+     * @param username  to use for all dbms:es in this project
+     * @return          this instance
      */
     BUILDER withUsername(String username);
 
@@ -169,9 +203,9 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param dbmsName the name of the dbms
-     * @param username to use for the named dbms
-     * @return this instance
+     * @param dbmsName  the name of the dbms
+     * @param username  to use for the named dbms
+     * @return          this instance
      */
     BUILDER withUsername(String dbmsName, String username);
 
@@ -180,8 +214,8 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * will then be applied after the configuration has been read and after the
      * System properties have been applied.
      *
-     * @param ipAddress to use for all dbms:es in this project
-     * @return this instance
+     * @param ipAddress  to use for all dbms:es in this project
+     * @return           this instance
      */
     BUILDER withIpAddress(String ipAddress);
 
@@ -190,9 +224,9 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param dbmsName the name of the dbms
-     * @param ipAddress to use for the named dbms.
-     * @return this instance
+     * @param dbmsName   the name of the dbms
+     * @param ipAddress  to use for the named dbms.
+     * @return           this instance
      */
     BUILDER withIpAddress(String dbmsName, String ipAddress);
 
@@ -201,8 +235,8 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param port to use for all dbms:es in this project
-     * @return this instance
+     * @param port  to use for all dbms:es in this project
+     * @return      this instance
      */
     BUILDER withPort(int port);
 
@@ -211,9 +245,9 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * the configuration has been read and after the System properties have been
      * applied.
      *
-     * @param dbmsName the name of the dbms
-     * @param port to use for the named dbms
-     * @return this instance
+     * @param dbmsName  the name of the dbms
+     * @param port      to use for the named dbms
+     * @return          this instance
      */
     BUILDER withPort(String dbmsName, int port);
 
@@ -225,8 +259,8 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * This method is useful for multi-tenant projects where there are several
      * identical schemas separated only by their names.
      *
-     * @param schemaName to use for all schemas this project
-     * @return this instance
+     * @param schemaName  to use for all schemas this project
+     * @return            this instance
      */
     BUILDER withSchema(String schemaName);
 
@@ -238,9 +272,9 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * This method is useful for multi-tenant projects where there are several
      * identical schemas separated only by their names.
      *
-     * @param oldSchemaName the current name of a schema
-     * @param schemaName to use for the named schema
-     * @return this instance
+     * @param oldSchemaName  the current name of a schema
+     * @param schemaName     to use for the named schema
+     * @return               this instance
      */
     BUILDER withSchema(String oldSchemaName, String schemaName);
 
@@ -253,8 +287,8 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * etc).
      * <p>
      *
-     * @param connectionUrl to use for all dbms this project or null
-     * @return this instance
+     * @param connectionUrl  to use for all dbms this project or null
+     * @return               this instance
      */
     BUILDER withConnectionUrl(String connectionUrl);
 
@@ -266,16 +300,16 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * dbmses' default connection URL generator (e.g. using ipAddress, port,
      * etc).
      *
-     * @param dbmsName the name of the dbms
-     * @param connectionUrl to use for the named dbms or null
-     * @return this instance
+     * @param dbmsName       the name of the dbms
+     * @param connectionUrl  to use for the named dbms or null
+     * @return               this instance
      */
     BUILDER withConnectionUrl(String dbmsName, String connectionUrl);
 
     /**
      * Sets that the initial database check shall be skipped upon build().
      *
-     * @return this instance
+     * @return  this instance
      */
     BUILDER withSkipCheckDatabaseConnectivity();
 
@@ -284,7 +318,7 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * upon build(). Useful for testing.
      *
      *
-     * @return this instance
+     * @return  this instance
      */
     BUILDER withSkipValidateRuntimeConfig();
 
@@ -292,79 +326,78 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * Sets that the logo printout shall be skipped upon build().
      *
      *
-     * @return this instance
+     * @return  this instance
      */
     BUILDER withSkipLogoPrintout();
 
     /**
      * Adds a custom manager.
      *
-     * @param <M> the manager type
-     *
-     * @param managerImplType the manager implementation class
-     * @return this instance
+     * @param <M>              the manager type
+     * @param managerImplType  the manager implementation class
+     * @return                 this instance
      */
     <M extends Manager<?>> BUILDER withManager(Class<M> managerImplType);
 
     /**
-     * Adds a custom component implementation class.
+     * Adds a custom component implementation class. The specified class will be
+     * instantiated using its default constructor and fields annotated with 
+     * {@link Inject} will be dependency injected. Methods annotated with 
+     * {@link ExecuteBefore} will also be executed as part of the application 
+     * configuration phase.
      *
-     * @param componentClass the implementation class
-     * @return this instance
+     * @param componentClass  the implementation class
+     * @return                this instance
      */
     BUILDER withComponent(Class<?> componentClass);
 
     /**
-     * Adds a custom component implementation class.
+     * Adds a custom component implementation class. The specified class will be
+     * instantiated using its default constructor and fields annotated with 
+     * {@link Inject} will be dependency injected. Methods annotated with 
+     * {@link ExecuteBefore} will also be executed as part of the application 
+     * configuration phase.
      *
-     * @param key the key to store it under
-     * @param componentClass the implementation class
-     * @return this instance
+     * @param key             the key to store it under
+     * @param componentClass  the implementation class
+     * @return                this instance
      */
     BUILDER withComponent(String key, Class<?> componentClass);
 
     /**
-     * Adds a custom bundle of injectable implementation classes.
+     * Adds a custom bundle of dependency injectable implementation classes.
+     * <p>
+     * The specified classes will be instantiated using its default constructor 
+     * and fields annotated with {@link Inject} will be dependency injected. 
+     * Methods annotated with {@link ExecuteBefore} will also be executed as 
+     * part of the application configuration phase.
      *
-     * @param bundleClass to use when adding injectables
-     * @return this instance
+     * @param bundleClass  to use when adding injectables
+     * @return             this instance
      */
     BUILDER withBundle(Class<? extends InjectBundle> bundleClass);
-
-    enum LogType {
-        STREAM, PERSIST, UPDATE, REMOVE, APPLICATION_BUILDER
-    }
 
     /**
      * Adds a logging configuration to the application.
      *
-     * @param logType to turn on
-     * @return this instance
+     * @param logType  to turn on
+     * @return         this instance
      */
     BUILDER withLogging(LogType logType);
 
-//    /**
-//     * Adds a custom installer class and then installs it in the parent
-//     *
-//     * @param <T> install class type
-//     * @param parent class type
-//     * @param installClass to be added and installed
-//     * @return this instance
-//     */
-//    <T> BUILDER withInstall(Class<HasInstall<T>> parent, Class<T> installClass);
-
     /**
-     * Builds this application.
+     * Builds this application. This is expected to be the last method called on
+     * this object.
      *
-     * @return the built application
+     * @return  the built application
      */
     APP build();
 
     /**
-     * Creates and returns a new empty ApplicationBuilder.
+     * Creates and returns a new empty {@code ApplicationBuilder}.
      *
-     * @param <BUILDER> ApplicationBuilder type
-     * @return a new empty ApplicationBuilder
+     * @param <BUILDER>  ApplicationBuilder type
+     * @return           a new empty ApplicationBuilder
      */
     @SuppressWarnings("unchecked")
     static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER empty() {
@@ -397,5 +430,4 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
     static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER create(Class<? extends ApplicationMetadata> applicationMetadataclass) {
         return (BUILDER) new DefaultApplicationBuilder(applicationMetadataclass);
     }
-
 }

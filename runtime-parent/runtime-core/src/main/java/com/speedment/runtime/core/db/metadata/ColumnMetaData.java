@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.db.metadata;
 
-
 import com.speedment.runtime.core.internal.db.metadata.ColumnMetaDataImpl;
 
 import java.sql.ResultSet;
@@ -25,7 +24,6 @@ import java.sql.ResultSet;
  *
  * @author Per Minborg
  */
-
 public interface ColumnMetaData {
 
     /**

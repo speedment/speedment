@@ -16,13 +16,10 @@
  */
 package com.speedment.runtime.core.exception;
 
-
-
 /**
  * {@code SpeedmentException} is the superclass of those exceptions that can be
  * thrown during the normal operation of the Speedment framework. Exceptions of
  * this type are sometimes used to wrap checked exception.
- *
  * <p>
  * {@code SpeedmentException} and its subclasses are <em>unchecked
  * exceptions</em>. Unchecked exceptions do <em>not</em> need to be declared in
@@ -33,7 +30,6 @@ package com.speedment.runtime.core.exception;
  * @author  Per Minborg
  * @since   2.0.0
  */
-
 public final class SpeedmentException extends RuntimeException {
 
     static final long serialVersionUID = -623523923713561356L;

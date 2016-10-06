@@ -16,17 +16,16 @@
  */
 package com.speedment.runtime.core.db;
 
-
-
 import java.sql.SQLException;
 
 import static java.util.Objects.requireNonNull;
 
 /**
- *
+ * A variation of the standard {@code java.lang.Runnable} that throws
+ * a {@code SQLException} if an error occured while it ran.
+ * 
  * @author  Per Minborg
  */
-
 @FunctionalInterface
 public interface SqlRunnable {
 

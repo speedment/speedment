@@ -22,18 +22,40 @@ import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 /**
- *
- * @author Per Minborg
+ * An action that takes an entity and removes it from a data store. This 
+ * interface extends the standard {@code UnaryOperator}- and 
+ * {@code Consumer}-interfaces so that it can be used inside a {@code Stream}.
+ * 
+ * @param <ENTITY>  the entity type
+ * 
+ * @author  Per Minborg
+ * @since   3.0.1
  */
 @FunctionalInterface
 public interface Remover<ENTITY> extends UnaryOperator<ENTITY>, Consumer<ENTITY> {
 
+    /**
+     * Removes the entity from the data store, returning the same or a different
+     * entity with any auto-generated fields updated.
+     * 
+     * @param entity  the entity to remove
+     * @return        the removed entity (same instance or new is not defined)
+     * 
+     * @throws SpeedmentException  if removing the entity failed
+     */
     @Override
-    ENTITY apply(ENTITY t) throws SpeedmentException;
+    ENTITY apply(ENTITY entity) throws SpeedmentException;
 
+    /**
+     * Removes the entity from the data store. The specified instance might be
+     * modified by this method in some implementations.
+     * 
+     * @param entity  the entity to remove
+     * 
+     * @throws SpeedmentException  if removing the entity failed
+     */
     @Override
-    default void accept(ENTITY t) {
-        apply(t);
+    default void accept(ENTITY entity) {
+        apply(entity);
     }
-
 }

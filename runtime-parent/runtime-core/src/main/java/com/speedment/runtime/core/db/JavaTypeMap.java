@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.db;
 
-
 import com.speedment.runtime.core.db.metadata.ColumnMetaData;
 import com.speedment.runtime.core.internal.db.JavaTypeMapImpl;
 
@@ -24,13 +23,12 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * A conviniency class for mapping between column types using a database 
- * specific ruleset.
+ * A convenience class for mapping between column types using a database 
+ * specific rule set.
  * 
  * @author  Emil Forslund
  * @since   3.0.0
  */
-
 public interface JavaTypeMap {
     
     /**

@@ -36,7 +36,7 @@ import static java.util.Objects.requireNonNull;
 /**
  *
  * @author  Emil Forslund
- * @since   1.0.0
+ * @since   3.0.1
  */
 public final class SqlPersistanceComponentImpl implements SqlPersistenceComponent {
     

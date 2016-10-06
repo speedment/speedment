@@ -16,21 +16,48 @@
  */
 package com.speedment.runtime.core.internal.component.sql;
 
+import com.speedment.runtime.core.component.sql.SqlPersistenceComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
 
 /**
- *
+ * The common interface for table specific persisting handlers that is managed 
+ * by a {@link SqlPersistenceComponent}.
+ * 
  * @param <ENTITY>  the entity type
  * 
  * @author  Emil Forslund
- * @since   1.0.0
+ * @since   3.0.1
  */
 interface SqlPersistence<ENTITY> {
 
+    /**
+     * Persists the specified entity in the table managed by this handler.
+     * 
+     * @param entity  the entity to persist
+     * @return        the new persisted entity
+     * 
+     * @throws SpeedmentException  if the entity could not be persisted
+     */
     ENTITY persist(ENTITY entity) throws SpeedmentException;
 
+    /**
+     * Updates the specified entity in the table managed by this handler.
+     * 
+     * @param entity  the entity to update
+     * @return        the new updated entity
+     * 
+     * @throws SpeedmentException  if the entity could not be updated
+     */
     ENTITY update(ENTITY entity) throws SpeedmentException;
 
+    /**
+     * Removes the specified entity from the table managed by this handler.
+     * 
+     * @param entity  the entity to remove
+     * @return        the entity as it was before it was removed
+     * 
+     * @throws SpeedmentException  if the entity could not be removed
+     */
     ENTITY remove(ENTITY entity) throws SpeedmentException;
     
 }

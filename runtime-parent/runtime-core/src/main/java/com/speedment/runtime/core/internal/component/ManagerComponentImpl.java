@@ -27,7 +27,8 @@ import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 
 /**
- *
+ * Default implementation of the {@link ManagerComponent}-interface.
+ * 
  * @author Emil Forslund
  */
 public final class ManagerComponentImpl implements ManagerComponent {

@@ -16,15 +16,12 @@
  */
 package com.speedment.runtime.core.util;
 
-
-
 /**
  * Support class for classes that only contains static methods and fields.
  * This interface can for example be used for various "Util" classes.
  *
  * @author  Per Minborg
  */
-
 public final class StaticClassUtil {
 
     /**

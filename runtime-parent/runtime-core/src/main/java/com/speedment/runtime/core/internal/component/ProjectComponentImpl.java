@@ -25,6 +25,12 @@ import com.speedment.runtime.core.component.ProjectComponent;
 import static com.speedment.common.injector.State.INITIALIZED;
 import static java.util.Objects.requireNonNull;
 
+/**
+ * The default implementation of the {@link ProjectComponent}-interface.
+ * 
+ * @author  Emil Forslund
+ * @since   2.0.0
+ */
 public final class ProjectComponentImpl implements ProjectComponent {
 
     private Project project;

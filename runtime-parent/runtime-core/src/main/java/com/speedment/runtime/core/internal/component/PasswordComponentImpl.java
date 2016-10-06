@@ -24,7 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
- * @author Emil Forslund
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
 public final class PasswordComponentImpl implements PasswordComponent {
 

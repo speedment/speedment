@@ -25,6 +25,8 @@ import java.util.function.Function;
 import static java.util.Objects.requireNonNull;
 
 /**
+ * A variation of the standard {@code java.util.function.Function} that throws
+ * a {@code SQLException} if an error occured while the function was applied.
  *
  * @param <T>  input type
  * @param <R>  result type

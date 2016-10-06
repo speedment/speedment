@@ -56,7 +56,8 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
 
 /**
- *
+ * Default implementation of the {@link SqlStreamSupplier}-interface.
+ * 
  * @author  Emil Forslund
  * @since   3.0.1
  */

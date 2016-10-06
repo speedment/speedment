@@ -33,8 +33,11 @@ import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 
 /**
- *
- * @author Per Minborg
+ * The default implementation of the 
+ * {@link SqlStreamSupplierComponent}-interface.
+ * 
+ * @author  Per Minborg
+ * @since   3.0.1
  */
 public final class SqlStreamSupplierComponentImpl implements SqlStreamSupplierComponent {
 

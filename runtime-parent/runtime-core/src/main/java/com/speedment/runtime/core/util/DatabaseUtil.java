@@ -25,12 +25,20 @@ import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed
 import static java.util.stream.Collectors.joining;
 
 /**
- *
+ * Utility methods for calculating values based on a configuration model.
+ * 
  * @author  Emil Forslund
  * @since   3.0.1
  */
 public final class DatabaseUtil {
 
+    /**
+     * Returns the {@link DbmsType} for the specified {@link Dbms}.
+     * 
+     * @param handler  the dbms handler to use
+     * @param dbms     the dbms
+     * @return         the type of that dbms
+     */
     public static DbmsType dbmsTypeOf(DbmsHandlerComponent handler, Dbms dbms) {
         final String typeName = dbms.getTypeName();
         return handler.findByName(typeName).orElseThrow(() -> 

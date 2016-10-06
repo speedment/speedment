@@ -30,21 +30,24 @@ import com.speedment.common.injector.annotation.InjectKey;
 public interface InfoComponent  {
 
     /**
-     * Returns the vendor of Speedment.
+     * Returns the vendor of the Speedment product. This is primarily used to 
+     * show meaningful information to the user.
      *
      * @return the vendor
      */
     String getVendor();
 
     /**
-     * Returns the title of Speedment.
+     * Returns the title of the Speedment product.  This is primarily used to 
+     * show meaningful information to the user.
      *
      * @return the title
      */
     String getTitle();
 
     /**
-     * Returns the subtitle of Speedment.
+     * Returns the subtitle of the Speedment product.  This is primarily used to 
+     * show meaningful information to the user.
      *
      * @return the subtitle
      */

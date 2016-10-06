@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.db;
 
-
 import com.speedment.runtime.config.Dbms;
 
 /**
@@ -26,7 +25,6 @@ import com.speedment.runtime.config.Dbms;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-
 @FunctionalInterface
 public interface ConnectionUrlGenerator {
     
