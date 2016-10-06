@@ -14,31 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.codegen.internal.java.view.value;
+package com.speedment.common.codegen.internal.model.value;
 
-import com.speedment.common.codegen.Generator;
-import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegen.model.value.BooleanValue;
-
-import java.util.Optional;
-
-import static java.util.Objects.requireNonNull;
+import com.speedment.common.codegen.internal.model.ValueImpl;
+import com.speedment.common.codegen.model.value.ReferenceValue;
 
 /**
- * Transforms from an {@link BooleanValue} to java code.
- * 
+ *
  * @author Emil Forslund
  */
-public final class BooleanValueView implements Transform<BooleanValue, String> {
-    
-    /**
-     * {@inheritDoc}
-     */
+public final class ReferenceValueImpl extends ValueImpl<String> implements ReferenceValue {
+
+	public ReferenceValueImpl(String value) {
+		super(value);
+	}
+
 	@Override
-	public Optional<String> transform(Generator gen, BooleanValue model) {
-        requireNonNull(gen);
-        requireNonNull(model);
-        
-		return Optional.of(model.getValue().toString());
+	public ReferenceValueImpl copy() {
+		return new ReferenceValueImpl(getValue());
 	}
 }

@@ -20,8 +20,6 @@ import com.speedment.common.codegen.constant.DefaultJavadocTag;
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
-import com.speedment.common.codegen.internal.model.value.ReferenceValue;
-import com.speedment.common.codegen.internal.model.value.TextValue;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.codegen.model.EnumConstant;
@@ -56,6 +54,7 @@ import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERR
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
+import com.speedment.common.codegen.model.Value;
 import static com.speedment.generator.standard.internal.util.ColumnUtil.usesOptional;
 import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.runtime.config.util.DocumentDbUtil;
@@ -229,7 +228,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                 final String setter = ", " + shortEntityName + "::" + SETTER_METHOD_PREFIX + getSupport().typeName(col);
 
                 final String constant = getSupport().namer().javaStaticFieldName(col.getJavaName());
-                identifierEnum.add(EnumConstant.of(constant).add(new TextValue(col.getName())));
+                identifierEnum.add(EnumConstant.of(constant).add(Value.ofText(col.getName())));
 
                 final String typeMapperCode;
                 if (col.getTypeMapper().isPresent()) {
@@ -249,7 +248,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
 
                 intrf.add(Field.of(getSupport().namer().javaStaticFieldName(col.getJavaName()), ref.type)
                     .final_()
-                    .set(new ReferenceValue(
+                    .set(Value.ofReference(
                         shortName(ref.type.getTypeName())
                         + ".create(Identifier."
                         + constant

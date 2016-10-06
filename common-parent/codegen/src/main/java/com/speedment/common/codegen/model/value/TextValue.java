@@ -14,22 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.codegen.internal.model.value;
+package com.speedment.common.codegen.model.value;
 
-import com.speedment.common.codegen.internal.model.ValueImpl;
+import com.speedment.common.codegen.model.Value;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class TextValue extends ValueImpl<String> {
-
-	public TextValue(String num) {
-		super(num);
-	}
-
-	@Override
-	public TextValue copy() {
-		return new TextValue(getValue());
-	}
+public interface TextValue extends Value<String> {
 }

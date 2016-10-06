@@ -18,7 +18,6 @@ package com.speedment.generator.standard.lifecycle;
 
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.internal.model.JavadocImpl;
-import com.speedment.common.codegen.internal.model.value.ReferenceValue;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
@@ -40,6 +39,7 @@ import java.util.stream.Stream;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
+import com.speedment.common.codegen.model.Value;
 import com.speedment.common.json.Json;
 import static java.util.stream.Collectors.toList;
 import static java.util.Objects.requireNonNull;
@@ -118,7 +118,7 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
         });
         initializer.add("return " + STRING_BUILDER_NAME + ".toString();");
 
-        metadataField.set(new ReferenceValue("init()"));
+        metadataField.set(Value.ofReference("init()"));
         getMetadata.add("return Optional.of(METADATA);");
 
         return newBuilder(file, getClassOrInterfaceName())

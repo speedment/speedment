@@ -22,7 +22,6 @@ import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.controller.AutoImports;
 import com.speedment.common.codegen.internal.java.JavaGenerator;
-import com.speedment.common.codegen.internal.model.value.TextValue;
 import com.speedment.common.codegen.internal.util.Formatting;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
@@ -31,6 +30,8 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Generic;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.Value;
+import com.speedment.common.codegen.model.value.TextValue;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,7 +62,7 @@ public class TypeViewTest {
                 .public_().final_()
                 .add(Field.of("MESSAGE", String.class)
                     .public_().final_().static_()
-                    .set(new TextValue("Hello, World!"))
+                    .set(Value.ofText("Hello, World!"))
                 )
                 .add(Method.of("main", void.class)
                     .public_().static_()

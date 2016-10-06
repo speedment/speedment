@@ -17,7 +17,7 @@
 package com.speedment.common.codegen.internal.model.value;
 
 import com.speedment.common.codegen.internal.model.ValueImpl;
-import com.speedment.common.codegen.model.trait.HasType;
+import com.speedment.common.codegen.model.value.EnumValue;
 
 import java.lang.reflect.Type;
 import java.util.Objects;
@@ -26,22 +26,21 @@ import java.util.Objects;
  *
  * @author Emil Forslund
  */
-public final class EnumValue extends ValueImpl<String>
-		implements HasType<EnumValue> {
+public final class EnumValueImpl extends ValueImpl<String> implements EnumValue {
 	
 	private Type type;
 	
-	public EnumValue(Type type, String value) { 
+	public EnumValueImpl(Type type, String value) { 
 		super (value); 
 		this.type = type;
 	}
 	
-	protected EnumValue(EnumValue prototype) {
-		this (prototype.type, prototype.getValue());
+	protected EnumValueImpl(EnumValue prototype) {
+		this (prototype.getType(), prototype.getValue());
 	}
 
 	@Override
-	public EnumValue set(Type type) {
+	public EnumValueImpl set(Type type) {
 		this.type = type;
 		return this;
 	}
@@ -52,8 +51,8 @@ public final class EnumValue extends ValueImpl<String>
 	}
 	
 	@Override
-	public EnumValue copy() {
-		return new EnumValue(this);
+	public EnumValueImpl copy() {
+		return new EnumValueImpl(this);
 	}
 
     @Override
@@ -75,7 +74,7 @@ public final class EnumValue extends ValueImpl<String>
             return false;
         }
         final EnumValue other = (EnumValue) obj;
-        return Objects.equals(this.type, other.type);
+        return Objects.equals(this.type, other.getType());
     }
 
 

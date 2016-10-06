@@ -14,34 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.codegen.constant;
+package com.speedment.common.codegen.model.value;
 
 import com.speedment.common.codegen.model.Value;
-import static java.util.Objects.requireNonNull;
 
 /**
- * Contains common default values used when generating java code.
- * 
+ *
  * @author Emil Forslund
  */
-public final class DefaultValue {
-    
-    /**
-     * The class should never be instantiated.
-     */
-    private DefaultValue() {}
-    
-    public final static Value<?>
-		NULL         = Value.ofNull(),
-		EMPTY_STRING = string("");
-    
-    /**
-     * Creates a 'string' value with the specified content.
-     * 
-     * @param text  the inner text
-     * @return      a value representing that string
-     */
-    public static Value<String> string(String text) {
-		return Value.ofText(requireNonNull(text));
-	}
+public interface ReferenceValue extends Value<String> {
+
 }

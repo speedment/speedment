@@ -18,7 +18,7 @@ package com.speedment.common.codegen.internal.java.view.value;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegen.internal.model.value.ReferenceValue;
+import com.speedment.common.codegen.model.value.ReferenceValue;
 
 import java.util.Optional;
 

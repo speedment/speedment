@@ -14,22 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.codegen.internal.model.value;
+package com.speedment.common.codegen.model.value;
 
-import com.speedment.common.codegen.internal.model.ValueImpl;
+import com.speedment.common.codegen.model.Value;
+
+import java.util.List;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class NumberValue extends ValueImpl<Number> {
-
-	public NumberValue(Number num) {
-		super(num);
-	}
-
-	@Override
-	public NumberValue copy() {
-		return new NumberValue(getValue());
-	}
+public interface ArrayValue extends Value<List<Value<?>>> {
 }

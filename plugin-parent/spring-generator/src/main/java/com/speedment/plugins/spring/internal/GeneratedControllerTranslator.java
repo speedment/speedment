@@ -17,8 +17,6 @@
 package com.speedment.plugins.spring.internal;
 
 import com.speedment.common.codegen.constant.SimpleType;
-import com.speedment.common.codegen.internal.model.value.ReferenceValue;
-import com.speedment.common.codegen.internal.model.value.TextValue;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Field;
@@ -40,6 +38,9 @@ import java.lang.reflect.Type;
 import java.util.stream.Collectors;
 
 import static com.speedment.common.codegen.constant.DefaultType.list;
+import com.speedment.common.codegen.model.Value;
+import com.speedment.common.codegen.model.value.ReferenceValue;
+import com.speedment.common.codegen.model.value.TextValue;
 
 /**
  *
@@ -85,19 +86,19 @@ public final class GeneratedControllerTranslator extends AbstractJavaClassTransl
                 clazz.add(Method.of("get", list(getSupport().entityType()))
                     .public_()
                     .add(AnnotationUsage.of(RequestMapping.class)
-                        .put("value", new TextValue("/" + getSupport().variableName()))
-                        .put("method", new ReferenceValue("GET"))
+                        .put("value", Value.ofText("/" + getSupport().variableName()))
+                        .put("method", Value.ofReference("GET"))
                     )
                     .add(Field.of("start", long.class)
                         .add(AnnotationUsage.of(RequestParam.class)
-                            .put("value", new TextValue("start"))
-                            .put("defaultValue", new TextValue("0"))
+                            .put("value", Value.ofText("start"))
+                            .put("defaultValue", Value.ofText("0"))
                         )
                     )
                     .add(Field.of("limit", long.class)
                         .add(AnnotationUsage.of(RequestParam.class)
-                            .put("value", new TextValue("limit"))
-                            .put("defaultValue", new TextValue("25"))
+                            .put("value", Value.ofText("limit"))
+                            .put("defaultValue", Value.ofText("25"))
                         )
                     )
                     .add(

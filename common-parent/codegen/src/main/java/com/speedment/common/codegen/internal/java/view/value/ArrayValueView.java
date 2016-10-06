@@ -18,12 +18,12 @@ package com.speedment.common.codegen.internal.java.view.value;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegen.internal.model.value.ArrayValue;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import com.speedment.common.codegen.model.value.ArrayValue;
 
 /**
  * Transforms from an {@link ArrayValue} to java code.

@@ -16,7 +16,6 @@
  */
 package com.speedment.plugins.enums.internal;
 
-import com.speedment.common.codegen.internal.model.value.TextValue;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.codegen.model.EnumConstant;
@@ -35,6 +34,7 @@ import java.util.List;
 
 import static com.speedment.common.codegen.internal.util.Formatting.indent;
 import static com.speedment.common.codegen.internal.util.Formatting.shortName;
+import com.speedment.common.codegen.model.Value;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -80,7 +80,7 @@ public final class GeneratedEntityDecorator implements TranslatorDecorator<Table
                         
                         constants.forEach(constant -> {
                             final String javaName = namer.javaStaticFieldName(constant);
-                            colEnum.add(EnumConstant.of(javaName).add(new TextValue(constant)));
+                            colEnum.add(EnumConstant.of(javaName).add(Value.ofText(constant)));
                         });
                         
                         /*

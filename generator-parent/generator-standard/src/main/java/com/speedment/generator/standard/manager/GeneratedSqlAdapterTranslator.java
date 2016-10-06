@@ -24,6 +24,7 @@ import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.Value;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
@@ -42,7 +43,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-import com.speedment.common.codegen.internal.model.value.ReferenceValue;
+
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.core.exception.SpeedmentException;
@@ -247,7 +248,7 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
 
     private AnnotationUsage withExecuteBefore(File file) {
         file.add(Import.of(State.class).static_().setStaticMember("RESOLVED"));
-        return AnnotationUsage.of(ExecuteBefore.class).set(new ReferenceValue("RESOLVED"));
+        return AnnotationUsage.of(ExecuteBefore.class).set(Value.ofReference("RESOLVED"));
     }
 
     private AnnotationUsage inject() {

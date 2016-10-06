@@ -43,12 +43,6 @@ import com.speedment.common.codegen.internal.java.view.value.EnumValueView;
 import com.speedment.common.codegen.internal.java.view.value.NumberValueView;
 import com.speedment.common.codegen.internal.java.view.value.ReferenceValueView;
 import com.speedment.common.codegen.internal.java.view.value.TextValueView;
-import com.speedment.common.codegen.internal.model.value.ArrayValue;
-import com.speedment.common.codegen.internal.model.value.BooleanValue;
-import com.speedment.common.codegen.internal.model.value.EnumValue;
-import com.speedment.common.codegen.internal.model.value.NumberValue;
-import com.speedment.common.codegen.internal.model.value.ReferenceValue;
-import com.speedment.common.codegen.internal.model.value.TextValue;
 import com.speedment.common.codegen.model.Annotation;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
@@ -67,6 +61,12 @@ import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.JavadocTag;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.modifier.Modifier;
+import com.speedment.common.codegen.model.value.ArrayValue;
+import com.speedment.common.codegen.model.value.BooleanValue;
+import com.speedment.common.codegen.model.value.EnumValue;
+import com.speedment.common.codegen.model.value.NumberValue;
+import com.speedment.common.codegen.model.value.ReferenceValue;
+import com.speedment.common.codegen.model.value.TextValue;
 
 import java.lang.reflect.Type;
 

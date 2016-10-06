@@ -18,7 +18,6 @@ package com.speedment.generator.translator;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.controller.AutoImports;
-import com.speedment.common.codegen.internal.model.value.TextValue;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.ClassOrInterface;
@@ -68,6 +67,7 @@ import java.util.stream.Stream;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.GENERATED;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import com.speedment.common.codegen.model.Value;
 import com.speedment.generator.translator.component.TypeMapperComponent;
 import static java.util.Objects.requireNonNull;
 
@@ -116,7 +116,7 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasName
 
     protected AnnotationUsage generated() {
         final String owner = infoComponent.getTitle();
-        return GENERATED.set(new TextValue(owner));
+        return GENERATED.set(Value.ofText(owner));
     }
 
     /**

@@ -17,13 +17,13 @@
 package com.speedment.plugins.spring.internal;
 
 import com.speedment.common.codegen.constant.SimpleType;
-import com.speedment.common.codegen.internal.model.value.TextValue;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.Value;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectKey;
@@ -78,17 +78,17 @@ public final class GeneratedConfigurationTranslator extends AbstractJavaClassTra
                 // Add constants
                 clazz.add(Field.of("URL_PROPERTY", String.class)
                     .protected_().final_().static_()
-                    .set(new TextValue("jdbc.url"))
+                    .set(Value.ofText("jdbc.url"))
                 );
 
                 clazz.add(Field.of("USERNAME_PROPERTY", String.class)
                     .protected_().final_().static_()
-                    .set(new TextValue("jdbc.username"))
+                    .set(Value.ofText("jdbc.username"))
                 );
 
                 clazz.add(Field.of("PASSWORD_PROPERTY", String.class)
                     .protected_().final_().static_()
-                    .set(new TextValue("jdbc.password"))
+                    .set(Value.ofText("jdbc.password"))
                 );
 
                 // Add environment variable

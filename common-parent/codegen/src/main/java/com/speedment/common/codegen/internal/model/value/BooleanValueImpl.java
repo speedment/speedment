@@ -17,19 +17,20 @@
 package com.speedment.common.codegen.internal.model.value;
 
 import com.speedment.common.codegen.internal.model.ValueImpl;
+import com.speedment.common.codegen.model.value.BooleanValue;
 
 /**
  *
  * @author Emil Forslund
  */
-public final class ReferenceValue extends ValueImpl<String> {
+public final class BooleanValueImpl extends ValueImpl<Boolean> implements BooleanValue {
 
-	public ReferenceValue(String value) {
-		super(value);
+	public BooleanValueImpl(Boolean num) {
+		super(num);
 	}
 
 	@Override
-	public ReferenceValue copy() {
-		return new ReferenceValue(getValue());
+	public BooleanValueImpl copy() {
+		return new BooleanValueImpl(getValue());
 	}
 }
