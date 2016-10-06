@@ -77,7 +77,7 @@ Search for Hares by a certain age:
 ```java
 // Searches are optimized in the background!
 Optional<Hare> harry = hares.stream()
-    .filter(NAME.equal("Harry").and(AGE.lessThan(5)))
+    .filter(AGE.greaterThan(5))
     .findAny();
 ```
 
