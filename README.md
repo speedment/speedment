@@ -152,7 +152,9 @@ hares.stream()
     .filter(Hare.ID.equal(42))  // Find all Hares with ID = 42 (just one)
     .map(Hare.AGE.setTo(10))    // Applies a setter that sets the age to 10
     .forEach(hares.updater());  // Applies the updater function
-    
+```
+or another example
+```java
 hares.stream()
     .filter(Hare.ID.between(48, 102))   // Find all Hares with ID between 48 and 102
     .map(h -> h.setAge(h.getAge() + 1)) // Applies a lambda that increases their age by one
