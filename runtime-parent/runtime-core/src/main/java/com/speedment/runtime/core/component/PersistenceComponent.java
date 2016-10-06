@@ -35,10 +35,43 @@ import com.speedment.runtime.core.manager.Updater;
 @InjectKey(PersistenceComponent.class)
 public interface PersistenceComponent {
 
+    /**
+     * Creates and returns a {@link Persister} that describes how entities are 
+     * persisted to the specified table. The returned {@link Persister} can then 
+     * be applied by supplying an entity.
+     * 
+     * @param <ENTITY>         the entity type
+     * @param tableIdentifier  identifier for the table to persist to
+     * @return                 the created {@code Persister}
+     * 
+     * @throws SpeedmentException  if it could not be created
+     */
     <ENTITY> Persister<ENTITY> persister(TableIdentifier<ENTITY> tableIdentifier) throws SpeedmentException;
     
+    /**
+     * Creates and returns an {@link Updater} that describes how entities are 
+     * updated in the specified table. The returned {@code Updater} can then be 
+     * applied by supplying an entity.
+     * 
+     * @param <ENTITY>         the entity type
+     * @param tableIdentifier  identifier for the table to update
+     * @return                 the created {@link Updater}
+     * 
+     * @throws SpeedmentException  if it could not be created
+     */
     <ENTITY> Updater<ENTITY> updater(TableIdentifier<ENTITY> tableIdentifier) throws SpeedmentException;
     
+    /**
+     * Creates and returns a {@link Remover} that describes how entities are 
+     * removed from the specified table. The returned {@code Remover} can then 
+     * be applied by supplying an entity.
+     * 
+     * @param <ENTITY>         the entity type
+     * @param tableIdentifier  identifier for the table to remove from
+     * @return                 the created {@link Remover}
+     * 
+     * @throws SpeedmentException  if it could not be created
+     */
     <ENTITY> Remover<ENTITY> remover(TableIdentifier<ENTITY> tableIdentifier) throws SpeedmentException;
     
 }

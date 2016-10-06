@@ -33,7 +33,6 @@ import java.util.stream.Stream;
 @InjectKey(ManagerComponent.class)
 public interface ManagerComponent {
 
-
     /**
      * Puts (associates) a {@link Manager} implementation into the
      * {@code ManagerComponent}. If a previous {@link Manager} was associated

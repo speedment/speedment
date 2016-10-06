@@ -43,10 +43,6 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
     private @Inject StreamSupplierComponent streamSupplierComponent;
 
-    // Hold these fields internally so that exposing methods may be compared by equality
-//    private final EntityCreator<ENTITY> entityCreator = this::entityCreate;
-//    private final EntityCopier<ENTITY> entityCopier = this::entityCopy;
-    
     private Persister<ENTITY> persister;
     private Updater<ENTITY> updater;
     private Remover<ENTITY> remover;
@@ -55,7 +51,7 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
     @ExecuteBefore(INITIALIZED)
     final void createSupport(
-        @WithState(INITIALIZED) PersistenceComponent persistenceComponent) {
+            @WithState(INITIALIZED) PersistenceComponent persistenceComponent) {
         
         final TableIdentifier<ENTITY> tableId = getTableIdentifier();
 
@@ -66,22 +62,12 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
 
     @ExecuteBefore(INITIALIZED)
     final void install(
-        @WithState(INITIALIZED) ManagerComponent managerComponent,
-        @WithState(INITIALIZED) ProjectComponent projectComponent) {
+            @WithState(INITIALIZED) ManagerComponent managerComponent,
+            @WithState(INITIALIZED) ProjectComponent projectComponent) {
 
-        requireNonNull(projectComponent); // Must be initialized first.  // Not really now...!!
+        requireNonNull(projectComponent); // Must be initialized first.
         managerComponent.put(this);
     }
-
-//    @Override
-//    public EntityCreator<ENTITY> entityCreator() {
-//        return entityCreator;
-//    }
-//
-//    @Override
-//    public EntityCopier<ENTITY> entityCopier() {
-//        return entityCopier;
-//    }
 
     @Override
     public Stream<ENTITY> stream() {
