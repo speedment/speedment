@@ -63,56 +63,135 @@ You can read the [the API quick start here](https://github.com/speedment/speedme
 
 Examples
 --------
-Here are a few examples of how you could use Speedment from your code:
+Here are a few examples of how you could use Speedment from your code assuming that you have an exemplary MySQL database that looks like this:
+```sql
+CREATE TABLE `hares`.`hare` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `color` varchar(45) NOT NULL,
+  `age` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=100;
 
-###### Easy initialization
-The `HareApplication`, `HareApplicationBuilder` and `HareManager` classes are generated from the database.
-```java
-HareApplication app = new HareApplicationBuilder().withPassword("myPwd729").build();
-HareManager hares = app.getOrThrow(HareManager.class);
+CREATE TABLE IF NOT EXISTS `hares`.`carrot` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `owner` int(11) NOT NULL,
+  `rival` int(11),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=100;
+
+CREATE TABLE IF NOT EXISTS `hares`.`human` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=100;
+
+CREATE TABLE `hares`.`friend` (
+  `hare` int(11) NOT NULL,
+  `human` int(11) NOT NULL,
+  PRIMARY KEY (`hare`, `human`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `hares`.`carrot`
+  ADD CONSTRAINT `carrot_owner_to_hare_id` FOREIGN KEY (`owner`) REFERENCES `hare` (`id`);
+ALTER TABLE `hares`.`carrot`
+  ADD CONSTRAINT `carrot_rival_to_hare_id` FOREIGN KEY (`rival`) REFERENCES `hare` (`id`);
+
+ALTER TABLE `hares`.`friend`
+  ADD CONSTRAINT `friend_hare_to_hare_id` FOREIGN KEY (`hare`) REFERENCES `hare` (`id`);
+ALTER TABLE `hares`.`friend`
+  ADD CONSTRAINT `friend_human_to_human_id` FOREIGN KEY (`human`) REFERENCES `human` (`id`);
+
 ```
 
-###### Full Transparency
-By appending a logger to the builder, you can follow exactly what happens behind the scenes.
+### Easy initialization
+The `HareApplication`, `HareApplicationBuilder` and `HareManager` classes are generated automatically from the database.
 ```java
-HareApplication app = new HareApplicationBuilder()
+final HareApplication app = new HareApplicationBuilder()
     .withPassword("myPwd729")
-    .withLogging(ApplicationBuilder.LogType.STREAM)
-    .withLogging(ApplicationBuilder.LogType.PERSIST)
-    .withLogging(ApplicationBuilder.LogType.UPDATE)
-    .withLogging(ApplicationBuilder.LogType.REMOVE)
     .build();
-HareManager hares = app.getOrThrow(HareManager.class);
+    
+final Manager<Hare>   hares   = app.managerOf(Hare.class);
+final Manager<Carrot> carrots = app.managerOf(Carrot.class);
+final Manager<Human>  humans  = app.managerOf(Human.class);
+final Manager<Friend> friends = app.managerOf(Friend.class);
 ```
 
-###### Optimised predicate short-circuit
-Search for Hares by a certain age:
+
+### Query with optimised Stream predicate short-circuit
+Search for an old hare (of age greater than 5):
 ```java
 // Searches are optimized in the background!
-Optional<Hare> harry = hares.stream()
-    .filter(AGE.greaterThan(5))
+Optional<Hare> oldHare = hares.stream()
+    .filter(Hare.AGE.greaterThan(5))
     .findAny();
-```
+``` 
 
 Results in the following SQL query:
 ```sql
-SELECT * FROM `Hare` 
-    WHERE `Hare`.`name` = "Harry"
-    AND `Hare`.`age` < 5
+SELECT id, name, color, age FROM hare 
+    WHERE (age > 5)
     LIMIT 1;
 ```
 
-###### Easy persistence
+### Easy persistence
 Entities can easily be persisted in a database.
 ```java
-Hare harry = new HareImpl();
-harry.setName("Harry");
-harry.setColor("Gray");
-harry.setAge(3);
-Hare persisted = hares.persist(harry); // Auto-Increment-fields have been set by the database
+Hare newHare = new HareImpl();  // Creates a new empty Hare
+newHare.setName("Harry");
+newHare.setColor("Gray");
+newHare.setAge(3);
+
+Hare persistedHare = hares.persist(newHare); // Auto-Increment-fields have been set by the database
 ```
 
-###### Entities are linked
+### Update
+```java
+hares.stream()
+    .filter(Hare.ID.equal(42))  // Find all Hares with ID = 42 (just one)
+    .map(Hare.AGE.setTo(10))    // Applies a setter that sets the age to 10
+    .forEach(hares.updater());  // Applies the updater function
+```
+or another example
+```java
+hares.stream()
+    .filter(Hare.ID.between(48, 102))   // Find all Hares with ID between 48 and 102
+    .map(h -> h.setAge(h.getAge() + 1)) // Applies a lambda that increases their age by one
+    .forEach(hares.updater());          // Applies the updater function to the selected hares
+```
+
+### Remove
+```java
+hares.stream()
+    .filter(Hare.ID.equal(71))  // Find all Hares with ID = 71 (just one)
+    .forEach(hares.remover());  // Applies the remover function
+```
+
+### Join
+Construct a Map with all Hares and their corresponding Carrots
+```java
+Map<Hare, List<Carrot>> join = carrots.stream()
+    .collect(
+        groupingBy(hares.finderBy(Carrot.OWNER)) // Applies the finderBy(Carrot.OWNER) classifier
+    );        
+```
+
+### Many-to-many
+Construct a Map with all Humans and their corresponding Friend Hares
+```java
+Map<Human, List<Hare>> humanFriends = friends.stream()
+    .collect(
+        groupingBy(humans.finderBy(Friend.HUMAN), // Applies the Friend to Human classifier
+            mapping(
+                hares.finderBy(Friend.HARE),      // Applies the Friend to Hare finder
+                toList()                          // Use a List collector for downstream aggregation.
+            )
+        )
+    );        
+```
+
+### Entities are linked
 No need for complicated joins!
 ```java
 // Find the owner of the orange carrot
@@ -128,7 +207,19 @@ Optional<Carrot> carrot = hares.stream()
     .findAny();
 ```
 
-###### Convert to JSON using Plugin
+### Full Transparency
+By appending a logger to the builder, you can follow exactly what happens behind the scenes.
+```java
+HareApplication app = new HareApplicationBuilder()
+    .withPassword("myPwd729")
+    .withLogging(ApplicationBuilder.LogType.STREAM)
+    .withLogging(ApplicationBuilder.LogType.PERSIST)
+    .withLogging(ApplicationBuilder.LogType.UPDATE)
+    .withLogging(ApplicationBuilder.LogType.REMOVE)
+    .build();
+```
+
+### Convert to JSON using a stardard Plugin
 Using the JSON Stream Plugin, you can easily convert a stream into JSON:
 ```java
 // List all hares as a complex JSON object where the ID and AGE
@@ -272,7 +363,7 @@ Speedment is available under the [Apache 2 License](http://www.apache.org/licens
 
 #### Copyright
 
-Copyright (c) 2015, Speedment, Inc. All Rights Reserved.
+Copyright (c) 2016, Speedment, Inc. All Rights Reserved.
 Visit [www.speedment.org](http://www.speedment.org/) for more info.
 
 [![Analytics](https://ga-beacon.appspot.com/UA-64937309-1/speedment/main)](https://github.com/igrigorik/ga-beacon)
