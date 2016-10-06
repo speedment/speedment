@@ -105,7 +105,7 @@ ALTER TABLE `hares`.`friend`
 
 ```
 
-#### Easy initialization
+### Easy initialization
 The `HareApplication`, `HareApplicationBuilder` and `HareManager` classes are generated automatically from the database.
 ```java
 final HareApplication app = new HareApplicationBuilder()
@@ -119,7 +119,7 @@ final Manager<Friend> friends = app.managerOf(Friend.class);
 ```
 
 
-#### Query with optimised Stream predicate short-circuit
+### Query with optimised Stream predicate short-circuit
 Search for an old hare (of age greater than 5):
 ```java
 // Searches are optimized in the background!
@@ -135,7 +135,7 @@ SELECT id, name, color, age FROM hare
     LIMIT 1;
 ```
 
-#### Easy persistence
+### Easy persistence
 Entities can easily be persisted in a database.
 ```java
 Hare newHare = new HareImpl();  // Creates a new empty Hare
@@ -146,7 +146,7 @@ newHare.setAge(3);
 Hare persistedHare = hares.persist(newHare); // Auto-Increment-fields have been set by the database
 ```
 
-#### Update
+### Update
 ```java
 hares.stream()
     .filter(Hare.ID.equal(42))  // Find all Hares with ID = 42 (just one)
@@ -158,17 +158,17 @@ or another example
 hares.stream()
     .filter(Hare.ID.between(48, 102))   // Find all Hares with ID between 48 and 102
     .map(h -> h.setAge(h.getAge() + 1)) // Applies a lambda that increases their age by one
-    .forEach(hares.updater());          // Applies the updater function to the filtered hares
+    .forEach(hares.updater());          // Applies the updater function to the selected hares
 ```
 
-#### Remove
+### Remove
 ```java
 hares.stream()
     .filter(Hare.ID.equal(71))  // Find all Hares with ID = 71 (just one)
     .forEach(hares.remover());  // Applies the remover function
 ```
 
-#### Join
+### Join
 Construct a Map with all Hares and their corresponding Carrots
 ```java
 Map<Hare, List<Carrot>> join = carrots.stream()
@@ -177,7 +177,7 @@ Map<Hare, List<Carrot>> join = carrots.stream()
     );        
 ```
 
-#### Many-to-many
+### Many-to-many
 Construct a Map with all Humans and their corresponding Friend Hares
 ```java
 Map<Human, List<Hare>> humanFriends = friends.stream()
@@ -191,7 +191,7 @@ Map<Human, List<Hare>> humanFriends = friends.stream()
     );        
 ```
 
-#### Entities are linked
+### Entities are linked
 No need for complicated joins!
 ```java
 // Find the owner of the orange carrot
@@ -207,7 +207,7 @@ Optional<Carrot> carrot = hares.stream()
     .findAny();
 ```
 
-#### Full Transparency
+### Full Transparency
 By appending a logger to the builder, you can follow exactly what happens behind the scenes.
 ```java
 HareApplication app = new HareApplicationBuilder()
@@ -219,7 +219,7 @@ HareApplication app = new HareApplicationBuilder()
     .build();
 ```
 
-#### Convert to JSON using Plugin
+### Convert to JSON using a stardard Plugin
 Using the JSON Stream Plugin, you can easily convert a stream into JSON:
 ```java
 // List all hares as a complex JSON object where the ID and AGE
