@@ -16,8 +16,8 @@
  */
 package com.speedment.common.codegen.model.modifier;
 
-import com.speedment.common.codegen.model.modifier.Keyword.default_;
-import com.speedment.common.codegen.model.modifier.Keyword.static_;
+import com.speedment.common.codegen.model.modifier.Keyword.Static;
+import com.speedment.common.codegen.model.modifier.Keyword.Default;
 
 /**
  *
@@ -26,4 +26,4 @@ import com.speedment.common.codegen.model.modifier.Keyword.static_;
  * @since  2.0
  */
 public interface InterfaceMethodModifier<T extends InterfaceMethodModifier<T>> 
-extends static_<T>, default_<T> {}
+extends Static<T>, Default<T> {}

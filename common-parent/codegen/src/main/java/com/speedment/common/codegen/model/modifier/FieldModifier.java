@@ -25,5 +25,5 @@ import com.speedment.common.codegen.model.modifier.Keyword.*;
  * @since  2.0
  */
 public interface FieldModifier<T extends FieldModifier<T>> 
-extends public_<T>, protected_<T>, private_<T>, static_<T>, final_<T>, 
-synchronized_<T>, transient_<T>, volatile_<T> {}
+extends Public<T>, Protected<T>, Private<T>, Static<T>, Final<T>, 
+Synchronized<T>, Transient<T>, Volatile<T> {}

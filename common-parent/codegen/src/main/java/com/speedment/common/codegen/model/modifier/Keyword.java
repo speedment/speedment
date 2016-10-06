@@ -23,10 +23,10 @@ import static com.speedment.common.codegen.model.modifier.Modifier.*;
 /**
  *
  * @author Emil Forslund
- * @since  2.0
+ * @since  2.0.0
  */
 public interface Keyword {
-    interface public_<T extends public_<T>> extends HasModifiers<T> {
+    interface Public<T extends Public<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T public_() {
             getModifiers().add(PUBLIC);
@@ -34,7 +34,7 @@ public interface Keyword {
         }
     }
     
-    interface protected_<T extends protected_<T>> extends HasModifiers<T> {
+    interface Protected<T extends Protected<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T protected_() {
             getModifiers().add(PROTECTED);
@@ -42,7 +42,7 @@ public interface Keyword {
         }
     }
     
-    interface private_<T extends private_<T>> extends HasModifiers<T> {
+    interface Private<T extends Private<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T private_() {
             getModifiers().add(PRIVATE);
@@ -50,7 +50,7 @@ public interface Keyword {
         }
     }
     
-    interface static_<T extends static_<T>> extends HasModifiers<T> {
+    interface Static<T extends Static<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T static_() {
             getModifiers().add(STATIC);
@@ -58,7 +58,7 @@ public interface Keyword {
         }
     }
     
-    interface final_<T extends final_<T>> extends HasModifiers<T> {
+    interface Final<T extends Final<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T final_() {
             getModifiers().add(FINAL);
@@ -66,7 +66,7 @@ public interface Keyword {
         }
     }
     
-    interface abstract_<T extends abstract_<T>> extends HasModifiers<T> {
+    interface Abstract<T extends Abstract<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T abstract_() {
             getModifiers().add(ABSTRACT);
@@ -74,7 +74,7 @@ public interface Keyword {
         }
     }
     
-    interface strictfp_<T extends strictfp_<T>> extends HasModifiers<T> {
+    interface Strictfp<T extends Strictfp<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T strictfp_() {
             getModifiers().add(STRICTFP);
@@ -82,7 +82,7 @@ public interface Keyword {
         }
     }
     
-    interface synchronized_<T extends synchronized_<T>> extends HasModifiers<T> {
+    interface Synchronized<T extends Synchronized<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T synchronized_() {
             getModifiers().add(SYNCHRONIZED);
@@ -90,7 +90,7 @@ public interface Keyword {
         }
     }
     
-    interface transient_<T extends transient_<T>> extends HasModifiers<T> {
+    interface Transient<T extends Transient<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T transient_() {
             getModifiers().add(TRANSIENT);
@@ -98,7 +98,7 @@ public interface Keyword {
         }
     }
     
-    interface volatile_<T extends volatile_<T>> extends HasModifiers<T> {
+    interface Volatile<T extends Volatile<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T volatile_() {
             getModifiers().add(VOLATILE);
@@ -106,7 +106,7 @@ public interface Keyword {
         }
     }
     
-    interface native_<T extends native_<T>> extends HasModifiers<T> {
+    interface Native<T extends Native<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T native_() {
             getModifiers().add(NATIVE);
@@ -114,7 +114,7 @@ public interface Keyword {
         }
     }
 	
-    interface default_<T extends default_<T>> extends HasModifiers<T> {
+    interface Default<T extends Default<T>> extends HasModifiers<T> {
         @SuppressWarnings("unchecked")
         default T default_() {
             getModifiers().add(DEFAULT);

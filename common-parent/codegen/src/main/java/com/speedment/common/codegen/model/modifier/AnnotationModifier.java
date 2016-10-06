@@ -16,7 +16,7 @@
  */
 package com.speedment.common.codegen.model.modifier;
 
-import com.speedment.common.codegen.model.modifier.Keyword.public_;
+import com.speedment.common.codegen.model.modifier.Keyword.Public;
 
 /**
  *
@@ -25,4 +25,4 @@ import com.speedment.common.codegen.model.modifier.Keyword.public_;
  * @since  2.0
  */
 public interface AnnotationModifier<T extends AnnotationModifier<T>> 
-extends public_<T> {}
+extends Public<T> {}

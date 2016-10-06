@@ -16,7 +16,7 @@
  */
 package com.speedment.common.codegen.model.modifier;
 
-import com.speedment.common.codegen.model.modifier.Keyword.final_;
+import com.speedment.common.codegen.model.modifier.Keyword.Final;
 
 /**
  *
@@ -24,4 +24,4 @@ import com.speedment.common.codegen.model.modifier.Keyword.final_;
  * @param <T> The extending type
  * @since  2.0
  */
-public interface InterfaceFieldModifier<T extends InterfaceFieldModifier<T>> extends final_<T> {}
+public interface InterfaceFieldModifier<T extends InterfaceFieldModifier<T>> extends Final<T> {}

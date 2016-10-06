@@ -16,10 +16,10 @@
  */
 package com.speedment.common.codegen.model.modifier;
 
-import com.speedment.common.codegen.model.modifier.Keyword.private_;
-import com.speedment.common.codegen.model.modifier.Keyword.protected_;
-import com.speedment.common.codegen.model.modifier.Keyword.public_;
-import com.speedment.common.codegen.model.modifier.Keyword.static_;
+import com.speedment.common.codegen.model.modifier.Keyword.Static;
+import com.speedment.common.codegen.model.modifier.Keyword.Private;
+import com.speedment.common.codegen.model.modifier.Keyword.Protected;
+import com.speedment.common.codegen.model.modifier.Keyword.Public;
 
 /**
  *
@@ -28,4 +28,4 @@ import com.speedment.common.codegen.model.modifier.Keyword.static_;
  * @since  2.0
  */
 public interface EnumModifier<T extends EnumModifier<T>> 
-extends public_<T>, protected_<T>, private_<T>, static_<T> {}
+extends Public<T>, Protected<T>, Private<T>, Static<T> {}

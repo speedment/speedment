@@ -16,9 +16,9 @@
  */
 package com.speedment.common.codegen.model.modifier;
 
-import com.speedment.common.codegen.model.modifier.Keyword.private_;
-import com.speedment.common.codegen.model.modifier.Keyword.protected_;
-import com.speedment.common.codegen.model.modifier.Keyword.public_;
+import com.speedment.common.codegen.model.modifier.Keyword.Private;
+import com.speedment.common.codegen.model.modifier.Keyword.Protected;
+import com.speedment.common.codegen.model.modifier.Keyword.Public;
 
 /**
  *
@@ -27,4 +27,4 @@ import com.speedment.common.codegen.model.modifier.Keyword.public_;
  * @since  2.0
  */
 public interface ConstructorModifier<T extends ConstructorModifier<T>> 
-extends public_<T>, protected_<T>, private_<T> {}
+extends Public<T>, Protected<T>, Private<T> {}

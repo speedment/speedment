@@ -16,7 +16,7 @@
  */
 package com.speedment.common.codegen.model.modifier;
 
-import com.speedment.common.codegen.model.modifier.Keyword.static_;
+import com.speedment.common.codegen.model.modifier.Keyword.Static;
 
 /**
  *
@@ -24,4 +24,4 @@ import com.speedment.common.codegen.model.modifier.Keyword.static_;
  * @param <T> The extending type
  * @since  2.0
  */
-public interface ImportModifier<T extends ImportModifier<T>> extends static_<T> {}
+public interface ImportModifier<T extends ImportModifier<T>> extends Static<T> {}

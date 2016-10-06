@@ -16,7 +16,7 @@
  */
 package com.speedment.common.codegen.model.modifier;
 
-import com.speedment.common.codegen.model.modifier.Keyword.public_;
+import com.speedment.common.codegen.model.modifier.Keyword.Public;
 
 /**
  *
@@ -24,4 +24,4 @@ import com.speedment.common.codegen.model.modifier.Keyword.public_;
  * @param <T> The extending type
  * @since  2.0
  */
-public interface InterfaceModifier<T extends InterfaceModifier<T>> extends public_<T> {}
+public interface InterfaceModifier<T extends InterfaceModifier<T>> extends Public<T> {}

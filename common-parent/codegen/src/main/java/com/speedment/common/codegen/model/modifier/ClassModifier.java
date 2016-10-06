@@ -24,5 +24,5 @@ import com.speedment.common.codegen.model.modifier.Keyword.*;
  * @param <T> The extending type
  * @since  2.0
  */
-public interface ClassModifier<T extends ClassModifier<T>> extends public_<T>, 
-protected_<T>, private_<T>, abstract_<T>, static_<T>, final_<T>, strictfp_<T> {}
+public interface ClassModifier<T extends ClassModifier<T>> extends Public<T>, 
+Protected<T>, Private<T>, Abstract<T>, Static<T>, Final<T>, Strictfp<T> {}
