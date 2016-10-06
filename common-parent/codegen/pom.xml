@@ -49,7 +49,9 @@
                             com.speedment.common.codegen.constant,
                             com.speedment.common.codegen.model,
                             com.speedment.common.codegen.model.modifier,
-                            com.speedment.common.codegen.model.trait
+                            com.speedment.common.codegen.model.trait,
+                            com.speedment.common.codegen.model.value,
+                            com.speedment.common.codegen.util
                         </Export-Package>
                     </instructions>
                 </configuration>
