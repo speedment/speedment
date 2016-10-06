@@ -26,11 +26,11 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
     
     <artifactId>common-all</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <packaging>pom</packaging>
     
     <name>Speedment - Common - All</name>
@@ -40,17 +40,17 @@
     </description>
     
     <properties>
-        <invariant.version>1.0.0-SNAPSHOT</invariant.version>
-        <function.version>1.0.0-SNAPSHOT</function.version>
-        <json.version>1.0.1-SNAPSHOT</json.version>
-        <tuple.version>1.0.1-SNAPSHOT</tuple.version>
-        <logger.version>1.0.2-SNAPSHOT</logger.version>
-        <mapstream.version>2.3.4-SNAPSHOT</mapstream.version>
-        <codegen.version>2.4.2-SNAPSHOT</codegen.version>
-        <codegenxml.version>1.0.1-SNAPSHOT</codegenxml.version>
-        <injector.version>1.0.1-SNAPSHOT</injector.version>
-        <rest.version>1.0.1-SNAPSHOT</rest.version>
-        <lazy.version>1.0.1-SNAPSHOT</lazy.version>
+        <invariant.version>1.0.0</invariant.version>
+        <function.version>1.0.0</function.version>
+        <json.version>1.0.1</json.version>
+        <tuple.version>1.0.1</tuple.version>
+        <logger.version>1.0.2</logger.version>
+        <mapstream.version>2.3.4</mapstream.version>
+        <codegen.version>2.4.2</codegen.version>
+        <codegenxml.version>1.0.1</codegenxml.version>
+        <injector.version>1.0.1</injector.version>
+        <rest.version>1.0.1</rest.version>
+        <lazy.version>1.0.1</lazy.version>
     </properties>
     
     <dependencyManagement>
