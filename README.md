@@ -120,18 +120,18 @@ final Manager<Friend> friends = app.managerOf(Friend.class);
 
 
 ###### Optimised predicate short-circuit
-Search for Hares by a certain age:
+Search for an old hare (of age greater than 5):
 ```java
 // Searches are optimized in the background!
-Optional<Hare> harry = hares.stream()
+Optional<Hare> oldHare = hares.stream()
     .filter(Hare.AGE.greaterThan(5))
     .findAny();
 ``` 
 
 Results in the following SQL query:
 ```sql
-SELECT * FROM `Hare` 
-    WHERE  `Hare`.`age` > 5
+SELECT id, name, color, age FROM hare 
+    WHERE (age > 5)
     LIMIT 1;
 ```
 
