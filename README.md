@@ -92,52 +92,45 @@ SELECT * FROM `Hare`
 ###### Easy persistence
 Entities can easily be persisted in a database.
 ```java
-Hare dbHarry = new HareImpl()
-    .setName("Harry")
-    .setColor("Gray")
-    .setAge(3)
-    .persist(hares); // Auto-Increment-fields have been set by the database
+Hare h = new HareImpl();
+h.setName("Harry");
+h.setColor("Gray");
+h.setAge(3);
+h = hares.persist(harry); // Auto-Increment-fields have been set by the database
 ```
 
 ###### Entities are linked
 No need for complicated joins!
 ```java
+// Find the owner of the orange carrot
+Optional<Hare> hare = carrots.stream()
+    .filter(Carrot.NAME.equal("Orange"))
+    .map(hares.finderBy(Carrot.OWNER))
+    .findAny();
+
+// Find one carrot owned by Harry
 Optional<Carrot> carrot = hares.stream()
-    .filter(NAME.equal("Harry"))
-    .flatMap(hares::findCarrots) // Carrot is a foreign key table.
+    .filter(Hare.NAME.equal("Harry"))
+    .flatMap(carrots.finderBackwardsBy(Carrot.OWNER)) // Carrot is a foreign key table.
     .findAny();
 ```
 
 ###### Convert to JSON using Plugin
 Using the JSON Stream Plugin, you can easily convert a stream into JSON:
 ```java
-// List all hares in JSON format
-hares.stream()
-    .map(JsonUtil::toJson)
-    .forEach(System.out::println);
-```
-
-...or collect the entire stream:
-```java
-// List all hares as one JSON object
-String json = hares.stream()
-    .collect(CollectorUtil.toJson());
-```
-
-...or configure exactly how you want your JSON objects to look:
-```java
 // List all hares as a complex JSON object where the ID and AGE
 // is ommitted and a new field 'carrots' list the id's of all
 // carrots associated by a particular hare.
+JsonComponent json = app.getOrThrow(JsonComponent.class);
 String json = hares.stream()
-    .collect(CollectorUtil.toJson(
-        JsonEncoder.allOf(hares)
+    .collect(json.toJson(
+        json.allOf(hares)
             .remove(Hare.ID)
             .remove(Hare.AGE)
             .putStreamer(
-                "carrots",                  // Declare a new attribute
-                hares::findCarrots,         // How it is calculated
-                JsonEncoder.noneOf(carrots) // How it is formatted
+                "carrots",                             // Declare a new attribute
+                hares.finderBackwardsBy(Carrot.OWNER), // How it is calculated
+                json.noneOf(carrots)                   // How it is formatted
                     .put(Carrot.ID)
             )
     ));
