@@ -45,7 +45,7 @@ public interface Dbms extends
         HasMainInterface,
         HasMutator<DbmsMutator<? extends Dbms>> {
     
-    final String
+    String
         TYPE_NAME      = "typeName",
         IP_ADDRESS     = "ipAddress",
         PORT           = "port",

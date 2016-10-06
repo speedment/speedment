@@ -30,7 +30,7 @@ import static com.speedment.runtime.config.util.TraitUtil.viewOf;
  */
 public interface HasPackageName extends Document{
     
-    final String PACKAGE_NAME = "packageName";  
+    String PACKAGE_NAME = "packageName";
     
     /**
      * Returns the name of the generated package where this document will be

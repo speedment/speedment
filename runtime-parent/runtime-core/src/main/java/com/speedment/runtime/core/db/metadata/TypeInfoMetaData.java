@@ -34,7 +34,7 @@ import java.util.Optional;
 
 public interface TypeInfoMetaData {
 
-    public final class Hidden {
+    final class Hidden {
 
         private static final Map<Integer, String> JAVA_SQL_TYPE_INT_TO_STRING_MAP = new HashMap<>();
 

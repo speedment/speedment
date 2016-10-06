@@ -37,7 +37,7 @@ import static com.speedment.common.mapstream.MapStream.comparing;
 
 public interface DbmsType {
 
-    final Comparator<DbmsType> COMPARATOR = comparing(DbmsType::getName);
+    Comparator<DbmsType> COMPARATOR = comparing(DbmsType::getName);
 
     /**
      * Returns the non-null name for this {@code DbmsType}. For example MySQL or

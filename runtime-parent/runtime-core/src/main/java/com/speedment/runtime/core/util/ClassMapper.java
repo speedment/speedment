@@ -51,7 +51,7 @@ public interface ClassMapper<V> {
      * @param clazz the class to use
      * @return the mapping for the given class, or null if no mapping exists
      */
-    public <R extends V> R getOrThrow(Class<R> clazz);
+    <R extends V> R getOrThrow(Class<R> clazz);
 
     /**
      * Returns a {@link Stream} of all mappings that exists.

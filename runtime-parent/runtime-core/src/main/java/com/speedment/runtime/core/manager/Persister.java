@@ -32,10 +32,10 @@ import java.util.function.UnaryOperator;
 public interface Persister<ENTITY> extends UnaryOperator<ENTITY>, Consumer<ENTITY>  {
 
     @Override
-    public ENTITY apply(ENTITY t) throws SpeedmentException;
+    ENTITY apply(ENTITY t) throws SpeedmentException;
 
     @Override
-    public default void accept(ENTITY t) {
+    default void accept(ENTITY t) {
         apply(t);
     }
 }

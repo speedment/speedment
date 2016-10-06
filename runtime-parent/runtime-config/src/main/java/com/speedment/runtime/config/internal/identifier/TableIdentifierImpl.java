@@ -79,10 +79,7 @@ public final class TableIdentifierImpl<ENTITY> implements TableIdentifier<ENTITY
         if (!Objects.equals(schemaName, other.schemaName)) {
             return false;
         }
-        if (!Objects.equals(tableName, other.tableName)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(tableName, other.tableName);
     }
 
     private int privateHashCode() {

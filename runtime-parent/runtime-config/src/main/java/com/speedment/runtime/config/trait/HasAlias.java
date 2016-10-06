@@ -37,7 +37,7 @@ public interface HasAlias extends Document, HasName {
     /**
      * The key of the {@code alias} property.
      */
-    final String ALIAS = "alias";
+    String ALIAS = "alias";
     
     /**
      * Returns the alias of the specified document. The alias is an optional

@@ -30,5 +30,5 @@ public interface HasCopy<T extends HasCopy<T>> {
      * 
      * @return  the copy
      */
-	public T copy();
+    T copy();
 }

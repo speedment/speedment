@@ -45,7 +45,7 @@ public interface Column extends
     HasMainInterface,
     HasMutator<ColumnMutator<? extends Column>> {
 
-    final String 
+    String
         AUTO_INCREMENT    = "autoIncrement",
         TYPE_MAPPER       = "typeMapper",
         DATABASE_TYPE     = "databaseType",

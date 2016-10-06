@@ -44,7 +44,7 @@ public interface Table extends
         HasMainInterface,
         HasMutator<TableMutator<? extends Table>> {
 
-    final String COLUMNS = "columns",
+    String COLUMNS = "columns",
             INDEXES = "indexes",
             FOREIGN_KEYS = "foreignKeys",
             PRIMARY_KEY_COLUMNS = "primaryKeyColumns";

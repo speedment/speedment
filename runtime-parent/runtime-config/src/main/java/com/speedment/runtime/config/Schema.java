@@ -41,7 +41,7 @@ public interface Schema extends
         HasMainInterface,
         HasMutator<SchemaMutator<? extends Schema>> {
 
-    final String DEFAULT_SCHEMA = "defaultSchema",
+    String DEFAULT_SCHEMA = "defaultSchema",
             TABLES = "tables";
 
     /**

@@ -80,10 +80,10 @@ public interface StreamSupplierComponent {
      * Starts the stream suppler and initialized any resources needed for its
      * operation.
      */
-    default void start(){};
-    
+    default void start(){}
+
     /**
      * Stops the stream suppler and releases any previously allocated resources.
      */
-    default void stop(){};
+    default void stop(){}
 }

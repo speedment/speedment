@@ -42,7 +42,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public interface Rest {
     
-    final String ENCODING = "UTF-8";
+    String ENCODING = "UTF-8";
     
     enum Method {
         POST, GET, DELETE, PUT, OPTIONS

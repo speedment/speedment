@@ -36,13 +36,13 @@ public interface HasEnabled extends Document {
     /**
      * The key of the {@code enabled} property.
      */
-    final String ENABLED = "enabled";
+    String ENABLED = "enabled";
     
     /**
      * If a {@link Document} should be considered {@code true} if it is not
      * specified in the map.
      */
-    final boolean ENABLED_DEFAULT = true;
+    boolean ENABLED_DEFAULT = true;
     
     /**
      * Returns if this document is enabled. The alias is a boolean value located 

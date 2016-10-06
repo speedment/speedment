@@ -38,7 +38,7 @@ public interface JavaTypeMap {
      * should apply to the java mapping.
      */
     @FunctionalInterface
-    public interface Rule {
+    interface Rule {
         
         /**
          * Returns the java type that should be used to represent the 

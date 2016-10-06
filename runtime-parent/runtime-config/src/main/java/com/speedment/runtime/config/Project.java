@@ -45,13 +45,13 @@ public interface Project extends
         HasMainInterface,
         HasMutator<ProjectMutator<? extends Project>> {
 
-    final String 
+    String
             COMPANY_NAME     = "companyName",
             PACKAGE_LOCATION = "packageLocation",
             CONFIG_PATH      = "configPath",
             DBMSES           = "dbmses";
     
-    final String 
+    String
             DEFAULT_COMPANY_NAME     = "company",
             DEFAULT_PACKAGE_NAME     = "com.",
             DEFAULT_PACKAGE_LOCATION = "src/main/java/",
@@ -103,7 +103,7 @@ public interface Project extends
         return DocumentMutator.of(this);
     }
 
-    static final Pattern SPLIT_PATTERN = Pattern.compile("\\."); // Pattern is immutable and therefor thread safe
+    Pattern SPLIT_PATTERN = Pattern.compile("\\."); // Pattern is immutable and therefor thread safe
     
     /**
      * Locates the table with the specified full name in this project. The name

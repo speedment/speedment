@@ -26,8 +26,8 @@ import java.util.Optional;
  */
 public interface Tuple2OfNullables<T0, T1> extends TupleOfNullables {
 
-    public Optional<T0> get0();
+    Optional<T0> get0();
 
-    public Optional<T1> get1();
+    Optional<T1> get1();
 
 }

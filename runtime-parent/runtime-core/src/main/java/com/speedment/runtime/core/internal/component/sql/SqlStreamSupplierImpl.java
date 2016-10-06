@@ -109,7 +109,7 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
                 .map(t -> isSame(table, t.get()))
                 .orElse(false)
             )
-            .map(Field<ENTITY>::identifier)
+            .map(Field::identifier)
             .collect(toMap(identity(), naming::fullNameOf));
     }
 

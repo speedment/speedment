@@ -37,7 +37,7 @@ public interface HasOrdinalPosition extends Document {
     /**
      * The key of the {@code ordinalPosition} property.
      */
-    final String ORDINAL_POSITION = "ordinalPosition";
+    String ORDINAL_POSITION = "ordinalPosition";
     
     /**
      * The default {@link Comparator} used for documents that implement the 
@@ -45,7 +45,7 @@ public interface HasOrdinalPosition extends Document {
      * based on the natural ordering of their {@link #getOrdinalPosition()}
      * result.
      */
-    final Comparator<HasOrdinalPosition> COMPARATOR = 
+    Comparator<HasOrdinalPosition> COMPARATOR =
         comparing(HasOrdinalPosition::getOrdinalPosition);
     
     /**

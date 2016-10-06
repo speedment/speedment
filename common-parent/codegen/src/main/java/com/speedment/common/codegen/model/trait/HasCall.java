@@ -37,7 +37,7 @@ public interface HasCall<T> {
      * @return           a reference to this
      */
 	@SuppressWarnings("unchecked")
-    default public T call(Consumer<T> procedure) {
+    default T call(Consumer<T> procedure) {
 		procedure.accept((T) this);
 		return (T) this;
 	}
@@ -50,7 +50,7 @@ public interface HasCall<T> {
      * @return           a reference to this
      */
 	@SuppressWarnings("unchecked")
-    default public T call(Runnable procedure) {
+    default T call(Runnable procedure) {
 		procedure.run();
 		return (T) this;
 	}

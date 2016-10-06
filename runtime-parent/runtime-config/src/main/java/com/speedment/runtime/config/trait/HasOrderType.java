@@ -36,7 +36,7 @@ public interface HasOrderType extends Document {
     /**
      * The key of the {@code orderType} property.
      */
-    final String ORDER_TYPE = "orderType";
+    String ORDER_TYPE = "orderType";
 
     /**
      * Returns the type of the ordering used in this {@link Document}. The 

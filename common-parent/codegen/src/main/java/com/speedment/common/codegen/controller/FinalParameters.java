@@ -42,7 +42,7 @@ public final class FinalParameters<T extends HasMethods<T>> implements Consumer<
 	public void accept(T model) {
 		requireNonNull(model).getMethods()
             .forEach(m -> m.getFields()
-                .forEach(Keyword.final_<Field>::final_)
+                .forEach(Keyword.final_::final_)
             );
 	}
 }

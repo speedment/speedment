@@ -20,7 +20,7 @@ import com.speedment.runtime.core.component.InfoComponent;
 
 public interface URLBuildingStrategy {
 
-    public String buildURL(FocusPoint focusPoint,  InfoComponent infoComponent);
+    String buildURL(FocusPoint focusPoint, InfoComponent infoComponent);
 
-    public void setRefererURL(String refererURL);
+    void setRefererURL(String refererURL);
 }

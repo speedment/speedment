@@ -30,7 +30,7 @@ import java.util.function.Consumer;
 
 public interface ProgressMeasure {
     
-    public final static double 
+    double
         INDETERMINATE = -1.0,
         INITIAL       = 0.0,
         DONE          = 1.0;

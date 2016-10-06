@@ -84,7 +84,7 @@ public interface ParallelStrategy {
         };
     }
 
-    static class Hidden {
+    class Hidden {
 
         private static final ParallelStrategy COMPUTE_INTENSITY_DEFAULT = Spliterators::spliteratorUnknownSize;
 

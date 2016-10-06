@@ -50,7 +50,7 @@ public interface TableIdentifier<ENTITY> extends
     HasSchemaName,
     HasTableName {
 
-    static class Hidden {
+    class Hidden {
 
         private static final Map<TableIdentifier<?>, TableIdentifier<?>> INTERNED = new ConcurrentHashMap<>();
 

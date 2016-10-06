@@ -77,7 +77,7 @@ public final class PropertyEditorComponentImpl implements PropertyEditorComponen
             .filterKey(clazz -> clazz.isAssignableFrom(document.getClass()))    // MapStream<Class, Map<String, Supplier<PropertyEditor>>>
             .flatMapValue(m -> MapStream.of(m))                                 // MapStream<Class, Map.Entry<String, Supplier<PropertyEditor>>>
             .mapKey((clazz, entry) -> entry.getKey())                           // MapStream<String, Map.Entry<String, Supplier<PropertyEditor>>>
-            .mapValue(Map.Entry<String, Supplier<PropertyEditor<?>>>::getValue) // MapStream<String, Supplier<PropertyEditor>>
+            .mapValue(Map.Entry::getValue)                                      // MapStream<String, Supplier<PropertyEditor>>
             .distinctKeys((a, b) -> b)                                          // If keys collide, keep newest
             .values()                                                           // Stream<Supplier<PropertyEditor>>
             .map(Supplier::get)                                                 // Stream<PropertyEditor>  (pre inject)

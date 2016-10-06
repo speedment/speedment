@@ -86,7 +86,7 @@ public interface LoggerFactory {
      * @return a Stream of Entry with all unique Loggers that has ever been
      * produced by this LoggerFactory
      */
-    public Stream<Map.Entry<String, Logger>> loggers();
+    Stream<Map.Entry<String, Logger>> loggers();
 
     /**
      * Returns a Stream of LoggerEventListener registered with this
@@ -95,7 +95,7 @@ public interface LoggerFactory {
      * @return a Stream of LoggerEventListener registered with this
      * LoggerFactory
      */
-    public Stream<LoggerEventListener> listeners();
+    Stream<LoggerEventListener> listeners();
 
     /**
      * Sets the log level for Loggers that fits the initial path.

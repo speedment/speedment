@@ -28,7 +28,7 @@ import javafx.beans.property.BooleanProperty;
 
 public interface HasExpandedProperty extends DocumentProperty {
     
-    final String EXPANDED = "expanded";
+    String EXPANDED = "expanded";
 
     default BooleanProperty expandedProperty() {
         return booleanPropertyOf(EXPANDED, this::isExpandedByDefault);

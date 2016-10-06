@@ -33,5 +33,5 @@ public interface HasNegated {
      * 
      * @return  {@code true} if negated, else {@code false}
      */
-    public boolean isNegated();
+    boolean isNegated();
 }

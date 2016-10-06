@@ -30,16 +30,16 @@ import java.util.Optional;
  */
 public interface Tuple6OfNullables<T0, T1, T2, T3, T4, T5> extends TupleOfNullables {
 
-    public Optional<T0> get0();
+    Optional<T0> get0();
 
-    public Optional<T1> get1();
+    Optional<T1> get1();
 
-    public Optional<T2> get2();
+    Optional<T2> get2();
 
-    public Optional<T3> get3();
+    Optional<T3> get3();
 
-    public Optional<T4> get4();
+    Optional<T4> get4();
 
-    public Optional<T5> get5();
+    Optional<T5> get5();
 
 }

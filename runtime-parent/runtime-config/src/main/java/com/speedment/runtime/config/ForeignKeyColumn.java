@@ -41,7 +41,7 @@ public interface ForeignKeyColumn extends
     HasMainInterface,
     HasMutator<ForeignKeyColumnMutator<? extends ForeignKeyColumn>> {
 
-    final String FOREIGN_TABLE_NAME = "foreignTableName",
+    String FOREIGN_TABLE_NAME = "foreignTableName",
         FOREIGN_COLUMN_NAME = "foreignColumnName",
         FOREIGN_DATABASE_NAME = "foreignDatabaseName",
         FOREIGN_SCHEMA_NAME = "foreignSchemaName";

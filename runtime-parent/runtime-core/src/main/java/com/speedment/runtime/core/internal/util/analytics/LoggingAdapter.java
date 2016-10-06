@@ -18,8 +18,8 @@ package com.speedment.runtime.core.internal.util.analytics;
 
 public interface LoggingAdapter {
 
-    public void logError(String errorMessage);
+    void logError(String errorMessage);
 
-    public void logMessage(String message);
+    void logMessage(String message);
 
 }

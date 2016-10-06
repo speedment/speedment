@@ -41,7 +41,7 @@ public interface HasName extends Document, HasMainInterface {
     /**
      * The key of the {@code name} property.
      */
-    final String NAME = "name";
+    String NAME = "name";
 
     /**
      * Gets the name of this Document. If no name is present, this method might

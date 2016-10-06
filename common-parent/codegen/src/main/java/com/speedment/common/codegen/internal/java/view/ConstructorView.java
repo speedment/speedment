@@ -76,7 +76,7 @@ public final class ConstructorView implements Transform<Constructor, String> {
         return gen.getRenderStack()
             .fromTop(HasName.class)
             .filter(n -> model != n)
-            .map(HasName<?>::getName)
+            .map(HasName::getName)
             .map(Formatting::shortName)
             .findFirst();
 	}

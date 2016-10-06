@@ -145,7 +145,7 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
         final Class<?> needle = typeMapper.getClass();
         return mappers.entrySet().stream()
             .filter(e -> e.getValue().stream()
-                .map(Supplier<TypeMapper<?, ?>>::get)
+                .map(Supplier::get)
                 .map(TypeMapper::getClass)
                 .anyMatch(needle::equals)
             )

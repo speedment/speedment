@@ -76,7 +76,7 @@ public final class ComponentsController implements Initializable {
     private List<TreeItem<String>> components() {
         return injector.injectables()
             .map(this::treeItem)
-            .sorted(comparing(TreeItem<String>::getValue))
+            .sorted(comparing(TreeItem::getValue))
             .collect(toList());
     }
     

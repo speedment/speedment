@@ -57,12 +57,12 @@ public interface HasNullable extends Document {
     /**
      * The key of the {@code nullable} property.
      */
-    final String NULLABLE = "nullable";
+    String NULLABLE = "nullable";
     
     /**
      * The key of the {@code nullableImplementation} property.
      */
-    final String NULLABLE_IMPLEMENTATION = "nullableImplementation";
+    String NULLABLE_IMPLEMENTATION = "nullableImplementation";
     
     /**
      * Returns whether or not this column can hold {@code null} values.

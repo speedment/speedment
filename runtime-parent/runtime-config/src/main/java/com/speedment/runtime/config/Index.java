@@ -41,7 +41,7 @@ public interface Index extends
         HasMainInterface,
         HasMutator<IndexMutator<? extends Index>> {
 
-    final String UNIQUE = "unique",
+    String UNIQUE = "unique",
         INDEX_COLUMNS = "indexColumns";
 
     /**
