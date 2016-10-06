@@ -72,6 +72,19 @@ HareApplication app = new HareApplicationBuilder().withPassword("myPwd729").buil
 HareManager hares = app.getOrThrow(HareManager.class);
 ```
 
+###### Full Transparency
+By appending a logger to the builder, you can follow exactly what happens behind the scenes.
+```java
+HareApplication app = new HareApplicationBuilder()
+    .withPassword("myPwd729")
+    .withLogging(ApplicationBuilder.LogType.STREAM)
+    .withLogging(ApplicationBuilder.LogType.PERSIST)
+    .withLogging(ApplicationBuilder.LogType.UPDATE)
+    .withLogging(ApplicationBuilder.LogType.REMOVE)
+    .build();
+HareManager hares = app.getOrThrow(HareManager.class);
+```
+
 ###### Optimised predicate short-circuit
 Search for Hares by a certain age:
 ```java
