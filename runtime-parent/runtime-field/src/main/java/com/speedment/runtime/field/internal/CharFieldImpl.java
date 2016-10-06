@@ -20,17 +20,19 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.CharField;
 import com.speedment.runtime.field.internal.comparator.CharFieldComparator;
 import com.speedment.runtime.field.internal.comparator.CharFieldComparatorImpl;
-import com.speedment.runtime.field.internal.predicate.chars.*;
+import com.speedment.runtime.field.internal.predicate.chars.CharBetweenPredicate;
+import com.speedment.runtime.field.internal.predicate.chars.CharEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.chars.CharGreaterOrEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.chars.CharGreaterThanPredicate;
+import com.speedment.runtime.field.internal.predicate.chars.CharInPredicate;
 import com.speedment.runtime.field.method.CharGetter;
 import com.speedment.runtime.field.method.CharSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
-
-import javax.annotation.Generated;
 import java.util.Set;
 import java.util.function.Predicate;
-
+import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**

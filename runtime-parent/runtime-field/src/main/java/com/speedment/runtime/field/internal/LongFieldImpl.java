@@ -20,17 +20,19 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.LongField;
 import com.speedment.runtime.field.internal.comparator.LongFieldComparator;
 import com.speedment.runtime.field.internal.comparator.LongFieldComparatorImpl;
-import com.speedment.runtime.field.internal.predicate.longs.*;
+import com.speedment.runtime.field.internal.predicate.longs.LongBetweenPredicate;
+import com.speedment.runtime.field.internal.predicate.longs.LongEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.longs.LongGreaterOrEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.longs.LongGreaterThanPredicate;
+import com.speedment.runtime.field.internal.predicate.longs.LongInPredicate;
 import com.speedment.runtime.field.method.LongGetter;
 import com.speedment.runtime.field.method.LongSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
-
-import javax.annotation.Generated;
 import java.util.Set;
 import java.util.function.Predicate;
-
+import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**

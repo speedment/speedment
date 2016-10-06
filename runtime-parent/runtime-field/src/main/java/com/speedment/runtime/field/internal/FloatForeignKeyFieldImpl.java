@@ -24,7 +24,11 @@ import com.speedment.runtime.field.internal.comparator.FloatFieldComparator;
 import com.speedment.runtime.field.internal.comparator.FloatFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromFloat;
-import com.speedment.runtime.field.internal.predicate.floats.*;
+import com.speedment.runtime.field.internal.predicate.floats.FloatBetweenPredicate;
+import com.speedment.runtime.field.internal.predicate.floats.FloatEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.floats.FloatGreaterOrEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.floats.FloatGreaterThanPredicate;
+import com.speedment.runtime.field.internal.predicate.floats.FloatInPredicate;
 import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.method.FloatGetter;
@@ -32,13 +36,11 @@ import com.speedment.runtime.field.method.FloatSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
-
-import javax.annotation.Generated;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-
+import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**

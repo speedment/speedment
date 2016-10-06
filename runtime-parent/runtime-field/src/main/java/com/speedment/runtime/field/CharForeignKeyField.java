@@ -22,7 +22,6 @@ import com.speedment.runtime.field.method.CharGetter;
 import com.speedment.runtime.field.method.CharSetter;
 import com.speedment.runtime.field.trait.HasFinder;
 import com.speedment.runtime.typemapper.TypeMapper;
-
 import javax.annotation.Generated;
 
 /**

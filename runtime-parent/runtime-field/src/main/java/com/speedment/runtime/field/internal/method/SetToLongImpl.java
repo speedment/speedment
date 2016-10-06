@@ -18,9 +18,7 @@ package com.speedment.runtime.field.internal.method;
 
 import com.speedment.runtime.field.method.SetToLong;
 import com.speedment.runtime.field.trait.HasLongValue;
-
 import javax.annotation.Generated;
-
 import static java.util.Objects.requireNonNull;
 
 /**

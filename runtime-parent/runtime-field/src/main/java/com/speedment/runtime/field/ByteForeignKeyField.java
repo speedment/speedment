@@ -22,7 +22,6 @@ import com.speedment.runtime.field.method.ByteGetter;
 import com.speedment.runtime.field.method.ByteSetter;
 import com.speedment.runtime.field.trait.HasFinder;
 import com.speedment.runtime.typemapper.TypeMapper;
-
 import javax.annotation.Generated;
 
 /**

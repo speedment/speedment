@@ -23,7 +23,6 @@ import com.speedment.runtime.field.method.ShortSetter;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.field.trait.HasShortValue;
 import com.speedment.runtime.typemapper.TypeMapper;
-
 import javax.annotation.Generated;
 
 /**

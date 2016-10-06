@@ -17,10 +17,8 @@
 package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.runtime.field.trait.HasByteValue;
-
-import javax.annotation.Generated;
 import java.util.Comparator;
-
+import javax.annotation.Generated;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
