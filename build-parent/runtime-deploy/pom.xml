@@ -38,19 +38,7 @@
         A Speedment bundle that shades all dependencies into one jar. This is 
         useful when deploying an application on a server.
     </description>
-    
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <configuration>
-                    <shadedArtifactId>runtime-all</shadedArtifactId>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-    
+
     <profiles>
         <profile>
             <id>release</id>
@@ -58,7 +46,7 @@
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <artifactId>maven-shade-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>

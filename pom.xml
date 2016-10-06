@@ -300,6 +300,7 @@
                                     <phase>package</phase>
                                     <goals>
                                         <goal>jar</goal>
+                                        <goal>aggregate-jar</goal>
                                     </goals>
                                 </execution>
                             </executions>

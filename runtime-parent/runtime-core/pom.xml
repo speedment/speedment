@@ -89,43 +89,6 @@
     </profiles>
     
     <dependencies>
-        <!-- Runtime Dependencies -->
-        <dependency>
-            <groupId>com.speedment.runtime</groupId>
-            <artifactId>runtime-config</artifactId>
-            <version>${speedment.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.runtime</groupId>
-            <artifactId>runtime-typemapper</artifactId>
-            <version>${speedment.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.runtime</groupId>
-            <artifactId>runtime-field</artifactId>
-            <version>${speedment.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        
         <!-- Common Dependencies -->
         <dependency>
             <groupId>com.speedment.common</groupId>
@@ -165,6 +128,43 @@
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>lazy</artifactId>
+        </dependency>
+        
+        <!-- Runtime Dependencies -->
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-config</artifactId>
+            <version>${speedment.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-typemapper</artifactId>
+            <version>${speedment.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-field</artifactId>
+            <version>${speedment.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         
         <!--Test Dependencies-->
