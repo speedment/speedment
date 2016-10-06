@@ -63,7 +63,7 @@ You can read the [the API quick start here](https://github.com/speedment/speedme
 
 Examples
 --------
-Here are a few examples of how you could use Speedment from your code assuming that you have an exemplary database that looks like this:
+Here are a few examples of how you could use Speedment from your code assuming that you have an exemplary MySQL database that looks like this:
 ```sql
 CREATE TABLE `hares`.`hare` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
