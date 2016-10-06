@@ -72,12 +72,25 @@ HareApplication app = new HareApplicationBuilder().withPassword("myPwd729").buil
 HareManager hares = app.getOrThrow(HareManager.class);
 ```
 
+###### Full Transparency
+By appending a logger to the builder, you can follow exactly what happens behind the scenes.
+```java
+HareApplication app = new HareApplicationBuilder()
+    .withPassword("myPwd729")
+    .withLogging(ApplicationBuilder.LogType.STREAM)
+    .withLogging(ApplicationBuilder.LogType.PERSIST)
+    .withLogging(ApplicationBuilder.LogType.UPDATE)
+    .withLogging(ApplicationBuilder.LogType.REMOVE)
+    .build();
+HareManager hares = app.getOrThrow(HareManager.class);
+```
+
 ###### Optimised predicate short-circuit
 Search for Hares by a certain age:
 ```java
 // Searches are optimized in the background!
 Optional<Hare> harry = hares.stream()
-    .filter(NAME.equal("Harry").and(AGE.lessThan(5)))
+    .filter(AGE.greaterThan(5))
     .findAny();
 ```
 
@@ -92,11 +105,11 @@ SELECT * FROM `Hare`
 ###### Easy persistence
 Entities can easily be persisted in a database.
 ```java
-Hare h = new HareImpl();
-h.setName("Harry");
-h.setColor("Gray");
-h.setAge(3);
-h = hares.persist(harry); // Auto-Increment-fields have been set by the database
+Hare harry = new HareImpl();
+harry.setName("Harry");
+harry.setColor("Gray");
+harry.setAge(3);
+Hare persisted = hares.persist(harry); // Auto-Increment-fields have been set by the database
 ```
 
 ###### Entities are linked
