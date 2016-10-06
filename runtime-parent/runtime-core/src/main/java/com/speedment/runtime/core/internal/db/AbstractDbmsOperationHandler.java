@@ -238,14 +238,14 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     }
 
     protected void handleSqlStatement(Dbms dbms, Connection conn, SqlUpdateStatement sqlStatement) throws SQLException {
-        handleSqlStatementHelper(dbms, conn, sqlStatement);
+        handleSqlStatementHelper(conn, sqlStatement);
     }
 
     protected void handleSqlStatement(Dbms dbms, Connection conn, SqlDeleteStatement sqlStatement) throws SQLException {
-        handleSqlStatementHelper(dbms, conn, sqlStatement);
+        handleSqlStatementHelper(conn, sqlStatement);
     }
 
-    private void handleSqlStatementHelper(Dbms dbms, Connection conn, SqlStatement sqlStatement) throws SQLException {
+    private void handleSqlStatementHelper(Connection conn, SqlStatement sqlStatement) throws SQLException {
         try (final PreparedStatement ps = conn.prepareStatement(sqlStatement.getSql(), Statement.NO_GENERATED_KEYS)) {
             int i = 1;
             for (Object o : sqlStatement.getValues()) {
@@ -259,7 +259,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         sqlStatementList.stream()
             .filter(SqlInsertStatement.class::isInstance)
             .map(SqlInsertStatement.class::cast)
-            .forEach(SqlInsertStatement::acceptGeneratedKeys);
+            .forEach(SqlInsertStatement<?>::acceptGeneratedKeys);
     }
 
     @FunctionalInterface

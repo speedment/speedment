@@ -23,7 +23,6 @@ import com.speedment.generator.core.internal.translator.TranslatorManagerImpl;
 import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasName;
-import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.internal.AbstractApplicationMetadata;
@@ -84,7 +83,6 @@ public abstract class SimpleModel {
             .withComponent(SilentTranslatorManager.class)
             .withSkipCheckDatabaseConnectivity()
             .withSkipValidateRuntimeConfig()
-            .withLogging(ApplicationBuilder.LogType.APPLICATION_BUILDER)
             .build();
         
         project = speedment.getOrThrow(ProjectComponent.class).getProject();

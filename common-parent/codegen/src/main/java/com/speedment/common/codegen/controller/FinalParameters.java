@@ -16,7 +16,6 @@
  */
 package com.speedment.common.codegen.controller;
 
-import com.speedment.common.codegen.model.modifier.Keyword;
 import com.speedment.common.codegen.model.trait.HasMethods;
 
 import java.util.function.Consumer;
@@ -41,7 +40,7 @@ public final class FinalParameters<T extends HasMethods<T>> implements Consumer<
 	public void accept(T model) {
 		requireNonNull(model).getMethods()
             .forEach(m -> m.getFields()
-                .forEach(Keyword.Final::final_)
+                .forEach(f -> f.final_())
             );
 	}
 }

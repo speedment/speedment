@@ -18,7 +18,6 @@ package com.speedment.runtime.config.trait;
 
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.parameter.OrderType;
-import com.speedment.runtime.config.util.TraitUtil.AbstractTraitView;
 
 import java.util.Map;
 

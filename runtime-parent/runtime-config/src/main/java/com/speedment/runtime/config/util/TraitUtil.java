@@ -17,12 +17,10 @@
 package com.speedment.runtime.config.util;
 
 import com.speedment.runtime.config.Document;
-import com.speedment.runtime.config.internal.BaseDocument;
 import com.speedment.runtime.config.trait.HasMainInterface;
 
 import java.util.Map;
 
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -58,21 +56,6 @@ public final class TraitUtil {
     @FunctionalInterface
     public interface TraitViewConstructor<TRAIT> {
         TRAIT create(Document parent, Map<String, Object> data, Class<? extends Document> mainInterface);
-    }
-    
-    public static abstract class AbstractTraitView extends BaseDocument implements HasMainInterface {
-        
-        private final Class<? extends Document> mainInterface;
-
-        protected AbstractTraitView(Document parent, Map<String, Object> data, Class<? extends Document> mainInterface) {
-            super(parent, data);
-            this.mainInterface = requireNonNull(mainInterface);
-        }
-
-        @Override
-        public final Class<? extends Document> mainInterface() {
-            return mainInterface;
-        }
     }
     
     /**

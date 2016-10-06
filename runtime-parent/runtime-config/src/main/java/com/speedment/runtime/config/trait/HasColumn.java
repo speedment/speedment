@@ -19,7 +19,6 @@ package com.speedment.runtime.config.trait;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.util.TraitUtil.AbstractTraitView;
 
 import java.util.Map;
 import java.util.Optional;

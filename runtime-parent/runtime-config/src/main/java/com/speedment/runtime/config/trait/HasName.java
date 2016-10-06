@@ -20,7 +20,6 @@ package com.speedment.runtime.config.trait;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
-import com.speedment.runtime.config.util.TraitUtil.AbstractTraitView;
 
 import java.util.Map;
 import java.util.Optional;
