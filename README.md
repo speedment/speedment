@@ -149,14 +149,14 @@ Hare persistedHare = hares.persist(newHare); // Auto-Increment-fields have been 
 ### Update
 ```java
 hares.stream()
-    .filter(Hare.ID.equal(42))  // Find all Hares with ID = 42 (just one)
+    .filter(Hare.ID.equal(42))  // Filters out all Hares with ID = 42 (just one)
     .map(Hare.AGE.setTo(10))    // Applies a setter that sets the age to 10
     .forEach(hares.updater());  // Applies the updater function
 ```
 or another example
 ```java
 hares.stream()
-    .filter(Hare.ID.between(48, 102))   // Find all Hares with ID between 48 and 102
+    .filter(Hare.ID.between(48, 102))   // Filters out all Hares with ID between 48 and 102
     .map(h -> h.setAge(h.getAge() + 1)) // Applies a lambda that increases their age by one
     .forEach(hares.updater());          // Applies the updater function to the selected hares
 ```
@@ -164,7 +164,7 @@ hares.stream()
 ### Remove
 ```java
 hares.stream()
-    .filter(Hare.ID.equal(71))  // Find all Hares with ID = 71 (just one)
+    .filter(Hare.ID.equal(71))  // Filters out all Hares with ID = 71 (just one)
     .forEach(hares.remover());  // Applies the remover function
 ```
 
