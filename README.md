@@ -206,7 +206,7 @@ To set which database connector you want to use to communicate with your databas
     <speedment.version>3.0.0-EA2</speedment.version>
     <db.groupId>mysql</db.groupId>
     <db.artifactId>mysql-connector-java</db.artifactId>
-    <db.version>5.1.38</db.version>
+    <db.version>5.1.39</db.version>
 </properties>
 ```
 
