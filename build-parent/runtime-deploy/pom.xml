@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.build</groupId>
         <artifactId>build-parent</artifactId>
-        <version>3.0.1-SNAPSHOT</version>
+        <version>3.0.0-EA2</version>
     </parent>
     
     <groupId>com.speedment</groupId>
@@ -58,6 +58,7 @@
             <groupId>com.speedment</groupId>
             <artifactId>runtime</artifactId>
             <version>${speedment.version}</version>
+            <type>pom</type>
         </dependency>
         
         <dependency>
