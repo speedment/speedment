@@ -23,7 +23,7 @@
     <parent>
         <groupId>com.speedment</groupId>
         <artifactId>speedment-parent</artifactId>
-        <version>3.0.0-EA2</version>
+        <version>3.0.3-SNAPSHOT</version>
     </parent>
     
     <groupId>com.speedment.common</groupId>
