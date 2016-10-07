@@ -31,7 +31,6 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>runtime-deploy</artifactId>
-    <packaging>jar</packaging>
     
     <name>Speedment - Build - Runtime Deploy</name>
     <description>
@@ -45,8 +44,15 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-shade-plugin</artifactId>
+                    </plugin>
+                    
+                    <plugin>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                    </plugin>
+                    
+                    <plugin>
+                        <artifactId>maven-javadoc-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>

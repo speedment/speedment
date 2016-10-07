@@ -42,6 +42,7 @@
         <!-- Only build "-deploy"-modules wen we are in the release profile. -->
         <profile>
             <id>release</id>
+            
             <modules>
                 <module>runtime</module>
                 <module>runtime-deploy</module>
@@ -51,9 +52,90 @@
                 <module>tool-deploy</module>
                 <module>maven-plugin</module>
             </modules>
+            
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <!-- Create a shaded artifact with sources included -->
+                        <plugin>
+                            <artifactId>maven-shade-plugin</artifactId>
+                            <version>2.4.3</version>
+
+                            <inherited>true</inherited>
+
+                            <configuration>
+                                <createSourcesJar>true</createSourcesJar>
+                                <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+                                <createDependencyReducedPom>true</createDependencyReducedPom>
+                                <minimizeJar>false</minimizeJar>
+                            </configuration>
+
+                            <executions>
+                                <execution>
+                                    <id>shade-artifacts</id>
+                                    <phase>package</phase>
+                                    <goals>
+                                        <goal>shade</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        
+                        <!-- Unpack the sources into a separate folder -->
+                        <plugin>
+                            <artifactId>maven-dependency-plugin</artifactId>
+                            <inherited>true</inherited>
+                            
+                            <executions>
+                                <execution>
+                                    <id>unpack-artifact-sources</id>
+                                    <phase>generate-resources</phase>
+                                    
+                                    <goals>
+                                        <goal>unpack</goal>
+                                    </goals>
+                                    
+                                    <configuration>
+                                        <artifactItems>
+                                            <artifactItem>
+                                                <groupId>${project.groupId}</groupId>
+                                                <artifactId>${project.artifactId}</artifactId>
+                                                <version>${project.version}</version>
+                                                <classifier>sources</classifier>
+                                                <overWrite>true</overWrite>
+                                            </artifactItem>
+                                        </artifactItems>
+                                        
+                                        <outputDirectory>${project.build.directory}/unpack_sources</outputDirectory>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+
+                        <!-- Generate javadoc for the unpacked sources -->
+                        <plugin>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            <inherited>true</inherited>
+
+                            <configuration>
+                                <sourcepath>${project.build.directory}/unpack_sources</sourcepath>
+                            </configuration>
+                            
+                            <executions>
+                                <execution>
+                                    <phase>process-resources</phase>
+                                    <goals>
+                                        <goal>javadoc</goal>
+                                    </goals>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
         </profile>
         
-        <profile>
+        <profile><!-- The order of the profiles is very important -->
             <id>default</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -102,33 +184,4 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-shade-plugin</artifactId>
-                    <version>2.4.3</version>
-                    
-                    <configuration>
-                        <createSourcesJar>true</createSourcesJar>
-                        <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
-                        <createDependencyReducedPom>true</createDependencyReducedPom>
-                        <minimizeJar>false</minimizeJar>
-                    </configuration>
-                    
-                    <executions>
-                        <execution>
-                            <id>shade-artifacts</id>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>shade</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
 </project>
