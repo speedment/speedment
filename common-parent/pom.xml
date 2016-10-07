@@ -51,27 +51,4 @@
         <module>lazy</module>
         <module>common-all</module>
     </modules>
-    
-    <profiles>
-        <profile>
-            <id>release</id>
-            
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-javadoc-plugin</artifactId>
-                            
-                            <inherited>true</inherited>
-                            
-                            <configuration>
-                                <excludePackageNames>*.internal.*</excludePackageNames>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
-            </build>
-        </profile>
-    </profiles>
 </project>
