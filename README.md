@@ -108,14 +108,16 @@ ALTER TABLE `hares`.`friend`
 ### Easy initialization
 The `HareApplication`, `HareApplicationBuilder` and `HareManager` classes are generated automatically from the database.
 ```java
+// Connect to the database
 final HareApplication app = new HareApplicationBuilder()
     .withPassword("myPwd729")
     .build();
     
-final Manager<Hare>   hares   = app.managerOf(Hare.class);
-final Manager<Carrot> carrots = app.managerOf(Carrot.class);
-final Manager<Human>  humans  = app.managerOf(Human.class);
-final Manager<Friend> friends = app.managerOf(Friend.class);
+// Retrieve managers for the four tables
+final HareManager   hares   = app.getOrThrow(HareManager.class);
+final CarrotManager carrots = app.getOrThrow(CarrotManager.class);
+final HumanManager  humans  = app.getOrThrow(HumanManager.class);
+final FriendManager friends = app.getOrThrow(FriendManager.class);
 ```
 
 
