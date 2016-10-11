@@ -59,9 +59,6 @@ You can read the [the API quick start here](https://github.com/speedment/speedme
 * [Tutorial 8 - Plug-in a Custom TypeMapper](https://github.com/speedment/speedment/wiki/Tutorial:-Plug-in-a-Custom-TypeMapper)
 * [Tutorial 9 - Create Event Sourced Systems](https://github.com/speedment/speedment/wiki/Tutorial:-Create-an-Event-Sourced-System)
 
-## Guides
-* [Formatting your output as JSON](https://github.com/speedment/speedment/wiki/Formatting-your-output-as-JSON)
-
 Examples
 --------
 Here are a few examples of how you could use Speedment from your code assuming that you have an exemplary MySQL database with the tables "hare", "carrot", "human" and "friends" that looks like this:
