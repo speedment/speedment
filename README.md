@@ -57,6 +57,7 @@ You can read the [the API quick start here](https://github.com/speedment/speedme
 * [Tutorial 6 - Use Speedment with Java EE](https://github.com/speedment/speedment/wiki/Tutorial:-Use-Speedment-with-Java-EE)
 * [Tutorial 7 - Writing your own extensions](https://github.com/speedment/speedment/wiki/Tutorial:-Writing-your-own-extensions)
 * [Tutorial 8 - Plug-in a Custom TypeMapper](https://github.com/speedment/speedment/wiki/Tutorial:-Plug-in-a-Custom-TypeMapper)
+* [Tutorial 9 - Create Event Sourced Systems](https://github.com/speedment/speedment/wiki/Tutorial:-Create-an-Event-Sourced-System)
 
 ## Guides
 * [Formatting your output as JSON](https://github.com/speedment/speedment/wiki/Formatting-your-output-as-JSON)
