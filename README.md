@@ -34,7 +34,7 @@ mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -Darche
 mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mariadb -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.0-EA2 && cd speedment-demo && mvn speedment:tool
 ```
 
-A GUI dialog will prompt for database connection details.
+A graphical dialog will prompt for database connection details.
 
 1. Enter database name and credentials and press **Connect**. 
 
