@@ -20,7 +20,6 @@ import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.core.Speedment;
-import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.component.*;
@@ -31,10 +30,8 @@ import com.speedment.runtime.core.internal.db.StandardDbmsTypes;
 import com.speedment.runtime.core.internal.manager.ManagerConfiguratorImpl;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.manager.ManagerConfigurator;
-
-import java.util.Optional;
-
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 
 /**
  * An abstract base implementation of the {@link Speedment} interface.
@@ -60,7 +57,6 @@ public abstract class AbstractSpeedment implements Speedment {
         );
     }
 
-    private @Inject ManagerComponent managerComponent;
     private @Inject Injector injector;
 
     protected AbstractSpeedment() {}
@@ -80,11 +76,6 @@ public abstract class AbstractSpeedment implements Speedment {
                 + "' is not installed in the platform.", ex
             );
         }
-    }
-
-    @Override
-    public <ENTITY> Manager<ENTITY> managerOf(Class<ENTITY> entityType) {
-        return managerComponent.managerOf(entityType);
     }
 
     @Override

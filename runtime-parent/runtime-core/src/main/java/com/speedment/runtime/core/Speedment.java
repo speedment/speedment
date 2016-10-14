@@ -19,7 +19,6 @@ package com.speedment.runtime.core;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.manager.ManagerConfigurator;
-
 import java.util.Optional;
 
 /**
@@ -57,15 +56,6 @@ public interface Speedment {
      * @throws SpeedmentException  if it was not installed
      */
     <T> T getOrThrow(Class<T> type) throws SpeedmentException;
-    
-    /**
-     * Returns the manager for the specified entity type.
-     * 
-     * @param <ENTITY>    the entity type
-     * @param entityType  class for the entity to manage
-     * @return            the manager for that entity type
-     */
-    <ENTITY> Manager<ENTITY> managerOf(Class<ENTITY> entityType);
     
 
     /**
