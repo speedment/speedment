@@ -326,11 +326,46 @@
 .menu-bar .menu .menu-item:active *,
 .menu-bar .menu .menu-item:focused *,
 .context-menu .menu-item:hover *,
-.context-menu .menu-item:focused * {
-    -fx-background-color: -fx-speedment-green;
-    -fx-fill: white;
-    -fx-text-fill: white;
-    -fx-focus-color: white;
+.context-menu .menu-item:focused *,
+.menu-bar .menu .check-menu-item:hover,
+.menu-bar .menu .check-menu-item:active,
+.menu-bar .menu .check-menu-item:focused,
+.context-menu .menu .check-menu-item:hover,
+.context-menu .menu .check-menu-item:active,
+.context-menu .menu .check-menu-item:focused {
+    -fx-background-color   : -fx-speedment-green;
+    -fx-fill               : white;
+    -fx-stroke             : white;
+    -fx-text-fill          : white;
+    -fx-focus-color        : white;
+    -fx-mark-color         : white;
+    -fx-focused-mark-color : white;
+}
+
+.menu-bar .menu .check-menu-item:hover .check-box *.box,
+.menu-bar .menu .check-menu-item:active .check-box *.box,
+.menu-bar .menu .check-menu-item:focused .check-box *.box,
+.context-menu .menu .check-menu-item:hover .check-box *.box,
+.context-menu .menu .check-menu-item:active .check-box *.box,
+.context-menu .menu .check-menu-item:focused .check-box *.box {
+    -fx-background-color : transparent;
+    -fx-fill               : white;
+    -fx-stroke             : white;
+    -fx-text-fill          : white;
+    -fx-focus-color        : white;
+    -fx-mark-color         : white;
+    -fx-focused-mark-color : white;
+    -fx-border-color       : white;
+}
+
+.menu-bar .menu .check-menu-item:checked > .left-container > .check,
+.context-menu .menu .check-menu-item:checked > .left-container > .check {
+    -fx-background-color : black;
+}
+
+.menu-bar .menu .check-menu-item:focused:checked > .left-container > .check,
+.context-menu .menu .check-menu-item:focused:checked > .left-container > .check {
+    -fx-background-color: white;
 }
 
 .menu-bar .menu:hover:show-mnemonics > .label > .mnemonic-underline,

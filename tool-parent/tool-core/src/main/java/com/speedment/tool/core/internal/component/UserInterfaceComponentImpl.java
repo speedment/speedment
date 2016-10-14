@@ -19,6 +19,7 @@ package com.speedment.tool.core.internal.component;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.common.mapstream.MapStream;
@@ -53,8 +54,23 @@ import com.speedment.tool.propertyeditor.internal.component.PropertyEditorCompon
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.List;
+import java.util.Map;
+import static java.util.Objects.requireNonNull;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
+import static java.util.stream.Collectors.toList;
 import javafx.application.Application;
 import javafx.application.Platform;
+import static javafx.application.Platform.runLater;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -70,23 +86,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-
-import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Predicate;
-
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
-import static javafx.application.Platform.runLater;
 
 /**
  *
@@ -123,7 +122,6 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     private final ObjectProperty<StoredNode> hiddenProjectTree = new SimpleObjectProperty<>();
     private final ObjectProperty<StoredNode> hiddenWorkspace   = new SimpleObjectProperty<>();
     private final ObjectProperty<StoredNode> hiddenOutput      = new SimpleObjectProperty<>();
-    private final ObjectProperty<StoredNode> hiddenPreview     = new SimpleObjectProperty<>();
     
     private final ObservableList<Notification> notifications;
     private final ObservableList<Node> outputMessages;
@@ -333,7 +331,6 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         configFileHelper.saveConfigFile(configFileHelper.getCurrentlyOpenFile());
         TranslatorSupport<Project> support = new TranslatorSupport<>(injector, project);
 
-//        final Stopwatch stopwatch = Stopwatch.createStarted();
         log(OutputUtil.info("Prepairing for generating classes " + support.basePackageName() + "." + project.getName() + ".*"));
         log(OutputUtil.info("Target directory is " + project.getPackageLocation()));
         log(OutputUtil.info("Performing rule verifications..."));
@@ -366,23 +363,18 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     }
 
     @Override
-    public void toggleProjectTree() {
-        toggle("projectTree", hiddenProjectTree, StoredNode.InsertAt.BEGINNING);
+    public void prepareToggleProjectTree(BooleanProperty checked) {
+        toggle(checked, "projectTree", hiddenProjectTree, StoredNode.InsertAt.BEGINNING);
     }
 
     @Override
-    public void toggleWorkspace() {
-        toggle("workspace", hiddenWorkspace, StoredNode.InsertAt.BEGINNING);
+    public void prepareToggleWorkspace(BooleanProperty checked) {
+        toggle(checked, "workspace", hiddenWorkspace, StoredNode.InsertAt.BEGINNING);
     }
 
     @Override
-    public void toggleOutput() {
-        toggle("output", hiddenOutput, StoredNode.InsertAt.END);
-    }
-
-    @Override
-    public void togglePreview() {
-        toggle("preview", hiddenPreview, StoredNode.InsertAt.END);
+    public void prepareToggleOutput(BooleanProperty checked) {
+        toggle(checked, "output", hiddenOutput, StoredNode.InsertAt.END);
     }
 
     @Override
@@ -395,51 +387,67 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         browse(GITHUB_URI);
     }
     
-    private void toggle(String cssId, ObjectProperty<StoredNode> hidden, StoredNode.InsertAt insertAt) {
-        final SplitPane parent;
-        final Node node;
+    private void toggle(
+            BooleanProperty checked,
+            String cssId, 
+            ObjectProperty<StoredNode> hidden, 
+            StoredNode.InsertAt insertAt) {
+        
+        final Runnable toggler = () -> {
+            final SplitPane parent;
+            final Node node;
 
-        if (hidden.get() == null) {
-            node = this.stage.getScene().lookup("#" + cssId);
+            if (hidden.get() == null) {
+                node = this.stage.getScene().lookup("#" + cssId);
 
-            if (node != null) {
-                Node n = node;
-                while (!((n = n.getParent()) instanceof SplitPane) && n != null) {
+                if (node != null) {
+                    Node n = node;
+                    while (!((n = n.getParent()) instanceof SplitPane) && n != null) {
+                    }
+                    parent = (SplitPane) n;
+
+                    if (parent != null) {
+                        parent.getItems().remove(node);
+                        hidden.set(new StoredNode(node, parent));
+                    } else {
+                        LOGGER.error("Found no SplitPane ancestor of #" + cssId + ".");
+                    }
+                } else {
+                    LOGGER.error("Non-existing node #" + cssId + " was toggled.");
                 }
-                parent = (SplitPane) n;
+            } else {
+                parent = hidden.get().parent;
 
                 if (parent != null) {
-                    parent.getItems().remove(node);
-                    hidden.set(new StoredNode(node, parent));
+                    node = hidden.get().node;
+
+                    switch (insertAt) {
+                        case BEGINNING:
+                            parent.getItems().add(0, node);
+                            break;
+                        case END:
+                            parent.getItems().add(node);
+                            break;
+                        default:
+                            throw new UnsupportedOperationException(
+                                "Unknown InsertAt enum constant '" + insertAt + "'."
+                            );
+                    }
+
+                    hidden.set(null);
                 } else {
-                    LOGGER.error("Found no SplitPane ancestor of #" + cssId + ".");
+                    LOGGER.error("Found no parent to node #" + cssId + " that was toggled.");
                 }
-            } else {
-                LOGGER.error("Non-existing node #" + cssId + " was toggled.");
             }
-        } else {
-            parent = hidden.get().parent;
-
-            if (parent != null) {
-                node = hidden.get().node;
-
-                switch (insertAt) {
-                    case BEGINNING:
-                        parent.getItems().add(0, node);
-                        break;
-                    case END:
-                        parent.getItems().add(node);
-                        break;
-                    default:
-                        throw new UnsupportedOperationException(
-                            "Unknown InsertAt enum constant '" + insertAt + "'."
-                        );
-                }
-
-                hidden.set(null);
-            } else {
-                LOGGER.error("Found no parent to node #" + cssId + " that was toggled.");
-            }
+        };
+        
+        checked.addListener((ob, o, isChecked) -> {
+            toggler.run();
+        });
+        
+        // If the item is unchecked, toggle the component initially.
+        if (!checked.get()) {
+            runLater(toggler);
         }
     }
     
@@ -666,12 +674,14 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     /*************************************************************/
 
     @Override
-    public <DOC extends DocumentProperty & HasMainInterface> void installContextMenu(Class<? extends DOC> nodeType, ContextMenuBuilder<DOC> menuBuilder) {
+    public <DOC extends DocumentProperty & HasMainInterface> void 
+    installContextMenu(Class<? extends DOC> nodeType, ContextMenuBuilder<DOC> menuBuilder) {
         contextMenuBuilders.computeIfAbsent(nodeType, k -> new CopyOnWriteArrayList<>()).add(menuBuilder);
     }
 
     @Override
-    public <DOC extends DocumentProperty & HasMainInterface> Optional<ContextMenu> createContextMenu(TreeCell<DocumentProperty> treeCell, DOC doc) {
+    public <DOC extends DocumentProperty & HasMainInterface> Optional<ContextMenu> 
+    createContextMenu(TreeCell<DocumentProperty> treeCell, DOC doc) {
         requireNonNulls(treeCell, doc);
         
         @SuppressWarnings("unchecked")
@@ -732,7 +742,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         private final SplitPane parent;
 
         private StoredNode(Node node, SplitPane parent) {
-            this.node = requireNonNull(node);
+            this.node   = requireNonNull(node);
             this.parent = requireNonNull(parent);
         }
     }

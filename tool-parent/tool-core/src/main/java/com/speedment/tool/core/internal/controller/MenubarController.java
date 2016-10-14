@@ -20,12 +20,12 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.internal.util.InjectionLoader;
 import com.speedment.tool.core.resource.SpeedmentIcon;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.MenuItem;
-
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.MenuItem;
 
 /**
  *
@@ -42,9 +42,9 @@ public final class MenubarController implements Initializable {
     private @FXML MenuItem mbSaveAs;
     private @FXML MenuItem mbQuit;
     private @FXML MenuItem mbGenerate;
-    private @FXML MenuItem mbProjectTree;
-    private @FXML MenuItem mbWorkspace;
-    private @FXML MenuItem mbOutput;
+    private @FXML CheckMenuItem mbProjectTree;
+    private @FXML CheckMenuItem mbWorkspace;
+    private @FXML CheckMenuItem mbOutput;
     private @FXML MenuItem mbGitter;
     private @FXML MenuItem mbGitHub;
     private @FXML MenuItem mbComponents;
@@ -78,9 +78,13 @@ public final class MenubarController implements Initializable {
 
         mbGenerate.setOnAction(ev -> userInterfaceComponent.generate());
 
-        mbProjectTree.setOnAction(ev -> userInterfaceComponent.toggleProjectTree());
-        mbWorkspace.setOnAction(ev -> userInterfaceComponent.toggleWorkspace());
-        mbOutput.setOnAction(ev -> userInterfaceComponent.toggleOutput());
+        mbProjectTree.setSelected(true);
+        mbWorkspace.setSelected(true);
+        mbOutput.setSelected(false);
+        
+        userInterfaceComponent.prepareToggleProjectTree(mbProjectTree.selectedProperty());
+        userInterfaceComponent.prepareToggleWorkspace(mbWorkspace.selectedProperty());
+        userInterfaceComponent.prepareToggleOutput(mbOutput.selectedProperty());
 
         mbGitter.setOnAction(ev -> userInterfaceComponent.showGitter());
         mbGitHub.setOnAction(ev -> userInterfaceComponent.showGithub());

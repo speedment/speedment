@@ -26,9 +26,9 @@
         </Menu>
         <Menu fx:id="menuWindow" mnemonicParsing="false" text="Window">
             <items>
-                <MenuItem fx:id="mbProjectTree" mnemonicParsing="false" text="Project Tree" />
-                <MenuItem fx:id="mbWorkspace" mnemonicParsing="false" text="Workspace" />
-                <MenuItem fx:id="mbOutput" mnemonicParsing="false" text="Output" />
+                <CheckMenuItem fx:id="mbProjectTree" mnemonicParsing="false" text="Project Tree" />
+                <CheckMenuItem fx:id="mbWorkspace" mnemonicParsing="false" text="Workspace" />
+                <CheckMenuItem fx:id="mbOutput" mnemonicParsing="false" text="Output" />
             </items>
         </Menu>
         <Menu fx:id="menuHelp" mnemonicParsing="false" text="Help">

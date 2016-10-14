@@ -28,15 +28,15 @@ import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.core.notification.Notification;
 import com.speedment.tool.propertyeditor.PropertyEditor;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Stream;
 
 /**
  * The user interface component contains a number of useful methods required to
@@ -159,23 +159,24 @@ public interface UserInterfaceComponent {
 
     /**
      * Shows or hides the "Project Tree" section of the user interface.
+     * 
+     * @param checked  regulates if the toggle is checked or not
      */
-    void toggleProjectTree();
+    void prepareToggleProjectTree(BooleanProperty checked);
 
     /**
      * Shows or hides the "Workspace" section of the user interface.
+     * 
+     * @param checked  regulates if the toggle is checked or not
      */
-    void toggleWorkspace();
+    void prepareToggleWorkspace(BooleanProperty checked);
 
     /**
      * Shows or hides the "Output" section of the user interface.
+     * 
+     * @param checked  regulates if the toggle is checked or not
      */
-    void toggleOutput();
-
-    /**
-     * Shows or hides the "Preview" section of the user interface.
-     */
-    void togglePreview();
+    void prepareToggleOutput(BooleanProperty checked);
     
     /**
      * Opens the default internet browser and shows the Speedment Gitter page.
