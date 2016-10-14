@@ -18,8 +18,11 @@ package com.speedment.common.json;
 
 import com.speedment.common.json.internal.JsonDeserializer;
 import com.speedment.common.json.internal.JsonSerializer;
-
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -52,7 +55,7 @@ public final class Json {
      * @param object  the object to parse
      * @return        the parsed string
      * 
-     * @throws IllegalArgumentException  if the inputed object is of or contains
+     * @throws IllegalArgumentException  if the inputed object is a or contains
      *                                   unsupported types
      */
     public static String toJson(Object object) throws IllegalArgumentException {
@@ -88,7 +91,8 @@ public final class Json {
      *                                   unsupported types
      * @throws IOException               if the stream could not be written to
      */
-    public static void toJson(Object object, OutputStream out) throws IllegalArgumentException, IOException {
+    public static void toJson(Object object, OutputStream out) 
+    throws IllegalArgumentException, IOException {
         new JsonSerializer(out, PRETTY).print(object);
     }
     
@@ -137,7 +141,8 @@ public final class Json {
      * @throws IOException          if the stream can not be read 
      * @throws JsonSyntaxException  if the specified json is malformed  
      */
-    public static Object fromJson(InputStream in) throws IOException, JsonSyntaxException {
+    public static Object fromJson(InputStream in) 
+    throws IOException, JsonSyntaxException {
         try (final JsonDeserializer parser = new JsonDeserializer(in)) {
             return parser.get();
         }
