@@ -35,7 +35,7 @@ public final class LongGreaterThanPredicate<ENTITY, D> extends AbstractFieldPred
     private final long value;
     
     public LongGreaterThanPredicate(HasLongValue<ENTITY, D> field, long value) {
-        super(PredicateType.GREATER_THAN, field, entity -> field.getAsLong(entity) >= value);
+        super(PredicateType.GREATER_THAN, field, entity -> field.getAsLong(entity) > value);
         this.value = value;
     }
     

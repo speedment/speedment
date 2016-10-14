@@ -35,7 +35,7 @@ public final class ShortGreaterThanPredicate<ENTITY, D> extends AbstractFieldPre
     private final short value;
     
     public ShortGreaterThanPredicate(HasShortValue<ENTITY, D> field, short value) {
-        super(PredicateType.GREATER_THAN, field, entity -> field.getAsShort(entity) >= value);
+        super(PredicateType.GREATER_THAN, field, entity -> field.getAsShort(entity) > value);
         this.value = value;
     }
     

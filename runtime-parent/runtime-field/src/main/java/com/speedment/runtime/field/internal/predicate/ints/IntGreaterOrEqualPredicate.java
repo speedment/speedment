@@ -35,7 +35,7 @@ public final class IntGreaterOrEqualPredicate<ENTITY, D> extends AbstractFieldPr
     private final int value;
     
     public IntGreaterOrEqualPredicate(HasIntValue<ENTITY, D> field, int value) {
-        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsInt(entity) == value);
+        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsInt(entity) >= value);
         this.value = value;
     }
     

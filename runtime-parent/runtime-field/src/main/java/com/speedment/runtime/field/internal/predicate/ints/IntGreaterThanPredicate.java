@@ -35,7 +35,7 @@ public final class IntGreaterThanPredicate<ENTITY, D> extends AbstractFieldPredi
     private final int value;
     
     public IntGreaterThanPredicate(HasIntValue<ENTITY, D> field, int value) {
-        super(PredicateType.GREATER_THAN, field, entity -> field.getAsInt(entity) >= value);
+        super(PredicateType.GREATER_THAN, field, entity -> field.getAsInt(entity) > value);
         this.value = value;
     }
     

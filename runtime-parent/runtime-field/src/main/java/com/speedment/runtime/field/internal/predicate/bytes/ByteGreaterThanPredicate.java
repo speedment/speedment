@@ -35,7 +35,7 @@ public final class ByteGreaterThanPredicate<ENTITY, D> extends AbstractFieldPred
     private final byte value;
     
     public ByteGreaterThanPredicate(HasByteValue<ENTITY, D> field, byte value) {
-        super(PredicateType.GREATER_THAN, field, entity -> field.getAsByte(entity) >= value);
+        super(PredicateType.GREATER_THAN, field, entity -> field.getAsByte(entity) > value);
         this.value = value;
     }
     

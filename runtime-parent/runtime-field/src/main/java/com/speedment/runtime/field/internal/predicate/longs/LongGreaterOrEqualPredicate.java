@@ -35,7 +35,7 @@ public final class LongGreaterOrEqualPredicate<ENTITY, D> extends AbstractFieldP
     private final long value;
     
     public LongGreaterOrEqualPredicate(HasLongValue<ENTITY, D> field, long value) {
-        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsLong(entity) == value);
+        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsLong(entity) >= value);
         this.value = value;
     }
     

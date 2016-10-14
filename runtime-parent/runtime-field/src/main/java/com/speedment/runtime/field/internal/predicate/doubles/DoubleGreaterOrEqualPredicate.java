@@ -35,7 +35,7 @@ public final class DoubleGreaterOrEqualPredicate<ENTITY, D> extends AbstractFiel
     private final double value;
     
     public DoubleGreaterOrEqualPredicate(HasDoubleValue<ENTITY, D> field, double value) {
-        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsDouble(entity) == value);
+        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsDouble(entity) >= value);
         this.value = value;
     }
     

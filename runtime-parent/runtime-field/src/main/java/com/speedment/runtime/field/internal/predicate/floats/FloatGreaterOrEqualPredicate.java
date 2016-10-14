@@ -35,7 +35,7 @@ public final class FloatGreaterOrEqualPredicate<ENTITY, D> extends AbstractField
     private final float value;
     
     public FloatGreaterOrEqualPredicate(HasFloatValue<ENTITY, D> field, float value) {
-        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsFloat(entity) == value);
+        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsFloat(entity) >= value);
         this.value = value;
     }
     

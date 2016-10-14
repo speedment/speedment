@@ -35,7 +35,7 @@ public final class CharGreaterThanPredicate<ENTITY, D> extends AbstractFieldPred
     private final char value;
     
     public CharGreaterThanPredicate(HasCharValue<ENTITY, D> field, char value) {
-        super(PredicateType.GREATER_THAN, field, entity -> field.getAsChar(entity) >= value);
+        super(PredicateType.GREATER_THAN, field, entity -> field.getAsChar(entity) > value);
         this.value = value;
     }
     

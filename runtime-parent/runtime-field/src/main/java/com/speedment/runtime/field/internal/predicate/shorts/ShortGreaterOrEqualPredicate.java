@@ -35,7 +35,7 @@ public final class ShortGreaterOrEqualPredicate<ENTITY, D> extends AbstractField
     private final short value;
     
     public ShortGreaterOrEqualPredicate(HasShortValue<ENTITY, D> field, short value) {
-        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsShort(entity) == value);
+        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsShort(entity) >= value);
         this.value = value;
     }
     

@@ -35,7 +35,7 @@ public final class ByteGreaterOrEqualPredicate<ENTITY, D> extends AbstractFieldP
     private final byte value;
     
     public ByteGreaterOrEqualPredicate(HasByteValue<ENTITY, D> field, byte value) {
-        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsByte(entity) == value);
+        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsByte(entity) >= value);
         this.value = value;
     }
     

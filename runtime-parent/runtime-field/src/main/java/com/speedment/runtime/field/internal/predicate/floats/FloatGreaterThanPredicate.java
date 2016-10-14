@@ -35,7 +35,7 @@ public final class FloatGreaterThanPredicate<ENTITY, D> extends AbstractFieldPre
     private final float value;
     
     public FloatGreaterThanPredicate(HasFloatValue<ENTITY, D> field, float value) {
-        super(PredicateType.GREATER_THAN, field, entity -> field.getAsFloat(entity) >= value);
+        super(PredicateType.GREATER_THAN, field, entity -> field.getAsFloat(entity) > value);
         this.value = value;
     }
     

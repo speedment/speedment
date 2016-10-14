@@ -35,7 +35,7 @@ public final class DoubleGreaterThanPredicate<ENTITY, D> extends AbstractFieldPr
     private final double value;
     
     public DoubleGreaterThanPredicate(HasDoubleValue<ENTITY, D> field, double value) {
-        super(PredicateType.GREATER_THAN, field, entity -> field.getAsDouble(entity) >= value);
+        super(PredicateType.GREATER_THAN, field, entity -> field.getAsDouble(entity) > value);
         this.value = value;
     }
     

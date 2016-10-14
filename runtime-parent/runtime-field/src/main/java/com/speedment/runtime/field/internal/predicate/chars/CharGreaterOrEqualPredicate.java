@@ -35,7 +35,7 @@ public final class CharGreaterOrEqualPredicate<ENTITY, D> extends AbstractFieldP
     private final char value;
     
     public CharGreaterOrEqualPredicate(HasCharValue<ENTITY, D> field, char value) {
-        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsChar(entity) == value);
+        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsChar(entity) >= value);
         this.value = value;
     }
     
