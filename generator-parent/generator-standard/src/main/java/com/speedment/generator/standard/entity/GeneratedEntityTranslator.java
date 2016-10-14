@@ -16,15 +16,30 @@
  */
 package com.speedment.generator.standard.entity;
 
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.common.codegen.constant.DefaultJavadocTag;
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
-import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Enum;
+import com.speedment.common.codegen.model.EnumConstant;
+import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.model.Import;
+import com.speedment.common.codegen.model.Interface;
+import com.speedment.common.codegen.model.Javadoc;
+import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.Value;
+import static com.speedment.common.codegen.util.Formatting.indent;
+import static com.speedment.common.codegen.util.Formatting.nl;
+import static com.speedment.common.codegen.util.Formatting.shortName;
 import com.speedment.common.function.OptionalBoolean;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
+import static com.speedment.generator.standard.internal.util.ColumnUtil.usesOptional;
 import com.speedment.generator.standard.internal.util.EntityTranslatorSupport;
 import com.speedment.generator.standard.internal.util.FkHolder;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
@@ -36,24 +51,18 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.config.util.DocumentDbUtil;
+import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
+import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
-
 import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
-
-import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
-import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
-import static com.speedment.common.codegen.util.Formatting.shortName;
-import static com.speedment.generator.standard.internal.util.ColumnUtil.usesOptional;
-import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
+import java.util.stream.Stream;
 
 /**
  *
@@ -197,62 +206,64 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                 final String shortEntityName = getSupport().entityName();
 
                 file.add(Import.of(entityType));
-
-                final String getter;
-                if (usesOptional(col)) {
-                    getter = "o -> OptionalUtil.unwrap(o." + GETTER_METHOD_PREFIX + getSupport().typeName(col) + "())";
-                    file.add(Import.of(OptionalUtil.class));
-                } else {
-                    getter = shortEntityName + "::get" + getSupport().typeName(col);
-                }
-
-                final String referenced = EntityTranslatorSupport.getForeignKey(getSupport().tableOrThrow(), col)
-                    .map(fkc -> {
-                        final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
-                        final TranslatorSupport<Table> fuSupport = fu.getForeignEmt().getSupport();
-
-                        return ", " + fuSupport.entityName() + "."
-                            + fuSupport.namer().javaStaticFieldName(
-                                fu.getForeignColumn().getJavaName()
-                            );
-                    }).orElse("");
-
-                final String setter = ", " + shortEntityName + "::" + SETTER_METHOD_PREFIX + getSupport().typeName(col);
-
+                
                 final String constant = getSupport().namer().javaStaticFieldName(col.getJavaName());
                 identifierEnum.add(EnumConstant.of(constant).add(Value.ofText(col.getName())));
 
-                final String typeMapperCode;
+                // Begin building the field value parameters.
+                final Stream.Builder<String> fieldParams = Stream.builder();
+                fieldParams.add("Identifier." + constant + ",");
+                
+                // Add getter method reference
+                if (usesOptional(col)) {
+                    fieldParams.add("o -> OptionalUtil.unwrap(o." + GETTER_METHOD_PREFIX + getSupport().typeName(col) + "()),");
+                    file.add(Import.of(OptionalUtil.class));
+                } else {
+                    fieldParams.add(shortEntityName + "::get" + getSupport().typeName(col) + ",");
+                }
+                
+                // Add setter method reference
+                fieldParams.add(shortEntityName + "::" + SETTER_METHOD_PREFIX + getSupport().typeName(col) + ",");
+
+                // Add the foreign key method reference
+                EntityTranslatorSupport.getForeignKey(getSupport().tableOrThrow(), col)
+                    .ifPresent(fkc -> {
+                        final FkHolder fu = new FkHolder(injector, fkc.getParentOrThrow());
+                        final TranslatorSupport<Table> fuSupport = fu.getForeignEmt().getSupport();
+
+                        fieldParams.add(fuSupport.entityName() + "."
+                            + fuSupport.namer().javaStaticFieldName(
+                                fu.getForeignColumn().getJavaName()
+                            ) + ","
+                        );
+                    });
+                
+                // Add type mapper
                 if (col.getTypeMapper().isPresent()) {
                     final String typeMapper = col.getTypeMapper().get();
 
                     if (PrimitiveTypeMapper.class.getName().equals(typeMapper)) {
                         file.add(Import.of(TypeMapper.class));
-                        typeMapperCode = "TypeMapper.primitive()";
+                        fieldParams.add("TypeMapper.primitive(), ");
                     } else {
                         file.add(Import.of(SimpleType.create(typeMapper)));
-                        typeMapperCode = "new " + shortName(typeMapper) + "()";
+                        fieldParams.add("new " + shortName(typeMapper) + "(), ");
                     }
                 } else {
-                    typeMapperCode = "TypeMapper.identity()";
+                    fieldParams.add("TypeMapper.identity(), ");
                     file.add(Import.of(TypeMapper.class));
                 }
+                
+                // Add the 'unique' boolean to the end
+                fieldParams.add(Boolean.toString(DocumentDbUtil.isUnique(col)));
 
                 intrf.add(Field.of(getSupport().namer().javaStaticFieldName(col.getJavaName()), ref.type)
                     .final_()
                     .set(Value.ofReference(
-                        shortName(ref.type.getTypeName())
-                        + ".create(Identifier."
-                        + constant
-                        + ", "
-                        + getter
-                        + setter
-                        + referenced
-                        + ", "
-                        + typeMapperCode
-                        + ", "
-                        + DocumentDbUtil.isUnique(col)
-                        + ")"
+                        shortName(ref.type.getTypeName()) + ".create(" + 
+                        nl() + indent(
+                            fieldParams.build().toArray(String[]::new)
+                        ) + nl() + ")"
                     ))
                     .set(Javadoc.of(
                         "This Field corresponds to the {@link " + shortEntityName + "} field that can be obtained using the "
