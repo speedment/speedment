@@ -17,13 +17,12 @@
 package com.speedment.runtime.core.db;
 
 import java.sql.SQLException;
-import java.util.function.Supplier;
-
 import static java.util.Objects.requireNonNull;
+import java.util.function.Supplier;
 
 /**
  * A variation of the standard {@code java.util.function.Supplier} that throws
- * a {@code SQLException} if an error occured while the supplier was getted.
+ * a {@code SQLException} if an error occurred while the supplier was getted.
  * 
  * @param <T>  supplied type
  * 

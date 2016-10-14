@@ -17,16 +17,14 @@
 package com.speedment.runtime.core.db;
 
 import com.speedment.runtime.core.exception.SpeedmentException;
-
 import java.sql.SQLException;
 import java.util.Objects;
-import java.util.function.Function;
-
 import static java.util.Objects.requireNonNull;
+import java.util.function.Function;
 
 /**
  * A variation of the standard {@code java.util.function.Function} that throws
- * a {@code SQLException} if an error occured while the function was applied.
+ * a {@code SQLException} if an error occurred while the function was applied.
  *
  * @param <T>  input type
  * @param <R>  result type

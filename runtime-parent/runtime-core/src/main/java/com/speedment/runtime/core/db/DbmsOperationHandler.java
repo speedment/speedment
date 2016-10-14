@@ -19,7 +19,6 @@ package com.speedment.runtime.core.db;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.Field;
-
 import java.sql.*;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,8 +27,8 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
- * A DbmsOperationHandler provides the interface between Speedment and an underlying
- * {@link Dbms} for when running queries.
+ * A DbmsOperationHandler provides the interface between Speedment and an 
+ * underlying {@link Dbms} for when running queries.
  *
  * @author  Per Minborg
  * @author  Emil Forslund
