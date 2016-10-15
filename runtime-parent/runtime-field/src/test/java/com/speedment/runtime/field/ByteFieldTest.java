@@ -30,18 +30,18 @@ import org.junit.Test;
 import static java.util.Arrays.asList;
 
 /**
- * JUnit tests for the primitive {@code int} field class.
+ * JUnit tests for the primitive {@code byte} field class.
  * 
  * @author Emil Forslund
  * @since  3.0.3
  * 
- * @see IntField
+ * @see ByteField
  */
 @Generated(value = "Speedment")
-public final class IntFieldTest {
+public final class ByteFieldTest {
     
-    private final static Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarInt();
-    private IntField<BasicEntity, Integer> field;
+    private final static Function<BasicEntity, String> FORMATTER = entity -> "" + entity.getVarByte();
+    private ByteField<BasicEntity, Byte> field;
     private List<BasicEntity> entities;
     private BasicEntity a;
     private BasicEntity b;
@@ -58,26 +58,26 @@ public final class IntFieldTest {
     
     @Before
     public void setUp() {
-        field = IntField.create(
-            BasicEntity.Identifier.VAR_INT,
-            BasicEntity::getVarInt,
-            BasicEntity::setVarInt,
+        field = ByteField.create(
+            BasicEntity.Identifier.VAR_BYTE,
+            BasicEntity::getVarByte,
+            BasicEntity::setVarByte,
             TypeMapper.primitive(),
             false
         );
         
-        a = new BasicEntity().setVarInt(0);
-        b = new BasicEntity().setVarInt(-1);
-        c = new BasicEntity().setVarInt(1);
-        d = new BasicEntity().setVarInt(1);
-        e = new BasicEntity().setVarInt(2);
-        f = new BasicEntity().setVarInt(2);
-        g = new BasicEntity().setVarInt(3);
-        h = new BasicEntity().setVarInt(-5);
-        i = new BasicEntity().setVarInt(1);
-        j = new BasicEntity().setVarInt(Integer.MIN_VALUE);
-        k = new BasicEntity().setVarInt(Integer.MAX_VALUE);
-        l = new BasicEntity().setVarInt(0);
+        a = new BasicEntity().setVarByte((byte) 0);
+        b = new BasicEntity().setVarByte((byte) -1);
+        c = new BasicEntity().setVarByte((byte) 1);
+        d = new BasicEntity().setVarByte((byte) 1);
+        e = new BasicEntity().setVarByte((byte) 2);
+        f = new BasicEntity().setVarByte((byte) 2);
+        g = new BasicEntity().setVarByte((byte) 3);
+        h = new BasicEntity().setVarByte((byte) -5);
+        i = new BasicEntity().setVarByte((byte) 1);
+        j = new BasicEntity().setVarByte(Byte.MIN_VALUE);
+        k = new BasicEntity().setVarByte(Byte.MAX_VALUE);
+        l = new BasicEntity().setVarByte((byte) 0);
         
         entities = asList(a, b, c, d, e, f, g, h, i, j, k, l);
     }
@@ -85,12 +85,12 @@ public final class IntFieldTest {
     @Test
     public void testBetween() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.between(0, 2);
-        final Predicate<BasicEntity> t1 = field.between(-2, 2);
-        final Predicate<BasicEntity> t2 = field.between(0, 2, Inclusion.START_EXCLUSIVE_END_EXCLUSIVE);
-        final Predicate<BasicEntity> t3 = field.between(0, 2, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
-        final Predicate<BasicEntity> t4 = field.between(0, 2, Inclusion.START_EXCLUSIVE_END_INCLUSIVE);
-        final Predicate<BasicEntity> t5 = field.between(0, 2, Inclusion.START_INCLUSIVE_END_INCLUSIVE);
+        final Predicate<BasicEntity> t0 = field.between((byte) 0, (byte) 2);
+        final Predicate<BasicEntity> t1 = field.between((byte) -2, (byte) 2);
+        final Predicate<BasicEntity> t2 = field.between((byte) 0, (byte) 2, Inclusion.START_EXCLUSIVE_END_EXCLUSIVE);
+        final Predicate<BasicEntity> t3 = field.between((byte) 0, (byte) 2, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
+        final Predicate<BasicEntity> t4 = field.between((byte) 0, (byte) 2, Inclusion.START_EXCLUSIVE_END_INCLUSIVE);
+        final Predicate<BasicEntity> t5 = field.between((byte) 0, (byte) 2, Inclusion.START_INCLUSIVE_END_INCLUSIVE);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(a, c, d, i, l);
@@ -120,15 +120,15 @@ public final class IntFieldTest {
     @Test
     public void testEqual() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.equal(-1);
-        final Predicate<BasicEntity> t1 = field.equal(0);
-        final Predicate<BasicEntity> t2 = field.equal(1);
-        final Predicate<BasicEntity> t3 = field.equal(2);
-        final Predicate<BasicEntity> t4 = field.equal(3);
-        final Predicate<BasicEntity> t5 = field.equal(-5);
-        final Predicate<BasicEntity> t6 = field.equal(Integer.MIN_VALUE);
-        final Predicate<BasicEntity> t7 = field.equal(Integer.MAX_VALUE);
-        final Predicate<BasicEntity> t8 = field.equal(100);
+        final Predicate<BasicEntity> t0 = field.equal((byte) -1);
+        final Predicate<BasicEntity> t1 = field.equal((byte) 0);
+        final Predicate<BasicEntity> t2 = field.equal((byte) 1);
+        final Predicate<BasicEntity> t3 = field.equal((byte) 2);
+        final Predicate<BasicEntity> t4 = field.equal((byte) 3);
+        final Predicate<BasicEntity> t5 = field.equal((byte) -5);
+        final Predicate<BasicEntity> t6 = field.equal(Byte.MIN_VALUE);
+        final Predicate<BasicEntity> t7 = field.equal(Byte.MAX_VALUE);
+        final Predicate<BasicEntity> t8 = field.equal((byte) 100);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(b);
@@ -167,15 +167,15 @@ public final class IntFieldTest {
     @Test
     public void testGreaterOrEqual() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.greaterOrEqual(-1);
-        final Predicate<BasicEntity> t1 = field.greaterOrEqual(0);
-        final Predicate<BasicEntity> t2 = field.greaterOrEqual(1);
-        final Predicate<BasicEntity> t3 = field.greaterOrEqual(2);
-        final Predicate<BasicEntity> t4 = field.greaterOrEqual(3);
-        final Predicate<BasicEntity> t5 = field.greaterOrEqual(-5);
-        final Predicate<BasicEntity> t6 = field.greaterOrEqual(Integer.MIN_VALUE);
-        final Predicate<BasicEntity> t7 = field.greaterOrEqual(Integer.MAX_VALUE);
-        final Predicate<BasicEntity> t8 = field.greaterOrEqual(100);
+        final Predicate<BasicEntity> t0 = field.greaterOrEqual((byte) -1);
+        final Predicate<BasicEntity> t1 = field.greaterOrEqual((byte) 0);
+        final Predicate<BasicEntity> t2 = field.greaterOrEqual((byte) 1);
+        final Predicate<BasicEntity> t3 = field.greaterOrEqual((byte) 2);
+        final Predicate<BasicEntity> t4 = field.greaterOrEqual((byte) 3);
+        final Predicate<BasicEntity> t5 = field.greaterOrEqual((byte) -5);
+        final Predicate<BasicEntity> t6 = field.greaterOrEqual(Byte.MIN_VALUE);
+        final Predicate<BasicEntity> t7 = field.greaterOrEqual(Byte.MAX_VALUE);
+        final Predicate<BasicEntity> t8 = field.greaterOrEqual((byte) 100);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(a, b, c, d, e, f, g, i, k, l);
@@ -214,15 +214,15 @@ public final class IntFieldTest {
     @Test
     public void testGreaterThan() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.greaterThan(-1);
-        final Predicate<BasicEntity> t1 = field.greaterThan(0);
-        final Predicate<BasicEntity> t2 = field.greaterThan(1);
-        final Predicate<BasicEntity> t3 = field.greaterThan(2);
-        final Predicate<BasicEntity> t4 = field.greaterThan(3);
-        final Predicate<BasicEntity> t5 = field.greaterThan(-5);
-        final Predicate<BasicEntity> t6 = field.greaterThan(Integer.MIN_VALUE);
-        final Predicate<BasicEntity> t7 = field.greaterThan(Integer.MAX_VALUE);
-        final Predicate<BasicEntity> t8 = field.greaterThan(100);
+        final Predicate<BasicEntity> t0 = field.greaterThan((byte) -1);
+        final Predicate<BasicEntity> t1 = field.greaterThan((byte) 0);
+        final Predicate<BasicEntity> t2 = field.greaterThan((byte) 1);
+        final Predicate<BasicEntity> t3 = field.greaterThan((byte) 2);
+        final Predicate<BasicEntity> t4 = field.greaterThan((byte) 3);
+        final Predicate<BasicEntity> t5 = field.greaterThan((byte) -5);
+        final Predicate<BasicEntity> t6 = field.greaterThan(Byte.MIN_VALUE);
+        final Predicate<BasicEntity> t7 = field.greaterThan(Byte.MAX_VALUE);
+        final Predicate<BasicEntity> t8 = field.greaterThan((byte) 100);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(a, c, d, e, f, g, i, k, l);
@@ -262,14 +262,14 @@ public final class IntFieldTest {
     public void testIn() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.in();
-        final Predicate<BasicEntity> t1 = field.in(0);
-        final Predicate<BasicEntity> t2 = field.in(0, 1);
-        final Predicate<BasicEntity> t3 = field.in(0, 1, 1);
-        final Predicate<BasicEntity> t4 = field.in(-1, 1, 2, 3);
-        final Predicate<BasicEntity> t5 = field.in(Integer.MIN_VALUE, Integer.MAX_VALUE);
-        final Predicate<BasicEntity> t6 = field.in(1, 2, 3, 4, 5);
-        final Predicate<BasicEntity> t7 = field.in(100, 101, 102, 103, 104);
-        final Predicate<BasicEntity> t8 = field.in(-100);
+        final Predicate<BasicEntity> t1 = field.in((byte) 0);
+        final Predicate<BasicEntity> t2 = field.in((byte) 0, (byte) 1);
+        final Predicate<BasicEntity> t3 = field.in((byte) 0, (byte) 1, (byte) 1);
+        final Predicate<BasicEntity> t4 = field.in((byte) -1, (byte) 1, (byte) 2, (byte) 3);
+        final Predicate<BasicEntity> t5 = field.in(Byte.MIN_VALUE, Byte.MAX_VALUE);
+        final Predicate<BasicEntity> t6 = field.in((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5);
+        final Predicate<BasicEntity> t7 = field.in((byte) 100, (byte) 101, (byte) 102, (byte) 103, (byte) 104);
+        final Predicate<BasicEntity> t8 = field.in((byte) -100);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList();
@@ -309,14 +309,14 @@ public final class IntFieldTest {
     public void testInSet() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.in(Collections.emptySet());
-        final Predicate<BasicEntity> t1 = field.in(Collections.singleton(0));
-        final Predicate<BasicEntity> t2 = field.in(Stream.of(0, 1).collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t3 = field.in(Stream.of(0, 1, 1).collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t4 = field.in(Stream.of(-1, 1, 2, 3).collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t5 = field.in(Stream.of(Integer.MIN_VALUE, Integer.MAX_VALUE).collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t6 = field.in(Stream.of(1, 2, 3, 4, 5).collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t7 = field.in(Stream.of(100, 101, 102, 103, 104).collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t8 = field.in(Collections.singleton(-100));
+        final Predicate<BasicEntity> t1 = field.in(Collections.singleton((byte) 0));
+        final Predicate<BasicEntity> t2 = field.in(Stream.of((byte) 0, (byte) 1).collect(Collectors.toSet()));
+        final Predicate<BasicEntity> t3 = field.in(Stream.of((byte) 0, (byte) 1, (byte) 1).collect(Collectors.toSet()));
+        final Predicate<BasicEntity> t4 = field.in(Stream.of((byte) -1, (byte) 1, (byte) 2, (byte) 3).collect(Collectors.toSet()));
+        final Predicate<BasicEntity> t5 = field.in(Stream.of(Byte.MIN_VALUE, Byte.MAX_VALUE).collect(Collectors.toSet()));
+        final Predicate<BasicEntity> t6 = field.in(Stream.of((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5).collect(Collectors.toSet()));
+        final Predicate<BasicEntity> t7 = field.in(Stream.of((byte) 100, (byte) 101, (byte) 102, (byte) 103, (byte) 104).collect(Collectors.toSet()));
+        final Predicate<BasicEntity> t8 = field.in(Collections.singleton((byte) -100));
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList();
@@ -355,15 +355,15 @@ public final class IntFieldTest {
     @Test
     public void testLessThan() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.lessThan(-1);
-        final Predicate<BasicEntity> t1 = field.lessThan(0);
-        final Predicate<BasicEntity> t2 = field.lessThan(1);
-        final Predicate<BasicEntity> t3 = field.lessThan(2);
-        final Predicate<BasicEntity> t4 = field.lessThan(3);
-        final Predicate<BasicEntity> t5 = field.lessThan(-5);
-        final Predicate<BasicEntity> t6 = field.lessThan(Integer.MIN_VALUE);
-        final Predicate<BasicEntity> t7 = field.lessThan(Integer.MAX_VALUE);
-        final Predicate<BasicEntity> t8 = field.lessThan(100);
+        final Predicate<BasicEntity> t0 = field.lessThan((byte) -1);
+        final Predicate<BasicEntity> t1 = field.lessThan((byte) 0);
+        final Predicate<BasicEntity> t2 = field.lessThan((byte) 1);
+        final Predicate<BasicEntity> t3 = field.lessThan((byte) 2);
+        final Predicate<BasicEntity> t4 = field.lessThan((byte) 3);
+        final Predicate<BasicEntity> t5 = field.lessThan((byte) -5);
+        final Predicate<BasicEntity> t6 = field.lessThan(Byte.MIN_VALUE);
+        final Predicate<BasicEntity> t7 = field.lessThan(Byte.MAX_VALUE);
+        final Predicate<BasicEntity> t8 = field.lessThan((byte) 100);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(h, j);
@@ -402,15 +402,15 @@ public final class IntFieldTest {
     @Test
     public void testLessOrEqual() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.lessOrEqual(-1);
-        final Predicate<BasicEntity> t1 = field.lessOrEqual(0);
-        final Predicate<BasicEntity> t2 = field.lessOrEqual(1);
-        final Predicate<BasicEntity> t3 = field.lessOrEqual(2);
-        final Predicate<BasicEntity> t4 = field.lessOrEqual(3);
-        final Predicate<BasicEntity> t5 = field.lessOrEqual(-5);
-        final Predicate<BasicEntity> t6 = field.lessOrEqual(Integer.MIN_VALUE);
-        final Predicate<BasicEntity> t7 = field.lessOrEqual(Integer.MAX_VALUE);
-        final Predicate<BasicEntity> t8 = field.lessOrEqual(100);
+        final Predicate<BasicEntity> t0 = field.lessOrEqual((byte) -1);
+        final Predicate<BasicEntity> t1 = field.lessOrEqual((byte) 0);
+        final Predicate<BasicEntity> t2 = field.lessOrEqual((byte) 1);
+        final Predicate<BasicEntity> t3 = field.lessOrEqual((byte) 2);
+        final Predicate<BasicEntity> t4 = field.lessOrEqual((byte) 3);
+        final Predicate<BasicEntity> t5 = field.lessOrEqual((byte) -5);
+        final Predicate<BasicEntity> t6 = field.lessOrEqual(Byte.MIN_VALUE);
+        final Predicate<BasicEntity> t7 = field.lessOrEqual(Byte.MAX_VALUE);
+        final Predicate<BasicEntity> t8 = field.lessOrEqual((byte) 100);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(b, h, j);
@@ -449,12 +449,12 @@ public final class IntFieldTest {
     @Test
     public void testNotBetween() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.notBetween(0, 2);
-        final Predicate<BasicEntity> t1 = field.notBetween(-2, 2);
-        final Predicate<BasicEntity> t2 = field.notBetween(0, 2, Inclusion.START_EXCLUSIVE_END_EXCLUSIVE);
-        final Predicate<BasicEntity> t3 = field.notBetween(0, 2, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
-        final Predicate<BasicEntity> t4 = field.notBetween(0, 2, Inclusion.START_EXCLUSIVE_END_INCLUSIVE);
-        final Predicate<BasicEntity> t5 = field.notBetween(0, 2, Inclusion.START_INCLUSIVE_END_INCLUSIVE);
+        final Predicate<BasicEntity> t0 = field.notBetween((byte) 0, (byte) 2);
+        final Predicate<BasicEntity> t1 = field.notBetween((byte) -2, (byte) 2);
+        final Predicate<BasicEntity> t2 = field.notBetween((byte) 0, (byte) 2, Inclusion.START_EXCLUSIVE_END_EXCLUSIVE);
+        final Predicate<BasicEntity> t3 = field.notBetween((byte) 0, (byte) 2, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
+        final Predicate<BasicEntity> t4 = field.notBetween((byte) 0, (byte) 2, Inclusion.START_EXCLUSIVE_END_INCLUSIVE);
+        final Predicate<BasicEntity> t5 = field.notBetween((byte) 0, (byte) 2, Inclusion.START_INCLUSIVE_END_INCLUSIVE);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(b, e, f, g, h, j, k);
@@ -484,15 +484,15 @@ public final class IntFieldTest {
     @Test
     public void testNotEqual() {
         // Create a number of predicates
-        final Predicate<BasicEntity> t0 = field.notEqual(-1);
-        final Predicate<BasicEntity> t1 = field.notEqual(0);
-        final Predicate<BasicEntity> t2 = field.notEqual(1);
-        final Predicate<BasicEntity> t3 = field.notEqual(2);
-        final Predicate<BasicEntity> t4 = field.notEqual(3);
-        final Predicate<BasicEntity> t5 = field.notEqual(-5);
-        final Predicate<BasicEntity> t6 = field.notEqual(Integer.MIN_VALUE);
-        final Predicate<BasicEntity> t7 = field.notEqual(Integer.MAX_VALUE);
-        final Predicate<BasicEntity> t8 = field.notEqual(100);
+        final Predicate<BasicEntity> t0 = field.notEqual((byte) -1);
+        final Predicate<BasicEntity> t1 = field.notEqual((byte) 0);
+        final Predicate<BasicEntity> t2 = field.notEqual((byte) 1);
+        final Predicate<BasicEntity> t3 = field.notEqual((byte) 2);
+        final Predicate<BasicEntity> t4 = field.notEqual((byte) 3);
+        final Predicate<BasicEntity> t5 = field.notEqual((byte) -5);
+        final Predicate<BasicEntity> t6 = field.notEqual(Byte.MIN_VALUE);
+        final Predicate<BasicEntity> t7 = field.notEqual(Byte.MAX_VALUE);
+        final Predicate<BasicEntity> t8 = field.notEqual((byte) 100);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(a, c, d, e, f, g, h, i, j, k, l);
@@ -532,14 +532,14 @@ public final class IntFieldTest {
     public void testNotIn() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notIn();
-        final Predicate<BasicEntity> t1 = field.notIn(0);
-        final Predicate<BasicEntity> t2 = field.notIn(0, 1);
-        final Predicate<BasicEntity> t3 = field.notIn(0, 1, 1);
-        final Predicate<BasicEntity> t4 = field.notIn(-1, 1, 2, 3);
-        final Predicate<BasicEntity> t5 = field.notIn(Integer.MIN_VALUE, Integer.MAX_VALUE);
-        final Predicate<BasicEntity> t6 = field.notIn(1, 2, 3, 4, 5);
-        final Predicate<BasicEntity> t7 = field.notIn(100, 101, 102, 103, 104);
-        final Predicate<BasicEntity> t8 = field.notIn(-100);
+        final Predicate<BasicEntity> t1 = field.notIn((byte) 0);
+        final Predicate<BasicEntity> t2 = field.notIn((byte) 0, (byte) 1);
+        final Predicate<BasicEntity> t3 = field.notIn((byte) 0, (byte) 1, (byte) 1);
+        final Predicate<BasicEntity> t4 = field.notIn((byte) -1, (byte) 1, (byte) 2, (byte) 3);
+        final Predicate<BasicEntity> t5 = field.notIn(Byte.MIN_VALUE, Byte.MAX_VALUE);
+        final Predicate<BasicEntity> t6 = field.notIn((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5);
+        final Predicate<BasicEntity> t7 = field.notIn((byte) 100, (byte) 101, (byte) 102, (byte) 103, (byte) 104);
+        final Predicate<BasicEntity> t8 = field.notIn((byte) -100);
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(a, b, c, d, e, f, g, h, i, j, k, l);
@@ -579,14 +579,14 @@ public final class IntFieldTest {
     public void testNotInSet() {
         // Create a number of predicates
         final Predicate<BasicEntity> t0 = field.notIn(Collections.emptySet());
-        final Predicate<BasicEntity> t1 = field.notIn(Collections.singleton(0));
-        final Predicate<BasicEntity> t2 = field.notIn(Stream.of(0, 1).collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t3 = field.notIn(Stream.of(0, 1, 1).collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t4 = field.notIn(Stream.of(-1, 1, 2, 3).collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t5 = field.notIn(Stream.of(Integer.MIN_VALUE, Integer.MAX_VALUE).collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t6 = field.notIn(Stream.of(1, 2, 3, 4, 5).collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t7 = field.notIn(Stream.of(100, 101, 102, 103, 104).collect(Collectors.toSet()));
-        final Predicate<BasicEntity> t8 = field.notIn(Collections.singleton(-100));
+        final Predicate<BasicEntity> t1 = field.notIn(Collections.singleton((byte) 0));
+        final Predicate<BasicEntity> t2 = field.notIn(Stream.of((byte) 0, (byte) 1).collect(Collectors.toSet()));
+        final Predicate<BasicEntity> t3 = field.notIn(Stream.of((byte) 0, (byte) 1, (byte) 1).collect(Collectors.toSet()));
+        final Predicate<BasicEntity> t4 = field.notIn(Stream.of((byte) -1, (byte) 1, (byte) 2, (byte) 3).collect(Collectors.toSet()));
+        final Predicate<BasicEntity> t5 = field.notIn(Stream.of(Byte.MIN_VALUE, Byte.MAX_VALUE).collect(Collectors.toSet()));
+        final Predicate<BasicEntity> t6 = field.notIn(Stream.of((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5).collect(Collectors.toSet()));
+        final Predicate<BasicEntity> t7 = field.notIn(Stream.of((byte) 100, (byte) 101, (byte) 102, (byte) 103, (byte) 104).collect(Collectors.toSet()));
+        final Predicate<BasicEntity> t8 = field.notIn(Collections.singleton((byte) -100));
         
         // Create a number of expected results
         final List<BasicEntity> e0 = asList(a, b, c, d, e, f, g, h, i, j, k, l);
