@@ -1,8 +1,8 @@
 Speedment is a Stream ORM Java Toolkit and Runtime
 ==================================================
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.speedment/speedment/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.speedment/speedment)
-[![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.speedment/runtime/badge.svg)](http://www.javadoc.io/doc/com.speedment/runtime)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.speedment/runtime/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.speedment/runtime)
+[![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.speedment/runtime-deploy/badge.svg)](http://www.javadoc.io/doc/com.speedment/runtime-deploy)
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg?maxAge=2592000)](https://raw.githubusercontent.com/speedment/speedment/master/LICENSE)
 [![Join the chat at https://gitter.im/speedment/speedment](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/speedment/speedment?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -34,7 +34,7 @@ mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -Darche
 mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mariadb -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.0-EA2 && cd speedment-demo && mvn speedment:tool
 ```
 
-A GUI dialog will prompt for database connection details.
+A graphical dialog will prompt for database connection details.
 
 1. Enter database name and credentials and press **Connect**. 
 
@@ -57,9 +57,7 @@ You can read the [the API quick start here](https://github.com/speedment/speedme
 * [Tutorial 6 - Use Speedment with Java EE](https://github.com/speedment/speedment/wiki/Tutorial:-Use-Speedment-with-Java-EE)
 * [Tutorial 7 - Writing your own extensions](https://github.com/speedment/speedment/wiki/Tutorial:-Writing-your-own-extensions)
 * [Tutorial 8 - Plug-in a Custom TypeMapper](https://github.com/speedment/speedment/wiki/Tutorial:-Plug-in-a-Custom-TypeMapper)
-
-## Guides
-* [Formatting your output as JSON](https://github.com/speedment/speedment/wiki/Formatting-your-output-as-JSON)
+* [Tutorial 9 - Create Event Sourced Systems](https://github.com/speedment/speedment/wiki/Tutorial:-Create-an-Event-Sourced-System)
 
 Examples
 --------
