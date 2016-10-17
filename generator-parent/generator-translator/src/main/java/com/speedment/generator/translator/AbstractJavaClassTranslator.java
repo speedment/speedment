@@ -28,6 +28,7 @@ import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.model.Interface;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.Value;
 import com.speedment.common.injector.Injector;
