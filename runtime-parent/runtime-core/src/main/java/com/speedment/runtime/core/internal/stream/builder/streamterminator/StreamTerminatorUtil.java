@@ -29,7 +29,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -40,7 +39,7 @@ public final class StreamTerminatorUtil {
     public static <T extends Pipeline, ENTITY> List<FieldPredicate<ENTITY>> topLevelAndPredicates(T initialPipeline) {
         final List<FieldPredicate<ENTITY>> andPredicateBuilders = new ArrayList<>();
 
-        for (final Action<?, ?> action : initialPipeline.stream().collect(toList())) {
+        for (final Action<?, ?> action : initialPipeline) {
             @SuppressWarnings("rawtypes")
             final Optional<FilterAction> oFilterAction = Cast.cast(action, FilterAction.class);
             if (oFilterAction.isPresent()) {
