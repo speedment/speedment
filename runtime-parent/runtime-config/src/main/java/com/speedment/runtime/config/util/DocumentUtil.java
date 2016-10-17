@@ -16,32 +16,31 @@
  */
 package com.speedment.runtime.config.util;
 
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.internal.util.Trees;
 import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
-
 import java.util.*;
+import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
-
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+import java.util.stream.Stream;
 
 /**
  * Common utility methods for working with instances of the {@code Document}
  * interface.
  *
- * @author Per Minborg
- * @author Emil Forslund
+ * @author  Per Minborg
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
 public final class DocumentUtil {
 
@@ -100,7 +99,7 @@ public final class DocumentUtil {
         Document document,
         BiFunction<Document, Map<String, Object>, E> childConstructor) {
 
-        return document.stream().values()
+        return document.getData().values().stream()
             .filter(obj -> obj instanceof List<?>)
             .map(list -> (List<Object>) list)
             .flatMap(list -> list.stream())
@@ -112,7 +111,7 @@ public final class DocumentUtil {
     /**
      * Creates and returns a new raw map on a specified key in the specified
      * document. This might involve creating a new list if no such existed
-     * already. If children aldready existed on that key, the new one is simply
+     * already. If children already existed on that key, the new one is simply
      * added to the end of the list.
      *
      * @param parent the parent to create it in

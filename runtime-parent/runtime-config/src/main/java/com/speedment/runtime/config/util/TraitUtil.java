@@ -18,16 +18,29 @@ package com.speedment.runtime.config.util;
 
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.trait.HasMainInterface;
-
 import java.util.Map;
 
-
 /**
- *
- * @author Emil Forslund
+ * An utility class with methods that traits can use to produce a view of the
+ * document that satisfies exactly that trait.
+ * 
+ * @author  Emil Forslund
+ * @since   3.0.1
  */
 public final class TraitUtil {
     
+    /**
+     * Returns a view of the specified document that implements the specified
+     * trait. The returned document might or might not be the same instance as
+     * was inputted to this method. If not, the instance will be initialized
+     * using the specified constructor.
+     * 
+     * @param <TRAIT>      the trait class
+     * @param document     the document to create a view of
+     * @param trait        the trait type
+     * @param constructor  constructor to use for documents that lack the trait
+     * @return             the view of the trait
+     */
     public static <TRAIT extends Document> TRAIT viewOf(
             Document document,
             Class<TRAIT> trait,
@@ -53,6 +66,12 @@ public final class TraitUtil {
         }
     }
     
+    /**
+     * A functional interface describing the constructor for a class that
+     * implements a specific trait.
+     * 
+     * @param <TRAIT>  the trait to construct an implementation of
+     */
     @FunctionalInterface
     public interface TraitViewConstructor<TRAIT> {
         TRAIT create(Document parent, Map<String, Object> data, Class<? extends Document> mainInterface);

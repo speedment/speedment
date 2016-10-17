@@ -17,14 +17,11 @@
 package com.speedment.runtime.config.internal;
 
 import com.speedment.common.function.OptionalBoolean;
-import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.Document;
-
-import java.util.*;
-import java.util.stream.Stream;
-
 import static com.speedment.runtime.config.util.DocumentUtil.childrenOf;
+import java.util.*;
 import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 
 /**
  *
@@ -88,11 +85,6 @@ public class BaseDocument implements Document {
     public void put(String key, Object value) {
         requireNonNull(value);
         config.put(key, value);
-    }
-    
-    @Override
-    public final MapStream<String, Object> stream() {
-        return MapStream.of(config);
     }
 
     @Override

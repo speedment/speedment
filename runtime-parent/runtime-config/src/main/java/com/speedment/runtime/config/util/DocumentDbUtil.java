@@ -23,14 +23,16 @@ import com.speedment.runtime.config.identifier.trait.HasColumnName;
 import com.speedment.runtime.config.identifier.trait.HasDbmsName;
 import com.speedment.runtime.config.identifier.trait.HasSchemaName;
 import com.speedment.runtime.config.identifier.trait.HasTableName;
-
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
- *
- * @author pemi
+ * Common utility methods specific to the database document model.
+ * 
+ * @author  Per Minborg
+ * @author  Emil Forslund
+ * @since   2.3.0
  */
 public final class DocumentDbUtil {
 

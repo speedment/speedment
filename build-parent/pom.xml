@@ -37,7 +37,7 @@
     <description>
         Common parent for modules that bundle togather multiple modules.
     </description>
-
+    
     <profiles>
         <!-- Only build "-deploy"-modules wen we are in the release profile. -->
         <profile>

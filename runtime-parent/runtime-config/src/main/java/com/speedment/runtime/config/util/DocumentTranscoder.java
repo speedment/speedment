@@ -19,14 +19,12 @@ package com.speedment.runtime.config.util;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.internal.ProjectImpl;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
-
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -37,13 +35,25 @@ import static java.util.Objects.requireNonNull;
  */
 public final class DocumentTranscoder {
 
+    /**
+     * The element name of the root node in the JSON configuration file. Every 
+     * setting should be located in this element.
+     */
     public static final String ROOT = "config";
     
+    /**
+     * A functional interface describing a method that encodes a map of 
+     * key-value pairs into a JSON String.
+     */
     @FunctionalInterface
     public interface Encoder {
         String encode(Map<String, Object> map);
     }
     
+    /**
+     * A functional interface describing a method that decodes a JSON String
+     * into a map of key-value pairs.
+     */
     @FunctionalInterface
     public interface Decoder {
         Map<String, Object> decode(String text);

@@ -17,9 +17,7 @@
 package com.speedment.runtime.config;
 
 import com.speedment.common.function.OptionalBoolean;
-import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.util.DocumentUtil;
-
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
@@ -146,15 +144,6 @@ public interface Document {
     void put(String key, Object value);
 
     /**
-     * Returns a key-value stream of the data contained in this {@code Document}.
-     * 
-     * @return  the key-value pairs
-     */
-    default MapStream<String, Object> stream() {
-        return MapStream.of(getData());
-    }
-
-    /**
      * Returns the children on the specified key, instantiated using the 
      * specified constructor. This instance will be used as parent to the
      * constructor.
@@ -166,7 +155,6 @@ public interface Document {
      * @return             a stream of constructed children
      * 
      * @see  #children()
-     * @see  #childrenByKey()
      */
     default <P extends Document, T extends Document> Stream<T> children(
             String key, BiFunction<P, Map<String, Object>, T> constructor) {
@@ -187,34 +175,12 @@ public interface Document {
     /**
      * Returns a {@code Stream} of child documents, instantiated using the
      * default document implementation. This method will consider every value
-     * that is a {@code List} of {@code Map} instances a child. To get a stream
-     * with the key-side preserved, use {@link #childrenByKey()}.
+     * that is a {@code List} of {@code Map} instances a child.
      * 
      * @return  a stream of every child
      * @see  #children(String, BiFunction)
-     * @see  #childrenByKey()
      */
     Stream<? extends Document> children();
-    
-    /**
-     * Returns a {@code Stream} of child documents, instantiated using the
-     * default document implementation and organized by key. This method will 
-     * consider every value that is a {@code List} of {@code Map} instances a 
-     * child. To get a stream without the key-side, use {@link #children()}.
-     * 
-     * @return  a stream of every child mapped by key
-     * @see  #children()
-     * @see  #children(String, BiFunction)
-     */
-    @SuppressWarnings("unchecked")
-    default MapStream<String, Map<String, Object>> childrenByKey() {
-        return stream()
-            .filterValue(List.class::isInstance)
-            .mapValue(List.class::cast)
-            .flatMapValue(List<?>::stream)
-            .filterValue(Map.class::isInstance)
-            .mapValue(v -> (Map<String, Object>)v);
-    }
 
     /**
      * Returns a {@code Stream} of every ancestor to this {@code Document}, 

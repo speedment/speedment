@@ -37,7 +37,7 @@
         A Speedment bundle that shades all dependencies into one jar. This is 
         useful when deploying an application on a server.
     </description>
-
+    
     <profiles>
         <profile>
             <id>release</id>
