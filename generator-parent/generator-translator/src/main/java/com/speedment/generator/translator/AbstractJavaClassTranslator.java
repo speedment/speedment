@@ -17,10 +17,19 @@
 package com.speedment.generator.translator;
 
 import com.speedment.common.codegen.Generator;
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.GENERATED;
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
 import com.speedment.common.codegen.controller.AutoImports;
-import com.speedment.common.codegen.model.*;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
+import com.speedment.common.codegen.model.ClassOrInterface;
+import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.Enum;
+import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.model.Javadoc;
+import com.speedment.common.codegen.model.Value;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.mapstream.MapStream;
@@ -31,19 +40,14 @@ import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.core.component.InfoComponent;
-
 import java.lang.reflect.Type;
 import java.util.*;
+import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Stream;
-
-import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.GENERATED;
-import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -293,11 +297,24 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasName
 
                 MapStream.of(map.get(phase))
                     .flatMapValue(List::stream)
-                    .forEachOrdered((key, actor)
-                        -> table().ifPresent(table -> table.childrenByKey()
+                    .forEachOrdered((key, actor) -> table()
+                        .ifPresent(table -> MapStream.of(table.getData())
                             .filterKey(key::equals)
                             
-                            // the foreignKeys-property is special in that only
+                            // Filter out elements that map to a list and flat
+                            // map the stream so that every value in the list
+                            // becomes an element of the stream.
+                            .filterValue(List.class::isInstance)
+                            .mapValue(v -> {
+                                @SuppressWarnings("unchecked")
+                                final List<Map<String, Object>> val =
+                                    (List<Map<String, Object>>) v;
+                                
+                                return val;
+                            })
+                            .flatMapValue(List::stream)
+                            
+                            // The foreignKeys-property is special in that only
                             // keys that reference enabled and existing table
                             // and columns are to be included.
                             .filter((k, v) -> {
@@ -316,8 +333,15 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasName
                                 // be handled as usual.
                                 } else return true;
                             })
+                            
+                            // We are now done with the keys. Use the values of
+                            // the stream to produce an ordinary stream of base
+                            // documents.
                             .values()
                             .map(data -> new BaseDocument(table, data))
+                            
+                            // All the documents that are enabled should be
+                            // passed to the actor.
                             .filter(HasEnabled::test)                            
                             .forEachOrdered(c -> actor.accept(model, c))
                         )
