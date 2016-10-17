@@ -72,10 +72,6 @@
                     <plugin><!-- Generate javadoc jar -->
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        
-                        <configuration>
-                            <excludePackageNames>com.speedment.common.*:com.speedment.runtime.*</excludePackageNames>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>
