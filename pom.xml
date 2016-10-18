@@ -217,6 +217,15 @@
         
         <plugins>
             <plugin>
+                <groupId>com.speedment</groupId>
+                <artifactId>speedmentversion-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <configuration>
+                    <minVersion>${speedment.version}</minVersion>
+                </configuration>
+            </plugin>
+            
+            <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5.1</version>
                 

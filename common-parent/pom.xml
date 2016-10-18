@@ -31,7 +31,7 @@
     
     <groupId>com.speedment.common</groupId>
     <artifactId>common-parent</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2-SNAPSHOT</version>
     
     <packaging>pom</packaging>
     
@@ -54,4 +54,17 @@
         <module>lazy</module>
         <module>common-all</module>
     </modules>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.speedment</groupId>
+                <artifactId>speedmentversion-maven-plugin</artifactId>
+                
+                <configuration>
+                    <minVersion>1.0.0</minVersion>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
