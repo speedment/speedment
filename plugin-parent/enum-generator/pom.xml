@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.plugins</groupId>
         <artifactId>plugin-parent</artifactId>
-        <version>3.0.3-SNAPSHOT</version>
+        <version>3.0.0</version>
     </parent>
     
     <artifactId>enum-generator</artifactId>
@@ -63,16 +63,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        
-<!--                        <configuration>
-                            <additionalDependencies>
-                                <additionalDependency>
-                                    <groupId>com.speedment</groupId>
-                                    <artifactId>runtime</artifactId>
-                                    <version>${speedment.version}</version>
-                                </additionalDependency>
-                            </additionalDependencies>
-                        </configuration>-->
                     </plugin>
                     
                     <plugin>
