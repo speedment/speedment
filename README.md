@@ -21,17 +21,17 @@ Assuming you have Maven installed and a relational database available, you can t
 
 ###### MySQL
 ```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mysql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.0-EA2 && cd speedment-demo && mvn speedment:tool
+mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mysql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.0 && cd speedment-demo && mvn speedment:tool
 ```
 
 ###### PostgreSQL
 ```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-postgresql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.0-EA2 && cd speedment-demo && mvn speedment:tool
+mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-postgresql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.0 && cd speedment-demo && mvn speedment:tool
 ```
 
 ###### MariaDB
 ```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mariadb -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.0-EA2 && cd speedment-demo && mvn speedment:tool
+mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mariadb -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.0 && cd speedment-demo && mvn speedment:tool
 ```
 
 A graphical dialog will prompt for database connection details.
@@ -110,10 +110,10 @@ final HareApplication app = new HareApplicationBuilder()
     .withPassword("myPwd729")
     .build();
     
-final Manager<Hare>   hares   = app.managerOf(Hare.class);
-final Manager<Carrot> carrots = app.managerOf(Carrot.class);
-final Manager<Human>  humans  = app.managerOf(Human.class);
-final Manager<Friend> friends = app.managerOf(Friend.class);
+final HareManager   hares   = app.getOrThrow(HareManager.class);
+final CarrotManager carrots = app.getOrThrow(CarrotManager.class);
+final HumanManager  humans  = app.getOrThrow(HumanManager.class);
+final FriendManager friends = app.getOrThrow(FriendManager.class);
 ```
 
 
@@ -141,7 +141,8 @@ newHare.setName("Harry");
 newHare.setColor("Gray");
 newHare.setAge(3);
 
-Hare persistedHare = hares.persist(newHare); // Auto-Increment-fields have been set by the database
+// Auto-Increment-fields have been set by the database
+Hare persistedHare = hares.persist(newHare); 
 ```
 
 ### Update
@@ -308,7 +309,7 @@ To set which database connector you want to use to communicate with your databas
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <speedment.version>3.0.0-EA2</speedment.version>
+    <speedment.version>3.0.0</speedment.version>
     <db.groupId>mysql</db.groupId>
     <db.artifactId>mysql-connector-java</db.artifactId>
     <db.version>5.1.39</db.version>
@@ -321,7 +322,7 @@ To set which database connector you want to use to communicate with your databas
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <speedment.version>3.0.0-EA2</speedment.version>
+    <speedment.version>3.0.0</speedment.version>
     <db.groupId>org.postgresql</db.groupId>
     <db.artifactId>postgresql</db.artifactId>
     <db.version>9.4-1206-jdbc4</db.version>
@@ -334,7 +335,7 @@ To set which database connector you want to use to communicate with your databas
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <speedment.version>3.0.0-EA2</speedment.version>
+    <speedment.version>3.0.0</speedment.version>
     <db.groupId>org.mariadb.jdbc</db.groupId>
     <db.artifactId>mariadb-java-client</db.artifactId>
     <db.version>1.4.0</db.version>
