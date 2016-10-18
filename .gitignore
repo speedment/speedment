@@ -7,7 +7,6 @@
 **/.DS_Store/
 **/.idea/
 
-**/nbactions.xml
 **/nb-configuration.xml
 **/dependency-reduced-pom.xml
 **/speedment.iml
