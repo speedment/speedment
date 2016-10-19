@@ -7,6 +7,7 @@ Speedment is a Stream ORM Java Toolkit and Runtime
 [![Join the chat at https://gitter.im/speedment/speedment](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/speedment/speedment?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 <img src="https://raw.githubusercontent.com/speedment/speedment-resources/master/src/main/resources/wiki/frontpage/Forest.png" alt="Spire the Hare" title="Spire" align="center" />
+
 Speedment is a Java toolkit and runtime for accelerated SQL database applications leveraging In-JVM Data Store technology.
 
 Speedment provides immediate relief from performance bottlenecks and speeds up application response times by orders of magnitude, gives database load reduction and application latency reduction. Speedment is modular. Speedment allows for a stepwise implementation and old legacy system can co-exist with the Speedment platform. Speedment can scale linearly with the number of CPU cores and threads. Speedment can be deployed in cloud environments/local clouds or on dedicated servers. Speedment requires Java 8 (version 1.8.0_40) or newer. Supported JVMs includes Oracle Java and OpenJDK.
