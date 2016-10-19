@@ -1,5 +1,5 @@
-Speedment is a Stream ORM Java Toolkit and Runtime
-==================================================
+Speedment is a Java Stream ORM
+==============================
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.speedment/runtime/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.speedment/runtime)
 [![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.speedment/runtime-deploy/badge.svg)](http://www.javadoc.io/doc/com.speedment/runtime-deploy)
