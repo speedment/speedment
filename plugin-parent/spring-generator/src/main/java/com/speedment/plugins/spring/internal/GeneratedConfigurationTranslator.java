@@ -139,7 +139,7 @@ public final class GeneratedConfigurationTranslator extends AbstractJavaClassTra
                             .public_()
                             .add(Field.of("app", appType))
                             .add(AnnotationUsage.of(Bean.class))
-                            .add("return (" + support.managerName() + ") app.getOrThrow(" + support.managerTypeName() + ".class);")
+                            .add("return app.getOrThrow(" + support.managerTypeName() + ".class);")
                         );
                     });
             }).build();
