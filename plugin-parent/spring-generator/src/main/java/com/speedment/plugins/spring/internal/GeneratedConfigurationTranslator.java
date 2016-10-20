@@ -45,7 +45,8 @@ import org.springframework.core.env.Environment;
  * @since 1.0.0
  */
 @InjectKey(GeneratedConfigurationTranslator.class)
-public final class GeneratedConfigurationTranslator extends AbstractJavaClassTranslator<Project, Class> {
+public final class GeneratedConfigurationTranslator 
+extends AbstractJavaClassTranslator<Project, Class> {
 
     private @Inject Injector injector;
 
