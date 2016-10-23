@@ -212,7 +212,7 @@ HareApplication app = new HareApplicationBuilder()
     .build();
 ```
 
-### Convert to JSON using a stardard Plugin
+### Convert to JSON using a standard Plugin
 Using the JSON Stream Plugin, you can easily convert a stream into JSON:
 ```java
 // List all hares as a complex JSON object where the ID and AGE
