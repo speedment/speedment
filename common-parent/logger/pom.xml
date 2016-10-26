@@ -35,6 +35,7 @@
     
     <name>Speedment - Common - Logger</name>
     <description>A lightweight logging tool inspired by Tengil.</description>
+    <url>https://github.com/speedment/speedment/wiki/Logger</url>
     
     <build>
         <plugins>

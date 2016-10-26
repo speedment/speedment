@@ -38,6 +38,7 @@
         A collection of Tuple classes that represent sets of a fixed length 
         where every element has a specific type.
     </description>
+    <url>https://github.com/speedment/speedment/wiki/Tuple</url>
     
     <build>
         <plugins>
