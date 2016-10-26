@@ -33,17 +33,17 @@ Assuming you have Maven installed and a relational database available, you can t
 
 ###### MySQL
 ```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mysql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.0 && cd speedment-demo && mvn speedment:tool
+mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mysql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.1 && cd speedment-demo && mvn speedment:tool
 ```
 
 ###### PostgreSQL
 ```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-postgresql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.0 && cd speedment-demo && mvn speedment:tool
+mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-postgresql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.1 && cd speedment-demo && mvn speedment:tool
 ```
 
 ###### MariaDB
 ```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mariadb -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.0 && cd speedment-demo && mvn speedment:tool
+mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mariadb -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.1 && cd speedment-demo && mvn speedment:tool
 ```
 
 A graphical dialog will prompt for database connection details.
@@ -212,7 +212,7 @@ HareApplication app = new HareApplicationBuilder()
     .build();
 ```
 
-### Convert to JSON using a stardard Plugin
+### Convert to JSON using a standard Plugin
 Using the JSON Stream Plugin, you can easily convert a stream into JSON:
 ```java
 // List all hares as a complex JSON object where the ID and AGE
@@ -300,7 +300,7 @@ To set which database connector you want to use to communicate with your databas
 #### MySQL
 ```xml
 <properties>
-    <speedment.version>3.0.0</speedment.version>
+    <speedment.version>3.0.1</speedment.version>
     <db.groupId>mysql</db.groupId>
     <db.artifactId>mysql-connector-java</db.artifactId>
     <db.version>5.1.39</db.version>
@@ -310,7 +310,7 @@ To set which database connector you want to use to communicate with your databas
 #### PostgreSQL
 ```xml
 <properties>
-    <speedment.version>3.0.0</speedment.version>
+    <speedment.version>3.0.1</speedment.version>
     <db.groupId>org.postgresql</db.groupId>
     <db.artifactId>postgresql</db.artifactId>
     <db.version>9.4-1206-jdbc4</db.version>
@@ -320,7 +320,7 @@ To set which database connector you want to use to communicate with your databas
 #### MariaDB
 ```xml
 <properties>
-    <speedment.version>3.0.0</speedment.version>
+    <speedment.version>3.0.1</speedment.version>
     <db.groupId>org.mariadb.jdbc</db.groupId>
     <db.artifactId>mariadb-java-client</db.artifactId>
     <db.version>1.4.0</db.version>
