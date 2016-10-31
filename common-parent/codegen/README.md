@@ -26,7 +26,7 @@ System.out.println(new JavaGenerator().on(
                 .set(Value.ofText("Hello, world!"))
             )
             .add(
-                Method.of("main", VOID)
+                Method.of("main", void.class)
                 .set(Javadoc.of(
                     "This is a vary basic example of ",
                     "the capabilities of the Code Generator."
