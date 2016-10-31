@@ -1,4 +1,6 @@
-# Speedment - Common - MapStream
+MapStream
+=========
+
 An utility class that expands the Java 8 Stream API to work with native Key-Value pair collections like `Map`. 
 
 ## Example Usage
