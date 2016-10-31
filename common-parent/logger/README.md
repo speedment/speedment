@@ -1,5 +1,7 @@
-# Speedment - Common - Logger
-An lightweight logging framework inspired by Tengil.
+Logger
+======
+
+A lightweight logging framework inspired by Tengil.
 
 ## Example Usage
 This is a basic usage example:
