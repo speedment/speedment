@@ -20,14 +20,13 @@ import com.speedment.common.codegen.DependencyManager;
 import com.speedment.common.codegen.internal.model.ImportImpl;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.trait.*;
-
+import com.speedment.common.codegen.util.Formatting;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
-
 import static java.util.Objects.requireNonNull;
+import java.util.function.Consumer;
 
 /**
  * This control can be applied to a {@link File} to automatically add imports
@@ -179,8 +178,16 @@ public final class AutoImports implements Consumer<File> {
         // If the class is not a primitive type and it should be ignored, add
         // it to the ignore list.
 		if (name.contains(".")) {
-			if (!mgr.isIgnored(name)) {
-				types.put(name, type);
+            if (!mgr.isIgnored(name)) {
+                final String shortName = Formatting.shortName(name);
+
+                // If a import already exists with the same suffix, ignore it.
+                if (types.keySet().stream()
+                        .map(Formatting::shortName)
+                        .noneMatch(shortName::equals)) {
+
+                    types.put(name, type);
+                }
 			}
 		}
         
