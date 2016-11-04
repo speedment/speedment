@@ -19,15 +19,13 @@ package com.speedment.common.codegen.internal.java.view;
 import com.speedment.common.codegen.DependencyManager;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegen.model.Import;
-
-import java.lang.reflect.Type;
-import java.util.Optional;
-
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import com.speedment.common.codegen.model.Import;
 import static com.speedment.common.codegen.util.Formatting.packageName;
 import static com.speedment.common.codegen.util.Formatting.stripGenerics;
+import java.lang.reflect.Type;
+import java.util.Optional;
 
 /**
  * Transforms from an {@link Import} to java code.
@@ -83,9 +81,9 @@ public final class ImportView implements Transform<Import, String> {
 
         final Optional<String> current = mgr.getCurrentPackage();
         final Optional<String> suggested = packageName(typeName);
-        
-        // TODO: Inner classes might still be imported explicitly.
 
+        // TODO: Inner classes might still be imported explicitly.
+            
         return !(current.isPresent()
             && suggested.isPresent()
             && current.get().equals(suggested.get()));
