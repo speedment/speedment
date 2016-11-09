@@ -21,7 +21,6 @@ import com.speedment.runtime.field.predicate.trait.HasEffectivePredicateType;
 import com.speedment.runtime.field.predicate.trait.HasField;
 import com.speedment.runtime.field.predicate.trait.HasNegated;
 import com.speedment.runtime.field.predicate.trait.HasPredicateType;
-
 import java.util.function.Predicate;
 
 /**
@@ -39,4 +38,9 @@ public interface FieldPredicate<ENTITY> extends
         HasPredicateType,
         HasEffectivePredicateType,
         HasField<ENTITY>,
-        HasNegated {}
+        HasNegated {
+
+    @Override
+    public FieldPredicate<ENTITY> negate();
+
+}
