@@ -21,10 +21,8 @@ import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.internal.util.Cast;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
-
-import java.util.function.Predicate;
-
 import static java.util.Objects.requireNonNull;
+import java.util.function.Predicate;
 
 /**
  * A predicate that contains metadata about the {@link Field} that was used
@@ -71,6 +69,11 @@ public abstract class AbstractFieldPredicate<ENTITY, V, FIELD extends Field<ENTI
     @Override
     public final FIELD getField() {
         return field;
+    }
+
+    @Override
+    public FieldPredicate<ENTITY> negate() {
+        return (FieldPredicate<ENTITY>) super.negate();
     }
 
     @Override

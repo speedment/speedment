@@ -19,10 +19,8 @@ package com.speedment.runtime.field.internal.predicate;
 import com.speedment.runtime.field.internal.predicate.AbstractCombinedPredicate.AndCombinedBasePredicate;
 import com.speedment.runtime.field.internal.predicate.AbstractCombinedPredicate.OrCombinedBasePredicate;
 import com.speedment.runtime.field.predicate.trait.HasNegated;
-
-import java.util.function.Predicate;
-
 import static java.util.Objects.requireNonNull;
+import java.util.function.Predicate;
 
 /**
  * This class represents a Predicate that is used to build up higher orders
@@ -54,7 +52,7 @@ abstract class AbstractPredicate<T> implements HasNegated, Predicate<T> {
     }
 
     @Override
-    public AbstractPredicate<T> negate() {
+    public Predicate<T> negate() {
         negated = !negated;
         return this;
     }
