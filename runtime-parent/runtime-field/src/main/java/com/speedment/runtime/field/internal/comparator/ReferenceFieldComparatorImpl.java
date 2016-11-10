@@ -16,9 +16,9 @@
  */
 package com.speedment.runtime.field.internal.comparator;
 
-import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.field.comparator.FieldComparator;
+import com.speedment.runtime.field.comparator.NullOrder;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -57,11 +57,13 @@ public final class ReferenceFieldComparatorImpl<ENTITY, D, V extends Comparable<
         reversed = !reversed;
         return this;
     }
+    
+    // TODO: Imrpove performance of chained comparators.
 
     @Override
     public int compare(ENTITY o1, ENTITY o2) {
-        final V o1Value = referenceField.getter().apply(requireNonNull(o1));
-        final V o2Value = referenceField.getter().apply(requireNonNull(o2));
+        final V o1Value = referenceField.get(requireNonNull(o1));
+        final V o2Value = referenceField.get(requireNonNull(o2));
         if (o1Value == null && o2Value == null) {
             if (NullOrder.NONE == nullOrder) {
                 throw new NullPointerException("Both fields were null and null fields not allowed");
@@ -108,5 +110,4 @@ public final class ReferenceFieldComparatorImpl<ENTITY, D, V extends Comparable<
             return 1;
         }
     }
-
 }

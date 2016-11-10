@@ -48,6 +48,7 @@
                     <instructions>
                         <Export-Package>
                             com.speedment.runtime.field,
+                            com.speedment.runtime.field.comparator,
                             com.speedment.runtime.field.exception,
                             com.speedment.runtime.field.method,
                             com.speedment.runtime.field.predicate,
