@@ -40,11 +40,4 @@ extends FieldComparator<ENTITY, V> {
     @Override
     ComparableField<ENTITY, D, V> getField();
 
-    /**
-     * Returns if this {@code Comparator} is reversed.
-     *
-     * @return  if this is reversed
-     */
-    boolean isReversed();
-
 }

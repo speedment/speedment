@@ -39,4 +39,13 @@ extends Comparator<ENTITY> {
      */
     HasComparableOperators<ENTITY, V> getField();
     
+    /**
+     * Returns {@code true} if this comparator reverses the natural order of the
+     * values in the current field. A reversed order descends from high values
+     * to low.
+     * 
+     * @return  {@code true} if reversed (descending), else {@code false}
+     */
+    boolean isReversed();
+    
 }

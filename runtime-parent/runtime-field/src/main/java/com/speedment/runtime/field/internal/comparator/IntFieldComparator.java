@@ -37,12 +37,6 @@ public interface IntFieldComparator<ENTITY, D> extends FieldComparator<ENTITY, I
      * 
      * @return the compared field
      */
+    @Override
     IntField<ENTITY, D> getField();
-    
-    /**
-     * Returns if this {@code Comparator} is reversed.
-     * 
-     * @return if this is reversed
-     */
-    boolean isReversed();
 }

@@ -21,7 +21,7 @@ import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.field.StringForeignKeyField;
 import com.speedment.runtime.field.comparator.FieldComparator;
-import com.speedment.runtime.field.internal.comparator.NullOrder;
+import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.ReferenceFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromReference;

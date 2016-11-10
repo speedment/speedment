@@ -19,7 +19,7 @@ package com.speedment.runtime.field.internal;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.field.comparator.FieldComparator;
-import com.speedment.runtime.field.internal.comparator.NullOrder;
+import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.ReferenceFieldComparatorImpl;
 import com.speedment.runtime.field.internal.predicate.reference.*;
 import com.speedment.runtime.field.internal.predicate.string.*;

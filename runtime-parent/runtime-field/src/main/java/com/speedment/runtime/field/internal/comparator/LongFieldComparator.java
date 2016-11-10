@@ -37,12 +37,6 @@ public interface LongFieldComparator<ENTITY, D> extends FieldComparator<ENTITY, 
      * 
      * @return the compared field
      */
+    @Override
     LongField<ENTITY, D> getField();
-    
-    /**
-     * Returns if this {@code Comparator} is reversed.
-     * 
-     * @return if this is reversed
-     */
-    boolean isReversed();
 }

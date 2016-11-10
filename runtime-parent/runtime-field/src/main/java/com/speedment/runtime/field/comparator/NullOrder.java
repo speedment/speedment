@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.field.internal.comparator;
+package com.speedment.runtime.field.comparator;
 
 /**
  * Determines in if null values should be located before or
