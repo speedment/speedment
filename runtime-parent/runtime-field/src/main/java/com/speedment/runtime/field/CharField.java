@@ -45,10 +45,10 @@ public interface CharField<ENTITY, D> extends Field<ENTITY>, HasCharValue<ENTITY
      * @param <ENTITY>   entity type
      * @param <D>        database type
      * @param identifier column that this field represents
-     * @param getter     method reference to the getter in the entity
-     * @param setter     method reference to the setter in the entity
+     * @param getter     method reference to getter in entity
+     * @param setter     method reference to setter in entity
      * @param typeMapper type mapper that is applied
-     * @param unique     if represented column only contains unique values
+     * @param unique     if column only contains unique values
      * @return           the created field
      */
     static <ENTITY, D> CharField<ENTITY, D> create(ColumnIdentifier<ENTITY> identifier, CharGetter<ENTITY> getter, CharSetter<ENTITY> setter, TypeMapper<D, Character> typeMapper, boolean unique) {

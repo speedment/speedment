@@ -45,10 +45,10 @@ public interface LongField<ENTITY, D> extends Field<ENTITY>, HasLongValue<ENTITY
      * @param <ENTITY>   entity type
      * @param <D>        database type
      * @param identifier column that this field represents
-     * @param getter     method reference to the getter in the entity
-     * @param setter     method reference to the setter in the entity
+     * @param getter     method reference to getter in entity
+     * @param setter     method reference to setter in entity
      * @param typeMapper type mapper that is applied
-     * @param unique     if represented column only contains unique values
+     * @param unique     if column only contains unique values
      * @return           the created field
      */
     static <ENTITY, D> LongField<ENTITY, D> create(ColumnIdentifier<ENTITY> identifier, LongGetter<ENTITY> getter, LongSetter<ENTITY> setter, TypeMapper<D, Long> typeMapper, boolean unique) {
