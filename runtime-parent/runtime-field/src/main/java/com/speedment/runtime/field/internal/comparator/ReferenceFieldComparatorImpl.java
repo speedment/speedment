@@ -16,10 +16,8 @@
  */
 package com.speedment.runtime.field.internal.comparator;
 
-import com.speedment.runtime.field.trait.HasReferenceValue;
-
-import java.util.Comparator;
-
+import com.speedment.runtime.field.ComparableField;
+import com.speedment.runtime.field.comparator.FieldComparator;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,18 +31,18 @@ import static java.util.Objects.requireNonNull;
  */
 public final class ReferenceFieldComparatorImpl<ENTITY, D, V extends Comparable<? super V>> implements ReferenceFieldComparator<ENTITY, D, V> {
 
-    private final HasReferenceValue<ENTITY, D, V> referenceField;
+    private final ComparableField<ENTITY, D, V> referenceField;
     private final NullOrder nullOrder;
     
     private boolean reversed;
 
-    public ReferenceFieldComparatorImpl(HasReferenceValue<ENTITY, D, V> referenceField, NullOrder nullOrder) {
+    public ReferenceFieldComparatorImpl(ComparableField<ENTITY, D, V> referenceField, NullOrder nullOrder) {
         this.referenceField = referenceField;
         this.nullOrder = nullOrder;
     }
 
     @Override
-    public HasReferenceValue<ENTITY, D, V> getField() {
+    public ComparableField<ENTITY, D, V> getField() {
         return referenceField;
     }
 
@@ -54,7 +52,7 @@ public final class ReferenceFieldComparatorImpl<ENTITY, D, V extends Comparable<
     }
 
     @Override
-    public Comparator<ENTITY> reversed() {
+    public FieldComparator<ENTITY, V> reversed() {
         reversed = !reversed;
         return this;
     }

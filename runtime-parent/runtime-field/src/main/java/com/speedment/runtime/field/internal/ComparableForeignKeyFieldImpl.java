@@ -19,6 +19,7 @@ package com.speedment.runtime.field.internal;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.ComparableForeignKeyField;
+import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.internal.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.ReferenceFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
@@ -32,14 +33,11 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.typemapper.TypeMapper;
-
-import java.util.Comparator;
+import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * @param <ENTITY>     the entity type
@@ -127,17 +125,17 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> {
     /*****************************************************************/
     
     @Override
-    public Comparator<ENTITY> comparator() {
+    public FieldComparator<ENTITY, V> comparator() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.NONE);
     }
 
     @Override
-    public Comparator<ENTITY> comparatorNullFieldsFirst() {
+    public FieldComparator<ENTITY, V> comparatorNullFieldsFirst() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.FIRST);
     }
 
     @Override
-    public Comparator<ENTITY> comparatorNullFieldsLast() {
+    public FieldComparator<ENTITY, V> comparatorNullFieldsLast() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.LAST);
     }
     

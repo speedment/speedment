@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field.internal.comparator;
 
-import com.speedment.runtime.field.trait.HasCharValue;
+import com.speedment.runtime.field.CharField;
 import java.util.Comparator;
 import javax.annotation.Generated;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
@@ -32,16 +32,16 @@ import static java.util.Objects.requireNonNull;
 @Generated(value = "Speedment")
 public final class CharFieldComparatorImpl<ENTITY, D> implements CharFieldComparator<ENTITY, D> {
     
-    private final HasCharValue<ENTITY, D> field;
+    private final CharField<ENTITY, D> field;
     private boolean reversed;
     
-    public CharFieldComparatorImpl(HasCharValue<ENTITY, D> field) {
+    public CharFieldComparatorImpl(CharField<ENTITY, D> field) {
         this.field    = requireNonNull(field);
         this.reversed = false;
     }
     
     @Override
-    public HasCharValue<ENTITY, D> getField() {
+    public CharField<ENTITY, D> getField() {
         return field;
     }
     

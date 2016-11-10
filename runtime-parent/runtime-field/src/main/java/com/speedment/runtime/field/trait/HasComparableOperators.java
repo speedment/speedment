@@ -18,14 +18,13 @@ package com.speedment.runtime.field.trait;
 
 
 import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.predicate.Inclusion;
-
 import java.util.Comparator;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
-
 import static java.util.stream.Collectors.toSet;
+import java.util.stream.Stream;
 
 /**
  * A representation of an Entity field that is a reference type (e.g.
@@ -39,7 +38,8 @@ import static java.util.stream.Collectors.toSet;
  * @since   2.2.0
  */
 
-public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>> extends Field<ENTITY> {
+public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>> 
+extends Field<ENTITY> {
 
     /**
      * Returns a {@link Comparator} that will compare to this field using this
@@ -49,7 +49,7 @@ public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
      * fields natural order
      * @throws NullPointerException if a field is null
      */
-    Comparator<ENTITY> comparator();
+    FieldComparator<ENTITY, V> comparator();
 
     /**
      * Returns a {@link Comparator} that will compare to this field using this
@@ -58,7 +58,7 @@ public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
      * @return a {@link Comparator} that will compare to this field using this
      * fields natural order, null fields are sorted first
      */
-    Comparator<ENTITY> comparatorNullFieldsFirst();
+    FieldComparator<ENTITY, V> comparatorNullFieldsFirst();
 
     /**
      * Returns a {@link Comparator} that will compare to this field using this
@@ -67,7 +67,7 @@ public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
      * @return a {@link Comparator} that will compare to this field using this
      * fields natural order, null fields are sorted last
      */
-    Comparator<ENTITY> comparatorNullFieldsLast();
+    FieldComparator<ENTITY, V> comparatorNullFieldsLast();
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to

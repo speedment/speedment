@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.field.internal.comparator;
 
-import com.speedment.runtime.field.trait.HasFloatValue;
-import java.util.Comparator;
+import com.speedment.runtime.field.FloatField;
+import com.speedment.runtime.field.comparator.FieldComparator;
 import javax.annotation.Generated;
 
 /**
@@ -30,14 +30,14 @@ import javax.annotation.Generated;
  * @since  3.0.0
  */
 @Generated(value = "Speedment")
-public interface FloatFieldComparator<ENTITY, D> extends Comparator<ENTITY> {
+public interface FloatFieldComparator<ENTITY, D> extends FieldComparator<ENTITY, Float> {
     
     /**
      * Gets the field that is being compared.
      * 
      * @return the compared field
      */
-    HasFloatValue<ENTITY, D> getField();
+    FloatField<ENTITY, D> getField();
     
     /**
      * Returns if this {@code Comparator} is reversed.

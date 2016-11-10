@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field.internal.comparator;
 
-import com.speedment.runtime.field.trait.HasFloatValue;
+import com.speedment.runtime.field.FloatField;
 import java.util.Comparator;
 import javax.annotation.Generated;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
@@ -32,16 +32,16 @@ import static java.util.Objects.requireNonNull;
 @Generated(value = "Speedment")
 public final class FloatFieldComparatorImpl<ENTITY, D> implements FloatFieldComparator<ENTITY, D> {
     
-    private final HasFloatValue<ENTITY, D> field;
+    private final FloatField<ENTITY, D> field;
     private boolean reversed;
     
-    public FloatFieldComparatorImpl(HasFloatValue<ENTITY, D> field) {
+    public FloatFieldComparatorImpl(FloatField<ENTITY, D> field) {
         this.field    = requireNonNull(field);
         this.reversed = false;
     }
     
     @Override
-    public HasFloatValue<ENTITY, D> getField() {
+    public FloatField<ENTITY, D> getField() {
         return field;
     }
     

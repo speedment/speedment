@@ -18,6 +18,7 @@ package com.speedment.runtime.field.internal;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.StringField;
+import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.internal.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.ReferenceFieldComparatorImpl;
 import com.speedment.runtime.field.internal.predicate.reference.*;
@@ -27,12 +28,9 @@ import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
-
-import java.util.Comparator;
+import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.function.Predicate;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * @param <ENTITY> the entity type
@@ -98,17 +96,17 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
     /*****************************************************************/
     
     @Override
-    public Comparator<ENTITY> comparator() {
+    public FieldComparator<ENTITY, String> comparator() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.NONE);
     }
 
     @Override
-    public Comparator<ENTITY> comparatorNullFieldsFirst() {
+    public FieldComparator<ENTITY, String> comparatorNullFieldsFirst() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.FIRST);
     }
 
     @Override
-    public Comparator<ENTITY> comparatorNullFieldsLast() {
+    public FieldComparator<ENTITY, String> comparatorNullFieldsLast() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.LAST);
     }
     

@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field.internal.comparator;
 
-import com.speedment.runtime.field.trait.HasByteValue;
+import com.speedment.runtime.field.ByteField;
 import java.util.Comparator;
 import javax.annotation.Generated;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
@@ -32,16 +32,16 @@ import static java.util.Objects.requireNonNull;
 @Generated(value = "Speedment")
 public final class ByteFieldComparatorImpl<ENTITY, D> implements ByteFieldComparator<ENTITY, D> {
     
-    private final HasByteValue<ENTITY, D> field;
+    private final ByteField<ENTITY, D> field;
     private boolean reversed;
     
-    public ByteFieldComparatorImpl(HasByteValue<ENTITY, D> field) {
+    public ByteFieldComparatorImpl(ByteField<ENTITY, D> field) {
         this.field    = requireNonNull(field);
         this.reversed = false;
     }
     
     @Override
-    public HasByteValue<ENTITY, D> getField() {
+    public ByteField<ENTITY, D> getField() {
         return field;
     }
     
