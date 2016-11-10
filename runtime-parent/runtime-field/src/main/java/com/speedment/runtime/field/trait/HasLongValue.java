@@ -18,7 +18,7 @@ package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.internal.method.SetToLongImpl;
-import com.speedment.runtime.field.method.LongGetter;
+import com.speedment.runtime.field.method.GetLong;
 import com.speedment.runtime.field.method.LongSetter;
 import com.speedment.runtime.field.method.SetToLong;
 import com.speedment.runtime.typemapper.TypeMapper;
@@ -40,7 +40,7 @@ public interface HasLongValue<ENTITY, D> extends Field<ENTITY> {
     LongSetter<ENTITY> setter();
     
     @Override
-    LongGetter<ENTITY> getter();
+    GetLong<ENTITY, D> getter();
     
     @Override
     TypeMapper<D, Long> typeMapper();

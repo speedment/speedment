@@ -20,6 +20,7 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.FloatField;
 import com.speedment.runtime.field.internal.comparator.FloatFieldComparator;
 import com.speedment.runtime.field.internal.comparator.FloatFieldComparatorImpl;
+import com.speedment.runtime.field.internal.method.GetFloatImpl;
 import com.speedment.runtime.field.internal.predicate.floats.FloatBetweenPredicate;
 import com.speedment.runtime.field.internal.predicate.floats.FloatEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.floats.FloatGreaterOrEqualPredicate;
@@ -27,6 +28,7 @@ import com.speedment.runtime.field.internal.predicate.floats.FloatGreaterThanPre
 import com.speedment.runtime.field.internal.predicate.floats.FloatInPredicate;
 import com.speedment.runtime.field.method.FloatGetter;
 import com.speedment.runtime.field.method.FloatSetter;
+import com.speedment.runtime.field.method.GetFloat;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
@@ -46,14 +48,14 @@ import static java.util.Objects.requireNonNull;
 public final class FloatFieldImpl<ENTITY, D> implements FloatField<ENTITY, D> {
     
     private final ColumnIdentifier<ENTITY> identifier;
-    private final FloatGetter<ENTITY> getter;
+    private final GetFloat<ENTITY, D> getter;
     private final FloatSetter<ENTITY> setter;
     private final TypeMapper<D, Float> typeMapper;
     private final boolean unique;
     
     public FloatFieldImpl(ColumnIdentifier<ENTITY> identifier, FloatGetter<ENTITY> getter, FloatSetter<ENTITY> setter, TypeMapper<D, Float> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
-        this.getter     = requireNonNull(getter);
+        this.getter     = new GetFloatImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
@@ -70,7 +72,7 @@ public final class FloatFieldImpl<ENTITY, D> implements FloatField<ENTITY, D> {
     }
     
     @Override
-    public FloatGetter<ENTITY> getter() {
+    public GetFloat<ENTITY, D> getter() {
         return getter;
     }
     

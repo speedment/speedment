@@ -18,7 +18,7 @@ package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.internal.method.SetToIntImpl;
-import com.speedment.runtime.field.method.IntGetter;
+import com.speedment.runtime.field.method.GetInt;
 import com.speedment.runtime.field.method.IntSetter;
 import com.speedment.runtime.field.method.SetToInt;
 import com.speedment.runtime.typemapper.TypeMapper;
@@ -40,7 +40,7 @@ public interface HasIntValue<ENTITY, D> extends Field<ENTITY> {
     IntSetter<ENTITY> setter();
     
     @Override
-    IntGetter<ENTITY> getter();
+    GetInt<ENTITY, D> getter();
     
     @Override
     TypeMapper<D, Integer> typeMapper();

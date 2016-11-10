@@ -24,6 +24,7 @@ import com.speedment.runtime.field.internal.comparator.ByteFieldComparator;
 import com.speedment.runtime.field.internal.comparator.ByteFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromByte;
+import com.speedment.runtime.field.internal.method.GetByteImpl;
 import com.speedment.runtime.field.internal.predicate.bytes.ByteBetweenPredicate;
 import com.speedment.runtime.field.internal.predicate.bytes.ByteEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.bytes.ByteGreaterOrEqualPredicate;
@@ -33,6 +34,7 @@ import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.ByteGetter;
 import com.speedment.runtime.field.method.ByteSetter;
 import com.speedment.runtime.field.method.FindFrom;
+import com.speedment.runtime.field.method.GetByte;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
@@ -55,7 +57,7 @@ import static java.util.Objects.requireNonNull;
 public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements ByteField<ENTITY, D>, ByteForeignKeyField<ENTITY, D, FK_ENTITY> {
     
     private final ColumnIdentifier<ENTITY> identifier;
-    private final ByteGetter<ENTITY> getter;
+    private final GetByte<ENTITY, D> getter;
     private final ByteSetter<ENTITY> setter;
     private final ByteField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, Byte> typeMapper;
@@ -63,7 +65,7 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Byte
     
     public ByteForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, ByteGetter<ENTITY> getter, ByteSetter<ENTITY> setter, ByteField<FK_ENTITY, D> referenced, TypeMapper<D, Byte> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
-        this.getter     = requireNonNull(getter);
+        this.getter     = new GetByteImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
@@ -81,7 +83,7 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Byte
     }
     
     @Override
-    public ByteGetter<ENTITY> getter() {
+    public GetByte<ENTITY, D> getter() {
         return getter;
     }
     

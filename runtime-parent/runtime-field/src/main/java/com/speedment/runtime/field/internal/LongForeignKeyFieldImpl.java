@@ -24,6 +24,7 @@ import com.speedment.runtime.field.internal.comparator.LongFieldComparator;
 import com.speedment.runtime.field.internal.comparator.LongFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromLong;
+import com.speedment.runtime.field.internal.method.GetLongImpl;
 import com.speedment.runtime.field.internal.predicate.longs.LongBetweenPredicate;
 import com.speedment.runtime.field.internal.predicate.longs.LongEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.longs.LongGreaterOrEqualPredicate;
@@ -31,6 +32,7 @@ import com.speedment.runtime.field.internal.predicate.longs.LongGreaterThanPredi
 import com.speedment.runtime.field.internal.predicate.longs.LongInPredicate;
 import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.FindFrom;
+import com.speedment.runtime.field.method.GetLong;
 import com.speedment.runtime.field.method.LongGetter;
 import com.speedment.runtime.field.method.LongSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
@@ -55,7 +57,7 @@ import static java.util.Objects.requireNonNull;
 public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements LongField<ENTITY, D>, LongForeignKeyField<ENTITY, D, FK_ENTITY> {
     
     private final ColumnIdentifier<ENTITY> identifier;
-    private final LongGetter<ENTITY> getter;
+    private final GetLong<ENTITY, D> getter;
     private final LongSetter<ENTITY> setter;
     private final LongField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, Long> typeMapper;
@@ -63,7 +65,7 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     
     public LongForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, LongGetter<ENTITY> getter, LongSetter<ENTITY> setter, LongField<FK_ENTITY, D> referenced, TypeMapper<D, Long> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
-        this.getter     = requireNonNull(getter);
+        this.getter     = new GetLongImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
@@ -81,7 +83,7 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     }
     
     @Override
-    public LongGetter<ENTITY> getter() {
+    public GetLong<ENTITY, D> getter() {
         return getter;
     }
     

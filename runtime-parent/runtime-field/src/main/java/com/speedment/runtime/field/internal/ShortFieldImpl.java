@@ -20,11 +20,13 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.ShortField;
 import com.speedment.runtime.field.internal.comparator.ShortFieldComparator;
 import com.speedment.runtime.field.internal.comparator.ShortFieldComparatorImpl;
+import com.speedment.runtime.field.internal.method.GetShortImpl;
 import com.speedment.runtime.field.internal.predicate.shorts.ShortBetweenPredicate;
 import com.speedment.runtime.field.internal.predicate.shorts.ShortEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.shorts.ShortGreaterOrEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.shorts.ShortGreaterThanPredicate;
 import com.speedment.runtime.field.internal.predicate.shorts.ShortInPredicate;
+import com.speedment.runtime.field.method.GetShort;
 import com.speedment.runtime.field.method.ShortGetter;
 import com.speedment.runtime.field.method.ShortSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
@@ -46,14 +48,14 @@ import static java.util.Objects.requireNonNull;
 public final class ShortFieldImpl<ENTITY, D> implements ShortField<ENTITY, D> {
     
     private final ColumnIdentifier<ENTITY> identifier;
-    private final ShortGetter<ENTITY> getter;
+    private final GetShort<ENTITY, D> getter;
     private final ShortSetter<ENTITY> setter;
     private final TypeMapper<D, Short> typeMapper;
     private final boolean unique;
     
     public ShortFieldImpl(ColumnIdentifier<ENTITY> identifier, ShortGetter<ENTITY> getter, ShortSetter<ENTITY> setter, TypeMapper<D, Short> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
-        this.getter     = requireNonNull(getter);
+        this.getter     = new GetShortImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
@@ -70,7 +72,7 @@ public final class ShortFieldImpl<ENTITY, D> implements ShortField<ENTITY, D> {
     }
     
     @Override
-    public ShortGetter<ENTITY> getter() {
+    public GetShort<ENTITY, D> getter() {
         return getter;
     }
     

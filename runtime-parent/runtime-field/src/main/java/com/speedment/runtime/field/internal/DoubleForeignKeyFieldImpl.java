@@ -24,6 +24,7 @@ import com.speedment.runtime.field.internal.comparator.DoubleFieldComparator;
 import com.speedment.runtime.field.internal.comparator.DoubleFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromDouble;
+import com.speedment.runtime.field.internal.method.GetDoubleImpl;
 import com.speedment.runtime.field.internal.predicate.doubles.DoubleBetweenPredicate;
 import com.speedment.runtime.field.internal.predicate.doubles.DoubleEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.doubles.DoubleGreaterOrEqualPredicate;
@@ -33,6 +34,7 @@ import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.DoubleGetter;
 import com.speedment.runtime.field.method.DoubleSetter;
 import com.speedment.runtime.field.method.FindFrom;
+import com.speedment.runtime.field.method.GetDouble;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
@@ -55,7 +57,7 @@ import static java.util.Objects.requireNonNull;
 public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements DoubleField<ENTITY, D>, DoubleForeignKeyField<ENTITY, D, FK_ENTITY> {
     
     private final ColumnIdentifier<ENTITY> identifier;
-    private final DoubleGetter<ENTITY> getter;
+    private final GetDouble<ENTITY, D> getter;
     private final DoubleSetter<ENTITY> setter;
     private final DoubleField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, Double> typeMapper;
@@ -63,7 +65,7 @@ public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Do
     
     public DoubleForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, DoubleGetter<ENTITY> getter, DoubleSetter<ENTITY> setter, DoubleField<FK_ENTITY, D> referenced, TypeMapper<D, Double> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
-        this.getter     = requireNonNull(getter);
+        this.getter     = new GetDoubleImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
@@ -81,7 +83,7 @@ public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Do
     }
     
     @Override
-    public DoubleGetter<ENTITY> getter() {
+    public GetDouble<ENTITY, D> getter() {
         return getter;
     }
     

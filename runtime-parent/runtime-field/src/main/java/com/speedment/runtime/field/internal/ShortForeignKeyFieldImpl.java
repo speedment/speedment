@@ -24,6 +24,7 @@ import com.speedment.runtime.field.internal.comparator.ShortFieldComparator;
 import com.speedment.runtime.field.internal.comparator.ShortFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromShort;
+import com.speedment.runtime.field.internal.method.GetShortImpl;
 import com.speedment.runtime.field.internal.predicate.shorts.ShortBetweenPredicate;
 import com.speedment.runtime.field.internal.predicate.shorts.ShortEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.shorts.ShortGreaterOrEqualPredicate;
@@ -31,6 +32,7 @@ import com.speedment.runtime.field.internal.predicate.shorts.ShortGreaterThanPre
 import com.speedment.runtime.field.internal.predicate.shorts.ShortInPredicate;
 import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.FindFrom;
+import com.speedment.runtime.field.method.GetShort;
 import com.speedment.runtime.field.method.ShortGetter;
 import com.speedment.runtime.field.method.ShortSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
@@ -55,7 +57,7 @@ import static java.util.Objects.requireNonNull;
 public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements ShortField<ENTITY, D>, ShortForeignKeyField<ENTITY, D, FK_ENTITY> {
     
     private final ColumnIdentifier<ENTITY> identifier;
-    private final ShortGetter<ENTITY> getter;
+    private final GetShort<ENTITY, D> getter;
     private final ShortSetter<ENTITY> setter;
     private final ShortField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, Short> typeMapper;
@@ -63,7 +65,7 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Sho
     
     public ShortForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, ShortGetter<ENTITY> getter, ShortSetter<ENTITY> setter, ShortField<FK_ENTITY, D> referenced, TypeMapper<D, Short> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
-        this.getter     = requireNonNull(getter);
+        this.getter     = new GetShortImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
@@ -81,7 +83,7 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Sho
     }
     
     @Override
-    public ShortGetter<ENTITY> getter() {
+    public GetShort<ENTITY, D> getter() {
         return getter;
     }
     

@@ -24,6 +24,7 @@ import com.speedment.runtime.field.internal.comparator.IntFieldComparator;
 import com.speedment.runtime.field.internal.comparator.IntFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromInt;
+import com.speedment.runtime.field.internal.method.GetIntImpl;
 import com.speedment.runtime.field.internal.predicate.ints.IntBetweenPredicate;
 import com.speedment.runtime.field.internal.predicate.ints.IntEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.ints.IntGreaterOrEqualPredicate;
@@ -31,6 +32,7 @@ import com.speedment.runtime.field.internal.predicate.ints.IntGreaterThanPredica
 import com.speedment.runtime.field.internal.predicate.ints.IntInPredicate;
 import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.FindFrom;
+import com.speedment.runtime.field.method.GetInt;
 import com.speedment.runtime.field.method.IntGetter;
 import com.speedment.runtime.field.method.IntSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
@@ -55,7 +57,7 @@ import static java.util.Objects.requireNonNull;
 public final class IntForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements IntField<ENTITY, D>, IntForeignKeyField<ENTITY, D, FK_ENTITY> {
     
     private final ColumnIdentifier<ENTITY> identifier;
-    private final IntGetter<ENTITY> getter;
+    private final GetInt<ENTITY, D> getter;
     private final IntSetter<ENTITY> setter;
     private final IntField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, Integer> typeMapper;
@@ -63,7 +65,7 @@ public final class IntForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements IntFi
     
     public IntForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, IntGetter<ENTITY> getter, IntSetter<ENTITY> setter, IntField<FK_ENTITY, D> referenced, TypeMapper<D, Integer> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
-        this.getter     = requireNonNull(getter);
+        this.getter     = new GetIntImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
@@ -81,7 +83,7 @@ public final class IntForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements IntFi
     }
     
     @Override
-    public IntGetter<ENTITY> getter() {
+    public GetInt<ENTITY, D> getter() {
         return getter;
     }
     

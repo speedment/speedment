@@ -18,8 +18,8 @@ package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.internal.method.SetToByteImpl;
-import com.speedment.runtime.field.method.ByteGetter;
 import com.speedment.runtime.field.method.ByteSetter;
+import com.speedment.runtime.field.method.GetByte;
 import com.speedment.runtime.field.method.SetToByte;
 import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
@@ -40,7 +40,7 @@ public interface HasByteValue<ENTITY, D> extends Field<ENTITY> {
     ByteSetter<ENTITY> setter();
     
     @Override
-    ByteGetter<ENTITY> getter();
+    GetByte<ENTITY, D> getter();
     
     @Override
     TypeMapper<D, Byte> typeMapper();

@@ -20,6 +20,7 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.internal.comparator.ByteFieldComparator;
 import com.speedment.runtime.field.internal.comparator.ByteFieldComparatorImpl;
+import com.speedment.runtime.field.internal.method.GetByteImpl;
 import com.speedment.runtime.field.internal.predicate.bytes.ByteBetweenPredicate;
 import com.speedment.runtime.field.internal.predicate.bytes.ByteEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.bytes.ByteGreaterOrEqualPredicate;
@@ -27,6 +28,7 @@ import com.speedment.runtime.field.internal.predicate.bytes.ByteGreaterThanPredi
 import com.speedment.runtime.field.internal.predicate.bytes.ByteInPredicate;
 import com.speedment.runtime.field.method.ByteGetter;
 import com.speedment.runtime.field.method.ByteSetter;
+import com.speedment.runtime.field.method.GetByte;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
@@ -46,14 +48,14 @@ import static java.util.Objects.requireNonNull;
 public final class ByteFieldImpl<ENTITY, D> implements ByteField<ENTITY, D> {
     
     private final ColumnIdentifier<ENTITY> identifier;
-    private final ByteGetter<ENTITY> getter;
+    private final GetByte<ENTITY, D> getter;
     private final ByteSetter<ENTITY> setter;
     private final TypeMapper<D, Byte> typeMapper;
     private final boolean unique;
     
     public ByteFieldImpl(ColumnIdentifier<ENTITY> identifier, ByteGetter<ENTITY> getter, ByteSetter<ENTITY> setter, TypeMapper<D, Byte> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
-        this.getter     = requireNonNull(getter);
+        this.getter     = new GetByteImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
@@ -70,7 +72,7 @@ public final class ByteFieldImpl<ENTITY, D> implements ByteField<ENTITY, D> {
     }
     
     @Override
-    public ByteGetter<ENTITY> getter() {
+    public GetByte<ENTITY, D> getter() {
         return getter;
     }
     

@@ -20,11 +20,13 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.field.internal.comparator.IntFieldComparator;
 import com.speedment.runtime.field.internal.comparator.IntFieldComparatorImpl;
+import com.speedment.runtime.field.internal.method.GetIntImpl;
 import com.speedment.runtime.field.internal.predicate.ints.IntBetweenPredicate;
 import com.speedment.runtime.field.internal.predicate.ints.IntEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.ints.IntGreaterOrEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.ints.IntGreaterThanPredicate;
 import com.speedment.runtime.field.internal.predicate.ints.IntInPredicate;
+import com.speedment.runtime.field.method.GetInt;
 import com.speedment.runtime.field.method.IntGetter;
 import com.speedment.runtime.field.method.IntSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
@@ -46,14 +48,14 @@ import static java.util.Objects.requireNonNull;
 public final class IntFieldImpl<ENTITY, D> implements IntField<ENTITY, D> {
     
     private final ColumnIdentifier<ENTITY> identifier;
-    private final IntGetter<ENTITY> getter;
+    private final GetInt<ENTITY, D> getter;
     private final IntSetter<ENTITY> setter;
     private final TypeMapper<D, Integer> typeMapper;
     private final boolean unique;
     
     public IntFieldImpl(ColumnIdentifier<ENTITY> identifier, IntGetter<ENTITY> getter, IntSetter<ENTITY> setter, TypeMapper<D, Integer> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
-        this.getter     = requireNonNull(getter);
+        this.getter     = new GetIntImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
@@ -70,7 +72,7 @@ public final class IntFieldImpl<ENTITY, D> implements IntField<ENTITY, D> {
     }
     
     @Override
-    public IntGetter<ENTITY> getter() {
+    public GetInt<ENTITY, D> getter() {
         return getter;
     }
     

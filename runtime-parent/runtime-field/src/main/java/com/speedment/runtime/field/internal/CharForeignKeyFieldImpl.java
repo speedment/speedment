@@ -24,6 +24,7 @@ import com.speedment.runtime.field.internal.comparator.CharFieldComparator;
 import com.speedment.runtime.field.internal.comparator.CharFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromChar;
+import com.speedment.runtime.field.internal.method.GetCharImpl;
 import com.speedment.runtime.field.internal.predicate.chars.CharBetweenPredicate;
 import com.speedment.runtime.field.internal.predicate.chars.CharEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.chars.CharGreaterOrEqualPredicate;
@@ -33,6 +34,7 @@ import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.CharGetter;
 import com.speedment.runtime.field.method.CharSetter;
 import com.speedment.runtime.field.method.FindFrom;
+import com.speedment.runtime.field.method.GetChar;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
@@ -55,7 +57,7 @@ import static java.util.Objects.requireNonNull;
 public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements CharField<ENTITY, D>, CharForeignKeyField<ENTITY, D, FK_ENTITY> {
     
     private final ColumnIdentifier<ENTITY> identifier;
-    private final CharGetter<ENTITY> getter;
+    private final GetChar<ENTITY, D> getter;
     private final CharSetter<ENTITY> setter;
     private final CharField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, Character> typeMapper;
@@ -63,7 +65,7 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
     
     public CharForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, CharGetter<ENTITY> getter, CharSetter<ENTITY> setter, CharField<FK_ENTITY, D> referenced, TypeMapper<D, Character> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
-        this.getter     = requireNonNull(getter);
+        this.getter     = new GetCharImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
@@ -81,7 +83,7 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
     }
     
     @Override
-    public CharGetter<ENTITY> getter() {
+    public GetChar<ENTITY, D> getter() {
         return getter;
     }
     

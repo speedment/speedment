@@ -18,8 +18,8 @@ package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.internal.method.SetToDoubleImpl;
-import com.speedment.runtime.field.method.DoubleGetter;
 import com.speedment.runtime.field.method.DoubleSetter;
+import com.speedment.runtime.field.method.GetDouble;
 import com.speedment.runtime.field.method.SetToDouble;
 import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
@@ -40,7 +40,7 @@ public interface HasDoubleValue<ENTITY, D> extends Field<ENTITY> {
     DoubleSetter<ENTITY> setter();
     
     @Override
-    DoubleGetter<ENTITY> getter();
+    GetDouble<ENTITY, D> getter();
     
     @Override
     TypeMapper<D, Double> typeMapper();

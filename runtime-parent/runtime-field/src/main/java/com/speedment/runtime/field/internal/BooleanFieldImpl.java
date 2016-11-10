@@ -18,8 +18,10 @@ package com.speedment.runtime.field.internal;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.BooleanField;
+import com.speedment.runtime.field.internal.method.GetBooleanImpl;
 import com.speedment.runtime.field.method.BooleanGetter;
 import com.speedment.runtime.field.method.BooleanSetter;
+import com.speedment.runtime.field.method.GetBoolean;
 import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
@@ -35,14 +37,14 @@ import static java.util.Objects.requireNonNull;
 public final class BooleanFieldImpl<ENTITY, D> implements BooleanField<ENTITY, D> {
     
     private final ColumnIdentifier<ENTITY> identifier;
-    private final BooleanGetter<ENTITY> getter;
+    private final GetBoolean<ENTITY, D> getter;
     private final BooleanSetter<ENTITY> setter;
     private final TypeMapper<D, Boolean> typeMapper;
     private final boolean unique;
     
     public BooleanFieldImpl(ColumnIdentifier<ENTITY> identifier, BooleanGetter<ENTITY> getter, BooleanSetter<ENTITY> setter, TypeMapper<D, Boolean> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
-        this.getter     = requireNonNull(getter);
+        this.getter     = new GetBooleanImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
@@ -59,7 +61,7 @@ public final class BooleanFieldImpl<ENTITY, D> implements BooleanField<ENTITY, D
     }
     
     @Override
-    public BooleanGetter<ENTITY> getter() {
+    public GetBoolean<ENTITY, D> getter() {
         return getter;
     }
     

@@ -24,6 +24,7 @@ import com.speedment.runtime.field.internal.comparator.FloatFieldComparator;
 import com.speedment.runtime.field.internal.comparator.FloatFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
 import com.speedment.runtime.field.internal.method.FindFromFloat;
+import com.speedment.runtime.field.internal.method.GetFloatImpl;
 import com.speedment.runtime.field.internal.predicate.floats.FloatBetweenPredicate;
 import com.speedment.runtime.field.internal.predicate.floats.FloatEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.floats.FloatGreaterOrEqualPredicate;
@@ -33,6 +34,7 @@ import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.method.FloatGetter;
 import com.speedment.runtime.field.method.FloatSetter;
+import com.speedment.runtime.field.method.GetFloat;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
@@ -55,7 +57,7 @@ import static java.util.Objects.requireNonNull;
 public final class FloatForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements FloatField<ENTITY, D>, FloatForeignKeyField<ENTITY, D, FK_ENTITY> {
     
     private final ColumnIdentifier<ENTITY> identifier;
-    private final FloatGetter<ENTITY> getter;
+    private final GetFloat<ENTITY, D> getter;
     private final FloatSetter<ENTITY> setter;
     private final FloatField<FK_ENTITY, D> referenced;
     private final TypeMapper<D, Float> typeMapper;
@@ -63,7 +65,7 @@ public final class FloatForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Flo
     
     public FloatForeignKeyFieldImpl(ColumnIdentifier<ENTITY> identifier, FloatGetter<ENTITY> getter, FloatSetter<ENTITY> setter, FloatField<FK_ENTITY, D> referenced, TypeMapper<D, Float> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
-        this.getter     = requireNonNull(getter);
+        this.getter     = new GetFloatImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.referenced = requireNonNull(referenced);
         this.typeMapper = requireNonNull(typeMapper);
@@ -81,7 +83,7 @@ public final class FloatForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Flo
     }
     
     @Override
-    public FloatGetter<ENTITY> getter() {
+    public GetFloat<ENTITY, D> getter() {
         return getter;
     }
     

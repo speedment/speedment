@@ -18,8 +18,8 @@ package com.speedment.runtime.field.trait;
 
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.internal.method.SetToFloatImpl;
-import com.speedment.runtime.field.method.FloatGetter;
 import com.speedment.runtime.field.method.FloatSetter;
+import com.speedment.runtime.field.method.GetFloat;
 import com.speedment.runtime.field.method.SetToFloat;
 import com.speedment.runtime.typemapper.TypeMapper;
 import javax.annotation.Generated;
@@ -40,7 +40,7 @@ public interface HasFloatValue<ENTITY, D> extends Field<ENTITY> {
     FloatSetter<ENTITY> setter();
     
     @Override
-    FloatGetter<ENTITY> getter();
+    GetFloat<ENTITY, D> getter();
     
     @Override
     TypeMapper<D, Float> typeMapper();

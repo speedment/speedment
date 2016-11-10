@@ -20,6 +20,7 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.DoubleField;
 import com.speedment.runtime.field.internal.comparator.DoubleFieldComparator;
 import com.speedment.runtime.field.internal.comparator.DoubleFieldComparatorImpl;
+import com.speedment.runtime.field.internal.method.GetDoubleImpl;
 import com.speedment.runtime.field.internal.predicate.doubles.DoubleBetweenPredicate;
 import com.speedment.runtime.field.internal.predicate.doubles.DoubleEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.doubles.DoubleGreaterOrEqualPredicate;
@@ -27,6 +28,7 @@ import com.speedment.runtime.field.internal.predicate.doubles.DoubleGreaterThanP
 import com.speedment.runtime.field.internal.predicate.doubles.DoubleInPredicate;
 import com.speedment.runtime.field.method.DoubleGetter;
 import com.speedment.runtime.field.method.DoubleSetter;
+import com.speedment.runtime.field.method.GetDouble;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
@@ -46,14 +48,14 @@ import static java.util.Objects.requireNonNull;
 public final class DoubleFieldImpl<ENTITY, D> implements DoubleField<ENTITY, D> {
     
     private final ColumnIdentifier<ENTITY> identifier;
-    private final DoubleGetter<ENTITY> getter;
+    private final GetDouble<ENTITY, D> getter;
     private final DoubleSetter<ENTITY> setter;
     private final TypeMapper<D, Double> typeMapper;
     private final boolean unique;
     
     public DoubleFieldImpl(ColumnIdentifier<ENTITY> identifier, DoubleGetter<ENTITY> getter, DoubleSetter<ENTITY> setter, TypeMapper<D, Double> typeMapper, boolean unique) {
         this.identifier = requireNonNull(identifier);
-        this.getter     = requireNonNull(getter);
+        this.getter     = new GetDoubleImpl<>(this, getter);
         this.setter     = requireNonNull(setter);
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
@@ -70,7 +72,7 @@ public final class DoubleFieldImpl<ENTITY, D> implements DoubleField<ENTITY, D> 
     }
     
     @Override
-    public DoubleGetter<ENTITY> getter() {
+    public GetDouble<ENTITY, D> getter() {
         return getter;
     }
     
