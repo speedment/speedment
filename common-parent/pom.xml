@@ -52,6 +52,7 @@
         <module>injector</module>
         <module>rest</module>
         <module>lazy</module>
+        <module>mutablestream</module>
         <module>common-all</module>
     </modules>
     

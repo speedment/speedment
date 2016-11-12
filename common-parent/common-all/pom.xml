@@ -51,6 +51,7 @@
         <injector.version>1.0.1</injector.version>
         <rest.version>1.0.1</rest.version>
         <lazy.version>1.0.1</lazy.version>
+        <mutablestream.version>1.0.0-SNAPSHOT</mutablestream.version>
     </properties>
     
     <dependencyManagement>
@@ -137,6 +138,12 @@
                 <groupId>com.speedment.common</groupId>
                 <artifactId>lazy</artifactId>
                 <version>${lazy.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>mutable-stream</artifactId>
+                <version>${mutablestream.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
