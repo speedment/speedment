@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.field.method;
 
+import java.util.function.Function;
+
 /**
  *
  * @param  <ENTITY>  the entity type
@@ -33,4 +35,12 @@ public interface Getter<ENTITY> {
      */
     Object apply(ENTITY entity);
     
+    /**
+     * Returns this object, typed as a {@code Function} method.
+     * 
+     * @return  this object as a function
+     */
+    default Function<ENTITY, Object> asFunction() {
+        return this::apply;
+    }
 }
