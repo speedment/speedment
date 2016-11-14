@@ -16,15 +16,14 @@
  */
 package com.speedment.common.codegen.util;
 
-import java.util.Arrays;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Stream;
-
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
 import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
+import java.util.Arrays;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
+import java.util.function.Function;
 import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
 
 /**
  * Common formatting methods used when generating code.
@@ -256,9 +255,9 @@ public final class Formatting {
      * @return The name part.
      */
     public static String shortName(String longName) {
-        final String temp = longName.replace("$", ".");
+        final String temp = stripGenerics(longName.replace("$", "."));
         if (temp.contains(".")) {
-            return temp.substring(stripGenerics(temp).lastIndexOf(".") + 1);
+            return temp.substring(temp.lastIndexOf(".") + 1);
         } else {
             return temp;
         }
