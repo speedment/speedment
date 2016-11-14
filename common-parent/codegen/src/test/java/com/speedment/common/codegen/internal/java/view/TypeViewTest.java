@@ -23,15 +23,23 @@ import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.controller.AutoImports;
 import com.speedment.common.codegen.internal.java.JavaGenerator;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.model.Constructor;
+import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.model.Generic;
+import com.speedment.common.codegen.model.Import;
+import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.Value;
 import com.speedment.common.codegen.util.Formatting;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
+import static com.speedment.common.codegen.util.Formatting.indent;
+import com.speedment.example.Person;
+import com.speedment.example.PersonImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  *
@@ -141,6 +149,69 @@ public class TypeViewTest {
             "    \n" +
             "    public int size() {\n" +
             "        return entities.size();\n" +
+            "    }\n" +
+            "}";
+        
+        final String actual = generator.on(file).get();
+        
+        System.out.println("------------------ Expected: --------------------");
+        System.out.println(expected);
+        System.out.println("------------------- Actual: ---------------------");
+        System.out.println(actual);
+        System.out.println("-------------------- End ------------------------");
+        
+        Assert.assertEquals("Make sure generated file matches expected:", expected, actual);
+    }
+    
+    @Test
+    public void testInnerClassImport() {
+        final File file = File.of("com/example/PersonFactory.java")
+            .add(Import.of(PersonImpl.class))
+            .add(Class.of("PersonFactory")
+                .public_().final_()
+                .add(Field.of("builder", Person.Builder.class)
+                    .private_().final_()
+                )
+                .add(Constructor.of().public_()
+                    .add("this.builder = new PersonImpl.Builder();")
+                )
+                .add(Method.of("create", Person.class)
+                    .public_()
+                    .add(Field.of("id", long.class))
+                    .add(Field.of("firstname", String.class))
+                    .add(Field.of("lastname", String.class))
+                    .add("return builder",
+                        indent(
+                            ".withId(id)",
+                            ".withFirstname(firstname)",
+                            ".withLastname(lastname)",
+                            ".build();"
+                        )
+                    )
+                )
+            ).call(new AutoImports(generator.getDependencyMgr()));
+        
+        final String expected =
+            "package com.example;\n" +
+            "\n" +
+            "import com.speedment.example.Person.Builder;\n" +
+            "import com.speedment.example.Person;\n" +
+            "import com.speedment.example.PersonImpl;\n" +
+            "\n" +
+            "public final class PersonFactory {\n" +
+            "    \n" +
+            "    private final Builder builder;\n" +
+            "    \n" +
+            "    public PersonFactory() {\n" +
+            "        this.builder = new PersonImpl.Builder();\n" +
+            "    }\n" +
+            "    \n" +
+            "    public Person create(long id, String firstname, String lastname) {\n" +
+            "        return builder\n" +
+            "            .withId(id)\n" +
+            "            .withFirstname(firstname)\n" +
+            "            .withLastname(lastname)\n" +
+            "            .build();\n" +
             "    }\n" +
             "}";
         

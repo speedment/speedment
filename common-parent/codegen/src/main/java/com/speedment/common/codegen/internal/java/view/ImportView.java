@@ -40,7 +40,8 @@ public final class ImportView implements Transform<Import, String> {
     @Override
     public Optional<String> transform(Generator gen, Import model) {
         requireNonNulls(gen, model);
-        final String name = stripGenerics(model.getType().getTypeName());
+        final String name = stripGenerics(model.getType().getTypeName())
+            .replace('$', '.');
 
         if (shouldImport(gen, model.getType())) {
             return Optional.of(

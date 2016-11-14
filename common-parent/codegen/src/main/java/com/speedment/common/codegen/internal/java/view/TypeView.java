@@ -19,16 +19,14 @@ package com.speedment.common.codegen.internal.java.view;
 import com.speedment.common.codegen.DependencyManager;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
+import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.common.codegen.util.Formatting;
-
+import static com.speedment.common.codegen.util.Formatting.shortName;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Optional;
 import java.util.stream.Stream;
-
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.common.codegen.util.Formatting.shortName;
 
 /**
  * Transforms from a {@link Type} to java code.
@@ -61,7 +59,7 @@ public final class TypeView implements Transform<Type, String> {
      */
     private String renderTypeName(Generator gen, Type model) {
         final StringBuilder name = new StringBuilder();
-        name.append(model.getTypeName());
+        name.append(model.getTypeName().replace('$', '.'));
         
         if (model instanceof ParameterizedType) {
             final ParameterizedType hasTypes = (ParameterizedType) model;
@@ -87,7 +85,7 @@ public final class TypeView implements Transform<Type, String> {
         requireNonNulls(gen, type);
         
         final DependencyManager mgr = gen.getDependencyMgr();
-        final String name = Formatting.stripGenerics(type.getTypeName());
+        final String name = Formatting.stripGenerics(type.getTypeName().replace('$', '.'));
         
         if (mgr.isIgnored(name)) {
             return true;
@@ -99,6 +97,5 @@ public final class TypeView implements Transform<Type, String> {
         
         final Optional<String> current = mgr.getCurrentPackage();
 		return current.isPresent() && name.startsWith(current.get());
-
 	}
 }
