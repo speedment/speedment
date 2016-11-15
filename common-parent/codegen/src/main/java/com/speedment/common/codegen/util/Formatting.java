@@ -19,6 +19,7 @@ package com.speedment.common.codegen.util;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
 import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanceNotAllowed;
 import java.util.Arrays;
+import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Function;
@@ -148,7 +149,7 @@ public final class Formatting {
      * @return The indented text.
      */
     public static String indent(String text) {
-        return tab + text.replaceAll("\\r?\\n", nl + tab);
+        return indent + text.replaceAll("\\r?\\n", nl + indent);
     }
     
     /**
@@ -160,7 +161,7 @@ public final class Formatting {
      * @return The indented text.
      */
     public static String indent(String... text) {
-        return tab + String.join(nl(), text).replaceAll("\\r?\\n", nl + tab);
+        return indent + String.join(nl(), text).replaceAll("\\r?\\n", nl + indent);
     }
     
     /**
@@ -234,7 +235,7 @@ public final class Formatting {
      * @return The current tab character.
      */
     public static String tab() {
-        return tab;
+        return indent;
     }
 
     /**
@@ -244,7 +245,7 @@ public final class Formatting {
      * @param tab The new tab character.
      */
     public static void tab(String tab) {
-        Formatting.tab = tab;
+        Formatting.indent = tab;
     }
 
     /**
@@ -315,11 +316,61 @@ public final class Formatting {
         
         return name;
     }
+    
+    /**
+     * Replaces every tab character ({@code \t}) in the specified rows with a
+     * number spaces so that the character indexes align. This is called 
+     * recursively until all tab characters have been replaced. If there are no
+     * tabs in the text, the method has no effect.
+     * <p>
+     * <em>Example:</em>
+     * If you call the method on the following code:
+     * {@code
+     *     this.firstname\t = firstname;\t // Nullable
+     *     this.lastname\t = lastname;\t // Nullable
+     *     this.email\t = email;\t // Nullable
+     *     this.age\t = age;
+     * }
+     * 
+     * You will get the following result:
+     * {@code
+     *     this.firstname = firstname; // Nullable
+     *     this.lastname  = lastname;  // Nullable
+     *     this.email     = email;     // Nullable
+     *     this.age       = age;
+     * }
+     * 
+     * @param rows 
+     */
+    public static void alignTabs(List<String> rows) {
+        while (true) {
+            int maxIndex = -1;
+            for (final String row : rows) {
+                final int index = row.indexOf('\t');
+
+                if (index > maxIndex) {
+                    maxIndex = index;
+                }
+            }
+
+            if (maxIndex > -1) {
+                for (int i = 0; i < rows.size(); i++) {
+                    final String row = rows.get(i);
+                    final int index = row.indexOf('\t');
+                    if (index > -1) {
+                        rows.set(i, row.replace("\t", Formatting.repeat(" ", maxIndex - index)));
+                    }
+                }
+            } else {
+                break;
+            }
+        }
+    }
 
     private static String 
-        nl = "\n",
-        dnl = "\n\n",
-        tab = "\t";
+        nl     = "\n",
+        dnl    = "\n\n",
+        indent = "    ";
 
     /**
      * Utility classes should not be instantiated.
