@@ -118,9 +118,10 @@ public final class Formatting {
 	/**
      * Indents the specified text, surrounds it with brackets and put the
      * content on a separate line.
-	 * @param row The first row of the text.
-	 * @param rows The rest of the rows.
-     * @return The text with a '{\n' before and a '\n}' afterwards.
+     * 
+	 * @param row   the first row of the text.
+	 * @param rows  the rest of the rows.
+     * @return      the text with a '{\n' before and a '\n}' afterwards.
      */
     public static String block(String row, String... rows) {
         requireNonNull(row);
@@ -135,8 +136,9 @@ public final class Formatting {
     /**
      * Indents the specified text, surrounds it with brackets and put the
      * content on a separate line.
-	 * @param rows The rest of the rows.
-     * @return The text with a '{\n' before and a '\n}' afterwards.
+     * 
+	 * @param rows  the rest of the rows.
+     * @return      the text with a '{\n' before and a '\n}' afterwards.
      */
     public static String block(Stream<String> rows) {
         return block(rows.collect(joining(nl())));
@@ -146,8 +148,8 @@ public final class Formatting {
      * Indents one level after each new-line-character as defined by
      * <code>nl()</code>.
      *
-     * @param text The text to indent.
-     * @return The indented text.
+     * @param text  the text to indent.
+     * @return      the indented text.
      */
     public static String indent(String text) {
         return indent + text.replaceAll("\\r?\\n", nl + indent);
@@ -155,14 +157,26 @@ public final class Formatting {
     
     /**
      * Indents one level after each new-line-character as defined by
-     * <code>nl()</code>. f multiple strings are specified, new-line characters
+     * <code>nl()</code>. If multiple strings are specified, new-line characters
      * will be added between them.
      *
-     * @param text The text to indent.
-     * @return The indented text.
+     * @param text  the text to indent.
+     * @return      the indented text.
      */
     public static String indent(String... text) {
         return indent + String.join(nl(), text).replaceAll("\\r?\\n", nl + indent);
+    }
+    
+    /**
+     * Indents one level after each new-line-character as defined by
+     * <code>nl()</code>. f multiple strings are specified, new-line characters
+     * will be added between them.
+     *
+     * @param text  the text to indent.
+     * @return      the indented text.
+     */
+    public static String indent(Stream<String> text) {
+        return indent(text.toArray(String[]::new));
     }
     
     /**
