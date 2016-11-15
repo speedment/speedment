@@ -77,7 +77,7 @@ public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>>
 		interfaces	= new ArrayList<>(prototype.getInterfaces());
 		fields		= Copier.copy(prototype.getFields());
 		methods		= Copier.copy(prototype.getMethods());
-        initalizers = Copier.copy(prototype.getInitalizers());
+        initalizers = Copier.copy(prototype.getInitializers());
 		classes		= Copier.copy(prototype.getClasses(), c -> c.copy());
 		modifiers	= Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
 	}
@@ -178,7 +178,7 @@ public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>>
      * {@inheritDoc}
      */
     @Override
-    public List<Initializer> getInitalizers() {
+    public List<Initializer> getInitializers() {
         return initalizers;
     }
 

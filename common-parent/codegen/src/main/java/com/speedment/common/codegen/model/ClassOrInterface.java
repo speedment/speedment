@@ -29,4 +29,4 @@ import com.speedment.common.codegen.model.trait.*;
 public interface ClassOrInterface<T extends ClassOrInterface<T>> extends 
     HasCopy<T>, HasCall<T>, HasName<T>, HasJavadoc<T>, HasGenerics<T>,
     HasImplements<T>, HasClasses<T>, HasMethods<T>, HasFields<T>, 
-    HasAnnotationUsage<T>, HasModifiers<T>, HasInitalizers<T> {}
+    HasAnnotationUsage<T>, HasModifiers<T>, HasInitializers<T> {}

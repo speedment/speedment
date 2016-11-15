@@ -358,7 +358,7 @@ public final class Formatting {
                     final String row = rows.get(i);
                     final int index = row.indexOf('\t');
                     if (index > -1) {
-                        rows.set(i, row.replace("\t", Formatting.repeat(" ", maxIndex - index)));
+                        rows.set(i, row.replaceFirst("\t", Formatting.repeat(" ", maxIndex - index)));
                     }
                 }
             } else {

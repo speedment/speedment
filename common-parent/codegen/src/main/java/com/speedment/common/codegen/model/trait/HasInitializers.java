@@ -17,17 +17,17 @@
 package com.speedment.common.codegen.model.trait;
 
 import com.speedment.common.codegen.model.Initializer;
-
 import java.util.List;
 
 /**
  * A trait for models that contain {@link Initializer} components.
  * 
+ * @param <T>  the extending type
+ * 
  * @author Emil Forslund
- * @param <T> The extending type
- * @since  2.0
+ * @since  2.0.0
  */
-public interface HasInitalizers<T extends HasInitalizers<T>> {
+public interface HasInitializers<T extends HasInitializers<T>> {
     
     /**
      * Adds the specified {@link Initializer} to this model.
@@ -37,7 +37,7 @@ public interface HasInitalizers<T extends HasInitalizers<T>> {
      */
     @SuppressWarnings("unchecked")
     default T add(final Initializer init) {
-        getInitalizers().add(init);
+        getInitializers().add(init);
         return (T) this;
     }
     
@@ -48,5 +48,5 @@ public interface HasInitalizers<T extends HasInitalizers<T>> {
      * 
      * @return  the initalizers
      */
-    List<Initializer> getInitalizers();
+    List<Initializer> getInitializers();
 }

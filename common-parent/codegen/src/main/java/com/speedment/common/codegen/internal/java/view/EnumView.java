@@ -17,13 +17,15 @@
 package com.speedment.common.codegen.internal.java.view;
 
 import com.speedment.common.codegen.Generator;
-import com.speedment.common.codegen.model.Enum;
-
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import com.speedment.common.codegen.model.Enum;
+import com.speedment.common.codegen.util.Formatting;
 import static com.speedment.common.codegen.util.Formatting.dnl;
 import static com.speedment.common.codegen.util.Formatting.nl;
+import java.util.List;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Transforms from an {@link Enum} to java code.
@@ -63,8 +65,12 @@ public final class EnumView extends ClassOrInterfaceView<Enum> {
 	protected String onBeforeFields(Generator gen, Enum model) {
         requireNonNulls(gen, model);
         
-		return model.getConstants().stream()
-			.map(c -> gen.on(c).get()).collect(
+        final List<String> constants = model.getConstants().stream()
+			.map(c -> gen.on(c).get()).collect(toList());
+        
+        Formatting.alignTabs(constants);
+        
+		return constants.stream().collect(
 				joinIfNotEmpty(
 					(!model.getConstants().isEmpty()
 					&& !model.getConstants().get(0).getValues().isEmpty())

@@ -18,12 +18,10 @@ package com.speedment.common.codegen.internal.java.view;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegen.model.EnumConstant;
-
-import java.util.Optional;
-
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import com.speedment.common.codegen.model.EnumConstant;
+import java.util.Optional;
 
 /**
  * Transforms from an {@link EnumConstant} to java code.
@@ -43,7 +41,7 @@ public final class EnumConstantView implements Transform<EnumConstant, String> {
 			model.getName() + 
 			(model.getValues().isEmpty() ? "" : " ") +
 			gen.onEach(model.getValues()).collect(
-				joinIfNotEmpty(", ", "(", ")")
+				joinIfNotEmpty(", ", "\t(", ")")
 			)
 		);
 	}

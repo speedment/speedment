@@ -18,21 +18,21 @@ package com.speedment.common.codegen.internal.java.view.trait;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegen.model.trait.HasInitalizers;
 
 import java.util.stream.Collectors;
 
 import static com.speedment.common.codegen.util.Formatting.dnl;
+import com.speedment.common.codegen.model.trait.HasInitializers;
 
 /**
  * A trait with the functionality to render models with the trait 
- * {@link HasInitalizers}.
+ * {@link HasInitializers}.
  * 
  * @author     Emil Forslund
  * @param <M>  The model type
  * @see        Transform
  */
-public interface HasInitalizersView<M extends HasInitalizers<M>> extends 
+public interface HasInitalizersView<M extends HasInitializers<M>> extends 
     Transform<M, String> {
     
     /**
@@ -44,7 +44,7 @@ public interface HasInitalizersView<M extends HasInitalizers<M>> extends
      * @return       the generated code
      */
     default String renderInitalizers(Generator gen, M model) {
-        return gen.onEach(model.getInitalizers())
+        return gen.onEach(model.getInitializers())
             .collect(Collectors.joining(dnl()));
     }
 }
