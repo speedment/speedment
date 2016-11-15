@@ -24,6 +24,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Function;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
 /**
@@ -315,6 +316,25 @@ public final class Formatting {
         }
         
         return name;
+    }
+    
+    /**
+     * Replaces every tab character ({@code \t}) in the specified rows with a
+     * number spaces so that the character indexes align. This is called 
+     * recursively until all tab characters have been replaced. If there are no
+     * tabs in the text, the method has no effect.
+     * <p>
+     * This implementation will begin by splitting the specified string into
+     * rows, then apply the alignment. Otherwise it is the same as 
+     * {@link #alignTabs(List)}.
+     * 
+     * @param rows  a single string with all the rows to align
+     * @return      the same string but with tabs replaced with aligning spaces
+     */
+    public static String alignTabs(String rows) {
+        final List<String> list = Stream.of(rows.split(nl())).collect(toList());
+        alignTabs(list);
+        return list.stream().collect(joining(nl()));
     }
     
     /**
