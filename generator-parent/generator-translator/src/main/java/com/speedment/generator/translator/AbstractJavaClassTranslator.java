@@ -19,6 +19,7 @@ package com.speedment.generator.translator;
 import com.speedment.common.codegen.Generator;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.GENERATED;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.AUTHOR;
+import com.speedment.common.codegen.controller.AlignTabs;
 import com.speedment.common.codegen.controller.AutoImports;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.common.codegen.model.AnnotationUsage;
@@ -144,6 +145,7 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasName
         file.add(item);
         finializeFile(file);
         file.call(new AutoImports(getCodeGenerator().getDependencyMgr()));
+        file.call(new AlignTabs<>());
         return file;
     }
 

@@ -91,8 +91,12 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
             .add(SimpleParameterizedType.create(ColumnIdentifier.class, getSupport().entityType()))
             .add(Constructor.of()
                 .add(Field.of("columnName", String.class))
-                .add("this.columnName = columnName;")
-                .add("this.tableIdentifier = TableIdentifier.of(getDbmsName(), getSchemaName(), getTableName());")
+                .add("this.columnName\t = columnName;")
+                .add("this.tableIdentifier\t = TableIdentifier.of(" + indent(
+                    "getDbmsName(), ",
+                    "getSchemaName(), ",
+                    "getTableName()"
+                ) + ");")
             )
             .add(Method.of("getDbmsName", String.class).public_()
                 .add(OVERRIDE)

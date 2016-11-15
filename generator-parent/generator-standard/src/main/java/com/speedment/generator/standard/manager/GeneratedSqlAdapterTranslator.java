@@ -17,11 +17,18 @@
 package com.speedment.generator.standard.manager;
 
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
-import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
+import com.speedment.common.codegen.model.Constructor;
+import com.speedment.common.codegen.model.Field;
+import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.model.Import;
+import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.Value;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
+import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateApplyResultSetBody;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.generator.translator.component.TypeMapperComponent;
@@ -41,17 +48,14 @@ import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
 import com.speedment.runtime.core.component.sql.SqlTypeMapperHelper;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.util.sql.ResultSetUtil;
+import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import com.speedment.runtime.typemapper.TypeMapper;
-
 import java.lang.reflect.Type;
 import java.sql.ResultSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
-
-import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateApplyResultSetBody;
-import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
 
 /**
  *
@@ -104,7 +108,6 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
                     
                     // Generate member fields
                     .add(Field.of("tableIdentifier", tableIdentifierType).private_().final_())
-//                    .add(Field.of("manager", getSupport().managerType()).add(inject()).private_())
                     
                     // Generate methods
                     .add(Method.of(INSTALL_METHOD_NAME, void.class).add(withExecuteBefore(file))
@@ -242,10 +245,6 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
     private AnnotationUsage withExecuteBefore(File file) {
         file.add(Import.of(State.class).static_().setStaticMember("RESOLVED"));
         return AnnotationUsage.of(ExecuteBefore.class).set(Value.ofReference("RESOLVED"));
-    }
-
-    private AnnotationUsage inject() {
-        return AnnotationUsage.of(Inject.class);
     }
     
     private String helperName(Column column) {
