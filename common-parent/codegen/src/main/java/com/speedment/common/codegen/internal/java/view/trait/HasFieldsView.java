@@ -18,9 +18,8 @@ package com.speedment.common.codegen.internal.java.view.trait;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegen.model.trait.HasFields;
-
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import com.speedment.common.codegen.model.trait.HasFields;
 
 /**
  * A trait with the functionality to render models with the trait 
@@ -44,7 +43,7 @@ public interface HasFieldsView<M extends HasFields<M>> extends Transform<M, Stri
     default String renderFields(Generator gen, M model) {
         return gen.onEach(model.getFields())
             .collect(joinIfNotEmpty(
-                fieldSuffix() + fieldSeparator() + fieldPrefix(), 
+                fieldSuffix() + fieldSeparator(model) + fieldPrefix(), 
                 fieldPrefix(), 
                 fieldSuffix()
             ));
@@ -53,9 +52,10 @@ public interface HasFieldsView<M extends HasFields<M>> extends Transform<M, Stri
     /**
      * The separator string used when joining fields.
      * 
-     * @return  the field separator
+     * @param model  the model that is being rendered
+     * @return       the field separator
      */
-    String fieldSeparator();
+    String fieldSeparator(M model);
     
     /**
      * A text to be inserted before each field.

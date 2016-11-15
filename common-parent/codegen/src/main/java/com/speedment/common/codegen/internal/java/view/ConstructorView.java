@@ -18,16 +18,14 @@ package com.speedment.common.codegen.internal.java.view;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
+import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.common.codegen.model.Constructor;
 import com.speedment.common.codegen.model.trait.HasName;
 import com.speedment.common.codegen.util.Formatting;
-
+import static com.speedment.common.codegen.util.Formatting.*;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.common.codegen.util.Formatting.*;
 
 /**
  * Transforms from a {@link Constructor} to java code.
@@ -51,7 +49,7 @@ public final class ConstructorView implements Transform<Constructor, String> {
                     "Could not find a nameable parent of constructor."
                 )) +
 			gen.onEach(model.getFields()).collect(
-				Collectors.joining(", ", "(", ")")
+				Collectors.joining(fieldSeparator(model), "(", ")")
 			) + " " + 
             gen.onEach(model.getExceptions()).collect(joinIfNotEmpty(", ", "throws ", "")) +
             block(
@@ -80,4 +78,10 @@ public final class ConstructorView implements Transform<Constructor, String> {
             .map(Formatting::shortName)
             .findFirst();
 	}
+    
+    private String fieldSeparator(Constructor model) {
+        if (model.getFields().size() > 3) {
+            return "," + nl() + tab() + tab();
+        } else return ", ";
+    }
 }

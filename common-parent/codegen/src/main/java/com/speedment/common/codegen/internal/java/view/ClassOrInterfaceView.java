@@ -19,15 +19,13 @@ package com.speedment.common.codegen.internal.java.view;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.internal.java.view.trait.*;
-import com.speedment.common.codegen.model.ClassOrInterface;
-
-import java.util.Optional;
-import java.util.stream.Stream;
-
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import com.speedment.common.codegen.model.ClassOrInterface;
 import static com.speedment.common.codegen.util.Formatting.*;
+import java.util.Optional;
 import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
 
 
 /**
@@ -72,7 +70,7 @@ abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements Tr
      * {@inheritDoc}
      */
     @Override
-    public String fieldSeparator() {
+    public String fieldSeparator(M model) {
         return nl();
     }
 

@@ -286,7 +286,7 @@ public final class Formatting {
 			String className = fileName;
 			className = className.replace('/', '.');
 			className = className.replace('\\', '.');
-			className = className.substring(0, className.length() - 6);
+			className = className.substring(0, className.length() - 5);
 			result = Optional.of(className);
 		}
 		return result;

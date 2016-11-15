@@ -19,11 +19,11 @@ package com.speedment.common.codegen.internal.java.view;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.internal.java.view.trait.*;
-import com.speedment.common.codegen.model.Method;
-
-import java.util.Optional;
-
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import com.speedment.common.codegen.model.Method;
+import static com.speedment.common.codegen.util.Formatting.nl;
+import static com.speedment.common.codegen.util.Formatting.tab;
+import java.util.Optional;
 
 /**
  * Transforms from a {@link Method} to java code.
@@ -61,11 +61,10 @@ public final class MethodView implements Transform<Method, String>,
         );
 	}
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public String fieldSeparator() {
-        return ", ";
+    public String fieldSeparator(Method model) {
+        if (model.getFields().size() > 3) {
+            return "," + nl() + tab() + tab();
+        } else return ", ";
     }
 }

@@ -20,12 +20,12 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.internal.java.view.trait.*;
 import com.speedment.common.codegen.model.InterfaceMethod;
-
-import java.util.Optional;
-
 import static com.speedment.common.codegen.model.modifier.Modifier.DEFAULT;
 import static com.speedment.common.codegen.model.modifier.Modifier.STATIC;
+import static com.speedment.common.codegen.util.Formatting.nl;
+import static com.speedment.common.codegen.util.Formatting.tab;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
 
 /**
  * Transforms from an {@link InterfaceMethod} to java code.
@@ -71,7 +71,9 @@ public final class InterfaceMethodView implements Transform<InterfaceMethod, Str
 	}
 
     @Override
-    public String fieldSeparator() {
-        return ", ";
+    public String fieldSeparator(InterfaceMethod model) {
+        if (model.getFields().size() > 3) {
+            return "," + nl() + tab() + tab();
+        } else return ", ";
     }
 }
