@@ -49,9 +49,13 @@ public final class ConstructorView implements Transform<Constructor, String> {
                     "Could not find a nameable parent of constructor."
                 )) +
 			gen.onEach(model.getFields()).collect(
-				Collectors.joining(fieldSeparator(model), "(", ")")
+				Collectors.joining(
+                    fieldSeparator(model), 
+                    (model.getFields().size() > 3) ? "(" + nl() : "(", 
+                    ")"
+                )
 			) + " " + 
-            gen.onEach(model.getExceptions()).collect(joinIfNotEmpty(", ", "throws ", "")) +
+            gen.onEach(model.getExceptions()).collect(joinIfNotEmpty(", ", "throws ", " ")) +
             block(
 				model.getCode().stream().collect(
 					Collectors.joining(nl())

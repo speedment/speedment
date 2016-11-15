@@ -32,7 +32,8 @@ import java.util.Optional;
  * 
  * @author Emil Forslund
  */
-public final class InterfaceMethodView implements Transform<InterfaceMethod, String>,
+public final class InterfaceMethodView 
+implements Transform<InterfaceMethod, String>,
         HasModifiersView<InterfaceMethod>,
         HasNameView<InterfaceMethod>,
         HasTypeView<InterfaceMethod>,
@@ -62,7 +63,7 @@ public final class InterfaceMethodView implements Transform<InterfaceMethod, Str
 			renderModifiers(gen, model, STATIC, DEFAULT) +
             renderGenerics(gen, model) +
             renderType(gen, model) +
-            renderName(gen, model) + "(" +
+            renderName(gen, model) + ((model.getFields().size() > 3) ? "(" + nl() : "(") +
             renderFields(gen, model) + ")" +
                 (body.isPresent() ? " " : "") +
             renderThrows(gen, model) + 
@@ -75,5 +76,12 @@ public final class InterfaceMethodView implements Transform<InterfaceMethod, Str
         if (model.getFields().size() > 3) {
             return "," + nl() + tab() + tab();
         } else return ", ";
+    }
+
+    @Override
+    public String throwsSuffix(InterfaceMethod model) {
+        return (model.getModifiers().contains(DEFAULT)
+             || model.getModifiers().contains(STATIC))
+            ? " " : "";
     }
 }

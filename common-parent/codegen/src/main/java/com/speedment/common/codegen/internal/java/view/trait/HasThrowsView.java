@@ -18,9 +18,8 @@ package com.speedment.common.codegen.internal.java.view.trait;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegen.model.trait.HasThrows;
-
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import com.speedment.common.codegen.model.trait.HasThrows;
 
 /**
  * A trait with the functionality to render models with the trait 
@@ -42,6 +41,15 @@ public interface HasThrowsView<M extends HasThrows<M>> extends
      */
     default String renderThrows(Generator gen, M model) {
         return gen.onEach(model.getExceptions())
-            .collect(joinIfNotEmpty(", ", "throws ", ""));
+            .collect(joinIfNotEmpty(", ", "throws ", throwsSuffix(model)));
     }
+    
+    /**
+     * Returns any suffix to a throws statement. This will only be used if a
+     * throws clause was specified.
+     * 
+     * @param model  the model being rendered
+     * @return       the throws suffix
+     */
+    String throwsSuffix(M model);
 }

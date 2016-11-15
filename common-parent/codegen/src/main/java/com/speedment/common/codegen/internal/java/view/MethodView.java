@@ -21,6 +21,7 @@ import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.internal.java.view.trait.*;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.common.codegen.model.Method;
+import static com.speedment.common.codegen.model.modifier.Modifier.ABSTRACT;
 import static com.speedment.common.codegen.util.Formatting.nl;
 import static com.speedment.common.codegen.util.Formatting.tab;
 import java.util.Optional;
@@ -54,17 +55,23 @@ public final class MethodView implements Transform<Method, String>,
             renderModifiers(gen, model) +
             renderGenerics(gen, model) +
             renderType(gen, model) +
-            renderName(gen, model) + "(" +
+            renderName(gen, model) + 
+            ((model.getFields().size() > 3) ? "(" + nl() : "(") +
             renderFields(gen, model) + ") " +
             renderThrows(gen, model) + 
             renderCode(gen, model)
         );
 	}
-
+    
     @Override
     public String fieldSeparator(Method model) {
         if (model.getFields().size() > 3) {
             return "," + nl() + tab() + tab();
         } else return ", ";
+    }
+
+    @Override
+    public String throwsSuffix(Method model) {
+        return model.getModifiers().contains(ABSTRACT) ? "" : " ";
     }
 }
