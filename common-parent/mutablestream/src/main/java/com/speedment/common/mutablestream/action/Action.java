@@ -56,6 +56,18 @@ public interface Action<
     }
     
     @SuppressWarnings("unchecked")
+    default Optional<MapToLongAction<T>> ifMapToLong() {
+        return CastUtil.castIf(this, MapToLongAction.class)
+            .map(a -> (MapToLongAction<T>) a);
+    }
+    
+    @SuppressWarnings("unchecked")
+    default Optional<MapToDoubleAction<T>> ifMapToDouble() {
+        return CastUtil.castIf(this, MapToDoubleAction.class)
+            .map(a -> (MapToDoubleAction<T>) a);
+    }
+    
+    @SuppressWarnings("unchecked")
     default Optional<FlatMapAction<T, R>> ifFlatMap() {
         return CastUtil.castIf(this, FlatMapAction.class)
             .map(a -> (FlatMapAction<T, R>) a);
