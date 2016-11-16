@@ -16,10 +16,10 @@
  */
 package com.speedment.common.mutablestream.action;
 
-import com.speedment.common.mutablestream.internal.util.CastUtil;
-import java.util.Optional;
 import com.speedment.common.mutablestream.HasNext;
 import com.speedment.common.mutablestream.HasPrevious;
+import com.speedment.common.mutablestream.internal.util.CastUtil;
+import java.util.Optional;
 import java.util.stream.BaseStream;
 
 /**
@@ -65,6 +65,18 @@ public interface Action<
     default Optional<FlatMapToIntAction<T>> ifFlatMapToInt() {
         return CastUtil.castIf(this, FlatMapToIntAction.class)
             .map(a -> (FlatMapToIntAction<T>) a);
+    }
+    
+    @SuppressWarnings("unchecked")
+    default Optional<FlatMapToLongAction<T>> ifFlatMapToLong() {
+        return CastUtil.castIf(this, FlatMapToLongAction.class)
+            .map(a -> (FlatMapToLongAction<T>) a);
+    }
+    
+    @SuppressWarnings("unchecked")
+    default Optional<FlatMapToDoubleAction<T>> ifFlatMapToDouble() {
+        return CastUtil.castIf(this, FlatMapToDoubleAction.class)
+            .map(a -> (FlatMapToDoubleAction<T>) a);
     }
     
     @SuppressWarnings("unchecked")
