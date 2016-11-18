@@ -109,7 +109,7 @@ public final class SingletonStream<T> implements Stream<T> {
         if (STRICT) {
             return toStream().mapToLong(mapper);
         }
-        return LongStream.of(mapper.applyAsLong(element));
+        return SingletonLongStream.of(mapper.applyAsLong(element));
     }
 
     @Override
@@ -436,7 +436,7 @@ public final class SingletonStream<T> implements Stream<T> {
                 int value = (element != null) ? Spliterator.NONNULL : 0;
                 // ORDERED can be derived from member flag 
                 return value | Spliterator.SIZED | Spliterator.SUBSIZED | Spliterator.IMMUTABLE
-                        | Spliterator.DISTINCT | Spliterator.ORDERED;
+                    | Spliterator.DISTINCT | Spliterator.ORDERED;
             }
         };
     }

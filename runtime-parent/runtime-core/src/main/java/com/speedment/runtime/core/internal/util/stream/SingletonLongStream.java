@@ -19,42 +19,42 @@ package com.speedment.runtime.core.internal.util.stream;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.core.internal.util.stream.SingletonUtil.*;
 import static java.util.Objects.requireNonNull;
+import java.util.stream.IntStream;
 
 /**
- * An implementation of an IntStream that takes exactly one element as its
+ * An implementation of a LongStream that takes exactly one element as its
  * source.
  *
  * This implementation supports optimized implementations of most terminal
  * operations and a some number of intermediate operations. Un-optimized
- * operations just returns a wrapped standard IntStream implementation.
+ * operations just returns a wrapped standard LongStream implementation.
  *
- * For performance reasons, the IntStream does not throw an
+ * For performance reasons, the LongStream does not throw an
  * IllegalStateOperation if methods are called after a terminal operation has
  * been called on the Stream. This could be implemented using a boolean value
  * set by each terminating op. All other ops could then assert this flag.
  *
  * @author Per Minborg
  */
-public class SingletonIntStream implements IntStream {
+public class SingletonLongStream implements LongStream {
 
-    private final int element;
+    private final long element;
 
-    private SingletonIntStream(int element) {
+    private SingletonLongStream(long element) {
         this.element = element;
     }
 
-    public static IntStream of(int element) {
-        return new SingletonIntStream(element);
+    public static LongStream of(long element) {
+        return new SingletonLongStream(element);
     }
 
     @Override
-    public IntStream filter(IntPredicate predicate) {
+    public LongStream filter(LongPredicate predicate) {
         requireNonNull(predicate);
         if (STRICT) {
             return toStream().filter(predicate);
@@ -63,16 +63,16 @@ public class SingletonIntStream implements IntStream {
     }
 
     @Override
-    public IntStream map(IntUnaryOperator mapper) {
+    public LongStream map(LongUnaryOperator mapper) {
         requireNonNull(mapper);
         if (STRICT) {
             return toStream().map(mapper);
         }
-        return of(mapper.applyAsInt(element));
+        return of(mapper.applyAsLong(element));
     }
 
     @Override
-    public <U> Stream<U> mapToObj(IntFunction<? extends U> mapper) {
+    public <U> Stream<U> mapToObj(LongFunction<? extends U> mapper) {
         requireNonNull(mapper);
         if (STRICT) {
             return toStream().mapToObj(mapper);
@@ -81,16 +81,16 @@ public class SingletonIntStream implements IntStream {
     }
 
     @Override
-    public LongStream mapToLong(IntToLongFunction mapper) {
+    public IntStream mapToInt(LongToIntFunction mapper) {
         requireNonNull(mapper);
         if (STRICT) {
-            return toStream().mapToLong(mapper);
+            return toStream().mapToInt(mapper);
         }
-        return SingletonLongStream.of(mapper.applyAsLong(element));
+        return SingletonIntStream.of(mapper.applyAsInt(element));
     }
 
     @Override
-    public DoubleStream mapToDouble(IntToDoubleFunction mapper) {
+    public DoubleStream mapToDouble(LongToDoubleFunction mapper) {
         requireNonNull(mapper);
         if (STRICT) {
             return toStream().mapToDouble(mapper);
@@ -99,7 +99,7 @@ public class SingletonIntStream implements IntStream {
     }
 
     @Override
-    public IntStream flatMap(IntFunction<? extends IntStream> mapper) {
+    public LongStream flatMap(LongFunction<? extends LongStream> mapper) {
         requireNonNull(mapper);
         if (STRICT) {
             return toStream().flatMap(mapper);
@@ -108,23 +108,23 @@ public class SingletonIntStream implements IntStream {
     }
 
     @Override
-    public IntStream distinct() {
+    public LongStream distinct() {
         return this;
     }
 
     @Override
-    public IntStream sorted() {
+    public LongStream sorted() {
         return this;
     }
 
     @Override
-    public IntStream peek(IntConsumer action) {
+    public LongStream peek(LongConsumer action) {
         requireNonNull(action);
         return toStream().peek(action);
     }
 
     @Override
-    public IntStream limit(long maxSize) {
+    public LongStream limit(long maxSize) {
         if (maxSize == 0) {
             return empty();
         }
@@ -135,7 +135,7 @@ public class SingletonIntStream implements IntStream {
     }
 
     @Override
-    public IntStream skip(long n) {
+    public LongStream skip(long n) {
         if (n == 0) {
             return this;
         }
@@ -146,38 +146,38 @@ public class SingletonIntStream implements IntStream {
     }
 
     @Override
-    public void forEach(IntConsumer action) {
+    public void forEach(LongConsumer action) {
         requireNonNull(action);
         action.accept(element);
     }
 
     @Override
-    public void forEachOrdered(IntConsumer action) {
+    public void forEachOrdered(LongConsumer action) {
         requireNonNull(action);
         action.accept(element);
     }
 
     @Override
-    public int[] toArray() {
-        final int[] result = new int[1];
+    public long[] toArray() {
+        final long[] result = new long[1];
         result[0] = element;
         return result;
     }
 
     @Override
-    public int reduce(int identity, IntBinaryOperator op) {
+    public long reduce(long identity, LongBinaryOperator op) {
         requireNonNull(op);
-        return op.applyAsInt(identity, element);
+        return op.applyAsLong(identity, element);
     }
 
     @Override
-    public OptionalInt reduce(IntBinaryOperator op) {
+    public OptionalLong reduce(LongBinaryOperator op) {
         // Just one element so the accumulator is never called.
         return toOptional();
     }
 
     @Override
-    public <R> R collect(Supplier<R> supplier, ObjIntConsumer<R> accumulator, BiConsumer<R, R> combiner) {
+    public <R> R collect(Supplier<R> supplier, ObjLongConsumer<R> accumulator, BiConsumer<R, R> combiner) {
         requireNonNull(supplier);
         requireNonNull(accumulator);
         final R value = supplier.get();
@@ -187,17 +187,17 @@ public class SingletonIntStream implements IntStream {
     }
 
     @Override
-    public int sum() {
+    public long sum() {
         return element;
     }
 
     @Override
-    public OptionalInt min() {
+    public OptionalLong min() {
         return toOptional();
     }
 
     @Override
-    public OptionalInt max() {
+    public OptionalLong max() {
         return toOptional();
     }
 
@@ -212,43 +212,38 @@ public class SingletonIntStream implements IntStream {
     }
 
     @Override
-    public IntSummaryStatistics summaryStatistics() {
-        final IntSummaryStatistics result = new IntSummaryStatistics();
+    public LongSummaryStatistics summaryStatistics() {
+        final LongSummaryStatistics result = new LongSummaryStatistics();
         result.accept(element);
         return result;
     }
 
     @Override
-    public boolean anyMatch(IntPredicate predicate) {
+    public boolean anyMatch(LongPredicate predicate) {
         requireNonNull(predicate);
         return predicate.test(element);
     }
 
     @Override
-    public boolean allMatch(IntPredicate predicate) {
+    public boolean allMatch(LongPredicate predicate) {
         requireNonNull(predicate);
         return predicate.test(element);
     }
 
     @Override
-    public boolean noneMatch(IntPredicate predicate) {
+    public boolean noneMatch(LongPredicate predicate) {
         requireNonNull(predicate);
         return !predicate.test(element);
     }
 
     @Override
-    public OptionalInt findFirst() {
+    public OptionalLong findFirst() {
         return toOptional();
     }
 
     @Override
-    public OptionalInt findAny() {
+    public OptionalLong findAny() {
         return toOptional();
-    }
-
-    @Override
-    public LongStream asLongStream() {
-        return LongStream.of(element);
     }
 
     @Override
@@ -257,27 +252,27 @@ public class SingletonIntStream implements IntStream {
     }
 
     @Override
-    public Stream<Integer> boxed() {
-        return mapToObj(Integer::valueOf);
+    public Stream<Long> boxed() {
+        return mapToObj(Long::valueOf);
     }
 
     @Override
-    public IntStream sequential() {
+    public LongStream sequential() {
         return this;
     }
 
     @Override
-    public IntStream parallel() {
+    public LongStream parallel() {
         return toStream().parallel();
     }
 
     @Override
-    public PrimitiveIterator.OfInt iterator() {
+    public PrimitiveIterator.OfLong iterator() {
         return singletonIntIterator(element);
     }
 
     @Override
-    public Spliterator.OfInt spliterator() {
+    public Spliterator.OfLong spliterator() {
         return singletonIntSpliterator(element);
     }
 
@@ -287,36 +282,36 @@ public class SingletonIntStream implements IntStream {
     }
 
     @Override
-    public IntStream unordered() {
+    public LongStream unordered() {
         return this; // Todo: may convey to singletonSpliterator()
     }
 
     @Override
-    public IntStream onClose(Runnable closeHandler) {
+    public LongStream onClose(Runnable closeHandler) {
         return toStream().onClose(closeHandler);
     }
 
     @Override
     public void close() {
-       // do nothing. OnClose createa a real Stream
+        // do nothing. OnClose createa a real Stream
     }
 
-    private IntStream toStream() {
-        return IntStream.of(element);
+    private LongStream toStream() {
+        return LongStream.of(element);
     }
 
-    private OptionalInt toOptional() {
+    private OptionalLong toOptional() {
         // if element is null, Optional will throw an NPE 
         // just as the standard Stream implementation does.
-        return OptionalInt.of(element);
+        return OptionalLong.of(element);
     }
 
-    private static IntStream empty() {
-        return IntStream.empty();
+    private static LongStream empty() {
+        return LongStream.empty();
     }
 
-    private static PrimitiveIterator.OfInt singletonIntIterator(final int e) {
-        return new PrimitiveIterator.OfInt() {
+    private static PrimitiveIterator.OfLong singletonIntIterator(final long e) {
+        return new PrimitiveIterator.OfLong() {
             private boolean hasNext = true;
 
             @Override
@@ -325,7 +320,7 @@ public class SingletonIntStream implements IntStream {
             }
 
             @Override
-            public int nextInt() {
+            public long nextLong() {
                 if (hasNext) {
                     hasNext = false;
                     return e;
@@ -334,11 +329,11 @@ public class SingletonIntStream implements IntStream {
             }
 
             @Override
-            public Integer next() {
+            public Long next() {
                 if (TRIPWIRE_ENABLED) {
-                    trip(getClass(), "{0} calling SingletonIntStream.singletonIterator.nextInt()");
+                    trip(getClass(), "{0} calling SingletonLongStream.singletonIterator.nextInt()");
                 }
-                return nextInt();
+                return nextLong();
             }
 
             @Override
@@ -347,7 +342,7 @@ public class SingletonIntStream implements IntStream {
             }
 
             @Override
-            public void forEachRemaining(IntConsumer action) {
+            public void forEachRemaining(LongConsumer action) {
                 requireNonNull(action);
                 if (hasNext) {
                     action.accept(e);
@@ -357,17 +352,17 @@ public class SingletonIntStream implements IntStream {
         };
     }
 
-    private static Spliterator.OfInt singletonIntSpliterator(final int element) {
-        return new Spliterator.OfInt() {
+    private static Spliterator.OfLong singletonIntSpliterator(final long element) {
+        return new Spliterator.OfLong() {
             long estimatedSize = SIZE;
 
             @Override
-            public Spliterator.OfInt trySplit() {
+            public Spliterator.OfLong trySplit() {
                 return null;
             }
 
             @Override
-            public boolean tryAdvance(IntConsumer consumer) {
+            public boolean tryAdvance(LongConsumer consumer) {
                 Objects.requireNonNull(consumer);
                 if (estimatedSize > 0) {
                     estimatedSize--;
@@ -378,7 +373,7 @@ public class SingletonIntStream implements IntStream {
             }
 
             @Override
-            public void forEachRemaining(IntConsumer consumer) {
+            public void forEachRemaining(LongConsumer consumer) {
                 tryAdvance(consumer);
             }
 
@@ -390,7 +385,7 @@ public class SingletonIntStream implements IntStream {
             @Override
             public int characteristics() {
                 return Spliterator.NONNULL | Spliterator.SIZED | Spliterator.SUBSIZED | Spliterator.IMMUTABLE
-                        | Spliterator.DISTINCT | Spliterator.ORDERED;
+                    | Spliterator.DISTINCT | Spliterator.ORDERED;
             }
         };
     }
@@ -404,7 +399,7 @@ public class SingletonIntStream implements IntStream {
      * elements to determine the longest prefix of elements.
      * @return the new stream
      */
-    public IntStream takeWhile(IntPredicate predicate) {
+    public LongStream takeWhile(LongPredicate predicate) {
         requireNonNull(predicate);
         if (predicate.test(element)) {
             return this;
@@ -425,7 +420,7 @@ public class SingletonIntStream implements IntStream {
      *
      * @return new new stream
      */
-    public IntStream dropWhile(IntPredicate predicate) {
+    public LongStream dropWhile(LongPredicate predicate) {
         requireNonNull(predicate);
         if (predicate.test(element)) {
             return empty();
