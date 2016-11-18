@@ -46,13 +46,14 @@
         <module>json</module>
         <module>tuple</module>
         <module>logger</module>
-        <module>mapstream</module>
         <module>codegen</module>
         <module>codegenxml</module>
         <module>injector</module>
         <module>rest</module>
         <module>lazy</module>
+        <module>mapstream</module>
         <module>mutablestream</module>
+        <module>singletonstream</module>
         <module>common-all</module>
     </modules>
     

@@ -14,15 +14,32 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.util.stream;
+package com.speedment.common.singletonstream;
 
-import java.util.*;
-import java.util.function.*;
-import java.util.stream.*;
-
-import static com.speedment.runtime.core.internal.util.stream.SingletonUtil.SIZE;
-import static com.speedment.runtime.core.internal.util.stream.SingletonUtil.STRICT;
+import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
+import java.util.Spliterator;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.IntFunction;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.function.ToDoubleFunction;
+import java.util.function.ToIntFunction;
+import java.util.function.ToLongFunction;
+import java.util.stream.Collector;
+import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 /**
  * An implementation of a Stream that takes exactly one element as its source.
@@ -222,7 +239,7 @@ public final class SingletonStream<T> implements Stream<T> {
     @Override
     public <A> A[] toArray(IntFunction<A[]> generator) {
         requireNonNull(generator);
-        final A[] result = generator.apply(SIZE);
+        final A[] result = generator.apply(1);
         result[0] = (A) element;
         return result;
     }
@@ -277,7 +294,7 @@ public final class SingletonStream<T> implements Stream<T> {
 
     @Override
     public long count() {
-        return SIZE;
+        return 1;
     }
 
     @Override
@@ -403,7 +420,7 @@ public final class SingletonStream<T> implements Stream<T> {
 
     private static <T> Spliterator<T> singletonSpliterator(final T element) {
         return new Spliterator<T>() {
-            long estimatedSize = SIZE;
+            long estimatedSize = 1;
 
             @Override
             public Spliterator<T> trySplit() {

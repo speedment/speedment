@@ -14,17 +14,33 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.util.stream;
+package com.speedment.common.singletonstream;
 
-import java.util.*;
-import java.util.function.*;
+import static com.speedment.common.singletonstream.internal.SingletonUtil.STRICT;
+import static com.speedment.common.singletonstream.internal.SingletonUtil.TRIPWIRE_ENABLED;
+import static com.speedment.common.singletonstream.internal.SingletonUtil.trip;
+import java.util.LongSummaryStatistics;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import static java.util.Objects.requireNonNull;
+import java.util.OptionalDouble;
+import java.util.OptionalLong;
+import java.util.PrimitiveIterator;
+import java.util.Spliterator;
+import java.util.function.BiConsumer;
+import java.util.function.LongBinaryOperator;
+import java.util.function.LongConsumer;
+import java.util.function.LongFunction;
+import java.util.function.LongPredicate;
+import java.util.function.LongToDoubleFunction;
+import java.util.function.LongToIntFunction;
+import java.util.function.LongUnaryOperator;
+import java.util.function.ObjLongConsumer;
+import java.util.function.Supplier;
 import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
-
-import static com.speedment.runtime.core.internal.util.stream.SingletonUtil.*;
-import static java.util.Objects.requireNonNull;
-import java.util.stream.IntStream;
 
 /**
  * An implementation of a LongStream that takes exactly one element as its
@@ -40,6 +56,7 @@ import java.util.stream.IntStream;
  * set by each terminating op. All other ops could then assert this flag.
  *
  * @author Per Minborg
+ * @since  1.0.0
  */
 public class SingletonLongStream implements LongStream {
 
@@ -203,7 +220,7 @@ public class SingletonLongStream implements LongStream {
 
     @Override
     public long count() {
-        return SIZE;
+        return 1;
     }
 
     @Override
@@ -354,7 +371,7 @@ public class SingletonLongStream implements LongStream {
 
     private static Spliterator.OfLong singletonIntSpliterator(final long element) {
         return new Spliterator.OfLong() {
-            long estimatedSize = SIZE;
+            long estimatedSize = 1;
 
             @Override
             public Spliterator.OfLong trySplit() {
@@ -428,5 +445,4 @@ public class SingletonLongStream implements LongStream {
             return this;
         }
     }
-
 }
