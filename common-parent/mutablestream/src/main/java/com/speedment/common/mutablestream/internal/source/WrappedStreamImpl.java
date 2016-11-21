@@ -18,6 +18,7 @@ package com.speedment.common.mutablestream.internal.source;
 
 import com.speedment.common.mutablestream.HasNext;
 import com.speedment.common.mutablestream.action.Action;
+import com.speedment.common.mutablestream.source.WrappedStream;
 import com.speedment.common.mutablestream.terminate.Terminator;
 import static java.util.Objects.requireNonNull;
 import java.util.stream.BaseStream;
@@ -30,12 +31,12 @@ import java.util.stream.BaseStream;
  * @author Emil Forslund
  * @since  1.0.0
  */
-public final class WrappedStream<T, TS extends BaseStream<T, TS>> 
-implements HasNext<T, TS> {
+public final class WrappedStreamImpl<T, TS extends BaseStream<T, TS>> 
+implements WrappedStream<T, TS> {
 
     private final TS wrapped;
 
-    public WrappedStream(TS wrapped) {
+    public WrappedStreamImpl(TS wrapped) {
         this.wrapped = requireNonNull(wrapped);
     }
 
