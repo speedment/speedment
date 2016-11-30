@@ -374,7 +374,7 @@ public final class Formatting {
      *     this.age       = age;
      * }
      * 
-     * @param rows 
+     * @param rows list of rows to operate on
      */
     public static void alignTabs(List<String> rows) {
         while (true) {

@@ -32,9 +32,10 @@ import com.speedment.common.codegen.model.trait.HasFields;
 public interface HasFieldsView<M extends HasFields<M>> extends Transform<M, String> {
     
     /**
-     * Render the fields-part of the model using the {@link #fieldSeparator()}
-     * method to separate the fields and the {@link #fieldPrefix()}- and
-     * {@link #fieldSuffix()}-methods on each field.
+     * Render the fields-part of the model using the 
+     * {@link #fieldSeparator(HasFields)} method to separate the fields and 
+     * the {@link #fieldPrefix()}- and {@link #fieldSuffix()}-methods on each 
+     * field.
      * 
      * @param gen    the generator
      * @param model  the model
