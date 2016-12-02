@@ -18,7 +18,7 @@
 
 -->
 <actions>
-<!--    <action>
+    <!--    <action>
         <actionName>CUSTOM-update-child-modules</actionName>
         <displayName>Update Child Modules</displayName>
         <goals>
@@ -35,7 +35,7 @@
             <goal>release</goal>
         </goals>
     </action>
-	<action>
+    <action>
         <actionName>CUSTOM-Fast Build</actionName>
         <displayName>Fast Build</displayName>
         <goals>
