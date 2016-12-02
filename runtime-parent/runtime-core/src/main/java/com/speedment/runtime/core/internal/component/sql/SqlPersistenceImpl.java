@@ -27,6 +27,7 @@ import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.core.component.resultset.ResultSetMapping;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
+import com.speedment.runtime.core.db.DbmsColumnHandler;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.exception.SpeedmentException;
@@ -37,9 +38,11 @@ import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -71,6 +74,7 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
     private final boolean hasPrimaryKeyColumns;
     private final DatabaseNamingConvention naming;
     private final DbmsOperationHandler operationHandler;
+    private final DbmsColumnHandler columnHandler;
     private final Class<ENTITY> entityClass;
     
     private final String insertStatement;
@@ -79,7 +83,8 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
     
     private final List<GeneratedFieldSupport<ENTITY, ?>> generatedFieldSupports;
     private final List<Field<ENTITY>> generatedFields;
-    
+    private final Map<Field<ENTITY>, Column> columnsByFields;
+
     private final static class GeneratedFieldSupport<ENTITY, T> {
         
         private final Field<ENTITY> field;
@@ -126,6 +131,7 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
         this.dbmsType = DatabaseUtil.dbmsTypeOf(dbmsHandlerComponent, dbms);
         this.naming           = dbmsType.getDatabaseNamingConvention();
         this.operationHandler = dbmsType.getOperationHandler();
+        this.columnHandler    = dbmsType.getColumnHandler();
         
         @SuppressWarnings("unchecked")
         final Manager<ENTITY> manager = (Manager<ENTITY>) managerComponent.stream()
@@ -140,33 +146,36 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
         
         this.sqlTableReference = naming.fullNameOf(table);
         this.hasPrimaryKeyColumns = manager.primaryKeyFields().anyMatch(m -> true);
-        
-        this.insertStatement = "INSERT INTO " + sqlTableReference + " (" + 
-            sqlColumnList(identity()) + ") VALUES (" + 
-            sqlColumnList(c -> "?") + ")";
-        
+
+        final Predicate<Column> included = columnHandler.excludedInInsertStatement().negate();
+        this.insertStatement = "INSERT INTO " + sqlTableReference + " (" +
+            sqlColumnList(included, identity()) + ") VALUES (" +
+            sqlColumnList(included, c -> "?") + ")";
+
         this.updateStatement = "UPDATE " + sqlTableReference + " SET " +
-            sqlColumnList(n -> n + " = ?") + " WHERE " + 
+            sqlColumnList(c -> true, n -> n + " = ?") + " WHERE " +
             sqlPrimaryKeyColumnList(pk -> pk + " = ?");
-        this.deleteStatement = "DELETE FROM " + sqlTableReference + " WHERE " + 
+        this.deleteStatement = "DELETE FROM " + sqlTableReference + " WHERE " +
             sqlPrimaryKeyColumnList(pk -> pk + " = ?");
-        
-        this.generatedFieldSupports = MapStream.fromKeys(fields.get(), f -> 
+
+        this.columnsByFields = MapStream.fromKeys(fields.get(), f ->
             DocumentDbUtil.referencedColumn(project, f.identifier())
-        ).filterValue(Column::isAutoIncrement)
-        .map((field, col) -> new GeneratedFieldSupport<>(
-            field, col, 
-            resultSetMapperComponent.apply(col.findDatabaseType())
+        ).toMap();
+
+        this.generatedFieldSupports = columnsByFields.entrySet().stream().filter(e -> e.getValue().isAutoIncrement())
+        .map(e -> new GeneratedFieldSupport<>(
+            e.getKey(), e.getValue(),
+            resultSetMapperComponent.apply(e.getValue().findDatabaseType())
         )).collect(toList());
         
         this.generatedFields = generatedFieldSupports.stream()
             .map(GeneratedFieldSupport::getField).collect(toList());
-          
     }
     
     @Override
     public ENTITY persist(ENTITY entity) throws SpeedmentException {
         final List<Object> values = fields.get()
+            .filter(f -> !columnHandler.excludedInInsertStatement().test(columnsByFields.get(f)))
             .map(f -> toDatabaseType(f, entity))
             .collect(toList());
 
@@ -254,10 +263,11 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
             .map(postMapper)
             .collect(joining(" AND "));
     }
-    
-    private String sqlColumnList(Function<String, String> postMapper) {
+
+    private String sqlColumnList(Predicate<Column> preFilter, Function<String, String> postMapper) {
         return table.columns()
             .filter(Column::isEnabled)
+            .filter(preFilter)
             .map(Column::getName)
             .map(naming::encloseField)
             .map(postMapper)

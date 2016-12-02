@@ -130,6 +130,14 @@ public interface DbmsType {
     DbmsOperationHandler getOperationHandler();
 
     /**
+     * Returns the handler responsible for column inclusion/exclusion in
+     * queries to databases
+     *
+     * @return the implementation type of the {@link DbmsColumnHandler}
+     */
+    DbmsColumnHandler getColumnHandler();
+
+    /**
      * Returns the result set table schema.
      * 
      * @return  the result set table schema.

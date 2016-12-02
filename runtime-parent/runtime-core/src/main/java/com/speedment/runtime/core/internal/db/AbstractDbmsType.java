@@ -18,14 +18,17 @@ package com.speedment.runtime.core.internal.db;
 
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
+import com.speedment.runtime.core.db.DbmsColumnHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import static com.speedment.common.injector.State.CREATED;
 import static com.speedment.common.injector.State.INITIALIZED;
@@ -36,6 +39,13 @@ import static com.speedment.common.injector.State.INITIALIZED;
  * @since   3.0.0
  */
 public abstract class AbstractDbmsType implements DbmsType {
+
+    private static final DbmsColumnHandler DEFAULT_COLUMN_HANDLER = new DbmsColumnHandler() {
+        @Override
+        public Predicate<Column> excludedInInsertStatement() {
+            return c -> false;
+        }
+    };
 
     @ExecuteBefore(INITIALIZED)
     void install(@WithState(CREATED) DbmsHandlerComponent component) {
@@ -85,5 +95,10 @@ public abstract class AbstractDbmsType implements DbmsType {
     @Override
     public String getInitialQuery() {
         return "select 1 from dual";
+    }
+
+    @Override
+    public DbmsColumnHandler getColumnHandler() {
+        return DEFAULT_COLUMN_HANDLER;
     }
 }
