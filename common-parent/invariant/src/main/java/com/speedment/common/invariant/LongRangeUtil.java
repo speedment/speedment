@@ -24,7 +24,7 @@ public final class LongRangeUtil {
 
     public static long requireNegative(long val) {
         if (val > -1) {
-            throw new IllegalArgumentException(val + " is not positive");
+            throw new IllegalArgumentException(val + " is not negative");
         }
         return val;
     }
@@ -68,7 +68,7 @@ public final class LongRangeUtil {
 
     public static <E extends RuntimeException> long requireNegative(long val, Function<String, E> exceptionConstructor) {
         if (val > -1) {
-            throw exceptionConstructor.apply(val + " is not positive");
+            throw exceptionConstructor.apply(val + " is not negative");
         }
         return val;
     }
