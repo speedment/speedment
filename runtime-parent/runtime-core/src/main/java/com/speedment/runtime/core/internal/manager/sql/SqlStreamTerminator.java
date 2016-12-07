@@ -193,15 +193,16 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
     }
 
     private boolean isCountOptimizable(Pipeline pipeline) {
-        int filters = 0;
         for (final Action<?, ?> action : pipeline) {
             if (action instanceof FilterAction) {
-                filters++;
-            } else {
-                break;
+                final FilterAction filterAction = (FilterAction) action;
+                if (!(filterAction.getPredicate() instanceof FieldPredicate)) {
+                    return false;
+                }
+
             }
         }
-        return filters > 0;
+        return true;
     }
 
     private static class SqlInfo {
