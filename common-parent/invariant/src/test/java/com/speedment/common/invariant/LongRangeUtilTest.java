@@ -58,6 +58,20 @@ public class LongRangeUtilTest {
     }
 
     @Test
+    public void testRequireEquals() {
+        System.out.println("requireNonZero");
+        final long otherVal = 3;
+        testHelper(l -> l == otherVal, l -> LongRangeUtil.requireEquals(l, otherVal));
+    }
+
+    @Test
+    public void testRequireNotEquals() {
+        System.out.println("requireNonZero");
+        final long otherVal = 3;
+        testHelper(l -> l != otherVal, l -> LongRangeUtil.requireNotEquals(l, otherVal));
+    }
+
+    @Test
     public void testRequireInRange() {
         System.out.println("requireInRange");
         final long first = -1;
