@@ -178,31 +178,29 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
     private long countHelper(Pipeline pipeline, LongSupplier fallbackSupplier) {
         requireNonNulls(pipeline, fallbackSupplier);
         
-        if (isCountOptimizable(pipeline)) {
+        if (pipeline.stream().allMatch(CHECK_RETAIN_SIZE)) {
+            // select count(*) from 'table'
+            return counter.apply(sqlSelectCount, Collections.emptyList());
+        } else if (allActionsAreOptimizableFilters(pipeline)) {
             // select count(*) from 'table' where ...
             final List<FieldPredicate<ENTITY>> andPredicateBuilders = StreamTerminatorUtil.topLevelAndPredicates(pipeline);
             final SqlInfo sqlInfo = sqlInfo(sqlSelectCount, andPredicateBuilders);
             return counter.apply(sqlInfo.sql, sqlInfo.values);
-        } else if (pipeline.stream().allMatch(CHECK_RETAIN_SIZE)) {
-            // select count(*) from 'table'
-            return counter.apply(sqlSelectCount, Collections.emptyList());
         } else {
             // Iterate over all materialized ENTITIES....
             return fallbackSupplier.getAsLong();
         }
     }
 
-    private boolean isCountOptimizable(Pipeline pipeline) {
-        for (final Action<?, ?> action : pipeline) {
+    private boolean allActionsAreOptimizableFilters(Pipeline pipeline) {
+        return pipeline.stream().allMatch(action -> {
             if (action instanceof FilterAction) {
-                final FilterAction filterAction = (FilterAction) action;
-                if (!(filterAction.getPredicate() instanceof FieldPredicate)) {
-                    return false;
+                if (((FilterAction) action).getPredicate() instanceof FieldPredicate) {
+                    return true;
                 }
-
             }
-        }
-        return true;
+            return false;
+        });
     }
 
     private static class SqlInfo {
