@@ -23,16 +23,14 @@ import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.stream.StreamUtil;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  *

@@ -36,6 +36,41 @@ public final class LongRangeUtil {
         return val;
     }
 
+    public static long requireNonPositive(long val) {
+        if (val > 0) {
+            throw new IllegalArgumentException(val + " is positive");
+        }
+        return val;
+    }
+
+    public static long requireNonNegative(long val) {
+        if (val < 0) {
+            throw new IllegalArgumentException(val + " is negative");
+        }
+        return val;
+    }
+
+    public static long requireNonZero(long val) {
+        if (val == 0) {
+            throw new IllegalArgumentException(val + " is zero");
+        }
+        return val;
+    }
+
+    public static long requireEquals(long val, long otherVal) {
+        if (val != otherVal) {
+            throw new IllegalArgumentException(val + " is not equal to " + otherVal);
+        }
+        return val;
+    }
+
+    public static long requireNotEquals(long val, long otherVal) {
+        if (val == otherVal) {
+            throw new IllegalArgumentException(val + " is equal to " + otherVal);
+        }
+        return val;
+    }
+
     public static long requireInRange(long val, long first, long lastExclusive) {
         if (val < first || val >= lastExclusive) {
             throw new IllegalArgumentException(val + " is not in the range [" + first + ", " + lastExclusive + ")");
@@ -76,6 +111,41 @@ public final class LongRangeUtil {
     public static <E extends RuntimeException> long requireZero(long val, Function<String, E> exceptionConstructor) {
         if (val != 0) {
             throw exceptionConstructor.apply(val + " is not zero");
+        }
+        return val;
+    }
+
+    public static <E extends RuntimeException> long requireNonPositive(long val, Function<String, E> exceptionConstructor) {
+        if (val > 0) {
+            throw exceptionConstructor.apply(val + " is positive");
+        }
+        return val;
+    }
+
+    public static <E extends RuntimeException> long requireNonNegative(long val, Function<String, E> exceptionConstructor) {
+        if (val < 0) {
+            throw exceptionConstructor.apply(val + " is negative");
+        }
+        return val;
+    }
+
+    public static <E extends RuntimeException> long requireNonZero(long val, Function<String, E> exceptionConstructor) {
+        if (val == 0) {
+            throw exceptionConstructor.apply(val + " is zero");
+        }
+        return val;
+    }
+
+    public static <E extends RuntimeException> long requireEquals(long val, long otherVal, Function<String, E> exceptionConstructor) {
+        if (val != otherVal) {
+            throw exceptionConstructor.apply(val + " is not equal to " + otherVal);
+        }
+        return val;
+    }
+
+    public static <E extends RuntimeException> long requireNotEquals(long val, long otherVal, Function<String, E> exceptionConstructor) {
+        if (val == otherVal) {
+            throw exceptionConstructor.apply(val + " is equal to " + otherVal);
         }
         return val;
     }
