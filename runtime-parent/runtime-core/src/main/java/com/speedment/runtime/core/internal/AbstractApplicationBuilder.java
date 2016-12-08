@@ -20,6 +20,7 @@ import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.exception.CyclicReferenceException;
 import com.speedment.common.injector.internal.InjectorImpl;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
@@ -33,6 +34,8 @@ import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.util.DocumentDbUtil;
+import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
+import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.ApplicationMetadata;
 import com.speedment.runtime.core.RuntimeBundle;
@@ -48,22 +51,17 @@ import com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler;
 import com.speedment.runtime.core.internal.db.AsynchronousQueryResultImpl;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.DatabaseUtil;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
-import static java.util.Objects.requireNonNull;
 
 /**
  * This abstract class is implemented by classes that can build a
@@ -298,7 +296,7 @@ public abstract class AbstractApplicationBuilder<
                 break;
             }
             case APPLICATION_BUILDER: {
-                LoggerManager.getLogger(InjectorImpl.class).setLevel(Level.DEBUG);
+                LoggerManager.getLogger(InjectorImpl.LOGGER_CONFIG_NAME).setLevel(Level.DEBUG);
                 LOGGER.setLevel(Level.DEBUG);
                 break;
             }
