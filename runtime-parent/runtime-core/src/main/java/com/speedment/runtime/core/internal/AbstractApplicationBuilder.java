@@ -78,6 +78,7 @@ public abstract class AbstractApplicationBuilder<
         APP extends Speedment, BUILDER extends AbstractApplicationBuilder<APP, BUILDER>> implements ApplicationBuilder<APP, BUILDER> {
 
     private final static Logger LOGGER = LoggerManager.getLogger(AbstractApplicationBuilder.class);
+    public static final String LOGGER_CONFIG_NAME = "#CONFIG";
 
     private final List<Tuple3<Class<? extends Document>, String, BiConsumer<Injector, ? extends Document>>> withsNamed;
     private final List<Tuple2<Class<? extends Document>, BiConsumer<Injector, ? extends Document>>> withsAll;
@@ -296,7 +297,8 @@ public abstract class AbstractApplicationBuilder<
                 break;
             }
             case APPLICATION_BUILDER: {
-                LoggerManager.getLogger(InjectorImpl.LOGGER_CONFIG_NAME).setLevel(Level.DEBUG);
+                LoggerManager.getLogger(InjectorImpl.class).setLevel(Level.DEBUG);
+                LoggerManager.getLogger(LOGGER_CONFIG_NAME).setLevel(Level.DEBUG);
                 LOGGER.setLevel(Level.DEBUG);
                 break;
             }
