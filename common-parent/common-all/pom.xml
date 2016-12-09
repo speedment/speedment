@@ -41,7 +41,7 @@
     
     <properties>
         <invariant.version>1.0.1-SNAPSHOT</invariant.version>
-        <function.version>1.0.0</function.version>
+        <function.version>1.0.1-SNAPSHOT</function.version>
         <json.version>1.0.1</json.version>
         <tuple.version>1.0.1</tuple.version>
         <logger.version>1.0.2</logger.version>
