@@ -17,6 +17,7 @@
 package com.speedment.runtime.field.internal.predicate;
 
 import com.speedment.common.tuple.Tuple;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.internal.util.Cast;
 import com.speedment.runtime.field.predicate.FieldPredicate;
@@ -25,32 +26,32 @@ import static java.util.Objects.requireNonNull;
 import java.util.function.Predicate;
 
 /**
- * A predicate that contains metadata about the {@link Field} that was used
- * to construct it.
- * 
- * @param <ENTITY>  the entity type that is being tested
- * @param <V>       the wrapper type
- * @param <FIELD>   the field in the entity that is operated on
- * 
- * @author  Emil Forslund
- * @since   3.0.0
+ * A predicate that contains metadata about the {@link Field} that was used to
+ * construct it.
+ *
+ * @param <ENTITY> the entity type that is being tested
+ * @param <V> the wrapper type
+ * @param <FIELD> the field in the entity that is operated on
+ *
+ * @author Emil Forslund
+ * @since 3.0.0
  */
-public abstract class AbstractFieldPredicate<ENTITY, V, FIELD extends Field<ENTITY>> 
-        extends AbstractPredicate<ENTITY> implements FieldPredicate<ENTITY> {
-    
+public abstract class AbstractFieldPredicate<ENTITY, V, FIELD extends Field<ENTITY>>
+    extends AbstractPredicate<ENTITY> implements FieldPredicate<ENTITY> {
+
     private final PredicateType predicateType;
     private final FIELD field;
     private final Predicate<ENTITY> tester;
-    
+
     protected AbstractFieldPredicate(
-            PredicateType predicateType,
-            FIELD field,
-            Predicate<ENTITY> tester) {
+        PredicateType predicateType,
+        FIELD field,
+        Predicate<ENTITY> tester) {
         this.predicateType = requireNonNull(predicateType);
-        this.field         = requireNonNull(field);
-        this.tester        = requireNonNull(tester);
+        this.field = requireNonNull(field);
+        this.tester = requireNonNull(tester);
     }
-    
+
     @Override
     protected boolean testWithoutNegation(ENTITY instance) {
         return tester.test(instance);
@@ -78,10 +79,15 @@ public abstract class AbstractFieldPredicate<ENTITY, V, FIELD extends Field<ENTI
 
     @Override
     public String toString() {
+        final ColumnIdentifier<ENTITY> cId = field.identifier();
         final StringBuilder sb = new StringBuilder();
         sb.append(getClass().getSimpleName())
             .append(" {")
-            .append("field: ").append(field)
+            .append("field: ")
+            .append(cId.getDbmsName()).append('.')
+            .append(cId.getSchemaName()).append('.')
+            .append(cId.getTableName()).append('.')
+            .append(cId.getColumnName())
             .append(", type: '").append(predicateType).append("'");
 
         Cast.cast(this, Tuple.class)

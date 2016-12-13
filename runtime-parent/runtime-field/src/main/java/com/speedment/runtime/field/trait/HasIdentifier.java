@@ -21,7 +21,6 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.util.DocumentDbUtil;
-
 import java.util.Optional;
 
 /**
