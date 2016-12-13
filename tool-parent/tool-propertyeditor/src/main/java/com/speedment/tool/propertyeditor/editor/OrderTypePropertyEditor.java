@@ -22,10 +22,9 @@ import com.speedment.tool.config.trait.HasOrderTypeProperty;
 import com.speedment.tool.propertyeditor.PropertyEditor;
 import com.speedment.tool.propertyeditor.item.ChoiceBoxItem;
 import com.speedment.tool.propertyeditor.item.ItemUtil;
+import java.util.stream.Stream;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import java.util.stream.Stream;
 
 /**
  *
@@ -38,12 +37,10 @@ public class OrderTypePropertyEditor<T extends HasOrderTypeProperty> implements 
     @Override
     public Stream<Item> fieldsFor(T document) {
         final ObservableList<OrderType> alternatives = 
-            FXCollections.observableArrayList( 
-                OrderType.class.getEnumConstants() 
-            );
+            FXCollections.observableArrayList(OrderType.values());
         
         return Stream.of(
-            new ChoiceBoxItem<OrderType>(
+            new ChoiceBoxItem<>(
                 "Order Type",
                 document.orderTypeProperty(),
                 alternatives,

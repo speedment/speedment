@@ -21,10 +21,8 @@ import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.mutator.ColumnMutator;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.trait.*;
-
-import java.util.Optional;
-
 import static com.speedment.runtime.config.util.DocumentUtil.newNoSuchElementExceptionFor;
+import java.util.Optional;
 
 /**
  * A typed {@link Document} that represents a column in the database. A
@@ -35,15 +33,15 @@ import static com.speedment.runtime.config.util.DocumentUtil.newNoSuchElementExc
  */
 
 public interface Column extends
-    Document,
-    HasParent<Table>,
-    HasEnabled,
-    HasName,
-    HasAlias,
-    HasNullable,
-    HasOrdinalPosition,
-    HasMainInterface,
-    HasMutator<ColumnMutator<? extends Column>> {
+        Document,
+        HasParent<Table>,
+        HasEnabled,
+        HasName,
+        HasAlias,
+        HasNullable,
+        HasOrdinalPosition,
+        HasMainInterface,
+        HasMutator<ColumnMutator<? extends Column>> {
 
     String
         AUTO_INCREMENT    = "autoIncrement",

@@ -20,7 +20,6 @@ import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.propertyeditor.PropertyEditor;
 import com.speedment.tool.propertyeditor.item.ItemUtil;
 import com.speedment.tool.propertyeditor.item.SimpleCheckBoxItem;
-
 import java.util.stream.Stream;
 
 /**
@@ -29,7 +28,7 @@ import java.util.stream.Stream;
  * @param <T>  the document type
  * @since 3.0.0
  */
-public class AutoIncrementPropertyEditor<T extends ColumnProperty> implements PropertyEditor<T>{
+public class AutoIncrementPropertyEditor<T extends ColumnProperty> implements PropertyEditor<T> {
 
     @Override
     public Stream<Item> fieldsFor(T document) {
