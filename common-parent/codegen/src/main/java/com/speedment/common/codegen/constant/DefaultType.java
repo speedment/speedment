@@ -19,13 +19,12 @@ package com.speedment.common.codegen.constant;
 
 import java.lang.reflect.Type;
 import java.util.*;
+import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Constant implementations of the {@link Type} interface that can be used to
@@ -207,6 +206,24 @@ public final class DefaultType {
         return requireNonNull(WRAPPERS.get(primitiveType.getTypeName()),
             "No wrapper found for type '" + primitiveType.getTypeName() + "'."
         );
+    }
+    
+    /**
+     * Returns a stream of all the primitive types in the java language.
+     * 
+     * @return  stream of types
+     */
+    public static Stream<Type> primitiveTypes() {
+        return WRAPPERS.keySet().stream().map(SimpleType::create);
+    }
+    
+    /**
+     * Returns a stream of all the wrapper types in the java language.
+     * 
+     * @return  stream of types
+     */
+    public static Stream<Type> wrapperTypes() {
+        return WRAPPERS.values().stream().map(Type.class::cast);
     }
     
     private final static Map<String, Class<?>> WRAPPERS;
