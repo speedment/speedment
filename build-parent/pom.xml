@@ -62,7 +62,7 @@
                             <version>2.4.3</version>
 
                             <inherited>true</inherited>
-
+                            
                             <configuration>
                                 <createSourcesJar>true</createSourcesJar>
                                 <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
@@ -89,7 +89,7 @@
                             <executions>
                                 <execution>
                                     <id>unpack-artifact-sources</id>
-                                    <phase>generate-resources</phase>
+                                    <phase>package</phase><!-- Same phase as shader -->
                                     
                                     <goals>
                                         <goal>unpack</goal>
@@ -123,7 +123,7 @@
                             
                             <executions>
                                 <execution>
-                                    <phase>process-resources</phase>
+                                    <phase>package</phase><!-- Same phase as shader -->
                                     <goals>
                                         <goal>javadoc</goal>
                                     </goals>
