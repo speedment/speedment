@@ -40,13 +40,14 @@ import com.speedment.runtime.config.util.DocumentDbUtil;
  *
  * @author Emil Forslund
  * @since 2.3
+ * 
  * @see DocumentDbUtil
  */
-public interface ColumnIdentifier<ENTITY> extends
-    HasDbmsName,
-    HasSchemaName,
-    HasTableName,
-    HasColumnName {
+public interface ColumnIdentifier<ENTITY> 
+extends HasDbmsName,
+        HasSchemaName,
+        HasTableName,
+        HasColumnName {
 
     default TableIdentifier<ENTITY> asTableIdentifier() {
         return TableIdentifier.of(getDbmsName(), getSchemaName(), getTableName());
