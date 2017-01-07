@@ -42,7 +42,7 @@ abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements Tr
         HasJavadocView<M>, 
         HasGenericsView<M>,
         HasImplementsView<M>, 
-        HasInitalizersView<M>, 
+        HasInitializersView<M>, 
         HasMethodsView<M>,
         HasClassesView<M>, 
         HasAnnotationUsageView<M>, 

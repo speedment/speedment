@@ -17,9 +17,13 @@
 package com.speedment.common.codegen.model;
 
 import com.speedment.common.codegen.internal.model.EnumConstantImpl;
+import com.speedment.common.codegen.model.trait.HasClasses;
 import com.speedment.common.codegen.model.trait.HasCopy;
+import com.speedment.common.codegen.model.trait.HasFields;
+import com.speedment.common.codegen.model.trait.HasInitializers;
+import com.speedment.common.codegen.model.trait.HasJavadoc;
+import com.speedment.common.codegen.model.trait.HasMethods;
 import com.speedment.common.codegen.model.trait.HasName;
-
 import java.util.List;
 
 /**
@@ -29,7 +33,14 @@ import java.util.List;
  * @see Enum
  * @since  2.0
  */
-public interface EnumConstant extends HasCopy<EnumConstant>, HasName<EnumConstant> {
+public interface EnumConstant 
+extends HasCopy<EnumConstant>, 
+        HasName<EnumConstant>, 
+        HasJavadoc<EnumConstant>,
+        HasClasses<EnumConstant>,
+        HasInitializers<EnumConstant>,
+        HasMethods<EnumConstant>, 
+        HasFields<EnumConstant> {
 
     /**
      * Adds the specified construction parameter to this constant.

@@ -32,7 +32,7 @@ import com.speedment.common.codegen.model.trait.HasInitializers;
  * @param <M>  The model type
  * @see        Transform
  */
-public interface HasInitalizersView<M extends HasInitializers<M>> extends 
+public interface HasInitializersView<M extends HasInitializers<M>> extends 
     Transform<M, String> {
     
     /**
