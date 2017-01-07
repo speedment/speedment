@@ -156,7 +156,9 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
 
             injector.inject(translator);
             
-            decorators.stream().forEachOrdered(dec -> dec.apply(translator));
+            decorators.stream()
+                .map(injector::inject)
+                .forEachOrdered(dec -> dec.apply(translator));
 
             return translator;
         }
