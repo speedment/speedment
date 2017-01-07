@@ -56,7 +56,7 @@ public final class MethodView implements Transform<Method, String>,
             renderGenerics(gen, model) +
             renderType(gen, model) +
             renderName(gen, model) + 
-            ((model.getFields().size() > 3) ? "(" + nl() : "(") +
+            ((model.getFields().size() > 3) ? "(" + nl() + tab() + tab() : "(") +
             renderFields(gen, model) + ") " +
             renderThrows(gen, model) + 
             renderCode(gen, model)
