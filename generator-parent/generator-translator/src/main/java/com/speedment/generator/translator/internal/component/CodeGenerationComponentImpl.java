@@ -28,16 +28,14 @@ import com.speedment.generator.translator.component.CodeGenerationComponent;
 import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
-
 import java.util.List;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-
-import static java.util.Objects.requireNonNull;
 
 public final class CodeGenerationComponentImpl implements CodeGenerationComponent {
 
@@ -113,8 +111,7 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
             .map(s -> (TranslatorSettings<DOC, ?>) s)
             .filter(s -> s != null)
             .filter(s -> s.getConstructor() != null)
-            .map(settings -> settings.createDecorated(document))
-            .map(injector::inject);
+            .map(settings -> settings.createDecorated(injector, document));
     }
 
     private static Supplier<SpeedmentTranslatorException> noTranslatorFound(HasMainInterface doc, String key) {
@@ -152,11 +149,13 @@ public final class CodeGenerationComponentImpl implements CodeGenerationComponen
             return decorators;
         }
 
-        public JavaClassTranslator<DOC, T> createDecorated(DOC document) {
+        public JavaClassTranslator<DOC, T> createDecorated(Injector injector, DOC document) {
             @SuppressWarnings("unchecked")
             final JavaClassTranslator<DOC, T> translator
                 = (JavaClassTranslator<DOC, T>) getConstructor().apply(document);
 
+            injector.inject(translator);
+            
             decorators.stream().forEachOrdered(dec -> dec.apply(translator));
 
             return translator;
