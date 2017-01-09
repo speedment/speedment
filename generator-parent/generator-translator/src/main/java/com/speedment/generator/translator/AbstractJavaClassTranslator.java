@@ -141,7 +141,9 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasName
         );
 
         final T item = makeCodeGenModel(file);
-        item.set(getJavaDoc());
+        if (!item.getJavadoc().isPresent()) {
+            item.set(getJavaDoc());
+        }
         file.add(item);
         finializeFile(file);
         file.call(new AutoImports(getCodeGenerator().getDependencyMgr()));
