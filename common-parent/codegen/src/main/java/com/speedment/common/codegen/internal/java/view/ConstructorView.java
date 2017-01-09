@@ -51,7 +51,7 @@ public final class ConstructorView implements Transform<Constructor, String> {
 			gen.onEach(model.getFields()).collect(
 				Collectors.joining(
                     fieldSeparator(model), 
-                    (model.getFields().size() > 3) ? "(" + nl() : "(", 
+                    (model.getFields().size() > 3) ? "(" + nl() + tab() + tab() : "(", 
                     ")"
                 )
 			) + " " + 
