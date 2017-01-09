@@ -1,24 +1,9 @@
-/**
- *
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); You may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
 package com.speedment.generator.core.internal.translator;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.internal.java.JavaGenerator;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.util.Formatting;
 import com.speedment.common.injector.annotation.Inject;
@@ -36,10 +21,10 @@ import com.speedment.generator.translator.component.CodeGenerationComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
+import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.util.Statistics;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
@@ -48,22 +33,21 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
-import static java.util.Objects.requireNonNull;
-
 /**
  *
- * @author Per Minborg
  * @author Emil Forslund
+ * @since  3.0.2
  */
-public class TranslatorManagerImpl implements TranslatorManager {
-
-    private final static Logger LOGGER = LoggerManager.getLogger(TranslatorManagerImpl.class);
+public final class TranslatorManagerHelper {
+    
+    private final static Logger LOGGER = 
+        LoggerManager.getLogger(DefaultTranslatorManager.class);
+    
     private final static String HASH_PREFIX = ".";
     private final static String HASH_SUFFIX = ".md5";
     private final static boolean PRINT_CODE = false;
@@ -72,25 +56,21 @@ public class TranslatorManagerImpl implements TranslatorManager {
 
     private @Inject InfoComponent info;
     private @Inject PathComponent paths;
-    private @Inject EventComponent eventComponent;
+    private @Inject EventComponent events;
     private @Inject CodeGenerationComponent codeGenerationComponent;
-    private @Inject InfoComponent infoComponent;
     
-    protected TranslatorManagerImpl() {}
-
-    @Override
-    public void accept(Project project) {
+    public void accept(TranslatorManager delegator, Project project) {
         requireNonNull(project);
-        Statistics.onGenerate(infoComponent);
+        Statistics.onGenerate(info);
 
-        final List<Translator<?, ?>> writeOnceTranslators = new ArrayList<>();
+        final List<Translator<?, ?>> writeOnceTranslators   = new ArrayList<>();
         final List<Translator<?, ?>> writeAlwaysTranslators = new ArrayList<>();
         final Generator gen = new JavaGenerator();
 
         fileCounter.set(0);
         Formatting.tab("    ");
 
-        eventComponent.notify(new BeforeGenerate(project, gen, this));
+        events.notify(new BeforeGenerate(project, gen, delegator));
 
         codeGenerationComponent.translators(project)
             .forEachOrdered(t -> {
@@ -114,24 +94,23 @@ public class TranslatorManagerImpl implements TranslatorManager {
             });
 
         // Erase any previous unmodified files.
-        clearExistingFiles(project);
+        delegator.clearExistingFiles(project);
 
         // Write generated code to file.
         gen.metaOn(writeOnceTranslators.stream()
             .map(Translator::get)
             .collect(Collectors.toList())
-        ).forEach(meta -> writeToFile(project, meta, false));
+        ).forEach(meta -> delegator.writeToFile(project, meta, false));
 
         gen.metaOn(writeAlwaysTranslators.stream()
             .map(Translator::get)
             .collect(Collectors.toList())
-        ).forEach(meta -> writeToFile(project, meta, true));
+        ).forEach(meta -> delegator.writeToFile(project, meta, true));
 
-        eventComponent.notify(new AfterGenerate(project, gen, this));
+        events.notify(new AfterGenerate(project, gen, delegator));
     }
 
-    @Override
-    public void clearExistingFiles(Project project) {
+    public void clearExistingFiles(TranslatorManager delegator, Project project) {
         final Path dir = paths.packageLocation();
 
         try {
@@ -189,20 +168,17 @@ public class TranslatorManagerImpl implements TranslatorManager {
         }
     }
 
-    @Override
-    public void writeToFile(Project project, Meta<File, String> meta, boolean overwriteExisting) {
-        eventComponent.notify(new FileGenerated(project, meta));
-        writeToFile(project, meta.getModel().getName(), meta.getResult(), overwriteExisting);
+    public void writeToFile(TranslatorManager delegator, Project project, Meta<File, String> meta, boolean overwriteExisting) {
+        events.notify(new FileGenerated(project, meta));
+        delegator.writeToFile(project, meta.getModel().getName(), meta.getResult(), overwriteExisting);
     }
 
-    @Override
-    public void writeToFile(Project project, String filename, String content, boolean overwriteExisting) {
+    public void writeToFile(TranslatorManager delegator, Project project, String filename, String content, boolean overwriteExisting) {
         final Path codePath = paths.packageLocation().resolve(filename);
-        writeToFile(codePath, content, overwriteExisting);
+        delegator.writeToFile(codePath, content, overwriteExisting);
     }
 
-    @Override
-    public void writeToFile(Path codePath, String content, boolean overwriteExisting) {
+    public void writeToFile(TranslatorManager delegator, Path codePath, String content, boolean overwriteExisting) {
         requireNonNulls(codePath, content);
 
         try {
@@ -227,7 +203,6 @@ public class TranslatorManagerImpl implements TranslatorManager {
         }
     }
 
-    @Override
     public int getFilesCreated() {
         return fileCounter.get();
     }
@@ -260,7 +235,7 @@ public class TranslatorManagerImpl implements TranslatorManager {
     private static void setAttributeHidden(Path path) {
         try {
             Files.setAttribute(path, "dos:hidden", true);
-        } catch (IOException | UnsupportedOperationException e) {
+        } catch (final IOException | UnsupportedOperationException e) {
             // Ignore. Maybe this is Linux or MacOS
         }
     }

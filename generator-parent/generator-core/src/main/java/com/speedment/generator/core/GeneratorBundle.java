@@ -19,15 +19,15 @@ package com.speedment.generator.core;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.generator.core.internal.component.EventComponentImpl;
 import com.speedment.generator.core.internal.component.PathComponentImpl;
-import com.speedment.generator.core.internal.translator.TranslatorManagerImpl;
+import com.speedment.generator.core.internal.translator.DefaultTranslatorManager;
 import com.speedment.generator.standard.StandardTranslatorBundle;
 import com.speedment.generator.translator.TranslatorBundle;
-
 import java.util.stream.Stream;
 
 /**
  *
  * @author Per Minborg
+ * @since  3.0.0
  */
 public class GeneratorBundle implements InjectBundle {
 
@@ -35,7 +35,7 @@ public class GeneratorBundle implements InjectBundle {
     public Stream<Class<?>> injectables() {
         return InjectBundle.of(
                 EventComponentImpl.class,
-                TranslatorManagerImpl.class,
+                DefaultTranslatorManager.class,
                 PathComponentImpl.class
             ).withBundle(new TranslatorBundle())
             .withBundle(new StandardTranslatorBundle())

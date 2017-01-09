@@ -19,25 +19,22 @@ package com.speedment.generator;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
 import com.speedment.generator.core.GeneratorBundle;
-import com.speedment.generator.core.internal.translator.TranslatorManagerImpl;
-import com.speedment.generator.translator.TranslatorManager;
+import com.speedment.generator.core.translator.AbstractTranslatorManager;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.internal.AbstractApplicationMetadata;
 import com.speedment.runtime.core.internal.DefaultApplicationBuilder;
-import org.junit.Before;
-
 import java.nio.file.Path;
 import java.util.Optional;
-import java.util.stream.Stream;
-
 import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
+import org.junit.Before;
 
 /**
  *
- * @author pemi
+ * @author Per Minborg
  */
 public abstract class SimpleModel {
 
@@ -57,7 +54,7 @@ public abstract class SimpleModel {
     protected Table table2;
     protected Column column2;
     
-    private final static class SilentTranslatorManager extends TranslatorManagerImpl implements TranslatorManager {
+    private final static class SilentTranslatorManager extends AbstractTranslatorManager {
 
         @Override
         public void clearExistingFiles(Project project) {}
@@ -85,14 +82,14 @@ public abstract class SimpleModel {
             .withSkipValidateRuntimeConfig()
             .build();
         
-        project = speedment.getOrThrow(ProjectComponent.class).getProject();
-        dbms = project.dbmses().findAny().get();
-        schema = dbms.schemas().findAny().get();
-        table = schema.tables().filter(t -> TABLE_NAME.equals(t.getName())).findAny().get();
-        column = table.columns().findAny().get();
+        project  = speedment.getOrThrow(ProjectComponent.class).getProject();
+        dbms     = project.dbmses().findAny().get();
+        schema   = dbms.schemas().findAny().get();
+        table    = schema.tables().filter(t -> TABLE_NAME.equals(t.getName())).findAny().get();
+        column   = table.columns().findAny().get();
         pkColumn = table.primaryKeyColumns().findAny().get();
 
-        table2 = schema.tables().filter(t -> TABLE_NAME2.equals(t.getName())).findAny().get();
+        table2  = schema.tables().filter(t -> TABLE_NAME2.equals(t.getName())).findAny().get();
         column2 = table2.columns().findAny().get();
     }
     
