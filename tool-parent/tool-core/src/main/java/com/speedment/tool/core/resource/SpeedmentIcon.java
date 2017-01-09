@@ -21,15 +21,13 @@ import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.tool.config.trait.HasIconPath;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-
 import java.io.InputStream;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static java.util.Objects.requireNonNull;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  * An enumeration of all the icons available in the Speedment Icon Package.
@@ -37,13 +35,9 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since 2.2.0
  */
-
 public enum SpeedmentIcon {
 
     // Big buttons
-// Big buttons
-// Big buttons
-// Big buttons
     BIG_GENERATE("/images/icon-generate.png"),
     BIG_CONFIGURE("/images/icon-configure.png"),
     BIG_GENERATE_HOVER("/images/icon-generate-hover.png"),

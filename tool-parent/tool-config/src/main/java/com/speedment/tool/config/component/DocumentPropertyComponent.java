@@ -18,12 +18,10 @@ package com.speedment.tool.config.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.config.*;
-import com.speedment.tool.config.DocumentProperty;
-
-import java.util.List;
-
 import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
 import static com.speedment.runtime.core.internal.util.ImmutableListUtil.of;
+import com.speedment.tool.config.DocumentProperty;
+import java.util.List;
 
 /**
  * Describes which implementations the {@link Document} interface to use at
@@ -32,7 +30,6 @@ import static com.speedment.runtime.core.internal.util.ImmutableListUtil.of;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-
 @InjectKey(DocumentPropertyComponent.class)
 public interface DocumentPropertyComponent {
 

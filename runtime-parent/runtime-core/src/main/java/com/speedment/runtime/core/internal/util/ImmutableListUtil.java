@@ -17,21 +17,20 @@
 package com.speedment.runtime.core.internal.util;
 
 import com.speedment.runtime.core.util.StaticClassUtil;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collector;
-import java.util.stream.Stream;
-
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toList;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Per Minborg
+ * @since  3.0.0
  */
-public class ImmutableListUtil {
+public final class ImmutableListUtil {
 
     public static <E> List<E> of() {
         return Collections.emptyList();
@@ -66,8 +65,10 @@ public class ImmutableListUtil {
         return collectingAndThen(toList(), Collections::unmodifiableList);
     }
 
+    /**
+     * Should not be instantiated.
+     */
     private ImmutableListUtil() {
         StaticClassUtil.instanceNotAllowed(ImmutableListUtil.class);
     }
-
 }
