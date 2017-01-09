@@ -21,15 +21,20 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.generator.core.translator.AbstractTranslatorManager;
 import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.runtime.config.Project;
 import java.nio.file.Path;
 
 /**
- *
+ * Default implementation of the {@link TranslatorManager}-interface. This is
+ * the implementation used by the injector system by default. The internal logic
+ * is stored in the class {@link TranslatorManagerHelper}. To override it,
+ * use the public class {@link AbstractTranslatorManager}.
+ * 
  * @author Per Minborg
  * @author Emil Forslund
- * @since  3.0.0
+ * @since  3.0.2
  */
 public final class DefaultTranslatorManager implements TranslatorManager {
     

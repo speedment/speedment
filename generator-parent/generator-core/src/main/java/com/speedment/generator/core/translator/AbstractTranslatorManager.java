@@ -11,7 +11,8 @@ import com.speedment.runtime.config.Project;
 import java.nio.file.Path;
 
 /**
- *
+ * Abstract base implementation for different translator managers. 
+ * 
  * @author Emil Forslund
  * @since  3.0.2
  */
