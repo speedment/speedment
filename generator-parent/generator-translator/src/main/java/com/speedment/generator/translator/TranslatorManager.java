@@ -20,16 +20,17 @@ import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.config.Project;
-
 import java.nio.file.Path;
 
 /**
  *
  * @author Per Minborg
  */
-
 @InjectKey(TranslatorManager.class)
 public interface TranslatorManager {
+    
+    // TODO: Name to TranslatorComponent and move to 'component' package in next
+    // major release.
 
     void accept(Project project);
 
