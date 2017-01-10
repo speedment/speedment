@@ -16,6 +16,7 @@
  */
 package com.speedment.common.injector.annotation;
 
+import com.speedment.common.injector.Injector;
 import java.lang.annotation.*;
 
 /**
@@ -41,4 +42,26 @@ public @interface InjectKey {
      * @return  the injection key
      */
     Class<?> value();
+    
+    /**
+     * Returns {@code true} if the class with this annotation should replace any
+     * previously defined implementations with the same {@link #value()} or if
+     * it should be appended as a more recent implementation without replacing
+     * the existing one.
+     * <p>
+     * If this is {@code false}, then <em>every</em> implementation with the 
+     * same {@link #value()} will be instantiated and configured by the 
+     * dependency injector, but when a specific key is requested using 
+     * {@link Injector#get(Class)}, then the most recent one is returned.
+     * <p>
+     * If this is {@code true}, then <em>only</em> the most recent 
+     * implementation will be instantiated and configured.
+     * <p>
+     * The default value for this method is {@code true}.
+     * 
+     * @return  if annotated implementation overwrites existing implementations
+     * 
+     * @since 1.1.0
+     */
+    boolean overwrite() default true;
 }
