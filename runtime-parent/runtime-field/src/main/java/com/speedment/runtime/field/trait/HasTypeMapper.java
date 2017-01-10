@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.field.trait;
 
-
 import com.speedment.runtime.typemapper.TypeMapper;
 
 /**
@@ -24,7 +23,6 @@ import com.speedment.runtime.typemapper.TypeMapper;
  * @author Emil Forslund
  * @since  3.0.0
  */
-
 public interface HasTypeMapper {
     
     /**

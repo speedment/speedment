@@ -16,14 +16,11 @@
  */
 package com.speedment.tool.config.trait;
 
-
-
 /**
  *
  * @author  Emil Forslund
  * @since   2.3.0
  */
-
 public interface HasIconPath {
     String getIconPath();
 }

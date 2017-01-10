@@ -25,8 +25,6 @@ import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.trait.*;
 import java.util.List;
 import java.util.Optional;
-import static javafx.beans.binding.Bindings.createObjectBinding;
-import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
 
@@ -43,6 +41,7 @@ implements Column,
         HasNameProperty,
         HasAliasProperty,
         HasNullableProperty,
+        HasTypeMapperProperty,
         HasOrdinalPositionProperty {
 
     public ColumnProperty(Table parent) {
@@ -62,15 +61,6 @@ implements Column,
     public boolean isAutoIncrement() {
         return autoIncrementProperty().get();
     }
-
-    public StringProperty typeMapperProperty() {
-        return stringPropertyOf(TYPE_MAPPER, () -> Column.super.getTypeMapper().orElse(null));
-    }
-
-    @Override
-    public Optional<String> getTypeMapper() {
-        return Optional.ofNullable(typeMapperProperty().get());
-    }
     
     public StringProperty enumConstantsProperty() {
         return stringPropertyOf(ENUM_CONSTANTS, () -> Column.super.getEnumConstants().orElse(null));
@@ -79,23 +69,6 @@ implements Column,
     @Override
     public Optional<String> getEnumConstants() {
         return Optional.ofNullable(enumConstantsProperty().get());
-    }
-    @Override
-    public String getDatabaseType() {
-        return databaseTypeProperty().get();
-    }
-
-    public StringProperty databaseTypeProperty() {
-        return stringPropertyOf(DATABASE_TYPE, Column.super::getDatabaseType);
-    }
-
-    public ObjectBinding<Class<?>> databaseTypeObjectProperty() {
-        return createObjectBinding(Column.super::findDatabaseType, databaseTypeProperty());
-    }
-
-    @Override
-    public Class<?> findDatabaseType() {
-        return databaseTypeObjectProperty().get();
     }
 
     @Override

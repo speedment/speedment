@@ -16,7 +16,6 @@
  */
 package com.speedment.tool.config.mutator.trait;
 
-
 import com.speedment.runtime.config.mutator.trait.HasOrderTypeMutator;
 import com.speedment.runtime.config.parameter.OrderType;
 import com.speedment.tool.config.trait.HasOrderTypeProperty;
@@ -28,8 +27,8 @@ import com.speedment.tool.config.trait.HasOrderTypeProperty;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-
-public interface HasOrderTypePropertyMutator<DOC extends HasOrderTypeProperty> extends HasOrderTypeMutator<DOC> {
+public interface HasOrderTypePropertyMutator<DOC extends HasOrderTypeProperty> 
+extends HasOrderTypeMutator<DOC> {
     
     @Override
     default void setOrderType(OrderType orderType) {
