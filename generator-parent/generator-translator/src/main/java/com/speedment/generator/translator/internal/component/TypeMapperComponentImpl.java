@@ -23,14 +23,28 @@ import com.speedment.generator.translator.exception.SpeedmentTranslatorException
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.bigdecimal.BigDecimalToDouble;
+import com.speedment.runtime.typemapper.doubles.DoubleToFloatMapper;
+import com.speedment.runtime.typemapper.doubles.PrimitiveDoubleToFloatMapper;
+import com.speedment.runtime.typemapper.integer.IntegerToByteMapper;
+import com.speedment.runtime.typemapper.integer.IntegerToShortMapper;
 import com.speedment.runtime.typemapper.integer.IntegerZeroOneToBooleanMapper;
+import com.speedment.runtime.typemapper.integer.PrimitiveIntegerToByteMapper;
+import com.speedment.runtime.typemapper.integer.PrimitiveIntegerToShortMapper;
+import com.speedment.runtime.typemapper.integer.PrimitiveIntegerZeroOneToBooleanMapper;
 import com.speedment.runtime.typemapper.largeobject.ClobToStringMapper;
+import com.speedment.runtime.typemapper.longs.LongToByteMapper;
+import com.speedment.runtime.typemapper.longs.LongToIntegerMapper;
+import com.speedment.runtime.typemapper.longs.LongToShortMapper;
+import com.speedment.runtime.typemapper.longs.PrimitiveLongToByteMapper;
+import com.speedment.runtime.typemapper.longs.PrimitiveLongToIntegerMapper;
+import com.speedment.runtime.typemapper.longs.PrimitiveLongToShortMapper;
 import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
+import com.speedment.runtime.typemapper.shorts.PrimitiveShortToByteMapper;
+import com.speedment.runtime.typemapper.shorts.ShortToByteMapper;
 import com.speedment.runtime.typemapper.string.StringToLocaleMapper;
 import com.speedment.runtime.typemapper.string.TrueFalseStringToBooleanMapper;
 import com.speedment.runtime.typemapper.string.YesNoStringToBooleanMapper;
 import com.speedment.runtime.typemapper.time.*;
-
 import java.math.BigDecimal;
 import java.sql.Clob;
 import java.sql.Date;
@@ -79,8 +93,29 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
         // Special Large object mappers
         install(Clob.class, ClobToStringMapper::new);
         
-        // Special integer mappers
+        // Special Long mappers
+        install(Long.class, LongToIntegerMapper::new);
+        install(Long.class, LongToShortMapper::new);
+        install(Long.class, LongToByteMapper::new);
+        install(Long.class, PrimitiveLongToIntegerMapper::new);
+        install(Long.class, PrimitiveLongToShortMapper::new);
+        install(Long.class, PrimitiveLongToByteMapper::new);
+        
+        // Special Integer mappers
         install(Integer.class, IntegerZeroOneToBooleanMapper::new);
+        install(Integer.class, IntegerToShortMapper::new);
+        install(Integer.class, IntegerToByteMapper::new);
+        install(Integer.class, PrimitiveIntegerZeroOneToBooleanMapper::new);
+        install(Integer.class, PrimitiveIntegerToShortMapper::new);
+        install(Integer.class, PrimitiveIntegerToByteMapper::new);
+        
+        // Special Short mappers
+        install(Short.class, ShortToByteMapper::new);
+        install(Short.class, PrimitiveShortToByteMapper::new);
+        
+        // Special Double mappers
+        install(Double.class, DoubleToFloatMapper::new);
+        install(Double.class, PrimitiveDoubleToFloatMapper::new);
         
         // Primitive mappers
         install(Byte.class,      PrimitiveTypeMapper<Byte>::new);
