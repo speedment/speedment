@@ -16,6 +16,8 @@
  */
 package com.speedment.generator.standard.manager;
 
+import static com.speedment.common.codegen.constant.DefaultType.isPrimitive;
+import static com.speedment.common.codegen.constant.DefaultType.wrapperFor;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.model.AnnotationUsage;
 import com.speedment.common.codegen.model.Class;
@@ -143,6 +145,7 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
                                 // Append the line for this helper to the method
                                 final String tmName = col.getTypeMapper().get();
                                 final TypeMapper<?, ?> tm = typeMapperComponent.get(col);
+                                final Type javaType = tm.getJavaType(col);
                                 
                                 final String tmsName = helperName(col);
                                 final Type tmsType = SimpleParameterizedType.create(
@@ -153,7 +156,9 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
                                             "database type for column '" + col + 
                                             "'."
                                         )),
-                                    tm.getJavaType(col)
+                                    isPrimitive(javaType) 
+                                        ? wrapperFor(javaType) 
+                                        : javaType
                                 );
                                 
                                 clazz.add(Field.of(tmsName, tmsType).private_());
