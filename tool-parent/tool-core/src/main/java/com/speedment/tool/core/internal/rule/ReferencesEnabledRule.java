@@ -24,12 +24,12 @@ import com.speedment.runtime.config.trait.HasColumn;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.util.DocumentDbUtil;
+import static com.speedment.runtime.config.util.DocumentDbUtil.isAllAncestorsEnabled;
 import com.speedment.runtime.config.util.DocumentUtil;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.tool.core.component.IssueComponent;
 import com.speedment.tool.core.rule.Issue;
 import com.speedment.tool.core.rule.Rule;
-
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -54,7 +54,7 @@ public final class ReferencesEnabledRule implements Rule {
         final Project project = projectComponent.getProject();
         
         DocumentDbUtil.traverseOver(project)
-            .filter(HasEnabled::test)
+            .filter(d -> isAllAncestorsEnabled(d))
             .forEach(doc -> check(doc, noIssues));
         
         return noIssues.get();
