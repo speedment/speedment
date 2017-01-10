@@ -25,10 +25,9 @@ import com.speedment.common.injector.test_b.B;
 import com.speedment.common.injector.test_b.C;
 import com.speedment.common.injector.test_c.ChildType;
 import com.speedment.common.injector.test_c.ParentType;
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import org.junit.Test;
 
 /**
  *
@@ -134,4 +133,34 @@ public class InjectorTest {
     private interface Foo {}
     private final static class Bar implements Foo {}
     private final static class Baz implements Foo {}
+    
+    @Test
+    public void testKeyWithoutOverwrite() {
+        final Injector injector;
+        
+        try {
+            injector = Injector.builder()
+                .put(Bar.class)
+                .put(Baz.class)
+                .put(FooNoOverwrite.class)
+                .build();
+        } catch (final NoDefaultConstructorException | InstantiationException ex) {
+            throw new RuntimeException(
+                "Failed to instantiate class.", ex
+            );
+        }
+        
+        assertNotNull("Make sure Foo has an implementation", injector.get(Foo.class).orElse(null));
+        assertNotNull("Make sure Bar had an implementation", injector.get(Bar.class).orElse(null));
+        assertNotNull("Make sure Baz had an implementation", injector.get(Baz.class).orElse(null));
+        assertNotNull("Make sure Baz had an implementation", injector.get(FooNoOverwrite.class).orElse(null));
+        
+        assertEquals("Make sure the default implementation is FooNoOverwrite.", FooNoOverwrite.class, injector.get(Foo.class).get().getClass());
+        assertEquals("Make sure FooNoOverwrite can be accessed directly.", FooNoOverwrite.class, injector.get(FooNoOverwrite.class).get().getClass());
+        assertEquals("Make sure the Bar can still be accessed", Bar.class, injector.get(Bar.class).get().getClass());
+        assertEquals("Make sure the Baz can still be accessed", Baz.class, injector.get(Baz.class).get().getClass());
+    }
+    
+    @InjectKey(value=Foo.class, overwrite=false)
+    private final static class FooNoOverwrite implements Foo {}
 }

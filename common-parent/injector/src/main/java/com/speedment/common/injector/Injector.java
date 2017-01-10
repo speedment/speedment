@@ -21,7 +21,6 @@ import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.internal.InjectorImpl;
-
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -39,6 +38,16 @@ import java.util.stream.Stream;
  * @see ExecuteBefore
  */
 public interface Injector {
+    
+    /**
+     * Returns a stream of all the instances associated with the specified class
+     * signature.
+     * 
+     * @param <T>   the class signature of the injectable type
+     * @param type  the expected type
+     * @return      the automatically resolved instances
+     */
+    <T> Stream<T> stream(Class<T> type);
 
     /**
      * Returns the instance associated with the specified class signature.
