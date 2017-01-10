@@ -30,5 +30,15 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface InjectKey {
+    
+    /**
+     * The key that this implementation should be associated with. The key is
+     * typically a public API interface while the implementing class can be an
+     * internal component. If multiple implementations share the same key, the
+     * most recently installed will be used in the typical case (unless the
+     * internal implementation is requested specifically).
+     * 
+     * @return  the injection key
+     */
     Class<?> value();
 }

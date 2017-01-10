@@ -17,17 +17,16 @@
 package com.speedment.common.injector.annotation;
 
 import com.speedment.common.injector.State;
-
 import java.lang.annotation.*;
 
 /**
- * Annotes that the method should be executed as part of the
- * platform initialization. The annoted method can only take 
- * parameters with the @{@link Inject}-annotation.
+ * Annotates that the method should be executed as part of the platform
+ * initialization. Method parameters may have the annotation {@link WithState}
+ * to indicate which state they must be in for this method to execute.
  * <p>
- * This method must be executed before this component can be
- * considered to be in the specified state.
- * 
+ * This method must be executed before this component can be considered to be in
+ * the specified state.
+ *
  * @author  Emil Forslund
  * @since   1.0.0
  * 
@@ -39,9 +38,9 @@ import java.lang.annotation.*;
 public @interface ExecuteBefore {
     
     /**
-     * The state before which this annoted method must be
-     * executed.
-     * 
+     * The state before which this annotated method must be in when executed by
+     * the injector.
+     *
      * @return  the state
      */
     State value();

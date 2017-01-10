@@ -19,7 +19,10 @@ package com.speedment.common.injector.annotation;
 import java.lang.annotation.*;
 
 /**
- *
+ * A configuration parameter that should be set automatically using
+ * dependency injection. Every config parameter has a {@link #name()} and a 
+ * {@link #value()}.
+ * 
  * @author  Emil Forslund
  * @since   1.0.0
  */

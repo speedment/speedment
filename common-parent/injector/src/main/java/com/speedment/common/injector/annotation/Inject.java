@@ -19,7 +19,7 @@ package com.speedment.common.injector.annotation;
 import java.lang.annotation.*;
 
 /**
- * Annotes a field that should be set automatically using dependency injection.
+ * Annotates a field that should be set automatically using dependency injection.
  * 
  * @author  Emil Forslund
  * @since   1.0.0

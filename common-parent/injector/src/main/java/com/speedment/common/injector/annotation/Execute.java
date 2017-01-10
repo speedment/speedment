@@ -19,10 +19,10 @@ package com.speedment.common.injector.annotation;
 import java.lang.annotation.*;
 
 /**
- * Annotes that the method should be executed as part of the
- * platform initialization. The annoted method can only take 
- * parameters with the @{@link Inject}-annotation.
- * 
+ * Annotates that the method should be executed as part of the platform
+ * initialization. Method parameters may have the annotation {@link WithState}
+ * to indicate which state they must be in for this method to execute.
+ *
  * @author  Emil Forslund
  * @since   1.0.0
  */
