@@ -80,4 +80,9 @@ implements Column,
     protected List<String> keyPathEndingWith(String key) {
         return concat(DocumentPropertyComponent.COLUMNS, key);
     }
+
+    @Override
+    public Column getMappedColumn() {
+        return this;
+    }
 }

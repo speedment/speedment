@@ -1,5 +1,6 @@
 package com.speedment.tool.config.trait;
 
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.trait.HasTypeMapper;
 import static com.speedment.runtime.config.trait.HasTypeMapper.DATABASE_TYPE;
 import static com.speedment.runtime.config.trait.HasTypeMapper.TYPE_MAPPER;
@@ -53,4 +54,5 @@ public interface HasTypeMapperProperty extends DocumentProperty, HasTypeMapper {
         );
     }
 
+    Column getMappedColumn();
 }
