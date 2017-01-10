@@ -48,7 +48,7 @@
         <mapstream.version>2.3.4</mapstream.version>
         <codegen.version>2.4.3-SNAPSHOT</codegen.version>
         <codegenxml.version>1.0.2-SNAPSHOT</codegenxml.version>
-        <injector.version>1.0.1</injector.version>
+        <injector.version>1.1.0-SNAPSHOT</injector.version>
         <rest.version>1.0.1</rest.version>
         <lazy.version>1.0.1</lazy.version>
         <mutablestream.version>1.0.0-SNAPSHOT</mutablestream.version>
