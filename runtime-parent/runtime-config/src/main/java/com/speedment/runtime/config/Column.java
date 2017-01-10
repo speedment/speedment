@@ -16,12 +16,17 @@
  */
 package com.speedment.runtime.config;
 
-
-import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.mutator.ColumnMutator;
 import com.speedment.runtime.config.mutator.DocumentMutator;
-import com.speedment.runtime.config.trait.*;
-import static com.speedment.runtime.config.util.DocumentUtil.newNoSuchElementExceptionFor;
+import com.speedment.runtime.config.trait.HasAlias;
+import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.runtime.config.trait.HasMainInterface;
+import com.speedment.runtime.config.trait.HasMutator;
+import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.trait.HasNullable;
+import com.speedment.runtime.config.trait.HasOrdinalPosition;
+import com.speedment.runtime.config.trait.HasParent;
+import com.speedment.runtime.config.trait.HasTypeMapper;
 import java.util.Optional;
 
 /**
@@ -31,7 +36,6 @@ import java.util.Optional;
  * @author  Emil Forslund
  * @since   2.0.0
  */
-
 public interface Column extends
         Document,
         HasParent<Table>,
@@ -40,14 +44,12 @@ public interface Column extends
         HasAlias,
         HasNullable,
         HasOrdinalPosition,
+        HasTypeMapper,
         HasMainInterface,
         HasMutator<ColumnMutator<? extends Column>> {
 
-    String
-        AUTO_INCREMENT    = "autoIncrement",
-        TYPE_MAPPER       = "typeMapper",
-        DATABASE_TYPE     = "databaseType",
-        ENUM_CONSTANTS    = "enumConstants";
+    String AUTO_INCREMENT = "autoIncrement",
+           ENUM_CONSTANTS = "enumConstants";
 
     /**
      * Returns whether or not this column will auto increment when new values
@@ -59,25 +61,6 @@ public interface Column extends
     default boolean isAutoIncrement() {
         return getAsBoolean(AUTO_INCREMENT).orElse(false);
     }
-    
-    /**
-     * Returns the name of the class that represents the database type.
-     *
-     * @return the database type class
-     */
-    default String getDatabaseType() {
-        return getAsString(DATABASE_TYPE).orElseThrow(newNoSuchElementExceptionFor(this, DATABASE_TYPE));
-    }
-    
-    /**
-     * Returns the name of the mapper class that will be used to generate a java
-     * representation of the database types.
-     *
-     * @return the mapper class
-     */
-    default Optional<String> getTypeMapper() {
-        return getAsString(TYPE_MAPPER);
-    }
 
     /**
      * Returns a comma separated string of the possible values that this column
@@ -88,21 +71,6 @@ public interface Column extends
      */
     default Optional<String> getEnumConstants() {
         return getAsString(ENUM_CONSTANTS);
-    }
-
-    /**
-     * Returns the class that represents the database type.
-     *
-     * @return the database type
-     */
-    default Class<?> findDatabaseType() {
-        final String name = getDatabaseType();
-
-        try {
-            return Class.forName(name);
-        } catch (final ClassNotFoundException ex) {
-            throw new SpeedmentConfigException("Could not find database type: '" + name + "'.", ex);
-        }
     }
 
     @Override
