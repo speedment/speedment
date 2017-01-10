@@ -23,6 +23,7 @@ import com.speedment.runtime.config.identifier.trait.HasColumnName;
 import com.speedment.runtime.config.identifier.trait.HasDbmsName;
 import com.speedment.runtime.config.identifier.trait.HasSchemaName;
 import com.speedment.runtime.config.identifier.trait.HasTableName;
+import com.speedment.runtime.config.trait.HasEnabled;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -194,6 +195,20 @@ public final class DocumentDbUtil {
                     .map(Optional::get)
                     .anyMatch(col -> isSame(column, col))
             );
+    }
+    
+    /**
+     * Returns {@code true} if the specified document and all its ancestors are 
+     * enabled. If at least one ancestor is not enabled, {@code false} is 
+     * returned.
+     * 
+     * @param document  the document to test
+     * @return          {@code true} if enabled, else {@code false}
+     */
+    public static boolean isAllAncestorsEnabled(Document document) {
+        return HasEnabled.test(document)
+            && document.ancestors()
+                .noneMatch(doc -> !HasEnabled.test(doc));
     }
     
     public static Optional<? extends Column> referencedColumnIfPresent(Project project, ColumnIdentifier<?> identifier) {
