@@ -18,33 +18,32 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
+import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.ColumnPropertyMutator;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.trait.*;
+import java.util.List;
+import java.util.Optional;
+import static javafx.beans.binding.Bindings.createObjectBinding;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
-
-import java.util.List;
-import java.util.Optional;
-
-import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
-import static javafx.beans.binding.Bindings.createObjectBinding;
 
 /**
  *
  * @author  Emil Forslund
  * @since   2.3.0
  */
-public final class ColumnProperty extends AbstractChildDocumentProperty<Table, ColumnProperty> implements
-    Column,
-    HasEnabledProperty,
-    HasExpandedProperty,
-    HasNameProperty,
-    HasAliasProperty,
-    HasNullableProperty,
-    HasOrdinalPositionProperty {
+public final class ColumnProperty 
+extends AbstractChildDocumentProperty<Table, ColumnProperty> 
+implements Column,
+        HasEnabledProperty,
+        HasExpandedProperty,
+        HasNameProperty,
+        HasAliasProperty,
+        HasNullableProperty,
+        HasOrdinalPositionProperty {
 
     public ColumnProperty(Table parent) {
         super(parent);

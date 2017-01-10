@@ -28,7 +28,6 @@ import com.speedment.tool.config.trait.*;
 import com.speedment.tool.propertyeditor.PropertyEditor;
 import com.speedment.tool.propertyeditor.component.PropertyEditorComponent;
 import com.speedment.tool.propertyeditor.editor.*;
-
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -38,7 +37,7 @@ import java.util.stream.Stream;
 /**
  *
  * @author Simon Jonasson
- * @since 3.0.0
+ * @since  3.0.0
  */
 public final class PropertyEditorComponentImpl implements PropertyEditorComponent {
     
