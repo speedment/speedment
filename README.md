@@ -15,8 +15,6 @@ the Speedment runtime allows the user to create scalable and efficient
 Java applications using **standard Java 8** streams without any
 specific query language or any new API. 
 
-Speedment abstracts away the details of the SQL database operations from 
-the user thus creating a productivity boosting separation of concerns. 
 This site covers the **Speedment Open Source** project available under the 
 [Apache 2 license](http://www.apache.org/licenses/LICENSE-2.0). The 
 enterprise product with support for commercial 
