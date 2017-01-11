@@ -8,9 +8,20 @@ Speedment is a Java Stream ORM
 
 <img src="https://raw.githubusercontent.com/speedment/speedment-resources/master/src/main/resources/wiki/frontpage/Forest.png" alt="Spire the Hare" title="Spire" align="right" width="480px" />
 
-Speedment accelerates your development speed and makes programming so easy and fun! When you use Speedment for database querying, you do not have to learn a new APIs or use complex ORMs. Everything is **standard Java 8** and works out of the box!
+Speedment is a Java Stream ORM toolkit and runtime. 
+The toolkit analyzes the metadata of an existing legacy SQL database 
+and creates a Java representation of the data model which together with 
+the Speedment runtime allows the user to create scalable and efficient 
+Java applications using **standard Java 8** streams without any
+specific query language or any new API. 
 
-This site covers the **Speedment Open Source** project available under the [Apache 2 license](http://www.apache.org/licenses/LICENSE-2.0). If you are interested in the enterprise product with support for commercial databases and in-memory acceleration, check out [www.speedment.com](http://speedment.com/)!
+Speedment abstracts away the details of the SQL database operations from 
+the user thus creating a productivity boosting separation of concerns. 
+This site covers the **Speedment Open Source** project available under the 
+[Apache 2 license](http://www.apache.org/licenses/LICENSE-2.0). The 
+enterprise product with support for commercial 
+databases and in-memory acceleration can be found at 
+[www.speedment.com](http://speedment.com/).
 
 Documentation
 -------------
