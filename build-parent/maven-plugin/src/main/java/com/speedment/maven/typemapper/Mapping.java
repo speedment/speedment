@@ -30,7 +30,7 @@ public final class Mapping {
     
     private String databaseType;
     private String implementation;
-
+    
     public String getDatabaseType() {
         return databaseType;
     }

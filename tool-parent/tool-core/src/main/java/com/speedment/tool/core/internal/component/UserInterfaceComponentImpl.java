@@ -666,7 +666,9 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
 
     @Override
     public void showNotification(String message, FontAwesomeIcon icon, Palette palette, Runnable action) {
-        notifications.add(new NotificationImpl(message, icon, palette, action));
+        runLater(() -> {
+            notifications.add(new NotificationImpl(message, icon, palette, action));
+        });
     }
     
     /*************************************************************/
