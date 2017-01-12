@@ -61,7 +61,7 @@ public class ProtectedNameRule implements Rule{
         "ResultSet",
         "String", "StringField", "StringFieldImpl", "SqlManager", "Stream", 
         "StringBuilder", "SQLException", "SpeedmentException", "StringJoiner", 
-        "Speedment", "Table", "TypeMapper", "Tuple", "Tuples"           
+        "Table", "TypeMapper", "Tuple", "Tuples"           
     };
     
     private final Pattern pattern;
