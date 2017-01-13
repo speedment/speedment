@@ -79,7 +79,7 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
         scopeTable = readSilent(rs, () -> rs.getString(20));
         sourceDataType = new IntHolder(rs, () -> rs.getInt(21));
         isAutoincrement = readSilent(rs, () -> rs.getString(22));
-        isGeneratedcolumn = readSilent(rs, () -> rs.getString(23));
+        isGeneratedcolumn = readSilent(rs, () -> rs.getString(23), false); // Somewhat non-standard
     }
 
     private static class IntHolder {
@@ -122,6 +122,10 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
     }
 
     private <T> T readSilent(ResultSet rs, SqlSupplier<T> supplier) {
+        return readSilent(rs, supplier, true);
+    }
+
+    private <T> T readSilent(ResultSet rs, SqlSupplier<T> supplier, boolean fullWarning) {
         try {
             final T result = supplier.get();
             if (rs.wasNull()) {
@@ -131,7 +135,11 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
             }
         } catch (SQLException sqle) {
             // ignore, just return null
-            LOGGER.warn(sqle, "Unable to read column metadata: " + sqle.getMessage());
+            if (fullWarning) {
+                LOGGER.warn(sqle, "Unable to read column metadata: " + sqle.getMessage());
+            } else {
+                LOGGER.info("Metadata not supported: " + sqle.getMessage());
+            }
         }
         return null;
     }
@@ -185,7 +193,6 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
 //    public Void getBufferLength() {
 //        return bufferLength;
 //    }
-
     @Override
     public int getDecimalDigits() {
         return decimalDigits.getValue();
@@ -245,7 +252,6 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
 //    public boolean isSqlDatetimeSubNull() {
 //        return sqlDatetimeSub.isNull();
 //    }
-
     @Override
     public int getCharOctetLength() {
         return charOctetLength.getValue();
