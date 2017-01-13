@@ -187,9 +187,8 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         }
     }
     
-    // synchronize to avoid asynchronous calls from logger
-    private synchronized void addToOutputMessages(Node node) {
-        outputMessages.add(node);
+    private void addToOutputMessages(Node node) {
+        runLater(() -> outputMessages.add(node));
     }
     
     /*************************************************************/
