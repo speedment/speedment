@@ -160,24 +160,24 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         
         LoggerManager.getFactory().addListener(ev -> {
             switch (ev.getLevel()) {
-                case DEBUG : case TRACE : case INFO : 
-                    outputMessages.add(OutputUtil.info(ev.getMessage()));
+                case DEBUG : case TRACE : case INFO : {
+                    addToOutputMessages(OutputUtil.info(ev.getMessage()));
                     break;
-                case WARN :
-                    outputMessages.add(OutputUtil.warning(ev.getMessage()));
+                }
+                case WARN : {
+                    addToOutputMessages(OutputUtil.warning(ev.getMessage()));
                     showNotification(ev.getMessage(), Palette.WARNING);
                     break;
-                case ERROR : case FATAL :
-                    outputMessages.add(OutputUtil.error(ev.getMessage()));
-                    
+                }
+                case ERROR : case FATAL : {
+                    addToOutputMessages(OutputUtil.error(ev.getMessage()));                   
                     // Hack to remove stack trace from message.
                     String msg = ev.getMessage();
                     if (msg.contains("\tat ")) {
                         msg = msg.substring(0, msg.indexOf("\tat "));
                     }
-                    
-                    showNotification(msg, Palette.ERROR);
                     break;
+                }
             }
         });
         
@@ -185,6 +185,11 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         if (loaded != null) {
             project.merge(documentPropertyComponent, loaded);
         }
+    }
+    
+    // synchronize to avoid asynchronous calls from logger
+    private synchronized void addToOutputMessages(Node node) {
+        outputMessages.add(node);
     }
     
     /*************************************************************/
