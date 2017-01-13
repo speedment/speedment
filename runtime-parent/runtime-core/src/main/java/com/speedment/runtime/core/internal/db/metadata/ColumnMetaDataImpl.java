@@ -20,7 +20,6 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.core.db.SqlSupplier;
 import com.speedment.runtime.core.db.metadata.ColumnMetaData;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -57,6 +56,7 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
     private final String isGeneratedcolumn;
 
     public ColumnMetaDataImpl(ResultSet rs) {
+        // These must be read in order for some databases (sic!)
         tableCat = readSilent(rs, () -> rs.getString(1));
         tableSchem = readSilent(rs, () -> rs.getString(2));
         tableName = readSilent(rs, () -> rs.getString(3));
