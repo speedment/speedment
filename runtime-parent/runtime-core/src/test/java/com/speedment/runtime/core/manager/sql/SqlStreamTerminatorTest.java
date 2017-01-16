@@ -31,17 +31,18 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.internal.IdentityTypeMapper;
 import java.util.function.Supplier;
+import java.util.stream.BaseStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
 import org.junit.Test;
 import static org.mockito.ArgumentMatchers.any;
-import org.mockito.Mockito;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class SqlStreamTerminatorTest {
+
     private static final long SQL_COUNT_RESULT = 100L;
     private static final String SELECT_SQL = "SELECT * FROM table";
     private static final String SELECT_COUNT_SQL = "SELECT COUNT(*) FROM table";
@@ -51,6 +52,7 @@ public class SqlStreamTerminatorTest {
     private String lastCountingSql;
 
     private static class MockEntity {
+
         private final int id;
 
         private MockEntity(int id) {
@@ -78,19 +80,26 @@ public class SqlStreamTerminatorTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void testCountFieldPredicateFilter() {
-        final TypeMapper typeMapper = new IdentityTypeMapper();
         @SuppressWarnings("unchecked")
-        final FieldPredicate<MockEntity> predicate = (FieldPredicate<MockEntity>) mock(FieldPredicate.class);
-        final Field field = mock(Field.class);
-        when(field.typeMapper()).thenReturn(typeMapper);
+        final TypeMapper<Integer, Integer> typeMapper = new IdentityTypeMapper<>();
+        @SuppressWarnings("unchecked")
+        final FieldPredicate<MockEntity> predicate = mock(FieldPredicate.class);
+        @SuppressWarnings("unchecked")
+        final Field<MockEntity> field = mock(Field.class);
+        when(field.typeMapper()).thenReturn((TypeMapper) typeMapper);
         when(predicate.getField()).thenReturn(field);
-        Action<Stream<MockEntity>, Stream<MockEntity>>  filterAction = new FilterAction<>(predicate);
+        Action<Stream<MockEntity>, Stream<MockEntity>> filterAction = new FilterAction<>(predicate);
         assertEquals(SQL_COUNT_RESULT, countStreamOf(filterAction));
         assertEquals(COUNT_WHERE_SQL, lastCountingSql);
     }
 
     private long countStreamOf(Action<?, ?> action) {
+
+        @SuppressWarnings("unchecked")
+        final AsynchronousQueryResult<MockEntity> asynchronousQueryResult = mock(AsynchronousQueryResult.class);
+
         SqlStreamTerminator<MockEntity> terminator = new SqlStreamTerminator<>(
             createDbmsType(),
             SELECT_SQL,
@@ -100,16 +109,18 @@ public class SqlStreamTerminatorTest {
                 return SQL_COUNT_RESULT;
             },
             f -> "",
-            /*Mockito.<AsynchronousQueryResult<MockEntity>>*/mock(AsynchronousQueryResult.class)
+            asynchronousQueryResult
         );
         return terminator.count(createPipeline(action));
     }
 
-    private ReferencePipeline<MockEntity> createPipeline(Action action) {
-        Supplier supplier = mock(Supplier.class);
-        Stream<MockEntity> stream = IntStream.range(0, 100).boxed().map(MockEntity::new);
+    private ReferencePipeline<MockEntity> createPipeline(Action<?, ?> action) {
+        @SuppressWarnings("unchecked")
+        final Supplier<Stream<MockEntity>> supplier = mock(Supplier.class);
+        final Stream<MockEntity> stream = IntStream.range(0, 100).boxed().map(MockEntity::new);
         when(supplier.get()).thenReturn(stream);
-        ReferencePipeline<MockEntity> pipeline = new PipelineImpl<>(supplier);
+        @SuppressWarnings("unchecked")
+        final ReferencePipeline<MockEntity> pipeline = new PipelineImpl<>((Supplier<BaseStream<?, ?>>) (Object) supplier);
         pipeline.add(action);
         return pipeline;
     }

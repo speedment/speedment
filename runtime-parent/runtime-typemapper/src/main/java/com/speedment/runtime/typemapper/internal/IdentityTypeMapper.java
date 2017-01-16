@@ -18,7 +18,6 @@ package com.speedment.runtime.typemapper.internal;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.typemapper.TypeMapper;
-
 import java.lang.reflect.Type;
 
 /**

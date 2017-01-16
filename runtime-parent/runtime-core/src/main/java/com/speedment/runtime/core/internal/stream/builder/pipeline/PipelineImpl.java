@@ -18,15 +18,13 @@ package com.speedment.runtime.core.internal.stream.builder.pipeline;
 
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
-
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.*;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  *
