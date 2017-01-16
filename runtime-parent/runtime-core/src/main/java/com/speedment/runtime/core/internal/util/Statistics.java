@@ -16,13 +16,14 @@
  */
 package com.speedment.runtime.core.internal.util;
 
+import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.util.analytics.AnalyticsUtil;
+import static com.speedment.runtime.core.internal.util.analytics.FocusPoint.*;
 import com.speedment.runtime.core.internal.util.testing.TestSettings;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -33,15 +34,11 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
-import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
-import static com.speedment.runtime.core.internal.util.analytics.FocusPoint.*;
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import java.util.List;
 import static java.util.Objects.requireNonNull;
+import java.util.concurrent.CompletableFuture;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -71,6 +68,16 @@ public final class Statistics {
     public static void onNodeStarted(InfoComponent infoComponent) {
         notifyEvent(infoComponent, "node-started");
         AnalyticsUtil.notify(APP_STARTED, infoComponent);
+    }
+
+    public static void onNodeAlive(InfoComponent infoComponent) {
+        notifyEvent(infoComponent, "node-alive");
+        AnalyticsUtil.notify(APP_ALIVE, infoComponent);
+    }
+
+    public static void onNodeStopped(InfoComponent infoComponent) {
+        notifyEvent(infoComponent, "node-stopped");
+        AnalyticsUtil.notify(APP_STOPPED, infoComponent);
     }
 
     private static void notifyEvent(InfoComponent infoComponent, final String event) {
@@ -106,11 +113,11 @@ public final class Statistics {
 
                 try {
                     final HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                    
+
                     con.connect();
                     con.getResponseCode(); // Might have side effects...
-                    con.getResponseMessage(); 
-                    
+                    con.getResponseMessage();
+
                     try (final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
                         final StringBuilder response = new StringBuilder();
                         String inputLine;
@@ -131,8 +138,8 @@ public final class Statistics {
         try {
             return new URL(PING_URL + "?"
                 + params.stream()
-                .map(Param::encode)
-                .collect(joining("&"))
+                    .map(Param::encode)
+                    .collect(joining("&"))
             );
         } catch (final MalformedURLException ex) {
             throw new RuntimeException("Could not parse statistics url.", ex);
@@ -142,7 +149,7 @@ public final class Statistics {
     private final static class Param {
 
         private static final String ENCODING = "UTF-8";
-        
+
         private final String key, value;
 
         public Param(final String key, final String value) {
@@ -165,6 +172,6 @@ public final class Statistics {
      * Utility classes should not be instantiated.
      */
     private Statistics() {
-        instanceNotAllowed(getClass());
+        throw new UnsupportedOperationException();
     }
 }

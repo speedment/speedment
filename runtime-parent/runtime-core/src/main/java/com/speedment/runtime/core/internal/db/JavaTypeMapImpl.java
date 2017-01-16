@@ -16,24 +16,22 @@
  */
 package com.speedment.runtime.core.internal.db;
 
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import com.speedment.runtime.core.db.JavaTypeMap;
 import com.speedment.runtime.core.db.metadata.ColumnMetaData;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.component.resultset.StandardJavaTypeMapping;
-
+import static com.speedment.runtime.core.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.*;
+import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
-
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static com.speedment.runtime.core.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
-import static java.util.Objects.requireNonNull;
 
 /**
  *

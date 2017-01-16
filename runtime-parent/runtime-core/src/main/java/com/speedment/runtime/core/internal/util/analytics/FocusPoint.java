@@ -18,26 +18,26 @@ package com.speedment.runtime.core.internal.util.analytics;
 
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.internal.util.EmailUtil;
-
+import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.joining;
-
 public enum FocusPoint {
-    
-    GUI_STARTED        ("GuiStarted"),
-    GUI_PROJECT_LOADED ("ProjectLoaded"),
-    APP_STARTED        ("AppStarted"),
-    GENERATE           ("Generate");
+
+    GUI_STARTED("GuiStarted"),
+    GUI_PROJECT_LOADED("ProjectLoaded"),
+    APP_STARTED("AppStarted"),
+    APP_ALIVE("AppAlive"),
+    APP_STOPPED("AppStopped"),
+    GENERATE("Generate");
 
     private static final String SEPARATOR = "/";
-    
+
     private final String eventName;
-    
+
     FocusPoint(String name) {
         this.eventName = name;
     }
-    
+
     public String getEventName() {
         return eventName;
     }

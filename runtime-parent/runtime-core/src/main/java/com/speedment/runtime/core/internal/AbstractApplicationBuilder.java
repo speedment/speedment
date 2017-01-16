@@ -107,12 +107,6 @@ public abstract class AbstractApplicationBuilder<
         this.skipValidateRuntimeConfig = false;
     }
 
-    private BUILDER self() {
-        @SuppressWarnings("unchecked")
-        final BUILDER builder = (BUILDER) this;
-        return builder;
-    }
-
     @Override
     public <C extends Document & HasEnabled> BUILDER with(Class<C> type, String name, BiConsumer<Injector, C> consumer) {
         requireNonNulls(type, name, consumer);
@@ -484,6 +478,12 @@ public abstract class AbstractApplicationBuilder<
 
     }
 
+    private BUILDER self() {
+        @SuppressWarnings("unchecked")
+        final BUILDER builder = (BUILDER) this;
+        return builder;
+    }
+    
     Optional<Boolean> isVersionOk(String versionString) {
         final Pattern pattern = Pattern.compile("(\\d+)[\\\\.](\\d+)[\\\\.](\\d+)_(\\d+)");
         final Matcher matcher = pattern.matcher(versionString);
