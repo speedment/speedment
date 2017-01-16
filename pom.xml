@@ -227,7 +227,7 @@
             
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.6.0</version>
                 
                 <configuration>
                     <compilerArgument>-Xlint:all</compilerArgument>
@@ -439,7 +439,7 @@
                         <!-- http://eclemma.org/jacoco/trunk/doc/maven.html -->
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.7.7.201606060606</version>
+                        <version>0.7.8</version>
                         
                         <executions>
                             <execution>
@@ -559,7 +559,7 @@
             <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>
                 <artifactId>selenium-java</artifactId>
-                <version>2.53.1</version>
+                <version>3.0.1</version>
                 <scope>test</scope>
             </dependency>
 
@@ -579,7 +579,7 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
-                <version>2.3.0</version>
+                <version>2.5.5</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
