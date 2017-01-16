@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.config.util;
 
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.internal.util.Trees;
@@ -75,10 +74,11 @@ public final class DocumentUtil {
      * @return first ancestor found or empty
      */
     public static <E extends Document> Optional<E> ancestor(
-        Document document,
-        Class<E> clazz) {
-
-        requireNonNulls(document, clazz);
+        final Document document,
+        final Class<E> clazz
+    ) {
+    requireNonNull(document);
+        requireNonNull(clazz);
         return document.ancestors()
             .filter(clazz::isInstance)
             .map(clazz::cast)
@@ -96,9 +96,12 @@ public final class DocumentUtil {
      */
     @SuppressWarnings("unchecked")
     public static <E extends Document> Stream<E> childrenOf(
-        Document document,
-        BiFunction<Document, Map<String, Object>, E> childConstructor) {
-
+        final Document document,
+        final BiFunction<Document, Map<String, Object>, E> childConstructor
+    ) {
+        requireNonNull(document);
+        requireNonNull(childConstructor);
+        
         return document.getData().values().stream()
             .filter(obj -> obj instanceof List<?>)
             .map(list -> (List<Object>) list)
@@ -119,6 +122,9 @@ public final class DocumentUtil {
      * @return the newly creating raw child map
      */
     public static Map<String, Object> newDocument(Document parent, String key) {
+        requireNonNull(parent);
+        requireNonNull(key);
+
         final List<Map<String, Object>> children = parent.get(key)
             .map(DocumentUtil::castToDocumentList)
             .orElseGet(() -> {
@@ -237,13 +243,16 @@ public final class DocumentUtil {
      *                    given by the parent Class
      */
     public static <T extends Document & HasName, D extends Document & HasName> String relativeName(
-        D document,
-        Class<T> from,
-        Name name,
-        CharSequence separator,
-        Function<String, String> nameMapper) {
-
-        requireNonNulls(document, from, nameMapper);
+        final D document,
+        final Class<T> from,
+        final Name name,
+        final CharSequence separator,
+        final Function<String, String> nameMapper
+    ) {
+    requireNonNull(document);
+        requireNonNull(from);
+        requireNonNull(nameMapper);
+        
         final StringJoiner sj = new StringJoiner(separator).setEmptyValue("");
         final List<HasAlias> ancestors = document.ancestors()
             .map(HasAlias::of)
