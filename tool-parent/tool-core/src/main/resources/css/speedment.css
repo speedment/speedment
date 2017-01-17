@@ -85,9 +85,10 @@
 
 .tree-view .gui-disabled,
 .tree-view .gui-disabled .tree-cell {
-    -fx-text-fill: -fx-speedment-gray;
+    -fx-text-fill: -fx-speedment-darkgray;
     -fx-font-weight: bold;
     -fx-font-style: italic;
+    /*-fx-strikethrough: true;*/
 }
 
 /*** List View ***/
@@ -148,7 +149,7 @@
 .text-area:disabled,
 .text-area:disabled > .content {
     -fx-text-fill: #000;
-    -fx-opacity: 0.5;
+    -fx-opacity: 0.75;
 }
 
 .text-input > .scroll-pane:disabled { /* JavaFX bug workaround */
