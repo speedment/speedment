@@ -32,31 +32,32 @@ import static com.speedment.common.injector.InjectBundle.of;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 
-
 /**
  *
- * @author  Per Minborg
- * @author  Emil Forslund
+ * @author Per Minborg
+ * @author Emil Forslund
  */
 public final class MySqlDbmsType extends AbstractDbmsType {
-    
+
     public static InjectBundle include() {
         return of(MySqlDbmsMetadataHandler.class, MySqlDbmsOperationHandler.class);
     }
-    
+
     private final static FieldPredicateView PREDICATE_VIEW = new MySqlSpeedmentPredicateView();
-    
+
     private final MySqlNamingConvention namingConvention;
     private final MySqlConnectionUrlGenerator connectionUrlGenerator;
-    
-    private @Inject MySqlDbmsMetadataHandler metadataHandler;
-    private @Inject MySqlDbmsOperationHandler operationHandler;
-    
+
+    private @Inject
+    MySqlDbmsMetadataHandler metadataHandler;
+    private @Inject
+    MySqlDbmsOperationHandler operationHandler;
+
     private MySqlDbmsType() {
-        namingConvention       = new MySqlNamingConvention();
+        namingConvention = new MySqlNamingConvention();
         connectionUrlGenerator = new MySqlConnectionUrlGenerator();
     }
-    
+
     @Override
     public String getName() {
         return "MySQL";
@@ -114,19 +115,18 @@ public final class MySqlDbmsType extends AbstractDbmsType {
 
     private final static class MySqlNamingConvention extends AbstractDatabaseNamingConvention {
 
-        private final static String 
-            ENCLOSER = "`",
+        private final static String ENCLOSER = "`",
             QUOTE = "'";
-        
-        private final static Set<String> EXCLUDE_SET = Stream.of( 
+
+        private final static Set<String> EXCLUDE_SET = Stream.of(
             "information_schema"
         ).collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
-        
+
         @Override
         public Set<String> getSchemaExcludeSet() {
             return EXCLUDE_SET;
         }
-        
+
         @Override
         protected String getFieldQuoteStart() {
             return QUOTE;
@@ -147,7 +147,7 @@ public final class MySqlDbmsType extends AbstractDbmsType {
             return ENCLOSER;
         }
     }
-    
+
     private final static class MySqlConnectionUrlGenerator implements ConnectionUrlGenerator {
 
         @Override
@@ -155,17 +155,19 @@ public final class MySqlDbmsType extends AbstractDbmsType {
             final StringBuilder result = new StringBuilder()
                 .append("jdbc:mysql://")
                 .append(dbms.getIpAddress().orElse(""));
-            
+
             dbms.getPort().ifPresent(p -> result.append(":").append(p));
             result.append(
-                "/?useUnicode=true" +
-                "&characterEncoding=UTF-8" +
-                "&useServerPrepStmts=true" +
-                "&useCursorFetch=true" +
-                "&zeroDateTimeBehavior=convertToNull"+
-                "&useSSL=false"
+                "/?useUnicode=true"
+                + "&characterEncoding=UTF-8"
+                + "&useServerPrepStmts=true"
+                /* + "&useCursorFetch=true" */ // Fix #190, Needs to be removed for 6.x drivers
+                + "&zeroDateTimeBehavior=convertToNull"
+                + "&useSSL=false"
+                + "&nullNamePatternMatchesAll=true" // Fix #190
+                + "&useLegacyDatetimeCode=true" // Fix #190
             );
-            
+
             return result.toString();
         }
     }
