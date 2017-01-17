@@ -47,8 +47,6 @@ import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler;
-import com.speedment.runtime.core.internal.db.AsynchronousQueryResultImpl;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.DatabaseUtil;
 import java.lang.reflect.Constructor;
@@ -77,8 +75,7 @@ import java.util.regex.Pattern;
 public abstract class AbstractApplicationBuilder<
         APP extends Speedment, BUILDER extends AbstractApplicationBuilder<APP, BUILDER>> implements ApplicationBuilder<APP, BUILDER> {
 
-    private final static Logger LOGGER = LoggerManager.getLogger(AbstractApplicationBuilder.class);
-    public static final String LOGGER_CONFIG_NAME = "#CONFIG";
+    private final static Logger LOGGER = LoggerManager.getLogger(LogType.APPLICATION_BUILDER.getLoggerName());
 
     private final List<Tuple3<Class<? extends Document>, String, BiConsumer<Injector, ? extends Document>>> withsNamed;
     private final List<Tuple2<Class<? extends Document>, BiConsumer<Injector, ? extends Document>>> withsAll;
@@ -272,33 +269,10 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public BUILDER withLogging(LogType logType) {
-        switch (logType) {
-            case STREAM: {
-                LoggerManager.getLogger(AsynchronousQueryResultImpl.LOGGER_SELECT_NAME).setLevel(Level.DEBUG);
-                break;
-            }
-            case PERSIST: {
-                LoggerManager.getLogger(AbstractDbmsOperationHandler.LOGGER_INSERT_NAME).setLevel(Level.DEBUG);
-                break;
-            }
-            case UPDATE: {
-                LoggerManager.getLogger(AbstractDbmsOperationHandler.LOGGER_UPDATE_NAME).setLevel(Level.DEBUG);
-                break;
-            }
-            case REMOVE: {
-                LoggerManager.getLogger(AbstractDbmsOperationHandler.LOGGER_DELETE_NAME).setLevel(Level.DEBUG);
-                break;
-            }
-            case APPLICATION_BUILDER: {
-                LoggerManager.getLogger(InjectorImpl.class).setLevel(Level.DEBUG);
-                LoggerManager.getLogger(LOGGER_CONFIG_NAME).setLevel(Level.DEBUG);
-                LOGGER.setLevel(Level.DEBUG);
-                break;
-            }
-            default: {
-                LOGGER.warn("The log type " + logType.name() + " is not supported.");
-            }
+    public BUILDER withLogging(HasLogglerName namer) {
+        LoggerManager.getLogger(namer.getLoggerName()).setLevel(Level.DEBUG);
+        if (LogType.APPLICATION_BUILDER.getLoggerName().equals(namer.getLoggerName())) {
+            LoggerManager.getLogger(InjectorImpl.class).setLevel(Level.DEBUG); // Special case becaues its in a common module
         }
         return self();
     }
@@ -440,7 +414,7 @@ public abstract class AbstractApplicationBuilder<
                 + ":: (v" + version + ") \n";
 
             LOGGER.info(speedmentMsg);
-        } 
+        }
         final String msg = title + " (" + info.getSubtitle()
             + ") version " + version
             + " by " + info.getVendor()
@@ -483,7 +457,7 @@ public abstract class AbstractApplicationBuilder<
         final BUILDER builder = (BUILDER) this;
         return builder;
     }
-    
+
     Optional<Boolean> isVersionOk(String versionString) {
         final Pattern pattern = Pattern.compile("(\\d+)[\\\\.](\\d+)[\\\\.](\\d+)_(\\d+)");
         final Matcher matcher = pattern.matcher(versionString);

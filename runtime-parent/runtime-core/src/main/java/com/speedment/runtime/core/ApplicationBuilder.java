@@ -26,7 +26,6 @@ import com.speedment.runtime.core.internal.DefaultApplicationBuilder;
 import com.speedment.runtime.core.internal.DefaultApplicationMetadata;
 import com.speedment.runtime.core.internal.EmptyApplicationMetadata;
 import com.speedment.runtime.core.manager.Manager;
-
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -40,11 +39,14 @@ import java.util.function.Consumer;
  * @since   3.0.0
  */
 public interface ApplicationBuilder<APP extends Speedment, BUILDER extends ApplicationBuilder<APP, BUILDER>> {
-    
+
+    interface HasLogglerName {
+        String getLoggerName();
+    }    
     /**
      * The type of logging to change the settings for.
      */
-    enum LogType {
+    enum LogType implements HasLogglerName {
         
         /**
          * Logging related to querying the data source.
@@ -54,7 +56,7 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
         /**
          * Logging related to persisting new entities into the data source.
          */
-        PERSIST, 
+        PERSIST,
         
         /**
          * Logging related to updating existing entities in the data source.
@@ -70,7 +72,19 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
          * Logging related to configurating the application platform, dependency 
          * injection, component configuration etc.
          */
-        APPLICATION_BUILDER
+        APPLICATION_BUILDER;
+
+        private final String loggerName;
+
+        private LogType() {
+            this.loggerName = "#"+name();
+        }
+
+        @Override
+        public String getLoggerName() {
+            return loggerName;
+        }
+
     }
 
     /**
@@ -380,10 +394,10 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
     /**
      * Adds a logging configuration to the application.
      *
-     * @param logType  to turn on
+     * @param namer    logger with the namer to turn on
      * @return         this instance
      */
-    BUILDER withLogging(LogType logType);
+    BUILDER withLogging(HasLogglerName namer);
 
     /**
      * Builds this application. This is expected to be the last method called on

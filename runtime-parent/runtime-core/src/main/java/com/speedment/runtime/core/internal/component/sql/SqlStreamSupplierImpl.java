@@ -16,6 +16,9 @@
  */
 package com.speedment.runtime.core.internal.component.sql;
 
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
@@ -23,6 +26,8 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.config.util.DocumentDbUtil;
+import static com.speedment.runtime.config.util.DocumentDbUtil.isSame;
+import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
@@ -39,25 +44,18 @@ import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.core.util.DatabaseUtil;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.trait.HasComparableOperators;
-
 import java.sql.ResultSet;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import static java.util.function.Function.identity;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
-import java.util.stream.Stream;
-
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import com.speedment.common.logger.Logger;
-import com.speedment.common.logger.LoggerManager;
-import static com.speedment.runtime.config.util.DocumentDbUtil.isSame;
-import static com.speedment.runtime.core.internal.db.AsynchronousQueryResultImpl.LOGGER_SELECT_NAME;
-import java.util.List;
-import static java.util.Objects.requireNonNull;
-import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
+import java.util.stream.Stream;
 
 /**
  * Default implementation of the {@link SqlStreamSupplier}-interface.
@@ -67,7 +65,7 @@ import static java.util.stream.Collectors.toMap;
  */
 final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
 
-    private static final Logger LOGGER_SELECT = LoggerManager.getLogger(LOGGER_SELECT_NAME); // Hold an extra reference to this logger
+    private static final Logger LOGGER_SELECT = LoggerManager.getLogger(ApplicationBuilder.LogType.STREAM.getLoggerName()); // Hold an extra reference to this logger
 
     private final SqlFunction<ResultSet, ENTITY> entityMapper;
     private final Dbms dbms;

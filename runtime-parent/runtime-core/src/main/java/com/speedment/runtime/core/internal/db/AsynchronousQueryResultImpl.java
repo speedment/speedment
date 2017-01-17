@@ -18,6 +18,7 @@ package com.speedment.runtime.core.internal.db;
 
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
+import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.exception.SpeedmentException;
@@ -40,8 +41,7 @@ import java.util.stream.Stream;
 public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryResult<T> {
 
     private static final Logger LOGGER = LoggerManager.getLogger(AsynchronousQueryResultImpl.class);
-    public static final String LOGGER_SELECT_NAME = "#SELECT";
-    private static final Logger LOGGER_SELECT = LoggerManager.getLogger(LOGGER_SELECT_NAME);
+    private static final Logger LOGGER_STREAN = LoggerManager.getLogger(ApplicationBuilder.LogType.STREAM.getLoggerName());
 
     private String sql;
     private List<?> values;
@@ -76,7 +76,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
     public Stream<T> stream() {
         setState(State.ESTABLISH);
         try {
-            LOGGER_SELECT.debug("%s, values:%s", getSql(), getValues());
+            LOGGER_STREAN.debug("%s, values:%s", getSql(), getValues());
             connection = connectionSupplier.get();
             connection.setAutoCommit(false);
             ps = connection.prepareStatement(getSql());

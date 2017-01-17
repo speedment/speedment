@@ -41,6 +41,7 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import com.speedment.runtime.core.ApplicationBuilder.LogType;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
@@ -53,12 +54,12 @@ import static java.util.Objects.requireNonNull;
 public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandler {
 
     private static final Logger LOGGER = LoggerManager.getLogger(AbstractDbmsOperationHandler.class);
-    public static final String LOGGER_INSERT_NAME = "#INSERT";
-    public static final String LOGGER_UPDATE_NAME = "#UPDATE";
-    public static final String LOGGER_DELETE_NAME = "#DELETE";
-    protected static final Logger LOGGER_INSERT = LoggerManager.getLogger(LOGGER_INSERT_NAME);
-    protected static final Logger LOGGER_UPDATE = LoggerManager.getLogger(LOGGER_UPDATE_NAME);
-    protected static final Logger LOGGER_DELETE = LoggerManager.getLogger(LOGGER_DELETE_NAME);
+//    public static final String LOGGER_INSERT_NAME = "#INSERT";
+//    public static final String LOGGER_UPDATE_NAME = "#UPDATE";
+//    public static final String LOGGER_DELETE_NAME = "#DELETE";
+    protected static final Logger LOGGER_PERSIST = LoggerManager.getLogger(LogType.PERSIST.getLoggerName());
+    protected static final Logger LOGGER_UPDATE = LoggerManager.getLogger(LogType.UPDATE.getLoggerName());
+    protected static final Logger LOGGER_REMOVE = LoggerManager.getLogger(LogType.REMOVE.getLoggerName());
 
     public static final boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
 
@@ -118,7 +119,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
     @Override
     public <ENTITY> void executeInsert(Dbms dbms, String sql, List<?> values, Collection<Field<ENTITY>> generatedKeyFields, Consumer<List<Long>> generatedKeyConsumer) throws SQLException {
-        logOperation(LOGGER_INSERT, sql, values);
+        logOperation(LOGGER_PERSIST, sql, values);
         final SqlInsertStatement<ENTITY> sqlUpdateStatement = new SqlInsertStatement<>(sql, values, generatedKeyFields, generatedKeyConsumer);
         execute(dbms, singletonList(sqlUpdateStatement));
     }
@@ -132,7 +133,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
     @Override
     public void executeDelete(Dbms dbms, String sql, List<?> values) throws SQLException {
-        logOperation(LOGGER_DELETE, sql, values);
+        logOperation(LOGGER_REMOVE, sql, values);
         final SqlDeleteStatement sqlDeleteStatement = new SqlDeleteStatement(sql, values);
         execute(dbms, singletonList(sqlDeleteStatement));
     }
