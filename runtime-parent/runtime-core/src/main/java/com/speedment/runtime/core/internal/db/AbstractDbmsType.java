@@ -16,9 +16,7 @@
  */
 package com.speedment.runtime.core.internal.db;
 
-import com.speedment.common.injector.Injector;
 import static com.speedment.common.injector.State.CREATED;
-import static com.speedment.common.injector.State.INITIALIZED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
@@ -35,15 +33,15 @@ import java.util.function.Predicate;
 
 /**
  *
- * @author  Emil Forslund
- * @since   3.0.0
+ * @author Emil Forslund
+ * @since 3.0.0
  */
 public abstract class AbstractDbmsType implements DbmsType {
 
     private static final DbmsColumnHandler DEFAULT_COLUMN_HANDLER = new DbmsColumnHandler() {
         @Override
         public Predicate<Column> excludedInInsertStatement() {
-            return c -> false;
+            return Column::isAutoIncrement;
         }
     };
     
@@ -53,7 +51,7 @@ public abstract class AbstractDbmsType implements DbmsType {
     void install(@WithState(CREATED) DbmsHandlerComponent component) {
         component.install(this);
     }
-    
+
     @Override
     public String getResultSetTableSchema() {
         return "TABLE_SCHEM";
