@@ -16,7 +16,11 @@
  */
 package com.speedment.runtime.core.internal.db;
 
+import com.speedment.common.injector.Injector;
+import static com.speedment.common.injector.State.CREATED;
+import static com.speedment.common.injector.State.INITIALIZED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
@@ -24,14 +28,10 @@ import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsColumnHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
-
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
-
-import static com.speedment.common.injector.State.CREATED;
-import static com.speedment.common.injector.State.INITIALIZED;
 
 /**
  *
@@ -46,6 +46,8 @@ public abstract class AbstractDbmsType implements DbmsType {
             return c -> false;
         }
     };
+    
+    private @Inject Injector injector;
 
     @ExecuteBefore(INITIALIZED)
     void install(@WithState(CREATED) DbmsHandlerComponent component) {
@@ -68,7 +70,7 @@ public abstract class AbstractDbmsType implements DbmsType {
             Class.forName(
                 getDriverName(),
                 false,
-                AbstractDbmsType.class.getClassLoader()
+                injector.classLoader()
             );
 
             return true;

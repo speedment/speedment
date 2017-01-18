@@ -129,7 +129,10 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
     }
 
     @Override
-    public void install(Class<?> databaseType, Supplier<TypeMapper<?, ?>> typeMapperConstructor) {
+    public void install(
+            Class<?> databaseType, 
+            Supplier<TypeMapper<?, ?>> typeMapperConstructor) {
+        
         mappers.computeIfAbsent(
             databaseType.getName(), 
             n -> new LinkedList<>()
@@ -138,7 +141,10 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
 
     @Override
     public final Stream<TypeMapper<?, ?>> mapFrom(Class<?> databaseType) {
-        return mappers.getOrDefault(databaseType.getName(), Collections.emptyList())
+        return mappers.getOrDefault(
+                databaseType.getName(), 
+                Collections.emptyList()
+            )
             .stream()
             .map(Supplier::get)
             .map(injector::inject);
@@ -166,17 +172,25 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
                 try {
                     @SuppressWarnings("unchecked")
                     final TypeMapper<Object, Object> mapper = 
-                        (TypeMapper<Object, Object>) Class.forName(name).newInstance();
+                        (TypeMapper<Object, Object>) injector.classLoader()
+                            .loadClass(name).newInstance();
                     return mapper;
-                } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
-                    throw new SpeedmentTranslatorException("Could not instantiate TypeMapper: '" + name + "'.", ex);
+                } catch (final ClassNotFoundException 
+                             | IllegalAccessException 
+                             | InstantiationException ex) {
+                    
+                    throw new SpeedmentTranslatorException(
+                        "Could not instantiate TypeMapper: '" + name + "'.", ex
+                    );
                 }
             }).orElseGet(TypeMapper::identity)
         );
     }
 
     @Override
-    public <DB_TYPE, JAVA_TYPE> Optional<Class<DB_TYPE>> findDatabaseTypeOf(TypeMapper<DB_TYPE, JAVA_TYPE> typeMapper) {
+    public <DB_TYPE, JAVA_TYPE> Optional<Class<DB_TYPE>> findDatabaseTypeOf(
+            TypeMapper<DB_TYPE, JAVA_TYPE> typeMapper) {
+        
         final Class<?> needle = typeMapper.getClass();
         return mappers.entrySet().stream()
             .filter(e -> e.getValue().stream()
@@ -189,7 +203,9 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
             .map(key -> {
                 try {
                     @SuppressWarnings("unchecked")
-                    final Class<DB_TYPE> result = (Class<DB_TYPE>) Class.forName(key);
+                    final Class<DB_TYPE> result = (Class<DB_TYPE>) 
+                        injector.classLoader().loadClass(key);
+                    
                     return result;
                 } catch (final ClassNotFoundException ex) {
                     throw new SpeedmentTranslatorException(

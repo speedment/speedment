@@ -359,16 +359,24 @@ public abstract class AbstractApplicationBuilder<
 
         project.dbmses().forEach(d -> {
             final String typeName = d.getTypeName();
-            final Optional<DbmsType> oDbmsType = injector.getOrThrow(DbmsHandlerComponent.class).findByName(typeName);
+            final Optional<DbmsType> oDbmsType = injector.getOrThrow(
+                DbmsHandlerComponent.class).findByName(typeName);
+            
             if (!oDbmsType.isPresent()) {
-                throw new SpeedmentException("The database type " + typeName + " is not registered with the " + DbmsHandlerComponent.class.getSimpleName());
+                throw new SpeedmentException("The database type " + typeName + 
+                    " is not registered with the " + 
+                    DbmsHandlerComponent.class.getSimpleName());
             }
             final String driverName = oDbmsType.get().getDriverName();
             try {
-                // Make sure the driver is loaded. This is a must for some JavaEE servers.
-                Class.forName(driverName);
-            } catch (ClassNotFoundException cnfe) {
-                LOGGER.error(cnfe, "The database driver class " + driverName + " is not available. Make sure to include it in your class path (e.g. in the POM file)");
+                // Make sure the driver is loaded. This is a must for some 
+                // JavaEE servers.
+                injector.classLoader().loadClass(driverName);
+            } catch (final ClassNotFoundException cnfe) {
+                LOGGER.error(cnfe, "The database driver class " + driverName + 
+                    " is not available. Make sure to include it in your " + 
+                    "class path (e.g. in the POM file)"
+                );
             }
         });
 
@@ -385,8 +393,10 @@ public abstract class AbstractApplicationBuilder<
 
             try {
                 LOGGER.info(handler.getDbmsInfoString(dbms));
-            } catch (SQLException sqle) {
-                throw new SpeedmentException("Unable to establish initial connection with the database named " + dbms.getName() + ".", sqle);
+            } catch (final SQLException sqle) {
+                throw new SpeedmentException("Unable to establish initial " + 
+                    "connection with the database named " + 
+                    dbms.getName() + ".", sqle);
             }
         });
     }
@@ -441,10 +451,13 @@ public abstract class AbstractApplicationBuilder<
             final Optional<Boolean> isVersionOk = isVersionOk(versionString);
             if (isVersionOk.isPresent()) {
                 if (!isVersionOk.get()) {
-                    LOGGER.warn("The current Java version (" + versionString + ") is outdated. Please upgrade to a more recent Java version.");
+                    LOGGER.warn("The current Java version (" + versionString + 
+                        ") is outdated. Please upgrade to a more recent " + 
+                        "Java version.");
                 }
             } else {
-                LOGGER.warn("Unable to fully parse the java version. Version check skipped!");
+                LOGGER.warn("Unable to fully parse the java version. " + 
+                    "Version check skipped!");
             }
         } catch (final Exception ex) {
             LOGGER.info("Unknown Java version.");
@@ -500,7 +513,11 @@ public abstract class AbstractApplicationBuilder<
         }
     }
 
-    private static <T> void withInjectable(Injector.Builder injector, Class<T> injectableImplType, Function<T, Class<?>> keyExtractor) {
+    private static <T> void withInjectable(
+            Injector.Builder injector, 
+            Class<T> injectableImplType, 
+            Function<T, Class<?>> keyExtractor) {
+        
         requireNonNull(injectableImplType);
 
         final T injectable;
@@ -508,7 +525,10 @@ public abstract class AbstractApplicationBuilder<
             final Constructor<T> constructor = injectableImplType.getDeclaredConstructor();
             constructor.setAccessible(true);
             injectable = constructor.newInstance();
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException ex) {
+        } catch (final InstantiationException 
+                     | IllegalAccessException 
+                     | NoSuchMethodException 
+                     | InvocationTargetException ex) {
 
             throw new SpeedmentException(ex);
         }

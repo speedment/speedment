@@ -68,15 +68,18 @@ public final class InjectorImpl implements Injector {
     private final static State[] STATES = State.values();
     private final Set<Class<?>> injectables;
     private final List<Object> instances;
+    private final ClassLoader classLoader;
     private final Injector.Builder builder;
 
     private InjectorImpl(
             Set<Class<?>> injectables, 
-            List<Object> instances, 
+            List<Object> instances,
+            ClassLoader classLoader,
             Injector.Builder builder) {
         
         this.injectables = requireNonNull(injectables);
         this.instances   = requireNonNull(instances);
+        this.classLoader = requireNonNull(classLoader);
         this.builder     = requireNonNull(builder);
     }
 
@@ -104,6 +107,11 @@ public final class InjectorImpl implements Injector {
     public <T> T inject(T instance) {
         injectFields(instance);
         return instance;
+    }
+
+    @Override
+    public ClassLoader classLoader() {
+        return classLoader;
     }
 
     @Override
@@ -297,17 +305,27 @@ public final class InjectorImpl implements Injector {
 
     private final static class Builder implements Injector.Builder {
 
+        private final ClassLoader classLoader;
         private final Map<String, List<Class<?>>> injectables;
         private final Map<String, String> overriddenParams;
         private Path configFileLocation;
 
         private Builder() {
-            this(Collections.emptySet());
+            this(ClassLoader.getSystemClassLoader(), Collections.emptySet());
+        }
+        
+        private Builder(ClassLoader classLoader) {
+            this(classLoader, Collections.emptySet());
+        }
+        
+        private Builder(Set<Class<?>> injectables) {
+            this(ClassLoader.getSystemClassLoader(), injectables);
         }
 
-        private Builder(Set<Class<?>> injectables) {
+        private Builder(ClassLoader classLoader, Set<Class<?>> injectables) {
             requireNonNull(injectables);
             
+            this.classLoader        = requireNonNull(classLoader);
             this.injectables        = new LinkedHashMap<>();
             this.overriddenParams   = new HashMap<>();
             this.configFileLocation = Paths.get("settings.properties");
@@ -442,6 +460,7 @@ public final class InjectorImpl implements Injector {
             final Injector injector = new InjectorImpl(
                 injectablesSet,
                 unmodifiableList(instances),
+                classLoader,
                 this
             );
 

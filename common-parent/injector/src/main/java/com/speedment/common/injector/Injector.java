@@ -100,6 +100,13 @@ public interface Injector {
     void stop();
     
     /**
+     * Returns the {@code ClassLoader} used by the injector.
+     * 
+     * @return  the class loader in use
+     */
+    ClassLoader classLoader();
+    
+    /**
      * Returns a new Injector builder based on the classes installed into
      * this one.
      * 
@@ -108,12 +115,23 @@ public interface Injector {
     Builder newBuilder();
     
     /**
-     * Returns a new builder for the {@link Injector} interface that uses the default
-     * implementation.
+     * Returns a new builder for the {@link Injector} interface that uses the
+     * default implementation.
      * 
      * @return  the builder
      */
     static Builder builder() {
+        return InjectorImpl.builder();
+    }
+    
+    /**
+     * Returns a new builder for the {@link Injector} interface that uses the 
+     * default implementation.
+     * 
+     * @param classLoader  the class loader to use
+     * @return             the builder
+     */
+    static Builder builder(ClassLoader classLoader) {
         return InjectorImpl.builder();
     }
     
@@ -123,62 +141,65 @@ public interface Injector {
     interface Builder {
         
         /**
-         * Appends a class that can be automatically dependency 
-         * injected into other classes to the builder. Classes can be appended in 
-         * any order. The final injection order will be determined once the 
+         * Appends a class that can be automatically dependency injected into
+         * other classes to the builder. Classes can be appended in any order.
+         * The final injection order will be determined once the
          * {@link #build()}-method is called.
          * <p>
-         * If a class has already been passed as injectable with the same InjectorKey,
-         * the previous one will be replaced by this new one. The old one will
-         * never be instantiated.
+         * If a class has already been passed as injectable with the same
+         * InjectorKey, the previous one will be replaced by this new one. The
+         * old one will never be instantiated.
          * <p>
          * This method will not replace any previous injectables.
-         * 
-         * @param injectableType  the type that should be injectable
-         * @return                a reference to this builder
-         * 
-         * @throws NoDefaultConstructorException  if the specified type does not 
-         *                                        have a default constructor.
+         *
+         * @param injectableType the type that should be injectable
+         * @return a reference to this builder
+         *
+         * @throws NoDefaultConstructorException if the specified type does not
+         * have a default constructor.
          */
-        Builder put(Class<?> injectableType) throws NoDefaultConstructorException;
+        Builder put(Class<?> injectableType) 
+        throws NoDefaultConstructorException;
 
         /**
-         * Appends a class that can be automatically dependency 
-         * injected into other classes to the builder. Classes can be appended in 
-         * any order. The final injection order will be determined once the 
+         * Appends a class that can be automatically dependency injected into
+         * other classes to the builder. Classes can be appended in any order.
+         * The final injection order will be determined once the
          * {@link #build()}-method is called.
          * <p>
          * If a class has already been passed as injectable with the same key,
          * the previous one will be replaced by this new one. The old one will
          * never be instantiated.
-         * 
-         * @param key             the key to check uniqueness with
-         * @param injectableType  the type that should be injectable
-         * @return                a reference to this builder
-         * 
-         * @throws NoDefaultConstructorException  if the specified type does not 
-         *                                        have a default constructor.
+         *
+         * @param key the key to check uniqueness with
+         * @param injectableType the type that should be injectable
+         * @return a reference to this builder
+         *
+         * @throws NoDefaultConstructorException if the specified type does not
+         * have a default constructor.
          */
-        Builder put(String key, Class<?> injectableType) throws NoDefaultConstructorException;
-        
-        
-         /**
-         * Puts one or multiple classes contained in an InjectBundle that can 
-         * be automatically dependency injected into other classes to the builder. 
-         * Classes can be appended in any order. The final injection order will 
+        Builder put(String key, Class<?> injectableType) 
+        throws NoDefaultConstructorException;
+
+        /**
+         * Puts one or multiple classes contained in an InjectBundle that can be
+         * automatically dependency injected into other classes to the builder.
+         * Classes can be appended in any order. The final injection order will
          * be determined once the {@link #build()}-method is called.
          * <p>
-         * If an injectable class has already been passed as injectable with the same key,
-         * the previous one will be replaced by this new one. The old one will
-         * never be instantiated.
-         * 
-         * @param bundleClass     containing the injectable classes that shall be appended
-         * @return                a reference to this builder
-         * 
-         * @throws NoDefaultConstructorException  if the specified type does not 
-         *                                        have a default constructor.
+         * If an injectable class has already been passed as injectable with the
+         * same key, the previous one will be replaced by this new one. The old
+         * one will never be instantiated.
+         *
+         * @param bundleClass containing the injectable classes that shall be
+         * appended
+         * @return a reference to this builder
+         *
+         * @throws NoDefaultConstructorException if the specified type does not
+         * have a default constructor.
          */
-        Builder putInBundle(Class<? extends InjectBundle> bundleClass) throws NoDefaultConstructorException;        
+        Builder putInBundle(Class<? extends InjectBundle> bundleClass) 
+        throws NoDefaultConstructorException;        
         
         /**
          * Overrides a particular configuration parameter in the config file
