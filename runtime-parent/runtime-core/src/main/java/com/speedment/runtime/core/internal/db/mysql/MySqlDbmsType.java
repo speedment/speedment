@@ -118,7 +118,7 @@ public final class MySqlDbmsType extends AbstractDbmsType {
         return new DbmsColumnHandler() { 
             @Override 
             public Predicate<Column> excludedInInsertStatement() { 
-                return c -> true; // For MySQL, even autoincrement fields are added to insert statements 
+                return c -> false; // For MySQL, even autoincrement fields are added to insert statements 
             } 
         }; 
     } 
