@@ -17,24 +17,22 @@
 package com.speedment.runtime.config.internal.identifier;
 
 import com.speedment.runtime.config.identifier.SchemaIdentifier;
-import com.speedment.runtime.config.identifier.TableIdentifier;
 import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author Per Minborg
- * @param <ENTITY> the entity type
+ * @param <ENTITY>  the entity type
  */
-public final class TableIdentifierImpl<ENTITY> implements TableIdentifier<ENTITY> {
+public final class SchemaIdentifierImpl<ENTITY> implements SchemaIdentifier<ENTITY> {
 
-    private final String dbmsName, schemaName, tableName;
+    private final String dbmsName, schemaName;
     private final int hashCode;
 
-    public TableIdentifierImpl(String dbmsName, String schemaName, String tableName) {
+    public SchemaIdentifierImpl(String dbmsName, String schemaName) {
         this.dbmsName = requireNonNull(dbmsName);
         this.schemaName = requireNonNull(schemaName);
-        this.tableName = requireNonNull(tableName);
         this.hashCode = privateHashCode();
     }
 
@@ -49,11 +47,6 @@ public final class TableIdentifierImpl<ENTITY> implements TableIdentifier<ENTITY
     }
 
     @Override
-    public String getTableName() {
-        return tableName;
-    }
-
-    @Override
     public int hashCode() {
         return hashCode;
     }
@@ -63,11 +56,11 @@ public final class TableIdentifierImpl<ENTITY> implements TableIdentifier<ENTITY
         if (this == obj) {
             return true;
         }
-        if (obj instanceof TableIdentifier) {
-            final TableIdentifier<?> that = (TableIdentifier<?>) obj;
-            return Objects.equals(dbmsName, that.getDbmsName())
-                && Objects.equals(schemaName, that.getSchemaName())
-                && Objects.equals(tableName, that.getTableName());
+        if (obj instanceof SchemaIdentifier) {
+            final SchemaIdentifier<?> that = (SchemaIdentifier<?>) obj;
+            return 
+                Objects.equals(dbmsName, that.getDbmsName()) &&
+                Objects.equals(schemaName, that.getSchemaName());
         }
         return false;
     }
@@ -76,12 +69,11 @@ public final class TableIdentifierImpl<ENTITY> implements TableIdentifier<ENTITY
         int hash = 5;
         hash = 53 * hash + Objects.hashCode(dbmsName);
         hash = 53 * hash + Objects.hashCode(schemaName);
-        hash = 53 * hash + Objects.hashCode(tableName);
         return hash;
     }
 
     @Override
     public String toString() {
-        return dbmsName + "." + schemaName + "." + tableName;
+        return dbmsName + "." + schemaName;
     }
 }
