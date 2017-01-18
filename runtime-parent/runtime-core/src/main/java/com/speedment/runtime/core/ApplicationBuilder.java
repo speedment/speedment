@@ -20,7 +20,15 @@ import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;
+import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.identifier.trait.HasColumnName;
+import com.speedment.runtime.config.identifier.trait.HasDbmsName;
+import com.speedment.runtime.config.identifier.trait.HasSchemaName;
+import com.speedment.runtime.config.identifier.trait.HasTableName;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.internal.DefaultApplicationBuilder;
 import com.speedment.runtime.core.internal.DefaultApplicationMetadata;
@@ -40,53 +48,145 @@ import java.util.function.Consumer;
  */
 public interface ApplicationBuilder<APP extends Speedment, BUILDER extends ApplicationBuilder<APP, BUILDER>> {
 
-    interface HasLogglerName {
-        String getLoggerName();
-    }    
-    /**
-     * The type of logging to change the settings for.
+
+     /**
+     * Configures a parameter for the identified dbms. The consumer will then
+     * be applied after the configuration has been read and after the System
+     * properties have been applied.
+     *
+     * @param <ENTITY>   entity type
+     * @param <I>        the identifier type
+     * @param id         of the dbms
+     * @param consumer   the consumer to apply
+     * @return           this instance
      */
-    enum LogType implements HasLogglerName {
-        
-        /**
-         * Logging related to querying the data source.
-         */
-        STREAM, 
-        
-        /**
-         * Logging related to persisting new entities into the data source.
-         */
-        PERSIST,
-        
-        /**
-         * Logging related to updating existing entities in the data source.
-         */
-        UPDATE, 
-        
-        /**
-         * Logging related to removing entities from the data source.
-         */
-        REMOVE, 
-        
-        /**
-         * Logging related to configurating the application platform, dependency 
-         * injection, component configuration etc.
-         */
-        APPLICATION_BUILDER;
-
-        private final String loggerName;
-
-        private LogType() {
-            this.loggerName = "#"+name();
-        }
-
-        @Override
-        public String getLoggerName() {
-            return loggerName;
-        }
-
+    default <ENTITY, I extends HasDbmsName> BUILDER withDbms(I id, Consumer<Dbms> consumer) {
+        return withDbms(id, (app, t) -> consumer.accept(t));
+    }
+    
+     /**
+     * Configures a parameter for the identified dbms.
+     * The consumer will then be applied after the configuration has been read
+     * and after the System properties have been applied.
+     *
+     * @param <ENTITY>   entity type
+     * @param <I>        the identifier type
+     * @param identifier of the dbms
+     * @param consumer   the consumer to apply
+     * @return           this instance
+     */
+    default <ENTITY, I extends HasDbmsName> BUILDER withDbms(I identifier, BiConsumer<Injector, Dbms> consumer) {
+        return with (
+            Dbms.class,
+            identifier.getDbmsName(),
+            consumer
+        );
+    }
+    
+    
+     /**
+     * Configures a parameter for the identified schema. The consumer will then
+     * be applied after the configuration has been read and after the System
+     * properties have been applied.
+     *
+     * @param <ENTITY>   entity type
+     * @param <I>        the identifier type
+     * @param id         of the schema
+     * @param consumer   the consumer to apply
+     * @return           this instance
+     */
+    default <ENTITY, I extends HasDbmsName & HasSchemaName > BUILDER withSchema(I id, Consumer<Schema> consumer) {
+        return withSchema(id, (app, t) -> consumer.accept(t));
+    }
+    
+     /**
+     * Configures a parameter for the identified schema.
+     * The consumer will then be applied after the configuration has been read
+     * and after the System properties have been applied.
+     *
+     * @param <ENTITY>   entity type
+     * @param <I>        the identifier type
+     * @param identifier of the schema
+     * @param consumer   the consumer to apply
+     * @return           this instance
+     */
+    default <ENTITY, I extends HasDbmsName & HasSchemaName> BUILDER withSchema(I identifier, BiConsumer<Injector, Schema> consumer) {
+        return with (
+            Schema.class,
+            identifier.getDbmsName() + "." + identifier.getSchemaName(),
+            consumer
+        );
+    }
+    
+    /**
+     * Configures a parameter for the identified table. The consumer will then
+     * be applied after the configuration has been read and after the System
+     * properties have been applied.
+     *
+     * @param <ENTITY>   entity type
+     * @param <I>        the identifier type
+     * @param id of the table
+     * @param consumer   the consumer to apply
+     * @return           this instance
+     */
+    default <ENTITY, I extends HasDbmsName & HasSchemaName & HasTableName> BUILDER withTable(I id, Consumer<Table> consumer) {
+        return withTable(id, (app, t) -> consumer.accept(t));
+    }
+    
+     /**
+     * Configures a parameter for the identified table.
+     * The consumer will then be applied after the configuration has been read
+     * and after the System properties have been applied.
+     *
+     * @param <ENTITY>   entity type
+     * @param <I>        the identifier type
+     * @param identifier of the table
+     * @param consumer   the consumer to apply
+     * @return           this instance
+     */
+    default <ENTITY, I extends HasDbmsName & HasSchemaName & HasTableName> BUILDER withTable(I identifier, BiConsumer<Injector, Table> consumer) {
+        return with (
+            Table.class,
+            identifier.getDbmsName() + "." + identifier.getSchemaName() + "." + identifier.getTableName(),
+            consumer
+        );
     }
 
+        /**
+     * Configures a parameter for the identified table. The consumer will then
+     * be applied after the configuration has been read and after the System
+     * properties have been applied.
+     *
+     * @param <ENTITY>   entity type
+     * @param <I>        the identifier type
+     * @param id         of the column
+     * @param consumer   the consumer to apply
+     * @return           this instance
+     */
+    default <ENTITY, I extends HasDbmsName & HasSchemaName & HasTableName & HasColumnName> BUILDER withColumn(I id, Consumer<Column> consumer) {
+        return withColumn(id, (app, t) -> consumer.accept(t));
+    }
+    
+     /**
+     * Configures a parameter for the identified column.
+     * The consumer will then be applied after the configuration has been read
+     * and after the System properties have been applied.
+     *
+     * @param <ENTITY>   entity type
+     * @param <I>        the identifier type
+     * @param id         of the column
+     * @param consumer   the consumer to apply
+     * @return           this instance
+     */
+    default <ENTITY, I extends HasDbmsName & HasSchemaName & HasTableName & HasColumnName> BUILDER withColumn(I id, BiConsumer<Injector, Column> consumer) {
+        return with (
+            Column.class,
+            id.getDbmsName() + "." + id.getSchemaName() + "." + id.getTableName() + "." + id.getColumnName(),
+            consumer
+        );
+    }
+    
+    
     /**
      * Configures a parameter for the named {@link Document} of a certain class.
      * The consumer will then be applied after the configuration has been read
@@ -176,7 +276,23 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * @return          this instance
      */
     BUILDER withPassword(String dbmsName, char[] password);
-
+    
+     /**
+     * Configures a password for the identified dbms. The password will then be
+     * applied after the configuration has been read and after the System
+     * properties have been applied.
+     * <p>
+     * This will not be saved in any configuration files!
+     *
+     * @param <I>       identification type
+     * @param id        the identification of the dbms
+     * @param password  to use for the identified dbms
+     * @return          this instance
+     */
+    default <I extends HasDbmsName> BUILDER withPassword(I id, char[] password) {
+        return withPassword(id.getDbmsName(), password);
+    }
+    
     /**
      * Configures a password for all dbmses in this project. The password will
      * then be applied after the configuration has been read and after the
@@ -202,6 +318,22 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      */
     BUILDER withPassword(String dbmsName, String password);
 
+     /**
+     * Configures a password for the identified dbms. The password will then be
+     * applied after the configuration has been read and after the System
+     * properties have been applied.
+     * <p>
+     * This will not be saved in any configuration files!
+     *
+     * @param <I>       identification type
+     * @param id        the identification of the dbms
+     * @param password  to use for the identified dbms
+     * @return          this instance
+     */
+    default <I extends HasDbmsName> BUILDER withPassword(I id, String password) {
+        return withPassword(id.getDbmsName(), password);
+    }    
+    
     /**
      * Configures a username for all dbmses in this project. The username will
      * then be applied after the configuration has been read and after the
@@ -223,6 +355,22 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      */
     BUILDER withUsername(String dbmsName, String username);
 
+     /**
+     * Configures a username for the identified dbms. The username will then be
+     * applied after the configuration has been read and after the System
+     * properties have been applied.
+     * <p>
+     * This will not be saved in any configuration files!
+     *
+     * @param <I>       identification type
+     * @param id        the identification of the dbms
+     * @param username  to use for the identified dbms
+     * @return          this instance
+     */
+    default <I extends HasDbmsName> BUILDER withUsername(I id, String username) {
+        return withUsername(id.getDbmsName(), username);
+    }
+    
     /**
      * Configures an IP-address for all dbmses in this project. The IP-address
      * will then be applied after the configuration has been read and after the
@@ -245,6 +393,23 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
     BUILDER withIpAddress(String dbmsName, String ipAddress);
 
     /**
+     * Configures an IP Address for the identified dbms. The IP Address will
+     * then be applied after the configuration has been read and after the
+     * System properties have been applied.
+     * <p>
+     * This will not be saved in any configuration files!
+     *
+     * @param <I>       identification type
+     * @param id        the identification of the dbms
+     * @param ipAddress to use for the identified dbms
+     * @return          this instance
+     */
+    default <I extends HasDbmsName> BUILDER withIpAddress(I id, String ipAddress) {
+        return withIpAddress(id.getDbmsName(), ipAddress);
+    }
+
+
+    /**
      * Configures a port for all dbmses in this project. The port will then be
      * applied after the configuration has been read and after the System
      * properties have been applied.
@@ -265,6 +430,23 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      */
     BUILDER withPort(String dbmsName, int port);
 
+    
+    /**
+     * Configures a port for the identified dbms. The port will then be
+     * applied after the configuration has been read and after the System
+     * properties have been applied.
+     * <p>
+     * This will not be saved in any configuration files!
+     *
+     * @param <I>       identification type
+     * @param id        the identification of the dbms
+     * @param port to use for the identified dbms
+     * @return          this instance
+     */
+    default <I extends HasDbmsName> BUILDER withPort(I id, int port) {
+        return withPort(id.getDbmsName(), port);
+    }
+    
     /**
      * Configures a new schema name for all schemas in this project. The new
      * schema name will then be applied after the configuration has been read
@@ -320,6 +502,22 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      */
     BUILDER withConnectionUrl(String dbmsName, String connectionUrl);
 
+     /**
+     * Configures a connection URL for the identified dbms. The URL will then be
+     * applied after the configuration has been read and after the System
+     * properties have been applied.
+     * <p>
+     * This will not be saved in any configuration files!
+     *
+     * @param <I>       identification type
+     * @param id        the identification of the dbms
+     * @param connectionUrl to use for the identified dbms
+     * @return          this instance
+     */
+    default <I extends HasDbmsName> BUILDER withConnectionUrl(I id, String connectionUrl) {
+        return withConnectionUrl(id.getDbmsName(), connectionUrl);
+    }
+    
     /**
      * Sets that the initial database check shall be skipped upon build().
      *
@@ -486,4 +684,53 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
             applicationMetadataclass
         );
     }
+    
+    interface HasLogglerName {
+        String getLoggerName();
+    }  
+    
+    /**
+     * The type of logging to change the settings for.
+     */
+    enum LogType implements HasLogglerName {
+        
+        /**
+         * Logging related to querying the data source.
+         */
+        STREAM, 
+        
+        /**
+         * Logging related to persisting new entities into the data source.
+         */
+        PERSIST,
+        
+        /**
+         * Logging related to updating existing entities in the data source.
+         */
+        UPDATE, 
+        
+        /**
+         * Logging related to removing entities from the data source.
+         */
+        REMOVE, 
+        
+        /**
+         * Logging related to configurating the application platform, dependency 
+         * injection, component configuration etc.
+         */
+        APPLICATION_BUILDER;
+
+        private final String loggerName;
+
+        private LogType() {
+            this.loggerName = "#"+name();
+        }
+
+        @Override
+        public String getLoggerName() {
+            return loggerName;
+        }
+
+    }
+    
 }

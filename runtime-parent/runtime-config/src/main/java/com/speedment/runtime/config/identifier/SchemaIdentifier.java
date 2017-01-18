@@ -18,14 +18,13 @@ package com.speedment.runtime.config.identifier;
 
 import com.speedment.runtime.config.identifier.trait.HasDbmsName;
 import com.speedment.runtime.config.identifier.trait.HasSchemaName;
-import com.speedment.runtime.config.identifier.trait.HasTableName;
-import com.speedment.runtime.config.internal.identifier.TableIdentifierImpl;
+import com.speedment.runtime.config.internal.identifier.SchemaIdentifierImpl;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Identifies a particular Table. The identifier is an immutable non-complex
+ * Identifies a particular Schema. The identifier is an immutable non-complex
  * object that only contains the names of the nodes required to uniquely
  * identify it in the database.
  * <p>
@@ -33,7 +32,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * utility methods can be used:
  * <ul>
  *
- * <li>DocumentDbUtil#referencedTable(Project, Project, TableIdentifier)
  * <li>DocumentDbUtil#referencedSchema(Project, Project, TableIdentifier)
  * <li>DocumentDbUtil#referencedDbms(Project, TableIdentifier)
  * </ul>
@@ -44,27 +42,24 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 3.0.1
  * @see DocumentDbUtil
  */
-public interface TableIdentifier<ENTITY> extends
-    HasDbmsName,
-    HasSchemaName,
-    HasTableName {
+public interface SchemaIdentifier<ENTITY> extends HasDbmsName, HasSchemaName {
 
-    default SchemaIdentifier<ENTITY> asSchemaIdentifier() {
-        return SchemaIdentifier.of(getDbmsName(), getSchemaName());
+    default DbmsIdentifier<ENTITY> asDbmsIdentifier() {
+        return DbmsIdentifier.of(getDbmsName());
     }
-
+    
     class Hidden {
 
-        private static final Map<TableIdentifier<?>, TableIdentifier<?>> INTERNED = new ConcurrentHashMap<>();
+        private static final Map<SchemaIdentifier<?>, SchemaIdentifier<?>> INTERNED = new ConcurrentHashMap<>();
 
     }
 
-    static <ENTITY> TableIdentifier<ENTITY> of(String dbmsName, String schemaName, String tableName) {
-        final TableIdentifier<ENTITY> newId = new TableIdentifierImpl<>(dbmsName, schemaName, tableName);
+    static <ENTITY> SchemaIdentifier<ENTITY> of(String dbmsName, String schemaName) {
+        final SchemaIdentifier<ENTITY> newId = new SchemaIdentifierImpl<>(dbmsName, schemaName);
         Hidden.INTERNED.putIfAbsent(newId, newId);
 
         @SuppressWarnings("unchecked")
-        final TableIdentifier<ENTITY> result = (TableIdentifier<ENTITY>) Hidden.INTERNED.get(newId);
+        final SchemaIdentifier<ENTITY> result = (SchemaIdentifier<ENTITY>) Hidden.INTERNED.get(newId);
         return result;
     }
 }

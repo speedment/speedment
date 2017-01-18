@@ -353,12 +353,23 @@ public abstract class AbstractApplicationBuilder<
             final BiConsumer<Injector, Document> consumer
                 = (BiConsumer<Injector, Document>) t3.get2();
 
+                                   
+            /* This is the old naming convention "proj.dbms.schema.table.colum". Todo: Remove in next API version */
             DocumentDbUtil.traverseOver(project)
                 .filter(clazz::isInstance)
                 .filter(HasName.class::isInstance)
                 .map(HasName.class::cast)
                 .filter(c -> name.equals(relativeName(c, Project.class, DATABASE_NAME)))
                 .forEachOrdered(doc -> consumer.accept(injector, doc));
+
+            /* New naming convention "dbms.schema.table.column"*/
+            DocumentDbUtil.traverseOver(project)
+                .filter(clazz::isInstance)
+                .filter(HasName.class::isInstance)
+                .map(HasName.class::cast)
+                .filter(c -> name.equals(relativeName(c, Dbms.class, DATABASE_NAME))) // Now relative to DBMS!
+                .forEachOrdered(doc -> consumer.accept(injector, doc));
+
         });
     }
 
