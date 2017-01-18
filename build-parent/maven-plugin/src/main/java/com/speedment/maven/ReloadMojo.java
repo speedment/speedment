@@ -19,6 +19,7 @@ package com.speedment.maven;
 import com.speedment.maven.abstractmojo.AbstractReloadMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 
 /**
  * A maven goal that reloads the JSON configuration file
@@ -27,7 +28,10 @@ import org.apache.maven.plugins.annotations.Mojo;
  * @author  Emil Forslund
  * @since   3.0.0
  */
-@Mojo(name = "reload", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
+@Mojo(name = "reload", 
+    defaultPhase = LifecyclePhase.GENERATE_SOURCES,
+    requiresDependencyResolution = ResolutionScope.COMPILE
+)
 public final class ReloadMojo extends AbstractReloadMojo {
     
     @Override

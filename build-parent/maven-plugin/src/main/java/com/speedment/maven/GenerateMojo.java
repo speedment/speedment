@@ -19,12 +19,16 @@ package com.speedment.maven;
 import com.speedment.maven.abstractmojo.AbstractGenerateMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 
 /**
  *
  * @author Emil Forslund
  */
-@Mojo(name = "generate", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
+@Mojo(name = "generate", 
+    defaultPhase = LifecyclePhase.GENERATE_SOURCES,
+    requiresDependencyResolution = ResolutionScope.COMPILE
+)
 public final class GenerateMojo extends AbstractGenerateMojo {
 
     @Override

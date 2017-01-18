@@ -51,7 +51,7 @@
             <artifactId>maven-plugin-api</artifactId>
             <version>3.3.9</version>
         </dependency>
-
+        
         <dependency>
             <groupId>org.apache.maven.plugin-tools</groupId>
             <artifactId>maven-plugin-annotations</artifactId>
@@ -61,6 +61,12 @@
         <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-project</artifactId>
+            <version>2.2.1</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-artifact</artifactId>
             <version>2.2.1</version>
         </dependency>
     </dependencies>

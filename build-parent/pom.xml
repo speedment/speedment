@@ -39,7 +39,7 @@
     </description>
     
     <profiles>
-        <!-- Only build "-deploy"-modules wen we are in the release profile. -->
+        <!-- Only build "-deploy"-modules when in the release profile. -->
         <profile>
             <id>release</id>
             

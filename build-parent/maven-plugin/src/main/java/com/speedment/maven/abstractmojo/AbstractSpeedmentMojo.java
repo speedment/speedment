@@ -17,6 +17,8 @@
 package com.speedment.maven.abstractmojo;
 
 import com.speedment.common.injector.InjectBundle;
+import static com.speedment.common.injector.State.INITIALIZED;
+import static com.speedment.common.injector.State.RESOLVED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.injector.annotation.WithState;
@@ -27,24 +29,26 @@ import com.speedment.maven.component.MavenPathComponent;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
+import static com.speedment.runtime.core.internal.DefaultApplicationMetadata.METADATA_LOCATION;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.tool.core.ToolBundle;
 import com.speedment.tool.core.internal.component.UserInterfaceComponentImpl;
+import static com.speedment.tool.core.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
+import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
-
-import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
-import static com.speedment.common.injector.State.INITIALIZED;
-import static com.speedment.common.injector.State.RESOLVED;
-import static com.speedment.runtime.core.internal.DefaultApplicationMetadata.METADATA_LOCATION;
-import static com.speedment.tool.core.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 
 /**
  * The abstract base implementation for all the Speedment Mojos.
@@ -129,9 +133,43 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
             return true;
         }
     }
+    
+    @SuppressWarnings("unchecked")
+    protected final ClassLoader getClassLoader() throws MojoExecutionException, DependencyResolutionRequiredException {
+        final MavenProject project = project();
+        
+        final List<String> classpathElements = new ArrayList<>();
+        classpathElements.addAll(project.getCompileClasspathElements());
+        classpathElements.add(project.getBuild().getOutputDirectory());
+        
+        final List<URL> projectClasspathList = new ArrayList<>();
+        
+        for (final String element : classpathElements) {
+            try {
+                projectClasspathList.add(new File(element).toURI().toURL());
+            } catch (final MalformedURLException ex) {
+                throw new MojoExecutionException(
+                    element + " is an invalid classpath element", ex
+                );
+            }
+        }
+
+        return new URLClassLoader(
+            projectClasspathList.toArray(new URL[projectClasspathList.size()]),
+            Thread.currentThread().getContextClassLoader()
+        );
+    }
 
     private ApplicationBuilder<?, ?> createBuilder() throws MojoExecutionException {
         final ApplicationBuilder<?, ?> result;
+        
+        // Create the ClassLoader
+        final ClassLoader classLoader;
+        try {
+            classLoader = getClassLoader();
+        } catch (final DependencyResolutionRequiredException ex)  {
+            throw new MojoExecutionException(ex.toString());
+        }
 
         // Configure config file location
         if (hasConfigFile()) {
@@ -177,8 +215,8 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
             .withComponent(MavenPathComponent.class);
 
         // Add any extra type mappers requested by the user
+        TypeMapperInstaller.classLoader = classLoader;
         TypeMapperInstaller.mappings = typeMappers(); // <-- Hack to pass type mappers to class with default constructor.
-        
         
         result.withComponent(TypeMapperInstaller.class);
 
@@ -187,7 +225,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
         if (components != null) {
             for (final String component : components) {
                 try {
-                    final Class<?> uncasted = Class.forName(component);
+                    final Class<?> uncasted = classLoader.loadClass(component);
 
                     if (InjectBundle.class.isAssignableFrom(uncasted)) {
                         @SuppressWarnings("unchecked")
@@ -224,6 +262,8 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
     @InjectKey(TypeMapperInstaller.class)
     private final static class TypeMapperInstaller {
 
+        private static ClassLoader classLoader = 
+            Thread.currentThread().getContextClassLoader();
         private static Mapping[] mappings;
 
         @ExecuteBefore(RESOLVED)
@@ -232,7 +272,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
                 for (final Mapping mapping : mappings) {
                     final Class<?> databaseType;
                     try {
-                        databaseType = Class.forName(mapping.getDatabaseType());
+                        databaseType = classLoader.loadClass(mapping.getDatabaseType());
                     } catch (final ClassNotFoundException ex) {
                         throw new MojoExecutionException(
                             "Specified database type '" + mapping.getDatabaseType() + "' "
@@ -246,7 +286,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
                     }
 
                     try {
-                        final Class<?> uncasted = Class.forName(mapping.getImplementation());
+                        final Class<?> uncasted = classLoader.loadClass(mapping.getImplementation());
 
                         @SuppressWarnings("unchecked")
                         final Class<TypeMapper<?, ?>> casted = (Class<TypeMapper<?, ?>>) uncasted;
@@ -254,7 +294,11 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
                         final Supplier<TypeMapper<?, ?>> supplier = () -> {
                             try {
                                 return constructor.newInstance();
-                            } catch (final IllegalAccessException | IllegalArgumentException | InstantiationException | InvocationTargetException ex) {
+                            } catch (final IllegalAccessException 
+                                         | IllegalArgumentException 
+                                         | InstantiationException 
+                                         | InvocationTargetException ex) {
+                                
                                 throw new TypeMapperInstantiationException(ex);
                             }
                         };

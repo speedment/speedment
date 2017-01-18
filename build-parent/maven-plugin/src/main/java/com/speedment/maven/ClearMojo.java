@@ -19,13 +19,17 @@ package com.speedment.maven;
 import com.speedment.maven.abstractmojo.AbstractClearMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 
 /**
  *
  * @author  Emil Forslund
  * @since   3.0.0
  */
-@Mojo(name = "clear", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
+@Mojo(name = "clear", 
+    defaultPhase = LifecyclePhase.GENERATE_SOURCES,
+    requiresDependencyResolution = ResolutionScope.COMPILE
+)
 public final class ClearMojo extends AbstractClearMojo {
 
     @Override

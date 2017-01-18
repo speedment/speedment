@@ -20,12 +20,16 @@ package com.speedment.maven;
 import com.speedment.maven.abstractmojo.AbstractToolMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.ResolutionScope;
 
 /**
  *
  * @author Emil Forslund
  */
-@Mojo(name = "tool", defaultPhase = LifecyclePhase.GENERATE_SOURCES)
+@Mojo(name = "tool", 
+    defaultPhase = LifecyclePhase.GENERATE_SOURCES,
+    requiresDependencyResolution = ResolutionScope.COMPILE
+)
 public final class ToolMojo extends AbstractToolMojo {
         
     @Override
