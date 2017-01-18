@@ -410,38 +410,80 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
     /**
      * Creates and returns a new empty {@code ApplicationBuilder}.
      *
-     * @param <BUILDER>  ApplicationBuilder type
+     * @param <BUILDER>  {@code ApplicationBuilder} type
      * @return           a new empty ApplicationBuilder
      */
     @SuppressWarnings("unchecked")
-    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER empty() {
-        return (BUILDER) new DefaultApplicationBuilder(EmptyApplicationMetadata.class);
+    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER 
+    empty() {
+        return (BUILDER) new DefaultApplicationBuilder(
+            EmptyApplicationMetadata.class
+        );
+    }
+    
+    /**
+     * Creates and returns a new empty {@code ApplicationBuilder}.
+     *
+     * @param <BUILDER>    {@code ApplicationBuilder} type
+     * @param classLoader  the class loader to use in the injector
+     * @return             a new empty ApplicationBuilder
+     */
+    @SuppressWarnings("unchecked")
+    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER 
+    empty(ClassLoader classLoader) {
+        return (BUILDER) new DefaultApplicationBuilder(
+            classLoader,
+            EmptyApplicationMetadata.class
+        );
     }
 
     /**
      * Creates and returns a new standard ApplicationBuilder. The configuration
      * is read from a JSON file.
      *
-     * @param <BUILDER> ApplicationBuilder type
+     * @param <BUILDER> {@code ApplicationBuilder} type
      * @return a new standard ApplicationBuilder
      */
     @SuppressWarnings("unchecked")
-    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER standard() {
-        return (BUILDER) new DefaultApplicationBuilder(DefaultApplicationMetadata.class);
+    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER 
+    standard() {
+        return (BUILDER) new DefaultApplicationBuilder(
+            DefaultApplicationMetadata.class
+        );
+    }
+    
+    /**
+     * Creates and returns a new standard ApplicationBuilder. The configuration
+     * is read from a JSON file.
+     *
+     * @param <BUILDER>    {@code ApplicationBuilder} type
+     * @param classLoader  the class loader to use in the injector
+     * @return a new standard ApplicationBuilder
+     */
+    @SuppressWarnings("unchecked")
+    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER 
+    standard(ClassLoader classLoader) {
+        return (BUILDER) new DefaultApplicationBuilder(
+            classLoader, 
+            DefaultApplicationMetadata.class
+        );
     }
 
     /**
      * Creates and returns a new ApplicationBuilder configured with the given
      * ApplicationMetadata class.
      *
-     * @param <BUILDER> ApplicationBuilder type
+     * @param <BUILDER> {@code ApplicationBuilder} type
      * @param applicationMetadataclass with configuration
      *
      * @return a new ApplicationBuilder configured with the given
      * ApplicationMetadata class
      */
     @SuppressWarnings("unchecked")
-    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER create(Class<? extends ApplicationMetadata> applicationMetadataclass) {
-        return (BUILDER) new DefaultApplicationBuilder(applicationMetadataclass);
+    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER 
+    create(Class<? extends ApplicationMetadata> applicationMetadataclass) {
+        return (BUILDER) new DefaultApplicationBuilder(
+            applicationMetadataclass
+        );
     }
 }

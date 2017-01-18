@@ -27,7 +27,16 @@ import com.speedment.runtime.core.Speedment;
 public final class DefaultApplicationBuilder extends
     AbstractApplicationBuilder<Speedment, DefaultApplicationBuilder> {
 
-    public DefaultApplicationBuilder(Class<? extends ApplicationMetadata> metadataClass) {
+    public DefaultApplicationBuilder(
+            ClassLoader classLoader, 
+            Class<? extends ApplicationMetadata> metadataClass) {
+        
+        super(classLoader, SpeedmentImpl.class, metadataClass);
+    }
+    
+    public DefaultApplicationBuilder(
+            Class<? extends ApplicationMetadata> metadataClass) {
+        
         super(SpeedmentImpl.class, metadataClass);
     }
 

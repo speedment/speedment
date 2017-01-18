@@ -28,7 +28,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
  */
 @Mojo(name = "tool", 
     defaultPhase = LifecyclePhase.GENERATE_SOURCES,
-    requiresDependencyResolution = ResolutionScope.COMPILE
+    requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME
 )
 public final class ToolMojo extends AbstractToolMojo {
         

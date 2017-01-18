@@ -30,7 +30,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
  */
 @Mojo(name = "reload", 
     defaultPhase = LifecyclePhase.GENERATE_SOURCES,
-    requiresDependencyResolution = ResolutionScope.COMPILE
+    requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME
 )
 public final class ReloadMojo extends AbstractReloadMojo {
     

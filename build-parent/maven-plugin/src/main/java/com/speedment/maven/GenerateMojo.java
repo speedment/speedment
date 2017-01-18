@@ -27,7 +27,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
  */
 @Mojo(name = "generate", 
     defaultPhase = LifecyclePhase.GENERATE_SOURCES,
-    requiresDependencyResolution = ResolutionScope.COMPILE
+    requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME
 )
 public final class GenerateMojo extends AbstractGenerateMojo {
 

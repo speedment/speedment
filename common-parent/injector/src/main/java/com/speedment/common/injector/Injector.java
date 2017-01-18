@@ -132,7 +132,7 @@ public interface Injector {
      * @return             the builder
      */
     static Builder builder(ClassLoader classLoader) {
-        return InjectorImpl.builder();
+        return InjectorImpl.builder(classLoader);
     }
     
     /**

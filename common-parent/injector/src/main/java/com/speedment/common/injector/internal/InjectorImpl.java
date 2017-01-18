@@ -302,6 +302,10 @@ public final class InjectorImpl implements Injector {
     public static Injector.Builder builder() {
         return new Builder();
     }
+    
+    public static Injector.Builder builder(ClassLoader classLoader) {
+        return new Builder(classLoader);
+    }
 
     private final static class Builder implements Injector.Builder {
 

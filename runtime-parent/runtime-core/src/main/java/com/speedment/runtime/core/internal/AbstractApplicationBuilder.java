@@ -84,7 +84,7 @@ public abstract class AbstractApplicationBuilder<
     private boolean skipCheckDatabaseConnectivity;
     private boolean skipValidateRuntimeConfig;
     private boolean skipLogoPrintout;
-
+    
     protected AbstractApplicationBuilder(
         Class<? extends APP> applicationImplClass,
         Class<? extends ApplicationMetadata> metadataClass) {
@@ -95,13 +95,25 @@ public abstract class AbstractApplicationBuilder<
             .put(metadataClass)
         );
     }
+    
+    protected AbstractApplicationBuilder(
+        ClassLoader classLoader,
+        Class<? extends APP> applicationImplClass,
+        Class<? extends ApplicationMetadata> metadataClass) {
+
+        this(Injector.builder(classLoader)
+            .putInBundle(RuntimeBundle.class)
+            .put(applicationImplClass)
+            .put(metadataClass)
+        );
+    }
 
     protected AbstractApplicationBuilder(Injector.Builder injector) {
-        this.injector = requireNonNull(injector);
+        this.injector   = requireNonNull(injector);
         this.withsNamed = new ArrayList<>();
-        this.withsAll = new ArrayList<>();
+        this.withsAll   = new ArrayList<>();
         this.skipCheckDatabaseConnectivity = false;
-        this.skipValidateRuntimeConfig = false;
+        this.skipValidateRuntimeConfig     = false;
     }
 
     @Override
