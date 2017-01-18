@@ -16,7 +16,9 @@
  */
 package com.speedment.runtime.core.internal.db;
 
+import com.speedment.common.injector.Injector;
 import static com.speedment.common.injector.State.CREATED;
+import static com.speedment.common.injector.State.INITIALIZED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
