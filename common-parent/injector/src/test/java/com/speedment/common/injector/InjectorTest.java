@@ -16,6 +16,7 @@
  */
 package com.speedment.common.injector;
 
+import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.test_a.StringIdentityMapper;
@@ -27,6 +28,7 @@ import com.speedment.common.injector.test_c.ChildType;
 import com.speedment.common.injector.test_c.ParentType;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -163,4 +165,50 @@ public class InjectorTest {
     
     @InjectKey(value=Foo.class, overwrite=false)
     private final static class FooNoOverwrite implements Foo {}
+    
+    private final static class ClassWithConfig {
+        
+        private @Config(name="a", value="example") String defaultString;
+        private @Config(name="b", value="-104726") int defaultInt;
+        private @Config(name="c", value="0.43472") float defaultFloat;
+        private @Config(name="d", value="false") boolean defaultBoolean;
+        
+        private @Config(name="e", value="example") String overridenString;
+        private @Config(name="f", value="-104726") int overridenInt;
+        private @Config(name="g", value="0.43472") float overridenFloat;
+        private @Config(name="h", value="false") boolean overridenBoolean;
+        
+    }
+    
+    private ClassWithConfig configTest;
+    
+    @Before
+    public void setupConfigTest() throws InstantiationException {
+        configTest = new ClassWithConfig();
+        
+        final Injector injector = Injector.builder()
+            .putParam("e", "anotherExample")
+            .putParam("f", "56629")
+            .putParam("g", "-476.443")
+            .putParam("h", "true")
+            .build();
+        
+        injector.inject(configTest);
+    }
+    
+    @Test
+    public void testDefaultConfig() {
+        assertEquals("Test default string param: ", "example", configTest.defaultString);
+        assertEquals("Test default int param: ", -104726, configTest.defaultInt);
+        assertEquals("Test default float param: ", 0.43472f, configTest.defaultFloat, 0.00000001f);
+        assertEquals("Test default boolean param: ", false, configTest.defaultBoolean);
+    }
+    
+    @Test
+    public void testOverridenConfig() {
+        assertEquals("Test overriden string param: ", "anotherExample", configTest.overridenString);
+        assertEquals("Test overriden int param: ", 56629, configTest.overridenInt);
+        assertEquals("Test overriden float param: ", -476.443f, configTest.overridenFloat, 0.00000001f);
+        assertEquals("Test overriden boolean param: ", true, configTest.overridenBoolean);
+    }
 }
