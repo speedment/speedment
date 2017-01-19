@@ -68,17 +68,20 @@ public final class InjectorImpl implements Injector {
     private final static State[] STATES = State.values();
     private final Set<Class<?>> injectables;
     private final List<Object> instances;
+    private final Properties properties;
     private final ClassLoader classLoader;
     private final Injector.Builder builder;
 
     private InjectorImpl(
             Set<Class<?>> injectables, 
             List<Object> instances,
+            Properties properties,
             ClassLoader classLoader,
             Injector.Builder builder) {
         
         this.injectables = requireNonNull(injectables);
         this.instances   = requireNonNull(instances);
+        this.properties  = requireNonNull(properties);
         this.classLoader = requireNonNull(classLoader);
         this.builder     = requireNonNull(builder);
     }
@@ -106,6 +109,7 @@ public final class InjectorImpl implements Injector {
     @Override
     public <T> T inject(T instance) {
         injectFields(instance);
+        Builder.configureParams(instance, properties);
         return instance;
     }
 
@@ -315,7 +319,7 @@ public final class InjectorImpl implements Injector {
         private Path configFileLocation;
 
         private Builder() {
-            this(ClassLoader.getSystemClassLoader(), Collections.emptySet());
+            this(defaultClassLoader(), Collections.emptySet());
         }
         
         private Builder(ClassLoader classLoader) {
@@ -323,7 +327,11 @@ public final class InjectorImpl implements Injector {
         }
         
         private Builder(Set<Class<?>> injectables) {
-            this(ClassLoader.getSystemClassLoader(), injectables);
+            this(defaultClassLoader(), injectables);
+        }
+        
+        private static ClassLoader defaultClassLoader() {
+            return Thread.currentThread().getContextClassLoader();
         }
 
         private Builder(ClassLoader classLoader, Set<Class<?>> injectables) {
@@ -464,6 +472,7 @@ public final class InjectorImpl implements Injector {
             final Injector injector = new InjectorImpl(
                 injectablesSet,
                 unmodifiableList(instances),
+                properties,
                 classLoader,
                 this
             );
@@ -657,76 +666,10 @@ public final class InjectorImpl implements Injector {
             try {
                 final Constructor<T> constr = type.getDeclaredConstructor();
                 constr.setAccessible(true);
+                
                 final T instance = constr.newInstance();
-
-                traverseFields(type)
-                    .filter(f -> f.isAnnotationPresent(Config.class))
-                    .forEach(f -> {
-                        final Config config = f.getAnnotation(Config.class);
-
-                        final String serialized;
-                        if (properties.containsKey(config.name())) {
-                            serialized = properties.getProperty(config.name());
-                        } else {
-                            serialized = config.value();
-                        }
-
-                        f.setAccessible(true);
-
-                        try {
-                            if (boolean.class == f.getType() 
-                            || Boolean.class.isAssignableFrom(f.getType())) {
-                                f.set(instance, Boolean.parseBoolean(serialized));
-                            } else if (byte.class == f.getType() 
-                            || Byte.class.isAssignableFrom(f.getType())) {
-                                f.set(instance, Byte.parseByte(serialized));
-                            } else if (short.class == f.getType() 
-                            || Short.class.isAssignableFrom(f.getType())) {
-                                f.set(instance, Short.parseShort(serialized));
-                            } else if (int.class == f.getType() 
-                            || Integer.class.isAssignableFrom(f.getType())) {
-                                f.set(instance, Integer.parseInt(serialized));
-                            } else if (long.class == f.getType() 
-                            || Long.class.isAssignableFrom(f.getType())) {
-                                f.set(instance, Long.parseLong(serialized));
-                            } else if (float.class == f.getType() 
-                            || Float.class.isAssignableFrom(f.getType())) {
-                                f.set(instance, Float.parseFloat(serialized));
-                            } else if (double.class == f.getType() 
-                            || Double.class.isAssignableFrom(f.getType())) {
-                                f.set(instance, Double.parseDouble(serialized));
-                            } else if (String.class.isAssignableFrom(f.getType())) {
-                                f.set(instance, serialized);
-                            } else if (char.class == f.getType() 
-                            || Character.class.isAssignableFrom(f.getType())) {
-                                if (serialized.length() == 1) {
-                                    f.set(instance, serialized.charAt(0));
-                                } else {
-                                    throw new IllegalArgumentException(
-                                        "Value '" + serialized
-                                        + "' is to long to be parsed into a field of type '"
-                                        + f.getType().getName() + "'."
-                                    );
-                                }
-                            } else if (File.class.isAssignableFrom(f.getType())) {
-                                f.set(instance, new File(serialized));
-                            } else if (URL.class.isAssignableFrom(f.getType())) {
-                                try {
-                                    f.set(instance, new URL(serialized));
-                                } catch (final MalformedURLException ex) {
-                                    throw new IllegalArgumentException(
-                                        "Specified URL '" + serialized + "' is malformed.", ex
-                                    );
-                                }
-                            }
-                        } catch (final IllegalAccessException | IllegalArgumentException ex) {
-                            throw new RuntimeException(
-                                "Failed to set config parameter '" + config.name()
-                                + "' in class '" + type.getName() + "'.", ex
-                            );
-                        }
-                    });
-
+                configureParams(instance, properties);
+                
                 return instance;
 
             } catch (final NoSuchMethodException ex) {
@@ -740,6 +683,76 @@ public final class InjectorImpl implements Injector {
 
                 throw new RuntimeException(ex);
             }
+        }
+        
+        private static <T> void configureParams(T instance, Properties properties) {
+            traverseFields(instance.getClass())
+                .filter(f -> f.isAnnotationPresent(Config.class))
+                .forEach(f -> {
+                    final Config config = f.getAnnotation(Config.class);
+
+                    final String serialized;
+                    if (properties.containsKey(config.name())) {
+                        serialized = properties.getProperty(config.name());
+                    } else {
+                        serialized = config.value();
+                    }
+
+                    f.setAccessible(true);
+
+                    try {
+                        if (boolean.class == f.getType() 
+                        || Boolean.class.isAssignableFrom(f.getType())) {
+                            f.set(instance, Boolean.parseBoolean(serialized));
+                        } else if (byte.class == f.getType() 
+                        || Byte.class.isAssignableFrom(f.getType())) {
+                            f.set(instance, Byte.parseByte(serialized));
+                        } else if (short.class == f.getType() 
+                        || Short.class.isAssignableFrom(f.getType())) {
+                            f.set(instance, Short.parseShort(serialized));
+                        } else if (int.class == f.getType() 
+                        || Integer.class.isAssignableFrom(f.getType())) {
+                            f.set(instance, Integer.parseInt(serialized));
+                        } else if (long.class == f.getType() 
+                        || Long.class.isAssignableFrom(f.getType())) {
+                            f.set(instance, Long.parseLong(serialized));
+                        } else if (float.class == f.getType() 
+                        || Float.class.isAssignableFrom(f.getType())) {
+                            f.set(instance, Float.parseFloat(serialized));
+                        } else if (double.class == f.getType() 
+                        || Double.class.isAssignableFrom(f.getType())) {
+                            f.set(instance, Double.parseDouble(serialized));
+                        } else if (String.class.isAssignableFrom(f.getType())) {
+                            f.set(instance, serialized);
+                        } else if (char.class == f.getType() 
+                        || Character.class.isAssignableFrom(f.getType())) {
+                            if (serialized.length() == 1) {
+                                f.set(instance, serialized.charAt(0));
+                            } else {
+                                throw new IllegalArgumentException(
+                                    "Value '" + serialized
+                                    + "' is to long to be parsed into a field of type '"
+                                    + f.getType().getName() + "'."
+                                );
+                            }
+                        } else if (File.class.isAssignableFrom(f.getType())) {
+                            f.set(instance, new File(serialized));
+                        } else if (URL.class.isAssignableFrom(f.getType())) {
+                            try {
+                                f.set(instance, new URL(serialized));
+                            } catch (final MalformedURLException ex) {
+                                throw new IllegalArgumentException(
+                                    "Specified URL '" + serialized + "' is malformed.", ex
+                                );
+                            }
+                        }
+                    } catch (final IllegalAccessException | IllegalArgumentException ex) {
+                        throw new RuntimeException(
+                            "Failed to set config parameter '" + config.name()
+                            + "' in class '" + instance.getClass().getName() + "'.", ex
+                        );
+                    }
+                });
         }
     }
 }
