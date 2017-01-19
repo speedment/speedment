@@ -16,6 +16,9 @@
  */
 package com.speedment.common.rest;
 
+import static com.speedment.common.rest.Option.Type.HEADER;
+import static com.speedment.common.rest.Option.Type.PARAM;
+import static com.speedment.common.rest.Rest.encode;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -23,15 +26,11 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Iterator;
+import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Stream;
-
-import static com.speedment.common.rest.Option.Type.HEADER;
-import static com.speedment.common.rest.Option.Type.PARAM;
-import static com.speedment.common.rest.Rest.encode;
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
 
 /**
  * Default implementation of the {@link Rest}-interface.
@@ -275,6 +274,7 @@ class RestImpl implements Rest {
                 if (doOutput) {
                     try (final OutputStream out = conn.getOutputStream()) {
                         outStreamConsumer.writeTo(out);
+                        out.flush();
                     }
                 }
 
