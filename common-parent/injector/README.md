@@ -131,6 +131,7 @@ public class FooComponent {
     }
 
 }
+```
 
 ##### Configurable Parameters
 Configurable Parameters can be injected into classes using the `@Config` annotation. The values for these can later be specified either as part of the `InjectorBuilder` process using the `withParam()`-method or by creating a `settings.properties`-file in the same folder as the application.
