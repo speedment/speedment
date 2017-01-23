@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.internal.component.sql;
 
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.Column;
@@ -31,6 +30,8 @@ import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.runtime.core.component.resultset.ResultSetMapperComponent;
+import com.speedment.runtime.core.component.resultset.ResultSetMapping;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsType;
@@ -46,6 +47,7 @@ import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import java.sql.ResultSet;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
@@ -71,18 +73,23 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
     private final Dbms dbms;
     private final DbmsType dbmsType;
     private final Map<ColumnIdentifier<ENTITY>, String> columnNameMap;
+    private final Map<ColumnIdentifier<ENTITY>, Class<?>> columnDatabaseTypeMap;
     private final String sqlSelect;
     private final String sqlSelectCount;
     private final String sqlTableReference;
 
     SqlStreamSupplierImpl(
-        TableIdentifier<ENTITY> tableId,
-        SqlFunction<ResultSet, ENTITY> entityMapper,
-        ProjectComponent projectComponent,
-        DbmsHandlerComponent dbmsHandlerComponent,
-        ManagerComponent managerComponent) {
+        final TableIdentifier<ENTITY> tableId,
+        final SqlFunction<ResultSet, ENTITY> entityMapper,
+        final ProjectComponent projectComponent,
+        final DbmsHandlerComponent dbmsHandlerComponent,
+        final ManagerComponent managerComponent
+    ) {
 
-        requireNonNulls(tableId, projectComponent, dbmsHandlerComponent);
+        requireNonNull(tableId);
+        requireNonNull(projectComponent);
+        requireNonNull(dbmsHandlerComponent);
+        requireNonNull(managerComponent);
 
         this.entityMapper = requireNonNull(entityMapper);
 
@@ -118,6 +125,16 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
             )
             .map(Field::identifier)
             .collect(toMap(identity(), naming::fullNameOf));
+
+        this.columnDatabaseTypeMap = new HashMap<>();
+
+        manager.fields()
+            .forEach(f -> {
+                final Optional<? extends Column> c = f.findColumn(project);
+                final Class<?> javaClass = c.get().findDatabaseType();
+                //final ResultSetMapping<?> resultSetMapping = resultSetMapperComponent.apply(dbmsType, javaClass);
+                columnDatabaseTypeMap.put(f.identifier(), javaClass);
+            });
     }
 
     @Override
@@ -137,6 +154,7 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
             sqlSelectCount,
             this::executeAndGetLong,
             this::sqlColumnNamer,
+            this::sqlDatabaseTypeFunction,
             asynchronousQueryResult
         );
 
@@ -176,5 +194,9 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
 
     private String sqlColumnNamer(Field<ENTITY> field) {
         return columnNameMap.get(field.identifier());
+    }
+    
+    private Class<?> sqlDatabaseTypeFunction(Field<ENTITY> field) {
+        return columnDatabaseTypeMap.get(field.identifier());
     }
 }

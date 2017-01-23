@@ -109,6 +109,7 @@ public class SqlStreamTerminatorTest {
                 return SQL_COUNT_RESULT;
             },
             f -> "",
+            f -> Object.class,
             asynchronousQueryResult
         );
         return terminator.count(createPipeline(action));
@@ -130,7 +131,7 @@ public class SqlStreamTerminatorTest {
         final FieldPredicateView fpv = mock(FieldPredicateView.class);
         final SqlPredicateFragmentImpl predicateFragment = new SqlPredicateFragmentImpl();
         predicateFragment.setSql(PREDICATE_COUNT_SQL_FRAGMENT);
-        when(fpv.transform(any(), any())).thenReturn(predicateFragment);
+        when(fpv.transform(any(), any(), any())).thenReturn(predicateFragment);
         when(dbmsType.getFieldPredicateView()).thenReturn(fpv);
         return dbmsType;
     }
