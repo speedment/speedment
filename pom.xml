@@ -411,12 +411,12 @@
                             </properties>
                             <excludes>
                                 <exclude>**/README</exclude>
+                                <exclude>**/README.md</exclude>
                                 <exclude>**/package-info.java</exclude>
                                 <exclude>**/nbactions.xml</exclude>
                                 <exclude>**/nb-configuration.xml</exclude>
-                                <exclude>**/.versionsBackup</exclude>
+                                <exclude>**/*.versionsBackup</exclude>
                                 <exclude>CONTRIBUTOR_LICENSE_AGREEMENT</exclude>
-                                <exclude>README.md</exclude>
                                 <exclude>LICENSE</exclude>
                                 <exclude>DISCLAIMER</exclude>
                                 <exclude>THIRD_PARTY_LICENSES</exclude>
