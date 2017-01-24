@@ -48,6 +48,7 @@ public final class PostgresqlDbmsMetadataHandler extends AbstractDbmsMetadataHan
     
     @Override
     protected void setAutoIncrement(Column column, ColumnMetaData md) throws SQLException {
+        super.setAutoIncrement(column, md);
         final String defaultValue = md.getColumnDef();
         if (defaultValue != null && defaultValue.startsWith("nextval(")) {
             column.mutator().setAutoIncrement(true);

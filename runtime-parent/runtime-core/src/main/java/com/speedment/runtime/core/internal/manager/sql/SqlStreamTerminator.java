@@ -61,23 +61,26 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
     //private final LongSupplier sqlCounter;
     private final BiFunction<String, List<Object>, Long> counter;
     private final Function<Field<ENTITY>, String> sqlColumnNamer;
+    private final Function<Field<ENTITY>, Class<?>> sqlDatabaseTypeFunction;
     private final AsynchronousQueryResult<ENTITY> asynchronousQueryResult;
 
     public SqlStreamTerminator(
-        DbmsType dbmsType,
-        String sqlSelect,
-        String sqlSelectCount,
-        BiFunction<String, List<Object>, Long> counter,
+        final DbmsType dbmsType,
+        final String sqlSelect,
+        final String sqlSelectCount,
+        final BiFunction<String, List<Object>, Long> counter,
         //LongSupplier sqlCounter,
-        Function<Field<ENTITY>, String> sqlColumnNamer,
-        AsynchronousQueryResult<ENTITY> asynchronousQueryResult) {
-
+        final Function<Field<ENTITY>, String> sqlColumnNamer,
+        final Function<Field<ENTITY>, Class<?>> sqlDatabaseTypeFunction,
+        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult
+    ) {
         this.dbmsType = requireNonNull(dbmsType);
         this.sqlSelect = requireNonNull(sqlSelect);
         this.sqlSelectCount = requireNonNull(sqlSelectCount);
         this.counter = requireNonNull(counter);
         //this.sqlCounter = requireNonNull(sqlCounter);
         this.sqlColumnNamer = requireNonNull(sqlColumnNamer);
+        this.sqlDatabaseTypeFunction = requireNonNull(sqlDatabaseTypeFunction);
         this.asynchronousQueryResult = requireNonNull(asynchronousQueryResult);
     }
 
@@ -117,7 +120,7 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
 
         final FieldPredicateView spv = dbmsType.getFieldPredicateView();
         final List<SqlPredicateFragment> fragments = predicateBuilders.stream()
-            .map(sp -> spv.transform(sqlColumnNamer, sp))
+            .map(sp -> spv.transform(sqlColumnNamer, sqlDatabaseTypeFunction, sp))
             .collect(toList());
 
         final String sql = sqlBase + " WHERE "

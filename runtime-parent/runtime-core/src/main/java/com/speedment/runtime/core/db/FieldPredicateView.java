@@ -29,6 +29,10 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface FieldPredicateView {
 
-    <ENTITY> SqlPredicateFragment transform(Function<Field<ENTITY>, String> columnNamer, FieldPredicate<ENTITY> model);
+    <ENTITY> SqlPredicateFragment transform(
+        Function<Field<ENTITY>, String> columnNamer,
+        Function<Field<ENTITY>, Class<?>> columnDbTypeFunction,
+        FieldPredicate<ENTITY> model
+    );
     
 }
