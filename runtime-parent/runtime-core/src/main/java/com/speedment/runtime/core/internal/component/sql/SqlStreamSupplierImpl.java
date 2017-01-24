@@ -76,11 +76,11 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
     private final String sqlTableReference;
 
     SqlStreamSupplierImpl(
-        TableIdentifier<ENTITY> tableId,
-        SqlFunction<ResultSet, ENTITY> entityMapper,
-        ProjectComponent projectComponent,
-        DbmsHandlerComponent dbmsHandlerComponent,
-        ManagerComponent managerComponent) {
+            TableIdentifier<ENTITY> tableId,
+            SqlFunction<ResultSet, ENTITY> entityMapper,
+            ProjectComponent projectComponent,
+            DbmsHandlerComponent dbmsHandlerComponent,
+            ManagerComponent managerComponent) {
 
         requireNonNulls(tableId, projectComponent, dbmsHandlerComponent);
 

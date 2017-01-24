@@ -32,7 +32,6 @@ import java.util.function.Predicate;
  * @author  Per Minborg
  * @since   2.1.0
  */
-
 public interface FieldPredicate<ENTITY> extends
         Predicate<ENTITY>,
         HasPredicateType,

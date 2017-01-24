@@ -39,9 +39,9 @@ public @interface Config {
     String name();
     
     /**
-     * The default name that should be used if no name is configured.
+     * The default value that should be used if no value is configured.
      * 
-     * @return  the default name
+     * @return  the default value
      */
     String value();
     
