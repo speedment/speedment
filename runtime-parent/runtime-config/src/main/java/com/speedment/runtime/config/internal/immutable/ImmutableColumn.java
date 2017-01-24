@@ -20,11 +20,10 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.internal.ColumnImpl;
 import com.speedment.runtime.config.trait.HasNullable;
-
+import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
 import java.util.Map;
 import java.util.Optional;
-
-import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
+import java.util.OptionalInt;
 
 /**
  *
@@ -42,6 +41,8 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
     private final transient String databaseType;
     private final transient Class<?> databaseTypeObject;
     private final transient Optional<String> enumConstants;
+    private final transient OptionalInt decimalDigits;
+    private final transient OptionalInt columnSize;
 
     ImmutableColumn(ImmutableTable parent, Map<String, Object> data) {
         super(parent, data);
@@ -58,6 +59,8 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
         this.databaseType           = prototype.getDatabaseType();
         this.databaseTypeObject     = prototype.findDatabaseType();
         this.enumConstants          = prototype.getEnumConstants();
+        this.decimalDigits          = prototype.getDecimalDigits();
+        this.columnSize             = prototype.getColumnSize();
     }
 
     @Override
@@ -110,6 +113,16 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
         return enumConstants;
     }
 
+    @Override
+    public OptionalInt getDecimalDigits() {
+        return decimalDigits;
+    }
+
+    @Override
+    public OptionalInt getColumnSize() {
+        return columnSize;
+    }
+    
     @Override
     public Optional<Table> getParent() {
         return super.getParent().map(Table.class::cast);

@@ -28,6 +28,8 @@ import com.speedment.runtime.config.trait.HasOrdinalPosition;
 import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.config.trait.HasTypeMapper;
 import java.util.Optional;
+import com.speedment.runtime.config.trait.HasColumnSize;
+import com.speedment.runtime.config.trait.HasDecimalDigits;
 
 /**
  * A typed {@link Document} that represents a column in the database. A
@@ -45,6 +47,8 @@ public interface Column extends
         HasNullable,
         HasOrdinalPosition,
         HasTypeMapper,
+        HasDecimalDigits,
+        HasColumnSize,
         HasMainInterface,
         HasMutator<ColumnMutator<? extends Column>> {
 
