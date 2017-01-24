@@ -255,8 +255,11 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
         }
         
         // Set parameters configured in the pom.xml
-        for (final ConfigParam param : parameters()) {
-            result.withParam(param.getName(), param.getValue());
+        final ConfigParam[] parameters = parameters();
+        if (parameters != null) {
+            for (final ConfigParam param : parameters()) {
+                result.withParam(param.getName(), param.getValue());
+            }
         }
 
         // Return the resulting builder.
