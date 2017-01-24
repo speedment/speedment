@@ -166,7 +166,7 @@ public abstract class AbstractDocumentProperty<THIS extends AbstractDocumentProp
     public final BooleanProperty booleanPropertyOf(String key, BooleanSupplier ifEmpty) {
         return (BooleanProperty) properties.computeIfAbsent(key, k -> prepare(k, new SimpleBooleanProperty(), ifEmpty.getAsBoolean()));
     }
-
+    
     @Override
     public final IntegerProperty integerPropertyOf(String key, IntSupplier ifEmpty) {
         return numericPropertyOf(key, ifEmpty::getAsInt, NumericProperty::asIntegerProperty);
