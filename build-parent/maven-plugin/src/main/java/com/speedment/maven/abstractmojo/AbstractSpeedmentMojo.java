@@ -27,6 +27,7 @@ import com.speedment.generator.core.GeneratorBundle;
 import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.generator.translator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.maven.component.MavenPathComponent;
+import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
@@ -72,6 +73,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
     protected abstract File configLocation();
     protected abstract String[] components();
     protected abstract Mapping[] typeMappers();
+    protected abstract ConfigParam[] parameters();
     protected abstract String launchMessage();
     protected abstract void execute(Speedment speedment) 
         throws MojoExecutionException, MojoFailureException;
@@ -250,6 +252,11 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
                     );
                 }
             }
+        }
+        
+        // Set parameters configured in the pom.xml
+        for (final ConfigParam param : parameters()) {
+            result.withParam(param.getName(), param.getValue());
         }
 
         // Return the resulting builder.

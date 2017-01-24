@@ -17,6 +17,7 @@
 package com.speedment.maven.abstractmojo;
 
 import com.speedment.generator.translator.TranslatorManager;
+import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.core.ApplicationBuilder;
@@ -46,6 +47,7 @@ public abstract class AbstractGenerateMojo extends AbstractSpeedmentMojo {
     private @Parameter(defaultValue = "${dbms.password}") String dbmsPassword;
     private @Parameter String[] components;
     private @Parameter Mapping[] typeMappers;
+    private @Parameter ConfigParam[] parameters;
     private @Parameter(defaultValue = DEFAULT_CONFIG_LOCATION) File configFile;
 
     protected AbstractGenerateMojo() {}
@@ -85,6 +87,11 @@ public abstract class AbstractGenerateMojo extends AbstractSpeedmentMojo {
     @Override
     protected Mapping[] typeMappers() {
         return typeMappers;
+    }
+    
+    @Override
+    protected ConfigParam[] parameters() {
+        return parameters;
     }
 
     @Override

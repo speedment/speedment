@@ -16,19 +16,18 @@
  */
 package com.speedment.maven.abstractmojo;
 
+import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
+import static com.speedment.tool.core.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
+import java.io.File;
+import java.util.function.Consumer;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
-
-import java.io.File;
-import java.util.function.Consumer;
-
-import static com.speedment.tool.core.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 
 /**
  * A maven goal that reloads the JSON configuration file
@@ -49,6 +48,7 @@ public abstract class AbstractReloadMojo extends AbstractSpeedmentMojo {
     private @Parameter(defaultValue = "${dbms.password}") String dbmsPassword;
     private @Parameter String[] components;
     private @Parameter Mapping[] typeMappers;
+    private @Parameter ConfigParam[] parameters;
     private @Parameter(defaultValue = DEFAULT_CONFIG_LOCATION) File configFile;
     
     protected AbstractReloadMojo() {}
@@ -93,6 +93,11 @@ public abstract class AbstractReloadMojo extends AbstractSpeedmentMojo {
     @Override
     protected Mapping[] typeMappers() {
         return typeMappers;
+    }
+    
+    @Override
+    protected ConfigParam[] parameters() {
+        return parameters;
     }
 
     @Override
