@@ -17,7 +17,7 @@
 package com.speedment.runtime.core.internal.util.analytics;
 
 import com.speedment.runtime.core.component.InfoComponent;
-import com.speedment.runtime.core.internal.util.EmailUtil;
+import com.speedment.runtime.core.internal.util.InternalEmailUtil;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 
@@ -46,7 +46,7 @@ public enum FocusPoint {
         return Stream.of(infoComponent.getTitle(),
             infoComponent.getImplementationVersion(),
             eventName,
-            EmailUtil.getEmail()
+            InternalEmailUtil.getEmail()
         ).collect(joining(SEPARATOR));
     }
 }

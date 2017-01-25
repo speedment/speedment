@@ -16,21 +16,21 @@
  */
 package com.speedment.runtime.core.internal.util;
 
-import java.util.Optional;
-import java.util.prefs.Preferences;
-
 import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
+import java.util.prefs.Preferences;
 
 /**
  *
  * @author Emil Forslund
+ * @since  3.0.2
  */
-public final class EmailUtil {
+public final class InternalEmailUtil {
 
-    private final static String FIELD_NAME = "user_mail";
-    private final static String DEFAULT_EMAIL = "no-mail-specified";
-    private final static Preferences PREFERENCES = Preferences.userNodeForPackage(EmailUtil.class);
+    private final static String FIELD_NAME       = "user_mail";
+    private final static String DEFAULT_EMAIL    = "no-mail-specified";
+    private final static Preferences PREFERENCES = Preferences.userNodeForPackage(InternalEmailUtil.class);
 
     public static boolean hasEmail() {
         final String storedEmail = PREFERENCES.get(FIELD_NAME, null);
@@ -55,7 +55,7 @@ public final class EmailUtil {
         PREFERENCES.put(FIELD_NAME, email);
     }
 
-    private EmailUtil() {
+    private InternalEmailUtil() {
         instanceNotAllowed(getClass());
     }
 }

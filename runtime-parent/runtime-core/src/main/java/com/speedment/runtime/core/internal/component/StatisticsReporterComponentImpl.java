@@ -37,8 +37,7 @@ public class StatisticsReporterComponentImpl implements StatisticsReporterCompon
     private static final Logger LOGGER = LoggerManager.getLogger(StatisticsReporterComponentImpl.class);
 
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-    private @Inject
-    InfoComponent infoComponent;
+    private @Inject InfoComponent infoComponent;
 
     @ExecuteBefore(State.STARTED)
     public void start() {
