@@ -43,23 +43,31 @@ public class StatisticsReporterComponentImpl implements StatisticsReporterCompon
     @ExecuteBefore(State.STARTED)
     public void start() {
         debug("started");
-        Statistics.onNodeStarted(infoComponent);
+        scheduler.submit(this::reportStarted);
         scheduler.scheduleAtFixedRate(this::alive, 1, 1, TimeUnit.HOURS);
     }
 
     @ExecuteBefore(State.STOPPED)
     public void stop() {
         debug("stopped");
-        Statistics.onNodeStopped(infoComponent);
+        scheduler.submit(this::reportStopped);
         try {
             scheduler.awaitTermination(2, TimeUnit.SECONDS);
         } catch (InterruptedException ie) {
 
         } finally {
-            scheduler.shutdownNow();            
+            scheduler.shutdownNow();
         }
     }
 
+    private void reportStarted() {
+        Statistics.onNodeStarted(infoComponent);
+    }
+    
+    private void reportStopped() {
+        Statistics.onNodeStopped(infoComponent);
+    }
+    
     private void alive() {
         debug("alive");
         Statistics.onNodeAlive(infoComponent);
