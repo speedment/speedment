@@ -23,7 +23,7 @@ import com.speedment.generator.translator.internal.component.CodeGenerationCompo
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.internal.DefaultApplicationBuilder;
 import com.speedment.runtime.core.internal.DefaultApplicationMetadata;
-import com.speedment.runtime.core.internal.util.EmailUtil;
+import com.speedment.runtime.core.internal.util.InternalEmailUtil;
 import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.core.internal.component.UserInterfaceComponentImpl;
 import com.speedment.tool.core.internal.util.InjectionLoader;
@@ -65,7 +65,7 @@ public final class MainApp extends Application {
         ui.start(this, stage);
         
         if (projects.getProject().dbmses().noneMatch(dbms -> true)) {
-            if (EmailUtil.hasEmail()) {
+            if (InternalEmailUtil.hasEmail()) {
                 loader.loadAndShow("Connect");
             } else {
                 loader.loadAndShow("MailPrompt");

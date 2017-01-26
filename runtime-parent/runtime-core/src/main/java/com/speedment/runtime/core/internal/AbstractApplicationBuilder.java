@@ -390,11 +390,10 @@ public abstract class AbstractApplicationBuilder<
                     " is not registered with the " + 
                     DbmsHandlerComponent.class.getSimpleName());
             }
+            
             final String driverName = oDbmsType.get().getDriverName();
             try {
-                // Make sure the driver is loaded. This is a must for some 
-                // JavaEE servers.
-                injector.classLoader().loadClass(driverName);
+                Class.forName(driverName);
             } catch (final ClassNotFoundException cnfe) {
                 LOGGER.error(cnfe, "The database driver class " + driverName + 
                     " is not available. Make sure to include it in your " + 

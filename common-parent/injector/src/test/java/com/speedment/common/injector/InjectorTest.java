@@ -16,7 +16,11 @@
  */
 package com.speedment.common.injector;
 
+import static com.speedment.common.injector.State.INITIALIZED;
+import static com.speedment.common.injector.State.RESOLVED;
+import static com.speedment.common.injector.State.STARTED;
 import com.speedment.common.injector.annotation.Config;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.test_a.StringIdentityMapper;
@@ -26,8 +30,10 @@ import com.speedment.common.injector.test_b.B;
 import com.speedment.common.injector.test_b.C;
 import com.speedment.common.injector.test_c.ChildType;
 import com.speedment.common.injector.test_c.ParentType;
+import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -210,5 +216,66 @@ public class InjectorTest {
         assertEquals("Test overriden int param: ", 56629, configTest.overridenInt);
         assertEquals("Test overriden float param: ", -476.443f, configTest.overridenFloat, 0.00000001f);
         assertEquals("Test overriden boolean param: ", true, configTest.overridenBoolean);
+    }
+    
+    private static abstract class AbstractComponent {
+        
+        protected final AtomicInteger counter;
+        
+        AbstractComponent() {
+            counter = new AtomicInteger();
+        }
+        
+        public int getCount() {
+            return counter.get();
+        }
+        
+        @ExecuteBefore(INITIALIZED)
+        void parentInitialized() {
+            counter.incrementAndGet();
+        }
+        
+        @ExecuteBefore(RESOLVED)
+        void parentResolved() {
+            counter.incrementAndGet();
+        }
+        
+        @ExecuteBefore(STARTED)
+        void parentStarted() {
+            counter.incrementAndGet();
+        }
+    }
+    
+    private static final class ImplementingComponent extends AbstractComponent {
+        @ExecuteBefore(INITIALIZED)
+        void childInitialized() {
+            counter.incrementAndGet();
+        }
+        
+        @ExecuteBefore(RESOLVED)
+        void childResolved() {
+            counter.incrementAndGet();
+        }
+        
+        @ExecuteBefore(STARTED)
+        void childStarted() {
+            counter.incrementAndGet();
+        }
+    }
+    
+    @Test
+    public void testParentChildExecutors() {
+        try {
+            final Injector injector = Injector.builder()
+                .put(ImplementingComponent.class)
+                .build();
+            
+            final ImplementingComponent component =
+                injector.getOrThrow(ImplementingComponent.class);
+            
+            assertEquals("Make sure all executors was executed: ", 6, component.getCount());
+        } catch (final InstantiationException ex) {
+            fail("InstantiationException!");
+        }
     }
 }

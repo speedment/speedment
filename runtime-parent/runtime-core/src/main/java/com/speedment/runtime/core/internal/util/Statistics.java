@@ -100,7 +100,7 @@ public final class Statistics {
     }
 
     private static Param includeMail() {
-        return new Param("mail", EmailUtil.getEmail());
+        return new Param("mail", InternalEmailUtil.getEmail());
     }
 
     private static void sendPostRequest(final Collection<Param> params) {

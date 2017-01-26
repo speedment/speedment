@@ -18,7 +18,7 @@ package com.speedment.tool.core.internal.controller;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.core.component.EventComponent;
-import com.speedment.runtime.core.internal.util.EmailUtil;
+import com.speedment.runtime.core.internal.util.InternalEmailUtil;
 import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.event.UIEvent;
 import com.speedment.tool.core.internal.util.InjectionLoader;
@@ -70,7 +70,7 @@ public final class MailPromptController implements Initializable {
 
         okey.setOnAction(ev -> {
             injectionLoader.loadAndShow("Connect");
-            EmailUtil.setEmail(email.getText());
+            InternalEmailUtil.setEmail(email.getText());
             eventComponent.notify(UIEvent.OPEN_CONNECT_WINDOW);
         });
         
