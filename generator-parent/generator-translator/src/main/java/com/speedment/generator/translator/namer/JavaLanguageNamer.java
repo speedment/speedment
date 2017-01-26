@@ -72,6 +72,7 @@ public interface JavaLanguageNamer {
      * given mutator on the first character (if any).
      *
      * @param externalName to base the name on
+     * @param mutator to apply to the initial character
      * @return the java name (e.g. "someName") by first applying the 
      * {@link #javaNameFromExternal(java.lang.String) } method and then applying
      * the given mutator on the first character (if any)
@@ -105,7 +106,7 @@ public interface JavaLanguageNamer {
      * Returns a replacement word if the given word is reserved by Java,
      * otherwise the original word is returned.
      *
-     * @param word
+     * @param word  to replace
      * @return a replacement word if the given word is reserved by Java,
      * otherwise the original word is returned
      */
@@ -115,7 +116,7 @@ public interface JavaLanguageNamer {
      * Returns a replacement word if the given word contains illegal Java
      * identifier characters, otherwise the original word is returned.
      *
-     * @param word
+     * @param word to replace
      * @return a replacement word if the given word contains illegal Java
      * identifier characters, otherwise the original word is returned
      */
@@ -125,7 +126,7 @@ public interface JavaLanguageNamer {
      * Returns the wrapper class name for primitive type names (e.g. Integer for
      * int) or else returns null.
      *
-     * @param javaTypeName
+     * @param javaTypeName naming the primitive class
      * @return the wrapper class name for primitive type names (e.g. Integer for
      * int) or else returns null
      */
@@ -135,7 +136,7 @@ public interface JavaLanguageNamer {
      * Returns a String where the camel cased java name has been replaced with
      * an underscore separated String.
      *
-     * @param javaName
+     * @param javaName to convert
      * @return a String where the camel cased java name has been replaced with
      * an underscore separated String
      */
@@ -144,7 +145,7 @@ public interface JavaLanguageNamer {
     /**
      * Returns a String that is easy to read for a human.
      *
-     * @param javaName
+     * @param javaName to convert
      * @return a String that is easy to read for a human
      */
     static String toHumanReadable(final String javaName) {
