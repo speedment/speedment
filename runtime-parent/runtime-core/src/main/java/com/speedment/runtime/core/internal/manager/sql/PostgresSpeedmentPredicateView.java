@@ -66,4 +66,27 @@ public class PostgresSpeedmentPredicateView extends AbstractFieldPredicateView i
     protected SqlPredicateFragment containsIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
         return of("(" + cn + " ILIKE '%' || ? || '%')", negated).add(getFirstOperandAsRaw(model));
     }
+    
+    
+    @Override
+    protected SqlPredicateFragment lessOrEqualString(String cn, FieldPredicate<?> model) {
+        return of("(" + cn + "::bytea <= ?::bytea)").add(getFirstOperandAsRaw(model));
+    }
+
+    @Override
+    protected SqlPredicateFragment lessThanString(String cn, FieldPredicate<?> model) {
+        return of("(" + cn + "::bytea < ?::bytea)").add(getFirstOperandAsRaw(model));
+    }
+
+    @Override
+    protected SqlPredicateFragment greaterOrEqualString(String cn, FieldPredicate<?> model) {
+        return of("(" + cn + "::bytea >= ?::bytea)").add(getFirstOperandAsRaw(model));
+    }
+
+    @Override
+    protected SqlPredicateFragment greaterThanString(String cn, FieldPredicate<?> model) {
+        return of("(" + cn + "::bytea > ?::bytea)").add(getFirstOperandAsRaw(model));
+    }
+    
+    
 }
