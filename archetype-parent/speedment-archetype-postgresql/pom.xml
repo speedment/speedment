@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.archetypes</groupId>
         <artifactId>archetypes</artifactId>
-        <version>3.0.2-SNAPSHOT</version>
+        <version>3.0.2</version>
     </parent>
             
     <artifactId>speedment-archetype-postgresql</artifactId>
@@ -59,12 +59,10 @@
         
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-archetype-plugin</artifactId>
             </plugin>
             
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
             </plugin>
         </plugins>

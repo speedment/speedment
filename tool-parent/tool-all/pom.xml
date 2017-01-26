@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.tool</groupId>
         <artifactId>tool-parent</artifactId>
-        <version>3.0.2-SNAPSHOT</version>
+        <version>3.0.2</version>
     </parent>
     
     <artifactId>tool-all</artifactId>
@@ -74,6 +74,11 @@
                     <exclusion>
                         <groupId>com.speedment.generator</groupId>
                         <artifactId>generator-core</artifactId>
+                    </exclusion>
+                    
+                    <exclusion>
+                        <groupId>com.speedment.generator</groupId>
+                        <artifactId>generator-translator</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -151,6 +156,11 @@
                         <groupId>com.speedment.common</groupId>
                         <artifactId>invariant</artifactId>
                     </exclusion>
+                    
+                    <exclusion>
+                        <groupId>com.speedment.common</groupId>
+                        <artifactId>mapstream</artifactId>
+                    </exclusion>
 
                     <exclusion>
                         <groupId>com.speedment.runtime</groupId>
@@ -170,6 +180,11 @@
                     <exclusion>
                         <groupId>com.speedment.generator</groupId>
                         <artifactId>generator-core</artifactId>
+                    </exclusion>
+                    
+                    <exclusion>
+                        <groupId>com.speedment.generator</groupId>
+                        <artifactId>generator-translator</artifactId>
                     </exclusion>
 
                     <exclusion>

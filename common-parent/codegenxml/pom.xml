@@ -25,11 +25,11 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.2</version>
     </parent>
     
     <artifactId>codegenxml</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - CodeGen XML</name>
@@ -39,7 +39,7 @@
     </description>
     
     <properties>
-        <codegen.version>2.4.3-SNAPSHOT</codegen.version>
+        <codegen.version>2.4.3</codegen.version>
     </properties>
     
     <build>

@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.tool</groupId>
         <artifactId>tool-parent</artifactId>
-        <version>3.0.2-SNAPSHOT</version>
+        <version>3.0.2</version>
     </parent>
     
     <artifactId>tool-config</artifactId>
@@ -62,12 +62,10 @@
             <build>
                 <plugins>
                     <plugin><!-- Generate sources jar -->
-                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
                     </plugin>
                     
                     <plugin><!-- Generate javadoc jar -->
-                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         
                         <configuration>

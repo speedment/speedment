@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.archetypes</groupId>
         <artifactId>archetypes</artifactId>
-        <version>3.0.2-SNAPSHOT</version>
+        <version>3.0.2</version>
     </parent>
     
     <artifactId>speedment-archetype-mysql</artifactId>
@@ -35,7 +35,7 @@
     <name>Speedment - Archetypes - MySQL</name>
     
     <properties>
-        <mysql.version>5.1.38</mysql.version>
+        <mysql.version>6.0.5</mysql.version>
     </properties>
                                                
     <build>
@@ -58,14 +58,12 @@
         </resources>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-archetype-plugin</artifactId>
             </plugin>
             
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
             </plugin>
         </plugins>
-    </build>
+    </build>    
 </project>

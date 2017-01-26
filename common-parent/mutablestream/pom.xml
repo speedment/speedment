@@ -26,11 +26,11 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.2</version>
     </parent>
     
     <artifactId>mutable-stream</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - MutableStream</name>
@@ -40,12 +40,6 @@
     </description>
     <url>https://www.github.com/speedment/speedment/wiki/MutableStream/</url>
     
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
-    
     <build>
         <plugins>
             <plugin>
@@ -53,16 +47,6 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-Vendor>Speedment, Inc.</Bundle-Vendor>
-                        <Bundle-Description>
-                            An implementation of the Java 8 Stream API that 
-                            allows the pipeline to be mutated before it is 
-                            executed.
-                        </Bundle-Description>
-                        <Import-Package>
-                            org.osgi.framework,
-                            *;resolution:=optional 
-                        </Import-Package>
                         <Export-Package>
                             com.speedment.common.mutablestream,
                             com.speedment.common.mutablestream.action,

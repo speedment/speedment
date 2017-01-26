@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.build</groupId>
         <artifactId>build-parent</artifactId>
-        <version>3.0.2-SNAPSHOT</version>
+        <version>3.0.2</version>
     </parent>
     
     <groupId>com.speedment</groupId>
@@ -105,6 +105,12 @@
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>invariant</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>singleton-stream</artifactId>
             <scope>runtime</scope>
         </dependency>
     </dependencies>
