@@ -10,7 +10,7 @@ mvn archetype:generate \
     -DarchetypeArtifactId=speedment-archetype-mysql \
     -DarchetypeGroupId=com.speedment.archetypes \
     -DinteractiveMode=false \
-    -DarchetypeVersion=3.0.1
+    -DarchetypeVersion=3.0.2
 ```
 Replace `speedment-archetype-mysql` with the archetype you want to use.
 
