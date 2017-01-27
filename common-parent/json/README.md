@@ -29,8 +29,8 @@ List<String> list = (List<String>) Json.fromJson("[\"a\", \"b\", \"c\"]");
 ### Download
 ```xml
 <dependency>
-    <groupId>com.speedment.common</groupdId>
+    <groupId>com.speedment.common</groupId>
     <artifactId>json</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
