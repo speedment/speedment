@@ -6,6 +6,6 @@ This module contains useful methods for checking the invariant of a method.
 <dependency>
     <groupId>com.speedment.common</groupId>
     <artifactId>invariant</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
