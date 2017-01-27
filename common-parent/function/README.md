@@ -7,6 +7,6 @@ To use `function` in your own projects, include the following dependency in your
 <dependency>
     <groupId>com.speedment.common</groupId>
     <artifactId>function</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
