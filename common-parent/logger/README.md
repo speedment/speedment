@@ -38,6 +38,6 @@ To use Logger in your own projects, add the following to your `pom.xml`-file:
 <dependency>
     <groupId>com.speedment.common</groupId>
     <artifactId>logger</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```
