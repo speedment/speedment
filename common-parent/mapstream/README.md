@@ -40,6 +40,6 @@ To use MapStream in your own projects, add the following to your `pom.xml`-file.
 <dependency>
     <groupId>com.speedment.common</groupId>
     <artifactId>mapstream</artifactId>
-    <version>2.3.4</version>
+    <version>2.3.5</version>
 </dependency>
 ```

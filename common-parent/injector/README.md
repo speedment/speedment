@@ -197,7 +197,7 @@ To use `function` in your own projects, include the following dependency in your
 <dependency>
     <groupId>com.speedment.common</groupId>
     <artifactId>injector</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 

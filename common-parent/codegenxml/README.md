@@ -7,6 +7,6 @@ To use CodeGenXML in your projects, add the following dependency to your `pom.xm
 <dependency>
     <groupId>com.speedment.common</groupId>
     <artifactId>codegenxml</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
