@@ -5,6 +5,9 @@
 <style type="text/css">
 	.st0{fill:#D1D3E2;stroke:#84899F;stroke-miterlimit:10;}
 	.st1{fill:#D1D3E2;fill-opacity:0;stroke:#84899F;stroke-miterlimit:10;}
+	.st2{fill:#E21047;stroke:#4E5260;stroke-width:1.5;stroke-linecap:round;stroke-miterlimit:10;}
+	.st3{fill:none;stroke:#E21047;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;}
+	.st4{fill:#E25267;stroke:#E21047;stroke-width:1.5;stroke-miterlimit:10;}
 </style>
 <g>
 	<path id="path4172" inkscape:connector-curvature="0" sodipodi:nodetypes="cccc" class="st0" d="M22,19.5l0-15L2,4.8v14.6
@@ -14,4 +17,10 @@
 	<path id="path4151_3_" class="st0" d="M22,9.5c0,2-4.5,3.6-10,3.6S2,11.5,2,9.5"/>
 	<ellipse id="path4151_1_" class="st0" cx="12" cy="4.5" rx="10" ry="3.6"/>
 </g>
+<g>
+	<rect x="9" y="9.5" transform="matrix(-0.7076 -0.7066 0.7066 -0.7076 6.6047 27.4289)" class="st2" width="0" height="5.8"/>
+	<rect x="12" y="12.5" transform="matrix(-0.7076 -0.7066 0.7066 -0.7076 9.6795 34.8285)" class="st2" width="0" height="5.8"/>
+</g>
+<path class="st3" d="M4.8,19.6C4.2,20,1.6,21.7,0,24.8"/>
+<path class="st4" d="M5.8,12.4l6.2,6.2l-3.9,4c-0.7,0.7-1.7,0.7-2.4,0l-3.8-3.8c-0.7-0.7-0.7-1.7,0-2.4L5.8,12.4z"/>
 </svg>

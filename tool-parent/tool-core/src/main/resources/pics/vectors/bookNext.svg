@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#7D8FF9;stroke:#253CAF;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st1{fill:#FFFFFF;}
+	.st2{fill:none;stroke:#7D8FF9;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st3{fill:none;stroke:#253CAF;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st4{fill:none;}
+	.st5{fill:none;stroke:#7D8FF9;stroke-linecap:round;stroke-linejoin:round;}
+	.st6{fill:none;stroke:#7D8FF9;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:0.9333,0.9333;}
+	.st7{fill:#FFFFFF;stroke:#000000;stroke-miterlimit:10;}
+	.st8{fill:#00CC99;stroke:#128463;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+</style>
+<path class="st0" d="M2.8,3.1C2.4,3.8,1.6,4.3,0.6,4.3s-1.8-0.5-2.2-1.2h-9.2v17.4h9c0,1.2,1.1,2.2,2.4,2.2s2.4-1,2.4-2.2h9V3.1H2.8
+	z"/>
+<path class="st1" d="M2.5,5.1C2.1,5.7,1.4,6,0.6,6s-1.5-0.4-1.9-0.9h-8v12.8h7.8c0,0.9,0.9,1.6,2.1,1.6s2.1-0.7,2.1-1.6h7.8V5.1H2.5
+	z"/>
+<line class="st2" x1="0.6" y1="6.6" x2="0.6" y2="17.7"/>
+<path class="st3" d="M2.5,5.1C2.1,5.7,1.4,6,0.6,6s-1.5-0.4-1.9-0.9h-8v12.8h7.8c0,0.9,0.9,1.6,2.1,1.6s2.1-0.7,2.1-1.6h7.8V5.1H2.5
+	z"/>
+<g>
+	<g>
+		<g>
+			<line class="st4" x1="-7.5" y1="8.3" x2="-1.8" y2="8.3"/>
+			<g>
+				<line class="st5" x1="-7.5" y1="8.3" x2="-7" y2="8.3"/>
+				<line class="st6" x1="-6.1" y1="8.3" x2="-2.8" y2="8.3"/>
+				<line class="st5" x1="-2.3" y1="8.3" x2="-1.8" y2="8.3"/>
+			</g>
+		</g>
+		<g>
+			<line class="st4" x1="-7.5" y1="11.3" x2="-1.8" y2="11.3"/>
+			<g>
+				<line class="st5" x1="-7.5" y1="11.3" x2="-7" y2="11.3"/>
+				<line class="st6" x1="-6.1" y1="11.3" x2="-2.8" y2="11.3"/>
+				<line class="st5" x1="-2.3" y1="11.3" x2="-1.8" y2="11.3"/>
+			</g>
+		</g>
+		<g>
+			<line class="st4" x1="-7.5" y1="14.3" x2="-1.8" y2="14.3"/>
+			<g>
+				<line class="st5" x1="-7.5" y1="14.3" x2="-7" y2="14.3"/>
+				<line class="st6" x1="-6.1" y1="14.3" x2="-2.8" y2="14.3"/>
+				<line class="st5" x1="-2.3" y1="14.3" x2="-1.8" y2="14.3"/>
+			</g>
+		</g>
+	</g>
+	<g>
+		<g>
+			<line class="st4" x1="3" y1="8.3" x2="8.7" y2="8.3"/>
+			<g>
+				<line class="st5" x1="3" y1="8.3" x2="3.5" y2="8.3"/>
+				<line class="st6" x1="4.5" y1="8.3" x2="7.7" y2="8.3"/>
+				<line class="st5" x1="8.2" y1="8.3" x2="8.7" y2="8.3"/>
+			</g>
+		</g>
+		<g>
+			<line class="st4" x1="3" y1="11.3" x2="8.7" y2="11.3"/>
+			<g>
+				<line class="st5" x1="3" y1="11.3" x2="3.5" y2="11.3"/>
+				<line class="st6" x1="4.5" y1="11.3" x2="7.7" y2="11.3"/>
+				<line class="st5" x1="8.2" y1="11.3" x2="8.7" y2="11.3"/>
+			</g>
+		</g>
+		<g>
+			<line class="st4" x1="3" y1="14.3" x2="8.7" y2="14.3"/>
+			<g>
+				<line class="st5" x1="3" y1="14.3" x2="3.5" y2="14.3"/>
+				<line class="st6" x1="4.5" y1="14.3" x2="7.7" y2="14.3"/>
+				<line class="st5" x1="8.2" y1="14.3" x2="8.7" y2="14.3"/>
+			</g>
+		</g>
+	</g>
+</g>
+<line class="st7" x1="14.6" y1="12.9" x2="14.6" y2="9.9"/>
+<polygon class="st8" points="17.9,7.3 17.9,9.8 13.6,9.8 13.6,11.7 13.6,11.9 13.6,13.8 17.9,13.8 17.9,16.3 23,11.8 "/>
+</svg>
