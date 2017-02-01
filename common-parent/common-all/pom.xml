@@ -26,11 +26,10 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3-SNAPSHOT</version>
     </parent>
     
     <artifactId>common-all</artifactId>
-    <version>1.0.2</version>
     <packaging>pom</packaging>
     
     <name>Speedment - Common - All</name>
