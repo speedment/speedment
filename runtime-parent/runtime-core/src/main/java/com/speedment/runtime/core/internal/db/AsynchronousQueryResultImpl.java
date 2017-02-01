@@ -20,6 +20,7 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
+import com.speedment.runtime.core.db.SqlConsumer;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.stream.StreamUtil;
@@ -41,13 +42,15 @@ import java.util.stream.Stream;
 public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryResult<T> {
 
     private static final Logger LOGGER = LoggerManager.getLogger(AsynchronousQueryResultImpl.class);
-    private static final Logger LOGGER_STREAN = LoggerManager.getLogger(ApplicationBuilder.LogType.STREAM.getLoggerName());
+    private static final Logger LOGGER_STREAM = LoggerManager.getLogger(ApplicationBuilder.LogType.STREAM.getLoggerName());
 
     private String sql;
     private List<?> values;
     private SqlFunction<ResultSet, T> rsMapper;
     private final Supplier<Connection> connectionSupplier;
     private final ParallelStrategy parallelStrategy;
+    private final SqlConsumer<PreparedStatement> statementConfigurator;
+    private final SqlConsumer<ResultSet> resultSetConfigurator;
     private Connection connection;  // null allowed if the stream() method is not run
     private PreparedStatement ps;
     private ResultSet rs;
@@ -62,7 +65,9 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
         final List<?> values,
         final SqlFunction<ResultSet, T> rsMapper,
         final Supplier<Connection> connectionSupplier,
-        final ParallelStrategy parallelStrategy
+        final ParallelStrategy parallelStrategy,
+        final SqlConsumer<PreparedStatement> statementConfigurator,
+        final SqlConsumer<ResultSet> resultSetConfigurator
     ) {
         setSql(sql); // requireNonNull in setter
         setValues(values); // requireNonNull in setter
@@ -70,21 +75,25 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
         this.connectionSupplier = requireNonNull(connectionSupplier);
         this.parallelStrategy   = requireNonNull(parallelStrategy);
         setState(State.INIT);
+        this.statementConfigurator = requireNonNull(statementConfigurator);
+        this.resultSetConfigurator = requireNonNull(resultSetConfigurator);
     }
 
     @Override
     public Stream<T> stream() {
         setState(State.ESTABLISH);
         try {
-            LOGGER_STREAN.debug("%s, values:%s", getSql(), getValues());
+            LOGGER_STREAM.debug("%s, values:%s", getSql(), getValues());
             connection = connectionSupplier.get();
             connection.setAutoCommit(false);
-            ps = connection.prepareStatement(getSql());
+            ps = connection.prepareStatement(getSql(), java.sql.ResultSet.TYPE_FORWARD_ONLY, java.sql.ResultSet.CONCUR_READ_ONLY);
+            statementConfigurator.accept(ps);
             int i = 1;
             for (final Object o : getValues()) {
                 ps.setObject(i++, o);
             }
             rs = ps.executeQuery();
+            resultSetConfigurator.accept(rs);
         } catch (SQLException sqle) {
             LOGGER.error(sqle, "Error executing " + getSql() + ", values=" + getValues());
             throw new SpeedmentException(sqle);
@@ -140,7 +149,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
 
     @Override
     public List<?> getValues() {
-        return values;
+        return values; // Intentionally expose the modifiable collection here. 
     }
 
     @Override
@@ -158,11 +167,11 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
         this.rsMapper = requireNonNull(rsMapper);
     }
 
-    public State getState() {
+    private State getState() {
         return state;
     }
 
-    protected void setState(State state) {
+    private void setState(State state) {
         this.state = requireNonNull(state);
     }
 }

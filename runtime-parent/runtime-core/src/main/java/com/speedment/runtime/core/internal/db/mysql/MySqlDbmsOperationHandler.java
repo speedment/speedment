@@ -17,12 +17,19 @@
 package com.speedment.runtime.core.internal.db.mysql;
 
 import com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  *
- * @author  Emil Forslund
- * @since   3.0.0
+ * @author Emil Forslund
+ * @since 3.0.0
  */
 public final class MySqlDbmsOperationHandler extends AbstractDbmsOperationHandler {
-    
+
+    @Override
+    public void configureSelect(PreparedStatement statement) throws SQLException {
+        statement.setFetchSize(Integer.MIN_VALUE); // Enable streaming ResultSet
+    }
+
 }

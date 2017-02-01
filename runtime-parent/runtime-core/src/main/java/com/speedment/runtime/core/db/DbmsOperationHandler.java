@@ -27,15 +27,15 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
- * A DbmsOperationHandler provides the interface between Speedment and an 
+ * A DbmsOperationHandler provides the interface between Speedment and an
  * underlying {@link Dbms} for when running queries.
  *
- * @author  Per Minborg
- * @author  Emil Forslund
- * @since   2.0.0
+ * @author Per Minborg
+ * @author Emil Forslund
+ * @since 2.0.0
  */
 public interface DbmsOperationHandler {
-    
+
     /**
      * Eagerly executes a SQL query and subsequently maps each row in the
      * ResultSet using a provided mapper and return a Stream of the mapped
@@ -45,16 +45,16 @@ public interface DbmsOperationHandler {
      * stream is returned.
      *
      * @param <T> the type of the objects in the stream to return
-     * @param dbms  the dbms to send it to
+     * @param dbms the dbms to send it to
      * @param sql the SQL command to execute
      * @param rsMapper the mapper to use when iterating over the ResultSet
      * @return a stream of the mapped objects
      */
     default <T> Stream<T> executeQuery(
-            Dbms dbms, 
-            String sql, 
-            SqlFunction<ResultSet, T> rsMapper) {
-        
+        Dbms dbms,
+        String sql,
+        SqlFunction<ResultSet, T> rsMapper) {
+
         return executeQuery(dbms, sql, Collections.emptyList(), rsMapper);
     }
 
@@ -66,7 +66,7 @@ public interface DbmsOperationHandler {
      * {@code empty} stream is returned.
      *
      * @param <T> the type of the objects in the stream to return
-     * @param dbms  the dbms to send it to
+     * @param dbms the dbms to send it to
      * @param sql the non-null SQL command to execute
      * @param values non-null values to use for "?" parameters in the sql
      * command
@@ -75,10 +75,10 @@ public interface DbmsOperationHandler {
      * @return a stream of the mapped objects
      */
     <T> Stream<T> executeQuery(
-            Dbms dbms, 
-            String sql, 
-            List<?> values, 
-            SqlFunction<ResultSet, T> rsMapper
+        Dbms dbms,
+        String sql,
+        List<?> values,
+        SqlFunction<ResultSet, T> rsMapper
     );
 
     /**
@@ -89,29 +89,28 @@ public interface DbmsOperationHandler {
      * no objects are present, an {@code empty} stream is returned.
      *
      * @param <T> the type of the objects in the Stream to return
-     * @param dbms  the dbms to send it to
+     * @param dbms the dbms to send it to
      * @param sql the non-null SQL command to execute
      * @param values non-null List of objects to use for "?" parameters in the
      * SQL command
      * @param rsMapper the non-null mapper to use when iterating over the
      * {@link ResultSet}
-     * @param parallelStrategy  strategy to use if constructing a parallel 
-     * stream
+     * @param parallelStrategy strategy to use if constructing a parallel stream
      * @return a stream of the mapped objects
      */
     <T> AsynchronousQueryResult<T> executeQueryAsync(
-            Dbms dbms, 
-            String sql,
-            List<?> values,
-            SqlFunction<ResultSet, T> rsMapper,
-            ParallelStrategy parallelStrategy
+        Dbms dbms,
+        String sql,
+        List<?> values,
+        SqlFunction<ResultSet, T> rsMapper,
+        ParallelStrategy parallelStrategy
     );
 
     /**
      * Executes an SQL update command. Generated key(s) following an insert
      * command (if any) will be feed to the provided Consumer.
-     * 
-     * @param <ENTITY>  the type of the entity from which the fields come
+     *
+     * @param <ENTITY> the type of the entity from which the fields come
      *
      * @param dbms the dbms to send it to
      * @param sql the non-null SQL command to execute
@@ -122,11 +121,11 @@ public interface DbmsOperationHandler {
      * @throws SQLException if an error occurs
      */
     <ENTITY> void executeInsert(
-            Dbms dbms,
-            String sql,
-            List<?> values,
-            Collection<Field<ENTITY>> generatedKeyFields,
-            Consumer<List<Long>> generatedKeyConsumer
+        Dbms dbms,
+        String sql,
+        List<?> values,
+        Collection<Field<ENTITY>> generatedKeyFields,
+        Consumer<List<Long>> generatedKeyConsumer
     ) throws SQLException;
 
     /**
@@ -150,7 +149,7 @@ public interface DbmsOperationHandler {
      * @throws SQLException if an error occurs
      */
     void executeDelete(Dbms dbms, String sql, List<?> values) throws SQLException;
-    
+
     /**
      * Constructs an object that implements the <code>Clob</code> interface. The
      * object returned initially contains no data. The
@@ -280,5 +279,27 @@ public interface DbmsOperationHandler {
      * @since 2.3.2
      */
     Struct createStruct(Dbms dbms, String typeName, Object[] attributes) throws SQLException;
-    
+
+    /**
+     * Configures a select statement for optimum read performance. This is
+     * necessary for some database types such as MySQL or else large ResutlSets
+     * may consume the entire heap.
+     *
+     * @param statement to configure
+     * @throws java.sql.SQLException if the configuration fails
+     */
+    default void configureSelect(PreparedStatement statement) throws SQLException {
+        // Do nothing by default
+    }
+
+    /**
+     * Configures a ResultSet for optimum read performance.
+     *
+     * @param resultSet to configure
+     * @throws java.sql.SQLException if the configuration fails
+     */
+    default void configureSelect(ResultSet resultSet) throws SQLException {
+        // Do nothing by default
+    }
+
 }

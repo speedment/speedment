@@ -74,8 +74,9 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
         try (
                 final Connection connection = connectionPoolComponent.getConnection(dbms);
-                final PreparedStatement ps = connection.prepareStatement(sql)
+                final PreparedStatement ps = connection.prepareStatement(sql, java.sql.ResultSet.TYPE_FORWARD_ONLY, java.sql.ResultSet.CONCUR_READ_ONLY)
         ) {
+            configureSelect(ps);
             connection.setAutoCommit(false);
             try {
                 int i = 1;
@@ -83,6 +84,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
                     ps.setObject(i++, o);
                 }
                 try (final ResultSet rs = ps.executeQuery()) {
+                    configureSelect(rs);
 
                     // Todo: Make a transparent stream with closeHandler added.
                     final Stream.Builder<T> streamBuilder = Stream.builder();
@@ -113,7 +115,9 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
             Objects.requireNonNull(values),
             Objects.requireNonNull(rsMapper),
             () -> connectionPoolComponent.getConnection(dbms),
-            parallelStrategy
+            parallelStrategy,
+            this::configureSelect,
+            this::configureSelect
         );
     }
 
