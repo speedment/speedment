@@ -47,7 +47,7 @@
         <codegen.version>2.4.3</codegen.version>
         <codegenxml.version>1.0.2</codegenxml.version>
         <injector.version>1.1.0</injector.version>
-        <rest.version>1.0.2</rest.version>
+        <rest.version>1.0.3-SNAPSHOT</rest.version>
         <lazy.version>1.0.2</lazy.version>
         <mapstream.version>2.3.5</mapstream.version>
         <mutablestream.version>1.0.0</mutablestream.version>
@@ -102,36 +102,18 @@
                 <groupId>com.speedment.common</groupId>
                 <artifactId>codegenxml</artifactId>
                 <version>${codegenxml.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.speedment.common</groupId>
-                        <artifactId>codegen</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>injector</artifactId>
                 <version>${injector.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.speedment.common</groupId>
-                        <artifactId>logger</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
                 <groupId>com.speedment.common</groupId>
                 <artifactId>rest</artifactId>
                 <version>${rest.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.speedment.common</groupId>
-                        <artifactId>json</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>
@@ -150,94 +132,7 @@
                 <groupId>com.speedment.common</groupId>
                 <artifactId>singleton-stream</artifactId>
                 <version>${singletonstream.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.speedment.common</groupId>
-                        <artifactId>logger</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
-    <profiles>
-        <profile>
-            <id>release</id>
-            
-            <dependencies>
-                <dependency>
-                    <groupId>com.speedment.common</groupId>
-                    <artifactId>invariant</artifactId>
-                </dependency>
-
-                <dependency>
-                    <groupId>com.speedment.common</groupId>
-                    <artifactId>function</artifactId>
-                </dependency>
-
-                <dependency>
-                    <groupId>com.speedment.common</groupId>
-                    <artifactId>json</artifactId>
-                </dependency>
-
-                <dependency>
-                    <groupId>com.speedment.common</groupId>
-                    <artifactId>tuple</artifactId>
-                </dependency>
-
-                <dependency>
-                    <groupId>com.speedment.common</groupId>
-                    <artifactId>logger</artifactId>
-                </dependency>
-
-                <dependency>
-                    <groupId>com.speedment.common</groupId>
-                    <artifactId>mapstream</artifactId>
-                </dependency>
-
-                <dependency>
-                    <groupId>com.speedment.common</groupId>
-                    <artifactId>codegen</artifactId>
-                </dependency>
-
-                <dependency>
-                    <groupId>com.speedment.common</groupId>
-                    <artifactId>codegenxml</artifactId>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>com.speedment.common</groupId>
-                            <artifactId>codegen</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
-
-                <dependency>
-                    <groupId>com.speedment.common</groupId>
-                    <artifactId>injector</artifactId>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>com.speedment.common</groupId>
-                            <artifactId>logger</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
-
-                <dependency>
-                    <groupId>com.speedment.common</groupId>
-                    <artifactId>rest</artifactId>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>com.speedment.common</groupId>
-                            <artifactId>json</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
-
-                <dependency>
-                    <groupId>com.speedment.common</groupId>
-                    <artifactId>lazy</artifactId>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
 </project>

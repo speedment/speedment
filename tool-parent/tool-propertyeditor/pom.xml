@@ -121,12 +121,6 @@
             <groupId>com.speedment.tool</groupId>
             <artifactId>tool-config</artifactId>
             <version>${speedment.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         
         <!-- Test Dependencies -->

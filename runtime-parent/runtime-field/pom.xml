@@ -102,26 +102,12 @@
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-config</artifactId>
             <version>${speedment.version}</version>
-            
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         
         <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-typemapper</artifactId>
             <version>${speedment.version}</version>
-            
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         
         <dependency>

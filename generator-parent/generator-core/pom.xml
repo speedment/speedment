@@ -137,24 +137,12 @@
             <groupId>com.speedment.generator</groupId>
             <artifactId>generator-translator</artifactId>
             <version>${speedment.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         
         <dependency>
             <groupId>com.speedment.generator</groupId>
             <artifactId>generator-standard</artifactId>
             <version>${speedment.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
 
         <!-- Test dependencies -->

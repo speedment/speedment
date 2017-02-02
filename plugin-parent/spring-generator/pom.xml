@@ -41,7 +41,7 @@
     <url>https://www.github.com/speedment/speedment-plugins/wiki/Spring-Generator/</url>
     
     <properties>
-        <spring.version>4.3.5.RELEASE</spring.version>
+        <spring.version>4.3.6.RELEASE</spring.version>
     </properties>
     
     <build>

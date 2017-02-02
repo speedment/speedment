@@ -180,7 +180,7 @@ public final class LongRangeUtil {
         return val;
     }
 
-    public LongRangeUtil() {
+    private LongRangeUtil() {
         throw new UnsupportedOperationException();
     }
 }

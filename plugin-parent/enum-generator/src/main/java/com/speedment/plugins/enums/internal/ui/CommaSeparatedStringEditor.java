@@ -19,9 +19,8 @@ package com.speedment.plugins.enums.internal.ui;
 import com.speedment.plugins.enums.StringToEnumTypeMapper;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.propertyeditor.PropertyEditor;
-import javafx.beans.binding.Bindings;
-
 import java.util.stream.Stream;
+import javafx.beans.binding.Bindings;
 
 /**
  * Editor for generating a comma-separated string.
@@ -35,7 +34,8 @@ import java.util.stream.Stream;
  * @author  Simon Jonasson
  * @since   3.0.0
  */
-public class CommaSeparatedStringEditor<T extends ColumnProperty> implements PropertyEditor<T>{
+public class CommaSeparatedStringEditor<T extends ColumnProperty> 
+        implements PropertyEditor<T> {
 
     @Override
     public Stream<Item> fieldsFor(T document) {

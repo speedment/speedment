@@ -150,24 +150,12 @@
             <groupId>com.speedment.tool</groupId>
             <artifactId>tool-config</artifactId>
             <version>${speedment.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         
         <dependency>
             <groupId>com.speedment.tool</groupId>
             <artifactId>tool-propertyeditor</artifactId>
             <version>${speedment.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         	        
         <!-- LICENSE INFORMATION
