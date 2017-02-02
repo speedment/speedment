@@ -17,40 +17,19 @@
 package com.speedment.runtime.config.util;
 
 import com.speedment.runtime.config.internal.util.Trees;
-import org.junit.*;
-
+import static com.speedment.runtime.config.internal.util.Trees.TraversalOrder.*;
 import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.speedment.runtime.config.internal.util.Trees.TraversalOrder.*;
 import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 /**
  *
  * @author pemi
  */
 public class TreesTest {
-
-    public TreesTest() {
-    }
-
-    @BeforeClass
-    public static void setUpClass() {
-    }
-
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
 
     /**
      * Test of traverse method, of class Trees.
