@@ -16,11 +16,14 @@
  */
 package com.speedment.runtime.config;
 
-
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.mutator.IndexMutator;
-import com.speedment.runtime.config.trait.*;
-
+import com.speedment.runtime.config.trait.HasChildren;
+import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.runtime.config.trait.HasMainInterface;
+import com.speedment.runtime.config.trait.HasMutator;
+import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.trait.HasParent;
 import java.util.stream.Stream;
 
 /**
@@ -61,16 +64,6 @@ public interface Index extends
      * @return  index columns
      */
     Stream<? extends IndexColumn> indexColumns();
-
-//    default Stream<? extends IndexColumn> indexColumns() {
-//        return children(INDEX_COLUMNS, indexColumnConstructor());
-//    }
-//
-//    default IndexColumn addNewIndexColumn() {
-//        return indexColumnConstructor().apply(this, newDocument(this, INDEX_COLUMNS));
-//    }
-//
-//    BiFunction<Index, Map<String, Object>, ? extends IndexColumn> indexColumnConstructor();
 
     @Override
     default Class<Index> mainInterface() {

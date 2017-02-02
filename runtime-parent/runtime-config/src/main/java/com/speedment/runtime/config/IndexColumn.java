@@ -16,10 +16,15 @@
  */
 package com.speedment.runtime.config;
 
-
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.mutator.IndexColumnMutator;
-import com.speedment.runtime.config.trait.*;
+import com.speedment.runtime.config.trait.HasColumn;
+import com.speedment.runtime.config.trait.HasMainInterface;
+import com.speedment.runtime.config.trait.HasMutator;
+import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.trait.HasOrderType;
+import com.speedment.runtime.config.trait.HasOrdinalPosition;
+import com.speedment.runtime.config.trait.HasParent;
 
 /**
  * A typed {@link Document} that represents the column referenced by an index 
@@ -29,7 +34,6 @@ import com.speedment.runtime.config.trait.*;
  * @author  Emil Forslund
  * @since   2.0.0
  */
-
 public interface IndexColumn extends
         Document,
         HasParent<Index>,
