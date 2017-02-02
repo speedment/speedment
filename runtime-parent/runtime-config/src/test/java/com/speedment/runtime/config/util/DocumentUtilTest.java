@@ -16,11 +16,18 @@
  */
 package com.speedment.runtime.config.util;
 
-import com.speedment.runtime.config.*;
-import org.junit.Test;
-
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.ForeignKey;
+import com.speedment.runtime.config.ForeignKeyColumn;
+import com.speedment.runtime.config.Index;
+import com.speedment.runtime.config.IndexColumn;
+import com.speedment.runtime.config.PrimaryKeyColumn;
+import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.Table;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import org.junit.Test;
 
 /**
  *
