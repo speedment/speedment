@@ -63,9 +63,9 @@ public final class JsonSyntaxException extends RuntimeException {
         this.row = row.get();
         this.col = col.get();
     }
-    
+
     @Override
-    public String toString() {
-        return getMessage() + " on row " + row + " col " + col + ".";
+    public String getMessage() {
+        return super.getMessage() + " on row " + row + " col " + col + ".";
     }
 }
