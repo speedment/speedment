@@ -84,6 +84,7 @@ public final class JsonDeserializer implements AutoCloseable {
             case 0x30 : case 0x31 : case 0x32 : case 0x33 : case 0x34 :
             case 0x35 : case 0x36 : case 0x37 : case 0x38 : case 0x39 :
             case 0x2E : // . (decimal sign)
+            case 0x2D : // - (minus sign)
                 final AtomicReference<Number> number = new AtomicReference<>();
                 if (parseNumber(number::set) == CloseMethod.NOT_DECIDED) {
                     return number.get();
@@ -248,6 +249,7 @@ public final class JsonDeserializer implements AutoCloseable {
             case 0x30 : case 0x31 : case 0x32 : case 0x33 : case 0x34 :
             case 0x35 : case 0x36 : case 0x37 : case 0x38 : case 0x39 :
             case 0x2E : // . (decimal sign)
+            case 0x2D : // - (minus sign)
                 return parseNumber(num -> {
                     if (object.put(key, num) != null) {
                         throw duplicateKeyException(key);
@@ -343,6 +345,7 @@ public final class JsonDeserializer implements AutoCloseable {
             case 0x30 : case 0x31 : case 0x32 : case 0x33 : case 0x34 :
             case 0x35 : case 0x36 : case 0x37 : case 0x38 : case 0x39 :
             case 0x2E : // . (decimal sign)
+            case 0x2D : // - (minus sign)
                 final CloseMethod method = parseNumber(list::add);
                 switch (method) {
                     case CONTINUE_IN_PARENT :
@@ -403,17 +406,10 @@ public final class JsonDeserializer implements AutoCloseable {
                     break;
 
                 // Digit '0 - 9'
-                case 0x30:
-                case 0x31:
-                case 0x32:
-                case 0x33:
-                case 0x34:
-                case 0x35:
-                case 0x36:
-                case 0x37:
-                case 0x38:
-                case 0x39:
+                case 0x30: case 0x31: case 0x32: case 0x33: case 0x34: 
+                case 0x35: case 0x36: case 0x37: case 0x38: case 0x39:
                 case 0x2E: // . (decimal sign)
+                case 0x2D: // - (minus sign)
                     final CloseMethod method = parseNumber(list::add);
                     switch (method) {
                         case CONTINUE_IN_PARENT:
@@ -519,8 +515,14 @@ public final class JsonDeserializer implements AutoCloseable {
             switch (character) {
                 // . (decimal sign)
                 case 0x2E : 
-                    builder.append(".");
+                    builder.append('.');
                     return parseNumberDecimal(consumer, builder);
+                    
+                // - (minus sign)
+                case 0x2D : 
+                    builder.append('-');
+                    next();
+                    continue;
                     
                 // Digit '0 - 9'
                 case 0x30 : case 0x31 : case 0x32 : case 0x33 : case 0x34 :
