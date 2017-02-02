@@ -16,13 +16,11 @@
  */
 package com.speedment.common.json;
 
-import org.junit.Test;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  *
@@ -59,12 +57,30 @@ public class JsonTest {
     }
     
     @Test
+    public void testParse_NegativeLong() {
+        final String json = "{\"id\" : -5678}";
+        @SuppressWarnings("unchecked")
+        final Map<String, Object> map = (Map<String, Object>) Json.fromJson(json);
+        assertNotNull(map);
+        assertEquals("Check value: ", -5678L, map.get("id"));
+    }
+    
+    @Test
     public void testParse_Double() {
         final String json = "{\"average\" : 0.6789}";
         @SuppressWarnings("unchecked")
         final Map<String, Object> map = (Map<String, Object>) Json.fromJson(json);
         assertNotNull(map);
         assertEquals("Check value: ", 0.6789, map.get("average"));
+    }
+    
+    @Test
+    public void testParse_NegativeDouble() {
+        final String json = "{\"average\" : -0.6789}";
+        @SuppressWarnings("unchecked")
+        final Map<String, Object> map = (Map<String, Object>) Json.fromJson(json);
+        assertNotNull(map);
+        assertEquals("Check value: ", -0.6789, map.get("average"));
     }
     
     @Test
@@ -118,5 +134,20 @@ public class JsonTest {
         assertEquals("Check one: ", 1L, list.get(0).get("one"));
         assertEquals("Check one: ", 2L, list.get(1).get("two"));
         assertEquals("Check one: ", 3L, list.get(2).get("three"));
+    }
+    
+    @Test
+    public void testParse_ArrayOfNegativeObjects() {
+        final String json = "{\"numbers\" : [{\"one\":-1}, {\"two\":-2}, {\"three\":-3}]}";
+        @SuppressWarnings("unchecked")
+        final Map<String, Object> map = (Map<String, Object>) Json.fromJson(json);
+        
+        assertNotNull(map);
+        @SuppressWarnings("unchecked")
+        final List<Map<String, Object>> list = (List<Map<String, Object>>) map.get("numbers");
+        
+        assertEquals("Check one: ", -1L, list.get(0).get("one"));
+        assertEquals("Check one: ", -2L, list.get(1).get("two"));
+        assertEquals("Check one: ", -3L, list.get(2).get("three"));
     }
 }
