@@ -17,7 +17,6 @@
 package com.speedment.common.json.internal;
 
 import com.speedment.common.json.JsonSyntaxException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,6 +25,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
@@ -661,7 +661,7 @@ public final class JsonDeserializer implements AutoCloseable {
     private JsonSyntaxException unexpectedCharacterException() {
         final String c = new String(Character.toChars(character));
         throw new JsonSyntaxException(row, col,
-            "Unexpected character '" + c + "'"
+            "Unexpected character '" + c + "' (Unicode: " + codePoints(c) + ")"
         );
     }
     
@@ -675,6 +675,14 @@ public final class JsonDeserializer implements AutoCloseable {
         throw new JsonSyntaxException(row, col,
             "Unexpected end of stream"
         );
+    }
+    
+    private String codePoints(String c) {
+        final StringJoiner str = new StringJoiner(" ");
+        for (int i = 0; i < c.length(); i++) {
+            str.add(String.valueOf(Character.codePointAt(c, i)));
+        }
+        return str.toString();
     }
     
     @Override
