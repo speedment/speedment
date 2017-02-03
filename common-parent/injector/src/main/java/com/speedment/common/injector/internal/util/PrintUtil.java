@@ -14,31 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.injector.internal.dependency;
-
-import com.speedment.common.injector.State;
-
-import java.util.Set;
+package com.speedment.common.injector.internal.util;
 
 /**
  *
- * @author  Emil Forslund
- * @since   1.0.0
+ * @author Emil Forslund
+ * @since  1.2.0
  */
-public interface DependencyNode {
+public final class PrintUtil {
+
+    public static String horizontalLine() {
+        return "+---------------------------------------------------------------------------------+";
+    }
     
-    Class<?> getRepresentedType();
+    public static String limit(String in, int length) {
+        if (in.length() < length) {
+            return in;
+        } else {
+            final int breakpoint = (length - 3) / 2;
+            return in.substring(0, breakpoint) + 
+                "..." + in.substring(length - breakpoint - 3);
+        }
+    }
     
-    Set<Dependency> getDependencies();
-    
-    Set<Execution> getExecutions();
-    
-    State getCurrentState();
-    
-    void setState(State newState);
-    
-    boolean canBe(State state);
-    
-    boolean is(State state);
-    
+    private PrintUtil() {}
 }

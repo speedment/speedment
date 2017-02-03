@@ -14,11 +14,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.injector.internal.dependency.impl;
+package com.speedment.common.injector.internal.dependency;
 
 import com.speedment.common.injector.State;
-import com.speedment.common.injector.internal.dependency.Dependency;
-import com.speedment.common.injector.internal.dependency.DependencyNode;
+import com.speedment.common.injector.dependency.Dependency;
+import com.speedment.common.injector.dependency.DependencyNode;
 
 import static java.util.Objects.requireNonNull;
 

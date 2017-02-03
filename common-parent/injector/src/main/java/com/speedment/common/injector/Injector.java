@@ -19,11 +19,9 @@ package com.speedment.common.injector;
 import com.speedment.common.injector.annotation.Execute;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
-import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.internal.InjectorImpl;
-import java.nio.file.Path;
+import com.speedment.common.logger.Logger;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
@@ -40,16 +38,6 @@ import java.util.stream.Stream;
  */
 public interface Injector {
     
-    /**
-     * Returns a stream of all the instances associated with the specified class
-     * signature.
-     * 
-     * @param <T>   the class signature of the injectable type
-     * @param type  the expected type
-     * @return      the automatically resolved instances
-     */
-    <T> Stream<T> stream(Class<T> type);
-
     /**
      * Returns the instance associated with the specified class signature.
      * <p>
@@ -75,6 +63,16 @@ public interface Injector {
      */
     <T> Optional<T> get(Class<T> type);
     
+    /**
+     * Returns a stream of all the instances associated with the specified class
+     * signature.
+     * 
+     * @param <T>   the class signature of the injectable type
+     * @param type  the expected type
+     * @return      the automatically resolved instances
+     */
+    <T> Stream<T> stream(Class<T> type);
+
     /**
      * Returns a stream of all the injectable types that are accessible from
      * this Injector.
@@ -113,7 +111,7 @@ public interface Injector {
      * 
      * @return  the new injector builder
      */
-    Builder newBuilder();
+    InjectorBuilder newBuilder();
     
     /**
      * Returns a new builder for the {@link Injector} interface that uses the
@@ -121,7 +119,7 @@ public interface Injector {
      * 
      * @return  the builder
      */
-    static Builder builder() {
+    static InjectorBuilder builder() {
         return InjectorImpl.builder();
     }
     
@@ -132,159 +130,17 @@ public interface Injector {
      * @param classLoader  the class loader to use
      * @return             the builder
      */
-    static Builder builder(ClassLoader classLoader) {
+    static InjectorBuilder builder(ClassLoader classLoader) {
         return InjectorImpl.builder(classLoader);
     }
     
     /**
-     * Builder pattern for the {@link Injector} interface.
+     * Returns the {@link logger} object used by the default implementation of 
+     * the {@code Injector}.
+     * 
+     * @return  the default logger
      */
-    interface Builder {
-        
-        /**
-         * Appends a class that can be automatically dependency injected into
-         * other classes to the builder. Classes can be appended in any order.
-         * The final injection order will be determined once the
-         * {@link #build()}-method is called.
-         * <p>
-         * If a class has already been passed as injectable with the same
-         * InjectorKey, the previous one will be replaced by this new one. The
-         * old one will never be instantiated.
-         * <p>
-         * This method will not replace any previous injectables.
-         *
-         * @param injectableType the type that should be injectable
-         * @return a reference to this builder
-         *
-         * @throws NoDefaultConstructorException if the specified type does not
-         * have a default constructor.
-         */
-        Builder put(Class<?> injectableType) 
-        throws NoDefaultConstructorException;
-
-        /**
-         * Appends a class that can be automatically dependency injected into
-         * other classes to the builder. Classes can be appended in any order.
-         * The final injection order will be determined once the
-         * {@link #build()}-method is called.
-         * <p>
-         * If a class has already been passed as injectable with the same key,
-         * the previous one will be replaced by this new one. The old one will
-         * never be instantiated.
-         *
-         * @param key the key to check uniqueness with
-         * @param injectableType the type that should be injectable
-         * @return a reference to this builder
-         *
-         * @throws NoDefaultConstructorException if the specified type does not
-         * have a default constructor.
-         */
-        Builder put(String key, Class<?> injectableType) 
-        throws NoDefaultConstructorException;
-
-        /**
-         * Puts one or multiple classes contained in an InjectBundle that can be
-         * automatically dependency injected into other classes to the builder.
-         * Classes can be appended in any order. The final injection order will
-         * be determined once the {@link #build()}-method is called.
-         * <p>
-         * If an injectable class has already been passed as injectable with the
-         * same key, the previous one will be replaced by this new one. The old
-         * one will never be instantiated.
-         *
-         * @param bundleClass containing the injectable classes that shall be
-         * appended
-         * @return a reference to this builder
-         *
-         * @throws NoDefaultConstructorException if the specified type does not
-         * have a default constructor.
-         */
-        Builder putInBundle(Class<? extends InjectBundle> bundleClass) 
-        throws NoDefaultConstructorException;
-        
-        /**
-         * Overrides a particular configuration parameter in the config file
-         * with the specified value.
-         * 
-         * @param key    the key to override
-         * @param value  the new value
-         * @return       a reference to this builder
-         */
-        Builder putParam(String key, String value);
-        
-        /**
-         * Sets the location of the configuration file.
-         * 
-         * @param configFile  the new config file location
-         * @return            a reference to this builder
-         */
-        Builder withConfigFileLocation(Path configFile);
-        
-        /**
-         * Appends an action that must be executed sometime before specified 
-         * type reaches the {@link State#INITIALIZED} state. The action will
-         * have access to the instance as it is configured. This is equivalent 
-         * to using the {@link ExecuteBefore}-annotation on a method in the 
-         * class.
-         * 
-         * @param <T>             the injectable type
-         * @param injectableType  the injectable type
-         * @param action          action to be applied before state is reached
-         * @return                a reference to this builder
-         */
-        <T> Builder beforeInitialized(Class<T> injectableType, Consumer<T> action);
-        
-        /**
-         * Appends an action that must be executed sometime before specified 
-         * type reaches the {@link State#RESOLVED} state. The action will
-         * have access to the instance as it is configured. This is equivalent 
-         * to using the {@link ExecuteBefore}-annotation on a method in the 
-         * class.
-         * 
-         * @param <T>             the injectable type
-         * @param injectableType  the injectable type
-         * @param action          action to be applied before state is reached
-         * @return                a reference to this builder
-         */
-        <T> Builder beforeResolved(Class<T> injectableType, Consumer<T> action);
-        
-        /**
-         * Appends an action that must be executed sometime before specified 
-         * type reaches the {@link State#STARTED} state. The action will
-         * have access to the instance as it is configured. This is equivalent 
-         * to using the {@link ExecuteBefore}-annotation on a method in the 
-         * class.
-         * 
-         * @param <T>             the injectable type
-         * @param injectableType  the injectable type
-         * @param action          action to be applied before state is reached
-         * @return                a reference to this builder
-         */
-        <T> Builder beforeStarted(Class<T> injectableType, Consumer<T> action);
-        
-        /**
-         * Appends an action that must be executed sometime before specified 
-         * type reaches the {@link State#STOPPED} state. The action will
-         * have access to the instance as it is configured. This is equivalent 
-         * to using the {@link ExecuteBefore}-annotation on a method in the 
-         * class.
-         * 
-         * @param <T>             the injectable type
-         * @param injectableType  the injectable type
-         * @param action          action to be applied before state is reached
-         * @return                a reference to this builder
-         */
-        <T> Builder beforeStopped(Class<T> injectableType, Consumer<T> action);
-        
-        /**
-         * Builds the {@link Injector} instance, organizing the 
-         * injectable instances based on their internal dependencies.
-         * 
-         * @return  the built instance
-         * 
-         * @throws InstantiationException  if one of the injectables can not 
-         *                                 be instantiated.
-         */
-        Injector build() throws InstantiationException;
+    static Logger logger() {
+        return InjectorImpl.LOGGER;
     }
 }
