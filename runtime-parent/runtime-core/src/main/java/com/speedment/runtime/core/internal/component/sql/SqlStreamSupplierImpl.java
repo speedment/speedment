@@ -30,8 +30,6 @@ import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.core.component.resultset.ResultSetMapperComponent;
-import com.speedment.runtime.core.component.resultset.ResultSetMapping;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsType;

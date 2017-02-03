@@ -20,6 +20,7 @@ import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
 import com.speedment.common.injector.exception.CyclicReferenceException;
+import static com.speedment.common.injector.execution.ExecutionBuilder.resolved;
 import static com.speedment.common.injector.execution.ExecutionBuilder.started;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import com.speedment.common.logger.Level;
@@ -115,7 +116,7 @@ public abstract class AbstractApplicationBuilder<
         
         requireNonNulls(type, name, consumer);
 
-        injectorBuilder.before(started(ProjectComponent.class)
+        injectorBuilder.before(resolved(ProjectComponent.class)
             .withStateInitialized(Injector.class)
             .withExecute((projComp, injector) -> 
                 DocumentDbUtil.traverseOver(projComp.getProject(), type)
@@ -137,7 +138,7 @@ public abstract class AbstractApplicationBuilder<
         
         requireNonNulls(type, consumer);
         
-        injectorBuilder.before(started(ProjectComponent.class)
+        injectorBuilder.before(resolved(ProjectComponent.class)
             .withStateInitialized(Injector.class)
             .withExecute((projComp, injector) -> 
                 DocumentDbUtil.traverseOver(projComp.getProject(), type)
@@ -152,9 +153,11 @@ public abstract class AbstractApplicationBuilder<
     public <C extends Document & HasEnabled> BUILDER with(
             Class<C> type, Consumer<C> consumer) {
         
-        injectorBuilder.beforeStarted(ProjectComponent.class, 
-            projComp -> DocumentDbUtil.traverseOver(projComp.getProject(), type)
-                .forEach(consumer)
+        injectorBuilder.before(resolved(ProjectComponent.class)
+            .withExecute(projComp -> 
+                DocumentDbUtil.traverseOver(projComp.getProject(), type)
+                    .forEach(consumer)
+            )
         );
         
         return self();

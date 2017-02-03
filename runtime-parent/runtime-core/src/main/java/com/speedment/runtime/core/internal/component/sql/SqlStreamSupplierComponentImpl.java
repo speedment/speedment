@@ -16,7 +16,8 @@
  */
 package com.speedment.runtime.core.internal.component.sql;
 
-import com.speedment.common.injector.annotation.Inject;
+import static com.speedment.common.injector.State.STARTED;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ManagerComponent;
@@ -24,13 +25,11 @@ import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
-
 import java.sql.ResultSet;
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * The default implementation of the 
@@ -41,27 +40,37 @@ import static java.util.Objects.requireNonNull;
  */
 public final class SqlStreamSupplierComponentImpl implements SqlStreamSupplierComponent {
 
+    private final Map<TableIdentifier<?>, SqlFunction<ResultSet, ?>> prestart;
     private final Map<TableIdentifier<?>, SqlStreamSupplier<?>> supportMap;
-    
-    private @Inject ProjectComponent projectComponent;
-    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject ManagerComponent managerComponent;
 
     public SqlStreamSupplierComponentImpl() {
         this.supportMap = new ConcurrentHashMap<>();
+        this.prestart   = new ConcurrentHashMap<>();
     }
 
     @Override
     public <ENTITY> void install(TableIdentifier<ENTITY> tableIdentifier, SqlFunction<ResultSet, ENTITY> entityMapper) {
-        final SqlStreamSupplier<ENTITY> supplier = new SqlStreamSupplierImpl<>(
-            tableIdentifier, 
-            entityMapper, 
-            projectComponent, 
-            dbmsHandlerComponent,
-            managerComponent
-        );
+        prestart.put(tableIdentifier, entityMapper);
+    }
+    
+    @ExecuteBefore(STARTED)
+    @SuppressWarnings("unchecked")
+    void startStreamSuppliers(
+            ProjectComponent projectComponent,
+            DbmsHandlerComponent dbmsHandlerComponent,
+            ManagerComponent managerComponent) {
         
-        supportMap.put(tableIdentifier, supplier);
+        prestart.forEach((tableIdentifier, entityMapper) -> {
+            final SqlStreamSupplier<Object> supplier = new SqlStreamSupplierImpl<>(
+                (TableIdentifier<Object>) tableIdentifier, 
+                (SqlFunction<ResultSet, Object>) entityMapper, 
+                projectComponent, 
+                dbmsHandlerComponent,
+                managerComponent
+            );
+            
+            supportMap.put(tableIdentifier, supplier);
+        });
     }
 
     @Override
