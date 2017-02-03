@@ -20,14 +20,11 @@ import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
 import com.speedment.common.injector.exception.CyclicReferenceException;
-import com.speedment.common.injector.internal.InjectorImpl;
+import static com.speedment.common.injector.execution.ExecutionBuilder.started;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
-import com.speedment.common.tuple.Tuple2;
-import com.speedment.common.tuple.Tuple3;
-import com.speedment.common.tuple.Tuples;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Project;
@@ -35,8 +32,6 @@ import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.util.DocumentDbUtil;
-import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.ApplicationMetadata;
 import com.speedment.runtime.core.RuntimeBundle;
@@ -51,11 +46,10 @@ import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.DatabaseUtil;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,9 +71,7 @@ public abstract class AbstractApplicationBuilder<
 
     private final static Logger LOGGER = LoggerManager.getLogger(
         LogType.APPLICATION_BUILDER.getLoggerName());
-
-    private final List<Tuple3<Class<? extends Document>, String, BiConsumer<Injector, ? extends Document>>> withsNamed;
-    private final List<Tuple2<Class<? extends Document>, BiConsumer<Injector, ? extends Document>>> withsAll;
+    
     private final InjectorBuilder injectorBuilder;
 
     private boolean skipCheckDatabaseConnectivity;
@@ -111,23 +103,54 @@ public abstract class AbstractApplicationBuilder<
 
     protected AbstractApplicationBuilder(InjectorBuilder injectorBuilder) {
         this.injectorBuilder = requireNonNull(injectorBuilder);
-        this.withsNamed      = new ArrayList<>();
-        this.withsAll        = new ArrayList<>();
         this.skipCheckDatabaseConnectivity = false;
         this.skipValidateRuntimeConfig     = false;
     }
 
     @Override
-    public <C extends Document & HasEnabled> BUILDER with(Class<C> type, String name, BiConsumer<Injector, C> consumer) {
+    public <C extends Document & HasEnabled> BUILDER with(
+            Class<C> type, String name, BiConsumer<Injector, C> consumer) {
+        
         requireNonNulls(type, name, consumer);
-        withsNamed.add(Tuples.of(type, name, consumer));
+        
+        injectorBuilder.before(started(ProjectComponent.class)
+            .withStateInitialized(Injector.class)
+            .withExecute((projComp, injector) -> 
+                DocumentDbUtil.traverseOver(projComp.getProject(), type)
+                    .filter(doc -> HasName.of(doc).getName().equals(name))
+                    .forEach(doc -> consumer.accept(injector, doc))
+            )
+        );
+        
         return self();
     }
 
     @Override
-    public <C extends Document & HasEnabled> BUILDER with(Class<C> type, BiConsumer<Injector, C> consumer) {
+    public <C extends Document & HasEnabled> BUILDER with(
+            Class<C> type, BiConsumer<Injector, C> consumer) {
+        
         requireNonNulls(type, consumer);
-        withsAll.add(Tuples.of(type, consumer));
+        
+        injectorBuilder.before(started(ProjectComponent.class)
+            .withStateInitialized(Injector.class)
+            .withExecute((projComp, injector) -> 
+                DocumentDbUtil.traverseOver(projComp.getProject(), type)
+                    .forEach(doc -> consumer.accept(injector, doc))
+            )
+        );
+        
+        return self();
+    }
+
+    @Override
+    public <C extends Document & HasEnabled> BUILDER with(
+            Class<C> type, Consumer<C> consumer) {
+        
+        injectorBuilder.beforeStarted(ProjectComponent.class, 
+            projComp -> DocumentDbUtil.traverseOver(projComp.getProject(), type)
+                .forEach(consumer)
+        );
+        
         return self();
     }
 
@@ -141,7 +164,15 @@ public abstract class AbstractApplicationBuilder<
     @Override
     public BUILDER withPassword(char[] password) {
         // password nullable
-        with(Dbms.class, (inj, dbms) -> inj.getOrThrow(PasswordComponent.class).put(dbms, password));
+        injectorBuilder.before(started(PasswordComponent.class)
+            .withStateResolved(ProjectComponent.class)
+            .withExecute((passComp, projComp) -> 
+                projComp.getProject().dbmses().forEach(
+                    dbms -> passComp.put(dbms, password)
+                )
+            )
+        );
+        
         return self();
     }
 
@@ -149,7 +180,11 @@ public abstract class AbstractApplicationBuilder<
     public BUILDER withPassword(String dbmsName, char[] password) {
         requireNonNull(dbmsName);
         // password nullable
-        with(Dbms.class, dbmsName, (inj, dbms) -> inj.getOrThrow(PasswordComponent.class).put(dbms, password));
+        
+        injectorBuilder.before(started(PasswordComponent.class)
+            .withExecute(passComp -> passComp.put(dbmsName, password))
+        );
+        
         return self();
     }
 
@@ -163,7 +198,9 @@ public abstract class AbstractApplicationBuilder<
     public BUILDER withPassword(String dbmsName, String password) {
         requireNonNull(dbmsName);
         // password nullable
-        return withPassword(dbmsName, password == null ? null : password.toCharArray());
+        return withPassword(dbmsName, 
+            password == null ? null : password.toCharArray()
+        );
     }
 
     @Override
@@ -285,9 +322,15 @@ public abstract class AbstractApplicationBuilder<
     @Override
     public BUILDER withLogging(HasLogglerName namer) {
         LoggerManager.getLogger(namer.getLoggerName()).setLevel(Level.DEBUG);
-        if (LogType.APPLICATION_BUILDER.getLoggerName().equals(namer.getLoggerName())) {
-            LoggerManager.getLogger(InjectorImpl.class).setLevel(Level.DEBUG); // Special case becaues its in a common module
+        
+        if (LogType.APPLICATION_BUILDER.getLoggerName()
+                .equals(namer.getLoggerName())) {
+            
+            // Special case becaues its in a common module
+            Injector.logger().setLevel(Level.DEBUG); 
+            InjectorBuilder.logger().setLevel(Level.DEBUG);
         }
+        
         return self();
     }
 
@@ -300,8 +343,6 @@ public abstract class AbstractApplicationBuilder<
         } catch (final InstantiationException | CyclicReferenceException ex) {
             throw new SpeedmentException("Error in dependency injection.", ex);
         }
-
-        loadAndSetProject(inj);
 
         printWelcomeMessage(inj);
 
@@ -323,61 +364,11 @@ public abstract class AbstractApplicationBuilder<
      */
     protected abstract APP build(Injector injector);
 
-    /**
-     * Builds up the complete Project meta data tree.
-     *
-     * @param injector the injector to use
-     */
-    protected void loadAndSetProject(Injector injector) {
-        LOGGER.debug("Loading and Setting Project Configuration");
-        final Project project = injector.getOrThrow(ProjectComponent.class).getProject();
-
-        // Apply overidden item (if any) for all Documents of a given class
-        withsAll.forEach(t2 -> {
-            final Class<? extends Document> clazz = t2.get0();
-
-            @SuppressWarnings("unchecked")
-            final BiConsumer<Injector, Document> consumer
-                = (BiConsumer<Injector, Document>) t2.get1();
-
-            DocumentDbUtil.traverseOver(project)
-                .filter(clazz::isInstance)
-                .map(Document.class::cast)
-                .forEachOrdered(doc -> consumer.accept(injector, doc));
-        });
-
-        // Apply a named overidden item (if any) for all Entities of a given class
-        withsNamed.forEach(t3 -> {
-            final Class<? extends Document> clazz = t3.get0();
-            final String name = t3.get1();
-
-            @SuppressWarnings("unchecked")
-            final BiConsumer<Injector, Document> consumer
-                = (BiConsumer<Injector, Document>) t3.get2();
-
-                                   
-            /* This is the old naming convention "proj.dbms.schema.table.colum". Todo: Remove in next API version */
-            DocumentDbUtil.traverseOver(project)
-                .filter(clazz::isInstance)
-                .filter(HasName.class::isInstance)
-                .map(HasName.class::cast)
-                .filter(c -> name.equals(relativeName(c, Project.class, DATABASE_NAME)))
-                .forEachOrdered(doc -> consumer.accept(injector, doc));
-
-            /* New naming convention "dbms.schema.table.column"*/
-            DocumentDbUtil.traverseOver(project)
-                .filter(clazz::isInstance)
-                .filter(HasName.class::isInstance)
-                .map(HasName.class::cast)
-                .filter(c -> name.equals(relativeName(c, Dbms.class, DATABASE_NAME))) // Now relative to DBMS!
-                .forEachOrdered(doc -> consumer.accept(injector, doc));
-
-        });
-    }
-
     protected void validateRuntimeConfig(Injector injector) {
         LOGGER.debug("Validating Runtime Configuration");
-        final Project project = injector.getOrThrow(ProjectComponent.class).getProject();
+        final Project project = injector.getOrThrow(ProjectComponent.class)
+            .getProject();
+        
         if (project == null) {
             throw new SpeedmentException("No project defined");
         }
@@ -406,11 +397,17 @@ public abstract class AbstractApplicationBuilder<
 
     protected void checkDatabaseConnectivity(Injector injector) {
         LOGGER.debug("Checking Database Connectivity");
-        final Project project = injector.getOrThrow(ProjectComponent.class).getProject();
+        final Project project = injector.getOrThrow(ProjectComponent.class)
+            .getProject();
+        
         project.dbmses().forEachOrdered(dbms -> {
 
-            final DbmsHandlerComponent dbmsHandlerComponent = injector.getOrThrow(DbmsHandlerComponent.class);
-            final DbmsType dbmsType = DatabaseUtil.dbmsTypeOf(dbmsHandlerComponent, dbms);
+            final DbmsHandlerComponent dbmsHandlerComponent = injector
+                .getOrThrow(DbmsHandlerComponent.class);
+            
+            final DbmsType dbmsType = DatabaseUtil
+                .dbmsTypeOf(dbmsHandlerComponent, dbms);
+            
             final DbmsMetadataHandler handler = dbmsType.getMetadataHandler();
 
             try {
