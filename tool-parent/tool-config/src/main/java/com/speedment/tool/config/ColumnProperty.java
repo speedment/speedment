@@ -22,7 +22,13 @@ import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.ColumnPropertyMutator;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
-import com.speedment.tool.config.trait.*;
+import com.speedment.tool.config.trait.HasAliasProperty;
+import com.speedment.tool.config.trait.HasEnabledProperty;
+import com.speedment.tool.config.trait.HasExpandedProperty;
+import com.speedment.tool.config.trait.HasNameProperty;
+import com.speedment.tool.config.trait.HasNullableProperty;
+import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
+import com.speedment.tool.config.trait.HasTypeMapperProperty;
 import java.util.List;
 import java.util.Optional;
 import javafx.beans.property.BooleanProperty;
@@ -31,7 +37,7 @@ import javafx.beans.property.StringProperty;
 /**
  *
  * @author  Emil Forslund
- * @since   2.3.0
+ * @since   2.3.0 
  */
 public final class ColumnProperty 
 extends AbstractChildDocumentProperty<Table, ColumnProperty> 
