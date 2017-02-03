@@ -18,6 +18,7 @@ package com.speedment.runtime.core.internal;
 
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.InjectorBuilder;
 import com.speedment.common.injector.exception.CyclicReferenceException;
 import com.speedment.common.injector.internal.InjectorImpl;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
@@ -49,15 +50,12 @@ import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.DatabaseUtil;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -73,13 +71,16 @@ import java.util.regex.Pattern;
  * @since 2.0.0
  */
 public abstract class AbstractApplicationBuilder<
-        APP extends Speedment, BUILDER extends AbstractApplicationBuilder<APP, BUILDER>> implements ApplicationBuilder<APP, BUILDER> {
+        APP extends Speedment, 
+        BUILDER extends AbstractApplicationBuilder<APP, BUILDER>
+> implements ApplicationBuilder<APP, BUILDER> {
 
-    private final static Logger LOGGER = LoggerManager.getLogger(LogType.APPLICATION_BUILDER.getLoggerName());
+    private final static Logger LOGGER = LoggerManager.getLogger(
+        LogType.APPLICATION_BUILDER.getLoggerName());
 
     private final List<Tuple3<Class<? extends Document>, String, BiConsumer<Injector, ? extends Document>>> withsNamed;
     private final List<Tuple2<Class<? extends Document>, BiConsumer<Injector, ? extends Document>>> withsAll;
-    private final Injector.Builder injector;
+    private final InjectorBuilder injectorBuilder;
 
     private boolean skipCheckDatabaseConnectivity;
     private boolean skipValidateRuntimeConfig;
@@ -90,9 +91,9 @@ public abstract class AbstractApplicationBuilder<
         Class<? extends ApplicationMetadata> metadataClass) {
 
         this(Injector.builder()
-            .putInBundle(RuntimeBundle.class)
-            .put(applicationImplClass)
-            .put(metadataClass)
+            .withBundle(RuntimeBundle.class)
+            .withComponent(applicationImplClass)
+            .withComponent(metadataClass)
         );
     }
     
@@ -102,16 +103,16 @@ public abstract class AbstractApplicationBuilder<
         Class<? extends ApplicationMetadata> metadataClass) {
 
         this(Injector.builder(classLoader)
-            .putInBundle(RuntimeBundle.class)
-            .put(applicationImplClass)
-            .put(metadataClass)
+            .withBundle(RuntimeBundle.class)
+            .withComponent(applicationImplClass)
+            .withComponent(metadataClass)
         );
     }
 
-    protected AbstractApplicationBuilder(Injector.Builder injector) {
-        this.injector   = requireNonNull(injector);
-        this.withsNamed = new ArrayList<>();
-        this.withsAll   = new ArrayList<>();
+    protected AbstractApplicationBuilder(InjectorBuilder injectorBuilder) {
+        this.injectorBuilder = requireNonNull(injectorBuilder);
+        this.withsNamed      = new ArrayList<>();
+        this.withsAll        = new ArrayList<>();
         this.skipCheckDatabaseConnectivity = false;
         this.skipValidateRuntimeConfig     = false;
     }
@@ -133,7 +134,7 @@ public abstract class AbstractApplicationBuilder<
     @Override
     public BUILDER withParam(String key, String value) {
         requireNonNulls(key, value);
-        injector.putParam(key, value);
+        injectorBuilder.withParam(key, value);
         return self();
     }
 
@@ -237,7 +238,7 @@ public abstract class AbstractApplicationBuilder<
     @Override
     public <M extends Manager<?>> BUILDER withManager(Class<M> managerImplType) {
         requireNonNull(managerImplType);
-        withInjectable(injector, managerImplType, M::getEntityClass);
+        withInjectable(injectorBuilder, managerImplType);
         return self();
     }
 
@@ -262,21 +263,22 @@ public abstract class AbstractApplicationBuilder<
     @Override
     public BUILDER withBundle(Class<? extends InjectBundle> bundleClass) {
         requireNonNull(bundleClass);
-        injector.putInBundle(bundleClass);
+        injectorBuilder.withBundle(bundleClass);
         return self();
     }
 
     @Override
     public BUILDER withComponent(Class<?> injectableClass) {
         requireNonNull(injectableClass);
-        injector.put(injectableClass);
+        injectorBuilder.withComponent(injectableClass);
         return self();
     }
 
     @Override
+    @Deprecated
     public BUILDER withComponent(String key, Class<?> injectableClass) {
         requireNonNulls(key, injectableClass);
-        injector.put(key, injectableClass);
+        injectorBuilder.withComponent(injectableClass);
         return self();
     }
 
@@ -294,7 +296,7 @@ public abstract class AbstractApplicationBuilder<
         final Injector inj;
 
         try {
-            inj = injector.build();
+            inj = injectorBuilder.build();
         } catch (final InstantiationException | CyclicReferenceException ex) {
             throw new SpeedmentException("Error in dependency injection.", ex);
         }
@@ -536,26 +538,10 @@ public abstract class AbstractApplicationBuilder<
     }
 
     private static <T> void withInjectable(
-            Injector.Builder injector, 
-            Class<T> injectableImplType, 
-            Function<T, Class<?>> keyExtractor) {
+            InjectorBuilder injector, 
+            Class<T> injectableImplType) {
         
         requireNonNull(injectableImplType);
-
-        final T injectable;
-        try {
-            final Constructor<T> constructor = injectableImplType.getDeclaredConstructor();
-            constructor.setAccessible(true);
-            injectable = constructor.newInstance();
-        } catch (final InstantiationException 
-                     | IllegalAccessException 
-                     | NoSuchMethodException 
-                     | InvocationTargetException ex) {
-
-            throw new SpeedmentException(ex);
-        }
-
-        final Class<?> key = keyExtractor.apply(injectable);
-        injector.put(key.getName(), injectableImplType);
+        injector.withComponent(injectableImplType);
     }
 }

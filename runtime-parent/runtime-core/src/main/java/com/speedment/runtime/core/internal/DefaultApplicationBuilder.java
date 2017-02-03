@@ -17,12 +17,14 @@
 package com.speedment.runtime.core.internal;
 
 import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.InjectorBuilder;
 import com.speedment.runtime.core.ApplicationMetadata;
 import com.speedment.runtime.core.Speedment;
 
 /**
  *
  * @author Emil Forslund
+ * @since  3.0.0
  */
 public final class DefaultApplicationBuilder extends
     AbstractApplicationBuilder<Speedment, DefaultApplicationBuilder> {
@@ -40,8 +42,8 @@ public final class DefaultApplicationBuilder extends
         super(SpeedmentImpl.class, metadataClass);
     }
 
-    public DefaultApplicationBuilder(Injector.Builder injector) {
-        super(injector);
+    public DefaultApplicationBuilder(InjectorBuilder injectorBuilder) {
+        super(injectorBuilder);
     }
 
     @Override
@@ -50,7 +52,5 @@ public final class DefaultApplicationBuilder extends
     }
 
     @Override
-    protected void printWelcomeMessage(Injector injector) {
-    }
-
+    protected void printWelcomeMessage(Injector injector) {}
 }
