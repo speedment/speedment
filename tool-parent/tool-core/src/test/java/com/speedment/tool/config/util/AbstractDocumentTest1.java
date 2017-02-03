@@ -14,18 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.config.util;
+package com.speedment.tool.config.util;
 
 import com.speedment.common.mapstream.MapStream;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.internal.*;
-import org.junit.Before;
-
 import java.util.AbstractMap;
 import java.util.Map;
-import java.util.stream.Stream;
-
 import static java.util.stream.Collectors.toList;
+import java.util.stream.Stream;
+import org.junit.Before;
 
 /**
  *
