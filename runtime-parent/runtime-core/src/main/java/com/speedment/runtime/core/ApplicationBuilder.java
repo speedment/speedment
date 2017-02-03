@@ -224,9 +224,7 @@ public interface ApplicationBuilder<
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <C extends Document & HasEnabled> BUILDER with(Class<C> type, Consumer<C> consumer) {
-        return with(type, (app, t) -> consumer.accept(t));
-    }
+    <C extends Document & HasEnabled> BUILDER with(Class<C> type, Consumer<C> consumer);
 
     /**
      * Configures a parameter for all {@link Document} of a certain class. The
