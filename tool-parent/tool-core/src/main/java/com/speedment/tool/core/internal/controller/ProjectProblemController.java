@@ -20,6 +20,9 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.core.component.IssueComponent;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.rule.Issue;
+import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanExpression;
 import javafx.collections.FXCollections;
@@ -34,9 +37,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class ProjectProblemController implements Initializable {
     
@@ -110,6 +110,10 @@ public class ProjectProblemController implements Initializable {
     }
     
     private void closeWindowAndGenerate() {
+        if (!configFileHelper.isFileOpen()) {
+            configFileHelper.setCurrentlyOpenFile(new File(ConfigFileHelper.DEFAULT_CONFIG_LOCATION));
+        }
+        configFileHelper.saveCurrentlyOpenConfigFile();
         configFileHelper.generateSources();
         closeWindow();
     }

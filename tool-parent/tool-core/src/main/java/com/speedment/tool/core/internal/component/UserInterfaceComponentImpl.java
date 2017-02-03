@@ -321,24 +321,19 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     @Override
     public void generate() {
         //Make sure that no more than one attemp of generating occurs concurrently
-        boolean allowed = canGenerate.getAndSet(false);
+        final boolean allowed = canGenerate.getAndSet(false);
         if( !allowed ){
             return;
         }
         
         clearLog();
         
-        if (!configFileHelper.isFileOpen()) {
-            configFileHelper.setCurrentlyOpenFile(new File(ConfigFileHelper.DEFAULT_CONFIG_LOCATION));
-        }
-        
-        configFileHelper.saveConfigFile(configFileHelper.getCurrentlyOpenFile());
-        TranslatorSupport<Project> support = new TranslatorSupport<>(injector, project);
+        final TranslatorSupport<Project> support = new TranslatorSupport<>(injector, project);
 
         log(OutputUtil.info("Prepairing for generating classes " + support.basePackageName() + "." + project.getName() + ".*"));
         log(OutputUtil.info("Target directory is " + project.getPackageLocation()));
         log(OutputUtil.info("Performing rule verifications..."));
-        
+
         final Project immutableProject = ImmutableProject.wrap(project);
         projectComponent.setProject(immutableProject);
         
@@ -349,7 +344,10 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
                     "An error occured while the error checker was looking " + 
                     "for issues in the project configuration.";
                 LOGGER.error(ex, err);
-                runLater(() -> showError("Error Creating Report", err, ex));
+                runLater(() -> {
+                    showError("Error Creating Report", err, ex);
+                    canGenerate.set(true);
+                });
             } else {
                 if (!bool) {
                     runLater( () -> {
@@ -357,7 +355,13 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
                         canGenerate.set(true);
                     } );
                 } else {
-                    runLater( () -> log(OutputUtil.info("Rule verifications completed") ) );
+                    runLater(() -> log(OutputUtil.info("Rule verifications completed")));
+
+                    if (!configFileHelper.isFileOpen()) {
+                        configFileHelper.setCurrentlyOpenFile(new File(ConfigFileHelper.DEFAULT_CONFIG_LOCATION));
+                    }
+                    configFileHelper.saveCurrentlyOpenConfigFile();
+                   
                     configFileHelper.generateSources();
                     canGenerate.set(true);
                 }
