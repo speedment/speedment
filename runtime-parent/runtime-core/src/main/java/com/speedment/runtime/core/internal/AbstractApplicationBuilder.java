@@ -32,6 +32,8 @@ import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.util.DocumentDbUtil;
+import com.speedment.runtime.config.util.DocumentUtil;
+import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.ApplicationMetadata;
 import com.speedment.runtime.core.RuntimeBundle;
@@ -112,12 +114,16 @@ public abstract class AbstractApplicationBuilder<
             Class<C> type, String name, BiConsumer<Injector, C> consumer) {
         
         requireNonNulls(type, name, consumer);
-        
+
         injectorBuilder.before(started(ProjectComponent.class)
             .withStateInitialized(Injector.class)
             .withExecute((projComp, injector) -> 
                 DocumentDbUtil.traverseOver(projComp.getProject(), type)
-                    .filter(doc -> HasName.of(doc).getName().equals(name))
+                    .filter(doc -> DocumentUtil.relativeName(
+                        HasName.of(doc), 
+                        Dbms.class, 
+                        DATABASE_NAME
+                    ).equals(name))
                     .forEach(doc -> consumer.accept(injector, doc))
             )
         );
