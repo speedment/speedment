@@ -16,8 +16,13 @@
  */
 package com.speedment.common.injector.internal.util;
 
+import com.speedment.common.injector.exception.NoDefaultConstructorException;
+import static com.speedment.common.injector.internal.util.PropertiesUtil.configureParams;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Properties;
 import java.util.stream.Stream;
 
 /**
@@ -52,8 +57,36 @@ public final class ReflectionUtil {
         } else {
             return Stream.concat(
                 Stream.of(clazz),
-                Stream.concat(traverseAncestors(clazz.getSuperclass()), Stream.of(clazz.getInterfaces()))
+                Stream.concat(
+                    traverseAncestors(clazz.getSuperclass()), 
+                    Stream.of(clazz.getInterfaces())
+                )
             ).distinct();
+        }
+    }
+    
+    public static <T> T newInstance(Class<T> type, Properties properties) 
+    throws InstantiationException, NoDefaultConstructorException {
+        try {
+            final Constructor<T> constr = type.getDeclaredConstructor();
+            constr.setAccessible(true);
+
+            final T instance = constr.newInstance();
+            configureParams(instance, properties);
+
+            return instance;
+
+        } catch (final NoSuchMethodException ex) {
+            throw new NoDefaultConstructorException(
+                "Could not find any default constructor for class '" + 
+                type.getName() + "'.", ex
+            );
+
+        } catch (final IllegalAccessException 
+                     | IllegalArgumentException 
+                     | InvocationTargetException ex) {
+
+            throw new RuntimeException(ex);
         }
     }
     

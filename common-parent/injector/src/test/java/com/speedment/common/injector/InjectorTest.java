@@ -55,8 +55,8 @@ public class InjectorTest {
         
         try {
             injector = Injector.builder()
-                .put(StringIdentityMapper.class)
-                .put(TypeMapperComponent.class)
+                .withComponent(StringIdentityMapper.class)
+                .withComponent(TypeMapperComponent.class)
                 .build();
         } catch (final InstantiationException ex) {
             throw new RuntimeException(
@@ -80,9 +80,9 @@ public class InjectorTest {
         
         try {
             injector = Injector.builder()
-                .put(A.class)
-                .put(B.class)
-                .put(C.class)
+                .withComponent(A.class)
+                .withComponent(B.class)
+                .withComponent(C.class)
                 .build();
         } catch (final InstantiationException ex) {
             throw new RuntimeException(
@@ -104,12 +104,14 @@ public class InjectorTest {
         
         try {
             injector = Injector.builder()
-                .put(A.class)
-                .put(B.class)
-                .put(C.class)
-                .put(ChildType.class)
+                .withComponent(A.class)
+                .withComponent(B.class)
+                .withComponent(C.class)
+                .withComponent(ChildType.class)
                 .build();
-        } catch (final NoDefaultConstructorException | InstantiationException ex) {
+        } catch (final NoDefaultConstructorException 
+                     | InstantiationException ex) {
+            
             throw new RuntimeException(
                 "Failed to instantiate class.", ex
             );
@@ -125,10 +127,12 @@ public class InjectorTest {
         
         try {
             injector = Injector.builder()
-                .put(Bar.class)
-                .put(Baz.class)
+                .withComponent(Bar.class)
+                .withComponent(Baz.class)
                 .build();
-        } catch (final NoDefaultConstructorException | InstantiationException ex) {
+        } catch (final NoDefaultConstructorException 
+                     | InstantiationException ex) {
+            
             throw new RuntimeException(
                 "Failed to instantiate class.", ex
             );
@@ -153,11 +157,13 @@ public class InjectorTest {
         
         try {
             injector = Injector.builder()
-                .put(Bar.class)
-                .put(Baz.class)
-                .put(FooNoOverwrite.class)
+                .withComponent(Bar.class)
+                .withComponent(Baz.class)
+                .withComponent(FooNoOverwrite.class)
                 .build();
-        } catch (final NoDefaultConstructorException | InstantiationException ex) {
+        } catch (final NoDefaultConstructorException 
+                     | InstantiationException ex) {
+            
             throw new RuntimeException(
                 "Failed to instantiate class.", ex
             );
@@ -198,10 +204,10 @@ public class InjectorTest {
         configTest = new ClassWithConfig();
         
         final Injector injector = Injector.builder()
-            .putParam("e", "anotherExample")
-            .putParam("f", "56629")
-            .putParam("g", "-476.443")
-            .putParam("h", "true")
+            .withParam("e", "anotherExample")
+            .withParam("f", "56629")
+            .withParam("g", "-476.443")
+            .withParam("h", "true")
             .build();
         
         injector.inject(configTest);
@@ -272,7 +278,7 @@ public class InjectorTest {
     public void testParentChildExecutors() {
         try {
             final Injector injector = Injector.builder()
-                .put(ImplementingComponent.class)
+                .withComponent(ImplementingComponent.class)
                 .build();
             
             final ImplementingComponent component =
@@ -319,7 +325,7 @@ public class InjectorTest {
     public void testInvokeExecutors() {
         try {
             final Injector injector = Injector.builder()
-                .put(ExecutableComponent.class)
+                .withComponent(ExecutableComponent.class)
                 .beforeInitialized(ExecutableComponent.class, ec -> ec.set("a"))
                 .beforeInitialized(ExecutableComponent.class, ec -> ec.set("b"))
                 .beforeResolved(ExecutableComponent.class, ec -> ec.set("c"))
