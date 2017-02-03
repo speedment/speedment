@@ -36,8 +36,14 @@ public class StatisticsReporterComponentImpl implements StatisticsReporterCompon
 
     private static final Logger LOGGER = LoggerManager.getLogger(StatisticsReporterComponentImpl.class);
 
-    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-    private @Inject InfoComponent infoComponent;
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
+        final Thread t = new Thread(r);
+        t.setDaemon(true);
+        return t;
+    }); // Make the threads daemon to allow speedment applications to exit via main method completion Fix #322 
+    
+    private @Inject
+    InfoComponent infoComponent;
 
     @ExecuteBefore(State.STARTED)
     public void start() {
@@ -62,11 +68,11 @@ public class StatisticsReporterComponentImpl implements StatisticsReporterCompon
     private void reportStarted() {
         Statistics.onNodeStarted(infoComponent);
     }
-    
+
     private void reportStopped() {
         Statistics.onNodeStopped(infoComponent);
     }
-    
+
     private void alive() {
         debug("alive");
         Statistics.onNodeAlive(infoComponent);
