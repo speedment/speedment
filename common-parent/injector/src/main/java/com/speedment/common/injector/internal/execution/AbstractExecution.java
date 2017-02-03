@@ -64,10 +64,10 @@ abstract class AbstractExecution<T> implements Execution<T> {
 
     @Override
     public String toString() {
-        return "<before " + state.name().toLowerCase() + ">(" +
+        return "<execute>(" +
             dependencies.stream().map(d -> 
                 d.getNode().getRepresentedType().getSimpleName() + "[" +
                 d.getRequiredState().name().toLowerCase() + "]"
-            ).collect(joining(", "));
+            ).collect(joining(", ")) + ")";
     }
 }
