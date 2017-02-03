@@ -14,25 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.injector.internal.dependency;
-
-import com.speedment.common.injector.exception.CyclicReferenceException;
-
-import java.util.stream.Stream;
+package com.speedment.common.injector.execution;
 
 /**
  *
- * @author  Emil Forslund
- * @since   1.0.0
+ * @param <T>   the component to withExecute on
+ * @param <P0>  the first parameter type
+ * @param <P1>  the second parameter type
+ * @param <P2>  the third parameter type
+ * 
+ * @author Emil Forslund
+ * @since  1.2.0
  */
-public interface DependencyGraph {
+public interface ExecutionThreeParamBuilder<T, P0, P1, P2> extends ExecutionBuilder<T> {
     
-    DependencyNode get(Class<?> clazz) throws CyclicReferenceException;
-    
-    DependencyNode getOrCreate(Class<?> clazz);
-    
-    DependencyGraph inject() throws CyclicReferenceException;
-    
-    Stream<DependencyNode> nodes();
+    @FunctionalInterface
+    interface QuadConsumer<T, P0, P1, P2> {
+        void accept(T component, P0 first, P1 second, P2 third);
+    }
+
+    ExecutionBuilder<T> withExecute(QuadConsumer<T, P0, P1, P2> executeAction);
     
 }

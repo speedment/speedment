@@ -14,31 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.injector.internal.dependency;
+package com.speedment.common.injector.internal.util;
 
-import com.speedment.common.injector.State;
-
+import java.util.Collections;
 import java.util.Set;
+import static java.util.stream.Collectors.toSet;
+import java.util.stream.Stream;
 
 /**
  *
- * @author  Emil Forslund
- * @since   1.0.0
+ * @author Emil Forslund
+ * @since  1.2.0
  */
-public interface DependencyNode {
+public final class SetUtil {
+
+    @SuppressWarnings("unchecked")
+    public static <T> Set<T> unmodifiableSet(T... types) {
+        return Collections.unmodifiableSet(
+            Stream.of(types).collect(toSet())
+        );
+    }
     
-    Class<?> getRepresentedType();
-    
-    Set<Dependency> getDependencies();
-    
-    Set<Execution> getExecutions();
-    
-    State getCurrentState();
-    
-    void setState(State newState);
-    
-    boolean canBe(State state);
-    
-    boolean is(State state);
-    
+    private SetUtil() {}
 }

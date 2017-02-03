@@ -21,25 +21,24 @@ import com.speedment.common.injector.InjectorBuilder;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
-import com.speedment.common.injector.internal.dependency.DependencyGraph;
-import com.speedment.common.injector.internal.dependency.DependencyNode;
-import com.speedment.common.injector.internal.dependency.Execution;
-import com.speedment.common.injector.internal.dependency.impl.DependencyGraphImpl;
+import com.speedment.common.injector.dependency.DependencyGraph;
+import com.speedment.common.injector.dependency.DependencyNode;
+import com.speedment.common.injector.exception.NotInjectableException;
+import com.speedment.common.injector.execution.Execution;
+import com.speedment.common.injector.execution.Execution.ClassMapper;
 import com.speedment.common.injector.internal.util.InjectorUtil;
 import static com.speedment.common.injector.internal.util.InjectorUtil.findIn;
 import static com.speedment.common.injector.internal.util.PrintUtil.horizontalLine;
 import static com.speedment.common.injector.internal.util.PrintUtil.limit;
 import static com.speedment.common.injector.internal.util.PropertiesUtil.configureParams;
 import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseFields;
-import static com.speedment.common.logger.Level.DEBUG;
+import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
 
@@ -77,25 +76,25 @@ public final class InjectorImpl implements Injector {
 
     private final Set<Class<?>> injectables;
     private final List<Object> instances;
-    private final Map<Class<?>, List<Consumer<?>>> beforeStopped;
     private final Properties properties;
     private final ClassLoader classLoader;
+    private final DependencyGraph graph;
     private final InjectorBuilder builder;
 
     InjectorImpl(
             Set<Class<?>> injectables, 
             List<Object> instances,
-            Map<Class<?>, List<Consumer<?>>> beforeStopped,
             Properties properties,
             ClassLoader classLoader,
+            DependencyGraph graph,
             InjectorBuilder builder) {
         
-        this.injectables   = requireNonNull(injectables);
-        this.instances     = requireNonNull(instances);
-        this.beforeStopped = requireNonNull(beforeStopped);
-        this.properties    = requireNonNull(properties);
-        this.classLoader   = requireNonNull(classLoader);
-        this.builder       = requireNonNull(builder);
+        this.injectables = requireNonNull(injectables);
+        this.instances   = requireNonNull(instances);
+        this.properties  = requireNonNull(properties);
+        this.classLoader = requireNonNull(classLoader);
+        this.graph       = requireNonNull(graph);
+        this.builder     = requireNonNull(builder);
     }
 
     @Override
@@ -132,9 +131,15 @@ public final class InjectorImpl implements Injector {
 
     @Override
     public void stop() {
-        final DependencyGraph graph = DependencyGraphImpl.create(injectables);
-
         final AtomicBoolean hasAnythingChanged = new AtomicBoolean();
+        
+        // Create ClassMapper
+        final ClassMapper classMapper = new ClassMapper() {
+            @Override
+            public <T> T apply(Class<T> type) throws NotInjectableException {
+                return find(type, true);
+            }
+        };
 
         // Loop until all nodes have been started.
         Set<DependencyNode> unfinished;
@@ -159,68 +164,33 @@ public final class InjectorImpl implements Injector {
                     // Execute all the executions for the next step.
                     n.getExecutions().stream()
                         .filter(e -> e.getState() == State.STOPPED)
-                        .map(Execution::getMethod)
-                        .forEach(m -> {
-                            final Object[] params = Stream.of(m.getParameters())
-                                .map(p -> find(
-                                    p.getType(), 
-                                    p.getAnnotation(WithState.class) != null
-                                ))
-                                .toArray(Object[]::new);
+                        .map(exec -> {
+                            @SuppressWarnings("unchecked")
+                            final Execution<Object> casted = 
+                                (Execution<Object>) exec;
+                            return casted;
+                        })
+                        .forEach(exec -> {
 
-                            m.setAccessible(true);
+                            // We might want to log exactly which steps we
+                            // have completed.
+                            if (LOGGER.getLevel()
+                                .isEqualOrLowerThan(Level.DEBUG)) {
 
-                            final String shortMethodName
-                                = n.getRepresentedType().getSimpleName() + "#"
-                                + m.getName() + "("
-                                + Stream.of(m.getParameters())
-                                .map(p -> p.getType()
-                                    .getSimpleName().substring(0, 1)
-                                )
-                                .collect(joining(", ")) + ")";
-
-                            LOGGER.debug(
-                                "| -> %-76s |", shortMethodName
-                            );
+                                LOGGER.debug(
+                                    "| -> %-76s |", 
+                                    limit(exec.toString(), 76)
+                                );
+                            }
 
                             try {
-                                m.invoke(inst, params);
+                                exec.invoke(inst, classMapper);
                             } catch (final IllegalAccessException 
                                          | IllegalArgumentException 
                                          | InvocationTargetException ex) {
 
                                 throw new RuntimeException(ex);
                             }
-                        });
-
-                    // Execute all manual configurations for the 
-                    // particular step.
-                    beforeStopped.entrySet().stream()
-                        .filter(e -> e.getKey()
-                            .isAssignableFrom(inst.getClass()))
-                        .map(Map.Entry::getValue)
-                        .map(list -> {
-                            @SuppressWarnings("unchecked")
-                            final List<Consumer<Object>> typed =
-                                (List<Consumer<Object>>) (List<?>) list;
-                            return typed;
-                        })
-                        .flatMap(List::stream)
-                        .forEachOrdered(action -> {
-                            // We might want to log exactly which steps we have
-                            // completed.
-                            if (LOGGER.getLevel().isEqualOrLowerThan(DEBUG)) {
-                                final String shortMethodName = 
-                                    n.getRepresentedType().getSimpleName() + 
-                                    "#<Consumer>()";
-
-                                LOGGER.debug(
-                                    "| -> %-76s |", 
-                                    limit(shortMethodName, 76)
-                                );
-                            }
-
-                            action.accept(inst);
                         });
 
                     // Update its state to the new state.

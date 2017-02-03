@@ -16,7 +16,13 @@
  */
 package com.speedment.common.injector;
 
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
+import com.speedment.common.injector.execution.ExecutionBuilder;
+import static com.speedment.common.injector.execution.ExecutionBuilder.initialized;
+import static com.speedment.common.injector.execution.ExecutionBuilder.resolved;
+import static com.speedment.common.injector.execution.ExecutionBuilder.started;
+import static com.speedment.common.injector.execution.ExecutionBuilder.stopped;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
@@ -86,6 +92,18 @@ public interface InjectorBuilder {
      * @return            a reference to this builder
      */
     InjectorBuilder withConfigFileLocation(Path configFile);
+    
+    /**
+     * Appends an action that must be executed sometime during the configuration 
+     * phase. The action will have access to the instance as it is configured. 
+     * This is equivalent to using the {@link ExecuteBefore}-annotation on a 
+     * method in the class.
+     * 
+     * @param <T>               the injectable type
+     * @param executionBuilder  builder for the execution to create
+     * @return                  a reference to this builder
+     */
+    <T> InjectorBuilder before(ExecutionBuilder<T> executionBuilder);
 
     /**
      * Appends an action that must be executed sometime before specified 
@@ -99,7 +117,11 @@ public interface InjectorBuilder {
      * @param action          action to be applied before state is reached
      * @return                a reference to this builder
      */
-    <T> InjectorBuilder beforeInitialized(Class<T> injectableType, Consumer<T> action);
+    default <T> InjectorBuilder beforeInitialized(
+            Class<T> injectableType, Consumer<T> action) {
+        
+        return before(initialized(injectableType).withExecute(action));
+    }
 
     /**
      * Appends an action that must be executed sometime before specified 
@@ -113,7 +135,11 @@ public interface InjectorBuilder {
      * @param action          action to be applied before state is reached
      * @return                a reference to this builder
      */
-    <T> InjectorBuilder beforeResolved(Class<T> injectableType, Consumer<T> action);
+    default <T> InjectorBuilder beforeResolved(
+            Class<T> injectableType, Consumer<T> action) {
+        
+        return before(resolved(injectableType).withExecute(action));
+    }
 
     /**
      * Appends an action that must be executed sometime before specified 
@@ -127,7 +153,11 @@ public interface InjectorBuilder {
      * @param action          action to be applied before state is reached
      * @return                a reference to this builder
      */
-    <T> InjectorBuilder beforeStarted(Class<T> injectableType, Consumer<T> action);
+    default <T> InjectorBuilder beforeStarted(
+            Class<T> injectableType, Consumer<T> action) {
+        
+        return before(started(injectableType).withExecute(action));
+    }
 
     /**
      * Appends an action that must be executed sometime before specified 
@@ -141,7 +171,11 @@ public interface InjectorBuilder {
      * @param action          action to be applied before state is reached
      * @return                a reference to this builder
      */
-    <T> InjectorBuilder beforeStopped(Class<T> injectableType, Consumer<T> action);
+    default <T> InjectorBuilder beforeStopped(
+            Class<T> injectableType, Consumer<T> action) {
+        
+        return before(stopped(injectableType).withExecute(action));
+    }
 
     /**
      * Builds the {@link Injector} instance, organizing the 
