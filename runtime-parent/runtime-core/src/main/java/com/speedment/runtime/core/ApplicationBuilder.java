@@ -46,7 +46,9 @@ import java.util.function.Consumer;
  * @author Emil Forslund
  * @since 3.0.0
  */
-public interface ApplicationBuilder<APP extends Speedment, BUILDER extends ApplicationBuilder<APP, BUILDER>> {
+public interface ApplicationBuilder<
+        APP extends Speedment, 
+        BUILDER extends ApplicationBuilder<APP, BUILDER>> {
 
     /**
      * Configures a parameter for the identified dbms. The consumer will then be
@@ -564,11 +566,17 @@ public interface ApplicationBuilder<APP extends Speedment, BUILDER extends Appli
      * {@link Inject} will be dependency injected. Methods annotated with
      * {@link ExecuteBefore} will also be executed as part of the application
      * configuration phase.
+     * 
+     * @deprecated The parameter {@code key} is not forwarded to the dependency
+     *             injection framework, so this method has exactly the same
+     *             behaviour as {@link #withComponent(java.lang.Class)}, so it
+     *             is redundant.
      *
-     * @param key the key to store it under
-     * @param componentClass the implementation class
-     * @return this instance
+     * @param key             the key to store it under
+     * @param componentClass  the implementation class
+     * @return                this instance
      */
+    @Deprecated
     BUILDER withComponent(String key, Class<?> componentClass);
 
     /**
