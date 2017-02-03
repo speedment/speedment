@@ -14,29 +14,28 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.injector.internal.dependency.impl;
+package com.speedment.common.injector.internal.dependency;
 
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.Execute;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
+import com.speedment.common.injector.dependency.Dependency;
+import com.speedment.common.injector.dependency.DependencyGraph;
+import com.speedment.common.injector.dependency.DependencyNode;
 import com.speedment.common.injector.exception.CyclicReferenceException;
+import com.speedment.common.injector.execution.Execution;
 import com.speedment.common.injector.internal.InjectorImpl;
-import com.speedment.common.injector.internal.dependency.Dependency;
-import com.speedment.common.injector.internal.dependency.DependencyGraph;
-import com.speedment.common.injector.internal.dependency.DependencyNode;
-import com.speedment.common.injector.internal.dependency.Execution;
-
+import com.speedment.common.injector.internal.execution.ReflectionExecutionImpl;
+import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseMethods;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
-
-import static com.speedment.common.injector.internal.util.ReflectionUtil.traverseMethods;
 import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
 
 /**
  * The default implementation of the {@link DependencyGraph} interface.
@@ -48,7 +47,9 @@ public final class DependencyGraphImpl implements DependencyGraph {
     
     private final Map<Class<?>, DependencyNode> nodes;
     
-    public static DependencyGraph create(Set<Class<?>> injectables) throws CyclicReferenceException {
+    public static DependencyGraph create(Set<Class<?>> injectables) 
+            throws CyclicReferenceException {
+        
         final DependencyGraphImpl graph = new DependencyGraphImpl();
         injectables.forEach(graph::getOrCreate);
         graph.inject();
@@ -82,21 +83,24 @@ public final class DependencyGraphImpl implements DependencyGraph {
     @Override
     public DependencyGraph inject() {
         nodes.forEach((clazz, node) -> {
-            // Go through all the methods with the '@Execute'-annotation in the class and
-            // add them to the executors set.
+            // Go through all the methods with the '@Execute'-annotation in the 
+            // class and add them to the executors set.
             traverseMethods(clazz)
                 .filter(m -> m.isAnnotationPresent(Execute.class))
                 .forEach(m -> {
-                    node.getExecutions().add(createExecution(clazz, m, State.STARTED));
+                    node.getExecutions().add(createExecution(m, State.STARTED));
                 });
 
-            // Go through all the methods with the '@ExecuteBefore'-annotation in the class 
-            // and add them to the executors set.
+            // Go through all the methods with the '@ExecuteBefore'-annotation 
+            // in the class  and add them to the executors set.
             traverseMethods(clazz)
                 .filter(m -> m.isAnnotationPresent(ExecuteBefore.class))
                 .forEach(m -> {
-                    final ExecuteBefore execute = m.getAnnotation(ExecuteBefore.class);
-                    node.getExecutions().add(createExecution(clazz, m, execute.value()));
+                    final ExecuteBefore execute =
+                        m.getAnnotation(ExecuteBefore.class);
+                    
+                    node.getExecutions()
+                        .add(createExecution(m, execute.value()));
                 });
         });
         
@@ -117,19 +121,7 @@ public final class DependencyGraphImpl implements DependencyGraph {
             ")";
     }
     
-    private Execution createExecution(Class<?> clazz, Method m, State executeBefore) {
-     
-//        // Make sure all the methods parameters are annoted with the 
-//        // '@WithState'-annotation.
-//        if (Stream.of(m.getParameters())
-//            .anyMatch(p -> !p.isAnnotationPresent(WithState.class))) {
-//            throw new RuntimeException(
-//                "Method '" + methodName(m) + 
-//                "' has a parameter that is missing the @" + 
-//                WithState.class.getSimpleName() + " annotation."
-//            );
-//        }
-
+    private Execution<?> createExecution(Method m, State executeBefore) {
         final Set<Dependency> dependencies = new HashSet<>();
         try {
             for (int i = 0; i < m.getParameterCount(); i++) {
@@ -145,7 +137,9 @@ public final class DependencyGraphImpl implements DependencyGraph {
                             new DependencyImpl(get(type), state)
                         );
                     } catch (final CyclicReferenceException ex) {
-                        throw new CyclicReferenceException(m.getDeclaringClass(), ex);
+                        throw new CyclicReferenceException(
+                            m.getDeclaringClass(), ex
+                        );
                     }
                 }
             }
@@ -157,6 +151,9 @@ public final class DependencyGraphImpl implements DependencyGraph {
             );
         }
 
-        return new ExecutionImpl(executeBefore, m, dependencies);
+        return new ReflectionExecutionImpl<>(
+            m.getDeclaringClass(), 
+            executeBefore, dependencies, m
+        );
     }
 }

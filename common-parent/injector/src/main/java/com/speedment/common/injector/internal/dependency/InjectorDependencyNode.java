@@ -14,15 +14,15 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.injector.internal.dependency.impl;
+package com.speedment.common.injector.internal.dependency;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.State;
-import com.speedment.common.injector.internal.dependency.Dependency;
-import com.speedment.common.injector.internal.dependency.DependencyNode;
-import com.speedment.common.injector.internal.dependency.Execution;
-
+import com.speedment.common.injector.dependency.Dependency;
+import com.speedment.common.injector.dependency.DependencyNode;
+import com.speedment.common.injector.execution.Execution;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -45,8 +45,8 @@ final class InjectorDependencyNode implements DependencyNode {
     }
 
     @Override
-    public Set<Execution> getExecutions() {
-        return Collections.emptySet();
+    public List<Execution<?>> getExecutions() {
+        return Collections.emptyList();
     }
 
     @Override

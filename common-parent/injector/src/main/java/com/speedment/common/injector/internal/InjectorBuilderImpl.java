@@ -24,11 +24,14 @@ import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.injector.annotation.WithState;
+import com.speedment.common.injector.dependency.DependencyGraph;
+import com.speedment.common.injector.dependency.DependencyNode;
 import com.speedment.common.injector.exception.NoDefaultConstructorException;
-import com.speedment.common.injector.internal.dependency.DependencyGraph;
-import com.speedment.common.injector.internal.dependency.DependencyNode;
-import com.speedment.common.injector.internal.dependency.Execution;
-import com.speedment.common.injector.internal.dependency.impl.DependencyGraphImpl;
+import com.speedment.common.injector.exception.NotInjectableException;
+import com.speedment.common.injector.execution.Execution;
+import com.speedment.common.injector.execution.Execution.ClassMapper;
+import com.speedment.common.injector.execution.ExecutionBuilder;
+import com.speedment.common.injector.internal.dependency.DependencyGraphImpl;
 import static com.speedment.common.injector.internal.util.InjectorUtil.findIn;
 import static com.speedment.common.injector.internal.util.PrintUtil.horizontalLine;
 import static com.speedment.common.injector.internal.util.PrintUtil.limit;
@@ -45,7 +48,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import static java.util.Collections.unmodifiableList;
-import static java.util.Collections.unmodifiableMap;
 import static java.util.Collections.unmodifiableSet;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -59,11 +61,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toSet;
-import java.util.stream.Stream;
 
 /**
  * Default implementation of the {@link InjectorBuilder}-interface.
@@ -78,11 +77,8 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
 
     private final ClassLoader classLoader;
     private final Map<String, List<Class<?>>> injectables;
+    private final List<ExecutionBuilder<?>> executions;
     private final Map<String, String> overriddenParams;
-    private final Map<Class<?>, List<Consumer<?>>> beforeInitialized;
-    private final Map<Class<?>, List<Consumer<?>>> beforeResolved;
-    private final Map<Class<?>, List<Consumer<?>>> beforeStarted;
-    private final Map<Class<?>, List<Consumer<?>>> beforeStopped;
     private Path configFileLocation;
 
     InjectorBuilderImpl() {
@@ -102,11 +98,8 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
 
         this.classLoader        = requireNonNull(classLoader);
         this.injectables        = new LinkedHashMap<>();
+        this.executions         = new LinkedList<>();
         this.overriddenParams   = new HashMap<>();
-        this.beforeInitialized  = new HashMap<>();
-        this.beforeResolved     = new HashMap<>();
-        this.beforeStarted      = new HashMap<>();
-        this.beforeStopped      = new HashMap<>();
         this.configFileLocation = Paths.get("settings.properties");
 
         injectables.forEach(this::withComponent);
@@ -168,26 +161,8 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
     }
 
     @Override
-    public <T> InjectorBuilder beforeInitialized(Class<T> injectableType, Consumer<T> action) {
-        beforeInitialized.computeIfAbsent(injectableType, c -> new LinkedList<>()).add(action);
-        return this;
-    }
-
-    @Override
-    public <T> InjectorBuilder beforeResolved(Class<T> injectableType, Consumer<T> action) {
-        beforeResolved.computeIfAbsent(injectableType, c -> new LinkedList<>()).add(action);
-        return this;
-    }
-
-    @Override
-    public <T> InjectorBuilder beforeStarted(Class<T> injectableType, Consumer<T> action) {
-        beforeStarted.computeIfAbsent(injectableType, c -> new LinkedList<>()).add(action);
-        return this;
-    }
-
-    @Override
-    public <T> InjectorBuilder beforeStopped(Class<T> injectableType, Consumer<T> action) {
-        beforeStopped.computeIfAbsent(injectableType, c -> new LinkedList<>()).add(action);
+    public <T> InjectorBuilder before(ExecutionBuilder<T> executionBuilder) {
+        executions.add(requireNonNull(executionBuilder));
         return this;
     }
 
@@ -251,11 +226,25 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
         final Injector injector = new InjectorImpl(
             injectablesSet,
             unmodifiableList(instances),
-            unmodifiableMap(beforeStopped),
             properties,
             classLoader,
+            graph,
             this
         );
+        
+        // Create ClassMapper
+        final ClassMapper classMapper = new ClassMapper() {
+            @Override
+            public <T> T apply(Class<T> type) 
+                throws NotInjectableException {
+                return findIn(
+                    type, 
+                    injector, 
+                    instances,
+                    true // Required = true
+                );
+            }
+        };
 
         // Set the auto-injected fields
         instances.forEach(instance -> traverseFields(instance.getClass())
@@ -289,6 +278,14 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                 }
             })
         );
+        
+        // Build explicit executions and add them to the graph
+        executions.stream()
+            .map(builder -> builder.build(graph))
+            .forEachOrdered(execution -> {
+                final DependencyNode node = graph.get(execution.getType());
+                node.getExecutions().add(execution);
+            });
 
         final AtomicBoolean hasAnythingChanged = new AtomicBoolean();
         final AtomicInteger nextState = new AtomicInteger(0);
@@ -313,16 +310,6 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                         n.getCurrentState().ordinal() + 1
                     ];
 
-                    final Map<Class<?>, List<Consumer<?>>> actions;
-                    switch (state) {
-                        case INITIALIZED : actions = beforeInitialized; break;
-                        case RESOLVED    : actions = beforeResolved;    break;
-                        case STARTED     : actions = beforeStarted;     break;
-                        default : throw new IllegalStateException(
-                            "Can't be in state '" + state + "'."
-                        );
-                    }
-
                     // Check if all its dependencies have been satisfied.
                     if (n.canBe(state)) {
 
@@ -339,72 +326,33 @@ public final class InjectorBuilderImpl implements InjectorBuilder {
                         // Execute all the executions for the next step.
                         n.getExecutions().stream()
                             .filter(e -> e.getState() == state)
-                            .map(Execution::getMethod)
-                            .forEach(m -> {
-                                final Object[] params = 
-                                    Stream.of(m.getParameters())
-                                    .map(p -> findIn(
-                                        p.getType(), 
-                                        injector, 
-                                        instances, 
-                                        p.getAnnotation(WithState.class) 
-                                            != null
-                                    )).toArray(Object[]::new);
-
-                                m.setAccessible(true);
-
-                                // We might want to log exactly which steps we have
-                                // completed.
-                                if (LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                                    final String shortMethodName
-                                        = n.getRepresentedType().getSimpleName() + "#"
-                                        + m.getName() + "("
-                                        + Stream.of(m.getParameters())
-                                        .map(p -> p.getType().getSimpleName().substring(0, 1))
-                                        .collect(joining(", ")) + ")";
-
+                            .map(exec -> {
+                                @SuppressWarnings("unchecked")
+                                final Execution<Object> casted = 
+                                    (Execution<Object>) exec;
+                                return casted;
+                            })
+                            .forEach(exec -> {
+                                
+                                // We might want to log exactly which steps we
+                                // have completed.
+                                if (LOGGER.getLevel()
+                                    .isEqualOrLowerThan(Level.DEBUG)) {
+                                    
                                     LOGGER.debug(
                                         "| -> %-76s |", 
-                                        limit(shortMethodName, 76)
+                                        limit(exec.toString(), 76)
                                     );
                                 }
-
+                                
                                 try {
-                                    m.invoke(instance, params);
+                                    exec.invoke(instance, classMapper);
                                 } catch (final IllegalAccessException 
                                              | IllegalArgumentException 
                                              | InvocationTargetException ex) {
 
                                     throw new RuntimeException(ex);
                                 }
-                            });
-
-                        // Execute all manual configurations for the 
-                        // particular step.
-                        actions.entrySet().stream()
-                            .filter(e -> e.getKey().isAssignableFrom(instance.getClass()))
-                            .map(Map.Entry::getValue)
-                            .map(list -> {
-                                @SuppressWarnings("unchecked")
-                                final List<Consumer<Object>> typed =
-                                    (List<Consumer<Object>>) (List<?>) list;
-                                return typed;
-                            })
-                            .flatMap(List::stream)
-                            .forEachOrdered(action -> {
-                                // We might want to log exactly which steps we have
-                                // completed.
-                                if (LOGGER.getLevel().isEqualOrLowerThan(Level.DEBUG)) {
-                                    final String shortMethodName
-                                        = n.getRepresentedType().getSimpleName() + "#<Consumer>()";
-
-                                    LOGGER.debug(
-                                        "| -> %-76s |", 
-                                        limit(shortMethodName, 76)
-                                    );
-                                }
-
-                                action.accept(instance);
                             });
 
                         // Update its state to the new state.

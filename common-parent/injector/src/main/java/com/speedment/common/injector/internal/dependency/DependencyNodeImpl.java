@@ -14,18 +14,18 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.injector.internal.dependency.impl;
+package com.speedment.common.injector.internal.dependency;
 
 import com.speedment.common.injector.State;
-import com.speedment.common.injector.internal.dependency.Dependency;
-import com.speedment.common.injector.internal.dependency.DependencyNode;
-import com.speedment.common.injector.internal.dependency.Execution;
-
+import com.speedment.common.injector.dependency.Dependency;
+import com.speedment.common.injector.dependency.DependencyNode;
+import com.speedment.common.injector.execution.Execution;
+import static java.util.Collections.newSetFromMap;
+import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static java.util.Collections.newSetFromMap;
-import static java.util.Objects.requireNonNull;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
@@ -36,13 +36,13 @@ public final class DependencyNodeImpl implements DependencyNode {
 
     private final Class<?> representedType;
     private final Set<Dependency> dependencies;
-    private final Set<Execution> executions;
+    private final List<Execution<?>> executions;
     private State currentState;
 
     public DependencyNodeImpl(Class<?> representedType) {
         this.representedType = requireNonNull(representedType);
         this.dependencies    = newSetFromMap(new ConcurrentHashMap<>());
-        this.executions      = newSetFromMap(new ConcurrentHashMap<>());
+        this.executions      = new CopyOnWriteArrayList<>();
         this.currentState    = State.CREATED;
     }
     
@@ -57,7 +57,7 @@ public final class DependencyNodeImpl implements DependencyNode {
     }
     
     @Override
-    public Set<Execution> getExecutions() {
+    public List<Execution<?>> getExecutions() {
         return executions;
     }
 
