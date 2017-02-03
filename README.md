@@ -242,6 +242,38 @@ String json = hares.stream()
     ));
 ```
 
+### Integration with Spring Boot
+It is easy to integrate Speedment with Spring Boot. Here is an example of a Configuration file for Spring:
+```java
+@Configuration
+public class AppConfig {
+    private @Value("${dbms.username}") String username;
+    private @Value("${dbms.password}") String password;
+    private @Value("${dbms.schema}") String schema;
+
+    @Bean
+    public SalesinfoApplication getSalesinfoApplication() {
+        return new SalesinfoApplicationBuilder()
+            .withUsername(username)
+            .withPassword(password)
+            .withSchema(schema)
+            .build();
+    }
+
+    // Individual managers
+    @Bean
+    public SalespersonManager getSalespersonManager(SalesinfoApplication app) {
+        return app.getOrThrow(SalespersonManager.class);
+    }
+}
+```
+
+So when we need to use a manager in a SpringMVC Controller, we can now simply autowire it:
+```java
+    private @Autowired SalespersonManager salespeople;
+```
+
+
 Features
 --------
 Here are some of the many features packed into the Speedment framework!
