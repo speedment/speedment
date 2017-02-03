@@ -23,6 +23,8 @@ import static com.speedment.common.injector.execution.ExecutionBuilder.initializ
 import static com.speedment.common.injector.execution.ExecutionBuilder.resolved;
 import static com.speedment.common.injector.execution.ExecutionBuilder.started;
 import static com.speedment.common.injector.execution.ExecutionBuilder.stopped;
+import com.speedment.common.injector.internal.InjectorBuilderImpl;
+import com.speedment.common.logger.Logger;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
@@ -187,5 +189,15 @@ public interface InjectorBuilder {
      *                                 be instantiated.
      */
     Injector build() throws InstantiationException;
+    
+    /**
+     * Returns the {@link logger} object used by the default implementation of 
+     * the {@code InjectorBuilder}.
+     * 
+     * @return  the default logger
+     */
+    static Logger logger() {
+        return InjectorBuilderImpl.LOGGER;
+    }
 
 }

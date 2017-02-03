@@ -71,7 +71,7 @@ public final class InjectorImpl implements Injector {
         return new InjectorBuilderImpl(classLoader);
     }
 
-    private final static Logger LOGGER = 
+    public final static Logger LOGGER = 
         LoggerManager.getLogger(InjectorImpl.class);
 
     private final Set<Class<?>> injectables;

@@ -72,7 +72,7 @@ import static java.util.stream.Collectors.toSet;
  */
 public final class InjectorBuilderImpl implements InjectorBuilder {
     
-    private final static Logger LOGGER = 
+    public final static Logger LOGGER = 
         LoggerManager.getLogger(InjectorBuilderImpl.class);
 
     private final ClassLoader classLoader;

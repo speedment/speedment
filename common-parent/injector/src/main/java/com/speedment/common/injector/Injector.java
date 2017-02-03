@@ -20,6 +20,7 @@ import com.speedment.common.injector.annotation.Execute;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.internal.InjectorImpl;
+import com.speedment.common.logger.Logger;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -131,5 +132,15 @@ public interface Injector {
      */
     static InjectorBuilder builder(ClassLoader classLoader) {
         return InjectorImpl.builder(classLoader);
+    }
+    
+    /**
+     * Returns the {@link logger} object used by the default implementation of 
+     * the {@code Injector}.
+     * 
+     * @return  the default logger
+     */
+    static Logger logger() {
+        return InjectorImpl.LOGGER;
     }
 }
