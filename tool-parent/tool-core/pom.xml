@@ -149,7 +149,7 @@
         <dependency>
             <groupId>com.speedment.tool</groupId>
             <artifactId>tool-config</artifactId>
-            <version>3.0.3-SNAPSHOT</version>
+            <version>${speedment.version}</version>
         </dependency>
         
         <dependency>

@@ -14,20 +14,20 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.tool.config.util;
+package com.speedment.runtime.config.util;
 
 import com.speedment.generator.core.GeneratorBundle;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.util.DocumentUtil;
-import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
-import static com.speedment.runtime.config.util.DocumentUtil.Name.JAVA_NAME;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.tool.core.ToolBundle;
-import static org.junit.Assert.assertEquals;
 import org.junit.Test;
+
+import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
+import static com.speedment.runtime.config.util.DocumentUtil.Name.JAVA_NAME;
+import static org.junit.Assert.assertEquals;
 
 /**
  *
