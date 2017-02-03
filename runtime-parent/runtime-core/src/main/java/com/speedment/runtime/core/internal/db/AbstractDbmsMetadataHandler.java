@@ -16,8 +16,10 @@
  */
 package com.speedment.runtime.core.internal.db;
 
+import static com.speedment.common.injector.State.INITIALIZED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.*;
@@ -35,26 +37,22 @@ import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.db.metadata.ColumnMetaData;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.core.exception.SpeedmentException;
+import static com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler.SHOW_METADATA;
+import static com.speedment.runtime.core.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
+import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.runtime.typemapper.TypeMapper;
-
 import java.sql.*;
 import java.util.*;
+import static java.util.Objects.nonNull;
+import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
-
-import static com.speedment.common.injector.State.INITIALIZED;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import static com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler.SHOW_METADATA;
-import static com.speedment.runtime.core.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
-import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
-import static java.util.Objects.nonNull;
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+import java.util.stream.Stream;
 
 /**
  *
@@ -85,9 +83,10 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     
     @Override
     public CompletableFuture<Project> readSchemaMetadata(
-        Dbms dbms,
-        ProgressMeasure progress,
-        Predicate<String> filterCriteria) {
+        final Dbms dbms,
+        final ProgressMeasure progress,
+        final Predicate<String> filterCriteria
+    ) {
 
         requireNonNulls(filterCriteria, progress);
 
@@ -106,8 +105,13 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         return readSchemaMetadata(
             projectCopy, dbmsCopy, filterCriteria, progress
         ).whenCompleteAsync((project, ex) -> {
-            progress.setCurrentAction("Done!");
             progress.setProgress(ProgressMeasure.DONE);
+            if (ex != null) {
+                progress.setCurrentAction("Error!");
+                throw new SpeedmentException("Unable to read schema metadata.", ex);
+            } else {
+                progress.setCurrentAction("Done!");
+            }
         });
     }
     
@@ -131,11 +135,11 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     }        
 
     private CompletableFuture<Project> readSchemaMetadata(
-        Project project,
-        Dbms dbms,
-        Predicate<String> filterCriteria,
-        ProgressMeasure progress) {
-
+        final Project project,
+        final Dbms dbms,
+        final Predicate<String> filterCriteria,
+        final ProgressMeasure progress
+    ) {
         requireNonNulls(project, dbms, filterCriteria, progress);
 
         final DbmsType dbmsType = dbmsTypeOf(dbmsHandlerComponent, dbms);
@@ -327,7 +331,12 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         ).thenApplyAsync(v -> schema);
     }
 
-    protected void columns(Connection connection, Map<String, Class<?>> sqlTypeMapping, Table table, ProgressMeasure progressListener) {
+    protected void columns(
+        final Connection connection, 
+        final Map<String, Class<?>> sqlTypeMapping, 
+        final Table table, 
+        final ProgressMeasure progressListener
+    ) {
         requireNonNulls(connection, table);
 
         final Schema schema = table.getParentOrThrow();
@@ -516,20 +525,20 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     }
 
     protected <T> void tableChilds(
-        Supplier<T> childSupplier,
-        SqlSupplier<ResultSet> resultSetSupplier,
-        AbstractDbmsOperationHandler.TableChildMutator<T, ResultSet> resultSetMutator,
-        ProgressMeasure progressListener
+        final Supplier<T> childSupplier,
+        final SqlSupplier<ResultSet> resultSetSupplier,
+        final AbstractDbmsOperationHandler.TableChildMutator<T, ResultSet> resultSetMutator,
+        final ProgressMeasure progressListener
     ) {
         tableChilds(childSupplier, resultSetSupplier, resultSetMutator, rs -> true, progressListener);
     }
 
     protected <T> void tableChilds(
-        Supplier<T> childSupplier,
-        SqlSupplier<ResultSet> resultSetSupplier,
-        AbstractDbmsOperationHandler.TableChildMutator<T, ResultSet> resultSetMutator,
-        SqlPredicate<ResultSet> filter,
-        ProgressMeasure progressListener
+        final Supplier<T> childSupplier,
+        final SqlSupplier<ResultSet> resultSetSupplier,
+        final AbstractDbmsOperationHandler.TableChildMutator<T, ResultSet> resultSetMutator,
+        final SqlPredicate<ResultSet> filter,
+        final ProgressMeasure progressListener
     ) {
         requireNonNulls(childSupplier, resultSetSupplier, resultSetMutator);
 
