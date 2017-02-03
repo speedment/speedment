@@ -19,6 +19,7 @@ package com.speedment.common.injector;
 import static com.speedment.common.injector.State.INITIALIZED;
 import static com.speedment.common.injector.State.RESOLVED;
 import static com.speedment.common.injector.State.STARTED;
+import static com.speedment.common.injector.State.STOPPED;
 import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.InjectKey;
@@ -30,9 +31,13 @@ import com.speedment.common.injector.test_b.B;
 import com.speedment.common.injector.test_b.C;
 import com.speedment.common.injector.test_c.ChildType;
 import com.speedment.common.injector.test_c.ParentType;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
@@ -274,6 +279,88 @@ public class InjectorTest {
                 injector.getOrThrow(ImplementingComponent.class);
             
             assertEquals("Make sure all executors was executed: ", 6, component.getCount());
+        } catch (final InstantiationException ex) {
+            fail("InstantiationException!");
+        }
+    }
+    
+    private static final class ExecutableComponent {
+        
+        private final Set<String> actionsInvoked = new HashSet<>();
+        private int count;
+        
+        public void set(String action) {
+            actionsInvoked.add(action);
+            count++;
+        }
+        
+        @ExecuteBefore(INITIALIZED)
+        public void onInit() {
+            actionsInvoked.add("q");
+            count++;
+        }
+        
+        @ExecuteBefore(STOPPED)
+        public void onStop() {
+            actionsInvoked.add("z");
+            count++;
+        }
+        
+        public Set<String> getActionsInvoked() {
+            return actionsInvoked;
+        }
+        
+        public int getCount() {
+            return count;
+        }
+    }
+    
+    @Test
+    public void testInvokeExecutors() {
+        try {
+            final Injector injector = Injector.builder()
+                .put(ExecutableComponent.class)
+                .beforeInitialized(ExecutableComponent.class, ec -> ec.set("a"))
+                .beforeInitialized(ExecutableComponent.class, ec -> ec.set("b"))
+                .beforeResolved(ExecutableComponent.class, ec -> ec.set("c"))
+                .beforeStopped(ExecutableComponent.class, ec -> ec.set("d"))
+                .beforeStarted(ExecutableComponent.class, ec -> ec.set("e"))
+                .beforeStarted(ExecutableComponent.class, ec -> ec.set("f"))
+                .beforeStopped(ExecutableComponent.class, ec -> ec.set("g"))
+                .beforeInitialized(ExecutableComponent.class, ec -> ec.set("h"))
+                .build();
+            
+            final ExecutableComponent c =
+                injector.getOrThrow(ExecutableComponent.class);
+            
+            assertTrue("Make sure 'a' was added before stop: ", c.getActionsInvoked().contains("a"));
+            assertTrue("Make sure 'b' was added before stop: ", c.getActionsInvoked().contains("b"));
+            assertTrue("Make sure 'c' was added before stop: ", c.getActionsInvoked().contains("c"));
+            assertFalse("Make sure 'd' was NOT added before stop: ", c.getActionsInvoked().contains("d"));
+            assertTrue("Make sure 'e' was added before stop: ", c.getActionsInvoked().contains("e"));
+            assertTrue("Make sure 'f' was added before stop: ", c.getActionsInvoked().contains("f"));
+            assertFalse("Make sure 'g' was NOT added before stop: ", c.getActionsInvoked().contains("g"));
+            assertTrue("Make sure 'h' was added before stop: ", c.getActionsInvoked().contains("h"));
+            assertTrue("Make sure 'q' was added before stop: ", c.getActionsInvoked().contains("q"));
+            assertFalse("Make sure 'z' was NOT added before stop: ", c.getActionsInvoked().contains("z"));
+            
+            assertEquals("Make sure the total count is right before stop: ", 7, c.getCount());
+            
+            injector.stop();
+            
+            assertTrue("Make sure 'a' was added after stop: ", c.getActionsInvoked().contains("a"));
+            assertTrue("Make sure 'b' was added after stop: ", c.getActionsInvoked().contains("b"));
+            assertTrue("Make sure 'c' was added after stop: ", c.getActionsInvoked().contains("c"));
+            assertTrue("Make sure 'd' was added after stop: ", c.getActionsInvoked().contains("d"));
+            assertTrue("Make sure 'e' was added after stop: ", c.getActionsInvoked().contains("e"));
+            assertTrue("Make sure 'f' was added after stop: ", c.getActionsInvoked().contains("f"));
+            assertTrue("Make sure 'g' was added after stop: ", c.getActionsInvoked().contains("g"));
+            assertTrue("Make sure 'h' was added after stop: ", c.getActionsInvoked().contains("h"));
+            assertTrue("Make sure 'q' was added after stop: ", c.getActionsInvoked().contains("q"));
+            assertTrue("Make sure 'z' was added after stop: ", c.getActionsInvoked().contains("z"));
+            
+            assertEquals("Make sure the total count is right after stop: ", 10, c.getCount());
+            
         } catch (final InstantiationException ex) {
             fail("InstantiationException!");
         }

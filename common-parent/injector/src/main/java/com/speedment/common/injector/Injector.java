@@ -23,6 +23,7 @@ import com.speedment.common.injector.exception.NoDefaultConstructorException;
 import com.speedment.common.injector.internal.InjectorImpl;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
@@ -199,7 +200,7 @@ public interface Injector {
          * have a default constructor.
          */
         Builder putInBundle(Class<? extends InjectBundle> bundleClass) 
-        throws NoDefaultConstructorException;        
+        throws NoDefaultConstructorException;
         
         /**
          * Overrides a particular configuration parameter in the config file
@@ -218,6 +219,62 @@ public interface Injector {
          * @return            a reference to this builder
          */
         Builder withConfigFileLocation(Path configFile);
+        
+        /**
+         * Appends an action that must be executed sometime before specified 
+         * type reaches the {@link State#INITIALIZED} state. The action will
+         * have access to the instance as it is configured. This is equivalent 
+         * to using the {@link ExecuteBefore}-annotation on a method in the 
+         * class.
+         * 
+         * @param <T>             the injectable type
+         * @param injectableType  the injectable type
+         * @param action          action to be applied before state is reached
+         * @return                a reference to this builder
+         */
+        <T> Builder beforeInitialized(Class<T> injectableType, Consumer<T> action);
+        
+        /**
+         * Appends an action that must be executed sometime before specified 
+         * type reaches the {@link State#RESOLVED} state. The action will
+         * have access to the instance as it is configured. This is equivalent 
+         * to using the {@link ExecuteBefore}-annotation on a method in the 
+         * class.
+         * 
+         * @param <T>             the injectable type
+         * @param injectableType  the injectable type
+         * @param action          action to be applied before state is reached
+         * @return                a reference to this builder
+         */
+        <T> Builder beforeResolved(Class<T> injectableType, Consumer<T> action);
+        
+        /**
+         * Appends an action that must be executed sometime before specified 
+         * type reaches the {@link State#STARTED} state. The action will
+         * have access to the instance as it is configured. This is equivalent 
+         * to using the {@link ExecuteBefore}-annotation on a method in the 
+         * class.
+         * 
+         * @param <T>             the injectable type
+         * @param injectableType  the injectable type
+         * @param action          action to be applied before state is reached
+         * @return                a reference to this builder
+         */
+        <T> Builder beforeStarted(Class<T> injectableType, Consumer<T> action);
+        
+        /**
+         * Appends an action that must be executed sometime before specified 
+         * type reaches the {@link State#STOPPED} state. The action will
+         * have access to the instance as it is configured. This is equivalent 
+         * to using the {@link ExecuteBefore}-annotation on a method in the 
+         * class.
+         * 
+         * @param <T>             the injectable type
+         * @param injectableType  the injectable type
+         * @param action          action to be applied before state is reached
+         * @return                a reference to this builder
+         */
+        <T> Builder beforeStopped(Class<T> injectableType, Consumer<T> action);
         
         /**
          * Builds the {@link Injector} instance, organizing the 
