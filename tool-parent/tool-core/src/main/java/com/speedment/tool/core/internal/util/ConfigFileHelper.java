@@ -17,6 +17,7 @@
 package com.speedment.tool.core.internal.util;
 
 import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.InjectorBuilder;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.json.Json;
@@ -35,8 +36,10 @@ import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.internal.DefaultApplicationBuilder;
+import static com.speedment.runtime.core.internal.DefaultApplicationMetadata.METADATA_LOCATION;
 import com.speedment.runtime.core.internal.util.ProgressMeasurerImpl;
 import com.speedment.runtime.core.internal.util.Settings;
+import static com.speedment.runtime.core.internal.util.TextUtil.alignRight;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.ProjectProperty;
@@ -47,10 +50,9 @@ import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.component.UserInterfaceComponent.ReuseStage;
 import com.speedment.tool.core.exception.SpeedmentToolException;
 import com.speedment.tool.core.util.OutputUtil;
+import static com.speedment.tool.core.util.OutputUtil.error;
+import static com.speedment.tool.core.util.OutputUtil.success;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -63,13 +65,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
-
-import static com.speedment.runtime.core.internal.DefaultApplicationMetadata.METADATA_LOCATION;
-import static com.speedment.runtime.core.internal.util.TextUtil.alignRight;
-import static com.speedment.tool.core.util.OutputUtil.error;
-import static com.speedment.tool.core.util.OutputUtil.success;
 import static java.util.stream.Collectors.toSet;
 import static javafx.application.Platform.runLater;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 /**
  *
@@ -239,9 +238,11 @@ public final class ConfigFileHelper {
                 switch (reuse) {
                     case CREATE_A_NEW_STAGE:
                         final Stage newStage = new Stage();
-                        final Injector.Builder injectorBuilder = injector.newBuilder()
-                            .putParam(METADATA_LOCATION, DEFAULT_CONFIG_LOCATION);
-                        final Speedment newSpeedment = new DefaultApplicationBuilder(injectorBuilder).build();
+                        final InjectorBuilder injectorBuilder = injector.newBuilder()
+                            .withParam(METADATA_LOCATION, DEFAULT_CONFIG_LOCATION);
+                        final Speedment newSpeedment = 
+                            new DefaultApplicationBuilder(injectorBuilder)
+                                .build();
                         
                         MainApp.setInjector(newSpeedment.getOrThrow(Injector.class));
                         final MainApp main = new MainApp();
