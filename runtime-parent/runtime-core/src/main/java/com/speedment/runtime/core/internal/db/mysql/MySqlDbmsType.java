@@ -84,6 +84,13 @@ public final class MySqlDbmsType extends AbstractDbmsType {
     }
 
     @Override
+    public boolean isSupported() {
+        return // Check the new driver first
+            isSupported("com.mysql.cj.jdbc.Driver")
+            & isSupported(getDriverName());
+    }
+
+    @Override
     public DatabaseNamingConvention getDatabaseNamingConvention() {
         return namingConvention;
     }
@@ -107,21 +114,21 @@ public final class MySqlDbmsType extends AbstractDbmsType {
     public FieldPredicateView getFieldPredicateView() {
         return PREDICATE_VIEW;
     }
-    
+
     @Override
     public String getInitialQuery() {
         return "select version() as `MySQL version`";
     }
 
-    @Override 
-    public DbmsColumnHandler getColumnHandler() { 
-        return new DbmsColumnHandler() { 
-            @Override 
-            public Predicate<Column> excludedInInsertStatement() { 
+    @Override
+    public DbmsColumnHandler getColumnHandler() {
+        return new DbmsColumnHandler() {
+            @Override
+            public Predicate<Column> excludedInInsertStatement() {
                 return c -> false; // For MySQL, even autoincrement fields are added to insert statements 
-            } 
-        }; 
-    } 
+            }
+        };
+    }
 
     private final static class MySqlNamingConvention extends AbstractDatabaseNamingConvention {
 

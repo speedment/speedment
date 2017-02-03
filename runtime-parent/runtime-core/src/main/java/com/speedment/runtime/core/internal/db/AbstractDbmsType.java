@@ -46,7 +46,7 @@ public abstract class AbstractDbmsType implements DbmsType {
             return Column::isAutoIncrement;
         }
     };
-    
+
     private @Inject Injector injector;
 
     @ExecuteBefore(INITIALIZED)
@@ -66,17 +66,28 @@ public abstract class AbstractDbmsType implements DbmsType {
 
     @Override
     public boolean isSupported() {
+        return isSupported(getDriverName());
+    }
+
+    protected boolean isSupported(String driverName) {
         try {
             Class.forName(
                 getDriverName(),
                 false,
                 injector.classLoader()
             );
-
             return true;
         } catch (final ClassNotFoundException ex) {
-            return false;
+            try {
+                // Some JavaEE servers, noteabley Tomcat, runs the driver on the
+                // standard classloader.  This is the reason we need to check an
+                // extra time.
+                Class.forName(getDriverName());
+                return true;
+            } catch (final ClassNotFoundException ex2) {
+            }
         }
+        return false;
     }
 
     @Override

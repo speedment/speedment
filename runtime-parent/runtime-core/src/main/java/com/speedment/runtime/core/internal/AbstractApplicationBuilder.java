@@ -390,12 +390,10 @@ public abstract class AbstractApplicationBuilder<
                     " is not registered with the " + 
                     DbmsHandlerComponent.class.getSimpleName());
             }
+            final DbmsType dbmsType = oDbmsType.get();
             
-            final String driverName = oDbmsType.get().getDriverName();
-            try {
-                Class.forName(driverName);
-            } catch (final ClassNotFoundException cnfe) {
-                LOGGER.error(cnfe, "The database driver class " + driverName + 
+            if (!dbmsType.isSupported()) {
+                LOGGER.error("The database driver class " + dbmsType.getDriverName() + 
                     " is not available. Make sure to include it in your " + 
                     "class path (e.g. in the POM file)"
                 );
