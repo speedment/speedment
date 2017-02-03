@@ -143,7 +143,7 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
     }
     
     private String charsToString(char[] chars) {
-        return chars == null ? "null" : new String(chars);
+        return chars == null ? null : new String(chars);
     }
 
     private void discard(PoolableConnection connection) {

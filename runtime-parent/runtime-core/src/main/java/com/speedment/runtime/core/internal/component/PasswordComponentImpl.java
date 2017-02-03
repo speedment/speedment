@@ -24,12 +24,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
- * @author  Emil Forslund
- * @since   2.3.0
+ * @author Emil Forslund
+ * @since 2.3.0
  */
 public final class PasswordComponentImpl implements PasswordComponent {
 
     private final transient Map<String, char[]> passwords;
+    private static final char[] NULL_MARKER = new char[0];
 
     public PasswordComponentImpl() {
         this.passwords = new ConcurrentHashMap<>();
@@ -37,11 +38,16 @@ public final class PasswordComponentImpl implements PasswordComponent {
 
     @Override
     public void put(String dbmsName, char[] password) {
-        passwords.put(dbmsName, password);
+        passwords.put(dbmsName, password == null ? NULL_MARKER : password);
     }
 
     @Override
     public Optional<char[]> get(String dbmsName) {
-        return Optional.ofNullable(passwords.get(dbmsName));
+        final char[] value = passwords.get(dbmsName);
+        if (value == NULL_MARKER) {
+            return Optional.empty();
+        } else {
+            return Optional.of(value);
+        }
     }
 }
