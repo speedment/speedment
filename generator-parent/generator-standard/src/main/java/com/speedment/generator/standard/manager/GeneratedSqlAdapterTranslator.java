@@ -30,6 +30,7 @@ import com.speedment.common.codegen.model.Value;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.WithState;
 import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateApplyResultSetBody;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
@@ -113,8 +114,12 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
                     
                     // Generate methods
                     .add(Method.of(INSTALL_METHOD_NAME, void.class).add(withExecuteBefore(file))
-                        .add(Field.of("streamSupplierComponent", SqlStreamSupplierComponent.class))
-                        .add(Field.of("persistenceComponent", SqlPersistenceComponent.class))
+                        .add(Field.of("streamSupplierComponent", SqlStreamSupplierComponent.class)
+                            .add(AnnotationUsage.of(WithState.class).set(Value.ofReference("RESOLVED")))
+                        )
+                        .add(Field.of("persistenceComponent", SqlPersistenceComponent.class)
+                            .add(AnnotationUsage.of(WithState.class).set(Value.ofReference("RESOLVED")))
+                        )
                         .add("streamSupplierComponent.install(tableIdentifier, this::apply);")
                         .add("persistenceComponent.install(tableIdentifier);")
                     )
@@ -123,6 +128,8 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
                     .add(generateCreateEntity(file))
                     
                     .call(() -> {
+                        file.add(Import.of(State.class).setStaticMember("RESOLVED").static_());
+                        
                         // Operate on enabled columns that has a type mapper
                         // that is not either empty, an identity mapper or a
                         // primitive mapper.
