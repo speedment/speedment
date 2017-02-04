@@ -216,6 +216,13 @@ public final class InjectorImpl implements Injector {
                 );
             }
         }
+        
+        LOGGER.debug(horizontalLine());
+        LOGGER.debug(
+            "| %-79s |",
+            "All " + instances.size() + " components have been stopped!"
+        );
+        LOGGER.debug(horizontalLine());
     }
 
     @Override
