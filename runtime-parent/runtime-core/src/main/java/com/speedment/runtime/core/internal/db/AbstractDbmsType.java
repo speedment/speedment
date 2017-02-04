@@ -73,7 +73,7 @@ public abstract class AbstractDbmsType implements DbmsType {
         try {
             Class.forName(
                 getDriverName(),
-                false,
+                true,
                 injector.classLoader()
             );
             return true;
