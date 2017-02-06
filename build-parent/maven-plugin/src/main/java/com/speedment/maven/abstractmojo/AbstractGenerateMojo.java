@@ -16,6 +16,8 @@
  */
 package com.speedment.maven.abstractmojo;
 
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.maven.typemapper.Mapping;
@@ -37,6 +39,9 @@ import org.apache.maven.project.MavenProject;
  */
 public abstract class AbstractGenerateMojo extends AbstractSpeedmentMojo {
 
+        private final static Logger LOGGER = 
+            LoggerManager.getLogger(AbstractGenerateMojo.class);
+    
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject mavenProject;
     
@@ -64,6 +69,7 @@ public abstract class AbstractGenerateMojo extends AbstractSpeedmentMojo {
                 speedment.getOrThrow(TranslatorManager.class).accept(project);
             } catch (final Exception ex) {
                 final String err = "Error parsing configFile file.";
+                LOGGER.error(ex, err);
                 getLog().error(err);
                 throw new MojoExecutionException(err, ex);
             }
