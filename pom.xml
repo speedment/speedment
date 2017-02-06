@@ -52,6 +52,7 @@
         <module>tool-parent</module>
         <module>build-parent</module>
         <module>plugin-parent</module>
+        <module>connector-parent</module>
         <module>archetype-parent</module>
     </modules>
     
