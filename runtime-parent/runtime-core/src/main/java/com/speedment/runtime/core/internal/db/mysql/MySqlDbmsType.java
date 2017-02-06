@@ -85,10 +85,8 @@ public final class MySqlDbmsType extends AbstractDbmsType {
 
     @Override
     public boolean isSupported() {
-        // make sure we touch both drivers
-        final boolean newSupported = isSupported("com.mysql.cj.jdbc.Driver");
-        final boolean oldSupported = isSupported(getDriverName());
-        return newSupported || oldSupported;
+        // make sure we touch new new driver first.
+        return isSupported("com.mysql.cj.jdbc.Driver") || isSupported(getDriverName());
     }
 
     @Override

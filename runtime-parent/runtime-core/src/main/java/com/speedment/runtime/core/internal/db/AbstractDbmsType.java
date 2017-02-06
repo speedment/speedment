@@ -29,6 +29,7 @@ import com.speedment.runtime.core.db.DbmsColumnHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 import java.util.Collections;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -70,9 +71,10 @@ public abstract class AbstractDbmsType implements DbmsType {
     }
 
     protected boolean isSupported(String driverName) {
+        requireNonNull(driverName);
         try {
             Class.forName(
-                getDriverName(),
+                driverName,
                 true,
                 injector.classLoader()
             );
@@ -82,7 +84,7 @@ public abstract class AbstractDbmsType implements DbmsType {
                 // Some JavaEE servers, noteabley Tomcat, runs the driver on the
                 // standard classloader.  This is the reason we need to check an
                 // extra time.
-                Class.forName(getDriverName());
+                Class.forName(driverName);
                 return true;
             } catch (final ClassNotFoundException ex2) {
             }
