@@ -121,12 +121,8 @@ public final class MySqlDbmsType extends AbstractDbmsType {
 
     @Override
     public DbmsColumnHandler getColumnHandler() {
-        return new DbmsColumnHandler() {
-            @Override
-            public Predicate<Column> excludedInInsertStatement() {
-                return c -> false; // For MySQL, even autoincrement fields are added to insert statements 
-            }
-        };
+        // Cannot be overridden becaues of #338
+        return super.getColumnHandler();
     }
 
     private final static class MySqlNamingConvention extends AbstractDatabaseNamingConvention {
