@@ -364,7 +364,7 @@ To set which database connector you want to use to communicate with your databas
     <speedment.version>3.0.2</speedment.version>
     <db.groupId>org.mariadb.jdbc</db.groupId>
     <db.artifactId>mariadb-java-client</db.artifactId>
-    <db.version>1.4.0</db.version>
+    <db.version>1.5.7</db.version>
 </properties>
 ```
 
