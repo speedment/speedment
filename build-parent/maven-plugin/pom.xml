@@ -29,6 +29,12 @@
         <version>3.0.3-SNAPSHOT</version>
     </parent>
     
+    <properties>
+        <mysql-jdbc-version>5.1.40</mysql-jdbc-version>
+        <postgres-jdbc-version>9.4-1206-jdbc4</postgres-jdbc-version>
+        <mariadb-jdbc-version>1.5.7</mariadb-jdbc-version>
+    </properties>
+    
     <groupId>com.speedment</groupId>
     <artifactId>speedment-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
@@ -75,6 +81,28 @@
             <version>3.0.5</version>
             <type>jar</type>
         </dependency>
+        
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-jdbc-version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgres-jdbc-version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>${mariadb-jdbc-version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        
     </dependencies>
 
     <build>
