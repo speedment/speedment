@@ -30,7 +30,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
     defaultPhase = LifecyclePhase.GENERATE_SOURCES,
     requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME
 )
-public final class ToolMojo extends AbstractToolMojo {
+public class ToolMojo extends AbstractToolMojo {
         
     @Override
     protected String launchMessage() {

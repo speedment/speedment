@@ -30,7 +30,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
     defaultPhase = LifecyclePhase.GENERATE_SOURCES,
     requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME
 )
-public final class ClearMojo extends AbstractClearMojo {
+public class ClearMojo extends AbstractClearMojo {
 
     @Override
     protected String launchMessage() {

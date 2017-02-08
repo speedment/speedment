@@ -29,7 +29,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
     defaultPhase = LifecyclePhase.GENERATE_SOURCES,
     requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME
 )
-public final class GenerateMojo extends AbstractGenerateMojo {
+public class GenerateMojo extends AbstractGenerateMojo {
 
     @Override
     protected String launchMessage() {

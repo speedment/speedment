@@ -32,7 +32,7 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
     defaultPhase = LifecyclePhase.GENERATE_SOURCES,
     requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME
 )
-public final class ReloadMojo extends AbstractReloadMojo {
+public class ReloadMojo extends AbstractReloadMojo {
     
     @Override
     protected String launchMessage() {
