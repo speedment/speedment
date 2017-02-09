@@ -16,13 +16,13 @@
  */
 package com.speedment.maven.component;
 
+import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.core.component.PathComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.core.component.ProjectComponent;
-import org.apache.maven.project.MavenProject;
-
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  *
@@ -31,16 +31,18 @@ import java.nio.file.Path;
  */
 public final class MavenPathComponent implements PathComponent {
 
-    private MavenProject mavenProject;
-    private @Inject ProjectComponent projectComponent;
+    public final static String MAVEN_BASE_DIR = "maven.baseDir";
     
-    public void setMavenProject(MavenProject mavenProject) {
-        this.mavenProject = mavenProject;
-    }
+    private @Config(name=MAVEN_BASE_DIR, value="") String mavenBaseDir;
+    private @Inject ProjectComponent projectComponent;
     
     @Override
     public Path baseDir() {
-        return mavenProject.getBasedir().toPath();
+        if (mavenBaseDir.isEmpty()) {
+            return Paths.get(System.getProperty("user.home"));
+        } else {
+            return Paths.get(mavenBaseDir);
+        }
     }
 
     @Override

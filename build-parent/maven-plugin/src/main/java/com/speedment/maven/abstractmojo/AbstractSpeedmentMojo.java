@@ -27,6 +27,7 @@ import com.speedment.generator.core.GeneratorBundle;
 import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.generator.translator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.maven.component.MavenPathComponent;
+import static com.speedment.maven.component.MavenPathComponent.MAVEN_BASE_DIR;
 import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.core.ApplicationBuilder;
@@ -89,13 +90,16 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
         final ApplicationBuilder<?, ?> builder = createBuilder();
         builder.withComponent(MavenPathComponent.class);
+        builder.withParam(MAVEN_BASE_DIR, project().getBasedir().toString());
+        
         configurer.accept(builder);
+        
         if (debug()) {
             builder.withLogging(ApplicationBuilder.LogType.APPLICATION_BUILDER);
         }
+        
         builder.withSkipCheckDatabaseConnectivity();
         final Speedment speedment = builder.build();
-        speedment.getOrThrow(MavenPathComponent.class).setMavenProject(project());
 
         getLog().info(launchMessage());
         execute(speedment);
