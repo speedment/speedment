@@ -1,5 +1,5 @@
-Speedment is a Java Stream ORM
-==============================
+Speedment is a Stream ORM Java Toolkit and Runtime
+==================================================
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.speedment/runtime/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.speedment/runtime)
 [![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.speedment/runtime-deploy/badge.svg)](http://www.javadoc.io/doc/com.speedment/runtime-deploy)
@@ -18,7 +18,7 @@ specific query language or any new API.
 This site covers the **Speedment Open Source** project available under the 
 [Apache 2 license](http://www.apache.org/licenses/LICENSE-2.0). The 
 enterprise product with support for commercial 
-databases and in-memory acceleration can be found at 
+databases (i.e. Oracle, MS SQL Server, DB2, AS400) and in-JVM-memory acceleration can be found at 
 [www.speedment.com](http://speedment.com/).
 
 Documentation
@@ -296,10 +296,11 @@ Ever seen a `NullPointerException` suddenly casted out of nowhere? Null-pointers
 
 Using Maven
 -----------
-The easiest way to get started with Speedment and Maven is to use one of [the existing archetypes](https://github.com/speedment/speedment-archetypes). An archetype is similar to a template project. When you start a new project, it will add all the dependencies you need to your `pom.xml`-file so that you can begin program immetiatly.
+The easiest way to get started with Speedment and Maven is to use one of [the existing archetypes](https://github.com/speedment/speedment-archetypes). An archetype is similar to a template project. When you start a new project, it will add all the dependencies you need to your `pom.xml`-file so that you can begin program immediately.
 
-If you do not want to use an archetype, for an example if you already have a project you want to use Speedment with, you can always write your `pom.xml`-file manually. Just add the following lines (between the ... marker lines) to your project's `pom.xml` file, and then assign values to the parameters in the `<properties>`-section of the file.
+If you do not want to use an archetype, for an example if you already have a project you want to use Speedment with, you can always write your `pom.xml`-file manually. Just add the following lines (between the ... marker lines) to your project's `pom.xml` file. Make sure to use the latest `${speedment.version}` available
 
+#### MySQL
 ```xml
 <build>
     <plugins>
@@ -308,13 +309,6 @@ If you do not want to use an archetype, for an example if you already have a pro
             <groupId>com.speedment</groupId>
             <artifactId>speedment-maven-plugin</artifactId>
             <version>${speedment.version}</version>
-            <dependencies>
-                <dependency>
-                    <groupId>${db.groupId}</groupId>
-                    <artifactId>${db.artifactId}</artifactId>
-                    <version>${db.version}</version>
-                </dependency>
-            </dependencies> 
         </plugin>
         
     </plugins>
@@ -328,47 +322,82 @@ If you do not want to use an archetype, for an example if you already have a pro
         <type>pom</type>
     </dependency>
     <dependency>
-        <groupId>${db.groupId}</groupId>
-        <artifactId>${db.artifactId}</artifactId>
-        <version>${db.version}</version>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+        <version>5.1.40</version>
+        <scope>runtime</scope>
     </dependency>
     
 </dependencies>
 ```
 
-To set which database connector you want to use to communicate with your database, please add one of the following to your `<properties>`-section in the `pom.xml`-file:
-
-#### MySQL
-```xml
-<properties>
-    <speedment.version>3.0.2</speedment.version>
-    <db.groupId>mysql</db.groupId>
-    <db.artifactId>mysql-connector-java</db.artifactId>
-    <db.version>5.1.40</db.version>
-</properties>
-```
 
 #### PostgreSQL
 ```xml
-<properties>
-    <speedment.version>3.0.2</speedment.version>
-    <db.groupId>org.postgresql</db.groupId>
-    <db.artifactId>postgresql</db.artifactId>
-    <db.version>9.4-1206-jdbc4</db.version>
-</properties>
+
+<build>
+    <plugins>
+        
+        <plugin>
+            <groupId>com.speedment</groupId>
+            <artifactId>speedment-maven-plugin</artifactId>
+            <version>${speedment.version}</version>
+        </plugin>
+        
+    </plugins>
+</build>
+<dependencies>
+    
+    <dependency>
+        <groupId>com.speedment</groupId>
+        <artifactId>runtime</artifactId>
+        <version>${speedment.version}</version>
+        <type>pom</type>
+    </dependency>
+    <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>9.4-1206-jdbc4</version>
+        <scope>runtime</scope>
+    </dependency>
+    
+</dependencies>
+
 ```
 
 #### MariaDB
 ```xml
-<properties>
-    <speedment.version>3.0.2</speedment.version>
-    <db.groupId>org.mariadb.jdbc</db.groupId>
-    <db.artifactId>mariadb-java-client</db.artifactId>
-    <db.version>1.5.7</db.version>
-</properties>
+<build>
+    <plugins>
+        
+        <plugin>
+            <groupId>com.speedment</groupId>
+            <artifactId>speedment-maven-plugin</artifactId>
+            <version>${speedment.version}</version>
+        </plugin>
+        
+    </plugins>
+</build>
+<dependencies>
+    
+    <dependency>
+        <groupId>com.speedment</groupId>
+        <artifactId>runtime</artifactId>
+        <version>${speedment.version}</version>
+        <type>pom</type>
+    </dependency>
+    <dependency>
+        <groupId>org.mariadb.jdbc</groupId>
+        <artifactId>mariadb-java-client</artifactId>
+        <version>1.5.7</version>
+        <scope>runtime</scope>
+    </dependency>
+    
+</dependencies>
+
 ```
 
-Make sure that you use the latest `${speedment.version}` available.
+Again, make sure that you use the latest `${speedment.version}` available.
 
 ### Requirements
 Speedment comes with support for the following databases out-of-the-box:
@@ -378,7 +407,7 @@ Speedment comes with support for the following databases out-of-the-box:
 
 Support for commercial databases like Oracle DB can be added using enterprise plugins. Visit [www.speedment.com](http://www.speedment.com) for more information on commercial alternatives.  
 
-As of version 2.0, Speedment requires `Java 8` or later. Make sure your IDE configured to use JDK 8 (version 1.8.0_40 or newer).
+Speedment requires `Java 8` or later. Make sure your IDE configured to use JDK 8 (version 1.8.0_40 or newer).
 
 License
 -------
@@ -388,7 +417,7 @@ Speedment is available under the [Apache 2 License](http://www.apache.org/licens
 
 #### Copyright
 
-Copyright (c) 2016, Speedment, Inc. All Rights Reserved.
+Copyright (c) 2014-2017, Speedment, Inc. All Rights Reserved.
 Visit [www.speedment.org](http://www.speedment.org/) for more info.
 
 [![Analytics](https://ga-beacon.appspot.com/UA-64937309-1/speedment/main)](https://github.com/igrigorik/ga-beacon)
