@@ -17,11 +17,9 @@
 package com.speedment.plugins.json;
 
 import com.speedment.plugins.json.internal.JsonCollectorImpl;
-
 import java.util.List;
-import java.util.stream.Collector;
-
 import static java.util.Objects.requireNonNull;
+import java.util.stream.Collector;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -30,10 +28,12 @@ import static java.util.stream.Collectors.joining;
  * <p>
  * Example usage:
  * <code>
- *      app.managerOf(Employee.class).stream()
+ *      app.getOrThrow(EmployeeManager.class).stream()
  *          .filter(Employee.AGE.greaterThan(35))
  *          .filter(Employee.NAME.startsWith("B"))
- *          .collect(JsonCollector.toJson());
+ *          .collect(JsonCollector.toJson(
+ *              jsonComponent.allOf(employees)
+ *          ));
  * </code>
  * 
  * @param <ENTITY> the entity type
