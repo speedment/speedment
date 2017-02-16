@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
 
@@ -47,6 +47,13 @@ public final class DocumentTranscoder {
      */
     @FunctionalInterface
     public interface Encoder {
+        
+        /**
+         * Encodes the specified map into a JSON string.
+         * 
+         * @param map  the map to encode
+         * @return     the resulting JSON string
+         */
         String encode(Map<String, Object> map);
     }
     
@@ -56,6 +63,13 @@ public final class DocumentTranscoder {
      */
     @FunctionalInterface
     public interface Decoder {
+        
+        /**
+         * Decodes the specified JSON string into a map.
+         * 
+         * @param text  the JSON string to decode
+         * @return      the resulting java map
+         */
         Map<String, Object> decode(String text);
     }
 
@@ -68,12 +82,14 @@ public final class DocumentTranscoder {
      * 
      * @throws SpeedmentConfigException  if the inputed object is not valid
      */
-    public static String save(Project project, Encoder encoder) throws SpeedmentConfigException {
+    public static String save(Project project, Encoder encoder) 
+            throws SpeedmentConfigException {
+        
         if (project == null) {
             return "null";
         } else {
             try {
-                final Map<String, Object> root = new HashMap<>();
+                final Map<String, Object> root = new LinkedHashMap<>();
                 root.put(ROOT, project.getData());
                 return encoder.encode(root);
             } catch (final IllegalArgumentException ex) {
@@ -91,9 +107,13 @@ public final class DocumentTranscoder {
      * 
      * @throws SpeedmentConfigException if the file could not be saved
      */
-    public static void save(Project project, Path location, Encoder encoder) throws SpeedmentConfigException {
+    public static void save(Project project, Path location, Encoder encoder) 
+            throws SpeedmentConfigException {
+        
         try {
-            Files.write(location, save(project, encoder).getBytes(StandardCharsets.UTF_8));
+            Files.write(location, save(project, encoder)
+                .getBytes(StandardCharsets.UTF_8));
+            
         } catch (final IOException ex) {
             throw new SpeedmentConfigException(
                 "Could not save json-file to path '" + location + "'.", ex
@@ -110,13 +130,17 @@ public final class DocumentTranscoder {
      * 
      * @throws SpeedmentConfigException  if the file couldn't be loaded
      */
-    public static Project load(String json, Decoder decoder) throws SpeedmentConfigException {
+    public static Project load(String json, Decoder decoder) 
+            throws SpeedmentConfigException {
+        
         requireNonNull(json, "No json value specified.");
+        
         try {
             final Map<String, Object> root = decoder.decode(json);
             
             @SuppressWarnings("unchecked")
-            final Map<String, Object> data = (Map<String, Object>) root.get(ROOT);
+            final Map<String, Object> data = 
+                (Map<String, Object>) root.get(ROOT);
             
             return new ProjectImpl(data);
         } catch (final Exception ex) {
@@ -133,10 +157,13 @@ public final class DocumentTranscoder {
      * 
      * @throws SpeedmentConfigException if the file could not be loaded
      */
-    public static Project load(Path location, Decoder decoder) throws SpeedmentConfigException {
+    public static Project load(Path location, Decoder decoder) 
+            throws SpeedmentConfigException {
+        
         try {
             final byte[] content = Files.readAllBytes(location);
             return load(new String(content, StandardCharsets.UTF_8), decoder);
+            
         } catch (final IOException ex) {
             throw new SpeedmentConfigException(
                 "Could not load json-file from path '" + location + "'.", ex

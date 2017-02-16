@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.config.internal.util;
 
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import java.util.ArrayDeque;
 import java.util.Objects;
 import java.util.Optional;
@@ -23,11 +24,9 @@ import java.util.Queue;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-
 /**
  *
- * @author pemi
+ * @author Per Minborg
  */
 public final class Trees {
 
@@ -51,73 +50,139 @@ public final class Trees {
         FORWARD, BACKWARD
     }
 
-    public static <T> Stream<? extends T> walk(T first, Function<T, T> traverser) {
+    public static <T> Stream<? extends T> walk(
+            T first, 
+            Function<T, T> traverser) {
+        
         requireNonNulls(first, traverser);
-        return walk(first, traverser, WalkingOrder.FORWARD, Stream.builder()).build();
+        
+        return walk(
+            first, 
+            traverser, 
+            WalkingOrder.FORWARD, 
+            Stream.builder()
+        ).build();
     }
 
-    public static <T> Stream<? extends T> walk(T first, Function<T, T> traverser, WalkingOrder order) {
+    public static <T> Stream<? extends T> walk(
+            T first, 
+            Function<T, T> traverser, 
+            WalkingOrder order) {
+        
         requireNonNulls(first, traverser, order);
         return walk(first, traverser, order, Stream.builder()).build();
     }
 
-    public static <T> Stream<? extends T> walkOptional(T first, Function<T, Optional<T>> traverser) {
+    public static <T> Stream<? extends T> walkOptional(
+            T first, 
+            Function<T, Optional<T>> traverser) {
+        
         requireNonNulls(first, traverser);
-        return walkOptional(first, traverser, WalkingOrder.FORWARD, Stream.builder()).build();
+        return walkOptional(
+            first, 
+            traverser, 
+            WalkingOrder.FORWARD, 
+            Stream.builder()
+        ).build();
     }
 
-    public static <T> Stream<? extends T> walkOptional(T first, Function<T, Optional<T>> traverser, WalkingOrder order) {
+    public static <T> Stream<? extends T> walkOptional(
+            T first, 
+            Function<T, Optional<T>> traverser,
+            WalkingOrder order) {
+        
         requireNonNulls(first, traverser, order);
         return walkOptional(first, traverser, order, Stream.builder()).build();
     }
 
-    public static <T> Stream<? extends T> traverse(T first, Function<T, Stream<? extends T>> traverser, TraversalOrder traversalOrder) {
+    public static <T> Stream<? extends T> traverse(
+            T first, 
+            Function<T, Stream<? extends T>> traverser, 
+            TraversalOrder traversalOrder) {
+        
         requireNonNulls(first, traverser, traversalOrder);
+        
         if (traversalOrder == TraversalOrder.BREADTH_FIRST) {
-            return traverseBredthFirst(first, traverser, Stream.builder()).build();
+            return traverseBredthFirst(
+                first, 
+                traverser, 
+                Stream.builder()
+            ).build();
         } else {
-            return traverse(first, traverser, traversalOrder, Stream.builder()).build();
+            return traverse(
+                first, 
+                traverser, 
+                traversalOrder, 
+                Stream.builder()
+            ).build();
         }
     }
 
     //
     // Private support methods
     //
-    private static <T> Stream.Builder<? extends T> walkOptional(T first, Function<T, Optional<T>> traverser, WalkingOrder order, Stream.Builder<T> builder) {
+    private static <T> Stream.Builder<? extends T> walkOptional(
+            T first, 
+            Function<T, Optional<T>> traverser, 
+            WalkingOrder order, 
+            Stream.Builder<T> builder) {
+        
         requireNonNulls(first, traverser, order, builder);
+        
         if (order == WalkingOrder.FORWARD) {
             builder.add(first);
         }
-        traverser.apply(first).ifPresent(p -> walkOptional(p, traverser, order, builder));
+        
+        traverser.apply(first)
+            .ifPresent(p -> walkOptional(p, traverser, order, builder));
+        
         if (order == WalkingOrder.BACKWARD) {
             builder.add(first);
         }
+        
         return builder;
     }
 
-    private static <T> Stream.Builder<? extends T> walk(T first, Function<T, T> traverser, WalkingOrder order, Stream.Builder<T> builder) {
+    private static <T> Stream.Builder<? extends T> walk(
+            T first, 
+            Function<T, T> traverser, 
+            WalkingOrder order, 
+            Stream.Builder<T> builder) {
+        
         requireNonNulls(first, traverser, order, builder);
+        
         if (order == WalkingOrder.FORWARD) {
             builder.add(first);
         }
+        
         final T next = traverser.apply(first);
         if (next != null) {
             walk(next, traverser, order, builder);
         }
+        
         if (order == WalkingOrder.BACKWARD) {
             builder.add(first);
         }
+        
         return builder;
     }
 
-    private static <T> Stream.Builder<? extends T> traverse(T first, Function<T, Stream<? extends T>> traverser, TraversalOrder traversalOrder, Stream.Builder<T> builder) {
+    private static <T> Stream.Builder<? extends T> traverse(
+            T first, 
+            Function<T, Stream<? extends T>> traverser, 
+            TraversalOrder traversalOrder, 
+            Stream.Builder<T> builder) {
+        
         requireNonNulls(first, traverser, traversalOrder, builder);
+        
         if (first == null) {
             return builder;
         }
+        
         if (traversalOrder == TraversalOrder.DEPTH_FIRST_PRE) {
             builder.add(first);
         }
+        
         final Stream<? extends T> next = traverser.apply(first);
         if (next != null) {
             next.filter(Objects::nonNull)
@@ -125,19 +190,28 @@ public final class Trees {
                     traverse(n, traverser, traversalOrder, builder);
                 });
         }
+        
         if (traversalOrder == TraversalOrder.DEPTH_FIRST_POST) {
             builder.add(first);
         }
+        
         return builder;
     }
 
-    private static <T> Stream.Builder<? extends T> traverseBredthFirst(T first, Function<T, Stream<? extends T>> traverser, Stream.Builder<T> builder) {
+    private static <T> Stream.Builder<? extends T> traverseBredthFirst(
+            T first, 
+            Function<T, Stream<? extends T>> traverser, 
+            Stream.Builder<T> builder) {
+        
         requireNonNulls(first, traverser, builder);
+        
         if (first == null) {
             return builder;
         }
+        
         final Queue<T> q = new ArrayDeque<>();
         q.add(first);
+        
         while (!q.isEmpty()) {
             final T node = q.poll();
             builder.add(node);
@@ -146,6 +220,7 @@ public final class Trees {
                 .filter(Objects::nonNull)
                 .forEach(q::add);
         }
+        
         return builder;
     }
 

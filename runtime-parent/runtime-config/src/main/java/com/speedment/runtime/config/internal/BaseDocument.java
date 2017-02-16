@@ -19,15 +19,18 @@ package com.speedment.runtime.config.internal;
 import com.speedment.common.function.OptionalBoolean;
 import com.speedment.runtime.config.Document;
 import static com.speedment.runtime.config.util.DocumentUtil.childrenOf;
-import java.util.*;
+import java.util.Map;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
+import java.util.OptionalDouble;
+import java.util.OptionalInt;
+import java.util.OptionalLong;
 import java.util.stream.Stream;
 
 /**
  *
  * @author Emil Forslund
  */
-
 public class BaseDocument implements Document {
     
     private final transient Document parent; // Nullable
@@ -61,19 +64,25 @@ public class BaseDocument implements Document {
     @Override
     public OptionalLong getAsLong(String key) {
         final Number value = (Number) config.get(key);
-        return value == null ? OptionalLong.empty() : OptionalLong.of(value.longValue());
+        return value == null 
+            ? OptionalLong.empty() 
+            : OptionalLong.of(value.longValue());
     }
 
     @Override
     public OptionalDouble getAsDouble(String key) {
         final Number value = (Number) config.get(key);
-        return value == null ? OptionalDouble.empty() : OptionalDouble.of(value.doubleValue());
+        return value == null 
+            ? OptionalDouble.empty() 
+            : OptionalDouble.of(value.doubleValue());
     }
 
     @Override
     public OptionalInt getAsInt(String key) {
         final Number value = (Number) config.get(key);
-        return value == null ? OptionalInt.empty() : OptionalInt.of(value.intValue());
+        return value == null 
+            ? OptionalInt.empty() 
+            : OptionalInt.of(value.intValue());
     }
     
     @Override

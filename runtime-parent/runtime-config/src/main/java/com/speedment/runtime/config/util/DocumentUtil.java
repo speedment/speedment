@@ -22,9 +22,13 @@ import com.speedment.runtime.config.internal.util.Trees;
 import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 import static java.util.Objects.requireNonNull;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Optional;
+import java.util.StringJoiner;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -133,7 +137,7 @@ public final class DocumentUtil {
                 return list;
             });
 
-        final Map<String, Object> child = new ConcurrentHashMap<>();
+        final Map<String, Object> child = new ConcurrentSkipListMap<>();
         children.add(child);
 
         return child;
@@ -359,7 +363,7 @@ public final class DocumentUtil {
     }
 
     private static <K, V> Map<K, V> deepCopyMap(Map<K, V> original) {
-        final Map<K, V> copy = new ConcurrentHashMap<>();
+        final Map<K, V> copy = new ConcurrentSkipListMap<>();
 
         MapStream.of(original)
             .mapValue(DocumentUtil::deepCopyObject)

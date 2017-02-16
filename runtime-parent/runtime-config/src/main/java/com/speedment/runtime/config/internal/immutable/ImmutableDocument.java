@@ -19,18 +19,16 @@ package com.speedment.runtime.config.internal.immutable;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.internal.BaseDocument;
 import com.speedment.runtime.config.util.DocumentUtil;
-
+import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Stream;
-
-import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
 import static java.util.stream.Collectors.toList;
+import java.util.stream.Stream;
 
 /**
  *
@@ -42,12 +40,12 @@ public class ImmutableDocument extends BaseDocument {
 
     protected ImmutableDocument(Map<String, Object> data) {
         super(null, Collections.unmodifiableMap(data));
-        children = new ConcurrentHashMap<>();
+        children = new ConcurrentSkipListMap<>();
     }
 
     protected ImmutableDocument(ImmutableDocument parent, Map<String, Object> data) {
         super(parent, Collections.unmodifiableMap(data));
-        children = new ConcurrentHashMap<>();
+        children = new ConcurrentSkipListMap<>();
     }
 
     @Override
