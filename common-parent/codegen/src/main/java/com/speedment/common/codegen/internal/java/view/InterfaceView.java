@@ -19,6 +19,7 @@ package com.speedment.common.codegen.internal.java.view;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.internal.model.InterfaceMethodImpl;
 import com.speedment.common.codegen.model.Interface;
+import com.speedment.common.codegen.model.InterfaceMethod;
 import com.speedment.common.codegen.model.Method;
 
 /**
@@ -44,7 +45,7 @@ public final class InterfaceView extends ClassOrInterfaceView<Interface> {
 	}
 
     @Override
-    public Object wrapMethod(Method method) {
+    public InterfaceMethod wrapMethod(Method method) {
         return new InterfaceMethodImpl(method);
     }
 

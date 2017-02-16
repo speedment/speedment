@@ -83,7 +83,11 @@ public interface Generator {
      * 
      * @see Meta
      */
-    default <A, B> Stream<Meta<A, B>> metaOn(A from, Class<B> to, Class<? extends Transform<A, B>> transform) {
+    default <A, B> Stream<Meta<A, B>> metaOn(
+            A from, 
+            Class<B> to, 
+            Class<? extends Transform<A, B>> transform) {
+        
         return metaOn(from, to)
             .filter(meta -> transform.equals(meta.getTransform().getClass()));
     }
@@ -113,7 +117,7 @@ public interface Generator {
      * @see Meta
      */
     default <A> Stream<Meta<A, String>> metaOn(Collection<A> models) {
-        return models.stream().map(this::metaOn).flatMap(m -> m);
+        return models.stream().flatMap(this::metaOn);
     }
     
     /**
@@ -128,8 +132,10 @@ public interface Generator {
      * 
      * @see Meta
      */
-    default <A, B> Stream<Meta<A, B>> metaOn(Collection<A> models, Class<B> to) {
-        return models.stream().map(model -> metaOn(model, to)).flatMap(m -> m);
+    default <A, B> Stream<Meta<A, B>> metaOn(
+            Collection<A> models, Class<B> to) {
+        
+        return models.stream().flatMap(model -> metaOn(model, to));
     }
     
     /**
@@ -149,7 +155,11 @@ public interface Generator {
      * 
      * @see Meta
      */
-    default <A, B> Stream<Meta<A, B>> metaOn(Collection<A> models, Class<B> to, Class<? extends Transform<A, B>> transform) {
+    default <A, B> Stream<Meta<A, B>> metaOn(
+            Collection<A> models, 
+            Class<B> to, 
+            Class<? extends Transform<A, B>> transform) {
+        
         return metaOn(models, to)
             .filter(meta -> meta.getTransform().is(transform));
     }
@@ -163,16 +173,20 @@ public interface Generator {
      * @return       the generated text if any
      */
     default Optional<String> on(Object model) {
+        final Object m;
+        
         if (model instanceof Optional) {
             final Optional<?> result = (Optional<?>) model;
             if (result.isPresent()) {
-                model = result.get();
+                m = result.get();
             } else {
                 return Optional.empty();
             }
+        } else {
+            m = model;
         }
         
-        return metaOn(model).map(Meta::getResult).findAny();
+        return metaOn(m).map(Meta::getResult).findAny();
     }
 
     /**
@@ -200,5 +214,8 @@ public interface Generator {
      * @see    Transform
      * @see    TransformFactory
      */
-    <A, B> Optional<Meta<A, B>> transform(Transform<A, B> transform, A model, TransformFactory factory);
+    <A, B> Optional<Meta<A, B>> transform(
+            Transform<A, B> transform, 
+            A model, 
+            TransformFactory factory);
 }
