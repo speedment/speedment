@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -95,7 +95,7 @@ public final class JsonDeserializer implements AutoCloseable {
     }
     
     private Map<String, Object> parseObject() throws IOException {
-        final Map<String, Object> object = new HashMap<>();
+        final Map<String, Object> object = new LinkedHashMap<>();
         
         firstChar: switch (nextNonBlankspace()) {
             // If the map should be closed with no entries:
