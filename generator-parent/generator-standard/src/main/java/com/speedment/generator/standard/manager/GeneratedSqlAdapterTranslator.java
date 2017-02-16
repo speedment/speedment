@@ -54,10 +54,16 @@ import com.speedment.runtime.core.internal.util.sql.ResultSetUtil;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import com.speedment.runtime.typemapper.TypeMapper;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
+import java.sql.Blob;
+import java.sql.Clob;
 import java.sql.ResultSet;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
 
 /**
@@ -218,6 +224,17 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
             .add(generateApplyResultSetBody(this::readFromResultSet, support, file, columnsSupplier));
     }
 
+    private static Set<java.lang.Class<?>> NULL_AWARE_GETTERS = Stream.of(
+        String.class,
+        BigDecimal.class,
+        java.sql.Time.class,
+        java.sql.Date.class,
+        java.sql.Timestamp.class,
+        UUID.class,
+        Blob.class,
+        Clob.class
+    ).collect(toSet());
+    
     private String readFromResultSet(File file, Column c, AtomicInteger position) {
         final Dbms dbms = c.getParentOrThrow().getParentOrThrow().getParentOrThrow();
 
@@ -237,7 +254,8 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
         }
         
         final String getterName = "get" + mapping.getResultSetMethodName(dbms);
-        if (c.isNullable()) {
+        // We do not need to wrap-get some classes X since getX() returns null for null X:es.
+        if (c.isNullable() && !NULL_AWARE_GETTERS.contains(mapping.getJavaClass())) {
             
             file.add(Import.of(ResultSetUtil.class).static_().setStaticMember("*"));
             sb.append(getterName).append("(resultSet, ")
