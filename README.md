@@ -23,7 +23,7 @@ databases (i.e. Oracle, MS SQL Server, DB2, AS400) and in-JVM-memory acceleratio
 
 Documentation
 -------------
-You can read the [the API quick start here](https://github.com/speedment/speedment/wiki/Speedment-API-Quick-Start)!
+You can read an [API quick start here](https://github.com/speedment/speedment#easy-initialization)!
 
 ## Tutorials
 * [Tutorial 1 - Set up the IDE](https://github.com/speedment/speedment/wiki/Tutorial:-Set-up-the-IDE)
@@ -64,60 +64,7 @@ Now you have a demo project set up with generated application code in the direct
 
 Examples
 --------
-Here are a few examples of how you could use Speedment from your code assuming that you have an exemplary MySQL database with the tables "hare", "carrot", "human" and "friends" that looks like this:
-```sql
-CREATE TABLE `hares`.`hare` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `color` varchar(45) NOT NULL,
-  `age` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=100;
-
-CREATE TABLE IF NOT EXISTS `hares`.`carrot` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `owner` int(11) NOT NULL,
-  `rival` int(11),
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=100;
-
-CREATE TABLE IF NOT EXISTS `hares`.`human` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=100;
-
-CREATE TABLE `hares`.`friend` (
-  `hare` int(11) NOT NULL,
-  `human` int(11) NOT NULL,
-  PRIMARY KEY (`hare`, `human`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-ALTER TABLE `hares`.`carrot`
-  ADD CONSTRAINT `carrot_owner_to_hare_id` FOREIGN KEY (`owner`) REFERENCES `hare` (`id`);
-ALTER TABLE `hares`.`carrot`
-  ADD CONSTRAINT `carrot_rival_to_hare_id` FOREIGN KEY (`rival`) REFERENCES `hare` (`id`);
-
-ALTER TABLE `hares`.`friend`
-  ADD CONSTRAINT `friend_hare_to_hare_id` FOREIGN KEY (`hare`) REFERENCES `hare` (`id`);
-ALTER TABLE `hares`.`friend`
-  ADD CONSTRAINT `friend_human_to_human_id` FOREIGN KEY (`human`) REFERENCES `human` (`id`);
-
-```
-
-### Easy initialization
-The `HareApplication`, `HareApplicationBuilder` and `HareManager` classes are generated automatically from the database.
-```java
-final HareApplication app = new HareApplicationBuilder()
-    .withPassword("myPwd729")
-    .build();
-    
-final HareManager   hares   = app.getOrThrow(HareManager.class);
-final CarrotManager carrots = app.getOrThrow(CarrotManager.class);
-final HumanManager  humans  = app.getOrThrow(HumanManager.class);
-final FriendManager friends = app.getOrThrow(FriendManager.class);
-```
+Here are a few examples of how you could use Speedment from your code assuming that you have an exemplary MySQL database with the tables "hare", "carrot", "human" and "friends" [See Database Schema here] (https://github.com/speedment/speedment/#Database-Schema):
 
 
 ### Query with optimised Stream predicate short-circuit
@@ -134,40 +81,6 @@ Results in the following SQL query:
 SELECT id, name, color, age FROM hare 
     WHERE (age > 5)
     LIMIT 1;
-```
-
-### Easy persistence
-Entities can easily be persisted in a database.
-```java
-Hare newHare = new HareImpl();  // Creates a new empty Hare
-newHare.setName("Harry");
-newHare.setColor("Gray");
-newHare.setAge(3);
-
-// Auto-Increment-fields have been set by the database
-Hare persistedHare = hares.persist(newHare); 
-```
-
-### Update
-```java
-hares.stream()
-    .filter(Hare.ID.equal(42))  // Filters out all Hares with ID = 42 (just one)
-    .map(Hare.AGE.setTo(10))    // Applies a setter that sets the age to 10
-    .forEach(hares.updater());  // Applies the updater function
-```
-or another example
-```java
-hares.stream()
-    .filter(Hare.ID.between(48, 102))   // Filters out all Hares with ID between 48 and 102
-    .map(h -> h.setAge(h.getAge() + 1)) // Applies a lambda that increases their age by one
-    .forEach(hares.updater());          // Applies the updater function to the selected hares
-```
-
-### Remove
-```java
-hares.stream()
-    .filter(Hare.ID.equal(71))  // Filters out all Hares with ID = 71 (just one)
-    .forEach(hares.remover());  // Applies the remover function
 ```
 
 ### Join
@@ -208,6 +121,54 @@ Optional<Carrot> carrot = hares.stream()
     .flatMap(carrots.finderBackwardsBy(Carrot.OWNER)) // Carrot is a foreign key table.
     .findAny();
 ```
+
+### Easy initialization
+The `HareApplication`, `HareApplicationBuilder` and `HareManager` classes are generated automatically from the database.
+```java
+final HareApplication app = new HareApplicationBuilder()
+    .withPassword("myPwd729")
+    .build();
+    
+final HareManager   hares   = app.getOrThrow(HareManager.class);
+final CarrotManager carrots = app.getOrThrow(CarrotManager.class);
+final HumanManager  humans  = app.getOrThrow(HumanManager.class);
+final FriendManager friends = app.getOrThrow(FriendManager.class);
+```
+
+### Easy persistence
+Entities can easily be persisted in a database.
+```java
+Hare newHare = new HareImpl();  // Creates a new empty Hare
+newHare.setName("Harry");
+newHare.setColor("Gray");
+newHare.setAge(3);
+
+// Auto-Increment-fields have been set by the database
+Hare persistedHare = hares.persist(newHare); 
+```
+
+### Update
+```java
+hares.stream()
+    .filter(Hare.ID.equal(42))  // Filters out all Hares with ID = 42 (just one)
+    .map(Hare.AGE.setTo(10))    // Applies a setter that sets the age to 10
+    .forEach(hares.updater());  // Applies the updater function
+```
+or another example
+```java
+hares.stream()
+    .filter(Hare.ID.between(48, 102))   // Filters out all Hares with ID between 48 and 102
+    .map(h -> h.setAge(h.getAge() + 1)) // Applies a lambda that increases their age by one
+    .forEach(hares.updater());          // Applies the updater function to the selected hares
+```
+
+### Remove
+```java
+hares.stream()
+    .filter(Hare.ID.equal(71))  // Filters out all Hares with ID = 71 (just one)
+    .forEach(hares.remover());  // Applies the remover function
+```
+
 
 ### Full Transparency
 By appending a logger to the builder, you can follow exactly what happens behind the scenes.
@@ -271,6 +232,50 @@ public class AppConfig {
 So when we need to use a manager in a SpringMVC Controller, we can now simply autowire it:
 ```java
     private @Autowired SalespersonManager salespeople;
+```
+
+### Database Schema
+The following database tables were used for the examples above.
+
+```sql
+CREATE TABLE `hares`.`hare` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `color` varchar(45) NOT NULL,
+  `age` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=100;
+
+CREATE TABLE IF NOT EXISTS `hares`.`carrot` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  `owner` int(11) NOT NULL,
+  `rival` int(11),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=100;
+
+CREATE TABLE IF NOT EXISTS `hares`.`human` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=100;
+
+CREATE TABLE `hares`.`friend` (
+  `hare` int(11) NOT NULL,
+  `human` int(11) NOT NULL,
+  PRIMARY KEY (`hare`, `human`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `hares`.`carrot`
+  ADD CONSTRAINT `carrot_owner_to_hare_id` FOREIGN KEY (`owner`) REFERENCES `hare` (`id`);
+ALTER TABLE `hares`.`carrot`
+  ADD CONSTRAINT `carrot_rival_to_hare_id` FOREIGN KEY (`rival`) REFERENCES `hare` (`id`);
+
+ALTER TABLE `hares`.`friend`
+  ADD CONSTRAINT `friend_hare_to_hare_id` FOREIGN KEY (`hare`) REFERENCES `hare` (`id`);
+ALTER TABLE `hares`.`friend`
+  ADD CONSTRAINT `friend_human_to_human_id` FOREIGN KEY (`human`) REFERENCES `human` (`id`);
+
 ```
 
 
