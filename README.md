@@ -7,7 +7,7 @@ Speedment is a Stream ORM Java Toolkit and Runtime
 [![Hex.pm](https://img.shields.io/hexpm/l/plug.svg?maxAge=2592000)](https://raw.githubusercontent.com/speedment/speedment/master/LICENSE)
 [![Join the chat at https://gitter.im/speedment/speedment](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/speedment/speedment?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-<img src="https://raw.githubusercontent.com/speedment/speedment-resources/master/src/main/resources/wiki/frontpage/Forest.png" alt="Spire the Hare" title="Spire" align="right" width="480px" />
+<img src="https://raw.githubusercontent.com/speedment/speedment-resources/master/src/main/resources/wiki/frontpage/Forest.png" alt="Spire the Hare" title="Spire" align="right" width="240px" />
 
 Speedment is a Java Stream ORM toolkit and runtime. 
 The toolkit analyzes the metadata of an existing legacy SQL database 
@@ -32,7 +32,7 @@ SELECT id, name, color, age FROM hare
     LIMIT 1;
 ```
 
-No need for wrinting SQL-queies any more. Remain in a pure Java world!
+No need for manually writing SQL-queies any more. Remain in a pure Java world!
 
 Documentation
 -------------
