@@ -34,9 +34,6 @@ import java.util.Optional;
  */
 public final class ImportView implements Transform<Import, String> {
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Optional<String> transform(Generator gen, Import model) {
         requireNonNulls(gen, model);

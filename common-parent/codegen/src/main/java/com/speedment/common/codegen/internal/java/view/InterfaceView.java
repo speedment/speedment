@@ -27,42 +27,27 @@ import com.speedment.common.codegen.model.Method;
  * @author Emil Forslund
  */
 public final class InterfaceView extends ClassOrInterfaceView<Interface> {
-    
-    /**
-     * {@inheritDoc}
-     */
+
 	@Override
 	protected String renderDeclarationType() {
 		return INTERFACE_STRING;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public String extendsOrImplementsInterfaces() {
 		return EXTENDS_STRING;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	protected String renderSupertype(Generator gen, Interface model) {
 		return "";
 	}
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Object wrapMethod(Method method) {
         return new InterfaceMethodImpl(method);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected String renderConstructors(Generator gen, Interface model) {
         return "";

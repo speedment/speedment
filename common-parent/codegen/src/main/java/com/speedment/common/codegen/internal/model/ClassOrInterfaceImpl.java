@@ -82,9 +82,6 @@ public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>>
 		modifiers	= Copier.copy(prototype.getModifiers(), c -> c.copy(), EnumSet.noneOf(Modifier.class));
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
     @SuppressWarnings("unchecked")
 	public T setName(String name) {
@@ -92,17 +89,11 @@ public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>>
 		return (T) this;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public String getName() {
 		return name;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
     @SuppressWarnings("unchecked")
 	public T set(Javadoc doc) {
@@ -110,73 +101,46 @@ public abstract class ClassOrInterfaceImpl<T extends ClassOrInterface<T>>
 		return (T) this;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public Optional<Javadoc> getJavadoc() {
 		return Optional.ofNullable(javadoc);
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public List<Method> getMethods() {
 		return methods;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public List<Field> getFields() {
 		return fields;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public List<Type> getInterfaces() {
 		return interfaces;
 	}
-	
-    /**
-     * {@inheritDoc}
-     */
+
 	@Override
 	public Set<Modifier> getModifiers() {
 		return modifiers;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public List<Generic> getGenerics() {
 		return generics;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public List<AnnotationUsage> getAnnotations() {
 		return annotations;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public List<ClassOrInterface<?>> getClasses() {
 		return classes;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<Initializer> getInitializers() {
         return initalizers;

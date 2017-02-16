@@ -43,10 +43,7 @@ implements Transform<InterfaceMethod, String>,
         HasJavadocView<InterfaceMethod>, 
         HasAnnotationUsageView<InterfaceMethod>,
         HasCodeView<InterfaceMethod> {
-    
-    /**
-     * {@inheritDoc}
-     */
+
 	@Override
 	public Optional<String> transform(Generator gen, InterfaceMethod model) {
         requireNonNull(gen);

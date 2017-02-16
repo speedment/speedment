@@ -35,10 +35,7 @@ import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNull
  * @author Emil Forslund
  */
 public final class TextValueView implements Transform<TextValue, String> {
-    
-    /**
-     * {@inheritDoc}
-     */
+
 	@Override
 	public Optional<String> transform(Generator gen, TextValue model) {
         requireNonNulls(gen, model);

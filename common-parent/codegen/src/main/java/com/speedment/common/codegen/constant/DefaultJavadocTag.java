@@ -94,34 +94,22 @@ public enum DefaultJavadocTag implements JavadocTag {
         requireNonNull(procedure).accept(copy);
         return copy;
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String getName() {
         return name;
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public Optional<String> getValue() {
         return Optional.empty();
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public Optional<String> getText() {
         return Optional.empty();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public JavadocTag copy() {
         return JavadocTag.of(name);

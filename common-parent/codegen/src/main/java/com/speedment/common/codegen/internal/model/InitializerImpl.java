@@ -60,25 +60,16 @@ public final class InitializerImpl implements Initializer {
         modifiers = Copier.copy(prototype.getModifiers(), c -> c);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<String> getCode() {
         return code;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Set<Modifier> getModifiers() {
         return modifiers;
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public InitializerImpl copy() {
         return new InitializerImpl(this);

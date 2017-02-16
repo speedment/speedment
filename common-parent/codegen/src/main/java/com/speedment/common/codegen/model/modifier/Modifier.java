@@ -60,9 +60,6 @@ public enum Modifier implements HasCopy<Modifier> {
 		return name;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public Modifier copy() {
 		return this;

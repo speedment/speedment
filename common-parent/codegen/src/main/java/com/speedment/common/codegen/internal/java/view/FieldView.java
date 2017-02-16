@@ -34,9 +34,6 @@ public final class FieldView implements Transform<Field, String>, HasNameView<Fi
     HasJavadocView<Field>, HasModifiersView<Field>, HasTypeView<Field>,
     HasValueView<Field>, HasAnnotationUsageView<Field> {
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public Optional<String> transform(Generator gen, Field model) {
         requireNonNulls(gen, model);
@@ -50,10 +47,7 @@ public final class FieldView implements Transform<Field, String>, HasNameView<Fi
 			renderValue(gen, model)
 		);
 	}
-	
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String annotationSeparator() {
         return " ";

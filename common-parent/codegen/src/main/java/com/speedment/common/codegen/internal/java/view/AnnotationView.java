@@ -39,9 +39,6 @@ public final class AnnotationView implements Transform<Annotation, String>,
         HasAnnotationUsageView<Annotation>,
         HasNameView<Annotation> {
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Optional<String> transform(Generator gen, Annotation model) {
         requireNonNulls(gen, model);

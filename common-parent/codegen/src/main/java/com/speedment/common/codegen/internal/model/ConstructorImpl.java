@@ -75,66 +75,42 @@ public final class ConstructorImpl implements Constructor {
         exceptions = new LinkedHashSet<>(prototype.getExceptions());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<Field> getFields() {
         return params;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<String> getCode() {
         return code;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Set<Modifier> getModifiers() {
         return modifiers;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Constructor set(Javadoc doc) {
         javadoc = doc;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Optional<Javadoc> getJavadoc() {
         return Optional.ofNullable(javadoc);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<AnnotationUsage> getAnnotations() {
         return annotations;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Set<Type> getExceptions() {
         return exceptions;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public ConstructorImpl copy() {
         return new ConstructorImpl(this);

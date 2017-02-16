@@ -53,10 +53,7 @@ implements Transform<EnumConstant, String>,
     public String fieldSuffix() {
         return ";";
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
 	@Override
 	public Optional<String> transform(Generator gen, EnumConstant model) {
         requireNonNulls(gen, model);

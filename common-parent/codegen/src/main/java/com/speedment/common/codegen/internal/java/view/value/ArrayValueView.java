@@ -31,10 +31,7 @@ import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNull
  * @author Emil Forslund
  */
 public final class ArrayValueView implements Transform<ArrayValue, String> {
-    
-    /**
-     * {@inheritDoc}
-     */
+
 	@Override
 	public Optional<String> transform(Generator gen, ArrayValue model) {
         requireNonNulls(gen, model);

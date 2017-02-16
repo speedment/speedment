@@ -34,9 +34,6 @@ import java.util.stream.Collectors;
  */
 public final class ConstructorView implements Transform<Constructor, String> {
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public Optional<String> transform(Generator gen, Constructor model) {
         requireNonNulls(gen, model);

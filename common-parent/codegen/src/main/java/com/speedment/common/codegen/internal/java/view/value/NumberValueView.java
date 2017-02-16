@@ -30,10 +30,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  */
 public final class NumberValueView implements Transform<NumberValue, String> {
-    
-    /**
-     * {@inheritDoc}
-     */
+
 	@Override
 	public Optional<String> transform(Generator gen, NumberValue model) {
         requireNonNull(gen);

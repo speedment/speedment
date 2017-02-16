@@ -32,9 +32,6 @@ import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNull
  */
 public final class GenericView implements Transform<Generic, String> {
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public Optional<String> transform(Generator gen, Generic model) {
         requireNonNulls(gen, model);

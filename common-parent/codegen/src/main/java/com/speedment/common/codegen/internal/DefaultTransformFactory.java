@@ -48,17 +48,11 @@ public class DefaultTransformFactory implements TransformFactory {
         this.transforms = new ConcurrentHashMap<>();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getName() {
         return name;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public <A, B, T extends Transform<A, B>> TransformFactory install(Class<A> from, Class<B> to, Class<T> transform) {
         requireNonNull(from);
@@ -71,9 +65,6 @@ public class DefaultTransformFactory implements TransformFactory {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public <A, T extends Transform<A, ?>> Set<Map.Entry<Class<?>, T>> allFrom(Class<A> model) {

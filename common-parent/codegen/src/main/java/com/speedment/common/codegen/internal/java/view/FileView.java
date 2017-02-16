@@ -39,10 +39,7 @@ public final class FileView implements Transform<File, String>,
         HasImportsView<File>,    
         HasJavadocView<File>, 
         HasClassesView<File> {
-    
-    /**
-     * {@inheritDoc}
-     */
+
 	@Override
 	public Optional<String> transform(Generator gen, File model) {
         requireNonNulls(gen, model);

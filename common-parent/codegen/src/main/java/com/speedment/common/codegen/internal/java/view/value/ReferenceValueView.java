@@ -30,10 +30,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  */
 public final class ReferenceValueView implements Transform<ReferenceValue, String> {
-    
-    /**
-     * {@inheritDoc}
-     */
+
 	@Override
 	public Optional<String> transform(Generator gen, ReferenceValue model) {
         requireNonNull(gen);

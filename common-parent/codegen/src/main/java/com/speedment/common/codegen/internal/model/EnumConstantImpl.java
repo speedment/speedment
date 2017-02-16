@@ -80,26 +80,17 @@ public final class EnumConstantImpl implements EnumConstant {
 		values	     = Copier.copy(prototype.getValues(), v -> v.copy());
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public EnumConstant setName(String name) {
 		this.name = requireNonNull(name);
 		return this;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public String getName() {
 		return name;
 	}
-	
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
 	public List<Value<?>> getValues() {
 		return values;
@@ -136,9 +127,6 @@ public final class EnumConstantImpl implements EnumConstant {
         return fields;
     }
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public EnumConstantImpl copy() {
 		return new EnumConstantImpl(this);

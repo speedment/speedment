@@ -33,34 +33,22 @@ import static java.util.stream.Collectors.toList;
  * @author Emil Forslund
  */
 public final class EnumView extends ClassOrInterfaceView<Enum> {
-	
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
 	protected String renderDeclarationType() {
 		return ENUM_STRING;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public String extendsOrImplementsInterfaces() {
 		return IMPLEMENTS_STRING;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	protected String renderSupertype(Generator gen, Enum model) {
 		return "";
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	protected String onBeforeFields(Generator gen, Enum model) {
         requireNonNulls(gen, model);
@@ -81,9 +69,6 @@ public final class EnumView extends ClassOrInterfaceView<Enum> {
 			);
 	}
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected String renderConstructors(Generator gen, Enum model) {
         requireNonNulls(gen, model);

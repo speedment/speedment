@@ -86,116 +86,77 @@ public final class MutableStream<T> implements Stream<T> {
     /**************************************************************************/
     /*                          Intermediate Actions                          */
     /**************************************************************************/
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     @SuppressWarnings("unchecked")
     public Stream<T> filter(Predicate<? super T> filter) {
         return internalWrap(pipeline.append(FilterAction.create(pipeline, (Predicate<T>) filter)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public <R> Stream<R> map(Function<? super T, ? extends R> mapper) {
         return internalWrap(pipeline.append(MapAction.create(pipeline, (Function<T, R>) mapper)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public IntStream mapToInt(ToIntFunction<? super T> mapper) {
         return MutableIntStream.internalWrap(pipeline.append(MapToIntAction.create(pipeline, (ToIntFunction<T>) mapper)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public LongStream mapToLong(ToLongFunction<? super T> mapper) {
         return MutableLongStream.internalWrap(pipeline.append(MapToLongAction.create(pipeline, (ToLongFunction<T>) mapper)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public DoubleStream mapToDouble(ToDoubleFunction<? super T> mapper) {
         return MutableDoubleStream.internalWrap(pipeline.append(MapToDoubleAction.create(pipeline, (ToDoubleFunction<T>) mapper)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public <R> Stream<R> flatMap(Function<? super T, ? extends Stream<? extends R>> mapper) {
         return internalWrap(pipeline.append(FlatMapAction.create(pipeline, (Function<T, Stream<R>>) mapper)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public IntStream flatMapToInt(Function<? super T, ? extends IntStream> mapper) {
         return MutableIntStream.internalWrap(pipeline.append(FlatMapToIntAction.create(pipeline, (Function<T, IntStream>) mapper)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public LongStream flatMapToLong(Function<? super T, ? extends LongStream> mapper) {
         return MutableLongStream.internalWrap(pipeline.append(FlatMapToLongAction.create(pipeline, (Function<T, LongStream>) mapper)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public DoubleStream flatMapToDouble(Function<? super T, ? extends DoubleStream> mapper) {
         return MutableDoubleStream.internalWrap(pipeline.append(FlatMapToDoubleAction.create(pipeline, (Function<T, DoubleStream>) mapper)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Stream<T> distinct() {
         return internalWrap(pipeline.append(DistinctAction.create(pipeline)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Stream<T> sorted() {
         return internalWrap(pipeline.append(SortedAction.create(pipeline)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public Stream<T> sorted(Comparator<? super T> comparator) {
         return internalWrap(pipeline.append(SortedAction.create(pipeline, (Comparator<T>) comparator)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Stream<T> peek(Consumer<? super T> cnsmr) {
         // Mutable Streams can not be peeked inside since they might not be
@@ -203,17 +164,11 @@ public final class MutableStream<T> implements Stream<T> {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Stream<T> limit(long limit) {
         return internalWrap(pipeline.append(LimitAction.create(pipeline, limit)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Stream<T> skip(long skip) {
         return internalWrap(pipeline.append(SkipAction.create(pipeline, skip)), parallel);
@@ -222,163 +177,106 @@ public final class MutableStream<T> implements Stream<T> {
     /**************************************************************************/
     /*                          Terminating Actions                           */
     /**************************************************************************/
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     @SuppressWarnings("unchecked")
     public void forEach(Consumer<? super T> consumer) {
         pipeline.execute(ForEachTerminator.create(pipeline, parallel, (Consumer<T>) consumer));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public void forEachOrdered(Consumer<? super T> consumer) {
         pipeline.execute(ForEachOrderedTerminator.create(pipeline, parallel, (Consumer<T>) consumer));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Object[] toArray() {
         return pipeline.execute(ToArrayTerminator.create(pipeline, parallel, Object[]::new));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public <A> A[] toArray(IntFunction<A[]> instantiator) {
         return pipeline.execute(ToArrayTerminator.create(pipeline, parallel, instantiator));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public T reduce(T identity, BinaryOperator<T> combiner) {
         return pipeline.execute(ReduceTerminator.create(pipeline, parallel, identity, combiner));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Optional<T> reduce(BinaryOperator<T> combiner) {
         return Optional.ofNullable(pipeline.execute(ReduceTerminator.create(pipeline, parallel, combiner)));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public <U> U reduce(U identity, BiFunction<U, ? super T, U> accumulator, BinaryOperator<U> combiner) {
         return pipeline.execute(ReduceTerminator.create(pipeline, parallel, identity, (BiFunction<U, T, U>) accumulator, combiner));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public <R> R collect(Supplier<R> supplier, BiConsumer<R, ? super T> accumulator, BiConsumer<R, R> combiner) {
         return pipeline.execute(CollectTerminator.create(pipeline, parallel, supplier, accumulator, combiner));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public <R, A> R collect(Collector<? super T, A, R> collector) {
         return pipeline.execute(CollectTerminator.create(pipeline, parallel, (Collector<T, A, R>) collector));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public Optional<T> min(Comparator<? super T> comparator) {
         return pipeline.execute(MinTerminator.create(pipeline, parallel, (Comparator<T>) comparator));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public Optional<T> max(Comparator<? super T> comparator) {
         return pipeline.execute(MaxTerminator.create(pipeline, parallel, (Comparator<T>) comparator));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public long count() {
         return pipeline.execute(CountTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public boolean anyMatch(Predicate<? super T> predicate) {
         return pipeline.execute(AnyMatchTerminator.create(pipeline, parallel, (Predicate<T>) predicate));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public boolean allMatch(Predicate<? super T> predicate) {
         return pipeline.execute(AllMatchTerminator.create(pipeline, parallel, (Predicate<T>) predicate));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public boolean noneMatch(Predicate<? super T> predicate) {
         return pipeline.execute(NoneMatchTerminator.create(pipeline, parallel, (Predicate<T>) predicate));
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public Optional<T> findFirst() {
         return pipeline.execute(FindFirstTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Optional<T> findAny() {
         return pipeline.execute(FindAnyTerminator.create(pipeline, parallel));
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public Iterator<T> iterator() {
         return pipeline.execute(IteratorTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Spliterator<T> spliterator() {
         return pipeline.execute(SpliteratorTerminator.create(pipeline, parallel));
@@ -388,41 +286,26 @@ public final class MutableStream<T> implements Stream<T> {
     /*                   Inherited Methods from Base Stream                   */
     /**************************************************************************/
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isParallel() {
         return parallel;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Stream<T> sequential() {
         return parallel ? internalWrap(pipeline, false) : this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Stream<T> parallel() {
         return parallel ? this : internalWrap(pipeline, true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Stream<T> unordered() {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Stream<T> onClose(Runnable r) {
         throw new UnsupportedOperationException(
@@ -430,9 +313,6 @@ public final class MutableStream<T> implements Stream<T> {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void close() {
         // Do nothing since close listeners are not supported by this 

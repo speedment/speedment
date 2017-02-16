@@ -84,75 +84,48 @@ public final class MutableLongStream implements LongStream {
     /*                          Intermediate Actions                          */
     /**************************************************************************/
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public LongStream filter(LongPredicate filter) {
         return internalWrap(pipeline.append(LongFilterAction.create(pipeline, filter)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public LongStream map(LongUnaryOperator mapper) {
         return internalWrap(pipeline.append(MapLongToLongAction.create(pipeline, mapper)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public <U> Stream<U> mapToObj(LongFunction<? extends U> mapper) {
         return MutableStream.internalWrap(pipeline.append(MapLongAction.create(pipeline, (LongFunction<U>) mapper)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public IntStream mapToInt(LongToIntFunction mapper) {
         return MutableIntStream.internalWrap(pipeline.append(MapLongToIntAction.create(pipeline, mapper)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public DoubleStream mapToDouble(LongToDoubleFunction mapper) {
         return MutableDoubleStream.internalWrap(pipeline.append(MapLongToDoubleAction.create(pipeline, mapper)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public LongStream flatMap(LongFunction<? extends LongStream> mapper) {
         return internalWrap(pipeline.append(FlatMapLongAction.create(pipeline, (LongFunction<LongStream>) mapper)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public LongStream distinct() {
         return internalWrap(pipeline.append(DistinctAction.create(pipeline)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public LongStream sorted() {
         return internalWrap(pipeline.append(SortedAction.create(pipeline)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public LongStream peek(LongConsumer ic) {
         // Mutable Streams can not be peeked inside since they might not be
@@ -160,33 +133,21 @@ public final class MutableLongStream implements LongStream {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public LongStream limit(long limit) {
         return internalWrap(pipeline.append(LimitAction.create(pipeline, limit)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public LongStream skip(long skip) {
         return internalWrap(pipeline.append(SkipAction.create(pipeline, skip)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public DoubleStream asDoubleStream() {
         return mapToDouble(i -> i);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Stream<Long> boxed() {
         return mapToObj(i -> i);
@@ -196,153 +157,96 @@ public final class MutableLongStream implements LongStream {
     /*                          Terminating Actions                           */
     /**************************************************************************/
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void forEach(LongConsumer action) {
         pipeline.execute(ForEachLongTerminator.create(pipeline, parallel, action));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void forEachOrdered(LongConsumer action) {
         pipeline.execute(ForEachLongOrderedTerminator.create(pipeline, parallel, action));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public long[] toArray() {
         return pipeline.execute(ToLongArrayTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public long reduce(long initialValue, LongBinaryOperator combiner) {
         return pipeline.execute(ReduceLongTerminator.create(pipeline, parallel, initialValue, combiner)).getAsLong();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public OptionalLong reduce(LongBinaryOperator combiner) {
         return pipeline.execute(ReduceLongTerminator.create(pipeline, parallel, combiner));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public <R> R collect(Supplier<R> supplier, ObjLongConsumer<R> accumulator, BiConsumer<R, R> merger) {
         return pipeline.execute(CollectLongTerminator.create(pipeline, parallel, supplier, accumulator, merger));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public long sum() {
         return pipeline.execute(SumLongTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public OptionalLong min() {
         return pipeline.execute(MinLongTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public OptionalLong max() {
         return pipeline.execute(MaxLongTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public long count() {
         return pipeline.execute(CountTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public OptionalDouble average() {
         return pipeline.execute(AverageTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public LongSummaryStatistics summaryStatistics() {
         return pipeline.execute(LongSummaryStatisticsTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean anyMatch(LongPredicate predicate) {
         return pipeline.execute(AnyMatchLongTerminator.create(pipeline, parallel, predicate));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean allMatch(LongPredicate predicate) {
         return pipeline.execute(AllMatchLongTerminator.create(pipeline, parallel, predicate));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean noneMatch(LongPredicate predicate) {
         return pipeline.execute(NoneMatchLongTerminator.create(pipeline, parallel, predicate));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public OptionalLong findFirst() {
         return pipeline.execute(FindFirstLongTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public OptionalLong findAny() {
         return pipeline.execute(FindAnyLongTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public PrimitiveIterator.OfLong iterator() {
         return pipeline.execute(LongIteratorTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Spliterator.OfLong spliterator() {
         return pipeline.execute(LongSpliteratorTerminator.create(pipeline, parallel));
@@ -352,42 +256,27 @@ public final class MutableLongStream implements LongStream {
     /**************************************************************************/
     /*                   Inherited Methods from Base Stream                   */
     /**************************************************************************/
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean isParallel() {
         return parallel;
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public LongStream sequential() {
         return parallel ? internalWrap(pipeline, false) : this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public LongStream parallel() {
         return parallel ? this : internalWrap(pipeline, true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public LongStream unordered() {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public LongStream onClose(Runnable r) {
         throw new UnsupportedOperationException(
@@ -395,9 +284,6 @@ public final class MutableLongStream implements LongStream {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void close() {
         // Do nothing since close listeners are not supported by this 

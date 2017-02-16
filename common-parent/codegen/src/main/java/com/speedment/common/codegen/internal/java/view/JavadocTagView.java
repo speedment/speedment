@@ -32,9 +32,6 @@ import static java.util.Objects.requireNonNull;
  */
 public final class JavadocTagView implements Transform<JavadocTag, String> {
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public Optional<String> transform(Generator gen, JavadocTag model) {
         requireNonNull(gen);

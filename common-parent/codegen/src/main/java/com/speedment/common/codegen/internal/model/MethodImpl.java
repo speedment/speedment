@@ -84,108 +84,69 @@ public final class MethodImpl implements Method {
         exceptions  = new HashSet<>(prototype.getExceptions());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getName() {
         return name;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Method setName(String name) {
         this.name = requireNonNull(name);
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Type getType() {
         return type;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Method set(Type type) {
         this.type = requireNonNull(type);
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<Field> getFields() {
         return params;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<String> getCode() {
         return code;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Set<Modifier> getModifiers() {
         return modifiers;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Method set(Javadoc doc) {
         javadoc = doc;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Optional<Javadoc> getJavadoc() {
         return Optional.ofNullable(javadoc);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<AnnotationUsage> getAnnotations() {
         return annotations;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<Generic> getGenerics() {
         return generics;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Set<Type> getExceptions() {
         return exceptions;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public MethodImpl copy() {
         return new MethodImpl(this);

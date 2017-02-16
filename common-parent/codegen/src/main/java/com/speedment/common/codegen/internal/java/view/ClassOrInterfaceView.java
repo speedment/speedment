@@ -66,17 +66,11 @@ abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements Tr
 		return "";
 	}
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String fieldSeparator(M model) {
         return nl();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String fieldSuffix() {
         return ";";
@@ -111,10 +105,7 @@ abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements Tr
      *               be any
      */
     protected abstract String renderConstructors(Generator gen, M model);
-    
-    /**
-     * {@inheritDoc}
-     */
+
 	@Override
 	public Optional<String> transform(Generator gen, M model) {
         requireNonNulls(gen, model);

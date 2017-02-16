@@ -65,34 +65,22 @@ public final class ClassImpl extends ClassOrInterfaceImpl<Class> implements Clas
 		this.constructors = Copier.copy(prototype.getConstructors());
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public Class setSupertype(Type superType) {
 		this.superType = superType;
 		return this;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public Optional<Type> getSupertype() {
 		return Optional.ofNullable(superType);
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public List<Constructor> getConstructors() {
 		return constructors;
 	}
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
 	public ClassImpl copy() {
 		return new ClassImpl(this);

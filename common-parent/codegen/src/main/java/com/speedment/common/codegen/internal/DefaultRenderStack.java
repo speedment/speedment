@@ -70,25 +70,16 @@ public class DefaultRenderStack implements RenderStack {
         return stack.pop();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public <T> Stream<T> fromBottom(Class<T> type) {
         return all(requireNonNull(type), stack.descendingIterator());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public <T> Stream<T> fromTop(Class<T> type) {
         return all(requireNonNull(type), stack.iterator());
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean isEmpty() {
         return stack.isEmpty();

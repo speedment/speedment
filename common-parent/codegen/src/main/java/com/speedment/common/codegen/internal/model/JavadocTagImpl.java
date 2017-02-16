@@ -99,33 +99,21 @@ public final class JavadocTagImpl extends JavadocTagBase {
             super(name, value, text);
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public JavadocTag setValue(String value) {
             return copy().setValue(value);
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public JavadocTag setText(String text) {
             return copy().setText(text);
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public JavadocTag setName(String name) {
             return copy().setName(name);
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public JavadocTagImpl copy() {
             return new JavadocTagImpl(this);
@@ -164,60 +152,39 @@ abstract class JavadocTagBase implements JavadocTag {
         this.text = prototype.getText().orElse(null);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Optional<String> getValue() {
         return Optional.ofNullable(value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public JavadocTag setValue(String value) {
         this.value = value;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Optional<String> getText() {
         return Optional.ofNullable(text);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public JavadocTag setText(String text) {
         this.text = text;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public JavadocTag setName(String name) {
         this.name = requireNonNull(name);
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getName() {
         return name;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public JavadocTagImpl copy() {
         return new JavadocTagImpl(this);

@@ -108,34 +108,22 @@ public enum DefaultAnnotationUsage implements AnnotationUsage {
 	public AnnotationUsage put(String key, Value<?> val) {
 		return copy().put(requireNonNull(key), val);
 	}
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
 	public Type getType() {
 		return type;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public Optional<Value<?>> getValue() {
 		return Optional.ofNullable(value).map(Value::copy);
 	}
-	
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
 	public List<Map.Entry<String, Value<?>>> getValues() {
 		return new ArrayList<>();
 	}
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
 	public AnnotationUsage copy() {
         final AnnotationUsage copy = AnnotationUsage.of(getType());

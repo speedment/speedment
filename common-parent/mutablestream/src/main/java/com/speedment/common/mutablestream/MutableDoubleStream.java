@@ -83,75 +83,48 @@ public final class MutableDoubleStream implements DoubleStream {
     /*                          Intermediate Actions                          */
     /**************************************************************************/
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public DoubleStream filter(DoublePredicate filter) {
         return internalWrap(pipeline.append(DoubleFilterAction.create(pipeline, filter)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public DoubleStream map(DoubleUnaryOperator mapper) {
         return internalWrap(pipeline.append(MapDoubleToDoubleAction.create(pipeline, mapper)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public <U> Stream<U> mapToObj(DoubleFunction<? extends U> mapper) {
         return MutableStream.internalWrap(pipeline.append(MapDoubleAction.create(pipeline, (DoubleFunction<U>) mapper)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public LongStream mapToLong(DoubleToLongFunction mapper) {
         return MutableLongStream.internalWrap(pipeline.append(MapDoubleToLongAction.create(pipeline, mapper)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public IntStream mapToInt(DoubleToIntFunction mapper) {
         return MutableIntStream.internalWrap(pipeline.append(MapDoubleToIntAction.create(pipeline, mapper)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     @SuppressWarnings("unchecked")
     public DoubleStream flatMap(DoubleFunction<? extends DoubleStream> mapper) {
         return internalWrap(pipeline.append(FlatMapDoubleAction.create(pipeline, (DoubleFunction<DoubleStream>) mapper)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public DoubleStream distinct() {
         return internalWrap(pipeline.append(DistinctAction.create(pipeline)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public DoubleStream sorted() {
         return internalWrap(pipeline.append(SortedAction.create(pipeline)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public DoubleStream peek(DoubleConsumer ic) {
         // Mutable Streams can not be peeked inside since they might not be
@@ -159,25 +132,16 @@ public final class MutableDoubleStream implements DoubleStream {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public DoubleStream limit(long limit) {
         return internalWrap(pipeline.append(LimitAction.create(pipeline, limit)), parallel);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public DoubleStream skip(long skip) {
         return internalWrap(pipeline.append(SkipAction.create(pipeline, skip)), parallel);
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public Stream<Double> boxed() {
         return mapToObj(i -> i);
@@ -187,153 +151,96 @@ public final class MutableDoubleStream implements DoubleStream {
     /*                          Terminating Actions                           */
     /**************************************************************************/
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void forEach(DoubleConsumer action) {
         pipeline.execute(ForEachDoubleTerminator.create(pipeline, parallel, action));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void forEachOrdered(DoubleConsumer action) {
         pipeline.execute(ForEachDoubleOrderedTerminator.create(pipeline, parallel, action));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public double[] toArray() {
         return pipeline.execute(ToDoubleArrayTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public double reduce(double initialValue, DoubleBinaryOperator combiner) {
         return pipeline.execute(ReduceDoubleTerminator.create(pipeline, parallel, initialValue, combiner)).getAsDouble();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public OptionalDouble reduce(DoubleBinaryOperator combiner) {
         return pipeline.execute(ReduceDoubleTerminator.create(pipeline, parallel, combiner));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public <R> R collect(Supplier<R> supplier, ObjDoubleConsumer<R> accumulator, BiConsumer<R, R> merger) {
         return pipeline.execute(CollectDoubleTerminator.create(pipeline, parallel, supplier, accumulator, merger));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public double sum() {
         return pipeline.execute(SumDoubleTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public OptionalDouble min() {
         return pipeline.execute(MinDoubleTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public OptionalDouble max() {
         return pipeline.execute(MaxDoubleTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public long count() {
         return pipeline.execute(CountTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public OptionalDouble average() {
         return pipeline.execute(AverageTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public DoubleSummaryStatistics summaryStatistics() {
         return pipeline.execute(DoubleSummaryStatisticsTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean anyMatch(DoublePredicate predicate) {
         return pipeline.execute(AnyMatchDoubleTerminator.create(pipeline, parallel, predicate));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean allMatch(DoublePredicate predicate) {
         return pipeline.execute(AllMatchDoubleTerminator.create(pipeline, parallel, predicate));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean noneMatch(DoublePredicate predicate) {
         return pipeline.execute(NoneMatchDoubleTerminator.create(pipeline, parallel, predicate));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public OptionalDouble findFirst() {
         return pipeline.execute(FindFirstDoubleTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public OptionalDouble findAny() {
         return pipeline.execute(FindAnyDoubleTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public PrimitiveIterator.OfDouble iterator() {
         return pipeline.execute(DoubleIteratorTerminator.create(pipeline, parallel));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Spliterator.OfDouble spliterator() {
         return pipeline.execute(DoubleSpliteratorTerminator.create(pipeline, parallel));
@@ -343,42 +250,27 @@ public final class MutableDoubleStream implements DoubleStream {
     /**************************************************************************/
     /*                   Inherited Methods from Base Stream                   */
     /**************************************************************************/
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public boolean isParallel() {
         return parallel;
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public DoubleStream sequential() {
         return parallel ? internalWrap(pipeline, false) : this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public DoubleStream parallel() {
         return parallel ? this : internalWrap(pipeline, true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public DoubleStream unordered() {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public DoubleStream onClose(Runnable r) {
         throw new UnsupportedOperationException(
@@ -386,9 +278,6 @@ public final class MutableDoubleStream implements DoubleStream {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void close() {
         // Do nothing since close listeners are not supported by this 

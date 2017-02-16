@@ -30,10 +30,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  */
 public final class BooleanValueView implements Transform<BooleanValue, String> {
-    
-    /**
-     * {@inheritDoc}
-     */
+
 	@Override
 	public Optional<String> transform(Generator gen, BooleanValue model) {
         requireNonNull(gen);

@@ -30,10 +30,7 @@ import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNull
  * @author Emil Forslund
  */
 public final class EnumValueView implements Transform<EnumValue, String> {
-    
-    /**
-     * {@inheritDoc}
-     */
+
 	@Override
 	public Optional<String> transform(Generator gen, EnumValue model) {
         requireNonNulls(gen, model);

@@ -37,10 +37,7 @@ public final class InterfaceFieldView implements Transform<InterfaceField, Strin
         HasAnnotationUsageView<InterfaceField>,
         HasTypeView<InterfaceField>,
         HasNameView<InterfaceField> {
-    
-    /**
-     * {@inheritDoc}
-     */
+
 	@Override
 	public Optional<String> transform(Generator gen, InterfaceField model) {
         requireNonNulls(gen, model);
@@ -54,9 +51,6 @@ public final class InterfaceFieldView implements Transform<InterfaceField, Strin
 		);
 	}
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String annotationSeparator() {
         return " ";

@@ -75,34 +75,22 @@ public final class JavadocImpl implements Javadoc {
         tags = Copier.copy(prototype.getTags());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getText() {
         return text;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Javadoc setText(String text) {
         this.text = text;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<JavadocTag> getTags() {
         return tags;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public JavadocImpl copy() {
         return new JavadocImpl(this);

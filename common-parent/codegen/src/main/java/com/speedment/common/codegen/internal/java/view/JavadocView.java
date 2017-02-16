@@ -47,10 +47,7 @@ public final class JavadocView implements Transform<Javadoc, String>,
 		JAVADOC_DELIMITER = nl() + " * ",
 		JAVADOC_PREFIX    = "/**" + nl() + " * ",
 		JAVADOC_SUFFIX    = nl() + " */";
-	
-    /**
-     * {@inheritDoc}
-     */
+
 	@Override
 	public Optional<String> transform(Generator gen, Javadoc model) {
         requireNonNulls(gen, model);

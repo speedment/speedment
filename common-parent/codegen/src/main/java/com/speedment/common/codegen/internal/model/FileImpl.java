@@ -72,59 +72,38 @@ public final class FileImpl implements File {
         this.classes = Copier.copy(prototype.getClasses(), c -> c.copy());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public File setName(String name) {
         this.name = requireNonNull(name);
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getName() {
         return name;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public File set(Javadoc doc) {
         this.doc = doc;
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Optional<Javadoc> getJavadoc() {
         return Optional.ofNullable(doc);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<Import> getImports() {
         return imports;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<ClassOrInterface<?>> getClasses() {
         return classes;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public FileImpl copy() {
         return new FileImpl(this);

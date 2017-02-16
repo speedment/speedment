@@ -64,25 +64,16 @@ public final class EnumImpl extends ClassOrInterfaceImpl<Enum> implements Enum {
 		constructors = Copier.copy(prototype.getConstructors());
 	}
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
 	public List<EnumConstant> getConstants() {
 		return constants;
 	}
-	
-    /**
-     * {@inheritDoc}
-     */
+
 	@Override
 	public List<Constructor> getConstructors() {
 		return constructors;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public EnumImpl copy() {
 		return new EnumImpl(this);

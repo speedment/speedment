@@ -14,15 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.common.codegen.internal;
 
-import com.speedment.common.codegen.*;
-
+import com.speedment.common.codegen.Meta;
+import com.speedment.common.codegen.RenderStack;
+import com.speedment.common.codegen.RenderTree;
+import com.speedment.common.codegen.Transform;
+import com.speedment.common.codegen.TransformFactory;
 import static java.util.Objects.requireNonNull;
 
 /**

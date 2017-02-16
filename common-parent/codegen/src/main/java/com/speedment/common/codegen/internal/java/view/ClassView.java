@@ -29,26 +29,17 @@ import static java.util.stream.Collectors.joining;
  * @author Emil Forslund
  */
 public final class ClassView extends ClassOrInterfaceView<Class> {
-    
-    /**
-     * {@inheritDoc}
-     */
+
 	@Override
 	protected String renderDeclarationType() {
 		return CLASS_STRING;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public String extendsOrImplementsInterfaces() {
 		return IMPLEMENTS_STRING;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	protected String renderSupertype(Generator gen, Class model) {
         requireNonNull(gen);
@@ -61,9 +52,6 @@ public final class ClassView extends ClassOrInterfaceView<Class> {
 		}
 	}
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     protected String renderConstructors(Generator gen, Class model) {
         requireNonNull(gen);

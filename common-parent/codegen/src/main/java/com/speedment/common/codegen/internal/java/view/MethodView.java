@@ -42,9 +42,6 @@ public final class MethodView implements Transform<Method, String>,
         HasCodeView<Method>, 
         HasModifiersView<Method> {
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public Optional<String> transform(Generator gen, Method model) {
         requireNonNulls(gen, model);

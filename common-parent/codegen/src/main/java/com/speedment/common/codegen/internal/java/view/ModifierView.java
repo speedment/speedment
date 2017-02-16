@@ -29,9 +29,6 @@ import java.util.Optional;
  */
 public final class ModifierView implements Transform<Modifier, String> {
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public Optional<String> transform(Generator gen, Modifier model) {
 		return Optional.of(model.getName());

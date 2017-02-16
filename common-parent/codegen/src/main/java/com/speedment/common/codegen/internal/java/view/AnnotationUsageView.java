@@ -33,9 +33,6 @@ import static java.util.Objects.requireNonNull;
  */
 public final class AnnotationUsageView implements Transform<AnnotationUsage, String> {
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Optional<String> transform(Generator gen, AnnotationUsage model) {
         requireNonNull(gen);

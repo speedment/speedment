@@ -35,9 +35,6 @@ public final class InitalizerView implements Transform<Initializer, String>,
         HasModifiersView<Initializer>,
         HasCodeView<Initializer> {
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Optional<String> transform(Generator gen, Initializer model) {
         requireNonNull(gen);

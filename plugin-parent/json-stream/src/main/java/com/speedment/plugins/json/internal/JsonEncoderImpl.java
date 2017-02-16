@@ -64,10 +64,7 @@ final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
     /**************************************************************************/
     /*                             Getters                                    */
     /**************************************************************************/
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public Manager<ENTITY> getManager() {
         return manager;
@@ -76,74 +73,47 @@ final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
     /**************************************************************************/
     /*                          Field Putters                                 */
     /**************************************************************************/
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public <D, V> JsonEncoder<ENTITY> put(ReferenceField<ENTITY, D, V> field) {
         return putHelper(field, ReferenceField::getter, this::put);
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public <D> JsonEncoder<ENTITY> putByte(ByteField<ENTITY, D> field) {
         return putHelper(field, ByteField::getter, this::putByte);
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public <D> JsonEncoder<ENTITY> putShort(ShortField<ENTITY, D> field) {
         return putHelper(field, ShortField::getter, this::putShort);
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public <D> JsonEncoder<ENTITY> putInt(IntField<ENTITY, D> field) {
         return putHelper(field, IntField::getter, this::putInt);
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public <D> JsonEncoder<ENTITY> putLong(LongField<ENTITY, D> field) {
         return putHelper(field, LongField::getter, this::putLong);
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public <D> JsonEncoder<ENTITY> putFloat(FloatField<ENTITY, D> field) {
         return putHelper(field, FloatField::getter, this::putFloat);
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public <D> JsonEncoder<ENTITY> putDouble(DoubleField<ENTITY, D> field) {
         return putHelper(field, DoubleField::getter, this::putDouble);
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public <D> JsonEncoder<ENTITY> putChar(CharField<ENTITY, D> field) {
         return putHelper(field, CharField::getter, this::putChar);
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public <D> JsonEncoder<ENTITY> putBoolean(BooleanField<ENTITY, D> field) {
         return putHelper(field, BooleanField::getter, this::putBoolean);
@@ -160,74 +130,47 @@ final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
     /**************************************************************************/
     /*                        Put Labels with Getters                         */
     /**************************************************************************/
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public <T> JsonEncoder<ENTITY> put(String label, ReferenceGetter<ENTITY, T> getter) {
         return putHelper(label, e -> jsonValue(getter.apply(e)));
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public JsonEncoder<ENTITY> putByte(String label, ByteGetter<ENTITY> getter) {
         return putHelper(label, e -> jsonValue(getter.applyAsByte(e)));
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public JsonEncoder<ENTITY> putShort(String label, ShortGetter<ENTITY> getter) {
         return putHelper(label, e -> jsonValue(getter.applyAsShort(e)));
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public JsonEncoder<ENTITY> putInt(String label, IntGetter<ENTITY> getter) {
         return putHelper(label, e -> jsonValue(getter.applyAsInt(e)));
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public JsonEncoder<ENTITY> putLong(String label, LongGetter<ENTITY> getter) {
         return putHelper(label, e -> jsonValue(getter.applyAsLong(e)));
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public JsonEncoder<ENTITY> putFloat(String label, FloatGetter<ENTITY> getter) {
         return putHelper(label, e -> jsonValue(getter.applyAsFloat(e)));
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public JsonEncoder<ENTITY> putDouble(String label, DoubleGetter<ENTITY> getter) {
         return putHelper(label, e -> jsonValue(getter.applyAsDouble(e)));
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public JsonEncoder<ENTITY> putChar(String label, CharGetter<ENTITY> getter) {
         return putHelper(label, e -> jsonValue(getter.applyAsChar(e)));
     }
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public JsonEncoder<ENTITY> putBoolean(String label, BooleanGetter<ENTITY> getter) {
         return putHelper(label, e -> jsonValue(getter.applyAsBoolean(e)));
@@ -242,10 +185,7 @@ final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
     /**************************************************************************/
     /*                        Put Fields with Finders                         */
     /**************************************************************************/
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public <FK_ENTITY, FIELD extends Field<ENTITY> & HasFinder<ENTITY, FK_ENTITY>> 
     JsonEncoder<ENTITY> put(FIELD field, JsonEncoder<FK_ENTITY> encoder) {
@@ -260,10 +200,7 @@ final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
     /**************************************************************************/
     /*                        Put Labels with Finders                         */
     /**************************************************************************/
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public <FK_ENTITY> JsonEncoder<ENTITY> put(
             String label, 
@@ -281,10 +218,7 @@ final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
     /**************************************************************************/
     /*                        Put Labels with Find Many                       */
     /**************************************************************************/
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public <FK_ENTITY> JsonEncoder<ENTITY> putStreamer(
             String label, 
@@ -300,9 +234,6 @@ final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public <FK_ENTITY> JsonEncoder<ENTITY> putStreamer(
             String label, 
@@ -321,10 +252,7 @@ final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
     /**************************************************************************/
     /*                             Remove by Label                            */
     /**************************************************************************/
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public JsonEncoder<ENTITY> remove(String label) {
         requireNonNull(label);
@@ -332,9 +260,6 @@ final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
         return this;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public JsonEncoder<ENTITY> remove(Field<ENTITY> field) {
         requireNonNull(field);
@@ -345,10 +270,7 @@ final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
     /**************************************************************************/
     /*                                  Encode                                */
     /**************************************************************************/
-    
-    /**
-     * {@inheritDoc}
-     */
+
     @Override
     public String apply(ENTITY entity) {
         return entity == null ? "null" : "{"
@@ -358,9 +280,6 @@ final class JsonEncoderImpl<ENTITY> implements JsonEncoder<ENTITY> {
             + "}";
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public JsonCollector<ENTITY> collector() {
         return JsonCollector.toJson(this);

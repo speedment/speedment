@@ -44,26 +44,17 @@ public abstract class ValueImpl<V> implements Value<V> {
 		value = val;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
 	public Value<V> setValue(V value) {
 		this.value = value;
 		return this;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
 	public V getValue() {
 		return value;
 	}
 
-    /**
-     * {@inheritDoc}
-     */
 	@Override
 	public abstract ValueImpl<V> copy();
 
