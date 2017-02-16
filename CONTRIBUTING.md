@@ -16,7 +16,7 @@ When you have signed the CLA, your name will be added to the project's ```<contr
 
 Creating a Pull Request
 -----------------------------
-Make sure that you are creating a **pull request against the 'develop' branch**. This makes it much easier for us to merge the pull request in the proper way (since all new stuff is funneled through the 'develop' branch). It also enables your name as a contributor to be retained for the changes files, which is nice.
+Make sure that you are creating a **pull request against the 'develop-3.0' branch**. This makes it much easier for us to merge the pull request in the proper way (since all new stuff is funneled through the 'develop-3.0' branch). It also enables your name as a contributor to be retained for the changes files, which is nice.
 
 
 Code Style
@@ -34,7 +34,6 @@ requests. Some of the main code style features includes:
         .collect(...)
 ```
 
-* Make your variables ```final``` when possible
 * Keep methods short
 * Keep classes short (yeah, we failed on this on some occasions)
 * Use Java 8's features like lambdas, ```Function```, ```Supplier```, etc
@@ -43,3 +42,4 @@ requests. Some of the main code style features includes:
 * Favor composition over inheritance
 * Write JavaDoc to your methods and classes
 * Add Unit Tests to your code
+* Make your variables ```final``` when possible
