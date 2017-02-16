@@ -15,15 +15,27 @@ the Speedment runtime allows the user to create scalable and efficient
 Java applications using **standard Java 8** streams without any
 specific query language or any new API. 
 
-This site covers the **Speedment Open Source** project available under the 
-[Apache 2 license](http://www.apache.org/licenses/LICENSE-2.0). The 
-enterprise product with support for commercial 
-databases (i.e. Oracle, MS SQL Server, DB2, AS400) and in-JVM-memory acceleration can be found at 
-[www.speedment.com](http://speedment.com/).
+### Onliner Example
+Search for an old hare (of age greater than 5):
+```java
+// Searches are optimized in the background!
+Optional<Hare> oldHare = hares.stream()
+    .filter(Hare.AGE.greaterThan(5))
+    .findAny();
+``` 
+
+Results in the following SQL query:
+```sql
+SELECT id, name, color, age FROM hare 
+    WHERE (age > 5)
+    LIMIT 1;
+```
+
+No need for wrinting SQL-queies. Remain in the Java world!
 
 Documentation
 -------------
-You can read an [API quick start here](https://github.com/speedment/speedment#easy-initialization)!
+You can read the [API quick start examples here](https://github.com/speedment/speedment#examples)!
 
 ## Tutorials
 * [Tutorial 1 - Set up the IDE](https://github.com/speedment/speedment/wiki/Tutorial:-Set-up-the-IDE)
@@ -64,7 +76,7 @@ Now you have a demo project set up with generated application code in the direct
 
 Examples
 --------
-Here are a few examples of how you could use Speedment from your code assuming that you have an exemplary MySQL database with the tables "hare", "carrot", "human" and "friends" [See Database Schema here] (https://github.com/speedment/speedment/#Database-Schema):
+Here are a few examples of how you could use Speedment from your code assuming that you have an exemplary MySQL database with the tables "hare", "carrot", "human" and "friends" [See Database Schema here] (https://github.com/speedment/speedment/#database-schema):
 
 
 ### Query with optimised Stream predicate short-circuit
@@ -410,7 +422,12 @@ Speedment comes with support for the following databases out-of-the-box:
 * MariaDB
 * PostgreSQL
 
-Support for commercial databases like Oracle DB can be added using enterprise plugins. Visit [www.speedment.com](http://www.speedment.com) for more information on commercial alternatives.  
+
+This site covers the **Speedment Open Source** project available under the 
+[Apache 2 license](http://www.apache.org/licenses/LICENSE-2.0). The 
+enterprise product with support for commercial 
+databases (i.e. Oracle, MS SQL Server, DB2, AS400) and in-JVM-memory acceleration can be found at 
+[www.speedment.com](http://speedment.com/).
 
 Speedment requires `Java 8` or later. Make sure your IDE configured to use JDK 8 (version 1.8.0_40 or newer).
 
