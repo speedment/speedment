@@ -32,7 +32,7 @@ SELECT id, name, color, age FROM hare
     LIMIT 1;
 ```
 
-No need for wrinting SQL-queies. Remain in the Java world!
+No need for wrinting SQL-queies any more. Remain in a pure Java world!
 
 Documentation
 -------------
