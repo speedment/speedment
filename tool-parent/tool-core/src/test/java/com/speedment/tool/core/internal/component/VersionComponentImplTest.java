@@ -16,31 +16,37 @@
  */
 package com.speedment.tool.core.internal.component;
 
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.core.GeneratorBundle;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.tool.core.ToolBundle;
 import com.speedment.tool.core.component.VersionComponent;
-import org.junit.Test;
-
 import java.net.UnknownHostException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import org.junit.Test;
 
 /**
- *
+ * Tests the default {@link VersionComponent} to make sure it can query the
+ * public GitHub API.
+ * 
  * @author  Emil Forslund
  * @since   3.0.0
  */
 public class VersionComponentImplTest {
 
+    private final static Logger LOGGER =
+        LoggerManager.getLogger(VersionComponentImplTest.class);
+    
     /**
      * Test of latestVersion method, of class VersionComponentImpl.
      */
     @Test
     public void testLatestVersion() {
-        System.out.println("Determining the latest version of Speedment.");
+        LOGGER.info("Determining the latest version of Speedment.");
         final Speedment speedment = ApplicationBuilder.empty()
             .withBundle(GeneratorBundle.class)
             .withBundle(ToolBundle.class)
@@ -52,27 +58,28 @@ public class VersionComponentImplTest {
         
         try {
             final String latest = version.latestVersion().get(2, TimeUnit.SECONDS);
-            System.out.println("The latest released version of Speedment is " + latest + ".");
+            LOGGER.info("The latest released version of Speedment is " + latest + ".");
         } catch (final ExecutionException | InterruptedException ex) {
             if (hasCause(ex, UnknownHostException.class)) {
-                System.out.println("UnknownHostException - not connected to the Internet?");
+                LOGGER.warn(ex, "Not connected to the Internet?");
             } else {
-                throw new RuntimeException(ex);
+                LOGGER.error(ex);
             }
         } catch (final TimeoutException ex ) {
-            System.out.println("Connection timed out before a version could be established");
+            LOGGER.error(ex, "Connection timed out before a version could be established.");
         }
     }
 
     private static boolean hasCause(Exception ex, Class<? extends Throwable> c) {
         Throwable cause = ex.getCause();
+        
         while (cause != null) {
             if (c.equals(cause.getClass())) {
                 return true;
             }
             cause = cause.getCause();
         }
+        
         return false;
     }
-
 }
