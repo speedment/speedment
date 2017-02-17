@@ -15,7 +15,7 @@ the Speedment runtime allows the user to create scalable and efficient
 Java applications using **standard Java 8** streams without any
 specific query language or any new API. 
 
-### Onliner Example
+### One-liner
 Search for an old hare (of age greater than 5):
 ```java
 // Searches are optimized in the background!
