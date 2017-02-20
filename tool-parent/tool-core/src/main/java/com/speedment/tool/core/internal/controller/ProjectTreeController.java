@@ -29,6 +29,11 @@ import com.speedment.tool.config.trait.HasIconPath;
 import com.speedment.tool.config.trait.HasNameProperty;
 import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.resource.SpeedmentIcon;
+import java.net.URL;
+import static java.util.Objects.requireNonNull;
+import java.util.ResourceBundle;
+import java.util.stream.Stream;
+import static javafx.application.Platform.runLater;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
@@ -37,19 +42,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.MenuItem;
+import static javafx.scene.control.SelectionMode.SINGLE;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.stream.Stream;
-
-import static java.util.Objects.requireNonNull;
-import static javafx.application.Platform.runLater;
-import static javafx.scene.control.SelectionMode.SINGLE;
 
 /**
  *
@@ -57,13 +55,10 @@ import static javafx.scene.control.SelectionMode.SINGLE;
  */
 public final class ProjectTreeController implements Initializable {
 
-    private @Inject
-    UserInterfaceComponent ui;
-    private @Inject
-    EventComponent events;
+    private @Inject UserInterfaceComponent ui;
+    private @Inject EventComponent events;
 
-    private @FXML
-    TreeView<DocumentProperty> hierarchy;
+    private @FXML TreeView<DocumentProperty> hierarchy;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

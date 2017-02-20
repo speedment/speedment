@@ -23,15 +23,23 @@ import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.internal.util.Settings;
+import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.core.component.UserInterfaceComponent;
+import static com.speedment.tool.core.component.UserInterfaceComponent.ReuseStage.USE_EXISTING_STAGE;
 import com.speedment.tool.core.event.UIEvent;
 import com.speedment.tool.core.exception.SpeedmentToolException;
+import static com.speedment.tool.core.internal.controller.ToolbarController.ICON_SIZE;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.internal.util.InjectionLoader;
 import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import java.net.URL;
+import java.util.ResourceBundle;
+import static java.util.stream.Collectors.toCollection;
+import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
+import static javafx.beans.binding.Bindings.createBooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -42,16 +50,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.StringConverter;
-
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.stream.Stream;
-
-import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
-import static com.speedment.tool.core.component.UserInterfaceComponent.ReuseStage.USE_EXISTING_STAGE;
-import static com.speedment.tool.core.internal.controller.ToolbarController.ICON_SIZE;
-import static java.util.stream.Collectors.toCollection;
-import static javafx.beans.binding.Bindings.createBooleanBinding;
 
 /**
  *
@@ -181,15 +179,16 @@ public final class ConnectController implements Initializable {
             passwordComponent
                 .put(fieldName.getText(), fieldPass.getText().toCharArray());
             
-            userInterfaceComponent.projectProperty().nameProperty().setValue(fieldSchema.getText());
+            userInterfaceComponent.projectProperty().nameProperty()
+                .setValue(fieldSchema.getText());
             
             Settings.inst().set("last_known_schema", fieldSchema.getText());
             Settings.inst().set("last_known_dbtype", dbms.getTypeName());
             Settings.inst().set("last_known_host", fieldHost.getText());
+            Settings.inst().set("last_known_port", fieldPort.getText());
             Settings.inst().set("last_known_user", fieldUser.getText());
             Settings.inst().set("last_known_name", fieldName.getText());
-            Settings.inst().set("last_known_port", fieldPort.getText());
-
+            
             if (configFileHelper.loadFromDatabase(dbms, fieldSchema.getText())) {
                 Settings.inst().set("hide_open_option", false);
                 loader.loadAndShow("Scene");
