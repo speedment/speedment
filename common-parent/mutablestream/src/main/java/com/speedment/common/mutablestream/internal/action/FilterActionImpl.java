@@ -16,13 +16,13 @@
  */
 package com.speedment.common.mutablestream.internal.action;
 
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 import com.speedment.common.mutablestream.HasNext;
-import com.speedment.common.mutablestream.action.FilterAction;
 import com.speedment.common.mutablestream.action.Action;
-import java.util.stream.BaseStream;
+import com.speedment.common.mutablestream.action.FilterAction;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Predicate;
+import java.util.stream.BaseStream;
+import java.util.stream.Stream;
 
 /**
  *
