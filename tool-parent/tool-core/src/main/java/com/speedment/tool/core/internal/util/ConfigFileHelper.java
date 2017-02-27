@@ -122,7 +122,7 @@ public final class ConfigFileHelper {
                 ));
 
             LOGGER.info(String.format(
-                "Reloading from dbms '%s' on %s:%d.", 
+                "Reloading from dbms '%s' on %s:%d.",
                 dbms.getName(), 
                 dbms.getIpAddress().orElse("127.0.0.1"), 
                 dbms.getPort().orElseGet(dbmsType::getDefaultPort)

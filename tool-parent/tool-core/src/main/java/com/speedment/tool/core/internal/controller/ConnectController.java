@@ -19,6 +19,7 @@ package com.speedment.tool.core.internal.controller;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.core.component.EventComponent;
 import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.db.DbmsType;
@@ -36,6 +37,7 @@ import de.jensd.fx.glyphs.GlyphsDude;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicReference;
 import static java.util.stream.Collectors.toCollection;
 import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
@@ -95,50 +97,77 @@ public final class ConnectController implements Initializable {
                 .collect(toCollection(FXCollections::observableArrayList))
         );
         
-        final DbmsProperty dbms = userInterfaceComponent.projectProperty().mutator().addNewDbms();
+        final DbmsProperty dbms = userInterfaceComponent.projectProperty()
+            .mutator().addNewDbms();
         
-        fieldType.getSelectionModel().selectedItemProperty().addListener((observable, old, typeName) -> {
-            dbms.stringPropertyOf(Dbms.TYPE_NAME, () -> typeName).setValue(typeName);
+        final AtomicReference<String> generatedHost = new AtomicReference<>("");
+        final AtomicReference<String> generatedUser = new AtomicReference<>("");
+        final AtomicReference<String> generatedName = new AtomicReference<>("");
+        
+        fieldType.getSelectionModel().selectedItemProperty()
+            .addListener((observable, old, typeName) -> {
+                
+            dbms.stringPropertyOf(Dbms.TYPE_NAME, () -> typeName)
+                .setValue(typeName);
             
             if (!typeName.isEmpty()) {
                 final DbmsType item = dbmsTypeOf(dbmsHandlerComponent, dbms);
 
-                if (fieldHost.textProperty().getValue().isEmpty()) {
+                if (fieldHost.getText().isEmpty()
+                ||  fieldHost.getText().equals(generatedHost.get())) {
                     fieldHost.textProperty().setValue(DEFAULT_HOST);
+                    generatedHost.set(DEFAULT_HOST);
                 }
 
-                if (fieldUser.textProperty().getValue().isEmpty()) {
+                if (fieldUser.getText().isEmpty()
+                ||  fieldUser.getText().equals(generatedUser.get())) {
                     fieldUser.textProperty().setValue(DEFAULT_USER);
+                    generatedUser.set(DEFAULT_USER);
                 }
                 
-                if (fieldName.textProperty().getValue().isEmpty()) {
-                    fieldName.textProperty().setValue(item.getDefaultDbmsName().orElse(DEFAULT_NAME));
+                if (fieldName.getText().isEmpty()
+                ||  fieldName.getText().equals(generatedName.get())) {
+                    final String name = item.getDefaultDbmsName()
+                        .orElse(DEFAULT_NAME);
+                    
+                    fieldName.textProperty().setValue(name);
+                    generatedName.set(name);
                 }
 
                 fieldName.getTooltip().setText(item.getDbmsNameMeaning());
-                fieldPort.textProperty().setValue("" + item.getDefaultPort());
+                
+                dbms.portProperty().setValue(item.getDefaultPort());
+                fieldPort.textProperty().setValue(
+                    Integer.toString(item.getDefaultPort())
+                );
             }
         });
         
-        Bindings.bindBidirectional(fieldPort.textProperty(), dbms.portProperty(), new StringConverter<Number>() {
+        Bindings.bindBidirectional(
+                fieldPort.textProperty(), 
+                dbms.portProperty(), 
+                new StringConverter<Number>() {
+                    
             @Override
-            public String toString(Number object) {
-                return object.toString();
+            public String toString(Number number) {
+                if (number == null) {
+                    try {
+                        return Integer.toString(defaultPort(dbms));
+                    } catch (SpeedmentConfigException ex) {
+                        return "";
+                    }
+                } else {
+                    return number.toString();
+                }
             }
 
             @Override
             public Number fromString(String string) {
                 if (string == null || "".equals(string.trim())) {
-                    return 0;
+                    return defaultPort(dbms);
                 } else return Integer.parseInt(string);
             }
         });
-        
-        fieldSchema.setText(Settings.inst().get("last_known_schema"));
-        fieldPort.setText(Settings.inst().get("last_known_port"));
-        fieldHost.setText(Settings.inst().get("last_known_host", DEFAULT_HOST));
-        fieldUser.setText(Settings.inst().get("last_known_user", DEFAULT_USER));
-        fieldName.setText(Settings.inst().get("last_known_name", DEFAULT_NAME));
         
         try {
             // Find the prefered dbms-type
@@ -147,17 +176,42 @@ public final class ConnectController implements Initializable {
                 getDbmsTypes()
                     .findFirst()
                     .orElseThrow(() -> new SpeedmentToolException(
-                        "Could not find any installed JDBC drivers. Make sure to " +
-                        "include at least one JDBC driver as a dependency in the " +
-                        "projects pom.xml-file under the speedment-maven-plugin <plugin> tag."
+                        "Could not find any installed JDBC drivers. Make " + 
+                        "sure to include at least one JDBC driver as a " + 
+                        "dependency in the projects pom.xml-file under the " + 
+                        "speedment-maven-plugin <plugin> tag."
                     ))
             );
             
             // If the prefered dbms-type isn't loaded, select the first one.
             if (getDbmsTypes().anyMatch(prefered::equals)) {
+                
                 fieldType.getSelectionModel().select(prefered);
+                
+                final int port = Integer.parseInt(
+                    Settings.inst().get(
+                        "last_known_port", 
+                        Integer.toString(defaultPort(dbms))
+                    )
+                );
+                
+                final String host = Settings.inst().get("last_known_host", DEFAULT_HOST);
+                final String user = Settings.inst().get("last_known_user", DEFAULT_USER);
+                final String name = Settings.inst().get("last_known_name", defaultName(dbms));
+                
+                generatedHost.set(host);
+                generatedUser.set(user);
+                generatedName.set(name);
+                
+                fieldSchema.setText(Settings.inst().get("last_known_schema"));
+                fieldPort.setText(Integer.toString(port));
+                fieldHost.setText(host);
+                fieldUser.setText(user);
+                fieldName.setText(name);
             } else {
-                fieldType.getSelectionModel().select(getDbmsTypes().findFirst().get());
+                fieldType.getSelectionModel().select(
+                    getDbmsTypes().findFirst().get()
+                );
             }
         } catch (final SpeedmentToolException ex) {
             userInterfaceComponent.showError(
@@ -170,9 +224,11 @@ public final class ConnectController implements Initializable {
         
         dbms.ipAddressProperty().bindBidirectional(fieldHost.textProperty());
         dbms.nameProperty().bindBidirectional(fieldName.textProperty());
-        dbms.usernameProperty().bindBidirectional(fieldUser.textProperty());        
+        dbms.usernameProperty().bindBidirectional(fieldUser.textProperty());
         
-        buttonOpen.setOnAction(ev -> userInterfaceComponent.openProject(USE_EXISTING_STAGE));
+        buttonOpen.setOnAction(ev -> 
+            userInterfaceComponent.openProject(USE_EXISTING_STAGE));
+        
         buttonConnect.setOnAction(ev -> {
             
             // Register password in password component
@@ -217,5 +273,16 @@ public final class ConnectController implements Initializable {
         return dbmsHandlerComponent
             .supportedDbmsTypes()
             .map(DbmsType::getName);
+    }
+    
+    private int defaultPort(DbmsProperty dbms) {
+        return dbmsTypeOf(dbmsHandlerComponent, dbms)
+            .getDefaultPort();
+    }
+    
+    private String defaultName(DbmsProperty dbms) {
+        return dbmsTypeOf(dbmsHandlerComponent, dbms)
+            .getDefaultDbmsName()
+            .orElse(DEFAULT_NAME);
     }
 }
