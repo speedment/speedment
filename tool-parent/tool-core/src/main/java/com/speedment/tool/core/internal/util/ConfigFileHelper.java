@@ -62,7 +62,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.toSet;
@@ -168,10 +168,23 @@ public final class ConfigFileHelper {
             final Project projectCopy = ImmutableProject.wrap(userInterfaceComponent.projectProperty());
             projectComponent.setProject(projectCopy);
             
+            // TODO: This method needs to be refactored. We create multiple
+            // copies of the config tree, but most of the copies are not deep
+            // but shallow, meaning that as soon as you start traversing them
+            // you risk changing the original map. Not only that, when the new
+            // nodes are created, they are given a reference to the old mutable
+            // parent instance, meaning that they can mutate the existing tree.
+            // It seems to be working for now, mainly because the metadata
+            // handler already does a second deep safe-copy of the given tree,
+            // but that is both unnescessary and very bad for load performance.
+            // We should try to limit the method to a maximum of one deep copy.
+            
             // Create a copy of everything in Dbms EXCEPT the schema key. This
             // is a hack to prevent duplication errors that would otherwise
             // occure if you change name of a node and reload.
-            final Map<String, Object> dbmsData = new ConcurrentHashMap<>(dbms.getData());
+            final Map<String, Object> dbmsData = 
+                new ConcurrentSkipListMap<>(dbms.getData());
+            
             dbmsData.remove(Dbms.SCHEMAS);
             final Dbms dbmsCopy = new DbmsImpl(dbms.getParentOrThrow(), dbmsData);
 
