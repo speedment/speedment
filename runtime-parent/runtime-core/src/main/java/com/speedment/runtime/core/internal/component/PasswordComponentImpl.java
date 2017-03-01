@@ -17,8 +17,8 @@
 package com.speedment.runtime.core.internal.component;
 
 import com.speedment.runtime.core.component.PasswordComponent;
-
 import java.util.Map;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,7 +30,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class PasswordComponentImpl implements PasswordComponent {
 
     private final transient Map<String, char[]> passwords;
-    private static final char[] NULL_MARKER = new char[0];
 
     public PasswordComponentImpl() {
         this.passwords = new ConcurrentHashMap<>();
@@ -38,13 +37,19 @@ public final class PasswordComponentImpl implements PasswordComponent {
 
     @Override
     public void put(String dbmsName, char[] password) {
-        passwords.put(dbmsName, password == null ? NULL_MARKER : password);
+        requireNonNull(dbmsName);
+        if (password == null) {
+            passwords.remove(dbmsName);
+        } else {
+            passwords.put(dbmsName, password);
+        }
     }
 
     @Override
     public Optional<char[]> get(String dbmsName) {
+        requireNonNull(dbmsName);
         final char[] value = passwords.get(dbmsName);
-        if (value == NULL_MARKER) {
+        if (value == null) {
             return Optional.empty();
         } else {
             return Optional.of(value);
