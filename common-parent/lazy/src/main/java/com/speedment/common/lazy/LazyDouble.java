@@ -39,9 +39,7 @@ public final class LazyDouble {
     }
 
     public double getOrCompute(DoubleSupplier supplier) {
-        // With this local variable, we only need to do one volatile read most of the times
-        final double result = value;
-        return initialized ? result : maybeCompute(supplier);
+        return initialized ? value : maybeCompute(supplier);
     }
 
     private synchronized double maybeCompute(DoubleSupplier supplier) {

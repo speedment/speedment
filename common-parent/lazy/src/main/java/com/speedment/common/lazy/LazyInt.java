@@ -39,9 +39,7 @@ public final class LazyInt {
     }
 
     public int getOrCompute(IntSupplier supplier) {
-        // With this local variable, we only need to do one volatile read most of the times
-        final int result = value;
-        return initialized ? result : maybeCompute(supplier);
+        return initialized ? value : maybeCompute(supplier);
     }
 
     private synchronized int maybeCompute(IntSupplier supplier) {

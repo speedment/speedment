@@ -48,9 +48,9 @@ public class LazyIntegerTest {
         return LazyInt.create();
     }
 
-    protected int makeFromThread(Thread t) {
-        return (int) t.getId();
-    }
+//    protected int makeFromThread(Thread t) {
+//        return (int) t.getId();
+//    }
 
     @Before
     public void setUp() {
@@ -69,20 +69,18 @@ public class LazyIntegerTest {
     }
 
     // Todo: Enable this test
-    
     @Test
-    @Ignore
     public void testConcurrency() throws InterruptedException, ExecutionException {
         final int threads = 8;
         ExecutorService executorService = Executors.newFixedThreadPool(8);
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 100_000; i++) {
             final LazyInt lazy = newInstance();
-            final Callable<Integer> callable = () -> lazy.getOrCompute(() -> makeFromThread(Thread.currentThread()));
+            final Callable<Integer> callable = () -> lazy.getOrCompute(() -> (int) Thread.currentThread().getId());
             List<Future<Integer>> futures
                 = IntStream.rangeClosed(0, threads)
-                .mapToObj($ -> executorService.submit(callable))
-                .collect(toList());
+                    .mapToObj($ -> executorService.submit(callable))
+                    .collect(toList());
 
             while (!futures.stream().allMatch(Future::isDone)) {
             }

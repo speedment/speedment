@@ -48,7 +48,7 @@
         <codegenxml.version>1.0.2</codegenxml.version>
         <injector.version>1.2.0</injector.version>
         <rest.version>1.0.3</rest.version>
-        <lazy.version>1.0.2</lazy.version>
+        <lazy.version>1.0.3-SNAPSHOT</lazy.version>
         <mapstream.version>2.3.5</mapstream.version>
         <mutablestream.version>1.0.0</mutablestream.version>
         <singletonstream.version>1.0.0</singletonstream.version>

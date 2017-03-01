@@ -39,9 +39,7 @@ public final class LazyLong {
     }
 
     public long getOrCompute(LongSupplier supplier) {
-        // With this local variable, we only need to do one volatile read most of the times
-        final long result = value;
-        return initialized ? result : maybeCompute(supplier);
+        return initialized ? value : maybeCompute(supplier);
     }
 
     private synchronized long maybeCompute(LongSupplier supplier) {
