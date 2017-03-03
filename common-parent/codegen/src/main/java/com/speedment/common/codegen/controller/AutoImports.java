@@ -17,8 +17,8 @@
 package com.speedment.common.codegen.controller;
 
 import com.speedment.common.codegen.DependencyManager;
-import com.speedment.common.codegen.internal.model.ImportImpl;
 import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.trait.*;
 import com.speedment.common.codegen.util.Formatting;
 import java.lang.reflect.ParameterizedType;
@@ -57,7 +57,7 @@ public final class AutoImports implements Consumer<File> {
 	@Override
 	public void accept(File file) {
 		findTypesIn(requireNonNull(file)).forEach(
-			(s, t) -> file.add(new ImportImpl(t))
+			(s, t) -> file.add(Import.of(t))
 		);
 	}
 	

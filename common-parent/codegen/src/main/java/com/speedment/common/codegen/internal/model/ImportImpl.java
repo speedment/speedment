@@ -19,14 +19,12 @@ package com.speedment.common.codegen.internal.model;
 import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.modifier.Modifier;
-
 import java.lang.reflect.Type;
 import java.util.EnumSet;
 import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * This is the default implementation of the {@link Import} interface. This
@@ -35,7 +33,7 @@ import static java.util.Objects.requireNonNull;
  * change the implementing class without modifying the using code.
  *
  * @author Emil Forslund
- * @see Import
+ * @see    Import
  */
 public final class ImportImpl implements Import {
 
@@ -46,15 +44,15 @@ public final class ImportImpl implements Import {
     /**
      * Initializes this import using a type.
      * <p>
-     * <b>Warning!</b> This class should not be instantiated directly but using
-     * the {@link Import#of(Type)} method!
+     * <em>Warning!</em> This class should not be instantiated directly but 
+     * using the {@link Import#of(Type)} method!
      *
      * @param type the type
      */
     public ImportImpl(Type type) {
-        this.type = requireNonNull(type);
+        this.type         = requireNonNull(type);
         this.staticMember = null;
-        this.modifiers = EnumSet.noneOf(Modifier.class);
+        this.modifiers    = EnumSet.noneOf(Modifier.class);
     }
 
     /**

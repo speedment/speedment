@@ -40,7 +40,8 @@ public final class ImportView implements Transform<Import, String> {
         final String name = stripGenerics(model.getType().getTypeName())
             .replace('$', '.');
 
-        if (shouldImport(gen, model.getType())) {
+        if (!model.getModifiers().isEmpty()
+        ||   shouldImport(gen, model.getType())) {
             return Optional.of(
                 "import "
                 + gen.onEach(model.getModifiers()).collect(joinIfNotEmpty(" ", "", " "))
