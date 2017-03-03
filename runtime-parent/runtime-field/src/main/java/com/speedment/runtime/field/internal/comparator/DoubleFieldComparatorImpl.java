@@ -35,11 +35,15 @@ import static java.util.Objects.requireNonNull;
 public final class DoubleFieldComparatorImpl<ENTITY, D> implements DoubleFieldComparator<ENTITY, D> {
     
     private final DoubleField<ENTITY, D> field;
-    private boolean reversed;
+    private final boolean reversed;
     
     public DoubleFieldComparatorImpl(DoubleField<ENTITY, D> field) {
+        this(field, false);
+    }
+    
+    public DoubleFieldComparatorImpl(DoubleField<ENTITY, D> field, boolean reversed) {
         this.field    = requireNonNull(field);
-        this.reversed = false;
+        this.reversed = reversed;
     }
     
     @Override
@@ -59,8 +63,7 @@ public final class DoubleFieldComparatorImpl<ENTITY, D> implements DoubleFieldCo
     
     @Override
     public FieldComparator<ENTITY, Double> reversed() {
-        reversed = !reversed;
-        return this;
+        return new DoubleFieldComparatorImpl<>(field, !reversed);
     }
     
     @Override

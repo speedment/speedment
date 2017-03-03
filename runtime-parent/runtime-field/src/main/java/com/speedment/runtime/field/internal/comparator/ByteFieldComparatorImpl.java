@@ -35,11 +35,15 @@ import static java.util.Objects.requireNonNull;
 public final class ByteFieldComparatorImpl<ENTITY, D> implements ByteFieldComparator<ENTITY, D> {
     
     private final ByteField<ENTITY, D> field;
-    private boolean reversed;
+    private final boolean reversed;
     
     public ByteFieldComparatorImpl(ByteField<ENTITY, D> field) {
+        this(field, false);
+    }
+    
+    public ByteFieldComparatorImpl(ByteField<ENTITY, D> field, boolean reversed) {
         this.field    = requireNonNull(field);
-        this.reversed = false;
+        this.reversed = reversed;
     }
     
     @Override
@@ -59,8 +63,7 @@ public final class ByteFieldComparatorImpl<ENTITY, D> implements ByteFieldCompar
     
     @Override
     public FieldComparator<ENTITY, Byte> reversed() {
-        reversed = !reversed;
-        return this;
+        return new ByteFieldComparatorImpl<>(field, !reversed);
     }
     
     @Override

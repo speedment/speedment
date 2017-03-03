@@ -35,11 +35,15 @@ import static java.util.Objects.requireNonNull;
 public final class ShortFieldComparatorImpl<ENTITY, D> implements ShortFieldComparator<ENTITY, D> {
     
     private final ShortField<ENTITY, D> field;
-    private boolean reversed;
+    private final boolean reversed;
     
     public ShortFieldComparatorImpl(ShortField<ENTITY, D> field) {
+        this(field, false);
+    }
+    
+    public ShortFieldComparatorImpl(ShortField<ENTITY, D> field, boolean reversed) {
         this.field    = requireNonNull(field);
-        this.reversed = false;
+        this.reversed = reversed;
     }
     
     @Override
@@ -59,8 +63,7 @@ public final class ShortFieldComparatorImpl<ENTITY, D> implements ShortFieldComp
     
     @Override
     public FieldComparator<ENTITY, Short> reversed() {
-        reversed = !reversed;
-        return this;
+        return new ShortFieldComparatorImpl<>(field, !reversed);
     }
     
     @Override

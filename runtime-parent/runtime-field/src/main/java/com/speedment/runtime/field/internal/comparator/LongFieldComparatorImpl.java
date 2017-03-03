@@ -35,11 +35,15 @@ import static java.util.Objects.requireNonNull;
 public final class LongFieldComparatorImpl<ENTITY, D> implements LongFieldComparator<ENTITY, D> {
     
     private final LongField<ENTITY, D> field;
-    private boolean reversed;
+    private final boolean reversed;
     
     public LongFieldComparatorImpl(LongField<ENTITY, D> field) {
+        this(field, false);
+    }
+    
+    public LongFieldComparatorImpl(LongField<ENTITY, D> field, boolean reversed) {
         this.field    = requireNonNull(field);
-        this.reversed = false;
+        this.reversed = reversed;
     }
     
     @Override
@@ -59,8 +63,7 @@ public final class LongFieldComparatorImpl<ENTITY, D> implements LongFieldCompar
     
     @Override
     public FieldComparator<ENTITY, Long> reversed() {
-        reversed = !reversed;
-        return this;
+        return new LongFieldComparatorImpl<>(field, !reversed);
     }
     
     @Override

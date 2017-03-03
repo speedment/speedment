@@ -35,11 +35,15 @@ import static java.util.Objects.requireNonNull;
 public final class IntFieldComparatorImpl<ENTITY, D> implements IntFieldComparator<ENTITY, D> {
     
     private final IntField<ENTITY, D> field;
-    private boolean reversed;
+    private final boolean reversed;
     
     public IntFieldComparatorImpl(IntField<ENTITY, D> field) {
+        this(field, false);
+    }
+    
+    public IntFieldComparatorImpl(IntField<ENTITY, D> field, boolean reversed) {
         this.field    = requireNonNull(field);
-        this.reversed = false;
+        this.reversed = reversed;
     }
     
     @Override
@@ -59,8 +63,7 @@ public final class IntFieldComparatorImpl<ENTITY, D> implements IntFieldComparat
     
     @Override
     public FieldComparator<ENTITY, Integer> reversed() {
-        reversed = !reversed;
-        return this;
+        return new IntFieldComparatorImpl<>(field, !reversed);
     }
     
     @Override

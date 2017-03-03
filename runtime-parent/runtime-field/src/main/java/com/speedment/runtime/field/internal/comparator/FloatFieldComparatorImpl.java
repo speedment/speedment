@@ -35,11 +35,15 @@ import static java.util.Objects.requireNonNull;
 public final class FloatFieldComparatorImpl<ENTITY, D> implements FloatFieldComparator<ENTITY, D> {
     
     private final FloatField<ENTITY, D> field;
-    private boolean reversed;
+    private final boolean reversed;
     
     public FloatFieldComparatorImpl(FloatField<ENTITY, D> field) {
+        this(field, false);
+    }
+    
+    public FloatFieldComparatorImpl(FloatField<ENTITY, D> field, boolean reversed) {
         this.field    = requireNonNull(field);
-        this.reversed = false;
+        this.reversed = reversed;
     }
     
     @Override
@@ -59,8 +63,7 @@ public final class FloatFieldComparatorImpl<ENTITY, D> implements FloatFieldComp
     
     @Override
     public FieldComparator<ENTITY, Float> reversed() {
-        reversed = !reversed;
-        return this;
+        return new FloatFieldComparatorImpl<>(field, !reversed);
     }
     
     @Override
