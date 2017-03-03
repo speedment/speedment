@@ -17,7 +17,7 @@
 package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.runtime.field.LongField;
-import java.util.Comparator;
+import com.speedment.runtime.field.comparator.FieldComparator;
 import javax.annotation.Generated;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -51,7 +51,7 @@ public final class LongFieldComparatorImpl<ENTITY, D> implements LongFieldCompar
     }
     
     @Override
-    public Comparator<ENTITY> reversed() {
+    public FieldComparator<ENTITY, Long> reversed() {
         reversed = !reversed;
         return this;
     }

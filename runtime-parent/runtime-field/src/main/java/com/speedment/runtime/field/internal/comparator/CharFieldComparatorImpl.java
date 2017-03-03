@@ -17,7 +17,7 @@
 package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.runtime.field.CharField;
-import java.util.Comparator;
+import com.speedment.runtime.field.comparator.FieldComparator;
 import javax.annotation.Generated;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -51,7 +51,7 @@ public final class CharFieldComparatorImpl<ENTITY, D> implements CharFieldCompar
     }
     
     @Override
-    public Comparator<ENTITY> reversed() {
+    public FieldComparator<ENTITY, Character> reversed() {
         reversed = !reversed;
         return this;
     }
