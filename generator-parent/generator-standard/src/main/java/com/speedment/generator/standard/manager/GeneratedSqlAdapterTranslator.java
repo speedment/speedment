@@ -230,7 +230,6 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
         java.sql.Time.class,
         java.sql.Date.class,
         java.sql.Timestamp.class,
-        UUID.class,
         Blob.class,
         Clob.class
     ).collect(toSet());
