@@ -38,6 +38,9 @@ extends Comparator<ENTITY> {
      * @return  the field
      */
     HasComparableOperators<ENTITY, V> getField();
+
+    @Override
+    FieldComparator<ENTITY, V> reversed();
     
     /**
      * Returns {@code true} if this comparator reverses the natural order of the
