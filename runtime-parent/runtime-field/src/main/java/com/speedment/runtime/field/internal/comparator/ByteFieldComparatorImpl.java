@@ -18,6 +18,7 @@ package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.comparator.FieldComparator;
+import com.speedment.runtime.field.comparator.NullOrder;
 import java.util.Objects;
 import javax.annotation.Generated;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
@@ -44,6 +45,11 @@ public final class ByteFieldComparatorImpl<ENTITY, D> implements ByteFieldCompar
     @Override
     public ByteField<ENTITY, D> getField() {
         return field;
+    }
+    
+    @Override
+    public NullOrder getNullOrder() {
+        return NullOrder.NONE;
     }
     
     @Override

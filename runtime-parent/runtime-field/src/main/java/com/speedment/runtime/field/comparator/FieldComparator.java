@@ -38,6 +38,16 @@ extends Comparator<ENTITY> {
      * @return  the field
      */
     HasComparableOperators<ENTITY, V> getField();
+    
+    /**
+     * Returns the strategy used when {@code null} values are encountered. If
+     * the order {@link NullOrder#NONE} is specified, then no guarantees will be
+     * made regarding the order of entities where the field value is 
+     * {@code null}.
+     * 
+     * @return  the null order strategy
+     */
+    NullOrder getNullOrder();
 
     @Override
     FieldComparator<ENTITY, V> reversed();

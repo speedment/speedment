@@ -23,7 +23,8 @@ import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 
 /**
- *
+ * The default implementation of the {@link ReferenceFieldComparator} interface.
+ * 
  * @param <ENTITY>  the entity type
  * @param <D>       the database type
  * @param <V>       the value type
@@ -31,7 +32,9 @@ import static java.util.Objects.requireNonNull;
  * @author  Per Minborg
  * @since   2.2.0
  */
-public final class ReferenceFieldComparatorImpl<ENTITY, D, V extends Comparable<? super V>> implements ReferenceFieldComparator<ENTITY, D, V> {
+public final class ReferenceFieldComparatorImpl
+    <ENTITY, D, V extends Comparable<? super V>> 
+implements ReferenceFieldComparator<ENTITY, D, V> {
 
     private final ComparableField<ENTITY, D, V> referenceField;
     private final NullOrder nullOrder;
@@ -46,6 +49,11 @@ public final class ReferenceFieldComparatorImpl<ENTITY, D, V extends Comparable<
     @Override
     public ComparableField<ENTITY, D, V> getField() {
         return referenceField;
+    }
+
+    @Override
+    public NullOrder getNullOrder() {
+        return nullOrder;
     }
 
     @Override
@@ -118,7 +126,9 @@ public final class ReferenceFieldComparatorImpl<ENTITY, D, V extends Comparable<
         final int lastOutcome = -firstOutcome;
         switch (nullOrder) {
             case NONE:
-                throw new NullPointerException("A field was null and null fields not allowed");
+                throw new NullPointerException(
+                    "A field was null and null fields not allowed"
+                );
             case FIRST:
                 return applyReversed(firstOutcome);
             case LAST:

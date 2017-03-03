@@ -18,6 +18,7 @@ package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.runtime.field.FloatField;
 import com.speedment.runtime.field.comparator.FieldComparator;
+import com.speedment.runtime.field.comparator.NullOrder;
 import java.util.Objects;
 import javax.annotation.Generated;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
@@ -44,6 +45,11 @@ public final class FloatFieldComparatorImpl<ENTITY, D> implements FloatFieldComp
     @Override
     public FloatField<ENTITY, D> getField() {
         return field;
+    }
+    
+    @Override
+    public NullOrder getNullOrder() {
+        return NullOrder.NONE;
     }
     
     @Override
