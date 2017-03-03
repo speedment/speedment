@@ -1,13 +1,13 @@
 /**
- *
+ * 
  * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
- * the License at:
- *
+ * the License at: 
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -56,7 +56,13 @@ public interface CharForeignKeyField<ENTITY, D, FK_ENTITY> extends CharField<ENT
      * @param unique      if represented column only contains unique values
      * @return            the created field
      */
-    static <ENTITY, D, FK_ENTITY> CharForeignKeyField<ENTITY, D, FK_ENTITY> create(ColumnIdentifier<ENTITY> identifier, CharGetter<ENTITY> getter, CharSetter<ENTITY> setter, CharField<FK_ENTITY, D> referenced, TypeMapper<D, Character> typeMapper, boolean unique) {
+    static <ENTITY, D, FK_ENTITY> CharForeignKeyField<ENTITY, D, FK_ENTITY> create(
+    ColumnIdentifier<ENTITY> identifier,
+            CharGetter<ENTITY> getter,
+            CharSetter<ENTITY> setter,
+            CharField<FK_ENTITY, D> referenced,
+            TypeMapper<D, Character> typeMapper,
+            boolean unique) {
         return new CharForeignKeyFieldImpl<>(
             identifier, getter, setter, referenced, typeMapper, unique
         );

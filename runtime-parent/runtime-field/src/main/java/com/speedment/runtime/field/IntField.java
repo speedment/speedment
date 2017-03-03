@@ -1,13 +1,13 @@
 /**
- *
+ * 
  * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
- * the License at:
- *
+ * the License at: 
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -51,7 +51,12 @@ public interface IntField<ENTITY, D> extends Field<ENTITY>, HasIntValue<ENTITY, 
      * @param unique     if column only contains unique values
      * @return           the created field
      */
-    static <ENTITY, D> IntField<ENTITY, D> create(ColumnIdentifier<ENTITY> identifier, IntGetter<ENTITY> getter, IntSetter<ENTITY> setter, TypeMapper<D, Integer> typeMapper, boolean unique) {
+    static <ENTITY, D> IntField<ENTITY, D> create(
+    ColumnIdentifier<ENTITY> identifier,
+            IntGetter<ENTITY> getter,
+            IntSetter<ENTITY> setter,
+            TypeMapper<D, Integer> typeMapper,
+            boolean unique) {
         return new IntFieldImpl<>(
             identifier, getter, setter, typeMapper, unique
         );
