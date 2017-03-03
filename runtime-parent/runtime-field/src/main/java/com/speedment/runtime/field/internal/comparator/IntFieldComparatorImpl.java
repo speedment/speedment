@@ -18,6 +18,7 @@ package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.field.comparator.FieldComparator;
+import java.util.Objects;
 import javax.annotation.Generated;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -62,6 +63,35 @@ public final class IntFieldComparatorImpl<ENTITY, D> implements IntFieldComparat
         final int a = field.getAsInt(first);
         final int b = field.getAsInt(second);
         return applyReversed(a - b);
+    }
+    
+    @Override
+    public int hashCode() {
+        return (4049 + Objects.hashCode(this.field.identifier())) * 3109
+            + Boolean.hashCode(reversed);
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if      (this == obj) return true;
+        else if (obj == null) return false;
+        else if (!(obj instanceof FieldComparator)) return false;
+        
+        @SuppressWarnings("unchecked")
+        final FieldComparator<ENTITY, Integer> casted =
+            (FieldComparator<ENTITY, Integer>) obj;
+        
+        return reversed == casted.isReversed()
+            && Objects.equals(
+                field.identifier(),
+                casted.getField().identifier()
+            );
+    }
+    
+    @Override
+    public String toString() {
+        return "(order by " + field.identifier() + " " +
+            (reversed ? "descending" : "ascending") + ")";
     }
     
     private int applyReversed(int compare) {

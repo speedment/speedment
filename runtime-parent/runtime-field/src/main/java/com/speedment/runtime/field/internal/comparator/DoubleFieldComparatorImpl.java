@@ -18,6 +18,7 @@ package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.runtime.field.DoubleField;
 import com.speedment.runtime.field.comparator.FieldComparator;
+import java.util.Objects;
 import javax.annotation.Generated;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -62,6 +63,35 @@ public final class DoubleFieldComparatorImpl<ENTITY, D> implements DoubleFieldCo
         final double a = field.getAsDouble(first);
         final double b = field.getAsDouble(second);
         return applyReversed(a - b);
+    }
+    
+    @Override
+    public int hashCode() {
+        return (4049 + Objects.hashCode(this.field.identifier())) * 3109
+            + Boolean.hashCode(reversed);
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if      (this == obj) return true;
+        else if (obj == null) return false;
+        else if (!(obj instanceof FieldComparator)) return false;
+        
+        @SuppressWarnings("unchecked")
+        final FieldComparator<ENTITY, Double> casted =
+            (FieldComparator<ENTITY, Double>) obj;
+        
+        return reversed == casted.isReversed()
+            && Objects.equals(
+                field.identifier(),
+                casted.getField().identifier()
+            );
+    }
+    
+    @Override
+    public String toString() {
+        return "(order by " + field.identifier() + " " +
+            (reversed ? "descending" : "ascending") + ")";
     }
     
     private int applyReversed(double compare) {

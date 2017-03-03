@@ -19,6 +19,7 @@ package com.speedment.runtime.field.internal.comparator;
 import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
+import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -77,6 +78,35 @@ public final class ReferenceFieldComparatorImpl<ENTITY, D, V extends Comparable<
             return forNull(Parameter.SECOND);
         }
         return applyReversed(o1Value.compareTo(o2Value));
+    }
+    
+    @Override
+    public int hashCode() {
+        return (4049 + Objects.hashCode(referenceField.identifier())) * 3109
+            + Boolean.hashCode(reversed);
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if      (this == obj) return true;
+        else if (obj == null) return false;
+        else if (!(obj instanceof FieldComparator)) return false;
+        
+        @SuppressWarnings("unchecked")
+        final FieldComparator<ENTITY, V> casted =
+            (FieldComparator<ENTITY, V>) obj;
+        
+        return reversed == casted.isReversed()
+            && Objects.equals(
+                referenceField.identifier(),
+                casted.getField().identifier()
+            );
+    }
+    
+    @Override
+    public String toString() {
+        return "(order by " + referenceField.identifier() + " " +
+            (reversed ? "descending" : "ascending") + ")";
     }
 
     private enum Parameter {
