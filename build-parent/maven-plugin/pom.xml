@@ -31,7 +31,7 @@
     
     <properties>
         <mysql-jdbc-version>5.1.40</mysql-jdbc-version>
-        <postgres-jdbc-version>9.4-1206-jdbc4</postgres-jdbc-version>
+        <postgres-jdbc-version>42.0.0</postgres-jdbc-version>
         <mariadb-jdbc-version>1.5.7</mariadb-jdbc-version>
     </properties>
     
