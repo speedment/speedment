@@ -42,18 +42,17 @@ implements ReferenceFieldComparator<ENTITY, D, V> {
     private final boolean reversed;
     
     public ReferenceFieldComparatorImpl(
-            ComparableField<ENTITY, D, V> field, 
-            NullOrder nullOrder) {
-        
+        final ComparableField<ENTITY, D, V> field, 
+        final NullOrder nullOrder
+    ) {
         this(field, nullOrder, false);
     }
-        
 
     public ReferenceFieldComparatorImpl(
-            ComparableField<ENTITY, D, V> field, 
-            NullOrder nullOrder,
-            boolean reversed) {
-        
+        final ComparableField<ENTITY, D, V> field, 
+        final NullOrder nullOrder,
+        final boolean reversed
+    ) {
         this.field     = requireNonNull(field);
         this.nullOrder = requireNonNull(nullOrder);
         this.reversed  = reversed;
@@ -76,7 +75,7 @@ implements ReferenceFieldComparator<ENTITY, D, V> {
 
     @Override
     public FieldComparator<ENTITY, V> reversed() {
-        return new ReferenceFieldComparatorImpl<>(field, nullOrder, reversed);
+        return new ReferenceFieldComparatorImpl<>(field, nullOrder, !reversed);
     }
     
     // TODO: Improve performance of chained comparators.
@@ -112,7 +111,6 @@ implements ReferenceFieldComparator<ENTITY, D, V> {
     @Override
     public boolean equals(Object obj) {
         if      (this == obj) return true;
-        else if (obj == null) return false;
         else if (!(obj instanceof FieldComparator)) return false;
         
         @SuppressWarnings("unchecked")
