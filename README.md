@@ -16,7 +16,7 @@ the Speedment runtime allows the user to create scalable and efficient
 Java applications using **standard Java 8** streams without any
 specific query language or any new API. 
 
-### Onliner Example
+### One-liner
 Search for an old hare (of age greater than 5):
 ```java
 // Searches are optimized in the background!
@@ -375,7 +375,7 @@ If you do not want to use an archetype, for an example if you already have a pro
     <dependency>
         <groupId>org.postgresql</groupId>
         <artifactId>postgresql</artifactId>
-        <version>9.4-1206-jdbc4</version>
+        <version>42.0.0</version>
         <scope>runtime</scope>
     </dependency>
     
