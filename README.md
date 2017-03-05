@@ -374,7 +374,7 @@ If you do not want to use an archetype, for an example if you already have a pro
     <dependency>
         <groupId>org.postgresql</groupId>
         <artifactId>postgresql</artifactId>
-        <version>9.4-1206-jdbc4</version>
+        <version>42.0.0</version>
         <scope>runtime</scope>
     </dependency>
     
