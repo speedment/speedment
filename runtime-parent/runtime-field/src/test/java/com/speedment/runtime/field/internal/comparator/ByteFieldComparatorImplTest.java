@@ -12,6 +12,7 @@ import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.typemapper.TypeMapper;
 import java.util.Objects;
 import java.util.Random;
+import java.util.stream.IntStream;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -68,18 +69,16 @@ public class ByteFieldComparatorImplTest {
     }
 
     @Test
-    public void testCompareABunch() {
-        final Random rnd = new Random();
-
-        final byte[] bytes = new byte[2];
-        for (int i = 0; i < 100_000; i++) {
-            rnd.nextBytes(bytes);
-            final ByteValue first = ByteValue.of(bytes[0]);
-            final ByteValue second = ByteValue.of(bytes[1]);
-            final int expResult = signum(Byte.compare(first.getByte(), second.getByte()));
-            final int result = signum(instance.compare(first, second));
-            assertEquals(expResult, result);
-        }
+    public void testCompareAllTheThings() {
+        IntStream.rangeClosed(Byte.MIN_VALUE, Byte.MAX_VALUE).forEach(first -> {
+            IntStream.rangeClosed(Byte.MIN_VALUE, Byte.MAX_VALUE).forEach(second -> {
+                final ByteValue firstByteValue = ByteValue.of((byte) first);
+                final ByteValue secondByteValue = ByteValue.of((byte) second);
+                final int expResult = signum(Byte.compare(firstByteValue.getByte(), secondByteValue.getByte()));
+                final int result = signum(instance.compare(firstByteValue, secondByteValue));
+                assertEquals(expResult, result);
+            });
+        });
     }
 
     private int signum(int b) {
