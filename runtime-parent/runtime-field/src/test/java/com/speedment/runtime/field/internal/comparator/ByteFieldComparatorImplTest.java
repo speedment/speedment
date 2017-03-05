@@ -132,7 +132,7 @@ public class ByteFieldComparatorImplTest {
 
         ByteValue setByte(byte value);
 
-        final ColumnIdentifier BYTE_IDENTIFIER = new ColumnIdentifier<ByteValue>() {
+        final ColumnIdentifier<ByteValue> BYTE_IDENTIFIER = new ColumnIdentifier<ByteValue>() {
             @Override
             public String getDbmsName() {
                 return "db0";
