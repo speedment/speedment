@@ -82,9 +82,8 @@ public final class CharFieldComparatorImpl<ENTITY, D> implements CharFieldCompar
     
     @Override
     public boolean equals(Object obj) {
-        if      (this == obj) return true;
-        else if (obj == null) return false;
-        else if (!(obj instanceof FieldComparator)) return false;
+        if (this == obj) return true;
+        if (!(obj instanceof FieldComparator)) return false;
         
         @SuppressWarnings("unchecked")
         final FieldComparator<ENTITY, Character> casted =

@@ -82,9 +82,8 @@ public final class LongFieldComparatorImpl<ENTITY, D> implements LongFieldCompar
     
     @Override
     public boolean equals(Object obj) {
-        if      (this == obj) return true;
-        else if (obj == null) return false;
-        else if (!(obj instanceof FieldComparator)) return false;
+        if (this == obj) return true;
+        if (!(obj instanceof FieldComparator)) return false;
         
         @SuppressWarnings("unchecked")
         final FieldComparator<ENTITY, Long> casted =
