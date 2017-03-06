@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>1.0.4</version>
+        <version>3.0.5-SNAPSHOT</version>
     </parent>
     
     <artifactId>common-all</artifactId>
