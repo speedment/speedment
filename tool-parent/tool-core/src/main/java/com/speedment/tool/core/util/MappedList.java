@@ -53,7 +53,7 @@ public final class MappedList<FROM, TO> extends TransformationList<TO, FROM> {
     }
 
     // Java 9 hack
-    int getViewIndex(int index) {
+    public int getViewIndex(int index) {
         return index;
     }
     
