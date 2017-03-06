@@ -39,24 +39,24 @@ import static com.speedment.common.codegen.internal.util.StaticClassUtil.instanc
 
 public final class StandardTranslatorKey {
     
-    public final static TranslatorKey<Project, Interface> 
+    public static final TranslatorKey<Project, Interface> 
         APPLICATION           = TranslatorKey.of("Application", Interface.class),
         GENERATED_APPLICATION = TranslatorKey.of("GeneratedApplication", Interface.class);
 
-    public final static TranslatorKey<Project, Class> 
+    public static final TranslatorKey<Project, Class> 
         APPLICATION_IMPL              = TranslatorKey.of("ApplicationImpl", Class.class),
         GENERATED_APPLICATION_IMPL    = TranslatorKey.of("GeneratedApplicationImpl", Class.class),
         APPLICATION_BUILDER           = TranslatorKey.of("ApplicationBuilder", Class.class),
         GENERATED_APPLICATION_BUILDER = TranslatorKey.of("GeneratedApplicationBuilder", Class.class),
         GENERATED_METADATA            = TranslatorKey.of("GeneratedMetadata", Class.class);
     
-    public final static TranslatorKey<Table, Interface> 
+    public static final TranslatorKey<Table, Interface> 
         ENTITY            = TranslatorKey.of("Entity", Interface.class),
         MANAGER           = TranslatorKey.of("Manager", Interface.class),
         GENERATED_ENTITY  = TranslatorKey.of("GeneratedEntity", Interface.class),
         GENERATED_MANAGER = TranslatorKey.of("GeneratedManager", Interface.class);
     
-    public final static TranslatorKey<Table, Class>
+    public static final TranslatorKey<Table, Class>
         ENTITY_IMPL            = TranslatorKey.of("EntityImpl", Class.class),
         MANAGER_IMPL           = TranslatorKey.of("ManagerImpl", Class.class),
         SQL_ADAPTER            = TranslatorKey.of("SqlAdapter", Class.class),
@@ -98,6 +98,6 @@ public final class StandardTranslatorKey {
      * Utility classes should not be instantiated.
      */
     private StandardTranslatorKey() {
-        instanceNotAllowed(getClass());
+        throw new UnsupportedOperationException();
     }
 }

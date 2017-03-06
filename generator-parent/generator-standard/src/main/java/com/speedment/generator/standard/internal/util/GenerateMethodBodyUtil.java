@@ -105,9 +105,9 @@ public final class GenerateMethodBodyUtil {
         final AtomicInteger position = new AtomicInteger(1);
         columnsSupplier.get()
             .filter(HasEnabled::isEnabled)
-            .forEachOrdered(c -> {
-                streamBuilder.add("entity.set" + support.namer().javaTypeName(c.getJavaName()) + "(\t " + readFromResultSet.readFromResultSet(file, c, position) + " \t);");
-            });
+            .forEachOrdered(c -> 
+                streamBuilder.add("entity.set" + support.namer().javaTypeName(c.getJavaName()) + "(\t " + readFromResultSet.readFromResultSet(file, c, position) + " \t);")
+            );
 
         rows.add(
             "try " + block(streamBuilder.build()) +
@@ -119,5 +119,7 @@ public final class GenerateMethodBodyUtil {
         return rows.toArray(new String[rows.size()]);
     }
     
-    private GenerateMethodBodyUtil() {}
+    private GenerateMethodBodyUtil() {
+        throw new UnsupportedOperationException();
+    }
 }

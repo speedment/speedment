@@ -17,7 +17,6 @@
 package com.speedment.generator.core.internal.util;
 
 import com.speedment.runtime.core.exception.SpeedmentException;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -27,8 +26,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -39,8 +36,8 @@ import static java.util.stream.Collectors.joining;
  */
 public final class HashUtil {
     
-    private final static String ALGORITHM = "MD5";
-    private final static Charset CHARSET  = StandardCharsets.UTF_8;
+    private static final String ALGORITHM = "MD5";
+    private static final Charset CHARSET  = StandardCharsets.UTF_8;
     
     public static boolean compare(Path contentPath, Path checksumPath) {
         final String expected = HashUtil.md5(contentPath);
@@ -113,6 +110,6 @@ public final class HashUtil {
      * Utility classes should never be instantiated.
      */
     private HashUtil() {
-        instanceNotAllowed(getClass());
+        throw new UnsupportedOperationException();
     }
 }
