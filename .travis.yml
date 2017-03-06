@@ -2,11 +2,15 @@ language: java
 
 jdk:
   - oraclejdk8
+  - oraclejdk9
 
 addons:
   apt:
     packages:
       - oracle-java8-installer
+      - oracle-java9-installer
+      
+dist: trusty
       
 notifications:
   email:
@@ -14,3 +18,4 @@ notifications:
       - dev@speedment.com
     on_success: never  # default: change
     on_failure: always # default: always
+
