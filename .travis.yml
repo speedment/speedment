@@ -10,6 +10,7 @@ addons:
       - oracle-java8-installer
       - oracle-java9-installer
       
+dist: trusty
       
 notifications:
   email:
