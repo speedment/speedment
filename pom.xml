@@ -34,7 +34,7 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment-parent</artifactId>
-    <version>3.0.4-SNAPSHOT</version>
+    <version>3.0.4</version>
     <packaging>pom</packaging>
     
     <!-- Project Metadata -->
@@ -63,7 +63,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         
         <speedment.version>${project.version}</speedment.version>
-        <common.version>1.0.4-SNAPSHOT</common.version>
+        <common.version>1.0.4</common.version>
     </properties>
     
     <organization>
@@ -228,7 +228,7 @@
             
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.0</version>
+                <version>3.6.1</version>
                 
                 <configuration>
                     <compilerArgument>-Xlint:all</compilerArgument>
@@ -440,7 +440,7 @@
                         <!-- http://eclemma.org/jacoco/trunk/doc/maven.html -->
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.7.8</version>
+                        <version>0.7.9</version>
                         
                         <executions>
                             <execution>
@@ -547,7 +547,7 @@
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
-                        <version>1.6.7</version>
+                        <version>1.6.8</version>
                         
                         <extensions>true</extensions>
                         
@@ -592,7 +592,7 @@
             <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>
                 <artifactId>selenium-java</artifactId>
-                <version>3.0.1</version>
+                <version>3.2.0</version>
                 <scope>test</scope>
             </dependency>
 
@@ -612,7 +612,7 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
-                <version>2.6.2</version>
+                <version>2.7.12</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>

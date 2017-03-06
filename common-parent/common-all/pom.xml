@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>1.0.4-SNAPSHOT</version>
+        <version>1.0.4</version>
     </parent>
     
     <artifactId>common-all</artifactId>
@@ -42,13 +42,13 @@
         <invariant.version>1.0.1</invariant.version>
         <function.version>1.0.1</function.version>
         <json.version>1.0.3</json.version>
-        <tuple.version>1.0.3-SNAPSHOT</tuple.version>
+        <tuple.version>1.0.3</tuple.version>
         <logger.version>1.0.3</logger.version>
-        <codegen.version>2.4.4-SNAPSHOT</codegen.version>
+        <codegen.version>2.4.4</codegen.version>
         <codegenxml.version>1.0.2</codegenxml.version>
         <injector.version>1.2.0</injector.version>
         <rest.version>1.0.3</rest.version>
-        <lazy.version>1.0.3-SNAPSHOT</lazy.version>
+        <lazy.version>1.0.3</lazy.version>
         <mapstream.version>2.3.5</mapstream.version>
         <mutablestream.version>1.0.0</mutablestream.version>
         <singletonstream.version>1.0.0</singletonstream.version>
