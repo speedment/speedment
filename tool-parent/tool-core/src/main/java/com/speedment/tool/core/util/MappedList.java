@@ -23,6 +23,7 @@ import javafx.collections.transformation.TransformationList;
 
 import java.util.ArrayList;
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 
 /**
@@ -38,7 +39,7 @@ public final class MappedList<FROM, TO> extends TransformationList<TO, FROM> {
 
     public MappedList(ObservableList<? extends FROM> source, Function<FROM, TO> mapper) {
         super(source);
-        this.mapper = mapper;
+        this.mapper = requireNonNull(mapper);
     }
 
     @Override
@@ -51,6 +52,11 @@ public final class MappedList<FROM, TO> extends TransformationList<TO, FROM> {
         return mapper.apply(getSource().get(index));
     }
 
+    // Java 9 hack
+    int getViewIndex(int index) {
+        return index;
+    }
+    
     @Override
     public int size() {
         return getSource().size();
