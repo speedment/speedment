@@ -20,6 +20,7 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
@@ -27,7 +28,7 @@ import com.speedment.runtime.core.component.connectionpool.PoolableConnection;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.pool.PoolableConnectionImpl;
 import com.speedment.runtime.core.util.DatabaseUtil;
-
+import static com.speedment.runtime.core.util.OptionalUtil.unwrap;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -35,11 +36,9 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.Map;
 import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
-
-import static com.speedment.runtime.core.util.OptionalUtil.unwrap;
-import static java.util.Objects.requireNonNull;
 
 /**
  * A fully concurrent implementation of a connection pool.
@@ -48,7 +47,9 @@ import static java.util.Objects.requireNonNull;
  */
 public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
 
-    private final Logger logger = LoggerManager.getLogger(ConnectionPoolComponentImpl.class);
+    protected static final Logger LOGGER_CONNECTION = LoggerManager.getLogger(
+        ApplicationBuilder.LogType.CONNECTION.getLoggerName()
+    );
 
     private final static long DEFAULT_MAX_AGE = 30_000;
     private final static int DEFAULT_MIN_POOL_SIZE_PER_DB = 32;
@@ -58,9 +59,11 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
 
     private final Map<Long, PoolableConnection> leasedConnections;
     private final Map<String, Deque<PoolableConnection>> pools;
-    
-    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject PasswordComponent passwordComponent;
+
+    private @Inject
+    DbmsHandlerComponent dbmsHandlerComponent;
+    private @Inject
+    PasswordComponent passwordComponent;
 
     public ConnectionPoolComponentImpl() {
         maxAge = DEFAULT_MAX_AGE;
@@ -68,11 +71,10 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
         pools = new ConcurrentHashMap<>();
         leasedConnections = new ConcurrentHashMap<>();
     }
-    
+
     @Override
     public PoolableConnection getConnection(Dbms dbms) {
-        
-        final String uri      = DatabaseUtil.findConnectionUrl(dbmsHandlerComponent, dbms);
+        final String uri = DatabaseUtil.findConnectionUrl(dbmsHandlerComponent, dbms);
         final String username = unwrap(dbms.getUsername());
         final char[] password = unwrap(passwordComponent.get(dbms));
 
@@ -80,50 +82,59 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
     }
 
     @Override
-    public PoolableConnection getConnection(String uri, String user, char[] password) {
+    public PoolableConnection getConnection(
+        final String uri,
+        final String user,
+        final char[] password
+    ) {
         requireNonNull(uri);
         // user nullable
         // password nullable
-        logger.debug("getConnection(" + uri + ", " + user);
+        LOGGER_CONNECTION.debug("getConnection(%s, %s, *****)", uri, user);
         final String key = makeKey(uri, user, password);
         final Deque<PoolableConnection> q = acquireDeque(key);
         final PoolableConnection reusedConnection = pollValidOrNull(q);
         if (reusedConnection != null) {
-            logger.debug("Reuse Connection:" + reusedConnection);
+            LOGGER_CONNECTION.debug("Reuse Connection: %s", reusedConnection);
             return lease(reusedConnection);
         } else {
             final Connection newRawConnection = newConnection(uri, user, password);
             final PoolableConnection newConnection = new PoolableConnectionImpl(uri, user, password, newRawConnection, System.currentTimeMillis() + getMaxAge());
             newConnection.setOnClose(() -> returnConnection(newConnection));
-            logger.debug("New Connection:" + newConnection);
+            LOGGER_CONNECTION.debug("New Connection: %s", newConnection);
             return lease(newConnection);
         }
     }
 
     @Override
-    public Connection newConnection(Dbms dbms) {
-        
-        final String uri      = DatabaseUtil.findConnectionUrl(dbmsHandlerComponent, dbms);
+    public Connection newConnection(final Dbms dbms) {
+        final String uri = DatabaseUtil.findConnectionUrl(dbmsHandlerComponent, dbms);
         final String username = unwrap(dbms.getUsername());
         final char[] password = unwrap(passwordComponent.get(dbms));
-        
+
         return newConnection(uri, username, password);
     }
 
     @Override
-    public Connection newConnection(String uri, String username, char[] password) {
+    public Connection newConnection(
+        final String uri,
+        final String username,
+        final char[] password
+    ) {
         try {
-            return DriverManager.getConnection(uri, username, charsToString(password));
+            final Connection connection = DriverManager.getConnection(uri, username, charsToString(password));
+            LOGGER_CONNECTION.debug("New external connection: %s", connection);
+            return connection;
         } catch (final SQLException ex) {
-            final String msg = "Unable to get connection using url \"" + uri + 
-                "\", user = \"" + username +
-                "\", password = \"********\".";
+            final String msg = "Unable to get connection using url \"" + uri
+                + "\", user = \"" + username
+                + "\", password = \"********\".";
 
-            logger.error(ex, msg);
+            LOGGER_CONNECTION.error(ex, msg);
             throw new SpeedmentException(msg, ex);
         }
     }
-    
+
     @Override
     public void returnConnection(PoolableConnection connection) {
         requireNonNull(connection);
@@ -136,23 +147,23 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
             if (q.size() >= getMaxRetainSize()) {
                 discard(connection);
             } else {
-                logger.debug("Recycled:" + connection);
+                LOGGER_CONNECTION.debug("Recycled: %s", connection);
                 q.addFirst(connection);
             }
         }
     }
-    
+
     private String charsToString(char[] chars) {
         return chars == null ? null : new String(chars);
     }
 
     private void discard(PoolableConnection connection) {
         requireNonNull(connection);
-        logger.debug("Discard:" + connection);
+        LOGGER_CONNECTION.debug("Discard: %s", connection);
         try {
             connection.rawClose();
         } catch (SQLException sqle) {
-            getLogger().error(sqle, "Error closing a connection.");
+            LOGGER_CONNECTION.error(sqle, "Error closing a connection.");
         }
     }
 
@@ -171,7 +182,7 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
         try {
             return connection == null || (connection.getExpires() > System.currentTimeMillis() && !connection.isClosed());
         } catch (SQLException sqle) {
-            getLogger().error(sqle, "Error while checking if a connection is closed.");
+            LOGGER_CONNECTION.error(sqle, "Error while checking if a connection is closed.");
             return false;
         }
     }
@@ -237,7 +248,4 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
         this.maxRetainSize = maxRetainSize;
     }
 
-    private Logger getLogger() {
-        return logger;
-    }
 }

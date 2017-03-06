@@ -16,6 +16,9 @@
  */
 package com.speedment.runtime.core.internal.pool;
 
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
+import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.component.connectionpool.PoolableConnection;
 
 import java.sql.Connection;
@@ -30,6 +33,10 @@ import static java.util.Objects.requireNonNull;
  */
 public final class PoolableConnectionImpl extends PoolableConnectionDelegator implements PoolableConnection {
 
+    protected static final Logger LOGGER_CONNECTION = LoggerManager.getLogger(
+        ApplicationBuilder.LogType.CONNECTION.getLoggerName()
+    );
+
     private static final AtomicLong ID_GENERATOR = new AtomicLong();
     private final long id;
     private final String username;
@@ -41,12 +48,12 @@ public final class PoolableConnectionImpl extends PoolableConnectionDelegator im
 
     public PoolableConnectionImpl(String uri, String username, char[] password, Connection connection, long expires) {
         super(connection);
-        this.id       = ID_GENERATOR.getAndIncrement();
-        this.uri      = requireNonNull(uri);
+        this.id = ID_GENERATOR.getAndIncrement();
+        this.uri = requireNonNull(uri);
         this.username = username; // Nullable
         this.password = password; //nullable
-        this.created  = System.currentTimeMillis();
-        this.expires  = expires;
+        this.created = System.currentTimeMillis();
+        this.expires = expires;
     }
 
     @Override
@@ -61,6 +68,7 @@ public final class PoolableConnectionImpl extends PoolableConnectionDelegator im
 
     @Override
     public void rawClose() throws SQLException {
+        LOGGER_CONNECTION.debug("Closed external connection: %s", connection);
         connection.close();
     }
 

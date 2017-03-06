@@ -728,7 +728,11 @@ public interface ApplicationBuilder<
          * Logging related to configurating the application platform, dependency
          * injection, component configuration etc.
          */
-        APPLICATION_BUILDER;
+        APPLICATION_BUILDER,
+        /**
+         * Logging related to connection handling.
+         */
+        CONNECTION;
 
         private final String loggerName;
 
