@@ -28,10 +28,9 @@ import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.core.internal.component.UserInterfaceComponentImpl;
 import com.speedment.tool.core.internal.util.InjectionLoader;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import static java.util.Objects.requireNonNull;
 import javafx.application.Application;
 import javafx.stage.Stage;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -39,7 +38,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class MainApp extends Application {
 
-    private final static Logger LOGGER = LoggerManager.getLogger(MainApp.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(MainApp.class);
     private static Injector INJECTOR;
     
     public static void setInjector(Injector injector) {

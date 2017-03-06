@@ -17,7 +17,6 @@
 package com.speedment.common.codegen;
 
 import com.speedment.common.codegen.internal.DefaultRenderTree;
-
 import java.util.List;
 
 /**

@@ -16,16 +16,14 @@
  */
 package com.speedment.common.codegen.controller;
 
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.*;
 import com.speedment.common.codegen.model.ClassOrInterface;
 import com.speedment.common.codegen.model.Javadoc;
 import com.speedment.common.codegen.model.JavadocTag;
 import com.speedment.common.codegen.model.Method;
 import com.speedment.common.codegen.model.trait.*;
-
-import java.util.function.Consumer;
-
-import static com.speedment.common.codegen.constant.DefaultJavadocTag.*;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Consumer;
 
 /**
  * This control generates javadoc stubs for all models descending from the

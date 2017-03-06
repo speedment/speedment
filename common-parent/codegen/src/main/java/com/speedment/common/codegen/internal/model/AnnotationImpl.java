@@ -19,9 +19,7 @@ package com.speedment.common.codegen.internal.model;
 import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.modifier.Modifier;
-
 import java.util.*;
-
 import static java.util.Objects.requireNonNull;
 
 /**
