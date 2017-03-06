@@ -48,7 +48,7 @@ abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements Tr
         HasAnnotationUsageView<M>, 
         HasFieldsView<M> {
     
-	protected final static String
+	protected static final String
 		CLASS_STRING      = "class ",
 		INTERFACE_STRING  = "interface ",
 		ENUM_STRING       = "enum ",

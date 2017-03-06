@@ -17,7 +17,6 @@
 package com.speedment.runtime.core.internal.util;
 
 import com.speedment.runtime.core.exception.SpeedmentException;
-
 import java.io.*;
 import java.util.Properties;
 
@@ -28,7 +27,7 @@ import java.util.Properties;
  */
 public final class Settings {
 
-	private final static File SETTINGS_FILE = new File("settings.properties");
+	private static final File SETTINGS_FILE = new File("settings.properties");
 
 	private final Properties props;
 	
@@ -94,7 +93,7 @@ public final class Settings {
 	}
 	
 	private static class Holder {
-		private final static Settings INSTANCE = new Settings();
+		private static final Settings INSTANCE = new Settings();
 	}
 	
 	public static Settings inst() {

@@ -36,7 +36,7 @@ import java.util.stream.Stream;
  */
 public final class DefaultType {
     
-    public static Type WILDCARD = SimpleType.create("?");
+    public static final Type WILDCARD = SimpleType.create("?");
         
     /**
      * Generates a {@link Type} to represent a java standard {@link Class} with
@@ -226,7 +226,7 @@ public final class DefaultType {
         return WRAPPERS.values().stream().map(Type.class::cast);
     }
     
-    private final static Map<String, Class<?>> WRAPPERS;
+    private static final Map<String, Class<?>> WRAPPERS;
     static {
         final Map<String, Class<?>> temp = new HashMap<>();
         
@@ -246,7 +246,7 @@ public final class DefaultType {
      * Utility classes should never be instantiated.
      */
     private DefaultType() {
-        throw new RuntimeException(
+        throw new UnsupportedOperationException(
             "This class should never be instantiated."
         );
     }

@@ -16,16 +16,15 @@
  */
 package com.speedment.generator.translator.util;
 
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
-
 import java.util.*;
+import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-import static java.util.Objects.requireNonNull;
+import java.util.stream.Stream;
 
 /**
  *
@@ -41,7 +40,7 @@ public enum Pluralis {
     private final Set<String> uncountables;
     private final Map<String, String> irregulars;
 
-    Pluralis() {
+    private Pluralis() {
         rules = new ArrayList<>();
         uncountables = new HashSet<>();
         irregulars = new HashMap<>();
@@ -147,7 +146,7 @@ public enum Pluralis {
 
     protected void addUncountable(String... words) {
         requireNonNullElements(words);
-        Arrays.stream(words).map(normalizeMapper()).forEach(uncountables::add);
+        Stream.of(words).map(normalizeMapper()).forEach(uncountables::add);
     }
 
     private String normalize(String input) {
@@ -192,9 +191,9 @@ public enum Pluralis {
 
     private static final class Rule implements Function<String, Optional<String>> {
 
-        protected final String expression;
-        protected final Pattern expressionPattern;
-        protected final String replacement;
+        private final String expression;
+        private final Pattern expressionPattern;
+        private final String replacement;
 
         private Rule(final String expression, final String replacement) {
             this.expression = requireNonNull(expression);

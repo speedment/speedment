@@ -57,29 +57,29 @@ import java.util.stream.Stream;
 /**
  *
  * @author Emil Forslund
- * @since  3.0.2
+ * @since 3.0.2
  */
 public final class TranslatorManagerHelper {
-    
-    private final static Logger LOGGER = 
-        LoggerManager.getLogger(DefaultTranslatorManager.class);
-    
-    private final static String HASH_PREFIX = ".";
-    private final static String HASH_SUFFIX = ".md5";
-    private final static boolean PRINT_CODE = false;
+
+    private static final Logger LOGGER
+        = LoggerManager.getLogger(DefaultTranslatorManager.class);
+
+    private static final String HASH_PREFIX = ".";
+    private static final String HASH_SUFFIX = ".md5";
+    private static final boolean PRINT_CODE = false;
 
     private final AtomicInteger fileCounter = new AtomicInteger(0);
 
-    private @Inject InfoComponent info;
-    private @Inject PathComponent paths;
-    private @Inject EventComponent events;
-    private @Inject CodeGenerationComponent codeGenerationComponent;
-    
+    @Inject private InfoComponent info;
+    @Inject private PathComponent paths;
+    @Inject private EventComponent events;
+    @Inject private CodeGenerationComponent codeGenerationComponent;
+
     public void accept(TranslatorManager delegator, Project project) {
         requireNonNull(project);
         Statistics.onGenerate(info);
 
-        final List<Translator<?, ?>> writeOnceTranslators   = new ArrayList<>();
+        final List<Translator<?, ?>> writeOnceTranslators = new ArrayList<>();
         final List<Translator<?, ?>> writeAlwaysTranslators = new ArrayList<>();
         final Generator gen = new JavaGenerator();
 
@@ -99,15 +99,15 @@ public final class TranslatorManagerHelper {
 
         traverseOver(project, Table.class)
             .filter(HasEnabled::test)
-            .forEach(table -> {
+            .forEach(table -> 
                 codeGenerationComponent.translators(table).forEachOrdered(t -> {
                     if (t.isInGeneratedPackage()) {
                         writeAlwaysTranslators.add(t);
                     } else {
                         writeOnceTranslators.add(t);
                     }
-                });
-            });
+                })
+            );
 
         // Erase any previous unmodified files.
         delegator.clearExistingFiles(project);
@@ -126,7 +126,7 @@ public final class TranslatorManagerHelper {
         events.notify(new AfterGenerate(project, gen, delegator));
     }
 
-    public void clearExistingFiles(TranslatorManager delegator, Project project) {
+    public void clearExistingFiles(Project project) {
         final Path dir = paths.packageLocation();
 
         try {
@@ -154,12 +154,12 @@ public final class TranslatorManagerHelper {
                             && filename.endsWith(HASH_SUFFIX)) {
                             final Path original
                                 = entry
-                                .getParent() // The hidden folder
-                                .getParent() // The parent folder
-                                .resolve(filename.substring( // Lookup original .java file
-                                    HASH_PREFIX.length(),
-                                    filename.length() - HASH_SUFFIX.length()
-                                ));
+                                    .getParent() // The hidden folder
+                                    .getParent() // The parent folder
+                                    .resolve(filename.substring( // Lookup original .java file
+                                        HASH_PREFIX.length(),
+                                        filename.length() - HASH_SUFFIX.length()
+                                    ));
 
                             if (original.toFile().exists()
                                 && HashUtil.compare(original, entry)) {

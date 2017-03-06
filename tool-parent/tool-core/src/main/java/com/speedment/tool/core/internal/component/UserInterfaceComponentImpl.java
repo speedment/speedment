@@ -93,19 +93,7 @@ import javafx.util.Pair;
  */
 public final class UserInterfaceComponentImpl implements UserInterfaceComponent {
     
-        public static InjectBundle include() {
-        return InjectBundle.of(
-            DocumentPropertyComponentImpl.class,
-            SpeedmentBrand.class,
-            InjectionLoader.class,
-            ConfigFileHelper.class,
-            PropertyEditorComponentImpl.class,
-            RuleComponentImpl.class,
-            IssueComponentImpl.class
-        );
-    }
-    
-    private final static Logger LOGGER = LoggerManager.getLogger(UserInterfaceComponentImpl.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(UserInterfaceComponentImpl.class);
 
     private static final String GITHUB_URI = "https://github.com/speedment/speedment/";
     private static final String GITTER_URI = "https://gitter.im/speedment/speedment/";
@@ -131,19 +119,19 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     
     private final AtomicBoolean canGenerate;
     
-    private @Inject DocumentPropertyComponent documentPropertyComponent;
-    private @Inject PasswordComponent passwordComponent;
-    private @Inject ProjectComponent projectComponent;
-    private @Inject ConfigFileHelper configFileHelper;
-    private @Inject InjectionLoader loader;
-    private @Inject RuleComponent rules;
+    @Inject private DocumentPropertyComponent documentPropertyComponent;
+    @Inject private PasswordComponent passwordComponent;
+    @Inject private ProjectComponent projectComponent;
+    @Inject private ConfigFileHelper configFileHelper;
+    @Inject private InjectionLoader loader;
+    @Inject private RuleComponent rules;
     
-    private @Inject Injector injector;
+    @Inject private Injector injector;
     
     private Stage stage;
     private Application application;
     private ProjectProperty project;
-    
+
     private UserInterfaceComponentImpl() {
         notifications        = FXCollections.observableArrayList();
         outputMessages       = FXCollections.observableArrayList();
@@ -151,6 +139,18 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         properties           = FXCollections.observableArrayList();
         contextMenuBuilders  = new ConcurrentHashMap<>();
         canGenerate          = new AtomicBoolean(true);
+    }
+
+    public static InjectBundle include() {
+        return InjectBundle.of(
+            DocumentPropertyComponentImpl.class,
+            SpeedmentBrand.class,
+            InjectionLoader.class,
+            ConfigFileHelper.class,
+            PropertyEditorComponentImpl.class,
+            RuleComponentImpl.class,
+            IssueComponentImpl.class
+        );
     }
     
     public void start(Application application, Stage stage) {
@@ -449,9 +449,9 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
             }
         };
         
-        checked.addListener((ob, o, isChecked) -> {
-            toggler.run();
-        });
+        checked.addListener((ob, o, isChecked) -> 
+            toggler.run()
+        );
         
         // If the item is unchecked, toggle the component initially.
         if (!checked.get()) {
@@ -674,9 +674,9 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
 
     @Override
     public void showNotification(String message, FontAwesomeIcon icon, Palette palette, Runnable action) {
-        runLater(() -> {
-            notifications.add(new NotificationImpl(message, icon, palette, action));
-        });
+        runLater(() -> 
+            notifications.add(new NotificationImpl(message, icon, palette, action))
+        );
     }
     
     /*************************************************************/

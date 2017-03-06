@@ -60,7 +60,7 @@ public final class DefaultTranslatorManager implements TranslatorManager {
 
     @Override
     public void clearExistingFiles(Project project) {
-        helper.clearExistingFiles(this, project);
+        helper.clearExistingFiles(project);
     }
 
     @Override

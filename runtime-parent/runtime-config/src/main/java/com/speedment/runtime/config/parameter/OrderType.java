@@ -38,7 +38,7 @@ public enum OrderType {
         }
 
         @Override
-        public <T> void selectRunnable(Runnable ascAternative, Runnable descAternative) {
+        public void selectRunnable(Runnable ascAternative, Runnable descAternative) {
             ascAternative.run();
         }
 
@@ -54,7 +54,7 @@ public enum OrderType {
         }
 
         @Override
-        public <T> void selectRunnable(Runnable ascAternative, Runnable descAternative) {
+        public void selectRunnable(Runnable ascAternative, Runnable descAternative) {
             descAternative.run();
         }
 
@@ -70,7 +70,7 @@ public enum OrderType {
         }
 
         @Override
-        public <T> void selectRunnable(Runnable ascAternative, Runnable descAternative) {
+        public void selectRunnable(Runnable ascAternative, Runnable descAternative) {
             ascAternative.run();
         }
     };
@@ -79,6 +79,6 @@ public enum OrderType {
 
     public abstract <T> T select(T ascAternative, T descAternative);
 
-    public abstract <T> void selectRunnable(Runnable ascAternative, Runnable descAternative);
+    public abstract void selectRunnable(Runnable ascAternative, Runnable descAternative);
 
 }

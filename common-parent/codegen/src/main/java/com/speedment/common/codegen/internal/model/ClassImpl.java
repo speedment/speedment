@@ -19,7 +19,6 @@ package com.speedment.common.codegen.internal.model;
 import com.speedment.common.codegen.internal.util.Copier;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.Constructor;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;

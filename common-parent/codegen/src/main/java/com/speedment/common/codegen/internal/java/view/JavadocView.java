@@ -41,9 +41,9 @@ import static java.util.stream.Collectors.joining;
 public final class JavadocView implements Transform<Javadoc, String>, 
     HasJavadocTagsView<Javadoc> {
     
-    private final static int BLOCK_WIDTH = 80;
+    private static final int BLOCK_WIDTH = 80;
     
-	private final static String
+	private static final String
 		JAVADOC_DELIMITER = nl() + " * ",
 		JAVADOC_PREFIX    = "/**" + nl() + " * ",
 		JAVADOC_SUFFIX    = nl() + " */";
@@ -148,7 +148,7 @@ public final class JavadocView implements Transform<Javadoc, String>,
 
                     // If this new word is about to push us over the blockWidth,
                     // create a new line and reset the column counter.
-                    final int extraSpace = (col.get() > indentTo ? 1 : 0);
+                    final int extraSpace = col.get() > indentTo ? 1 : 0;
                     if (col.get() + word.length() + extraSpace > blockWidth) {
                         row.append(nl()).append(repeat(" ", indentTo));
                         col.set(indentTo);

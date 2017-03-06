@@ -36,7 +36,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class AutoJavadoc<T extends HasJavadoc<?>> implements Consumer<T> {
     
-	private final static String 
+	private static final String 
 			DEFAULT_TEXT = "Write some documentation here.",
 			DEFAULT_NAME = "Your Name";
  
@@ -91,12 +91,11 @@ public final class AutoJavadoc<T extends HasJavadoc<?>> implements Consumer<T> {
 			}
 		}
 
-		if (model instanceof Method) {
-            if (((Method) model).getType() != void.class) {
-                // Add @return to methods.
-                addTag(doc, RETURN);
-            }
-		}
+        if ((model instanceof Method) && (((Method) model).getType() != void.class)) {
+            // Add @return to methods.
+            addTag(doc, RETURN);
+        }
+		
 		
 		if (model instanceof HasConstructors) {
             // Generate javadoc for each constructor.

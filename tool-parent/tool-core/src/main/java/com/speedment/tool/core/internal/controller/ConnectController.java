@@ -64,24 +64,24 @@ public final class ConnectController implements Initializable {
         DEFAULT_USER = "root",
         DEFAULT_NAME = "db0";
     
-    private @Inject UserInterfaceComponent userInterfaceComponent;
-    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject PasswordComponent passwordComponent;
-    private @Inject ConfigFileHelper configFileHelper;
-    private @Inject EventComponent eventComponent;
-    private @Inject InjectionLoader loader;
+    @Inject private UserInterfaceComponent userInterfaceComponent;
+    @Inject private DbmsHandlerComponent dbmsHandlerComponent;
+    @Inject private PasswordComponent passwordComponent;
+    @Inject private ConfigFileHelper configFileHelper;
+    @Inject private EventComponent eventComponent;
+    @Inject private InjectionLoader loader;
     
-    private @FXML Button buttonOpen;
-    private @FXML TextField fieldHost;
-    private @FXML TextField fieldPort;
-    private @FXML ChoiceBox<String> fieldType;
-    private @FXML TextField fieldName;
-    private @FXML TextField fieldSchema;
-    private @FXML TextField fieldUser;
-    private @FXML PasswordField fieldPass;
-    private @FXML Button buttonConnect;
-    private @FXML HBox container;
-    private @FXML StackPane openContainer;
+    @FXML private Button buttonOpen;
+    @FXML private TextField fieldHost;
+    @FXML private TextField fieldPort;
+    @FXML private ChoiceBox<String> fieldType;
+    @FXML private TextField fieldName;
+    @FXML private TextField fieldSchema;
+    @FXML private TextField fieldUser;
+    @FXML private PasswordField fieldPass;
+    @FXML private Button buttonConnect;
+    @FXML private HBox container;
+    @FXML private StackPane openContainer;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -230,7 +230,6 @@ public final class ConnectController implements Initializable {
             userInterfaceComponent.openProject(USE_EXISTING_STAGE));
         
         buttonConnect.setOnAction(ev -> {
-            
             // Register password in password component
             passwordComponent
                 .put(fieldName.getText(), fieldPass.getText().toCharArray());

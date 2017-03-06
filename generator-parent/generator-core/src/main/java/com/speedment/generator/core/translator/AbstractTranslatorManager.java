@@ -56,7 +56,7 @@ public abstract class AbstractTranslatorManager implements TranslatorManager {
 
     @Override
     public void clearExistingFiles(Project project) {
-        helper.clearExistingFiles(this, project);
+        helper.clearExistingFiles(project);
     }
 
     @Override

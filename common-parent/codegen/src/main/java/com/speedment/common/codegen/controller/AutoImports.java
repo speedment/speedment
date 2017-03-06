@@ -94,21 +94,21 @@ public final class AutoImports implements Consumer<File> {
 		}
 		
 		if (HasAnnotationUsage.class.isInstance(model)) {
-			((HasAnnotationUsage<?>) model).getAnnotations().forEach(a -> {
-				addType(a.getType(), types);
-			});
+			((HasAnnotationUsage<?>) model).getAnnotations().forEach(a -> 
+				addType(a.getType(), types)
+			);
 		}
 		
 		if (HasClasses.class.isInstance(model)) {
-			((HasClasses<?>) model).getClasses().forEach(c -> {
-				findTypesIn(c, types);
-			});
+			((HasClasses<?>) model).getClasses().forEach(c -> 
+				findTypesIn(c, types)
+			);
 		}
 		
 		if (HasConstructors.class.isInstance(model)) {
-			((HasConstructors<?>) model).getConstructors().forEach(c -> {
-				findTypesIn(c, types);
-			});
+			((HasConstructors<?>) model).getConstructors().forEach(c -> 
+				findTypesIn(c, types)
+			);
 		}
 		
 		if (HasFields.class.isInstance(model)) {
@@ -119,17 +119,17 @@ public final class AutoImports implements Consumer<File> {
 		}
 		
 		if (HasGenerics.class.isInstance(model)) {
-			((HasGenerics<?>) model).getGenerics().forEach(g -> {
-				g.getUpperBounds().forEach(ub -> {
-					addType(ub, types);
-				});
-			});
+			((HasGenerics<?>) model).getGenerics().forEach(g -> 
+				g.getUpperBounds().forEach(ub -> 
+					addType(ub, types)
+				)
+			);
 		}
 		
 		if (HasImplements.class.isInstance(model)) {
-			((HasImplements<?>) model).getInterfaces().forEach(i -> {
-				addType(i, types);
-			});
+			((HasImplements<?>) model).getInterfaces().forEach(i -> 
+				addType(i, types)
+			);
 		}
 		
 		if (HasMethods.class.isInstance(model)) {
@@ -140,9 +140,9 @@ public final class AutoImports implements Consumer<File> {
 		}
         
         if (HasThrows.class.isInstance(model)) {
-			((HasThrows<?>) model).getExceptions().forEach(e -> {
-				addType(e, types);
-			});
+			((HasThrows<?>) model).getExceptions().forEach(e -> 
+				addType(e, types)
+			);
 		}
 		
 		if (HasType.class.isInstance(model)) {
@@ -177,19 +177,18 @@ public final class AutoImports implements Consumer<File> {
 
         // If the class is not a primitive type and it should be ignored, add
         // it to the ignore list.
-		if (name.contains(".")) {
-            if (!mgr.isIgnored(name)) {
-                final String shortName = Formatting.shortName(name);
+		if (name.contains(".") && !mgr.isIgnored(name)) {
+            final String shortName = Formatting.shortName(name);
 
-                // If a import already exists with the same suffix, ignore it.
-                if (types.keySet().stream()
-                        .map(Formatting::shortName)
-                        .noneMatch(shortName::equals)) {
+            // If a import already exists with the same suffix, ignore it.
+            if (types.keySet().stream()
+                .map(Formatting::shortName)
+                .noneMatch(shortName::equals)) {
 
-                    types.put(name, type);
-                }
-			}
-		}
+                types.put(name, type);
+            }
+
+        }
         
         // Recurse over any type parameters this type might have.
         if (type instanceof ParameterizedType) {

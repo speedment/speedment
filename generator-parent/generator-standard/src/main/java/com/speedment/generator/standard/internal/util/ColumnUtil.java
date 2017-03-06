@@ -19,11 +19,8 @@ package com.speedment.generator.standard.internal.util;
 import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.trait.HasNullable;
-
 import java.lang.reflect.Type;
 import java.util.Optional;
-
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  *
@@ -61,6 +58,6 @@ public final class ColumnUtil {
      * Utility classes should not be instantiated.
      */
     private ColumnUtil() {
-        instanceNotAllowed(ColumnUtil.class);
+        throw new UnsupportedOperationException();
     }
 }

@@ -53,8 +53,8 @@ import java.util.StringJoiner;
  */
 public final class GeneratedEntityImplTranslator extends AbstractEntityAndManagerTranslator<Class> {
 
-    private @Inject TypeMapperComponent typeMappers;
-    private @Inject Injector injector;
+    @Inject private TypeMapperComponent typeMappers;
+    @Inject private Injector injector;
     
     public GeneratedEntityImplTranslator(Table table) {
         super(table, Class::of);
@@ -69,12 +69,12 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
             /**
              * Class details
              */
-            .forEveryTable((clazz, table) -> {
+            .forEveryTable((clazz, table) -> 
                 clazz.public_()
                     .abstract_()
                     .add(getSupport().entityType())
-                    .add(Constructor.of().protected_());
-            })
+                    .add(Constructor.of().protected_())
+            )
             
             /**
              * Getters
@@ -96,23 +96,22 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
                 clazz
                     .add(fieldFor(col).private_())
                     .add(Method.of(GETTER_METHOD_PREFIX + getSupport().typeName(col), retType)
-                        .public_()
-                        .add(OVERRIDE)
+                        .public_().add(OVERRIDE)
                         .add("return " + getter + ";"));
             })
             
             /**
              * Setters
              */
-            .forEveryColumn((clazz, col) -> {
+            .forEveryColumn((clazz, col) -> 
                 clazz
                     .add(Method.of(SETTER_METHOD_PREFIX + getSupport().typeName(col), getSupport().entityType())
                         .public_()
                         .add(OVERRIDE)
                         .add(fieldFor(col))
                         .add("this." + getSupport().variableName(col) + " = " + getSupport().variableName(col) + ";")
-                        .add("return this;"));
-            })
+                        .add("return this;"))
+            )
             
             /**
              * Finders
@@ -159,12 +158,12 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
             })
             
             // We need to make it POST_MAKE because other plugins might add fields
-            .forEveryTable(Phase.POST_MAKE, (clazz, table) -> {
+            .forEveryTable(Phase.POST_MAKE, (clazz, table) -> 
                 clazz
                     .add(toStringMethod(file))
                     .add(equalsMethod())
-                    .add(hashCodeMethod());
-            })
+                    .add(hashCodeMethod())
+            )
             .build();
 
     }

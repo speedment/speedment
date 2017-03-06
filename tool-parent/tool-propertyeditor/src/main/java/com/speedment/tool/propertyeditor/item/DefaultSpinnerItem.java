@@ -16,6 +16,8 @@
  */
 package com.speedment.tool.propertyeditor.item;
 
+import static java.util.Objects.requireNonNull;
+import java.util.function.UnaryOperator;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -27,10 +29,6 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.SpinnerValueFactory.IntegerSpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-
-import java.util.function.UnaryOperator;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * An editor for editing a StringProperty via an IntegerSpinner, which has a default value. The user
@@ -45,7 +43,8 @@ public class DefaultSpinnerItem extends AbstractLabelTooltipItem {
     private final ObservableIntegerValue defaultValue;
     private final ObjectProperty<Integer> value;        //Output value
     private final ObjectProperty<Integer> customValue;  
-    private final int min, max;
+    private final int min,
+        max;
 
     /**
      * Creates a new DefaultSpinnerItem. 
@@ -65,11 +64,11 @@ public class DefaultSpinnerItem extends AbstractLabelTooltipItem {
      * @param tooltip       the tooltip
      */
     public DefaultSpinnerItem(
-            String label, 
-            ObservableIntegerValue defaultValue, 
-            IntegerProperty value, 
-            String tooltip) {
-        
+        final String label,
+        final ObservableIntegerValue defaultValue,
+        final IntegerProperty value,
+        final String tooltip
+    ) {
         this(label, defaultValue, value, tooltip, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
     
@@ -92,12 +91,12 @@ public class DefaultSpinnerItem extends AbstractLabelTooltipItem {
      * @param decorator     the editor decorator
      */
     public DefaultSpinnerItem(
-            String label, 
-            ObservableIntegerValue defaultValue, 
-            IntegerProperty value, 
-            String tooltip, 
-            UnaryOperator<Node> decorator) {
-        
+        final String label,
+        final ObservableIntegerValue defaultValue,
+        final IntegerProperty value,
+        final String tooltip,
+        final UnaryOperator<Node> decorator
+    ) {
         this(label, defaultValue, value, tooltip, Integer.MIN_VALUE, Integer.MAX_VALUE, decorator);
     }
 
@@ -121,13 +120,13 @@ public class DefaultSpinnerItem extends AbstractLabelTooltipItem {
      * @param max           the maximum spinner value
      */
     public DefaultSpinnerItem(
-            String label, 
-            ObservableIntegerValue defaultValue, 
-            IntegerProperty value, 
-            String tooltip, 
-            int min, 
-            int max) {
-        
+        final String label,
+        final ObservableIntegerValue defaultValue,
+        final IntegerProperty value,
+        final String tooltip,
+        final int min,
+        final int max
+    ) {
         this(label, defaultValue, value, tooltip, min, max, NO_DECORATOR);
     }
     
@@ -152,91 +151,92 @@ public class DefaultSpinnerItem extends AbstractLabelTooltipItem {
      * @param decorator     the editor decorator
      */
     public DefaultSpinnerItem(
-            String label, 
-            ObservableIntegerValue defaultValue, 
-            IntegerProperty value, 
-            String tooltip, 
-            int min, 
-            int max, 
-            UnaryOperator<Node> decorator) {
-        
+        final String label,
+        final ObservableIntegerValue defaultValue,
+        final IntegerProperty value,
+        final String tooltip,
+        final int min,
+        final int max,
+        final UnaryOperator<Node> decorator
+    ) {
         super(label, tooltip, decorator);
-        
+
         this.defaultValue = requireNonNull(defaultValue);
-        this.value        = requireNonNull(value).asObject();
-        this.customValue  = new SimpleIntegerProperty().asObject();
-        this.min          = min;
-        this.max          = max;
+        this.value = requireNonNull(value).asObject();
+        this.customValue = new SimpleIntegerProperty().asObject();
+        this.min = min;
+        this.max = max;
     }
 
     @Override
     protected Node createUndecoratedEditor() {
         final boolean usesDefaultValue = value.getValue() == null || value.getValue().equals(defaultValue.getValue());
-        
+
         final HBox container = new HBox();
         final CheckBox auto = new CheckBox("Auto");
         final Spinner<Integer> spinner = new Spinner<>();
-        
+
         final IntegerSpinnerValueFactory svf = new SpinnerValueFactory.IntegerSpinnerValueFactory(min, max);
         spinner.setValueFactory(svf);
         spinner.disableProperty().bind(auto.selectedProperty());
         spinner.setEditable(true);
-        
+
         auto.setSelected(usesDefaultValue);
-        attachListener(auto.selectedProperty(), (ov, o, isAuto) -> 
-            setSpinnerBehaviour(svf, isAuto, defaultValue, customValue)
+        attachListener(auto.selectedProperty(), (ov, o, isAuto)
+            -> setSpinnerBehaviour(svf, isAuto, defaultValue, customValue)
         );
-        
+
         customValue.setValue(usesDefaultValue ? defaultValue.get() : value.get());
         setSpinnerBehaviour(svf, usesDefaultValue, defaultValue, customValue);
-        
+
         final TextField editor = spinner.getEditor();
         attachListener(editor.textProperty(), (ov, oldVal, newVal) -> {
             try {
-                Integer.parseInt(newVal);                
-            } catch (final NumberFormatException ex){
+                Integer.parseInt(newVal);
+            } catch (final NumberFormatException ex) {
                 editor.setText(oldVal);
             }
         });
-        
+
         attachListener(editor.focusedProperty(), (ov, wasFocused, isFocused) -> {
-            if(wasFocused) {
-                try{
-                    final int editorValue = Integer.parseInt( editor.getText() );
-                    if( editorValue > max){
-                        editor.setText( String.valueOf(max) );
-                    } else if( editorValue < min ){
-                        editor.setText( String.valueOf(min) );
-                    } 
+            if (wasFocused) {
+                try {
+                    final int editorValue = Integer.parseInt(editor.getText());
+                    if (editorValue > max) {
+                        editor.setText(String.valueOf(max));
+                    } else if (editorValue < min) {
+                        editor.setText(String.valueOf(min));
+                    }
                 } catch (final NumberFormatException ex) {
                     throw new RuntimeException("Unable to parse an integer from editor field", ex);
                 }
-            } 
+            }
         });
-        
+
         attachListener(svf.valueProperty(), (ov, o, n) -> {
-            if( n == null || n == defaultValue.get() ){
+            if (n == null || n == defaultValue.get()) {
                 value.setValue(null);
             } else {
                 value.setValue(n);
             }
         });
-        
+
         container.getChildren().addAll(auto, spinner);
         return container;
     }
 
     private static void setSpinnerBehaviour(
-            IntegerSpinnerValueFactory svf, 
-            boolean useDefaultValue, 
-            ObservableIntegerValue defaultValue, 
-            ObjectProperty<Integer> customValue) {
+        final IntegerSpinnerValueFactory svf,
+        final boolean useDefaultValue,
+        final ObservableIntegerValue defaultValue,
+        final ObjectProperty<Integer> customValue
+    ) {
         if (useDefaultValue) {
-            svf.valueProperty().unbindBidirectional( customValue );
+            svf.valueProperty().unbindBidirectional(customValue);
             svf.setValue(defaultValue.get());
         } else {
             svf.setValue(customValue.getValue());
-            svf.valueProperty().bindBidirectional( customValue );
+            svf.valueProperty().bindBidirectional(customValue);
         }
-    }    
+    }
 }

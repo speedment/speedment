@@ -51,15 +51,29 @@ import static javafx.util.Duration.millis;
  */
 public final class NotificationController implements Initializable {
 
+    private static final int 
+        ENTER_SPEED = 350, 
+        EXIT_SPEED = 350,
+        ENTER_Y = 100;
+    
+    private static final String ICON_SIZE = "24";
+    private static final String NOTIFICATION_FXML = "/fxml/Notification.fxml";
+    private static final Duration TIMER = Duration.seconds(10);
+    
     private final String message;
     private final FontAwesomeIcon icon;
     private final Palette palette;
     private final Runnable onClose;
     private final AtomicBoolean destroyed;
     
-    private @FXML Label notification;
+    @FXML private Label notification;
     
-    private NotificationController(String message, FontAwesomeIcon icon, Palette palette, Runnable onClose) {
+    private NotificationController(
+        final String message, 
+        final FontAwesomeIcon icon, 
+        final Palette palette, 
+        final Runnable onClose
+    ) {
         this.message = requireNonNull(message);
         this.icon    = requireNonNull(icon);
         this.palette = requireNonNull(palette);
@@ -78,7 +92,7 @@ public final class NotificationController implements Initializable {
         notification.getStyleClass().add(palette.name().toLowerCase());
     }
     
-    public @FXML void close() {
+    @FXML public void close() {
         if (destroyed.compareAndSet(false, true)) {
             onClose.run();
             remove(notification);
@@ -188,12 +202,5 @@ public final class NotificationController implements Initializable {
         }
     }
     
-    private final static int 
-        ENTER_SPEED = 350, 
-        EXIT_SPEED = 350,
-        ENTER_Y = 100;
-    
-    private final static String ICON_SIZE = "24";
-    private final static String NOTIFICATION_FXML = "/fxml/Notification.fxml";
-    private final static Duration TIMER = Duration.seconds(10);
+
 }

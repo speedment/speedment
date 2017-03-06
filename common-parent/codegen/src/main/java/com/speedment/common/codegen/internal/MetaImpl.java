@@ -89,7 +89,7 @@ public final class MetaImpl<A, B> implements Meta<A, B> {
         return "MetaImpl{" + "model=" + model + ", result=" + result + ", transform=" + transform + ", factory=" + factory + ", stack=" + stack + ", tree=" + tree + '}';
     }
    
-    public final static class Builder<A, B> implements Meta.Builder<A, B> {
+    public static final class Builder<A, B> implements Meta.Builder<A, B> {
         
         private A model;
         private B result;

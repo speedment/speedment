@@ -58,6 +58,7 @@ import com.speedment.runtime.core.util.OptionalUtil;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
 import java.lang.reflect.Type;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
@@ -71,10 +72,10 @@ import java.util.stream.Stream;
  */
 public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTranslator<Interface> {
 
-    public final static String IDENTIFIER_NAME = "Identifier";
+    public static final String IDENTIFIER_NAME = "Identifier";
 
-    private @Inject Injector injector;
-    private @Inject TypeMapperComponent typeMappers;
+    @Inject private Injector injector;
+    @Inject private TypeMapperComponent typeMappers;
 
     public GeneratedEntityTranslator(Table table) {
         super(table, Interface::of);
@@ -100,15 +101,15 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
             )
             .add(Method.of("getDbmsName", String.class).public_()
                 .add(OVERRIDE)
-                .add("return \"" + getSupport().dbmsOrThrow().getName() + "\";")
+                .add(returnString(getSupport().dbmsOrThrow().getName()))
             )
             .add(Method.of("getSchemaName", String.class).public_()
                 .add(OVERRIDE)
-                .add("return \"" + getSupport().schemaOrThrow().getName() + "\";")
+                .add(returnString(getSupport().schemaOrThrow().getName()))
             )
             .add(Method.of("getTableName", String.class).public_()
                 .add(OVERRIDE)
-                .add("return \"" + getSupport().tableOrThrow().getName() + "\";")
+                .add(returnString(getSupport().tableOrThrow().getName()))
             )
             .add(Method.of("getColumnName", String.class).public_()
                 .add(OVERRIDE)
@@ -149,7 +150,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
             /**
              * Setters
              */
-            .forEveryColumn((intrf, col) -> {
+            .forEveryColumn((intrf, col) -> 
                 intrf.add(Method.of(SETTER_METHOD_PREFIX + getSupport().typeName(col), getSupport().entityType())
                     .add(Field.of(getSupport().variableName(col), typeMappers.get(col).getJavaType(col)))
                     .set(Javadoc.of(
@@ -161,13 +162,13 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                     )
                         .add(PARAM.setValue(getSupport().variableName(col)).setText("to set of this " + getSupport().entityName()))
                         .add(RETURN.setText("this " + getSupport().entityName() + " instance")))
-                );
-            })
+                )
+            )
             
             /**
              * Finders
              */
-            .forEveryColumn((intrf, col) -> {
+            .forEveryColumn((intrf, col) -> 
                 EntityTranslatorSupport.getForeignKey(
                     getSupport().tableOrThrow(), col
                 ).ifPresent(fkc -> {
@@ -193,8 +194,8 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                             Manager.class, fuSupport.entityType()
                         )))
                     );
-                });
-            })
+                })
+            )
             
             /**
              * Fields
@@ -316,5 +317,10 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
         }
 
         return retType;
+    }
+    
+    private String returnString(String s) {
+        requireNonNull(s);
+        return "return \""+s+"\";";
     }
 }

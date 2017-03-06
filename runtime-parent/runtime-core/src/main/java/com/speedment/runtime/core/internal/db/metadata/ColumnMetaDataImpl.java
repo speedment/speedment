@@ -29,7 +29,7 @@ import java.sql.SQLException;
  */
 public class ColumnMetaDataImpl implements ColumnMetaData {
 
-    private final static Logger LOGGER = LoggerManager.getLogger(ColumnMetaDataImpl.class);
+    private static final Logger LOGGER = LoggerManager.getLogger(ColumnMetaDataImpl.class);
 
     private final String tableCat;
     private final String tableSchem;
@@ -87,17 +87,17 @@ public class ColumnMetaDataImpl implements ColumnMetaData {
         private final int value;
         private final boolean isNull;
 
-        public IntHolder(ResultSet rs, SqlIntSupplier supplier) {
-            int value = 0;
-            boolean isNull = true;
+        IntHolder(ResultSet rs, SqlIntSupplier supplier) {
+            int val = 0;
+            boolean isValueNull= true;
             try {
-                value = supplier.get();
-                isNull = rs.wasNull();
+                val = supplier.get();
+                isValueNull = rs.wasNull();
             } catch (SQLException sqle) {
                 // Ignore, value = 0 and wasNull true
             }
-            this.value = value;
-            this.isNull = isNull;
+            this.value = val;
+            this.isNull = isValueNull;
         }
 
         public int getValue() {

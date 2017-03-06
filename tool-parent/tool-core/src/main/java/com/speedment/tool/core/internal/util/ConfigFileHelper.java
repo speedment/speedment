@@ -72,72 +72,79 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author  Emil Forslund
- * @since   3.0.0
+ * @author Emil Forslund
+ * @since 3.0.0
  */
 @InjectKey(ConfigFileHelper.class)
 public final class ConfigFileHelper {
-    
-    private final static Logger LOGGER = LoggerManager.getLogger(ConfigFileHelper.class);
+
+    private static final Logger LOGGER = LoggerManager.getLogger(ConfigFileHelper.class);
     public static final String DEFAULT_CONFIG_LOCATION = "src/main/json/speedment.json";
-    
-    private @Inject DocumentPropertyComponent documentPropertyComponent;
-    private @Inject UserInterfaceComponent userInterfaceComponent;
-    private @Inject DbmsHandlerComponent dbmsHandlerComponenet;
-    private @Inject TranslatorManager translatorManager;
-    private @Inject ProjectComponent projectComponent;
-    private @Inject Injector injector;
-    
+
+    private static final Predicate<File> OPEN_FILE_CONDITIONS = file
+        -> file != null
+        && file.exists()
+        && file.isFile()
+        && file.canRead()
+        && file.getName().toLowerCase().endsWith(".json");
+
+    @Inject private DocumentPropertyComponent documentPropertyComponent;
+    @Inject private UserInterfaceComponent userInterfaceComponent;
+    @Inject private DbmsHandlerComponent dbmsHandlerComponenet;
+    @Inject private TranslatorManager translatorManager;
+    @Inject private ProjectComponent projectComponent;
+    @Inject private Injector injector;
+
     private File currentlyOpenFile;
-    
+
     public boolean isFileOpen() {
         return currentlyOpenFile != null;
     }
-    
+
     public File getCurrentlyOpenFile() {
         return currentlyOpenFile;
     }
-    
+
     public void setCurrentlyOpenFile(File currentlyOpenFile) {
         this.currentlyOpenFile = currentlyOpenFile; // Nullable
     }
-    
+
     public void loadFromDatabaseAndSaveToFile() {
         final ProjectProperty project = new ProjectProperty();
         final Project loaded = projectComponent.getProject();
-        
+
         if (loaded != null) {
             project.merge(documentPropertyComponent, loaded);
         } else {
             throw new SpeedmentToolException(
-                "Can't load from database unless either a dbms and schema " + 
-                "is specified or a config file is present."
+                "Can't load from database unless either a dbms and schema "
+                + "is specified or a config file is present."
             );
         }
-        
+
         project.dbmses().map(dbms -> {
             final DbmsType dbmsType = dbmsHandlerComponenet.findByName(dbms.getTypeName())
                 .orElseThrow(() -> new SpeedmentToolException(
-                    "Could not find dbms type with name '" + dbms.getTypeName() + "'."
-                ));
+                "Could not find dbms type with name '" + dbms.getTypeName() + "'."
+            ));
 
             LOGGER.info(String.format(
                 "Reloading from dbms '%s' on %s:%d.",
-                dbms.getName(), 
-                dbms.getIpAddress().orElse("127.0.0.1"), 
+                dbms.getName(),
+                dbms.getIpAddress().orElse("127.0.0.1"),
                 dbms.getPort().orElseGet(dbmsType::getDefaultPort)
             ));
 
             final Predicate<String> schemaFilter;
             final Set<String> schemaNames = dbms.schemas()
                 .map(Schema::getName).collect(toSet());
-            
+
             if (schemaNames.isEmpty()) {
                 schemaFilter = s -> true;
             } else {
                 schemaFilter = schemaNames::contains;
             }
-            
+
             return dbmsType.getMetadataHandler()
                 .readSchemaMetadata(dbms, new ProgressMeasurerImpl(), schemaFilter);
         }).forEachOrdered(fut -> {
@@ -152,7 +159,7 @@ public final class ConfigFileHelper {
                 throw new SpeedmentToolException("Reload sequence was interrupted.", ex);
             }
         });
-        
+
         saveConfigFile(
             currentlyOpenFile == null
                 ? new File(DEFAULT_CONFIG_LOCATION)
@@ -161,13 +168,13 @@ public final class ConfigFileHelper {
             false
         );
     }
-    
+
     public boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
         try {
             // Create an immutable copy of the tree and store in the ProjectComponent
             final Project projectCopy = ImmutableProject.wrap(userInterfaceComponent.projectProperty());
             projectComponent.setProject(projectCopy);
-            
+
             // TODO: This method needs to be refactored. We create multiple
             // copies of the config tree, but most of the copies are not deep
             // but shallow, meaning that as soon as you start traversing them
@@ -178,13 +185,12 @@ public final class ConfigFileHelper {
             // handler already does a second deep safe-copy of the given tree,
             // but that is both unnescessary and very bad for load performance.
             // We should try to limit the method to a maximum of one deep copy.
-            
             // Create a copy of everything in Dbms EXCEPT the schema key. This
             // is a hack to prevent duplication errors that would otherwise
             // occure if you change name of a node and reload.
-            final Map<String, Object> dbmsData = 
-                new ConcurrentSkipListMap<>(dbms.getData());
-            
+            final Map<String, Object> dbmsData
+                = new ConcurrentSkipListMap<>(dbms.getData());
+
             dbmsData.remove(Dbms.SCHEMAS);
             final Dbms dbmsCopy = new DbmsImpl(dbms.getParentOrThrow(), dbmsData);
 
@@ -192,35 +198,32 @@ public final class ConfigFileHelper {
             final DbmsMetadataHandler dh = dbmsHandlerComponenet.findByName(dbmsCopy.getTypeName())
                 .map(DbmsType::getMetadataHandler)
                 .orElseThrow(() -> new SpeedmentToolException(
-                    "Could not find metadata handler for DbmsType '" + dbmsCopy.getTypeName() + "'."
-                ));
-            
+                "Could not find metadata handler for DbmsType '" + dbmsCopy.getTypeName() + "'."
+            ));
+
             // Begin executing the loading with a progress measurer
             final ProgressMeasure progress = ProgressMeasure.create();
             final CompletableFuture<Boolean> future
                 = dh.readSchemaMetadata(dbmsCopy, progress, schemaName::equalsIgnoreCase)
-                .handleAsync((p, ex) -> {
-                    progress.setProgress(ProgressMeasure.DONE);
+                    .handleAsync((p, ex) -> {
+                        progress.setProgress(ProgressMeasure.DONE);
 
-                    // If the loading was successfull
-                    if (ex == null && p != null) {
-                        
-                        // Make sure any old data is cleared before merging in
-                        // the new state from the database.
-                        dbms.schemasProperty().clear();
-                        userInterfaceComponent.projectProperty().merge(documentPropertyComponent, p);
-                        
-                        return true;
-                        
-                    } else {
-                        runLater(() -> {
-                            userInterfaceComponent.showError("Error Connecting to Database",
-                                "A problem occured with establishing the database connection.", ex
-                            );
-                        });
-                        return false;
-                    }
-                });
+                        // If the loading was successfull
+                        if (ex == null && p != null) {
+                            // Make sure any old data is cleared before merging in
+                            // the new state from the database.
+                            dbms.schemasProperty().clear();
+                            userInterfaceComponent.projectProperty().merge(documentPropertyComponent, p);
+                            return true;
+                        } else {
+                            runLater(() -> {
+                                userInterfaceComponent.showError("Error Connecting to Database",
+                                    "A problem occured with establishing the database connection.", ex
+                                );
+                            });
+                            return false;
+                        }
+                    });
 
             userInterfaceComponent.showProgressDialog("Loading Database Metadata", progress, future);
 
@@ -253,19 +256,19 @@ public final class ConfigFileHelper {
                         final Stage newStage = new Stage();
                         final InjectorBuilder injectorBuilder = injector.newBuilder()
                             .withParam(METADATA_LOCATION, DEFAULT_CONFIG_LOCATION);
-                        final Speedment newSpeedment = 
-                            new DefaultApplicationBuilder(injectorBuilder)
+                        final Speedment newSpeedment
+                            = new DefaultApplicationBuilder(injectorBuilder)
                                 .build();
-                        
+
                         MainApp.setInjector(newSpeedment.getOrThrow(Injector.class));
                         final MainApp main = new MainApp();
-                        
+
                         try {
                             main.start(newStage);
                         } catch (final Exception ex) {
                             throw new SpeedmentToolException(ex);
                         }
-                        
+
                         break;
 
                     case USE_EXISTING_STAGE:
@@ -294,7 +297,7 @@ public final class ConfigFileHelper {
             );
         }
     }
-    
+
     private Map<String, Object> fromJson(String json) {
         @SuppressWarnings("unchecked")
         final Map<String, Object> parsed = (Map<String, Object>) Json.fromJson(json);
@@ -339,7 +342,7 @@ public final class ConfigFileHelper {
             saveConfigFile(file);
         }
     }
-    
+
     public void saveCurrentlyOpenConfigFile() {
         saveConfigFile(currentlyOpenFile);
     }
@@ -347,7 +350,7 @@ public final class ConfigFileHelper {
     public void saveConfigFile(File file) {
         saveConfigFile(file, userInterfaceComponent.projectProperty(), true);
     }
-    
+
     private void saveConfigFile(File file, ProjectProperty project, boolean isGraphical) {
         final Path path = file.toPath();
         final Path parent = path.getParent();
@@ -364,32 +367,33 @@ public final class ConfigFileHelper {
 
             final String absolute = file.getAbsolutePath();
             Settings.inst().set("project_location", absolute);
-            
+
             if (isGraphical) {
                 userInterfaceComponent.log(success("Saved project file to '" + absolute + "'."));
                 userInterfaceComponent.showNotification("Configuration saved.", FontAwesomeIcon.SAVE, Palette.INFO);
             }
-            
+
             currentlyOpenFile = file;
 
         } catch (final IOException ex) {
             if (isGraphical) {
                 userInterfaceComponent.showError("Could not save file", ex.getMessage(), ex);
-            } else throw new SpeedmentToolException(ex);
+            } else {
+                throw new SpeedmentToolException(ex);
+            }
         }
     }
-    
+
     public void generateSources() {
-        
-        
+
         try {
-            translatorManager.accept( projectComponent.getProject() );
+            translatorManager.accept(projectComponent.getProject());
 //            stopwatch.stop();
 
             runLater(() -> {
                 userInterfaceComponent.log(OutputUtil.success(
                     "+------------: Generation completed! :------------+" + "\n"
-    //                + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
+                    //                + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
                     + "| Files generated  " + alignRight("" + Integer.toString(translatorManager.getFilesCreated()), 30) + " |\n"
                     + "+-------------------------------------------------+"
                 ));
@@ -408,7 +412,7 @@ public final class ConfigFileHelper {
             runLater(() -> {
                 userInterfaceComponent.log(OutputUtil.error(
                     "+--------------: Generation failed! :-------------+" + "\n"
-    //                + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
+                    //                + "| Total time       " + alignRight(stopwatch.toString(), 30) + " |\n"
                     + "| Files generated  " + alignRight("" + Integer.toString(translatorManager.getFilesCreated()), 30) + " |\n"
                     + "| Exception Type   " + alignRight(ex.getClass().getSimpleName(), 30) + " |\n"
                     + "+-------------------------------------------------+"
@@ -421,11 +425,5 @@ public final class ConfigFileHelper {
             });
         }
     }
-    
-    private static final Predicate<File> OPEN_FILE_CONDITIONS = file
-        -> file != null
-        && file.exists()
-        && file.isFile()
-        && file.canRead()
-        && file.getName().toLowerCase().endsWith(".json");
+
 }
