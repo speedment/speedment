@@ -35,6 +35,7 @@ public interface Schema extends
         Document,
         HasParent<Dbms>,
         HasEnabled,
+        HasId,        
         HasName,
         HasChildren,
         HasAlias,

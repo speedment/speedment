@@ -25,6 +25,7 @@ import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 
 import static com.speedment.runtime.config.Index.INDEX_COLUMNS;
 import static com.speedment.runtime.config.Index.UNIQUE;
+import com.speedment.runtime.config.mutator.trait.HasIdMutator;
 import static com.speedment.runtime.config.util.DocumentUtil.newDocument;
 
 /**
@@ -34,6 +35,7 @@ import static com.speedment.runtime.config.util.DocumentUtil.newDocument;
  */
 
 public class IndexMutator<DOC extends Index> extends DocumentMutatorImpl<DOC> implements 
+        HasIdMutator<DOC>,    
         HasEnabledMutator<DOC>, 
         HasNameMutator<DOC> {
 

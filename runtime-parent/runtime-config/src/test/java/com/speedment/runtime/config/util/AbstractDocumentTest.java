@@ -50,7 +50,9 @@ import org.junit.Before;
  */
 public abstract class AbstractDocumentTest {
 
-    Project project;
+    protected static final String DBMS_A_ID = "Dbms A Id";
+    
+    protected Project project;
     protected Dbms dbmsA, dbmsB;
     protected Schema schemaA, schemaB;
     protected Table tableA, tableB, tableC, tableD;
@@ -67,8 +69,10 @@ public abstract class AbstractDocumentTest {
             entry(Project.NAME, "Project"),
             entry(Project.ENABLED, true),
             entry(Project.DBMSES, map(
+                entry(Dbms.ID, DBMS_A_ID),
                 entry(Dbms.NAME, "Dbms A"),
                 entry(Dbms.ENABLED, true),
+                entry(Dbms.TYPE_NAME, "MySQL"),
                 entry(Dbms.SCHEMAS, map(
                     entry(Schema.NAME, "Schema A"),
                     entry(Schema.ALIAS, "Custom Schema A"),
@@ -130,6 +134,7 @@ public abstract class AbstractDocumentTest {
             ), map(
                 entry(Dbms.NAME, "Dbms B"),
                 entry(Dbms.ENABLED, true),
+                entry(Dbms.TYPE_NAME, "MySQL"),
                 entry(Dbms.SCHEMAS, map(
                     entry(Schema.NAME, "Schema B"),
                     entry(Schema.ALIAS, "Custom Schema B"),

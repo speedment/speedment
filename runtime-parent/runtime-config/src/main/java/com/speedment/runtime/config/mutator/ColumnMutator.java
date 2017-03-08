@@ -24,6 +24,7 @@ import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 import com.speedment.runtime.config.mutator.trait.HasOrdinalPositionMutator;
 
 import static com.speedment.runtime.config.Column.*;
+import com.speedment.runtime.config.mutator.trait.HasIdMutator;
 import static com.speedment.runtime.config.trait.HasNullable.NULLABLE;
 
 /**
@@ -34,6 +35,7 @@ import static com.speedment.runtime.config.trait.HasNullable.NULLABLE;
 
 public class ColumnMutator<DOC extends Column> extends DocumentMutatorImpl<DOC> implements 
         HasEnabledMutator<DOC>, 
+        HasIdMutator<DOC>,
         HasNameMutator<DOC>, 
         HasAliasMutator<DOC>, 
         HasOrdinalPositionMutator<DOC> {

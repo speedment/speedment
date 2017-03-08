@@ -33,6 +33,7 @@ import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
  */
 public final class ImmutableForeignKeyColumn extends ImmutableDocument implements ForeignKeyColumn {
 
+    private final transient String id;
     private final transient String name;
     private final transient int ordinalPosition;
     private final transient String foreignColumnName;
@@ -46,7 +47,8 @@ public final class ImmutableForeignKeyColumn extends ImmutableDocument implement
         super(parent, requireKeys(fkc, ForeignKeyColumn.FOREIGN_COLUMN_NAME, ForeignKeyColumn.FOREIGN_TABLE_NAME));
         
         final ForeignKeyColumn prototype = new ForeignKeyColumnImpl(parent, fkc);
-        
+    
+        this.id                = prototype.getId();
         this.name              = prototype.getName();
         this.ordinalPosition   = prototype.getOrdinalPosition();
         this.foreignTableName  = prototype.getForeignTableName();
@@ -55,6 +57,11 @@ public final class ImmutableForeignKeyColumn extends ImmutableDocument implement
         this.foreignTable      = LazyReference.create();
         this.foreignColumn     = LazyReference.create();
         this.column            = LazyReference.create();
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 
     @Override

@@ -18,6 +18,7 @@ package com.speedment.runtime.config.mutator;
 
 
 import com.speedment.runtime.config.PrimaryKeyColumn;
+import com.speedment.runtime.config.mutator.trait.HasIdMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 import com.speedment.runtime.config.mutator.trait.HasOrdinalPositionMutator;
 
@@ -28,6 +29,7 @@ import com.speedment.runtime.config.mutator.trait.HasOrdinalPositionMutator;
  */
 
 public class PrimaryKeyColumnMutator<DOC extends PrimaryKeyColumn>  extends DocumentMutatorImpl<DOC> implements 
+        HasIdMutator<DOC>,    
         HasNameMutator<DOC>,
         HasOrdinalPositionMutator<DOC> {
 

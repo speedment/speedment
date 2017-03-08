@@ -29,6 +29,7 @@ import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
 import java.util.List;
 
 import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
+import com.speedment.tool.config.trait.HasIdProperty;
 
 /**
  *
@@ -39,6 +40,7 @@ public final class PrimaryKeyColumnProperty
     extends AbstractChildDocumentProperty<Table, PrimaryKeyColumnProperty>
     implements PrimaryKeyColumn,
         HasExpandedProperty,
+        HasIdProperty,        
         HasNameProperty,
         HasOrdinalPositionProperty,
         HasColumnProperty {

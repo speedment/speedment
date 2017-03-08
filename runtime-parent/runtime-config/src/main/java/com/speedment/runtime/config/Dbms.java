@@ -22,6 +22,7 @@ import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.runtime.config.trait.HasChildren;
 import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasMutator;
 import com.speedment.runtime.config.trait.HasName;
@@ -43,6 +44,7 @@ public interface Dbms extends
         Document,
         HasParent<Project>,
         HasEnabled,
+        HasId,        
         HasName,
         HasChildren,
         HasAlias,

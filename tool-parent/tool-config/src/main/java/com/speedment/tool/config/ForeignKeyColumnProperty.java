@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
+import com.speedment.tool.config.trait.HasIdProperty;
 import static javafx.beans.binding.Bindings.createObjectBinding;
 
 /**
@@ -40,7 +41,12 @@ import static javafx.beans.binding.Bindings.createObjectBinding;
  * @since   2.3.0
  */
 public final class ForeignKeyColumnProperty extends AbstractChildDocumentProperty<ForeignKey, ForeignKeyColumnProperty> 
-    implements ForeignKeyColumn, HasExpandedProperty, HasNameProperty, HasOrdinalPositionProperty, HasColumnProperty {
+    implements ForeignKeyColumn, 
+    HasExpandedProperty, 
+    HasIdProperty,
+    HasNameProperty,
+    HasOrdinalPositionProperty, 
+    HasColumnProperty {
 	
     public final StringProperty foreignDatabaseNameProperty() {
     	return stringPropertyOf(FOREIGN_DATABASE_NAME, ForeignKeyColumn.super::getForeignDatabaseName);

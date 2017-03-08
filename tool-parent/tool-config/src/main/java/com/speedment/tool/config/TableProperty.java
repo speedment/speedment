@@ -40,6 +40,7 @@ public final class TableProperty
     implements Table,
         HasEnabledProperty,
         HasExpandedProperty,
+        HasIdProperty,        
         HasNameProperty,
         HasAliasProperty,
         HasPackageNameProperty {

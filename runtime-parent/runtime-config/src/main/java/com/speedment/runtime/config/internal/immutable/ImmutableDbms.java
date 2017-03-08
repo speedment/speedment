@@ -38,6 +38,7 @@ import static java.util.stream.Collectors.toList;
 public final class ImmutableDbms extends ImmutableDocument implements Dbms {
 
     private final transient boolean enabled;
+    private final transient String id;
     private final transient String name;
     private final transient Optional<String> alias;
     private final transient String typeName;
@@ -53,6 +54,7 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
         final Dbms prototype = new DbmsImpl(parent, dbms);
         
         this.enabled   = prototype.isEnabled();
+        this.id        = prototype.getId();
         this.name      = prototype.getName();
         this.alias     = prototype.getAlias();
         this.typeName  = prototype.getTypeName();
@@ -66,6 +68,10 @@ public final class ImmutableDbms extends ImmutableDocument implements Dbms {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public String getId() {
+        return id;
     }
 
     @Override

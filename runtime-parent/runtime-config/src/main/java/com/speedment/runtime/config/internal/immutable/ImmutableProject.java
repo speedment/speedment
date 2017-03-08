@@ -41,6 +41,7 @@ import static java.util.stream.Collectors.toList;
 public final class ImmutableProject extends ImmutableDocument implements Project {
 
     private final transient boolean enabled;
+    private final transient String id;
     private final transient String name;
     private final transient String companyName;
     private final transient Optional<String> packageName;
@@ -56,6 +57,7 @@ public final class ImmutableProject extends ImmutableDocument implements Project
         final Project prototype = new ProjectImpl(project);
 
         this.enabled         = prototype.isEnabled();
+        this.id              = prototype.getId();
         this.name            = prototype.getName();
         this.companyName     = prototype.getCompanyName();
         this.packageName     = prototype.getPackageName();
@@ -75,6 +77,11 @@ public final class ImmutableProject extends ImmutableDocument implements Project
         return enabled;
     }
 
+    @Override
+    public String getId() {
+        return id;
+    }
+    
     @Override
     public String getName() {
         return name;

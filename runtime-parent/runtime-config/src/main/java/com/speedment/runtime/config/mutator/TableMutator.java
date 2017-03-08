@@ -27,6 +27,7 @@ import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 
 import static com.speedment.runtime.config.Table.*;
+import com.speedment.runtime.config.mutator.trait.HasIdMutator;
 import static com.speedment.runtime.config.util.DocumentUtil.newDocument;
 
 /**
@@ -37,6 +38,7 @@ import static com.speedment.runtime.config.util.DocumentUtil.newDocument;
 
 public class TableMutator<DOC extends Table> extends DocumentMutatorImpl<DOC> implements 
         HasEnabledMutator<DOC>, 
+        HasIdMutator<DOC>,    
         HasNameMutator<DOC>, 
         HasAliasMutator<DOC> {
 

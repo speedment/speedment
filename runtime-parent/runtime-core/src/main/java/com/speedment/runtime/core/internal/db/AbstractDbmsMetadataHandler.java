@@ -181,7 +181,8 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                         boolean schemaWasUsed = false;
                         if (!naming.getSchemaExcludeSet().contains(name)) {
                             if (filterCriteria.test(name)) {
-                                final Schema schema = dbms.mutator().addNewSchema();
+                                final Schema schema = dbms.mutator().addNewSchema();                                
+                                schema.mutator().setId(name);
                                 schema.mutator().setName(name);
                                 schemaWasUsed = true;
                             }
@@ -210,6 +211,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                         if (filterCriteria.test(schemaName)) {
                             if (!naming.getSchemaExcludeSet().contains(schemaName)) {
                                 final Schema schema = dbms.mutator().addNewSchema();
+                                schema.mutator().setId(schemaName);
                                 schema.mutator().setName(schemaName);
                                 schemaWasUsed = true;
                             }
@@ -305,6 +307,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                     
                     final Table table = schema.mutator().addNewTable();
                     final String tableName = rsTable.getString("TABLE_NAME");
+                    table.mutator().setId(tableName);
                     table.mutator().setName(tableName);
                 }
             }
@@ -354,7 +357,8 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             final ColumnMetaData md = ColumnMetaData.of(rs);
 
             final String columnName = md.getColumnName();
-
+            
+            column.mutator().setId(columnName);
             column.mutator().setName(columnName);
             column.mutator().setOrdinalPosition(md.getOrdinalPosition());
 
@@ -434,7 +438,9 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             );
 
         final AbstractDbmsOperationHandler.TableChildMutator<PrimaryKeyColumn, ResultSet> mutator = (primaryKeyColumn, rs) -> {
-            primaryKeyColumn.mutator().setName(rs.getString("COLUMN_NAME"));
+            final String columnName = rs.getString("COLUMN_NAME");
+            primaryKeyColumn.mutator().setId(columnName);
+            primaryKeyColumn.mutator().setName(columnName);
             primaryKeyColumn.mutator().setOrdinalPosition(rs.getInt("KEY_SEQ"));
         };
 
@@ -462,11 +468,14 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             final String indexName = rs.getString("INDEX_NAME");
             final boolean unique = !rs.getBoolean("NON_UNIQUE");
 
+            index.mutator().setId(indexName);
             index.mutator().setName(indexName);
             index.mutator().setUnique(unique);
 
             final IndexColumn indexColumn = index.mutator().addNewIndexColumn();
-            indexColumn.mutator().setName(rs.getString("COLUMN_NAME"));
+            final String columnName = rs.getString("COLUMN_NAME");
+            indexColumn.mutator().setId(columnName);
+            indexColumn.mutator().setName(columnName);
             indexColumn.mutator().setOrdinalPosition(rs.getInt("ORDINAL_POSITION"));
             final String ascOrDesc = rs.getString("ASC_OR_DESC");
 
@@ -502,11 +511,14 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         final AbstractDbmsOperationHandler.TableChildMutator<ForeignKey, ResultSet> mutator = (foreignKey, rs) -> {
 
             final String foreignKeyName = rs.getString("FK_NAME");
+            foreignKey.mutator().setId(foreignKeyName);
             foreignKey.mutator().setName(foreignKeyName);
 
             final ForeignKeyColumn foreignKeyColumn = foreignKey.mutator().addNewForeignKeyColumn();
             final ForeignKeyColumnMutator<?> fkcMutator = foreignKeyColumn.mutator();
-            fkcMutator.setName(rs.getString("FKCOLUMN_NAME"));
+            final String fkColumnName = rs.getString("FKCOLUMN_NAME");
+            fkcMutator.setId(fkColumnName);
+            fkcMutator.setName(fkColumnName);
             fkcMutator.setOrdinalPosition(rs.getInt("KEY_SEQ"));
             fkcMutator.setForeignTableName(rs.getString("PKTABLE_NAME"));
             fkcMutator.setForeignColumnName(rs.getString("PKCOLUMN_NAME"));

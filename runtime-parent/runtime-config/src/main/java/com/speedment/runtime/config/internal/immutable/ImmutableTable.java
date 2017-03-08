@@ -35,6 +35,7 @@ import static java.util.stream.Collectors.toList;
 public final class ImmutableTable extends ImmutableDocument implements Table {
 
     private final transient boolean enabled;
+    private final transient String id;
     private final transient String name;
     private final transient Optional<String> alias;
     private final transient Optional<String> packageName;
@@ -50,6 +51,7 @@ public final class ImmutableTable extends ImmutableDocument implements Table {
         final Table prototype = new TableImpl(parent, table);
         
         this.enabled     = prototype.isEnabled();
+        this.id          = prototype.getId();
         this.name        = prototype.getName();
         this.alias       = prototype.getAlias();
         this.packageName = prototype.getPackageName();
@@ -63,6 +65,11 @@ public final class ImmutableTable extends ImmutableDocument implements Table {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+   
+    @Override
+    public String getId() {
+        return id;
     }
 
     @Override

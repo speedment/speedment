@@ -24,6 +24,7 @@ import com.speedment.runtime.config.mutator.trait.HasEnabledMutator;
 import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 
 import static com.speedment.runtime.config.Dbms.*;
+import com.speedment.runtime.config.mutator.trait.HasIdMutator;
 import static com.speedment.runtime.config.util.DocumentUtil.newDocument;
 
 /**
@@ -33,7 +34,8 @@ import static com.speedment.runtime.config.util.DocumentUtil.newDocument;
  */
 
 public class DbmsMutator<DOC extends Dbms> extends DocumentMutatorImpl<DOC> implements 
-        HasEnabledMutator<DOC>, 
+        HasEnabledMutator<DOC>,
+        HasIdMutator<DOC>,    
         HasNameMutator<DOC> {
     
     public DbmsMutator(DOC dbms) {

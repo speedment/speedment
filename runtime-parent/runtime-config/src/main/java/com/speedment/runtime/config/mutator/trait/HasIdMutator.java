@@ -14,28 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.config.mutator;
+package com.speedment.runtime.config.mutator.trait;
 
 
-import com.speedment.runtime.config.IndexColumn;
-import com.speedment.runtime.config.mutator.trait.HasIdMutator;
-import com.speedment.runtime.config.mutator.trait.HasNameMutator;
-import com.speedment.runtime.config.mutator.trait.HasOrderTypeMutator;
-import com.speedment.runtime.config.mutator.trait.HasOrdinalPositionMutator;
+import com.speedment.runtime.config.mutator.DocumentMutator;
+import com.speedment.runtime.config.trait.HasId;
 
 /**
  *
  * @author       Per Minborg
  * @param <DOC>  document type
+ * @since 3.0.5
  */
 
-public class IndexColumnMutator<DOC extends IndexColumn> extends DocumentMutatorImpl<DOC> implements 
-        HasIdMutator<DOC>,    
-        HasNameMutator<DOC>,
-        HasOrdinalPositionMutator<DOC>, 
-        HasOrderTypeMutator<DOC> {
-
-    public IndexColumnMutator(DOC indexColumn) {
-        super(indexColumn);
+public interface HasIdMutator<DOC extends HasId> extends DocumentMutator<DOC> {
+    
+    default void setId(String name) {
+        put(HasId.ID, name);
     }
 }

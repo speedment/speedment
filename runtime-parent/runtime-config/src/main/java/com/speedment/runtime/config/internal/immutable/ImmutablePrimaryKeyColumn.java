@@ -32,6 +32,7 @@ import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
  */
 public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implements PrimaryKeyColumn {
 
+    private final transient String id;
     private final transient String name;
     private final transient int ordinalPosition;
     
@@ -42,6 +43,7 @@ public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implement
         
         final PrimaryKeyColumn prototype = new PrimaryKeyColumnImpl(parent, pkc);
         
+        this.id              = prototype.getId();
         this.name            = prototype.getName();
         this.ordinalPosition = prototype.getOrdinalPosition();        
         this.column          = LazyReference.create();
@@ -52,6 +54,11 @@ public final class ImmutablePrimaryKeyColumn extends ImmutableDocument implement
         return super.getParent().map(Table.class::cast);
     }
 
+    @Override
+    public String getId() {
+        return id;
+    }
+    
     @Override
     public String getName() {
         return name;

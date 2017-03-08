@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
+import com.speedment.tool.config.trait.HasIdProperty;
 
 /**
  *
@@ -42,6 +43,7 @@ public final class IndexProperty
     implements Index, 
         HasEnabledProperty, 
         HasExpandedProperty, 
+        HasIdProperty,        
         HasNameProperty {
 
     public IndexProperty(Table parent) {

@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
+import com.speedment.tool.config.trait.HasIdProperty;
 
 /**
  *
@@ -37,7 +38,11 @@ import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
  * @since   2.3.0
  */
 public final class ForeignKeyProperty extends AbstractChildDocumentProperty<Table, ForeignKeyProperty> 
-    implements ForeignKey, HasEnabledProperty, HasExpandedProperty, HasNameProperty {
+    implements ForeignKey, 
+    HasEnabledProperty, 
+    HasExpandedProperty, 
+    HasIdProperty,
+    HasNameProperty {
 
     public ForeignKeyProperty(Table parent) {
         super(parent);

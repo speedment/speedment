@@ -20,6 +20,7 @@ import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.mutator.ForeignKeyMutator;
 import com.speedment.runtime.config.trait.HasChildren;
 import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasMutator;
 import com.speedment.runtime.config.trait.HasName;
@@ -39,6 +40,7 @@ public interface ForeignKey extends
         Document,
         HasParent<Table>,
         HasEnabled,
+        HasId,        
         HasName,
         HasChildren,
         HasMainInterface,

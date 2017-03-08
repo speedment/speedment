@@ -25,6 +25,7 @@ import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.trait.HasAliasProperty;
 import com.speedment.tool.config.trait.HasEnabledProperty;
 import com.speedment.tool.config.trait.HasExpandedProperty;
+import com.speedment.tool.config.trait.HasIdProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
 import com.speedment.tool.config.trait.HasNullableProperty;
 import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
@@ -44,6 +45,7 @@ extends AbstractChildDocumentProperty<Table, ColumnProperty>
 implements Column,
         HasEnabledProperty,
         HasExpandedProperty,
+        HasIdProperty,
         HasNameProperty,
         HasAliasProperty,
         HasNullableProperty,

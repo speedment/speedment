@@ -20,6 +20,7 @@ package com.speedment.tool.config.util;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.internal.BaseDocument;
+import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.tool.config.DocumentProperty;
@@ -29,7 +30,6 @@ import javafx.collections.ObservableList;
 import java.util.*;
 import java.util.function.Function;
 
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
@@ -52,33 +52,36 @@ public final class DocumentMerger {
      * @param constructor  used to create new {@link DocumentProperty}
      */
     public static void merge(
-            DocumentProperty existing, 
-            Document proposed,
-            DocumentConstructor constructor
-        ) {
+        final DocumentProperty existing,
+        final Document proposed,
+        final DocumentConstructor constructor
+    ) {
+        requireNonNull(existing);
+        requireNonNull(proposed);
+        requireNonNull(constructor);
         
         // Go through the keys specified by the proposed document
         for (final Map.Entry<String, Object> entry : proposed.getData().entrySet()) {
-            final String key           = entry.getKey();
+            final String key = entry.getKey();
             final Object proposedValue = proposed.getData().get(key);
-            
+
             // Check if the proposed value fulfills the requirements to be
             // considered a list of child documents.
             boolean wasChild = false;
             if (proposedValue instanceof List<?>) {
                 @SuppressWarnings("unchecked")
                 final List<Object> list = (List<Object>) proposedValue;
-                
+
                 if (!list.isEmpty()) {
                     final Object first = list.get(0);
-                    
+
                     if (first instanceof Map<?, ?>) {
                         @SuppressWarnings("unchecked")
                         final List<Document> documents = list.stream()
                             .map(data -> (Map<String, Object>) data)
                             .map(data -> new BaseDocument(proposed, data))
                             .collect(toList());
-                        
+
                         // Merge the new children into the existing document.
                         merge(
                             existing,
@@ -86,7 +89,7 @@ public final class DocumentMerger {
                             documents,
                             constructor
                         );
-                        
+
                         wasChild = true;
                     }
                 }
@@ -125,11 +128,16 @@ public final class DocumentMerger {
      * @param constructor  used to create new {@link DocumentProperty}
      */
     private static void merge(
-            DocumentProperty parent,
-            String key,
-            List<Document> proposed, 
-            DocumentConstructor constructor) {
-
+        final DocumentProperty parent,
+        final String key,
+        final List<Document> proposed,
+        final DocumentConstructor constructor
+    ) {
+        requireNonNull(parent);
+        requireNonNull(key);
+        requireNonNull(proposed);
+        requireNonNull(constructor);
+        
         // Create a list of tasks that should be executed to merge the lists.
         final MergeTaskManager tasks = new MergeTaskManager();
         final ObservableList<DocumentProperty> existing = parent.observableListOf(key);
@@ -145,21 +153,21 @@ public final class DocumentMerger {
                 // If they are mentioning the same element, simply merge them 
                 // into the same position.
                 if (isSame(first, second)) {
-                    tasks.add(first.getName(), new MergeWithoutMovingTask(first, second, constructor));
+                    tasks.add(first.getId(), new MergeWithoutMovingTask(first, second, constructor));
                     
                 // if they are mentioning different elements, find the 
                 // entities in the other list and create a task for each.
                 } else {
-                    tasks.add(first.getName(), new MergeIntoExistingTask(first, constructor));
-                    tasks.add(HasName.of(second).getName(), new MergeByMovingTask(parent, second, key, constructor));
+                    tasks.add(first.getId(), new MergeIntoExistingTask(first, constructor));
+                    tasks.add(HasId.of(second).getId(), new MergeByMovingTask(parent, second, key, constructor));
                 }
             } else {
                 if (i < existing.size()) {
                     final DocumentProperty first = existing.get(i);
-                    tasks.add(first.getName(), new MergeIntoExistingTask(first, constructor));
+                    tasks.add(first.getId(), new MergeIntoExistingTask(first, constructor));
                 } else if (i < proposed.size()) {
                     final Document second = proposed.get(i);
-                    tasks.add(HasName.of(second).getName(), new MergeByMovingTask(parent, second, key, constructor));
+                    tasks.add(HasId.of(second).getId(), new MergeByMovingTask(parent, second, key, constructor));
                 } else {
                     throw new IllegalStateException( // Not possible.
                         "This stage should never be reached."
@@ -183,18 +191,24 @@ public final class DocumentMerger {
     /**
      * Returns if the two documents corresponds to the same data by first 
      * comparing if their parents are the same and then comparing if they have
-     * the same value on their {@code name} property. Equality is not used to
+     * the same value on their {@code id} property. Equality is not used to
      * determine if two documents are the same since they could have been 
      * created during different stages and with different data.
      * <p>
-     * If one or both of the documents does not have a name property specified,
+     * If one or both of the documents does not have an id property specified,
      * the default value specified by {@link HasName} will be used.
      * 
      * @param first   the first document
      * @param second  the second document
      * @return        true if they represent the same data
      */
-    private static boolean isSame(Document first, Document second) {
+    private static boolean isSame(
+        final Document first, 
+        final Document second
+    ) {
+        requireNonNull(first);
+        requireNonNull(second);
+        
         final Optional<? extends Document> firstParent  = first.getParent();
         final Optional<? extends Document> secondParent = second.getParent();
         
@@ -202,14 +216,14 @@ public final class DocumentMerger {
             return false;
         }
         
-        final String firstName  = HasName.of(first).getName();
-        final String secondName = HasName.of(second).getName();
-        final boolean namesEqual = Objects.equals(firstName, secondName);
+        final String firstId  = HasId.of(first).getId();
+        final String secondId = HasId.of(second).getId();
+        final boolean idsEqual = Objects.equals(firstId, secondId);
         
         if (firstParent.isPresent()) {
-            return namesEqual && isSame(firstParent.get(), secondParent.get());
+            return idsEqual && isSame(firstParent.get(), secondParent.get());
         } else {
-            return namesEqual;
+            return idsEqual;
         }
     }
     
@@ -226,9 +240,13 @@ public final class DocumentMerger {
      * @return                {@code true} if a value was set, else {@code false}
      */
     private static <T, P extends Property<? super T>> boolean setPropertyIf(
-            Class<T> type, 
-            Object value,
-            Function<T, P> propertyGetter) {
+        final Class<T> type,
+        final Object value,
+        final Function<T, P> propertyGetter
+    ) {
+        requireNonNull(type);
+        // Value nullable ??
+        requireNonNull(propertyGetter);
         
         if (type.isInstance(value)) {
             final T casted = type.cast(value);
@@ -245,10 +263,8 @@ public final class DocumentMerger {
                     property.setValue(casted);
                 }
             }
-            
             return true;
         }
-        
         return false;
     }
    
@@ -260,13 +276,13 @@ public final class DocumentMerger {
         
         private final List<MergeTask> tasks = new LinkedList<>();
         
-        public void add(String name, MergeTask task) {
+        public void add(String id, MergeTask task) {
             final Iterator<MergeTask> iterator = tasks.iterator();
             
             while (iterator.hasNext()) {
                 final MergeTask next = iterator.next();
                 
-                if (next.canBeReplaced(name)) {
+                if (next.canBeReplaced(id)) {
                     iterator.remove();
                 }
             }
@@ -290,10 +306,10 @@ public final class DocumentMerger {
          * Return {@code true} if this task can be removed given that another
          * task is created for the specified document.
          * 
-         * @param name  the name of the replacing document
+         * @param id    the id of the replacing document
          * @return      {@code true} if this can be removed, else {@code false}
          */
-        boolean canBeReplaced(String name);
+        boolean canBeReplaced(String id);
         
         /**
          * Executes this merging task on the specified list.
@@ -314,17 +330,17 @@ public final class DocumentMerger {
         private final DocumentConstructor constructor;
         
         private MergeWithoutMovingTask(
-                DocumentProperty existing, 
-                Document proposed, 
-                DocumentConstructor constructor) {
-            
+            final DocumentProperty existing,
+            final Document proposed,
+            final DocumentConstructor constructor
+        ) { 
             this.existing    = requireNonNull(existing);
             this.proposed    = requireNonNull(proposed);
             this.constructor = requireNonNull(constructor);
         }
         
         @Override
-        public boolean canBeReplaced(String name) {
+        public boolean canBeReplaced(String id) {
             // Is always false since this task is already handling both documents.
             return false;
         }
@@ -343,18 +359,21 @@ public final class DocumentMerger {
     private final static class MergeIntoExistingTask implements MergeTask {
 
         private final DocumentProperty document;
-        private final String name;
+        private final String id;
         private final DocumentConstructor constructor;
         
-        private MergeIntoExistingTask(DocumentProperty document, DocumentConstructor constructor) {
+        private MergeIntoExistingTask(
+            final DocumentProperty document, 
+            final DocumentConstructor constructor
+        ) {
             this.document    = requireNonNull(document);
-            this.name        = HasName.of(document).getName();
+            this.id          = HasId.of(document).getId();
             this.constructor = requireNonNull(constructor);
         }
 
         @Override
-        public boolean canBeReplaced(String name) {
-            return this.name.equals(name);
+        public boolean canBeReplaced(String id) {
+            return this.id.equals(id);
         }
         
         @Override
@@ -394,7 +413,12 @@ public final class DocumentMerger {
         private final String key;
         private final DocumentConstructor constructor;
         
-        private MergeByMovingTask(DocumentProperty parent, Document document, String key, DocumentConstructor constructor) {
+        private MergeByMovingTask(
+            final DocumentProperty parent,
+            final Document document,
+            final String key,
+            final DocumentConstructor constructor
+        ) {
             this.parent      = parent; // Can be null.
             this.document    = requireNonNull(document);
             this.key         = requireNonNull(key);
@@ -402,7 +426,7 @@ public final class DocumentMerger {
         }
 
         @Override
-        public boolean canBeReplaced(String name) {
+        public boolean canBeReplaced(String id) {
             return false;
         }
         
@@ -428,18 +452,13 @@ public final class DocumentMerger {
         private DocumentProperty createWithConstructor() {
             final DocumentProperty inst = constructor.create(parent, key);
             
-            // Name need to be set manually before the two documents are merged
-            inst.stringPropertyOf(HasName.NAME, () -> null)
-                .setValue(document.getAsString(HasName.NAME)
-                    .orElseThrow(() -> new SpeedmentConfigException(
-                        "Attempting to merge by moving document without name. " + 
-                        document
-                    ))
-                );
+            // Name needs to be set manually before the two documents are merged
+            inst.stringPropertyOf(HasId.ID, () -> null)
+                .setValue(HasId.of(document).getId());
             
             return inst;
         }
     }
     
-    private DocumentMerger() { instanceNotAllowed(getClass()); }
+    private DocumentMerger() { throw new UnsupportedOperationException(); }
 }

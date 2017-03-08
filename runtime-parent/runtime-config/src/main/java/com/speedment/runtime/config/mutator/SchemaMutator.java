@@ -26,6 +26,7 @@ import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 
 import static com.speedment.runtime.config.Schema.DEFAULT_SCHEMA;
 import static com.speedment.runtime.config.Schema.TABLES;
+import com.speedment.runtime.config.mutator.trait.HasIdMutator;
 import static com.speedment.runtime.config.util.DocumentUtil.newDocument;
 
 /**
@@ -36,6 +37,7 @@ import static com.speedment.runtime.config.util.DocumentUtil.newDocument;
 
 public class SchemaMutator<DOC extends Schema> extends DocumentMutatorImpl<DOC> implements 
         HasEnabledMutator<DOC>, 
+        HasIdMutator<DOC>,    
         HasNameMutator<DOC>, 
         HasAliasMutator<DOC> {
 

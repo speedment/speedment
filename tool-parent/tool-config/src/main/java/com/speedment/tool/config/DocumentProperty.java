@@ -18,6 +18,7 @@ package com.speedment.tool.config;
 
 import com.speedment.common.function.FloatSupplier;
 import com.speedment.runtime.config.Document;
+import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.tool.config.trait.HasUiVisibleProperties;
@@ -65,6 +66,7 @@ import javafx.collections.ObservableMap;
 public interface DocumentProperty extends Document, 
         HasUiVisibleProperties, 
         HasMainInterface,
+        HasId,
         HasName,
         Observable {
     

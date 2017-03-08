@@ -41,6 +41,7 @@ import java.util.OptionalInt;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
+import com.speedment.tool.config.trait.HasIdProperty;
 
 /**
  *
@@ -48,7 +49,12 @@ import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
  * @since   2.3.0
  */
 public final class DbmsProperty extends AbstractChildDocumentProperty<Project, DbmsProperty> 
-    implements Dbms, HasEnabledProperty, HasExpandedProperty, HasNameProperty, HasAliasProperty {
+    implements Dbms, 
+    HasEnabledProperty, 
+    HasExpandedProperty, 
+    HasIdProperty,
+    HasNameProperty, 
+    HasAliasProperty {
 
     public DbmsProperty(Project parent) {
         super(parent);

@@ -37,6 +37,7 @@ public interface Table extends
         Document,
         HasParent<Schema>,
         HasEnabled,
+        HasId,        
         HasName,
         HasChildren,
         HasAlias,

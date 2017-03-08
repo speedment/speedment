@@ -35,6 +35,7 @@ import static java.util.stream.Collectors.toList;
 public final class ImmutableSchema extends ImmutableDocument implements Schema {
 
     private final transient boolean enabled;
+    private final transient String id;
     private final transient String name;
     private final transient Optional<String> alias;
     private final transient boolean defaultSchema;
@@ -47,6 +48,7 @@ public final class ImmutableSchema extends ImmutableDocument implements Schema {
         final Schema prototype = new SchemaImpl(parent, schema);
         
         this.enabled       = prototype.isEnabled();
+        this.id            = prototype.getId();
         this.name          = prototype.getName();
         this.alias         = prototype.getAlias();
         this.defaultSchema = prototype.isDefaultSchema();
@@ -59,6 +61,11 @@ public final class ImmutableSchema extends ImmutableDocument implements Schema {
         return enabled;
     }
 
+    @Override
+    public String getId() {
+        return id;
+    }
+    
     @Override
     public String getName() {
         return name;

@@ -35,6 +35,7 @@ import static java.util.stream.Collectors.toList;
 public final class ImmutableIndex extends ImmutableDocument implements Index {
     
     private final transient boolean enabled;
+    private final transient String id;
     private final transient String name;
     private final transient boolean unique;
     
@@ -46,6 +47,7 @@ public final class ImmutableIndex extends ImmutableDocument implements Index {
         final Index prototype = new IndexImpl(parent, index);
         
         this.enabled = prototype.isEnabled();
+        this.id      = prototype.getId();
         this.name    = prototype.getName();
         this.unique  = prototype.isUnique();
         
@@ -55,6 +57,11 @@ public final class ImmutableIndex extends ImmutableDocument implements Index {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+    
+    @Override
+    public String getId() {
+        return id;
     }
 
     @Override

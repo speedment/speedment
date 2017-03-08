@@ -34,6 +34,7 @@ import static java.util.stream.Collectors.toList;
  */
 public final class ImmutableForeignKey extends ImmutableDocument implements ForeignKey {
 
+    private final transient String id;
     private final transient String name;
     private final transient boolean enabled;
     
@@ -44,10 +45,16 @@ public final class ImmutableForeignKey extends ImmutableDocument implements Fore
         
         final ForeignKey prototype = new ForeignKeyImpl(parent, data);
         
+        this.id      = prototype.getId();
         this.name    = prototype.getName();
         this.enabled = prototype.isEnabled();
         
         this.foreignKeyColumns = unmodifiableList(super.children(FOREIGN_KEY_COLUMNS, ImmutableForeignKeyColumn::new).collect(toList()));
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 
     @Override

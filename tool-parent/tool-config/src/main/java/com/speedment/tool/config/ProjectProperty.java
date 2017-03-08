@@ -23,6 +23,7 @@ import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.ProjectPropertyMutator;
 import com.speedment.tool.config.trait.HasEnabledProperty;
 import com.speedment.tool.config.trait.HasExpandedProperty;
+import com.speedment.tool.config.trait.HasIdProperty;
 import com.speedment.tool.config.trait.HasNameProperty;
 import com.speedment.tool.config.trait.HasPackageNameProperty;
 import com.speedment.tool.config.util.DocumentMerger;
@@ -49,6 +50,7 @@ public final class ProjectProperty
     implements Project, 
         HasEnabledProperty, 
         HasExpandedProperty, 
+        HasIdProperty,        
         HasNameProperty, 
         HasPackageNameProperty {
 

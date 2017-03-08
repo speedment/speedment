@@ -32,6 +32,7 @@ import com.speedment.runtime.config.trait.*;
 public interface PrimaryKeyColumn extends
     Document,
     HasParent<Table>,
+    HasId,    
     HasName,
     HasOrdinalPosition,
     HasColumn,

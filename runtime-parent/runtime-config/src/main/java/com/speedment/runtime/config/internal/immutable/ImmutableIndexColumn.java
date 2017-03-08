@@ -33,6 +33,7 @@ import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
  */
 public final class ImmutableIndexColumn extends ImmutableDocument implements IndexColumn {
 
+    private final transient String id;
     private final transient String name;
     private final transient int ordinalPosition;
     private final transient OrderType orderType;
@@ -43,6 +44,7 @@ public final class ImmutableIndexColumn extends ImmutableDocument implements Ind
         
         final IndexColumn prototype = new IndexColumnImpl(parent, ic);
         
+        this.id              = prototype.getId();
         this.name            = prototype.getName();
         this.ordinalPosition = prototype.getOrdinalPosition();
         this.orderType       = prototype.getOrderType();
@@ -50,6 +52,11 @@ public final class ImmutableIndexColumn extends ImmutableDocument implements Ind
         this.column          = LazyReference.create();
     }
 
+    @Override
+    public String getId() {
+        return id;
+    }
+    
     @Override
     public String getName() {
         return name;

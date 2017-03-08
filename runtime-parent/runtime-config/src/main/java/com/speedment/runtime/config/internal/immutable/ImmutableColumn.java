@@ -18,6 +18,7 @@ package com.speedment.runtime.config.internal.immutable;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.internal.ColumnImpl;
 import com.speedment.runtime.config.trait.HasNullable;
 import static com.speedment.runtime.config.util.DocumentUtil.toStringHelper;
@@ -32,6 +33,7 @@ import java.util.OptionalInt;
 public final class ImmutableColumn extends ImmutableDocument implements Column {
 
     private final transient boolean enabled;
+    private final transient String id;
     private final transient String name;
     private final transient Optional<String> alias;
     private final transient boolean nullable;
@@ -50,6 +52,7 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
         final Column prototype = new ColumnImpl(parent, data);
         
         this.enabled                = prototype.isEnabled();
+        this.id                     = prototype.getId();
         this.name                   = prototype.getName();
         this.alias                  = prototype.getAlias();
         this.nullable               = prototype.isNullable();
@@ -66,6 +69,11 @@ public final class ImmutableColumn extends ImmutableDocument implements Column {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 
     @Override

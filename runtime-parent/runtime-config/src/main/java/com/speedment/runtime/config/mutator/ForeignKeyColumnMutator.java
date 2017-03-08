@@ -22,6 +22,7 @@ import com.speedment.runtime.config.mutator.trait.HasNameMutator;
 import com.speedment.runtime.config.mutator.trait.HasOrdinalPositionMutator;
 
 import static com.speedment.runtime.config.ForeignKeyColumn.*;
+import com.speedment.runtime.config.mutator.trait.HasIdMutator;
 
 /**
  *
@@ -30,6 +31,7 @@ import static com.speedment.runtime.config.ForeignKeyColumn.*;
  */
 
 public class ForeignKeyColumnMutator<DOC extends ForeignKeyColumn> extends DocumentMutatorImpl<DOC> implements 
+        HasIdMutator<DOC>,    
         HasNameMutator<DOC>, 
         HasOrdinalPositionMutator<DOC> {
 

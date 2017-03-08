@@ -22,6 +22,7 @@ import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.runtime.config.trait.HasColumnSize;
 import com.speedment.runtime.config.trait.HasDecimalDigits;
 import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasMutator;
 import com.speedment.runtime.config.trait.HasName;
@@ -42,6 +43,7 @@ public interface Column extends
         Document,
         HasParent<Table>,
         HasEnabled,
+        HasId,
         HasName,
         HasAlias,
         HasNullable,

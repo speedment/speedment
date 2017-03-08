@@ -36,6 +36,7 @@ public final class IndexColumnProperty
     extends AbstractChildDocumentProperty<Index, IndexColumnProperty>
     implements IndexColumn, 
         HasExpandedProperty, 
+        HasIdProperty,        
         HasNameProperty, 
         HasOrdinalPositionProperty,
         HasOrderTypeProperty, 
