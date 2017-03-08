@@ -101,15 +101,15 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
             )
             .add(Method.of("getDbmsName", String.class).public_()
                 .add(OVERRIDE)
-                .add(returnString(getSupport().dbmsOrThrow().getName()))
+                .add(returnString(getSupport().dbmsOrThrow().getId()))
             )
             .add(Method.of("getSchemaName", String.class).public_()
                 .add(OVERRIDE)
-                .add(returnString(getSupport().schemaOrThrow().getName()))
+                .add(returnString(getSupport().schemaOrThrow().getId()))
             )
             .add(Method.of("getTableName", String.class).public_()
                 .add(OVERRIDE)
-                .add(returnString(getSupport().tableOrThrow().getName()))
+                .add(returnString(getSupport().tableOrThrow().getId()))
             )
             .add(Method.of("getColumnName", String.class).public_()
                 .add(OVERRIDE)
@@ -213,7 +213,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                 file.add(Import.of(entityType));
                 
                 final String constant = getSupport().namer().javaStaticFieldName(col.getJavaName());
-                identifierEnum.add(EnumConstant.of(constant).add(Value.ofText(col.getName())));
+                identifierEnum.add(EnumConstant.of(constant).add(Value.ofText(col.getId())));
 
                 // Begin building the field value parameters.
                 final Stream.Builder<String> fieldParams = Stream.builder();
@@ -283,7 +283,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
         return "The generated base for the {@link "
             + getSupport().entityType().getTypeName()
             + "}-interface representing entities of the {@code "
-            + getDocument().getName() + "}-table in the database.";
+            + getDocument().getId() + "}-table in the database.";
     }
 
     @Override

@@ -61,7 +61,7 @@ public final class GeneratedApplicationImplTranslator extends AbstractJavaClassT
     protected String getJavadocRepresentText() {
         return "The generated {@link " + AbstractApplicationBuilder.class.getName() + 
             "} implementation class for the {@link " + Project.class.getName() + 
-            "} named " + getSupport().projectOrThrow().getName() + ".";
+            "} named " + getSupport().projectOrThrow().getId() + ".";
     }
     
     private Type generatedType() {

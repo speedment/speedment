@@ -55,7 +55,7 @@ public abstract class AbstractEntityAndManagerTranslator<T extends ClassOrInterf
 
         final Column firstColumn = columnsFromPks()
                 .findFirst().orElseThrow(() -> new SpeedmentTranslatorException(
-                    "Table '" + table().get().getName() + 
+                    "Table '" + table().get().getId() + 
                     "' did not contain any primary key columns."
                 ));
         
@@ -82,7 +82,7 @@ public abstract class AbstractEntityAndManagerTranslator<T extends ClassOrInterf
                 return pk.findColumn().get();
             } catch (final NoSuchElementException ex) {
                 throw new SpeedmentTranslatorException(
-                    "Could not find any column belonging to primary key '" + pk.getName() + "'.", ex
+                    "Could not find any column belonging to primary key '" + pk.getId() + "'.", ex
                 );
             }
         });

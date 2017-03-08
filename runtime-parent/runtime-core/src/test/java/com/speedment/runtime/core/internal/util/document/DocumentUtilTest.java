@@ -17,7 +17,7 @@
 package com.speedment.runtime.core.internal.util.document;
 
 import com.speedment.runtime.config.*;
-import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.util.DocumentUtil;
 import com.speedment.runtime.core.util.TestUtil;
 import org.junit.Ignore;
@@ -45,7 +45,7 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         final Set<Integer> set = visited.stream()
             .map(d -> System.identityHashCode(d.getData()))
             .collect(toSet());
-        assertEquals("Duplicates in " + namesOf(visited), visited.size(), set.size());
+        assertEquals("Duplicates in " + idsOf(visited), visited.size(), set.size());
 
         assertThatFirstIsBeforeOthers(visited, schemaA,
             tableA, columnA1, columnA2, primaryKeyColumnA1, indexA2, indexColumnA2, foreignKeyA2_C1, foreignKeyColumnA2_C1,
@@ -68,7 +68,7 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         );
 
         for (final Document document : Arrays.asList(tableB, columnB1, columnB2)) {
-            assertTrue("Illegal node traversed " + nameOf(document), index(visited, document) == -1);
+            assertTrue("Illegal node traversed " + idOf(document), index(visited, document) == -1);
         }
 
     }
@@ -188,15 +188,15 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
     private void assertThatFirstIsBeforeOthers(List<Document> list, Document first, Document... others) {
         final int firstIndex = index(list, first);
         if (firstIndex == -1) {
-            fail("First document " + nameOf(first) + " is not in the list " + namesOf(list));
+            fail("First document " + idOf(first) + " is not in the list " + idsOf(list));
         }
         for (final Document other : others) {
             final int secondIndex = index(list, other);
             if (secondIndex == -1) {
-                fail("There is no " + nameOf(other) + " in the list " + namesOf(list));
+                fail("There is no " + idOf(other) + " in the list " + idsOf(list));
             }
             if (firstIndex >= secondIndex) {
-                fail(nameOf(first) + " is after or same as " + nameOf(other) + " in the list " + namesOf(list));
+                fail(idOf(first) + " is after or same as " + idOf(other) + " in the list " + idsOf(list));
             }
         }
     }
@@ -212,13 +212,13 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         return -1;
     }
 
-    private String nameOf(Document doc) {
-        return HasName.of(doc).getName();
+    private String idOf(Document doc) {
+        return HasId.of(doc).getId();
     }
 
-    private String namesOf(Collection<Document> docs) {
+    private String idsOf(Collection<Document> docs) {
         return docs.stream()
-            .map(this::nameOf)
+            .map(this::idOf)
             .collect(toList()).toString();
     }
 

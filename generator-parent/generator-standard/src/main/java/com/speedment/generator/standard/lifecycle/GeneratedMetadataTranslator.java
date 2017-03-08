@@ -147,7 +147,7 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
     protected String getJavadocRepresentText() {
         return "A {@link " + ApplicationMetadata.class.getName()
             + "} class for the {@link " + Project.class.getName()
-            + "} named " + getSupport().projectOrThrow().getName() + "."
+            + "} named " + getSupport().projectOrThrow().getId() + "."
             + " This class contains the meta data present at code generation time.";
     }
 

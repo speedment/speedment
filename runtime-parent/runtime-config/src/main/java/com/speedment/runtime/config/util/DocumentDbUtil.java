@@ -237,29 +237,29 @@ public final class DocumentDbUtil {
         return referencedDbmsIfPresent(project, identifier.getDbmsName());
     }
     
-    public static Optional<? extends Column> referencedColumnIfPresent(Project project, String dbmsName, String schemaName, String tableName, String columnName) {
-        return referencedTableIfPresent(project, dbmsName, schemaName, tableName)
-            .flatMap(table -> table.columns().filter(column -> columnName.equals(column.getName()))
+    public static Optional<? extends Column> referencedColumnIfPresent(Project project, String dbmsId, String schemaId, String tableId, String columnId) {
+        return referencedTableIfPresent(project, dbmsId, schemaId, tableId)
+            .flatMap(table -> table.columns().filter(column -> columnId.equals(column.getId()))
                 .findAny()
             );
     }
     
-    public static Optional<? extends Table> referencedTableIfPresent(Project project, String dbmsName, String schemaName, String tableName) {
-        return referencedSchemaIfPresent(project, dbmsName, schemaName)
-            .flatMap(schema -> schema.tables().filter(table -> tableName.equals(table.getName()))
+    public static Optional<? extends Table> referencedTableIfPresent(Project project, String dbmsId, String schemaId, String tableId) {
+        return referencedSchemaIfPresent(project, dbmsId, schemaId)
+            .flatMap(schema -> schema.tables().filter(table -> tableId.equals(table.getId()))
                 .findAny()
             );
     }
     
-    public static Optional<? extends Schema> referencedSchemaIfPresent(Project project, String dbmsName, String schemaName) {
-        return referencedDbmsIfPresent(project, dbmsName)
-            .flatMap(dbms -> dbms.schemas().filter(schema -> schemaName.equals(schema.getName()))
+    public static Optional<? extends Schema> referencedSchemaIfPresent(Project project, String dbmsId, String schemaId) {
+        return referencedDbmsIfPresent(project, dbmsId)
+            .flatMap(dbms -> dbms.schemas().filter(schema -> schemaId.equals(schema.getId()))
                 .findAny()
             );
     }
     
-    public static Optional<? extends Dbms> referencedDbmsIfPresent(Project project, String dbmsName) {
-        return project.dbmses().filter(dbms -> dbmsName.equals(dbms.getName())).findAny();
+    public static Optional<? extends Dbms> referencedDbmsIfPresent(Project project, String dbmsId) {
+        return project.dbmses().filter(dbms -> dbmsId.equals(dbms.getId())).findAny();
     }
     
     public static <T extends HasDbmsName & HasSchemaName & HasTableName & HasColumnName> Column referencedColumn(Project project, T identifier) {
@@ -286,30 +286,30 @@ public final class DocumentDbUtil {
             ));
     }
     
-    public static Table referencedTable(Project project, String dbmsName, String schemaName, String tableName) {
-        return referencedSchema(project, dbmsName, schemaName)
-            .tables().filter(table -> tableName.equals(table.getName()))
+    public static Table referencedTable(Project project, String dbmsId, String schemaId, String tableId) {
+        return referencedSchema(project, dbmsId, schemaId)
+            .tables().filter(table -> tableId.equals(table.getId()))
             .findAny().orElseThrow(() -> new SpeedmentConfigException(
                 "Could not find referenced " + Table.class.getSimpleName() + 
-                " with name '" + tableName + "'."
+                " with name '" + tableId + "'."
             ));
     }
     
-    public static Schema referencedSchema(Project project, String dbmsName, String schemaName) {
-        return referencedDbms(project, dbmsName)
-            .schemas().filter(schema -> schemaName.equals(schema.getName()))
+    public static Schema referencedSchema(Project project, String dbmsId, String schemaId) {
+        return referencedDbms(project, dbmsId)
+            .schemas().filter(schema -> schemaId.equals(schema.getId()))
             .findAny().orElseThrow(() -> new SpeedmentConfigException(
                 "Could not find referenced " + Schema.class.getSimpleName() + 
-                " with name '" + schemaName + "'."
+                " with name '" + schemaId + "'."
             ));
     }
     
-    public static Dbms referencedDbms(Project project, String dbmsName) {
+    public static Dbms referencedDbms(Project project, String dbmsId) {
         return project
-            .dbmses().filter(dbms -> dbmsName.equals(dbms.getName()))
+            .dbmses().filter(dbms -> dbmsId.equals(dbms.getId()))
             .findAny().orElseThrow(() -> new SpeedmentConfigException(
                 "Could not find referenced " + Dbms.class.getSimpleName() + 
-                " with name '" + dbmsName + "'."
+                " with name '" + dbmsId + "'."
             ));
     }
     
@@ -323,11 +323,13 @@ public final class DocumentDbUtil {
      * @return        {@code true} if same, else {@code false}
      */
     public static boolean isSame(Column first, Column second) {
-        if (first.getName().equals(second.getName())) {
+        if (first.getId().equals(second.getId())) {
             final Table firstParent  = first.getParentOrThrow();
             final Table secondParent = second.getParentOrThrow();
             return isSame(firstParent, secondParent);
-        } else return false;
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -340,11 +342,13 @@ public final class DocumentDbUtil {
      * @return        {@code true} if same, else {@code false}
      */
     public static boolean isSame(IndexColumn first, IndexColumn second) {
-        if (first.getName().equals(second.getName())) {
+        if (first.getId().equals(second.getId())) {
             final Index firstParent  = first.getParentOrThrow();
             final Index secondParent = second.getParentOrThrow();
             return isSame(firstParent, secondParent);
-        } else return false;
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -357,11 +361,13 @@ public final class DocumentDbUtil {
      * @return        {@code true} if same, else {@code false}
      */
     public static boolean isSame(Index first, Index second) {
-        if (first.getName().equals(second.getName())) {
+        if (first.getId().equals(second.getId())) {
             final Table firstParent  = first.getParentOrThrow();
             final Table secondParent = second.getParentOrThrow();
             return isSame(firstParent, secondParent);
-        } else return false;
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -374,11 +380,13 @@ public final class DocumentDbUtil {
      * @return        {@code true} if same, else {@code false}
      */
     public static boolean isSame(PrimaryKeyColumn first, PrimaryKeyColumn second) {
-        if (first.getName().equals(second.getName())) {
+        if (first.getId().equals(second.getId())) {
             final Table firstParent  = first.getParentOrThrow();
             final Table secondParent = second.getParentOrThrow();
             return isSame(firstParent, secondParent);
-        } else return false;
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -391,11 +399,13 @@ public final class DocumentDbUtil {
      * @return        {@code true} if same, else {@code false}
      */
     public static boolean isSame(ForeignKeyColumn first, ForeignKeyColumn second) {
-        if (first.getName().equals(second.getName())) {
+        if (first.getId().equals(second.getId())) {
             final ForeignKey firstParent  = first.getParentOrThrow();
             final ForeignKey secondParent = second.getParentOrThrow();
             return isSame(firstParent, secondParent);
-        } else return false;
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -408,11 +418,13 @@ public final class DocumentDbUtil {
      * @return        {@code true} if same, else {@code false}
      */
     public static boolean isSame(ForeignKey first, ForeignKey second) {
-        if (first.getName().equals(second.getName())) {
+        if (first.getId().equals(second.getId())) {
             final Table firstParent  = first.getParentOrThrow();
             final Table secondParent = second.getParentOrThrow();
             return isSame(firstParent, secondParent);
-        } else return false;
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -425,11 +437,13 @@ public final class DocumentDbUtil {
      * @return        {@code true} if same, else {@code false}
      */
     public static boolean isSame(Table first, Table second) {
-        if (first.getName().equals(second.getName())) {
+        if (first.getId().equals(second.getId())) {
             final Schema firstParent  = first.getParentOrThrow();
             final Schema secondParent = second.getParentOrThrow();
             return isSame(firstParent, secondParent);
-        } else return false;
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -442,11 +456,13 @@ public final class DocumentDbUtil {
      * @return        {@code true} if same, else {@code false}
      */
     public static boolean isSame(Schema first, Schema second) {
-        if (first.getName().equals(second.getName())) {
+        if (first.getId().equals(second.getId())) {
             final Dbms firstParent  = first.getParentOrThrow();
             final Dbms secondParent = second.getParentOrThrow();
             return isSame(firstParent, secondParent);
-        } else return false;
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -459,11 +475,13 @@ public final class DocumentDbUtil {
      * @return        {@code true} if same, else {@code false}
      */
     public static boolean isSame(Dbms first, Dbms second) {
-        if (first.getName().equals(second.getName())) {
+        if (first.getId().equals(second.getId())) {
             final Project firstParent  = first.getParentOrThrow();
             final Project secondParent = second.getParentOrThrow();
             return isSame(firstParent, secondParent);
-        } else return false;
+        } else {
+            return false;
+        }
     }
     
     /**
@@ -476,7 +494,7 @@ public final class DocumentDbUtil {
      * @return        {@code true} if same, else {@code false}
      */
     public static boolean isSame(Project first, Project second) {
-        return first.getName().equals(second.getName());
+        return first.getId().equals(second.getId());
     }
 
     /**

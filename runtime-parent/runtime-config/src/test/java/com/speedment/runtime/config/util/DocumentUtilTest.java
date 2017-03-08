@@ -48,8 +48,8 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         for (int i = 0; i < columns.length; i++) {
             for (int j = 0; j < columns.length; j++) {
                 assertEquals(
-                    "  Is " + columns[i].getName() + 
-                    " same as " + columns[j].getName() + 
+                    "  Is " + columns[i].getId() + 
+                    " same as " + columns[j].getId() + 
                     ": ", i == j, 
                     DocumentDbUtil.isSame(columns[i], columns[j])
                 );
@@ -69,8 +69,8 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         for (int i = 0; i < indexColumns.length; i++) {
             for (int j = 0; j < indexColumns.length; j++) {
                 assertEquals(
-                    "  Is " + indexColumns[i].getName() + 
-                    " same as " + indexColumns[j].getName() + 
+                    "  Is " + indexColumns[i].getId() + 
+                    " same as " + indexColumns[j].getId() + 
                     ": ", i == j, 
                     DocumentDbUtil.isSame(indexColumns[i], indexColumns[j])
                 );
@@ -90,8 +90,8 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         for (int i = 0; i < indexes.length; i++) {
             for (int j = 0; j < indexes.length; j++) {
                 assertEquals(
-                    "  Is " + indexes[i].getName() + 
-                    " same as " + indexes[j].getName() + 
+                    "  Is " + indexes[i].getId() + 
+                    " same as " + indexes[j].getId() + 
                     ": ", i == j, 
                     DocumentDbUtil.isSame(indexes[i], indexes[j])
                 );
@@ -112,8 +112,8 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         for (int i = 0; i < primaryKeyColumns.length; i++) {
             for (int j = 0; j < primaryKeyColumns.length; j++) {
                 assertEquals(
-                    "  Is " + primaryKeyColumns[i].getName() + 
-                    " same as " + primaryKeyColumns[j].getName() + 
+                    "  Is " + primaryKeyColumns[i].getId() + 
+                    " same as " + primaryKeyColumns[j].getId() + 
                     ": ", i == j, 
                     DocumentDbUtil.isSame(primaryKeyColumns[i], primaryKeyColumns[j])
                 );
@@ -133,8 +133,8 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         for (int i = 0; i < foreignKeyColumns.length; i++) {
             for (int j = 0; j < foreignKeyColumns.length; j++) {
                 assertEquals(
-                    "  Is " + foreignKeyColumns[i].getName() + 
-                    " same as " + foreignKeyColumns[j].getName() + 
+                    "  Is " + foreignKeyColumns[i].getId() + 
+                    " same as " + foreignKeyColumns[j].getId() + 
                     ": ", i == j, 
                     DocumentDbUtil.isSame(foreignKeyColumns[i], foreignKeyColumns[j])
                 );
@@ -154,8 +154,8 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         for (int i = 0; i < foreignKeys.length; i++) {
             for (int j = 0; j < foreignKeys.length; j++) {
                 assertEquals(
-                    "  Is " + foreignKeys[i].getName() + 
-                    " same as " + foreignKeys[j].getName() + 
+                    "  Is " + foreignKeys[i].getId() + 
+                    " same as " + foreignKeys[j].getId() + 
                     ": ", i == j, 
                     DocumentDbUtil.isSame(foreignKeys[i], foreignKeys[j])
                 );
@@ -175,8 +175,8 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         for (int i = 0; i < tables.length; i++) {
             for (int j = 0; j < tables.length; j++) {
                 assertEquals(
-                    "  Is " + tables[i].getName() + 
-                    " same as " + tables[j].getName() + 
+                    "  Is " + tables[i].getId() + 
+                    " same as " + tables[j].getId() + 
                     ": ", i == j, 
                     DocumentDbUtil.isSame(tables[i], tables[j])
                 );
@@ -196,8 +196,8 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         for (int i = 0; i < schemas.length; i++) {
             for (int j = 0; j < schemas.length; j++) {
                 assertEquals(
-                    "  Is " + schemas[i].getName() + 
-                    " same as " + schemas[j].getName() + 
+                    "  Is " + schemas[i].getId() + 
+                    " same as " + schemas[j].getId() + 
                     ": ", i == j, 
                     DocumentDbUtil.isSame(schemas[i], schemas[j])
                 );
@@ -217,8 +217,8 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
         for (int i = 0; i < dbmses.length; i++) {
             for (int j = 0; j < dbmses.length; j++) {
                 assertEquals(
-                    "  Is " + dbmses[i].getName() + 
-                    " same as " + dbmses[j].getName() + 
+                    "  Is " + dbmses[i].getId() + 
+                    " same as " + dbmses[j].getId() + 
                     ": ", i == j, 
                     DocumentDbUtil.isSame(dbmses[i], dbmses[j])
                 );
@@ -232,8 +232,8 @@ public final class DocumentUtilTest extends AbstractDocumentTest {
     @Test
     public void testIsSame_Project_Project() {
         assertTrue(
-            "  Is " + project.getName() + 
-            " same as " + project.getName() + ": ",
+            "  Is " + project.getId() + 
+            " same as " + project.getId() + ": ",
             DocumentDbUtil.isSame(project, project)
         );
     }

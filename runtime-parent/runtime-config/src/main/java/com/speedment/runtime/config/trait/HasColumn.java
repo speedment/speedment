@@ -34,7 +34,7 @@ import static com.speedment.runtime.config.util.TraitUtil.viewOf;
  * @author  Emil Forslund
  * @since   2.3.0
  */
-public interface HasColumn extends Document, HasName {
+public interface HasColumn extends Document, HasId, HasName {
 
     /**
      * Locates and returns the column referenced by the {@link #getName()} 
@@ -49,7 +49,7 @@ public interface HasColumn extends Document, HasName {
             .findFirst()
             .flatMap(table -> table
                 .columns()
-                .filter(col -> col.getName().equals(getName()))
+                .filter(col -> col.getId().equals(getId()))
                 .findAny()
             );
     }

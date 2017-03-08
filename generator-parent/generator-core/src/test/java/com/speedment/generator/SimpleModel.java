@@ -85,11 +85,11 @@ public abstract class SimpleModel {
         project  = speedment.getOrThrow(ProjectComponent.class).getProject();
         dbms     = project.dbmses().findAny().get();
         schema   = dbms.schemas().findAny().get();
-        table    = schema.tables().filter(t -> TABLE_NAME.equals(t.getName())).findAny().get();
+        table    = schema.tables().filter(t -> TABLE_NAME.equals(t.getId())).findAny().get();
         column   = table.columns().findAny().get();
         pkColumn = table.primaryKeyColumns().findAny().get();
 
-        table2  = schema.tables().filter(t -> TABLE_NAME2.equals(t.getName())).findAny().get();
+        table2  = schema.tables().filter(t -> TABLE_NAME2.equals(t.getId())).findAny().get();
         column2 = table2.columns().findAny().get();
     }
     

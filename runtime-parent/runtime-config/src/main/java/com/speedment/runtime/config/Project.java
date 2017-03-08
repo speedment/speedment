@@ -136,20 +136,20 @@ public interface Project extends
             );
         }
 
-        final String dbmsName = parts[0],
-            schemaName = parts[1],
-            tableName = parts[2];
+        final String dbmsId = parts[0],
+            schemaId = parts[1],
+            tableId = parts[2];
        
         return dbmses()
-            .filter(d -> dbmsName.equals(d.getName()))
+            .filter(d -> dbmsId.equals(d.getId()))
             .findAny()
             .orElseThrow(() -> new IllegalArgumentException(
-                "Could not find dbms: '" + dbmsName + "'."))
-            .schemas().filter(s -> schemaName.equals(s.getName())).findAny()
+                "Could not find dbms: '" + dbmsId + "'."))
+            .schemas().filter(s -> schemaId.equals(s.getId())).findAny()
             .orElseThrow(() -> new IllegalArgumentException(
-                "Could not find schema: '" + schemaName + "'."))
-            .tables().filter(t -> tableName.equals(t.getName())).findAny()
+                "Could not find schema: '" + schemaId + "'."))
+            .tables().filter(t -> tableId.equals(t.getId())).findAny()
             .orElseThrow(() -> new IllegalArgumentException(
-                "Could not find table: '" + tableName + "'."));
+                "Could not find table: '" + tableId + "'."));
     }
 }

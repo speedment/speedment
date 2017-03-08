@@ -55,7 +55,7 @@ public final class ApplicationImplTranslator extends AbstractJavaClassTranslator
     protected String getJavadocRepresentText() {
         return "The default {@link " + Speedment.class.getName() + 
             "} implementation class for the {@link " + Project.class.getName() + 
-            "} named " + getSupport().projectOrThrow().getName() + ".";
+            "} named " + getSupport().projectOrThrow().getId() + ".";
     }
     
     private Type applicationType() {

@@ -78,20 +78,20 @@ public interface Table extends
      */
     Stream<? extends PrimaryKeyColumn> primaryKeyColumns();
 
-    default Optional<? extends Column> findColumn(String name) {
-        return columns().filter(child -> child.getName().equals(name)).findAny();
+    default Optional<? extends Column> findColumn(String id) {
+        return columns().filter(child -> child.getId().equals(id)).findAny();
     }
 
-    default Optional<? extends Index> findIndex(String name) {
-        return indexes().filter(child -> child.getName().equals(name)).findAny();
+    default Optional<? extends Index> findIndex(String id) {
+        return indexes().filter(child -> child.getId().equals(id)).findAny();
     }
 
-    default Optional<? extends ForeignKey> findForeignKey(String name) {
-        return foreignKeys().filter(child -> child.getName().equals(name)).findAny();
+    default Optional<? extends ForeignKey> findForeignKey(String id) {
+        return foreignKeys().filter(child -> child.getId().equals(id)).findAny();
     }
 
-    default Optional<? extends PrimaryKeyColumn> findPrimaryKeyColumn(String name) {
-        return primaryKeyColumns().filter(child -> child.getName().equals(name)).findAny();
+    default Optional<? extends PrimaryKeyColumn> findPrimaryKeyColumn(String id) {
+        return primaryKeyColumns().filter(child -> child.getId().equals(id)).findAny();
     }
 
     @Override

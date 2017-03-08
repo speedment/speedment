@@ -75,12 +75,12 @@ public final class ReferencesEnabledRule implements Rule {
                     issues.post(new Issue() {
                         @Override
                         public String getTitle() {
-                            return "Reference not enabled: " + target.get().getName();
+                            return "Reference not enabled: " + target.get().getId();
                         }
 
                         @Override
                         public String getDescription() {
-                            return "The referenced element " + target.get().getName()
+                            return "The referenced element " + target.get().getId()
                                 + ", is not enabled. Disabled elements will "
                                 + "not be generated. Thus, referencing a disabled element "
                                 + "will result in broken code.\n"

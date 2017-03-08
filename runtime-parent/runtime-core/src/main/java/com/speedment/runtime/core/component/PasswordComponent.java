@@ -60,7 +60,7 @@ public interface PasswordComponent {
     default void put(Dbms dbms, char[] password) {
         requireNonNull(dbms);
         // password is nullable
-        put(dbms.getName(), password);
+        put(dbms.getId(), password);
     }
     
     /**
@@ -80,6 +80,6 @@ public interface PasswordComponent {
      */
     default Optional<char[]> get(Dbms dbms) {
         requireNonNull(dbms);
-        return get(dbms.getName());
+        return get(dbms.getId());
     }
 }

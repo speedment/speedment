@@ -104,7 +104,7 @@ public interface ForeignKeyColumn extends
             .findFirst();
 
         return schema.flatMap(s -> s.tables()
-            .filter(tab -> tab.getName().equals(getForeignTableName()))
+            .filter(tab -> tab.getId().equals(getForeignTableName()))
             .findAny()
         );
     }
@@ -118,7 +118,7 @@ public interface ForeignKeyColumn extends
     default Optional<? extends Column> findForeignColumn() {
         return findForeignTable()
             .flatMap(table -> table.columns()
-                .filter(col -> col.getName().equals(getForeignColumnName()))
+                .filter(col -> col.getId().equals(getForeignColumnName()))
                 .findAny()
             );
     }

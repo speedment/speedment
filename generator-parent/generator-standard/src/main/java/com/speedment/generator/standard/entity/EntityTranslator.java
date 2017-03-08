@@ -46,6 +46,6 @@ public class EntityTranslator extends AbstractEntityAndManagerTranslator<Interfa
     @Override
     protected String getJavadocRepresentText() {
         return "The main interface for entities of the {@code " + 
-            getDocument().getName() + "}-table in the database.";
+            getDocument().getId() + "}-table in the database.";
     }
 }

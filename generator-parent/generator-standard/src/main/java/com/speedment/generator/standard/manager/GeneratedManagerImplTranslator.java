@@ -70,7 +70,7 @@ public final class GeneratedManagerImplTranslator
                     .add(Field.of("tableIdentifier", SimpleParameterizedType.create(TableIdentifier.class, getSupport().entityType())).private_().final_())
                     .add(Constructor.of().protected_()
                         .add("this.tableIdentifier = " + TableIdentifier.class.getSimpleName() + ".of("
-                            + Stream.of(getSupport().dbmsOrThrow().getName(), getSupport().schemaOrThrow().getName(), getSupport().tableOrThrow().getName())
+                            + Stream.of(getSupport().dbmsOrThrow().getId(), getSupport().schemaOrThrow().getId(), getSupport().tableOrThrow().getId())
                             .map(s -> "\"" + s + "\"").collect(joining(", ")) 
                             + ");")
                     )
@@ -108,6 +108,6 @@ public final class GeneratedManagerImplTranslator
     }
 
     private static boolean isPrimaryKey(Column column) {
-        return column.getParentOrThrow().findPrimaryKeyColumn(column.getName()).isPresent();
+        return column.getParentOrThrow().findPrimaryKeyColumn(column.getId()).isPresent();
     }
 }

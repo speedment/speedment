@@ -26,6 +26,7 @@ import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.mutator.ForeignKeyColumnMutator;
 import com.speedment.runtime.config.parameter.OrderType;
+import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
@@ -97,7 +98,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
 
         // Locate the dbms in the copy.
         final Dbms dbmsCopy = projectCopy.dbmses()
-            .filter(d -> d.getName().equals(dbms.getName()))
+            .filter(d -> d.getId().equals(dbms.getId()))
             .findAny().orElseThrow(() -> new SpeedmentException(
                 "Could not find Dbms document in copy."
             ));
@@ -389,8 +390,8 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                 // Fall-back to DEFAULT_MAPPING
                 selectedJdbcClass = DEFAULT_MAPPING;
                 LOGGER.warn(
-                    "Unable to determine mapping for table " + table.getName() + 
-                    ", column " + column.getName() + 
+                    "Unable to determine mapping for table " + table.getId() + 
+                    ", column " + column.getId() + 
                     ". Fall-back to JDBC-type " + 
                     selectedJdbcClass.getSimpleName()
                 );
@@ -447,7 +448,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         tableChilds(table.mutator()::addNewPrimaryKeyColumn, supplier, mutator, progressListener);
         
         if (table.primaryKeyColumns().noneMatch(pk -> true)) {
-            LOGGER.warn("Table '" + table.getName() + "' does not have any primary key.");
+            LOGGER.warn("Table '" + table.getId() + "' does not have any primary key.");
         }
     }
 
@@ -525,7 +526,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
 
             // FKs always point to the same DBMS but can
             // be changed to another one using the config 
-            fkcMutator.setForeignDatabaseName(schema.getParentOrThrow().getName());
+            fkcMutator.setForeignDatabaseName(schema.getParentOrThrow().getId());
 
             // Use schema name first but if not present, use catalog name
             fkcMutator.setForeignSchemaName(
@@ -624,7 +625,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
      * connection.getMetaData().getXxxx(catalogLookupName, ...) methods
      */
     protected String jdbcCatalogLookupName(Schema schema) {
-        return schema.getName();
+        return schema.getId();
     }
 
     /**
@@ -636,7 +637,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
      * connection.getMetaData().getColumns() method
      */
     protected String metaDataTableNameForColumns(Table table) {
-        return table.getName();
+        return table.getId();
     }
 
     /**
@@ -648,7 +649,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
      * connection.getMetaData().getIndexes() method
      */
     protected String metaDataTableNameForIndexes(Table table) {
-        return table.getName();
+        return table.getId();
     }
 
     /**
@@ -660,7 +661,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
      * connection.getMetaData().getPrimaryKeys() method
      */
     protected String metaDataTableNameForPrimaryKeys(Table table) {
-        return table.getName();
+        return table.getId();
     }
 
     /**
@@ -672,7 +673,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
      * connection.getMetaData().getImportedKeys() method
      */
     protected String metaDataTableNameForForeignKeys(Table table) {
-        return table.getName();
+        return table.getId();
     }
     
     /**
@@ -683,7 +684,7 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
      * @return       the table name to use
      */
     protected String metaDataTableNameForShowColumns(Table table) {
-        return table.getName();
+        return table.getId();
     }
     
     protected Map<String, Class<?>> readTypeMapFromDB(Dbms dbms) throws SQLException {
@@ -742,12 +743,12 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         return result;
     }
 
-    private <P extends HasName, D extends Document & HasName & HasMainInterface & HasParent<P>> String actionName(D doc) {
+    private <P extends HasId & HasName, D extends Document & HasId & HasName & HasMainInterface & HasParent<P>> String actionName(D doc) {
         return doc.mainInterface().getSimpleName() +
             " " +
-            doc.getName() +
+            doc.getId() +
             " in " +
-            doc.getParentOrThrow().getName();
+            doc.getParentOrThrow().getId();
     }
     
     /**

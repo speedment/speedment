@@ -54,7 +54,7 @@ public final class ApplicationTranslator extends AbstractJavaClassTranslator<Pro
     protected String getJavadocRepresentText() {
         return "An {@link " + ApplicationBuilder.class.getName() + 
             "} interface for the {@link " + Project.class.getName() + 
-            "} named " + getSupport().projectOrThrow().getName() + ".";
+            "} named " + getSupport().projectOrThrow().getId() + ".";
     }
     
     private Type generatedType() {

@@ -92,15 +92,15 @@ public final class FkHolder {
 
     private IllegalStateException noEnabledForeignKeyException() {
         return new IllegalStateException(
-            "FK " + fk.getName() + " does not have an enabled ForeignKeyColumn"
+            "FK " + fk.getId() + " does not have an enabled ForeignKeyColumn"
         );
     }
     
     private SpeedmentException couldNotFindLocalColumnException() {
         return new SpeedmentException(
             "Could not find referenced local column '" + 
-            fkc.getName() + "' in table '" + 
-            fkc.getParent().flatMap(ForeignKey::getParent).get().getName() + "'."
+            fkc.getId() + "' in table '" + 
+            fkc.getParent().flatMap(ForeignKey::getParent).get().getId() + "'."
         );
     }
     

@@ -108,9 +108,9 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
                         .add("this.tableIdentifier = "
                             + TableIdentifier.class.getSimpleName() + ".of("
                             + Stream.of(
-                                getSupport().dbmsOrThrow().getName(), 
-                                getSupport().schemaOrThrow().getName(), 
-                                getSupport().tableOrThrow().getName()
+                                getSupport().dbmsOrThrow().getId(), 
+                                getSupport().schemaOrThrow().getId(), 
+                                getSupport().tableOrThrow().getId()
                             ).map(s -> "\"" + s + "\"").collect(joining(", "))
                             + ");")
                     )

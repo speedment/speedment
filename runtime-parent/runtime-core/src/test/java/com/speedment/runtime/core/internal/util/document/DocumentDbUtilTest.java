@@ -33,13 +33,13 @@ public final class DocumentDbUtilTest extends AbstractDocumentTest {
      */
     @Test
     public void testIsUnique() {
-        assertTrue("  Is " + columnA1.getName() + " unique: ", DocumentDbUtil.isUnique(columnA1));
-        assertFalse("  Is " + columnA2.getName() + " unique: ", DocumentDbUtil.isUnique(columnA2));
-        assertTrue("  Is " + columnB1.getName() + " unique: ", DocumentDbUtil.isUnique(columnB1));
-        assertTrue("  Is " + columnB2.getName() + " unique: ", DocumentDbUtil.isUnique(columnB2));
-        assertTrue("  Is " + columnC1.getName() + " unique: ", DocumentDbUtil.isUnique(columnC1));
-        assertFalse("  Is " + columnC2.getName() + " unique: ", DocumentDbUtil.isUnique(columnC2));
-        assertTrue("  Is " + columnD1.getName() + " unique: ", DocumentDbUtil.isUnique(columnD1));
-        assertFalse("  Is " + columnD2.getName() + " unique: ", DocumentDbUtil.isUnique(columnD2));
+        assertTrue("  Is " + columnA1.getId() + " unique: ", DocumentDbUtil.isUnique(columnA1));
+        assertFalse("  Is " + columnA2.getId() + " unique: ", DocumentDbUtil.isUnique(columnA2));
+        assertTrue("  Is " + columnB1.getId() + " unique: ", DocumentDbUtil.isUnique(columnB1));
+        assertTrue("  Is " + columnB2.getId() + " unique: ", DocumentDbUtil.isUnique(columnB2));
+        assertTrue("  Is " + columnC1.getId() + " unique: ", DocumentDbUtil.isUnique(columnC1));
+        assertFalse("  Is " + columnC2.getId() + " unique: ", DocumentDbUtil.isUnique(columnC2));
+        assertTrue("  Is " + columnD1.getId() + " unique: ", DocumentDbUtil.isUnique(columnD1));
+        assertFalse("  Is " + columnD2.getId() + " unique: ", DocumentDbUtil.isUnique(columnD2));
     }
 }

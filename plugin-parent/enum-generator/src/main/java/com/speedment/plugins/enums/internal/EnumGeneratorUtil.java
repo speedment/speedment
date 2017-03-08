@@ -63,8 +63,8 @@ public final class EnumGeneratorUtil {
     public static List<String> enumConstantsOf(Column column) {
         return Stream.of(column.getEnumConstants()
             .orElseThrow(() -> new RuntimeException(
-                "Column '" + column.getName() + 
-                "' in table '" + column.getParentOrThrow().getName() + 
+                "Column '" + column.getId() + 
+                "' in table '" + column.getParentOrThrow().getId() + 
                 "' was marked as an enum but no enum constants was specified."
             ))
             .split(",")

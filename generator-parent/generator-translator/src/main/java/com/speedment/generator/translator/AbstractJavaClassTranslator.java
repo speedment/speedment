@@ -38,6 +38,7 @@ import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.internal.*;
 import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.runtime.config.trait.HasId;
 import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.core.annotation.GeneratedCode;
@@ -58,7 +59,7 @@ import java.util.stream.Stream;
  * 
  * @author  Per Minborg
  */
-public abstract class AbstractJavaClassTranslator<DOC extends Document & HasName & HasEnabled & HasMainInterface, T extends ClassOrInterface<T>>
+public abstract class AbstractJavaClassTranslator<DOC extends Document & HasId & HasName & HasEnabled & HasMainInterface, T extends ClassOrInterface<T>>
     implements JavaClassTranslator<DOC, T> {
 
     public static final String 
@@ -358,7 +359,7 @@ public abstract class AbstractJavaClassTranslator<DOC extends Document & HasName
                         .flatMap(t -> t.foreignKeys())
                         .filter(HasEnabled::test)
                         .filter(fk -> fk.foreignKeyColumns()
-                            .filter(fkc -> fkc.getForeignTableName().equals(getDocument().getName()))
+                            .filter(fkc -> fkc.getForeignTableName().equals(getDocument().getId()))
                             .filter(HasEnabled::test)
                             .filter(fkc -> fkc.findForeignColumn().map(HasEnabled::test).orElse(false))
                             .findFirst()

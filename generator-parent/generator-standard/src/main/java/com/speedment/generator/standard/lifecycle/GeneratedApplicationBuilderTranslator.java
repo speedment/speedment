@@ -79,7 +79,7 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
 
                 final Map<String, List<Table>> nameMap = traverseOver(project, Table.class)
                     .filter(HasEnabled::test)
-                    .collect(Collectors.groupingBy(Table::getName));
+                    .collect(Collectors.groupingBy(Table::getId));
 
                 final Set<String> ambigousNames = MapStream.of(nameMap)
                     .filterValue(l -> l.size() > 1)
@@ -96,7 +96,7 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
                         final Type managerImplType = support.managerImplType();
                         final Type sqlAdapterType = support.sqlAdapterType();
 
-                        if (ambigousNames.contains(t.getName())) {
+                        if (ambigousNames.contains(t.getId())) {
                             managerImpls.add(managerImplType.getTypeName());
                             sqlAdapters.add(sqlAdapterType.getTypeName());
                         } else {
@@ -167,7 +167,7 @@ public final class GeneratedApplicationBuilderTranslator extends AbstractJavaCla
     protected String getJavadocRepresentText() {
         return "A generated base {@link " + AbstractApplicationBuilder.class.getName()
             + "} class for the {@link " + Project.class.getName()
-            + "} named " + getSupport().projectOrThrow().getName() + ".";
+            + "} named " + getSupport().projectOrThrow().getId() + ".";
     }
 
     @Override
