@@ -14,25 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.speedment.runtime.core.internal.code.model.java;
 
-import com.speedment.runtime.config.*;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.PrimaryKeyColumn;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.internal.AbstractApplicationMetadata;
 import com.speedment.runtime.core.internal.DefaultApplicationBuilder;
-import org.junit.Before;
-
 import java.util.Optional;
-import java.util.stream.Stream;
-
 import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
+import org.junit.Before;
 
 /**
  *
