@@ -24,6 +24,7 @@ import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.component.resultset.StandardJavaTypeMapping;
 import static com.speedment.runtime.core.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Time;
@@ -65,9 +66,13 @@ public class JavaTypeMapImpl implements JavaTypeMap {
         inner.put("DECIMAL", BigDecimal.class);
         inner.put("BIT", Integer.class); ///
         inner.put("TINYINT", Byte.class);
+        inner.put("TINYINT UNSIGNED", Short.class);
         inner.put("SMALLINT", Short.class);
+        inner.put("SMALLINT UNSIGNED", Integer.class);
         inner.put("INTEGER", Integer.class);
+        inner.put("INTEGER UNSIGNED", Long.class);
         inner.put("BIGINT", Long.class);
+        inner.put("BIGINT UNSIGNED", BigInteger.class);
         inner.put("REAL", Float.class);
         inner.put("FLOAT", Double.class);
         inner.put("DOUBLE", Double.class);
@@ -81,6 +86,7 @@ public class JavaTypeMapImpl implements JavaTypeMap {
 
         //MySQL Specific mappings
         inner.put("YEAR", Integer.class);
+        inner.put("INT UNSIGNED", Long.class);
 
         //PostgreSQL specific mappings
         inner.put("UUID", UUID.class);
