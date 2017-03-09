@@ -257,14 +257,26 @@ public abstract class AbstractApplicationBuilder<
     @Override
     public BUILDER withSchema(String schemaName) {
         requireNonNull(schemaName);
-        with(Schema.class, s -> s.mutator().setName(schemaName));
+        with(Schema.class, s -> {
+            // This makes sure that old json files with no id
+            // first sets it id before the name is changed
+            // Todo: Remove in next major API bumnp
+            s.mutator().setId(s.getId());
+            s.mutator().setName(schemaName);
+        });
         return self();
     }
 
     @Override
     public BUILDER withSchema(String oldSchemaName, String schemaName) {
         requireNonNulls(oldSchemaName, schemaName);
-        with(Schema.class, oldSchemaName, s -> s.mutator().setName(schemaName));
+        with(Schema.class, oldSchemaName, s -> {
+            // This makes sure that old json files with no id
+            // first sets it id before the name is changed
+            // Todo: Remove in next major API bumnp
+            s.mutator().setId(s.getId());
+            s.mutator().setName(schemaName);
+        });
         return self();
     }
 
@@ -277,7 +289,7 @@ public abstract class AbstractApplicationBuilder<
     @Override
     public BUILDER withConnectionUrl(String dbmsName, String connectionUrl) {
         requireNonNull(dbmsName);
-        with(Dbms.class, dbmsName, s -> s.mutator().setName(connectionUrl));
+        with(Dbms.class, dbmsName, s -> s.mutator().setConnectionUrl(connectionUrl));
         return self();
     }
 

@@ -48,7 +48,7 @@ public final class JavaTypeMappingImpl<T> implements ResultSetMapping<T> {
         this.stringMapper        = requireNonNull(stringMapper);
         this.longMapper          = requireNonNull(longMapper);
     }
-
+    
     @Override
     public Class<T> getJavaClass() {
         return clazz;
