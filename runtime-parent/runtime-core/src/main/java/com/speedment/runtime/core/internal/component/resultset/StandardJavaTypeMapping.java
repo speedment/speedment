@@ -30,6 +30,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
+import java.math.BigInteger;
 
 public final class StandardJavaTypeMapping {
     
@@ -106,6 +107,10 @@ public final class StandardJavaTypeMapping {
         
         new JavaTypeMappingImpl<>(
             BigDecimal.class, "BigDecimal", s -> new BigDecimal(s), l -> LongUtil.cast(l, BigDecimal.class)
+        ),
+        
+        new JavaTypeMappingImpl<>(
+            BigInteger.class, BigInteger.class.getSimpleName(), s -> new BigInteger(s), l -> LongUtil.cast(l, BigInteger.class)
         ),
         
         new JavaTypeMappingImpl<>(

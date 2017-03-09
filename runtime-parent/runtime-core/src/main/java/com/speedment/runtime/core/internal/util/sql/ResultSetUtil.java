@@ -24,6 +24,7 @@ import java.sql.*;
 import java.util.UUID;
 
 import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
+import java.math.BigInteger;
 
 /**
  * Utility methods for retrieving nullable and special values from
@@ -173,6 +174,16 @@ public final class ResultSetUtil {
 
     public static BigDecimal getBigDecimal(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
         return getNullableFrom(resultSet, rs -> rs.getBigDecimal(ordinalPosition));
+    }
+    
+    public static BigInteger getBigInteger(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
+        return getNullableFrom(resultSet, rs -> {
+            final BigDecimal bd = rs.getBigDecimal(ordinalPosition);
+            if (bd == null) {
+                return null;
+            }
+            return bd.toBigInteger();
+        });
     }
 
     public static Blob getBlob(final ResultSet resultSet, final int ordinalPosition) throws SQLException {
