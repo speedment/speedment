@@ -54,17 +54,20 @@ public @interface GeneratedCode {
     * The value element MUST have the name of the code generator.
     * The recommended convention is to use the fully qualified name of the
     * code generator. For example: com.acme.generator.CodeGen.
+     * @return the code generators
     */
    String[] value();
 
    /**
     * Date when the source was generated.
+     * @return the date the source was generated
     */
    String date() default "";
 
    /**
     * A place holder for any comments that the code generator may want to
     * include in the generated code.
+     * @return the comment
     */
    String comments() default "";
 }
