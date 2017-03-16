@@ -1,5 +1,5 @@
-Speedment is a Stream ORM Java Toolkit and Runtime
-==================================================
+Speedment is a Java 8 Stream ORM Toolkit and Runtime
+====================================================
 
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.speedment/runtime/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.speedment/runtime)
 [![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.speedment/runtime-deploy/badge.svg)](http://www.javadoc.io/doc/com.speedment/runtime-deploy)
@@ -9,7 +9,6 @@ Speedment is a Stream ORM Java Toolkit and Runtime
 
 <img src="https://raw.githubusercontent.com/speedment/speedment-resources/master/src/main/resources/wiki/frontpage/Forest.png" alt="Spire the Hare" title="Spire" align="right" width="240px" />
 
-Speedment is a Java Stream ORM toolkit and runtime. 
 The toolkit analyzes the metadata of an existing legacy SQL database 
 and creates a Java representation of the data model which together with 
 the Speedment runtime allows the user to create scalable and efficient 
@@ -33,6 +32,25 @@ SELECT id, name, color, age FROM hare
 ```
 
 No need for manually writing SQL-queies any more. Remain in a pure Java world!
+
+### Expressing SQL as Java 8 Streams
+When we started the open-source project Speedment, the main objective was to remove the polyglot requirement for Java database application developers. After all, we all love Java and why should we need to know SQL when, instead, we could derive the same semantics directly from Java streams? When one takes a closer look at this objective, it turns out that there is a remarkable resemblance between Java streams and SQL as summarized in this simplified table:
+
+| SQL          | Java 8 Stream Equivalent          |
+| : ---------- | :---------------------------------|
+| `FROM`       | `stream()`   |
+| `SELECT`     | `map()`      |
+| `WHERE`      | `filter()` (before collecting) |
+| `HAVING`     | `filter()` (after collecting) |
+| `JOIN`       | `flatMap()`  |
+| `DISTINCT`   | `distinct()` |
+| `UNION`      | `concat().distinct()` |
+| `ORDER BY`   | `sorted()`   |
+| `OFFSET`     | `skip()`     |
+| `LIMIT`      | `limit()`    |
+| `GROUP BY`   | `collect(groupingBy())` |
+| `COUNT`      | `count()`    |
+
 
 Documentation
 -------------
