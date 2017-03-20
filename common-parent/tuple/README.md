@@ -18,7 +18,7 @@ Here is another example:
    
    int id = tuple3.get0();
    String name = tuple3.get1();
-   fload saldo = tuple3.get2();
+   float saldo = tuple3.get2();
 ```
 
 
