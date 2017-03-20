@@ -30,7 +30,8 @@ If we need to be able to handle `null` values, there is a variant of the Tuple t
   Optional<String> alias = tuple2.get1();
 ```
 
-All tuples (e.g. Tuple2, Tuple3 and TupleOfNullables2) support the following methods:
+## Suported Methods
+Both tuple types (e.g. `Tuple` and `TupleOfNullables`) support the following methods:
 
 | Method      | Parameter  | Outcome
 | :---------- | :--------- | :--------
@@ -39,13 +40,13 @@ All tuples (e.g. Tuple2, Tuple3 and TupleOfNullables2) support the following met
 | `stream`    | `Class`    | Returns a `Stream` of all non-null elements of the given class
 
 
-Tuples without null values support the following methods:
+`Tuples` without null values support the following methods:
 
 | Method      | Parameter  | Outcome
 | :---------- | :--------- | :--------
 | `stream`    | -          | Returns a `Stream` of all elements in the Tuple
 
-TupleOfNullables (allowing null values) support the following methods:
+`TupleOfNullables` (allowing null values) support the following methods:
 
 | Method      | Parameter  | Outcome
 | :---------- | :--------- | :--------
