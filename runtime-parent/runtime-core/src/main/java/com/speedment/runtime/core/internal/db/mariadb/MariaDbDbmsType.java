@@ -18,6 +18,7 @@ package com.speedment.runtime.core.internal.db.mariadb;
 
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.internal.db.AbstractDatabaseNamingConvention;
@@ -28,6 +29,7 @@ import com.speedment.runtime.core.internal.manager.sql.MySqlSpeedmentPredicateVi
 
 import java.util.Collections;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static com.speedment.common.injector.InjectBundle.of;
@@ -112,6 +114,17 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
     public String getInitialQuery() {
         return "select version() as `MariaDB version`";
     }
+
+    @Override
+    public DbmsColumnHandler getColumnHandler() {
+        return new DbmsColumnHandler() {
+            @Override
+            public Predicate<Column> excludedInInsertStatement() {
+                return c -> false; // For MariaDB, even autoincrement fields are added to insert statements
+            }
+        };
+    }
+
 
     private final static class MariaDbNamingConvention extends AbstractDatabaseNamingConvention {
 
