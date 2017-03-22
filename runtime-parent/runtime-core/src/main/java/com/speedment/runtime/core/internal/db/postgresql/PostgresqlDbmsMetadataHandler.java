@@ -21,6 +21,7 @@ import com.speedment.runtime.core.db.JavaTypeMap;
 import com.speedment.runtime.core.db.metadata.ColumnMetaData;
 import com.speedment.runtime.core.internal.db.AbstractDbmsMetadataHandler;
 
+import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.Optional;
 
@@ -35,7 +36,9 @@ public final class PostgresqlDbmsMetadataHandler extends AbstractDbmsMetadataHan
     @Override
     protected JavaTypeMap newJavaTypeMap() {
         final JavaTypeMap javaTypeMap = super.newJavaTypeMap();
-            
+
+        javaTypeMap.put("bytea", Blob.class);
+
         javaTypeMap.addRule((sqlTypeMapping, md) -> {
             // Map a BIT(1) to boolean
             if ("BIT".equalsIgnoreCase(md.getTypeName()) && md.getColumnSize() == 1) {
