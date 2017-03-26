@@ -62,6 +62,7 @@ public abstract class AbstractReloadMojo extends AbstractSpeedmentMojo {
         final ConfigFileHelper helper = speedment.getOrThrow(ConfigFileHelper.class);
         
         try {
+            helper.setCurrentlyOpenFile(configLocation());
             helper.loadFromDatabaseAndSaveToFile();
         } catch (final Exception ex) {
             final String err = "An error occured while reloading.";
