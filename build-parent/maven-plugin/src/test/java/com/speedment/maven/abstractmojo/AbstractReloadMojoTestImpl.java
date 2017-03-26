@@ -5,7 +5,7 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
 /**
- * test implementaiton of AbstractReloadMojo
+ * test implementation of AbstractReloadMojo
  */
 public class AbstractReloadMojoTestImpl extends AbstractReloadMojo {
 
