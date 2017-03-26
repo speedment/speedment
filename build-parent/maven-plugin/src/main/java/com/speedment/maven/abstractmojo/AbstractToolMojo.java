@@ -41,15 +41,15 @@ public abstract class AbstractToolMojo extends AbstractSpeedmentMojo {
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject mavenProject;
     
-    private @Parameter(defaultValue = "false") boolean debug;
+    private @Parameter(defaultValue = "${debug}") Boolean debug;
     private @Parameter(defaultValue = "${dbms.host}") String dbmsHost;
     private @Parameter(defaultValue = "${dbms.port}") int dbmsPort;
     private @Parameter(defaultValue = "${dbms.username}") String dbmsUsername;
     private @Parameter(defaultValue = "${dbms.password}") String dbmsPassword;
-    private @Parameter String[] components;
-    private @Parameter Mapping[] typeMappers;
+    private @Parameter(defaultValue = "${components}") String[] components;
+    private @Parameter(defaultValue = "${typeMappers}") Mapping[] typeMappers;
     private @Parameter ConfigParam[] parameters;
-    private @Parameter(defaultValue = DEFAULT_CONFIG_LOCATION) File configFile;
+    private @Parameter(defaultValue = "${configFile}") File configFile;
 
     protected AbstractToolMojo() {}
     
@@ -61,7 +61,7 @@ public abstract class AbstractToolMojo extends AbstractSpeedmentMojo {
         MainApp.setInjector(injector);
         
         if (hasConfigFile()) {
-            Application.launch(MainApp.class, configFile.getAbsolutePath());
+            Application.launch(MainApp.class, configLocation().getAbsolutePath());
         } else {
             Application.launch(MainApp.class);
         }
@@ -89,12 +89,12 @@ public abstract class AbstractToolMojo extends AbstractSpeedmentMojo {
     
     @Override
     protected File configLocation() {
-        return configFile;
+        return configFile == null ? new File(DEFAULT_CONFIG_LOCATION) : configFile;
     }
     
     @Override
     protected boolean debug() {
-        return debug;
+        return debug == null ? false: debug;
     }
 
     @Override
