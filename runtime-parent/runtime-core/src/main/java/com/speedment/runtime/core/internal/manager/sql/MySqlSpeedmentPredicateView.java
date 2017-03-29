@@ -20,11 +20,10 @@ import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
 import static com.speedment.runtime.core.internal.manager.sql.AbstractFieldPredicateView.of;
 import static com.speedment.runtime.field.internal.predicate.PredicateUtil.getFirstOperandAsRaw;
-import com.speedment.runtime.field.predicate.FieldPredicate;
-
 import static com.speedment.runtime.field.internal.predicate.PredicateUtil.getFirstOperandAsRawSet;
 import static com.speedment.runtime.field.internal.predicate.PredicateUtil.getInclusionOperand;
 import static com.speedment.runtime.field.internal.predicate.PredicateUtil.getSecondOperand;
+import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import java.util.Set;
 import static java.util.stream.Collectors.joining;
@@ -36,9 +35,24 @@ import static java.util.stream.Collectors.joining;
 @SuppressWarnings("rawtypes")
 public final class MySqlSpeedmentPredicateView extends AbstractFieldPredicateView implements FieldPredicateView {
 
+    private enum Collation {
+
+        UTF8_BIN, UTF8_GENERAL_CI;
+        
+        private final String collateCommand;
+
+        private Collation() {
+            this.collateCommand = "COLLATE " + name().toLowerCase();
+        }
+
+        String getCollateCommand() {
+            return collateCommand;
+        }
+    }
+
     @Override
     protected SqlPredicateFragment equalIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(LOWER(" + cn + ") = LOWER(?))", negated).add(getFirstOperandAsRaw(model)); // Will work for any collation
+        return of(compare(cn, " = ?", Collation.UTF8_GENERAL_CI), negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
@@ -73,12 +87,12 @@ public final class MySqlSpeedmentPredicateView extends AbstractFieldPredicateVie
 
     @Override
     protected SqlPredicateFragment equalString(String cn, FieldPredicate<?> model) {
-        return of("(BINARY " + cn + " = ?)").add(getFirstOperandAsRaw(model));
+        return of(compare(cn, " = ?", Collation.UTF8_BIN)).add(getFirstOperandAsRaw(model));
     }
 
     @Override
     protected SqlPredicateFragment notEqualString(String cn, FieldPredicate<?> model) {
-        return of("(NOT (BINARY " + cn + " = ?))").add(getFirstOperandAsRaw(model));
+        return of("(NOT (" + compare(cn, " = ?", Collation.UTF8_BIN) + ")").add(getFirstOperandAsRaw(model));
     }
 
     @Override
@@ -91,9 +105,9 @@ public final class MySqlSpeedmentPredicateView extends AbstractFieldPredicateVie
         return inStringHelper(cn, model, true);
     }
 
-    protected SqlPredicateFragment inStringHelper(String cn, FieldPredicate<?> model, boolean negated) {
+    private SqlPredicateFragment inStringHelper(String cn, FieldPredicate<?> model, boolean negated) {
         final Set<?> set = getFirstOperandAsRawSet(model);
-        return of("(BINARY " + cn + " IN (" + set.stream().map($ -> "?").collect(joining(",")) + "))", negated).addAll(set);
+        return of("(" + cn + " " + Collation.UTF8_BIN.getCollateCommand() + " IN (" + set.stream().map($ -> "?").collect(joining(",")) + "))", negated).addAll(set);
     }
 
     @Override
@@ -106,20 +120,33 @@ public final class MySqlSpeedmentPredicateView extends AbstractFieldPredicateVie
         return betweenStringHelper(cn, model, true);
     }
 
-    protected SqlPredicateFragment betweenStringHelper(String cn, FieldPredicate<?> model, boolean negated) {
+    private SqlPredicateFragment betweenStringHelper(String cn, FieldPredicate<?> model, boolean negated) {
         final Inclusion inclusion = getInclusionOperand(model);
         switch (inclusion) {
             case START_EXCLUSIVE_END_EXCLUSIVE: {
-                return of("(" + cn + " > ? AND " + cn + " < ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
+                return of(
+                    "(" + greaterThanString(cn) + " AND " + lessThanString(cn) + ")",
+                    negated
+                ).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
             }
             case START_INCLUSIVE_END_EXCLUSIVE: {
-                return of("(" + cn + " >= ? AND " + cn + " < ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
+                return of(
+                    "(" + greaterOrEqualString(cn) + " AND " + lessThanString(cn) + ")",
+                    negated
+                ).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
             }
             case START_EXCLUSIVE_END_INCLUSIVE: {
-                return of("(" + cn + " > ? AND " + cn + " <= ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
+
+                return of(
+                    "(" + greaterThanString(cn) + " AND " + lessOrEqualString(cn) + ")",
+                    negated
+                ).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
             }
             case START_INCLUSIVE_END_INCLUSIVE: {
-                return of("(" + cn + " >= ? AND " + cn + " <= ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
+                return of(
+                    "(" + greaterOrEqualString(cn) + " AND " + lessOrEqualString(cn) + ")",
+                    negated
+                ).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
             }
         }
         throw new IllegalArgumentException("Unknown Inclusion:" + inclusion);
@@ -127,22 +154,50 @@ public final class MySqlSpeedmentPredicateView extends AbstractFieldPredicateVie
 
     @Override
     protected SqlPredicateFragment lessOrEqualString(String cn, FieldPredicate<?> model) {
-        return of("(BINARY " + cn + " <= ?)").add(getFirstOperandAsRaw(model));
+        return of(lessOrEqualString(cn)).add(getFirstOperandAsRaw(model));
     }
 
     @Override
     protected SqlPredicateFragment lessThanString(String cn, FieldPredicate<?> model) {
-        return of("(BINARY " + cn + " < ?)").add(getFirstOperandAsRaw(model));
+        return of(lessThanString(cn)).add(getFirstOperandAsRaw(model));
     }
 
     @Override
     protected SqlPredicateFragment greaterOrEqualString(String cn, FieldPredicate<?> model) {
-        return of("(BINARY " + cn + " >= ?)").add(getFirstOperandAsRaw(model));
+        return of(greaterOrEqualString(cn)).add(getFirstOperandAsRaw(model));
     }
 
     @Override
     protected SqlPredicateFragment greaterThanString(String cn, FieldPredicate<?> model) {
-        return of("(BINARY " + cn + " > ?)").add(getFirstOperandAsRaw(model));
+        return of(greaterThanString(cn)).add(getFirstOperandAsRaw(model));
+    }
+
+    private String lessOrEqualString(String cn) {
+        return compare(cn, "<= ?", Collation.UTF8_BIN);
+    }
+
+    private String lessThanString(String cn) {
+        return compare(cn, "< ?", Collation.UTF8_BIN);
+    }
+
+    private String greaterOrEqualString(String cn) {
+        return compare(cn, ">= ?", Collation.UTF8_BIN);
+    }
+
+    private String greaterThanString(String cn) {
+        return compare(cn, "> ?", Collation.UTF8_BIN);
+    }
+
+    private String compare(String cn, String operator, Collation collation) {
+        return new StringBuilder()
+            .append('(')
+            .append(cn)
+            .append(' ')
+            .append(operator)
+            .append(' ')
+            .append(collation.getCollateCommand())
+            .append(')')
+            .toString();
     }
 
 }
