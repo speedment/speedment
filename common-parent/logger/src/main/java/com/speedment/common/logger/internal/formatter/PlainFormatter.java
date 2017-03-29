@@ -18,10 +18,8 @@ package com.speedment.common.logger.internal.formatter;
 
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.LoggerFormatter;
-
 import java.time.Instant;
-
-import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -29,10 +27,33 @@ import static com.speedment.common.logger.internal.util.NullUtil.requireNonNulls
  */
 public final class PlainFormatter implements LoggerFormatter {
 
+    public static final int INSTANCE_LENGTH = "2017-03-29T21:55:39.172Z".length();
+
     @Override
     public String apply(Level level, String name, String message) {
-        requireNonNulls(level, name);
-        return Instant.now() + " " + level.toText() + " [" + Thread.currentThread().getName() + "] (" + name + ") - " + message;
+        requireNonNull(level);
+        requireNonNull(name);
+
+        return new StringBuilder()
+            .append(formatInstance(Instant.now().toString()))
+            .append(" ")
+            .append(level.toText())
+            .append(" [")
+            .append(Thread.currentThread().getName())
+            .append("] (")
+            .append(name)
+            .append(") - ")
+            .append(message)
+            .toString();
+    }
+
+    protected String formatInstance(final String instantString) {
+        if (instantString.length() == INSTANCE_LENGTH) {
+            return instantString;
+        }
+        final int missingCharacters = INSTANCE_LENGTH - instantString.length();
+        final String padding = ".000".substring(4 - missingCharacters);
+        return instantString.substring(0, instantString.length() - 1) + padding + "Z";
     }
 
 }
