@@ -24,7 +24,7 @@ package com.speedment.runtime.field.predicate;
 
 
 /**
- * Determines if a range of resuls should be start and/or end-inclusive.
+ * Determines if a range of results should be start and/or end-inclusive.
  * <p>
  * For an example, take the series {@code [1 2 3 4 5]}. If we select the range 
  * {@code (2, 4)} from this series, we will get the following results:

@@ -19,7 +19,6 @@ package com.speedment.runtime.core.internal.db.mysql;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.JavaTypeMap;
 import com.speedment.runtime.core.internal.db.AbstractDbmsMetadataHandler;
-
 import java.sql.Blob;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -36,21 +35,31 @@ public final class MySqlDbmsMetadataHandler extends AbstractDbmsMetadataHandler 
     @Override
     protected JavaTypeMap newJavaTypeMap() {
         final JavaTypeMap javaTypeMap = super.newJavaTypeMap();
-        
+
         javaTypeMap.put("YEAR", Integer.class);
         javaTypeMap.put("JSON", String.class);
-        
+
         Stream.of("LONG", "MEDIUM", "TINY").forEach(key -> {
             javaTypeMap.put(key + "BLOB", Blob.class);
         });
-        
+
+        javaTypeMap.addRule((sqlTypeMapping, md) -> {
+            if ("GEOMETRY".equalsIgnoreCase(md.getTypeName())) {
+                return Optional.of(Blob.class);
+            } else {
+                return Optional.empty();
+            }
+        });
+
         javaTypeMap.addRule((sqlTypeMapping, md) -> {
             // Map a BIT(1) to boolean
             if ("BIT".equalsIgnoreCase(md.getTypeName()) && md.getColumnSize() == 1) {
                 return Optional.of(Boolean.class);
-            } else return Optional.empty();
+            } else {
+                return Optional.empty();
+            }
         });
-        
+
         return javaTypeMap;
     }
 }
