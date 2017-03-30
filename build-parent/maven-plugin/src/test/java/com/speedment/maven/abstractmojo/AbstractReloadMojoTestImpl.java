@@ -20,6 +20,9 @@ import com.speedment.runtime.core.Speedment;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
+import java.io.File;
+import java.lang.reflect.Field;
+
 /**
  * test implementation of AbstractReloadMojo
  */
@@ -32,5 +35,17 @@ public class AbstractReloadMojoTestImpl extends AbstractReloadMojo {
 
     public void execute(Speedment speedment) throws MojoFailureException, MojoExecutionException {
         super.execute(speedment);
+    }
+
+    public void setConfigFile(File mockedConfigLocation) {
+        try {
+            Field field = AbstractReloadMojo.class.getDeclaredField("configFile");
+            field.setAccessible(true);
+            field.set(this, mockedConfigLocation);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 }
