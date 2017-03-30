@@ -38,7 +38,7 @@ public final class MySqlSpeedmentPredicateView extends AbstractFieldPredicateVie
     private enum Collation {
 
         UTF8_BIN, UTF8_GENERAL_CI;
-        
+
         private final String collateCommand;
 
         private Collation() {
@@ -58,31 +58,43 @@ public final class MySqlSpeedmentPredicateView extends AbstractFieldPredicateVie
     @Override
     protected SqlPredicateFragment startsWithHelper(String cn, FieldPredicate<?> model, boolean negated) {
         return of("(" + cn + " LIKE BINARY CONCAT(? ,'%'))", negated).add(getFirstOperandAsRaw(model));
+        // Todo: Use collation like this:
+        // return of("(" + cn + " " + Collation.UTF8_BIN.getCollateCommand() + " LIKE CONCAT(? ,'%'))", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
     protected SqlPredicateFragment startsWithIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
         return of("(LOWER(" + cn + ") LIKE BINARY CONCAT(LOWER(?) ,'%'))", negated).add(getFirstOperandAsRaw(model));
+        // Todo: Use collation like this:
+        // return of("(" + cn + " " + Collation.UTF8_GENERAL_CI.getCollateCommand() + " LIKE BINARY CONCAT(? ,'%'))", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
     protected SqlPredicateFragment endsWithHelper(String cn, FieldPredicate<?> model, boolean negated) {
         return of("(" + cn + " LIKE BINARY CONCAT('%', ?))", negated).add(getFirstOperandAsRaw(model));
+        // Todo: Use collation like this:
+        // return of("(" + cn + " " + Collation.UTF8_BIN.getCollateCommand() + " LIKE CONCAT('%', ?))", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
     protected SqlPredicateFragment endsWithIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
         return of("(LOWER(" + cn + ") LIKE BINARY CONCAT('%', LOWER(?)))", negated).add(getFirstOperandAsRaw(model));
+        // Todo: Use collation like this:
+        // return of("(" + cn + " " + Collation.UTF8_GENERAL_CI.getCollateCommand() +" LIKE CONCAT('%', ?))", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
     protected SqlPredicateFragment containsHelper(String cn, FieldPredicate<?> model, boolean negated) {
         return of("(" + cn + " LIKE BINARY CONCAT('%', ? ,'%'))", negated).add(getFirstOperandAsRaw(model));
+        // Todo: Use collation like this:
+        // return of("(" + cn + " " + Collation.UTF8_BIN.getCollateCommand() +" LIKE CONCAT('%', ? ,'%'))", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
     protected SqlPredicateFragment containsIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
         return of("(LOWER(" + cn + ") LIKE BINARY CONCAT('%', LOWER(?) ,'%'))", negated).add(getFirstOperandAsRaw(model));
+        // Todo: Use collation like this:
+        //return of("(" + cn + " "+Collation.UTF8_GENERAL_CI.getCollateCommand()+" LIKE CONCAT('%', ? ,'%'))", negated).add(getFirstOperandAsRaw(model));        
     }
 
     @Override
@@ -92,7 +104,7 @@ public final class MySqlSpeedmentPredicateView extends AbstractFieldPredicateVie
 
     @Override
     protected SqlPredicateFragment notEqualString(String cn, FieldPredicate<?> model) {
-        return of("(NOT (" + compare(cn, " = ?", Collation.UTF8_BIN) + ")").add(getFirstOperandAsRaw(model));
+        return of("(NOT " + compare(cn, " = ?", Collation.UTF8_BIN) + ")").add(getFirstOperandAsRaw(model));
     }
 
     @Override
