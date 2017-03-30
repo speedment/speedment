@@ -52,6 +52,10 @@ public final class PlainFormatter implements LoggerFormatter {
             return instantString;
         }
         final int missingCharacters = INSTANCE_LENGTH - instantString.length();
+        if (missingCharacters > 4) {
+            // Huston, we've had a problem... Just return to Earth...
+            return instantString;
+        }
         final String padding = ".000".substring(4 - missingCharacters);
         return instantString.substring(0, instantString.length() - 1) + padding + "Z";
     }

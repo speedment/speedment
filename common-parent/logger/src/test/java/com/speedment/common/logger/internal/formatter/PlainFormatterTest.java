@@ -6,6 +6,7 @@
 package com.speedment.common.logger.internal.formatter;
 
 import com.speedment.common.logger.Level;
+import java.time.Instant;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +22,12 @@ public class PlainFormatterTest {
     @Before
     public void setUp() {
         instance = new PlainFormatter();
+    }
+
+    @Test
+    public void Java9TestInstantNowToString() {
+        // Java 9 test
+        System.out.println("Instant.now().toString():" + Instant.now().toString());
     }
 
     @Test
