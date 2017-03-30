@@ -138,7 +138,7 @@ public class JavaTypeMapImpl implements JavaTypeMap {
     @Override
     public final void put(String key, Class<?> clazz) {
         requireNonNulls(key, clazz);
-        this.inner.put(key, clazz);
+        inner.put(key, clazz);
     }
     
     @Override
