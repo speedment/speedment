@@ -43,6 +43,12 @@ public class PlainFormatterTest {
     }
 
     @Test
+    public void testHighResolutionTime() {
+        final String actual = instance.formatInstance("2017-03-30T02:02:42.988290Z");
+        System.out.println("Hi resolution:" + actual);
+    }
+
+    @Test
     public void testFormatInstanceCorrectLength() {
         final String expected = "2017-03-29T21:55:39.169Z";
         final String actual = instance.formatInstance("2017-03-29T21:55:39.169Z");
