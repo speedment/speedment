@@ -16,21 +16,20 @@
  */
 package com.speedment.maven.abstractmojo;
 
-import com.speedment.runtime.core.Speedment;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
-
 /**
- * test implementation of AbstractReloadMojo
+ *
+ * @author Per Minborg
  */
-public class AbstractReloadMojoTestImpl extends AbstractReloadMojo {
+public final class Java9Util {
 
-    @Override
-    protected String launchMessage() {
-        return "test implementaiton of AbstractReloadMojo";
+    public static final void main(String... args) {
+        System.out.println(isJava9());
     }
 
-    public void execute(Speedment speedment) throws MojoFailureException, MojoExecutionException {
-        super.execute(speedment);
+    static boolean isJava9() {
+        final String javaVmSpecificationVersion = System.getProperty("java.vm.specification.version");
+        System.out.format("Java VM specification version is %s %n", javaVmSpecificationVersion);
+        return javaVmSpecificationVersion.startsWith("9");
     }
+
 }

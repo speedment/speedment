@@ -390,11 +390,17 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                 // Fall-back to DEFAULT_MAPPING
                 selectedJdbcClass = DEFAULT_MAPPING;
                 LOGGER.warn(
-                    "Unable to determine mapping for table " + table.getId() + 
-                    ", column " + column.getId() + 
-                    ". Fall-back to JDBC-type " + 
-                    selectedJdbcClass.getSimpleName()
-                );
+                    String.format("Unable to determine mapping for table %s, column %s. "
+                        + "Type name %s, data type %d, decimal digits %d."
+                        + "Fallback to JDBC-type %s",
+                        table.getId(),
+                        column.getId(),
+                        md.getTypeName(),
+                        md.getDataType(),
+                        md.getDecimalDigits(),
+                        selectedJdbcClass.getSimpleName()
+                    )
+                );                    
             }
 
             column.mutator().setDatabaseType(selectedJdbcClass);
