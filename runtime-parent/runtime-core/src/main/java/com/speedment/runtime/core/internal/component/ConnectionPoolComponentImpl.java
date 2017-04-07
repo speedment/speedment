@@ -28,7 +28,7 @@ import com.speedment.runtime.core.component.connectionpool.PoolableConnection;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.pool.PoolableConnectionImpl;
 import com.speedment.runtime.core.util.DatabaseUtil;
-import static com.speedment.runtime.core.util.OptionalUtil.unwrap;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -36,9 +36,11 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.Map;
 import java.util.Objects;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
+
+import static com.speedment.runtime.core.util.OptionalUtil.unwrap;
+import static java.util.Objects.requireNonNull;
 
 /**
  * A fully concurrent implementation of a connection pool.
@@ -60,10 +62,8 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
     private final Map<Long, PoolableConnection> leasedConnections;
     private final Map<String, Deque<PoolableConnection>> pools;
 
-    private @Inject
-    DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject
-    PasswordComponent passwordComponent;
+    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
+    private @Inject PasswordComponent passwordComponent;
 
     public ConnectionPoolComponentImpl() {
         maxAge = DEFAULT_MAX_AGE;
