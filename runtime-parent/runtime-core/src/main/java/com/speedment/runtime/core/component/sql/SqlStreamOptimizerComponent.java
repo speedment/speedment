@@ -14,14 +14,19 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.stream.builder.streamterminator;
+package com.speedment.runtime.core.component.sql;
+
+import com.speedment.runtime.core.db.DbmsType;
+import com.speedment.runtime.core.stream.Pipeline;
 
 /**
  *
- * @author pemi
+ * @author Per Minborg
  */
-public interface StreamTerminator extends
-    ReferenceStreamTerminator,
-    IntStreamTerminator,
-    LongStreamTerminator,
-    DoubleStreamTerminator {}
+public interface SqlStreamOptimizerComponent {
+
+    <ENTITY> SqlStreamOptimizer<ENTITY> get(Pipeline initialPipeline, DbmsType dbmsType);
+
+    <ENTITY> void install(SqlStreamOptimizer<ENTITY> sqlStreamOptimizer);
+
+}

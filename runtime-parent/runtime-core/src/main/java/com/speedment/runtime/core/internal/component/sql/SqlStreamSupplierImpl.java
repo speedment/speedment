@@ -30,12 +30,14 @@ import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.runtime.core.component.sql.SqlStreamOptimizerComponent;
+import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
+import com.speedment.runtime.core.internal.manager.sql.DefaultSqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.ReferenceStreamBuilder;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.runtime.core.manager.Manager;
@@ -75,21 +77,26 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
     private final String sqlSelect;
     private final String sqlSelectCount;
     private final String sqlTableReference;
+    private final SqlStreamOptimizerComponent sqlStreamOptimizerComponent;
+    //private final SqlStreamTerminatorFactoryComponent streamTerminatorFactory;
 
     SqlStreamSupplierImpl(
         final TableIdentifier<ENTITY> tableId,
         final SqlFunction<ResultSet, ENTITY> entityMapper,
         final ProjectComponent projectComponent,
         final DbmsHandlerComponent dbmsHandlerComponent,
-        final ManagerComponent managerComponent
+        final ManagerComponent managerComponent,
+        final SqlStreamOptimizerComponent sqlStreamOptimizerComponent
     ) {
 
         requireNonNull(tableId);
         requireNonNull(projectComponent);
         requireNonNull(dbmsHandlerComponent);
         requireNonNull(managerComponent);
+        requireNonNull(sqlStreamOptimizerComponent);
 
         this.entityMapper = requireNonNull(entityMapper);
+        this.sqlStreamOptimizerComponent = requireNonNull(sqlStreamOptimizerComponent);
 
         final Project project = projectComponent.getProject();
         final Table table = DocumentDbUtil.referencedTable(project, tableId);
@@ -146,14 +153,19 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
                 parallelStrategy
             );
 
-        final SqlStreamTerminator<ENTITY> terminator = new SqlStreamTerminator<>(
-            dbmsType,
-            sqlSelect,
-            sqlSelectCount,
-            this::executeAndGetLong,
-            this::sqlColumnNamer,
-            this::sqlDatabaseTypeFunction,
-            asynchronousQueryResult
+        final SqlStreamOptimizerInfo<ENTITY> info = SqlStreamOptimizerInfo.of(
+            dbmsType, 
+            sqlSelect, 
+            sqlSelectCount, 
+            this::executeAndGetLong, 
+            this::sqlColumnNamer, 
+            this::sqlDatabaseTypeFunction
+        );
+        
+        final DefaultSqlStreamTerminator<ENTITY> terminator = new DefaultSqlStreamTerminator<>(
+            info,
+            asynchronousQueryResult,
+            sqlStreamOptimizerComponent
         );
 
         final Supplier<BaseStream<?, ?>> initialSupplier

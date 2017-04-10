@@ -17,9 +17,11 @@
 package com.speedment.runtime.core.internal.stream.builder.streamterminator;
 
 import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
+import com.speedment.runtime.core.internal.stream.builder.action.reference.SortedComparatorAction;
 import com.speedment.runtime.core.internal.util.Cast;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
+import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.internal.predicate.AbstractCombinedPredicate;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 
@@ -78,5 +80,24 @@ public final class StreamTerminatorUtil {
         return andPredicateBuilders;
     }
 
-    private StreamTerminatorUtil() {}
+    public static boolean isFilterActionWithFieldPredicate(Action<?, ?> action) {
+        if (action instanceof FilterAction) {
+            if (((FilterAction) action).getPredicate() instanceof FieldPredicate) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public static boolean isSortedActionWithFieldPredicate(Action<?, ?> action) {
+        if (action instanceof SortedComparatorAction) {
+            if (((SortedComparatorAction) action).getComparator() instanceof FieldComparator) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    
+    private StreamTerminatorUtil() {throw new UnsupportedOperationException();}
 }

@@ -16,11 +16,13 @@
  */
 package com.speedment.runtime.core.manager.sql;
 
+import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.FieldPredicateView;
+import com.speedment.runtime.core.internal.component.sql.SqlStreamOptimizerComponentImpl;
 import com.speedment.runtime.core.internal.manager.sql.SqlPredicateFragmentImpl;
-import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
+import com.speedment.runtime.core.internal.manager.sql.DefaultSqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.MapAction;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.PipelineImpl;
@@ -28,11 +30,12 @@ import com.speedment.runtime.core.internal.stream.builder.pipeline.ReferencePipe
 import com.speedment.runtime.core.stream.action.Action;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.test_support.MockEntity;
+import com.speedment.runtime.test_support.MockEntityUtil;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.internal.IdentityTypeMapper;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNull;
@@ -50,19 +53,6 @@ public class SqlStreamTerminatorTest {
     private static final String COUNT_WHERE_SQL = String.join(" WHERE ", SELECT_COUNT_SQL, PREDICATE_COUNT_SQL_FRAGMENT);
 
     private String lastCountingSql;
-
-    private static class MockEntity {
-
-        private final int id;
-
-        private MockEntity(int id) {
-            this.id = id;
-        }
-
-        public int getId() {
-            return id;
-        }
-    }
 
     @Test
     public void testCountGeneralFilter() {
@@ -100,7 +90,7 @@ public class SqlStreamTerminatorTest {
         @SuppressWarnings("unchecked")
         final AsynchronousQueryResult<MockEntity> asynchronousQueryResult = mock(AsynchronousQueryResult.class);
 
-        SqlStreamTerminator<MockEntity> terminator = new SqlStreamTerminator<>(
+        final SqlStreamOptimizerInfo<MockEntity> info = SqlStreamOptimizerInfo.of(
             createDbmsType(),
             SELECT_SQL,
             SELECT_COUNT_SQL,
@@ -109,8 +99,13 @@ public class SqlStreamTerminatorTest {
                 return SQL_COUNT_RESULT;
             },
             f -> "",
-            f -> Object.class,
-            asynchronousQueryResult
+            f -> Object.class
+        );
+
+        DefaultSqlStreamTerminator<MockEntity> terminator = new DefaultSqlStreamTerminator<>(
+            info,
+            asynchronousQueryResult,
+            new SqlStreamOptimizerComponentImpl()
         );
         return terminator.count(createPipeline(action));
     }
@@ -118,7 +113,7 @@ public class SqlStreamTerminatorTest {
     private ReferencePipeline<MockEntity> createPipeline(Action<?, ?> action) {
         @SuppressWarnings("unchecked")
         final Supplier<Stream<MockEntity>> supplier = mock(Supplier.class);
-        final Stream<MockEntity> stream = IntStream.range(0, 100).boxed().map(MockEntity::new);
+        final Stream<MockEntity> stream = MockEntityUtil.stream((int) SQL_COUNT_RESULT);
         when(supplier.get()).thenReturn(stream);
         @SuppressWarnings("unchecked")
         final ReferencePipeline<MockEntity> pipeline = new PipelineImpl<>((Supplier<BaseStream<?, ?>>) (Object) supplier);

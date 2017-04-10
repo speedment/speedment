@@ -17,7 +17,6 @@
 package com.speedment.runtime.core.internal.manager.sql;
 
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
-import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.DoublePipeline;
@@ -34,17 +33,18 @@ import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.LongSupplier;
 import java.util.function.Predicate;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import com.speedment.runtime.core.component.sql.SqlStreamOptimizer;
+import com.speedment.runtime.core.component.sql.SqlStreamOptimizerComponent;
+import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
 import static com.speedment.runtime.core.stream.action.Property.SIZE;
 import static com.speedment.runtime.core.stream.action.Verb.PRESERVE;
 import java.util.Collections;
 import static java.util.Objects.requireNonNull;
-import java.util.function.BiFunction;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
@@ -53,64 +53,38 @@ import static java.util.stream.Collectors.toList;
  * @author pemi
  * @param <ENTITY> the entity type
  */
-public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
+public final class DefaultSqlStreamTerminator<ENTITY> implements StreamTerminator {
 
-    private final DbmsType dbmsType;
-    private final String sqlSelect;
-    private final String sqlSelectCount;
-    //private final LongSupplier sqlCounter;
-    private final BiFunction<String, List<Object>, Long> counter;
-    private final Function<Field<ENTITY>, String> sqlColumnNamer;
-    private final Function<Field<ENTITY>, Class<?>> sqlDatabaseTypeFunction;
+    
+    //private final ReferenceStreamTerminatorOverrides referenceStreamTerminatorOverrides = null;
+    
+    private final SqlStreamOptimizerComponent sqlStreamOptimizerComponent;
+    
+    private final SqlStreamOptimizerInfo<ENTITY> info;
     private final AsynchronousQueryResult<ENTITY> asynchronousQueryResult;
 
-    public SqlStreamTerminator(
-        final DbmsType dbmsType,
-        final String sqlSelect,
-        final String sqlSelectCount,
-        final BiFunction<String, List<Object>, Long> counter,
-        //LongSupplier sqlCounter,
-        final Function<Field<ENTITY>, String> sqlColumnNamer,
-        final Function<Field<ENTITY>, Class<?>> sqlDatabaseTypeFunction,
-        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult
+    public DefaultSqlStreamTerminator(
+        final SqlStreamOptimizerInfo<ENTITY> info,
+        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult,
+        final SqlStreamOptimizerComponent sqlStreamOptimizerComponent
+        
     ) {
-        this.dbmsType = requireNonNull(dbmsType);
-        this.sqlSelect = requireNonNull(sqlSelect);
-        this.sqlSelectCount = requireNonNull(sqlSelectCount);
-        this.counter = requireNonNull(counter);
-        //this.sqlCounter = requireNonNull(sqlCounter);
-        this.sqlColumnNamer = requireNonNull(sqlColumnNamer);
-        this.sqlDatabaseTypeFunction = requireNonNull(sqlDatabaseTypeFunction);
+        this.info = requireNonNull(info);
         this.asynchronousQueryResult = requireNonNull(asynchronousQueryResult);
+        this.sqlStreamOptimizerComponent = requireNonNull(sqlStreamOptimizerComponent);
     }
 
     @Override
-    public <P extends Pipeline> P optimize(P initialPipeline) {
+    public <P extends Pipeline> P optimize(final P initialPipeline) {
         requireNonNull(initialPipeline);
-        final List<FieldPredicate<ENTITY>> andPredicateBuilders = StreamTerminatorUtil.topLevelAndPredicates(initialPipeline);
-
-        if (!andPredicateBuilders.isEmpty()) {
-            modifySource(andPredicateBuilders, asynchronousQueryResult);
-        }
-
-        return initialPipeline;
+        final SqlStreamOptimizer<ENTITY> optimizer =  sqlStreamOptimizerComponent.get(initialPipeline, info.getDbmsType());
+        return optimizer.optimize(initialPipeline, info, asynchronousQueryResult);
     }
 
-    public void modifySource(List<FieldPredicate<ENTITY>> predicateBuilders, AsynchronousQueryResult<ENTITY> qr) {
-        requireNonNull(predicateBuilders);
-        requireNonNull(qr);
-
-        if (predicateBuilders.isEmpty()) {
-            // Nothing to do...
-            return;
-        }
-
-        final SqlInfo sqlInfo = sqlInfo(sqlSelect, predicateBuilders);
-        qr.setSql(sqlInfo.sql);
-        qr.setValues(sqlInfo.values);
-    }
-
-    public SqlInfo sqlInfo(String sqlBase, List<FieldPredicate<ENTITY>> predicateBuilders) {
+    
+    
+    
+    private SqlInfo sqlInfo(String sqlBase, List<FieldPredicate<ENTITY>> predicateBuilders) {
         requireNonNull(predicateBuilders);
 
         if (predicateBuilders.isEmpty()) {
@@ -118,9 +92,9 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
             return new SqlInfo(sqlBase, Collections.emptyList());
         }
 
-        final FieldPredicateView spv = dbmsType.getFieldPredicateView();
+        final FieldPredicateView spv = info.getDbmsType().getFieldPredicateView();
         final List<SqlPredicateFragment> fragments = predicateBuilders.stream()
-            .map(sp -> spv.transform(sqlColumnNamer, sqlDatabaseTypeFunction, sp))
+            .map(sp -> spv.transform(info.getSqlColumnNamer(), info.getSqlDatabaseTypeFunction(), sp))
             .collect(toList());
 
         final String sql = sqlBase + " WHERE "
@@ -180,21 +154,23 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
      */
     private long countHelper(Pipeline pipeline, LongSupplier fallbackSupplier) {
         requireNonNulls(pipeline, fallbackSupplier);
-        
+
         if (pipeline.stream().allMatch(CHECK_RETAIN_SIZE)) {
             // select count(*) from 'table'
-            return counter.apply(sqlSelectCount, Collections.emptyList());
+            return info.getCounter().apply(info.getSqlSelectCount(), Collections.emptyList());
         } else if (allActionsAreOptimizableFilters(pipeline)) {
             // select count(*) from 'table' where ...
             final List<FieldPredicate<ENTITY>> andPredicateBuilders = StreamTerminatorUtil.topLevelAndPredicates(pipeline);
-            final SqlInfo sqlInfo = sqlInfo(sqlSelectCount, andPredicateBuilders);
-            return counter.apply(sqlInfo.sql, sqlInfo.values);
+            final SqlInfo sqlInfo = sqlInfo(info.getSqlSelectCount(), andPredicateBuilders);
+            return info.getCounter().apply(sqlInfo.sql, sqlInfo.values);
         } else {
             // Iterate over all materialized ENTITIES....
             return fallbackSupplier.getAsLong();
         }
     }
 
+    // Todo: Fix this requirement to be more inclusive
+    
     private boolean allActionsAreOptimizableFilters(Pipeline pipeline) {
         return pipeline.stream().allMatch(action -> {
             if (action instanceof FilterAction) {
