@@ -34,7 +34,7 @@ SELECT id, name, color, age FROM hare
 No need for manually writing SQL-queies any more. Remain in a pure Java world!
 
 ### User's Manual
-We are in the process of doing a complete rewrite of the User's Manual. You can see the work in progress (here)[https://speedment.github.io/speedment-doc/introduction.html]. 
+We are in the process of doing a complete rewrite of the User's Manual. You can see the work in progress [here](https://speedment.github.io/speedment-doc/introduction.html).
 
 
 ### Expressing SQL as Java 8 Streams
