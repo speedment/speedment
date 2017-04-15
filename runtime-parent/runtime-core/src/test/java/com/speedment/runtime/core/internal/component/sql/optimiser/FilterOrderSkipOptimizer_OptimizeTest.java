@@ -47,13 +47,13 @@ public class FilterOrderSkipOptimizer_OptimizeTest {
     private static final LimitAction<MockEntity> LIMIT_ACTION = new LimitAction<>(1);
     private static final PeekAction<MockEntity> PEEK_ACTION = new PeekAction<>(System.out::println);
 
-    private FilterOrderSkipOptimizer<MockEntity> instance;
+    private FilterSortedSkipOptimizer<MockEntity> instance;
     private AsynchronousQueryResult<MockEntity> asynchronousQueryResult;
     private SqlStreamOptimizerInfo<MockEntity> sqlStreamOptimizerInfo;
 
     @Before
     public void setUp() {
-        instance = new FilterOrderSkipOptimizer<>();
+        instance = new FilterSortedSkipOptimizer<>();
         asynchronousQueryResult = new AsynchronousQueryResultImpl<>(
             "SELECT id, name from mock_entity",
             new ArrayList<>(),

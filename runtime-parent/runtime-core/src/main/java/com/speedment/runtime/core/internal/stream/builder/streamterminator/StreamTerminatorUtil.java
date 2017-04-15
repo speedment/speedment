@@ -16,21 +16,27 @@
  */
 package com.speedment.runtime.core.internal.stream.builder.streamterminator;
 
+import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
+import com.speedment.runtime.core.db.AsynchronousQueryResult;
+import com.speedment.runtime.core.db.FieldPredicateView;
+import com.speedment.runtime.core.db.SqlPredicateFragment;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.SortedComparatorAction;
 import com.speedment.runtime.core.internal.util.Cast;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
+import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.internal.predicate.AbstractCombinedPredicate;
 import com.speedment.runtime.field.predicate.FieldPredicate;
-
+import com.speedment.runtime.typemapper.TypeMapper;
 import java.util.ArrayList;
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.Predicate;
-
-import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -97,6 +103,44 @@ public final class StreamTerminatorUtil {
         }
         return false;
     }
+    
+    public static <ENTITY> void modifySource(
+        final List<FieldPredicate<ENTITY>> predicateBuilders,
+        final SqlStreamOptimizerInfo<ENTITY> info,
+        final AsynchronousQueryResult<ENTITY> query
+    ) {
+        requireNonNull(predicateBuilders);
+        requireNonNull(info);
+        requireNonNull(query);
+
+        final FieldPredicateView spv = info.getDbmsType().getFieldPredicateView();
+        final List<SqlPredicateFragment> fragments = predicateBuilders.stream()
+            .map(sp -> spv.transform(info.getSqlColumnNamer(), info.getSqlDatabaseTypeFunction(), sp))
+            .collect(toList());
+
+        final String sql = info.getSqlSelect() + " WHERE "
+            + fragments.stream()
+                .map(SqlPredicateFragment::getSql)
+                .collect(joining(" AND "));
+
+        final List<Object> values = new ArrayList<>();
+        for (int i = 0; i < fragments.size(); i++) {
+
+            final FieldPredicate<ENTITY> p = predicateBuilders.get(i);
+            final Field<ENTITY> referenceFieldTrait = p.getField();
+
+            @SuppressWarnings("unchecked")
+            final TypeMapper<Object, Object> tm = (TypeMapper<Object, Object>) referenceFieldTrait.typeMapper();
+
+            fragments.get(i).objects()
+                .map(tm::toDatabaseType)
+                .forEach(values::add);
+        }
+
+        query.setSql(sql);
+        query.setValues(values);
+    }
+    
     
     
     private StreamTerminatorUtil() {throw new UnsupportedOperationException();}

@@ -27,6 +27,7 @@ import com.speedment.runtime.core.stream.Pipeline;
  */
 public interface SqlStreamOptimizer<ENTITY> {
 
+
     /**
      * Returns a metric of how well this optimizer can optimize the given
      * pipeline. The best imaginable optimization metric is
@@ -41,7 +42,7 @@ public interface SqlStreamOptimizer<ENTITY> {
      * @param dbmsType the type of the database
      * @return how well this optimizer can optimize the given pipeline
      */
-    <P extends Pipeline> int metrics(P initialPipeline, DbmsType dbmsType);
+    <P extends Pipeline> Metrics metrics(P initialPipeline, DbmsType dbmsType);
 
     /**
      * Returns an optimized pipeline, potentially by modifying the query.

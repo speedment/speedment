@@ -125,11 +125,6 @@ public interface IntStreamTerminator extends BaseStreamTerminator {
         return optimize(pipeline).getAsIntStream().findAny();
     }
 
-    default Stream<Integer> boxed(IntPipeline pipeline) {
-        requireNonNull(pipeline);
-        return optimize(pipeline).getAsIntStream().boxed();
-    }
-
     default PrimitiveIterator.OfInt iterator(IntPipeline pipeline) {
         requireNonNull(pipeline);
         return optimize(pipeline).getAsIntStream().iterator();

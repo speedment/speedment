@@ -21,8 +21,9 @@ import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.internal.component.sql.SqlStreamOptimizerComponentImpl;
+import com.speedment.runtime.core.internal.component.sql.override.SqlStreamTerminatorComponentImpl;
 import com.speedment.runtime.core.internal.manager.sql.SqlPredicateFragmentImpl;
-import com.speedment.runtime.core.internal.manager.sql.DefaultSqlStreamTerminator;
+import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator; 
 import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.MapAction;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.PipelineImpl;
@@ -102,10 +103,11 @@ public class SqlStreamTerminatorTest {
             f -> Object.class
         );
 
-        DefaultSqlStreamTerminator<MockEntity> terminator = new DefaultSqlStreamTerminator<>(
+        SqlStreamTerminator<MockEntity> terminator = new SqlStreamTerminator<>(
             info,
             asynchronousQueryResult,
-            new SqlStreamOptimizerComponentImpl()
+            new SqlStreamOptimizerComponentImpl(),
+            new SqlStreamTerminatorComponentImpl()
         );
         return terminator.count(createPipeline(action));
     }

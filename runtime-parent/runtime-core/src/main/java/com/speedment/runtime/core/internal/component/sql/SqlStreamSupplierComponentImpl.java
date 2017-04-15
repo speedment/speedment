@@ -24,6 +24,7 @@ import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerComponent;
 import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
+import com.speedment.runtime.core.component.sql.override.SqlStreamTerminatorComponent;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import java.sql.ResultSet;
@@ -60,7 +61,8 @@ public final class SqlStreamSupplierComponentImpl implements SqlStreamSupplierCo
         final ProjectComponent projectComponent,
         final DbmsHandlerComponent dbmsHandlerComponent,
         final ManagerComponent managerComponent,
-        final SqlStreamOptimizerComponent sqlStreamOptimizerComponent
+        final SqlStreamOptimizerComponent sqlStreamOptimizerComponent,
+        final SqlStreamTerminatorComponent sqlStreamTerminatorComponent
     ) {
 
         prestart.forEach((tableIdentifier, entityMapper) -> {
@@ -70,7 +72,8 @@ public final class SqlStreamSupplierComponentImpl implements SqlStreamSupplierCo
                 projectComponent,
                 dbmsHandlerComponent,
                 managerComponent,
-                sqlStreamOptimizerComponent
+                sqlStreamOptimizerComponent,
+                sqlStreamTerminatorComponent
             );
 
             supportMap.put(tableIdentifier, supplier);

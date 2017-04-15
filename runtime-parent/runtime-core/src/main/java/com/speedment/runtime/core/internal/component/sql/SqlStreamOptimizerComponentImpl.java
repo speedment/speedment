@@ -16,9 +16,13 @@
  */
 package com.speedment.runtime.core.internal.component.sql;
 
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
+import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.component.sql.*;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsType;
+import com.speedment.runtime.core.internal.component.sql.optimiser.FilterSortedSkipOptimizer;
 import com.speedment.runtime.core.internal.component.sql.optimiser.InitialFilterOptimizer;
 import com.speedment.runtime.core.stream.Pipeline;
 import java.util.List;
@@ -31,6 +35,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public final class SqlStreamOptimizerComponentImpl implements SqlStreamOptimizerComponent {
 
+    private static final Logger LOGGER_STREAM_OPTIMIZER = LoggerManager.getLogger(ApplicationBuilder.LogType.STREAM_OPTIMIZER.getLoggerName());
+
     private static final SqlStreamOptimizer<?> FALL_BACK = new FallbackStreamOptimizer<>();
 
     private final List<SqlStreamOptimizer<?>> optimizers;
@@ -38,21 +44,29 @@ public final class SqlStreamOptimizerComponentImpl implements SqlStreamOptimizer
     public SqlStreamOptimizerComponentImpl() {
         this.optimizers = new CopyOnWriteArrayList<>();
         install(new InitialFilterOptimizer<>());
+        install(new FilterSortedSkipOptimizer<>());
     }
 
     @Override
     public <ENTITY> SqlStreamOptimizer<ENTITY> get(Pipeline initialPipeline, DbmsType dbmsType) {
+        final SqlStreamOptimizer<ENTITY> result = getHelper(initialPipeline, dbmsType);
+        LOGGER_STREAM_OPTIMIZER.debug("Selected %s", result.getClass().getSimpleName());
+        return result;
+    }
+
+    private <ENTITY> SqlStreamOptimizer<ENTITY> getHelper(Pipeline initialPipeline, DbmsType dbmsType) {
         @SuppressWarnings("unchecked")
         SqlStreamOptimizer<ENTITY> result = (SqlStreamOptimizer<ENTITY>) FALL_BACK;
-        int metric = 0;
+        Metrics metric = Metrics.empty();
         for (int i = 0; i < optimizers.size(); i++) {
             @SuppressWarnings("unchecked")
-            SqlStreamOptimizer<ENTITY> candidate = (SqlStreamOptimizer<ENTITY>) optimizers.get(i);
-            int candidateMetric = candidate.metrics(initialPipeline, dbmsType);
-            if (candidateMetric > metric) {
+            final SqlStreamOptimizer<ENTITY> candidate = (SqlStreamOptimizer<ENTITY>) optimizers.get(i);
+            final Metrics candidateMetric = candidate.metrics(initialPipeline, dbmsType);
+            LOGGER_STREAM_OPTIMIZER.debug("Candidate %-30s : %s ", candidate.getClass().getSimpleName(), candidateMetric);
+            if (candidateMetric.getPipelineReductions() > metric.getPipelineReductions()) {
                 metric = candidateMetric;
                 result = candidate;
-                if (metric == Integer.MAX_VALUE) {
+                if (metric.getPipelineReductions() == Integer.MAX_VALUE) {
                     return result;
                 }
             }
@@ -70,8 +84,8 @@ public final class SqlStreamOptimizerComponentImpl implements SqlStreamOptimizer
     private static class FallbackStreamOptimizer<ENTITY> implements SqlStreamOptimizer<ENTITY> {
 
         @Override
-        public <P extends Pipeline> int metrics(P initialPipeline, DbmsType dbmsType) {
-            return 0;
+        public <P extends Pipeline> Metrics metrics(P initialPipeline, DbmsType dbmsType) {
+            return Metrics.empty();
         }
 
         @Override

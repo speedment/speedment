@@ -5,6 +5,7 @@
  */
 package com.speedment.runtime.core.internal.component.sql.optimiser;
 
+import com.speedment.runtime.core.component.sql.Metrics;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.LimitAction;
@@ -42,73 +43,73 @@ public class FilterOrderSkipOptimizer_MetricsTest {
     private static final LimitAction<MockEntity> LIMIT_ACTION = new LimitAction<>(1);
     private static final PeekAction<MockEntity> PEEK_ACTION = new PeekAction<>(System.out::println);
 
-    private FilterOrderSkipOptimizer<MockEntity> instance;
+    private FilterSortedSkipOptimizer<MockEntity> instance;
 
     @Before
     public void setUp() {
-        instance = new FilterOrderSkipOptimizer<>();
+        instance = new FilterSortedSkipOptimizer<>();
     }
 
     @Test
     public void testFilter1Order1Skip1() {
         final Pipeline pipeline = pipelineOf(FILTER_ACTION, SORTED_ACTION, SKIP_ACTION);
-        int metrics = instance.metrics(pipeline, DBMS_TYPE);
-        assertEquals(30, metrics);
+        final Metrics metrics = instance.metrics(pipeline, DBMS_TYPE);
+        assertEquals(3, metrics.getPipelineReductions());
     }
 
     @Test
     public void testFilter0Order1Skip1() {
         final Pipeline pipeline = pipelineOf(SORTED_ACTION, SKIP_ACTION);
-        int metrics = instance.metrics(pipeline, DBMS_TYPE);
-        assertEquals(20, metrics);
+        final Metrics metrics = instance.metrics(pipeline, DBMS_TYPE);
+        assertEquals(2, metrics.getPipelineReductions());
     }
 
     @Test
     public void testFilter1Order0Skip1() {
         final Pipeline pipeline = pipelineOf(FILTER_ACTION, SKIP_ACTION);
-        int metrics = instance.metrics(pipeline, DBMS_TYPE);
-        assertEquals(20, metrics);
+        final Metrics metrics = instance.metrics(pipeline, DBMS_TYPE);
+        assertEquals(2, metrics.getPipelineReductions());
     }
 
     @Test
     public void testFilter1Order1Skip0() {
         final Pipeline pipeline = pipelineOf(FILTER_ACTION, SORTED_ACTION);
-        int metrics = instance.metrics(pipeline, DBMS_TYPE);
-        assertEquals(20, metrics);
+        final Metrics metrics = instance.metrics(pipeline, DBMS_TYPE);
+        assertEquals(2, metrics.getPipelineReductions());
     }
 
     @Test
     public void testFilter1Order0Skip0() {
         final Pipeline pipeline = pipelineOf(SORTED_ACTION, SKIP_ACTION);
-        int metrics = instance.metrics(pipeline, DBMS_TYPE);
-        assertEquals(20, metrics);
+        final Metrics metrics = instance.metrics(pipeline, DBMS_TYPE);
+        assertEquals(2, metrics.getPipelineReductions());
     }
 
     @Test
     public void testFilter0Order1Skip0() {
         final Pipeline pipeline = pipelineOf(FILTER_ACTION, SKIP_ACTION);
-        int metrics = instance.metrics(pipeline, DBMS_TYPE);
-        assertEquals(20, metrics);
+        final Metrics metrics = instance.metrics(pipeline, DBMS_TYPE);
+        assertEquals(2, metrics.getPipelineReductions());
     }
 
     @Test
     public void testFilter0Order0Skip1() {
         final Pipeline pipeline = pipelineOf(FILTER_ACTION, SORTED_ACTION);
-        int metrics = instance.metrics(pipeline, DBMS_TYPE);
-        assertEquals(20, metrics);
+        final Metrics metrics = instance.metrics(pipeline, DBMS_TYPE);
+        assertEquals(2, metrics.getPipelineReductions());
     }
 
     @Test
     public void testFilter0Order0Skip0() {
-        Pipeline pipeline = pipelineOf();
-        int metrics = instance.metrics(pipeline, DBMS_TYPE);
-        assertEquals(0, metrics);
+        final Pipeline pipeline = pipelineOf();
+        final Metrics metrics = instance.metrics(pipeline, DBMS_TYPE);
+        assertEquals(0, metrics.getPipelineReductions());
     }
 
     @Test
     public void focus() {
-        Pipeline pipeline = pipelineOf(FILTER_ACTION, SKIP_ACTION, SORTED_ACTION, LIMIT_ACTION, PEEK_ACTION);
-        int metrics = instance.metrics(pipeline, DBMS_TYPE);
+        final Pipeline pipeline = pipelineOf(FILTER_ACTION, SKIP_ACTION, SORTED_ACTION, LIMIT_ACTION, PEEK_ACTION);
+        final Metrics metrics = instance.metrics(pipeline, DBMS_TYPE);
     }
 
     //// Polution...
@@ -132,42 +133,55 @@ public class FilterOrderSkipOptimizer_MetricsTest {
 //                expected = expected == 0 ? Integer.MIN_VALUE : expected;
                 Pipeline pipeline = pipelineOf(l.stream().toArray(Action[]::new));
 
-                assertEquals("Failed for " + l, expected, instance.metrics(pipeline, DBMS_TYPE));
+                assertEquals("Failed for " + l, expected, instance.metrics(pipeline, DBMS_TYPE).getPipelineReductions());
             }
             );
     }
 
     private int expectedMetrics(List<? extends Action<Stream<MockEntity>, Stream<MockEntity>>> l) {
+
+        // Filter first
         if ((l.get(0) == FILTER_ACTION)
             && (l.get(1) == SORTED_ACTION)
             && (l.get(2) == SKIP_ACTION)) {
-            return 30;
+            return 3;
         }
         if ((l.get(0) == FILTER_ACTION)
             && (l.get(1) == SORTED_ACTION)) {
-            return 20;
+            return 2;
         }
 
         if ((l.get(0) == FILTER_ACTION)
             && (l.get(1) == SKIP_ACTION)) {
-            return 20;
+            return 2;
         }
 
         if ((l.get(0) == FILTER_ACTION)) {
-            return 10;
+            return 1;
+        }
+        // Sorted first
+        if ((l.get(0) == SORTED_ACTION)
+            && (l.get(1) == FILTER_ACTION)
+            && (l.get(2) == SKIP_ACTION)) {
+            return 3;
+        }
+        if ((l.get(0) == SORTED_ACTION)
+            && (l.get(1) == FILTER_ACTION)) {
+            return 2;
         }
 
         if ((l.get(0) == SORTED_ACTION)
             && (l.get(1) == SKIP_ACTION)) {
-            return 20;
+            return 2;
         }
 
         if ((l.get(0) == SORTED_ACTION)) {
-            return 10;
+            return 1;
         }
 
+        // Skip first
         if ((l.get(0) == SKIP_ACTION)) {
-            return 10;
+            return 1;
         }
 
         return 0;
