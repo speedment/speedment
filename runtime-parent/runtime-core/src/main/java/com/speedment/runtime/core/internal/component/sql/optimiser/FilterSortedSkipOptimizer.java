@@ -23,9 +23,6 @@ import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
-import static com.speedment.runtime.core.internal.component.sql.optimiser.FilterSortedSkipOptimizer.State.FILTER;
-import static com.speedment.runtime.core.internal.component.sql.optimiser.FilterSortedSkipOptimizer.State.SKIP;
-import static com.speedment.runtime.core.internal.component.sql.optimiser.FilterSortedSkipOptimizer.State.SORTED;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.SkipAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.SortedComparatorAction;
@@ -39,12 +36,10 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
@@ -71,9 +66,6 @@ import static java.util.stream.Collectors.toList;
  */
 public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimizer<ENTITY> {
 
-    enum State {
-        FILTER, SORTED, SKIP, LIMIT;
-    }
 
     private final FilterOperation FILTER_OPERATION = new FilterOperation();
     private final SortedOperation SORTED_OPERATION = new SortedOperation();
@@ -98,11 +90,8 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         requireNonNull(dbmsType);
 
         final AtomicInteger cnt = new AtomicInteger();
-
         traverse(initialPipeline, fc -> cnt.incrementAndGet(), fc -> cnt.incrementAndGet(), fc -> cnt.incrementAndGet());
-
         return Metrics.of(cnt.get());
-
     }
 
     @Override
@@ -280,59 +269,59 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         }
     }
 
-    private void traverseOld(Pipeline pipeline,
-        final Consumer<? super FilterAction<ENTITY>> filterConsumer,
-        final Consumer<? super SortedComparatorAction<ENTITY>> sortedConsumer,
-        final Consumer<? super SkipAction<ENTITY>> skipConsumer
-    ) {
-
-        State state = FILTER;
-
-        for (Action<?, ?> action : pipeline) {
-
-            if (state == FILTER) {
-                if (isFilterActionWithFieldPredicate(action)) {
-                    @SuppressWarnings("unchecked")
-                    final FilterAction<ENTITY> filterAction = (FilterAction<ENTITY>) action;
-                    filterConsumer.accept(filterAction);
-                } else {
-                    if (isSortedActionWithFieldPredicate(action)) { // Note: SortedAction will not work because an Entity is not Comparable
-                        state = SORTED;
-                    } else {
-                        if (action instanceof SkipAction) {
-                            state = SKIP;
-                        } else {
-                            return;
-                        }
-                    }
-                }
-            }
-
-            if (state == SORTED) {
-                if (isSortedActionWithFieldPredicate(action)) {
-                    @SuppressWarnings("unchecked")
-                    final SortedComparatorAction<ENTITY> sortedAction = (SortedComparatorAction<ENTITY>) action;
-                    sortedConsumer.accept(sortedAction);
-                } else {
-                    if (action instanceof SkipAction) {
-                        state = SKIP;
-                    } else {
-                        return;
-                    }
-                }
-            }
-
-            if (state == SKIP) {
-                if (action instanceof SkipAction) {
-                    @SuppressWarnings("unchecked")
-                    final SkipAction<ENTITY> skipAction = (SkipAction<ENTITY>) action;
-                    skipConsumer.accept(skipAction);
-                } else {
-                    return;
-                }
-            }
-        }
-    }
+//    private void traverseOld(Pipeline pipeline,
+//        final Consumer<? super FilterAction<ENTITY>> filterConsumer,
+//        final Consumer<? super SortedComparatorAction<ENTITY>> sortedConsumer,
+//        final Consumer<? super SkipAction<ENTITY>> skipConsumer
+//    ) {
+//
+//        State state = FILTER;
+//
+//        for (Action<?, ?> action : pipeline) {
+//
+//            if (state == FILTER) {
+//                if (isFilterActionWithFieldPredicate(action)) {
+//                    @SuppressWarnings("unchecked")
+//                    final FilterAction<ENTITY> filterAction = (FilterAction<ENTITY>) action;
+//                    filterConsumer.accept(filterAction);
+//                } else {
+//                    if (isSortedActionWithFieldPredicate(action)) { // Note: SortedAction will not work because an Entity is not Comparable
+//                        state = SORTED;
+//                    } else {
+//                        if (action instanceof SkipAction) {
+//                            state = SKIP;
+//                        } else {
+//                            return;
+//                        }
+//                    }
+//                }
+//            }
+//
+//            if (state == SORTED) {
+//                if (isSortedActionWithFieldPredicate(action)) {
+//                    @SuppressWarnings("unchecked")
+//                    final SortedComparatorAction<ENTITY> sortedAction = (SortedComparatorAction<ENTITY>) action;
+//                    sortedConsumer.accept(sortedAction);
+//                } else {
+//                    if (action instanceof SkipAction) {
+//                        state = SKIP;
+//                    } else {
+//                        return;
+//                    }
+//                }
+//            }
+//
+//            if (state == SKIP) {
+//                if (action instanceof SkipAction) {
+//                    @SuppressWarnings("unchecked")
+//                    final SkipAction<ENTITY> skipAction = (SkipAction<ENTITY>) action;
+//                    skipConsumer.accept(skipAction);
+//                } else {
+//                    return;
+//                }
+//            }
+//        }
+//    }
 
     private static class Consumers<ENTITY> {
 
