@@ -33,10 +33,6 @@ SELECT id, name, color, age FROM hare
 
 No need for manually writing SQL-queies any more. Remain in a pure Java world!
 
-### User's Manual
-We are in the process of doing a complete rewrite of the User's Manual. You can see the work in progress [here](https://speedment.github.io/speedment-doc/introduction.html).
-
-
 ### Expressing SQL as Java 8 Streams
 When we started the open-source project Speedment, the main objective was to remove the polyglot requirement for Java database application developers. After all, we all love Java and why should we need to know SQL when, instead, we could derive the same semantics directly from Java streams? When one takes a closer look at this objective, it turns out that there is a remarkable resemblance between Java streams and SQL as summarized in this simplified table:
 
@@ -58,7 +54,7 @@ When we started the open-source project Speedment, the main objective was to rem
 
 Documentation
 -------------
-You can read the [API quick start examples here](https://github.com/speedment/speedment#examples)!
+You can read the [API manual here](https://speedment.github.io/speedment-doc/introduction.html)!
 
 ## Tutorials
 * [Tutorial 1 - Set up the IDE](https://github.com/speedment/speedment/wiki/Tutorial:-Set-up-the-IDE)
