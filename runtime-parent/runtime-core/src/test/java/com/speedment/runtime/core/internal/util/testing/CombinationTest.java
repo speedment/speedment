@@ -118,7 +118,7 @@ public class CombinationTest {
 
     @Test
     public void testOfUniqueSingleton() {
-        final List<List<String>> actual = Combination.ofUniqueIdentity("a")
+        final List<List<String>> actual = Combination.ofDistinct("a")
             .collect(toList());
 
         assertEquals(
@@ -131,7 +131,7 @@ public class CombinationTest {
 
     @Test
     public void testUniqueOfTwo() {
-        final Set<List<String>> actual = Combination.ofUniqueIdentity("a", "b")
+        final Set<List<String>> actual = Combination.ofDistinct("a", "b")
             .collect(toSet());
 
         final Set<List<String>> expected = Arrays.asList(
@@ -147,7 +147,7 @@ public class CombinationTest {
 
     @Test
     public void testOfUniqueThree() {
-        Set<List<String>> actual = Combination.ofUniqueIdentity("a", "b", "c")
+        Set<List<String>> actual = Combination.ofDistinct("a", "b", "c")
             .collect(toSet());
 
         final Set<List<String>> expected = Arrays.asList(

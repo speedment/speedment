@@ -31,7 +31,7 @@ public final class Combination {
     /**
      * Creates and returns all possible combinations of the given elements.
      *
-     * The order of the combinations is unspecified.
+     * The order of the combinations in the stream is unspecified.
      *
      * @param <T> element type
      * @param items to combine
@@ -57,23 +57,24 @@ public final class Combination {
 
     /**
      * Creates and returns all possible combinations of the given elements
-     * whereby each element only occur one time. Elements are checked for
-     * occurrence by its identity, not equality.
+     * whereby each element only occurs at most once in any given List. Elements
+     * are checked for occurrence by its {@code equals() } method.
      *
-     * The order of the combinations is unspecified.
+     * The order of the combinations in the stream is unspecified.
      *
      * @param <T> element type
      * @param items to combine
-     * @return all possible combinations of the given elements
+     * @return all possible combinations of the given elements whereby each
+     * element only occurs at most once in any given List
      */
     @SafeVarargs
     @SuppressWarnings("varargs") // Creating a List from an array is safe
-    public static <T> Stream<List<T>> ofUniqueIdentity(final T... items) {
-        return of(items).filter(Combination::isUniqueIdentityElements);
+    public static <T> Stream<List<T>> ofDistinct(final T... items) {
+        return of(items).filter(Combination::isDistinctElements);
     }
 
-    private static <T> boolean isUniqueIdentityElements(List<T> list) {
-        final Set<T> discovered = Collections.newSetFromMap(new IdentityHashMap<>());
+    private static <T> boolean isDistinctElements(List<T> list) {
+        final Set<T> discovered = Collections.newSetFromMap(new HashMap<>());
         return list.stream().allMatch(discovered::add);
     }
 
