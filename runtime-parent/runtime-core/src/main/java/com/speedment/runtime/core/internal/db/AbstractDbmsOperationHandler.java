@@ -60,8 +60,10 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
     public static final boolean SHOW_METADATA = false; // Warning: Enabling SHOW_METADATA will make some dbmses fail on metadata (notably Oracle) because all the columns must be read in order...
 
-    @Inject private ConnectionPoolComponent connectionPoolComponent;
-    @Inject private DbmsHandlerComponent dbmsHandlerComponent;
+    @Inject
+    private ConnectionPoolComponent connectionPoolComponent;
+    @Inject
+    private DbmsHandlerComponent dbmsHandlerComponent;
 
     protected AbstractDbmsOperationHandler() {
     }
@@ -72,8 +74,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
         try (
             final Connection connection = connectionPoolComponent.getConnection(dbms);
-            final PreparedStatement ps = connection.prepareStatement(sql, java.sql.ResultSet.TYPE_FORWARD_ONLY, java.sql.ResultSet.CONCUR_READ_ONLY)
-        ) {
+            final PreparedStatement ps = connection.prepareStatement(sql, java.sql.ResultSet.TYPE_FORWARD_ONLY, java.sql.ResultSet.CONCUR_READ_ONLY)) {
             configureSelect(ps);
             connection.setAutoCommit(false);
             try {
@@ -232,10 +233,15 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
             }
             ps.executeUpdate();
 
-            try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
-                while (generatedKeys.next()) {
-                    sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
-                }
+            handleGeneratedKeys(ps, sqlStatement);
+        }
+    }
+
+    @Override
+    public <ENTITY> void handleGeneratedKeys(PreparedStatement ps, SqlInsertStatement<ENTITY> sqlStatement) throws SQLException {
+        try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
+            while (generatedKeys.next()) {
+                sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
             }
         }
     }

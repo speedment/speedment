@@ -24,7 +24,6 @@ import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.internal.db.AbstractDatabaseNamingConvention;
 import com.speedment.runtime.core.internal.db.AbstractDbmsType;
 import com.speedment.runtime.core.internal.db.mysql.MySqlDbmsMetadataHandler;
-import com.speedment.runtime.core.internal.db.mysql.MySqlDbmsOperationHandler;
 import com.speedment.runtime.core.internal.manager.sql.MySqlSpeedmentPredicateView;
 
 import java.util.Collections;
@@ -44,7 +43,7 @@ import static java.util.stream.Collectors.toSet;
 public final class MariaDbDbmsType extends AbstractDbmsType {
 
     public static InjectBundle include() {
-        return of(MySqlDbmsMetadataHandler.class, MySqlDbmsOperationHandler.class);
+        return of(MySqlDbmsMetadataHandler.class, MariaDbDbmsOperationHandler.class);
     }
 
     private final static FieldPredicateView PREDICATE_VIEW = new MySqlSpeedmentPredicateView();
@@ -53,7 +52,7 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
     private final MariaDbConnectionUrlGenerator connectionUrlGenerator;
 
     private @Inject MySqlDbmsMetadataHandler metadataHandler;
-    private @Inject MySqlDbmsOperationHandler operationHandler;
+    private @Inject MariaDbDbmsOperationHandler operationHandler;
 
     private MariaDbDbmsType() {
         namingConvention = new MariaDbNamingConvention();

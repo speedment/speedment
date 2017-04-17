@@ -17,6 +17,7 @@
 package com.speedment.runtime.core.db;
 
 import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.core.internal.manager.sql.SqlInsertStatement;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.Field;
 import java.sql.*;
@@ -301,5 +302,7 @@ public interface DbmsOperationHandler {
     default void configureSelect(ResultSet resultSet) throws SQLException {
         // Do nothing by default
     }
+       
+    <ENTITY> void handleGeneratedKeys(PreparedStatement ps, SqlInsertStatement<ENTITY> sqlStatement) throws SQLException;
 
 }
