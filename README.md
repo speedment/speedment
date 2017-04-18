@@ -360,7 +360,7 @@ If you do not want to use an archetype, for an example if you already have a pro
     <dependency>
         <groupId>mysql</groupId>
         <artifactId>mysql-connector-java</artifactId>
-        <version>5.1.40</version>
+        <version>5.1.41</version>
         <scope>runtime</scope>
     </dependency>
     
