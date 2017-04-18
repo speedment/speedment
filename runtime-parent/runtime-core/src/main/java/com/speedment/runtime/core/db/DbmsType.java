@@ -16,13 +16,12 @@
  */
 package com.speedment.runtime.core.db;
 
+import static com.speedment.common.mapstream.MapStream.comparing;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
-
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
-import static com.speedment.common.mapstream.MapStream.comparing;
 
 /**
  * The {@code DbmsType} interface defines unique properties for different Dbms
@@ -30,8 +29,8 @@ import static com.speedment.common.mapstream.MapStream.comparing;
  * {@code DbmsHandler}, one may easily implement support for new Dbms vendor
  * types.
  *
- * @author  Per Minborg
- * @since   2.0.0
+ * @author Per Minborg
+ * @since 2.0.0
  */
 public interface DbmsType {
 
@@ -114,24 +113,24 @@ public interface DbmsType {
     DatabaseNamingConvention getDatabaseNamingConvention();
 
     /**
-     * Returns the handler responsible for loading the metadata when 
-     * running this type of database.
-     * 
+     * Returns the handler responsible for loading the metadata when running
+     * this type of database.
+     *
      * @return the {@link DbmsMetadataHandler}
      */
     DbmsMetadataHandler getMetadataHandler();
-    
+
     /**
-     * Returns the handler responsible for running queries to databases 
-     * of this type.
-     * 
+     * Returns the handler responsible for running queries to databases of this
+     * type.
+     *
      * @return the implementation type of the {@link DbmsOperationHandler}
      */
     DbmsOperationHandler getOperationHandler();
 
     /**
-     * Returns the handler responsible for column inclusion/exclusion in
-     * queries to databases
+     * Returns the handler responsible for column inclusion/exclusion in queries
+     * to databases
      *
      * @return the implementation type of the {@link DbmsColumnHandler}
      */
@@ -139,8 +138,8 @@ public interface DbmsType {
 
     /**
      * Returns the result set table schema.
-     * 
-     * @return  the result set table schema.
+     *
+     * @return the result set table schema.
      */
     String getResultSetTableSchema();
 
@@ -154,8 +153,8 @@ public interface DbmsType {
     ConnectionUrlGenerator getConnectionUrlGenerator();
 
     /**
-     * Returns the FieldPredicateView for this database. A
-     * FieldPredicateView can render a SQL query given a stream pipeline.
+     * Returns the FieldPredicateView for this database. A FieldPredicateView
+     * can render a SQL query given a stream pipeline.
      *
      * @return the FieldPredicateView for this database
      */
@@ -178,4 +177,19 @@ public interface DbmsType {
      * database during speedment startup
      */
     String getInitialQuery();
+
+    /**
+     * Returns a new String and modifies the provided parameter list so that the
+     * original SQL query will reflect a query that has an offset (skip) and a
+     * limit.
+     *
+     * @param originalSql original SQL query
+     * @param params parameter list
+     * @param skip number of rows to skip (OFFSET) (0 = no skip)
+     * @param limit number of rows to limit (Long.MAX_VALUE = no limit)
+     * @return a new String and modifies the provided list so that the original
+     * SQL query will reflect a query that has an offset (skip) and a limit
+     */
+    String applySkipLimit(String originalSql, List<Object> params, long skip, long limit);
+
 }

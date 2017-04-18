@@ -22,6 +22,7 @@ import static com.speedment.common.injector.State.INITIALIZED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
+import static com.speedment.common.invariant.LongRangeUtil.requireNonNegative;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
@@ -29,6 +30,7 @@ import com.speedment.runtime.core.db.DbmsColumnHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 import java.util.Collections;
+import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
@@ -42,7 +44,8 @@ public abstract class AbstractDbmsType implements DbmsType {
 
     private static final DbmsColumnHandler DEFAULT_COLUMN_HANDLER = () -> Column::isAutoIncrement;
 
-    @Inject private Injector injector;
+    @Inject
+    private Injector injector;
 
     @ExecuteBefore(INITIALIZED)
     void install(@WithState(CREATED) DbmsHandlerComponent component) {
@@ -110,4 +113,32 @@ public abstract class AbstractDbmsType implements DbmsType {
     public DbmsColumnHandler getColumnHandler() {
         return DEFAULT_COLUMN_HANDLER;
     }
+
+        
+    @Override
+    public String applySkipLimit(String originalSql, List<Object> params, long skip, long limit) {
+        requireNonNegative(skip);
+        requireNonNegative(limit);
+
+        if (skip == 0 && limit == Long.MAX_VALUE) {
+            return originalSql;
+        }
+
+        final StringBuilder sb = new StringBuilder(originalSql);
+        if (limit == Long.MAX_VALUE) {
+            sb.append(" LIMIT 223372036854775807"); // Some big number that does not overflow
+        } else {
+            sb.append(" LIMIT ?");
+            params.add(limit);
+        }
+
+        if (skip > 0) {
+            sb.append(" OFFSET ?");
+            params.add(skip);
+        }
+
+        return sb.toString();
+
+    }
+
 }

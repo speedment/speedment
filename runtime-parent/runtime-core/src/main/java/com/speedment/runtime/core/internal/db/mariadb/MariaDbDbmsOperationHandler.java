@@ -34,18 +34,18 @@ public final class MariaDbDbmsOperationHandler extends AbstractDbmsOperationHand
         statement.setFetchSize(Integer.MIN_VALUE); // Enable streaming ResultSet
     }
 
-    @Override
-    public <ENTITY> void handleGeneratedKeys(PreparedStatement ps, SqlInsertStatement<ENTITY> sqlStatement) throws SQLException {
-        try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
-
-            // Work-around for MariaDb Bug that returns a SINGLETON of no keys are generated! See #408
-            if (!generatedKeys.isClosed()) {
-                while (generatedKeys.next()) {
-                    sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
-                }
-            }
-
-        }
-    }
+//    @Override
+//    public <ENTITY> void handleGeneratedKeys(PreparedStatement ps, SqlInsertStatement<ENTITY> sqlStatement) throws SQLException {
+//        try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
+//
+////            // Work-around for MariaDb Bug that returns a SINGLETON of no keys are generated! See #408
+////            if (!generatedKeys.isClosed()) {
+//                while (generatedKeys.next()) {
+//                    sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
+//                }
+////            }
+//
+//        }
+//    }
 
 }

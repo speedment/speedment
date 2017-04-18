@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.core.internal.component.sql.optimiser;
 
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.component.sql.Metrics;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizer;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
@@ -36,8 +37,10 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import static java.util.stream.Collectors.joining;
@@ -65,7 +68,6 @@ import static java.util.stream.Collectors.toList;
  * @param <ENTITY> entity type
  */
 public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimizer<ENTITY> {
-
 
     private final FilterOperation FILTER_OPERATION = new FilterOperation();
     private final SortedOperation SORTED_OPERATION = new SortedOperation();
@@ -162,36 +164,50 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         if (!sorteds.isEmpty()) {
             sql.append(" ORDER BY ");
             // Iterate backwards
+            final Set<ColumnIdentifier<ENTITY>> columns = new HashSet<>();
             for (int i = sorteds.size() - 1; i >= 0; i--) {
-                if (!(i == (sorteds.size() - 1))) {
-                    sql.append(", ");
-                }
                 final SortedComparatorAction<ENTITY> sortedAction = sorteds.get(i);
                 @SuppressWarnings("unchecked")
                 final FieldComparator<ENTITY, ?> fieldComparator = (FieldComparator<ENTITY, ?>) sortedAction.getComparator();
-                boolean isReversed = fieldComparator.isReversed();
-                String fieldName = info.getSqlColumnNamer().apply(fieldComparator.getField());
-                sql.append(fieldName);
-                if (isReversed) {
-                    sql.append(" DESC");
-                } else {
-                    sql.append(" ASC");
+                final ColumnIdentifier<ENTITY> columnIdentifier = fieldComparator.getField().identifier();
+
+                // SQL Server only allows distict columns in ORDER BY 
+                if (columns.add(columnIdentifier)) {
+                    if (!(i == (sorteds.size() - 1))) {
+                        sql.append(", ");
+                    }
+
+                    boolean isReversed = fieldComparator.isReversed();
+                    String fieldName = info.getSqlColumnNamer().apply(fieldComparator.getField());
+                    sql.append(fieldName);
+                    if (isReversed) {
+                        sql.append(" DESC");
+                    } else {
+                        sql.append(" ASC");
+                    }
                 }
             }
         }
 
-        if (!skips.isEmpty()) {
-            final long sumSkip = skips.stream().mapToLong(SkipAction::getSkip).sum();
-            values.add(sumSkip);
-            // Only works for MySQL. Make DB independent using DbmsType
-            sql.append(" LIMIT 9223372036854775807 OFFSET ?");
-        }
+        final long sumSkip = skips.stream().mapToLong(SkipAction::getSkip).sum();
 
-        query.setSql(sql.toString());
+//        final long sumSkip;
+//        if (!skips.isEmpty()) {
+//            values.add(sumSkip);
+//            // Only works for MySQL. Make DB independent using DbmsType
+////            sql.append(" LIMIT 9223372036854775807 OFFSET ?");
+//            sql.append(" LIMIT 223372036854775807 OFFSET ?");
+//        } else {
+//            sumSkip = 0;
+//        }
+        final String finalSql = info.getDbmsType()
+            .applySkipLimit(sql.toString(), values, sumSkip, Long.MAX_VALUE);
+
+        query.setSql(finalSql);
         query.setValues(values);
 
         initialPipeline.removeIf(a -> filters.contains(a) || sorteds.contains(a) || skips.contains(a));
-        
+
 //        // Todo: Optimize this
 //        Iterator<Action<?, ?>> iterator = initialPipeline.iterator();
 //        while (iterator.hasNext()) {
@@ -204,7 +220,6 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
 //                iterator.remove();
 //            }
 //        }
-
         return initialPipeline;
     }
 
@@ -322,7 +337,6 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
 //            }
 //        }
 //    }
-
     private static class Consumers<ENTITY> {
 
         private final Consumer<? super FilterAction<ENTITY>> filterConsumer;
@@ -356,7 +370,6 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
     private interface Operation<ENTITY> {
 
         //State getState();
-
         boolean is(Action<?, ?> action);
 
         void consume(Action<?, ?> action, Consumers<ENTITY> consumers);
@@ -369,7 +382,6 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
 //        public State getState() {
 //            return State.FILTER;
 //        }
-
         @Override
         public boolean is(Action<?, ?> action) {
             return isFilterActionWithFieldPredicate(action);
@@ -390,7 +402,6 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
 //        public State getState() {
 //            return State.SORTED;
 //        }
-
         @Override
         public boolean is(Action<?, ?> action) {
             return isSortedActionWithFieldPredicate(action);
@@ -411,7 +422,6 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
 //        public State getState() {
 //            return State.SKIP;
 //        }
-
         @Override
         public boolean is(Action<?, ?> action) {
             return action instanceof SkipAction;
