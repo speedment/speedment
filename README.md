@@ -425,7 +425,7 @@ If you do not want to use an archetype, for an example if you already have a pro
     <dependency>
         <groupId>org.mariadb.jdbc</groupId>
         <artifactId>mariadb-java-client</artifactId>
-        <version>1.5.7</version>
+        <version>1.5.9</version>
         <scope>runtime</scope>
     </dependency>
     
