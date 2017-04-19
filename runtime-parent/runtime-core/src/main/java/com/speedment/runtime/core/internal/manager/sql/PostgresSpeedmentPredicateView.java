@@ -32,6 +32,8 @@ public class PostgresSpeedmentPredicateView extends AbstractFieldPredicateView i
     // Info from:
     // http://stackoverflow.com/questions/23320945/postgresql-select-if-string-contains
     
+    // We cannot use collation for PostgreSQL. See https://github.com/speedment/speedment/issues/401    
+    
     @Override
     protected SqlPredicateFragment equalIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
         return of("(LOWER(" + cn + ") = LOWER(?))", negated).add(getFirstOperandAsRaw(model));
