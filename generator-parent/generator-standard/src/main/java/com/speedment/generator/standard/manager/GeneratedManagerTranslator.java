@@ -21,9 +21,11 @@ import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.model.*;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
+import com.speedment.runtime.config.PrimaryKeyColumn;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.core.manager.Manager;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 /**
@@ -58,6 +60,7 @@ extends AbstractEntityAndManagerTranslator<Interface> {
         } else {
             file.add(Import.of(Arrays.class));
             method.add(primaryKeyColumns()
+                .sorted(Comparator.comparing(PrimaryKeyColumn::getOrdinalPosition))
                 .map(pkc -> "entity.get" + getSupport().typeName(pkc.findColumn().get()) + "()")
                 .collect(Collectors.joining(", ", "return Arrays.asList(", ");"))
             );
