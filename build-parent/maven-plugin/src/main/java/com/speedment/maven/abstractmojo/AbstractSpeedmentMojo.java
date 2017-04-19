@@ -43,6 +43,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
@@ -61,7 +64,7 @@ import org.apache.maven.project.MavenProject;
  */
 public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
-    private static final File DEFAULT_CONFIG = new File(DEFAULT_CONFIG_LOCATION);
+    private static final Path DEFAULT_CONFIG = Paths.get(DEFAULT_CONFIG_LOCATION);
     private static final Consumer<ApplicationBuilder<?, ?>> NOTHING = builder -> {};
 
     private final Consumer<ApplicationBuilder<?, ?>> configurer;
@@ -78,14 +81,28 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
     protected abstract int dbmsPort();
     protected abstract String dbmsUsername();
     protected abstract String dbmsPassword();
-    protected abstract File configLocation();
     protected abstract String[] components();
     protected abstract Mapping[] typeMappers();
     protected abstract ConfigParam[] parameters();
     protected abstract String launchMessage();
+    protected abstract String getConfigFile();
     protected abstract void execute(Speedment speedment)
         throws MojoExecutionException, MojoFailureException;
 
+    
+    protected Path configLocation() {
+        final String top = getConfigFile() == null 
+            ? DEFAULT_CONFIG_LOCATION 
+            : getConfigFile();
+        
+        System.out.println(project());
+        
+        return project()
+            .getBasedir()
+            .toPath()
+            .resolve(top);
+    }
+    
     @Override
     public final void execute() throws MojoExecutionException, MojoFailureException {
 
@@ -125,19 +142,19 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
      * @param file the config file to check
      * @return {@code true} if available, else {@code false}
      */
-    protected final boolean hasConfigFile(File file) {
+    protected final boolean hasConfigFile(Path file) {
         if (file == null) {
             final String msg = "The expected .json-file is null.";
             getLog().info(msg);
             return false;
-        } else if (!file.exists()) {
+        } else if (!Files.exists(file)) {
             final String msg = "The expected .json-file '"
-                + file.getAbsolutePath() + "' does not exist.";
+                + file + "' does not exist.";
             getLog().info(msg);
             return false;
-        } else if (!file.canRead()) {
+        } else if (!Files.isReadable(file)) {
             final String err = "The expected .json-file '"
-                + file.getAbsolutePath() + "' is not readable.";
+                + file + "' is not readable.";
             getLog().error(err);
             return false;
         } else {
@@ -188,7 +205,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
         // Configure config file location
         if (hasConfigFile()) {
             result = ApplicationBuilder.standard(classLoader)
-                .withParam(METADATA_LOCATION, configLocation().getAbsolutePath());
+                .withParam(METADATA_LOCATION, configLocation().toAbsolutePath().toString());
         } else if (hasConfigFile(DEFAULT_CONFIG)) {
             result = ApplicationBuilder.standard(classLoader)
                 .withParam(METADATA_LOCATION, DEFAULT_CONFIG_LOCATION);

@@ -23,6 +23,8 @@ import com.speedment.runtime.core.Speedment;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import static com.speedment.tool.core.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.function.Consumer;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -49,7 +51,7 @@ public abstract class AbstractReloadMojo extends AbstractSpeedmentMojo {
     private @Parameter(defaultValue = "${components}") String[] components;
     private @Parameter(defaultValue = "${typeMappers}") Mapping[] typeMappers;
     private @Parameter ConfigParam[] parameters;
-    private @Parameter(defaultValue = "${configFile}") File configFile;
+    private @Parameter(defaultValue = "${configFile}") String configFile;
         
     protected AbstractReloadMojo() {}
     
@@ -57,12 +59,12 @@ public abstract class AbstractReloadMojo extends AbstractSpeedmentMojo {
     
     @Override
     protected void execute(Speedment speedment) throws MojoExecutionException, MojoFailureException {
-        getLog().info("Saving default configuration from database to '" + configLocation().getAbsolutePath() + "'.");
+        getLog().info("Saving default configuration from database to '" + configLocation().toAbsolutePath() + "'.");
         
         final ConfigFileHelper helper = speedment.getOrThrow(ConfigFileHelper.class);
         
         try {
-            helper.setCurrentlyOpenFile(configLocation());
+            helper.setCurrentlyOpenFile(configLocation().toFile());
             helper.loadFromDatabaseAndSaveToFile();
         } catch (final Exception ex) {
             final String err = "An error occured while reloading.";
@@ -81,9 +83,8 @@ public abstract class AbstractReloadMojo extends AbstractSpeedmentMojo {
         return debug == null ? false: debug;
     }
 
-    @Override
-    protected File configLocation() {
-        return configFile == null ? new File(DEFAULT_CONFIG_LOCATION) : configFile;
+    public String getConfigFile() {
+        return configFile;
     }
 
     @Override

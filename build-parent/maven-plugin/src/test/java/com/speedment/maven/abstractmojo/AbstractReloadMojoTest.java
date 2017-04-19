@@ -25,6 +25,9 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.io.File;
+import java.nio.file.Paths;
+import org.apache.maven.project.MavenProject;
+import static org.mockito.Mockito.mock;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -35,7 +38,7 @@ public class AbstractReloadMojoTest {
 
     private AbstractReloadMojoTestImpl mojo;
 
-    private File mockedConfigLocation = new File("testFile.txt");
+    private String mockedConfigLocation = "testFile.txt";
     @Mock
     private Speedment mockedSpeedment;
     @Mock
@@ -43,7 +46,16 @@ public class AbstractReloadMojoTest {
 
     @Before
     public void setup() {
-        mojo = new AbstractReloadMojoTestImpl();
+        MavenProject mavenProject = mock(MavenProject.class);
+        when(mavenProject.getBasedir()).thenReturn(new File("baseDir"));
+
+        mojo = new AbstractReloadMojoTestImpl() {
+            @Override
+            protected MavenProject project() {
+                return mavenProject;
+            }
+
+        };
     }
 
     @Test
@@ -51,12 +63,12 @@ public class AbstractReloadMojoTest {
         // Given
         when(mockedSpeedment.getOrThrow(ConfigFileHelper.class)).thenReturn(mockedConfigFileHelper);
         mojo.setConfigFile(mockedConfigLocation);
-
+        
         // When
         mojo.execute(mockedSpeedment);
 
         // Then
-        verify(mockedConfigFileHelper).setCurrentlyOpenFile(mockedConfigLocation);
+        verify(mockedConfigFileHelper).setCurrentlyOpenFile(Paths.get("baseDir", mockedConfigLocation).toFile());
         verify(mockedConfigFileHelper).loadFromDatabaseAndSaveToFile();
     }
 
