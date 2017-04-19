@@ -28,23 +28,24 @@ import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.manager.AbstractManager;
 import java.lang.reflect.Type;
+import java.util.Comparator;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 
 /**
  *
  * @author Emil Forslund
- * @since  2.3.0
+ * @since 2.3.0
  */
-public final class GeneratedManagerImplTranslator 
-        extends AbstractEntityAndManagerTranslator<Class> {
+public final class GeneratedManagerImplTranslator
+    extends AbstractEntityAndManagerTranslator<Class> {
 
-    public final static String 
-        ENTITY_COPY_METHOD_NAME    = "entityCopy",
-        ENTITY_CREATE_METHOD_NAME  = "entityCreate",
-        FIELDS_METHOD              = "fields",
+    public final static String ENTITY_COPY_METHOD_NAME = "entityCopy",
+        ENTITY_CREATE_METHOD_NAME = "entityCreate",
+        FIELDS_METHOD = "fields",
         PRIMARY_KEYS_FIELDS_METHOD = "primaryKeyFields";
 
     public GeneratedManagerImplTranslator(Table table) {
@@ -71,18 +72,21 @@ public final class GeneratedManagerImplTranslator
                     .add(Constructor.of().protected_()
                         .add("this.tableIdentifier = " + TableIdentifier.class.getSimpleName() + ".of("
                             + Stream.of(getSupport().dbmsOrThrow().getId(), getSupport().schemaOrThrow().getId(), getSupport().tableOrThrow().getId())
-                            .map(s -> "\"" + s + "\"").collect(joining(", ")) 
+                                .map(s -> "\"" + s + "\"").collect(joining(", "))
                             + ");")
                     )
                     .add(Method.of("getTableIdentifier", SimpleParameterizedType.create(TableIdentifier.class, getSupport().entityType()))
                         .public_().add(OVERRIDE)
                         .add("return tableIdentifier;")
                     )
-                    .add(generateFields(getSupport(), file, FIELDS_METHOD, table::columns))
+                    .add(generateFields(getSupport(), file, FIELDS_METHOD, () -> table.columns().sorted(Comparator.comparing(Column::getOrdinalPosition))))
                     .add(generateFields(getSupport(), file, PRIMARY_KEYS_FIELDS_METHOD,
-                        () -> table.columns().filter(GeneratedManagerImplTranslator::isPrimaryKey))
-                    )
-                    ;
+                        () -> table.primaryKeyColumns()
+                            .filter(HasEnabled::test)
+                            .map(pk -> pk.findColumn())
+                            .filter(o -> o.isPresent())
+                            .map(o -> o.get())
+                    ));
             })
             .build();
     }
