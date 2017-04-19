@@ -54,7 +54,7 @@ When we started the open-source project Speedment, the main objective was to rem
 
 Documentation
 -------------
-You can read the [API quick start examples here](https://github.com/speedment/speedment#examples)!
+You can read the [API manual here](https://speedment.github.io/speedment-doc/introduction.html)!
 
 ## Tutorials
 * [Tutorial 1 - Set up the IDE](https://github.com/speedment/speedment/wiki/Tutorial:-Set-up-the-IDE)
@@ -360,7 +360,7 @@ If you do not want to use an archetype, for an example if you already have a pro
     <dependency>
         <groupId>mysql</groupId>
         <artifactId>mysql-connector-java</artifactId>
-        <version>5.1.40</version>
+        <version>5.1.41</version>
         <scope>runtime</scope>
     </dependency>
     
@@ -425,7 +425,7 @@ If you do not want to use an archetype, for an example if you already have a pro
     <dependency>
         <groupId>org.mariadb.jdbc</groupId>
         <artifactId>mariadb-java-client</artifactId>
-        <version>1.5.7</version>
+        <version>1.5.9</version>
         <scope>runtime</scope>
     </dependency>
     
