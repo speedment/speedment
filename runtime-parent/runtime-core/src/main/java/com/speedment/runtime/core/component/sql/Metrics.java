@@ -39,6 +39,9 @@ public interface Metrics {
      * @return a new Metrics
      */
     static Metrics of(int pipelineReductions) {
+        if (pipelineReductions == 0) {
+            return empty();
+        }
         return new MetricsImpl(pipelineReductions);
     }
 

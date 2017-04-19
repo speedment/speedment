@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.component.sql.optimiser;
+package com.speedment.runtime.core.internal.component.sql.optimizer;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.component.sql.Metrics;
@@ -22,6 +22,8 @@ import com.speedment.runtime.core.component.sql.SqlStreamOptimizer;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsType;
+import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.NONE;
+import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.ONLY_AFTER_SORTED;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
@@ -90,10 +92,22 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
     public Metrics metrics(Pipeline initialPipeline, DbmsType dbmsType) {
         requireNonNull(initialPipeline);
         requireNonNull(dbmsType);
+        final DbmsType.SkipLimitSupport skipLimitSupport = dbmsType.getSkipLimitSupport();
+        final AtomicInteger filterCounter = new AtomicInteger();
+        final AtomicInteger orderCounter = new AtomicInteger();
+        final AtomicInteger skipCounter = new AtomicInteger();
 
-        final AtomicInteger cnt = new AtomicInteger();
-        traverse(initialPipeline, fc -> cnt.incrementAndGet(), fc -> cnt.incrementAndGet(), fc -> cnt.incrementAndGet());
-        return Metrics.of(cnt.get());
+        traverse(initialPipeline, fc -> filterCounter.incrementAndGet(), fc -> orderCounter.incrementAndGet(), fc -> skipCounter.incrementAndGet());
+
+        if (skipLimitSupport == ONLY_AFTER_SORTED && orderCounter.get() == 0) {
+            // Just decline. There are other optimizer that handles just filtering better
+            return Metrics.empty();
+        }
+        if (skipLimitSupport == NONE) {
+            return Metrics.of(filterCounter.get() + orderCounter.get());
+        }
+
+        return Metrics.of(filterCounter.get() + orderCounter.get() + skipCounter.get());
     }
 
     @Override
@@ -105,7 +119,7 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         requireNonNull(initialPipeline);
         requireNonNull(info);
         requireNonNull(query);
-
+        final DbmsType.SkipLimitSupport skipLimitSupport = info.getDbmsType().getSkipLimitSupport();
         final List<FilterAction<ENTITY>> filters = new ArrayList<>();
         final List<SortedComparatorAction<ENTITY>> sorteds = new ArrayList<>();
         final List<SkipAction<ENTITY>> skips = new ArrayList<>();
@@ -120,16 +134,6 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         if (!filters.isEmpty()) {
             final FieldPredicateView spv = info.getDbmsType().getFieldPredicateView();
 
-//            for (FilterAction<ENTITY> filter: filters) {
-//                Predicate<? super ENTITY> predicate = filter.getPredicate();
-//                @SuppressWarnings("unchecked")
-//                FieldPredicate<ENTITY> fPredicate = (FieldPredicate<ENTITY>)filter.getPredicate();
-//                SqlPredicateFragment fragment = spv.transform(
-//                    info.getSqlColumnNamer(), 
-//                    info.getSqlDatabaseTypeFunction(), 
-//                    fPredicate
-//                );
-//            }
             @SuppressWarnings("unchecked")
             final List<SqlPredicateFragment> fragments = filters.stream()
                 .map(f -> f.getPredicate())
@@ -189,37 +193,21 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
             }
         }
 
-        final long sumSkip = skips.stream().mapToLong(SkipAction::getSkip).sum();
+        final String finalSql;
+        if (skipLimitSupport == NONE) {
+            finalSql = sql.toString();
+            initialPipeline.removeIf(a -> filters.contains(a) || sorteds.contains(a));
+        } else {
+            final long sumSkip = skips.stream().mapToLong(SkipAction::getSkip).sum();
 
-//        final long sumSkip;
-//        if (!skips.isEmpty()) {
-//            values.add(sumSkip);
-//            // Only works for MySQL. Make DB independent using DbmsType
-////            sql.append(" LIMIT 9223372036854775807 OFFSET ?");
-//            sql.append(" LIMIT 223372036854775807 OFFSET ?");
-//        } else {
-//            sumSkip = 0;
-//        }
-        final String finalSql = info.getDbmsType()
-            .applySkipLimit(sql.toString(), values, sumSkip, Long.MAX_VALUE);
+            finalSql = info.getDbmsType()
+                .applySkipLimit(sql.toString(), values, sumSkip, Long.MAX_VALUE);
+            initialPipeline.removeIf(a -> filters.contains(a) || sorteds.contains(a) || skips.contains(a));
+        }
 
         query.setSql(finalSql);
         query.setValues(values);
 
-        initialPipeline.removeIf(a -> filters.contains(a) || sorteds.contains(a) || skips.contains(a));
-
-//        // Todo: Optimize this
-//        Iterator<Action<?, ?>> iterator = initialPipeline.iterator();
-//        while (iterator.hasNext()) {
-//            final Action<?, ?> action = iterator.next();
-//            if (filters.contains(action)) {
-//                iterator.remove();
-//            } else if (sorteds.contains(action)) {
-//                iterator.remove();
-//            } else if (skips.contains(action)) {
-//                iterator.remove();
-//            }
-//        }
         return initialPipeline;
     }
 

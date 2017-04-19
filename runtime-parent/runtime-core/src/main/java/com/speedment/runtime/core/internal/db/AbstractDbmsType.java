@@ -114,7 +114,11 @@ public abstract class AbstractDbmsType implements DbmsType {
         return DEFAULT_COLUMN_HANDLER;
     }
 
-        
+    @Override
+    public SkipLimitSupport getSkipLimitSupport() {
+        return SkipLimitSupport.STANDARD;
+    }
+
     @Override
     public String applySkipLimit(String originalSql, List<Object> params, long skip, long limit) {
         requireNonNegative(skip);

@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.core.internal.component.sql.optimiser;
 
+import com.speedment.runtime.core.internal.component.sql.optimizer.FilterSortedSkipOptimizer;
 import com.speedment.runtime.core.component.sql.Metrics;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;

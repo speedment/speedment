@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.component.sql.optimiser;
+package com.speedment.runtime.core.internal.component.sql.optimizer;
 
 import com.speedment.runtime.core.component.sql.Metrics;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizer;

@@ -178,10 +178,23 @@ public interface DbmsType {
      */
     String getInitialQuery();
 
+    enum SkipLimitSupport {
+        STANDARD, ONLY_AFTER_SORTED, NONE;
+    }
+
     /**
-     * Returns a new String and modifies the provided parameter list so that the
-     * original SQL query will reflect a query that has an offset (skip) and a
-     * limit.
+     * Returns the support for skip and limit (or skip and offset) for this
+     * database type.
+     *
+     * @return the support for skip and limit (or skip and offset) for this
+     * database type
+     */
+    SkipLimitSupport getSkipLimitSupport();
+
+    /**
+     * Returns a new String and modifies the provided parameter list (side
+     * effect) so that the original SQL query will reflect a query that has an
+     * offset (skip) and a limit.
      *
      * @param originalSql original SQL query
      * @param params parameter list
