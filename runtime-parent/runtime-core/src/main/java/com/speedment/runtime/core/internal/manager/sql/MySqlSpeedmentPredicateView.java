@@ -35,6 +35,17 @@ import static java.util.stream.Collectors.joining;
 @SuppressWarnings("rawtypes")
 public final class MySqlSpeedmentPredicateView extends AbstractFieldPredicateView implements FieldPredicateView {
 
+    /*
+    create table colltest (
+      name character(20)
+    ) charset latin1
+
+    insert into colltest (name) values ('olle');
+    insert into colltest (name) values ('sven');
+    
+    select * from colltest where name = 'olle' collate utf8_bin;
+    
+     */
     private enum Collation {
 
         UTF8_BIN, UTF8_GENERAL_CI;
