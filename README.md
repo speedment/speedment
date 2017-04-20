@@ -44,7 +44,7 @@ When we started the open-source project Speedment, the main objective was to rem
 | `HAVING`     | `filter()` (after collecting) |
 | `JOIN`       | `flatMap()`  |
 | `DISTINCT`   | `distinct()` |
-| `UNION`      | `concat(s1, s0).distinct()` |
+| `UNION`      | `concat(s0, s1).distinct()` |
 | `ORDER BY`   | `sorted()`   |
 | `OFFSET`     | `skip()`     |
 | `LIMIT`      | `limit()`    |
