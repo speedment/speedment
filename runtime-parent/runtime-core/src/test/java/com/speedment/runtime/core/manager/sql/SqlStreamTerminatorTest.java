@@ -107,7 +107,8 @@ public class SqlStreamTerminatorTest {
             info,
             asynchronousQueryResult,
             new SqlStreamOptimizerComponentImpl(),
-            new SqlStreamTerminatorComponentImpl()
+            new SqlStreamTerminatorComponentImpl(),
+            true
         );
         return terminator.count(createPipeline(action));
     }

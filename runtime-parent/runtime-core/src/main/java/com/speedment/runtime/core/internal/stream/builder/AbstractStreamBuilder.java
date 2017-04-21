@@ -44,10 +44,10 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
 
     private static final Logger LOGGER = LoggerManager.getLogger(AbstractStreamBuilder.class);
 
-    protected final String UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED = "This method has been disabled for this Stream type because improper use will "
-        + "lead to resources not being freed up. "
-        + "We regret any inconvenience caused by this. "
-        + "If you want to concatenate two or more stream, please use the " + StreamComposition.class.getName() + "#concatAndAutoClose() method instead.";
+//    protected final String UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED = "This method has been disabled for this Stream type because improper use will "
+//        + "lead to resources not being freed up. "
+//        + "We regret any inconvenience caused by this. "
+//        + "If you want to concatenate two or more stream, please use the " + StreamComposition.class.getName() + "#concatAndAutoClose() method instead.";
 
     protected final PipelineImpl<?> pipeline;
     protected final StreamTerminator streamTerminator;

@@ -603,6 +603,24 @@ public interface ApplicationBuilder<
     BUILDER withLogging(HasLogglerName namer);
 
     /**
+     * Allows {@link Stream#iterator } and .{@link Stream#spliterator }
+     * terminating operations to be called on Speedment streams.
+     * <p>
+     * Note: if enabled, make sure to close the Stream or else database
+     * connections will be consumed.
+     * <p>
+     * {@code
+     *   try (Stream<User> userStream = users.stream()) {
+     *      Iterator<User> userIterator = userStream();
+     *      // Do something with the Iterator
+     *   }
+     *   // The stream is auto-closed and the connection (if any) is returned.
+     *
+     * @return this instance
+     */
+    BUILDER withAllowStreamIteratorAndSpliterator();
+
+    /**
      * Builds this application. This is expected to be the last method called on
      * this object.
      *

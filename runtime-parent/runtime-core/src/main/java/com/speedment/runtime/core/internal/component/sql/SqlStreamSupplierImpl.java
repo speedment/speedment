@@ -80,7 +80,7 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
     private final String sqlTableReference;
     private final SqlStreamOptimizerComponent sqlStreamOptimizerComponent;
     private final SqlStreamTerminatorComponent sqlStreamTerminatorComponent;
-
+    private final boolean allowIteratorAndSpliterator;
 
     SqlStreamSupplierImpl(
         final TableIdentifier<ENTITY> tableId,
@@ -89,7 +89,8 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
         final DbmsHandlerComponent dbmsHandlerComponent,
         final ManagerComponent managerComponent,
         final SqlStreamOptimizerComponent sqlStreamOptimizerComponent,
-        final SqlStreamTerminatorComponent sqlStreamTerminatorComponent
+        final SqlStreamTerminatorComponent sqlStreamTerminatorComponent,
+        final boolean allowIteratorAndSpliterator
     ) {
         requireNonNull(tableId);
         requireNonNull(projectComponent);
@@ -99,6 +100,7 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
         this.entityMapper = requireNonNull(entityMapper);
         this.sqlStreamOptimizerComponent = requireNonNull(sqlStreamOptimizerComponent);
         this.sqlStreamTerminatorComponent = requireNonNull(sqlStreamTerminatorComponent);
+        this.allowIteratorAndSpliterator = allowIteratorAndSpliterator;
 
         final Project project = projectComponent.getProject();
         final Table table = DocumentDbUtil.referencedTable(project, tableId);
@@ -156,19 +158,20 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
             );
 
         final SqlStreamOptimizerInfo<ENTITY> info = SqlStreamOptimizerInfo.of(
-            dbmsType, 
-            sqlSelect, 
-            sqlSelectCount, 
-            this::executeAndGetLong, 
-            this::sqlColumnNamer, 
+            dbmsType,
+            sqlSelect,
+            sqlSelectCount,
+            this::executeAndGetLong,
+            this::sqlColumnNamer,
             this::sqlDatabaseTypeFunction
         );
-        
+
         final SqlStreamTerminator<ENTITY> terminator = new SqlStreamTerminator<>(
             info,
             asynchronousQueryResult,
             sqlStreamOptimizerComponent,
-            sqlStreamTerminatorComponent
+            sqlStreamTerminatorComponent,
+            allowIteratorAndSpliterator
         );
 
         final Supplier<BaseStream<?, ?>> initialSupplier
@@ -208,7 +211,7 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
     private String sqlColumnNamer(Field<ENTITY> field) {
         return columnNameMap.get(field.identifier());
     }
-    
+
     private Class<?> sqlDatabaseTypeFunction(Field<ENTITY> field) {
         return columnDatabaseTypeMap.get(field.identifier());
     }

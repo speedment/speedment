@@ -27,10 +27,12 @@ import com.speedment.runtime.core.internal.stream.builder.pipeline.LongPipeline;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.ReferencePipeline;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminator;
 import com.speedment.runtime.core.stream.Pipeline;
+import com.speedment.runtime.core.util.StreamComposition;
 import java.util.Comparator;
 import java.util.Iterator;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import java.util.PrimitiveIterator;
 import java.util.Spliterator;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -54,22 +56,32 @@ import java.util.stream.Collector;
  */
 public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
 
+    protected final String UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED = "This method has been disabled for this Stream type "
+        + "because improper use will lead to resources not being freed up. "
+        + "We regret any inconvenience caused by this. "
+        + "If you want to concatenate two or more stream, please use the " + StreamComposition.class.getName()
+        + "#concatAndAutoClose() method instead."
+        + "Note: If you want to enable this functionality, please use the .withAllowStreamIteratorAndSpliterator() application builder "
+        + "method. Be aware though, you are then responsible for closing the stream implicitly after use, ALWAYS";
+
     private final SqlStreamTerminatorComponent sqlStreamTerminatorComponent;
     private final SqlStreamOptimizerComponent sqlStreamOptimizerComponent;
-
     private final SqlStreamOptimizerInfo<ENTITY> info;
     private final AsynchronousQueryResult<ENTITY> asynchronousQueryResult;
+    private final boolean allowIteratorAndSpliterator;
 
     public SqlStreamTerminator(
         final SqlStreamOptimizerInfo<ENTITY> info,
         final AsynchronousQueryResult<ENTITY> asynchronousQueryResult,
         final SqlStreamOptimizerComponent sqlStreamOptimizerComponent,
-        final SqlStreamTerminatorComponent sqlStreamTerminatorComponent
+        final SqlStreamTerminatorComponent sqlStreamTerminatorComponent,
+        final boolean allowIteratorAndSpliterator
     ) {
         this.info = requireNonNull(info);
         this.asynchronousQueryResult = requireNonNull(asynchronousQueryResult);
         this.sqlStreamOptimizerComponent = requireNonNull(sqlStreamOptimizerComponent);
         this.sqlStreamTerminatorComponent = requireNonNull(sqlStreamTerminatorComponent);
+        this.allowIteratorAndSpliterator = allowIteratorAndSpliterator;
     }
 
     @Override
@@ -167,30 +179,90 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
 
     @Override
     public <T> Iterator<T> iterator(ReferencePipeline<T> pipeline) {
-        return sqlStreamTerminatorComponent.<ENTITY>getIteratorTerminator().apply(info, this, pipeline);
+        if (allowIteratorAndSpliterator) {
+            return sqlStreamTerminatorComponent.<ENTITY>getIteratorTerminator().apply(info, this, pipeline);
+        }
+        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
     }
 
     @Override
     public <T> Spliterator<T> spliterator(ReferencePipeline<T> pipeline) {
-        return sqlStreamTerminatorComponent.<ENTITY>getSpliteratorTerminator().apply(info, this, pipeline);
+        if (allowIteratorAndSpliterator) {
+            return sqlStreamTerminatorComponent.<ENTITY>getSpliteratorTerminator().apply(info, this, pipeline);
+        }
+        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
     }
 
-    // double
+    ///////////// double
     @Override
     public long count(DoublePipeline pipeline) {
         return sqlStreamTerminatorComponent.<ENTITY>getDoubleCountTerminator().apply(info, this, pipeline);
     }
 
-    // int
+    // Todo: Introduce delegator
+    @Override
+    public PrimitiveIterator.OfDouble iterator(DoublePipeline pipeline) {
+        if (allowIteratorAndSpliterator) {
+            return StreamTerminator.super.iterator(pipeline);
+        }
+        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+    }
+
+    // Todo: Introduce delegator
+    @Override
+    public Spliterator.OfDouble spliterator(DoublePipeline pipeline) {
+        if (allowIteratorAndSpliterator) {
+            return StreamTerminator.super.spliterator(pipeline);
+        }
+        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+    }
+
+    ///////////// int
     @Override
     public long count(IntPipeline pipeline) {
         return sqlStreamTerminatorComponent.<ENTITY>getIntCountTerminator().apply(info, this, pipeline);
     }
 
-    // long 
+    // Todo: Introduce delegator
+    @Override
+    public PrimitiveIterator.OfInt iterator(IntPipeline pipeline) {
+        if (allowIteratorAndSpliterator) {
+            return StreamTerminator.super.iterator(pipeline);
+        }
+        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+    }
+
+    // Todo: Introduce delegator
+    @Override
+    public Spliterator.OfInt spliterator(IntPipeline pipeline) {
+        if (allowIteratorAndSpliterator) {
+            return StreamTerminator.super.spliterator(pipeline);
+        }
+        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+    }
+
+    ///////////// long 
     @Override
     public long count(LongPipeline pipeline) {
         return sqlStreamTerminatorComponent.<ENTITY>getLongCountTerminator().apply(info, this, pipeline);
+    }
+
+    // Todo: Introduce delegator
+    @Override
+    public PrimitiveIterator.OfLong iterator(LongPipeline pipeline) {
+        if (allowIteratorAndSpliterator) {
+            return StreamTerminator.super.iterator(pipeline);
+        }
+        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+    }
+
+    // Todo: Introduce delegator
+    @Override
+    public Spliterator.OfLong spliterator(LongPipeline pipeline) {
+        if (allowIteratorAndSpliterator) {
+            return StreamTerminator.super.spliterator(pipeline);
+        }
+        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
     }
 
 }
