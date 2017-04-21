@@ -18,6 +18,7 @@ import com.speedment.runtime.core.internal.stream.builder.ReferenceStreamBuilder
 import com.speedment.runtime.core.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.Field;
+import com.speedment.runtime.test_support.MockDbmsType;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ import org.junit.Test;
  *
  * @author Per Minborg
  */
-public class Issue403TakeWhileDropWhile {
+public class Issue403TakeWhileDropWhileTest {
 
     private static final String[] ELEMENTS = {"a", "b", "c", "d", "e", "a"};
     private static final Predicate<String> GREATER_THAN_B = (String s) -> "b".compareTo(s) < 0;
@@ -45,12 +46,12 @@ public class Issue403TakeWhileDropWhile {
     private Stream<String> stream;
 
     @Test
-    public void ensureStream() {
+    public void testStream() {
         assertArrayEquals(ELEMENTS, stream.toArray(String[]::new));
     }
 
     @Test
-    public void checkPredicateGreaterThanB() {
+    public void testPredicateGreaterThanB() {
         assertEquals(
             Arrays.asList("c", "d", "e"),
             stream.filter(GREATER_THAN_B).collect(toList())
@@ -58,7 +59,7 @@ public class Issue403TakeWhileDropWhile {
     }
 
     @Test
-    public void checkPredicateLessThanC() {
+    public void testPredicateLessThanC() {
         assertEquals(
             Arrays.asList("a", "b", "a"),
             stream.filter(LESS_THAN_C).collect(toList())
@@ -66,7 +67,7 @@ public class Issue403TakeWhileDropWhile {
     }
 
     @Test
-    public void testTakeWhile() {
+    public void testTakeWhileTest() {
         try {
             final Method method = Stream.class.getMethod("takeWhile", Predicate.class);
             log("We are running under Java 9: takeWhile exists");
@@ -91,52 +92,7 @@ public class Issue403TakeWhileDropWhile {
     public void before() {
         final PipelineImpl<String> pipeline = new PipelineImpl<>(() -> Stream.of(ELEMENTS));
 
-        DbmsType dbmsType = new AbstractDbmsType() {
-            @Override
-            public String getName() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public String getDriverManagerName() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public int getDefaultPort() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public String getDbmsNameMeaning() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public String getDriverName() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public DbmsMetadataHandler getMetadataHandler() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public DbmsOperationHandler getOperationHandler() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public ConnectionUrlGenerator getConnectionUrlGenerator() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public FieldPredicateView getFieldPredicateView() {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-        };
+        final DbmsType dbmsType = new MockDbmsType();
 
         final SqlStreamOptimizerInfo<String> info
             = SqlStreamOptimizerInfo.of(
@@ -170,7 +126,7 @@ public class Issue403TakeWhileDropWhile {
             true
         );
 
-        stream = new ReferenceStreamBuilder<String>(
+        stream = new ReferenceStreamBuilder<>(
             pipeline,
             streamTerminator
         );
