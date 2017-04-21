@@ -17,6 +17,7 @@
 package com.speedment.runtime.core.internal.component.sql;
 
 import static com.speedment.common.injector.State.STARTED;
+import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
@@ -44,6 +45,7 @@ public final class SqlStreamSupplierComponentImpl implements SqlStreamSupplierCo
 
     private final Map<TableIdentifier<?>, SqlFunction<ResultSet, ?>> prestart;
     private final Map<TableIdentifier<?>, SqlStreamSupplier<?>> supportMap;
+    private @Config(name = "allowStreamIteratorAndSpliterator", value = "false") boolean allowStreamIteratorAndSpliterator;
 
     public SqlStreamSupplierComponentImpl() {
         this.supportMap = new ConcurrentHashMap<>();
@@ -73,7 +75,8 @@ public final class SqlStreamSupplierComponentImpl implements SqlStreamSupplierCo
                 dbmsHandlerComponent,
                 managerComponent,
                 sqlStreamOptimizerComponent,
-                sqlStreamTerminatorComponent
+                sqlStreamTerminatorComponent,
+                allowStreamIteratorAndSpliterator
             );
 
             supportMap.put(tableIdentifier, supplier);

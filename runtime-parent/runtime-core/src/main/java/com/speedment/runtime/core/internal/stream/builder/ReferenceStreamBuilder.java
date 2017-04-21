@@ -42,7 +42,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     public ReferenceStreamBuilder(PipelineImpl<?> pipeline, final StreamTerminator streamTerminator) {
         this(pipeline, streamTerminator, newStreamSet());
     }
-    
+
     @Override
     public Stream<T> filter(Predicate<? super T> predicate) {
         requireNonNull(predicate);
@@ -381,8 +381,8 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      */
     @Override
     public Iterator<T> iterator() {
-        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
-        //return streamTerminator.iterator(pipeline());
+        //throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+        return streamTerminator.iterator(pipeline());
     }
 
     /**
@@ -397,7 +397,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
      */
     @Override
     public Spliterator<T> spliterator() {
-        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
-        //return streamTerminator.spliterator(pipeline());
+        //throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+        return streamTerminator.spliterator(pipeline());
     }
 }
