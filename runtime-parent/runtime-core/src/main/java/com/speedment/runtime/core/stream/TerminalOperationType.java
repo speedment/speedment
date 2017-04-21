@@ -20,6 +20,7 @@ package com.speedment.runtime.core.stream;
  *
  * @author Per Minborg
  */
+@Deprecated
 public enum TerminalOperationType {
 
     /* REFERENCE STREAM */
@@ -40,8 +41,7 @@ public enum TerminalOperationType {
     NONE_MATCH,              /// Count all with filters and match predicate and see if it is zero
     FIND_FIRST,              /// Limit 1
     FIND_ANY,                /// Remove all ordering from pipeline
-    TAKE_WHILE,
-    DROP_WHILE,
+    
     /* Primitive Stream Specific */
     SUM,                     /// Use SQL sum() if possible, order irrelevant
     AVERAGE,                 /// Use SQL average() if possible, order irrelevant
