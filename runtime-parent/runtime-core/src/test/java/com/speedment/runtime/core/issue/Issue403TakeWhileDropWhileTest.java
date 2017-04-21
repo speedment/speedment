@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
@@ -69,6 +70,9 @@ public class Issue403TakeWhileDropWhileTest {
     @Test
     public void testTakeWhileTest() {
         try {
+            final AtomicInteger closeCounter = new AtomicInteger();
+            stream.onClose(() -> closeCounter.incrementAndGet());
+
             final Method method = Stream.class.getMethod("takeWhile", Predicate.class);
             log("We are running under Java 9: takeWhile exists");
             @SuppressWarnings("unchecked")
@@ -78,6 +82,7 @@ public class Issue403TakeWhileDropWhileTest {
             final List<String> actual = newStream.collect(toList());
             log("actual:" + actual);
             assertEquals(expected, actual);
+            assertEquals("Stream was not closed", 1, closeCounter.get());
         } catch (NoSuchMethodException | SecurityException e) {
             log("We run under Java 8: takeWhile does not exist");
             // We are under Java 8. Just ignore. 
@@ -87,6 +92,32 @@ public class Issue403TakeWhileDropWhileTest {
         }
 
     }
+    
+    @Test
+    public void testDropWhileTest() {
+        try {
+            final AtomicInteger closeCounter = new AtomicInteger();
+            stream.onClose(() -> closeCounter.incrementAndGet());
+
+            final Method method = Stream.class.getMethod("dropWhile", Predicate.class);
+            log("We are running under Java 9: dropWhile exists");
+            @SuppressWarnings("unchecked")
+            final Stream<String> newStream = (Stream<String>) method.invoke(stream, LESS_THAN_C);
+            final List<String> expected = Arrays.asList("c", "d", "e", "a");
+            log("expected:" + expected);
+            final List<String> actual = newStream.collect(toList());
+            log("actual:" + actual);
+            assertEquals(expected, actual);
+            assertEquals("Stream was not closed", 1, closeCounter.get());
+        } catch (NoSuchMethodException | SecurityException e) {
+            log("We run under Java 8: dropWhile does not exist");
+            // We are under Java 8. Just ignore. 
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            // We are on Java 9 but it failed
+            fail(e.getMessage());
+        }
+
+    }    
 
     @Before
     public void before() {
