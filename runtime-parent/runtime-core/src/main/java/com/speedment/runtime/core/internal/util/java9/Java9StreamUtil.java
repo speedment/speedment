@@ -36,7 +36,7 @@ public final class Java9StreamUtil {
             throw new UnsupportedOperationException("Stream::takeWhile is not supported by this Java version. Use Java 9 or greater.");
         }
         try {
-            final Object obj = TAKE_WHILE_METHOD_HANDLE.invokeExact(stream, predicate);
+            final Object obj = TAKE_WHILE_METHOD_HANDLE.invoke(stream, predicate);
             return (Stream<T>) obj;
         } catch (Throwable t) {
             throw new RuntimeException(t);
@@ -62,7 +62,7 @@ public final class Java9StreamUtil {
             throw new UnsupportedOperationException("Stream::dropWhile is not supported by this Java version. Use Java 9 or greater.");
         }
         try {
-            final Object obj = DROP_WHILE_METHOD_HANDLE.invokeExact(stream, predicate);
+            final Object obj = DROP_WHILE_METHOD_HANDLE.invoke(stream, predicate);
             return (Stream<T>) obj;
         } catch (Throwable t) {
             throw new RuntimeException(t);
@@ -74,7 +74,7 @@ public final class Java9StreamUtil {
         requireNonNull(stream);
         requireNonNull(predicate);
         try {
-            return (Stream<T>) FILTER_METHOD_HANDLE.invokeExact(stream, predicate);
+            return (Stream<T>) FILTER_METHOD_HANDLE.invoke(stream, predicate);
         } catch (Throwable t) {
             throw new RuntimeException(t);
         }

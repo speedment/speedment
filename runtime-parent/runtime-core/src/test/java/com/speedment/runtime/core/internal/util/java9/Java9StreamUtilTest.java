@@ -12,8 +12,8 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
-import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  *
@@ -69,9 +69,13 @@ public class Java9StreamUtilTest {
 
     @Test
     public void testFilter() {
-        List<String> expected = STREAM_SUPPLIER.get().filter(LESS_THAN_C).collect(toList());
-        List<String> actual
-            = Java9StreamUtil.filter(STREAM_SUPPLIER.get(), LESS_THAN_C).collect(toList());
+        
+        final List<String> expected = STREAM_SUPPLIER.get()
+            .filter(LESS_THAN_C)
+            .collect(toList());
+
+        final List<String> actual = Java9StreamUtil.filter(STREAM_SUPPLIER.get(), LESS_THAN_C)
+            .collect(toList());
 
         assertEquals(expected, actual);
 

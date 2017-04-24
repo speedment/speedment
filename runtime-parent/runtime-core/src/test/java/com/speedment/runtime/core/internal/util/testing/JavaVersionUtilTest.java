@@ -19,4 +19,9 @@ public class JavaVersionUtilTest {
         System.out.println("Running java version " + JavaVersionUtil.getJavaVersion());
     }
 
+    @Test
+    public void testGetJavaVersion2() {
+        System.out.println("Running java package version " + Runtime.class.getPackage().getImplementationVersion());
+    }
+
 }
