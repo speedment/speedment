@@ -4,14 +4,9 @@ import com.speedment.runtime.core.component.sql.SqlStreamOptimizerComponent;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.component.sql.override.SqlStreamTerminatorComponent;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
-import com.speedment.runtime.core.db.ConnectionUrlGenerator;
-import com.speedment.runtime.core.db.DbmsMetadataHandler;
-import com.speedment.runtime.core.db.DbmsOperationHandler;
 import com.speedment.runtime.core.db.DbmsType;
-import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.internal.component.sql.SqlStreamOptimizerComponentImpl;
 import com.speedment.runtime.core.internal.component.sql.override.SqlStreamTerminatorComponentImpl;
-import com.speedment.runtime.core.internal.db.AbstractDbmsType;
 import com.speedment.runtime.core.internal.db.AsynchronousQueryResultImpl;
 import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.ReferenceStreamBuilder;
@@ -68,7 +63,35 @@ public class Issue403TakeWhileDropWhileTest {
     }
 
     @Test
-    public void testTakeWhileTest() {
+    public void testFilter() {
+        System.out.println("testFilter");
+        try {
+            final AtomicInteger closeCounter = new AtomicInteger();
+            stream.onClose(() -> closeCounter.incrementAndGet());
+
+            final Method method = Stream.class.getMethod("filter", Predicate.class);
+            log("Filter exists");
+            @SuppressWarnings("unchecked")
+            final Stream<String> newStream = (Stream<String>) method.invoke(stream, LESS_THAN_C);
+            final List<String> expected = Arrays.asList("a", "b", "a");
+            log("expected:" + expected);
+            final List<String> actual = newStream.collect(toList());
+            log("actual:" + actual);
+            assertEquals(expected, actual);
+            assertEquals("Stream was not closed", 1, closeCounter.get());
+        } catch (NoSuchMethodException | SecurityException e) {
+            log("We run under Java 8: takeWhile does not exist");
+            // We are under Java 8. Just ignore. 
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            // We are on Java 9 but it failed
+            fail(e.getMessage());
+        }
+
+    }
+
+    @Test
+    public void testTakeWhile() {
+        System.out.println("testTakeWhile");
         try {
             final AtomicInteger closeCounter = new AtomicInteger();
             stream.onClose(() -> closeCounter.incrementAndGet());
@@ -92,9 +115,10 @@ public class Issue403TakeWhileDropWhileTest {
         }
 
     }
-    
+
     @Test
-    public void testDropWhileTest() {
+    public void testDropWhile() {
+        System.out.println("testDropWhile");
         try {
             final AtomicInteger closeCounter = new AtomicInteger();
             stream.onClose(() -> closeCounter.incrementAndGet());
@@ -117,7 +141,7 @@ public class Issue403TakeWhileDropWhileTest {
             fail(e.getMessage());
         }
 
-    }    
+    }
 
     @Before
     public void before() {
