@@ -20,12 +20,10 @@ import com.speedment.runtime.core.internal.stream.builder.action.reference.*;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.ReferencePipeline;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminator;
-
 import java.util.*;
+import static java.util.Objects.requireNonNull;
 import java.util.function.*;
 import java.util.stream.*;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -45,6 +43,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
 
     @Override
     public Stream<T> filter(Predicate<? super T> predicate) {
+        System.out.println("filter("+predicate+")");
         requireNonNull(predicate);
         return append(new FilterAction<>(predicate));
     }
@@ -128,7 +127,21 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     public Stream<T> skip(long n) {
         return append(new SkipAction<>(n));
     }
-
+    
+    // @Override not possible for Java 8
+    public Stream<T> takeWhile(Predicate<? super T> predicate) {
+        System.out.println("takeWhile("+predicate+")");
+        requireNonNull(predicate);
+        return append(new TakeWhileAction<>(predicate));
+    }
+    
+    // @Override not possible for Java 8
+    public Stream<T> dropWhile(Predicate<? super T> predicate) {
+        System.out.println("dropWhile("+predicate+")");
+        requireNonNull(predicate);
+        return append(new TakeWhileAction<>(predicate));
+    }
+    
     // Terminal operations
     /**
      * {@inheritDoc}
