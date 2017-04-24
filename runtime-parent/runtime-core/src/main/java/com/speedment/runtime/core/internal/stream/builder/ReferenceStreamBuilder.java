@@ -43,7 +43,7 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
 
     @Override
     public Stream<T> filter(Predicate<? super T> predicate) {
-        System.out.println("filter("+predicate+")");
+        //System.out.println("filter("+predicate+")");
         requireNonNull(predicate);
         return append(new FilterAction<>(predicate));
     }
@@ -127,21 +127,21 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
     public Stream<T> skip(long n) {
         return append(new SkipAction<>(n));
     }
-    
+
     // @Override not possible for Java 8
     public Stream<T> takeWhile(Predicate<? super T> predicate) {
-        System.out.println("takeWhile("+predicate+")");
+        //System.out.println("takeWhile("+predicate+")");
         requireNonNull(predicate);
         return append(new TakeWhileAction<>(predicate));
     }
-    
+
     // @Override not possible for Java 8
     public Stream<T> dropWhile(Predicate<? super T> predicate) {
-        System.out.println("dropWhile("+predicate+")");
+        //System.out.println("dropWhile("+predicate+")");
         requireNonNull(predicate);
-        return append(new TakeWhileAction<>(predicate));
+        return append(new DropWhileAction<>(predicate));
     }
-    
+
     // Terminal operations
     /**
      * {@inheritDoc}
