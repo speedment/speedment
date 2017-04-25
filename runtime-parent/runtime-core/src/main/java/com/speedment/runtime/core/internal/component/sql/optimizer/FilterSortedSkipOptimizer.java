@@ -27,6 +27,7 @@ import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.ONLY_AFTER
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
+import com.speedment.runtime.core.internal.stream.builder.action.reference.LimitAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.SkipAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.SortedComparatorAction;
 import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isFilterActionWithFieldPredicate;
@@ -55,16 +56,17 @@ import static java.util.stream.Collectors.toList;
  * <li> a) Zero or more filter() operations
  * <li> b) Zero or more sorted() operations
  * <li> c) Zero or more skip() operations
+ * <li> d) Zero or more limit() operations
  *
- * <em>No other operations<em> must be in the sequence a-c or within the
- * individual items a-c. <em>All</em> parameters in a and b must be obtained via
+ * <em>No other operations</em> must be in the sequence a-d or within the
+ * individual items a-d. <em>All</em> parameters in a and b must be obtained via
  * fields. Failure to any of these rules will make the Optimizer reject
- * optimization.
+ * optimization. Steps a) and b) may swap places.
  *
- * Thus, this optimizer can handle a (FILTER*,SORTED*,SKIP*) pattern where all
- * non-primitive parameters are all Field derived
+ * Thus, this optimizer can handle a (FILTER*, SORTED*, SKIP*, LIMIT*) or
+ * (SORTED*, LIMIT*, SKIP*, LIMIT*) pattern where all non-primitive parameters
+ * are all Field derived
  *
- * TODO: Sorted can come first, add limit
  *
  * @author Per Minborg
  * @param <ENTITY> entity type
@@ -74,20 +76,23 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
     private final FilterOperation FILTER_OPERATION = new FilterOperation();
     private final SortedOperation SORTED_OPERATION = new SortedOperation();
     private final SkipOperation SKIP_OPERATION = new SkipOperation();
+    private final LimitOperation LIMIT_OPERATION = new LimitOperation();
 
     private final List<Operation<ENTITY>> FILTER_SORTED_SKIP_PATH = Arrays.asList(
         FILTER_OPERATION,
         SORTED_OPERATION,
-        SKIP_OPERATION
+        SKIP_OPERATION,
+        LIMIT_OPERATION
     );
     private final List<Operation<ENTITY>> SORTED_FILTER_SKIP_PATH = Arrays.asList(
         SORTED_OPERATION,
         FILTER_OPERATION,
-        SKIP_OPERATION
+        SKIP_OPERATION,
+        LIMIT_OPERATION
     );
 
     // FILTER <-> SORTED
-    // This optimizer can handle a (FILTER*,SORTED*,SKIP*) pattern where parameters are all Field derived
+    // This optimizer can handle a (FILTER*,SORTED*,SKIP*, LIMIT*) pattern where filter and sorted parameters are all Field derived
     @Override
     public Metrics metrics(Pipeline initialPipeline, DbmsType dbmsType) {
         requireNonNull(initialPipeline);
@@ -96,8 +101,14 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         final AtomicInteger filterCounter = new AtomicInteger();
         final AtomicInteger orderCounter = new AtomicInteger();
         final AtomicInteger skipCounter = new AtomicInteger();
+        final AtomicInteger limitCounter = new AtomicInteger();
 
-        traverse(initialPipeline, fc -> filterCounter.incrementAndGet(), fc -> orderCounter.incrementAndGet(), fc -> skipCounter.incrementAndGet());
+        traverse(initialPipeline,
+            $ -> filterCounter.incrementAndGet(),
+            $ -> orderCounter.incrementAndGet(),
+            $ -> skipCounter.incrementAndGet(),
+            $ -> limitCounter.incrementAndGet()
+        );
 
         if (skipLimitSupport == ONLY_AFTER_SORTED && orderCounter.get() == 0) {
             // Just decline. There are other optimizer that handles just filtering better
@@ -107,7 +118,7 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
             return Metrics.of(filterCounter.get() + orderCounter.get());
         }
 
-        return Metrics.of(filterCounter.get() + orderCounter.get() + skipCounter.get());
+        return Metrics.of(filterCounter.get() + orderCounter.get() + skipCounter.get() + limitCounter.get());
     }
 
     @Override
@@ -123,8 +134,9 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         final List<FilterAction<ENTITY>> filters = new ArrayList<>();
         final List<SortedComparatorAction<ENTITY>> sorteds = new ArrayList<>();
         final List<SkipAction<ENTITY>> skips = new ArrayList<>();
+        final List<LimitAction<ENTITY>> limits = new ArrayList<>();
 
-        traverse(initialPipeline, filters::add, sorteds::add, skips::add);
+        traverse(initialPipeline, filters::add, sorteds::add, skips::add, limits::add);
 
         final List<Object> values = new ArrayList<>();
         final StringBuilder sql = new StringBuilder();
@@ -199,10 +211,10 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
             initialPipeline.removeIf(a -> filters.contains(a) || sorteds.contains(a));
         } else {
             final long sumSkip = skips.stream().mapToLong(SkipAction::getSkip).sum();
-
+            final long minLimit = limits.stream().mapToLong(LimitAction::getLimit).min().orElse(Long.MAX_VALUE);
             finalSql = info.getDbmsType()
-                .applySkipLimit(sql.toString(), values, sumSkip, Long.MAX_VALUE);
-            initialPipeline.removeIf(a -> filters.contains(a) || sorteds.contains(a) || skips.contains(a));
+                .applySkipLimit(sql.toString(), values, sumSkip, minLimit);
+            initialPipeline.removeIf(a -> filters.contains(a) || sorteds.contains(a) || skips.contains(a) || limits.contains(a));
         }
 
         query.setSql(finalSql);
@@ -214,13 +226,14 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
     private void traverse(Pipeline pipeline,
         final Consumer<? super FilterAction<ENTITY>> filterConsumer,
         final Consumer<? super SortedComparatorAction<ENTITY>> sortedConsumer,
-        final Consumer<? super SkipAction<ENTITY>> skipConsumer
+        final Consumer<? super SkipAction<ENTITY>> skipConsumer,
+        final Consumer<? super LimitAction<ENTITY>> limitConsumer
     ) {
         if (pipeline.isEmpty()) {
             return;
         }
 
-        final Consumers<ENTITY> consumers = new Consumers<>(filterConsumer, sortedConsumer, skipConsumer);
+        final Consumers<ENTITY> consumers = new Consumers<>(filterConsumer, sortedConsumer, skipConsumer, limitConsumer);
 
         final Action<?, ?> firstAction = pipeline.getFirst();
         final List<Operation<ENTITY>> path;
@@ -244,7 +257,11 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
                         if (path.get(2).is(action)) {
                             operation = path.get(2);
                         } else {
-                            return;
+                            if (path.get(3).is(action)) {
+                                operation = path.get(3);
+                            } else {
+                                return;
+                            }
                         }
                     }
                 }
@@ -257,12 +274,28 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
                     if (path.get(2).is(action)) {
                         operation = path.get(2);
                     } else {
-                        return;
+                        if (path.get(3).is(action)) {
+                            operation = path.get(3);
+                        } else {
+                            return;
+                        }
                     }
                 }
             }
 
             if (operation == path.get(2)) {
+                if (operation.is(action)) {
+                    operation.consume(action, consumers);
+                } else {
+                    if (path.get(3).is(action)) {
+                        operation = path.get(3);
+                    } else {
+                        return;
+                    }
+                }
+            }
+
+            if (operation == path.get(3)) {
                 if (operation.is(action)) {
                     operation.consume(action, consumers);
                 } else {
@@ -330,15 +363,18 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         private final Consumer<? super FilterAction<ENTITY>> filterConsumer;
         private final Consumer<? super SortedComparatorAction<ENTITY>> sortedConsumer;
         private final Consumer<? super SkipAction<ENTITY>> skipConsumer;
+        private final Consumer<? super LimitAction<ENTITY>> limitConsumer;
 
         public Consumers(
             final Consumer<? super FilterAction<ENTITY>> filterConsumer,
             final Consumer<? super SortedComparatorAction<ENTITY>> sortedConsumer,
-            final Consumer<? super SkipAction<ENTITY>> skipConsumer
+            final Consumer<? super SkipAction<ENTITY>> skipConsumer,
+            final Consumer<? super LimitAction<ENTITY>> limitConsumer
         ) {
             this.filterConsumer = requireNonNull(filterConsumer);
             this.sortedConsumer = requireNonNull(sortedConsumer);;
             this.skipConsumer = requireNonNull(skipConsumer);
+            this.limitConsumer = requireNonNull(limitConsumer);
         }
 
         public Consumer<? super FilterAction<ENTITY>> getFilterConsumer() {
@@ -353,11 +389,14 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
             return skipConsumer;
         }
 
+        public Consumer<? super LimitAction<ENTITY>> getLimitConsumer() {
+            return limitConsumer;
+        }
+
     }
 
     private interface Operation<ENTITY> {
 
-        //State getState();
         boolean is(Action<?, ?> action);
 
         void consume(Action<?, ?> action, Consumers<ENTITY> consumers);
@@ -366,10 +405,6 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
 
     private class FilterOperation implements Operation<ENTITY> {
 
-//        @Override
-//        public State getState() {
-//            return State.FILTER;
-//        }
         @Override
         public boolean is(Action<?, ?> action) {
             return isFilterActionWithFieldPredicate(action);
@@ -386,10 +421,6 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
 
     private class SortedOperation implements Operation<ENTITY> {
 
-//        @Override
-//        public State getState() {
-//            return State.SORTED;
-//        }
         @Override
         public boolean is(Action<?, ?> action) {
             return isSortedActionWithFieldPredicate(action);
@@ -406,10 +437,6 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
 
     private class SkipOperation implements Operation<ENTITY> {
 
-//        @Override
-//        public State getState() {
-//            return State.SKIP;
-//        }
         @Override
         public boolean is(Action<?, ?> action) {
             return action instanceof SkipAction;
@@ -420,6 +447,22 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
             @SuppressWarnings("unchecked")
             final SkipAction<ENTITY> skipAction = (SkipAction<ENTITY>) action;
             consumers.getSkipConsumer().accept(skipAction);
+        }
+
+    }
+
+    private class LimitOperation implements Operation<ENTITY> {
+
+        @Override
+        public boolean is(Action<?, ?> action) {
+            return action instanceof LimitAction;
+        }
+
+        @Override
+        public void consume(Action<?, ?> action, Consumers<ENTITY> consumers) {
+            @SuppressWarnings("unchecked")
+            final LimitAction<ENTITY> limitAction = (LimitAction<ENTITY>) action;
+            consumers.getLimitConsumer().accept(limitAction);
         }
 
     }

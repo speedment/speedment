@@ -44,7 +44,7 @@ import org.junit.Test;
  *
  * @author Per Minborg
  */
-public class FilterOrderSkipOptimizer_OptimizeTest {
+public class FilterSortedSkipOptimizer_OptimizeTest {
 
     private static final DbmsType DBMS_TYPE = new MockDbmsType();
     private static final Supplier<BaseStream<?, ?>> STREAM_SUPPLIER = () -> MockEntityUtil.stream(2);
