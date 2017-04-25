@@ -26,12 +26,14 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import static java.util.Objects.requireNonNull;
+import com.speedment.runtime.core.internal.util.java9.Java9DoubleStreamAdditions;
 
 /**
  *
  * @author pemi
  */
-public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStreamBuilder, DoublePipeline> implements DoubleStream {
+public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStreamBuilder, DoublePipeline> 
+    implements DoubleStream, Java9DoubleStreamAdditions {
 
     DoubleStreamBuilder(final PipelineImpl<?> pipeline, final StreamTerminator streamTerminator, Set<BaseStream<?, ?>> streamSet) {
         super(pipeline, streamTerminator, streamSet);
@@ -110,6 +112,16 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
         return new ReferenceStreamBuilder<Double>(pipeline, streamTerminator, streamSet).append(new DoubleBoxedAction());
     }
 
+    @Override
+    public DoubleStream takeWhile(DoublePredicate predicate) {
+        return append(new DoubleTakeWhileAction(predicate));
+    }
+
+    @Override
+    public DoubleStream dropWhile(DoublePredicate predicate) {
+        return append(new DoubleDropWhileAction(predicate));
+    }
+    
     /**
      * {@inheritDoc}
      *

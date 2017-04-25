@@ -24,13 +24,15 @@ import java.util.*;
 import static java.util.Objects.requireNonNull;
 import java.util.function.*;
 import java.util.stream.*;
+import com.speedment.runtime.core.internal.util.java9.Java9StreamAdditions;
 
 /**
  *
  * @author pemi
  * @param <T> steam type
  */
-public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<ReferenceStreamBuilder<T>, ReferencePipeline<T>> implements Stream<T> {
+public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<ReferenceStreamBuilder<T>, ReferencePipeline<T>>
+    implements Stream<T>, Java9StreamAdditions<T> {
 
     ReferenceStreamBuilder(PipelineImpl<?> pipeline, final StreamTerminator streamTerminator, Set<BaseStream<?, ?>> streamSet) {
         super(pipeline, streamTerminator, streamSet);
@@ -43,7 +45,6 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
 
     @Override
     public Stream<T> filter(Predicate<? super T> predicate) {
-        //System.out.println("filter("+predicate+")");
         requireNonNull(predicate);
         return append(new FilterAction<>(predicate));
     }
@@ -128,16 +129,14 @@ public final class ReferenceStreamBuilder<T> extends AbstractStreamBuilder<Refer
         return append(new SkipAction<>(n));
     }
 
-    // @Override not possible for Java 8
+    @Override 
     public Stream<T> takeWhile(Predicate<? super T> predicate) {
-        //System.out.println("takeWhile("+predicate+")");
         requireNonNull(predicate);
         return append(new TakeWhileAction<>(predicate));
     }
 
-    // @Override not possible for Java 8
+    @Override 
     public Stream<T> dropWhile(Predicate<? super T> predicate) {
-        //System.out.println("dropWhile("+predicate+")");
         requireNonNull(predicate);
         return append(new DropWhileAction<>(predicate));
     }

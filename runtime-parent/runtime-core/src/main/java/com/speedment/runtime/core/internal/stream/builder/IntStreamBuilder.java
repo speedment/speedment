@@ -26,12 +26,14 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import static java.util.Objects.requireNonNull;
+import com.speedment.runtime.core.internal.util.java9.Java9IntStreamAdditions;
 
 /**
  *
  * @author pemi
  */
-public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuilder, IntPipeline> implements IntStream {
+public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuilder, IntPipeline>
+    implements IntStream, Java9IntStreamAdditions {
 
     IntStreamBuilder(final PipelineImpl<?> pipeline, final StreamTerminator streamTerminator, Set<BaseStream<?, ?>> streamSet) {
         super(pipeline, streamTerminator, streamSet);
@@ -117,6 +119,16 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
     @Override
     public Stream<Integer> boxed() {
         return new ReferenceStreamBuilder<Integer>(pipeline, streamTerminator, streamSet).append(new IntBoxedAction());
+    }
+
+    @Override
+    public IntStream takeWhile(IntPredicate predicate) {
+        return append(new IntTakeWhileAction(predicate));
+    }
+
+    @Override
+    public IntStream dropWhile(IntPredicate predicate) {
+        return append(new IntDropWhileAction(predicate));
     }
 
     /**
