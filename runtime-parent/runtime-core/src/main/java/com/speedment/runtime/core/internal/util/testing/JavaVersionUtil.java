@@ -25,7 +25,7 @@ public final class JavaVersionUtil {
     }
 
     public static JavaVersion getJavaVersion() {
-        final String version = Runtime.class.getPackage().getImplementationVersion();
+        final String version = System.getProperty("java.specification.version");
         if (version == null) {
             return UNKNOWN;
         }
