@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.field.internal.predicate;
 
+import com.speedment.runtime.field.predicate.CombinedPredicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -27,27 +28,20 @@ import static java.util.Objects.requireNonNull;
  * Aggregation of a number of {@link Predicate Predicates} of the same type
  * (e.g. AND or OR) that can be applied in combination.
  *
- * @param <ENTITY>  the entity type
- * 
- * @author  Per Minborg
- * @author  Emil Forslund
- * @since   2.2.0
+ * @param <ENTITY> the entity type
+ *
+ * @author Per Minborg
+ * @author Emil Forslund
+ * @since 2.2.0
  */
-public abstract class AbstractCombinedPredicate<ENTITY> extends AbstractPredicate<ENTITY> {
-
-    /**
-     * This enum list all the different types of concrete implementation of the
-     * abstract CombinedBasePredicate
-     */
-    public enum Type {
-        AND, OR
-    }
+public abstract class AbstractCombinedPredicate<ENTITY> extends AbstractPredicate<ENTITY>
+    implements CombinedPredicate<ENTITY> {
 
     private final List<Predicate<? super ENTITY>> predicates;
     private final Type type;
 
     private AbstractCombinedPredicate(Type type, Predicate<ENTITY> first, Predicate<? super ENTITY> second) {
-        
+
         this.type = requireNonNull(type);
         this.predicates = new ArrayList<>();
         add(requireNonNull(first));
@@ -91,31 +85,17 @@ public abstract class AbstractCombinedPredicate<ENTITY> extends AbstractPredicat
         return this;
     }
 
-    /**
-     * Creates and returns a {link Stream} of all predicates that this
-     * CombinedBasePredicate holds.
-     *
-     * @return a {link Stream} of all predicates that this CombinedBasePredicate
-     * holds
-     */
+    @Override
     public Stream<Predicate<? super ENTITY>> stream() {
         return predicates.stream();
     }
 
-    /**
-     * Returns the number of predicates that this CombinedBasePredicate holds
-     *
-     * @return the number of predicates that this CombinedBasePredicate holds
-     */
+    @Override
     public int size() {
         return predicates.size();
     }
 
-    /**
-     * Returns the {@link Type} of this CombinedBasePredicate
-     *
-     * @return the {@link Type} of this CombinedBasePredicate
-     */
+    @Override
     public Type getType() {
         return type;
     }
@@ -178,10 +158,10 @@ public abstract class AbstractCombinedPredicate<ENTITY> extends AbstractPredicat
 
     @Override
     public String toString() {
-        return "{type=" +
-            type.name() +
-            ", predicates=" +
-            predicates.toString() +
-            "}";
+        return "{type="
+            + type.name()
+            + ", predicates="
+            + predicates.toString()
+            + "}";
     }
 }
