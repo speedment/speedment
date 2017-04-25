@@ -16,8 +16,7 @@
  */
 package com.speedment.runtime.field.internal.predicate;
 
-import com.speedment.runtime.field.internal.predicate.AbstractCombinedPredicate.AndCombinedBasePredicate;
-import com.speedment.runtime.field.internal.predicate.AbstractCombinedPredicate.OrCombinedBasePredicate;
+import com.speedment.runtime.field.predicate.CombinedPredicate;
 import com.speedment.runtime.field.predicate.trait.HasNegated;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Predicate;
@@ -42,13 +41,13 @@ abstract class AbstractPredicate<T> implements HasNegated, Predicate<T> {
     @Override
     public Predicate<T> and(Predicate<? super T> other) {
         requireNonNull(other);
-        return new AndCombinedBasePredicate<>(this, other);
+        return CombinedPredicate.and(this, other);
     }
 
     @Override
     public Predicate<T> or(Predicate<? super T> other) {
         requireNonNull(other);
-        return new OrCombinedBasePredicate<>(this, other);
+        return CombinedPredicate.or(this, other);
     }
 
     @Override
