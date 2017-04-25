@@ -20,18 +20,18 @@ import com.speedment.runtime.core.internal.stream.builder.action.longs.*;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.LongPipeline;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminator;
-
+import com.speedment.runtime.core.internal.util.java9.Java9LongStreamAdditions;
 import java.util.*;
+import static java.util.Objects.requireNonNull;
 import java.util.function.*;
 import java.util.stream.*;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBuilder, LongPipeline> implements LongStream {
+public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBuilder, LongPipeline> 
+    implements LongStream, Java9LongStreamAdditions {
 
     LongStreamBuilder(final PipelineImpl<?> pipeline, final StreamTerminator streamTerminator, Set<BaseStream<?, ?>> streamSet) {
         super(pipeline, streamTerminator, streamSet);
@@ -112,6 +112,16 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
     @Override
     public Stream<Long> boxed() {
         return new ReferenceStreamBuilder<Long>(pipeline, streamTerminator, streamSet).append(new LongBoxedAction());
+    }
+    
+        @Override
+    public LongStream takeWhile(LongPredicate predicate) {
+        return append(new LongTakeWhileAction(predicate));
+    }
+
+    @Override
+    public LongStream dropWhile(LongPredicate predicate) {
+        return append(new LongDropWhileAction(predicate));
     }
 
     /**
