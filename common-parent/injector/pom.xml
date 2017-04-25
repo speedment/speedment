@@ -39,7 +39,7 @@
     </description>
     
     <properties>
-        <logger.version>1.0.3</logger.version>
+        <logger.version>1.0.4</logger.version>
     </properties>
     
     <build>
