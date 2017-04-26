@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.annotation;
+package com.speedment.common.annotation;
 
 import java.lang.annotation.Documented;
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;

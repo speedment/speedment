@@ -16,11 +16,11 @@
  */
 package com.speedment.runtime.field.internal.predicate.shorts;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasShortValue;
-import javax.annotation.Generated;
 
 /**
  * @param <ENTITY> entity type
@@ -29,18 +29,27 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class ShortEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Short, HasShortValue<ENTITY, D>> implements Tuple1<Short> {
     
     private final short value;
     
     public ShortEqualPredicate(HasShortValue<ENTITY, D> field, short value) {
-        super(PredicateType.EQUAL, field, entity -> field.getAsShort(entity) == value);
+        this(field, value, false);
+    }
+    
+    ShortEqualPredicate(HasShortValue<ENTITY, D> field, short value, boolean negated) {
+        super(PredicateType.EQUAL, field, entity -> field.getAsShort(entity) == value, negated);
         this.value = value;
     }
     
     @Override
     public Short get0() {
         return value;
+    }
+    
+    @Override
+    public ShortEqualPredicate<ENTITY, D> negate() {
+        return new ShortEqualPredicate<>(getField(), value, !isNegated());
     }
 }

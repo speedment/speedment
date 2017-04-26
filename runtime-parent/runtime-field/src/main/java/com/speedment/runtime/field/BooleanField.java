@@ -16,13 +16,13 @@
  */
 package com.speedment.runtime.field;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.BooleanFieldImpl;
 import com.speedment.runtime.field.method.BooleanGetter;
 import com.speedment.runtime.field.method.BooleanSetter;
 import com.speedment.runtime.field.trait.HasBooleanValue;
 import com.speedment.runtime.typemapper.TypeMapper;
-import javax.annotation.Generated;
 
 /**
  * A field that represents a primitive {@code boolean} value.
@@ -35,7 +35,7 @@ import javax.annotation.Generated;
  * 
  * @see ReferenceField
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public interface BooleanField<ENTITY, D> extends Field<ENTITY>, HasBooleanValue<ENTITY, D> {
     
     /**

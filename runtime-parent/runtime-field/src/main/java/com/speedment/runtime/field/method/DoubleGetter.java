@@ -16,8 +16,8 @@
  */
 package com.speedment.runtime.field.method;
 
+import com.speedment.common.annotation.GeneratedCode;
 import java.util.function.ToDoubleFunction;
-import javax.annotation.Generated;
 
 /**
  * A short-cut functional reference to the {@code getXXX(value)} method for a
@@ -35,7 +35,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 @FunctionalInterface
 public interface DoubleGetter<ENTITY> extends Getter<ENTITY>, ToDoubleFunction<ENTITY> {
     

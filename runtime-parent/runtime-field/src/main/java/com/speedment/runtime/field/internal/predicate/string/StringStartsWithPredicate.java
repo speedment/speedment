@@ -16,25 +16,35 @@
  */
 package com.speedment.runtime.field.internal.predicate.string;
 
-
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasReferenceValue;
 
 /**
  *
- * @param <ENTITY>  the entity type
- * @param <D>       the database type
- * 
- * @author  Per Minborg
- * @since   2.2.0
+ * @param <ENTITY> the entity type
+ * @param <D> the database type
+ *
+ * @author Per Minborg
+ * @since 2.2.0
  */
 public final class StringStartsWithPredicate<ENTITY, D> extends AbstractStringPredicate<ENTITY, D> {
+
     public StringStartsWithPredicate(HasReferenceValue<ENTITY, D, String> field, String str) {
+        this(field, str, false);
+    }
+
+    StringStartsWithPredicate(HasReferenceValue<ENTITY, D, String> field, String str, boolean negated) {
         super(PredicateType.STARTS_WITH, field, str, entity -> {
             final String fieldValue = field.get(entity);
-            return fieldValue != null 
-                && str != null 
+            return fieldValue != null
+                && str != null
                 && fieldValue.startsWith(str);
-        });
+        }, negated);
     }
+
+    @Override
+    public StringStartsWithPredicate<ENTITY, D> negate() {
+        return new StringStartsWithPredicate<>(getField(), get0(), !isNegated());
+    }
+
 }

@@ -154,6 +154,12 @@
             <version>${speedment.version}</version>
         </dependency>
         
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>combinatorics</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
         <!--Test Dependencies-->
         <dependency>
             <groupId>junit</groupId>
@@ -168,13 +174,11 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <scope>test</scope>
-            <version>2.44.0</version>
         </dependency>
         <dependency>
             <groupId>com.opera</groupId>
             <artifactId>operadriver</artifactId>
             <scope>test</scope>
-            <version>1.5</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.seleniumhq.selenium</groupId>

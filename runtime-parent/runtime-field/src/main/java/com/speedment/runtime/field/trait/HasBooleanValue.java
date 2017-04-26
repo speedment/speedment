@@ -16,13 +16,13 @@
  */
 package com.speedment.runtime.field.trait;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.internal.method.SetToBooleanImpl;
 import com.speedment.runtime.field.method.BooleanSetter;
 import com.speedment.runtime.field.method.GetBoolean;
 import com.speedment.runtime.field.method.SetToBoolean;
 import com.speedment.runtime.typemapper.TypeMapper;
-import javax.annotation.Generated;
 
 /**
  * A representation of an Entity field that is a primitive {@code boolean} type.
@@ -33,7 +33,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public interface HasBooleanValue<ENTITY, D> extends Field<ENTITY> {
     
     @Override

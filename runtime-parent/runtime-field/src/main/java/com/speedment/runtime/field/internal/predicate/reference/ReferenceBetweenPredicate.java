@@ -19,6 +19,7 @@ package com.speedment.runtime.field.internal.predicate.reference;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.internal.predicate.BetweenPredicate;
+import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasReferenceValue;
 
@@ -43,10 +44,21 @@ public final class ReferenceBetweenPredicate<ENTITY, D, V extends Comparable<? s
     private final Inclusion inclusion;
 
     public ReferenceBetweenPredicate(
-            HasReferenceValue<ENTITY, D, V> referenceField,
-            V start,
-            V end,
-            Inclusion inclusion) {
+        final HasReferenceValue<ENTITY, D, V> referenceField,
+        final V start,
+        final V end,
+        final Inclusion inclusion
+    ) {
+        this(referenceField, start, end, inclusion, false);
+    }
+
+    ReferenceBetweenPredicate(
+        final HasReferenceValue<ENTITY, D, V> referenceField,
+        final V start,
+        final V end,
+        final Inclusion inclusion,
+        final boolean negated
+    ) {
         
         super(BETWEEN, referenceField, entity -> {
             final V fieldValue = referenceField.get(entity);
@@ -74,7 +86,7 @@ public final class ReferenceBetweenPredicate<ENTITY, D, V extends Comparable<? s
                 
                 default : throw new IllegalStateException("Inclusion unknown: " + inclusion);
             }
-        });
+        }, negated);
         
         this.start     = start;
         this.end       = end;
@@ -95,4 +107,10 @@ public final class ReferenceBetweenPredicate<ENTITY, D, V extends Comparable<? s
     public Inclusion getInclusion() {
         return inclusion;
     }
+
+    @Override
+    public ReferenceBetweenPredicate<ENTITY, D, V> negate() {
+        return new ReferenceBetweenPredicate<>(getField(), start, end, inclusion, !isNegated());
+    }
+    
 }

@@ -16,13 +16,13 @@
  */
 package com.speedment.runtime.field.internal.predicate.shorts;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.internal.predicate.BetweenPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasShortValue;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -34,18 +34,19 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class ShortBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Short, HasShortValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Short, Short> {
     
     private final short start;
     private final short end;
     private final Inclusion inclusion;
     
-    public ShortBetweenPredicate(
+    ShortBetweenPredicate(
             HasShortValue<ENTITY, D> field,
             short start,
             short end,
-            Inclusion inclusion) {
+            Inclusion inclusion,
+            boolean negated) {
         super(PredicateType.BETWEEN, field, entity -> {
             final short fieldValue = field.getAsShort(entity);
             
@@ -64,11 +65,19 @@ public final class ShortBetweenPredicate<ENTITY, D> extends AbstractFieldPredica
                 
                 default : throw new IllegalStateException("Inclusion unknown: " + inclusion);
             }
-        });
+        }, negated);
         
         this.start     = start;
         this.end       = end;
         this.inclusion = requireNonNull(inclusion);
+    }
+    
+    public ShortBetweenPredicate(
+            HasShortValue<ENTITY, D> field,
+            short start,
+            short end,
+            Inclusion inclusion) {
+        this(field, start, end, inclusion, false);
     }
     
     @Override
@@ -84,5 +93,10 @@ public final class ShortBetweenPredicate<ENTITY, D> extends AbstractFieldPredica
     @Override
     public Inclusion getInclusion() {
         return inclusion;
+    }
+    
+    @Override
+    public ShortBetweenPredicate<ENTITY, D> negate() {
+        return new ShortBetweenPredicate<>(getField(), start, end, inclusion, !isNegated());
     }
 }

@@ -19,6 +19,7 @@ package com.speedment.runtime.field.internal.predicate.reference;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.internal.predicate.BetweenPredicate;
+import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasReferenceValue;
 
@@ -46,7 +47,18 @@ public final class ReferenceNotBetweenPredicate<ENTITY, D, V extends Comparable<
             HasReferenceValue<ENTITY, D, V> referenceField,
             V start,
             V end,
-            Inclusion inclusion) {
+            Inclusion inclusion
+    ) {
+        this(referenceField, start, end, inclusion, false);
+    }
+    
+    ReferenceNotBetweenPredicate(
+        final HasReferenceValue<ENTITY, D, V> referenceField,
+        final V start,
+        final V end,
+        final Inclusion inclusion,
+        final boolean negated
+    ) {
         
         super(NOT_BETWEEN, referenceField, entity -> {
             final V fieldValue = referenceField.get(entity);
@@ -74,7 +86,7 @@ public final class ReferenceNotBetweenPredicate<ENTITY, D, V extends Comparable<
                 
                 default : throw new IllegalStateException("Inclusion unknown: " + inclusion);
             }
-        });
+        }, negated);
         
         this.start     = start;
         this.end       = end;
@@ -95,4 +107,11 @@ public final class ReferenceNotBetweenPredicate<ENTITY, D, V extends Comparable<
     public Inclusion getInclusion() {
         return inclusion;
     }
+
+    @Override
+    public ReferenceNotBetweenPredicate<ENTITY, D, V> negate() {
+        return new ReferenceNotBetweenPredicate<>(getField(), start, end, inclusion, !isNegated());
+    }
+    
+    
 }

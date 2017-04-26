@@ -16,13 +16,13 @@
  */
 package com.speedment.runtime.field.internal.predicate.doubles;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.internal.predicate.BetweenPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasDoubleValue;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -34,18 +34,19 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class DoubleBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Double, HasDoubleValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Double, Double> {
     
     private final double start;
     private final double end;
     private final Inclusion inclusion;
     
-    public DoubleBetweenPredicate(
+    DoubleBetweenPredicate(
             HasDoubleValue<ENTITY, D> field,
             double start,
             double end,
-            Inclusion inclusion) {
+            Inclusion inclusion,
+            boolean negated) {
         super(PredicateType.BETWEEN, field, entity -> {
             final double fieldValue = field.getAsDouble(entity);
             
@@ -64,11 +65,19 @@ public final class DoubleBetweenPredicate<ENTITY, D> extends AbstractFieldPredic
                 
                 default : throw new IllegalStateException("Inclusion unknown: " + inclusion);
             }
-        });
+        }, negated);
         
         this.start     = start;
         this.end       = end;
         this.inclusion = requireNonNull(inclusion);
+    }
+    
+    public DoubleBetweenPredicate(
+            HasDoubleValue<ENTITY, D> field,
+            double start,
+            double end,
+            Inclusion inclusion) {
+        this(field, start, end, inclusion, false);
     }
     
     @Override
@@ -84,5 +93,10 @@ public final class DoubleBetweenPredicate<ENTITY, D> extends AbstractFieldPredic
     @Override
     public Inclusion getInclusion() {
         return inclusion;
+    }
+    
+    @Override
+    public DoubleBetweenPredicate<ENTITY, D> negate() {
+        return new DoubleBetweenPredicate<>(getField(), start, end, inclusion, !isNegated());
     }
 }

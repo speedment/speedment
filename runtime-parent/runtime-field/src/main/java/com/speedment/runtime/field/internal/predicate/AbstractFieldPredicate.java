@@ -26,7 +26,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.function.Predicate;
 
 /**
- * A predicate that contains metadata about the {@link Field} that was used to
+ * A predicate that contains meta-data about the {@link Field} that was used to
  * construct it.
  *
  * @param <ENTITY> the entity type that is being tested
@@ -44,9 +44,12 @@ public abstract class AbstractFieldPredicate<ENTITY, V, FIELD extends Field<ENTI
     private final Predicate<ENTITY> tester;
 
     protected AbstractFieldPredicate(
-        PredicateType predicateType,
-        FIELD field,
-        Predicate<ENTITY> tester) {
+        final PredicateType predicateType,
+        final FIELD field,
+        final Predicate<ENTITY> tester,
+        final boolean negated
+    ) {
+        super(negated);
         this.predicateType = requireNonNull(predicateType);
         this.field = requireNonNull(field);
         this.tester = requireNonNull(tester);

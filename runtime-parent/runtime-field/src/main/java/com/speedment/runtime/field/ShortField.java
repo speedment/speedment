@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.field;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.ShortFieldImpl;
 import com.speedment.runtime.field.method.ShortGetter;
@@ -23,7 +24,6 @@ import com.speedment.runtime.field.method.ShortSetter;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.field.trait.HasShortValue;
 import com.speedment.runtime.typemapper.TypeMapper;
-import javax.annotation.Generated;
 
 /**
  * A field that represents a primitive {@code short} value.
@@ -36,7 +36,7 @@ import javax.annotation.Generated;
  * 
  * @see ReferenceField
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public interface ShortField<ENTITY, D> extends Field<ENTITY>, HasShortValue<ENTITY, D>, HasComparableOperators<ENTITY, Short> {
     
     /**

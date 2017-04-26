@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field.method;
 
-import javax.annotation.Generated;
+import com.speedment.common.annotation.GeneratedCode;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -36,7 +36,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 @FunctionalInterface
 public interface DoubleSetter<ENTITY> extends Setter<ENTITY> {
     

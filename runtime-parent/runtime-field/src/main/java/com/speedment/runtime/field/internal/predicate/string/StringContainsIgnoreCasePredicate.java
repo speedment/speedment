@@ -30,11 +30,21 @@ import com.speedment.runtime.field.trait.HasReferenceValue;
 public final class StringContainsIgnoreCasePredicate<ENTITY, D> extends AbstractStringPredicate<ENTITY, D> {
 
     public StringContainsIgnoreCasePredicate(HasReferenceValue<ENTITY, D, String> field, String str) {
+        this(field, str, false);
+    }
+    
+    StringContainsIgnoreCasePredicate(HasReferenceValue<ENTITY, D, String> field, String str, boolean negated) {
         super(PredicateType.CONTAINS_IGNORE_CASE, field, str, entity -> {
             final String fieldValue = field.get(entity);
             return fieldValue != null
                 && str != null
                 && fieldValue.toLowerCase().contains(str.toLowerCase()); // Todo: Optimize so that str.toLower() is just done once
-        });
+        }, negated);
     }
+
+    @Override
+    public StringContainsIgnoreCasePredicate<ENTITY, D> negate() {
+        return new StringContainsIgnoreCasePredicate<>(getField(), get0(), !isNegated());
+    }
+    
 }

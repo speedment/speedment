@@ -55,6 +55,9 @@
         <module>mutablestream</module>
         <module>singletonstream</module>
         <module>common-all</module>
+        <module>annotation</module>
+        <module>benchmark</module>
+        <module>combinatorics</module>
     </modules>
     
     <build>

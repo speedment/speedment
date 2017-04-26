@@ -18,11 +18,9 @@ package com.speedment.runtime.field.internal.predicate.reference;
 
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
-import com.speedment.runtime.field.trait.HasReferenceValue;
-
-import java.util.Objects;
-
 import static com.speedment.runtime.field.predicate.PredicateType.EQUAL;
+import com.speedment.runtime.field.trait.HasReferenceValue;
+import java.util.Objects;
 
 /**
  *
@@ -40,7 +38,11 @@ public final class ReferenceEqualPredicate<ENTITY, D, V extends Comparable<? sup
     private final V value;
     
     public ReferenceEqualPredicate(HasReferenceValue<ENTITY, D, V> field, V value) {
-        super(EQUAL, field, entity -> Objects.equals(field.get(entity), value));
+        this(field, value, false);
+    }
+    
+    ReferenceEqualPredicate(HasReferenceValue<ENTITY, D, V> field, V value, boolean negated) {
+        super(EQUAL, field, entity -> Objects.equals(field.get(entity), value), negated);
         this.value = value;
     }
 
@@ -48,4 +50,10 @@ public final class ReferenceEqualPredicate<ENTITY, D, V extends Comparable<? sup
     public V get0() {
         return value;
     }
+
+    @Override
+    public ReferenceEqualPredicate<ENTITY, D, V> negate() {
+        return new ReferenceEqualPredicate<>(getField(), value, !isNegated());
+    }
+     
 }

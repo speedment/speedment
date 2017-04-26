@@ -16,13 +16,13 @@
  */
 package com.speedment.runtime.field.internal.predicate.chars;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.internal.predicate.BetweenPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasCharValue;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -34,18 +34,19 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class CharBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Character, HasCharValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Character, Character> {
     
     private final char start;
     private final char end;
     private final Inclusion inclusion;
     
-    public CharBetweenPredicate(
+    CharBetweenPredicate(
             HasCharValue<ENTITY, D> field,
             char start,
             char end,
-            Inclusion inclusion) {
+            Inclusion inclusion,
+            boolean negated) {
         super(PredicateType.BETWEEN, field, entity -> {
             final char fieldValue = field.getAsChar(entity);
             
@@ -64,11 +65,19 @@ public final class CharBetweenPredicate<ENTITY, D> extends AbstractFieldPredicat
                 
                 default : throw new IllegalStateException("Inclusion unknown: " + inclusion);
             }
-        });
+        }, negated);
         
         this.start     = start;
         this.end       = end;
         this.inclusion = requireNonNull(inclusion);
+    }
+    
+    public CharBetweenPredicate(
+            HasCharValue<ENTITY, D> field,
+            char start,
+            char end,
+            Inclusion inclusion) {
+        this(field, start, end, inclusion, false);
     }
     
     @Override
@@ -84,5 +93,10 @@ public final class CharBetweenPredicate<ENTITY, D> extends AbstractFieldPredicat
     @Override
     public Inclusion getInclusion() {
         return inclusion;
+    }
+    
+    @Override
+    public CharBetweenPredicate<ENTITY, D> negate() {
+        return new CharBetweenPredicate<>(getField(), start, end, inclusion, !isNegated());
     }
 }

@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.field;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.CharFieldImpl;
 import com.speedment.runtime.field.method.CharGetter;
@@ -23,7 +24,6 @@ import com.speedment.runtime.field.method.CharSetter;
 import com.speedment.runtime.field.trait.HasCharValue;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.typemapper.TypeMapper;
-import javax.annotation.Generated;
 
 /**
  * A field that represents a primitive {@code char} value.
@@ -36,7 +36,7 @@ import javax.annotation.Generated;
  * 
  * @see ReferenceField
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public interface CharField<ENTITY, D> extends Field<ENTITY>, HasCharValue<ENTITY, D>, HasComparableOperators<ENTITY, Character> {
     
     /**

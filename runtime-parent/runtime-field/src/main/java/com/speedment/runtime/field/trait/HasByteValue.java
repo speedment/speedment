@@ -16,13 +16,13 @@
  */
 package com.speedment.runtime.field.trait;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.internal.method.SetToByteImpl;
 import com.speedment.runtime.field.method.ByteSetter;
 import com.speedment.runtime.field.method.GetByte;
 import com.speedment.runtime.field.method.SetToByte;
 import com.speedment.runtime.typemapper.TypeMapper;
-import javax.annotation.Generated;
 
 /**
  * A representation of an Entity field that is a primitive {@code byte} type.
@@ -33,7 +33,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public interface HasByteValue<ENTITY, D> extends Field<ENTITY> {
     
     @Override

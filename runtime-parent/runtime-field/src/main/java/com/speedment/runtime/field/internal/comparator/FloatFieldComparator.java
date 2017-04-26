@@ -16,9 +16,9 @@
  */
 package com.speedment.runtime.field.internal.comparator;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.FloatField;
 import com.speedment.runtime.field.comparator.FieldComparator;
-import javax.annotation.Generated;
 
 /**
  * A predicate that evaluates if a value is between two floats.
@@ -29,7 +29,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public interface FloatFieldComparator<ENTITY, D> extends FieldComparator<ENTITY, Float> {
     
     /**

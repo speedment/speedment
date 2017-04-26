@@ -32,10 +32,10 @@ import java.util.function.Predicate;
  */
 abstract class AbstractPredicate<T> implements HasNegated, Predicate<T> {
 
-    private boolean negated;
+    private final boolean negated;
 
-    AbstractPredicate() {
-        this.negated = false;
+    AbstractPredicate(boolean negated) {
+        this.negated = negated;
     }
 
     @Override
@@ -48,12 +48,6 @@ abstract class AbstractPredicate<T> implements HasNegated, Predicate<T> {
     public Predicate<T> or(Predicate<? super T> other) {
         requireNonNull(other);
         return CombinedPredicate.or(this, other);
-    }
-
-    @Override
-    public Predicate<T> negate() {
-        negated = !negated;
-        return this;
     }
 
     @Override

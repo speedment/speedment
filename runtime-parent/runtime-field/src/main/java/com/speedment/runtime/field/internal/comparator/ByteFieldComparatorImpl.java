@@ -16,11 +16,11 @@
  */
 package com.speedment.runtime.field.internal.comparator;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import java.util.Objects;
-import javax.annotation.Generated;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -31,7 +31,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class ByteFieldComparatorImpl<ENTITY, D> implements ByteFieldComparator<ENTITY, D> {
     
     private final ByteField<ENTITY, D> field;

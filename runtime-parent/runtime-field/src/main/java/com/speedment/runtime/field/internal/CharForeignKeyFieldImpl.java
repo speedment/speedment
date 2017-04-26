@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.field.internal;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.CharField;
@@ -42,7 +43,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -53,7 +53,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements CharField<ENTITY, D>, CharForeignKeyField<ENTITY, D, FK_ENTITY> {
     
     private final ColumnIdentifier<ENTITY> identifier;

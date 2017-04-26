@@ -108,5 +108,10 @@
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-typemapper</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>annotation</artifactId>
+        </dependency>
     </dependencies>
 </project>

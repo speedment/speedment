@@ -16,9 +16,9 @@
  */
 package com.speedment.runtime.field.method;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.trait.HasBooleanValue;
 import java.util.function.UnaryOperator;
-import javax.annotation.Generated;
 
 /**
  * Represents a set-operation with all the metadata contained.
@@ -29,7 +29,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public interface SetToBoolean<ENTITY, D> extends UnaryOperator<ENTITY> {
     
     /**

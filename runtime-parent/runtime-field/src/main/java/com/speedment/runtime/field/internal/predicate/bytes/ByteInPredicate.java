@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.field.internal.predicate.bytes;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasByteValue;
 import java.util.Set;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,18 +33,27 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class ByteInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Byte, HasByteValue<ENTITY, D>> implements Tuple1<Set<Byte>> {
     
     private final Set<Byte> set;
     
     public ByteInPredicate(HasByteValue<ENTITY, D> field, Set<Byte> set) {
-        super(PredicateType.IN, field, entity -> set.contains(field.getAsByte(entity)));
+        this(field, set, false);
+    }
+    
+    ByteInPredicate(HasByteValue<ENTITY, D> field, Set<Byte> set, boolean negated) {
+        super(PredicateType.IN, field, entity -> set.contains(field.getAsByte(entity)), negated);
         this.set = requireNonNull(set);
     }
     
     @Override
     public Set<Byte> get0() {
         return set;
+    }
+    
+    @Override
+    public ByteInPredicate<ENTITY, D> negate() {
+        return new ByteInPredicate<>(getField(), set, !isNegated());
     }
 }
