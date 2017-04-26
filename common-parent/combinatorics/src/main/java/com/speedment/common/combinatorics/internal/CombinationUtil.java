@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.util.testing;
+package com.speedment.common.combinatorics.internal;
 
+import com.speedment.common.combinatorics.*;
 import java.util.*;
 import java.util.function.Consumer;
 import static java.util.stream.Collectors.toList;
@@ -26,7 +27,7 @@ import java.util.stream.Stream;
  *
  * @author Per Minborg
  */
-public final class Combination {
+public final class CombinationUtil {
 
     /**
      * Creates and returns all possible combinations of the given elements.
@@ -70,7 +71,7 @@ public final class Combination {
     @SafeVarargs
     @SuppressWarnings("varargs") // Creating a List from an array is safe
     public static <T> Stream<List<T>> ofDistinct(final T... items) {
-        return of(items).filter(Combination::isDistinctElements);
+        return of(items).filter(CombinationUtil::isDistinctElements);
     }
 
     private static <T> boolean isDistinctElements(List<T> list) {
@@ -89,7 +90,7 @@ public final class Combination {
         }
     }
 
-    private Combination() {
+    private CombinationUtil() {
         throw new UnsupportedOperationException();
     }
 }

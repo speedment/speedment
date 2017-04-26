@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.util.testing;
+package com.speedment.common.benchmark.internal;
 
+import com.speedment.common.benchmark.Stopwatch;
 import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.*;
@@ -29,7 +30,7 @@ public final class StopwatchImpl implements Stopwatch {
     private long start;
     private long stop;
 
-    StopwatchImpl() {
+    public StopwatchImpl() {
         reset();
     }
 
