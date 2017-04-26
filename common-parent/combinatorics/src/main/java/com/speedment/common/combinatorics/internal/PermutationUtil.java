@@ -14,13 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.util.testing;
+package com.speedment.common.combinatorics.internal;
 
+import com.speedment.common.combinatorics.*;
 import java.util.*;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
-
-import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
 
 /**
  * General Permutation support from
@@ -28,7 +27,7 @@ import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed
  *
  * @author Per Minborg
  */
-public class Permutations {
+public final class PermutationUtil {
 
     public static long factorial(final int n) {
         if (n > 20 || n < 0) {
@@ -60,8 +59,8 @@ public class Permutations {
             .mapToObj(no -> permutation(no, itemList).stream());
     }
 
-    private Permutations() {
-        instanceNotAllowed(getClass());
+    private PermutationUtil() {
+        throw new UnsupportedOperationException();
     }
 
 }
