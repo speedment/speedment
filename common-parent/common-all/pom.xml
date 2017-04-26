@@ -52,6 +52,9 @@
         <mapstream.version>2.3.5</mapstream.version>
         <mutablestream.version>1.0.0</mutablestream.version>
         <singletonstream.version>1.0.0</singletonstream.version>
+        <annotation.version>1.0.0-SNAPSHOT</annotation.version>
+        <combinatorics.version>1.0.0-SNAPSHOT</combinatorics.version>
+        <benchmark.version>1.0.0-SNAPSHOT</benchmark.version>
     </properties>
     
     <dependencyManagement>
@@ -133,6 +136,25 @@
                 <artifactId>singleton-stream</artifactId>
                 <version>${singletonstream.version}</version>
             </dependency>
+            
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>annotation</artifactId>
+                <version>${annotation.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>combinatorics</artifactId>
+                <version>${benchmark.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>benchmark</artifactId>
+                <version>${benchmark.version}</version>
+            </dependency>
+            
         </dependencies>
     </dependencyManagement>
 </project>

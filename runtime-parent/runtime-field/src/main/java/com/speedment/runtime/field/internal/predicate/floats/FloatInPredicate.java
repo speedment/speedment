@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.field.internal.predicate.floats;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasFloatValue;
 import java.util.Set;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,18 +33,27 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class FloatInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Float, HasFloatValue<ENTITY, D>> implements Tuple1<Set<Float>> {
     
     private final Set<Float> set;
     
     public FloatInPredicate(HasFloatValue<ENTITY, D> field, Set<Float> set) {
-        super(PredicateType.IN, field, entity -> set.contains(field.getAsFloat(entity)));
+        this(field, set, false);
+    }
+    
+    FloatInPredicate(HasFloatValue<ENTITY, D> field, Set<Float> set, boolean negated) {
+        super(PredicateType.IN, field, entity -> set.contains(field.getAsFloat(entity)), negated);
         this.set = requireNonNull(set);
     }
     
     @Override
     public Set<Float> get0() {
         return set;
+    }
+    
+    @Override
+    public FloatInPredicate<ENTITY, D> negate() {
+        return new FloatInPredicate<>(getField(), set, !isNegated());
     }
 }

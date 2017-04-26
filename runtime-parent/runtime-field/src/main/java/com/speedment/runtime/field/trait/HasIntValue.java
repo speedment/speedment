@@ -16,13 +16,13 @@
  */
 package com.speedment.runtime.field.trait;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.internal.method.SetToIntImpl;
 import com.speedment.runtime.field.method.GetInt;
 import com.speedment.runtime.field.method.IntSetter;
 import com.speedment.runtime.field.method.SetToInt;
 import com.speedment.runtime.typemapper.TypeMapper;
-import javax.annotation.Generated;
 
 /**
  * A representation of an Entity field that is a primitive {@code int} type.
@@ -33,7 +33,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public interface HasIntValue<ENTITY, D> extends Field<ENTITY> {
     
     @Override

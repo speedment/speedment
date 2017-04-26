@@ -33,6 +33,6 @@ public final class AlwaysTruePredicate<ENTITY, V, FIELD extends Field<ENTITY>>
         extends AbstractFieldPredicate<ENTITY, V, FIELD> {
 
     public AlwaysTruePredicate(FIELD field) {
-        super(PredicateType.ALWAYS_TRUE, field, entity -> true);
+        super(PredicateType.ALWAYS_TRUE, field, entity -> true, false);
     }
 }

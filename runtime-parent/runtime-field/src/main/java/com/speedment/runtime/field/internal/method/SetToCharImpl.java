@@ -16,9 +16,9 @@
  */
 package com.speedment.runtime.field.internal.method;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.method.SetToChar;
 import com.speedment.runtime.field.trait.HasCharValue;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,7 +33,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class SetToCharImpl<ENTITY, D> implements SetToChar<ENTITY, D> {
     
     private final HasCharValue<ENTITY, D> field;

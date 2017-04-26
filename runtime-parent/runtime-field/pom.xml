@@ -97,6 +97,11 @@
             <artifactId>function</artifactId>
         </dependency>
         
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>annotation</artifactId>
+        </dependency>
+        
         <!-- Runtime Dependencies -->
         <dependency>
             <groupId>com.speedment.runtime</groupId>
@@ -109,7 +114,7 @@
             <artifactId>runtime-typemapper</artifactId>
             <version>${speedment.version}</version>
         </dependency>
-        
+                
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

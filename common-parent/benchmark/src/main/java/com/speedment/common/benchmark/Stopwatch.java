@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.util.testing;
+package com.speedment.common.benchmark;
 
+import com.speedment.common.benchmark.internal.StopwatchImpl;
 import java.util.concurrent.TimeUnit;
 
 /**

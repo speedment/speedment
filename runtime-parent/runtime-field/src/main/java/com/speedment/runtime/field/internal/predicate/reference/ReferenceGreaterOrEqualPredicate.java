@@ -18,6 +18,7 @@ package com.speedment.runtime.field.internal.predicate.reference;
 
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
+import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.trait.HasReferenceValue;
 
 import static com.speedment.runtime.field.predicate.PredicateType.GREATER_OR_EQUAL;
@@ -38,6 +39,10 @@ public final class ReferenceGreaterOrEqualPredicate<ENTITY, D, V extends Compara
     private final V value;
     
     public ReferenceGreaterOrEqualPredicate(HasReferenceValue<ENTITY, D, V> field, V value) {
+        this(field, value, false);
+    }
+    
+   ReferenceGreaterOrEqualPredicate(HasReferenceValue<ENTITY, D, V> field, V value, boolean negated) {
         super(GREATER_OR_EQUAL, field, entity -> {
             final V fieldValue = field.get(entity);
             if (fieldValue == null && value == null) {
@@ -45,7 +50,7 @@ public final class ReferenceGreaterOrEqualPredicate<ENTITY, D, V extends Compara
             } else if (fieldValue == null || value == null) {
                 return false;
             } else return fieldValue.compareTo(value) >= 0;
-        });
+        }, negated);
         
         this.value = value;
     }
@@ -54,4 +59,10 @@ public final class ReferenceGreaterOrEqualPredicate<ENTITY, D, V extends Compara
     public V get0() {
         return value;
     }
+
+    @Override
+    public ReferenceGreaterOrEqualPredicate<ENTITY, D, V> negate() {
+        return new ReferenceGreaterOrEqualPredicate<>(getField(), value, !isNegated());
+    }
+    
 }

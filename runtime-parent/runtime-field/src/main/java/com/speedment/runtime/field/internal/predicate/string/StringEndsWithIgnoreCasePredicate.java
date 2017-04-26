@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.field.internal.predicate.string;
 
+import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasReferenceValue;
 
@@ -30,11 +31,21 @@ import com.speedment.runtime.field.trait.HasReferenceValue;
 public final class StringEndsWithIgnoreCasePredicate<ENTITY, D> extends AbstractStringPredicate<ENTITY, D> {
 
     public StringEndsWithIgnoreCasePredicate(HasReferenceValue<ENTITY, D, String> field, String str) {
+        this(field, str, false);
+    }
+    
+    StringEndsWithIgnoreCasePredicate(HasReferenceValue<ENTITY, D, String> field, String str, boolean negated) {
         super(PredicateType.ENDS_WITH_IGNORE_CASE, field, str, entity -> {
             final String fieldValue = field.get(entity);
             return fieldValue != null
                 && str != null
                 && fieldValue.toLowerCase().endsWith(str.toLowerCase()); // Todo: Optimize so that str.toLower() is just done once
-        });
+        }, negated);
     }
+
+    @Override
+    public StringEndsWithIgnoreCasePredicate<ENTITY, D> negate() {
+        return new StringEndsWithIgnoreCasePredicate<>(getField(), get0(), !isNegated());
+    }
+    
 }

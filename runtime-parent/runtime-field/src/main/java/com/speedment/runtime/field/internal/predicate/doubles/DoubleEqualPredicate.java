@@ -16,11 +16,11 @@
  */
 package com.speedment.runtime.field.internal.predicate.doubles;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasDoubleValue;
-import javax.annotation.Generated;
 
 /**
  * @param <ENTITY> entity type
@@ -29,18 +29,27 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class DoubleEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Double, HasDoubleValue<ENTITY, D>> implements Tuple1<Double> {
     
     private final double value;
     
     public DoubleEqualPredicate(HasDoubleValue<ENTITY, D> field, double value) {
-        super(PredicateType.EQUAL, field, entity -> field.getAsDouble(entity) == value);
+        this(field, value, false);
+    }
+    
+    DoubleEqualPredicate(HasDoubleValue<ENTITY, D> field, double value, boolean negated) {
+        super(PredicateType.EQUAL, field, entity -> field.getAsDouble(entity) == value, negated);
         this.value = value;
     }
     
     @Override
     public Double get0() {
         return value;
+    }
+    
+    @Override
+    public DoubleEqualPredicate<ENTITY, D> negate() {
+        return new DoubleEqualPredicate<>(getField(), value, !isNegated());
     }
 }

@@ -20,7 +20,6 @@ import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasReferenceValue;
-
 import java.util.function.Predicate;
 
 /**
@@ -28,17 +27,19 @@ import java.util.function.Predicate;
  * @author pemi
  * @param <ENTITY> the entity type
  */
-abstract class AbstractStringPredicate<ENTITY, D> 
-extends AbstractFieldPredicate<ENTITY, String, HasReferenceValue<ENTITY, D, String>> 
-implements Tuple1<String> {
+abstract class AbstractStringPredicate<ENTITY, D>
+    extends AbstractFieldPredicate<ENTITY, String, HasReferenceValue<ENTITY, D, String>>
+    implements Tuple1<String> {
 
     private final String operand;
 
     protected AbstractStringPredicate(PredicateType predicateType,
-        HasReferenceValue<ENTITY, D, String> field,
-        String operand,
-        Predicate<ENTITY> tester) {
-        super(predicateType, field, tester);
+        final HasReferenceValue<ENTITY, D, String> field,
+        final String operand,
+        final Predicate<ENTITY> tester,
+        final boolean negated
+    ) {
+        super(predicateType, field, tester, negated);
         this.operand = operand;
     }
 

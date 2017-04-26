@@ -18,12 +18,11 @@ package com.speedment.runtime.field.internal.predicate.reference;
 
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
-import com.speedment.runtime.field.trait.HasReferenceValue;
-
-import java.util.Set;
-
+import com.speedment.runtime.field.predicate.FieldPredicate;
 import static com.speedment.runtime.field.predicate.PredicateType.NOT_IN;
+import com.speedment.runtime.field.trait.HasReferenceValue;
 import static java.util.Objects.requireNonNull;
+import java.util.Set;
 
 /**
  *
@@ -41,10 +40,14 @@ public final class ReferenceNotInPredicate<ENTITY, D, V extends Comparable<? sup
     private final Set<V> set;
 
     public ReferenceNotInPredicate(HasReferenceValue<ENTITY, D, V> field, Set<V> values) {
+        this(field, values, false);
+    }
+    
+    ReferenceNotInPredicate(HasReferenceValue<ENTITY, D, V> field, Set<V> values, boolean negated) {
         super(NOT_IN, field, entity -> {
             final V value = field.get(entity);
             return value != null && !values.contains(field.get(entity));
-        });
+        }, negated);
         this.set = requireNonNull(values);
     }
 
@@ -52,4 +55,10 @@ public final class ReferenceNotInPredicate<ENTITY, D, V extends Comparable<? sup
     public Set<V> get0() {
         return set;
     }
+
+    @Override
+    public FieldPredicate<ENTITY> negate() {
+        return new ReferenceNotInPredicate<>(getField(), set, !isNegated());
+    }
+    
 }

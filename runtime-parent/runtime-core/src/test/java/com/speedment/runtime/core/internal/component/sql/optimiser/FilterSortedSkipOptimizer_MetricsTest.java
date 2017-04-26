@@ -25,7 +25,7 @@ import com.speedment.runtime.core.internal.stream.builder.action.reference.PeekA
 import com.speedment.runtime.core.internal.stream.builder.action.reference.SkipAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.SortedComparatorAction;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.PipelineImpl;
-import com.speedment.runtime.core.internal.util.testing.Permutations;
+import com.speedment.common.combinatorics.Permutation;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
 import com.speedment.runtime.test_support.MockDbmsType;
@@ -135,7 +135,7 @@ public class FilterSortedSkipOptimizer_MetricsTest {
     //// Polution...
     @Test
     public void testPolution() {
-        Permutations.of(FILTER_ACTION, SORTED_ACTION, SKIP_ACTION, LIMIT_ACTION, PEEK_ACTION)
+        Permutation.of(FILTER_ACTION, SORTED_ACTION, SKIP_ACTION, LIMIT_ACTION, PEEK_ACTION)
             .map(s -> s.collect(toList()))
             .forEachOrdered(l -> {
                 int expected = expectedMetrics(l);

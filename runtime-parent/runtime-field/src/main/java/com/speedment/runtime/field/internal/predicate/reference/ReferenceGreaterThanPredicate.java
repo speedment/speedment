@@ -18,6 +18,7 @@ package com.speedment.runtime.field.internal.predicate.reference;
 
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
+import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.trait.HasReferenceValue;
 
 import static com.speedment.runtime.field.predicate.PredicateType.GREATER_THAN;
@@ -39,12 +40,16 @@ public final class ReferenceGreaterThanPredicate<ENTITY, D, V extends Comparable
     private final V value;
 
     public ReferenceGreaterThanPredicate(HasReferenceValue<ENTITY, D, V> field, V value) {
+        this(field, value, false);
+    }
+    
+    ReferenceGreaterThanPredicate(HasReferenceValue<ENTITY, D, V> field, V value, boolean negated) {
         super(GREATER_THAN, field, entity -> {
             final V fieldValue = field.get(entity);
             if (fieldValue == null || value == null) {
                 return false;
             } else return fieldValue.compareTo(value) > 0;
-        });
+        }, negated);
         
         this.value = value;
     }
@@ -53,4 +58,10 @@ public final class ReferenceGreaterThanPredicate<ENTITY, D, V extends Comparable
     public V get0() {
         return value;
     }
+
+    @Override
+    public ReferenceGreaterThanPredicate<ENTITY, D, V> negate() {
+        return new ReferenceGreaterThanPredicate<>(getField(), value, !isNegated());
+    }
+    
 }

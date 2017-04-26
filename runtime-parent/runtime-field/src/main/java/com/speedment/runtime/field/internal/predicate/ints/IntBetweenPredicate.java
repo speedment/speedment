@@ -16,13 +16,13 @@
  */
 package com.speedment.runtime.field.internal.predicate.ints;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.internal.predicate.BetweenPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasIntValue;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -34,18 +34,19 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class IntBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Integer, HasIntValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Integer, Integer> {
     
     private final int start;
     private final int end;
     private final Inclusion inclusion;
     
-    public IntBetweenPredicate(
+    IntBetweenPredicate(
             HasIntValue<ENTITY, D> field,
             int start,
             int end,
-            Inclusion inclusion) {
+            Inclusion inclusion,
+            boolean negated) {
         super(PredicateType.BETWEEN, field, entity -> {
             final int fieldValue = field.getAsInt(entity);
             
@@ -64,11 +65,19 @@ public final class IntBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate
                 
                 default : throw new IllegalStateException("Inclusion unknown: " + inclusion);
             }
-        });
+        }, negated);
         
         this.start     = start;
         this.end       = end;
         this.inclusion = requireNonNull(inclusion);
+    }
+    
+    public IntBetweenPredicate(
+            HasIntValue<ENTITY, D> field,
+            int start,
+            int end,
+            Inclusion inclusion) {
+        this(field, start, end, inclusion, false);
     }
     
     @Override
@@ -84,5 +93,10 @@ public final class IntBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate
     @Override
     public Inclusion getInclusion() {
         return inclusion;
+    }
+    
+    @Override
+    public IntBetweenPredicate<ENTITY, D> negate() {
+        return new IntBetweenPredicate<>(getField(), start, end, inclusion, !isNegated());
     }
 }

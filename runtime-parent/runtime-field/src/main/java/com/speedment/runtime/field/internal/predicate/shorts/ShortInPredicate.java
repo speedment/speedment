@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.field.internal.predicate.shorts;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasShortValue;
 import java.util.Set;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,18 +33,27 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class ShortInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Short, HasShortValue<ENTITY, D>> implements Tuple1<Set<Short>> {
     
     private final Set<Short> set;
     
     public ShortInPredicate(HasShortValue<ENTITY, D> field, Set<Short> set) {
-        super(PredicateType.IN, field, entity -> set.contains(field.getAsShort(entity)));
+        this(field, set, false);
+    }
+    
+    ShortInPredicate(HasShortValue<ENTITY, D> field, Set<Short> set, boolean negated) {
+        super(PredicateType.IN, field, entity -> set.contains(field.getAsShort(entity)), negated);
         this.set = requireNonNull(set);
     }
     
     @Override
     public Set<Short> get0() {
         return set;
+    }
+    
+    @Override
+    public ShortInPredicate<ENTITY, D> negate() {
+        return new ShortInPredicate<>(getField(), set, !isNegated());
     }
 }

@@ -16,24 +16,36 @@
  */
 package com.speedment.runtime.field.internal.predicate.string;
 
+import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasReferenceValue;
 
 /**
  *
- * @param <ENTITY>  the entity type
- * @param <D>       the database type
- * 
- * @author  Per Minborg
- * @since   2.2.0
+ * @param <ENTITY> the entity type
+ * @param <D> the database type
+ *
+ * @author Per Minborg
+ * @since 2.2.0
  */
 public final class StringContainsPredicate<ENTITY, D> extends AbstractStringPredicate<ENTITY, D> {
+
     public StringContainsPredicate(HasReferenceValue<ENTITY, D, String> field, String str) {
+        this(field, str, false);
+    }
+    
+    StringContainsPredicate(HasReferenceValue<ENTITY, D, String> field, String str, boolean negated) {
         super(PredicateType.CONTAINS, field, str, entity -> {
             final String fieldValue = field.get(entity);
-            return fieldValue != null 
-                && str != null 
+            return fieldValue != null
+                && str != null
                 && fieldValue.contains(str);
-        });
+        }, negated);
     }
+
+    @Override
+    public StringContainsPredicate<ENTITY, D> negate() {
+        return new StringContainsPredicate<>(getField(), get0(), !isNegated());
+    }
+    
 }

@@ -16,13 +16,13 @@
  */
 package com.speedment.runtime.field.internal.predicate.longs;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.internal.predicate.BetweenPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasLongValue;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -34,18 +34,19 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class LongBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Long, HasLongValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Long, Long> {
     
     private final long start;
     private final long end;
     private final Inclusion inclusion;
     
-    public LongBetweenPredicate(
+    LongBetweenPredicate(
             HasLongValue<ENTITY, D> field,
             long start,
             long end,
-            Inclusion inclusion) {
+            Inclusion inclusion,
+            boolean negated) {
         super(PredicateType.BETWEEN, field, entity -> {
             final long fieldValue = field.getAsLong(entity);
             
@@ -64,11 +65,19 @@ public final class LongBetweenPredicate<ENTITY, D> extends AbstractFieldPredicat
                 
                 default : throw new IllegalStateException("Inclusion unknown: " + inclusion);
             }
-        });
+        }, negated);
         
         this.start     = start;
         this.end       = end;
         this.inclusion = requireNonNull(inclusion);
+    }
+    
+    public LongBetweenPredicate(
+            HasLongValue<ENTITY, D> field,
+            long start,
+            long end,
+            Inclusion inclusion) {
+        this(field, start, end, inclusion, false);
     }
     
     @Override
@@ -84,5 +93,10 @@ public final class LongBetweenPredicate<ENTITY, D> extends AbstractFieldPredicat
     @Override
     public Inclusion getInclusion() {
         return inclusion;
+    }
+    
+    @Override
+    public LongBetweenPredicate<ENTITY, D> negate() {
+        return new LongBetweenPredicate<>(getField(), start, end, inclusion, !isNegated());
     }
 }

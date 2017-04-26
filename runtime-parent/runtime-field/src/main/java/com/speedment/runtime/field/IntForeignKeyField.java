@@ -16,13 +16,13 @@
  */
 package com.speedment.runtime.field;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.IntForeignKeyFieldImpl;
 import com.speedment.runtime.field.method.IntGetter;
 import com.speedment.runtime.field.method.IntSetter;
 import com.speedment.runtime.field.trait.HasFinder;
 import com.speedment.runtime.typemapper.TypeMapper;
-import javax.annotation.Generated;
 
 /**
  * A field that represents a primitive {@code int} value that references another
@@ -38,7 +38,7 @@ import javax.annotation.Generated;
  * @see ReferenceField
  * @see ComparableForeignKeyField
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public interface IntForeignKeyField<ENTITY, D, FK_ENTITY> extends IntField<ENTITY, D>, HasFinder<ENTITY, FK_ENTITY> {
     
     /**

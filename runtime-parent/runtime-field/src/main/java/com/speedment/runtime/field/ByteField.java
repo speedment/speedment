@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.field;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.ByteFieldImpl;
 import com.speedment.runtime.field.method.ByteGetter;
@@ -23,7 +24,6 @@ import com.speedment.runtime.field.method.ByteSetter;
 import com.speedment.runtime.field.trait.HasByteValue;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.typemapper.TypeMapper;
-import javax.annotation.Generated;
 
 /**
  * A field that represents a primitive {@code byte} value.
@@ -36,7 +36,7 @@ import javax.annotation.Generated;
  * 
  * @see ReferenceField
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public interface ByteField<ENTITY, D> extends Field<ENTITY>, HasByteValue<ENTITY, D>, HasComparableOperators<ENTITY, Byte> {
     
     /**

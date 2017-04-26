@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.field.internal.predicate.longs;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasLongValue;
 import java.util.Set;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,18 +33,27 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class LongInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Long, HasLongValue<ENTITY, D>> implements Tuple1<Set<Long>> {
     
     private final Set<Long> set;
     
     public LongInPredicate(HasLongValue<ENTITY, D> field, Set<Long> set) {
-        super(PredicateType.IN, field, entity -> set.contains(field.getAsLong(entity)));
+        this(field, set, false);
+    }
+    
+    LongInPredicate(HasLongValue<ENTITY, D> field, Set<Long> set, boolean negated) {
+        super(PredicateType.IN, field, entity -> set.contains(field.getAsLong(entity)), negated);
         this.set = requireNonNull(set);
     }
     
     @Override
     public Set<Long> get0() {
         return set;
+    }
+    
+    @Override
+    public LongInPredicate<ENTITY, D> negate() {
+        return new LongInPredicate<>(getField(), set, !isNegated());
     }
 }

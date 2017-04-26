@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.field.internal.predicate.chars;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasCharValue;
 import java.util.Set;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,18 +33,27 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class CharInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Character, HasCharValue<ENTITY, D>> implements Tuple1<Set<Character>> {
     
     private final Set<Character> set;
     
     public CharInPredicate(HasCharValue<ENTITY, D> field, Set<Character> set) {
-        super(PredicateType.IN, field, entity -> set.contains(field.getAsChar(entity)));
+        this(field, set, false);
+    }
+    
+    CharInPredicate(HasCharValue<ENTITY, D> field, Set<Character> set, boolean negated) {
+        super(PredicateType.IN, field, entity -> set.contains(field.getAsChar(entity)), negated);
         this.set = requireNonNull(set);
     }
     
     @Override
     public Set<Character> get0() {
         return set;
+    }
+    
+    @Override
+    public CharInPredicate<ENTITY, D> negate() {
+        return new CharInPredicate<>(getField(), set, !isNegated());
     }
 }

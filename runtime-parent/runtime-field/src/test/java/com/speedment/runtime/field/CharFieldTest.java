@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.field;
 
-import javax.annotation.Generated;
+import com.speedment.common.annotation.GeneratedCode;
 
 /**
  * JUnit tests for the primitive {@code char} field class.
@@ -26,7 +26,7 @@ import javax.annotation.Generated;
  * 
  * @see CharField
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class CharFieldTest {
     
     

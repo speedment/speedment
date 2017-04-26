@@ -16,11 +16,11 @@
  */
 package com.speedment.runtime.field.internal.predicate.floats;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasFloatValue;
-import javax.annotation.Generated;
 
 /**
  * @param <ENTITY> entity type
@@ -29,18 +29,27 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class FloatEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Float, HasFloatValue<ENTITY, D>> implements Tuple1<Float> {
     
     private final float value;
     
     public FloatEqualPredicate(HasFloatValue<ENTITY, D> field, float value) {
-        super(PredicateType.EQUAL, field, entity -> field.getAsFloat(entity) == value);
+        this(field, value, false);
+    }
+    
+    FloatEqualPredicate(HasFloatValue<ENTITY, D> field, float value, boolean negated) {
+        super(PredicateType.EQUAL, field, entity -> field.getAsFloat(entity) == value, negated);
         this.value = value;
     }
     
     @Override
     public Float get0() {
         return value;
+    }
+    
+    @Override
+    public FloatEqualPredicate<ENTITY, D> negate() {
+        return new FloatEqualPredicate<>(getField(), value, !isNegated());
     }
 }

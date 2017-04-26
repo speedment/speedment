@@ -29,7 +29,12 @@ import com.speedment.runtime.field.trait.HasReferenceValue;
  * @since   2.2.0
  */
 public final class StringEqualIgnoreCasePredicate<ENTITY, D> extends AbstractStringPredicate<ENTITY, D> {
+
     public StringEqualIgnoreCasePredicate(HasReferenceValue<ENTITY, D, String> field, String str) {
+        this(field, str, false);
+    }
+    
+    StringEqualIgnoreCasePredicate(HasReferenceValue<ENTITY, D, String> field, String str, boolean negated) {
         super(PredicateType.EQUAL_IGNORE_CASE, field, str, entity -> {
             final String fieldValue = field.get(entity);
             if (fieldValue == null && str == null) {
@@ -37,6 +42,12 @@ public final class StringEqualIgnoreCasePredicate<ENTITY, D> extends AbstractStr
             } else if (fieldValue == null || str == null) {
                 return false;
             } else return fieldValue.equalsIgnoreCase(str);
-        });
+        }, negated);
     }
+
+    @Override
+    public StringEqualIgnoreCasePredicate<ENTITY, D> negate() {
+        return new StringEqualIgnoreCasePredicate<>(getField(), get0(), !isNegated());
+    }
+    
 }

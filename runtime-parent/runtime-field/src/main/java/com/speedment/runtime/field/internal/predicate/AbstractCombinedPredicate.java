@@ -19,10 +19,9 @@ package com.speedment.runtime.field.internal.predicate;
 import com.speedment.runtime.field.predicate.CombinedPredicate;
 import java.util.ArrayList;
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Aggregation of a number of {@link Predicate Predicates} of the same type
@@ -40,12 +39,25 @@ public abstract class AbstractCombinedPredicate<ENTITY> extends AbstractPredicat
     private final List<Predicate<? super ENTITY>> predicates;
     private final Type type;
 
-    private AbstractCombinedPredicate(Type type, Predicate<ENTITY> first, Predicate<? super ENTITY> second) {
-
+    private AbstractCombinedPredicate(
+        final Type type, 
+        final Predicate<ENTITY> first, 
+        final Predicate<? super ENTITY> second,
+        final boolean negated
+    ) {
+        super(negated);
         this.type = requireNonNull(type);
         this.predicates = new ArrayList<>();
         add(requireNonNull(first));
         add(requireNonNull(second));
+    }
+    /**
+     * Creates a negated predicate of an original.
+     */
+    private AbstractCombinedPredicate(AbstractCombinedPredicate<ENTITY> original) {
+        super(!requireNonNull(original).isNegated());
+        this.type = original.type;
+        this.predicates = original.predicates;
     }
 
     /**
@@ -109,7 +121,11 @@ public abstract class AbstractCombinedPredicate<ENTITY> extends AbstractPredicat
     public static class AndCombinedBasePredicate<ENTITY> extends AbstractCombinedPredicate<ENTITY> {
 
         public AndCombinedBasePredicate(Predicate<ENTITY> first, Predicate<? super ENTITY> second) {
-            super(Type.AND, first, second);
+           super(Type.AND, first, second, false);
+        }
+        
+        private AndCombinedBasePredicate(AndCombinedBasePredicate<ENTITY> original) {
+            super(original);
         }
 
         @Override
@@ -129,12 +145,22 @@ public abstract class AbstractCombinedPredicate<ENTITY> extends AbstractPredicat
             requireNonNull(other);
             return new OrCombinedBasePredicate<>(this, other);
         }
+
+        @Override
+        public AndCombinedBasePredicate<ENTITY> negate() {
+            return new AndCombinedBasePredicate<>(this);
+        }
+        
     }
 
     public static class OrCombinedBasePredicate<ENTITY> extends AbstractCombinedPredicate<ENTITY> {
 
         public OrCombinedBasePredicate(Predicate<ENTITY> first, Predicate<? super ENTITY> second) {
-            super(Type.OR, first, second);
+            super(Type.OR, first, second, false);
+        }
+
+        private OrCombinedBasePredicate(OrCombinedBasePredicate<ENTITY> original) {
+            super(original);
         }
 
         @Override
@@ -154,12 +180,20 @@ public abstract class AbstractCombinedPredicate<ENTITY> extends AbstractPredicat
             requireNonNull(other);
             return add(other);
         }
+
+        @Override
+        public OrCombinedBasePredicate<ENTITY> negate() {
+            return new OrCombinedBasePredicate<>(this);
+        }
+        
     }
 
     @Override
     public String toString() {
         return "{type="
             + type.name()
+            + ", negated="
+            + isNegated()
             + ", predicates="
             + predicates.toString()
             + "}";

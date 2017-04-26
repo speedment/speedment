@@ -16,11 +16,11 @@
  */
 package com.speedment.runtime.field.internal.comparator;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.FloatField;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import java.util.Objects;
-import javax.annotation.Generated;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -31,7 +31,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class FloatFieldComparatorImpl<ENTITY, D> implements FloatFieldComparator<ENTITY, D> {
     
     private final FloatField<ENTITY, D> field;
@@ -82,9 +82,8 @@ public final class FloatFieldComparatorImpl<ENTITY, D> implements FloatFieldComp
     
     @Override
     public boolean equals(Object obj) {
-        if      (this == obj) return true;
-        else if (obj == null) return false;
-        else if (!(obj instanceof FieldComparator)) return false;
+        if (this == obj) return true;
+        if (!(obj instanceof FieldComparator)) return false;
         
         @SuppressWarnings("unchecked")
         final FieldComparator<ENTITY, Float> casted =
