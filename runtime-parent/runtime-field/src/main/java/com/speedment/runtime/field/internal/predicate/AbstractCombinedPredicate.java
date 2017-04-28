@@ -18,13 +18,16 @@ package com.speedment.runtime.field.internal.predicate;
 
 import com.speedment.runtime.field.predicate.CombinedPredicate;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Predicate;
+import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 
 /**
- * Aggregation of a number of {@link Predicate Predicates} of the same type
+ * Immutable aggregation of a number of {@link Predicate Predicates} of the same type
  * (e.g. AND or OR) that can be applied in combination.
  *
  * @param <ENTITY> the entity type
@@ -40,61 +43,13 @@ public abstract class AbstractCombinedPredicate<ENTITY> extends AbstractPredicat
     private final Type type;
 
     private AbstractCombinedPredicate(
-        final Type type, 
-        final Predicate<ENTITY> first, 
-        final Predicate<? super ENTITY> second,
+        final Type type,
+        final List<Predicate<? super ENTITY>> predicates,
         final boolean negated
     ) {
         super(negated);
         this.type = requireNonNull(type);
-        this.predicates = new ArrayList<>();
-        add(requireNonNull(first));
-        add(requireNonNull(second));
-    }
-    /**
-     * Creates a negated predicate of an original.
-     */
-    private AbstractCombinedPredicate(AbstractCombinedPredicate<ENTITY> original) {
-        super(!requireNonNull(original).isNegated());
-        this.type = original.type;
-        this.predicates = original.predicates;
-    }
-
-    /**
-     * Adds the provided Predicate to this CombinedBasePredicate.
-     *
-     * @param <R> the Type of CombinedBasePredicate (AndCombinedBasePredicate or
-     * OrCombinedBasePredicate)
-     * @param predicate to add
-     * @return a reference to a CombinedPredicate after the method has been
-     * applied
-     */
-    protected final <R extends AbstractCombinedPredicate<ENTITY>> R add(Predicate<? super ENTITY> predicate) {
-        requireNonNull(predicate);
-        if (getClass().equals(predicate.getClass())) {
-            @SuppressWarnings("unchecked")
-            final AbstractCombinedPredicate<ENTITY> cbp = getClass().cast(predicate);
-            cbp.stream().forEachOrdered(predicates::add);
-        } else {
-            predicates.add(predicate);
-        }
-
-        @SuppressWarnings("unchecked")
-        final R self = (R) this;
-        return self;
-    }
-
-    /**
-     * Removes the provided Predicate from this CombinedBasePredicate.
-     *
-     * @param predicate to remove
-     * @return a reference to a CombinedPredicate after the method has been
-     * applied
-     */
-    protected AbstractCombinedPredicate<ENTITY> remove(Predicate<? super ENTITY> predicate) {
-        requireNonNull(predicate);
-        predicates.remove(predicate);
-        return this;
+        this.predicates = new ArrayList<>(requireNonNull(predicates));
     }
 
     @Override
@@ -105,6 +60,10 @@ public abstract class AbstractCombinedPredicate<ENTITY> extends AbstractPredicat
     @Override
     public int size() {
         return predicates.size();
+    }
+
+    protected List<Predicate<? super ENTITY>> getPredicates() {
+        return Collections.unmodifiableList(predicates);
     }
 
     @Override
@@ -120,12 +79,11 @@ public abstract class AbstractCombinedPredicate<ENTITY> extends AbstractPredicat
 
     public static class AndCombinedBasePredicate<ENTITY> extends AbstractCombinedPredicate<ENTITY> {
 
-        public AndCombinedBasePredicate(Predicate<ENTITY> first, Predicate<? super ENTITY> second) {
-           super(Type.AND, first, second, false);
-        }
-        
-        private AndCombinedBasePredicate(AndCombinedBasePredicate<ENTITY> original) {
-            super(original);
+        public AndCombinedBasePredicate(
+            final List<Predicate<? super ENTITY>> predicates,
+            final boolean negated
+        ) {
+            super(Type.AND, requireNonNull(predicates), negated);
         }
 
         @Override
@@ -137,30 +95,31 @@ public abstract class AbstractCombinedPredicate<ENTITY> extends AbstractPredicat
         @Override
         public AndCombinedBasePredicate<ENTITY> and(Predicate<? super ENTITY> other) {
             requireNonNull(other);
-            return add(other);
+            final List<Predicate<? super ENTITY>> updatedPredicates = new ArrayList<>(getPredicates());
+            updatedPredicates.add(other);
+            return new AndCombinedBasePredicate<>(updatedPredicates, isNegated());
         }
 
         @Override
         public OrCombinedBasePredicate<ENTITY> or(Predicate<? super ENTITY> other) {
             requireNonNull(other);
-            return new OrCombinedBasePredicate<>(this, other);
+            return new OrCombinedBasePredicate<>(Arrays.asList(this, other), false);
         }
 
         @Override
         public AndCombinedBasePredicate<ENTITY> negate() {
-            return new AndCombinedBasePredicate<>(this);
+            return new AndCombinedBasePredicate<>(getPredicates(), !isNegated());
         }
-        
+
     }
 
     public static class OrCombinedBasePredicate<ENTITY> extends AbstractCombinedPredicate<ENTITY> {
 
-        public OrCombinedBasePredicate(Predicate<ENTITY> first, Predicate<? super ENTITY> second) {
-            super(Type.OR, first, second, false);
-        }
-
-        private OrCombinedBasePredicate(OrCombinedBasePredicate<ENTITY> original) {
-            super(original);
+        public OrCombinedBasePredicate(
+            final List<Predicate<? super ENTITY>> predicates,
+            final boolean negated
+        ) {
+            super(Type.OR, requireNonNull(predicates), negated);
         }
 
         @Override
@@ -172,30 +131,35 @@ public abstract class AbstractCombinedPredicate<ENTITY> extends AbstractPredicat
         @Override
         public AndCombinedBasePredicate<ENTITY> and(Predicate<? super ENTITY> other) {
             requireNonNull(other);
-            return new AndCombinedBasePredicate<>(this, other);
+            return new AndCombinedBasePredicate<>(Arrays.asList(this, other), false);
         }
 
         @Override
         public OrCombinedBasePredicate<ENTITY> or(Predicate<? super ENTITY> other) {
             requireNonNull(other);
-            return add(other);
+            final List<Predicate<? super ENTITY>> updatedPredicates = new ArrayList<>(getPredicates());
+            updatedPredicates.add(other);
+            return new OrCombinedBasePredicate<>(updatedPredicates, isNegated());
         }
 
         @Override
         public OrCombinedBasePredicate<ENTITY> negate() {
-            return new OrCombinedBasePredicate<>(this);
+            return new OrCombinedBasePredicate<>(getPredicates(), !isNegated());
         }
-        
+
     }
 
     @Override
     public String toString() {
-        return "{type="
+        return "CombinedPredicate {type="
             + type.name()
             + ", negated="
             + isNegated()
             + ", predicates="
-            + predicates.toString()
+            + predicates.stream()
+                .map(Object::toString)
+                .collect(joining(", "))
             + "}";
     }
+
 }
