@@ -40,8 +40,8 @@ import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
 import static java.util.stream.Collectors.toCollection;
 import java.util.stream.Stream;
-import javafx.beans.binding.Bindings;
 import static javafx.beans.binding.Bindings.createBooleanBinding;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -82,6 +82,8 @@ public final class ConnectController implements Initializable {
     @FXML private Button buttonConnect;
     @FXML private HBox container;
     @FXML private StackPane openContainer;
+    
+    private ObjectProperty<Integer> portProperty;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -143,13 +145,10 @@ public final class ConnectController implements Initializable {
             }
         });
         
-        Bindings.bindBidirectional(
-                fieldPort.textProperty(), 
-                dbms.portProperty(), 
-                new StringConverter<Number>() {
-                    
+        portProperty = dbms.portProperty().asObject();
+        fieldPort.textProperty().bindBidirectional(portProperty, new StringConverter<Integer>() {
             @Override
-            public String toString(Number number) {
+            public String toString(Integer number) {
                 if (number == null) {
                     try {
                         return Integer.toString(defaultPort(dbms));
@@ -162,15 +161,19 @@ public final class ConnectController implements Initializable {
             }
 
             @Override
-            public Number fromString(String string) {
+            public Integer fromString(String string) {
                 if (string == null || "".equals(string.trim())) {
                     return defaultPort(dbms);
                 } else return Integer.parseInt(string);
             }
         });
+
+        dbms.portProperty().addListener((ob, o, n) -> {
+            System.out.println("Port changed to: " + n);
+        });
         
         try {
-            // Find the prefered dbms-type
+            // Find the preferred dbms-type
             final String prefered = Settings.inst().get(
                 "last_known_dbtype",
                 getDbmsTypes()
@@ -183,7 +186,7 @@ public final class ConnectController implements Initializable {
                     ))
             );
             
-            // If the prefered dbms-type isn't loaded, select the first one.
+            // If the preferred dbms-type isn't loaded, select the first one.
             if (getDbmsTypes().anyMatch(prefered::equals)) {
                 
                 fieldType.getSelectionModel().select(prefered);
