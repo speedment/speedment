@@ -17,6 +17,7 @@
 package com.speedment.runtime.field.predicate;
 
 import com.speedment.runtime.field.internal.predicate.AbstractCombinedPredicate;
+import java.util.Arrays;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -60,19 +61,48 @@ public interface CombinedPredicate<ENTITY> extends Predicate<ENTITY> {
      */
     Type getType();
 
+    /**
+     * Returns if this CombinedPredicate is negated.
+     *
+     * @return if this CombinedPredicate is negated
+     */
+    boolean isNegated();
+
     @Override
     public CombinedPredicate<ENTITY> and(Predicate<? super ENTITY> other);
 
     @Override
     public CombinedPredicate<ENTITY> or(Predicate<? super ENTITY> other);
     
-    
+    @Override
+    public CombinedPredicate<ENTITY> negate();
+
+    /**
+     * Creates and returns a new CombinedPredicate that is the logical AND
+     * combination of the given predicates.
+     *
+     * @param <ENTITY> entity type
+     * @param first the first predicate used in the AND operation
+     * @param second the first predicate used in the AND operation
+     * @return a new CombinedPredicate that is the logical AND combination of
+     * the given predicates
+     */
     static <ENTITY> CombinedPredicate<ENTITY> and(Predicate<ENTITY> first, Predicate<? super ENTITY> second) {
-        return new AbstractCombinedPredicate.AndCombinedBasePredicate<>(first, second);
+        return new AbstractCombinedPredicate.AndCombinedBasePredicate<>(Arrays.asList(first, second), false);
     }
 
+    /**
+     * Creates and returns a new CombinedPredicate that is the logical OR
+     * combination of the given predicates.
+     *
+     * @param <ENTITY> entity type
+     * @param first the first predicate used in the OR operation
+     * @param second the first predicate used in the OR operation
+     * @return a new CombinedPredicate that is the logical OR combination of the
+     * given predicates
+     */
     static <ENTITY> CombinedPredicate<ENTITY> or(Predicate<ENTITY> first, Predicate<? super ENTITY> second) {
-        return new AbstractCombinedPredicate.OrCombinedBasePredicate<>(first, second);
+        return new AbstractCombinedPredicate.OrCombinedBasePredicate<>(Arrays.asList(first, second), false);
     }
 
 }
