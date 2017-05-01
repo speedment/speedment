@@ -31,6 +31,7 @@ import com.speedment.runtime.typemapper.integer.IntegerZeroOneToBooleanMapper;
 import com.speedment.runtime.typemapper.integer.PrimitiveIntegerToByteMapper;
 import com.speedment.runtime.typemapper.integer.PrimitiveIntegerToShortMapper;
 import com.speedment.runtime.typemapper.integer.PrimitiveIntegerZeroOneToBooleanMapper;
+import com.speedment.runtime.typemapper.largeobject.BlobToByteArrayMapper;
 import com.speedment.runtime.typemapper.largeobject.ClobToStringMapper;
 import com.speedment.runtime.typemapper.longs.LongToByteMapper;
 import com.speedment.runtime.typemapper.longs.LongToIntegerMapper;
@@ -46,10 +47,8 @@ import com.speedment.runtime.typemapper.string.TrueFalseStringToBooleanMapper;
 import com.speedment.runtime.typemapper.string.YesNoStringToBooleanMapper;
 import com.speedment.runtime.typemapper.time.*;
 import java.math.BigDecimal;
-import java.sql.Clob;
+import java.sql.*;
 import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
@@ -92,6 +91,7 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
 
         // Special Large object mappers
         install(Clob.class, ClobToStringMapper::new);
+        install(Blob.class, BlobToByteArrayMapper::new);
         
         // Special Long mappers
         install(Long.class, LongToIntegerMapper::new);
