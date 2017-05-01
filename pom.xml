@@ -54,6 +54,7 @@
         <module>plugin-parent</module>
         <module>connector-parent</module>
         <module>archetype-parent</module>
+        <module>example-parent</module>
     </modules>
     
     <!-- Properties -->
