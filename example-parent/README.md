@@ -12,7 +12,7 @@ This module shows basic examples of how to use Speedment including standard prob
 
 
 ### Requirements
-The examples make use of the "sakira" example database available directly from Oracle [here][https://dev.mysql.com/doc/index-other.html]. 
+The examples make use of the "sakira" example database available directly from Oracle [here](https://dev.mysql.com/doc/index-other.html). 
 Download and install the database content on your target machine before running any of the examples.
 
 
