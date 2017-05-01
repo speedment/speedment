@@ -26,10 +26,11 @@ import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.internal.component.sql.optimizer.FilterSortedSkipOptimizer;
 import com.speedment.runtime.core.internal.component.sql.optimizer.InitialFilterOptimizer;
 import com.speedment.runtime.core.stream.Pipeline;
+import java.util.Comparator;
+import static java.util.Comparator.comparingInt;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CopyOnWriteArrayList;
-import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -61,6 +62,10 @@ public final class SqlStreamOptimizerComponentImpl implements SqlStreamOptimizer
         return result;
     }
 
+    private static final Comparator<Metrics> METRICS_COMPARATOR
+        = comparingInt(Metrics::getPipelineReductions)
+            .thenComparing(comparingInt(Metrics::getSqlCount).reversed());
+
     private <ENTITY> SqlStreamOptimizer<ENTITY> getHelper(Pipeline initialPipeline, DbmsType dbmsType) {
         @SuppressWarnings("unchecked")
         SqlStreamOptimizer<ENTITY> result = (SqlStreamOptimizer<ENTITY>) FALL_BACK;
@@ -76,7 +81,8 @@ public final class SqlStreamOptimizerComponentImpl implements SqlStreamOptimizer
             if (DEBUG.isEqualOrHigherThan(LOGGER_STREAM_OPTIMIZER.getLevel())) {
                 LOGGER_STREAM_OPTIMIZER.debug("Candidate: %-30s : %s ", candidate.getClass().getSimpleName(), candidateMetric);
             }
-            if (candidateMetric.getPipelineReductions() > metric.getPipelineReductions()) {
+            if (METRICS_COMPARATOR.compare(candidateMetric, metric) > 0) {
+//            if (candidateMetric.getPipelineReductions() > metric.getPipelineReductions()) {
                 metric = candidateMetric;
                 result = candidate;
                 if (metric.getPipelineReductions() == Integer.MAX_VALUE) {

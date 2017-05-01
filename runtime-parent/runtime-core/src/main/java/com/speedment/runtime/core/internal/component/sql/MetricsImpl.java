@@ -26,9 +26,23 @@ import com.speedment.runtime.core.component.sql.Metrics;
 public class MetricsImpl implements Metrics {
 
     private final int pipelineReductions;
+    private final int sqlWhileCount;
+    private final int sqlOrderCount;
+    private final int sqlSkipCount;
+    private final int sqlLimitCount;
 
-    public MetricsImpl(int pipelineReductions) {
+    public MetricsImpl(
+        final int pipelineReductions,
+        final int sqlWhileCount,
+        final int sqlOrderCount,
+        final int sqlSkipCount,
+        final int sqlLimitCount
+    ) {
         this.pipelineReductions = requireNonNegative(pipelineReductions);
+        this.sqlWhileCount = requireNonNegative(sqlWhileCount);
+        this.sqlOrderCount = requireNonNegative(sqlOrderCount);
+        this.sqlSkipCount = requireNonNegative(sqlSkipCount);
+        this.sqlLimitCount = requireNonNegative(sqlSkipCount);
     }
 
     @Override
@@ -37,8 +51,34 @@ public class MetricsImpl implements Metrics {
     }
 
     @Override
+    public int getSqlWhileCount() {
+        return sqlWhileCount;
+    }
+
+    @Override
+    public int getSqlOrderCount() {
+        return sqlOrderCount;
+    }
+
+    @Override
+    public int getSqlSkipCount() {
+        return sqlSkipCount;
+    }
+
+    @Override
+    public int getSqlLimitCount() {
+        return sqlLimitCount;
+    }
+
+    @Override
     public String toString() {
-        return String.format("Metrics {pipelineReductions = %d}", getPipelineReductions());
+        return String.format("Metrics {pipelineReductions = %d, sqlWhileCount = %d, sqlOrderCount = %d, sqlSkipCount = %d, sqlLimitCount = %d}",
+            getPipelineReductions(),
+            getSqlWhileCount(),
+            getSqlOrderCount(),
+            getSqlSkipCount(),
+            getSqlLimitCount()
+        );
     }
 
     @Override
@@ -50,15 +90,25 @@ public class MetricsImpl implements Metrics {
             return false;
         }
         final Metrics that = (Metrics) obj;
-        return this.getPipelineReductions() == that.getPipelineReductions();
+        return this.getPipelineReductions() == that.getPipelineReductions()
+            && this.getSqlWhileCount() == that.getSqlWhileCount()
+            && this.getSqlOrderCount() == that.getSqlOrderCount()
+            && this.getSqlSkipCount() == that.getSqlSkipCount()
+            && this.getSqlLimitCount() == that.getSqlLimitCount();
     }
 
     @Override
     public int hashCode() {
-        return getPipelineReductions();
+        int hash = 33;
+        hash += 33 * getPipelineReductions();
+        hash += 33 * getSqlWhileCount();
+        hash += 33 * getSqlOrderCount();
+        hash += 33 * getSqlSkipCount();
+        hash += 33 * getSqlLimitCount();
+        return hash;
     }
 
-    public static final Metrics EMPTY = new MetricsImpl(0) {
+    public static final Metrics EMPTY = new MetricsImpl(0, 0, 0, 0, 0) {
         @Override
         public String toString() {
             return "Metrics.empty()";
