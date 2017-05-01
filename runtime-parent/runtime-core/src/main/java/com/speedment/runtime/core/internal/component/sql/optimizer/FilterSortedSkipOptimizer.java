@@ -113,10 +113,16 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
             return Metrics.empty();
         }
         if (skipLimitSupport == NONE) {
-            return Metrics.of(filterCounter.get() + orderCounter.get());
+            return Metrics.of(filterCounter.get() + orderCounter.get(), filterCounter.get(), orderCounter.get(), 0, 0);
         }
 
-        return Metrics.of(filterCounter.get() + orderCounter.get() + skipCounter.get() + limitCounter.get());
+        return Metrics.of(
+            filterCounter.get() + orderCounter.get() + skipCounter.get() + limitCounter.get(),
+            filterCounter.get(),
+            orderCounter.get(),
+            skipCounter.get() > 0 ? 1 : 0,
+            limitCounter.get() > 0 ? 1 : 0
+        );
     }
 
     @Override
@@ -146,7 +152,6 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
             List<Predicate<ENTITY>> predicates = filters.stream()
                 .map(FilterAction::getPredicate)
                 .map(p -> (Predicate<ENTITY>) p)
-//                .map(p -> (FieldPredicate<ENTITY>) p)
                 .collect(toList());
 
             final RenderResult rr = StreamTerminatorUtil.renderSqlWhere(
@@ -156,39 +161,8 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
                 predicates
             );
 
-//            final FieldPredicateView spv = info.getDbmsType().getFieldPredicateView();
-//
-//            // Todo: Allow composite predicates
-//            @SuppressWarnings("unchecked")
-//            final List<SqlPredicateFragment> fragments = filters.stream()
-//                .map(f -> f.getPredicate())
-//                .map(p -> (FieldPredicate<ENTITY>) p)
-//                .map(sp -> spv.transform(info.getSqlColumnNamer(), info.getSqlDatabaseTypeFunction(), sp))
-//                .collect(toList());
-//
-//            // Todo: Make this in one sweep
-//            String expression = fragments.stream()
-//                .map(SqlPredicateFragment::getSql)
-//                .collect(joining(" AND "));
-//            sql.append(" WHERE ").append(expression);
-//
-//            for (int i = 0; i < fragments.size(); i++) {
-//
-//                @SuppressWarnings("unchecked")
-//                final FieldPredicate<ENTITY> p = (FieldPredicate<ENTITY>) filters.get(i).getPredicate();
-//                final Field<ENTITY> referenceFieldTrait = p.getField();
-//
-//                @SuppressWarnings("unchecked")
-//                final TypeMapper<Object, Object> tm = (TypeMapper<Object, Object>) referenceFieldTrait.typeMapper();
-//
-//                fragments.get(i).objects()
-//                    .map(tm::toDatabaseType)
-//                    .forEachOrdered(values::add);
-//
-//            }
             sql.append(" WHERE ").append(rr.getSql());
             values.addAll(rr.getValues());
-
         }
 
         if (!sorteds.isEmpty()) {
