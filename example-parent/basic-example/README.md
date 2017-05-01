@@ -19,5 +19,5 @@ Download and install the database content on your target machine before running 
 #### Copyright
 
 Copyright (c) 2014-2017, Speedment, Inc. All Rights Reserved.
-Visit [www.speedment.org](http://www.speedment.com) for more info.
+Visit [www.speedment.com](http://www.speedment.com) for more info.
 
