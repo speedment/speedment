@@ -459,7 +459,7 @@ Speedment is available under the [Apache 2 License](http://www.apache.org/licens
 #### Copyright
 
 Copyright (c) 2014-2017, Speedment, Inc. All Rights Reserved.
-Visit [www.speedment.org](http://www.speedment.org/) for more info.
+Visit [www.speedment.com](http://www.speedment.com/) for more info.
 
 [![Analytics](https://ga-beacon.appspot.com/UA-64937309-1/speedment/main)](https://github.com/igrigorik/ga-beacon)
 

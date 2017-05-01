@@ -21,12 +21,18 @@ import com.speedment.runtime.core.component.sql.SqlStreamOptimizer;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsType;
-import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.modifySource;
-import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.topLevelAndPredicates;
+import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
+import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil;
+import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isContainingOnlyFieldPredicate;
 import com.speedment.runtime.core.stream.Pipeline;
-import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.core.stream.action.Action;
+import java.util.ArrayList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import static java.util.stream.Collectors.toList;
 
 /**
  * This Optimizer can take care of the case where there is a mix of Field
@@ -39,12 +45,14 @@ import static java.util.Objects.requireNonNull;
 public final class InitialFilterOptimizer<ENTITY> implements SqlStreamOptimizer<ENTITY> {
 
     // Todo: A more general expression would be better. Eg. stream().peek().filter() would still be possible...
+    // Todo: Allow CombinedPredicates
     @Override
     public Metrics metrics(Pipeline initialPipeline, DbmsType dbmsType) {
         requireNonNull(initialPipeline);
         requireNonNull(dbmsType);
-        int noFilters = topLevelAndPredicates(initialPipeline).size();
-        return Metrics.of(noFilters);
+        final AtomicInteger filterCounter = new AtomicInteger();
+        traverse(initialPipeline, $ -> filterCounter.getAndIncrement());
+        return Metrics.of(filterCounter.get(), filterCounter.get(), 0, 0, 0);
     }
 
     @Override
@@ -56,12 +64,60 @@ public final class InitialFilterOptimizer<ENTITY> implements SqlStreamOptimizer<
         requireNonNull(initialPipeline);
         requireNonNull(info);
         requireNonNull(query);
-        final List<FieldPredicate<ENTITY>> andPredicateBuilders = topLevelAndPredicates(initialPipeline);
 
-        if (!andPredicateBuilders.isEmpty()) {
-            modifySource(andPredicateBuilders, info, query);
+        final List<FilterAction<ENTITY>> filters = new ArrayList<>();
+        traverse(initialPipeline, filters::add);
+
+        final List<Object> values = new ArrayList<>();
+        final StringBuilder sql = new StringBuilder();
+
+        sql.append(info.getSqlSelect());
+
+        if (!filters.isEmpty()) {
+            @SuppressWarnings("unchecked")
+            List<Predicate<ENTITY>> predicates = filters.stream()
+                .map(FilterAction::getPredicate)
+                .map(p -> (Predicate<ENTITY>) p)
+                .collect(toList());
+
+            final StreamTerminatorUtil.RenderResult rr = StreamTerminatorUtil.renderSqlWhere(
+                info.getDbmsType(),
+                info.getSqlColumnNamer(),
+                info.getSqlDatabaseTypeFunction(),
+                predicates
+            );
+
+            sql.append(" WHERE ").append(rr.getSql());
+            values.addAll(rr.getValues());
         }
+
+//        final List<FieldPredicate<ENTITY>> andPredicateBuilders = topLevelAndPredicates(initialPipeline);
+//
+//        if (!andPredicateBuilders.isEmpty()) {
+//            modifySource(andPredicateBuilders, info, query);
+//        }
+        query.setSql(sql.toString());
+        query.setValues(values);
+
+        initialPipeline.removeIf(filters::contains);
         return initialPipeline;
+    }
+
+    private void traverse(Pipeline pipeline,
+        final Consumer<? super FilterAction<ENTITY>> filterConsumer
+    ) {
+        for (Action<?, ?> action : pipeline) {
+            if (action instanceof FilterAction) {
+                @SuppressWarnings("unchecked")
+                final FilterAction<ENTITY> filterAction = (FilterAction<ENTITY>) action;
+                if (isContainingOnlyFieldPredicate(filterAction.getPredicate())) {
+                    filterConsumer.accept(filterAction);
+                }
+            } else {
+                // We are done. Only initial filters can be optimized
+                return;
+            }
+        }
     }
 
 }

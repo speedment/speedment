@@ -17,6 +17,7 @@
 package com.speedment.runtime.core.component.sql;
 
 import com.speedment.runtime.core.internal.component.sql.MetricsImpl;
+import java.util.Set;
 
 /**
  *
@@ -33,16 +34,66 @@ public interface Metrics {
     int getPipelineReductions();
 
     /**
+     * Returns the number of while predicate expressions in the SQL query.
+     *
+     * @return the number of while predicate expressions in the SQL query
+     */
+    int getSqlWhileCount();
+
+    /**
+     * Returns the number of order by columns in the SQL query.
+     *
+     * @return the number of order by columns in the SQL query
+     */
+    int getSqlOrderCount();
+
+    /**
+     * Returns the number of skip statements (0 or 1) in the SQL query.
+     *
+     * @return the number of skip statements (0 or 1) in the SQL query
+     */
+    int getSqlSkipCount();
+
+    /**
+     * Returns the number of limit statements (0 or 1) in the SQL query.
+     *
+     * @return the number of limit statements (0 or 1) in the SQL query
+     */
+    int getSqlLimitCount();
+
+    /**
+     * Returns the sum of {@link #getSqlWhileCount() }, {@link #getSqlOrderCount() }
+     * , {@link #getSqlSkipCount() } and {@link #getSqlLimitCount() }.
+     *
+     *
+     * @return the sum of {@link #getSqlWhileCount() }, {@link #getSqlOrderCount() }
+     * , {@link #getSqlSkipCount() } and {@link #getSqlLimitCount() }
+     */
+    default int getSqlCount() {
+        return getSqlWhileCount() + getSqlOrderCount() + getSqlSkipCount() + getSqlLimitCount();
+    }
+
+    /**
      * Creates and returns a new Metrics.
      *
      * @param pipelineReductions number of pipeline reductions that were made
+     * @param sqlWhileCount the number of while predicates
+     * @param sqlOrderCount the number of columns to sort by
+     * @param sqlSkipCount the number of skip statements (0 or 1)
+     * @param sqlLimitCount the number of limit statements (0 or 1)
      * @return a new Metrics
      */
-    static Metrics of(int pipelineReductions) {
-        if (pipelineReductions == 0) {
+    static Metrics of(
+        final int pipelineReductions,
+        final int sqlWhileCount,
+        final int sqlOrderCount,
+        final int sqlSkipCount,
+        final int sqlLimitCount
+    ) {
+        if (pipelineReductions == 0 && sqlWhileCount == 0 && sqlOrderCount == 0 && sqlSkipCount == 0 && sqlLimitCount == 0) {
             return empty();
         }
-        return new MetricsImpl(pipelineReductions);
+        return new MetricsImpl(pipelineReductions, sqlWhileCount, sqlOrderCount, sqlSkipCount, sqlLimitCount);
     }
 
     /**
