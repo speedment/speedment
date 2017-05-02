@@ -22,10 +22,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.speedment.example</groupId>
+        <artifactId>example-parent</artifactId>
+        <version>3.0.7</version>
+        <relativePath/>
+    </parent>
     
     <groupId>com.speedment.example</groupId>
     <artifactId>basic-example</artifactId>
-    <version>1.0.0</version>
     <packaging>jar</packaging> 
     
     <name>Speedment - Example - Basic Example</name>
@@ -37,7 +42,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <speedment.version>3.0.7-SNAPSHOT</speedment.version>
     </properties>
 
     <build>
@@ -63,4 +67,24 @@
             <scope>runtime</scope>
         </dependency>
     </dependencies>
+    
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                    </plugin>
+                    
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>   
+    
 </project>

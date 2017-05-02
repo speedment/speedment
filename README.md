@@ -44,7 +44,7 @@ When we started the open-source project Speedment, the main objective was to rem
 | `HAVING`     | `filter()` (after collecting) |
 | `JOIN`       | `flatMap()`  |
 | `DISTINCT`   | `distinct()` |
-| `UNION`      | `concat().distinct()` |
+| `UNION`      | `concat(s0, s1).distinct()` |
 | `ORDER BY`   | `sorted()`   |
 | `OFFSET`     | `skip()`     |
 | `LIMIT`      | `limit()`    |
@@ -73,17 +73,17 @@ Assuming you have Maven installed and a relational database available, you can t
 
 ###### MySQL
 ```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mysql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.5 && cd speedment-demo && mvn speedment:tool
+mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mysql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.6 && cd speedment-demo && mvn speedment:tool
 ```
 
 ###### PostgreSQL
 ```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-postgresql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.5 && cd speedment-demo && mvn speedment:tool
+mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-postgresql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.6 && cd speedment-demo && mvn speedment:tool
 ```
 
 ###### MariaDB
 ```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mariadb -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.5 && cd speedment-demo && mvn speedment:tool
+mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mariadb -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.6 && cd speedment-demo && mvn speedment:tool
 ```
 
 A graphical dialog will prompt for database connection details.
@@ -113,6 +113,30 @@ SELECT id, name, color, age FROM hare
     WHERE (age > 5)
     LIMIT 1;
 ```
+
+### Query with optimised paging
+Show page 3 of old hares sorted by name:
+```java
+private static final long PAGE_SIZE = 50;
+
+// Even complex streams can be optimized!
+long page = 3;
+List<Hare> page = hares.stream()
+    .filter(Hare.AGE.greaterThan(5))
+    .sorted(Hare.NAME.comparator())
+    .skip(PAGE_SIZE * page)
+    .limit(PAGE_SIZE)
+    .collect(toList());
+``` 
+
+Results in the following SQL query:
+```sql
+SELECT id, name, color, age FROM hare 
+    WHERE (age > 5)
+    ORDER BY `name` DESC 
+    LIMIT 50 OFFSET 150;
+```
+
 
 ### Join
 Construct a Map with all Hares and their corresponding Carrots
