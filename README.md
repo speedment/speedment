@@ -158,7 +158,7 @@ LIMIT 50 OFFSET 150;
 ```
 
 ### Classification
-Create a Map with film ratings ant the corresponding films:
+Create a Map with film ratings and the corresponding films:
 ```
 Map<String, List<Film>> map = films.stream()
     .collect(
