@@ -190,29 +190,30 @@ Map<Language, List<Film>> languageFilmMap = films.stream()
 ### Many-to-many
 Construct a Map with all Actors and their corresponding Films:
 ```java
-Map<Actor, List<Film>> filmographies = filmActorRelations.stream()
+Map<Actor, List<Film>> filmographies = filmActors.stream()
     .collect(
-        groupingBy(actors.finderBy(FilmActor.ACTOR_ID), // Applies the FilmActor to Actor classifier
+        groupingBy(actors.finderBy(FilmActor.ACTOR_ID), // Applies the FilmActor to ACTOR classifier
             mapping(
-                films.finderBy(FilmActor.FILM_ID),      // Applies the FilmActor to Film finder
-                toList())                               // Use a List collector for downstream aggregation.
+                films.finderBy(FilmActor.FILM_ID), // Applies the FilmActor to Film finder
+                toList()                           // Use a List collector for downstream aggregation.
+            )
         )
     );
 ```
+FilmActor is an entity with foreign keys to both the Film and the Actor table.
 
 ### Entities are linked
 No need for complicated joins!
 ```java
-// Find the owner of the orange carrot
-Optional<Hare> hare = carrots.stream()
-    .filter(Carrot.NAME.equal("Orange"))
-    .map(hares.finderBy(Carrot.OWNER))
+// Find any film where english is spoken
+Optional<Film> anyFilmInEnglish = languages.stream()
+    .flatMap(films.finderBackwardsBy(Film.LANGUAGE_ID))
     .findAny();
 
-// Find one carrot owned by Harry
-Optional<Carrot> carrot = hares.stream()
-    .filter(Hare.NAME.equal("Harry"))
-    .flatMap(carrots.finderBackwardsBy(Carrot.OWNER)) // Carrot is a foreign key table.
+// Find the language of the film with id 42
+Optional<Language> languageOfFilmWithId42 = films.stream()
+    .filter(Film.FILM_ID.equal(42))
+    .map(languages.finderBy(Film.LANGUAGE_ID))
     .findAny();
 ```
 
@@ -223,10 +224,10 @@ final SakilaApplication app = new SakilaApplicationBuilder()
     .withPassword("myPwd729")
     .build();
     
-final FilmManager      films     = app.getOrThrow(FilmManager.class);
-final LanguageManager  languages = app.getOrThrow(CarrotManager.class);
-final ActorManager     actors    = app.getOrThrow(ActorManager.class);
-final FilmActorManager friends   = app.getOrThrow(FilmActorManager.class);
+final FilmManager      films      = app.getOrThrow(FilmManager.class);
+final LanguageManager  languages  = app.getOrThrow(CarrotManager.class);
+final ActorManager     actors     = app.getOrThrow(ActorManager.class);
+final FilmActorManager filmActors = app.getOrThrow(FilmActorManager.class);
 ```
 
 ### Easy persistence
