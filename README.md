@@ -105,7 +105,6 @@ Here are a few examples of how you could use Speedment from your code assuming t
 
 
 ### Query with optimised Stream predicate short-circuit
-Search for an old hare (of age greater than 5):
 Search for a long film (of length greater than 120 minutes):
 ```java
 // Searches are optimized in the background!
@@ -128,7 +127,7 @@ WHERE
 ```
 
 ### Query with optimised paging
-Show page 3 of PG-13 rated films sorted by name:
+Show page 3 of PG-13 rated films sorted by length:
 ```java
 private static final long PAGE_SIZE = 50;
 
@@ -158,13 +157,26 @@ ORDER BY
 LIMIT 50 OFFSET 150;
 ```
 
-### Join
-Construct a Map with all Hares and their corresponding Carrots
-```java
-Map<Hare, List<Carrot>> join = carrots.stream()
+### Classification
+Create a Map with film ratings ant the corresponding films
+```
+Map<String, List<Film>> map = films.stream()
     .collect(
-        groupingBy(hares.finderBy(Carrot.OWNER)) // Applies the finderBy(Carrot.OWNER) classifier
-    );        
+        Collectors.groupingBy(
+            // Apply this classifier
+            f -> f.getRating().orElse("none")
+        )
+    );
+```
+
+### Join
+Construct a Map with all films languages and the corresponding films
+```java
+Map<Language, List<Film>> languageFilmMap = films.stream()
+    .collect(
+        // Apply this foreign key classifier
+        groupingBy(languages.finderBy(Film.LANGUAGE_ID))
+    );
 ```
 
 ### Many-to-many
@@ -213,42 +225,43 @@ final FriendManager friends = app.getOrThrow(FriendManager.class);
 ### Easy persistence
 Entities can easily be persisted in a database.
 ```java
-Hare newHare = new HareImpl();  // Creates a new empty Hare
-newHare.setName("Harry");
-newHare.setColor("Gray");
-newHare.setAge(3);
+Film newFilm = new FilmImpl();  // Creates a new empty Film
+newFilm.setTitle("Police Academy 13");
+newFilm.setRating("G");
+newFilm.setLength(123);
+...
 
 // Auto-Increment-fields have been set by the database
-Hare persistedHare = hares.persist(newHare); 
+Film persistedFilm = films.persist(newFilm); 
 ```
 
 ### Update
 ```java
-hares.stream()
-    .filter(Hare.ID.equal(42))  // Filters out all Hares with ID = 42 (just one)
-    .map(Hare.AGE.setTo(10))    // Applies a setter that sets the age to 10
-    .forEach(hares.updater());  // Applies the updater function
+films.stream()
+    .filter(Film.ID.equal(42))   // Filters out all Films with ID = 42 (just one)
+    .map(Film.LENGTH.setTo(143)) // Applies a setter that sets the length to 143
+    .forEach(films.updater());   // Applies the updater function
 ```
 or another example
 ```java
-hares.stream()
-    .filter(Hare.ID.between(48, 102))   // Filters out all Hares with ID between 48 and 102
-    .map(h -> h.setAge(h.getAge() + 1)) // Applies a lambda that increases their age by one
-    .forEach(hares.updater());          // Applies the updater function to the selected hares
+films.stream()
+    .filter(Film.ID.between(48, 102))   // Filters out all Films with ID between 48 and 102
+    .map(f -> f.setRentalDuration(f.getRentalDuration() + 1)) // Applies a lambda that increases their rental duration by one
+    .forEach(films.updater());          // Applies the updater function to the selected films
 ```
 
 ### Remove
 ```java
-hares.stream()
-    .filter(Hare.ID.equal(71))  // Filters out all Hares with ID = 71 (just one)
-    .forEach(hares.remover());  // Applies the remover function
+films.stream()
+    .filter(Film.ID.equal(71))  // Filters out all Films with ID = 71 (just one)
+    .forEach(films.remover());  // Applies the remover function
 ```
 
 
 ### Full Transparency
 By appending a logger to the builder, you can follow exactly what happens behind the scenes.
 ```java
-HareApplication app = new HareApplicationBuilder()
+SakilaApplication app = new SakilaApplicationBuilder()
     .withPassword("myPwd729")
     .withLogging(ApplicationBuilder.LogType.STREAM)
     .withLogging(ApplicationBuilder.LogType.PERSIST)
@@ -264,16 +277,16 @@ Using the JSON Stream Plugin, you can easily convert a stream into JSON:
 // is ommitted and a new field 'carrots' list the id's of all
 // carrots associated by a particular hare.
 JsonComponent json = app.getOrThrow(JsonComponent.class);
-String json = hares.stream()
+String json = films.stream()
     .collect(json.toJson(
-        json.allOf(hares)
-            .remove(Hare.ID)
-            .remove(Hare.AGE)
+        json.allOf(films)
+            .remove(Film.ID)
+            .remove(Film.DESCRIPTION)
             .putStreamer(
-                "carrots",                             // Declare a new attribute
-                hares.finderBackwardsBy(Carrot.OWNER), // How it is calculated
-                json.noneOf(carrots)                   // How it is formatted
-                    .put(Carrot.ID)
+                "language",                                 // Declare a new attribute
+                languages.finderBackwardsBy(Film.LANGUAGE), // How it is calculated
+                json.noneOf(languages)                      // How it is formatted
+                    .put(Language.NAME)
             )
     ));
 ```
@@ -288,8 +301,8 @@ public class AppConfig {
     private @Value("${dbms.schema}") String schema;
 
     @Bean
-    public SalesinfoApplication getSalesinfoApplication() {
-        return new SalesinfoApplicationBuilder()
+    public SakilaApplication getSakilaApplication() {
+        return new SakilaApplicationBuilder()
             .withUsername(username)
             .withPassword(password)
             .withSchema(schema)
@@ -298,15 +311,15 @@ public class AppConfig {
 
     // Individual managers
     @Bean
-    public SalespersonManager getSalespersonManager(SalesinfoApplication app) {
-        return app.getOrThrow(SalespersonManager.class);
+    public FilmManager getFilmManager(SakilaApplication app) {
+        return app.getOrThrow(FilmManager.class);
     }
 }
 ```
 
 So when we need to use a manager in a SpringMVC Controller, we can now simply autowire it:
 ```java
-    private @Autowired SalespersonManager salespeople;
+    private @Autowired FilmManager films;
 ```
 
 
