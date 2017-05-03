@@ -25,60 +25,60 @@ import com.company.sakila.db0.sakila.film_actor.FilmActor;
 import com.company.sakila.db0.sakila.film_actor.FilmActorManager;
 import com.speedment.oracle_java_magazine.util.ExampleUtil;
 import static com.speedment.oracle_java_magazine.util.ExampleUtil.buildApplication;
-import java.util.List;
-import java.util.Map;
-import static java.util.stream.Collectors.groupingBy;
-import static java.util.stream.Collectors.mapping;
-import static java.util.stream.Collectors.toList;
+import com.speedment.plugins.json.JsonBundle;
+import com.speedment.plugins.json.JsonCollector;
+import com.speedment.plugins.json.JsonComponent;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Per Minborg
  */
-public class JoinManyToMany {
+public class Json {
 
     private final SakilaApplication app;
     private final FilmManager films;
-    private final ActorManager actors;
     private final FilmActorManager filmActors;
+    private final ActorManager actors;
 
-    public JoinManyToMany() {
-        app = buildApplication();
+    public Json() {
+        app = buildApplication(b -> b.withBundle(JsonBundle.class));
         films = app.getOrThrow(FilmManager.class);
-        actors = app.getOrThrow(ActorManager.class);
         filmActors = app.getOrThrow(FilmActorManager.class);
-
+        actors = app.getOrThrow(ActorManager.class);
     }
 
     public static void main(String[] args) {
-        new JoinManyToMany().run();
+        new Json().run();
     }
 
     private void run() {
-        manyToMany();
+        json();
     }
 
-    private void manyToMany() {
-        ExampleUtil.log("manyToMany");
+    private void json() {
+        ExampleUtil.log("json");
 
-        Map<Actor, List<Film>> filmographies = filmActors.stream()
-            .collect(
-                groupingBy(actors.finderBy(FilmActor.ACTOR_ID), // Applies the FilmActor to ACTOR classifier
-                    mapping(
-                        films.finderBy(FilmActor.FILM_ID), // Applies the FilmActor to Film finder
-                        toList()                           // Use a List collector for downstream aggregation.
+        final JsonComponent jsonComponent = app.getOrThrow(JsonComponent.class);
+
+        Function<Film, Stream<Actor>> mapper = f -> filmActors.findBackwardsBy(FilmActor.FILM_ID, f).map(actors.finderBy(FilmActor.ACTOR_ID));
+
+        String json = films.stream()
+            .collect(JsonCollector.toJson(
+                jsonComponent.allOf(films)
+                    .remove(Film.FILM_ID)
+                    .remove(Film.DESCRIPTION)
+                    .putStreamer(
+                        "actors", // Declare a new attribute
+                        mapper, // How it is calculated
+                        jsonComponent.noneOf(actors) // How it is formatted
+                            .put(Actor.FIRST_NAME)
                     )
-                )
-            );
-
+            ));
         
         
-        filmographies.forEach((a, fl) -> {
-            System.out.format("%s -> %s %n",
-                a.getFirstName() + " " + a.getLastName(),
-                fl.stream().map(Film::getTitle).sorted().collect(toList())
-            );
-        });
+        System.out.println(json);
 
     }
 
