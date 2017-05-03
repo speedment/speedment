@@ -16,19 +16,25 @@ Java applications using **standard Java 8** streams without any
 specific query language or any new API. 
 
 ### One-liner
-Search for an old hare (of age greater than 5):
+Search for a long film (of length greater than 120 minutes):
 ```java
 // Searches are optimized in the background!
-Optional<Hare> oldHare = hares.stream()
-    .filter(Hare.AGE.greaterThan(5))
+Optional<Film> longFilm = films.stream()
+    .filter(Film.LENGTH.greaterThan(120))
     .findAny();
 ``` 
 
 Results in the following SQL query:
 ```sql
-SELECT id, name, color, age FROM hare 
-    WHERE (age > 5)
-    LIMIT 1;
+SELECT 
+    `film_id`,`title`,`description`,`release_year`,
+    `language_id`,`original_language_id`,`rental_duration`,`rental_rate`,
+    `length`,`replacement_cost`,`rating`,`special_features`,
+    `last_update` 
+FROM 
+     FROM `sakila`.`film
+WHERE
+    (`length` > 120)
 ```
 
 No need for manually writing SQL-queies any more. Remain in a pure Java world!
@@ -95,48 +101,62 @@ Now you have a demo project set up with generated application code in the direct
 
 Examples
 --------
-Here are a few examples of how you could use Speedment from your code assuming that you have an exemplary MySQL database with the tables "hare", "carrot", "human" and "friends" [See Database Schema here] (https://github.com/speedment/speedment/#database-schema):
+Here are a few examples of how you could use Speedment from your code assuming that you have an exemplary MySQL database called "Sakila" avaiable. Sakila can be downloaded directly form Oracle [here](https://dev.mysql.com/doc/index-other.html) 
 
 
 ### Query with optimised Stream predicate short-circuit
 Search for an old hare (of age greater than 5):
+Search for a long film (of length greater than 120 minutes):
 ```java
 // Searches are optimized in the background!
-Optional<Hare> oldHare = hares.stream()
-    .filter(Hare.AGE.greaterThan(5))
+Optional<Film> longFilm = films.stream()
+    .filter(Film.LENGTH.greaterThan(120))
     .findAny();
 ``` 
 
 Results in the following SQL query:
 ```sql
-SELECT id, name, color, age FROM hare 
-    WHERE (age > 5)
-    LIMIT 1;
+SELECT 
+    `film_id`,`title`,`description`,`release_year`,
+    `language_id`,`original_language_id`,`rental_duration`,`rental_rate`,
+    `length`,`replacement_cost`,`rating`,`special_features`,
+    `last_update` 
+FROM 
+     FROM `sakila`.`film
+WHERE
+    (`length` > 120)
 ```
 
 ### Query with optimised paging
-Show page 3 of old hares sorted by name:
+Show page 3 of PG-13 rated films sorted by name:
 ```java
 private static final long PAGE_SIZE = 50;
 
 // Even complex streams can be optimized!
 long page = 3;
-List<Hare> page = hares.stream()
-    .filter(Hare.AGE.greaterThan(5))
-    .sorted(Hare.NAME.comparator())
-    .skip(PAGE_SIZE * page)
-    .limit(PAGE_SIZE)
+List<Film> stream = films.stream();
+    .filter(Film.RATING.equal("PG-13"));
+    .sorted(Film.LENGTH.comparator())
+    .skip(page * PAGE_SIZE)
+    .limit(PAGE_SIZE);
     .collect(toList());
 ``` 
 
 Results in the following SQL query:
 ```sql
-SELECT id, name, color, age FROM hare 
-    WHERE (age > 5)
-    ORDER BY `name` DESC 
-    LIMIT 50 OFFSET 150;
+SELECT 
+    `film_id`,`title`,`description`,`release_year`,
+    `language_id`,`original_language_id`,`rental_duration`,`rental_rate`,
+    `length`,`replacement_cost`,`rating`,`special_features`,
+    `last_update` 
+FROM 
+    `sakila`.`film` 
+WHERE 
+    (`rating`  = 'PG-13' COLLATE utf8_bin) 
+ORDER BY 
+    `sakila`.`film`.`length` ASC 
+LIMIT 50 OFFSET 150;
 ```
-
 
 ### Join
 Construct a Map with all Hares and their corresponding Carrots
@@ -287,50 +307,6 @@ public class AppConfig {
 So when we need to use a manager in a SpringMVC Controller, we can now simply autowire it:
 ```java
     private @Autowired SalespersonManager salespeople;
-```
-
-### Database Schema
-The following database tables were used for the examples above.
-
-```sql
-CREATE TABLE `hares`.`hare` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `color` varchar(45) NOT NULL,
-  `age` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=100;
-
-CREATE TABLE IF NOT EXISTS `hares`.`carrot` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `owner` int(11) NOT NULL,
-  `rival` int(11),
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=100;
-
-CREATE TABLE IF NOT EXISTS `hares`.`human` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=100;
-
-CREATE TABLE `hares`.`friend` (
-  `hare` int(11) NOT NULL,
-  `human` int(11) NOT NULL,
-  PRIMARY KEY (`hare`, `human`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-ALTER TABLE `hares`.`carrot`
-  ADD CONSTRAINT `carrot_owner_to_hare_id` FOREIGN KEY (`owner`) REFERENCES `hare` (`id`);
-ALTER TABLE `hares`.`carrot`
-  ADD CONSTRAINT `carrot_rival_to_hare_id` FOREIGN KEY (`rival`) REFERENCES `hare` (`id`);
-
-ALTER TABLE `hares`.`friend`
-  ADD CONSTRAINT `friend_hare_to_hare_id` FOREIGN KEY (`hare`) REFERENCES `hare` (`id`);
-ALTER TABLE `hares`.`friend`
-  ADD CONSTRAINT `friend_human_to_human_id` FOREIGN KEY (`human`) REFERENCES `human` (`id`);
-
 ```
 
 
