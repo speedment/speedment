@@ -104,7 +104,7 @@ Examples
 Here are a few examples of how you could use Speedment from your code assuming that you have an exemplary MySQL database called "Sakila" avaiable. Sakila can be downloaded directly form Oracle [here](https://dev.mysql.com/doc/index-other.html) 
 
 
-### Query with optimised Stream predicate short-circuit
+### Query with Optimised Stream Predicate Short-Circuit
 Search for a long film (of length greater than 120 minutes):
 ```java
 // Searches are optimized in the background!
@@ -126,7 +126,7 @@ WHERE
     (`length` > 120)
 ```
 
-### Query with optimised paging
+### Query with Optimised Paging
 Show page 3 of PG-13 rated films sorted by length:
 ```java
 private static final long PAGE_SIZE = 50;
@@ -177,8 +177,8 @@ Rating G     maps to 178 films
 Rating PG    maps to 194 films 
 ```
 
-### Join
-Construct a Map with all films languages and the corresponding films:
+### Joins
+Construct a Map with all film languages and the corresponding films:
 ```java
 Map<Language, List<Film>> languageFilmMap = films.stream()
     .collect(
@@ -188,7 +188,7 @@ Map<Language, List<Film>> languageFilmMap = films.stream()
 ```
 
 ### Many-to-many
-Construct a Map with all Actors and their corresponding Films:
+Construct a Map with all Actors and the corresponding Films they have acted in:
 ```java
 Map<Actor, List<Film>> filmographies = filmActors.stream()
     .collect(
@@ -200,9 +200,9 @@ Map<Actor, List<Film>> filmographies = filmActors.stream()
         )
     );
 ```
-FilmActor is an entity with foreign keys to both the Film and the Actor table.
+Note: FilmActor is an entity with foreign keys to both the Film and the Actor table.
 
-### Entities are linked
+### Entities are Linked
 No need for complicated joins!
 ```java
 // Find any film where english is spoken
@@ -217,7 +217,7 @@ Optional<Language> languageOfFilmWithId42 = films.stream()
     .findAny();
 ```
 
-### Easy initialization
+### Easy Initialization
 The `SakilaApplication`, `SakilaApplicationBuilder` and `FilmManager` classes are generated automatically from the database.
 ```java
 final SakilaApplication app = new SakilaApplicationBuilder()
@@ -230,7 +230,7 @@ final ActorManager     actors     = app.getOrThrow(ActorManager.class);
 final FilmActorManager filmActors = app.getOrThrow(FilmActorManager.class);
 ```
 
-### Easy persistence
+### Easy Persistence
 Entities can easily be persisted in a database.
 ```java
 Film newFilm = new FilmImpl();  // Creates a new empty Film
@@ -335,10 +335,10 @@ Features
 --------
 Here are some of the many features packed into the Speedment framework!
 
-### Database centric
+### Database Centric
 Speedment is using the database as the source-of-truth, both when it comes to the domain model and the actual data itself. Perfect if you are tired of configuring and debuging complex ORMs. After all, your data is more important than programming tools, is it not?
 
-### Code generation
+### Code Generation
 Speedment inspects your database and can automatically generate code that reflects the latest state of your database. Nice if you have changed the data structure (like columns or tables) in your database. Optionally, you can change the way code is generated [using an intuitive UI](https://github.com/speedment/speedment/wiki/Tutorial:-Get-started-with-the-UI) or programatically using your own code.
 
 ### Modular Design
