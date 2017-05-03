@@ -60,11 +60,11 @@
             <version>${speedment.version}</version>
             <type>pom</type>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>com.speedment.plugins</groupId>
             <artifactId>json-stream</artifactId>
             <version>${speedment.version}</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
