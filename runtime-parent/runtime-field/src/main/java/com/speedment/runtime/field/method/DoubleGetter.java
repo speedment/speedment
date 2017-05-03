@@ -17,6 +17,7 @@
 package com.speedment.runtime.field.method;
 
 import com.speedment.common.annotation.GeneratedCode;
+import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 
 /**
@@ -52,4 +53,10 @@ public interface DoubleGetter<ENTITY> extends Getter<ENTITY>, ToDoubleFunction<E
     default Double apply(ENTITY instance) {
         return applyAsDouble(instance);
     }
+    
+    @Override
+    default Function<ENTITY, Double> asFunction() {
+        return this::apply;
+    }
+    
 }

@@ -17,6 +17,7 @@
 package com.speedment.runtime.field.method;
 
 import com.speedment.common.annotation.GeneratedCode;
+import java.util.function.Function;
 import java.util.function.ToLongFunction;
 
 /**
@@ -52,4 +53,10 @@ public interface LongGetter<ENTITY> extends Getter<ENTITY>, ToLongFunction<ENTIT
     default Long apply(ENTITY instance) {
         return applyAsLong(instance);
     }
+    
+    @Override
+    default Function<ENTITY, Long> asFunction() {
+        return this::apply;
+    }    
+    
 }
