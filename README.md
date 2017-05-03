@@ -278,27 +278,6 @@ SakilaApplication app = new SakilaApplicationBuilder()
     .build();
 ```
 
-### Convert to JSON using a standard Plugin
-Using the JSON Stream Plugin, you can easily convert a stream into JSON:
-```java
-// List all hares as a complex JSON object where the ID and AGE
-// is ommitted and a new field 'carrots' list the id's of all
-// carrots associated by a particular hare.
-JsonComponent json = app.getOrThrow(JsonComponent.class);
-String json = films.stream()
-    .collect(json.toJson(
-        json.allOf(films)
-            .remove(Film.ID)
-            .remove(Film.DESCRIPTION)
-            .putStreamer(
-                "language",                                 // Declare a new attribute
-                languages.finderBackwardsBy(Film.LANGUAGE), // How it is calculated
-                json.noneOf(languages)                      // How it is formatted
-                    .put(Language.NAME)
-            )
-    ));
-```
-
 ### Integration with Spring Boot
 It is easy to integrate Speedment with Spring Boot. Here is an example of a Configuration file for Spring:
 ```java
