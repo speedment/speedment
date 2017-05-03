@@ -158,7 +158,7 @@ LIMIT 50 OFFSET 150;
 ```
 
 ### Classification
-Create a Map with film ratings ant the corresponding films
+Create a Map with film ratings ant the corresponding films:
 ```
 Map<String, List<Film>> map = films.stream()
     .collect(
@@ -168,9 +168,17 @@ Map<String, List<Film>> map = films.stream()
         )
     );
 ```
+This will produce a Map like this:
+```
+Rating PG-13 maps to 223 films 
+Rating R     maps to 195 films 
+Rating NC-17 maps to 210 films 
+Rating G     maps to 178 films 
+Rating PG    maps to 194 films 
+```
 
 ### Join
-Construct a Map with all films languages and the corresponding films
+Construct a Map with all films languages and the corresponding films:
 ```java
 Map<Language, List<Film>> languageFilmMap = films.stream()
     .collect(
@@ -180,17 +188,16 @@ Map<Language, List<Film>> languageFilmMap = films.stream()
 ```
 
 ### Many-to-many
-Construct a Map with all Humans and their corresponding Friend Hares
+Construct a Map with all Actors and their corresponding Films:
 ```java
-Map<Human, List<Hare>> humanFriends = friends.stream()
+Map<Actor, List<Film>> filmographies = filmActorRelations.stream()
     .collect(
-        groupingBy(humans.finderBy(Friend.HUMAN), // Applies the Friend to Human classifier
+        groupingBy(actors.finderBy(FilmActor.ACTOR_ID), // Applies the FilmActor to Actor classifier
             mapping(
-                hares.finderBy(Friend.HARE),      // Applies the Friend to Hare finder
-                toList()                          // Use a List collector for downstream aggregation.
-            )
+                films.finderBy(FilmActor.FILM_ID),      // Applies the FilmActor to Film finder
+                toList())                               // Use a List collector for downstream aggregation.
         )
-    );        
+    );
 ```
 
 ### Entities are linked
@@ -210,16 +217,16 @@ Optional<Carrot> carrot = hares.stream()
 ```
 
 ### Easy initialization
-The `HareApplication`, `HareApplicationBuilder` and `HareManager` classes are generated automatically from the database.
+The `SakilaApplication`, `SakilaApplicationBuilder` and `FilmManager` classes are generated automatically from the database.
 ```java
-final HareApplication app = new HareApplicationBuilder()
+final SakilaApplication app = new SakilaApplicationBuilder()
     .withPassword("myPwd729")
     .build();
     
-final HareManager   hares   = app.getOrThrow(HareManager.class);
-final CarrotManager carrots = app.getOrThrow(CarrotManager.class);
-final HumanManager  humans  = app.getOrThrow(HumanManager.class);
-final FriendManager friends = app.getOrThrow(FriendManager.class);
+final FilmManager      films     = app.getOrThrow(FilmManager.class);
+final LanguageManager  languages = app.getOrThrow(CarrotManager.class);
+final ActorManager     actors    = app.getOrThrow(ActorManager.class);
+final FilmActorManager friends   = app.getOrThrow(FilmActorManager.class);
 ```
 
 ### Easy persistence
