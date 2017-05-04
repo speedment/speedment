@@ -18,7 +18,7 @@ package com.speedment.tool.core.internal.controller;
 
 import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.core.exception.SpeedmentToolException;
-import com.speedment.tool.core.resource.SpeedmentIcon;
+import com.speedment.tool.core.resource.Icon;
 import javafx.animation.*;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -59,7 +59,7 @@ public final class NotificationController implements Initializable {
     private static final Duration TIMER = Duration.seconds(10);
     
     private final String message;
-    private final SpeedmentIcon icon;
+    private final Icon icon;
     private final Palette palette;
     private final Runnable onClose;
     private final AtomicBoolean destroyed;
@@ -68,7 +68,7 @@ public final class NotificationController implements Initializable {
     
     private NotificationController(
         final String message, 
-        final SpeedmentIcon icon,
+        final Icon icon,
         final Palette palette, 
         final Runnable onClose
     ) {
@@ -115,7 +115,7 @@ public final class NotificationController implements Initializable {
         seq.play();
     }
 
-    static void showNotification(FlowPane area, String message, SpeedmentIcon icon, Palette palette, Runnable onClose) {
+    static void showNotification(FlowPane area, String message, Icon icon, Palette palette, Runnable onClose) {
 
         final FXMLLoader loader = new FXMLLoader(NotificationController.class.getResource(NOTIFICATION_FXML));
         final AtomicReference<NotificationController> ref = new AtomicReference<>();

@@ -62,7 +62,12 @@ public class NotificationAreaController implements Initializable {
             while (change.next()) {
                 if (change.wasAdded()) {
                     change.getAddedSubList().forEach(n -> {
-                        NotificationController.showNotification(notificationArea, n.text(), n.icon(), n.palette(), n.onClose()
+                        NotificationController.showNotification(
+                            notificationArea,
+                            n.text(),
+                            n.icon(),
+                            n.palette(),
+                            n.onClose()
                         );
                         
                         notifications.remove(n);
@@ -73,7 +78,12 @@ public class NotificationAreaController implements Initializable {
         
         while (!notifications.isEmpty()) {
             final Notification n = notifications.get(0);
-            NotificationController.showNotification(notificationArea, n.text(), n.icon(), n.palette(), n.onClose()
+            NotificationController.showNotification(
+                notificationArea,
+                n.text(),
+                n.icon(),
+                n.palette(),
+                n.onClose()
             );
             notifications.remove(0);
         }
