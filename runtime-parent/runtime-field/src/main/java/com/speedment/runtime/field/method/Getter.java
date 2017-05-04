@@ -40,7 +40,7 @@ public interface Getter<ENTITY> {
      * 
      * @return  this object as a function
      */
-    default Function<ENTITY, Object> asFunction() {
+    default Function<ENTITY, ? extends Object> asFunction() {
         return this::apply;
     }
 }

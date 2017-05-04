@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.runtime</groupId>
         <artifactId>runtime-parent</artifactId>
-        <version>3.0.7-SNAPSHOT</version>
+        <version>3.0.8-SNAPSHOT</version>
     </parent>
     
     <artifactId>runtime-typemapper</artifactId>
@@ -84,6 +84,11 @@
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-config</artifactId>
             <version>${speedment.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
 </project>

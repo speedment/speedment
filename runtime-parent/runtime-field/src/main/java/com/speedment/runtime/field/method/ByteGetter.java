@@ -17,6 +17,7 @@
 package com.speedment.runtime.field.method;
 
 import com.speedment.common.annotation.GeneratedCode;
+import java.util.function.Function;
 
 /**
  * A short-cut functional reference to the {@code getXXX(value)} method for a
@@ -50,4 +51,10 @@ public interface ByteGetter<ENTITY> extends Getter<ENTITY> {
     default Byte apply(ENTITY instance) {
         return applyAsByte(instance);
     }
+
+    @Override
+    default Function<ENTITY,Byte> asFunction() {
+        return this::apply;
+    }    
+    
 }
