@@ -26,7 +26,7 @@ import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.core.notification.Notification;
-import com.speedment.tool.core.resource.SpeedmentIcon;
+import com.speedment.tool.core.resource.Icon;
 import com.speedment.tool.propertyeditor.PropertyEditor;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
@@ -275,7 +275,7 @@ public interface UserInterfaceComponent {
      * @param message  short notification message
      * @param icon     custom icon
      */
-    void showNotification(String message, SpeedmentIcon icon);
+    void showNotification(String message, Icon icon);
 
     /**
      * Shows a small notification in the user interface, executing
@@ -306,7 +306,7 @@ public interface UserInterfaceComponent {
      * @param icon     custom icon
      * @param palette  custom color palette
      */
-    void showNotification(String message, SpeedmentIcon icon, Palette palette);
+    void showNotification(String message, Icon icon, Palette palette);
 
     /**
      * Shows a small notification with a custom icon and color 
@@ -319,7 +319,7 @@ public interface UserInterfaceComponent {
      * @param palette  custom color palette
      * @param action   action to be performed on click
      */
-    void showNotification(String message, SpeedmentIcon icon, Palette palette, Runnable action);
+    void showNotification(String message, Icon icon, Palette palette, Runnable action);
     
     /*************************************************************/
     /*                      Context Menues                       */

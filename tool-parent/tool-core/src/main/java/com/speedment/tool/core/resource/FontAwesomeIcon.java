@@ -2,6 +2,7 @@ package com.speedment.tool.core.resource;
 
 import com.speedment.tool.core.exception.SpeedmentToolException;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.io.InputStream;
 
@@ -11,7 +12,7 @@ import java.io.InputStream;
  * @author Emil Forslund
  * @since  3.0.8
  */
-public enum FontAwesomeIcon {
+public enum FontAwesomeIcon implements Icon {
 
     BAN("ban"),
     CHECK("check"),
@@ -39,7 +40,12 @@ public enum FontAwesomeIcon {
         filename = "/icons/" + icon + ".png";
     }
 
-    public Image load() {
+    @Override
+    public ImageView view() {
+        return new ImageView(load());
+    }
+
+    Image load() {
         return new Image(getFileInputStream());
     }
 

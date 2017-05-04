@@ -19,7 +19,7 @@ package com.speedment.tool.core.internal.controller;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.core.brand.Brand;
 import com.speedment.tool.core.component.UserInterfaceComponent;
-import com.speedment.tool.core.resource.SpeedmentIcon;
+import com.speedment.tool.core.resource.FontAwesomeIcon;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -34,9 +34,7 @@ import java.util.ResourceBundle;
  * @author Emil Forslund
  */
 public final class ToolbarController implements Initializable {
-    
-    public final static String ICON_SIZE = "2em";
-    
+
     private @Inject UserInterfaceComponent ui;
     private @Inject Brand uiBrand;
     
@@ -49,8 +47,8 @@ public final class ToolbarController implements Initializable {
         buttonReload.setOnAction(ev -> ui.reload());
         buttonGenerate.setOnAction(ev -> ui.generate());
         
-        buttonReload.setGraphic(SpeedmentIcon.DISK.view()); // Change to refresh
-        buttonGenerate.setGraphic(SpeedmentIcon.RUN_PROJECT.view());
+        buttonReload.setGraphic(FontAwesomeIcon.REFRESH.view());
+        buttonGenerate.setGraphic(FontAwesomeIcon.PLAY_CIRCLE.view());
 
         uiBrand.logoLarge()
             .map(Image::new)

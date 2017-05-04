@@ -30,6 +30,7 @@ import com.speedment.tool.core.event.UIEvent;
 import com.speedment.tool.core.exception.SpeedmentToolException;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.internal.util.InjectionLoader;
+import com.speedment.tool.core.resource.FontAwesomeIcon;
 import com.speedment.tool.core.resource.SpeedmentIcon;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
@@ -91,8 +92,8 @@ public final class ConnectController implements Initializable {
             container.getChildren().remove(openContainer);
         }
 
-        buttonOpen.setGraphic(SpeedmentIcon.OPEN_PROJECT.view());
-        buttonConnect.setGraphic(SpeedmentIcon.DOOR_IN.view());
+        buttonOpen.setGraphic(FontAwesomeIcon.FOLDER_OPEN.view());
+        buttonConnect.setGraphic(FontAwesomeIcon.SIGN_IN.view());
         
         fieldType.setItems(
             getDbmsTypes()

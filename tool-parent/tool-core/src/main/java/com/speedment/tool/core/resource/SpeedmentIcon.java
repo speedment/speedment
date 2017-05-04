@@ -35,7 +35,7 @@ import javafx.scene.image.ImageView;
  * @author Emil Forslund
  * @since 2.2.0
  */
-public enum SpeedmentIcon {
+public enum SpeedmentIcon implements Icon {
 
     // Big buttons
     BIG_GENERATE("/images/icon-generate.png"),
@@ -135,6 +135,7 @@ public enum SpeedmentIcon {
         return new Image(getFileInputStream(node));
     }
 
+    @Override
     public ImageView view() {
         return new ImageView(load());
     }

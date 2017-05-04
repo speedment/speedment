@@ -46,6 +46,8 @@ import com.speedment.tool.core.internal.notification.NotificationImpl;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.internal.util.InjectionLoader;
 import com.speedment.tool.core.notification.Notification;
+import com.speedment.tool.core.resource.FontAwesomeIcon;
+import com.speedment.tool.core.resource.Icon;
 import com.speedment.tool.core.resource.SpeedmentIcon;
 import com.speedment.tool.core.util.BrandUtil;
 import com.speedment.tool.core.util.OutputUtil;
@@ -97,7 +99,6 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
 
     private static final String GITHUB_URI = "https://github.com/speedment/speedment/";
     private static final String GITTER_URI = "https://gitter.im/speedment/speedment/";
-    public static final String DIALOG_PANE_ICON_SIZE = "2.5em";
     
     private static final Predicate<File> OPEN_DIRECTORY_CONDITIONS = file
         -> file != null
@@ -358,7 +359,9 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
                     runLater(() -> log(OutputUtil.info("Rule verifications completed")));
 
                     if (!configFileHelper.isFileOpen()) {
-                        configFileHelper.setCurrentlyOpenFile(new File(ConfigFileHelper.DEFAULT_CONFIG_LOCATION));
+                        configFileHelper.setCurrentlyOpenFile(
+                            new File(ConfigFileHelper.DEFAULT_CONFIG_LOCATION)
+                        );
                     }
                     configFileHelper.saveCurrentlyOpenConfigFile();
                    
@@ -477,7 +480,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
 
         alert.setHeaderText(title);
         alert.setContentText(message);
-        alert.setGraphic(SpeedmentIcon.EXCLAMATION_MONO.view()); // TODO: Change to warning icon
+        alert.setGraphic(FontAwesomeIcon.EXCLAMATION_TRIANGLE.view());
 
         if (ex == null) {
             alert.setTitle("Error");
@@ -522,7 +525,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         alert.setTitle("Confirmation");
         alert.setHeaderText(title);
         alert.setContentText(message);
-        alert.setGraphic(SpeedmentIcon.EXCLAMATION_MONO.view()); // TODO: Change to warning icon
+        alert.setGraphic(FontAwesomeIcon.EXCLAMATION_TRIANGLE.view());
 
         return alert.showAndWait();
     }
@@ -532,7 +535,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         final Dialog<Pair<String, char[]>> dialog = new Dialog<>();
         dialog.setTitle("Authentication Required");
         dialog.setHeaderText("Enter password for " + dbms.getName());
-        dialog.setGraphic(SpeedmentIcon.LOCK_MONO.view()); // TODO: Change to lock icon
+        dialog.setGraphic(FontAwesomeIcon.LOCK.view());
         final DialogPane pane = dialog.getDialogPane();
         pane.getStyleClass().add("authentication");
 
@@ -586,7 +589,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         final Dialog<Boolean> dialog = new Dialog<>();
         dialog.setTitle("Progress Tracker");
         dialog.setHeaderText(title);
-        dialog.setGraphic(SpeedmentIcon.DATABASE_CONNECT.view()); // TODO: Change to spinner icon
+        dialog.setGraphic(FontAwesomeIcon.SPINNER.view());
 
         final DialogPane pane = dialog.getDialogPane();
         pane.getStyleClass().add("progress");
@@ -594,7 +597,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         final VBox box = new VBox();
         final ProgressBar bar = new ProgressBar();
         final Label message = new Label();
-        final Button cancel = new Button("Cancel", SpeedmentIcon.TIMES_MONO.view()); // TODO: Change to remove icon
+        final Button cancel = new Button("Cancel", FontAwesomeIcon.TIMES.view());
 
         box.getChildren().addAll(bar, message, cancel);
         box.setMaxWidth(Double.MAX_VALUE);
@@ -649,31 +652,31 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
 
     @Override
     public void showNotification(String message) {
-        showNotification(message, SpeedmentIcon.EXCLAMATION_MONO); // TODO: Change to exclamation
+        showNotification(message, FontAwesomeIcon.EXCLAMATION_CIRCLE);
     }
 
     @Override
-    public void showNotification(String message, SpeedmentIcon icon) {
+    public void showNotification(String message, Icon icon) {
         showNotification(message, icon, Palette.INFO);
     }
 
     @Override
     public void showNotification(String message, Runnable action) {
-        showNotification(message, SpeedmentIcon.EXCLAMATION_MONO, Palette.INFO, action); // TODO: Change to exclamation
+        showNotification(message, FontAwesomeIcon.EXCLAMATION_CIRCLE, Palette.INFO, action);
     }
 
     @Override
     public void showNotification(String message, Palette palette) {
-        showNotification(message, SpeedmentIcon.EXCLAMATION_MONO, palette); // TODO: Change to exclamation
+        showNotification(message, FontAwesomeIcon.EXCLAMATION_CIRCLE, palette);
     }
 
     @Override
-    public void showNotification(String message, SpeedmentIcon icon, Palette palette) {
+    public void showNotification(String message, Icon icon, Palette palette) {
         showNotification(message, icon, palette, () -> {});
     }
 
     @Override
-    public void showNotification(String message, SpeedmentIcon icon, Palette palette, Runnable action) {
+    public void showNotification(String message, Icon icon, Palette palette, Runnable action) {
         runLater(() -> 
             notifications.add(new NotificationImpl(message, icon, palette, action))
         );

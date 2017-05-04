@@ -54,8 +54,7 @@ public final class NotificationController implements Initializable {
         ENTER_SPEED = 350, 
         EXIT_SPEED = 350,
         ENTER_Y = 100;
-    
-    private static final String ICON_SIZE = "24";
+
     private static final String NOTIFICATION_FXML = "/fxml/Notification.fxml";
     private static final Duration TIMER = Duration.seconds(10);
     
@@ -194,6 +193,4 @@ public final class NotificationController implements Initializable {
             );
         }
     }
-    
-
 }
