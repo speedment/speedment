@@ -24,23 +24,13 @@ import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.internal.util.Settings;
-import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.core.component.UserInterfaceComponent;
-import static com.speedment.tool.core.component.UserInterfaceComponent.ReuseStage.USE_EXISTING_STAGE;
 import com.speedment.tool.core.event.UIEvent;
 import com.speedment.tool.core.exception.SpeedmentToolException;
-import static com.speedment.tool.core.internal.controller.ToolbarController.ICON_SIZE;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.internal.util.InjectionLoader;
-import de.jensd.fx.glyphs.GlyphsDude;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicReference;
-import static java.util.stream.Collectors.toCollection;
-import java.util.stream.Stream;
-import static javafx.beans.binding.Bindings.createBooleanBinding;
+import com.speedment.tool.core.resource.SpeedmentIcon;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -52,6 +42,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.StringConverter;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Stream;
+
+import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
+import static com.speedment.tool.core.component.UserInterfaceComponent.ReuseStage.USE_EXISTING_STAGE;
+import static java.util.stream.Collectors.toCollection;
+import static javafx.beans.binding.Bindings.createBooleanBinding;
 
 /**
  *
@@ -91,8 +91,8 @@ public final class ConnectController implements Initializable {
             container.getChildren().remove(openContainer);
         }
 
-        buttonOpen.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.FOLDER_OPEN, ICON_SIZE));
-        buttonConnect.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.SIGN_IN, ICON_SIZE));
+        buttonOpen.setGraphic(SpeedmentIcon.OPEN_PROJECT.view());
+        buttonConnect.setGraphic(SpeedmentIcon.DOOR_IN.view());
         
         fieldType.setItems(
             getDbmsTypes()

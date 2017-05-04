@@ -96,7 +96,7 @@ public final class MailPromptController implements Initializable {
                     byte b = (byte) result;
                     buf.write(b);
                     result = bis.read();
-                }        
+                }
                 return buf.toString();
             }
         }

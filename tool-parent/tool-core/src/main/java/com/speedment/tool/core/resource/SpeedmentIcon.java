@@ -65,7 +65,7 @@ public enum SpeedmentIcon {
     // Menu icons
     ADD_DBMS_TRANS("/pics/dialog/add_dbms_trans.png"),
     OPEN_FILE("/pics/dialog/openFile.png"),
-    QUESTION("/pics/dialog/question.png"),
+    //QUESTION("/pics/dialog/question.png"),   // Doesn't exist
     SPEEDMENT_LOGO("/pics/dialog/speedment_logo.png"),
     SPEEDMENT_LOGO_100("/pics/dialog/speedment_logo100.png"),
     WALKING_MAN("/pics/dialog/walking_man.gif"),
@@ -96,12 +96,23 @@ public enum SpeedmentIcon {
     INFORMATION("/pics/vectors_rendered/info.png"),
     HELP("/pics/vectors_rendered/help.png"),
     SCRIPT_ADD("/pics/vectors_rendered/scriptAdd.png"),
-    SCRIPT_DELETE("/pics/vectors_rendered/scriptDelete.png");
+    SCRIPT_DELETE("/pics/vectors_rendered/scriptDelete.png"),
+
+    DATABASE_MONO("/pics/vectors_rendered/mono-database.png"),
+    DISK_MONO("/pics/vectors_rendered/mono-disk2.png"),
+    EXCLAMATION_MONO("/pics/vectors_rendered/mono-exclamation.png"),
+    REFRESH_MONO("/pics/vectors_rendered/mono-fa-refresh.png"),
+    FOLDER_OPEN_MONO("/pics/vectors_rendered/mono-folder-open.png"),
+    LOCK_MONO("/pics/vectors_rendered/mono-lock.png"),
+    PLAY_CIRCLE_MONO("/pics/vectors_rendered/mono-play-circle.png"),
+    SIGN_IN_MONO("/pics/vectors_rendered/mono-sign-in.png"),
+    SPINNER_MONO("/pics/vectors_rendered/mono-spinner.png"),
+    TIMES_MONO("/pics/vectors_rendered/mono-times.png");
 
     private final String filename;
 
     private static final Logger LOGGER = LoggerManager.getLogger(SpeedmentIcon.class);
-    private static final Map<Class<? extends Document>, SpeedmentIcon> NODE_ICONS = new ConcurrentHashMap<>();
+    private static final Map<Class<?>, SpeedmentIcon> NODE_ICONS = new ConcurrentHashMap<>();
 
     static {
         NODE_ICONS.put(Dbms.class, DBMS);
@@ -154,10 +165,10 @@ public enum SpeedmentIcon {
 
         final SpeedmentIcon icon = NODE_ICONS.get(
             Optional.of(node)
-            .filter(HasMainInterface.class::isInstance)
-            .map(HasMainInterface.class::cast)
-            .map(HasMainInterface::mainInterface)
-            .orElse(node.getClass())
+                .filter(HasMainInterface.class::isInstance)
+                .map(HasMainInterface.class::cast)
+                .map(HasMainInterface::mainInterface)
+                .orElse(node.getClass())
         );
 
         if (icon != null) {

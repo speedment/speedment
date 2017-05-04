@@ -17,6 +17,7 @@
 package com.speedment.tool.core;
 
 import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.InjectorBuilder;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.translator.internal.component.CodeGenerationComponentImpl;
@@ -27,10 +28,12 @@ import com.speedment.runtime.core.internal.util.InternalEmailUtil;
 import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.core.internal.component.UserInterfaceComponentImpl;
 import com.speedment.tool.core.internal.util.InjectionLoader;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import static java.util.Objects.requireNonNull;
+import com.speedment.tool.core.resource.SpeedmentIcon;
 import javafx.application.Application;
 import javafx.stage.Stage;
+
+import static com.speedment.common.logger.Level.DEBUG;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -48,10 +51,15 @@ public final class MainApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         requireNonNull(stage);
+
+        InjectorBuilder.logger().setLevel(DEBUG);
         
         if (INJECTOR == null) {
             LOGGER.warn("Creating new Speedment instance for UI session.");
-            INJECTOR = new DefaultApplicationBuilder(DefaultApplicationMetadata.class)
+            INJECTOR = new DefaultApplicationBuilder(
+                    getClass().getClassLoader(),
+                    DefaultApplicationMetadata.class
+                )
                 .withComponent(CodeGenerationComponentImpl.class)
                 .withComponent(UserInterfaceComponentImpl.class)
                 .build().getOrThrow(Injector.class);
@@ -73,7 +81,7 @@ public final class MainApp extends Application {
             loader.loadAndShow("Scene");
             ui.showNotification(
                 "Metadata has been loaded from an offline file. Click here to reload from database.",
-                FontAwesomeIcon.REFRESH,
+                SpeedmentIcon.REFRESH_MONO,
                 Palette.INFO,
                 ui::reload
             );
