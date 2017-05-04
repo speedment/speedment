@@ -157,42 +157,11 @@
             <artifactId>tool-propertyeditor</artifactId>
             <version>${speedment.version}</version>
         </dependency>
-        	        
-        <!-- LICENSE INFORMATION
-        FontawesomeFX:8.9
-        Apache 2 License
-        http://www.apache.org/licenses/LICENSE-2.0.txt
-        2016-04-05
-        permin
-        -->
-        <dependency>
-            <groupId>de.jensd</groupId>
-            <artifactId>fontawesomefx</artifactId>
-            <version>8.9</version>
-        </dependency>
         
         <!-- Test dependencies -->	
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>codegen</artifactId>
-            <scope>test</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>tuple</artifactId>
-            <scope>test</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.generator</groupId>
-            <artifactId>generator-standard</artifactId>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>
