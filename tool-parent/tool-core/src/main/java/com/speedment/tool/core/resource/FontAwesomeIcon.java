@@ -14,6 +14,7 @@ import java.io.InputStream;
 public enum FontAwesomeIcon {
 
     BAN("ban"),
+    CHECK("check"),
     CLOCK("clock-o"),
     DATABASE("database"),
     DOWNLOAD("download"),
@@ -22,11 +23,13 @@ public enum FontAwesomeIcon {
     FOLDER_OPEN("folder-open"),
     LOCK("lock"),
     PLAY_CIRCLE("play-circle"),
+    PLUS("plus"),
     QUESTION_CIRCLE("question-circle"),
     REFRESH("refresh"),
     SIGN_IN("sign-in"),
     SPINNER("spinner"),
     STAR("star"),
+    TIMES("times"),
     TRASH("trash"),
     WRENCH("wrench");
 
