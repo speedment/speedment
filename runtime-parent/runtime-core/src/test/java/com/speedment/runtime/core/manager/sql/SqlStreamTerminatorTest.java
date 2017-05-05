@@ -68,7 +68,7 @@ public class SqlStreamTerminatorTest {
     public void testCountSizePreservingFilter() {
         final Action<Stream<MockEntity>, Stream<Integer>> mapAction = new MapAction<>(MockEntity::getId);
         assertEquals(SQL_COUNT_RESULT, countStreamOf(mapAction));
-        assertEquals(makeCountSql(SELECT_SQL), lastCountingSql);
+        assertEquals(SELECT_COUNT_SQL, lastCountingSql);
     }
 
     @Test
