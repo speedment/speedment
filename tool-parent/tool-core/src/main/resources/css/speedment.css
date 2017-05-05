@@ -461,12 +461,12 @@
 }
 
 .notification.success {
-    -fx-border-color: -fx-speedment-lightgreen;
+    -fx-border-color: -fx-speedment-green;
 }
 
 .notification.success .glyph-icon {
-    -fx-fill: -fx-speedment-lightgreen;
-    -fx-text-fill: -fx-speedment-lightgreen;
+    -fx-fill: -fx-speedment-green;
+    -fx-text-fill: -fx-speedment-green;
 }
 
 .notification.warning {
