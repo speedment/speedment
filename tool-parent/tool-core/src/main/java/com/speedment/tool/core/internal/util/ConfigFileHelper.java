@@ -36,10 +36,8 @@ import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.internal.DefaultApplicationBuilder;
-import static com.speedment.runtime.core.internal.DefaultApplicationMetadata.METADATA_LOCATION;
 import com.speedment.runtime.core.internal.util.ProgressMeasurerImpl;
 import com.speedment.runtime.core.internal.util.Settings;
-import static com.speedment.runtime.core.internal.util.TextUtil.alignRight;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.ProjectProperty;
@@ -49,10 +47,12 @@ import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.component.UserInterfaceComponent.ReuseStage;
 import com.speedment.tool.core.exception.SpeedmentToolException;
+import com.speedment.tool.core.resource.FontAwesome;
+import com.speedment.tool.core.resource.SpeedmentIcon;
 import com.speedment.tool.core.util.OutputUtil;
-import static com.speedment.tool.core.util.OutputUtil.error;
-import static com.speedment.tool.core.util.OutputUtil.success;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -65,10 +65,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
+
+import static com.speedment.runtime.core.internal.DefaultApplicationMetadata.METADATA_LOCATION;
+import static com.speedment.runtime.core.internal.util.TextUtil.alignRight;
+import static com.speedment.tool.core.util.OutputUtil.error;
+import static com.speedment.tool.core.util.OutputUtil.success;
 import static java.util.stream.Collectors.toSet;
 import static javafx.application.Platform.runLater;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 /**
  *
@@ -232,7 +235,7 @@ public final class ConfigFileHelper {
             if (status) {
                 userInterfaceComponent.showNotification(
                     "Database metadata has been loaded.",
-                    FontAwesomeIcon.DATABASE,
+                    FontAwesome.DATABASE,
                     Palette.INFO
                 );
             }
@@ -370,7 +373,7 @@ public final class ConfigFileHelper {
 
             if (isGraphical) {
                 userInterfaceComponent.log(success("Saved project file to '" + absolute + "'."));
-                userInterfaceComponent.showNotification("Configuration saved.", FontAwesomeIcon.SAVE, Palette.INFO);
+                userInterfaceComponent.showNotification("Configuration saved.", FontAwesome.DOWNLOAD, Palette.INFO);
             }
 
             currentlyOpenFile = file;
@@ -401,7 +404,7 @@ public final class ConfigFileHelper {
                 userInterfaceComponent.showNotification(
                     "Generation completed! " + translatorManager.getFilesCreated()
                     + " files created.",
-                    FontAwesomeIcon.STAR,
+                    FontAwesome.STAR,
                     Palette.SUCCESS
                 );
             });

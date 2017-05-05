@@ -61,19 +61,19 @@ public class JoinManyToMany {
     private void manyToMany() {
         ExampleUtil.log("manyToMany");
 
-        Map<Actor, List<Film>> filmography = filmActors.stream()
+        Map<Actor, List<Film>> filmographies = filmActors.stream()
             .collect(
                 groupingBy(actors.finderBy(FilmActor.ACTOR_ID), // Applies the FilmActor to ACTOR classifier
                     mapping(
                         films.finderBy(FilmActor.FILM_ID), // Applies the FilmActor to Film finder
-                        toList() // Use a List collector for downstream aggregation.
+                        toList()                           // Use a List collector for downstream aggregation.
                     )
                 )
             );
 
         
         
-        filmography.forEach((a, fl) -> {
+        filmographies.forEach((a, fl) -> {
             System.out.format("%s -> %s %n",
                 a.getFirstName() + " " + a.getLastName(),
                 fl.stream().map(Film::getTitle).sorted().collect(toList())

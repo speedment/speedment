@@ -44,6 +44,7 @@ public final class OptimizedIntCountTerminator<ENTITY> implements IntCountTermin
         requireNonNull(pipeline);
         return countHelper(
             info,
+            sqlStreamTerminator,
             pipeline,
             () -> IntCountTerminator.<ENTITY>defaultTerminator().apply(info, sqlStreamTerminator, pipeline)
         );

@@ -18,7 +18,7 @@ package com.speedment.tool.core.internal.notification;
 
 import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.core.notification.Notification;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import com.speedment.tool.core.resource.Icon;
 
 import static java.util.Objects.requireNonNull;
 
@@ -30,11 +30,11 @@ import static java.util.Objects.requireNonNull;
 public final class NotificationImpl implements Notification {
 
     private final String message;
-    private final FontAwesomeIcon icon;
+    private final Icon icon;
     private final Palette palette;
     private final Runnable onClose;
 
-    public NotificationImpl(String message, FontAwesomeIcon icon, Palette palette, Runnable onClose) {
+    public NotificationImpl(String message, Icon icon, Palette palette, Runnable onClose) {
         this.message = requireNonNull(message);
         this.icon    = requireNonNull(icon);
         this.palette = requireNonNull(palette);
@@ -47,7 +47,7 @@ public final class NotificationImpl implements Notification {
     }
 
     @Override
-    public FontAwesomeIcon icon() {
+    public Icon icon() {
         return icon;
     }
 

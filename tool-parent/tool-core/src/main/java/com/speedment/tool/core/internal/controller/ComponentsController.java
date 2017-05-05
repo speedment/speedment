@@ -105,7 +105,7 @@ public final class ComponentsController implements Initializable {
         }
     }
 
-    private static Optional<Class<?>> injectorKeyValue(Class<?> clazz) {
+    private static Optional<? extends Class<?>> injectorKeyValue(Class<?> clazz) {
         return traverseAncestors(clazz)
             .map(c -> c.getAnnotation(InjectKey.class))
             .filter(Objects::nonNull)
@@ -225,32 +225,6 @@ public final class ComponentsController implements Initializable {
             }
         }
 
-//        // Show Third Party Software
-//        final DependenciesItem dependencies = new DependenciesItem();
-//        comp.asSoftware().getDependencies()
-//            .sorted(Software.COMPARATOR)
-//            .map(this::createSoftwareItem)
-//            .forEachOrdered(dependencies.getChildren()::add);
-//        if (!dependencies.getChildren().isEmpty()) {
-//            item.getChildren().add(dependencies);
-//        }
         return item;
     }
-
-//    private SoftwareItem createSoftwareItem(Software software) {
-//        final SoftwareItem item = new SoftwareItem(software);
-//        item.getChildren().add(new LicenseItem(software.getLicense()));
-//
-//        final DependenciesItem dependencies = new DependenciesItem();
-//        software.getDependencies()
-//            .sorted(Software.COMPARATOR)
-//            .map(this::createSoftwareItem)
-//            .forEachOrdered(dependencies.getChildren()::add);
-//
-//        if (!dependencies.getChildren().isEmpty()) {
-//            item.getChildren().add(dependencies);
-//        }
-//
-//        return item;
-//    }
 }

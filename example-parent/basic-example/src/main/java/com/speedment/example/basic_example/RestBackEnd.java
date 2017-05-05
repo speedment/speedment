@@ -45,7 +45,7 @@ public class RestBackEnd {
     private void run() {
         serveFilms("PG-13", 0).forEach(System.out::println);
         serveFilms("PG-13", 1).forEach(System.out::println);
-    serveFilms("PG-13", 3).forEach(System.out::println);
+        serveFilms("PG-13", 3).forEach(System.out::println);
     }
 
     private static final int PAGE_SIZE = 50;

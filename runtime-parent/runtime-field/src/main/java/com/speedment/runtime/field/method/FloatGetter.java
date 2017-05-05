@@ -17,6 +17,7 @@
 package com.speedment.runtime.field.method;
 
 import com.speedment.common.annotation.GeneratedCode;
+import java.util.function.Function;
 
 /**
  * A short-cut functional reference to the {@code getXXX(value)} method for a
@@ -50,4 +51,10 @@ public interface FloatGetter<ENTITY> extends Getter<ENTITY> {
     default Float apply(ENTITY instance) {
         return applyAsFloat(instance);
     }
+    
+    @Override
+    default Function<ENTITY, Float> asFunction() {
+        return this::apply;
+    }
+    
 }

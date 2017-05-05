@@ -35,16 +35,55 @@ import java.util.function.Function;
  */
 public interface SqlStreamOptimizerInfo<ENTITY> {
 
+    /**
+     * Returns the DbmsType.
+     *
+     * @return the DbmsType
+     */
     DbmsType getDbmsType();
 
+    /**
+     * Returns the SQL select statement.
+     * <p>
+     * The initial value is "SELECT " + sqlColumnList + " FROM " +
+     * sqlTableReference;
+     *
+     * @return the SQL select statement
+     */
     String getSqlSelect();
 
+    /**
+     * Returns the SQL select count statement.
+     * <p>
+     * "SELECT COUNT(*) FROM " + sqlTableReference;
+     *
+     * @return the SQL select count statement
+     */
     String getSqlSelectCount();
 
+    /**
+     * Returns a BiFunction that will read in the count long value from the
+     * database.
+     * <p>
+     * E.g. getCounter.apply("select count(*) from user", emptyList()))
+     *
+     * @return a BiFunction that will read in the count long value from the
+     * database
+     */
     BiFunction<String, List<Object>, Long> getCounter();
 
+    /**
+     * Returns a Function that will map a Field to a column name.
+     *
+     * @return a Function that will map a Field to a column name
+     */
     Function<Field<ENTITY>, String> getSqlColumnNamer();
 
+    /**
+     * Returns a Function that will map a Field to a column class type.
+     *
+     * @return a Function that will map a Field to a column class type
+     */
     Function<Field<ENTITY>, Class<?>> getSqlDatabaseTypeFunction();
 
     static <ENTITY> SqlStreamOptimizerInfo<ENTITY> of(

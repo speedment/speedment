@@ -40,4 +40,11 @@ import java.util.function.Function;
 
 @FunctionalInterface
 public interface ReferenceGetter<ENTITY, V> 
-extends Getter<ENTITY>, Function<ENTITY, V> {}
+extends Getter<ENTITY>, Function<ENTITY, V> {
+    
+    @Override
+    default Function<ENTITY, V> asFunction() {
+        return this;
+    }    
+
+}

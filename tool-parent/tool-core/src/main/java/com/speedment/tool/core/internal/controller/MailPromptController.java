@@ -22,6 +22,7 @@ import com.speedment.runtime.core.internal.util.InternalEmailUtil;
 import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.event.UIEvent;
 import com.speedment.tool.core.internal.util.InjectionLoader;
+import com.speedment.tool.core.resource.FontAwesome;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -43,9 +44,7 @@ import java.util.regex.Pattern;
  * @author Emil Forslund
  */
 public final class MailPromptController implements Initializable {
-    
-    public final static String MAIL_FIELD = "user_mail";
-    
+
     private final static Pattern INVALID_MAIL = 
         Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$");
     
@@ -62,7 +61,8 @@ public final class MailPromptController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        
+
+        okey.setGraphic(FontAwesome.CHECK.view());
         okey.disableProperty().bind(Bindings.createBooleanBinding(
             () -> IS_INVALID_MAIL.test(email.getText()), 
             email.textProperty()
@@ -96,7 +96,7 @@ public final class MailPromptController implements Initializable {
                     byte b = (byte) result;
                     buf.write(b);
                     result = bis.read();
-                }        
+                }
                 return buf.toString();
             }
         }

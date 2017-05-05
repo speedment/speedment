@@ -19,7 +19,6 @@ package com.speedment.tool.core.internal.component;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.common.mapstream.MapStream;
@@ -47,29 +46,14 @@ import com.speedment.tool.core.internal.notification.NotificationImpl;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.internal.util.InjectionLoader;
 import com.speedment.tool.core.notification.Notification;
+import com.speedment.tool.core.resource.FontAwesome;
+import com.speedment.tool.core.resource.Icon;
 import com.speedment.tool.core.util.BrandUtil;
 import com.speedment.tool.core.util.OutputUtil;
 import com.speedment.tool.propertyeditor.PropertyEditor;
 import com.speedment.tool.propertyeditor.internal.component.PropertyEditorComponentImpl;
-import de.jensd.fx.glyphs.GlyphsDude;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.List;
-import java.util.Map;
-import static java.util.Objects.requireNonNull;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Predicate;
-import static java.util.stream.Collectors.toList;
 import javafx.application.Application;
 import javafx.application.Platform;
-import static javafx.application.Platform.runLater;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -87,6 +71,23 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Predicate;
+
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
+import static javafx.application.Platform.runLater;
+
 /**
  *
  * @author Emil Forslund
@@ -97,7 +98,6 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
 
     private static final String GITHUB_URI = "https://github.com/speedment/speedment/";
     private static final String GITTER_URI = "https://gitter.im/speedment/speedment/";
-    public static final String DIALOG_PANE_ICON_SIZE = "2.5em";
     
     private static final Predicate<File> OPEN_DIRECTORY_CONDITIONS = file
         -> file != null
@@ -358,7 +358,9 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
                     runLater(() -> log(OutputUtil.info("Rule verifications completed")));
 
                     if (!configFileHelper.isFileOpen()) {
-                        configFileHelper.setCurrentlyOpenFile(new File(ConfigFileHelper.DEFAULT_CONFIG_LOCATION));
+                        configFileHelper.setCurrentlyOpenFile(
+                            new File(ConfigFileHelper.DEFAULT_CONFIG_LOCATION)
+                        );
                     }
                     configFileHelper.saveCurrentlyOpenConfigFile();
                    
@@ -477,7 +479,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
 
         alert.setHeaderText(title);
         alert.setContentText(message);
-        alert.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.WARNING, DIALOG_PANE_ICON_SIZE));
+        alert.setGraphic(FontAwesome.EXCLAMATION_TRIANGLE.view());
 
         if (ex == null) {
             alert.setTitle("Error");
@@ -522,7 +524,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         alert.setTitle("Confirmation");
         alert.setHeaderText(title);
         alert.setContentText(message);
-        alert.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.WARNING, DIALOG_PANE_ICON_SIZE));
+        alert.setGraphic(FontAwesome.EXCLAMATION_TRIANGLE.view());
 
         return alert.showAndWait();
     }
@@ -532,7 +534,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         final Dialog<Pair<String, char[]>> dialog = new Dialog<>();
         dialog.setTitle("Authentication Required");
         dialog.setHeaderText("Enter password for " + dbms.getName());
-        dialog.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.LOCK, DIALOG_PANE_ICON_SIZE));
+        dialog.setGraphic(FontAwesome.LOCK.view());
         final DialogPane pane = dialog.getDialogPane();
         pane.getStyleClass().add("authentication");
 
@@ -586,7 +588,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         final Dialog<Boolean> dialog = new Dialog<>();
         dialog.setTitle("Progress Tracker");
         dialog.setHeaderText(title);
-        dialog.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.SPINNER, DIALOG_PANE_ICON_SIZE));
+        dialog.setGraphic(FontAwesome.SPINNER.view());
 
         final DialogPane pane = dialog.getDialogPane();
         pane.getStyleClass().add("progress");
@@ -594,7 +596,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         final VBox box = new VBox();
         final ProgressBar bar = new ProgressBar();
         final Label message = new Label();
-        final Button cancel = new Button("Cancel", new FontAwesomeIconView(FontAwesomeIcon.REMOVE));
+        final Button cancel = new Button("Cancel", FontAwesome.TIMES.view());
 
         box.getChildren().addAll(bar, message, cancel);
         box.setMaxWidth(Double.MAX_VALUE);
@@ -649,31 +651,31 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
 
     @Override
     public void showNotification(String message) {
-        showNotification(message, FontAwesomeIcon.EXCLAMATION);
+        showNotification(message, FontAwesome.EXCLAMATION_CIRCLE);
     }
 
     @Override
-    public void showNotification(String message, FontAwesomeIcon icon) {
+    public void showNotification(String message, Icon icon) {
         showNotification(message, icon, Palette.INFO);
     }
 
     @Override
     public void showNotification(String message, Runnable action) {
-        showNotification(message, FontAwesomeIcon.EXCLAMATION, Palette.INFO, action);
+        showNotification(message, FontAwesome.EXCLAMATION_CIRCLE, Palette.INFO, action);
     }
 
     @Override
     public void showNotification(String message, Palette palette) {
-        showNotification(message, FontAwesomeIcon.EXCLAMATION, palette);
+        showNotification(message, FontAwesome.EXCLAMATION_CIRCLE, palette);
     }
 
     @Override
-    public void showNotification(String message, FontAwesomeIcon icon, Palette palette) {
+    public void showNotification(String message, Icon icon, Palette palette) {
         showNotification(message, icon, palette, () -> {});
     }
 
     @Override
-    public void showNotification(String message, FontAwesomeIcon icon, Palette palette, Runnable action) {
+    public void showNotification(String message, Icon icon, Palette palette, Runnable action) {
         runLater(() -> 
             notifications.add(new NotificationImpl(message, icon, palette, action))
         );
