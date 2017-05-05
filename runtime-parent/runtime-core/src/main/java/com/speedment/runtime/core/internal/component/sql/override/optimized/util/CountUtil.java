@@ -17,10 +17,12 @@
 package com.speedment.runtime.core.internal.component.sql.override.optimized.util;
 
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
+import com.speedment.runtime.core.db.AsynchronousQueryResult;
+import com.speedment.runtime.core.db.DbmsType.SubSelectAlias;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
+import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
-import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
 import static com.speedment.runtime.core.stream.action.Property.SIZE;
@@ -50,6 +52,7 @@ public final class CountUtil {
      *
      * @param <ENTITY> the entity type
      * @param info about the stream optimizer
+     * @param sqlStreamTerminator that called us
      * @param pipeline the pipeline
      * @param fallbackSupplier a fallback supplier should every item be size
      * retaining
@@ -57,19 +60,30 @@ public final class CountUtil {
      */
     public static <ENTITY> long countHelper(
         final SqlStreamOptimizerInfo<ENTITY> info,
+        final SqlStreamTerminator<ENTITY> sqlStreamTerminator,
         final Pipeline pipeline,
         final LongSupplier fallbackSupplier
     ) {
         requireNonNull(info);
+        requireNonNull(sqlStreamTerminator);
         requireNonNull(pipeline);
         requireNonNull(fallbackSupplier);
 
-        if (allActionsAreOptimizableFilters(pipeline)) {
-            // select count(*) from 'table' where ...
-            final List<FieldPredicate<ENTITY>> andPredicateBuilders = StreamTerminatorUtil.topLevelAndPredicates(pipeline);
+        final Pipeline optimizedPipeline = sqlStreamTerminator.optimize(pipeline);
 
-            final SqlInfo sqlInfo = sqlInfo(info, andPredicateBuilders);
-            return info.getCounter().apply(sqlInfo.sql, sqlInfo.values);
+        if (optimizedPipeline.stream().allMatch(PRESERVE_SIZE)) {
+            final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = sqlStreamTerminator.getAsynchronousQueryResult();
+            final StringBuilder sql = new StringBuilder()
+                .append("SELECT COUNT(*) FROM (")
+                .append(asynchronousQueryResult.getSql())
+                .append(")");
+
+            if (info.getDbmsType().getSubSelectAlias() == SubSelectAlias.REQUIRED) {
+                sql.append(" AS A");
+            }
+            @SuppressWarnings("unchecked")
+            final List<Object> values = (List<Object>) asynchronousQueryResult.getValues();
+            return info.getCounter().apply(sql.toString(), values);
         } else {
             // Iterate over all materialized ENTITIES....
             return fallbackSupplier.getAsLong();
