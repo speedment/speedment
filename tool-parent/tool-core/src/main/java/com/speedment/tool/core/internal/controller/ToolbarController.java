@@ -19,8 +19,7 @@ package com.speedment.tool.core.internal.controller;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.core.brand.Brand;
 import com.speedment.tool.core.component.UserInterfaceComponent;
-import de.jensd.fx.glyphs.GlyphsDude;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import com.speedment.tool.core.resource.FontAwesome;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -35,9 +34,7 @@ import java.util.ResourceBundle;
  * @author Emil Forslund
  */
 public final class ToolbarController implements Initializable {
-    
-    public final static String ICON_SIZE = "2em";
-    
+
     private @Inject UserInterfaceComponent ui;
     private @Inject Brand uiBrand;
     
@@ -50,8 +47,8 @@ public final class ToolbarController implements Initializable {
         buttonReload.setOnAction(ev -> ui.reload());
         buttonGenerate.setOnAction(ev -> ui.generate());
         
-        buttonReload.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.REFRESH, ICON_SIZE));
-        buttonGenerate.setGraphic(GlyphsDude.createIcon(FontAwesomeIcon.PLAY_CIRCLE, ICON_SIZE));
+        buttonReload.setGraphic(FontAwesome.REFRESH.view());
+        buttonGenerate.setGraphic(FontAwesome.PLAY_CIRCLE.view());
 
         uiBrand.logoLarge()
             .map(Image::new)

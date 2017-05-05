@@ -44,7 +44,7 @@ public class IssueComponentImpl implements IssueComponent {
     
     @Override
     public void clear(){
-        Platform.runLater( () -> issues.clear() );
+        Platform.runLater(issues::clear);
     }
 
     @Override

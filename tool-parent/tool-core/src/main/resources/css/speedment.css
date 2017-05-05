@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,6 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+
+/*** Load Custom Fonts ***/
+@font-face { src: url("../fonts/AdventPro-Bold.ttf"); }
+
+@font-face { src: url("../fonts/fontawesome-webfont.ttf"); }
+
+@font-face { src: url("../fonts/Montserrat-Bold.otf"); }
+@font-face { src: url("../fonts/Montserrat-Regular.otf"); }
+
+@font-face { src: url("../fonts/NotoSans-Bold.ttf"); }
+@font-face { src: url("../fonts/NotoSans-Regular.ttf"); }
+@font-face { src: url("../fonts/NotoSans-Italic.ttf"); }
+@font-face { src: url("../fonts/NotoSans-BoldItalic.ttf"); }
+
+@font-face { src: url("../fonts/SourceSansPro-Bold.ttf"); }
+@font-face { src: url("../fonts/SourceSansPro-Regular.ttf"); }
 
 /*** Constants ***/
 * {
@@ -156,8 +172,10 @@
     -fx-background-color: -fx-speedment-darkgray;
 }
 
-.button > .glyph-icon {
+.button .glyph-icon {
     -fx-fill: white;
+    -fx-text-fill: white;
+    -fx-font-size: 1.5em;
 }
 
 /*** Choice Box ***/
@@ -372,7 +390,9 @@
     -fx-fill: white;
 }
 
-.header-panel > .graphic-container > .glyph-icon {
+.header-panel > .graphic-container .glyph-icon {
+    -fx-font-size: 2em;
+    -fx-text-fill: white;
     -fx-fill: white;
 }
 
@@ -422,27 +442,68 @@
 /*** Notifications ***/
 .notification {
     -fx-border-width: 0px 0px 0px 8px;
-    -fx-background-color: #eee; 
+    -fx-background-color: #eee;
     -fx-padding: 16;
 }
 
-.notification.info { -fx-border-color: -fx-speedment-lightblue; }
-.notification.info .glyph-icon { -fx-fill: -fx-speedment-lightblue; } 
+.notification .glyph-icon {
+    -fx-font-size: 2.0em;
+    -fx-padding: 0em 0.8em 0em 0em;
+}
 
-.notification.success { -fx-border-color: -fx-speedment-lightgreen; }
-.notification.success .glyph-icon { -fx-fill: -fx-speedment-lightgreen; } 
+.notification.info {
+    -fx-border-color: -fx-speedment-lightblue;
+}
 
-.notification.warning { -fx-border-color: -fx-speedment-lightorange; }
-.notification.warning .glyph-icon { -fx-fill: -fx-speedment-lightorange; }
+.notification.info .glyph-icon {
+    -fx-fill: -fx-speedment-lightblue;
+    -fx-text-fill: -fx-speedment-lightblue;
+}
 
-.notification.error { -fx-border-color: -fx-speedment-lightred; }
-.notification.error .glyph-icon { -fx-fill: -fx-speedment-lightred; }
+.notification.success {
+    -fx-border-color: -fx-speedment-lightgreen;
+}
 
-.notification.confirmation { -fx-border-color: -fx-speedment-lightorange; }
-.notification.confirmation .glyph-icon { -fx-fill: -fx-speedment-lightorange; }
+.notification.success .glyph-icon {
+    -fx-fill: -fx-speedment-lightgreen;
+    -fx-text-fill: -fx-speedment-lightgreen;
+}
 
-.notification.authentication { -fx-border-color: -fx-speedment-lightgray; }
-.notification.authentication .glyph-icon { -fx-fill: -fx-speedment-lightgray; }
+.notification.warning {
+    -fx-border-color: -fx-speedment-lightorange;
+}
+
+.notification.warning .glyph-icon {
+    -fx-fill: -fx-speedment-lightorange;
+    -fx-text-fill: -fx-speedment-lightorange;
+}
+
+.notification.error {
+    -fx-border-color: -fx-speedment-lightred;
+}
+
+.notification.error .glyph-icon {
+    -fx-fill: -fx-speedment-lightred;
+    -fx-text-fill: -fx-speedment-lightred;
+}
+
+.notification.confirmation {
+    -fx-border-color: -fx-speedment-lightorange;
+}
+
+.notification.confirmation .glyph-icon {
+    -fx-fill: -fx-speedment-lightorange;
+    -fx-text-fill: -fx-speedment-lightorange;
+}
+
+.notification.authentication {
+    -fx-border-color: -fx-speedment-lightgray;
+}
+
+.notification.authentication .glyph-icon {
+    -fx-fill: -fx-speedment-lightgray;
+    -fx-text-fill: -fx-speedment-lightgray;
+}
 
 /*** Properties layout ***/
 .properties-layout {
@@ -461,12 +522,17 @@
 /*** Properties layout : right ***/
 .property-editor {
     -fx-spacing: 10px;
-    -fx-fill-width: true;    
+    -fx-fill-width: true;
     -fx-alignment: center-left;
-    -fx-wrap-text: true;  
+    -fx-wrap-text: true;
 }
 
 /*** Issues ***/
 #issues .button {
     -fx-padding: 6px 8px 6px 8px;
+}
+
+/*** FontAwesome Icons ***/
+.glyph-icon {
+    -fx-font-family: 'FontAwesome';
 }

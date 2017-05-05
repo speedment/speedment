@@ -38,12 +38,12 @@ public final class SpeedmentBrand implements Brand {
 
     @Override
     public final Optional<String> logoSmall() {
-        return Optional.ofNullable("/images/logo.png");
+        return Optional.of("/images/logo.png");
     }
 
     @Override
     public final Optional<String> logoLarge() {
-        return Optional.ofNullable("/images/speedment_open_source_small.png");
+        return Optional.of("/images/speedment_open_source_small.png");
     }
 
     @Override
