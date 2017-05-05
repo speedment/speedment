@@ -15,6 +15,22 @@
  * the License.
  */
 
+/*** Load Custom Fonts ***/
+@font-face { src: url("../fonts/AdventPro-Bold.ttf"); }
+
+@font-face { src: url("../fonts/fontawesome-webfont.ttf"); }
+
+@font-face { src: url("../fonts/Montserrat-Bold.ttf"); }
+@font-face { src: url("../fonts/Montserrat-Regular.ttf"); }
+
+@font-face { src: url("../fonts/NotoSans-Bold.ttf"); }
+@font-face { src: url("../fonts/NotoSans-Regular.ttf"); }
+@font-face { src: url("../fonts/NotoSans-Italic.ttf"); }
+@font-face { src: url("../fonts/NotoSans-BoldItalic.ttf"); }
+
+@font-face { src: url("../fonts/SourceSansPro-Bold.ttf"); }
+@font-face { src: url("../fonts/SourceSansPro-Regular.ttf"); }
+
 /*** Constants ***/
 * {
     -fx-speedment-gray:        #DBDAD9;
@@ -37,6 +53,11 @@
     
     -fx-font-header: 'Montserrat';
     -fx-font-text:   'Noto Sans';
+}
+
+/*** FontAwesome Icons ***/
+.glyph-icon {
+    -fx-font-family: 'FontAwesome';
 }
 
 /*** Titles Pane ***/
@@ -158,6 +179,7 @@
 
 .button > .glyph-icon {
     -fx-fill: white;
+    -fx-text-fill: white;
 }
 
 /*** Choice Box ***/
@@ -373,6 +395,7 @@
 }
 
 .header-panel > .graphic-container > .glyph-icon {
+    -fx-text-fill: white;
     -fx-fill: white;
 }
 
@@ -422,27 +445,63 @@
 /*** Notifications ***/
 .notification {
     -fx-border-width: 0px 0px 0px 8px;
-    -fx-background-color: #eee; 
+    -fx-background-color: #eee;
     -fx-padding: 16;
 }
 
-.notification.info { -fx-border-color: -fx-speedment-lightblue; }
-.notification.info .glyph-icon { -fx-fill: -fx-speedment-lightblue; } 
+.notification.info {
+    -fx-border-color: -fx-speedment-lightblue;
+}
 
-.notification.success { -fx-border-color: -fx-speedment-lightgreen; }
-.notification.success .glyph-icon { -fx-fill: -fx-speedment-lightgreen; } 
+.notification.info .glyph-icon {
+    -fx-fill: -fx-speedment-lightblue;
+    -fx-text-fill: -fx-speedment-lightblue;
+}
 
-.notification.warning { -fx-border-color: -fx-speedment-lightorange; }
-.notification.warning .glyph-icon { -fx-fill: -fx-speedment-lightorange; }
+.notification.success {
+    -fx-border-color: -fx-speedment-lightgreen;
+}
 
-.notification.error { -fx-border-color: -fx-speedment-lightred; }
-.notification.error .glyph-icon { -fx-fill: -fx-speedment-lightred; }
+.notification.success .glyph-icon {
+    -fx-fill: -fx-speedment-lightgreen;
+    -fx-text-fill: -fx-speedment-lightgreen;
+}
 
-.notification.confirmation { -fx-border-color: -fx-speedment-lightorange; }
-.notification.confirmation .glyph-icon { -fx-fill: -fx-speedment-lightorange; }
+.notification.warning {
+    -fx-border-color: -fx-speedment-lightorange;
+}
 
-.notification.authentication { -fx-border-color: -fx-speedment-lightgray; }
-.notification.authentication .glyph-icon { -fx-fill: -fx-speedment-lightgray; }
+.notification.warning .glyph-icon {
+    -fx-fill: -fx-speedment-lightorange;
+    -fx-text-fill: -fx-speedment-lightorange;
+}
+
+.notification.error {
+    -fx-border-color: -fx-speedment-lightred;
+}
+
+.notification.error .glyph-icon {
+    -fx-fill: -fx-speedment-lightred;
+    -fx-text-fill: -fx-speedment-lightred;
+}
+
+.notification.confirmation {
+    -fx-border-color: -fx-speedment-lightorange;
+}
+
+.notification.confirmation .glyph-icon {
+    -fx-fill: -fx-speedment-lightorange;
+    -fx-text-fill: -fx-speedment-lightorange;
+}
+
+.notification.authentication {
+    -fx-border-color: -fx-speedment-lightgray;
+}
+
+.notification.authentication .glyph-icon {
+    -fx-fill: -fx-speedment-lightgray;
+    -fx-text-fill: -fx-speedment-lightgray;
+}
 
 /*** Properties layout ***/
 .properties-layout {
