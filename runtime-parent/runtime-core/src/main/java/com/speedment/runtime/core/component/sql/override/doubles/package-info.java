@@ -1,5 +1,5 @@
 /**
- * Pluggable terminating operation interfaces of long type are located in this package.
+ * Pluggable terminating operation interfaces of {@code double} type are located in this package.
  * <p>
  * This package is part of the API. Modifications to classes here should only
  * (if ever) be done in major releases.
