@@ -44,6 +44,7 @@ public final class OptimizedDoubleCountTerminator<ENTITY> implements DoubleCount
         requireNonNull(pipeline);
         return countHelper(
             info,
+            sqlStreamTerminator,
             pipeline,
             () -> DoubleCountTerminator.<ENTITY>defaultTerminator().apply(info, sqlStreamTerminator, pipeline)
         );

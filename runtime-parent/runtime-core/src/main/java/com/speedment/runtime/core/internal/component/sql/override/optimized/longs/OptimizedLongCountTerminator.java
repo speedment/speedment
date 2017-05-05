@@ -44,6 +44,7 @@ public final class OptimizedLongCountTerminator<ENTITY> implements LongCountTerm
         requireNonNull(pipeline);
         return countHelper(
             info,
+            sqlStreamTerminator,
             pipeline,
             () -> LongCountTerminator.<ENTITY>defaultTerminator().apply(info, sqlStreamTerminator, pipeline)
         );

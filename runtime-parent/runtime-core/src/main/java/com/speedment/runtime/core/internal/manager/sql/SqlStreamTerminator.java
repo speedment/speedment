@@ -84,6 +84,11 @@ public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
         this.allowIteratorAndSpliterator = allowIteratorAndSpliterator;
     }
 
+    //Todo: Remove this and split up responsibility
+    public AsynchronousQueryResult<ENTITY> getAsynchronousQueryResult() {
+        return asynchronousQueryResult;
+    }
+    
     @Override
     public <P extends Pipeline> P optimize(final P initialPipeline) {
         requireNonNull(initialPipeline);
