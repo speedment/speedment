@@ -46,9 +46,8 @@ import com.speedment.tool.core.internal.notification.NotificationImpl;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.internal.util.InjectionLoader;
 import com.speedment.tool.core.notification.Notification;
-import com.speedment.tool.core.resource.FontAwesomeIcon;
+import com.speedment.tool.core.resource.FontAwesome;
 import com.speedment.tool.core.resource.Icon;
-import com.speedment.tool.core.resource.SpeedmentIcon;
 import com.speedment.tool.core.util.BrandUtil;
 import com.speedment.tool.core.util.OutputUtil;
 import com.speedment.tool.propertyeditor.PropertyEditor;
@@ -480,7 +479,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
 
         alert.setHeaderText(title);
         alert.setContentText(message);
-        alert.setGraphic(FontAwesomeIcon.EXCLAMATION_TRIANGLE.view());
+        alert.setGraphic(FontAwesome.EXCLAMATION_TRIANGLE.view());
 
         if (ex == null) {
             alert.setTitle("Error");
@@ -525,7 +524,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         alert.setTitle("Confirmation");
         alert.setHeaderText(title);
         alert.setContentText(message);
-        alert.setGraphic(FontAwesomeIcon.EXCLAMATION_TRIANGLE.view());
+        alert.setGraphic(FontAwesome.EXCLAMATION_TRIANGLE.view());
 
         return alert.showAndWait();
     }
@@ -535,7 +534,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         final Dialog<Pair<String, char[]>> dialog = new Dialog<>();
         dialog.setTitle("Authentication Required");
         dialog.setHeaderText("Enter password for " + dbms.getName());
-        dialog.setGraphic(FontAwesomeIcon.LOCK.view());
+        dialog.setGraphic(FontAwesome.LOCK.view());
         final DialogPane pane = dialog.getDialogPane();
         pane.getStyleClass().add("authentication");
 
@@ -589,7 +588,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         final Dialog<Boolean> dialog = new Dialog<>();
         dialog.setTitle("Progress Tracker");
         dialog.setHeaderText(title);
-        dialog.setGraphic(FontAwesomeIcon.SPINNER.view());
+        dialog.setGraphic(FontAwesome.SPINNER.view());
 
         final DialogPane pane = dialog.getDialogPane();
         pane.getStyleClass().add("progress");
@@ -597,7 +596,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         final VBox box = new VBox();
         final ProgressBar bar = new ProgressBar();
         final Label message = new Label();
-        final Button cancel = new Button("Cancel", FontAwesomeIcon.TIMES.view());
+        final Button cancel = new Button("Cancel", FontAwesome.TIMES.view());
 
         box.getChildren().addAll(bar, message, cancel);
         box.setMaxWidth(Double.MAX_VALUE);
@@ -652,7 +651,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
 
     @Override
     public void showNotification(String message) {
-        showNotification(message, FontAwesomeIcon.EXCLAMATION_CIRCLE);
+        showNotification(message, FontAwesome.EXCLAMATION_CIRCLE);
     }
 
     @Override
@@ -662,12 +661,12 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
 
     @Override
     public void showNotification(String message, Runnable action) {
-        showNotification(message, FontAwesomeIcon.EXCLAMATION_CIRCLE, Palette.INFO, action);
+        showNotification(message, FontAwesome.EXCLAMATION_CIRCLE, Palette.INFO, action);
     }
 
     @Override
     public void showNotification(String message, Palette palette) {
-        showNotification(message, FontAwesomeIcon.EXCLAMATION_CIRCLE, palette);
+        showNotification(message, FontAwesome.EXCLAMATION_CIRCLE, palette);
     }
 
     @Override

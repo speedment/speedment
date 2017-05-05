@@ -47,6 +47,7 @@ import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.component.UserInterfaceComponent.ReuseStage;
 import com.speedment.tool.core.exception.SpeedmentToolException;
+import com.speedment.tool.core.resource.FontAwesome;
 import com.speedment.tool.core.resource.SpeedmentIcon;
 import com.speedment.tool.core.util.OutputUtil;
 import javafx.stage.FileChooser;
@@ -234,7 +235,7 @@ public final class ConfigFileHelper {
             if (status) {
                 userInterfaceComponent.showNotification(
                     "Database metadata has been loaded.",
-                    SpeedmentIcon.DATABASE,
+                    FontAwesome.DATABASE,
                     Palette.INFO
                 );
             }
@@ -372,7 +373,7 @@ public final class ConfigFileHelper {
 
             if (isGraphical) {
                 userInterfaceComponent.log(success("Saved project file to '" + absolute + "'."));
-                userInterfaceComponent.showNotification("Configuration saved.", SpeedmentIcon.DISK, Palette.INFO);
+                userInterfaceComponent.showNotification("Configuration saved.", FontAwesome.DOWNLOAD, Palette.INFO);
             }
 
             currentlyOpenFile = file;
@@ -403,7 +404,7 @@ public final class ConfigFileHelper {
                 userInterfaceComponent.showNotification(
                     "Generation completed! " + translatorManager.getFilesCreated()
                     + " files created.",
-                    SpeedmentIcon.PLAY_CIRCLE_MONO, // TODO: Change to Star
+                    FontAwesome.STAR,
                     Palette.SUCCESS
                 );
             });

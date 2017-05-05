@@ -28,8 +28,7 @@ import com.speedment.runtime.core.internal.util.InternalEmailUtil;
 import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.core.internal.component.UserInterfaceComponentImpl;
 import com.speedment.tool.core.internal.util.InjectionLoader;
-import com.speedment.tool.core.resource.FontAwesomeIcon;
-import com.speedment.tool.core.resource.SpeedmentIcon;
+import com.speedment.tool.core.resource.FontAwesome;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -82,7 +81,7 @@ public final class MainApp extends Application {
             loader.loadAndShow("Scene");
             ui.showNotification(
                 "Metadata has been loaded from an offline file. Click here to reload from database.",
-                FontAwesomeIcon.REFRESH,
+                FontAwesome.REFRESH,
                 Palette.INFO,
                 ui::reload
             );

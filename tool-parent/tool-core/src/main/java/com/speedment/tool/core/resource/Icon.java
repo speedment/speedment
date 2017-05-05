@@ -1,6 +1,6 @@
 package com.speedment.tool.core.resource;
 
-import javafx.scene.image.ImageView;
+import javafx.scene.Node;
 
 /**
  * @author Emil Forslund
@@ -8,6 +8,6 @@ import javafx.scene.image.ImageView;
  */
 public interface Icon {
 
-    ImageView view();
+    Node view();
 
 }

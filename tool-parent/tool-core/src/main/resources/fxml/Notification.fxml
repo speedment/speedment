@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.effect.DropShadow?>
+
 <Label fx:id="notification"
        styleClass="notification"
        graphicTextGap="8"
