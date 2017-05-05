@@ -205,4 +205,25 @@ public interface DbmsType {
      */
     String applySkipLimit(String originalSql, List<Object> params, long skip, long limit);
 
+    /**
+     * The sub-select alias mode.
+     */
+    enum SubSelectAlias {
+        /**
+         * select count(*) from (select id from user) AS A
+         */
+        REQUIRED,
+        /**
+         * select count(*) from (select id from user)
+         */
+        PROHIBITED
+    }
+
+    /**
+     * Returns the sub-select alias mode for this database type.
+     *
+     * @return the sub-select alias mode for this database type
+     */
+    SubSelectAlias getSubSelectAlias();
+
 }

@@ -59,18 +59,21 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
     @Override
     public <U> Stream<U> mapToObj(IntFunction<? extends U> mapper) {
         requireNonNull(mapper);
+        assertNotLinkedOrConsumedAndSet();
         return new ReferenceStreamBuilder<U>(pipeline, streamTerminator, streamSet).append(new IntMapToObjAction<>(mapper));
     }
 
     @Override
     public LongStream mapToLong(IntToLongFunction mapper) {
         requireNonNull(mapper);
+        assertNotLinkedOrConsumedAndSet();
         return new LongStreamBuilder(pipeline, streamTerminator, streamSet).append(new IntMapToLongAction(mapper));
     }
 
     @Override
     public DoubleStream mapToDouble(IntToDoubleFunction mapper) {
         requireNonNull(mapper);
+        assertNotLinkedOrConsumedAndSet();
         return new DoubleStreamBuilder(pipeline, streamTerminator, streamSet).append(new IntMapToDoubleAction(mapper));
     }
 
@@ -108,16 +111,19 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
 
     @Override
     public LongStream asLongStream() {
+        assertNotLinkedOrConsumedAndSet();
         return new LongStreamBuilder(pipeline, streamTerminator, streamSet).append(new IntAsLongAction());
     }
 
     @Override
     public DoubleStream asDoubleStream() {
+        assertNotLinkedOrConsumedAndSet();
         return new DoubleStreamBuilder(pipeline, streamTerminator, streamSet).append(new IntAsDoubleAction());
     }
 
     @Override
     public Stream<Integer> boxed() {
+        assertNotLinkedOrConsumedAndSet();
         return new ReferenceStreamBuilder<Integer>(pipeline, streamTerminator, streamSet).append(new IntBoxedAction());
     }
 
@@ -142,6 +148,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
     @Override
     public void forEach(IntConsumer action) {
         requireNonNull(action);
+        assertNotLinkedOrConsumedAndSet();
         try {
             streamTerminator.forEach(pipeline(), action);
         } finally {
@@ -160,6 +167,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
     @Override
     public void forEachOrdered(IntConsumer action) {
         requireNonNull(action);
+        assertNotLinkedOrConsumedAndSet();
         try {
             streamTerminator.forEachOrdered(pipeline(), action);
         } finally {
@@ -177,6 +185,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public int[] toArray() {
+        assertNotLinkedOrConsumedAndSet();
         try {
             return streamTerminator.toArray(pipeline());
         } finally {
@@ -195,6 +204,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
     @Override
     public int reduce(int identity, IntBinaryOperator op) {
         requireNonNull(op);
+        assertNotLinkedOrConsumedAndSet();
         try {
             return streamTerminator.reduce(pipeline(), identity, op);
         } finally {
@@ -213,6 +223,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
     @Override
     public OptionalInt reduce(IntBinaryOperator op) {
         requireNonNull(op);
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.reduce(pipeline(), op));
     }
 
@@ -229,6 +240,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
         requireNonNull(supplier);
         requireNonNull(accumulator);
         requireNonNull(combiner);
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.collect(pipeline(), supplier, accumulator, combiner));
     }
 
@@ -242,6 +254,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public int sum() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseInt(() -> streamTerminator.sum(pipeline()));
 
     }
@@ -256,6 +269,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public OptionalInt min() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.min(pipeline()));
     }
 
@@ -269,6 +283,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public OptionalInt max() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.max(pipeline()));
     }
 
@@ -282,6 +297,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public long count() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseLong(() -> streamTerminator.count(pipeline()));
     }
 
@@ -295,6 +311,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public OptionalDouble average() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.average(pipeline()));
     }
 
@@ -308,6 +325,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public IntSummaryStatistics summaryStatistics() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.summaryStatistics(pipeline()));
     }
 
@@ -322,6 +340,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
     @Override
     public boolean anyMatch(IntPredicate predicate) {
         requireNonNull(predicate);
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseBoolean(() -> streamTerminator.anyMatch(pipeline(), predicate));
     }
 
@@ -336,6 +355,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
     @Override
     public boolean allMatch(IntPredicate predicate) {
         requireNonNull(predicate);
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseBoolean(() -> streamTerminator.allMatch(pipeline(), predicate));
     }
 
@@ -350,6 +370,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
     @Override
     public boolean noneMatch(IntPredicate predicate) {
         requireNonNull(predicate);
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseBoolean(() -> streamTerminator.noneMatch(pipeline(), predicate));
     }
 
@@ -363,6 +384,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public OptionalInt findFirst() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.findFirst(pipeline()));
     }
 
@@ -376,6 +398,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public OptionalInt findAny() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.findAny(pipeline()));
     }
 
@@ -392,6 +415,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public PrimitiveIterator.OfInt iterator() {
+        assertNotLinkedOrConsumedAndSet();
         return streamTerminator.iterator(pipeline());
     }
 
@@ -407,6 +431,7 @@ public final class IntStreamBuilder extends AbstractStreamBuilder<IntStreamBuild
      */
     @Override
     public Spliterator.OfInt spliterator() {
+        assertNotLinkedOrConsumedAndSet();
         return streamTerminator.spliterator(pipeline());
     }
 

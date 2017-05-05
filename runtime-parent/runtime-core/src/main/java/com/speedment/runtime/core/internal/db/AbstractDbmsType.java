@@ -145,4 +145,9 @@ public abstract class AbstractDbmsType implements DbmsType {
 
     }
 
+    @Override
+    public SubSelectAlias getSubSelectAlias() {
+        return SubSelectAlias.REQUIRED;
+    }
+
 }

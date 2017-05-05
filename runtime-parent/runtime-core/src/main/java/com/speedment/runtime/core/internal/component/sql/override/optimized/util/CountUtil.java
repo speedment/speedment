@@ -17,25 +17,18 @@
 package com.speedment.runtime.core.internal.component.sql.override.optimized.util;
 
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
-import com.speedment.runtime.core.db.FieldPredicateView;
-import com.speedment.runtime.core.db.SqlPredicateFragment;
-import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
-import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil;
+import com.speedment.runtime.core.db.AsynchronousQueryResult;
+import com.speedment.runtime.core.db.DbmsType.SubSelectAlias;
+import com.speedment.runtime.core.internal.manager.sql.SqlStreamTerminator;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
 import static com.speedment.runtime.core.stream.action.Property.SIZE;
 import static com.speedment.runtime.core.stream.action.Verb.PRESERVE;
-import com.speedment.runtime.field.Field;
-import com.speedment.runtime.field.predicate.FieldPredicate;
-import com.speedment.runtime.typemapper.TypeMapper;
-import java.util.ArrayList;
-import java.util.Collections;
+import static java.util.Collections.emptyList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.function.LongSupplier;
 import java.util.function.Predicate;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
 
 /**
  *
@@ -50,6 +43,7 @@ public final class CountUtil {
      *
      * @param <ENTITY> the entity type
      * @param info about the stream optimizer
+     * @param sqlStreamTerminator that called us
      * @param pipeline the pipeline
      * @param fallbackSupplier a fallback supplier should every item be size
      * retaining
@@ -57,96 +51,40 @@ public final class CountUtil {
      */
     public static <ENTITY> long countHelper(
         final SqlStreamOptimizerInfo<ENTITY> info,
+        final SqlStreamTerminator<ENTITY> sqlStreamTerminator,
         final Pipeline pipeline,
         final LongSupplier fallbackSupplier
     ) {
         requireNonNull(info);
+        requireNonNull(sqlStreamTerminator);
         requireNonNull(pipeline);
         requireNonNull(fallbackSupplier);
 
-        if (allActionsAreOptimizableFilters(pipeline)) {
-            // select count(*) from 'table' where ...
-            final List<FieldPredicate<ENTITY>> andPredicateBuilders = StreamTerminatorUtil.topLevelAndPredicates(pipeline);
-
-            final SqlInfo sqlInfo = sqlInfo(info, andPredicateBuilders);
-            return info.getCounter().apply(sqlInfo.sql, sqlInfo.values);
+        // Can we count it directly (with no sub-select query)?
+        if (pipeline.stream().allMatch(PRESERVE_SIZE)) {
+            return info.getCounter().apply(info.getSqlSelectCount(), emptyList());
         } else {
-            // Iterate over all materialized ENTITIES....
-            return fallbackSupplier.getAsLong();
-        }
-    }
 
-    private static <ENTITY> SqlInfo sqlInfo(
-        final SqlStreamOptimizerInfo<ENTITY> info,
-        final List<FieldPredicate<ENTITY>> predicateBuilders
-    ) {
-        requireNonNull(info);
-        requireNonNull(predicateBuilders);
+            final Pipeline optimizedPipeline = sqlStreamTerminator.optimize(pipeline);
+            // Can we count using a sub-select query?
+            if (optimizedPipeline.stream().allMatch(PRESERVE_SIZE)) {
+                final AsynchronousQueryResult<ENTITY> asynchronousQueryResult = sqlStreamTerminator.getAsynchronousQueryResult();
+                final StringBuilder sql = new StringBuilder()
+                    .append("SELECT COUNT(*) FROM (")
+                    .append(asynchronousQueryResult.getSql())
+                    .append(")");
 
-        if (predicateBuilders.isEmpty()) {
-            // Nothing to do...
-            return new SqlInfo(info.getSqlSelectCount(), Collections.emptyList());
-        }
-
-        final FieldPredicateView spv = info.getDbmsType().getFieldPredicateView();
-        final List<SqlPredicateFragment> fragments = predicateBuilders.stream()
-            .map(sp -> spv.transform(info.getSqlColumnNamer(), info.getSqlDatabaseTypeFunction(), sp))
-            .collect(toList());
-
-        final String sql = info.getSqlSelectCount() + " WHERE "
-            + fragments.stream()
-                .map(SqlPredicateFragment::getSql)
-                .collect(joining(" AND "));
-
-        final List<Object> values = new ArrayList<>();
-        for (int i = 0; i < fragments.size(); i++) {
-
-            final FieldPredicate<ENTITY> p = predicateBuilders.get(i);
-            final Field<ENTITY> referenceFieldTrait = p.getField();
-
-            @SuppressWarnings("unchecked")
-            final TypeMapper<Object, Object> tm = (TypeMapper<Object, Object>) referenceFieldTrait.typeMapper();
-
-            fragments.get(i).objects()
-                .map(tm::toDatabaseType)
-                .forEach(values::add);
-        }
-        return new SqlInfo(sql, values);
-    }
-
-    private static boolean allActionsAreOptimizableFilters(Pipeline pipeline) {
-        boolean scanningFieldPredicate = true;
-        for (Action<?, ?> action : pipeline) {
-            if (scanningFieldPredicate) {
-                if (action instanceof FilterAction) {
-                    if (!(((FilterAction) action).getPredicate() instanceof FieldPredicate)) {
-                        // We have a non-field predicate and we cannot count on the DB side
-                        return false;
-                    }
-                } else {
-                    scanningFieldPredicate = false;
+                if (info.getDbmsType().getSubSelectAlias() == SubSelectAlias.REQUIRED) {
+                    sql.append(" AS A");
                 }
-            }
-            if (!scanningFieldPredicate) {
-                if (!PRESERVE_SIZE.test(action)) {
-                    return false;
-                }
+                @SuppressWarnings("unchecked")
+                final List<Object> values = (List<Object>) asynchronousQueryResult.getValues();
+                return info.getCounter().apply(sql.toString(), values);
+            } else {
+                // Iterate over all materialized ENTITIES....
+                return fallbackSupplier.getAsLong();
             }
         }
-        return true;
-
-    }
-
-    private static class SqlInfo {
-
-        private final String sql;
-        private final List<Object> values;
-
-        public SqlInfo(String sql, List<Object> values) {
-            this.sql = sql;
-            this.values = values;
-        }
-
     }
 
     private CountUtil() {
