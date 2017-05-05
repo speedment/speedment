@@ -57,6 +57,7 @@ public abstract class AbstractSpeedment implements Speedment {
             SqlPersistanceComponentImpl.class,
             StandardDbmsTypes.class,
             StatisticsReporterComponentImpl.class,
+            StatisticsReporterSchedulerComponentImpl.class,
             SqlStreamOptimizerComponentImpl.class,
             SqlStreamTerminatorComponentImpl.class
         );

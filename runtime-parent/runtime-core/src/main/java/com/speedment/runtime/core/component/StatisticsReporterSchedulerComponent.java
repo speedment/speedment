@@ -19,19 +19,12 @@ package com.speedment.runtime.core.component;
 import com.speedment.common.injector.annotation.InjectKey;
 
 /**
- * A StatisticsReporterComponent reports statistics to the Speedment developers
- * on when a Speedment application is started, is running and is stopped.
+ * A StatisticsReporterSchedulerComponent used to start a
+ * StatisticsReporterComponent
  *
  * @author Per Minborg
- * @since 3.0.2
+ * @since 3.0.8
  */
-@InjectKey(StatisticsReporterComponent.class)
-public interface StatisticsReporterComponent {
-
-    default void reportStarted(){};
-
-    default void reportStopped(){};
-
-    default void alive(){};
-
+@InjectKey(StatisticsReporterSchedulerComponent.class)
+public interface StatisticsReporterSchedulerComponent {
 }
