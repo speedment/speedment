@@ -226,4 +226,30 @@ public interface DbmsType {
      */
     SubSelectAlias getSubSelectAlias();
 
+    /**
+     * The sort by null order insertion. E.g. how is null first/last handled
+     */
+    enum SortByNullOrderInsertion {
+        /*
+        * ORDER BY col IS NULL, col DESC
+         */
+        PRE,
+        /*
+        * ORDER BY CASE WHEN col IS NULL THEN 0 ELSE 1 END, col DESC
+         */
+        PRE_WITH_CASE,
+        /*
+        * ORDER BY col DESC NULLS FIRST
+         */
+        POST;
+
+    }
+
+    /**
+     * Returns the SortByNullOrderInsertion mode for this database type.
+     *
+     * @return the SortByNullOrderInsertion mode for this database type
+     */
+    SortByNullOrderInsertion getSortByNullOrderInsertion();
+
 }

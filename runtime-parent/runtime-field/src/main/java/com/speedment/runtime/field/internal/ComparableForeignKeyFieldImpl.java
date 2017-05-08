@@ -126,7 +126,7 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> {
     
     @Override
     public FieldComparator<ENTITY, V> comparator() {
-        return new ReferenceFieldComparatorImpl<>(this, NullOrder.NONE);
+        return new ReferenceFieldComparatorImpl<>(this, NullOrder.LAST);
     }
 
     @Override
@@ -136,7 +136,7 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> {
 
     @Override
     public FieldComparator<ENTITY, V> comparatorNullFieldsLast() {
-        return new ReferenceFieldComparatorImpl<>(this, NullOrder.LAST);
+        return comparator();
     }
     
     /*****************************************************************/

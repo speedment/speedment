@@ -157,6 +157,11 @@ public final class PostgresqlDbmsType extends AbstractDbmsType {
         }
     }
 
+    @Override
+    public SortByNullOrderInsertion getSortByNullOrderInsertion() {
+        return SortByNullOrderInsertion.POST;
+    }    
+
     private final static class PostgresConnectionUrlGenerator implements ConnectionUrlGenerator {
 
         @Override
