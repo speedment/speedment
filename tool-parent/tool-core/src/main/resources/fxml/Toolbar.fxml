@@ -24,12 +24,12 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+
 <HBox alignment="CENTER"
       prefHeight="38.0"
       prefWidth="900.0"
       spacing="8.0"
-      xmlns="http://javafx.com/javafx/8.0.40"
-      xmlns:fx="http://javafx.com/fxml/1"
+      xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.speedment.tool.core.internal.controller.ToolbarController">
     
     <children>
