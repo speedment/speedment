@@ -3,7 +3,7 @@
 <!--
 
 
-    Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+    Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License"); You may not
     use this file except in compliance with the License. You may obtain a copy of
@@ -27,8 +27,7 @@
       maxHeight="1.7976931348623157E308"
       maxWidth="1.7976931348623157E308"
       spacing="6.0"
-      xmlns="http://javafx.com/javafx/8.0.40"
-      xmlns:fx="http://javafx.com/fxml/1"
+      xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.speedment.tool.core.internal.controller.ConnectController">
     <children>
         <StackPane fx:id="openContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="320.0" style="-fx-background-color: #f5f5f5;" HBox.hgrow="ALWAYS">
