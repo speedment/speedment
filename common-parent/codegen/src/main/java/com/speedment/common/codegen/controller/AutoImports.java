@@ -19,14 +19,26 @@ package com.speedment.common.codegen.controller;
 import com.speedment.common.codegen.DependencyManager;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.trait.*;
+import com.speedment.common.codegen.model.trait.HasAnnotationUsage;
+import com.speedment.common.codegen.model.trait.HasClasses;
+import com.speedment.common.codegen.model.trait.HasConstructors;
+import com.speedment.common.codegen.model.trait.HasFields;
+import com.speedment.common.codegen.model.trait.HasGenerics;
+import com.speedment.common.codegen.model.trait.HasImplements;
+import com.speedment.common.codegen.model.trait.HasMethods;
+import com.speedment.common.codegen.model.trait.HasSupertype;
+import com.speedment.common.codegen.model.trait.HasThrows;
+import com.speedment.common.codegen.model.trait.HasType;
+import com.speedment.common.codegen.model.value.AnonymousValue;
 import com.speedment.common.codegen.util.Formatting;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * This control can be applied to a {@link File} to automatically add imports
@@ -147,6 +159,12 @@ public final class AutoImports implements Consumer<File> {
 		
 		if (HasType.class.isInstance(model)) {
 			addType(((HasType<?>) model).getType(), types);
+		}
+
+		if (AnonymousValue.class.isInstance(model)) {
+			((AnonymousValue) model).getTypeParameters().forEach(e ->
+				addType(e, types)
+			);
 		}
 	}
 	
