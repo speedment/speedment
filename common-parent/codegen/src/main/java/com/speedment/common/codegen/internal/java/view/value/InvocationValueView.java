@@ -6,8 +6,8 @@ import com.speedment.common.codegen.model.value.InvocationValue;
 
 import java.util.Optional;
 
+import static com.speedment.common.codegen.util.Formatting.indent;
 import static com.speedment.common.codegen.util.Formatting.nl;
-import static com.speedment.common.codegen.util.Formatting.tab;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -27,11 +27,9 @@ implements Transform<InvocationValue, String> {
             model.getValue() +
             (model.getValues().size() <= 3
                 ? gen.onEach(model.getValues()).collect(joining(", ", "(", ")"))
-                : gen.onEach(model.getValues()).collect(joining(
-                    "," + nl() + tab(),
-                    "(" + nl() + tab(),
-                    nl() + ")"
-                ))
+                : ("(" + nl() + indent(gen.onEach(model.getValues())
+                    .collect(joining("," + nl()))) + nl() + ")"
+                )
             )
         );
     }
