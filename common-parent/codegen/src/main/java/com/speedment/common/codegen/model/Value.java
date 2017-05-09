@@ -144,12 +144,11 @@ public interface Value<V> extends HasCopy<Value<V>> {
      * Returns a new {@link AnonymousValue} representing the anonymous
      * implementation of a class or interface as the value of a field.
      *
-     * @param classOrInterface  the class or interface to implement
-     * @param <T>               the type (class, interface, enum etc)
-     * @return                  the anonymous value
+     * @param implementedType  the class or interface to implement
+     * @return                 the anonymous value
      */
-    static <T extends ClassOrInterface<T>> AnonymousValue<T> ofAnonymous(T classOrInterface) {
-        return new AnonymousValueImpl<T>()
-            .setValue(classOrInterface);
+    static AnonymousValue ofAnonymous(Type implementedType) {
+        return new AnonymousValueImpl()
+            .setValue(implementedType);
     }
 }
