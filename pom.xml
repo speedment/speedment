@@ -401,11 +401,11 @@
                         <version>3.2</version>
                     </plugin>
                     
-<!--                    <plugin>
+                    <plugin>
                         <groupId>com.mycila</groupId>
                         <artifactId>license-maven-plugin</artifactId>
                         <version>3.0</version>
-                        
+
                         <configuration>
                             <header>license_header.txt</header>
                             <properties>
@@ -429,15 +429,15 @@
                                 <exclude>/Users/pemi/Documents/orm/speedment/example-parent/basic-example/src/main/java/com/company/sakila/db0</exclude>
                             </excludes>
                         </configuration>
-                        
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>-->
+
+                        <!--<executions>-->
+                            <!--<execution>-->
+                                <!--<goals>-->
+                                    <!--<goal>check</goal>-->
+                                <!--</goals>-->
+                            <!--</execution>-->
+                        <!--</executions>-->
+                    </plugin>
                     
                     <plugin>
                         <!-- http://eclemma.org/jacoco/trunk/doc/maven.html -->
