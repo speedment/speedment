@@ -24,5 +24,4 @@ import java.util.List;
  *
  * @author Emil Forslund
  */
-public interface ArrayValue extends Value<List<Value<?>>> {
-}
+public interface ArrayValue extends Value<List<Value<?>>> {}

@@ -18,10 +18,8 @@ package com.speedment.common.codegen.model.value;
 
 import com.speedment.common.codegen.model.Value;
 
-
 /**
  *
  * @author Emil Forslund
  */
-public interface NullValue extends Value<Number> {	
-}
+public interface NullValue extends Value<Number> {}

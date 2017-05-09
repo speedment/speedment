@@ -22,6 +22,4 @@ import com.speedment.common.codegen.model.Value;
  *
  * @author Emil Forslund
  */
-public interface ReferenceValue extends Value<String> {
-
-}
+public interface ReferenceValue extends Value<String> {}

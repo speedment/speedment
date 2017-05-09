@@ -23,5 +23,4 @@ import com.speedment.common.codegen.model.trait.HasType;
  *
  * @author Emil Forslund
  */
-public interface EnumValue extends Value<String>, HasType<EnumValue> {
-}
+public interface EnumValue extends Value<String>, HasType<EnumValue> {}
