@@ -20,6 +20,7 @@ import com.speedment.common.codegen.internal.model.value.AnonymousValueImpl;
 import com.speedment.common.codegen.internal.model.value.ArrayValueImpl;
 import com.speedment.common.codegen.internal.model.value.BooleanValueImpl;
 import com.speedment.common.codegen.internal.model.value.EnumValueImpl;
+import com.speedment.common.codegen.internal.model.value.InvocationValueImpl;
 import com.speedment.common.codegen.internal.model.value.NullValueImpl;
 import com.speedment.common.codegen.internal.model.value.NumberValueImpl;
 import com.speedment.common.codegen.internal.model.value.ReferenceValueImpl;
@@ -29,6 +30,7 @@ import com.speedment.common.codegen.model.value.AnonymousValue;
 import com.speedment.common.codegen.model.value.ArrayValue;
 import com.speedment.common.codegen.model.value.BooleanValue;
 import com.speedment.common.codegen.model.value.EnumValue;
+import com.speedment.common.codegen.model.value.InvocationValue;
 import com.speedment.common.codegen.model.value.NullValue;
 import com.speedment.common.codegen.model.value.NumberValue;
 import com.speedment.common.codegen.model.value.ReferenceValue;
@@ -36,6 +38,7 @@ import com.speedment.common.codegen.model.value.TextValue;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * A model that represents any kind of value declared in code.
@@ -150,5 +153,45 @@ public interface Value<V> extends HasCopy<Value<V>> {
     static AnonymousValue ofAnonymous(Type implementedType) {
         return new AnonymousValueImpl()
             .setValue(implementedType);
+    }
+
+    /**
+     * Returns a new {@link InvocationValue} representing a call to the
+     * specified local method with the specified arguments.
+     *
+     * @param method  the local method to invoke
+     * @param args    the arguments to pass to it
+     * @return        the created invocation
+     */
+    static InvocationValue ofInvocation(String method, Value<?>... args) {
+        final InvocationValue result = new InvocationValueImpl()
+            .setValue(method);
+
+        Stream.of(args).forEachOrdered(result::add);
+
+        return result;
+    }
+
+    /**
+     * Returns a new {@link InvocationValue} representing a call to the
+     * specified static method in the specified class with the specified
+     * arguments.
+     *
+     * @param owner   the class where the static method is located
+     * @param method  the static method to invoke
+     * @param args    the arguments to pass to it
+     * @return        the created invocation
+     */
+    static InvocationValue ofInvocation(Type owner,
+                                        String method,
+                                        Value<?>... args) {
+
+        final InvocationValue result = new InvocationValueImpl()
+            .set(owner)
+            .setValue(method);
+
+        Stream.of(args).forEachOrdered(result::add);
+
+        return result;
     }
 }
