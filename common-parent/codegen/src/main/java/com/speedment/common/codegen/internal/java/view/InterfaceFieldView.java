@@ -24,7 +24,6 @@ import com.speedment.common.codegen.model.InterfaceField;
 import java.util.Optional;
 
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-import static com.speedment.common.codegen.model.modifier.Modifier.FINAL;
 
 /**
  * Transforms from an {@link InterfaceField} to java code.
@@ -41,10 +40,10 @@ public final class InterfaceFieldView implements Transform<InterfaceField, Strin
 	@Override
 	public Optional<String> transform(Generator gen, InterfaceField model) {
         requireNonNulls(gen, model);
-        
+
+        // We intentionally avoid modifiers on fields.
 		return Optional.of(
             renderJavadoc(gen, model) +
-            renderModifiers(gen, model, FINAL) +
             renderAnnotations(gen, model) +
 			renderType(gen, model) +
 			renderName(gen, model)
