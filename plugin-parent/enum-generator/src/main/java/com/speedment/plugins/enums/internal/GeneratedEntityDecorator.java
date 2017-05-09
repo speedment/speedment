@@ -24,6 +24,7 @@ import com.speedment.generator.translator.TranslatorDecorator;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
 import com.speedment.plugins.enums.StringToEnumTypeMapper;
 import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.trait.HasEnabled;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -56,6 +57,7 @@ public final class GeneratedEntityDecorator implements TranslatorDecorator<Table
         translator.onMake(builder -> {
             builder.forEveryTable((intrf, table) -> {
                 table.columns()
+                    .filter(HasEnabled::test)
                     .filter(col -> col.getTypeMapper()
                         .filter(StringToEnumTypeMapper.class.getName()::equals)
                         .isPresent()
@@ -69,26 +71,19 @@ public final class GeneratedEntityDecorator implements TranslatorDecorator<Table
                         final Enum colEnum = Enum.of(shortName(colEnumName))
                             .add(Field.of(DATABASE_NAME_FIELD, String.class).private_().final_());
                         
-                        /*
-                         * Generate enum constants
-                         */
-                        
+                        // Generate enum constants
                         constants.forEach(constant -> {
                             final String javaName = namer.javaStaticFieldName(constant);
                             colEnum.add(EnumConstant.of(javaName).add(Value.ofText(constant)));
                         });
                         
-                        /*
-                         * Generate constructor
-                         */
+                        // Generate constructor
                         colEnum.add(Constructor.of()
                             .add(Field.of(DATABASE_NAME_FIELD, String.class))
                             .add("this." + DATABASE_NAME_FIELD + " = " + DATABASE_NAME_FIELD + ";")
                         );
                         
-                        /*
-                         * Generate fromDatabase()-method
-                         */
+                        // Generate fromDatabase()-method
                         final Method fromDatabase = Method.of(FROM_DATABASE_METHOD, enumType)
                             .public_().static_()
                             .add(Field.of(DATABASE_NAME_FIELD, String.class))
@@ -106,16 +101,12 @@ public final class GeneratedEntityDecorator implements TranslatorDecorator<Table
                         
                         colEnum.add(fromDatabase);
                         
-                        /*
-                         * Generate toDatabase()-method
-                         */
+                        // Generate toDatabase()-method
                         colEnum.add(Method.of(TO_DATABASE_METHOD, String.class)
                             .public_().add("return " + DATABASE_NAME_FIELD + ";")
                         );
                         
-                        /*
-                         * Add it to the interface.
-                         */
+                        // Add it to the interface.
                         intrf.add(colEnum);
                     });
             });
