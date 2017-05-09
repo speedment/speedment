@@ -16,21 +16,34 @@
  */
 package com.speedment.plugins.enums.internal;
 
+import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.injector.Injector;
+import com.speedment.generator.core.exception.SpeedmentGeneratorException;
 import com.speedment.generator.translator.JavaClassTranslator;
+import com.speedment.generator.translator.Translator;
 import com.speedment.generator.translator.TranslatorDecorator;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
 import com.speedment.plugins.enums.StringToEnumTypeMapper;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
+import com.speedment.runtime.core.util.OptionalUtil;
+import com.speedment.runtime.field.ReferenceField;
+import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.lang.reflect.Type;
 import java.util.List;
 
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.constant.DefaultType.WILDCARD;
+import static com.speedment.common.codegen.constant.DefaultType.classOf;
+import static com.speedment.common.codegen.model.Value.*;
 import static com.speedment.common.codegen.util.Formatting.indent;
 import static com.speedment.common.codegen.util.Formatting.shortName;
+import static com.speedment.generator.standard.internal.util.ColumnUtil.usesOptional;
+import static com.speedment.runtime.config.util.DocumentDbUtil.isUnique;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -39,7 +52,8 @@ import static java.util.Objects.requireNonNull;
  * @author  Simon Jonasson
  * @since   1.0.0
  */
-public final class GeneratedEntityDecorator implements TranslatorDecorator<Table, Interface> {
+public final class GeneratedEntityDecorator
+implements TranslatorDecorator<Table, Interface> {
     
     public final static String
         FROM_DATABASE_METHOD = "fromDatabase",
@@ -54,14 +68,14 @@ public final class GeneratedEntityDecorator implements TranslatorDecorator<Table
     
     @Override
     public void apply(JavaClassTranslator<Table, Interface> translator) {
-        translator.onMake(builder -> {
-            builder.forEveryTable((intrf, table) -> {
+        translator.onMake((file, builder) -> {
+            builder.forEveryTable(Translator.Phase.POST_MAKE, (intrf, table) -> {
                 table.columns()
                     .filter(HasEnabled::test)
                     .filter(col -> col.getTypeMapper()
                         .filter(StringToEnumTypeMapper.class.getName()::equals)
                         .isPresent()
-                    ).forEach(col -> {
+                    ).forEachOrdered(col -> {
                         final JavaLanguageNamer namer = translator.getSupport().namer();
                         
                         final String colEnumName = EnumGeneratorUtil.enumNameOf(col, injector);
@@ -108,6 +122,60 @@ public final class GeneratedEntityDecorator implements TranslatorDecorator<Table
                         
                         // Add it to the interface.
                         intrf.add(colEnum);
+
+                        // Rewrite the static field to use a inlined type mapper
+                        // instead.
+                        final String fieldName = namer.javaStaticFieldName(col.getJavaName());
+                        final Field field = intrf.getFields().stream()
+                            .filter(f -> f.getName().equals(fieldName))
+                            .findFirst().orElseThrow(() -> new SpeedmentGeneratorException(
+                                "Expected a static field with name '" +
+                                fieldName + "' to be generated."
+                            ));
+
+                        if (usesOptional(col)) {
+                            file.add(Import.of(OptionalUtil.class));
+                        }
+
+                        final String enumShortName = shortName(colEnumName);
+                        final String enumVarName = namer.javaVariableName(enumShortName);
+                        field.set(ofInvocation(ReferenceField.class, "create",
+                            ofReference("Identifier." + fieldName),
+                            ofReference(
+                                usesOptional(col)
+                                    ? "o -> " + OptionalUtil.class.getSimpleName() + ".unwrap(o.get" + translator.getSupport().typeName(col) + "()),"
+                                    : translator.getSupport().entityName() + "::get" + translator.getSupport().typeName(col)
+                            ),
+                            ofReference(
+                                translator.getSupport().entityName() + "::set" +
+                                    translator.getSupport().typeName(col)
+                            ),
+                            ofAnonymous(TypeMapper.class)
+                                .add(String.class)
+                                .add(SimpleType.create(colEnumName))
+                                .add(Method.of("getLabel", String.class)
+                                    .public_().add(OVERRIDE)
+                                    .add("return \"String to " + enumShortName + " Mapper\";")
+                                )
+                                .add(Method.of("getJavaType", Type.class)
+                                    .public_().add(OVERRIDE)
+                                    .add(Field.of("column", Column.class))
+                                    .add("return " + enumShortName + ".class;")
+                                )
+                                .add(Method.of("toJavaType", enumType)
+                                    .public_().add(OVERRIDE)
+                                    .add(Field.of("column", Column.class))
+                                    .add(Field.of("clazz", classOf(WILDCARD)))
+                                    .add(Field.of("str", String.class))
+                                    .add("return str == null ? null : " + enumShortName + "." + FROM_DATABASE_METHOD + "(str);")
+                                )
+                                .add(Method.of("toDatabaseType", String.class)
+                                    .public_().add(OVERRIDE)
+                                    .add(Field.of(enumVarName, enumType))
+                                    .add("return " + enumVarName + " == null ? null : " + enumVarName + "." + TO_DATABASE_METHOD + "();")
+                                ),
+                            ofBoolean(isUnique(col))
+                        ));
                     });
             });
         });
