@@ -30,12 +30,14 @@ import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNull
  * 
  * @author Emil Forslund
  */
-public final class InterfaceFieldView implements Transform<InterfaceField, String>,
-        HasJavadocView<InterfaceField>,
-        HasModifiersView<InterfaceField>,
-        HasAnnotationUsageView<InterfaceField>,
-        HasTypeView<InterfaceField>,
-        HasNameView<InterfaceField> {
+public final class InterfaceFieldView
+implements Transform<InterfaceField, String>,
+           HasNameView<InterfaceField>,
+           HasJavadocView<InterfaceField>,
+           HasModifiersView<InterfaceField>,
+           HasTypeView<InterfaceField>,
+           HasValueView<InterfaceField>,
+           HasAnnotationUsageView<InterfaceField> {
 
 	@Override
 	public Optional<String> transform(Generator gen, InterfaceField model) {
@@ -45,8 +47,9 @@ public final class InterfaceFieldView implements Transform<InterfaceField, Strin
 		return Optional.of(
             renderJavadoc(gen, model) +
             renderAnnotations(gen, model) +
-			renderType(gen, model) +
-			renderName(gen, model)
+            renderType(gen, model) +
+            renderName(gen, model) +
+            renderValue(gen, model)
 		);
 	}
 
