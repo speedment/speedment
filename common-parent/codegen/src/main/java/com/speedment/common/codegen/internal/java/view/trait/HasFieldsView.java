@@ -18,8 +18,11 @@ package com.speedment.common.codegen.internal.java.view.trait;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.trait.HasFields;
+
+import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static java.util.stream.Collectors.toList;
 
 /**
  * A trait with the functionality to render models with the trait 
@@ -42,8 +45,10 @@ public interface HasFieldsView<M extends HasFields<M>> extends Transform<M, Stri
      * @return       the generated code
      */
     default String renderFields(Generator gen, M model) {
-        return gen.onEach(model.getFields())
-            .collect(joinIfNotEmpty(
+        return gen.onEach(model.getFields().stream()
+                .map(this::wrapField)
+                .collect(toList())
+            ).collect(joinIfNotEmpty(
                 fieldSuffix() + fieldSeparator(model) + fieldPrefix(), 
                 fieldPrefix(), 
                 fieldSuffix()
@@ -74,5 +79,21 @@ public interface HasFieldsView<M extends HasFields<M>> extends Transform<M, Stri
      */
     default String fieldSuffix() {
         return "";
+    }
+
+    /**
+     * This method is called for every field being generated to give the
+     * implementing class a chance to change the implementation before rendering.
+     * There must be a {@link Transform} installed in the generator that can
+     * handle the output of this method.
+     * <p>
+     * The default behaviour of this method is to return the input without any
+     * modifications.
+     *
+     * @param field  the field to wrap
+     * @return       a model derived from the field
+     */
+    default Object wrapField(Field field) {
+        return field;
     }
 }

@@ -17,10 +17,9 @@
 package com.speedment.common.codegen.internal.java.view;
 
 import com.speedment.common.codegen.Generator;
+import com.speedment.common.codegen.internal.model.InterfaceFieldImpl;
 import com.speedment.common.codegen.internal.model.InterfaceMethodImpl;
-import com.speedment.common.codegen.model.Interface;
-import com.speedment.common.codegen.model.InterfaceMethod;
-import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.*;
 
 /**
  * Transforms from an {@link Interface} to java code.
@@ -48,6 +47,11 @@ public final class InterfaceView extends ClassOrInterfaceView<Interface> {
     public InterfaceMethod wrapMethod(Method method) {
         return new InterfaceMethodImpl(method);
     }
+
+	@Override
+	public InterfaceField wrapField(Field field) {
+		return new InterfaceFieldImpl(field);
+	}
 
     @Override
     protected String renderConstructors(Generator gen, Interface model) {

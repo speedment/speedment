@@ -30,9 +30,14 @@ import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNull
  * 
  * @author Emil Forslund
  */
-public final class FieldView implements Transform<Field, String>, HasNameView<Field>, 
-    HasJavadocView<Field>, HasModifiersView<Field>, HasTypeView<Field>,
-    HasValueView<Field>, HasAnnotationUsageView<Field> {
+public final class FieldView
+implements Transform<Field, String>,
+           HasNameView<Field>,
+           HasJavadocView<Field>,
+           HasModifiersView<Field>,
+           HasTypeView<Field>,
+           HasValueView<Field>,
+           HasAnnotationUsageView<Field> {
 
 	@Override
 	public Optional<String> transform(Generator gen, Field model) {
