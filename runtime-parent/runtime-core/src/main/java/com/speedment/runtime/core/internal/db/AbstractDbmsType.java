@@ -150,4 +150,9 @@ public abstract class AbstractDbmsType implements DbmsType {
         return SubSelectAlias.REQUIRED;
     }
 
+    @Override
+    public SortByNullOrderInsertion getSortByNullOrderInsertion() {
+        return SortByNullOrderInsertion.PRE;
+    }
+
 }

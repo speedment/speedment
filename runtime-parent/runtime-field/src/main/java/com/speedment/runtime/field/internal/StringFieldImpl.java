@@ -97,7 +97,7 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
     
     @Override
     public FieldComparator<ENTITY, String> comparator() {
-        return new ReferenceFieldComparatorImpl<>(this, NullOrder.NONE);
+        return new ReferenceFieldComparatorImpl<>(this, NullOrder.LAST);
     }
 
     @Override
@@ -107,7 +107,7 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
 
     @Override
     public FieldComparator<ENTITY, String> comparatorNullFieldsLast() {
-        return new ReferenceFieldComparatorImpl<>(this, NullOrder.LAST);
+        return comparator();
     }
     
     /*****************************************************************/

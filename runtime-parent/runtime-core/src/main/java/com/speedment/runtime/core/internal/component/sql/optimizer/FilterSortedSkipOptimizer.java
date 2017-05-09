@@ -35,7 +35,7 @@ import static com.speedment.runtime.core.internal.stream.builder.streamterminato
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
 import com.speedment.runtime.field.comparator.FieldComparator;
-import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.field.comparator.NullOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -134,7 +134,8 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         requireNonNull(initialPipeline);
         requireNonNull(info);
         requireNonNull(query);
-        final DbmsType.SkipLimitSupport skipLimitSupport = info.getDbmsType().getSkipLimitSupport();
+        final DbmsType dbmsType = info.getDbmsType();
+        final DbmsType.SkipLimitSupport skipLimitSupport = dbmsType.getSkipLimitSupport();
         final List<FilterAction<ENTITY>> filters = new ArrayList<>();
         final List<SortedComparatorAction<ENTITY>> sorteds = new ArrayList<>();
         final List<SkipAction<ENTITY>> skips = new ArrayList<>();
@@ -155,7 +156,7 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
                 .collect(toList());
 
             final RenderResult rr = StreamTerminatorUtil.renderSqlWhere(
-                info.getDbmsType(),
+                dbmsType,
                 info.getSqlColumnNamer(),
                 info.getSqlDatabaseTypeFunction(),
                 predicates
@@ -175,7 +176,7 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
                 final FieldComparator<ENTITY, ?> fieldComparator = (FieldComparator<ENTITY, ?>) sortedAction.getComparator();
                 final ColumnIdentifier<ENTITY> columnIdentifier = fieldComparator.getField().identifier();
 
-                // SQL Server only allows distict columns in ORDER BY 
+                // Some databases (e.g. SQL Server) only allows distinct columns in ORDER BY 
                 if (columns.add(columnIdentifier)) {
                     if (!(i == (sorteds.size() - 1))) {
                         sql.append(", ");
@@ -183,12 +184,33 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
 
                     boolean isReversed = fieldComparator.isReversed();
                     String fieldName = info.getSqlColumnNamer().apply(fieldComparator.getField());
+
+                    final NullOrder effectiveNullOrder = isReversed
+                        ? fieldComparator.getNullOrder().reversed()
+                        : fieldComparator.getNullOrder();
+
+                    // Specify NullOrder pre column if nulls are first
+                    if (effectiveNullOrder == NullOrder.FIRST) {
+                        if (dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.PRE) {
+                            sql.append(fieldName).append("IS NOT NULL, ");
+                        }
+                        if (dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.PRE_WITH_CASE) {
+                            sql.append("CASE WHEN ").append(fieldName).append(" IS NULL THEN 0 ELSE 1 END, ");
+                        }
+                    }
+
                     sql.append(fieldName);
                     if (isReversed) {
                         sql.append(" DESC");
                     } else {
                         sql.append(" ASC");
                     }
+
+                    // Specify NullOrder post column
+                    if (effectiveNullOrder == NullOrder.FIRST && dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.POST) {
+                        sql.append(" NULLS FIRST");
+                    }
+
                 }
             }
         }
@@ -200,7 +222,7 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         } else {
             final long sumSkip = skips.stream().mapToLong(SkipAction::getSkip).sum();
             final long minLimit = limits.stream().mapToLong(LimitAction::getLimit).min().orElse(Long.MAX_VALUE);
-            finalSql = info.getDbmsType()
+            finalSql = dbmsType
                 .applySkipLimit(sql.toString(), values, sumSkip, minLimit);
             initialPipeline.removeIf(a -> filters.contains(a) || sorteds.contains(a) || skips.contains(a) || limits.contains(a));
         }

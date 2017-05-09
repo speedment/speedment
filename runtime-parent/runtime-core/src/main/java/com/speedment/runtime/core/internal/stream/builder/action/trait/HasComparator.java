@@ -21,6 +21,7 @@ import java.util.Comparator;
 /**
  *
  * @author Per Minborg
+ * @param <T> type to compare
  */
 public interface HasComparator<T> {
 

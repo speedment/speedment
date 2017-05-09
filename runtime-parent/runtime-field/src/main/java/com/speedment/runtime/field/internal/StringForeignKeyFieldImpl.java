@@ -123,7 +123,7 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     /**************************************************************************/
     @Override
     public FieldComparator<ENTITY, String> comparator() {
-        return new ReferenceFieldComparatorImpl<>(this, NullOrder.NONE);
+        return new ReferenceFieldComparatorImpl<>(this, NullOrder.LAST);
     }
 
     @Override
@@ -133,7 +133,7 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
 
     @Override
     public FieldComparator<ENTITY, String> comparatorNullFieldsLast() {
-        return new ReferenceFieldComparatorImpl<>(this, NullOrder.LAST);
+        return comparator();
     }
 
     /**************************************************************************/

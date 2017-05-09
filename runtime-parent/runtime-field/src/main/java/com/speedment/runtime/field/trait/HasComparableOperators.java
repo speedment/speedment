@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.field.trait;
 
-
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.predicate.Inclusion;
@@ -30,16 +29,15 @@ import java.util.stream.Stream;
  * A representation of an Entity field that is a reference type (e.g.
  * {@code Integer} and not {@code int}) and that implements {@link Comparable}.
  *
- * @param <ENTITY>  the entity type
- * @param <V>       the field value type
+ * @param <ENTITY> the entity type
+ * @param <V> the field value type
  *
- * @author  Per Minborg
- * @author  Emil Forslund
- * @since   2.2.0
+ * @author Per Minborg
+ * @author Emil Forslund
+ * @since 2.2.0
  */
-
-public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>> 
-extends Field<ENTITY> {
+public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
+    extends Field<ENTITY> {
 
     /**
      * Returns a {@link Comparator} that will compare to this field using this
@@ -66,7 +64,12 @@ extends Field<ENTITY> {
      *
      * @return a {@link Comparator} that will compare to this field using this
      * fields natural order, null fields are sorted last
+     *
+     *
+     * @deprecated This method is the same as comparator(). Use that method
+     * instead. This method will be removed in coming API versions.
      */
+    @Deprecated
     FieldComparator<ENTITY, V> comparatorNullFieldsLast();
 
     /**
@@ -90,7 +93,7 @@ extends Field<ENTITY> {
      * this Field is <em>not equal</em> to the given value
      */
     Predicate<ENTITY> notEqual(V value);
-    
+
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
      * {@code true}, if and only if this Field is <em>less than</em> the given
@@ -110,8 +113,8 @@ extends Field<ENTITY> {
      * {@code true}, if and only if this Field is <em>less than or equal</em>
      * to the given value.
      * <p>
-     * If the specified value is {@code null}, the returned predicate will
-     * only return {@code true} for {@code null} values.
+     * If the specified value is {@code null}, the returned predicate will only
+     * return {@code true} for {@code null} values.
      *
      * @param value to compare
      * @return a Predicate that will evaluate to {@code true}, if and only if
@@ -122,13 +125,12 @@ extends Field<ENTITY> {
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
      * {@code true}, if and only if this Field is <em>greater than</em>
-     * the given value.
-     * If the specified value is {@code null}, the returned predicate will
-     * always return {@code false}.
+     * the given value. If the specified value is {@code null}, the returned
+     * predicate will always return {@code false}.
      *
-     * @param value  to compare
-     * @return       a Predicate that will evaluate to {@code true}, if and only if
-     *               this Field is <em>greater than</em> the given value
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>greater than</em> the given value
      */
     Predicate<ENTITY> greaterThan(V value);
 
@@ -137,12 +139,12 @@ extends Field<ENTITY> {
      * {@code true}, if and only if this Field is <em>greater than or equal</em>
      * to the given value.
      * <p>
-     * If the specified value is {@code null}, the returned predicate will
-     * only return {@code true} for {@code null} values.
+     * If the specified value is {@code null}, the returned predicate will only
+     * return {@code true} for {@code null} values.
      *
-     * @param value  to compare
-     * @return       a Predicate that will evaluate to {@code true}, if and only if
-     *               this Field is <em>greater than or equal</em> to the given value
+     * @param value to compare
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>greater than or equal</em> to the given value
      */
     Predicate<ENTITY> greaterOrEqual(V value);
 
@@ -154,11 +156,11 @@ extends Field<ENTITY> {
      * N.B. if the start value is greater or equal to the end value, then the
      * returned Predicate will always evaluate to {@code false}.
      *
-     * @param start  to compare as a start value
-     * @param end    to compare as an end value
-     * @return       a Predicate that will evaluate to {@code true}, if and only if
-     *               this Field is <em>between</em> the given values (inclusive the 
-     *               start value but exclusive the end value)
+     * @param start to compare as a start value
+     * @param end to compare as an end value
+     * @return a Predicate that will evaluate to {@code true}, if and only if
+     * this Field is <em>between</em> the given values (inclusive the start
+     * value but exclusive the end value)
      */
     default Predicate<ENTITY> between(V start, V end) {
         return between(start, end, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
