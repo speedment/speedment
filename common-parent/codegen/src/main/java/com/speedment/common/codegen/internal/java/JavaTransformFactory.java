@@ -77,5 +77,6 @@ public class JavaTransformFactory extends DefaultTransformFactory {
 		install(Constructor.class, ConstructorView.class);
 		install(File.class, FileView.class);
         install(Initializer.class, InitalizerView.class);
+        install(AnonymousValue.class, AnonymousValueView.class);
     }
 }
