@@ -28,6 +28,7 @@ import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Spliterator;
 import java.util.stream.Stream;
@@ -43,7 +44,7 @@ import static java.util.Objects.requireNonNull;
 public final class StreamUtil {
     
     public static <T> Stream<T> streamOfOptional(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<T> element) {
-        return Stream.of(element.orElse(null)).filter(e -> e != null);
+        return Stream.of(element.orElse(null)).filter(Objects::nonNull);
     }
 
     public static <T> Stream<T> streamOfNullable(T element) {
@@ -67,10 +68,6 @@ public final class StreamUtil {
     }
 
     public static <T> Stream<T> asStream(ResultSet resultSet, SqlFunction<ResultSet, T> mapper) {
-//        requireNonNull(resultSet);
-//        requireNonNull(mapper);
-//        final Iterator<T> iterator = new ResultSetIterator<>(resultSet, mapper);
-//        return StreamSupport.stream(Spliterators.spliteratorUnknownSize(iterator, Spliterator.IMMUTABLE + Spliterator.NONNULL), false);
          return asStream(resultSet, mapper, ParallelStrategy.computeIntensityDefault());
     }
     
@@ -83,7 +80,7 @@ public final class StreamUtil {
 
     public static <T> Stream<T> from(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<T> optional) {
         requireNonNull(optional);
-        return optional.isPresent() ? Stream.of(optional.get()) : Stream.empty();
+        return optional.map(Stream::of).orElseGet(Stream::empty);
     }
 
     private static class ResultSetIterator<T> implements Iterator<T> {
@@ -91,26 +88,37 @@ public final class StreamUtil {
         private final ResultSet resultSet;
         private final SqlFunction<ResultSet, T> mapper;
 
-        public ResultSetIterator(final ResultSet resultSet, final SqlFunction<ResultSet, T> mapper) {
+        private ResultSetIterator(final ResultSet resultSet,
+                                 final SqlFunction<ResultSet, T> mapper) {
+
             this.resultSet = requireNonNull(resultSet);
-            this.mapper = requireNonNull(mapper);
+            this.mapper    = requireNonNull(mapper);
         }
 
         @Override
         public boolean hasNext() {
             try {
-                return resultSet.next();
-            } catch (SQLException sqle) {
-                throw new SpeedmentException("Error iterating over a ResultSet", sqle);
+                return !resultSet.isLast();
+            } catch (final SQLException ex) {
+                throw new SpeedmentException(
+                    "Error looking ahead in ResultSet.", ex
+                );
             }
         }
 
         @Override
         public T next() {
             try {
-                return mapper.apply(resultSet);
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
+                if (resultSet.next()) {
+                    return mapper.apply(resultSet);
+                } else {
+                    throw new SpeedmentException(
+                        "ResultSetIterator#next() was called without " +
+                        "checking #hasNext() first."
+                    );
+                }
+            } catch (final SQLException ex) {
+                throw new SpeedmentException(ex);
             }
         }
 
