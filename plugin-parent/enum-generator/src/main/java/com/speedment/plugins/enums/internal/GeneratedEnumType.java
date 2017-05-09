@@ -47,4 +47,27 @@ public final class GeneratedEnumType implements Type {
     public String getTypeName() {
         return typeName;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Type)) {
+            return false;
+        }
+
+        if (o instanceof GeneratedEnumType) {
+            final GeneratedEnumType that = (GeneratedEnumType) o;
+            return typeName.equals(that.typeName)
+                && constants.equals(that.constants);
+        } else {
+            return typeName.equals(((Type) o).getTypeName());
+        }
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getTypeName().hashCode();
+        result = 31 * result + constants.hashCode();
+        return result;
+    }
 }
