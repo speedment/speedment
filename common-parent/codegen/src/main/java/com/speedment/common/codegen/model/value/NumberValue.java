@@ -22,5 +22,4 @@ import com.speedment.common.codegen.model.Value;
  *
  * @author Emil Forslund
  */
-public interface NumberValue extends Value<Number> {
-}
+public interface NumberValue extends Value<Number> {}

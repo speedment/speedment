@@ -22,5 +22,4 @@ import com.speedment.common.codegen.model.Value;
  *
  * @author Emil Forslund
  */
-public interface BooleanValue extends Value<Boolean> {
-}
+public interface BooleanValue extends Value<Boolean> {}
