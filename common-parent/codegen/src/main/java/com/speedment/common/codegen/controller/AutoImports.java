@@ -19,16 +19,7 @@ package com.speedment.common.codegen.controller;
 import com.speedment.common.codegen.DependencyManager;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.trait.HasAnnotationUsage;
-import com.speedment.common.codegen.model.trait.HasClasses;
-import com.speedment.common.codegen.model.trait.HasConstructors;
-import com.speedment.common.codegen.model.trait.HasFields;
-import com.speedment.common.codegen.model.trait.HasGenerics;
-import com.speedment.common.codegen.model.trait.HasImplements;
-import com.speedment.common.codegen.model.trait.HasMethods;
-import com.speedment.common.codegen.model.trait.HasSupertype;
-import com.speedment.common.codegen.model.trait.HasThrows;
-import com.speedment.common.codegen.model.trait.HasType;
+import com.speedment.common.codegen.model.trait.*;
 import com.speedment.common.codegen.model.value.AnonymousValue;
 import com.speedment.common.codegen.util.Formatting;
 
@@ -166,6 +157,11 @@ public final class AutoImports implements Consumer<File> {
 				addType(e, types)
 			);
 		}
+
+		if (HasValue.class.isInstance(model)) {
+            ((HasValue<?>) model).getValue()
+                .ifPresent(val -> findTypesIn(val, types));
+        }
 	}
 	
     /**
