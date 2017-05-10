@@ -53,4 +53,14 @@ Both tuple types (e.g. `Tuple` and `TupleOfNullables`) support the following met
 | `stream`    | -          | Returns a `Stream` of `Optional`s with elements in the TupleOfNullables. Null values are `Optional.empty()`
 
 
+## Typesafe Tuple Builder
+Tuples can be constructed with a Builder if the elements becomes available subsequently.
+```java
+final Tuple3<Integer, String, Long> actual = 
+    TupleBuilder.builder()
+        .add(1)
+        .add("Alice")
+        .add(42l)
+        .build();
+```
 

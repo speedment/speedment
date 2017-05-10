@@ -56,7 +56,7 @@ public class TupleBuilder {
         this.current = Tuples.of();
     }
     
-    static Builder0 builder() {
+    public static Builder0 builder() {
         return new TupleBuilder().new Builder0();
     }
     

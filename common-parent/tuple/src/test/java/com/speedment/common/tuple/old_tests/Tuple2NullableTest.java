@@ -19,10 +19,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.runtime.core.util.tuple;
+package com.speedment.common.tuple.old_tests;
 
-import com.speedment.common.tuple.Tuple2OfNullables;
 import com.speedment.common.tuple.Tuples;
+import com.speedment.common.tuple.TuplesOfNullables;
+import com.speedment.common.tuple.nullable.Tuple2OfNullables;
 import org.junit.*;
 
 import java.util.Arrays;
@@ -58,7 +59,7 @@ public class Tuple2NullableTest {
 
     @Before
     public void setUp() {
-        instance = Tuples.ofNullables(FIRST, SECOND);
+        instance = TuplesOfNullables.ofNullables(FIRST, SECOND);
         //instance = new Tuple2OfNullables<>(Integer.class, Integer.class, FIRST, SECOND);
     }
 
@@ -84,7 +85,7 @@ public class Tuple2NullableTest {
 
     @Test
     public void testCasting() {
-        Tuple2OfNullables<Integer, String> t2 = Tuples.ofNullables(1, null);
+        Tuple2OfNullables<Integer, String> t2 = TuplesOfNullables.ofNullables(1, null);
         assertEquals(Optional.of(1), t2.get0());
         assertEquals(Optional.empty(), t2.get1());
     }
@@ -104,7 +105,7 @@ public class Tuple2NullableTest {
 //    }
     @Test
     public void testDefConstructor() {
-        final Tuple2OfNullables<Integer, Integer> newInstance = Tuples.ofNullables(1, 2);
+        final Tuple2OfNullables<Integer, Integer> newInstance = TuplesOfNullables.ofNullables(1, 2);
         assertTrue(newInstance.get0().isPresent());
         assertTrue(newInstance.get1().isPresent());
     }
@@ -112,20 +113,20 @@ public class Tuple2NullableTest {
     @Test
     public void testHash() {
         int hashCodeInstance = instance.hashCode();
-        final Tuple2OfNullables<Integer, Integer> newInstance = Tuples.ofNullables(FIRST, SECOND);
+        final Tuple2OfNullables<Integer, Integer> newInstance = TuplesOfNullables.ofNullables(FIRST, SECOND);
         int hashCodenewInstance = newInstance.hashCode();
         assertEquals(hashCodeInstance, hashCodenewInstance);
     }
 
     @Test
     public void testEquals() {
-        final Tuple2OfNullables<Integer, Integer> newInstance = Tuples.ofNullables(FIRST, SECOND);
+        final Tuple2OfNullables<Integer, Integer> newInstance = TuplesOfNullables.ofNullables(FIRST, SECOND);
         assertEquals(instance, newInstance);
     }
 
     @Test
     public void testToString() {
-        final Tuple2OfNullables<Integer, Integer> newInstance = Tuples.ofNullables(null, null);
+        final Tuple2OfNullables<Integer, Integer> newInstance = TuplesOfNullables.ofNullables(null, null);
     }
 
     @Test
@@ -134,7 +135,7 @@ public class Tuple2NullableTest {
         final List<Optional<Integer>> expected = Arrays.asList(Optional.of(FIRST), Optional.of(SECOND));
         assertEquals(expected, content);
 
-        final Tuple2OfNullables<Integer, Integer> newInstance = Tuples.ofNullables(FIRST, null);
+        final Tuple2OfNullables<Integer, Integer> newInstance = TuplesOfNullables.ofNullables(FIRST, null);
         final List<Object> content2 = newInstance.stream().collect(toList());
         final List<Optional<Integer>> expected2 = Arrays.asList(Optional.of(FIRST), Optional.empty());
         assertEquals(expected2, content2);
@@ -142,7 +143,7 @@ public class Tuple2NullableTest {
 
     @Test
     public void testStreamOf() {
-        final Tuple2OfNullables<Integer, Integer> newInstance = Tuples.ofNullables(FIRST, null);
+        final Tuple2OfNullables<Integer, Integer> newInstance = TuplesOfNullables.ofNullables(FIRST, null);
         List<Integer> content = newInstance.streamOf(Integer.class).collect(toList());
         List<Integer> expected = Collections.singletonList(FIRST);
         assertEquals(expected, content);
@@ -150,7 +151,7 @@ public class Tuple2NullableTest {
 
     @Test
     public void testStreamOf2() {
-        final Tuple2OfNullables<Integer, String> newInstance = Tuples.ofNullables(FIRST, "Tryggve");
+        final Tuple2OfNullables<Integer, String> newInstance = TuplesOfNullables.ofNullables(FIRST, "Tryggve");
         List<Integer> content = newInstance.streamOf(Integer.class).collect(toList());
         List<Integer> expected = Collections.singletonList(FIRST);
         assertEquals(expected, content);
