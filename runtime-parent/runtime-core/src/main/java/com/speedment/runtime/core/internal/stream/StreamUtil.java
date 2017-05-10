@@ -27,10 +27,8 @@ import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Spliterator;
+import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -83,10 +81,40 @@ public final class StreamUtil {
         return optional.map(Stream::of).orElseGet(Stream::empty);
     }
 
+    /**
+     * Specialized read-only {@link Iterator} for consuming
+     * {@link ResultSet ResultSets} by mapping them to an entity using an
+     * adapter. This implementation is not thread safe.
+     *
+     * @param <T>  the type of the entity
+     */
     private static class ResultSetIterator<T> implements Iterator<T> {
+
+        /**
+         * The current state of the {@code ResultSetIterator}.
+         */
+        private enum State {
+            /**
+             * There is a row in the ResultSet that has not yet been consumed.
+             */
+            NEXT,
+
+            /**
+             * There are no more rows in the ResultSet.
+             */
+            NO_NEXT,
+
+            /**
+             * The current row has already been consumed and we don't know if
+             * there are any more yet. Call {@link #hasNext()} to find out.
+             */
+            NOT_DETERMINED
+        }
 
         private final ResultSet resultSet;
         private final SqlFunction<ResultSet, T> mapper;
+
+        private State state = State.NOT_DETERMINED;
 
         private ResultSetIterator(final ResultSet resultSet,
                                  final SqlFunction<ResultSet, T> mapper) {
@@ -95,33 +123,87 @@ public final class StreamUtil {
             this.mapper    = requireNonNull(mapper);
         }
 
+        /**
+         * {@inheritDoc}
+         * <p>
+         * After the termination of this method, the state will be either
+         * {@link State#NEXT} or {@link State#NO_NEXT}. Calling this method
+         * multiple times in a row has no effect. The state will remain the
+         * same.
+         *
+         * @return  if there are more rows
+         */
         @Override
         public boolean hasNext() {
-            try {
-                return !resultSet.isLast();
-            } catch (final SQLException ex) {
-                throw new SpeedmentException(
-                    "Error looking ahead in ResultSet.", ex
+            switch (state) {
+                case NEXT : return true;
+                case NO_NEXT: return false;
+                case NOT_DETERMINED: {
+                    try {
+                        if (!resultSet.next()) {
+                            state = State.NO_NEXT;
+                            return false;
+                        }
+                    } catch (final SQLException ex) {
+                        state = State.NO_NEXT;
+                        return false;
+                    }
+
+                    state = State.NEXT;
+                    return true;
+                }
+
+                default: throw new IllegalStateException(
+                    "Unknown state '" + state + "'."
                 );
             }
         }
 
         @Override
         public T next() {
+            if (state == State.NOT_DETERMINED) {
+                hasNext();
+            }
+
+            if (state == State.NO_NEXT) {
+                throw new NoSuchElementException(
+                    "Next was called even though hasNext() returned false."
+                );
+            }
+
+            state = State.NOT_DETERMINED;
+
             try {
-                if (resultSet.next()) {
-                    return mapper.apply(resultSet);
-                } else {
-                    throw new SpeedmentException(
-                        "ResultSetIterator#next() was called without " +
-                        "checking #hasNext() first."
-                    );
-                }
+                return mapper.apply(resultSet);
             } catch (final SQLException ex) {
                 throw new SpeedmentException(ex);
             }
         }
 
+        @Override
+        public void forEachRemaining(Consumer<? super T> action) {
+            if (state == State.NOT_DETERMINED) {
+                hasNext();
+            }
+
+            if (state == State.NO_NEXT) {
+                return;
+            }
+
+            try {
+                while (resultSet.next()) {
+                    try {
+                        action.accept(mapper.apply(resultSet));
+                    } catch (final SQLException ex) {
+                        throw new SpeedmentException(ex);
+                    }
+                }
+            } catch (final SQLException ex) {
+                // Do nothing.
+            } finally {
+                state = State.NO_NEXT;
+            }
+        }
     }
 
     /**
