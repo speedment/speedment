@@ -55,6 +55,5 @@ public interface ShortGetter<ENTITY> extends Getter<ENTITY> {
     @Override
     default Function<ENTITY, Short> asFunction() {
         return this::apply;
-    }    
-    
+    }
 }

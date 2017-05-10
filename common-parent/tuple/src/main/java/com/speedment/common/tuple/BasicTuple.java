@@ -25,14 +25,13 @@ import java.util.stream.Stream;
  */
 public interface BasicTuple<R> {
 
-
     /**
-     * Returns the length of the Tuple. For example, a Tuple2 has a length of 2
-     * whereas a Tuple3 has a length of 3.
+     * Returns the degree of the Tuple. For example, a Tuple2 has a degree of 2
+     * whereas a Tuple3 has a degree of 3.
      *
-     * @return the length of the Tuple
+     * @return the degree of the Tuple
      */
-    int length();
+    int degree();
 
     /**
      * Gets the tuple element at the given index. For example, get(0) will
@@ -46,10 +45,10 @@ public interface BasicTuple<R> {
     R get(int index);
 
     /**
-     * Returns a {@link Stream} of all non-null values for this Tuple of the
-     * given class. I.e. all non-null members of a Tuple that can be cast to the
-     * given class are included in the Stream. If sequential, the Stream will
-     * start with the 0:th tuple and progress upwards.
+     * Returns a {@link Stream} of all values for this Tuple of the given class.
+     * I.e. all non-null members of a Tuple that can be cast to the given class
+     * are included in the Stream. If sequential, the Stream will start with the
+     * 0:th tuple and progress upwards.
      *
      * @param <T> The type of stream
      * @param clazz The class of the type of the stream
