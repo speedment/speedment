@@ -21,11 +21,8 @@
  */
 package com.speedment.common.tuple.internal;
 
-import com.speedment.common.tuple.internal.nonnullable.Tuple2Impl;
 import com.speedment.common.tuple.internal.nullable.Tuple2OfNullablesImpl;
-import com.speedment.common.tuple.nonnullable.Tuple2;
 import com.speedment.common.tuple.nullable.Tuple2OfNullables;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import static java.util.stream.Collectors.toList;

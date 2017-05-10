@@ -4,6 +4,8 @@ Tuples are like a `List`s but where each element can retain its type individuall
 
 Tuples are immutable and comes in two flavors; Tuples without `null` values (`Tuple`) and Tuples that allows `null` values (`TupleOfNullables`).
 
+Tuples with a degree of up to 23 are supported. Higher degrees can be constructed but then type information is lost.
+
 ## Tuples without null values
 
 Here is an example:

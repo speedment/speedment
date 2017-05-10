@@ -16,9 +16,9 @@
  */
 package com.speedment.common.tuple.internal.nonnullable.mapper;
 
+import com.speedment.common.tuple.Tuple17;
 import com.speedment.common.tuple.TupleMapper;
 import com.speedment.common.tuple.Tuples;
-import com.speedment.common.tuple.nonnullable.Tuple17;
 import java.util.function.Function;
 import static java.util.Objects.requireNonNull;
 

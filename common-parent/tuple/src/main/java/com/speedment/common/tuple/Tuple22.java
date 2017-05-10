@@ -14,15 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.tuple.nonnullable;
-
-import com.speedment.common.tuple.Tuple;
+package com.speedment.common.tuple;
 
 /**
  * This interface defines a generic Tuple of any order that can hold null
  * values. A Tuple is type safe, immutable and thread safe. For pure non-null
  * value elements see {@link Tuple}
- * This {@link Tuple } has a degree of 11
+ * This {@link Tuple } has a degree of 22
  * 
  * @param <T0>  type of element 0
  * @param <T1>  type of element 1
@@ -35,10 +33,21 @@ import com.speedment.common.tuple.Tuple;
  * @param <T8>  type of element 8
  * @param <T9>  type of element 9
  * @param <T10> type of element 10
+ * @param <T11> type of element 11
+ * @param <T12> type of element 12
+ * @param <T13> type of element 13
+ * @param <T14> type of element 14
+ * @param <T15> type of element 15
+ * @param <T16> type of element 16
+ * @param <T17> type of element 17
+ * @param <T18> type of element 18
+ * @param <T19> type of element 19
+ * @param <T20> type of element 20
+ * @param <T21> type of element 21
  * 
  * @author Per Minborg
  */
-public interface Tuple11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> extends Tuple {
+public interface Tuple22<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21> extends Tuple {
     
     T0 get0();
     
@@ -62,9 +71,31 @@ public interface Tuple11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> extends Tu
     
     T10 get10();
     
+    T11 get11();
+    
+    T12 get12();
+    
+    T13 get13();
+    
+    T14 get14();
+    
+    T15 get15();
+    
+    T16 get16();
+    
+    T17 get17();
+    
+    T18 get18();
+    
+    T19 get19();
+    
+    T20 get20();
+    
+    T21 get21();
+    
     @Override
     default int degree() {
-        return 11;
+        return 22;
     }
     
     default Object get(int index) {
@@ -80,6 +111,17 @@ public interface Tuple11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> extends Tu
             case 8 : return get8();
             case 9 : return get9();
             case 10 : return get10();
+            case 11 : return get11();
+            case 12 : return get12();
+            case 13 : return get13();
+            case 14 : return get14();
+            case 15 : return get15();
+            case 16 : return get16();
+            case 17 : return get17();
+            case 18 : return get18();
+            case 19 : return get19();
+            case 20 : return get20();
+            case 21 : return get21();
             default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()
             ));
         }

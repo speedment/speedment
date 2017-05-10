@@ -14,15 +14,13 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.tuple.nonnullable;
-
-import com.speedment.common.tuple.Tuple;
+package com.speedment.common.tuple;
 
 /**
  * This interface defines a generic Tuple of any order that can hold null
  * values. A Tuple is type safe, immutable and thread safe. For pure non-null
  * value elements see {@link Tuple}
- * This {@link Tuple } has a degree of 17
+ * This {@link Tuple } has a degree of 19
  * 
  * @param <T0>  type of element 0
  * @param <T1>  type of element 1
@@ -41,10 +39,12 @@ import com.speedment.common.tuple.Tuple;
  * @param <T14> type of element 14
  * @param <T15> type of element 15
  * @param <T16> type of element 16
+ * @param <T17> type of element 17
+ * @param <T18> type of element 18
  * 
  * @author Per Minborg
  */
-public interface Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> extends Tuple {
+public interface Tuple19<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18> extends Tuple {
     
     T0 get0();
     
@@ -80,9 +80,13 @@ public interface Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, 
     
     T16 get16();
     
+    T17 get17();
+    
+    T18 get18();
+    
     @Override
     default int degree() {
-        return 17;
+        return 19;
     }
     
     default Object get(int index) {
@@ -104,6 +108,8 @@ public interface Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, 
             case 14 : return get14();
             case 15 : return get15();
             case 16 : return get16();
+            case 17 : return get17();
+            case 18 : return get18();
             default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()
             ));
         }
