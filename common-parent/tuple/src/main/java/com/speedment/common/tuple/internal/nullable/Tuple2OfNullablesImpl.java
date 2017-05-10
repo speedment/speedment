@@ -16,9 +16,9 @@
  */
 package com.speedment.common.tuple.internal.nullable;
 
+import com.speedment.common.tuple.Tuple2;
 import com.speedment.common.tuple.TupleOfNullables;
 import com.speedment.common.tuple.internal.AbstractTupleOfNullables;
-import com.speedment.common.tuple.nonnullable.Tuple2;
 import com.speedment.common.tuple.nullable.Tuple2OfNullables;
 import java.util.Optional;
 

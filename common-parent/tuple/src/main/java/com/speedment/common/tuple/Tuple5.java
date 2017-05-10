@@ -14,23 +14,23 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.tuple.nonnullable;
-
-import com.speedment.common.tuple.Tuple;
+package com.speedment.common.tuple;
 
 /**
  * This interface defines a generic Tuple of any order that can hold null
  * values. A Tuple is type safe, immutable and thread safe. For pure non-null
  * value elements see {@link Tuple}
- * This {@link Tuple } has a degree of 3
+ * This {@link Tuple } has a degree of 5
  * 
  * @param <T0> type of element 0
  * @param <T1> type of element 1
  * @param <T2> type of element 2
+ * @param <T3> type of element 3
+ * @param <T4> type of element 4
  * 
  * @author Per Minborg
  */
-public interface Tuple3<T0, T1, T2> extends Tuple {
+public interface Tuple5<T0, T1, T2, T3, T4> extends Tuple {
     
     T0 get0();
     
@@ -38,9 +38,13 @@ public interface Tuple3<T0, T1, T2> extends Tuple {
     
     T2 get2();
     
+    T3 get3();
+    
+    T4 get4();
+    
     @Override
     default int degree() {
-        return 3;
+        return 5;
     }
     
     default Object get(int index) {
@@ -48,6 +52,8 @@ public interface Tuple3<T0, T1, T2> extends Tuple {
             case 0 : return get0();
             case 1 : return get1();
             case 2 : return get2();
+            case 3 : return get3();
+            case 4 : return get4();
             default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()
             ));
         }

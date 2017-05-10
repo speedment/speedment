@@ -16,9 +16,9 @@
  */
 package com.speedment.common.tuple.internal.nonnullable;
 
+import com.speedment.common.tuple.Tuple2;
 import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.internal.AbstractTuple;
-import com.speedment.common.tuple.nonnullable.Tuple2;
 
 /**
  * An implementation class of a {@link Tuple2 }

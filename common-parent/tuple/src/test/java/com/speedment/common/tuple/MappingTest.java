@@ -21,8 +21,7 @@
  */
 package com.speedment.common.tuple;
 
-import com.speedment.common.tuple.nonnullable.Tuple2;
-import com.speedment.common.tuple.nonnullable.Tuple4;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;

@@ -16,31 +16,6 @@
  */
 package com.speedment.common.tuple;
 
-import com.speedment.common.tuple.nonnullable.Tuple0;
-import com.speedment.common.tuple.nonnullable.Tuple10;
-import com.speedment.common.tuple.nonnullable.Tuple11;
-import com.speedment.common.tuple.nonnullable.Tuple12;
-import com.speedment.common.tuple.nonnullable.Tuple13;
-import com.speedment.common.tuple.nonnullable.Tuple14;
-import com.speedment.common.tuple.nonnullable.Tuple15;
-import com.speedment.common.tuple.nonnullable.Tuple16;
-import com.speedment.common.tuple.nonnullable.Tuple17;
-import com.speedment.common.tuple.nonnullable.Tuple18;
-import com.speedment.common.tuple.nonnullable.Tuple19;
-import com.speedment.common.tuple.nonnullable.Tuple1;
-import com.speedment.common.tuple.nonnullable.Tuple20;
-import com.speedment.common.tuple.nonnullable.Tuple21;
-import com.speedment.common.tuple.nonnullable.Tuple22;
-import com.speedment.common.tuple.nonnullable.Tuple23;
-import com.speedment.common.tuple.nonnullable.Tuple2;
-import com.speedment.common.tuple.nonnullable.Tuple3;
-import com.speedment.common.tuple.nonnullable.Tuple4;
-import com.speedment.common.tuple.nonnullable.Tuple5;
-import com.speedment.common.tuple.nonnullable.Tuple6;
-import com.speedment.common.tuple.nonnullable.Tuple7;
-import com.speedment.common.tuple.nonnullable.Tuple8;
-import com.speedment.common.tuple.nonnullable.Tuple9;
-
 /**
  * This class is a Builder that can be used to build type safe Tuple of degree
  * up to 23 that can hold non-null

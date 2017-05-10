@@ -14,9 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.common.tuple.nonnullable;
-
-import com.speedment.common.tuple.Tuple;
+package com.speedment.common.tuple;
 
 /**
  * This interface defines a generic Tuple of any order that can hold null
