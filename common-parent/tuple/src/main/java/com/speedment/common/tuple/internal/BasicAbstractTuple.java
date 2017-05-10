@@ -17,12 +17,11 @@
 package com.speedment.common.tuple.internal;
 
 import com.speedment.common.tuple.BasicTuple;
-
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.stream.Stream;
-
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
 
 /**
  * The BasicAbstractTuple implements parts of a generic Tuple of any order.
@@ -40,13 +39,16 @@ public abstract class BasicAbstractTuple<T extends BasicTuple<R>, R> implements 
 
     @SuppressWarnings("rawtypes")
     BasicAbstractTuple(Class<? extends T> baseClass, Object... values) {
-        this.baseClass = baseClass;
+        this.baseClass = requireNonNull(baseClass);
         if (!isNullable()) {
-            if (Stream.of(values).filter(Objects::isNull).findAny().isPresent()) {
-                throw new NullPointerException(getClass().getName() + " can not hold null values.");
+            if (Stream.of(values).anyMatch(Objects::isNull)) {
+                throw new NullPointerException(getClass().getName() + " cannot hold null values.");
             }
         }
-        this.values = Arrays.copyOf(values, values.length);
+        if (values.length != degree()) {
+            throw new IllegalArgumentException("A Tuple of degree " + degree() + " must contain exactly " + degree() + " elements. Element length was " + values.length);
+        }
+        this.values = Arrays.copyOf(values, requireNonNull(values.length));
     }
 
     /**
@@ -57,15 +59,10 @@ public abstract class BasicAbstractTuple<T extends BasicTuple<R>, R> implements 
     protected abstract boolean isNullable();
 
     protected int assertIndexBounds(int index) {
-        if (index < 0 || index >= length()) {
-            throw new IndexOutOfBoundsException("index " + index + " is illegal. There is capacity for " + length() + " items in this class.");
+        if (index < 0 || index >= degree()) {
+            throw new IndexOutOfBoundsException("index " + index + " is illegal. The degree of this Tuple is " + degree() + ".");
         }
         return index;
-    }
-
-    @Override
-    public int length() {
-        return values.length;
     }
 
     @Override
@@ -87,7 +84,7 @@ public abstract class BasicAbstractTuple<T extends BasicTuple<R>, R> implements 
         // Must be a BasicTuple since baseClass is a BasicTuple
         @SuppressWarnings("unchecked")
         final BasicTuple<?> tuple = (BasicTuple<?>) obj;
-        final int capacity = tuple.length();
+        final int capacity = tuple.degree();
         for (int i = 0; i < capacity; i++) {
             if (!Objects.equals(get(i), tuple.get(i))) {
                 return false;
@@ -100,14 +97,14 @@ public abstract class BasicAbstractTuple<T extends BasicTuple<R>, R> implements 
     public String toString() {
         return getClass().getSimpleName() + " "
             + Stream.of(values)
-            .map(Objects::toString)
-            .collect(joining(", ", "{", "}"));
+                .map(Objects::toString)
+                .collect(joining(", ", "{", "}"));
     }
 
     @Override
     public <C> Stream<C> streamOf(Class<C> clazz) {
+        requireNonNull(clazz);
         return Stream.of(values)
-            .filter(Objects::nonNull)
             .filter(clazz::isInstance)
             .map(clazz::cast);
     }

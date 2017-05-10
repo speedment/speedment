@@ -56,5 +56,4 @@ public interface FloatGetter<ENTITY> extends Getter<ENTITY> {
     default Function<ENTITY, Float> asFunction() {
         return this::apply;
     }
-    
 }

@@ -51,10 +51,9 @@ public interface ByteGetter<ENTITY> extends Getter<ENTITY> {
     default Byte apply(ENTITY instance) {
         return applyAsByte(instance);
     }
-
-    @Override
-    default Function<ENTITY,Byte> asFunction() {
-        return this::apply;
-    }    
     
+    @Override
+    default Function<ENTITY, Byte> asFunction() {
+        return this::apply;
+    }
 }
