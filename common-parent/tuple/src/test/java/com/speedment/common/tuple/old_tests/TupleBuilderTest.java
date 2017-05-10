@@ -19,7 +19,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.runtime.core.util.tuple;
+package com.speedment.common.tuple.old_tests;
 
 import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleBuilder;
