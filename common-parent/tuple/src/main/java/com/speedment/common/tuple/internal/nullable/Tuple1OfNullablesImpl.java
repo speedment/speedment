@@ -23,7 +23,7 @@ import com.speedment.common.tuple.nullable.Tuple1OfNullables;
 import java.util.Optional;
 
 /**
- * An implementation class of a {@link Tuple1 }
+ * An implementation class of a {@link Tuple1OfNullables }
  * 
  * @param <T0> type of element 0
  * 
@@ -32,7 +32,8 @@ import java.util.Optional;
 public final class Tuple1OfNullablesImpl<T0> extends AbstractTupleOfNullables implements Tuple1OfNullables<T0> {
     
     /**
-     * Constructs a {@link Tuple } of type {@link Tuple1 }.
+     * Constructs a {@link TupleOfNullables } of type {@link Tuple1OfNullables
+     * }.
      * 
      * @param e0 element 0
      */

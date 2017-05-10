@@ -16,6 +16,7 @@
  */
 package com.speedment.common.tuple;
 
+import com.speedment.common.tuple.internal.TupleInfiniteDegreeOfNullablesImpl;
 import com.speedment.common.tuple.internal.nullable.Tuple0OfNullablesImpl;
 import com.speedment.common.tuple.internal.nullable.Tuple10OfNullablesImpl;
 import com.speedment.common.tuple.internal.nullable.Tuple11OfNullablesImpl;
@@ -2478,5 +2479,17 @@ public final class TuplesOfNullables {
             Function<T, T21> m21,
             Function<T, T22> m22) {
         return new Tuple23OfNullablesMapperImpl<>(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22);
+    }
+    
+    /**
+     * Creates and returns a {@link TupleOfNullables} with the given parameters
+     * 
+     * @param elements array of elements to use for the TupleOfNullables
+     * @return         a {@link TupleOfNullables} with the given parameters
+     * 
+     * @see TupleOfNullables
+     */
+    public static TupleOfNullables ofNullables(Object... elements) {
+        return new TupleInfiniteDegreeOfNullablesImpl(elements);
     }
 }

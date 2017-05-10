@@ -25,17 +25,17 @@ Here is another example:
 ## TupleOfNullables that allows null values
 If we need to be able to handle `null` values, there is a variant of the Tuple that does this:
 ``` java
-  TupleOfNullable2<String, String> tuple2 = Tuples.ofNullable("Alice", null);
+  TupleOfNullable2<String, String> tuple2 = TuplesOfNullabes.ofNullable("Alice", null);
   Optional<String> name = tuple2.get0();
   Optional<String> alias = tuple2.get1();
 ```
 
-## Suported Methods
+## Supported Methods
 Both tuple types (e.g. `Tuple` and `TupleOfNullables`) support the following methods:
 
 | Method      | Parameter  | Outcome
 | :---------- | :--------- | :--------
-| `length`    | -          | Returns the number of elements in the Tuple. E.g. Tuple2::length will return 2 whereas Tuple3::length will return 3 
+| `degree`    | -          | Returns the number of elements in the Tuple. E.g. Tuple2::degree will return 2 whereas Tuple3::degree will return 3 
 | `get`       | `int`      | Returns the element at the given position
 | `stream`    | `Class`    | Returns a `Stream` of all non-null elements of the given class
 

@@ -23,7 +23,7 @@ import com.speedment.common.tuple.nullable.Tuple0OfNullables;
 import java.util.Optional;
 
 /**
- * An implementation class of a {@link Tuple0 }
+ * An implementation class of a {@link Tuple0OfNullables }
  * 
  * @author Per Minborg
  */
@@ -32,7 +32,8 @@ public final class Tuple0OfNullablesImpl extends AbstractTupleOfNullables implem
     public final static Tuple0OfNullables EMPTY_TUPLE = new Tuple0OfNullablesImpl();
     
     /**
-     * Constructs a {@link Tuple } of type {@link Tuple0 }.
+     * Constructs a {@link TupleOfNullables } of type {@link Tuple0OfNullables
+     * }.
      */
     private Tuple0OfNullablesImpl() {
         super(Tuple0OfNullablesImpl.class);
