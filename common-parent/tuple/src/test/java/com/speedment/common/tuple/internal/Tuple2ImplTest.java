@@ -21,7 +21,8 @@
  */
 package com.speedment.common.tuple.internal;
 
-import com.speedment.common.tuple.Tuple2;
+import com.speedment.common.tuple.internal.nonnullable.Tuple2Impl;
+import com.speedment.common.tuple.nonnullable.Tuple2;
 import java.util.Arrays;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
@@ -66,7 +67,7 @@ public class Tuple2ImplTest {
 
     @Test
     public void testLength() {
-        assertEquals(2, t2.length());
+        assertEquals(2, t2.degree());
     }
 
     @Test

@@ -58,5 +58,4 @@ public interface DoubleGetter<ENTITY> extends Getter<ENTITY>, ToDoubleFunction<E
     default Function<ENTITY, Double> asFunction() {
         return this::apply;
     }
-    
 }

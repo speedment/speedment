@@ -57,6 +57,5 @@ public interface LongGetter<ENTITY> extends Getter<ENTITY>, ToLongFunction<ENTIT
     @Override
     default Function<ENTITY, Long> asFunction() {
         return this::apply;
-    }    
-    
+    }
 }
