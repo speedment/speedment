@@ -164,7 +164,7 @@ Map<String, List<Film>> map = films.stream()
     .collect(
         Collectors.groupingBy(
             // Apply this classifier
-            f -> f.getRating().orElse("none")
+            Film.RATING.getter()
         )
     );
 ```
