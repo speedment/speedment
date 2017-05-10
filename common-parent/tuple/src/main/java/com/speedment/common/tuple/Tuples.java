@@ -16,6 +16,7 @@
  */
 package com.speedment.common.tuple;
 
+import com.speedment.common.tuple.internal.TupleInfiniteDegreeImpl;
 import com.speedment.common.tuple.internal.nonnullable.Tuple0Impl;
 import com.speedment.common.tuple.internal.nonnullable.Tuple10Impl;
 import com.speedment.common.tuple.internal.nonnullable.Tuple11Impl;
@@ -2430,5 +2431,17 @@ public final class Tuples {
             Function<T, T21> m21,
             Function<T, T22> m22) {
         return new Tuple23MapperImpl<>(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11, m12, m13, m14, m15, m16, m17, m18, m19, m20, m21, m22);
+    }
+    
+    /**
+     * Creates and returns a {@link Tuple} with the given parameters
+     * 
+     * @param elements array of elements to use for the Tuple
+     * @return         a {@link Tuple} with the given parameters
+     * 
+     * @see Tuple
+     */
+    public static Tuple of(Object... elements) {
+        return new TupleInfiniteDegreeImpl(elements);
     }
 }

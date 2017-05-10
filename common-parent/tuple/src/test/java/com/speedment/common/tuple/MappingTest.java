@@ -83,4 +83,20 @@ public class MappingTest {
 
     }
 
+    @Test(expected = NullPointerException.class)
+    public void testTuple2Nulls() {
+        Stream.of("Arne", "Tryggve")
+            .map(Tuples.toTuple(Function.identity(), s -> null))
+            .forEach(System.out::println);
+
+    }
+
+    @Test()
+    public void testTuple2OfNullablesNulls() {
+        Stream.of("Arne", "Tryggve")
+            .map(TuplesOfNullables.toTupleOfNullables(Function.identity(), s -> null))
+            .forEach(System.out::println);
+
+    }
+
 }

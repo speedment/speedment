@@ -23,7 +23,7 @@ import com.speedment.common.tuple.nullable.Tuple9OfNullables;
 import java.util.Optional;
 
 /**
- * An implementation class of a {@link Tuple9 }
+ * An implementation class of a {@link Tuple9OfNullables }
  * 
  * @param <T0> type of element 0
  * @param <T1> type of element 1
@@ -40,7 +40,8 @@ import java.util.Optional;
 public final class Tuple9OfNullablesImpl<T0, T1, T2, T3, T4, T5, T6, T7, T8> extends AbstractTupleOfNullables implements Tuple9OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8> {
     
     /**
-     * Constructs a {@link Tuple } of type {@link Tuple9 }.
+     * Constructs a {@link TupleOfNullables } of type {@link Tuple9OfNullables
+     * }.
      * 
      * @param e0 element 0
      * @param e1 element 1

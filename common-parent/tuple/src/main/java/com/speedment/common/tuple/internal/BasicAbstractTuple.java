@@ -39,6 +39,7 @@ public abstract class BasicAbstractTuple<T extends BasicTuple<R>, R> implements 
 
     @SuppressWarnings("rawtypes")
     BasicAbstractTuple(Class<? extends T> baseClass, Object... values) {
+        requireNonNull(values);
         this.baseClass = requireNonNull(baseClass);
         if (!isNullable()) {
             if (Stream.of(values).anyMatch(Objects::isNull)) {
@@ -48,7 +49,8 @@ public abstract class BasicAbstractTuple<T extends BasicTuple<R>, R> implements 
         if (values.length != degree()) {
             throw new IllegalArgumentException("A Tuple of degree " + degree() + " must contain exactly " + degree() + " elements. Element length was " + values.length);
         }
-        this.values = Arrays.copyOf(values, requireNonNull(values.length));
+        // Defensive copying
+        this.values = Arrays.copyOf(values, values.length);
     }
 
     /**

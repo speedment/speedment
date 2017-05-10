@@ -20,6 +20,11 @@ public class TupleBuilderTest {
         final Tuple3<Integer, String, Long> expected = Tuples.of(1, "Olle", Long.MAX_VALUE);
         final Tuple3<Integer, String, Long> actual = TupleBuilder.builder().add(1).add("Olle").add(Long.MAX_VALUE).build();
         assertEquals(expected, actual);
+        
+        Tuples.of(1,3,4,4,"Arne");
+        
+        TupleBuilder.builder().add(1).add("Arne").build();
+
     }
 
 }
