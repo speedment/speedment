@@ -16,6 +16,7 @@
  */
 package com.speedment.common.tuple;
 
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -34,7 +35,10 @@ public interface Tuple extends BasicTuple<Object> {
      *
      * @return a {@link Stream} of all values for this Tuple
      */
-    Stream<Object> stream();
+    default Stream<Object> stream() {
+        return IntStream.range(0, degree())
+            .mapToObj(this::get);
+    }
 
     @Override
     default <T> Stream<T> streamOf(Class<T> clazz) {
@@ -42,7 +46,5 @@ public interface Tuple extends BasicTuple<Object> {
             .filter(clazz::isInstance)
             .map(clazz::cast);
     }
-
-    //<T> T map(Function<? extends Tuple, T> mapper);
 
 }

@@ -26,12 +26,24 @@ import java.util.stream.Stream;
 public interface BasicTuple<R> {
 
     /**
-     * Returns the degree of the Tuple. For example, a Tuple2 has a degree of 2
-     * whereas a Tuple3 has a degree of 3.
+     * Returns the degree of the BasicTuple. For example, a Tuple2 has a degree
+     * of 2 whereas a Tuple3 has a degree of 3.
      *
      * @return the degree of the Tuple
      */
     int degree();
+
+    /**
+     * Returns the degree of the BasicTuple.
+     *
+     * @return the degree of the BasicTuple
+     * @deprecated use {@link #degree() } instead. This method will be removed\
+     * in the next major API version
+     */
+    @Deprecated
+    default int length() {
+        return degree();
+    }
 
     /**
      * Gets the tuple element at the given index. For example, get(0) will
