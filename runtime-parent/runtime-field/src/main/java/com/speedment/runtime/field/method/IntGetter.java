@@ -39,7 +39,7 @@ import java.util.function.ToIntFunction;
 @GeneratedCode(value = "Speedment")
 @FunctionalInterface
 public interface IntGetter<ENTITY> extends Getter<ENTITY>, ToIntFunction<ENTITY> {
-        
+    
     /**
      * Returns the member represented by this getter in the specified instance.
      * 
@@ -53,10 +53,9 @@ public interface IntGetter<ENTITY> extends Getter<ENTITY>, ToIntFunction<ENTITY>
     default Integer apply(ENTITY instance) {
         return applyAsInt(instance);
     }
-
+    
     @Override
     default Function<ENTITY, Integer> asFunction() {
         return this::apply;
-    }    
-    
+    }
 }
