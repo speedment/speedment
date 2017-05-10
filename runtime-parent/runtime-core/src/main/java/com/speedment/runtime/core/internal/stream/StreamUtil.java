@@ -136,9 +136,9 @@ public final class StreamUtil {
         @Override
         public boolean hasNext() {
             switch (state) {
-                case NEXT : return true;
-                case NO_NEXT: return false;
-                case NOT_DETERMINED: {
+                case NEXT    : return true;
+                case NO_NEXT : return false;
+                case NOT_DETERMINED : {
                     try {
                         if (!resultSet.next()) {
                             state = State.NO_NEXT;
@@ -153,7 +153,7 @@ public final class StreamUtil {
                     return true;
                 }
 
-                default: throw new IllegalStateException(
+                default : throw new IllegalStateException(
                     "Unknown state '" + state + "'."
                 );
             }
@@ -191,13 +191,13 @@ public final class StreamUtil {
             }
 
             try {
-                while (resultSet.next()) {
+                do {
                     try {
                         action.accept(mapper.apply(resultSet));
                     } catch (final SQLException ex) {
                         throw new SpeedmentException(ex);
                     }
-                }
+                } while (resultSet.next());
             } catch (final SQLException ex) {
                 // Do nothing.
             } finally {
