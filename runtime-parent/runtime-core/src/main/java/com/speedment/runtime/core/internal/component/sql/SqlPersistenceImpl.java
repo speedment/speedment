@@ -172,7 +172,7 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
             fields.get(), 
             primaryKeyFields.get()
         )
-            .map(f -> f.getter().apply(entity))
+            .map(f -> toDatabaseType(f, entity))
             .collect(Collectors.toList());
 
         try {
