@@ -102,50 +102,48 @@ public final class Statistics {
 
         sendPostRequest(PING_URL, Json.toJson(ping));
     }
+
     private static void sendPostRequest(final String url, String data) {
-        if (!TestSettings.isTestMode()) { // Wolkswagen Pattern
+        CompletableFuture.runAsync(() -> {
+            try {
+                final HttpURLConnection con = (HttpURLConnection)
+                    new URL(url).openConnection();
 
-            CompletableFuture.runAsync(() -> {
-                try {
-                    final HttpURLConnection con = (HttpURLConnection)
-                        new URL(url).openConnection();
+                con.setRequestMethod("POST");
+                con.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
 
-                    con.setRequestMethod("POST");
-                    con.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                con.setUseCaches(false);
+                con.setAllowUserInteraction(false);
+                con.setDoOutput(true);
 
-                    con.setUseCaches(false);
-                    con.setAllowUserInteraction(false);
-                    con.setDoOutput(true);
-
-                    con.connect();
-                    try (final OutputStream out = con.getOutputStream()) {
-                        out.write(data.getBytes(StandardCharsets.UTF_8));
-                        out.flush();
-                    }
-
-                    int status = getResponseCodeFrom(con);
-                    final String text;
-
-                    try (final BufferedReader rd = new BufferedReader(
-                        new InputStreamReader(status >= 400
-                            ? con.getErrorStream()
-                            : con.getInputStream()))) {
-
-                        final StringBuilder sb = new StringBuilder();
-                        String line;
-                        while ((line = rd.readLine()) != null) {
-                            sb.append(line);
-                        }
-
-                        text = sb.toString();
-                    }
-
-                    LOGGER.debug("Statistics response %d: %s", status, text);
-                } catch (final IOException ex) {
-                    LOGGER.debug(ex);
+                con.connect();
+                try (final OutputStream out = con.getOutputStream()) {
+                    out.write(data.getBytes(StandardCharsets.UTF_8));
+                    out.flush();
                 }
-            });
-        }
+
+                int status = getResponseCodeFrom(con);
+                final String text;
+
+                try (final BufferedReader rd = new BufferedReader(
+                    new InputStreamReader(status >= 400
+                        ? con.getErrorStream()
+                        : con.getInputStream()))) {
+
+                    final StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = rd.readLine()) != null) {
+                        sb.append(line);
+                    }
+
+                    text = sb.toString();
+                }
+
+                LOGGER.debug("Statistics response %d: %s", status, text);
+            } catch (final IOException ex) {
+                LOGGER.debug(ex);
+            }
+        });
     }
 
     private static String getComputerName() {
