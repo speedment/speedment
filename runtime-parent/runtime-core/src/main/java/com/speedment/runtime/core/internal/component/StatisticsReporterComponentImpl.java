@@ -20,40 +20,49 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.core.component.InfoComponent;
+import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.StatisticsReporterComponent;
 import com.speedment.runtime.core.internal.util.Statistics;
 
+import static com.speedment.runtime.core.internal.util.Statistics.Event.NODE_ALIVE;
+import static com.speedment.runtime.core.internal.util.Statistics.Event.NODE_STARTED;
+import static com.speedment.runtime.core.internal.util.Statistics.Event.NODE_STOPPED;
+
 /**
+ * Default implementation of the {@link StatisticsReporterComponent} component.
  *
  * @author Per Minborg
+ * @author Emil Forslund
+ * @since  3.0.8
  */
-public class StatisticsReporterComponentImpl implements StatisticsReporterComponent {
+public class StatisticsReporterComponentImpl
+implements StatisticsReporterComponent {
 
-    private static final Logger LOGGER = LoggerManager.getLogger(StatisticsReporterComponentImpl.class);
+    private static final Logger LOGGER =
+        LoggerManager.getLogger(StatisticsReporterComponentImpl.class);
 
-    @Inject
-    private InfoComponent infoComponent;
+    private @Inject InfoComponent info;
+    private @Inject ProjectComponent projects;
 
     @Override
     public void reportStarted() {
         debug("started");
-        Statistics.onNodeStarted(infoComponent);
+        Statistics.report(info, projects, NODE_STARTED);
     }
 
     @Override
     public void reportStopped() {
         debug("stopped");
-        Statistics.onNodeStopped(infoComponent);
+        Statistics.report(info, projects, NODE_STOPPED);
     }
 
     @Override
     public void alive() {
         debug("alive");
-        Statistics.onNodeAlive(infoComponent);
+        Statistics.report(info, projects, NODE_ALIVE);
     }
 
     private void debug(String action) {
         LOGGER.debug("Report node " + action);
     }
-
 }

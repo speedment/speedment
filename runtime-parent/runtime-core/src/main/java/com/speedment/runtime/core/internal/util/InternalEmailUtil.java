@@ -16,10 +16,12 @@
  */
 package com.speedment.runtime.core.internal.util;
 
+import java.util.Optional;
+import java.util.UUID;
+import java.util.prefs.Preferences;
+
 import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
 import static java.util.Objects.requireNonNull;
-import java.util.Optional;
-import java.util.prefs.Preferences;
 
 /**
  *
@@ -28,12 +30,14 @@ import java.util.prefs.Preferences;
  */
 public final class InternalEmailUtil {
 
-    private final static String FIELD_NAME       = "user_mail";
-    private final static String DEFAULT_EMAIL    = "no-mail-specified";
-    private final static Preferences PREFERENCES = Preferences.userNodeForPackage(InternalEmailUtil.class);
+    private static final String ID_FIELD_NAME    = "user_id";
+    private static final String EMAIL_FIELD_NAME = "user_mail";
+    private static final String DEFAULT_EMAIL    = "no-mail-specified";
+    private static final Preferences PREFERENCES =
+        Preferences.userNodeForPackage(InternalEmailUtil.class);
 
     public static boolean hasEmail() {
-        final String storedEmail = PREFERENCES.get(FIELD_NAME, null);
+        final String storedEmail = PREFERENCES.get(EMAIL_FIELD_NAME, null);
         if (storedEmail == null) {
             return false;
         }
@@ -42,17 +46,28 @@ public final class InternalEmailUtil {
 
     public static String getEmail() {
         return Optional.ofNullable(
-            PREFERENCES.get(FIELD_NAME, null)
+            PREFERENCES.get(EMAIL_FIELD_NAME, null)
         ).orElse(DEFAULT_EMAIL);
     }
 
     public static void removeEmail() {
-        PREFERENCES.remove(FIELD_NAME);
+        PREFERENCES.remove(EMAIL_FIELD_NAME);
     }
 
     public static void setEmail(String email) {
         requireNonNull(email);
-        PREFERENCES.put(FIELD_NAME, email);
+        PREFERENCES.put(EMAIL_FIELD_NAME, email);
+    }
+
+    public static UUID getUserId() {
+        final String id = PREFERENCES.get(ID_FIELD_NAME, "");
+        try {
+            return UUID.fromString(id);
+        } catch (final IllegalArgumentException ex) {
+            final UUID generated = UUID.randomUUID();
+            PREFERENCES.put(ID_FIELD_NAME, generated.toString());
+            return generated;
+        }
     }
 
     private InternalEmailUtil() {
