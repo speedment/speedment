@@ -27,6 +27,7 @@ import com.speedment.runtime.core.internal.util.testing.TestSettings;
 
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Clock;
@@ -34,6 +35,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import static java.util.Objects.requireNonNull;
@@ -91,7 +93,7 @@ public final class Statistics {
             .collect(toList())
         );
         ping.put("emailAddress", InternalEmailUtil.getEmail());
-        ping.put("computerName", System.getProperty("user.dir"));
+        ping.put("computerName", getComputerName());
         ping.put("dateStarted", STARTED);
 
         sendPostRequest(PING_URL, Json.toJson(ping));
@@ -139,6 +141,17 @@ public final class Statistics {
                     LOGGER.debug(ex);
                 }
             });
+        }
+    }
+
+    private static String getComputerName() {
+        try {
+            return InetAddress.getLocalHost().getHostName();
+        } catch (final Exception ex) { // Ignore exception.
+            return Optional.ofNullable(System.getenv("COMPUTERNAME"))
+                .orElseGet(() -> Optional.ofNullable(System.getenv("HOSTNAME"))
+                    .orElse("unknown")
+                );
         }
     }
 
