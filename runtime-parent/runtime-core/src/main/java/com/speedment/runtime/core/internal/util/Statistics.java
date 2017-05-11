@@ -25,11 +25,10 @@ import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.internal.util.testing.TestSettings;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -105,18 +104,48 @@ public final class Statistics {
                     final HttpURLConnection con = (HttpURLConnection)
                         new URL(url).openConnection();
 
-                    con.connect();
-                    con.getResponseCode(); // Might have side effects...
-                    con.getResponseMessage();
+                    con.setRequestMethod("POST");
+                    con.setUseCaches(false);
+                    con.setAllowUserInteraction(false);
+                    con.setDoOutput(true);
 
-                    try (final BufferedReader in = new BufferedReader(
-                            new InputStreamReader(con.getInputStream()))) {
-                        while (in.readLine() != null);
+                    con.connect();
+                    try (final OutputStream out = con.getOutputStream()) {
+                        out.write(data.getBytes(StandardCharsets.UTF_8));
+                        out.flush();
                     }
+
+                    int status = getResponseCodeFrom(con);
+                    final String text;
+
+                    try (final BufferedReader rd = new BufferedReader(
+                        new InputStreamReader(status >= 400
+                            ? con.getErrorStream()
+                            : con.getInputStream()))) {
+
+                        final StringBuilder sb = new StringBuilder();
+                        String line;
+                        while ((line = rd.readLine()) != null) {
+                            sb.append(line);
+                        }
+
+                        text = sb.toString();
+                    }
+
+                    LOGGER.debug("Statistics response %d: %s", status, text);
                 } catch (final IOException ex) {
                     LOGGER.debug(ex);
                 }
             });
+        }
+    }
+
+    private static int getResponseCodeFrom(final HttpURLConnection conn)
+    throws IOException {
+        try {
+            return conn.getResponseCode();
+        } catch (final FileNotFoundException ex) {
+            return 404;
         }
     }
 
