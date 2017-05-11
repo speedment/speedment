@@ -17,6 +17,8 @@
 package com.speedment.runtime.core.internal.util;
 
 import com.speedment.common.json.Json;
+import com.speedment.common.lazy.LazyLong;
+import com.speedment.common.lazy.specialized.LazyString;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.Dbms;
@@ -93,8 +95,10 @@ public final class Statistics {
             .collect(toList())
         );
         ping.put("emailAddress", InternalEmailUtil.getEmail());
-        ping.put("computerName", getComputerName());
-        ping.put("dateStarted", STARTED);
+        ping.put("computerName", HOST_NAME.getOrCompute(Statistics::getComputerName));
+        ping.put("dateStarted", STARTED.getOrCompute(
+            () -> Instant.now(Clock.system(ZoneId.of("UTC"))).getEpochSecond()
+        ));
 
         sendPostRequest(PING_URL, Json.toJson(ping));
     }
@@ -145,14 +149,21 @@ public final class Statistics {
     }
 
     private static String getComputerName() {
+        final String hostName;
+
         try {
-            return InetAddress.getLocalHost().getHostName();
-        } catch (final Exception ex) { // Ignore exception.
-            return Optional.ofNullable(System.getenv("COMPUTERNAME"))
-                .orElseGet(() -> Optional.ofNullable(System.getenv("HOSTNAME"))
-                    .orElse("unknown")
-                );
+            hostName = InetAddress.getLocalHost().getHostName();
+            if (hostName != null && !hostName.isEmpty()) {
+                return hostName;
+            }
+        } catch (final Exception ex) {
+            // Ignore exception.
         }
+
+        return Optional.ofNullable(System.getenv("COMPUTERNAME"))
+            .orElseGet(() -> Optional.ofNullable(System.getenv("HOSTNAME"))
+                .orElse("unknown")
+            );
     }
 
     private static int getResponseCodeFrom(final HttpURLConnection conn)
@@ -164,8 +175,8 @@ public final class Statistics {
         }
     }
 
-    private static final long STARTED =
-        Instant.now(Clock.system(ZoneId.of("UTC"))).getEpochSecond();
+    private static final LazyString HOST_NAME = LazyString.create();
+    private static final LazyLong STARTED     = LazyLong.create();
 
     /**
      * Utility classes should not be instantiated.
