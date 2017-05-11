@@ -25,6 +25,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -141,6 +143,10 @@ public final class DocumentTranscoder {
             @SuppressWarnings("unchecked")
             final Map<String, Object> data = 
                 (Map<String, Object>) root.get(ROOT);
+
+            if (!data.containsKey(Project.APP_ID)) {
+                data.put(Project.APP_ID, UUID.randomUUID().toString());
+            }
             
             return new ProjectImpl(data);
         } catch (final Exception ex) {
