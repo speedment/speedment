@@ -70,6 +70,9 @@ implements TranslatorDecorator<Table, Interface> {
     public void apply(JavaClassTranslator<Table, Interface> translator) {
         translator.onMake((file, builder) -> {
             builder.forEveryTable(Translator.Phase.POST_MAKE, (intrf, table) -> {
+
+                file.getImports().removeIf(i -> i.getType().equals(StringToEnumTypeMapper.class));
+
                 table.columns()
                     .filter(HasEnabled::test)
                     .filter(col -> col.getTypeMapper()
