@@ -105,6 +105,8 @@ public final class Statistics {
                         new URL(url).openConnection();
 
                     con.setRequestMethod("POST");
+                    con.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+
                     con.setUseCaches(false);
                     con.setAllowUserInteraction(false);
                     con.setDoOutput(true);
