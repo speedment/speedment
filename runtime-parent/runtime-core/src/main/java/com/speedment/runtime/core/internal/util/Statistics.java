@@ -81,7 +81,7 @@ public final class Statistics {
         final Project project = projects.getProject();
         final Map<String, Object> ping = new HashMap<>();
 
-        ping.put("userId", InternalEmailUtil.getUserId());
+        ping.put("userId", InternalEmailUtil.getUserId().toString());
         ping.put("appId", project.getAppId());
         ping.put("eventType", event.eventName);
         ping.put("productName", info.getTitle());
