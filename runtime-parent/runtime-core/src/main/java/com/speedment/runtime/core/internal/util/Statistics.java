@@ -27,7 +27,11 @@ import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.internal.util.testing.TestSettings;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
@@ -67,7 +71,7 @@ public final class Statistics {
     }
 
     private final static Logger LOGGER   = LoggerManager.getLogger(Statistics.class);
-    private final static String PING_URL = "https://api.speedment.com:9020/stats";
+    private final static String PING_URL = "https://report.speedment.com:9020/stats";
 
     public static void report(final InfoComponent info,
                               final ProjectComponent projects,
