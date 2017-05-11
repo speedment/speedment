@@ -58,10 +58,8 @@ public abstract class AbstractApplicationMetadata implements ApplicationMetadata
     
     private Map<String, Object> fromJson(String json) {
         @SuppressWarnings("unchecked")
-        final Map<String, Object> parsed = (Map<String, Object>) Json.fromJson(json);
-        if (!parsed.containsKey(Project.APP_ID)) {
-            parsed.put(Project.APP_ID, UUID.randomUUID().toString());
-        }
+        final Map<String, Object> parsed =
+            (Map<String, Object>) Json.fromJson(json);
         return parsed;
     }
 }
