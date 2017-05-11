@@ -19,7 +19,6 @@ package com.speedment.generator.core.internal.translator;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Meta;
 import com.speedment.common.codegen.internal.java.JavaGenerator;
-import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.util.Formatting;
 import com.speedment.common.injector.annotation.Inject;
@@ -37,10 +36,11 @@ import com.speedment.generator.translator.component.CodeGenerationComponent;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
-import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
 import com.speedment.runtime.core.component.InfoComponent;
+import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.util.Statistics;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
@@ -49,10 +49,14 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
+import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
+import static com.speedment.runtime.core.internal.util.Statistics.Event.GENERATE;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -73,11 +77,12 @@ public final class TranslatorManagerHelper {
     @Inject private InfoComponent info;
     @Inject private PathComponent paths;
     @Inject private EventComponent events;
+    @Inject private ProjectComponent projects;
     @Inject private CodeGenerationComponent codeGenerationComponent;
 
     public void accept(TranslatorManager delegator, Project project) {
         requireNonNull(project);
-        Statistics.onGenerate(info);
+        Statistics.report(info, projects, GENERATE);
 
         final List<Translator<?, ?>> writeOnceTranslators = new ArrayList<>();
         final List<Translator<?, ?>> writeAlwaysTranslators = new ArrayList<>();
