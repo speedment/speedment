@@ -16,116 +16,103 @@
  */
 package com.speedment.runtime.core.internal.util;
 
-import static com.speedment.common.invariant.NullUtil.requireNonNullElements;
+import com.speedment.common.json.Json;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.Project;
 import com.speedment.runtime.core.component.InfoComponent;
-import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.internal.util.analytics.AnalyticsUtil;
-import static com.speedment.runtime.core.internal.util.analytics.FocusPoint.*;
+import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.internal.util.testing.TestSettings;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
-import java.util.List;
-import static java.util.Objects.requireNonNull;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import static java.util.stream.Collectors.joining;
+
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 
 /**
+ * Utility class for reporting events to the statistics manager.
  *
  * @author Emil Forslund
  */
 public final class Statistics {
 
-    private final static Logger LOGGER = LoggerManager.getLogger(Statistics.class);
-    private final static String PING_URL = "http://stat.speedment.com:8081/Beacon";
+    public enum Event {
 
-    public static void onGuiStarted(InfoComponent infoComponent) {
-        notifyEvent(infoComponent, "gui-started", includeMail());
-        AnalyticsUtil.notify(GUI_STARTED, infoComponent);
+        GUI_STARTED        ("gui-started"),
+        GUI_PROJECT_LOADED ("gui-project-loaded"),
+        GENERATE           ("generate"),
+        NODE_STARTED       ("node-started"),
+        NODE_ALIVE         ("node-alive"),
+        NODE_STOPPED       ("node-stopped");
+
+        private final String eventName;
+
+        Event(String eventName) {
+            this.eventName = eventName;
+        }
     }
 
-    public static void onGuiProjectLoaded(InfoComponent infoComponent) {
-        notifyEvent(infoComponent, "gui-project-loaded", includeMail());
-        AnalyticsUtil.notify(GUI_PROJECT_LOADED, infoComponent);
-    }
+    private final static Logger LOGGER   = LoggerManager.getLogger(Statistics.class);
+    private final static String PING_URL = "https://api.speedment.com:9020/stats";
 
-    public static void onGenerate(InfoComponent infoComponent) {
-        notifyEvent(infoComponent, "generate", includeMail());
-        AnalyticsUtil.notify(GENERATE, infoComponent);
-    }
+    public static void report(final InfoComponent info,
+                              final ProjectComponent projects,
+                              final Event event) {
 
-    public static void onNodeStarted(InfoComponent infoComponent) {
-        notifyEvent(infoComponent, "node-started");
-        AnalyticsUtil.notify(APP_STARTED, infoComponent);
-    }
-
-    public static void onNodeAlive(InfoComponent infoComponent) {
-        notifyEvent(infoComponent, "node-alive");
-        AnalyticsUtil.notify(APP_ALIVE, infoComponent);
-    }
-
-    public static void onNodeStopped(InfoComponent infoComponent) {
-        notifyEvent(infoComponent, "node-stopped");
-        AnalyticsUtil.notify(APP_STOPPED, infoComponent);
-    }
-
-    private static void notifyEvent(InfoComponent infoComponent, final String event) {
-        notifyEvent(infoComponent, event, emptyList());
-    }
-
-    private static void notifyEvent(InfoComponent infoComponent, final String event, final Param param) {
-        notifyEvent(infoComponent, event, singletonList(requireNonNull(param)));
-    }
-
-    private static void notifyEvent(InfoComponent infoComponent, final String event, final Collection<Param> params) {
-        requireNonNull(infoComponent);
+        requireNonNull(info);
+        requireNonNull(projects);
         requireNonNull(event);
-        requireNonNullElements(params);
-        final List<Param> allParams = new ArrayList<>(params);
-        allParams.add(new Param("project-key", Hash.md5(System.getProperty("user.dir"))));
-        allParams.add(new Param("version", infoComponent.getImplementationVersion()));
-        allParams.add(new Param("event", event));
-        sendPostRequest(allParams);
+
+        if (TestSettings.isTestMode()) {
+            return;
+        }
+
+        final Project project = projects.getProject();
+        final Map<String, Object> ping = new HashMap<>();
+
+        ping.put("userId", InternalEmailUtil.getUserId());
+        ping.put("appId", project.getAppId());
+        ping.put("eventType", event.eventName);
+        ping.put("productName", info.getTitle());
+        ping.put("productVersion", info.getImplementationVersion());
+        ping.put("databases", project.dbmses()
+            .map(Dbms::getTypeName)
+            .distinct()
+            .collect(toList())
+        );
+        ping.put("emailAddress", InternalEmailUtil.getEmail());
+        ping.put("computerName", System.getProperty("user.dir"));
+        ping.put("dateStarted", STARTED);
+
+        sendPostRequest(PING_URL, Json.toJson(ping));
     }
-
-    private static Param includeMail() {
-        return new Param("mail", InternalEmailUtil.getEmail());
-    }
-
-    private static void sendPostRequest(final Collection<Param> params) {
-        requireNonNullElements(params);
-
+    private static void sendPostRequest(final String url, String data) {
         if (!TestSettings.isTestMode()) { // Wolkswagen Pattern
 
             CompletableFuture.runAsync(() -> {
-                final URL url = createRequestURL(params);
-
                 try {
-                    final HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    final HttpURLConnection con = (HttpURLConnection)
+                        new URL(url).openConnection();
 
                     con.connect();
                     con.getResponseCode(); // Might have side effects...
                     con.getResponseMessage();
 
-                    try (final BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()))) {
-                        final StringBuilder response = new StringBuilder();
-                        String inputLine;
-                        while ((inputLine = in.readLine()) != null) {
-                            response.append(inputLine);
-                        }
+                    try (final BufferedReader in = new BufferedReader(
+                            new InputStreamReader(con.getInputStream()))) {
+                        while (in.readLine() != null);
                     }
-
                 } catch (final IOException ex) {
                     LOGGER.debug(ex);
                 }
@@ -133,40 +120,8 @@ public final class Statistics {
         }
     }
 
-    private static URL createRequestURL(final Collection<Param> params) {
-        requireNonNull(params);
-        try {
-            return new URL(PING_URL + "?"
-                + params.stream()
-                    .map(Param::encode)
-                    .collect(joining("&"))
-            );
-        } catch (final MalformedURLException ex) {
-            throw new RuntimeException("Could not parse statistics url.", ex);
-        }
-    }
-
-    private final static class Param {
-
-        private static final String ENCODING = "UTF-8";
-
-        private final String key, value;
-
-        public Param(final String key, final String value) {
-            this.key = requireNonNull(key);
-            this.value = requireNonNull(value);
-        }
-
-        public String encode() {
-            try {
-
-                return URLEncoder.encode(key, ENCODING) + "="
-                    + URLEncoder.encode(value, ENCODING);
-            } catch (UnsupportedEncodingException ex) {
-                throw new SpeedmentException("Encoding '" + ENCODING + "' is not supported.", ex);
-            }
-        }
-    }
+    private static final long STARTED =
+        Instant.now(Clock.system(ZoneId.of("UTC"))).getEpochSecond();
 
     /**
      * Utility classes should not be instantiated.

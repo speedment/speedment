@@ -28,10 +28,10 @@ import com.speedment.common.injector.annotation.InjectKey;
 @InjectKey(StatisticsReporterComponent.class)
 public interface StatisticsReporterComponent {
 
-    default void reportStarted(){};
+    default void reportStarted() {}
 
-    default void reportStopped(){};
+    default void reportStopped() {}
 
-    default void alive(){};
+    default void alive() {}
 
 }
