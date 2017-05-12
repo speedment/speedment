@@ -5,7 +5,6 @@
  */
 package com.speedment.common.tuple;
 
-import com.speedment.common.tuple.nonnullable.Tuple3;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 

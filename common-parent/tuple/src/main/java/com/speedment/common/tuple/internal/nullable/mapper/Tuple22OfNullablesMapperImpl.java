@@ -16,9 +16,15 @@
  */
 package com.speedment.common.tuple.internal.nullable.mapper;
 
+<<<<<<< HEAD
 import com.speedment.common.tuple.TupleMapper;
 import com.speedment.common.tuple.TuplesOfNullables;
 import com.speedment.common.tuple.nonnullable.Tuple22;
+=======
+import com.speedment.common.tuple.Tuple22;
+import com.speedment.common.tuple.TupleMapper;
+import com.speedment.common.tuple.TuplesOfNullables;
+>>>>>>> develop-3.0
 import com.speedment.common.tuple.nullable.Tuple22OfNullables;
 import java.util.function.Function;
 import static java.util.Objects.requireNonNull;
