@@ -25,8 +25,7 @@
     <parent>
         <groupId>com.speedment.example</groupId>
         <artifactId>example-parent</artifactId>
-        <version>3.0.8</version>
-        <relativePath/>
+        <version>3.0.9</version>
     </parent>
     
     <groupId>com.speedment.example</groupId>
@@ -68,7 +67,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.41</version>
+            <version>5.1.42</version>
             <scope>runtime</scope>
         </dependency>
     </dependencies>

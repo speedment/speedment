@@ -34,7 +34,7 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment-parent</artifactId>
-    <version>3.0.9-SNAPSHOT</version>
+    <version>3.0.9</version>
     <packaging>pom</packaging>
     
     <!-- Project Metadata -->
@@ -64,7 +64,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         
         <speedment.version>${project.version}</speedment.version>
-        <common.version>3.0.9-SNAPSHOT</common.version>
+        <common.version>3.0.9</common.version>
     </properties>
     
     <organization>
@@ -401,7 +401,7 @@
                         <version>3.2</version>
                     </plugin>
                     
-                    <plugin>
+<!--                    <plugin>
                         <groupId>com.mycila</groupId>
                         <artifactId>license-maven-plugin</artifactId>
                         <version>3.0</version>
@@ -430,14 +430,14 @@
                             </excludes>
                         </configuration>
 
-                        <!--<executions>-->
-                            <!--<execution>-->
-                                <!--<goals>-->
-                                    <!--<goal>check</goal>-->
-                                <!--</goals>-->
-                            <!--</execution>-->
-                        <!--</executions>-->
-                    </plugin>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>-->
                     
                     <plugin>
                         <!-- http://eclemma.org/jacoco/trunk/doc/maven.html -->
