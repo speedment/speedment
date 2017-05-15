@@ -17,13 +17,8 @@
 package com.speedment.plugins.spring.internal;
 
 import com.speedment.common.codegen.constant.SimpleType;
-import com.speedment.common.codegen.model.AnnotationUsage;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Value;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectKey;
@@ -32,11 +27,13 @@ import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
-import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
-import java.lang.reflect.Type;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+
+import java.lang.reflect.Type;
+
+import static com.speedment.runtime.config.util.DocumentDbUtil.traverseOver;
 
 
 /**
@@ -104,7 +101,7 @@ extends AbstractJavaClassTranslator<Project, Class> {
 
                 file.add(Import.of(appBuilderType));
 
-                clazz.add(Method.of("application", appType)
+                clazz.add(Method.of("getApplication", appType)
                     .public_()
                     .add(AnnotationUsage.of(Bean.class))
                     .add(
@@ -136,7 +133,7 @@ extends AbstractJavaClassTranslator<Project, Class> {
 
                         file.add(Import.of(support.entityType()));
 
-                        clazz.add(Method.of(support.variableName(), support.managerType())
+                        clazz.add(Method.of("get" + support.typeName() + "Manager", support.managerType())
                             .public_()
                             .add(Field.of("app", appType))
                             .add(AnnotationUsage.of(Bean.class))
