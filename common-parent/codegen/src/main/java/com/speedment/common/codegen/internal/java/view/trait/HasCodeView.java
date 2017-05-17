@@ -42,8 +42,12 @@ public interface HasCodeView<M extends HasCode<M>> extends Transform<M, String> 
      * @return       the generated code
      */
     default String renderCode(Generator gen, M model) {
-        return block(model.getCode().stream()
-            .collect(joining(nl()))
-        );
+        if (model.getCode().isEmpty()) {
+            return "{}";
+        } else {
+            return block(model.getCode().stream()
+                .collect(joining(nl()))
+            );
+        }
     }
 }
