@@ -163,6 +163,12 @@ public final class AutoImports implements Consumer<File> {
 			);
 		}
 
+        if (HasValues.class.isInstance(model)) {
+            ((HasValues<?>) model).getValues().forEach(v ->
+                findTypesIn(v, types)
+            );
+        }
+
 		if (HasValue.class.isInstance(model)) {
             ((HasValue<?>) model).getValue()
                 .ifPresent(val -> findTypesIn(val, types));
