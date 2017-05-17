@@ -122,6 +122,15 @@ implements TranslatorDecorator<Table, Interface> {
                         colEnum.add(Method.of(TO_DATABASE_METHOD, String.class)
                             .public_().add("return " + DATABASE_NAME_FIELD + ";")
                         );
+
+                        // Generate compareTo()-method
+                        colEnum.add(Method.of("compareTo", int.class)
+                            .public_().add(OVERRIDE)
+                            .add(Field.of("other", enumType))
+                            .add("if (other == null) return -1;",
+                                "else return name().compareTo(other.name());"
+                            )
+                        );
                         
                         // Add it to the interface.
                         intrf.add(colEnum);
