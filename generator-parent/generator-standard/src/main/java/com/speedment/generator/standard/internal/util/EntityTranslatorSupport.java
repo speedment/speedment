@@ -234,6 +234,7 @@ public final class EntityTranslatorSupport {
                         );
                         
                     case COMPARABLE :
+                    case ENUM :
                         type = SimpleParameterizedType.create(
                             ComparableForeignKeyField.class,
                             entityType,
@@ -407,6 +408,7 @@ public final class EntityTranslatorSupport {
                         break;
                         
                     case COMPARABLE :
+                    case ENUM :
                         type = SimpleParameterizedType.create(
                             ComparableField.class, 
                             entityType,
