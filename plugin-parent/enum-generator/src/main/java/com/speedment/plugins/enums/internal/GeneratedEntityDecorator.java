@@ -87,7 +87,7 @@ implements TranslatorDecorator<Table, Interface> {
                         
                         final Enum colEnum = Enum.of(shortName(colEnumName))
                             .add(Field.of(DATABASE_NAME_FIELD, String.class).private_().final_());
-                        
+
                         // Generate enum constants
                         constants.forEach(constant -> {
                             final String javaName = namer.javaStaticFieldName(constant);
@@ -159,6 +159,12 @@ implements TranslatorDecorator<Table, Interface> {
                                 .add(Method.of("getLabel", String.class)
                                     .public_().add(OVERRIDE)
                                     .add("return \"String to " + enumShortName + " Mapper\";")
+                                )
+                                .add(Method.of("getJavaTypeCategory", TypeMapper.Category.class)
+                                    .public_().add(OVERRIDE)
+                                    .add(Field.of("column", Column.class))
+                                    .add("return " + TypeMapper.Category.class.getSimpleName() +
+                                        "." + TypeMapper.Category.ENUM.name() + ";")
                                 )
                                 .add(Method.of("getJavaType", Type.class)
                                     .public_().add(OVERRIDE)
