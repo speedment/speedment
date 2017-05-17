@@ -37,8 +37,27 @@ import static java.util.Comparator.comparing;
  * @author  Emil Forslund
  * @since   2.2.0
  */
-
 public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
+
+    /**
+     * Which category the {@link #getJavaType(Column)} result belong to.
+     *
+     * @author Emil Forslund
+     * @since  3.0.10
+     */
+    enum Category {
+        BYTE,
+        SHORT,
+        INT,
+        LONG,
+        DOUBLE,
+        FLOAT,
+        BOOLEAN,
+        CHAR,
+        REFERENCE,
+        COMPARABLE,
+        STRING
+    }
 
     /**
      * The standard comparator to use for instances of the {@link TypeMapper}
@@ -63,6 +82,38 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
      * @return          the resulting java type
      */
     Type getJavaType(Column column);
+
+    /**
+     * Returns the {@link Category} of the type returned by
+     * {@link #getJavaType(Column)}.
+     *
+     * @param column  the column
+     * @return        the category
+     */
+    default Category getJavaTypeCategory(Column column) {
+        final Type type       = getJavaType(column);
+        final String typeName = getJavaType(column).getTypeName();
+
+        switch (typeName) {
+            case "byte"    : return Category.BYTE;
+            case "short"   : return Category.SHORT;
+            case "int"     : return Category.INT;
+            case "long"    : return Category.LONG;
+            case "double"  : return Category.DOUBLE;
+            case "float"   : return Category.FLOAT;
+            case "boolean" : return Category.BOOLEAN;
+            case "char"    : return Category.CHAR;
+            case "java.lang.String" : return Category.STRING;
+            default : {
+                if (type instanceof Class<?>) {
+                    return Comparable.class.isAssignableFrom((Class<?>) type)
+                        ? Category.COMPARABLE : Category.REFERENCE;
+                } else {
+                    return Category.REFERENCE;
+                }
+            }
+        }
+    }
     
     /**
      * Converts a value from the database domain to the java domain.
