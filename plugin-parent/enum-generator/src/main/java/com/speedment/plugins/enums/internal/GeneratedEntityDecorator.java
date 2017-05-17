@@ -16,7 +16,6 @@
  */
 package com.speedment.plugins.enums.internal;
 
-import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.injector.Injector;
@@ -155,7 +154,7 @@ implements TranslatorDecorator<Table, Interface> {
                             ),
                             ofAnonymous(TypeMapper.class)
                                 .add(String.class)
-                                .add(SimpleType.create(colEnumName))
+                                .add(enumType)
                                 .add(Method.of("getLabel", String.class)
                                     .public_().add(OVERRIDE)
                                     .add("return \"String to " + enumShortName + " Mapper\";")
