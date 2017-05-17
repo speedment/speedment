@@ -151,7 +151,6 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
                                 }
                                 
                                 // Append the line for this helper to the method
-                                final String tmName = col.getTypeMapper().get();
                                 final TypeMapper<?, ?> tm = typeMapperComponent.get(col);
                                 final Type javaType = tm.getJavaType(col);
                                 
