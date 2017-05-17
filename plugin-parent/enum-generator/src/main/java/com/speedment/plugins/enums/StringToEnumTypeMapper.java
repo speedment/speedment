@@ -71,7 +71,7 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
 
     @Override
     public Category getJavaTypeCategory(Column column) {
-        return Category.COMPARABLE;
+        return Category.ENUM;
     }
 
     @Override
