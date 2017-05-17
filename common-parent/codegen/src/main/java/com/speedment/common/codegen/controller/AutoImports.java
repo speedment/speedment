@@ -97,9 +97,13 @@ public final class AutoImports implements Consumer<File> {
 		}
 		
 		if (HasAnnotationUsage.class.isInstance(model)) {
-			((HasAnnotationUsage<?>) model).getAnnotations().forEach(a -> 
-				addType(a.getType(), types)
-			);
+			((HasAnnotationUsage<?>) model).getAnnotations().forEach(a -> {
+				addType(a.getType(), types);
+				a.getValue().ifPresent(v -> findTypesIn(v, types));
+				a.getValues().stream()
+					.map(Map.Entry::getValue)
+					.forEach(v ->  findTypesIn(v, types));
+			});
 		}
 		
 		if (HasClasses.class.isInstance(model)) {
