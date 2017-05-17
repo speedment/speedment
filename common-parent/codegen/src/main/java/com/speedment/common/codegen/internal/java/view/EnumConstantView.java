@@ -51,6 +51,11 @@ implements Transform<EnumConstant, String>,
         return ";";
     }
 
+    @Override
+    public String annotationSeparator() {
+        return " ";
+    }
+
 	@Override
 	public Optional<String> transform(Generator gen, EnumConstant model) {
         requireNonNulls(gen, model);
