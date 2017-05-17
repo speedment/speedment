@@ -16,22 +16,13 @@
  */
 package com.speedment.generator.standard.manager;
 
-import static com.speedment.common.codegen.constant.DefaultType.isPrimitive;
-import static com.speedment.common.codegen.constant.DefaultType.wrapperFor;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
-import com.speedment.common.codegen.model.AnnotationUsage;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Constructor;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Value;
 import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
-import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateApplyResultSetBody;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.generator.translator.component.TypeMapperComponent;
@@ -51,20 +42,24 @@ import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
 import com.speedment.runtime.core.component.sql.SqlTypeMapperHelper;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.util.sql.ResultSetUtil;
-import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.ResultSet;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
+
+import static com.speedment.common.codegen.constant.DefaultType.isPrimitive;
+import static com.speedment.common.codegen.constant.DefaultType.wrapperFor;
+import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateApplyResultSetBody;
+import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
-import java.util.stream.Stream;
 
 /**
  *
@@ -279,26 +274,5 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
     private String helperName(Column column) {
         return getSupport().namer()
             .javaVariableName(column.getJavaName()) + "Helper";
-    }
-    
-    private enum TypeMapperType {
-        IDENTITY, PRIMITIVE, OTHER;
-        
-        static TypeMapperType of(TypeMapperComponent mappers, Column col) {
-            
-            if (!col.getTypeMapper().isPresent()) {
-                return IDENTITY;
-            }
-            
-            final TypeMapper<?, ?> mapper = mappers.get(col);
-            
-            if (TypeMapper.identity().getClass().isAssignableFrom(mapper.getClass())) {
-                return IDENTITY;
-            } else if (TypeMapper.primitive().getClass().isAssignableFrom(mapper.getClass())) {
-                return PRIMITIVE;
-            } else {
-                return OTHER;
-            }
-        }
     }
 }
