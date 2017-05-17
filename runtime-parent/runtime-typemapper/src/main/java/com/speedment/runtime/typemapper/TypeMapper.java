@@ -56,7 +56,8 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
         CHAR,
         REFERENCE,
         COMPARABLE,
-        STRING
+        STRING,
+        ENUM
     }
 
     /**
@@ -106,8 +107,14 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
             case "java.lang.String" : return Category.STRING;
             default : {
                 if (type instanceof Class<?>) {
-                    return Comparable.class.isAssignableFrom((Class<?>) type)
-                        ? Category.COMPARABLE : Category.REFERENCE;
+                    final Class<?> clazz = (Class<?>) type;
+                    if (Enum.class.isAssignableFrom(clazz)) {
+                        return Category.ENUM;
+                    } else if (Comparable.class.isAssignableFrom(clazz)) {
+                        return Category.COMPARABLE;
+                    } else {
+                        return Category.REFERENCE;
+                    }
                 } else {
                     return Category.REFERENCE;
                 }
