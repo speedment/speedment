@@ -30,7 +30,7 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.util.OptionalUtil;
-import com.speedment.runtime.field.ReferenceField;
+import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.lang.reflect.Type;
@@ -142,7 +142,7 @@ implements TranslatorDecorator<Table, Interface> {
 
                         final String enumShortName = shortName(colEnumName);
                         final String enumVarName = namer.javaVariableName(enumShortName);
-                        field.set(ofInvocation(ReferenceField.class, "create",
+                        field.set(ofInvocation(ComparableField.class, "create",
                             ofReference("Identifier." + fieldName),
                             ofReference(
                                 usesOptional(col)
