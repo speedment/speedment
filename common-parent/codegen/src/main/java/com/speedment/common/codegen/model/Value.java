@@ -42,10 +42,11 @@ import java.util.stream.Stream;
 
 /**
  * A model that represents any kind of value declared in code.
- * 
- * @author Emil Forslund
+ *
  * @param <V> the value type
- * @since  2.0
+ *
+ * @author Emil Forslund
+ * @since  2.0.0
  */
 public interface Value<V> extends HasCopy<Value<V>> {
     
@@ -76,10 +77,11 @@ public interface Value<V> extends HasCopy<Value<V>> {
     /**
      * Returns a new {@link ArrayValue} with the specified values set.
      *
-     * @return an {@code ArrayValue}
+     * @param values  the values to initialize the array with
+     * @return        an {@code ArrayValue}
      */
-    static ArrayValue ofArray(List<Value<?>> arrayValue) {
-        return new ArrayValueImpl(arrayValue);
+    static ArrayValue ofArray(List<Value<?>> values) {
+        return new ArrayValueImpl(values);
     }
 
     /**

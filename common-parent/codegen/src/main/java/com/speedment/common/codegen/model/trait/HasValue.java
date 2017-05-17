@@ -22,10 +22,11 @@ import java.util.Optional;
 
 /**
  * A trait for models that has a {@link Value}.
- * 
+ *
+ * @param <T>  the extending type
+ *
  * @author Emil Forslund
- * @param <T> The extending type
- * @since  2.0
+ * @since  2.0.0
  */
 public interface HasValue<T extends HasValue<T>> {
     
