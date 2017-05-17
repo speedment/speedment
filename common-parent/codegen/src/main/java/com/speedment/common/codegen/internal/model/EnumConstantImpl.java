@@ -17,17 +17,13 @@
 package com.speedment.common.codegen.internal.model;
 
 import com.speedment.common.codegen.internal.util.Copier;
-import com.speedment.common.codegen.model.ClassOrInterface;
-import com.speedment.common.codegen.model.EnumConstant;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.Initializer;
-import com.speedment.common.codegen.model.Javadoc;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Value;
+import com.speedment.common.codegen.model.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * This is the default implementation of the {@link EnumConstant} interface.
@@ -47,6 +43,7 @@ public final class EnumConstantImpl implements EnumConstant {
     private final List<Method> methods;
     private final List<Field> fields;
 	private final List<Value<?>> values;
+	private final List<AnnotationUsage> annotations;
 
     /**
      * Initializes this enum constant using a name.
@@ -63,6 +60,7 @@ public final class EnumConstantImpl implements EnumConstant {
 		this.methods      = new ArrayList<>();
 		this.fields       = new ArrayList<>();
 		this.values       = new ArrayList<>();
+		this.annotations  = new ArrayList<>();
 	}
 	
     /**
@@ -73,11 +71,12 @@ public final class EnumConstantImpl implements EnumConstant {
 	protected EnumConstantImpl(EnumConstant prototype) {
 		name	     = requireNonNull(prototype).getName();
         javadoc      = prototype.getJavadoc().orElse(null);
-		classes	     = Copier.copy(prototype.getClasses(), v -> v.copy());
-		initializers = Copier.copy(prototype.getInitializers(), v -> v.copy());
-		methods	     = Copier.copy(prototype.getMethods(), v -> v.copy());
-		fields	     = Copier.copy(prototype.getFields(), v -> v.copy());
-		values	     = Copier.copy(prototype.getValues(), v -> v.copy());
+		classes	     = Copier.copy(prototype.getClasses(), c -> c.copy());
+		initializers = Copier.copy(prototype.getInitializers(), c -> c.copy());
+		methods	     = Copier.copy(prototype.getMethods(), c -> c.copy());
+		fields	     = Copier.copy(prototype.getFields(), c -> c.copy());
+		values	     = Copier.copy(prototype.getValues(), c -> c.copy());
+        annotations  = Copier.copy(prototype.getAnnotations(), c -> c.copy());
 	}
 
 	@Override
@@ -127,7 +126,12 @@ public final class EnumConstantImpl implements EnumConstant {
         return fields;
     }
 
-	@Override
+    @Override
+    public List<AnnotationUsage> getAnnotations() {
+        return annotations;
+    }
+
+    @Override
 	public EnumConstantImpl copy() {
 		return new EnumConstantImpl(this);
 	}
