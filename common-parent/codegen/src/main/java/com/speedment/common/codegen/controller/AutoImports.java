@@ -17,6 +17,7 @@
 package com.speedment.common.codegen.controller;
 
 import com.speedment.common.codegen.DependencyManager;
+import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.trait.*;
@@ -166,6 +167,11 @@ public final class AutoImports implements Consumer<File> {
             ((HasValue<?>) model).getValue()
                 .ifPresent(val -> findTypesIn(val, types));
         }
+
+        if (Enum.class.isInstance(model)) {
+			((Enum) model).getConstants()
+				.forEach(ec -> findTypesIn(ec, types));
+		}
 	}
 	
     /**
