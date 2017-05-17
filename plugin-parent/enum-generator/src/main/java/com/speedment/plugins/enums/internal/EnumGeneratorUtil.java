@@ -68,7 +68,7 @@ public final class EnumGeneratorUtil {
                 "' was marked as an enum but no enum constants was specified."
             ))
             .split(",")
-        ).collect(toList());
+        ).sorted().collect(toList());
     }
     
     public static Stream<Class<?>> classesIn(Class<?> entityClass) {
