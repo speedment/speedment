@@ -16,30 +16,15 @@
  */
 package com.speedment.generator.standard.entity;
 
-import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.common.codegen.constant.DefaultJavadocTag;
-import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
-import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
-import com.speedment.common.codegen.model.Constructor;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Enum;
-import com.speedment.common.codegen.model.EnumConstant;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Interface;
-import com.speedment.common.codegen.model.Javadoc;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Value;
-import static com.speedment.common.codegen.util.Formatting.indent;
-import static com.speedment.common.codegen.util.Formatting.nl;
-import static com.speedment.common.codegen.util.Formatting.shortName;
 import com.speedment.common.function.OptionalBoolean;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
-import static com.speedment.generator.standard.internal.util.ColumnUtil.usesOptional;
 import com.speedment.generator.standard.internal.util.EntityTranslatorSupport;
 import com.speedment.generator.standard.internal.util.FkHolder;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
@@ -51,19 +36,26 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.config.util.DocumentDbUtil;
-import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
-import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
+
 import java.lang.reflect.Type;
-import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
 import java.util.stream.Stream;
+
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
+import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
+import static com.speedment.common.codegen.util.Formatting.*;
+import static com.speedment.generator.standard.internal.util.ColumnUtil.usesOptional;
+import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
+import static com.speedment.runtime.config.util.DocumentUtil.relativeName;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -262,10 +254,10 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                 // Add the 'unique' boolean to the end
                 fieldParams.add(Boolean.toString(DocumentDbUtil.isUnique(col)));
 
-                intrf.add(Field.of(getSupport().namer().javaStaticFieldName(col.getJavaName()), ref.type)
+                intrf.add(Field.of(getSupport().namer().javaStaticFieldName(col.getJavaName()), ref.getType())
                     .final_()
                     .set(Value.ofReference(
-                        shortName(ref.type.getTypeName()) + ".create(" + 
+                        shortName(ref.getType().getTypeName()) + ".create(" +
                         nl() + indent(
                             fieldParams.build().toArray(String[]::new)
                         ) + nl() + ")"
