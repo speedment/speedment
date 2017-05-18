@@ -58,9 +58,8 @@ When we started the open-source project Speedment, the main objective was to rem
 | `COUNT`      | `count()`    |
 
 
-Documentation
--------------
-You can read the [API manual here](https://speedment.github.io/speedment-doc/introduction.html)!
+## Documentation 
+You can read the online [Speedment User's Guide here](https://speedment.github.io/speedment-doc/introduction.html)!
 
 ## Tutorials
 * [Tutorial 1 - Set up the IDE](https://github.com/speedment/speedment/wiki/Tutorial:-Set-up-the-IDE)
