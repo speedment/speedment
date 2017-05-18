@@ -29,8 +29,7 @@ public interface Option {
      * Enumeration of the different implementations of the {@link Option} 
      * interface.
      */
-    enum Type { PARAM, HEADER
-    }
+    enum Type { PARAM, HEADER }
     
     /**
      * The key of this option.
