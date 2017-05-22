@@ -7,7 +7,7 @@ jdk:
 addons:
   apt:
     packages:
-      - oracle-java9-installer
+      - oracle-java8-installer
       - oracle-java9-installer
       
 dist: trusty
