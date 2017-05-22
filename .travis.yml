@@ -11,7 +11,7 @@ addons:
       - oracle-java9-installer
       
 dist: trusty
-sudo: required
+sudo: false
       
 notifications:
   email:
