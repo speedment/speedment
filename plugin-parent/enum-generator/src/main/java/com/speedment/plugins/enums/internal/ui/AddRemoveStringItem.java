@@ -22,16 +22,20 @@ import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.WithState;
+import com.speedment.common.json.Json;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.common.singletonstream.SingletonStream;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.config.internal.identifier.TableIdentifierImpl;
+import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
+import com.speedment.runtime.core.ApplicationMetadata;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
@@ -51,6 +55,7 @@ import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.trait.HasEnumConstantsProperty;
+import com.speedment.tool.config.trait.HasTypeMapperProperty;
 import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.exception.SpeedmentToolException;
 import com.speedment.tool.core.resource.FontAwesome;
@@ -71,10 +76,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -100,6 +102,7 @@ import static javafx.scene.layout.Region.USE_PREF_SIZE;
  */
 public final class AddRemoveStringItem
     <DOC extends HasEnumConstantsProperty
+               & HasTypeMapperProperty
                & HasParent<? extends Table>
                & HasName>
 extends AbstractLabelTooltipItem {
@@ -276,11 +279,13 @@ extends AbstractLabelTooltipItem {
         final Button button = new Button("Populate", FontAwesome.DATABASE.view());
 
         button.setOnAction(e -> {
-            final DbmsProperty dbms = ancestor(column, DbmsProperty.class).get();
+            final Column col = column.getMappedColumn();
+
+            final DbmsProperty dbms = ancestor(col, DbmsProperty.class).get();
             final String dbmsName   = dbms.getName();
-            final String schemaName = ancestor(column, Schema.class).get().getName();
-            final String tableName  = column.getParentOrThrow().getName();
-            final String columnName = column.getName();
+            final String schemaName = ancestor(col, Schema.class).get().getName();
+            final String tableName  = col.getParentOrThrow().getName();
+            final String columnName = col.getName();
 
             final ProgressMeasure progress = ProgressMeasure.create();
 
@@ -295,12 +300,6 @@ extends AbstractLabelTooltipItem {
             );
 
             final CompletableFuture<Boolean> task = supplyAsync(() -> {
-
-                final TableIdentifier<String> tableId =
-                    new TableIdentifierImpl<>(
-                        dbmsName, schemaName, tableName
-                    );
-
                 try {
                     // Hack to create a Manager for reading a single column from
                     // the database.
@@ -308,7 +307,9 @@ extends AbstractLabelTooltipItem {
 
                     progress.setProgress(0.2);
                     final Injector inj = injector.newBuilder()
+                        .withComponent(TempApplicationMetadata.class)
                         .withComponent(SqlStreamSupplierComponentImpl.class)
+                        .withParam("temp.json", Json.toJson(dbms.getParentOrThrow().getData()))
                         .withParam("temp.dbms", dbmsName)
                         .withParam("temp.schema", schemaName)
                         .withParam("temp.table", tableName)
@@ -362,6 +363,94 @@ extends AbstractLabelTooltipItem {
     //                            Internal Class                              //
     ////////////////////////////////////////////////////////////////////////////
 
+    private static class TempApplicationMetadata
+    implements ApplicationMetadata {
+
+        private @Config(name="temp.json", value="") String json;
+
+        @Override
+        public Project makeProject() {
+            try {
+                @SuppressWarnings("unchecked") final Map<String, Object> data =
+                    (Map<String, Object>) Json.fromJson(json);
+                return new ProjectImpl(data);
+            } catch (final ClassCastException ex) {
+                throw new SpeedmentToolException(
+                    "Error deserializing temporary project JSON.", ex
+                );
+            }
+        }
+    }
+
+    private static class TempColumnIdentifier implements ColumnIdentifier<String> {
+        private final String dbms;
+        private final String schema;
+        private final String table;
+        private final String column;
+
+        TempColumnIdentifier(String dbms,
+                             String schema,
+                             String table,
+                             String column) {
+
+            this.dbms   = requireNonNull(dbms);
+            this.schema = requireNonNull(schema);
+            this.table  = requireNonNull(table);
+            this.column = requireNonNull(column);
+        }
+
+        @Override
+        public String getDbmsName() {
+            return dbms;
+        }
+
+        @Override
+        public String getTableName() {
+            return table;
+        }
+
+        @Override
+        public String getColumnName() {
+            return column;
+        }
+
+        @Override
+        public String getSchemaName() {
+            return schema;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ColumnIdentifier)) return false;
+
+            final ColumnIdentifier<?> that = (ColumnIdentifier<?>) o;
+            return dbms.equals(that.getDbmsName())
+                && schema.equals(that.getSchemaName())
+                && table.equals(that.getTableName())
+                && column.equals(that.getColumnName());
+        }
+
+        @Override
+        public int hashCode() {
+            int result = dbms.hashCode();
+            result = 31 * result + schema.hashCode();
+            result = 31 * result + table.hashCode();
+            result = 31 * result + column.hashCode();
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "TempColumnIdentifier{" +
+                "dbms='" + dbms + '\'' +
+                ", schema='" + schema + '\'' +
+                ", table='" + table + '\'' +
+                ", column='" + column + '\'' +
+                '}';
+        }
+    }
+
     private static class SingleColumnManager implements Manager<String> {
 
         private StringField<String, String> field;
@@ -379,27 +468,7 @@ extends AbstractLabelTooltipItem {
         void setFieldAndTableId() {
             this.tableId = TableIdentifier.of(dbms, schema, table);
             this.field   = StringField.create(
-                new ColumnIdentifier<String>() {
-                    @Override
-                    public String getColumnName() {
-                        return column;
-                    }
-
-                    @Override
-                    public String getDbmsName() {
-                        return tableId.getDbmsName();
-                    }
-
-                    @Override
-                    public String getSchemaName() {
-                        return tableId.getSchemaName();
-                    }
-
-                    @Override
-                    public String getTableName() {
-                        return tableId.getTableName();
-                    }
-                },
+                new TempColumnIdentifier(dbms, schema, table, column),
                 e -> e, (e, s) -> e,
                 TypeMapper.identity(),
                 false
@@ -476,6 +545,13 @@ extends AbstractLabelTooltipItem {
         @Override
         public Remover<String> remover() {
             throw new UnsupportedOperationException("This manager is read-only.");
+        }
+
+        @Override
+        public String toString() {
+            return getClass().getSimpleName() + "{tableId: " +
+                TableIdentifier.of(dbms, schema, table).toString()
+                + "}";
         }
     }
 
