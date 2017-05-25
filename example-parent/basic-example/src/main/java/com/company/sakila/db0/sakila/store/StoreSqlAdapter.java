@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.store.generated.GeneratedStoreSqlAdapter;
  * 
  * @author company
  */
-public class StoreSqlAdapter extends GeneratedStoreSqlAdapter {
-    
-    
-}
+public class StoreSqlAdapter extends GeneratedStoreSqlAdapter {}

@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.country.generated.GeneratedCountryManagerIm
  * 
  * @author company
  */
-public final class CountryManagerImpl extends GeneratedCountryManagerImpl implements CountryManager {
-    
-    
-}
+public final class CountryManagerImpl extends GeneratedCountryManagerImpl implements CountryManager {}

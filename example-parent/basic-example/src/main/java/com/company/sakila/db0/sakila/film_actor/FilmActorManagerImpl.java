@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.film_actor.generated.GeneratedFilmActorMana
  * 
  * @author company
  */
-public final class FilmActorManagerImpl extends GeneratedFilmActorManagerImpl implements FilmActorManager {
-    
-    
-}
+public final class FilmActorManagerImpl extends GeneratedFilmActorManagerImpl implements FilmActorManager {}

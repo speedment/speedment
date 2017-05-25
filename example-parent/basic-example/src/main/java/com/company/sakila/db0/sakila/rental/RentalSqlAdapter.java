@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.rental.generated.GeneratedRentalSqlAdapter;
  * 
  * @author company
  */
-public class RentalSqlAdapter extends GeneratedRentalSqlAdapter {
-    
-    
-}
+public class RentalSqlAdapter extends GeneratedRentalSqlAdapter {}

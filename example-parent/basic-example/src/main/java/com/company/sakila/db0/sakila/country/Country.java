@@ -9,7 +9,4 @@ import com.company.sakila.db0.sakila.country.generated.GeneratedCountry;
  * 
  * @author company
  */
-public interface Country extends GeneratedCountry {
-    
-    
-}
+public interface Country extends GeneratedCountry {}

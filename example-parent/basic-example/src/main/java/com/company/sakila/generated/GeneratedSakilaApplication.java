@@ -14,7 +14,4 @@ import com.speedment.runtime.core.Speedment;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public interface GeneratedSakilaApplication extends Speedment {
-    
-    
-}
+public interface GeneratedSakilaApplication extends Speedment {}

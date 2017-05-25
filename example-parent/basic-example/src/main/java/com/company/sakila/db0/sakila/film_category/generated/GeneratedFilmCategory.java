@@ -30,7 +30,7 @@ public interface GeneratedFilmCategory {
      * This Field corresponds to the {@link FilmCategory} field that can be
      * obtained using the {@link FilmCategory#getFilmId()} method.
      */
-    final IntForeignKeyField<FilmCategory, Integer, Film> FILM_ID = IntForeignKeyField.create(
+    IntForeignKeyField<FilmCategory, Integer, Film> FILM_ID = IntForeignKeyField.create(
         Identifier.FILM_ID,
         FilmCategory::getFilmId,
         FilmCategory::setFilmId,
@@ -42,7 +42,7 @@ public interface GeneratedFilmCategory {
      * This Field corresponds to the {@link FilmCategory} field that can be
      * obtained using the {@link FilmCategory#getCategoryId()} method.
      */
-    final ShortForeignKeyField<FilmCategory, Short, Category> CATEGORY_ID = ShortForeignKeyField.create(
+    ShortForeignKeyField<FilmCategory, Short, Category> CATEGORY_ID = ShortForeignKeyField.create(
         Identifier.CATEGORY_ID,
         FilmCategory::getCategoryId,
         FilmCategory::setCategoryId,
@@ -54,7 +54,7 @@ public interface GeneratedFilmCategory {
      * This Field corresponds to the {@link FilmCategory} field that can be
      * obtained using the {@link FilmCategory#getLastUpdate()} method.
      */
-    final ComparableField<FilmCategory, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
+    ComparableField<FilmCategory, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
         Identifier.LAST_UPDATE,
         FilmCategory::getLastUpdate,
         FilmCategory::setLastUpdate,

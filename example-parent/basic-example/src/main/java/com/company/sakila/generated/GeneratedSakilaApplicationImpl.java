@@ -15,7 +15,4 @@ import com.speedment.runtime.core.internal.AbstractSpeedment;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public class GeneratedSakilaApplicationImpl extends AbstractSpeedment implements GeneratedSakilaApplication {
-    
-    
-}
+public class GeneratedSakilaApplicationImpl extends AbstractSpeedment implements GeneratedSakilaApplication {}

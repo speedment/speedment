@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.oracle_java_magazine.util;
+package com.speedment.example.basic_example.util;
 
 import com.company.sakila.SakilaApplication;
 import com.company.sakila.SakilaApplicationBuilder;

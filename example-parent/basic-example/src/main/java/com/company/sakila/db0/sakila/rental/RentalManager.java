@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.rental.generated.GeneratedRentalManager;
  * 
  * @author company
  */
-public interface RentalManager extends GeneratedRentalManager {
-    
-    
-}
+public interface RentalManager extends GeneratedRentalManager {}

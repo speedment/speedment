@@ -9,7 +9,4 @@ import com.company.sakila.db0.sakila.payment.generated.GeneratedPayment;
  * 
  * @author company
  */
-public interface Payment extends GeneratedPayment {
-    
-    
-}
+public interface Payment extends GeneratedPayment {}

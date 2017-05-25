@@ -27,7 +27,7 @@ public interface GeneratedLanguage {
      * This Field corresponds to the {@link Language} field that can be obtained
      * using the {@link Language#getLanguageId()} method.
      */
-    final ShortField<Language, Short> LANGUAGE_ID = ShortField.create(
+    ShortField<Language, Short> LANGUAGE_ID = ShortField.create(
         Identifier.LANGUAGE_ID,
         Language::getLanguageId,
         Language::setLanguageId,
@@ -38,7 +38,7 @@ public interface GeneratedLanguage {
      * This Field corresponds to the {@link Language} field that can be obtained
      * using the {@link Language#getName()} method.
      */
-    final StringField<Language, String> NAME = StringField.create(
+    StringField<Language, String> NAME = StringField.create(
         Identifier.NAME,
         Language::getName,
         Language::setName,
@@ -49,7 +49,7 @@ public interface GeneratedLanguage {
      * This Field corresponds to the {@link Language} field that can be obtained
      * using the {@link Language#getLastUpdate()} method.
      */
-    final ComparableField<Language, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
+    ComparableField<Language, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
         Identifier.LAST_UPDATE,
         Language::getLastUpdate,
         Language::setLastUpdate,

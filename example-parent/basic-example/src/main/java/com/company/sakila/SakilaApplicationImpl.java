@@ -10,7 +10,4 @@ import com.company.sakila.generated.GeneratedSakilaApplicationImpl;
  * 
  * @author company
  */
-public final class SakilaApplicationImpl extends GeneratedSakilaApplicationImpl implements SakilaApplication {
-    
-    
-}
+public final class SakilaApplicationImpl extends GeneratedSakilaApplicationImpl implements SakilaApplication {}

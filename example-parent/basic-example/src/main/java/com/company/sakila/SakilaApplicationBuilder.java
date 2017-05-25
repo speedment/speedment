@@ -11,7 +11,4 @@ import com.company.sakila.generated.GeneratedSakilaApplicationBuilder;
  * 
  * @author company
  */
-public final class SakilaApplicationBuilder extends GeneratedSakilaApplicationBuilder {
-    
-    
-}
+public final class SakilaApplicationBuilder extends GeneratedSakilaApplicationBuilder {}

@@ -18,8 +18,8 @@ package com.speedment.example.basic_example;
 
 import com.company.sakila.SakilaApplication;
 import com.company.sakila.db0.sakila.address.AddressManager;
-import com.speedment.oracle_java_magazine.util.ExampleUtil;
-import static com.speedment.oracle_java_magazine.util.ExampleUtil.buildApplication;
+import com.speedment.example.basic_example.util.ExampleUtil;
+import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 import java.sql.Blob;
 import java.sql.SQLException;
 

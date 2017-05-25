@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.payment.generated.GeneratedPaymentSqlAdapte
  * 
  * @author company
  */
-public class PaymentSqlAdapter extends GeneratedPaymentSqlAdapter {
-    
-    
-}
+public class PaymentSqlAdapter extends GeneratedPaymentSqlAdapter {}

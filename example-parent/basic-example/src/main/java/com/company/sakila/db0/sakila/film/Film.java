@@ -9,7 +9,4 @@ import com.company.sakila.db0.sakila.film.generated.GeneratedFilm;
  * 
  * @author company
  */
-public interface Film extends GeneratedFilm {
-    
-    
-}
+public interface Film extends GeneratedFilm {}

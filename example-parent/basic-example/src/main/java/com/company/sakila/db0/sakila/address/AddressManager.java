@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.address.generated.GeneratedAddressManager;
  * 
  * @author company
  */
-public interface AddressManager extends GeneratedAddressManager {
-    
-    
-}
+public interface AddressManager extends GeneratedAddressManager {}

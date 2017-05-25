@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.staff.generated.GeneratedStaffManager;
  * 
  * @author company
  */
-public interface StaffManager extends GeneratedStaffManager {
-    
-    
-}
+public interface StaffManager extends GeneratedStaffManager {}

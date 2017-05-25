@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.language.generated.GeneratedLanguageImpl;
  * 
  * @author company
  */
-public final class LanguageImpl extends GeneratedLanguageImpl implements Language {
-    
-    
-}
+public final class LanguageImpl extends GeneratedLanguageImpl implements Language {}

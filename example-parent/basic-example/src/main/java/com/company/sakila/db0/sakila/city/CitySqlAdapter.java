@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.city.generated.GeneratedCitySqlAdapter;
  * 
  * @author company
  */
-public class CitySqlAdapter extends GeneratedCitySqlAdapter {
-    
-    
-}
+public class CitySqlAdapter extends GeneratedCitySqlAdapter {}

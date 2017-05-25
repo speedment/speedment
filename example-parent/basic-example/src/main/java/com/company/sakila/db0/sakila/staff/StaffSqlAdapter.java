@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.staff.generated.GeneratedStaffSqlAdapter;
  * 
  * @author company
  */
-public class StaffSqlAdapter extends GeneratedStaffSqlAdapter {
-    
-    
-}
+public class StaffSqlAdapter extends GeneratedStaffSqlAdapter {}

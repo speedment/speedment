@@ -9,7 +9,4 @@ import com.company.sakila.db0.sakila.address.generated.GeneratedAddress;
  * 
  * @author company
  */
-public interface Address extends GeneratedAddress {
-    
-    
-}
+public interface Address extends GeneratedAddress {}

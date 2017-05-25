@@ -9,7 +9,4 @@ import com.company.sakila.db0.sakila.rental.generated.GeneratedRental;
  * 
  * @author company
  */
-public interface Rental extends GeneratedRental {
-    
-    
-}
+public interface Rental extends GeneratedRental {}

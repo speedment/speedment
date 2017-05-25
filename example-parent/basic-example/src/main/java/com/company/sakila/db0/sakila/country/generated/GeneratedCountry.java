@@ -27,7 +27,7 @@ public interface GeneratedCountry {
      * This Field corresponds to the {@link Country} field that can be obtained
      * using the {@link Country#getCountryId()} method.
      */
-    final IntField<Country, Integer> COUNTRY_ID = IntField.create(
+    IntField<Country, Integer> COUNTRY_ID = IntField.create(
         Identifier.COUNTRY_ID,
         Country::getCountryId,
         Country::setCountryId,
@@ -38,7 +38,7 @@ public interface GeneratedCountry {
      * This Field corresponds to the {@link Country} field that can be obtained
      * using the {@link Country#getCountry()} method.
      */
-    final StringField<Country, String> COUNTRY = StringField.create(
+    StringField<Country, String> COUNTRY = StringField.create(
         Identifier.COUNTRY,
         Country::getCountry,
         Country::setCountry,
@@ -49,7 +49,7 @@ public interface GeneratedCountry {
      * This Field corresponds to the {@link Country} field that can be obtained
      * using the {@link Country#getLastUpdate()} method.
      */
-    final ComparableField<Country, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
+    ComparableField<Country, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
         Identifier.LAST_UPDATE,
         Country::getLastUpdate,
         Country::setLastUpdate,

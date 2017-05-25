@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.payment.generated.GeneratedPaymentImpl;
  * 
  * @author company
  */
-public final class PaymentImpl extends GeneratedPaymentImpl implements Payment {
-    
-    
-}
+public final class PaymentImpl extends GeneratedPaymentImpl implements Payment {}

@@ -20,8 +20,8 @@ import com.company.sakila.SakilaApplication;
 import com.company.sakila.db0.sakila.language.Language;
 import com.company.sakila.db0.sakila.language.LanguageImpl;
 import com.company.sakila.db0.sakila.language.LanguageManager;
-import com.speedment.oracle_java_magazine.util.ExampleUtil;
-import static com.speedment.oracle_java_magazine.util.ExampleUtil.buildApplication;
+import com.speedment.example.basic_example.util.ExampleUtil;
+import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 import com.speedment.runtime.core.ApplicationBuilder.LogType;
 
 /**

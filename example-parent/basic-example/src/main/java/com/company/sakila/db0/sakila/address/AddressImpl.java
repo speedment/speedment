@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.address.generated.GeneratedAddressImpl;
  * 
  * @author company
  */
-public final class AddressImpl extends GeneratedAddressImpl implements Address {
-    
-    
-}
+public final class AddressImpl extends GeneratedAddressImpl implements Address {}

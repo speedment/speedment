@@ -18,9 +18,14 @@ package com.speedment.example.basic_example;
 
 import com.company.sakila.SakilaApplication;
 import com.company.sakila.db0.sakila.actor.ActorManager;
+import com.company.sakila.db0.sakila.film.Film;
 import com.company.sakila.db0.sakila.film.FilmManager;
 import com.company.sakila.db0.sakila.film_actor.FilmActorManager;
-import static com.speedment.oracle_java_magazine.util.ExampleUtil.buildApplication;
+import com.company.sakila.db0.sakila.language.Language;
+import com.company.sakila.db0.sakila.language.LanguageManager;
+import com.speedment.common.tuple.Tuples;
+import com.speedment.example.basic_example.util.ExampleUtil;
+import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 //import com.speedment.plugins.json.JsonBundle;
 
 /**
@@ -33,12 +38,14 @@ public class Json {
     private final FilmManager films;
     private final FilmActorManager filmActors;
     private final ActorManager actors;
+    private final LanguageManager languages;
 
     public Json() {
         app = buildApplication(/*b -> b.withBundle(JsonBundle.class)*/);
         films = app.getOrThrow(FilmManager.class);
         filmActors = app.getOrThrow(FilmActorManager.class);
         actors = app.getOrThrow(ActorManager.class);
+        languages = app.getOrThrow(LanguageManager.class);
     }
 
     public static void main(String[] args) {
@@ -46,32 +53,40 @@ public class Json {
     }
 
     private void run() {
-//        json();
+        oneToMany();
+        manyToMany();
+        join();
     }
 
-//    private void json() {
-//        ExampleUtil.log("json");
-//
-//        final JsonComponent jsonComponent = app.getOrThrow(JsonComponent.class);
-//
-//        Function<Film, Stream<Actor>> mapper = f -> filmActors.findBackwardsBy(FilmActor.FILM_ID, f).map(actors.finderBy(FilmActor.ACTOR_ID));
-//
-//        String json = films.stream()
-//            .collect(JsonCollector.toJson(
-//                jsonComponent.allOf(films)
-//                    .remove(Film.FILM_ID)
-//                    .remove(Film.DESCRIPTION)
-//                    .putStreamer(
-//                        "actors", // Declare a new attribute
-//                        mapper, // How it is calculated
-//                        jsonComponent.noneOf(actors) // How it is formatted
-//                            .put(Actor.FIRST_NAME)
-//                    )
-//            ));
-//        
-//        
-//        System.out.println(json);
-//
-//    }
+    private void oneToMany() {
+        ExampleUtil.log("oneToMany");
+
+        languages.stream()
+            .filter(Language.NAME.equal("English"))
+            .flatMap(films.finderBackwardsBy(Film.LANGUAGE_ID))
+            .forEach(System.out::println);
+
+    }
+    
+    private void manyToMany() {
+        ExampleUtil.log("manyToMany");
+
+        languages.stream()
+            .filter(Language.NAME.equal("English"))
+            .flatMap(films.finderBackwardsBy(Film.LANGUAGE_ID))
+            .forEach(System.out::println);
+
+    }
+
+    private void join() {
+        ExampleUtil.log("join");
+
+         films.stream()
+            .filter(Film.RATING.in("G", "PG"))
+            .map(f -> Tuples.of(f, languages.findBy(Film.LANGUAGE_ID, f)))
+            .map(t2 -> String.format("The film '%s' is in %s", t2.get0().getTitle(), t2.get1().getName()))
+            .forEachOrdered(System.out::println);
+
+    }
 
 }

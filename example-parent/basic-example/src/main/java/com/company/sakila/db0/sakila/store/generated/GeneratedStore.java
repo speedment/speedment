@@ -31,7 +31,7 @@ public interface GeneratedStore {
      * This Field corresponds to the {@link Store} field that can be obtained
      * using the {@link Store#getStoreId()} method.
      */
-    final ShortField<Store, Short> STORE_ID = ShortField.create(
+    ShortField<Store, Short> STORE_ID = ShortField.create(
         Identifier.STORE_ID,
         Store::getStoreId,
         Store::setStoreId,
@@ -42,7 +42,7 @@ public interface GeneratedStore {
      * This Field corresponds to the {@link Store} field that can be obtained
      * using the {@link Store#getManagerStaffId()} method.
      */
-    final ShortForeignKeyField<Store, Short, Staff> MANAGER_STAFF_ID = ShortForeignKeyField.create(
+    ShortForeignKeyField<Store, Short, Staff> MANAGER_STAFF_ID = ShortForeignKeyField.create(
         Identifier.MANAGER_STAFF_ID,
         Store::getManagerStaffId,
         Store::setManagerStaffId,
@@ -54,7 +54,7 @@ public interface GeneratedStore {
      * This Field corresponds to the {@link Store} field that can be obtained
      * using the {@link Store#getAddressId()} method.
      */
-    final IntForeignKeyField<Store, Integer, Address> ADDRESS_ID = IntForeignKeyField.create(
+    IntForeignKeyField<Store, Integer, Address> ADDRESS_ID = IntForeignKeyField.create(
         Identifier.ADDRESS_ID,
         Store::getAddressId,
         Store::setAddressId,
@@ -66,7 +66,7 @@ public interface GeneratedStore {
      * This Field corresponds to the {@link Store} field that can be obtained
      * using the {@link Store#getLastUpdate()} method.
      */
-    final ComparableField<Store, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
+    ComparableField<Store, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
         Identifier.LAST_UPDATE,
         Store::getLastUpdate,
         Store::setLastUpdate,

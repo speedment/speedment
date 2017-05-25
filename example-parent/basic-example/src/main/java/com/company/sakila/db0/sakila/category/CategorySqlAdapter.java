@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.category.generated.GeneratedCategorySqlAdap
  * 
  * @author company
  */
-public class CategorySqlAdapter extends GeneratedCategorySqlAdapter {
-    
-    
-}
+public class CategorySqlAdapter extends GeneratedCategorySqlAdapter {}

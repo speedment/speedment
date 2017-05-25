@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.inventory.generated.GeneratedInventoryImpl;
  * 
  * @author company
  */
-public final class InventoryImpl extends GeneratedInventoryImpl implements Inventory {
-    
-    
-}
+public final class InventoryImpl extends GeneratedInventoryImpl implements Inventory {}

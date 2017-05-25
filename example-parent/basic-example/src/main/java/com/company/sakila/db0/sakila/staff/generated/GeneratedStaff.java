@@ -37,7 +37,7 @@ public interface GeneratedStaff {
      * This Field corresponds to the {@link Staff} field that can be obtained
      * using the {@link Staff#getStaffId()} method.
      */
-    final ShortField<Staff, Short> STAFF_ID = ShortField.create(
+    ShortField<Staff, Short> STAFF_ID = ShortField.create(
         Identifier.STAFF_ID,
         Staff::getStaffId,
         Staff::setStaffId,
@@ -48,7 +48,7 @@ public interface GeneratedStaff {
      * This Field corresponds to the {@link Staff} field that can be obtained
      * using the {@link Staff#getFirstName()} method.
      */
-    final StringField<Staff, String> FIRST_NAME = StringField.create(
+    StringField<Staff, String> FIRST_NAME = StringField.create(
         Identifier.FIRST_NAME,
         Staff::getFirstName,
         Staff::setFirstName,
@@ -59,7 +59,7 @@ public interface GeneratedStaff {
      * This Field corresponds to the {@link Staff} field that can be obtained
      * using the {@link Staff#getLastName()} method.
      */
-    final StringField<Staff, String> LAST_NAME = StringField.create(
+    StringField<Staff, String> LAST_NAME = StringField.create(
         Identifier.LAST_NAME,
         Staff::getLastName,
         Staff::setLastName,
@@ -70,7 +70,7 @@ public interface GeneratedStaff {
      * This Field corresponds to the {@link Staff} field that can be obtained
      * using the {@link Staff#getAddressId()} method.
      */
-    final IntForeignKeyField<Staff, Integer, Address> ADDRESS_ID = IntForeignKeyField.create(
+    IntForeignKeyField<Staff, Integer, Address> ADDRESS_ID = IntForeignKeyField.create(
         Identifier.ADDRESS_ID,
         Staff::getAddressId,
         Staff::setAddressId,
@@ -82,7 +82,7 @@ public interface GeneratedStaff {
      * This Field corresponds to the {@link Staff} field that can be obtained
      * using the {@link Staff#getPicture()} method.
      */
-    final ReferenceField<Staff, Blob, Blob> PICTURE = ReferenceField.create(
+    ReferenceField<Staff, Blob, Blob> PICTURE = ReferenceField.create(
         Identifier.PICTURE,
         o -> OptionalUtil.unwrap(o.getPicture()),
         Staff::setPicture,
@@ -93,7 +93,7 @@ public interface GeneratedStaff {
      * This Field corresponds to the {@link Staff} field that can be obtained
      * using the {@link Staff#getEmail()} method.
      */
-    final StringField<Staff, String> EMAIL = StringField.create(
+    StringField<Staff, String> EMAIL = StringField.create(
         Identifier.EMAIL,
         o -> OptionalUtil.unwrap(o.getEmail()),
         Staff::setEmail,
@@ -104,7 +104,7 @@ public interface GeneratedStaff {
      * This Field corresponds to the {@link Staff} field that can be obtained
      * using the {@link Staff#getStoreId()} method.
      */
-    final ShortForeignKeyField<Staff, Short, Store> STORE_ID = ShortForeignKeyField.create(
+    ShortForeignKeyField<Staff, Short, Store> STORE_ID = ShortForeignKeyField.create(
         Identifier.STORE_ID,
         Staff::getStoreId,
         Staff::setStoreId,
@@ -116,7 +116,7 @@ public interface GeneratedStaff {
      * This Field corresponds to the {@link Staff} field that can be obtained
      * using the {@link Staff#getActive()} method.
      */
-    final IntField<Staff, Integer> ACTIVE = IntField.create(
+    IntField<Staff, Integer> ACTIVE = IntField.create(
         Identifier.ACTIVE,
         Staff::getActive,
         Staff::setActive,
@@ -127,7 +127,7 @@ public interface GeneratedStaff {
      * This Field corresponds to the {@link Staff} field that can be obtained
      * using the {@link Staff#getUsername()} method.
      */
-    final StringField<Staff, String> USERNAME = StringField.create(
+    StringField<Staff, String> USERNAME = StringField.create(
         Identifier.USERNAME,
         Staff::getUsername,
         Staff::setUsername,
@@ -138,7 +138,7 @@ public interface GeneratedStaff {
      * This Field corresponds to the {@link Staff} field that can be obtained
      * using the {@link Staff#getPassword()} method.
      */
-    final StringField<Staff, String> PASSWORD = StringField.create(
+    StringField<Staff, String> PASSWORD = StringField.create(
         Identifier.PASSWORD,
         o -> OptionalUtil.unwrap(o.getPassword()),
         Staff::setPassword,
@@ -149,7 +149,7 @@ public interface GeneratedStaff {
      * This Field corresponds to the {@link Staff} field that can be obtained
      * using the {@link Staff#getLastUpdate()} method.
      */
-    final ComparableField<Staff, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
+    ComparableField<Staff, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
         Identifier.LAST_UPDATE,
         Staff::getLastUpdate,
         Staff::setLastUpdate,
