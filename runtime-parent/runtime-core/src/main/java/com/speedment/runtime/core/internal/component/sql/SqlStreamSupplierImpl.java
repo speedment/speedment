@@ -24,8 +24,8 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.config.util.DocumentDbUtil;
-import static com.speedment.runtime.config.util.DocumentDbUtil.isSame;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ManagerComponent;
@@ -46,19 +46,19 @@ import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.core.util.DatabaseUtil;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.trait.HasComparableOperators;
+
 import java.sql.ResultSet;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import static java.util.Objects.requireNonNull;
-import java.util.Optional;
-import static java.util.function.Function.identity;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
+import java.util.stream.Stream;
+
+import static com.speedment.runtime.config.util.DocumentDbUtil.isSame;
+import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
+import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
-import java.util.stream.Stream;
 
 /**
  * Default implementation of the {@link SqlStreamSupplier}-interface.
@@ -128,9 +128,9 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
 
         this.columnNameMap = manager.fields()
             .filter(f -> f.findColumn(project)
-            .map(c -> c.getParent())
-            .map(t -> isSame(table, t.get()))
-            .orElse(false)
+                .map(HasParent::getParentOrThrow)
+                .map(t -> isSame(table, t))
+                .orElse(false)
             )
             .map(Field::identifier)
             .collect(toMap(identity(), naming::fullNameOf));
@@ -140,8 +140,14 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
         manager.fields()
             .forEach(f -> {
                 final Optional<? extends Column> c = f.findColumn(project);
-                final Class<?> javaClass = c.get().findDatabaseType();
-                //final ResultSetMapping<?> resultSetMapping = resultSetMapperComponent.apply(dbmsType, javaClass);
+                final Class<?> javaClass = c.orElseThrow(() ->
+                    new SpeedmentException(format("Field '%s' in manager '%s'" +
+                        " referred to a column that couldn't be found " +
+                        "in config model.",
+                        f.identifier().toString(),
+                        manager
+                    ))
+                ).findDatabaseType();
                 columnDatabaseTypeMap.put(f.identifier(), javaClass);
             });
     }
