@@ -17,7 +17,8 @@
 package com.speedment.runtime.core.component.sql.override.ints;
 
 /**
- *
+ * An interface used for overriding an IntStream's terminating operations.
+ * 
  * @author Per Minborg
  */
 public interface IntSqlStreamTerminatorOverride {

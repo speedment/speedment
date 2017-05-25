@@ -17,7 +17,8 @@
 package com.speedment.runtime.core.component.sql.override.longs;
 
 /**
- *
+ * An interface used for overriding a LongStream's terminating operations.
+ * 
  * @author Per Minborg
  */
 public interface LongSqlStreamTerminatorOverride {
