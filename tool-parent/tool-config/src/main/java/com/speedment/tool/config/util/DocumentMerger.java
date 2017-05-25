@@ -52,18 +52,18 @@ public final class DocumentMerger {
      * @param constructor  used to create new {@link DocumentProperty}
      */
     public static void merge(
-        final DocumentProperty existing,
-        final Document proposed,
-        final DocumentConstructor constructor
-    ) {
+            final DocumentProperty existing,
+            final Document proposed,
+            final DocumentConstructor constructor) {
+
         requireNonNull(existing);
         requireNonNull(proposed);
         requireNonNull(constructor);
         
         // Go through the keys specified by the proposed document
         for (final Map.Entry<String, Object> entry : proposed.getData().entrySet()) {
-            final String key = entry.getKey();
-            final Object proposedValue = proposed.getData().get(key);
+            final String key           = entry.getKey();
+            final Object proposedValue = proposed.getData().get(key); // Or null
 
             // Check if the proposed value fulfills the requirements to be
             // considered a list of child documents.
@@ -115,8 +115,7 @@ public final class DocumentMerger {
             }
         }
     }
-    
-    
+
     /**
      * Merges the specified document on the specified key with a specified list
      * of proposed children. If a new {@link DocumentProperty} needs to be
@@ -128,11 +127,11 @@ public final class DocumentMerger {
      * @param constructor  used to create new {@link DocumentProperty}
      */
     private static void merge(
-        final DocumentProperty parent,
-        final String key,
-        final List<Document> proposed,
-        final DocumentConstructor constructor
-    ) {
+            final DocumentProperty parent,
+            final String key,
+            final List<Document> proposed,
+            final DocumentConstructor constructor) {
+
         requireNonNull(parent);
         requireNonNull(key);
         requireNonNull(proposed);
@@ -203,9 +202,9 @@ public final class DocumentMerger {
      * @return        true if they represent the same data
      */
     private static boolean isSame(
-        final Document first, 
-        final Document second
-    ) {
+            final Document first,
+            final Document second) {
+
         requireNonNull(first);
         requireNonNull(second);
         
@@ -219,12 +218,10 @@ public final class DocumentMerger {
         final String firstId  = HasId.of(first).getId();
         final String secondId = HasId.of(second).getId();
         final boolean idsEqual = Objects.equals(firstId, secondId);
-        
-        if (firstParent.isPresent()) {
-            return idsEqual && isSame(firstParent.get(), secondParent.get());
-        } else {
-            return idsEqual;
-        }
+
+        return firstParent.map(doc ->
+            idsEqual && isSame(doc, secondParent.get())
+        ).orElse(idsEqual);
     }
     
     /**
@@ -235,17 +232,16 @@ public final class DocumentMerger {
      * @param <T>             the expected type of the value
      * @param <P>             the property type
      * @param type            the expected type of the value
-     * @param value           the value
+     * @param value           the value or null
      * @param propertyGetter  getter for the property
      * @return                {@code true} if a value was set, else {@code false}
      */
     private static <T, P extends Property<? super T>> boolean setPropertyIf(
-        final Class<T> type,
-        final Object value,
-        final Function<T, P> propertyGetter
-    ) {
+            final Class<T> type,
+            final Object value, // Nullable
+            final Function<T, P> propertyGetter) {
+
         requireNonNull(type);
-        // Value nullable ??
         requireNonNull(propertyGetter);
         
         if (type.isInstance(value)) {
@@ -263,8 +259,10 @@ public final class DocumentMerger {
                     property.setValue(casted);
                 }
             }
+
             return true;
         }
+
         return false;
     }
    
@@ -277,16 +275,7 @@ public final class DocumentMerger {
         private final List<MergeTask> tasks = new LinkedList<>();
         
         public void add(String id, MergeTask task) {
-            final Iterator<MergeTask> iterator = tasks.iterator();
-            
-            while (iterator.hasNext()) {
-                final MergeTask next = iterator.next();
-                
-                if (next.canBeReplaced(id)) {
-                    iterator.remove();
-                }
-            }
-            
+            tasks.removeIf(next -> next.canBeReplaced(id));
             tasks.add(task);
         }
         
@@ -330,10 +319,10 @@ public final class DocumentMerger {
         private final DocumentConstructor constructor;
         
         private MergeWithoutMovingTask(
-            final DocumentProperty existing,
-            final Document proposed,
-            final DocumentConstructor constructor
-        ) { 
+                final DocumentProperty existing,
+                final Document proposed,
+                final DocumentConstructor constructor) {
+
             this.existing    = requireNonNull(existing);
             this.proposed    = requireNonNull(proposed);
             this.constructor = requireNonNull(constructor);
@@ -363,9 +352,9 @@ public final class DocumentMerger {
         private final DocumentConstructor constructor;
         
         private MergeIntoExistingTask(
-            final DocumentProperty document, 
-            final DocumentConstructor constructor
-        ) {
+                final DocumentProperty document,
+                final DocumentConstructor constructor) {
+
             this.document    = requireNonNull(document);
             this.id          = HasId.of(document).getId();
             this.constructor = requireNonNull(constructor);
@@ -414,11 +403,11 @@ public final class DocumentMerger {
         private final DocumentConstructor constructor;
         
         private MergeByMovingTask(
-            final DocumentProperty parent,
-            final Document document,
-            final String key,
-            final DocumentConstructor constructor
-        ) {
+                final DocumentProperty parent,
+                final Document document,
+                final String key,
+                final DocumentConstructor constructor) {
+
             this.parent      = parent; // Can be null.
             this.document    = requireNonNull(document);
             this.key         = requireNonNull(key);
