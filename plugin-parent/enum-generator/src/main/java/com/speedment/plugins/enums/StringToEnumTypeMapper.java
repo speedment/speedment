@@ -39,7 +39,7 @@ import static java.util.Objects.requireNonNull;
  * 
  * @author  Emil Forslund
  * @author  Simon Jonasson
- * @since   1.0.0
+ * @since   3.0.0
  */
 public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapper<String, T> {
 

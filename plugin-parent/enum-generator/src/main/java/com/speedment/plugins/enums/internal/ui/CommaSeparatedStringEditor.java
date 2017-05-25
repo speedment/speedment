@@ -16,11 +16,14 @@
  */
 package com.speedment.plugins.enums.internal.ui;
 
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.plugins.enums.StringToEnumTypeMapper;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.propertyeditor.PropertyEditor;
-import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
+
+import java.util.stream.Stream;
 
 /**
  * Editor for generating a comma-separated string.
@@ -35,17 +38,20 @@ import javafx.beans.binding.Bindings;
  * @since   3.0.0
  */
 public class CommaSeparatedStringEditor<T extends ColumnProperty> 
-        implements PropertyEditor<T> {
+implements PropertyEditor<T> {
+
+    private @Inject Injector injector;
 
     @Override
     public Stream<Item> fieldsFor(T document) {
         return Stream.of(
             new AddRemoveStringItem(
+                document,
                 "Enum Constants", 
                 document.enumConstantsProperty(),
                 "Used for defining what contants the generated enum can have",
                 Bindings.equal(document.typeMapperProperty(), StringToEnumTypeMapper.class.getName())
             )
-        );
+        ).map(injector::inject);
     }
 }

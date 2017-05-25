@@ -30,7 +30,7 @@ import static java.util.stream.Collectors.toList;
  *
  * @author  Emil Forslund
  * @author  Simon Jonasson
- * @since   1.0.0
+ * @since   3.0.0
  */
 public final class EnumGeneratorUtil {
 

@@ -47,7 +47,7 @@ import static com.speedment.common.injector.State.RESOLVED;
  *
  * @author Emil Forslund
  * @author Simon Jonasson
- * @since 1.0.0
+ * @since  3.0.0
  */
 @InjectKey(EnumGeneratorComponent.class)
 public final class EnumGeneratorComponent {
