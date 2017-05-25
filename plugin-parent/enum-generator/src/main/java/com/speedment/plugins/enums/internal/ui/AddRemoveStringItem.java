@@ -26,9 +26,12 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.common.singletonstream.SingletonStream;
 import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.config.internal.identifier.TableIdentifierImpl;
+import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
@@ -46,8 +49,8 @@ import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.StringField;
 import com.speedment.runtime.typemapper.TypeMapper;
-import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.config.DbmsProperty;
+import com.speedment.tool.config.trait.HasEnumConstantsProperty;
 import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.exception.SpeedmentToolException;
 import com.speedment.tool.core.resource.FontAwesome;
@@ -95,11 +98,15 @@ import static javafx.scene.layout.Region.USE_PREF_SIZE;
  * @author  Simon Jonasson
  * @since   3.0.0
  */
-public final class AddRemoveStringItem extends AbstractLabelTooltipItem {
+public final class AddRemoveStringItem
+    <DOC extends HasEnumConstantsProperty
+               & HasParent<? extends Table>
+               & HasName>
+extends AbstractLabelTooltipItem {
 
     private final static Logger LOGGER = LoggerManager.getLogger(AddRemoveStringItem.class);
 
-    private final ColumnProperty column;
+    private final DOC column;
     private final ObservableList<String> strings;
     private final ObservableBooleanValue enabled;
     
@@ -121,11 +128,11 @@ public final class AddRemoveStringItem extends AbstractLabelTooltipItem {
     ////////////////////////////////////////////////////////////////////////////
      
     AddRemoveStringItem(
-            ColumnProperty column,
-            String label,
-            StringProperty value,
-            String tooltip,
-            ObservableBooleanValue enableThis) {
+            final DOC column,
+            final String label,
+            final StringProperty value,
+            final String tooltip,
+            final ObservableBooleanValue enableThis) {
         
         super(label, tooltip, NO_DECORATOR);
 
