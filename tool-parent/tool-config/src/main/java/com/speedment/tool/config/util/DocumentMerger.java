@@ -67,12 +67,14 @@ public final class DocumentMerger {
 
             // Check if the proposed value fulfills the requirements to be
             // considered a list of child documents.
-            boolean wasChild = false;
             if (proposedValue instanceof List<?>) {
                 @SuppressWarnings("unchecked")
                 final List<Object> list = (List<Object>) proposedValue;
 
-                if (!list.isEmpty()) {
+                if (list.isEmpty()) {
+                    // Make sure the list is initialized.
+                    existing.observableListOf(key);
+                } else {
                     final Object first = list.get(0);
 
                     if (first instanceof Map<?, ?>) {
@@ -89,16 +91,19 @@ public final class DocumentMerger {
                             documents,
                             constructor
                         );
-
-                        wasChild = true;
+                    } else {
+                        throw new SpeedmentConfigException(
+                            "Only Lists of Maps are supported in the " +
+                            "document model."
+                        );
                     }
                 }
-            }
-            
-            // If it wasn't a key used for child documents, consider it a 
+
+            // If it wasn't a key used for child documents, consider it a
             // property.
-            if (!wasChild) {
-                
+            } else {
+                // The block of this is intentionally left empty so that the
+                // conditions are evaluated until one of them return true.
                 if (setPropertyIf(String.class,  proposedValue, casted -> existing.stringPropertyOf(key,  () -> casted))
                 ||  setPropertyIf(Boolean.class, proposedValue, casted -> existing.booleanPropertyOf(key, () -> casted))
                 ||  setPropertyIf(Integer.class, proposedValue, casted -> existing.integerPropertyOf(key, () -> casted))
