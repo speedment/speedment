@@ -110,9 +110,9 @@ public final class DocumentMerger {
                 ||  setPropertyIf(Long.class,    proposedValue, casted -> existing.longPropertyOf(key,    () -> casted))
                 ||  setPropertyIf(Float.class,   proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))
                 ||  setPropertyIf(Double.class,  proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))
-                ||  setPropertyIf(Byte.class,    proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))
-                ||  setPropertyIf(Short.class,   proposedValue, casted -> existing.doublePropertyOf(key,  () -> casted))) {}
-                else {
+                ||  setPropertyIf(Byte.class,    proposedValue, casted -> existing.integerPropertyOf(key,  () -> casted))
+                ||  setPropertyIf(Short.class,   proposedValue, casted -> existing.integerPropertyOf(key,  () -> casted)))
+                {} else {
                     throw new SpeedmentConfigException(
                         "Property was not of any known type."
                     );
