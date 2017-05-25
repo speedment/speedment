@@ -33,6 +33,7 @@ import com.speedment.runtime.config.internal.immutable.ImmutableProject;
 import com.speedment.runtime.config.util.DocumentTranscoder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
+import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.DbmsType;
@@ -94,6 +95,7 @@ public final class ConfigFileHelper {
     @Inject private DocumentPropertyComponent documentPropertyComponent;
     @Inject private UserInterfaceComponent userInterfaceComponent;
     @Inject private DbmsHandlerComponent dbmsHandlerComponenet;
+    @Inject private PasswordComponent passwordComponent;
     @Inject private TranslatorManager translatorManager;
     @Inject private ProjectComponent projectComponent;
     @Inject private Injector injector;
@@ -219,9 +221,12 @@ public final class ConfigFileHelper {
                             // Make sure any old data is cleared before merging in
                             // the new state from the database.
                             dbms.schemasProperty().clear();
-                            userInterfaceComponent.projectProperty().merge(documentPropertyComponent, p);
+                            userInterfaceComponent.projectProperty()
+                                .merge(documentPropertyComponent, p);
+
                             return true;
                         } else {
+                            passwordComponent.put(dbms, null); // Clear password
                             runLater(() -> {
                                 userInterfaceComponent.showError("Error Connecting to Database",
                                     "A problem occured with establishing the database connection.", ex
@@ -246,6 +251,7 @@ public final class ConfigFileHelper {
             return status;
 
         } catch (final InterruptedException | ExecutionException ex) {
+            passwordComponent.put(dbms, null); // Clear password
             userInterfaceComponent.showError("Error Executing Connection Task",
                 "The execution of certain tasks could not be completed.", ex
             );
