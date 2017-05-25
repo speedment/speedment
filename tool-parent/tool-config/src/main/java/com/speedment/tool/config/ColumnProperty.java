@@ -18,22 +18,16 @@ package com.speedment.tool.config;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
-import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.ColumnPropertyMutator;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
-import com.speedment.tool.config.trait.HasAliasProperty;
-import com.speedment.tool.config.trait.HasEnabledProperty;
-import com.speedment.tool.config.trait.HasExpandedProperty;
-import com.speedment.tool.config.trait.HasIdProperty;
-import com.speedment.tool.config.trait.HasNameProperty;
-import com.speedment.tool.config.trait.HasNullableProperty;
-import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
-import com.speedment.tool.config.trait.HasTypeMapperProperty;
-import java.util.List;
-import java.util.Optional;
+import com.speedment.tool.config.trait.*;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
+
+import java.util.List;
+
+import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
 
 /**
  *
@@ -50,7 +44,8 @@ implements Column,
         HasAliasProperty,
         HasNullableProperty,
         HasTypeMapperProperty,
-        HasOrdinalPositionProperty {
+        HasOrdinalPositionProperty,
+        HasEnumConstantsProperty {
 
     public ColumnProperty(Table parent) {
         super(parent);
@@ -68,15 +63,6 @@ implements Column,
     @Override
     public boolean isAutoIncrement() {
         return autoIncrementProperty().get();
-    }
-    
-    public StringProperty enumConstantsProperty() {
-        return stringPropertyOf(ENUM_CONSTANTS, () -> Column.super.getEnumConstants().orElse(null));
-    }
-
-    @Override
-    public Optional<String> getEnumConstants() {
-        return Optional.ofNullable(enumConstantsProperty().get());
     }
 
     @Override
