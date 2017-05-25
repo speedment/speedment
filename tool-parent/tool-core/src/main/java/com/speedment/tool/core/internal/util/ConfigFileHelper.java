@@ -18,6 +18,7 @@ package com.speedment.tool.core.internal.util;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
+import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.json.Json;
@@ -48,7 +49,6 @@ import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.component.UserInterfaceComponent.ReuseStage;
 import com.speedment.tool.core.exception.SpeedmentToolException;
 import com.speedment.tool.core.resource.FontAwesome;
-import com.speedment.tool.core.resource.SpeedmentIcon;
 import com.speedment.tool.core.util.OutputUtil;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -98,7 +98,10 @@ public final class ConfigFileHelper {
     @Inject private ProjectComponent projectComponent;
     @Inject private Injector injector;
 
-    private File currentlyOpenFile;
+    private @Config(
+        name=METADATA_LOCATION,
+        value=DEFAULT_CONFIG_LOCATION
+    ) File currentlyOpenFile;
 
     public boolean isFileOpen() {
         return currentlyOpenFile != null;
