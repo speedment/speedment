@@ -17,6 +17,7 @@
 package com.speedment.generator.standard.manager;
 
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
+import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.injector.State;
@@ -56,6 +57,7 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultType.isPrimitive;
 import static com.speedment.common.codegen.constant.DefaultType.wrapperFor;
+import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateApplyResultSetBody;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import static java.util.stream.Collectors.joining;
@@ -98,7 +100,7 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
                 
                 clazz.public_().abstract_()
                     
-                    // Generate conxtructor
+                    // Generate constructor
                     .add(Constructor.of().protected_()
                         .add("this.tableIdentifier = "
                             + TableIdentifier.class.getSimpleName() + ".of("
@@ -225,7 +227,8 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
         java.sql.Date.class,
         java.sql.Timestamp.class,
         Blob.class,
-        Clob.class
+        Clob.class,
+        Object.class
     ).collect(toSet());
     
     private String readFromResultSet(File file, Column c, AtomicInteger position) {
@@ -247,15 +250,24 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
         }
         
         final String getterName = "get" + mapping.getResultSetMethodName(dbms);
+
         // We do not need to wrap-get some classes X since getX() returns null for null X:es.
         if (c.isNullable() && !NULL_AWARE_GETTERS.contains(mapping.getJavaClass())) {
-            
             file.add(Import.of(ResultSetUtil.class).static_().setStaticMember("*"));
             sb.append(getterName).append("(resultSet, ")
                 .append(position.getAndIncrement()).append(")");
         } else {
+            if ("getObject".equals(getterName)
+                && !Object.class.getName().equals(c.getDatabaseType())) {
+
+                file.add(Import.of(SimpleType.create(c.getDatabaseType())));
+                sb.append("(").append(shortName(c.getDatabaseType())).append(") ");
+            }
+
             sb.append("resultSet.").append(getterName)
-                .append("(").append(position.getAndIncrement()).append(")");
+                .append("(").append(position.getAndIncrement());
+
+            sb.append(")");
         }
         
         if (isCustomTypeMapper) {
