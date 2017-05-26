@@ -250,7 +250,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                     fieldParams.add("TypeMapper.identity(), ");
                     file.add(Import.of(TypeMapper.class));
                 }
-                
+
                 // Add the 'unique' boolean to the end
                 fieldParams.add(Boolean.toString(DocumentDbUtil.isUnique(col)));
 

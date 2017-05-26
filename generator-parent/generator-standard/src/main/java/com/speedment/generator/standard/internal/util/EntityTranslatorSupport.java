@@ -31,7 +31,6 @@ import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.field.*;
-import com.speedment.runtime.field.internal.*;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.lang.reflect.Type;
@@ -49,19 +48,14 @@ public final class EntityTranslatorSupport {
     
     public static class ReferenceFieldType {
 
-        private final Type type, implType;
+        private final Type type;
 
-        private ReferenceFieldType(Type type, Type implType) {
+        private ReferenceFieldType(Type type) {
             this.type     = requireNonNull(type);
-            this.implType = requireNonNull(implType);
         }
 
         public Type getType() {
             return type;
-        }
-
-        public Type getImplType() {
-            return implType;
         }
     }
 
@@ -82,7 +76,7 @@ public final class EntityTranslatorSupport {
         return EntityTranslatorSupport.getForeignKey(table, column)
             // If this is a foreign key.
             .map(fkc -> {
-                final Type type, implType;
+                final Type type;
                 final Type fkType = new TranslatorSupport<>(injector, fkc.findForeignTable().orElseThrow(
                         () -> new SpeedmentException(
                             "Could not find referenced foreign table '"
@@ -99,26 +93,12 @@ public final class EntityTranslatorSupport {
                             databaseType,
                             fkType
                         );
-
-                        implType = SimpleParameterizedType.create(
-                            StringForeignKeyFieldImpl.class, 
-                            entityType,
-                            databaseType,
-                            fkType
-                        );
                         
                         break;
                         
                     case BYTE :
                         type = SimpleParameterizedType.create(
                             ByteForeignKeyField.class, 
-                            entityType,
-                            databaseType,
-                            fkType
-                        );
-
-                        implType = SimpleParameterizedType.create(
-                            ByteForeignKeyFieldImpl.class, 
                             entityType,
                             databaseType,
                             fkType
@@ -133,26 +113,12 @@ public final class EntityTranslatorSupport {
                             databaseType,
                             fkType
                         );
-
-                        implType = SimpleParameterizedType.create(
-                            ShortForeignKeyFieldImpl.class, 
-                            entityType,
-                            databaseType,
-                            fkType
-                        );
                         
                         break;
                         
                     case INT :
                         type = SimpleParameterizedType.create(
                             IntForeignKeyField.class, 
-                            entityType,
-                            databaseType,
-                            fkType
-                        );
-
-                        implType = SimpleParameterizedType.create(
-                            IntForeignKeyFieldImpl.class, 
                             entityType,
                             databaseType,
                             fkType
@@ -167,26 +133,12 @@ public final class EntityTranslatorSupport {
                             databaseType,
                             fkType
                         );
-
-                        implType = SimpleParameterizedType.create(
-                            LongForeignKeyFieldImpl.class, 
-                            entityType,
-                            databaseType,
-                            fkType
-                        );
                         
                         break;
                         
                     case FLOAT :
                         type = SimpleParameterizedType.create(
                             FloatForeignKeyField.class, 
-                            entityType,
-                            databaseType,
-                            fkType
-                        );
-
-                        implType = SimpleParameterizedType.create(
-                            FloatForeignKeyFieldImpl.class, 
                             entityType,
                             databaseType,
                             fkType
@@ -201,13 +153,6 @@ public final class EntityTranslatorSupport {
                             databaseType,
                             fkType
                         );
-
-                        implType = SimpleParameterizedType.create(
-                            DoubleForeignKeyFieldImpl.class, 
-                            entityType,
-                            databaseType,
-                            fkType
-                        );
                         
                         break;
                         
@@ -218,14 +163,18 @@ public final class EntityTranslatorSupport {
                             databaseType,
                             fkType
                         );
+                        
+                        break;
 
-                        implType = SimpleParameterizedType.create(
-                            CharForeignKeyFieldImpl.class, 
+                    case ENUM :
+                        type = SimpleParameterizedType.create(
+                            EnumForeignKeyField.class,
                             entityType,
                             databaseType,
+                            javaType,
                             fkType
                         );
-                        
+
                         break;
                         
                     case BOOLEAN :
@@ -234,17 +183,8 @@ public final class EntityTranslatorSupport {
                         );
                         
                     case COMPARABLE :
-                    case ENUM :
                         type = SimpleParameterizedType.create(
                             ComparableForeignKeyField.class,
-                            entityType,
-                            databaseType,
-                            javaType,
-                            fkType
-                        );
-
-                        implType = SimpleParameterizedType.create(
-                            ComparableForeignKeyFieldImpl.class,
                             entityType,
                             databaseType,
                             javaType,
@@ -264,23 +204,17 @@ public final class EntityTranslatorSupport {
                     );
                 }
 
-                return new ReferenceFieldType(type, implType);
+                return new ReferenceFieldType(type);
 
                 // If it is not a foreign key
             }).orElseGet(() -> {
-                final Type type, implType;
+                final Type type;
 
                 switch (category) {
                     case STRING :
                         
                         type = SimpleParameterizedType.create(
                             StringField.class, 
-                            entityType,
-                            databaseType
-                        );
-
-                        implType = SimpleParameterizedType.create(
-                            StringFieldImpl.class, 
                             entityType,
                             databaseType
                         );
@@ -293,24 +227,12 @@ public final class EntityTranslatorSupport {
                             entityType,
                             databaseType
                         );
-
-                        implType = SimpleParameterizedType.create(
-                            ByteFieldImpl.class, 
-                            entityType,
-                            databaseType
-                        );
                         
                         break;
                         
                     case SHORT :
                         type = SimpleParameterizedType.create(
                             ShortField.class, 
-                            entityType,
-                            databaseType
-                        );
-
-                        implType = SimpleParameterizedType.create(
-                            ShortFieldImpl.class, 
                             entityType,
                             databaseType
                         );
@@ -323,24 +245,12 @@ public final class EntityTranslatorSupport {
                             entityType,
                             databaseType
                         );
-
-                        implType = SimpleParameterizedType.create(
-                            IntFieldImpl.class, 
-                            entityType,
-                            databaseType
-                        );
                         
                         break;
                         
                     case LONG :
                         type = SimpleParameterizedType.create(
                             LongField.class, 
-                            entityType,
-                            databaseType
-                        );
-
-                        implType = SimpleParameterizedType.create(
-                            LongFieldImpl.class, 
                             entityType,
                             databaseType
                         );
@@ -353,24 +263,12 @@ public final class EntityTranslatorSupport {
                             entityType,
                             databaseType
                         );
-
-                        implType = SimpleParameterizedType.create(
-                            FloatFieldImpl.class, 
-                            entityType,
-                            databaseType
-                        );
                         
                         break;
                         
                     case DOUBLE :
                         type = SimpleParameterizedType.create(
                             DoubleField.class, 
-                            entityType,
-                            databaseType
-                        );
-
-                        implType = SimpleParameterizedType.create(
-                            DoubleFieldImpl.class, 
                             entityType,
                             databaseType
                         );
@@ -383,12 +281,6 @@ public final class EntityTranslatorSupport {
                             entityType,
                             databaseType
                         );
-
-                        implType = SimpleParameterizedType.create(
-                            CharFieldImpl.class, 
-                            entityType,
-                            databaseType
-                        );
                         
                         break;
                         
@@ -398,26 +290,22 @@ public final class EntityTranslatorSupport {
                             entityType,
                             databaseType
                         );
-
-                        implType = SimpleParameterizedType.create(
-                            BooleanFieldImpl.class, 
-                            entityType,
-                            databaseType
-                        );
                         
                         break;
-                        
-                    case COMPARABLE :
+
                     case ENUM :
                         type = SimpleParameterizedType.create(
-                            ComparableField.class, 
+                            EnumField.class,
                             entityType,
                             databaseType,
                             javaType
                         );
 
-                        implType = SimpleParameterizedType.create(
-                            ComparableFieldImpl.class, 
+                        break;
+
+                    case COMPARABLE :
+                        type = SimpleParameterizedType.create(
+                            ComparableField.class, 
                             entityType,
                             databaseType,
                             javaType
@@ -433,21 +321,13 @@ public final class EntityTranslatorSupport {
                             javaType
                         );
 
-                        implType = SimpleParameterizedType.create(
-                            ReferenceFieldImpl.class, 
-                            entityType,
-                            databaseType,
-                            javaType
-                        );
-                        
-                        
                         break;
                     default : throw new UnsupportedOperationException(
                         "Unknown enum constant '" + category + "'."
                     );
                 }
 
-                return new ReferenceFieldType(type, implType);
+                return new ReferenceFieldType(type);
             });
     }
 
