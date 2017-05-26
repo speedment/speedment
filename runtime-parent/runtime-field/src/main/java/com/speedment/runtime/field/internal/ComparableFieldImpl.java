@@ -27,9 +27,11 @@ import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Set;
 import java.util.function.Predicate;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * @param <ENTITY> the entity type
@@ -63,10 +65,10 @@ implements ComparableField<ENTITY, D, V> {
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
     }
-    
-    /*****************************************************************/
-    /*                           Getters                             */
-    /*****************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                                Getters                                 //
+    ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public ColumnIdentifier<ENTITY> identifier() {
@@ -92,10 +94,10 @@ implements ComparableField<ENTITY, D, V> {
     public boolean isUnique() {
         return unique;
     }
-    
-    /*****************************************************************/
-    /*                         Comparators                           */
-    /*****************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                              Comparators                               //
+    ////////////////////////////////////////////////////////////////////////////
     
     @Override
     public FieldComparator<ENTITY, V> comparator() {
@@ -127,6 +129,11 @@ implements ComparableField<ENTITY, D, V> {
     }
 
     @Override
+    public Predicate<ENTITY> notEqual(V value) {
+        return new ReferenceNotEqualPredicate<>(this, value);
+    }
+
+    @Override
     public Predicate<ENTITY> greaterThan(V value) {
         return new ReferenceGreaterThanPredicate<>(this, value);
     }
@@ -134,21 +141,6 @@ implements ComparableField<ENTITY, D, V> {
     @Override
     public Predicate<ENTITY> greaterOrEqual(V value) {
         return new ReferenceGreaterOrEqualPredicate<>(this, value);
-    }
-
-    @Override
-    public Predicate<ENTITY> between(V start, V end, Inclusion inclusion) {
-        return new ReferenceBetweenPredicate<>(this, start, end, inclusion);
-    }
-
-    @Override
-    public Predicate<ENTITY> in(Set<V> values) {
-        return new ReferenceInPredicate<>(this, values);
-    }
-
-    @Override
-    public Predicate<ENTITY> notEqual(V value) {
-        return new ReferenceNotEqualPredicate<>(this, value);
     }
 
     @Override
@@ -162,8 +154,18 @@ implements ComparableField<ENTITY, D, V> {
     }
 
     @Override
+    public Predicate<ENTITY> between(V start, V end, Inclusion inclusion) {
+        return new ReferenceBetweenPredicate<>(this, start, end, inclusion);
+    }
+
+    @Override
     public Predicate<ENTITY> notBetween(V start, V end, Inclusion inclusion) {
         return new ReferenceNotBetweenPredicate<>(this, start, end, inclusion);
+    }
+
+    @Override
+    public Predicate<ENTITY> in(Set<V> values) {
+        return new ReferenceInPredicate<>(this, values);
     }
 
     @Override
