@@ -1,25 +1,28 @@
 package com.speedment.runtime.field;
 
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
-import com.speedment.runtime.field.internal.EnumFieldImpl;
+import com.speedment.runtime.field.internal.EnumForeignKeyFieldImpl;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
-import com.speedment.runtime.field.trait.HasStringOperators;
+import com.speedment.runtime.field.trait.HasComparableOperators;
+import com.speedment.runtime.field.trait.HasFinder;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.util.function.Function;
 
 /**
- * A field representing an {@code Enum} value in the entity.
+ * A field representing an {@code Enum} value in the entity that has a finder to
+ * another entity.
  *
  * @author Emil Forslund
  * @since  3.0.10
  *
- * @see  ComparableField
+ * @see  EnumField
+ * @see  HasFinder
  */
-public interface EnumField<ENTITY, D, E extends Enum<E>>
-extends ComparableField<ENTITY, D, E>,
-        HasStringOperators<ENTITY, D> {
+public interface EnumForeignKeyField<ENTITY, D, E extends Enum<E>, FK>
+extends EnumField<ENTITY, D, E>,
+        HasFinder<ENTITY, FK> {
 
     /**
      * A method that takes a {@code String} and converts it into an enum for
@@ -52,23 +55,26 @@ extends ComparableField<ENTITY, D, E>,
      * @param getter        method reference to the getter in the entity
      * @param setter        method reference to the setter in the entity
      * @param typeMapper    the type mapper that is applied
+     * @param referenced    the field in the foreign entity that is referenced
      * @param enumToString  method to convert enum to a string
      * @param stringToEnum  method to convert a string to enum
      * @param enumClass     the enum class
      *
      * @return            the created field
      */
-    static <ENTITY, D, E extends Enum<E>> EnumField<ENTITY, D, E> create(
+    static <ENTITY, D, E extends Enum<E>, FK>
+    EnumForeignKeyField<ENTITY, D, E, FK> create(
             ColumnIdentifier<ENTITY> identifier,
             ReferenceGetter<ENTITY, E> getter,
             ReferenceSetter<ENTITY, E> setter,
             TypeMapper<D, E> typeMapper,
+            HasComparableOperators<FK, E> referenced,
             Function<E, String> enumToString,
             Function<String, E> stringToEnum,
             Class<E> enumClass) {
 
-        return new EnumFieldImpl<>(
-            identifier, getter, setter, typeMapper,
+        return new EnumForeignKeyFieldImpl<>(
+            identifier, getter, setter, typeMapper, referenced,
             enumToString, stringToEnum, enumClass
         );
     }
