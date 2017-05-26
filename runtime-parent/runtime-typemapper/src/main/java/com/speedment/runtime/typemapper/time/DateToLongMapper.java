@@ -51,4 +51,10 @@ public final class DateToLongMapper implements TypeMapper<Date, Long> {
     public Date toDatabaseType(Long value) {
         return value == null ? null : new Date(value);
     }
+
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }    
+    
 }

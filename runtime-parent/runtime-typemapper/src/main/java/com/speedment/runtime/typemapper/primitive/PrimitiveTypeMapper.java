@@ -62,4 +62,10 @@ public final class PrimitiveTypeMapper<T> implements TypeMapper<T, T> {
     public T toDatabaseType(T value) {
         return value;
     }
+
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }
+    
 }

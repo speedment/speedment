@@ -49,4 +49,9 @@ public final class LongToByteMapper implements TypeMapper<Long, Byte> {
         return value == null ? null : ((long) (byte) value);
     }
 
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }
+    
 }

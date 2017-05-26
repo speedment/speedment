@@ -556,8 +556,8 @@ public interface ApplicationBuilder<
      * Note: If a component class is specifying the same {@link InjectKey } as
      * an existing class previously added to this ApplicationBuilder, then the
      * last class will be associated with that {@link InjectKey }. Thus, the 
-     * order of calls to {@link #withComponent(java.lang.Class) and
-     * {@link #withBundle(java.lang.Class) is significant.
+     * order of calls to {@link #withComponent(java.lang.Class) } and
+     * {@link #withBundle(java.lang.Class) } is significant.
      *
      * @param componentClass the implementation class
      * @return this instance
@@ -573,7 +573,7 @@ public interface ApplicationBuilder<
      *
      * @deprecated The parameter {@code key} is not forwarded to the dependency
      * injection framework, so this method has exactly the same behavior as
-     * {@link #withComponent(java.lang.Class)}, so it is redundant.
+     * {@link #withComponent(java.lang.Class) }, so it is redundant.
      *
      * @param key the key to store it under
      * @param componentClass the implementation class

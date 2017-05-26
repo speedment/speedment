@@ -49,4 +49,10 @@ public final class BigDecimalToDouble implements TypeMapper<BigDecimal, Double> 
     public BigDecimal toDatabaseType(Double value) {
         return value == null ? null : BigDecimal.valueOf(value);
     }
+
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }
+    
 }

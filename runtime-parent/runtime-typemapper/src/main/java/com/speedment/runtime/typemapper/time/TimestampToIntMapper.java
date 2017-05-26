@@ -49,4 +49,9 @@ public final class TimestampToIntMapper implements TypeMapper<Timestamp, Integer
     public Timestamp toDatabaseType(Integer value) {
         return value == null ? null : new Timestamp(value * 1000);
     }
+    
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }
 }

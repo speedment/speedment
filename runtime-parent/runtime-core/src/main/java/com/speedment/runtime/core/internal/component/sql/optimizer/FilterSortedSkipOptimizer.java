@@ -247,10 +247,10 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
 
         final Action<?, ?> firstAction = pipeline.getFirst();
         final List<Operation<ENTITY>> path;
-        if (isFilterActionAndContainingOnlyFieldPredicate(firstAction)) {
-            path = FILTER_SORTED_SKIP_PATH;
-        } else {
+        if (firstAction instanceof SortedComparatorAction) {
             path = SORTED_FILTER_SKIP_PATH;
+        } else {
+            path = FILTER_SORTED_SKIP_PATH;
         }
 
         Operation<ENTITY> operation = path.get(0);

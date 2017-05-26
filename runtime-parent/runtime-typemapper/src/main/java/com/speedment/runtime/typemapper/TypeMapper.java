@@ -93,7 +93,7 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
      */
     default Category getJavaTypeCategory(Column column) {
         final Type type       = getJavaType(column);
-        final String typeName = getJavaType(column).getTypeName();
+        final String typeName = type.getTypeName();
 
         switch (typeName) {
             case "byte"    : return Category.BYTE;
@@ -112,14 +112,11 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
                         return Category.ENUM;
                     } else if (Comparable.class.isAssignableFrom(clazz)) {
                         return Category.COMPARABLE;
-                    } else {
-                        return Category.REFERENCE;
                     }
-                } else {
-                    return Category.REFERENCE;
                 }
             }
         }
+        return Category.REFERENCE;
     }
     
     /**
@@ -139,7 +136,59 @@ public interface TypeMapper<DB_TYPE, JAVA_TYPE> {
      * @return       the converted value
      */
     DB_TYPE toDatabaseType(JAVA_TYPE value);
+   
+     /**
+     * Indicates how the ordering of mapped vs un-mapped types relate to each
+     * other.
+     *
+     * @author Per Minborg
+     * @since  3.0.11
+     */
+    enum Ordering {
+        /**
+         * Objects of the DB_TYPE type and objects of the the JAVA_TYPE have the
+         * same order. I.e. ordering is retained for mapped/un-mapped objects in
+         * both directions of mapping.
+         */
+        RETAIN,
+         /**
+         * Objects of the DB_TYPE type and objects of the the JAVA_TYPE have the
+         * inverted order. I.e. ordering is reversed for mapped/un-mapped objects in
+         * both directions of mapping.
+         */
+        INVERT,
+        /**
+         * Objects of the DB_TYPE type and objects of the the JAVA_TYPE may have
+         * different order. I.e. ordering is unrelated for mapped/un-mapped
+         * objects in either direction of mapping. If either of the types does
+         * not have an order, then this alternative applies by definition.
+         */
+        UNSPECIFIED
+    }
 
+    
+     /**
+     * Returns how the {@link Ordering} of mapped and un-mapped types relate
+     * to each other.
+     * <p>
+     * Speedment is using this method to determine if certain optimizations of
+     * streams can be made. Make sure to implicitly specify the Ordering in any
+     * custom TypeMapper to allow maximum execution speed.
+     * <p>
+     * Specifying {@link Ordering#UNSPECIFIED } prevents some optimizations so
+     * if possible, write a TypeMapper that RETAINS ordering.
+     *
+     * @return        the ordering
+     *
+     * @see Ordering#RETAIN
+     * @see Ordering#INVERT
+     * @see Ordering#UNSPECIFIED
+     */
+    default Ordering getOrdering() {
+        // Defensively assume an unspecified order.
+        return Ordering.UNSPECIFIED;
+    }
+    
     /**
      * Returns an identity type mapper.
      *
