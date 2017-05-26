@@ -17,13 +17,8 @@
 package com.speedment.common.codegen.model;
 
 import com.speedment.common.codegen.internal.model.EnumConstantImpl;
-import com.speedment.common.codegen.model.trait.HasClasses;
-import com.speedment.common.codegen.model.trait.HasCopy;
-import com.speedment.common.codegen.model.trait.HasFields;
-import com.speedment.common.codegen.model.trait.HasInitializers;
-import com.speedment.common.codegen.model.trait.HasJavadoc;
-import com.speedment.common.codegen.model.trait.HasMethods;
-import com.speedment.common.codegen.model.trait.HasName;
+import com.speedment.common.codegen.model.trait.*;
+
 import java.util.List;
 
 /**
@@ -39,6 +34,7 @@ extends HasCopy<EnumConstant>,
         HasJavadoc<EnumConstant>,
         HasClasses<EnumConstant>,
         HasInitializers<EnumConstant>,
+        HasAnnotationUsage<EnumConstant>,
         HasMethods<EnumConstant>, 
         HasFields<EnumConstant> {
 

@@ -50,4 +50,9 @@ public final class TimeToLongMapper implements TypeMapper<Time, Long> {
     public Time toDatabaseType(Long value) {
         return value == null ? null : new Time(value);
     }
+    
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }
 }

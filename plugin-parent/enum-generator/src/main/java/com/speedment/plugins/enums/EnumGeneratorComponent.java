@@ -30,7 +30,7 @@ import com.speedment.plugins.enums.internal.GeneratedEntityDecorator;
 import com.speedment.plugins.enums.internal.ui.CommaSeparatedStringEditor;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
-import com.speedment.tool.config.ColumnProperty;
+import com.speedment.tool.config.trait.HasEnumConstantsProperty;
 import com.speedment.tool.propertyeditor.component.PropertyEditorComponent;
 import com.speedment.tool.propertyeditor.internal.component.PropertyEditorComponentImpl;
 
@@ -47,12 +47,12 @@ import static com.speedment.common.injector.State.RESOLVED;
  *
  * @author Emil Forslund
  * @author Simon Jonasson
- * @since 1.0.0
+ * @since  3.0.0
  */
 @InjectKey(EnumGeneratorComponent.class)
 public final class EnumGeneratorComponent {
 
-    public static InjectBundle include() {
+    static InjectBundle include() {
         return InjectBundle.of(
             TypeMapperComponentImpl.class, 
             CodeGenerationComponentImpl.class, 
@@ -62,14 +62,23 @@ public final class EnumGeneratorComponent {
 
     @ExecuteBefore(RESOLVED)
     void installDecorators(Injector injector,
-        @WithState(INITIALIZED) TypeMapperComponent typeMappers,
-        @WithState(INITIALIZED) CodeGenerationComponent codeGen,
-        @WithState(RESOLVED) PropertyEditorComponent editors){
+            @WithState(INITIALIZED) TypeMapperComponent typeMappers,
+            @WithState(INITIALIZED) CodeGenerationComponent codeGen,
+            @WithState(RESOLVED) PropertyEditorComponent editors){
 
         typeMappers.install(String.class, StringToEnumTypeMapper::new);
-        codeGen.add(Table.class, StandardTranslatorKey.GENERATED_ENTITY, new GeneratedEntityDecorator(injector));
 
-        editors.install(ColumnProperty.class, Column.ENUM_CONSTANTS, CommaSeparatedStringEditor::new);
+        codeGen.add(
+            Table.class,
+            StandardTranslatorKey.GENERATED_ENTITY,
+            new GeneratedEntityDecorator(injector)
+        );
+
+        editors.install(
+            HasEnumConstantsProperty.class,
+            Column.ENUM_CONSTANTS,
+            CommaSeparatedStringEditor::new
+        );
         
     }
 }

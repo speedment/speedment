@@ -19,7 +19,7 @@ package com.speedment.example.basic_example;
 import com.company.sakila.SakilaApplication;
 import com.company.sakila.db0.sakila.film.Film;
 import com.company.sakila.db0.sakila.film.FilmManager;
-import static com.speedment.oracle_java_magazine.util.ExampleUtil.buildApplication;
+import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 import com.speedment.runtime.core.ApplicationBuilder.LogType;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;

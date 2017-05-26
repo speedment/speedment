@@ -23,9 +23,7 @@ import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.tool.core.MainApp;
-import static com.speedment.tool.core.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
-import java.io.File;
-import java.nio.file.Path;
+
 import java.util.function.Consumer;
 import javafx.application.Application;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -48,7 +46,7 @@ public abstract class AbstractToolMojo extends AbstractSpeedmentMojo {
     private @Parameter(defaultValue = "${dbms.username}") String dbmsUsername;
     private @Parameter(defaultValue = "${dbms.password}") String dbmsPassword;
     private @Parameter(defaultValue = "${components}") String[] components;
-    private @Parameter(defaultValue = "${typeMappers}") Mapping[] typeMappers;
+    private @Parameter(defaultValue = "${typeMappers}") String[] typeMappers;
     private @Parameter ConfigParam[] parameters;
     private @Parameter(defaultValue = "${configFile}") String configFile;
 
@@ -79,7 +77,7 @@ public abstract class AbstractToolMojo extends AbstractSpeedmentMojo {
     }
     
     @Override
-    protected Mapping[] typeMappers() {
+    protected String[] typeMappers() {
         return typeMappers;
     }
     

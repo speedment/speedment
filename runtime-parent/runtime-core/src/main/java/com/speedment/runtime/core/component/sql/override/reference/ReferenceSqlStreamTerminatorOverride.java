@@ -17,7 +17,8 @@
 package com.speedment.runtime.core.component.sql.override.reference;
 
 /**
- *
+ * An interface used for overriding a reference stream's terminating operations.
+ * 
  * @author Per Minborg
  */
 public interface ReferenceSqlStreamTerminatorOverride {

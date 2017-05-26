@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.city.generated.GeneratedCityManager;
  * 
  * @author company
  */
-public interface CityManager extends GeneratedCityManager {
-    
-    
-}
+public interface CityManager extends GeneratedCityManager {}

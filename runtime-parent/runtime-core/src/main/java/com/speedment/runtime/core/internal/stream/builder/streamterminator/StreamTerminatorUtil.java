@@ -31,11 +31,16 @@ import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.internal.predicate.AbstractCombinedPredicate;
 import com.speedment.runtime.field.predicate.CombinedPredicate;
 import com.speedment.runtime.field.predicate.FieldPredicate;
+import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.typemapper.TypeMapper;
+import com.speedment.runtime.typemapper.TypeMapper.Ordering;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -90,9 +95,25 @@ public final class StreamTerminatorUtil {
         return andPredicateBuilders;
     }
 
+    private static final Set<PredicateType> NON_COMPARATIVE_PREDICATES
+        = EnumSet.complementOf(
+            EnumSet.of(
+                PredicateType.BETWEEN,
+                PredicateType.GREATER_OR_EQUAL,
+                PredicateType.GREATER_THAN,
+                PredicateType.LESS_OR_EQUAL,
+                PredicateType.LESS_THAN,
+                PredicateType.NOT_BETWEEN
+            )
+        );
+
     public static <ENTITY> boolean isContainingOnlyFieldPredicate(Predicate<ENTITY> predicate) {
         if (predicate instanceof FieldPredicate) {
-            return true;
+            final FieldPredicate<ENTITY> fieldPredicate = (FieldPredicate<ENTITY>) predicate;
+
+            // We can only optimize filters if the ordering is retained.. Bar equal, isNull, isNotNull etc.
+            return fieldPredicate.getField().typeMapper().getOrdering() == Ordering.RETAIN
+                || NON_COMPARATIVE_PREDICATES.contains(fieldPredicate.getPredicateType());
         } else if (predicate instanceof CombinedPredicate) {
             return ((CombinedPredicate<ENTITY>) predicate).stream().allMatch(StreamTerminatorUtil::isContainingOnlyFieldPredicate);
         }
@@ -101,8 +122,12 @@ public final class StreamTerminatorUtil {
 
     public static boolean isSortedActionWithFieldPredicate(Action<?, ?> action) {
         if (action instanceof SortedComparatorAction) {
-            if (((SortedComparatorAction) action).getComparator() instanceof FieldComparator) {
-                return true;
+            final SortedComparatorAction<?> sortedComparatorAction = (SortedComparatorAction) action;
+            final Comparator<?> comparator = sortedComparatorAction.getComparator();
+            if (comparator instanceof FieldComparator) {
+                final FieldComparator<?, ?> fieldComparator = (FieldComparator<?, ?>) comparator;
+                // We can only optimize filters if the ordering is retained.. Bar equal, isNull, isNotNull etc.
+                return fieldComparator.getField().typeMapper().getOrdering() == Ordering.RETAIN;
             }
         }
         return false;

@@ -49,4 +49,9 @@ public final class IntegerToByteMapper implements TypeMapper<Integer, Byte> {
         return value == null ? null : ((int) (byte) value);
     }
 
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }
+    
 }

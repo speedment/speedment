@@ -17,7 +17,8 @@
 package com.speedment.runtime.core.component.sql.override.doubles;
 
 /**
- *
+* An interface used for overriding a DoubleStream's terminating operations.
+* 
  * @author Per Minborg
  */
 public interface DoubleSqlStreamTerminatorOverride {

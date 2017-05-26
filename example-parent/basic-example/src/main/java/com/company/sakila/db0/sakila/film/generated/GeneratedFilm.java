@@ -37,7 +37,7 @@ public interface GeneratedFilm {
      * This Field corresponds to the {@link Film} field that can be obtained
      * using the {@link Film#getFilmId()} method.
      */
-    final IntField<Film, Integer> FILM_ID = IntField.create(
+    IntField<Film, Integer> FILM_ID = IntField.create(
         Identifier.FILM_ID,
         Film::getFilmId,
         Film::setFilmId,
@@ -48,7 +48,7 @@ public interface GeneratedFilm {
      * This Field corresponds to the {@link Film} field that can be obtained
      * using the {@link Film#getTitle()} method.
      */
-    final StringField<Film, String> TITLE = StringField.create(
+    StringField<Film, String> TITLE = StringField.create(
         Identifier.TITLE,
         Film::getTitle,
         Film::setTitle,
@@ -59,7 +59,7 @@ public interface GeneratedFilm {
      * This Field corresponds to the {@link Film} field that can be obtained
      * using the {@link Film#getDescription()} method.
      */
-    final StringField<Film, String> DESCRIPTION = StringField.create(
+    StringField<Film, String> DESCRIPTION = StringField.create(
         Identifier.DESCRIPTION,
         o -> OptionalUtil.unwrap(o.getDescription()),
         Film::setDescription,
@@ -70,7 +70,7 @@ public interface GeneratedFilm {
      * This Field corresponds to the {@link Film} field that can be obtained
      * using the {@link Film#getReleaseYear()} method.
      */
-    final ComparableField<Film, Date, Date> RELEASE_YEAR = ComparableField.create(
+    ComparableField<Film, Date, Date> RELEASE_YEAR = ComparableField.create(
         Identifier.RELEASE_YEAR,
         o -> OptionalUtil.unwrap(o.getReleaseYear()),
         Film::setReleaseYear,
@@ -81,7 +81,7 @@ public interface GeneratedFilm {
      * This Field corresponds to the {@link Film} field that can be obtained
      * using the {@link Film#getLanguageId()} method.
      */
-    final ShortForeignKeyField<Film, Short, Language> LANGUAGE_ID = ShortForeignKeyField.create(
+    ShortForeignKeyField<Film, Short, Language> LANGUAGE_ID = ShortForeignKeyField.create(
         Identifier.LANGUAGE_ID,
         Film::getLanguageId,
         Film::setLanguageId,
@@ -93,7 +93,7 @@ public interface GeneratedFilm {
      * This Field corresponds to the {@link Film} field that can be obtained
      * using the {@link Film#getOriginalLanguageId()} method.
      */
-    final ComparableForeignKeyField<Film, Short, Short, Language> ORIGINAL_LANGUAGE_ID = ComparableForeignKeyField.create(
+    ComparableForeignKeyField<Film, Short, Short, Language> ORIGINAL_LANGUAGE_ID = ComparableForeignKeyField.create(
         Identifier.ORIGINAL_LANGUAGE_ID,
         o -> OptionalUtil.unwrap(o.getOriginalLanguageId()),
         Film::setOriginalLanguageId,
@@ -105,7 +105,7 @@ public interface GeneratedFilm {
      * This Field corresponds to the {@link Film} field that can be obtained
      * using the {@link Film#getRentalDuration()} method.
      */
-    final ShortField<Film, Short> RENTAL_DURATION = ShortField.create(
+    ShortField<Film, Short> RENTAL_DURATION = ShortField.create(
         Identifier.RENTAL_DURATION,
         Film::getRentalDuration,
         Film::setRentalDuration,
@@ -116,7 +116,7 @@ public interface GeneratedFilm {
      * This Field corresponds to the {@link Film} field that can be obtained
      * using the {@link Film#getRentalRate()} method.
      */
-    final ComparableField<Film, BigDecimal, BigDecimal> RENTAL_RATE = ComparableField.create(
+    ComparableField<Film, BigDecimal, BigDecimal> RENTAL_RATE = ComparableField.create(
         Identifier.RENTAL_RATE,
         Film::getRentalRate,
         Film::setRentalRate,
@@ -127,7 +127,7 @@ public interface GeneratedFilm {
      * This Field corresponds to the {@link Film} field that can be obtained
      * using the {@link Film#getLength()} method.
      */
-    final ComparableField<Film, Integer, Integer> LENGTH = ComparableField.create(
+    ComparableField<Film, Integer, Integer> LENGTH = ComparableField.create(
         Identifier.LENGTH,
         o -> OptionalUtil.unwrap(o.getLength()),
         Film::setLength,
@@ -138,7 +138,7 @@ public interface GeneratedFilm {
      * This Field corresponds to the {@link Film} field that can be obtained
      * using the {@link Film#getReplacementCost()} method.
      */
-    final ComparableField<Film, BigDecimal, BigDecimal> REPLACEMENT_COST = ComparableField.create(
+    ComparableField<Film, BigDecimal, BigDecimal> REPLACEMENT_COST = ComparableField.create(
         Identifier.REPLACEMENT_COST,
         Film::getReplacementCost,
         Film::setReplacementCost,
@@ -149,7 +149,7 @@ public interface GeneratedFilm {
      * This Field corresponds to the {@link Film} field that can be obtained
      * using the {@link Film#getRating()} method.
      */
-    final StringField<Film, String> RATING = StringField.create(
+    StringField<Film, String> RATING = StringField.create(
         Identifier.RATING,
         o -> OptionalUtil.unwrap(o.getRating()),
         Film::setRating,
@@ -160,7 +160,7 @@ public interface GeneratedFilm {
      * This Field corresponds to the {@link Film} field that can be obtained
      * using the {@link Film#getSpecialFeatures()} method.
      */
-    final StringField<Film, String> SPECIAL_FEATURES = StringField.create(
+    StringField<Film, String> SPECIAL_FEATURES = StringField.create(
         Identifier.SPECIAL_FEATURES,
         o -> OptionalUtil.unwrap(o.getSpecialFeatures()),
         Film::setSpecialFeatures,
@@ -171,7 +171,7 @@ public interface GeneratedFilm {
      * This Field corresponds to the {@link Film} field that can be obtained
      * using the {@link Film#getLastUpdate()} method.
      */
-    final ComparableField<Film, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
+    ComparableField<Film, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
         Identifier.LAST_UPDATE,
         Film::getLastUpdate,
         Film::setLastUpdate,

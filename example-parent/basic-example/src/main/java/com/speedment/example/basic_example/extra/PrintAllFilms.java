@@ -14,12 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.oracle_java_magazine.extra;
+package com.speedment.example.basic_example.extra;
 
 import com.company.sakila.SakilaApplication;
 import com.company.sakila.db0.sakila.film.FilmManager;
-import com.speedment.oracle_java_magazine.util.ExampleUtil;
-import static com.speedment.oracle_java_magazine.util.ExampleUtil.buildApplication;
+import com.speedment.example.basic_example.util.ExampleUtil;
+import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 
 /**
  *

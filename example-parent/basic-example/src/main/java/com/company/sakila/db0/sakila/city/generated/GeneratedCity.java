@@ -30,7 +30,7 @@ public interface GeneratedCity {
      * This Field corresponds to the {@link City} field that can be obtained
      * using the {@link City#getCityId()} method.
      */
-    final IntField<City, Integer> CITY_ID = IntField.create(
+    IntField<City, Integer> CITY_ID = IntField.create(
         Identifier.CITY_ID,
         City::getCityId,
         City::setCityId,
@@ -41,7 +41,7 @@ public interface GeneratedCity {
      * This Field corresponds to the {@link City} field that can be obtained
      * using the {@link City#getCity()} method.
      */
-    final StringField<City, String> CITY = StringField.create(
+    StringField<City, String> CITY = StringField.create(
         Identifier.CITY,
         City::getCity,
         City::setCity,
@@ -52,7 +52,7 @@ public interface GeneratedCity {
      * This Field corresponds to the {@link City} field that can be obtained
      * using the {@link City#getCountryId()} method.
      */
-    final IntForeignKeyField<City, Integer, Country> COUNTRY_ID = IntForeignKeyField.create(
+    IntForeignKeyField<City, Integer, Country> COUNTRY_ID = IntForeignKeyField.create(
         Identifier.COUNTRY_ID,
         City::getCountryId,
         City::setCountryId,
@@ -64,7 +64,7 @@ public interface GeneratedCity {
      * This Field corresponds to the {@link City} field that can be obtained
      * using the {@link City#getLastUpdate()} method.
      */
-    final ComparableField<City, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
+    ComparableField<City, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
         Identifier.LAST_UPDATE,
         City::getLastUpdate,
         City::setLastUpdate,

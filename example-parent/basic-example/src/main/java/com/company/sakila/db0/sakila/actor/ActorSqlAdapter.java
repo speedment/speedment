@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.actor.generated.GeneratedActorSqlAdapter;
  * 
  * @author company
  */
-public class ActorSqlAdapter extends GeneratedActorSqlAdapter {
-    
-    
-}
+public class ActorSqlAdapter extends GeneratedActorSqlAdapter {}

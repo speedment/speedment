@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.language.generated.GeneratedLanguageSqlAdap
  * 
  * @author company
  */
-public class LanguageSqlAdapter extends GeneratedLanguageSqlAdapter {
-    
-    
-}
+public class LanguageSqlAdapter extends GeneratedLanguageSqlAdapter {}

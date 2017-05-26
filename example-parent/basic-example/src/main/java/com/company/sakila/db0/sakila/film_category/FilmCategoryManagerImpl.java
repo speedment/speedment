@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.film_category.generated.GeneratedFilmCatego
  * 
  * @author company
  */
-public final class FilmCategoryManagerImpl extends GeneratedFilmCategoryManagerImpl implements FilmCategoryManager {
-    
-    
-}
+public final class FilmCategoryManagerImpl extends GeneratedFilmCategoryManagerImpl implements FilmCategoryManager {}

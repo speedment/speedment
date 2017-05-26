@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.typemapper.largeobject;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,14 +24,14 @@ import javax.sql.rowset.serial.SerialBlob;
 import java.sql.Blob;
 import java.util.Random;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertEquals;
 
 public class BlobToByteArrayMapperTest {
-    BlobToByteArrayMapper mapper;
+
+    private BlobToByteArrayMapper mapper;
     private Random random;
+
     @Before
     public void createMapper(){
         mapper = new BlobToByteArrayMapper();
@@ -48,15 +49,17 @@ public class BlobToByteArrayMapperTest {
         IntStream.range(0,array.length).forEach(index -> array[index] = nextByte());
         Blob blob = mapper.toDatabaseType(array);
         byte[] actual = mapper.toJavaType(null,null,blob);
-        assertArrayEquals(array,actual);
+        Assert.assertArrayEquals(array,actual);
     }
+
     @Test
     public void javaTypeToDbType() throws Exception {
         byte[] array= new byte[10];
         Blob blob = new SerialBlob(array);
         byte[] actual = mapper.toJavaType(null,null,blob);
-        assertArrayEquals(array,actual);
+        Assert.assertArrayEquals(array,actual);
     }
+
     public byte nextByte() {
         switch (random.nextInt(10)) {
             case 0 : return 0;
@@ -71,5 +74,4 @@ public class BlobToByteArrayMapperTest {
             default : return (byte) random.nextInt();
         }
     }
-
 }

@@ -32,6 +32,7 @@ public interface HasValues<T extends HasValues<T>> {
     /**
      * Adds the specified {@link Value} to this model.
      *
+     * @param <E>      the type of the generic value
      * @param generic  the new child
      * @return         a reference to this
      */

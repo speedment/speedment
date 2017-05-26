@@ -39,7 +39,7 @@ import static java.util.Objects.requireNonNull;
  * 
  * @author  Emil Forslund
  * @author  Simon Jonasson
- * @since   1.0.0
+ * @since   3.0.0
  */
 public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapper<String, T> {
 
@@ -50,9 +50,7 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
     public StringToEnumTypeMapper() {
         cachedEnum = LazyClass.create();
     }
-    
-    public LazyClass getLazy() {return cachedEnum;}
-    
+
     @Override
     public String getLabel() {
         return "String to Enum";
@@ -69,6 +67,11 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
             EnumGeneratorUtil.enumNameOf(column, injector), 
             EnumGeneratorUtil.enumConstantsOf(column)
         );
+    }
+
+    @Override
+    public Category getJavaTypeCategory(Column column) {
+        return Category.ENUM;
     }
 
     @Override
@@ -91,12 +94,11 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
                     // that takes the right parameters
                     .filter(c -> Stream.of(c.getMethods())
                         .filter(m -> m.getName().equals("fromDatabase"))
-                        .filter(m -> {
+                        .anyMatch(m -> {
                             final Class<?>[] params = m.getParameterTypes();
                             return params.length == 1 
                                 && params[0] == column.findDatabaseType();
                         })
-                        .findAny().isPresent()
                     )
 
                     // Return it as the enumClass or throw an exception.

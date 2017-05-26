@@ -49,4 +49,9 @@ public final class LongToIntegerMapper implements TypeMapper<Long, Integer> {
         return value == null ? null : ((long) (int) value);
     }
 
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }
+    
 }

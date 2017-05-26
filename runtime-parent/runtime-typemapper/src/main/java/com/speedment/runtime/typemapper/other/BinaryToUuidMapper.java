@@ -18,17 +18,20 @@ package com.speedment.runtime.typemapper.other;
 
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.typemapper.TypeMapper;
+import com.speedment.runtime.typemapper.exception.SpeedmentTypeMapperException;
 
 import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
 import java.util.UUID;
+
+import static java.lang.String.format;
 
 /**
  * Speedment {@link TypeMapper} that maps from a MySQL {@code BINARY} type to
  * a regular java {@code java.util.UUID}.
  *
  * @author Emil Forslund
- * @since  1.0.0
+ * @since  3.0.9
  */
 public final class BinaryToUuidMapper implements TypeMapper<Object, UUID> {
 
@@ -44,7 +47,33 @@ public final class BinaryToUuidMapper implements TypeMapper<Object, UUID> {
 
     @Override
     public UUID toJavaType(Column column, Class<?> aClass, Object binary) {
-        return binary == null ? null : UUID.nameUUIDFromBytes((byte[]) binary);
+        if (binary == null) return null;
+
+        final byte[] data;
+        try {
+            data = (byte[]) binary;
+        } catch (final ClassCastException ex) {
+            throw new SpeedmentTypeMapperException(format(
+                "Expected database input to be a byte[] but was a %s.",
+                binary.getClass()
+            ), ex);
+        }
+
+        long msb = 0;
+        long lsb = 0;
+
+        if (data.length != 16) {
+            throw new SpeedmentTypeMapperException(
+                "Binary UUID is expected to be 16 bytes in length"
+            );
+        }
+
+        for (int i = 0; i < 8; i++)
+            msb = (msb << 8) | (data[i] & 0xff);
+        for (int i = 8; i < 16; i++)
+            lsb = (lsb << 8) | (data[i] & 0xff);
+
+        return new UUID(msb, lsb);
     }
 
     @Override

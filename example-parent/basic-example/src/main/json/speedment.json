@@ -2,6 +2,7 @@
   "config" : {
     "expanded" : true,
     "companyName" : "company",
+    "appId" : "3a4ca9ae-9edc-496d-9fe3-38e607885df5",
     "name" : "sakila",
     "packageLocation" : "src/main/java/",
     "id" : "sakila",

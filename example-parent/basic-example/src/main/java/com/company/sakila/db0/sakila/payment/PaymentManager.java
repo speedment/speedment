@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.payment.generated.GeneratedPaymentManager;
  * 
  * @author company
  */
-public interface PaymentManager extends GeneratedPaymentManager {
-    
-    
-}
+public interface PaymentManager extends GeneratedPaymentManager {}

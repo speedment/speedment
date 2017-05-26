@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.language.generated.GeneratedLanguage;
  * 
  * @author company
  */
-public interface Language extends GeneratedLanguage {
-    
-    
-}
+public interface Language extends GeneratedLanguage {}

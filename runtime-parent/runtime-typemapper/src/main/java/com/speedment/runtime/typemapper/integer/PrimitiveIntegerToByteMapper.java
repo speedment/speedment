@@ -49,4 +49,9 @@ public final class PrimitiveIntegerToByteMapper implements TypeMapper<Integer, B
         return value == null ? null : ((int) (byte) value);
     }
 
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }
+    
 }

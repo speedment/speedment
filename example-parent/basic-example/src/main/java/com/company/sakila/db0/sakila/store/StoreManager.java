@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.store.generated.GeneratedStoreManager;
  * 
  * @author company
  */
-public interface StoreManager extends GeneratedStoreManager {
-    
-    
-}
+public interface StoreManager extends GeneratedStoreManager {}

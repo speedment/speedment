@@ -17,7 +17,6 @@
 package com.speedment.runtime.core.internal.db.mysql;
 
 import com.speedment.common.injector.InjectBundle;
-import static com.speedment.common.injector.InjectBundle.of;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
@@ -25,12 +24,15 @@ import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.internal.db.AbstractDatabaseNamingConvention;
 import com.speedment.runtime.core.internal.db.AbstractDbmsType;
 import com.speedment.runtime.core.internal.manager.sql.MySqlSpeedmentPredicateView;
+
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+import static com.speedment.common.injector.InjectBundle.of;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
-import java.util.stream.Stream;
 
 /**
  *
@@ -48,10 +50,8 @@ public final class MySqlDbmsType extends AbstractDbmsType {
     private final MySqlNamingConvention namingConvention;
     private final MySqlConnectionUrlGenerator connectionUrlGenerator;
 
-    private @Inject
-    MySqlDbmsMetadataHandler metadataHandler;
-    private @Inject
-    MySqlDbmsOperationHandler operationHandler;
+    private @Inject MySqlDbmsMetadataHandler metadataHandler;
+    private @Inject MySqlDbmsOperationHandler operationHandler;
 
     private MySqlDbmsType() {
         namingConvention = new MySqlNamingConvention();

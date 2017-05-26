@@ -29,7 +29,7 @@ public interface GeneratedFilmActor {
      * This Field corresponds to the {@link FilmActor} field that can be
      * obtained using the {@link FilmActor#getActorId()} method.
      */
-    final IntForeignKeyField<FilmActor, Integer, Actor> ACTOR_ID = IntForeignKeyField.create(
+    IntForeignKeyField<FilmActor, Integer, Actor> ACTOR_ID = IntForeignKeyField.create(
         Identifier.ACTOR_ID,
         FilmActor::getActorId,
         FilmActor::setActorId,
@@ -41,7 +41,7 @@ public interface GeneratedFilmActor {
      * This Field corresponds to the {@link FilmActor} field that can be
      * obtained using the {@link FilmActor#getFilmId()} method.
      */
-    final IntForeignKeyField<FilmActor, Integer, Film> FILM_ID = IntForeignKeyField.create(
+    IntForeignKeyField<FilmActor, Integer, Film> FILM_ID = IntForeignKeyField.create(
         Identifier.FILM_ID,
         FilmActor::getFilmId,
         FilmActor::setFilmId,
@@ -53,7 +53,7 @@ public interface GeneratedFilmActor {
      * This Field corresponds to the {@link FilmActor} field that can be
      * obtained using the {@link FilmActor#getLastUpdate()} method.
      */
-    final ComparableField<FilmActor, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
+    ComparableField<FilmActor, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
         Identifier.LAST_UPDATE,
         FilmActor::getLastUpdate,
         FilmActor::setLastUpdate,

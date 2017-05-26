@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.category.generated.GeneratedCategoryImpl;
  * 
  * @author company
  */
-public final class CategoryImpl extends GeneratedCategoryImpl implements Category {
-    
-    
-}
+public final class CategoryImpl extends GeneratedCategoryImpl implements Category {}

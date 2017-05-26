@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.film_text.generated.GeneratedFilmTextSqlAda
  * 
  * @author company
  */
-public class FilmTextSqlAdapter extends GeneratedFilmTextSqlAdapter {
-    
-    
-}
+public class FilmTextSqlAdapter extends GeneratedFilmTextSqlAdapter {}

@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.country.generated.GeneratedCountrySqlAdapte
  * 
  * @author company
  */
-public class CountrySqlAdapter extends GeneratedCountrySqlAdapter {
-    
-    
-}
+public class CountrySqlAdapter extends GeneratedCountrySqlAdapter {}

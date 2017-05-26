@@ -20,6 +20,8 @@ import com.speedment.common.singletonstream.SingletonStream;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.method.BackwardFinder;
+import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.trait.HasFinder;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -257,12 +259,12 @@ public interface Manager<ENTITY> {
      *
      * @param <FK_ENTITY> the type of the foreign entity
      * @param fkField the foreign key field
-     * @return an Entity (if any) that matches the given a foreign key relation
-     * (foreign field and entity)
+     * @return a function that returns an Entity (if any) that matches the given
+     * a foreign key relation (foreign field and entity)
      * 
      * @see #finderByNullable(HasFinder)
      */
-    default <FK_ENTITY> Function<FK_ENTITY, ENTITY> finderBy(HasFinder<FK_ENTITY, ENTITY> fkField) {
+    default <FK_ENTITY> FindFrom<FK_ENTITY, ENTITY> finderBy(HasFinder<FK_ENTITY, ENTITY> fkField) {
         return fkField.finder(getTableIdentifier(), this::stream);
     }
 
@@ -289,8 +291,8 @@ public interface Manager<ENTITY> {
      *
      * @param <FK_ENTITY> the type of the foreign entity
      * @param fkField the foreign key field
-     * @return an Entity (if any) that matches the given a foreign key relation
-     * (foreign field and entity)
+     * @return a function that returns an Entity (if any) that matches the given
+     * a foreign key relation (foreign field and entity)
      * 
      * @see #findByNullable(HasFinder, Object)
      */
@@ -327,7 +329,7 @@ public interface Manager<ENTITY> {
      * (foreign field and entity)
      * @see #findBackwardsBy(HasFinder, Object)
      */
-    default <FK_ENTITY> Function<FK_ENTITY, Stream<ENTITY>> finderBackwardsBy(HasFinder<ENTITY, FK_ENTITY> fkField) {
+    default <FK_ENTITY> BackwardFinder<FK_ENTITY, ENTITY> finderBackwardsBy(HasFinder<ENTITY, FK_ENTITY> fkField) {
         return fkField.backwardFinder(getTableIdentifier(), this::stream);
     }
 

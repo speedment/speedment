@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.inventory.generated.GeneratedInventorySqlAd
  * 
  * @author company
  */
-public class InventorySqlAdapter extends GeneratedInventorySqlAdapter {
-    
-    
-}
+public class InventorySqlAdapter extends GeneratedInventorySqlAdapter {}

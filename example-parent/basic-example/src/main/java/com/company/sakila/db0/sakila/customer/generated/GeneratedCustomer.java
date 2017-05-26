@@ -34,7 +34,7 @@ public interface GeneratedCustomer {
      * This Field corresponds to the {@link Customer} field that can be obtained
      * using the {@link Customer#getCustomerId()} method.
      */
-    final IntField<Customer, Integer> CUSTOMER_ID = IntField.create(
+    IntField<Customer, Integer> CUSTOMER_ID = IntField.create(
         Identifier.CUSTOMER_ID,
         Customer::getCustomerId,
         Customer::setCustomerId,
@@ -45,7 +45,7 @@ public interface GeneratedCustomer {
      * This Field corresponds to the {@link Customer} field that can be obtained
      * using the {@link Customer#getStoreId()} method.
      */
-    final ShortForeignKeyField<Customer, Short, Store> STORE_ID = ShortForeignKeyField.create(
+    ShortForeignKeyField<Customer, Short, Store> STORE_ID = ShortForeignKeyField.create(
         Identifier.STORE_ID,
         Customer::getStoreId,
         Customer::setStoreId,
@@ -57,7 +57,7 @@ public interface GeneratedCustomer {
      * This Field corresponds to the {@link Customer} field that can be obtained
      * using the {@link Customer#getFirstName()} method.
      */
-    final StringField<Customer, String> FIRST_NAME = StringField.create(
+    StringField<Customer, String> FIRST_NAME = StringField.create(
         Identifier.FIRST_NAME,
         Customer::getFirstName,
         Customer::setFirstName,
@@ -68,7 +68,7 @@ public interface GeneratedCustomer {
      * This Field corresponds to the {@link Customer} field that can be obtained
      * using the {@link Customer#getLastName()} method.
      */
-    final StringField<Customer, String> LAST_NAME = StringField.create(
+    StringField<Customer, String> LAST_NAME = StringField.create(
         Identifier.LAST_NAME,
         Customer::getLastName,
         Customer::setLastName,
@@ -79,7 +79,7 @@ public interface GeneratedCustomer {
      * This Field corresponds to the {@link Customer} field that can be obtained
      * using the {@link Customer#getEmail()} method.
      */
-    final StringField<Customer, String> EMAIL = StringField.create(
+    StringField<Customer, String> EMAIL = StringField.create(
         Identifier.EMAIL,
         o -> OptionalUtil.unwrap(o.getEmail()),
         Customer::setEmail,
@@ -90,7 +90,7 @@ public interface GeneratedCustomer {
      * This Field corresponds to the {@link Customer} field that can be obtained
      * using the {@link Customer#getAddressId()} method.
      */
-    final IntForeignKeyField<Customer, Integer, Address> ADDRESS_ID = IntForeignKeyField.create(
+    IntForeignKeyField<Customer, Integer, Address> ADDRESS_ID = IntForeignKeyField.create(
         Identifier.ADDRESS_ID,
         Customer::getAddressId,
         Customer::setAddressId,
@@ -102,7 +102,7 @@ public interface GeneratedCustomer {
      * This Field corresponds to the {@link Customer} field that can be obtained
      * using the {@link Customer#getActive()} method.
      */
-    final IntField<Customer, Integer> ACTIVE = IntField.create(
+    IntField<Customer, Integer> ACTIVE = IntField.create(
         Identifier.ACTIVE,
         Customer::getActive,
         Customer::setActive,
@@ -113,7 +113,7 @@ public interface GeneratedCustomer {
      * This Field corresponds to the {@link Customer} field that can be obtained
      * using the {@link Customer#getCreateDate()} method.
      */
-    final ComparableField<Customer, Timestamp, Timestamp> CREATE_DATE = ComparableField.create(
+    ComparableField<Customer, Timestamp, Timestamp> CREATE_DATE = ComparableField.create(
         Identifier.CREATE_DATE,
         Customer::getCreateDate,
         Customer::setCreateDate,
@@ -124,7 +124,7 @@ public interface GeneratedCustomer {
      * This Field corresponds to the {@link Customer} field that can be obtained
      * using the {@link Customer#getLastUpdate()} method.
      */
-    final ComparableField<Customer, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
+    ComparableField<Customer, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
         Identifier.LAST_UPDATE,
         Customer::getLastUpdate,
         Customer::setLastUpdate,

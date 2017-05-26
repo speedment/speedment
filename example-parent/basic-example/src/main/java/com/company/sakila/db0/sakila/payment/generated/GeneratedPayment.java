@@ -37,7 +37,7 @@ public interface GeneratedPayment {
      * This Field corresponds to the {@link Payment} field that can be obtained
      * using the {@link Payment#getPaymentId()} method.
      */
-    final IntField<Payment, Integer> PAYMENT_ID = IntField.create(
+    IntField<Payment, Integer> PAYMENT_ID = IntField.create(
         Identifier.PAYMENT_ID,
         Payment::getPaymentId,
         Payment::setPaymentId,
@@ -48,7 +48,7 @@ public interface GeneratedPayment {
      * This Field corresponds to the {@link Payment} field that can be obtained
      * using the {@link Payment#getCustomerId()} method.
      */
-    final IntForeignKeyField<Payment, Integer, Customer> CUSTOMER_ID = IntForeignKeyField.create(
+    IntForeignKeyField<Payment, Integer, Customer> CUSTOMER_ID = IntForeignKeyField.create(
         Identifier.CUSTOMER_ID,
         Payment::getCustomerId,
         Payment::setCustomerId,
@@ -60,7 +60,7 @@ public interface GeneratedPayment {
      * This Field corresponds to the {@link Payment} field that can be obtained
      * using the {@link Payment#getStaffId()} method.
      */
-    final ShortForeignKeyField<Payment, Short, Staff> STAFF_ID = ShortForeignKeyField.create(
+    ShortForeignKeyField<Payment, Short, Staff> STAFF_ID = ShortForeignKeyField.create(
         Identifier.STAFF_ID,
         Payment::getStaffId,
         Payment::setStaffId,
@@ -72,7 +72,7 @@ public interface GeneratedPayment {
      * This Field corresponds to the {@link Payment} field that can be obtained
      * using the {@link Payment#getRentalId()} method.
      */
-    final ComparableForeignKeyField<Payment, Integer, Integer, Rental> RENTAL_ID = ComparableForeignKeyField.create(
+    ComparableForeignKeyField<Payment, Integer, Integer, Rental> RENTAL_ID = ComparableForeignKeyField.create(
         Identifier.RENTAL_ID,
         o -> OptionalUtil.unwrap(o.getRentalId()),
         Payment::setRentalId,
@@ -84,7 +84,7 @@ public interface GeneratedPayment {
      * This Field corresponds to the {@link Payment} field that can be obtained
      * using the {@link Payment#getAmount()} method.
      */
-    final ComparableField<Payment, BigDecimal, BigDecimal> AMOUNT = ComparableField.create(
+    ComparableField<Payment, BigDecimal, BigDecimal> AMOUNT = ComparableField.create(
         Identifier.AMOUNT,
         Payment::getAmount,
         Payment::setAmount,
@@ -95,7 +95,7 @@ public interface GeneratedPayment {
      * This Field corresponds to the {@link Payment} field that can be obtained
      * using the {@link Payment#getPaymentDate()} method.
      */
-    final ComparableField<Payment, Timestamp, Timestamp> PAYMENT_DATE = ComparableField.create(
+    ComparableField<Payment, Timestamp, Timestamp> PAYMENT_DATE = ComparableField.create(
         Identifier.PAYMENT_DATE,
         Payment::getPaymentDate,
         Payment::setPaymentDate,
@@ -106,7 +106,7 @@ public interface GeneratedPayment {
      * This Field corresponds to the {@link Payment} field that can be obtained
      * using the {@link Payment#getLastUpdate()} method.
      */
-    final ComparableField<Payment, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
+    ComparableField<Payment, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
         Identifier.LAST_UPDATE,
         Payment::getLastUpdate,
         Payment::setLastUpdate,

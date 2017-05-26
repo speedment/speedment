@@ -38,12 +38,14 @@ public final class MySqlSpeedmentPredicateView extends AbstractFieldPredicateVie
     /*
     create table colltest (
       name character(20)
-    ) charset latin1
+    ) charset latin1;
 
     insert into colltest (name) values ('olle');
     insert into colltest (name) values ('sven');
     
     select * from colltest where name = 'olle' collate utf8_bin;
+
+    select * from colltest where name in ('Olle', 'tryggve' collate utf8_bin) ;
     
      */
     private enum Collation {
@@ -130,7 +132,7 @@ public final class MySqlSpeedmentPredicateView extends AbstractFieldPredicateVie
 
     private SqlPredicateFragment inStringHelper(String cn, FieldPredicate<?> model, boolean negated) {
         final Set<?> set = getFirstOperandAsRawSet(model);
-        return of("(" + cn + " " + Collation.UTF8_BIN.getCollateCommand() + " IN (" + set.stream().map($ -> "?").collect(joining(",")) + "))", negated).addAll(set);
+        return of("(" + cn + " IN (" + set.stream().map($ -> "?").collect(joining(",")) + " "+ Collation.UTF8_BIN.getCollateCommand() +"))", negated).addAll(set);
     }
 
     @Override

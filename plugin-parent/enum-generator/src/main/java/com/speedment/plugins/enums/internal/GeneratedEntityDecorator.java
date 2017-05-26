@@ -16,11 +16,12 @@
  */
 package com.speedment.plugins.enums.internal;
 
-import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.injector.Injector;
 import com.speedment.generator.core.exception.SpeedmentGeneratorException;
+import com.speedment.generator.standard.internal.util.EntityTranslatorSupport;
+import com.speedment.generator.standard.internal.util.FkHolder;
 import com.speedment.generator.translator.JavaClassTranslator;
 import com.speedment.generator.translator.Translator;
 import com.speedment.generator.translator.TranslatorDecorator;
@@ -30,11 +31,14 @@ import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.util.OptionalUtil;
-import com.speedment.runtime.field.ReferenceField;
+import com.speedment.runtime.field.EnumField;
+import com.speedment.runtime.field.EnumForeignKeyField;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.lang.reflect.Type;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultType.WILDCARD;
@@ -43,14 +47,14 @@ import static com.speedment.common.codegen.model.Value.*;
 import static com.speedment.common.codegen.util.Formatting.indent;
 import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.generator.standard.internal.util.ColumnUtil.usesOptional;
-import static com.speedment.runtime.config.util.DocumentDbUtil.isUnique;
+import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author  Emil Forslund
  * @author  Simon Jonasson
- * @since   1.0.0
+ * @since   3.0.0
  */
 public final class GeneratedEntityDecorator
 implements TranslatorDecorator<Table, Interface> {
@@ -87,7 +91,7 @@ implements TranslatorDecorator<Table, Interface> {
                         
                         final Enum colEnum = Enum.of(shortName(colEnumName))
                             .add(Field.of(DATABASE_NAME_FIELD, String.class).private_().final_());
-                        
+
                         // Generate enum constants
                         constants.forEach(constant -> {
                             final String javaName = namer.javaStaticFieldName(constant);
@@ -142,7 +146,9 @@ implements TranslatorDecorator<Table, Interface> {
 
                         final String enumShortName = shortName(colEnumName);
                         final String enumVarName = namer.javaVariableName(enumShortName);
-                        field.set(ofInvocation(ReferenceField.class, "create",
+
+                        final List<Value<?>> params = new LinkedList<>();
+                        params.addAll(asList(
                             ofReference("Identifier." + fieldName),
                             ofReference(
                                 usesOptional(col)
@@ -155,10 +161,16 @@ implements TranslatorDecorator<Table, Interface> {
                             ),
                             ofAnonymous(TypeMapper.class)
                                 .add(String.class)
-                                .add(SimpleType.create(colEnumName))
+                                .add(enumType)
                                 .add(Method.of("getLabel", String.class)
                                     .public_().add(OVERRIDE)
                                     .add("return \"String to " + enumShortName + " Mapper\";")
+                                )
+                                .add(Method.of("getJavaTypeCategory", TypeMapper.Category.class)
+                                    .public_().add(OVERRIDE)
+                                    .add(Field.of("column", Column.class))
+                                    .add("return " + TypeMapper.Category.class.getSimpleName() +
+                                        "." + TypeMapper.Category.ENUM.name() + ";")
                                 )
                                 .add(Method.of("getJavaType", Type.class)
                                     .public_().add(OVERRIDE)
@@ -176,8 +188,34 @@ implements TranslatorDecorator<Table, Interface> {
                                     .public_().add(OVERRIDE)
                                     .add(Field.of(enumVarName, enumType))
                                     .add("return " + enumVarName + " == null ? null : " + enumVarName + "." + TO_DATABASE_METHOD + "();")
-                                ),
-                            ofBoolean(isUnique(col))
+                                )
+                        ));
+
+                        // Foreign key args
+                        final Optional<FkHolder> fk =
+                            EntityTranslatorSupport.getForeignKey(
+                                translator.getSupport().tableOrThrow(), col
+                            ).map(fkc -> new FkHolder(injector, fkc.getParentOrThrow()));
+
+                        fk.ifPresent(holder -> {
+                            params.add(ofReference(
+                                holder.getForeignEmt().getSupport().entityName() + "." +
+                                translator.getSupport().namer().javaStaticFieldName(
+                                    holder.getForeignColumn().getJavaName()
+                                ) + ","
+                            ));
+                        });
+
+                        params.add(Value.ofReference(enumShortName + "::" + TO_DATABASE_METHOD));
+                        params.add(Value.ofReference(enumShortName + "::" + FROM_DATABASE_METHOD));
+                        params.add(Value.ofReference(enumShortName + ".class"));
+
+                        field.set(ofInvocation(
+                            fk.isPresent()
+                                ? EnumForeignKeyField.class
+                                : EnumField.class,
+                            "create",
+                            params.toArray(new Value<?>[params.size()])
                         ));
                     });
             });

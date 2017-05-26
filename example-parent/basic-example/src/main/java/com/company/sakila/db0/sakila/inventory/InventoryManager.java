@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.inventory.generated.GeneratedInventoryManag
  * 
  * @author company
  */
-public interface InventoryManager extends GeneratedInventoryManager {
-    
-    
-}
+public interface InventoryManager extends GeneratedInventoryManager {}

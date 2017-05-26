@@ -28,9 +28,11 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.internal.immutable.ImmutableProject;
 import com.speedment.runtime.config.trait.HasMainInterface;
+import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.internal.util.Settings;
+import com.speedment.runtime.core.internal.util.Statistics;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.DocumentProperty;
@@ -84,6 +86,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import static com.speedment.runtime.core.internal.util.Statistics.Event.GUI_PROJECT_LOADED;
+import static com.speedment.runtime.core.internal.util.Statistics.Event.GUI_STARTED;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 import static javafx.application.Platform.runLater;
@@ -125,6 +129,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     @Inject private ConfigFileHelper configFileHelper;
     @Inject private InjectionLoader loader;
     @Inject private RuleComponent rules;
+    @Inject private InfoComponent info;
     
     @Inject private Injector injector;
     
@@ -185,6 +190,8 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         if (loaded != null) {
             project.merge(documentPropertyComponent, loaded);
         }
+
+        Statistics.report(info, projectComponent, GUI_STARTED);
     }
     
     private void addToOutputMessages(Node node) {
@@ -309,6 +316,8 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
                 project.dbmses()
                     .map(DbmsProperty.class::cast)
                     .forEach(dbms -> configFileHelper.loadFromDatabase(dbms, schemaName.get()));
+
+                Statistics.report(info, projectComponent, GUI_PROJECT_LOADED);
             } else {
                 showError(
                     "No Schema Found",

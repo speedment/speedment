@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.address.generated.GeneratedAddressSqlAdapte
  * 
  * @author company
  */
-public class AddressSqlAdapter extends GeneratedAddressSqlAdapter {
-    
-    
-}
+public class AddressSqlAdapter extends GeneratedAddressSqlAdapter {}

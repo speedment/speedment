@@ -34,7 +34,7 @@ public interface GeneratedAddress {
      * This Field corresponds to the {@link Address} field that can be obtained
      * using the {@link Address#getAddressId()} method.
      */
-    final IntField<Address, Integer> ADDRESS_ID = IntField.create(
+    IntField<Address, Integer> ADDRESS_ID = IntField.create(
         Identifier.ADDRESS_ID,
         Address::getAddressId,
         Address::setAddressId,
@@ -45,7 +45,7 @@ public interface GeneratedAddress {
      * This Field corresponds to the {@link Address} field that can be obtained
      * using the {@link Address#getAddress()} method.
      */
-    final StringField<Address, String> ADDRESS = StringField.create(
+    StringField<Address, String> ADDRESS = StringField.create(
         Identifier.ADDRESS,
         Address::getAddress,
         Address::setAddress,
@@ -56,7 +56,7 @@ public interface GeneratedAddress {
      * This Field corresponds to the {@link Address} field that can be obtained
      * using the {@link Address#getAddress2()} method.
      */
-    final StringField<Address, String> ADDRESS2 = StringField.create(
+    StringField<Address, String> ADDRESS2 = StringField.create(
         Identifier.ADDRESS2,
         o -> OptionalUtil.unwrap(o.getAddress2()),
         Address::setAddress2,
@@ -67,7 +67,7 @@ public interface GeneratedAddress {
      * This Field corresponds to the {@link Address} field that can be obtained
      * using the {@link Address#getDistrict()} method.
      */
-    final StringField<Address, String> DISTRICT = StringField.create(
+    StringField<Address, String> DISTRICT = StringField.create(
         Identifier.DISTRICT,
         Address::getDistrict,
         Address::setDistrict,
@@ -78,7 +78,7 @@ public interface GeneratedAddress {
      * This Field corresponds to the {@link Address} field that can be obtained
      * using the {@link Address#getCityId()} method.
      */
-    final IntForeignKeyField<Address, Integer, City> CITY_ID = IntForeignKeyField.create(
+    IntForeignKeyField<Address, Integer, City> CITY_ID = IntForeignKeyField.create(
         Identifier.CITY_ID,
         Address::getCityId,
         Address::setCityId,
@@ -90,7 +90,7 @@ public interface GeneratedAddress {
      * This Field corresponds to the {@link Address} field that can be obtained
      * using the {@link Address#getPostalCode()} method.
      */
-    final StringField<Address, String> POSTAL_CODE = StringField.create(
+    StringField<Address, String> POSTAL_CODE = StringField.create(
         Identifier.POSTAL_CODE,
         o -> OptionalUtil.unwrap(o.getPostalCode()),
         Address::setPostalCode,
@@ -101,7 +101,7 @@ public interface GeneratedAddress {
      * This Field corresponds to the {@link Address} field that can be obtained
      * using the {@link Address#getPhone()} method.
      */
-    final StringField<Address, String> PHONE = StringField.create(
+    StringField<Address, String> PHONE = StringField.create(
         Identifier.PHONE,
         Address::getPhone,
         Address::setPhone,
@@ -112,7 +112,7 @@ public interface GeneratedAddress {
      * This Field corresponds to the {@link Address} field that can be obtained
      * using the {@link Address#getLocation()} method.
      */
-    final ReferenceField<Address, Blob, Blob> LOCATION = ReferenceField.create(
+    ReferenceField<Address, Blob, Blob> LOCATION = ReferenceField.create(
         Identifier.LOCATION,
         Address::getLocation,
         Address::setLocation,
@@ -123,7 +123,7 @@ public interface GeneratedAddress {
      * This Field corresponds to the {@link Address} field that can be obtained
      * using the {@link Address#getLastUpdate()} method.
      */
-    final ComparableField<Address, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
+    ComparableField<Address, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
         Identifier.LAST_UPDATE,
         Address::getLastUpdate,
         Address::setLastUpdate,

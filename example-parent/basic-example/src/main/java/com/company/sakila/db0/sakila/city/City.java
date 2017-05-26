@@ -9,7 +9,4 @@ import com.company.sakila.db0.sakila.city.generated.GeneratedCity;
  * 
  * @author company
  */
-public interface City extends GeneratedCity {
-    
-    
-}
+public interface City extends GeneratedCity {}

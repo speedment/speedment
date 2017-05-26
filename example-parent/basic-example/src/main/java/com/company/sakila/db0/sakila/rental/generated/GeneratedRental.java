@@ -34,7 +34,7 @@ public interface GeneratedRental {
      * This Field corresponds to the {@link Rental} field that can be obtained
      * using the {@link Rental#getRentalId()} method.
      */
-    final IntField<Rental, Integer> RENTAL_ID = IntField.create(
+    IntField<Rental, Integer> RENTAL_ID = IntField.create(
         Identifier.RENTAL_ID,
         Rental::getRentalId,
         Rental::setRentalId,
@@ -45,7 +45,7 @@ public interface GeneratedRental {
      * This Field corresponds to the {@link Rental} field that can be obtained
      * using the {@link Rental#getRentalDate()} method.
      */
-    final ComparableField<Rental, Timestamp, Timestamp> RENTAL_DATE = ComparableField.create(
+    ComparableField<Rental, Timestamp, Timestamp> RENTAL_DATE = ComparableField.create(
         Identifier.RENTAL_DATE,
         Rental::getRentalDate,
         Rental::setRentalDate,
@@ -56,7 +56,7 @@ public interface GeneratedRental {
      * This Field corresponds to the {@link Rental} field that can be obtained
      * using the {@link Rental#getInventoryId()} method.
      */
-    final IntForeignKeyField<Rental, Integer, Inventory> INVENTORY_ID = IntForeignKeyField.create(
+    IntForeignKeyField<Rental, Integer, Inventory> INVENTORY_ID = IntForeignKeyField.create(
         Identifier.INVENTORY_ID,
         Rental::getInventoryId,
         Rental::setInventoryId,
@@ -68,7 +68,7 @@ public interface GeneratedRental {
      * This Field corresponds to the {@link Rental} field that can be obtained
      * using the {@link Rental#getCustomerId()} method.
      */
-    final IntForeignKeyField<Rental, Integer, Customer> CUSTOMER_ID = IntForeignKeyField.create(
+    IntForeignKeyField<Rental, Integer, Customer> CUSTOMER_ID = IntForeignKeyField.create(
         Identifier.CUSTOMER_ID,
         Rental::getCustomerId,
         Rental::setCustomerId,
@@ -80,7 +80,7 @@ public interface GeneratedRental {
      * This Field corresponds to the {@link Rental} field that can be obtained
      * using the {@link Rental#getReturnDate()} method.
      */
-    final ComparableField<Rental, Timestamp, Timestamp> RETURN_DATE = ComparableField.create(
+    ComparableField<Rental, Timestamp, Timestamp> RETURN_DATE = ComparableField.create(
         Identifier.RETURN_DATE,
         o -> OptionalUtil.unwrap(o.getReturnDate()),
         Rental::setReturnDate,
@@ -91,7 +91,7 @@ public interface GeneratedRental {
      * This Field corresponds to the {@link Rental} field that can be obtained
      * using the {@link Rental#getStaffId()} method.
      */
-    final ShortForeignKeyField<Rental, Short, Staff> STAFF_ID = ShortForeignKeyField.create(
+    ShortForeignKeyField<Rental, Short, Staff> STAFF_ID = ShortForeignKeyField.create(
         Identifier.STAFF_ID,
         Rental::getStaffId,
         Rental::setStaffId,
@@ -103,7 +103,7 @@ public interface GeneratedRental {
      * This Field corresponds to the {@link Rental} field that can be obtained
      * using the {@link Rental#getLastUpdate()} method.
      */
-    final ComparableField<Rental, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
+    ComparableField<Rental, Timestamp, Timestamp> LAST_UPDATE = ComparableField.create(
         Identifier.LAST_UPDATE,
         Rental::getLastUpdate,
         Rental::setLastUpdate,

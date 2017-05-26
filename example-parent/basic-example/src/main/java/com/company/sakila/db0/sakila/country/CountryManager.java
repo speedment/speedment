@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.country.generated.GeneratedCountryManager;
  * 
  * @author company
  */
-public interface CountryManager extends GeneratedCountryManager {
-    
-    
-}
+public interface CountryManager extends GeneratedCountryManager {}

@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.country.generated.GeneratedCountryImpl;
  * 
  * @author company
  */
-public final class CountryImpl extends GeneratedCountryImpl implements Country {
-    
-    
-}
+public final class CountryImpl extends GeneratedCountryImpl implements Country {}

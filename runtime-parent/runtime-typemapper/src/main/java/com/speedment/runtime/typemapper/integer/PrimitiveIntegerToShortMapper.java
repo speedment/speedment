@@ -49,4 +49,9 @@ public final class PrimitiveIntegerToShortMapper implements TypeMapper<Integer, 
         return value == null ? null : ((int) (short) value);
     }
 
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }
+    
 }

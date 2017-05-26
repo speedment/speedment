@@ -25,6 +25,7 @@ import com.speedment.runtime.core.internal.util.Statistics;
 import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.component.VersionComponent;
 import com.speedment.tool.core.internal.util.InjectionLoader;
+import com.speedment.tool.core.internal.util.SemanticVersionComparator;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.SplitPane;
@@ -47,6 +48,8 @@ import static javafx.application.Platform.runLater;
 public final class SceneController implements Initializable {
     
     private final static Logger LOGGER = LoggerManager.getLogger(SceneController.class);
+    private final static SemanticVersionComparator SEMANTIC_VERSION =
+        new SemanticVersionComparator();
     
     private @Inject UserInterfaceComponent ui;
     private @Inject InfoComponent info;
@@ -76,7 +79,10 @@ public final class SceneController implements Initializable {
                 try {
                     version.latestVersion()
                         .thenAcceptAsync(release -> runLater(() -> {
-                            final int compare = release.compareTo(info.getImplementationVersion());
+                            final int compare = SEMANTIC_VERSION.compare(
+                                release, info.getImplementationVersion()
+                            );
+
                             if (compare == 0) {
                                 ui.showNotification(
                                     "Your version of " + info.getTitle() + " is up to date."
@@ -84,13 +90,13 @@ public final class SceneController implements Initializable {
                             } else if (compare > 0) {
                                 ui.showNotification(
                                     "A new version " + release +
-                                        " of " + info.getTitle() + " is available."
+                                    " of " + info.getTitle() + " is available."
                                 );
                             } else {
                                 ui.showNotification(
                                     "Your version " + info.getImplementationVersion() +
-                                        " of " + info.getTitle() + " is newer than the released " +
-                                        release + "."
+                                    " of " + info.getTitle() + " is newer than the released " +
+                                    release + "."
                                 );
                             }
                         })).get(3, TimeUnit.SECONDS);

@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.film_text.generated.GeneratedFilmTextManage
  * 
  * @author company
  */
-public interface FilmTextManager extends GeneratedFilmTextManager {
-    
-    
-}
+public interface FilmTextManager extends GeneratedFilmTextManager {}

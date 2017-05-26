@@ -50,4 +50,10 @@ public final class DateToIntMapper implements TypeMapper<Date, Integer> {
     public Date toDatabaseType(Integer value) {
         return value == null ? null : new Date(value * 1000L);
     }
+
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }
+    
 }

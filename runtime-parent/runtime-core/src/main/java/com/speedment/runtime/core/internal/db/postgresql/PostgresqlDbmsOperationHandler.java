@@ -17,12 +17,52 @@
 package com.speedment.runtime.core.internal.db.postgresql;
 
 import com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler;
+import com.speedment.runtime.core.internal.manager.sql.SqlInsertStatement;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
  * @author  Emil Forslund
+ * @author  Dan Lawesson
  * @since   3.0.0
  */
 public final class PostgresqlDbmsOperationHandler extends AbstractDbmsOperationHandler {
-    
+
+    // Five elements - list is surely more efficient than hash set
+    private static List<Integer> LONG_GETTABLE_TYPES = Arrays.asList(
+        Types.TINYINT,
+        Types.SMALLINT,
+        Types.INTEGER,
+        Types.BIGINT,
+        Types.NUMERIC
+    );
+
+    @Override
+    public <ENTITY> void handleGeneratedKeys(PreparedStatement ps, SqlInsertStatement<ENTITY> sqlStatement) throws SQLException {
+        /*
+         * There does not seem to be any way to find the generated keys from a Postgres JDBC driver
+         * since getGeneratedKeys() returns the whole set of columns. This causes
+         * bug #293 "The postgresql throws an exception when the PRIMARY KEY is not type long."
+         *
+         * See http://stackoverflow.com/questions/19766816/postgresql-jdbc-getgeneratedkeys-returns-all-columns
+         *
+         * Below we instead handle auto generated fields that can be retrieved as Long. This fix clearly only
+         * works for generated fields that are also auto generated.
+         */
+
+        try (final ResultSet generatedKeys = ps.getGeneratedKeys()) {
+            while (generatedKeys.next()) {
+                final int columnType = generatedKeys.getMetaData().getColumnType(1);
+                if (generatedKeys.getMetaData().isAutoIncrement(1) && LONG_GETTABLE_TYPES.contains(columnType)) {
+                    sqlStatement.addGeneratedKey(generatedKeys.getLong(1));
+                }
+            }
+        }
+    }
 }

@@ -10,7 +10,4 @@ import com.company.sakila.db0.sakila.film_actor.generated.GeneratedFilmActor;
  * 
  * @author company
  */
-public interface FilmActor extends GeneratedFilmActor {
-    
-    
-}
+public interface FilmActor extends GeneratedFilmActor {}

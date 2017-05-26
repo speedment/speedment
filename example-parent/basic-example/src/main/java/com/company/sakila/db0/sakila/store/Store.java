@@ -9,7 +9,4 @@ import com.company.sakila.db0.sakila.store.generated.GeneratedStore;
  * 
  * @author company
  */
-public interface Store extends GeneratedStore {
-    
-    
-}
+public interface Store extends GeneratedStore {}

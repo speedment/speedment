@@ -57,5 +57,10 @@ public class TimestampToLocalDateTimeMapper implements TypeMapper<Timestamp, Loc
     public Timestamp toDatabaseType(LocalDateTime value) {
         return value == null ? null : Timestamp.valueOf(value);
     }
+
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }
     
 }

@@ -17,7 +17,6 @@
 package com.speedment.tool.propertyeditor.internal.component;
 
 import com.speedment.common.injector.Injector;
-import com.speedment.common.injector.State;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.mapstream.MapStream;
@@ -28,11 +27,14 @@ import com.speedment.tool.config.trait.*;
 import com.speedment.tool.propertyeditor.PropertyEditor;
 import com.speedment.tool.propertyeditor.component.PropertyEditorComponent;
 import com.speedment.tool.propertyeditor.editor.*;
+
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+import static com.speedment.common.injector.State.INITIALIZED;
 
 /**
  *
@@ -45,10 +47,10 @@ public final class PropertyEditorComponentImpl implements PropertyEditorComponen
     private @Inject Injector injector;
     
     public PropertyEditorComponentImpl (){
-        this.factoryMap = Collections.synchronizedMap( new LinkedHashMap<>() );
+        this.factoryMap = Collections.synchronizedMap(new LinkedHashMap<>());
     }
     
-    @ExecuteBefore(State.RESOLVED)
+    @ExecuteBefore(INITIALIZED)
     void installEditors() {
         install(HasEnabledProperty.class,    HasEnabled.ENABLED,    EnabledPropertyEditor::new);
         install(HasNameProperty.class,       HasName.NAME,          NamePropertyEditor::new);
@@ -71,6 +73,8 @@ public final class PropertyEditorComponentImpl implements PropertyEditorComponen
     
     @Override
     public <DOC extends DocumentProperty> Stream<PropertyEditor.Item> getUiVisibleProperties(DOC document) {
+
+        // @RequestParam(name="sort", required=false) String sSorts,
 
         return MapStream.of(factoryMap)                                         // MapStream<Class, Map<String, Supplier<PropertyEditor>>>
             .filterKey(clazz -> clazz.isAssignableFrom(document.getClass()))    // MapStream<Class, Map<String, Supplier<PropertyEditor>>>

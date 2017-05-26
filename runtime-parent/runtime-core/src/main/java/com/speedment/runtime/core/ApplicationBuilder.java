@@ -20,6 +20,7 @@ import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;
@@ -551,6 +552,12 @@ public interface ApplicationBuilder<
      * {@link Inject} will be dependency injected. Methods annotated with
      * {@link ExecuteBefore} will also be executed as part of the application
      * configuration phase.
+     * <p>
+     * Note: If a component class is specifying the same {@link InjectKey } as
+     * an existing class previously added to this ApplicationBuilder, then the
+     * last class will be associated with that {@link InjectKey }. Thus, the 
+     * order of calls to {@link #withComponent(java.lang.Class) } and
+     * {@link #withBundle(java.lang.Class) } is significant.
      *
      * @param componentClass the implementation class
      * @return this instance
@@ -566,7 +573,7 @@ public interface ApplicationBuilder<
      *
      * @deprecated The parameter {@code key} is not forwarded to the dependency
      * injection framework, so this method has exactly the same behavior as
-     * {@link #withComponent(java.lang.Class)}, so it is redundant.
+     * {@link #withComponent(java.lang.Class) }, so it is redundant.
      *
      * @param key the key to store it under
      * @param componentClass the implementation class
@@ -582,6 +589,12 @@ public interface ApplicationBuilder<
      * and fields annotated with {@link Inject} will be dependency injected.
      * Methods annotated with {@link ExecuteBefore} will also be executed as
      * part of the application configuration phase.
+     * <p>
+     * Note: If a class in the {@link InjectBundle } is specifying the same 
+     * {@link InjectKey } as an existing class previously added to this
+     * ApplicationBuilder, then the last class will be associated with that 
+     * {@link InjectKey }. Thus, the order of calls to this method is 
+     * significant.
      *
      * @param bundleClass to use when adding injectables
      * @return this instance
