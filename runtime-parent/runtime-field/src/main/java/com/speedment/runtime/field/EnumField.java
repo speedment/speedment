@@ -4,10 +4,12 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.EnumFieldImpl;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
+import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasStringOperators;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * A field representing an {@code Enum} value in the entity.
@@ -41,6 +43,125 @@ extends ComparableField<ENTITY, D, E>,
      * @return  the enum-to-string mapper
      */
     Function<E, String> enumToString();
+
+    /**
+     * Returns a new predicate that evaluates if entities has a enum value for
+     * this field with a value that is equal to the specified value. The string
+     * of the enum is determined using the {@link #enumToString()}-method.
+     *
+     * @param value  the argument
+     * @return       the predicate
+     */
+    Predicate<ENTITY> equal(String value);
+
+    /**
+     * Returns a new predicate that evaluates if entities has a enum value for
+     * this field with a value that is not equal to the specified value. The
+     * string of the enum is determined using the
+     * {@link #enumToString()}-method.
+     *
+     * @param value  the argument
+     * @return       the predicate
+     */
+    Predicate<ENTITY> notEqual(String value);
+
+    /**
+     * Returns a new predicate that evaluates if entities has a enum value for
+     * this field with a value that is less than the specified value. The
+     * string of the enum is determined using the
+     * {@link #enumToString()}-method.
+     *
+     * @param value  the argument
+     * @return       the predicate
+     */
+    Predicate<ENTITY> lessThan(String value);
+
+    /**
+     * Returns a new predicate that evaluates if entities has a enum value for
+     * this field with a value that is less or equal to the specified value. The
+     * string of the enum is determined using the
+     * {@link #enumToString()}-method.
+     *
+     * @param value  the argument
+     * @return       the predicate
+     */
+    Predicate<ENTITY> lessOrEqual(String value);
+
+    /**
+     * Returns a new predicate that evaluates if entities has a enum value for
+     * this field with a value that is greater than the specified value. The
+     * string of the enum is determined using the
+     * {@link #enumToString()}-method.
+     *
+     * @param value  the argument
+     * @return       the predicate
+     */
+    Predicate<ENTITY> greaterThan(String value);
+
+    /**
+     * Returns a new predicate that evaluates if entities has a enum value for
+     * this field with a value that is greater or equal to the specified value.
+     * The string of the enum is determined using the
+     * {@link #enumToString()}-method.
+     *
+     * @param value  the argument
+     * @return       the predicate
+     */
+    Predicate<ENTITY> greaterOrEqual(String value);
+
+    /**
+     * Returns a new predicate that evaluates if entities has a enum value for
+     * this field with a value that is between the two specified values.
+     * The string of the enum is determined using the
+     * {@link #enumToString()}-method.
+     *
+     * @param start  the start (inclusive)
+     * @param end    the end (exclusive)
+     * @return       the predicate
+     */
+    default Predicate<ENTITY> between(String start, String end) {
+        return between(start, end, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
+    }
+
+    /**
+     * Returns a new predicate that evaluates if entities has a enum value for
+     * this field with a value that is between the two specified values.
+     * The string of the enum is determined using the
+     * {@link #enumToString()}-method.
+     *
+     * @param start      the start
+     * @param end        the end
+     * @param inclusion  if start and end are inclusive or exclusive
+     * @return           the predicate
+     */
+    Predicate<ENTITY> between(String start, String end, Inclusion inclusion);
+
+    /**
+     * Returns a new predicate that evaluates if entities has a enum value for
+     * this field with a value that is not between the two specified values.
+     * The string of the enum is determined using the
+     * {@link #enumToString()}-method.
+     *
+     * @param start  the start (inclusive)
+     * @param end    the end (exclusive)
+     * @return       the predicate
+     */
+    default Predicate<ENTITY> notBetween(String start, String end) {
+        return notBetween(start, end, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
+    }
+
+    /**
+     * Returns a new predicate that evaluates if entities has a enum value for
+     * this field with a value that is not between the two specified values.
+     * The string of the enum is determined using the
+     * {@link #enumToString()}-method.
+     *
+     * @param start      the start
+     * @param end        the end
+     * @param inclusion  if start and end are inclusive or exclusive
+     * @return           the predicate
+     */
+    Predicate<ENTITY> notBetween(String start, String end, Inclusion inclusion);
 
     /**
      * Create a new instance of this interface using the default implementation.

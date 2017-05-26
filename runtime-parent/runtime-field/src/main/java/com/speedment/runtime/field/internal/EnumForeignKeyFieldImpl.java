@@ -247,6 +247,92 @@ implements EnumForeignKeyField<ENTITY, D, E, FK> {
     ////////////////////////////////////////////////////////////////////////////
 
     @Override
+    public Predicate<ENTITY> equal(String value) {
+        return toEntityPredicate(e -> value.equals(enumToString.apply(e)));
+    }
+
+    @Override
+    public Predicate<ENTITY> notEqual(String value) {
+        return toEntityPredicate(e -> !value.equals(enumToString.apply(e)));
+    }
+
+    @Override
+    public Predicate<ENTITY> lessThan(String value) {
+        return toEntityPredicate(e -> {
+            final String str = enumToString.apply(e);
+            return str != null && str.compareTo(value) < 0;
+        });
+    }
+
+    @Override
+    public Predicate<ENTITY> lessOrEqual(String value) {
+        return toEntityPredicate(e -> {
+            final String str = enumToString.apply(e);
+            return str != null && str.compareTo(value) <= 0;
+        });
+    }
+
+    @Override
+    public Predicate<ENTITY> greaterThan(String value) {
+        return toEntityPredicate(e -> {
+            final String str = enumToString.apply(e);
+            return str != null && str.compareTo(value) > 0;
+        });
+    }
+
+    @Override
+    public Predicate<ENTITY> greaterOrEqual(String value) {
+        return toEntityPredicate(e -> {
+            final String str = enumToString.apply(e);
+            return str != null && str.compareTo(value) >= 0;
+        });
+    }
+
+    @Override
+    public Predicate<ENTITY> between(String start, String end, Inclusion inclusion) {
+        return toEntityPredicate(e -> {
+            final String str = enumToString.apply(e);
+            if (str == null) return false;
+
+            switch (inclusion) {
+                case START_EXCLUSIVE_END_EXCLUSIVE:
+                    return str.compareTo(start) >  0 && str.compareTo(end) <  0;
+                case START_EXCLUSIVE_END_INCLUSIVE:
+                    return str.compareTo(start) >  0 && str.compareTo(end) <= 0;
+                case START_INCLUSIVE_END_EXCLUSIVE:
+                    return str.compareTo(start) >= 0 && str.compareTo(end) <  0;
+                case START_INCLUSIVE_END_INCLUSIVE:
+                    return str.compareTo(start) >= 0 && str.compareTo(end) <= 0;
+                default : throw new UnsupportedOperationException(
+                    "Unknown inclusion '" + inclusion + "'."
+                );
+            }
+        });
+    }
+
+    @Override
+    public Predicate<ENTITY> notBetween(String start, String end, Inclusion inclusion) {
+        return toEntityPredicate(e -> {
+            final String str = enumToString.apply(e);
+            if (str == null) return false;
+
+            switch (inclusion) {
+                case START_EXCLUSIVE_END_EXCLUSIVE:
+                    return str.compareTo(start) <= 0 || str.compareTo(end) >= 0;
+                case START_EXCLUSIVE_END_INCLUSIVE:
+                    return str.compareTo(start) <= 0 || str.compareTo(end) >  0;
+                case START_INCLUSIVE_END_EXCLUSIVE:
+                    return str.compareTo(start) <  0 || str.compareTo(end) >= 0;
+                case START_INCLUSIVE_END_INCLUSIVE:
+                    return str.compareTo(start) <  0 || str.compareTo(end) >  0;
+                default : throw new UnsupportedOperationException(
+                    "Unknown inclusion '" + inclusion + "'."
+                );
+            }
+        });
+    }
+
+    @Override
     public Predicate<ENTITY> isEmpty() {
         return toEntityPredicate(e -> "".equals(enumToString.apply(e)));
     }
