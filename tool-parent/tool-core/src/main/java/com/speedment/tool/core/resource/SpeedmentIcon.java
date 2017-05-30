@@ -167,13 +167,19 @@ public enum SpeedmentIcon implements Icon {
             }
         }
 
-        final SpeedmentIcon icon = NODE_ICONS.get(
-            Optional.of(node)
-                .filter(HasMainInterface.class::isInstance)
-                .map(HasMainInterface.class::cast)
-                .map(HasMainInterface::mainInterface)
-                .orElse(node.getClass())
-        );
+        final SpeedmentIcon icon;
+        if (node instanceof Table) {
+            icon = ((Table) node).isView()
+                ? TABLE_LINK : TABLE;
+        } else {
+            icon = NODE_ICONS.get(
+                Optional.of(node)
+                    .filter(HasMainInterface.class::isInstance)
+                    .map(HasMainInterface.class::cast)
+                    .map(HasMainInterface::mainInterface)
+                    .orElse(node.getClass())
+            );
+        }
 
         if (icon != null) {
             return icon.view();
