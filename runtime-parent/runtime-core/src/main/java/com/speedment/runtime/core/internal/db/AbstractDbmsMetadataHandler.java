@@ -16,10 +16,8 @@
  */
 package com.speedment.runtime.core.internal.db;
 
-import static com.speedment.common.injector.State.INITIALIZED;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.*;
@@ -38,22 +36,26 @@ import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.db.metadata.ColumnMetaData;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import static com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler.SHOW_METADATA;
-import static com.speedment.runtime.core.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
-import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.runtime.typemapper.TypeMapper;
+
 import java.sql.*;
 import java.util.*;
-import static java.util.Objects.nonNull;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
+
+import static com.speedment.common.injector.State.INITIALIZED;
+import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import static com.speedment.runtime.core.internal.db.AbstractDbmsOperationHandler.SHOW_METADATA;
+import static com.speedment.runtime.core.internal.util.CaseInsensitiveMaps.newCaseInsensitiveMap;
+import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
+import static java.util.Objects.nonNull;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import java.util.stream.Stream;
 
 /**
  *
@@ -287,7 +289,10 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         progressListener.setCurrentAction(action);
 
         try (final Connection connection = getConnection(dbms)) {
-            try (final ResultSet rsTable = connection.getMetaData().getTables(jdbcCatalogLookupName(schema), jdbcSchemaLookupName(schema), null, new String[]{"TABLE"})) {
+            try (final ResultSet rsTable = connection.getMetaData().getTables(
+                    jdbcCatalogLookupName(schema),
+                    jdbcSchemaLookupName(schema),
+                    null, new String[] {"TABLE", "VIEW"})) {
 
                 if (SHOW_METADATA) {
                     final ResultSetMetaData rsmd = rsTable.getMetaData();
@@ -308,8 +313,13 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                     
                     final Table table = schema.mutator().addNewTable();
                     final String tableName = rsTable.getString("TABLE_NAME");
+                    final String tableType = rsTable.getString("TABLE_TYPE");
                     table.mutator().setId(tableName);
                     table.mutator().setName(tableName);
+
+                    if ("VIEW".equals(tableType)) {
+                        table.mutator().put("isView", true);
+                    }
                 }
             }
         } catch (final SQLException sqle) {
