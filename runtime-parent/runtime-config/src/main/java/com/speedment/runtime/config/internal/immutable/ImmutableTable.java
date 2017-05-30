@@ -39,6 +39,7 @@ public final class ImmutableTable extends ImmutableDocument implements Table {
     private final transient String name;
     private final transient Optional<String> alias;
     private final transient Optional<String> packageName;
+    private final transient boolean view;
     
     private final transient List<ImmutableColumn> columns;
     private final transient List<ImmutableIndex> indexes;
@@ -55,6 +56,7 @@ public final class ImmutableTable extends ImmutableDocument implements Table {
         this.name        = prototype.getName();
         this.alias       = prototype.getAlias();
         this.packageName = prototype.getPackageName();
+        this.view        = prototype.isView();
         
         this.columns           = unmodifiableList(super.children(COLUMNS, ImmutableColumn::new).collect(toList()));
         this.indexes           = unmodifiableList(super.children(INDEXES, ImmutableIndex::new).collect(toList()));
@@ -85,6 +87,11 @@ public final class ImmutableTable extends ImmutableDocument implements Table {
     @Override
     public Optional<String> getPackageName() {
         return packageName;
+    }
+
+    @Override
+    public boolean isView() {
+        return view;
     }
 
     @Override

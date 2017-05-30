@@ -46,8 +46,23 @@ public interface Table extends
     String COLUMNS             = "columns",
            INDEXES             = "indexes",
            FOREIGN_KEYS        = "foreignKeys",
-           PRIMARY_KEY_COLUMNS = "primaryKeyColumns";
-    
+           PRIMARY_KEY_COLUMNS = "primaryKeyColumns",
+           IS_VIEW             = "isView";
+
+    /**
+     * Returns {@code true} if this {@code Table} represents a VIEW in the
+     * database. VIEW Tables are not necessarily writable and might not have
+     * all the functionality a regular Table has.
+     * <p>
+     * The default value for this property is {@code false}.
+     *
+     * @return  {@code true} if this is just a SQL VIEW, else {@code false}
+     * @since   3.0.11
+     */
+    default boolean isView() {
+        return getAsBoolean(IS_VIEW).orElse(false);
+    }
+
     /**
      * Creates a stream of columns located in this document.
      * 
