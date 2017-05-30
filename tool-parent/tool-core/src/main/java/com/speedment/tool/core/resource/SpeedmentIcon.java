@@ -63,6 +63,7 @@ public enum SpeedmentIcon implements Icon {
     PROJECT("/pics/vectors_rendered/project.png"),
     SCHEMA("/pics/vectors_rendered/schema.png"),
     TABLE("/pics/vectors_rendered/table.png"),
+    TABLE_LINK("/pics/vectors_rendered/tableLink.png"),
     PLUGIN_DATA("/pics/vectors_rendered/plugin.png"),
     // Menu icons
     ADD_DBMS_TRANS("/pics/dialog/add_dbms_trans.png"),
