@@ -64,7 +64,9 @@ public final class GeneratedManagerImplTranslator
                     .public_()
                     .abstract_()
                     .setSupertype(SimpleParameterizedType.create(
-                        AbstractManager.class,
+                        table.isView()
+                            ? AbstractViewManager.class
+                            : AbstractManager.class,
                         getSupport().entityType()
                     ))
                     .add(getSupport().generatedManagerType())
