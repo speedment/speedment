@@ -39,7 +39,7 @@ import static java.util.stream.Collectors.joining;
 /**
  *
  * @author Emil Forslund
- * @since 2.3.0
+ * @since  2.3.0
  */
 public final class GeneratedManagerImplTranslator
     extends AbstractEntityAndManagerTranslator<Class> {

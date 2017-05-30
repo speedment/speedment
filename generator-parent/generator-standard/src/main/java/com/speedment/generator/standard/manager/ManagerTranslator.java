@@ -26,7 +26,8 @@ import com.speedment.runtime.config.Table;
  * @author Emil Forslund
  * @author Per-Åke Minborg
  */
-public final class ManagerTranslator extends AbstractEntityAndManagerTranslator<Interface> {
+public final class ManagerTranslator
+extends AbstractEntityAndManagerTranslator<Interface> {
 
     public ManagerTranslator(Table doc) {
         super(doc, Interface::of);
@@ -35,9 +36,9 @@ public final class ManagerTranslator extends AbstractEntityAndManagerTranslator<
     @Override
     protected Interface makeCodeGenModel(File file) {
         return newBuilder(file, getSupport().managerName())
-            .forEveryTable((intf, table) -> {
-                intf.public_().add(getSupport().generatedManagerType());
-            }).build();
+            .forEveryTable((intf, table) ->
+                intf.public_().add(getSupport().generatedManagerType())
+            ).build();
     }
     
     @Override
