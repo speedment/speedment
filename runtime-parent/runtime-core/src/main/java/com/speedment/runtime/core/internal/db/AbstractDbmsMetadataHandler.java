@@ -311,15 +311,12 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                         }
                     }
                     
-                    final Table table = schema.mutator().addNewTable();
+                    final Table table      = schema.mutator().addNewTable();
                     final String tableName = rsTable.getString("TABLE_NAME");
                     final String tableType = rsTable.getString("TABLE_TYPE");
                     table.mutator().setId(tableName);
                     table.mutator().setName(tableName);
-
-                    if ("VIEW".equals(tableType)) {
-                        table.mutator().put("isView", true);
-                    }
+                    table.mutator().setView("VIEW".equals(tableType));
                 }
             }
         } catch (final SQLException sqle) {
