@@ -25,7 +25,6 @@ import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.PersistenceComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
-import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 
 import java.util.stream.Stream;
@@ -44,7 +43,7 @@ import static java.util.Objects.requireNonNull;
  * @param <ENTITY> entity type
  *
  * @author Emil Forslund
- * @since 2.0.0
+ * @since  2.0.0
  * 
  * @see StreamSupplierComponent
  * @see PersistenceComponent
@@ -65,7 +64,7 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
      * three interfaces {@link Persister}, {@link Updater} and {@link Remover} 
      * to use when making changes to the data store.
      * <p>
-     * THIS METHOD IS INTENDED TO BE INVOCED AUTOMATICALLY BY THE DEPENDENCY
+     * THIS METHOD IS INTENDED TO BE INVOKED AUTOMATICALLY BY THE DEPENDENCY
      * INJECTOR. IT SHOULD THEREFORE NEVER BE CALLED DIRECTLY!
      * 
      * @param persistenceComponent  auto-injected persistenceComponent
@@ -86,11 +85,11 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
      * the {@link ManagerComponent} so that it can be found by other parts of
      * the system.
      * <p>
-     * THIS METHOD IS INTENDED TO BE INVOCED AUTOMATICALLY BY THE DEPENDENCY
+     * THIS METHOD IS INTENDED TO BE INVOKED AUTOMATICALLY BY THE DEPENDENCY
      * INJECTOR. IT SHOULD THEREFORE NEVER BE CALLED DIRECTLY!
      * 
-     * @param persistenceComponent  auto-injected managerComponent
-     * @param projectComponent      auto-injected projectComponent
+     * @param managerComponent  auto-injected managerComponent
+     * @param projectComponent  auto-injected projectComponent
      */
     @ExecuteBefore(INITIALIZED)
     final void install(
@@ -110,28 +109,13 @@ public abstract class AbstractManager<ENTITY> implements Manager<ENTITY> {
     }
 
     @Override
-    public final ENTITY persist(ENTITY entity) throws SpeedmentException {
-        return persister().apply(entity);
-    }
-
-    @Override
     public Persister<ENTITY> persister() {
         return persister;
     }
 
     @Override
-    public final ENTITY update(ENTITY entity) throws SpeedmentException {
-        return updater().apply(entity);
-    }
-
-    @Override
     public Updater<ENTITY> updater() {
         return updater;
-    }
-
-    @Override
-    public final ENTITY remove(ENTITY entity) throws SpeedmentException {
-        return remover().apply(entity);
     }
 
     @Override

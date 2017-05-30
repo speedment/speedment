@@ -185,7 +185,9 @@ public interface Manager<ENTITY> {
      * @throws SpeedmentException if the underlying database throws an exception
      * (e.g. SQLException)
      */
-    ENTITY persist(ENTITY entity) throws SpeedmentException;
+    default ENTITY persist(ENTITY entity) throws SpeedmentException {
+        return persister().apply(entity);
+    }
 
     /**
      * Returns a {@link Persister} that when its
@@ -219,7 +221,9 @@ public interface Manager<ENTITY> {
      * @throws SpeedmentException if the underlying database throws an exception
      * (e.g. SQLException)
      */
-    ENTITY update(ENTITY entity) throws SpeedmentException;
+    default ENTITY update(ENTITY entity) throws SpeedmentException {
+        return updater().apply(entity);
+    }
 
     /**
      * Returns an {@link Updater} that when its
@@ -242,7 +246,9 @@ public interface Manager<ENTITY> {
      * @throws SpeedmentException if the underlying database throws an exception
      * (e.g. SQLException)
      */
-    ENTITY remove(ENTITY entity) throws SpeedmentException;
+    default ENTITY remove(ENTITY entity) throws SpeedmentException {
+        return remover().apply(entity);
+    }
 
     /**
      * Returns a {@link Remover} that when its
