@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.config;
 
-
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.mutator.TableMutator;
 import com.speedment.runtime.config.trait.*;
@@ -32,7 +31,6 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   2.0.0
  */
-
 public interface Table extends
         Document,
         HasParent<Schema>,
@@ -45,10 +43,10 @@ public interface Table extends
         HasMainInterface,
         HasMutator<TableMutator<? extends Table>> {
 
-    String COLUMNS = "columns",
-            INDEXES = "indexes",
-            FOREIGN_KEYS = "foreignKeys",
-            PRIMARY_KEY_COLUMNS = "primaryKeyColumns";
+    String COLUMNS             = "columns",
+           INDEXES             = "indexes",
+           FOREIGN_KEYS        = "foreignKeys",
+           PRIMARY_KEY_COLUMNS = "primaryKeyColumns";
     
     /**
      * Creates a stream of columns located in this document.
@@ -78,18 +76,46 @@ public interface Table extends
      */
     Stream<? extends PrimaryKeyColumn> primaryKeyColumns();
 
+    /**
+     * Locate the {@link Column} child with the specified id if it exists, else
+     * return an empty {@code Optional}.
+     *
+     * @param id  the {@link HasId#getId()} of the column
+     * @return    the child found or an empty {@code Optional}
+     */
     default Optional<? extends Column> findColumn(String id) {
         return columns().filter(child -> child.getId().equals(id)).findAny();
     }
 
+    /**
+     * Locate the {@link Index} child with the specified id if it exists, else
+     * return an empty {@code Optional}.
+     *
+     * @param id  the {@link HasId#getId()} of the index
+     * @return    the child found or an empty {@code Optional}
+     */
     default Optional<? extends Index> findIndex(String id) {
         return indexes().filter(child -> child.getId().equals(id)).findAny();
     }
 
+    /**
+     * Locate the {@link ForeignKey} child with the specified id if it exists,
+     * else return an empty {@code Optional}.
+     *
+     * @param id  the {@link HasId#getId()} of the foreign key
+     * @return    the child found or an empty {@code Optional}
+     */
     default Optional<? extends ForeignKey> findForeignKey(String id) {
         return foreignKeys().filter(child -> child.getId().equals(id)).findAny();
     }
 
+    /**
+     * Locate the {@link PrimaryKeyColumn} child with the specified id if it
+     * exists, else return an empty {@code Optional}.
+     *
+     * @param id  the {@link HasId#getId()} of the primary key column
+     * @return    the child found or an empty {@code Optional}
+     */
     default Optional<? extends PrimaryKeyColumn> findPrimaryKeyColumn(String id) {
         return primaryKeyColumns().filter(child -> child.getId().equals(id)).findAny();
     }
