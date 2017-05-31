@@ -17,8 +17,8 @@
 package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.DoubleField;
 import com.speedment.runtime.field.comparator.FieldComparator;
+import com.speedment.runtime.field.trait.HasDoubleValue;
 
 /**
  * A predicate that evaluates if a value is between two doubles.
@@ -38,5 +38,5 @@ public interface DoubleFieldComparator<ENTITY, D> extends FieldComparator<ENTITY
      * @return the compared field
      */
     @Override
-    DoubleField<ENTITY, D> getField();
+    HasDoubleValue<ENTITY, D> getField();
 }

@@ -17,8 +17,8 @@
 package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.ShortField;
 import com.speedment.runtime.field.comparator.FieldComparator;
+import com.speedment.runtime.field.trait.HasShortValue;
 
 /**
  * A predicate that evaluates if a value is between two shorts.
@@ -38,5 +38,5 @@ public interface ShortFieldComparator<ENTITY, D> extends FieldComparator<ENTITY,
      * @return the compared field
      */
     @Override
-    ShortField<ENTITY, D> getField();
+    HasShortValue<ENTITY, D> getField();
 }

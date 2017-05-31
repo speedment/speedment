@@ -17,8 +17,8 @@
 package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.FloatField;
 import com.speedment.runtime.field.comparator.FieldComparator;
+import com.speedment.runtime.field.trait.HasFloatValue;
 
 /**
  * A predicate that evaluates if a value is between two floats.
@@ -38,5 +38,5 @@ public interface FloatFieldComparator<ENTITY, D> extends FieldComparator<ENTITY,
      * @return the compared field
      */
     @Override
-    FloatField<ENTITY, D> getField();
+    HasFloatValue<ENTITY, D> getField();
 }

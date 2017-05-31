@@ -17,9 +17,9 @@
 package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.ShortField;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
+import com.speedment.runtime.field.trait.HasShortValue;
 import java.util.Objects;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -34,20 +34,20 @@ import static java.util.Objects.requireNonNull;
 @GeneratedCode(value = "Speedment")
 public final class ShortFieldComparatorImpl<ENTITY, D> implements ShortFieldComparator<ENTITY, D> {
     
-    private final ShortField<ENTITY, D> field;
+    private final HasShortValue<ENTITY, D> field;
     private final boolean reversed;
     
-    public ShortFieldComparatorImpl(ShortField<ENTITY, D> field) {
+    public ShortFieldComparatorImpl(HasShortValue<ENTITY, D> field) {
         this(field, false);
     }
     
-    public ShortFieldComparatorImpl(ShortField<ENTITY, D> field, boolean reversed) {
+    public ShortFieldComparatorImpl(HasShortValue<ENTITY, D> field, boolean reversed) {
         this.field    = requireNonNull(field);
         this.reversed = reversed;
     }
     
     @Override
-    public ShortField<ENTITY, D> getField() {
+    public HasShortValue<ENTITY, D> getField() {
         return field;
     }
     

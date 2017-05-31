@@ -17,9 +17,9 @@
 package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
+import com.speedment.runtime.field.trait.HasIntValue;
 import java.util.Objects;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -34,20 +34,20 @@ import static java.util.Objects.requireNonNull;
 @GeneratedCode(value = "Speedment")
 public final class IntFieldComparatorImpl<ENTITY, D> implements IntFieldComparator<ENTITY, D> {
     
-    private final IntField<ENTITY, D> field;
+    private final HasIntValue<ENTITY, D> field;
     private final boolean reversed;
     
-    public IntFieldComparatorImpl(IntField<ENTITY, D> field) {
+    public IntFieldComparatorImpl(HasIntValue<ENTITY, D> field) {
         this(field, false);
     }
     
-    public IntFieldComparatorImpl(IntField<ENTITY, D> field, boolean reversed) {
+    public IntFieldComparatorImpl(HasIntValue<ENTITY, D> field, boolean reversed) {
         this.field    = requireNonNull(field);
         this.reversed = reversed;
     }
     
     @Override
-    public IntField<ENTITY, D> getField() {
+    public HasIntValue<ENTITY, D> getField() {
         return field;
     }
     

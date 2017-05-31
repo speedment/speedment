@@ -17,8 +17,8 @@
 package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.comparator.FieldComparator;
+import com.speedment.runtime.field.trait.HasByteValue;
 
 /**
  * A predicate that evaluates if a value is between two bytes.
@@ -38,5 +38,5 @@ public interface ByteFieldComparator<ENTITY, D> extends FieldComparator<ENTITY, 
      * @return the compared field
      */
     @Override
-    ByteField<ENTITY, D> getField();
+    HasByteValue<ENTITY, D> getField();
 }

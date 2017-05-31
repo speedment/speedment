@@ -34,7 +34,7 @@ public interface CombinedPredicate<ENTITY> extends Predicate<ENTITY> {
     /**
      * This enum list all the different types of combinations
      */
-    public enum Type {
+    enum Type {
         AND, OR
     }
 
@@ -69,13 +69,13 @@ public interface CombinedPredicate<ENTITY> extends Predicate<ENTITY> {
     boolean isNegated();
 
     @Override
-    public CombinedPredicate<ENTITY> and(Predicate<? super ENTITY> other);
+    CombinedPredicate<ENTITY> and(Predicate<? super ENTITY> other);
 
     @Override
-    public CombinedPredicate<ENTITY> or(Predicate<? super ENTITY> other);
+    CombinedPredicate<ENTITY> or(Predicate<? super ENTITY> other);
     
     @Override
-    public CombinedPredicate<ENTITY> negate();
+    CombinedPredicate<ENTITY> negate();
 
     /**
      * Creates and returns a new CombinedPredicate that is the logical AND
