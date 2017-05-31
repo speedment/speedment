@@ -30,7 +30,7 @@ import com.speedment.runtime.field.trait.HasShortValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public interface ShortFieldComparator<ENTITY, D> extends FieldComparator<ENTITY, Short> {
+public interface ShortFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> {
     
     /**
      * Gets the field that is being compared.

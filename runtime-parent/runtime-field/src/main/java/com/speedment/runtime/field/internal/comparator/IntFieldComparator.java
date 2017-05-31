@@ -30,7 +30,7 @@ import com.speedment.runtime.field.trait.HasIntValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public interface IntFieldComparator<ENTITY, D> extends FieldComparator<ENTITY, Integer> {
+public interface IntFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> {
     
     /**
      * Gets the field that is being compared.

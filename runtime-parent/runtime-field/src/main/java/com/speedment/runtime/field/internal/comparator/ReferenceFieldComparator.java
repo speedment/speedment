@@ -30,7 +30,7 @@ import com.speedment.runtime.field.comparator.FieldComparator;
  * @since   2.2.0
  */
 public interface ReferenceFieldComparator<ENTITY, D, V extends Comparable<? super V>> 
-extends FieldComparator<ENTITY, V> {
+extends FieldComparator<ENTITY> {
 
     /**
      * Gets the field that is being compared.

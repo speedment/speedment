@@ -28,17 +28,17 @@ import static java.util.Objects.requireNonNull;
 public final class CombinedComparatorImpl<ENTITY>
 implements CombinedComparator<ENTITY> {
 
-    private final List<FieldComparator<? super ENTITY, ?>> comparators;
+    private final List<FieldComparator<? super ENTITY>> comparators;
     private final boolean reversed;
 
     public CombinedComparatorImpl(
-            final List<FieldComparator<? super ENTITY, ?>> comparators) {
+            final List<FieldComparator<? super ENTITY>> comparators) {
 
         this(comparators, false);
     }
 
     private CombinedComparatorImpl(
-            final List<FieldComparator<? super ENTITY, ?>> comparators,
+            final List<FieldComparator<? super ENTITY>> comparators,
             final boolean reversed) {
 
         this.comparators = requireNonNull(comparators);
@@ -46,7 +46,7 @@ implements CombinedComparator<ENTITY> {
     }
 
     @Override
-    public Stream<FieldComparator<? super ENTITY, ?>> stream() {
+    public Stream<FieldComparator<? super ENTITY>> stream() {
         return comparators.stream();
     }
 
@@ -57,7 +57,7 @@ implements CombinedComparator<ENTITY> {
 
     @Override
     public int compare(ENTITY o1, ENTITY o2) {
-        for (final FieldComparator<? super ENTITY, ?> comp : comparators) {
+        for (final FieldComparator<? super ENTITY> comp : comparators) {
             final int c = comp.compare(o1, o2);
             if (c != 0) return isReversed() ? -c : c;
         }
@@ -211,10 +211,10 @@ implements CombinedComparator<ENTITY> {
     then(Comparator<? super ENTITY> other) {
         if (other instanceof FieldComparator) {
             @SuppressWarnings("unchecked")
-            final FieldComparator<? super ENTITY, V> fc =
-                (FieldComparator<? super ENTITY, V>) other;
+            final FieldComparator<? super ENTITY> fc =
+                (FieldComparator<? super ENTITY>) other;
 
-            final List<FieldComparator<? super ENTITY, ?>> copy =
+            final List<FieldComparator<? super ENTITY>> copy =
                 new ArrayList<>(comparators);
             copy.add(reversed ? fc.reversed() : fc);
 

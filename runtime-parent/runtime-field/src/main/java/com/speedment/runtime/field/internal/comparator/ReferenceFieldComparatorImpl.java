@@ -74,7 +74,7 @@ implements ReferenceFieldComparator<ENTITY, D, V> {
     }
 
     @Override
-    public FieldComparator<ENTITY, V> reversed() {
+    public FieldComparator<ENTITY> reversed() {
         return new ReferenceFieldComparatorImpl<>(field, nullOrder, !reversed);
     }
     
@@ -114,8 +114,8 @@ implements ReferenceFieldComparator<ENTITY, D, V> {
         if (!(obj instanceof FieldComparator)) return false;
         
         @SuppressWarnings("unchecked")
-        final FieldComparator<ENTITY, V> casted =
-            (FieldComparator<ENTITY, V>) obj;
+        final FieldComparator<ENTITY> casted =
+            (FieldComparator<ENTITY>) obj;
         
         return reversed  == casted.isReversed()
             && nullOrder == casted.getNullOrder()

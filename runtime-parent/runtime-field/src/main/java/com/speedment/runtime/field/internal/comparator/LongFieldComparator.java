@@ -30,7 +30,7 @@ import com.speedment.runtime.field.trait.HasLongValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public interface LongFieldComparator<ENTITY, D> extends FieldComparator<ENTITY, Long> {
+public interface LongFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> {
     
     /**
      * Gets the field that is being compared.

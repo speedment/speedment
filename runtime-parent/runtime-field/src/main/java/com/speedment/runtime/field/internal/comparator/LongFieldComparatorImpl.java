@@ -62,7 +62,7 @@ public final class LongFieldComparatorImpl<ENTITY, D> implements LongFieldCompar
     }
     
     @Override
-    public FieldComparator<ENTITY, Long> reversed() {
+    public FieldComparator<ENTITY> reversed() {
         return new LongFieldComparatorImpl<>(field, !reversed);
     }
     
@@ -86,8 +86,8 @@ public final class LongFieldComparatorImpl<ENTITY, D> implements LongFieldCompar
         if (!(obj instanceof FieldComparator)) return false;
         
         @SuppressWarnings("unchecked")
-        final FieldComparator<ENTITY, Long> casted =
-            (FieldComparator<ENTITY, Long>) obj;
+        final FieldComparator<ENTITY> casted =
+            (FieldComparator<ENTITY>) obj;
         
         return reversed == casted.isReversed()
             && Objects.equals(

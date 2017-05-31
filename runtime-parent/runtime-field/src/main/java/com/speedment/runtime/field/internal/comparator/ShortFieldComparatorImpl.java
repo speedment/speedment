@@ -62,7 +62,7 @@ public final class ShortFieldComparatorImpl<ENTITY, D> implements ShortFieldComp
     }
     
     @Override
-    public FieldComparator<ENTITY, Short> reversed() {
+    public FieldComparator<ENTITY> reversed() {
         return new ShortFieldComparatorImpl<>(field, !reversed);
     }
     
@@ -86,8 +86,8 @@ public final class ShortFieldComparatorImpl<ENTITY, D> implements ShortFieldComp
         if (!(obj instanceof FieldComparator)) return false;
         
         @SuppressWarnings("unchecked")
-        final FieldComparator<ENTITY, Short> casted =
-            (FieldComparator<ENTITY, Short>) obj;
+        final FieldComparator<ENTITY> casted =
+            (FieldComparator<ENTITY>) obj;
         
         return reversed == casted.isReversed()
             && Objects.equals(

@@ -100,17 +100,17 @@ implements ComparableField<ENTITY, D, V> {
     ////////////////////////////////////////////////////////////////////////////
     
     @Override
-    public FieldComparator<ENTITY, V> comparator() {
+    public FieldComparator<ENTITY> comparator() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.LAST);
     }
 
     @Override
-    public FieldComparator<ENTITY, V> comparatorNullFieldsFirst() {
+    public FieldComparator<ENTITY> comparatorNullFieldsFirst() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.FIRST);
     }
 
     @Override
-    public FieldComparator<ENTITY, V> comparatorNullFieldsLast() {
+    public FieldComparator<ENTITY> comparatorNullFieldsLast() {
         return comparator();
     }
     

@@ -62,7 +62,7 @@ public final class IntFieldComparatorImpl<ENTITY, D> implements IntFieldComparat
     }
     
     @Override
-    public FieldComparator<ENTITY, Integer> reversed() {
+    public FieldComparator<ENTITY> reversed() {
         return new IntFieldComparatorImpl<>(field, !reversed);
     }
     
@@ -86,8 +86,8 @@ public final class IntFieldComparatorImpl<ENTITY, D> implements IntFieldComparat
         if (!(obj instanceof FieldComparator)) return false;
         
         @SuppressWarnings("unchecked")
-        final FieldComparator<ENTITY, Integer> casted =
-            (FieldComparator<ENTITY, Integer>) obj;
+        final FieldComparator<ENTITY> casted =
+            (FieldComparator<ENTITY>) obj;
         
         return reversed == casted.isReversed()
             && Objects.equals(

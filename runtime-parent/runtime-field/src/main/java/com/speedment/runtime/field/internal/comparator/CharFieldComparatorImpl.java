@@ -62,7 +62,7 @@ public final class CharFieldComparatorImpl<ENTITY, D> implements CharFieldCompar
     }
     
     @Override
-    public FieldComparator<ENTITY, Character> reversed() {
+    public FieldComparator<ENTITY> reversed() {
         return new CharFieldComparatorImpl<>(field, !reversed);
     }
     
@@ -86,8 +86,8 @@ public final class CharFieldComparatorImpl<ENTITY, D> implements CharFieldCompar
         if (!(obj instanceof FieldComparator)) return false;
         
         @SuppressWarnings("unchecked")
-        final FieldComparator<ENTITY, Character> casted =
-            (FieldComparator<ENTITY, Character>) obj;
+        final FieldComparator<ENTITY> casted =
+            (FieldComparator<ENTITY>) obj;
         
         return reversed == casted.isReversed()
             && Objects.equals(

@@ -62,7 +62,7 @@ public final class ByteFieldComparatorImpl<ENTITY, D> implements ByteFieldCompar
     }
     
     @Override
-    public FieldComparator<ENTITY, Byte> reversed() {
+    public FieldComparator<ENTITY> reversed() {
         return new ByteFieldComparatorImpl<>(field, !reversed);
     }
     
@@ -86,8 +86,8 @@ public final class ByteFieldComparatorImpl<ENTITY, D> implements ByteFieldCompar
         if (!(obj instanceof FieldComparator)) return false;
         
         @SuppressWarnings("unchecked")
-        final FieldComparator<ENTITY, Byte> casted =
-            (FieldComparator<ENTITY, Byte>) obj;
+        final FieldComparator<ENTITY> casted =
+            (FieldComparator<ENTITY>) obj;
         
         return reversed == casted.isReversed()
             && Objects.equals(

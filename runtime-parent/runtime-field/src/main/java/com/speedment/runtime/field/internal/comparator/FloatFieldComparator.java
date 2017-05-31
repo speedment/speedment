@@ -30,7 +30,7 @@ import com.speedment.runtime.field.trait.HasFloatValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public interface FloatFieldComparator<ENTITY, D> extends FieldComparator<ENTITY, Float> {
+public interface FloatFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> {
     
     /**
      * Gets the field that is being compared.

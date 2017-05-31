@@ -30,7 +30,7 @@ import com.speedment.runtime.field.trait.HasDoubleValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public interface DoubleFieldComparator<ENTITY, D> extends FieldComparator<ENTITY, Double> {
+public interface DoubleFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> {
     
     /**
      * Gets the field that is being compared.

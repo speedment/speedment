@@ -30,7 +30,7 @@ import com.speedment.runtime.field.trait.HasByteValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public interface ByteFieldComparator<ENTITY, D> extends FieldComparator<ENTITY, Byte> {
+public interface ByteFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> {
     
     /**
      * Gets the field that is being compared.

@@ -62,7 +62,7 @@ public final class FloatFieldComparatorImpl<ENTITY, D> implements FloatFieldComp
     }
     
     @Override
-    public FieldComparator<ENTITY, Float> reversed() {
+    public FieldComparator<ENTITY> reversed() {
         return new FloatFieldComparatorImpl<>(field, !reversed);
     }
     
@@ -86,8 +86,8 @@ public final class FloatFieldComparatorImpl<ENTITY, D> implements FloatFieldComp
         if (!(obj instanceof FieldComparator)) return false;
         
         @SuppressWarnings("unchecked")
-        final FieldComparator<ENTITY, Float> casted =
-            (FieldComparator<ENTITY, Float>) obj;
+        final FieldComparator<ENTITY> casted =
+            (FieldComparator<ENTITY>) obj;
         
         return reversed == casted.isReversed()
             && Objects.equals(

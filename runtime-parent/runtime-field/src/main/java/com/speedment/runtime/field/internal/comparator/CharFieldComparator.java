@@ -30,7 +30,7 @@ import com.speedment.runtime.field.trait.HasCharValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public interface CharFieldComparator<ENTITY, D> extends FieldComparator<ENTITY, Character> {
+public interface CharFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> {
     
     /**
      * Gets the field that is being compared.

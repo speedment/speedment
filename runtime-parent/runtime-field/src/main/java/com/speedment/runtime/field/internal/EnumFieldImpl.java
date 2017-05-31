@@ -118,17 +118,17 @@ implements EnumField<ENTITY, D, E> {
     ////////////////////////////////////////////////////////////////////////////
 
     @Override
-    public FieldComparator<ENTITY, E> comparator() {
+    public FieldComparator<ENTITY> comparator() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.LAST);
     }
 
     @Override
-    public FieldComparator<ENTITY, E> comparatorNullFieldsFirst() {
+    public FieldComparator<ENTITY> comparatorNullFieldsFirst() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.FIRST);
     }
 
     @Override
-    public FieldComparator<ENTITY, E> comparatorNullFieldsLast() {
+    public FieldComparator<ENTITY> comparatorNullFieldsLast() {
         return comparator();
     }
 

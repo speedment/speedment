@@ -30,7 +30,7 @@ public interface CombinedComparator<ENTITY> extends Comparator<ENTITY>  {
      *
      * @return  list of comparators
      */
-    Stream<FieldComparator<? super ENTITY, ?>> stream();
+    Stream<FieldComparator<? super ENTITY>> stream();
 
     /**
      * The number of comparators in the {@link #stream()}.

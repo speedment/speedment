@@ -34,11 +34,13 @@ import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * @param <ENTITY>     the entity type
@@ -122,17 +124,17 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     /*                              Comparators                               */
     /**************************************************************************/
     @Override
-    public FieldComparator<ENTITY, String> comparator() {
+    public FieldComparator<ENTITY> comparator() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.LAST);
     }
 
     @Override
-    public FieldComparator<ENTITY, String> comparatorNullFieldsFirst() {
+    public FieldComparator<ENTITY> comparatorNullFieldsFirst() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.FIRST);
     }
 
     @Override
-    public FieldComparator<ENTITY, String> comparatorNullFieldsLast() {
+    public FieldComparator<ENTITY> comparatorNullFieldsLast() {
         return comparator();
     }
 

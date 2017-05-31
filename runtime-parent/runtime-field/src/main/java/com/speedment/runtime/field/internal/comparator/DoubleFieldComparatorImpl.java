@@ -62,7 +62,7 @@ public final class DoubleFieldComparatorImpl<ENTITY, D> implements DoubleFieldCo
     }
     
     @Override
-    public FieldComparator<ENTITY, Double> reversed() {
+    public FieldComparator<ENTITY> reversed() {
         return new DoubleFieldComparatorImpl<>(field, !reversed);
     }
     
@@ -86,8 +86,8 @@ public final class DoubleFieldComparatorImpl<ENTITY, D> implements DoubleFieldCo
         if (!(obj instanceof FieldComparator)) return false;
         
         @SuppressWarnings("unchecked")
-        final FieldComparator<ENTITY, Double> casted =
-            (FieldComparator<ENTITY, Double>) obj;
+        final FieldComparator<ENTITY> casted =
+            (FieldComparator<ENTITY>) obj;
         
         return reversed == casted.isReversed()
             && Objects.equals(
