@@ -32,7 +32,7 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class ShortFieldComparatorImpl<ENTITY, D> implements ShortFieldComparator<ENTITY, D> {
+public final class ShortFieldComparatorImpl<ENTITY, D> extends AbstractFieldComparator<ENTITY> implements ShortFieldComparator<ENTITY, D> {
     
     private final HasShortValue<ENTITY, D> field;
     private final boolean reversed;
@@ -41,7 +41,7 @@ public final class ShortFieldComparatorImpl<ENTITY, D> implements ShortFieldComp
         this(field, false);
     }
     
-    public ShortFieldComparatorImpl(HasShortValue<ENTITY, D> field, boolean reversed) {
+    ShortFieldComparatorImpl(HasShortValue<ENTITY, D> field, boolean reversed) {
         this.field    = requireNonNull(field);
         this.reversed = reversed;
     }

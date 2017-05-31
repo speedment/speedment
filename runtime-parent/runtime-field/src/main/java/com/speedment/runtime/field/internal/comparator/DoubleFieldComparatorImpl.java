@@ -32,7 +32,7 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class DoubleFieldComparatorImpl<ENTITY, D> implements DoubleFieldComparator<ENTITY, D> {
+public final class DoubleFieldComparatorImpl<ENTITY, D> extends AbstractFieldComparator<ENTITY> implements DoubleFieldComparator<ENTITY, D> {
     
     private final HasDoubleValue<ENTITY, D> field;
     private final boolean reversed;
@@ -41,7 +41,7 @@ public final class DoubleFieldComparatorImpl<ENTITY, D> implements DoubleFieldCo
         this(field, false);
     }
     
-    public DoubleFieldComparatorImpl(HasDoubleValue<ENTITY, D> field, boolean reversed) {
+    DoubleFieldComparatorImpl(HasDoubleValue<ENTITY, D> field, boolean reversed) {
         this.field    = requireNonNull(field);
         this.reversed = reversed;
     }

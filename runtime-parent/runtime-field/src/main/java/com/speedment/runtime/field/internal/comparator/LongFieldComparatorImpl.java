@@ -32,7 +32,7 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class LongFieldComparatorImpl<ENTITY, D> implements LongFieldComparator<ENTITY, D> {
+public final class LongFieldComparatorImpl<ENTITY, D> extends AbstractFieldComparator<ENTITY> implements LongFieldComparator<ENTITY, D> {
     
     private final HasLongValue<ENTITY, D> field;
     private final boolean reversed;
@@ -41,7 +41,7 @@ public final class LongFieldComparatorImpl<ENTITY, D> implements LongFieldCompar
         this(field, false);
     }
     
-    public LongFieldComparatorImpl(HasLongValue<ENTITY, D> field, boolean reversed) {
+    LongFieldComparatorImpl(HasLongValue<ENTITY, D> field, boolean reversed) {
         this.field    = requireNonNull(field);
         this.reversed = reversed;
     }
