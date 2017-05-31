@@ -2,7 +2,7 @@ package com.speedment.common.collection;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.LongSupplier;
 
 /**
@@ -17,12 +17,17 @@ import java.util.function.LongSupplier;
  */
 public final class LongCache<K> {
 
-    private final Semaphore semaphore;
+    private final AtomicBoolean free;
     private final LinkedHashMap<K, Long> cache;
 
+    /**
+     * Creates a new {@code LongCache} with the specified maximum size.
+     *
+     * @param maxSize  the maximum size
+     */
     public LongCache(int maxSize) {
-        semaphore = new Semaphore(1);
-        cache = new LinkedHashMap<K, Long>() {
+        free  = new AtomicBoolean(true);
+        cache = new LinkedHashMap<K, Long>(maxSize, 0.75f, true) {
             @Override
             protected boolean removeEldestEntry(Map.Entry<K, Long> eldest) {
                 return size() > maxSize;
@@ -34,28 +39,22 @@ public final class LongCache<K> {
      * This method will return the value for the specified key if it is cached,
      * and if not, will calculate the value using the supplied method. The
      * computed value may or may not be stored in the cache afterwards. This
-     * method is guaranteed to be lock-free.
+     * method is guaranteed to be lock-free, and might calculate the value
+     * instead of using the cached one to avoid blocking.
      *
      * @param key      the key to retrieve the value for
      * @param compute  method to use to compute the value if it is not cached
      * @return         the cached or computed value
      */
     public long getOrCompute(K key, LongSupplier compute) {
-        final Long cached = cache.get(key);
-        if (cached == null) {
-            final long computed = compute.getAsLong();
-
-            if (semaphore.tryAcquire()) {
-                try {
-                    cache.put(key, computed);
-                } finally {
-                    semaphore.release();
-                }
+        if (free.compareAndSet(true, false)) {
+            try {
+                return cache.computeIfAbsent(key, k -> compute.getAsLong());
+            } finally {
+                free.set(true);
             }
-
-            return computed;
         } else {
-            return cached;
+            return compute.getAsLong();
         }
     }
 

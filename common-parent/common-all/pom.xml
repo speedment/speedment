@@ -155,6 +155,12 @@
                 <artifactId>benchmark</artifactId>
                 <version>${benchmark.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>collection</artifactId>
+                <version>${collection.version}</version>
+            </dependency>
             
         </dependencies>
     </dependencyManagement>
