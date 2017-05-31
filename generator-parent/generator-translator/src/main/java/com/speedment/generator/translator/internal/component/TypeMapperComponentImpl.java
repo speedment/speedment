@@ -100,7 +100,9 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
         install(Integer.class, PrimitiveIntegerZeroOneToBooleanMapper::new);
         install(Integer.class, PrimitiveIntegerToShortMapper::new);
         install(Integer.class, PrimitiveIntegerToByteMapper::new);
-        
+        install(Integer.class, DateIntToShortMapper::new);
+        install(Integer.class, DateIntToPrimitiveShortMapper::new);
+
         // Special Short mappers
         install(Short.class, ShortToByteMapper::new);
         install(Short.class, PrimitiveShortToByteMapper::new);
