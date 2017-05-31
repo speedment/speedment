@@ -57,6 +57,7 @@
         <module>annotation</module>
         <module>benchmark</module>
         <module>combinatorics</module>
+        <module>collection</module>
     </modules>
     
     <build>
