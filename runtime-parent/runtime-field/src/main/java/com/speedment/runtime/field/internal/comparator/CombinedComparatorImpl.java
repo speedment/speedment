@@ -9,6 +9,7 @@ import com.speedment.runtime.field.method.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -71,7 +72,7 @@ implements CombinedComparator<ENTITY> {
     }
 
     @Override
-    public Comparator<ENTITY> reversed() {
+    public CombinedComparator<ENTITY> reversed() {
         return new CombinedComparatorImpl<>(comparators, !reversed);
     }
 
@@ -207,8 +208,28 @@ implements CombinedComparator<ENTITY> {
         };
     }
 
-    private <V extends Comparable<? super V>> Comparator<ENTITY>
-    then(Comparator<? super ENTITY> other) {
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CombinedComparator)) return false;
+
+        final CombinedComparator<?> that = (CombinedComparator<?>) o;
+        if (isReversed() != that.isReversed()) return false;
+
+        final Iterator<FieldComparator<? super ENTITY>> it =
+            comparators.iterator();
+
+        return that.stream().allMatch(
+            c -> it.hasNext() && it.next().equals(c)
+        ) && !it.hasNext();
+    }
+
+    @Override
+    public int hashCode() {
+        return 31 * comparators.hashCode() + (isReversed() ? 1 : 0);
+    }
+
+    private Comparator<ENTITY> then(Comparator<? super ENTITY> other) {
         if (other instanceof FieldComparator) {
             @SuppressWarnings("unchecked")
             final FieldComparator<? super ENTITY> fc =
