@@ -228,6 +228,17 @@ implements CombinedComparator<ENTITY> {
             copy.add(fc);
 
             return new CombinedComparatorImpl<>(copy);
+        } else if (other instanceof CombinedComparator) {
+            @SuppressWarnings("unchecked")
+            final CombinedComparator<? super ENTITY> cc =
+                (CombinedComparator<? super ENTITY>) other;
+
+            final List<FieldComparator<? super ENTITY>> copy =
+                new ArrayList<>(comparators);
+
+            cc.stream().forEachOrdered(copy::add);
+
+            return new CombinedComparatorImpl<>(copy);
         } else {
             return (a, b) -> {
                 final int c = compare(a, b);
