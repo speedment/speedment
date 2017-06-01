@@ -22,27 +22,26 @@ import com.speedment.runtime.core.component.sql.SqlStreamOptimizer;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsType;
+import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.NONE;
+import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.ONLY_AFTER_SORTED;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.LimitAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.SkipAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.SortedComparatorAction;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.RenderResult;
+import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isContainingOnlyFieldPredicate;
+import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isSortedActionWithFieldPredicate;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
+import com.speedment.runtime.field.comparator.CombinedComparator;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
-
 import java.util.*;
+import static java.util.Objects.requireNonNull;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-
-import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.NONE;
-import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.ONLY_AFTER_SORTED;
-import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isContainingOnlyFieldPredicate;
-import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isSortedActionWithFieldPredicate;
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -165,50 +164,74 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         }
 
         if (!sorteds.isEmpty()) {
-            sql.append(" ORDER BY ");
-            // Iterate backwards
-            final Set<ColumnIdentifier<ENTITY>> columns = new HashSet<>();
+
+            final List<FieldComparator<ENTITY>> fieldComparators = new ArrayList<>();
             for (int i = sorteds.size() - 1; i >= 0; i--) {
                 final SortedComparatorAction<ENTITY> sortedAction = sorteds.get(i);
                 @SuppressWarnings("unchecked")
-                final FieldComparator<ENTITY> fieldComparator = (FieldComparator<ENTITY>) sortedAction.getComparator();
-                final ColumnIdentifier<ENTITY> columnIdentifier = fieldComparator.getField().identifier();
+                final Comparator<? super ENTITY> comparator = sortedAction.getComparator();
+                if (comparator instanceof FieldComparator) {
+                    @SuppressWarnings("unchecked")
+                    final FieldComparator<ENTITY> fieldComparator = (FieldComparator<ENTITY>) sortedAction.getComparator();
+                    fieldComparators.add(fieldComparator);
+                }
+                if (comparator instanceof CombinedComparator) {
+                    @SuppressWarnings("unchecked")
+                    final CombinedComparator<ENTITY> combinedComparator = (CombinedComparator<ENTITY>) sortedAction.getComparator();
+                    @SuppressWarnings("unchecked")
+                    List<FieldComparator<ENTITY>> comparators = combinedComparator.stream()
+                        .map(c -> (FieldComparator<ENTITY>)c)
+                        .collect(toList());
+                    Collections.reverse(comparators);
+                    fieldComparators.addAll(comparators);
+                }
+            }
 
-                // Some databases (e.g. SQL Server) only allows distinct columns in ORDER BY 
-                if (columns.add(columnIdentifier)) {
-                    if (!(i == (sorteds.size() - 1))) {
-                        sql.append(", ");
-                    }
+            if (!fieldComparators.isEmpty()) {
 
-                    boolean isReversed = fieldComparator.isReversed();
-                    String fieldName = info.getSqlColumnNamer().apply(fieldComparator.getField());
+                sql.append(" ORDER BY ");
+                // Iterate backwards
+                final Set<ColumnIdentifier<ENTITY>> columns = new HashSet<>();
+                int cnt = 0;
+                for (FieldComparator<ENTITY> fieldComparator:fieldComparators) {
+                    final ColumnIdentifier<ENTITY> columnIdentifier = fieldComparator.getField().identifier();
 
-                    final NullOrder effectiveNullOrder = isReversed
-                        ? fieldComparator.getNullOrder().reversed()
-                        : fieldComparator.getNullOrder();
-
-                    // Specify NullOrder pre column if nulls are first
-                    if (effectiveNullOrder == NullOrder.FIRST) {
-                        if (dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.PRE) {
-                            sql.append(fieldName).append("IS NOT NULL, ");
+                    // Some databases (e.g. SQL Server) only allows distinct columns in ORDER BY 
+                    if (columns.add(columnIdentifier)) {
+                        if (cnt++ != 0) {
+                            sql.append(", ");
                         }
-                        if (dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.PRE_WITH_CASE) {
-                            sql.append("CASE WHEN ").append(fieldName).append(" IS NULL THEN 0 ELSE 1 END, ");
+
+                        boolean isReversed = fieldComparator.isReversed();
+                        String fieldName = info.getSqlColumnNamer().apply(fieldComparator.getField());
+
+                        final NullOrder effectiveNullOrder = isReversed
+                            ? fieldComparator.getNullOrder().reversed()
+                            : fieldComparator.getNullOrder();
+
+                        // Specify NullOrder pre column if nulls are first
+                        if (effectiveNullOrder == NullOrder.FIRST) {
+                            if (dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.PRE) {
+                                sql.append(fieldName).append("IS NOT NULL, ");
+                            }
+                            if (dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.PRE_WITH_CASE) {
+                                sql.append("CASE WHEN ").append(fieldName).append(" IS NULL THEN 0 ELSE 1 END, ");
+                            }
                         }
-                    }
 
-                    sql.append(fieldName);
-                    if (isReversed) {
-                        sql.append(" DESC");
-                    } else {
-                        sql.append(" ASC");
-                    }
+                        sql.append(fieldName);
+                        if (isReversed) {
+                            sql.append(" DESC");
+                        } else {
+                            sql.append(" ASC");
+                        }
 
-                    // Specify NullOrder post column
-                    if (effectiveNullOrder == NullOrder.FIRST && dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.POST) {
-                        sql.append(" NULLS FIRST");
-                    }
+                        // Specify NullOrder post column
+                        if (effectiveNullOrder == NullOrder.FIRST && dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.POST) {
+                            sql.append(" NULLS FIRST");
+                        }
 
+                    }
                 }
             }
         }

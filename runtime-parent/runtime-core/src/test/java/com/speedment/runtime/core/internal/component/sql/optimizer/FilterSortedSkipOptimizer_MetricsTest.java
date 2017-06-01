@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal.component.sql.optimiser;
+package com.speedment.runtime.core.internal.component.sql.optimizer;
 
 import com.speedment.runtime.core.internal.component.sql.optimizer.FilterSortedSkipOptimizer;
 import com.speedment.runtime.core.component.sql.Metrics;
@@ -55,6 +55,9 @@ public class FilterSortedSkipOptimizer_MetricsTest {
     private static final LimitAction<MockEntity> LIMIT_ACTION = new LimitAction<>(1);
     private static final PeekAction<MockEntity> PEEK_ACTION = new PeekAction<>(System.out::println);
 
+    private static final SortedComparatorAction<MockEntity> SORTED_ACTION_MULTI = new SortedComparatorAction<>(MockEntity.NAME.comparator().thenComparing(MockEntity.ID.comparator()));
+    private static final SortedComparatorAction<MockEntity> SORTED_ACTION_MULTI_VARIANT = new SortedComparatorAction<>(MockEntity.NAME.comparator().thenComparingInt(MockEntity.ID.getter()));
+
     private FilterSortedSkipOptimizer<MockEntity> instance;
 
     @Before
@@ -65,6 +68,20 @@ public class FilterSortedSkipOptimizer_MetricsTest {
     @Test
     public void testFilter1Order1Skip1() {
         final Pipeline pipeline = pipelineOf(FILTER_ACTION, SORTED_ACTION, SKIP_ACTION);
+        final Metrics metrics = instance.metrics(pipeline, DBMS_TYPE);
+        assertEquals(3, metrics.getPipelineReductions());
+    }
+
+    @Test
+    public void testFilter1OrderMulti1Skip1() {
+        final Pipeline pipeline = pipelineOf(FILTER_ACTION, SORTED_ACTION_MULTI, SKIP_ACTION);
+        final Metrics metrics = instance.metrics(pipeline, DBMS_TYPE);
+        assertEquals(3, metrics.getPipelineReductions());
+    }
+    
+    @Test
+    public void testFilter1OrderMultiVariant1Skip1() {
+        final Pipeline pipeline = pipelineOf(FILTER_ACTION, SORTED_ACTION_MULTI_VARIANT, SKIP_ACTION);
         final Metrics metrics = instance.metrics(pipeline, DBMS_TYPE);
         assertEquals(3, metrics.getPipelineReductions());
     }
@@ -232,7 +249,7 @@ public class FilterSortedSkipOptimizer_MetricsTest {
             && (l.get(1) == FILTER_ACTION)) {
             return 2;
         }
-        
+
         if ((l.get(0) == SORTED_ACTION)
             && (l.get(1) == SKIP_ACTION)
             && (l.get(2) == LIMIT_ACTION)) {

@@ -27,6 +27,7 @@ import com.speedment.runtime.core.internal.util.Cast;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
 import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.comparator.CombinedComparator;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.internal.predicate.AbstractCombinedPredicate;
 import com.speedment.runtime.field.predicate.CombinedPredicate;
@@ -125,6 +126,15 @@ public final class StreamTerminatorUtil {
                 final FieldComparator<?> fieldComparator = (FieldComparator<?>) comparator;
                 // We can only optimize filters if the ordering is retained.. Bar equal, isNull, isNotNull etc.
                 return fieldComparator.getField().typeMapper().getOrdering() == Ordering.RETAIN;
+            }
+            if (comparator instanceof CombinedComparator) {
+                final CombinedComparator<?> combinedComparator = (CombinedComparator<?>) comparator;
+                // We can only optimize filters if the ordering is retained.. Bar equal, isNull, isNotNull etc.                
+                return combinedComparator.stream()
+                    .map(FieldComparator::getField)
+                    .map(Field::typeMapper)
+                    .map(TypeMapper::getOrdering)
+                    .allMatch(o -> o == Ordering.RETAIN);
             }
         }
         return false;
