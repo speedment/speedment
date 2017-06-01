@@ -20,8 +20,8 @@ import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.predicate.Inclusion;
 
+import java.util.Collection;
 import java.util.Comparator;
-import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -247,7 +247,9 @@ extends Field<ENTITY> {
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
-     * {@code true}, if and only if this Field is <em>in</em> the given Set.
+     * {@code true}, if and only if this Field is <em>in</em> the given set. (If
+     * the collection is not a set, then a set will be created temporarily from
+     * the values of the collection).
      * <p>
      * N.B. if the Set is empty, then the returned Predicate will always
      * evaluate to {@code false}
@@ -256,7 +258,7 @@ extends Field<ENTITY> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>in</em> the given Set
      */
-    Predicate<ENTITY> in(Set<V> values);
+    Predicate<ENTITY> in(Collection<V> values);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -278,6 +280,8 @@ extends Field<ENTITY> {
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
      * {@code true}, if and only if this Field is <em>not in</em> the given Set.
+     * (If the collection is not a set, then a set will be created temporarily
+     * from the values of the collection).
      * <p>
      * N.B. if the Set is empty, then the returned Predicate will always
      * evaluate to {@code true}
@@ -286,5 +290,5 @@ extends Field<ENTITY> {
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>not in</em> the given Set
      */
-    Predicate<ENTITY> notIn(Set<V> values);
+    Predicate<ENTITY> notIn(Collection<V> values);
 }

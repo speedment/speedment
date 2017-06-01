@@ -39,10 +39,11 @@ import com.speedment.runtime.field.method.IntSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
-import java.util.Set;
+import java.util.Collection;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -154,8 +155,8 @@ public final class IntForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements IntFi
     }
     
     @Override
-    public FieldPredicate<ENTITY> in(Set<Integer> set) {
-        return new IntInPredicate<>(this, set);
+    public FieldPredicate<ENTITY> in(Collection<Integer> values) {
+        return new IntInPredicate<>(this, collectionToSet(values));
     }
     
     @Override
@@ -179,7 +180,7 @@ public final class IntForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements IntFi
     }
     
     @Override
-    public Predicate<ENTITY> notIn(Set<Integer> set) {
-        return new IntInPredicate<>(this, set).negate();
+    public Predicate<ENTITY> notIn(Collection<Integer> values) {
+        return new IntInPredicate<>(this, collectionToSet(values)).negate();
     }
 }

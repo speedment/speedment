@@ -33,8 +33,9 @@ import com.speedment.runtime.field.method.LongSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
-import java.util.Set;
+import java.util.Collection;
 import java.util.function.Predicate;
+import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -127,8 +128,8 @@ public final class LongFieldImpl<ENTITY, D> implements LongField<ENTITY, D> {
     }
     
     @Override
-    public FieldPredicate<ENTITY> in(Set<Long> set) {
-        return new LongInPredicate<>(this, set);
+    public FieldPredicate<ENTITY> in(Collection<Long> values) {
+        return new LongInPredicate<>(this, collectionToSet(values));
     }
     
     @Override
@@ -152,7 +153,7 @@ public final class LongFieldImpl<ENTITY, D> implements LongField<ENTITY, D> {
     }
     
     @Override
-    public Predicate<ENTITY> notIn(Set<Long> set) {
-        return new LongInPredicate<>(this, set).negate();
+    public Predicate<ENTITY> notIn(Collection<Long> values) {
+        return new LongInPredicate<>(this, collectionToSet(values)).negate();
     }
 }

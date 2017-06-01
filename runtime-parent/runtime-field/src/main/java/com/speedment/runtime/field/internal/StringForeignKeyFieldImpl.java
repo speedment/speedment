@@ -35,11 +35,12 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
 
-import java.util.Set;
+import java.util.Collection;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -77,9 +78,9 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
         this.unique = unique;
     }
 
-    /**************************************************************************/
-    /*                                Getters                                 */
-    /**************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////
+    //                                Getters                                 //
+    ////////////////////////////////////////////////////////////////////////////
     @Override
     public ColumnIdentifier<ENTITY> identifier() {
         return identifier;
@@ -120,9 +121,9 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
         return unique;
     }
 
-    /**************************************************************************/
-    /*                              Comparators                               */
-    /**************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////
+    //                              Comparators                               //
+    ////////////////////////////////////////////////////////////////////////////
     @Override
     public FieldComparator<ENTITY> comparator() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.LAST);
@@ -138,9 +139,9 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
         return comparator();
     }
 
-    /**************************************************************************/
-    /*                               Operators                                */
-    /**************************************************************************/
+    ////////////////////////////////////////////////////////////////////////////
+    //                               Operators                                //
+    ////////////////////////////////////////////////////////////////////////////
     @Override
     public FieldPredicate<ENTITY> isNull() {
         return new ReferenceIsNullPredicate<>(this);
@@ -167,8 +168,8 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     }
 
     @Override
-    public Predicate<ENTITY> in(Set<String> values) {
-        return new ReferenceInPredicate<>(this, values);
+    public Predicate<ENTITY> in(Collection<String> values) {
+        return new ReferenceInPredicate<>(this, collectionToSet(values));
     }
 
     @Override
@@ -192,8 +193,8 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     }
 
     @Override
-    public Predicate<ENTITY> notIn(Set<String> values) {
-        return new ReferenceNotInPredicate<>(this, values);
+    public Predicate<ENTITY> notIn(Collection<String> values) {
+        return new ReferenceNotInPredicate<>(this, collectionToSet(values));
     }
 
     @Override
@@ -235,5 +236,4 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     public Predicate<ENTITY> containsIgnoreCase(String value) {
         return new StringContainsIgnoreCasePredicate<>(this, value);
     }
-
 }

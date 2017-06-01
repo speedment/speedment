@@ -34,11 +34,12 @@ import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.typemapper.TypeMapper;
 
-import java.util.Set;
+import java.util.Collection;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -52,7 +53,8 @@ import static java.util.Objects.requireNonNull;
  * 
  * @since  2.2.0
  */
-public final class ComparableForeignKeyFieldImpl<ENTITY, D, V extends Comparable<? super V>, FK_ENTITY> 
+public final class ComparableForeignKeyFieldImpl
+    <ENTITY, D, V extends Comparable<? super V>, FK_ENTITY>
 implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> {
 
     private final ColumnIdentifier<ENTITY> identifier;
@@ -77,10 +79,10 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> {
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
     }
-    
-    /*****************************************************************/
-    /*                           Getters                             */
-    /*****************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                                Getters                                 //
+    ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public ColumnIdentifier<ENTITY> identifier() {
@@ -103,12 +105,18 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> {
     }
     
     @Override
-    public BackwardFinder<FK_ENTITY, ENTITY> backwardFinder(TableIdentifier<ENTITY> identifier, Supplier<Stream<ENTITY>> streamSupplier) {
+    public BackwardFinder<FK_ENTITY, ENTITY> backwardFinder(
+            TableIdentifier<ENTITY> identifier,
+            Supplier<Stream<ENTITY>> streamSupplier) {
+
         return new BackwardFinderImpl<>(this, identifier, streamSupplier);
     }
     
     @Override
-    public FindFrom<ENTITY, FK_ENTITY> finder(TableIdentifier<FK_ENTITY> identifier, Supplier<Stream<FK_ENTITY>> streamSupplier) {
+    public FindFrom<ENTITY, FK_ENTITY> finder(
+            TableIdentifier<FK_ENTITY> identifier,
+            Supplier<Stream<FK_ENTITY>> streamSupplier) {
+
         return new FindFromReference<>(this, referenced, identifier, streamSupplier);
     }
 
@@ -121,10 +129,10 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> {
     public boolean isUnique() {
         return unique;
     }
-    
-    /*****************************************************************/
-    /*                         Comparators                           */
-    /*****************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                              Comparators                               //
+    ////////////////////////////////////////////////////////////////////////////
     
     @Override
     public FieldComparator<ENTITY> comparator() {
@@ -140,10 +148,10 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> {
     public FieldComparator<ENTITY> comparatorNullFieldsLast() {
         return comparator();
     }
-    
-    /*****************************************************************/
-    /*                           Operators                           */
-    /*****************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                               Operators                                //
+    ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public FieldPredicate<ENTITY> isNull() {
@@ -171,8 +179,8 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> {
     }
 
     @Override
-    public Predicate<ENTITY> in(Set<V> values) {
-        return new ReferenceInPredicate<>(this, values);
+    public Predicate<ENTITY> in(Collection<V> values) {
+        return new ReferenceInPredicate<>(this, collectionToSet(values));
     }
     
     @Override
@@ -196,7 +204,7 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> {
     }
 
     @Override
-    public Predicate<ENTITY> notIn(Set<V> values) {
-        return new ReferenceNotInPredicate<>(this, values);
+    public Predicate<ENTITY> notIn(Collection<V> values) {
+        return new ReferenceNotInPredicate<>(this, collectionToSet(values));
     }
 }

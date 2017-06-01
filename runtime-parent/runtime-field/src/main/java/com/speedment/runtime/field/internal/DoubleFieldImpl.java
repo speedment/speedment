@@ -33,8 +33,9 @@ import com.speedment.runtime.field.method.GetDouble;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
-import java.util.Set;
+import java.util.Collection;
 import java.util.function.Predicate;
+import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -127,8 +128,8 @@ public final class DoubleFieldImpl<ENTITY, D> implements DoubleField<ENTITY, D> 
     }
     
     @Override
-    public FieldPredicate<ENTITY> in(Set<Double> set) {
-        return new DoubleInPredicate<>(this, set);
+    public FieldPredicate<ENTITY> in(Collection<Double> values) {
+        return new DoubleInPredicate<>(this, collectionToSet(values));
     }
     
     @Override
@@ -152,7 +153,7 @@ public final class DoubleFieldImpl<ENTITY, D> implements DoubleField<ENTITY, D> 
     }
     
     @Override
-    public Predicate<ENTITY> notIn(Set<Double> set) {
-        return new DoubleInPredicate<>(this, set).negate();
+    public Predicate<ENTITY> notIn(Collection<Double> values) {
+        return new DoubleInPredicate<>(this, collectionToSet(values)).negate();
     }
 }

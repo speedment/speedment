@@ -29,9 +29,10 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
 
-import java.util.Set;
+import java.util.Collection;
 import java.util.function.Predicate;
 
+import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -63,10 +64,10 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
     }
-    
-    /*****************************************************************/
-    /*                           Getters                             */
-    /*****************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                                Getters                                 //
+    ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public ColumnIdentifier<ENTITY> identifier() {
@@ -92,10 +93,10 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
     public boolean isUnique() {
         return unique;
     }
-    
-    /*****************************************************************/
-    /*                         Comparators                           */
-    /*****************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                              Comparators                               //
+    ////////////////////////////////////////////////////////////////////////////
     
     @Override
     public FieldComparator<ENTITY> comparator() {
@@ -111,10 +112,10 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
     public FieldComparator<ENTITY> comparatorNullFieldsLast() {
         return comparator();
     }
-    
-    /*****************************************************************/
-    /*                           Operators                           */
-    /*****************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                               Operators                                //
+    ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public FieldPredicate<ENTITY> isNull() {
@@ -142,8 +143,8 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
     }
 
     @Override
-    public Predicate<ENTITY> in(Set<String> values) {
-        return new ReferenceInPredicate<>(this, values);
+    public Predicate<ENTITY> in(Collection<String> values) {
+        return new ReferenceInPredicate<>(this, collectionToSet(values));
     }
     
     @Override
@@ -167,8 +168,8 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
     }
 
     @Override
-    public Predicate<ENTITY> notIn(Set<String> values) {
-        return new ReferenceNotInPredicate<>(this, values);
+    public Predicate<ENTITY> notIn(Collection<String> values) {
+        return new ReferenceNotInPredicate<>(this, collectionToSet(values));
     }
 
     @Override
@@ -210,5 +211,4 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
     public Predicate<ENTITY> containsIgnoreCase(String value) {
         return new StringContainsIgnoreCasePredicate<>(this, value);
     }
-    
 }

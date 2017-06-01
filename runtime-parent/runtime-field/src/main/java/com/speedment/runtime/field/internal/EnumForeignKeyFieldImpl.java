@@ -37,8 +37,8 @@ import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.typemapper.TypeMapper;
 
+import java.util.Collection;
 import java.util.EnumSet;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -249,12 +249,12 @@ implements EnumForeignKeyField<ENTITY, D, E, FK> {
     }
 
     @Override
-    public Predicate<ENTITY> in(Set<E> values) {
+    public Predicate<ENTITY> in(Collection<E> values) {
         return toEntityPredicate(values::contains);
     }
 
     @Override
-    public Predicate<ENTITY> notIn(Set<E> values) {
+    public Predicate<ENTITY> notIn(Collection<E> values) {
         return toEntityPredicate(e -> !values.contains(e));
     }
 
