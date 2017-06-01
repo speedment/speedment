@@ -31,24 +31,35 @@ import java.util.stream.Stream;
  * <p>
  * Each {@code FindFrom} contains metadata of which fields it compares to 
  * determine the mapping as well as a reference to the foreign manager.
+ * <p>
+ * {@code FindFromNullable} is a specialization of {@link FindFrom} that is used
+ * to signal that the referenced entity might not exist.
  * 
  * @param <ENTITY>     the source entity
  * @param <FK_ENTITY>  the target entity
  * 
  * @author Emil Forslund
- * @since  3.0.0
+ * @since  3.0.10
  */
-public interface FindFromNullable<ENTITY, FK_ENTITY> extends Function<ENTITY, Stream<FK_ENTITY>> {
+public interface FindFromNullable<ENTITY, FK_ENTITY>
+extends Function<ENTITY, Stream<FK_ENTITY>> {
+
+    /**
+     * Returns the identifier for the referenced (foreign) table.
+     *
+     * @return  target (foreign) table identifier
+     */
+    TableIdentifier<FK_ENTITY> getTableIdentifier();
     
     /**
      * Returns the field that the stream originates from. 
      * <p>
      * In the following example, {@code foo} is the source:
-     * {@code
+     * <pre>{@code
      *      foos.stream()
-     *          .flatMap(foo.findBars()) // findBars returns Streamer<Foo, Bar>
+     *          .flatMap(foo.findBars()) // findBars returns FindFromNullable<Foo, Bar>
      *          .forEach(...);
-     * }
+     * }</pre>
      * 
      * @return  the source field
      */
@@ -67,12 +78,40 @@ public interface FindFromNullable<ENTITY, FK_ENTITY> extends Function<ENTITY, St
      * @return  the target field
      */
     Field<FK_ENTITY> getTargetField();
-    
-    /**
-     * Returns the identifier for the referenced (foreign) table.
-     * 
-     * @return  target (foreign) table identifier
-     */
-    TableIdentifier<FK_ENTITY> getTableIdentifier();
 
+    /**
+     * Returns {@code true} if the {@link #apply(Object)}-method will return a
+     * stream with a value. Otherwise, {@code false} is returned.
+     *
+     * @param entity  the entity to locate a foreign entity for
+     * @return        singleton or empty stream
+     */
+    boolean isPresent(ENTITY entity);
+
+    /**
+     * Applies this method, returning the referenced entity. If no entity was
+     * referenced, then an exception is thrown. This method should therefore not
+     * be invoked unless the status of the availability of the entity has been
+     * checked with {@link #isPresent(Object)}.
+     * <p>
+     * Another way of retrieving the referenced entity is to use the
+     * {@link #apply(Object)}-method.
+     *
+     * @param entity  the entity to locate a foreign entity for
+     * @return        the referenced foreign entity
+     *
+     * @throws IllegalArgumentException  if no foreign entity was referenced
+     */
+    FK_ENTITY applyOrThrow(ENTITY entity) throws IllegalArgumentException;
+
+    /**
+     * Applies this method, locating the referenced entity and returning it as a
+     * singleton stream if found. If no entity was referenced, an empty stream
+     * will be returned.
+     *
+     * @param entity  the entity to locate a foreign entity for
+     * @return        singleton or empty stream
+     */
+    @Override
+    Stream<FK_ENTITY> apply(ENTITY entity);
 }
