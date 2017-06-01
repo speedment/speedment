@@ -293,6 +293,18 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
 
         if (usesOptional(col)) {
             if (isPrimitive(type)) {
+                if (type.equals(int.class)) {
+                    retType = OptionalInt.class;
+                } else if (type.equals(long.class)) {
+                    retType = OptionalLong.class;
+                } else if (type.equals(double.class)) {
+                    retType = OptionalDouble.class;
+                } else if (type.equals(boolean.class)) {
+                    retType = OptionalBoolean.class;
+                } else {
+                    retType = optional(wrapperFor(type)); // Optional<Float>
+                }
+            } else {
                 if (type.equals(Integer.class)) {
                     retType = OptionalInt.class;
                 } else if (type.equals(Long.class)) {
@@ -302,10 +314,8 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                 } else if (type.equals(Boolean.class)) {
                     retType = OptionalBoolean.class;
                 } else {
-                    retType = optional(wrapperFor(type));
+                    retType = optional(type);
                 }
-            } else {
-                retType = optional(type);
             }
         } else {
             retType = type;
