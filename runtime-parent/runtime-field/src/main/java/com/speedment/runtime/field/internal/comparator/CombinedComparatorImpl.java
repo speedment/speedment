@@ -229,6 +229,14 @@ implements CombinedComparator<ENTITY> {
         return 31 * comparators.hashCode() + (isReversed() ? 1 : 0);
     }
 
+    @Override
+    public String toString() {
+        return "CombinedComparatorImpl{" +
+            "comparators=" + comparators +
+            ", reversed=" + reversed +
+            '}';
+    }
+
     private Comparator<ENTITY> then(Comparator<? super ENTITY> other) {
         if (other instanceof FieldComparator) {
             @SuppressWarnings("unchecked")
