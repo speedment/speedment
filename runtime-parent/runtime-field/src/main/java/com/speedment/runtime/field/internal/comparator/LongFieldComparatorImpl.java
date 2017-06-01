@@ -71,7 +71,7 @@ public final class LongFieldComparatorImpl<ENTITY, D> extends AbstractFieldCompa
         requireNonNulls(first, second);
         final long a = field.getAsLong(first);
         final long b = field.getAsLong(second);
-        return applyReversed(a - b);
+        return applyReversed(Long.compare(a, b));
     }
     
     @Override

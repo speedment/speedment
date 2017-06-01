@@ -71,7 +71,7 @@ public final class ShortFieldComparatorImpl<ENTITY, D> extends AbstractFieldComp
         requireNonNulls(first, second);
         final short a = field.getAsShort(first);
         final short b = field.getAsShort(second);
-        return applyReversed(a - b);
+        return applyReversed(Short.compare(a, b));
     }
     
     @Override

@@ -71,7 +71,7 @@ public final class IntFieldComparatorImpl<ENTITY, D> extends AbstractFieldCompar
         requireNonNulls(first, second);
         final int a = field.getAsInt(first);
         final int b = field.getAsInt(second);
-        return applyReversed(a - b);
+        return applyReversed(Integer.compare(a, b));
     }
     
     @Override

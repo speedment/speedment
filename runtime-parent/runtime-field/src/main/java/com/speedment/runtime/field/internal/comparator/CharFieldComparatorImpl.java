@@ -71,7 +71,7 @@ public final class CharFieldComparatorImpl<ENTITY, D> extends AbstractFieldCompa
         requireNonNulls(first, second);
         final char a = field.getAsChar(first);
         final char b = field.getAsChar(second);
-        return applyReversed(a - b);
+        return applyReversed(Character.compare(a, b));
     }
     
     @Override

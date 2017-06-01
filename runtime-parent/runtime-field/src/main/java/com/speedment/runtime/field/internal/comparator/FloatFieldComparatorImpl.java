@@ -71,7 +71,7 @@ public final class FloatFieldComparatorImpl<ENTITY, D> extends AbstractFieldComp
         requireNonNulls(first, second);
         final float a = field.getAsFloat(first);
         final float b = field.getAsFloat(second);
-        return applyReversed(a - b);
+        return applyReversed(Float.compare(a, b));
     }
     
     @Override

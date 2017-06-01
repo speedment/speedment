@@ -71,7 +71,7 @@ public final class ByteFieldComparatorImpl<ENTITY, D> extends AbstractFieldCompa
         requireNonNulls(first, second);
         final byte a = field.getAsByte(first);
         final byte b = field.getAsByte(second);
-        return applyReversed(a - b);
+        return applyReversed(Byte.compare(a, b));
     }
     
     @Override

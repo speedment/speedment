@@ -71,7 +71,7 @@ public final class DoubleFieldComparatorImpl<ENTITY, D> extends AbstractFieldCom
         requireNonNulls(first, second);
         final double a = field.getAsDouble(first);
         final double b = field.getAsDouble(second);
-        return applyReversed(a - b);
+        return applyReversed(Double.compare(a, b));
     }
     
     @Override
