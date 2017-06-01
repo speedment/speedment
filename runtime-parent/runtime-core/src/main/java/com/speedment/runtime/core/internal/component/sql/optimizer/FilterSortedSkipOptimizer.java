@@ -22,29 +22,27 @@ import com.speedment.runtime.core.component.sql.SqlStreamOptimizer;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsType;
-import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.NONE;
-import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.ONLY_AFTER_SORTED;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.LimitAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.SkipAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.SortedComparatorAction;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.RenderResult;
-import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isContainingOnlyFieldPredicate;
-import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isSortedActionWithFieldPredicate;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import static java.util.Objects.requireNonNull;
-import java.util.Set;
+
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
+import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.NONE;
+import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.ONLY_AFTER_SORTED;
+import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isContainingOnlyFieldPredicate;
+import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isSortedActionWithFieldPredicate;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -173,7 +171,7 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
             for (int i = sorteds.size() - 1; i >= 0; i--) {
                 final SortedComparatorAction<ENTITY> sortedAction = sorteds.get(i);
                 @SuppressWarnings("unchecked")
-                final FieldComparator<ENTITY, ?> fieldComparator = (FieldComparator<ENTITY, ?>) sortedAction.getComparator();
+                final FieldComparator<ENTITY> fieldComparator = (FieldComparator<ENTITY>) sortedAction.getComparator();
                 final ColumnIdentifier<ENTITY> columnIdentifier = fieldComparator.getField().identifier();
 
                 // Some databases (e.g. SQL Server) only allows distinct columns in ORDER BY 
