@@ -19,10 +19,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.runtime.core.field.predicate;
+package com.speedment.runtime.field.predicate;
 
-import com.speedment.runtime.field.predicate.PredicateType;
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import java.util.EnumMap;
 import java.util.List;
