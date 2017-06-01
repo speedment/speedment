@@ -23,16 +23,14 @@ import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.ReferenceFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
+import com.speedment.runtime.field.internal.method.FindFromNullableReference;
 import com.speedment.runtime.field.internal.method.FindFromReference;
 import com.speedment.runtime.field.internal.predicate.AlwaysFalsePredicate;
 import com.speedment.runtime.field.internal.predicate.reference.ReferenceEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.reference.ReferenceInPredicate;
 import com.speedment.runtime.field.internal.predicate.reference.ReferenceIsNotNullPredicate;
 import com.speedment.runtime.field.internal.predicate.reference.ReferenceIsNullPredicate;
-import com.speedment.runtime.field.method.BackwardFinder;
-import com.speedment.runtime.field.method.FindFrom;
-import com.speedment.runtime.field.method.ReferenceGetter;
-import com.speedment.runtime.field.method.ReferenceSetter;
+import com.speedment.runtime.field.method.*;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.typemapper.TypeMapper;
@@ -143,6 +141,16 @@ implements EnumForeignKeyField<ENTITY, D, E, FK> {
                                        Supplier<Stream<FK>> streamSupplier) {
 
         return new FindFromReference<>(
+            this, referenced, identifier, streamSupplier
+        );
+    }
+
+    @Override
+    public FindFromNullable<ENTITY, FK> nullableFinder(
+            TableIdentifier<FK> identifier,
+            Supplier<Stream<FK>> streamSupplier) {
+
+        return new FindFromNullableReference<>(
             this, referenced, identifier, streamSupplier
         );
     }

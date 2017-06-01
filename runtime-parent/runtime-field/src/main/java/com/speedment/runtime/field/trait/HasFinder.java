@@ -56,7 +56,7 @@ public interface HasFinder<ENTITY, FK_ENTITY> {
     FindFrom<ENTITY, FK_ENTITY> finder(
         TableIdentifier<FK_ENTITY> identifier,
         Supplier<Stream<FK_ENTITY>> streamSupplier);
-    
+
     /**
      * Returns a function that can be used to find a stream of entities 
      * referencing this entity using the specified manager.

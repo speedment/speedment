@@ -24,13 +24,11 @@ import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.ReferenceFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
+import com.speedment.runtime.field.internal.method.FindFromNullableReference;
 import com.speedment.runtime.field.internal.method.FindFromReference;
 import com.speedment.runtime.field.internal.predicate.reference.*;
 import com.speedment.runtime.field.internal.predicate.string.*;
-import com.speedment.runtime.field.method.BackwardFinder;
-import com.speedment.runtime.field.method.FindFrom;
-import com.speedment.runtime.field.method.ReferenceGetter;
-import com.speedment.runtime.field.method.ReferenceSetter;
+import com.speedment.runtime.field.method.*;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
@@ -102,13 +100,33 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     }
     
     @Override
-    public BackwardFinder<FK_ENTITY, ENTITY> backwardFinder(TableIdentifier<ENTITY> identifier, Supplier<Stream<ENTITY>> streamSupplier) {
-        return new BackwardFinderImpl<>(this, identifier, streamSupplier);
+    public BackwardFinder<FK_ENTITY, ENTITY> backwardFinder(
+            TableIdentifier<ENTITY> identifier,
+            Supplier<Stream<ENTITY>> streamSupplier) {
+
+        return new BackwardFinderImpl<>(
+            this, identifier, streamSupplier
+        );
     }
     
     @Override
-    public FindFrom<ENTITY, FK_ENTITY> finder(TableIdentifier<FK_ENTITY> identifier, Supplier<Stream<FK_ENTITY>> streamSupplier) {
-        return new FindFromReference<>(this, referenced, identifier, streamSupplier);
+    public FindFrom<ENTITY, FK_ENTITY> finder(
+            TableIdentifier<FK_ENTITY> identifier,
+            Supplier<Stream<FK_ENTITY>> streamSupplier) {
+
+        return new FindFromReference<>(
+            this, referenced, identifier, streamSupplier
+        );
+    }
+
+    @Override
+    public FindFromNullable<ENTITY, FK_ENTITY> nullableFinder(
+            TableIdentifier<FK_ENTITY> identifier,
+            Supplier<Stream<FK_ENTITY>> streamSupplier) {
+
+        return new FindFromNullableReference<>(
+            this, referenced, identifier, streamSupplier
+        );
     }
 
     @Override

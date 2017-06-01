@@ -22,6 +22,7 @@ import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.field.trait.HasFinder;
+import com.speedment.runtime.field.trait.HasNullableFinder;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.util.function.Function;
@@ -38,7 +39,7 @@ import java.util.function.Function;
  */
 public interface EnumForeignKeyField<ENTITY, D, E extends Enum<E>, FK>
 extends EnumField<ENTITY, D, E>,
-        HasFinder<ENTITY, FK> {
+        HasNullableFinder<ENTITY, FK> {
 
     /**
      * A method that takes a {@code String} and converts it into an enum for
