@@ -85,7 +85,13 @@ The tutorials are divided into three sections. The basics are covered in the fir
 
 Quick Start
 -----------
-Assuming you have Maven installed and a relational database available, you can try out Speedment in a minute by running the following from a command-line.
+Assuming you have Maven installed and a relational database available, you can try out Speedment in a minute either by setting up a POM file for your project or launching a Maven archetype template.
+
+### Setup a POM file
+Use the Speedment [Initializer](https://www.speedment.com/initializer/) to get a POM template for your project.
+
+### Launch Archtype Directly
+Running the following from a command-line:
 
 ###### MySQL
 ```
