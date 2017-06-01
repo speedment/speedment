@@ -123,6 +123,7 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <P extends Pipeline> P optimize(
         final P initialPipeline,
         final SqlStreamOptimizerInfo<ENTITY> info,
@@ -178,12 +179,9 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
                 if (comparator instanceof CombinedComparator) {
                     @SuppressWarnings("unchecked")
                     final CombinedComparator<ENTITY> combinedComparator = (CombinedComparator<ENTITY>) sortedAction.getComparator();
-                    @SuppressWarnings("unchecked")
-                    List<FieldComparator<ENTITY>> comparators = combinedComparator.stream()
-                        .map(c -> (FieldComparator<ENTITY>)c)
-                        .collect(toList());
-                    Collections.reverse(comparators);
-                    fieldComparators.addAll(comparators);
+                    combinedComparator.stream()
+                        .map(c -> (FieldComparator<ENTITY>) c)
+                        .forEachOrdered(fieldComparators::add);
                 }
             }
 
@@ -193,7 +191,7 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
                 // Iterate backwards
                 final Set<ColumnIdentifier<ENTITY>> columns = new HashSet<>();
                 int cnt = 0;
-                for (FieldComparator<ENTITY> fieldComparator:fieldComparators) {
+                for (FieldComparator<ENTITY> fieldComparator : fieldComparators) {
                     final ColumnIdentifier<ENTITY> columnIdentifier = fieldComparator.getField().identifier();
 
                     // Some databases (e.g. SQL Server) only allows distinct columns in ORDER BY 
