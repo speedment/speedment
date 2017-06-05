@@ -21,37 +21,47 @@ import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.manager.ManagerConfigurator;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 
+import static com.speedment.runtime.core.stream.parallel.ParallelStrategy.computeIntensityDefault;
 import static java.util.Objects.requireNonNull;
 
 /**
+ * Default implementation of {@link ManagerConfigurator} that allows a new
+ * default {@link ParallelStrategy} to be set in the delegating {@link Manager}.
  *
- * @author Per Minborg
  * @param <ENTITY> Entity type
  *
- * @since 3.0.1
+ * @author Per Minborg
+ * @since  3.0.1
  */
-public class ManagerConfiguratorImpl<ENTITY> implements ManagerConfigurator<ENTITY> {
+public final class ManagerConfiguratorImpl<ENTITY>
+implements ManagerConfigurator<ENTITY> {
 
-    private final StreamSupplierComponent streamSupplierComponent;
+    private final StreamSupplierComponent streams;
     private final Manager<ENTITY> manager;
-    //
-    private ParallelStrategy parallelStrategy;
 
-    public ManagerConfiguratorImpl(StreamSupplierComponent streamSupplierComponent, Manager<ENTITY> manager) {
-        this.streamSupplierComponent = requireNonNull(streamSupplierComponent);
-        this.manager = requireNonNull(manager);
-        this.parallelStrategy = ParallelStrategy.computeIntensityDefault();
+    private ParallelStrategy strategy;
+
+    public ManagerConfiguratorImpl(StreamSupplierComponent streams,
+                                   Manager<ENTITY> manager) {
+
+        this.streams  = requireNonNull(streams);
+        this.manager  = requireNonNull(manager);
+        this.strategy = computeIntensityDefault();
     }
 
     @Override
-    public ManagerConfigurator<ENTITY> withParallelStrategy(ParallelStrategy parallelStrategy) {
-        this.parallelStrategy = requireNonNull(parallelStrategy);
+    public ManagerConfigurator<ENTITY>
+    withParallelStrategy(ParallelStrategy parallelStrategy) {
+        this.strategy = requireNonNull(parallelStrategy);
         return this;
     }
 
     @Override
     public Manager<ENTITY> build() {
-        return new ConfiguredManager<>(streamSupplierComponent, manager, parallelStrategy);
-    }
+        requireNonNull(strategy, getClass().getSimpleName() +
+            ".withParallelStrategy(...) has not been called!"
+        );
 
+        return new ConfiguredManager<>(streams, manager, strategy);
+    }
 }
