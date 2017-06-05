@@ -22,36 +22,38 @@ import com.speedment.runtime.core.component.sql.SqlStreamOptimizer;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsType;
-import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.NONE;
-import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.ONLY_AFTER_SORTED;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.LimitAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.SkipAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.SortedComparatorAction;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.RenderResult;
-import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isContainingOnlyFieldPredicate;
-import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isSortedActionWithFieldPredicate;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
 import com.speedment.runtime.field.comparator.CombinedComparator;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
+
 import java.util.*;
-import static java.util.Objects.requireNonNull;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
+import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.NONE;
+import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.ONLY_AFTER_SORTED;
+import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isContainingOnlyFieldPredicate;
+import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isSortedActionWithFieldPredicate;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 /**
  * This Optimizer takes care of the following case:
- * <br>
  * <ul>
- * <li> a) Zero or more filter() operations
- * <li> b) Zero or more sorted() operations
- * <li> c) Zero or more skip() operations
- * <li> d) Zero or more limit() operations
+ *   <li> a) Zero or more filter() operations
+ *   <li> b) Zero or more sorted() operations
+ *   <li> c) Zero or more skip() operations
+ *   <li> d) Zero or more limit() operations
+ * </ul>
  *
  * <em>No other operations</em> must be in the sequence a-d or within the
  * individual items a-d. <em>All</em> parameters in a and b must be obtained via
@@ -61,7 +63,6 @@ import static java.util.stream.Collectors.toList;
  * Thus, this optimizer can handle a (FILTER*, SORTED*, SKIP*, LIMIT*) or
  * (SORTED*, LIMIT*, SKIP*, LIMIT*) pattern where all non-primitive parameters
  * are all Field derived
- *
  *
  * @author Per Minborg
  * @param <ENTITY> entity type
