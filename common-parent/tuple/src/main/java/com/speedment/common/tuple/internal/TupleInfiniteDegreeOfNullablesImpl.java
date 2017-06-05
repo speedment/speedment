@@ -19,12 +19,13 @@ package com.speedment.common.tuple.internal;
 import com.speedment.common.tuple.TupleOfNullables;
 
 /**
- * An implementation class of a {@link TuplefNullables } Sadly, types are lost
+ * An implementation class of a {@link TupleOfNullables} Sadly, types are lost
  * for this implementation.
  *
  * @author Per Minborg
  */
-public final class TupleInfiniteDegreeOfNullablesImpl extends AbstractTupleOfNullables implements TupleOfNullables {
+public final class TupleInfiniteDegreeOfNullablesImpl
+extends AbstractTupleOfNullables implements TupleOfNullables {
 
     public TupleInfiniteDegreeOfNullablesImpl(Object... elements) {
         super(TupleInfiniteDegreeOfNullablesImpl.class, elements);
