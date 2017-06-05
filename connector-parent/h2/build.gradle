@@ -1,0 +1,11 @@
+group = 'com.speedment.connector'
+description = 'Speedment - Connector - H2'
+dependencies {
+  compile project(':common-parent:logger')
+  compile project(':common-parent:injector')
+  compile project(':common-parent:tuple')
+  compile project(':common-parent:invariant')
+  compile project(':runtime-parent:runtime-core')
+  compile project(':runtime-parent:runtime-field')
+  compile project(':runtime-parent:runtime-config')
+}

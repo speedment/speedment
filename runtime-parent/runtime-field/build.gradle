@@ -1,0 +1,12 @@
+group = 'com.speedment.runtime'
+description = 'Speedment - Runtime - Field'
+dependencies {
+  compile project(':common-parent:invariant')
+  compile project(':common-parent:tuple')
+  compile project(':common-parent:function')
+  compile project(':common-parent:annotation')
+  compile project(':runtime-parent:runtime-config')
+  compile project(':runtime-parent:runtime-typemapper')
+    testCompile group: 'junit', name: 'junit', version:'4.12'
+    testCompile group: 'org.hamcrest', name: 'hamcrest-core', version:'1.3'
+}

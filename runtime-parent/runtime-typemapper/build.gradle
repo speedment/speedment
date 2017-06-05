@@ -1,0 +1,6 @@
+group = 'com.speedment.runtime'
+description = 'Speedment - Runtime - TypeMapper'
+dependencies {
+  compile project(':runtime-parent:runtime-config')
+    testCompile group: 'junit', name: 'junit', version:'4.12'
+}

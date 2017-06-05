@@ -1,0 +1,9 @@
+group = 'com.speedment.runtime'
+description = 'Speedment - Runtime - Config'
+dependencies {
+  compile project(':common-parent:mapstream')
+  compile project(':common-parent:lazy')
+  compile project(':common-parent:function')
+  compile project(':common-parent:invariant')
+    testCompile group: 'junit', name: 'junit', version:'4.12'
+}

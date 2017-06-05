@@ -1,0 +1,14 @@
+group = 'com.speedment.plugins'
+description = 'Speedment - Plugins - Spring Generator'
+dependencies {
+  compile project(':common-parent:injector')
+  compile project(':common-parent:codegen')
+  compile project(':runtime-parent:runtime-config')
+  compile project(':generator-parent:generator-translator')
+  compile project(':generator-parent:generator-core')
+    compile group: 'org.springframework', name: 'spring-beans', version:'4.3.6.RELEASE'
+    compile group: 'org.springframework', name: 'spring-context', version:'4.3.6.RELEASE'
+    compile group: 'org.springframework', name: 'spring-web', version:'4.3.6.RELEASE'
+    testCompile group: 'junit', name: 'junit', version:'4.12'
+    testCompile group: 'org.hamcrest', name: 'hamcrest-core', version:'1.3'
+}

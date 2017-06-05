@@ -1,0 +1,106 @@
+rootProject.name = 'speedment-parent'
+include ':common-parent:invariant'
+include ':common-parent:function'
+include ':common-parent:json'
+include ':common-parent:tuple'
+include ':common-parent:logger'
+include ':common-parent:codegen'
+include ':common-parent:codegenxml'
+include ':common-parent:injector'
+include ':common-parent:rest'
+include ':common-parent:lazy'
+include ':common-parent:mapstream'
+include ':common-parent:mutable-stream'
+include ':common-parent:singleton-stream'
+include ':common-parent:common-all'
+include ':common-parent:annotation'
+include ':common-parent:benchmark'
+include ':common-parent:combinatorics'
+include ':common-parent:collection'
+include ':common-parent'
+include ':runtime-parent:runtime-config'
+include ':runtime-parent:runtime-typemapper'
+include ':runtime-parent:runtime-field'
+include ':runtime-parent:runtime-core'
+include ':runtime-parent:runtime-all'
+include ':runtime-parent'
+include ':generator-parent:generator-translator'
+include ':generator-parent:generator-standard'
+include ':generator-parent:generator-core'
+include ':generator-parent:generator-all'
+include ':generator-parent'
+include ':tool-parent:tool-config'
+include ':tool-parent:tool-propertyeditor'
+include ':tool-parent:tool-core'
+include ':tool-parent:tool-all'
+include ':tool-parent'
+include ':build-parent:runtime'
+include ':build-parent:generator'
+include ':build-parent:tool'
+include ':build-parent:speedment-maven-plugin'
+include ':build-parent'
+include ':plugin-parent:json-stream'
+include ':plugin-parent:spring-generator'
+include ':plugin-parent:enum-generator'
+include ':plugin-parent'
+include ':connector-parent:h2'
+include ':connector-parent'
+include ':archetypes:speedment-archetype-mysql'
+include ':archetypes:speedment-archetype-postgresql'
+include ':archetypes:speedment-archetype-mariadb'
+include ':archetypes'
+include ':example-parent:basic-example'
+include ':example-parent'
+
+project(':common-parent:invariant').projectDir = "$rootDir/common-parent/invariant" as File
+project(':common-parent:function').projectDir = "$rootDir/common-parent/function" as File
+project(':common-parent:json').projectDir = "$rootDir/common-parent/json" as File
+project(':common-parent:tuple').projectDir = "$rootDir/common-parent/tuple" as File
+project(':common-parent:logger').projectDir = "$rootDir/common-parent/logger" as File
+project(':common-parent:codegen').projectDir = "$rootDir/common-parent/codegen" as File
+project(':common-parent:codegenxml').projectDir = "$rootDir/common-parent/codegenxml" as File
+project(':common-parent:injector').projectDir = "$rootDir/common-parent/injector" as File
+project(':common-parent:rest').projectDir = "$rootDir/common-parent/rest" as File
+project(':common-parent:lazy').projectDir = "$rootDir/common-parent/lazy" as File
+project(':common-parent:mapstream').projectDir = "$rootDir/common-parent/mapstream" as File
+project(':common-parent:mutable-stream').projectDir = "$rootDir/common-parent/mutablestream" as File
+project(':common-parent:singleton-stream').projectDir = "$rootDir/common-parent/singletonstream" as File
+project(':common-parent:common-all').projectDir = "$rootDir/common-parent/common-all" as File
+project(':common-parent:annotation').projectDir = "$rootDir/common-parent/annotation" as File
+project(':common-parent:benchmark').projectDir = "$rootDir/common-parent/benchmark" as File
+project(':common-parent:combinatorics').projectDir = "$rootDir/common-parent/combinatorics" as File
+project(':common-parent:collection').projectDir = "$rootDir/common-parent/collection" as File
+project(':common-parent').projectDir = "$rootDir/common-parent" as File
+project(':runtime-parent:runtime-config').projectDir = "$rootDir/runtime-parent/runtime-config" as File
+project(':runtime-parent:runtime-typemapper').projectDir = "$rootDir/runtime-parent/runtime-typemapper" as File
+project(':runtime-parent:runtime-field').projectDir = "$rootDir/runtime-parent/runtime-field" as File
+project(':runtime-parent:runtime-core').projectDir = "$rootDir/runtime-parent/runtime-core" as File
+project(':runtime-parent:runtime-all').projectDir = "$rootDir/runtime-parent/runtime-all" as File
+project(':runtime-parent').projectDir = "$rootDir/runtime-parent" as File
+project(':generator-parent:generator-translator').projectDir = "$rootDir/generator-parent/generator-translator" as File
+project(':generator-parent:generator-standard').projectDir = "$rootDir/generator-parent/generator-standard" as File
+project(':generator-parent:generator-core').projectDir = "$rootDir/generator-parent/generator-core" as File
+project(':generator-parent:generator-all').projectDir = "$rootDir/generator-parent/generator-all" as File
+project(':generator-parent').projectDir = "$rootDir/generator-parent" as File
+project(':tool-parent:tool-config').projectDir = "$rootDir/tool-parent/tool-config" as File
+project(':tool-parent:tool-propertyeditor').projectDir = "$rootDir/tool-parent/tool-propertyeditor" as File
+project(':tool-parent:tool-core').projectDir = "$rootDir/tool-parent/tool-core" as File
+project(':tool-parent:tool-all').projectDir = "$rootDir/tool-parent/tool-all" as File
+project(':tool-parent').projectDir = "$rootDir/tool-parent" as File
+project(':build-parent:runtime').projectDir = "$rootDir/build-parent/runtime" as File
+project(':build-parent:generator').projectDir = "$rootDir/build-parent/generator" as File
+project(':build-parent:tool').projectDir = "$rootDir/build-parent/tool" as File
+project(':build-parent:speedment-maven-plugin').projectDir = "$rootDir/build-parent/maven-plugin" as File
+project(':build-parent').projectDir = "$rootDir/build-parent" as File
+project(':plugin-parent:json-stream').projectDir = "$rootDir/plugin-parent/json-stream" as File
+project(':plugin-parent:spring-generator').projectDir = "$rootDir/plugin-parent/spring-generator" as File
+project(':plugin-parent:enum-generator').projectDir = "$rootDir/plugin-parent/enum-generator" as File
+project(':plugin-parent').projectDir = "$rootDir/plugin-parent" as File
+project(':connector-parent:h2').projectDir = "$rootDir/connector-parent/h2" as File
+project(':connector-parent').projectDir = "$rootDir/connector-parent" as File
+project(':archetypes:speedment-archetype-mysql').projectDir = "$rootDir/archetype-parent/speedment-archetype-mysql" as File
+project(':archetypes:speedment-archetype-postgresql').projectDir = "$rootDir/archetype-parent/speedment-archetype-postgresql" as File
+project(':archetypes:speedment-archetype-mariadb').projectDir = "$rootDir/archetype-parent/speedment-archetype-mariadb" as File
+project(':archetypes').projectDir = "$rootDir/archetype-parent" as File
+project(':example-parent:basic-example').projectDir = "$rootDir/example-parent/basic-example" as File
+project(':example-parent').projectDir = "$rootDir/example-parent" as File

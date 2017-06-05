@@ -1,0 +1,23 @@
+group = 'com.speedment.runtime'
+description = 'Speedment - Runtime - Core'
+dependencies {
+  compile project(':common-parent:invariant')
+  compile project(':common-parent:function')
+  compile project(':common-parent:mapstream')
+  compile project(':common-parent:logger')
+  compile project(':common-parent:injector')
+  compile project(':common-parent:json')
+  compile project(':common-parent:tuple')
+  compile project(':common-parent:lazy')
+  compile project(':common-parent:singleton-stream')
+  compile project(':runtime-parent:runtime-config')
+  compile project(':runtime-parent:runtime-typemapper')
+  compile project(':runtime-parent:runtime-field')
+  testCompile project(':common-parent:combinatorics')
+    testCompile group: 'junit', name: 'junit', version:'4.12'
+    testCompile group: 'org.mockito', name: 'mockito-core', version:'2.7.12'
+    testCompile group: 'org.seleniumhq.selenium', name: 'selenium-java', version:'3.2.0'
+    testCompile(group: 'com.opera', name: 'operadriver', version:'1.5') {
+exclude(module: 'selenium-remote-driver')
+    }
+}

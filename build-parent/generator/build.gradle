@@ -1,0 +1,6 @@
+group = 'com.speedment'
+description = 'Speedment - Build - Generator'
+dependencies {
+    compile project(':runtime-parent:runtime-all')
+    compile project(':generator-parent:generator-all')
+}
