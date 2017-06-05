@@ -42,24 +42,6 @@ public final class Combination {
         return CombinationUtil.of(items);
     }
 
-    /**
-     * Creates and returns all possible combinations of the given elements
-     * whereby each element only occurs at most once in any given List. Elements
-     * are checked for occurrence by its {@code equals() } method.
-     *
-     * The order of the combinations in the stream is unspecified.
-     *
-     * @param <T> element type
-     * @param items to combine
-     * @return all possible combinations of the given elements whereby each
-     * element only occurs at most once in any given List
-     */
-    @SafeVarargs
-    @SuppressWarnings("varargs") // Creating a List from an array is safe
-    public static <T> Stream<List<T>> ofDistinct(final T... items) {
-        return CombinationUtil.ofDistinct(items);
-    }
-
     private Combination() {
         throw new UnsupportedOperationException();
     }

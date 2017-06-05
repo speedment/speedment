@@ -53,7 +53,7 @@
         <mutablestream.version>1.0.0</mutablestream.version>
         <singletonstream.version>1.0.0</singletonstream.version>
         <annotation.version>1.0.0</annotation.version>
-        <combinatorics.version>1.0.0</combinatorics.version>
+        <combinatorics.version>1.0.1-SNAPSHOT</combinatorics.version>
         <benchmark.version>1.0.0</benchmark.version>
         <collection.version>1.0.0-SNAPSHOT</collection.version>
     </properties>
