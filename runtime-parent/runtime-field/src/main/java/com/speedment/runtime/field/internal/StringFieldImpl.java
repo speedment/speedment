@@ -174,7 +174,7 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
 
     @Override
     public Predicate<ENTITY> equalIgnoreCase(String value) {
-        return new StringEqualIgnoreCasePredicate<>(this, value);
+        return new StringEqualIgnoreCasePredicate<>(this, value.toLowerCase());
     }
 
     @Override
@@ -199,16 +199,16 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
 
     @Override
     public Predicate<ENTITY> startsWithIgnoreCase(String value) {
-        return new StringStartsWithIgnoreCasePredicate<>(this, value);
+        return new StringStartsWithIgnoreCasePredicate<>(this, value.toLowerCase());
     }
 
     @Override
     public Predicate<ENTITY> endsWithIgnoreCase(String value) {
-        return new StringEndsWithIgnoreCasePredicate<>(this, value);
+        return new StringEndsWithIgnoreCasePredicate<>(this, value.toLowerCase());
     }
 
     @Override
     public Predicate<ENTITY> containsIgnoreCase(String value) {
-        return new StringContainsIgnoreCasePredicate<>(this, value);
+        return new StringContainsIgnoreCasePredicate<>(this, value.toLowerCase());
     }
 }

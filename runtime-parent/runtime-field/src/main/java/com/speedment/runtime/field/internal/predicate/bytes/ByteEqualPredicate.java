@@ -30,16 +30,12 @@ import com.speedment.runtime.field.trait.HasByteValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class ByteEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Byte, HasByteValue<ENTITY, D>> implements Tuple1<Byte> {
+public final class ByteEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasByteValue<ENTITY, D>> implements Tuple1<Byte> {
     
     private final byte value;
     
     public ByteEqualPredicate(HasByteValue<ENTITY, D> field, byte value) {
-        this(field, value, false);
-    }
-    
-    ByteEqualPredicate(HasByteValue<ENTITY, D> field, byte value, boolean negated) {
-        super(PredicateType.EQUAL, field, entity -> field.getAsByte(entity) == value, negated);
+        super(PredicateType.EQUAL, field, entity -> field.getAsByte(entity) == value);
         this.value = value;
     }
     
@@ -49,7 +45,7 @@ public final class ByteEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<
     }
     
     @Override
-    public ByteEqualPredicate<ENTITY, D> negate() {
-        return new ByteEqualPredicate<>(getField(), value, !isNegated());
+    public ByteNotEqualPredicate<ENTITY, D> negate() {
+        return new ByteNotEqualPredicate<>(getField(), value);
     }
 }

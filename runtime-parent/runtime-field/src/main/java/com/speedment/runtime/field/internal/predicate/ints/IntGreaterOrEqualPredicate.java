@@ -30,16 +30,12 @@ import com.speedment.runtime.field.trait.HasIntValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class IntGreaterOrEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Integer, HasIntValue<ENTITY, D>> implements Tuple1<Integer> {
+public final class IntGreaterOrEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasIntValue<ENTITY, D>> implements Tuple1<Integer> {
     
     private final int value;
     
     public IntGreaterOrEqualPredicate(HasIntValue<ENTITY, D> field, int value) {
-        this(field, value, false);
-    }
-    
-    IntGreaterOrEqualPredicate(HasIntValue<ENTITY, D> field, int value, boolean negated) {
-        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsInt(entity) >= value, negated);
+        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsInt(entity) >= value);
         this.value = value;
     }
     
@@ -49,7 +45,7 @@ public final class IntGreaterOrEqualPredicate<ENTITY, D> extends AbstractFieldPr
     }
     
     @Override
-    public IntGreaterOrEqualPredicate<ENTITY, D> negate() {
-        return new IntGreaterOrEqualPredicate<>(getField(), value, !isNegated());
+    public IntLessThanPredicate<ENTITY, D> negate() {
+        return new IntLessThanPredicate<>(getField(), value);
     }
 }

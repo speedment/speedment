@@ -30,16 +30,12 @@ import com.speedment.runtime.field.trait.HasLongValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class LongGreaterOrEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Long, HasLongValue<ENTITY, D>> implements Tuple1<Long> {
+public final class LongGreaterOrEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasLongValue<ENTITY, D>> implements Tuple1<Long> {
     
     private final long value;
     
     public LongGreaterOrEqualPredicate(HasLongValue<ENTITY, D> field, long value) {
-        this(field, value, false);
-    }
-    
-    LongGreaterOrEqualPredicate(HasLongValue<ENTITY, D> field, long value, boolean negated) {
-        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsLong(entity) >= value, negated);
+        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsLong(entity) >= value);
         this.value = value;
     }
     
@@ -49,7 +45,7 @@ public final class LongGreaterOrEqualPredicate<ENTITY, D> extends AbstractFieldP
     }
     
     @Override
-    public LongGreaterOrEqualPredicate<ENTITY, D> negate() {
-        return new LongGreaterOrEqualPredicate<>(getField(), value, !isNegated());
+    public LongLessThanPredicate<ENTITY, D> negate() {
+        return new LongLessThanPredicate<>(getField(), value);
     }
 }

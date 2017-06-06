@@ -30,16 +30,12 @@ import com.speedment.runtime.field.trait.HasCharValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class CharGreaterThanPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Character, HasCharValue<ENTITY, D>> implements Tuple1<Character> {
+public final class CharGreaterThanPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasCharValue<ENTITY, D>> implements Tuple1<Character> {
     
     private final char value;
     
     public CharGreaterThanPredicate(HasCharValue<ENTITY, D> field, char value) {
-        this(field, value, false);
-    }
-    
-    CharGreaterThanPredicate(HasCharValue<ENTITY, D> field, char value, boolean negated) {
-        super(PredicateType.GREATER_THAN, field, entity -> field.getAsChar(entity) > value, negated);
+        super(PredicateType.GREATER_THAN, field, entity -> field.getAsChar(entity) > value);
         this.value = value;
     }
     
@@ -49,7 +45,7 @@ public final class CharGreaterThanPredicate<ENTITY, D> extends AbstractFieldPred
     }
     
     @Override
-    public CharGreaterThanPredicate<ENTITY, D> negate() {
-        return new CharGreaterThanPredicate<>(getField(), value, !isNegated());
+    public CharLessOrEqualPredicate<ENTITY, D> negate() {
+        return new CharLessOrEqualPredicate<>(getField(), value);
     }
 }

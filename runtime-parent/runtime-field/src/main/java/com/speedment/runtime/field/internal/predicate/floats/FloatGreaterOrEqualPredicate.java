@@ -30,16 +30,12 @@ import com.speedment.runtime.field.trait.HasFloatValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class FloatGreaterOrEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Float, HasFloatValue<ENTITY, D>> implements Tuple1<Float> {
+public final class FloatGreaterOrEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasFloatValue<ENTITY, D>> implements Tuple1<Float> {
     
     private final float value;
     
     public FloatGreaterOrEqualPredicate(HasFloatValue<ENTITY, D> field, float value) {
-        this(field, value, false);
-    }
-    
-    FloatGreaterOrEqualPredicate(HasFloatValue<ENTITY, D> field, float value, boolean negated) {
-        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsFloat(entity) >= value, negated);
+        super(PredicateType.GREATER_OR_EQUAL, field, entity -> field.getAsFloat(entity) >= value);
         this.value = value;
     }
     
@@ -49,7 +45,7 @@ public final class FloatGreaterOrEqualPredicate<ENTITY, D> extends AbstractField
     }
     
     @Override
-    public FloatGreaterOrEqualPredicate<ENTITY, D> negate() {
-        return new FloatGreaterOrEqualPredicate<>(getField(), value, !isNegated());
+    public FloatLessThanPredicate<ENTITY, D> negate() {
+        return new FloatLessThanPredicate<>(getField(), value);
     }
 }

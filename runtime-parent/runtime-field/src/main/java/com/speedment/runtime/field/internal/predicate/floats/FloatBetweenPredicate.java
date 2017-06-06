@@ -35,18 +35,17 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class FloatBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Float, HasFloatValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Float, Float> {
+public final class FloatBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasFloatValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Float, Float> {
     
     private final float start;
     private final float end;
     private final Inclusion inclusion;
     
-    FloatBetweenPredicate(
+    public FloatBetweenPredicate(
             HasFloatValue<ENTITY, D> field,
             float start,
             float end,
-            Inclusion inclusion,
-            boolean negated) {
+            Inclusion inclusion) {
         super(PredicateType.BETWEEN, field, entity -> {
             final float fieldValue = field.getAsFloat(entity);
             
@@ -65,19 +64,11 @@ public final class FloatBetweenPredicate<ENTITY, D> extends AbstractFieldPredica
                 
                 default : throw new IllegalStateException("Inclusion unknown: " + inclusion);
             }
-        }, negated);
+        });
         
         this.start     = start;
         this.end       = end;
         this.inclusion = requireNonNull(inclusion);
-    }
-    
-    public FloatBetweenPredicate(
-            HasFloatValue<ENTITY, D> field,
-            float start,
-            float end,
-            Inclusion inclusion) {
-        this(field, start, end, inclusion, false);
     }
     
     @Override
@@ -96,7 +87,7 @@ public final class FloatBetweenPredicate<ENTITY, D> extends AbstractFieldPredica
     }
     
     @Override
-    public FloatBetweenPredicate<ENTITY, D> negate() {
-        return new FloatBetweenPredicate<>(getField(), start, end, inclusion, !isNegated());
+    public FloatNotBetweenPredicate<ENTITY, D> negate() {
+        return new FloatNotBetweenPredicate<>(getField(), start, end, inclusion);
     }
 }

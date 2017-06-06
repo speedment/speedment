@@ -35,18 +35,17 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class ByteBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Byte, HasByteValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Byte, Byte> {
+public final class ByteBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasByteValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Byte, Byte> {
     
     private final byte start;
     private final byte end;
     private final Inclusion inclusion;
     
-    ByteBetweenPredicate(
+    public ByteBetweenPredicate(
             HasByteValue<ENTITY, D> field,
             byte start,
             byte end,
-            Inclusion inclusion,
-            boolean negated) {
+            Inclusion inclusion) {
         super(PredicateType.BETWEEN, field, entity -> {
             final byte fieldValue = field.getAsByte(entity);
             
@@ -65,19 +64,11 @@ public final class ByteBetweenPredicate<ENTITY, D> extends AbstractFieldPredicat
                 
                 default : throw new IllegalStateException("Inclusion unknown: " + inclusion);
             }
-        }, negated);
+        });
         
         this.start     = start;
         this.end       = end;
         this.inclusion = requireNonNull(inclusion);
-    }
-    
-    public ByteBetweenPredicate(
-            HasByteValue<ENTITY, D> field,
-            byte start,
-            byte end,
-            Inclusion inclusion) {
-        this(field, start, end, inclusion, false);
     }
     
     @Override
@@ -96,7 +87,7 @@ public final class ByteBetweenPredicate<ENTITY, D> extends AbstractFieldPredicat
     }
     
     @Override
-    public ByteBetweenPredicate<ENTITY, D> negate() {
-        return new ByteBetweenPredicate<>(getField(), start, end, inclusion, !isNegated());
+    public ByteNotBetweenPredicate<ENTITY, D> negate() {
+        return new ByteNotBetweenPredicate<>(getField(), start, end, inclusion);
     }
 }

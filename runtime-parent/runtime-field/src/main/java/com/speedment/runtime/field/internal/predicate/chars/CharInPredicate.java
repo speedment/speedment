@@ -34,16 +34,12 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class CharInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Character, HasCharValue<ENTITY, D>> implements Tuple1<Set<Character>> {
+public final class CharInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasCharValue<ENTITY, D>> implements Tuple1<Set<Character>> {
     
     private final Set<Character> set;
     
     public CharInPredicate(HasCharValue<ENTITY, D> field, Set<Character> set) {
-        this(field, set, false);
-    }
-    
-    CharInPredicate(HasCharValue<ENTITY, D> field, Set<Character> set, boolean negated) {
-        super(PredicateType.IN, field, entity -> set.contains(field.getAsChar(entity)), negated);
+        super(PredicateType.IN, field, entity -> set.contains(field.getAsChar(entity)));
         this.set = requireNonNull(set);
     }
     
@@ -53,7 +49,7 @@ public final class CharInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENT
     }
     
     @Override
-    public CharInPredicate<ENTITY, D> negate() {
-        return new CharInPredicate<>(getField(), set, !isNegated());
+    public CharNotInPredicate<ENTITY, D> negate() {
+        return new CharNotInPredicate<>(getField(), set);
     }
 }

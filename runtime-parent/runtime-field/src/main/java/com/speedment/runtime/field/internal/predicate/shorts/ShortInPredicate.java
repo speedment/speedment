@@ -34,16 +34,12 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class ShortInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Short, HasShortValue<ENTITY, D>> implements Tuple1<Set<Short>> {
+public final class ShortInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasShortValue<ENTITY, D>> implements Tuple1<Set<Short>> {
     
     private final Set<Short> set;
     
     public ShortInPredicate(HasShortValue<ENTITY, D> field, Set<Short> set) {
-        this(field, set, false);
-    }
-    
-    ShortInPredicate(HasShortValue<ENTITY, D> field, Set<Short> set, boolean negated) {
-        super(PredicateType.IN, field, entity -> set.contains(field.getAsShort(entity)), negated);
+        super(PredicateType.IN, field, entity -> set.contains(field.getAsShort(entity)));
         this.set = requireNonNull(set);
     }
     
@@ -53,7 +49,7 @@ public final class ShortInPredicate<ENTITY, D> extends AbstractFieldPredicate<EN
     }
     
     @Override
-    public ShortInPredicate<ENTITY, D> negate() {
-        return new ShortInPredicate<>(getField(), set, !isNegated());
+    public ShortNotInPredicate<ENTITY, D> negate() {
+        return new ShortNotInPredicate<>(getField(), set);
     }
 }

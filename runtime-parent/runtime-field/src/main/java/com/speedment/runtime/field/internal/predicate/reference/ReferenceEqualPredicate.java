@@ -18,9 +18,11 @@ package com.speedment.runtime.field.internal.predicate.reference;
 
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
-import static com.speedment.runtime.field.predicate.PredicateType.EQUAL;
 import com.speedment.runtime.field.trait.HasReferenceValue;
+
 import java.util.Objects;
+
+import static com.speedment.runtime.field.predicate.PredicateType.EQUAL;
 
 /**
  *
@@ -32,17 +34,13 @@ import java.util.Objects;
  * @since   2.2.0
  */
 public final class ReferenceEqualPredicate<ENTITY, D, V extends Comparable<? super V>>
-        extends AbstractFieldPredicate<ENTITY, V, HasReferenceValue<ENTITY, D, V>>
-        implements Tuple1<V> {
+extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
+implements Tuple1<V> {
 
     private final V value;
-    
+
     public ReferenceEqualPredicate(HasReferenceValue<ENTITY, D, V> field, V value) {
-        this(field, value, false);
-    }
-    
-    ReferenceEqualPredicate(HasReferenceValue<ENTITY, D, V> field, V value, boolean negated) {
-        super(EQUAL, field, entity -> Objects.equals(field.get(entity), value), negated);
+        super(EQUAL, field, entity -> Objects.equals(field.get(entity), value));
         this.value = value;
     }
 
@@ -52,8 +50,8 @@ public final class ReferenceEqualPredicate<ENTITY, D, V extends Comparable<? sup
     }
 
     @Override
-    public ReferenceEqualPredicate<ENTITY, D, V> negate() {
-        return new ReferenceEqualPredicate<>(getField(), value, !isNegated());
+    public ReferenceNotEqualPredicate<ENTITY, D, V> negate() {
+        return new ReferenceNotEqualPredicate<>(getField(), value);
     }
      
 }

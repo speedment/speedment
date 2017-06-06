@@ -34,16 +34,12 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class ByteInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Byte, HasByteValue<ENTITY, D>> implements Tuple1<Set<Byte>> {
+public final class ByteInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasByteValue<ENTITY, D>> implements Tuple1<Set<Byte>> {
     
     private final Set<Byte> set;
     
     public ByteInPredicate(HasByteValue<ENTITY, D> field, Set<Byte> set) {
-        this(field, set, false);
-    }
-    
-    ByteInPredicate(HasByteValue<ENTITY, D> field, Set<Byte> set, boolean negated) {
-        super(PredicateType.IN, field, entity -> set.contains(field.getAsByte(entity)), negated);
+        super(PredicateType.IN, field, entity -> set.contains(field.getAsByte(entity)));
         this.set = requireNonNull(set);
     }
     
@@ -53,7 +49,7 @@ public final class ByteInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENT
     }
     
     @Override
-    public ByteInPredicate<ENTITY, D> negate() {
-        return new ByteInPredicate<>(getField(), set, !isNegated());
+    public ByteNotInPredicate<ENTITY, D> negate() {
+        return new ByteNotInPredicate<>(getField(), set);
     }
 }

@@ -34,16 +34,12 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class DoubleInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Double, HasDoubleValue<ENTITY, D>> implements Tuple1<Set<Double>> {
+public final class DoubleInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasDoubleValue<ENTITY, D>> implements Tuple1<Set<Double>> {
     
     private final Set<Double> set;
     
     public DoubleInPredicate(HasDoubleValue<ENTITY, D> field, Set<Double> set) {
-        this(field, set, false);
-    }
-    
-    DoubleInPredicate(HasDoubleValue<ENTITY, D> field, Set<Double> set, boolean negated) {
-        super(PredicateType.IN, field, entity -> set.contains(field.getAsDouble(entity)), negated);
+        super(PredicateType.IN, field, entity -> set.contains(field.getAsDouble(entity)));
         this.set = requireNonNull(set);
     }
     
@@ -53,7 +49,7 @@ public final class DoubleInPredicate<ENTITY, D> extends AbstractFieldPredicate<E
     }
     
     @Override
-    public DoubleInPredicate<ENTITY, D> negate() {
-        return new DoubleInPredicate<>(getField(), set, !isNegated());
+    public DoubleNotInPredicate<ENTITY, D> negate() {
+        return new DoubleNotInPredicate<>(getField(), set);
     }
 }

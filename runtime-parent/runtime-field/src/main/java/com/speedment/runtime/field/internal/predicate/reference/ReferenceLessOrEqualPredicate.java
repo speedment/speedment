@@ -18,7 +18,6 @@ package com.speedment.runtime.field.internal.predicate.reference;
 
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
-import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.trait.HasReferenceValue;
 
 import static com.speedment.runtime.field.predicate.PredicateType.LESS_OR_EQUAL;
@@ -33,16 +32,12 @@ import static com.speedment.runtime.field.predicate.PredicateType.LESS_OR_EQUAL;
  * @since   2.2.0
  */
 public final class ReferenceLessOrEqualPredicate<ENTITY, D, V extends Comparable<? super V>>
-        extends AbstractFieldPredicate<ENTITY, V, HasReferenceValue<ENTITY, D, V>>
-        implements Tuple1<V> {
+extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
+implements Tuple1<V> {
 
     private final V value;
-    
+
     public ReferenceLessOrEqualPredicate(HasReferenceValue<ENTITY, D, V> field, V value) {
-        this(field, value, false);
-    }
-    
-    ReferenceLessOrEqualPredicate(HasReferenceValue<ENTITY, D, V> field, V value, boolean negated) {
         super(LESS_OR_EQUAL, field, entity -> {
             final V fieldValue = field.get(entity);
             if (fieldValue == null && value == null) {
@@ -50,7 +45,7 @@ public final class ReferenceLessOrEqualPredicate<ENTITY, D, V extends Comparable
             } else if (fieldValue == null || value == null) {
                 return false;
             } else return fieldValue.compareTo(value) <= 0;
-        }, negated);
+        });
         
         this.value = value;
     }
@@ -61,8 +56,7 @@ public final class ReferenceLessOrEqualPredicate<ENTITY, D, V extends Comparable
     }
 
     @Override
-    public ReferenceLessOrEqualPredicate<ENTITY, D, V> negate() {
-        return new ReferenceLessOrEqualPredicate<>(getField(), value, !isNegated());
+    public ReferenceGreaterThanPredicate<ENTITY, D, V> negate() {
+        return new ReferenceGreaterThanPredicate<>(getField(), value);
     }
-    
 }

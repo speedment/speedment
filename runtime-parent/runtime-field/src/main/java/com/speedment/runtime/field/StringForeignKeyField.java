@@ -40,7 +40,6 @@ import com.speedment.runtime.typemapper.TypeMapper;
  * @see  StringField
  * @see  HasFinder
  */
-
 public interface StringForeignKeyField<ENTITY, D, FK_ENTITY> 
 extends StringField<ENTITY, D>,
         HasNullableFinder<ENTITY, FK_ENTITY> {
