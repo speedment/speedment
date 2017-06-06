@@ -1,11 +1,8 @@
 package com.speedment.runtime.field.internal.util;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-import static java.util.Collections.emptySet;
-import static java.util.Collections.singleton;
+import static java.util.Collections.*;
 
 /**
  * Utility class for constructing temporary collections.
@@ -33,6 +30,30 @@ public final class CollectionUtil {
                 case 0  : return emptySet();
                 case 1  : return singleton(collection.iterator().next());
                 default : return new HashSet<>(collection);
+            }
+        }
+    }
+
+    /**
+     * Creates a copy of the specified list and adds the specified elements to
+     * it before returning it as an immutable list.
+     *
+     * @param <T>       the element type
+     * @param original  the original list
+     * @param element   elements to add
+     * @return          the new immutable list
+     */
+    @SafeVarargs
+    public static <T> List<T> copyAndAdd(List<T> original, T... element) {
+        switch (original.size() + element.length) {
+            case 0 : return emptyList();
+            case 1 : return singletonList(
+                original.isEmpty() ? element[0] : original.get(0)
+            );
+            default : {
+                final List<T> copy = new ArrayList<>(original);
+                addAll(copy, element);
+                return unmodifiableList(copy);
             }
         }
     }
