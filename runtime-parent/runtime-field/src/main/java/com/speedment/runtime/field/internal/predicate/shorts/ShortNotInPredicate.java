@@ -34,7 +34,9 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.11
  */
 @GeneratedCode(value = "Speedment")
-public final class ShortNotInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasShortValue<ENTITY, D>> implements Tuple1<Set<Short>> {
+public final class ShortNotInPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasShortValue<ENTITY, D>> 
+implements Tuple1<Set<Short>> {
     
     private final Set<Short> set;
     

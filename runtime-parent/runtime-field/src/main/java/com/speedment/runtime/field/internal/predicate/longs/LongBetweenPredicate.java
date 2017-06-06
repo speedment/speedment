@@ -35,7 +35,10 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class LongBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasLongValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Long, Long> {
+public final class LongBetweenPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasLongValue<ENTITY, D>> 
+implements BetweenPredicate,
+          Tuple2<Long, Long> {
     
     private final long start;
     private final long end;

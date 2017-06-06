@@ -30,7 +30,9 @@ import com.speedment.runtime.field.trait.HasDoubleValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class DoubleGreaterThanPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasDoubleValue<ENTITY, D>> implements Tuple1<Double> {
+public final class DoubleGreaterThanPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasDoubleValue<ENTITY, D>> 
+implements Tuple1<Double> {
     
     private final double value;
     

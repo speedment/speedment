@@ -34,7 +34,9 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.11
  */
 @GeneratedCode(value = "Speedment")
-public final class CharNotInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasCharValue<ENTITY, D>> implements Tuple1<Set<Character>> {
+public final class CharNotInPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasCharValue<ENTITY, D>> 
+implements Tuple1<Set<Character>> {
     
     private final Set<Character> set;
     

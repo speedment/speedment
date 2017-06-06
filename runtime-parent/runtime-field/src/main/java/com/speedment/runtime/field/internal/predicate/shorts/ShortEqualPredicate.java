@@ -30,7 +30,9 @@ import com.speedment.runtime.field.trait.HasShortValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class ShortEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasShortValue<ENTITY, D>> implements Tuple1<Short> {
+public final class ShortEqualPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasShortValue<ENTITY, D>> 
+implements Tuple1<Short> {
     
     private final short value;
     

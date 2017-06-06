@@ -30,7 +30,9 @@ import com.speedment.runtime.field.trait.HasFloatValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class FloatLessThanPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasFloatValue<ENTITY, D>> implements Tuple1<Float> {
+public final class FloatLessThanPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasFloatValue<ENTITY, D>> 
+implements Tuple1<Float> {
     
     private final float value;
     

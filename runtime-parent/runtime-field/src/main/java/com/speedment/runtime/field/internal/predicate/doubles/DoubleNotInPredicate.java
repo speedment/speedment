@@ -34,7 +34,9 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.11
  */
 @GeneratedCode(value = "Speedment")
-public final class DoubleNotInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasDoubleValue<ENTITY, D>> implements Tuple1<Set<Double>> {
+public final class DoubleNotInPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasDoubleValue<ENTITY, D>> 
+implements Tuple1<Set<Double>> {
     
     private final Set<Double> set;
     

@@ -34,7 +34,9 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class LongInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasLongValue<ENTITY, D>> implements Tuple1<Set<Long>> {
+public final class LongInPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasLongValue<ENTITY, D>> 
+implements Tuple1<Set<Long>> {
     
     private final Set<Long> set;
     

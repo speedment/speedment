@@ -30,7 +30,9 @@ import com.speedment.runtime.field.trait.HasByteValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class ByteGreaterOrEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasByteValue<ENTITY, D>> implements Tuple1<Byte> {
+public final class ByteGreaterOrEqualPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasByteValue<ENTITY, D>> 
+implements Tuple1<Byte> {
     
     private final byte value;
     

@@ -32,7 +32,9 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class IntFieldComparatorImpl<ENTITY, D> extends AbstractFieldComparator<ENTITY> implements IntFieldComparator<ENTITY, D> {
+public final class IntFieldComparatorImpl<ENTITY, D> 
+extends AbstractFieldComparator<ENTITY> 
+implements IntFieldComparator<ENTITY, D> {
     
     private final HasIntValue<ENTITY, D> field;
     private final boolean reversed;

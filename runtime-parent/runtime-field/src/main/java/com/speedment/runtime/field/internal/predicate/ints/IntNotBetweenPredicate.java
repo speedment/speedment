@@ -35,7 +35,10 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.11
  */
 @GeneratedCode(value = "Speedment")
-public final class IntNotBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasIntValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Integer, Integer> {
+public final class IntNotBetweenPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasIntValue<ENTITY, D>> 
+implements BetweenPredicate,
+          Tuple2<Integer, Integer> {
     
     private final int start;
     private final int end;

@@ -30,7 +30,9 @@ import com.speedment.runtime.field.trait.HasIntValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class IntLessThanPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasIntValue<ENTITY, D>> implements Tuple1<Integer> {
+public final class IntLessThanPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasIntValue<ENTITY, D>> 
+implements Tuple1<Integer> {
     
     private final int value;
     

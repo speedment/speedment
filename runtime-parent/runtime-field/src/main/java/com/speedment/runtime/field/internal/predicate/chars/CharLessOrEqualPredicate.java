@@ -30,7 +30,9 @@ import com.speedment.runtime.field.trait.HasCharValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class CharLessOrEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasCharValue<ENTITY, D>> implements Tuple1<Character> {
+public final class CharLessOrEqualPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasCharValue<ENTITY, D>> 
+implements Tuple1<Character> {
     
     private final char value;
     

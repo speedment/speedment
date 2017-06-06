@@ -34,7 +34,9 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.11
  */
 @GeneratedCode(value = "Speedment")
-public final class FloatNotInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, HasFloatValue<ENTITY, D>> implements Tuple1<Set<Float>> {
+public final class FloatNotInPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasFloatValue<ENTITY, D>> 
+implements Tuple1<Set<Float>> {
     
     private final Set<Float> set;
     

@@ -32,7 +32,9 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class CharFieldComparatorImpl<ENTITY, D> extends AbstractFieldComparator<ENTITY> implements CharFieldComparator<ENTITY, D> {
+public final class CharFieldComparatorImpl<ENTITY, D> 
+extends AbstractFieldComparator<ENTITY> 
+implements CharFieldComparator<ENTITY, D> {
     
     private final HasCharValue<ENTITY, D> field;
     private final boolean reversed;
