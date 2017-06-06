@@ -19,7 +19,7 @@ package com.speedment.runtime.core.internal.manager.sql;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
 import com.speedment.runtime.field.Field;
-import static com.speedment.runtime.field.internal.predicate.PredicateUtil.*;
+import static com.speedment.runtime.field.util.PredicateOperandUtil.*;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
