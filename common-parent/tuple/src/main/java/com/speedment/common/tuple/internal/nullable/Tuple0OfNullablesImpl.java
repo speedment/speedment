@@ -27,7 +27,9 @@ import java.util.Optional;
  * 
  * @author Per Minborg
  */
-public final class Tuple0OfNullablesImpl extends AbstractTupleOfNullables implements Tuple0OfNullables {
+public final class Tuple0OfNullablesImpl 
+extends AbstractTupleOfNullables 
+implements Tuple0OfNullables {
     
     public final static Tuple0OfNullables EMPTY_TUPLE = new Tuple0OfNullablesImpl();
     

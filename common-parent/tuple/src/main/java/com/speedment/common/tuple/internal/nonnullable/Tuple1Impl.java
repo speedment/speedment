@@ -27,7 +27,9 @@ import com.speedment.common.tuple.internal.AbstractTuple;
  * 
  * @author Per Minborg
  */
-public final class Tuple1Impl<T0> extends AbstractTuple implements Tuple1<T0> {
+public final class Tuple1Impl<T0> 
+extends AbstractTuple 
+implements Tuple1<T0> {
     
     /**
      * Constructs a {@link Tuple } of type {@link Tuple1 }.

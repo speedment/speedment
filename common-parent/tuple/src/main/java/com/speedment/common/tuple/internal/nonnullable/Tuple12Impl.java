@@ -38,7 +38,9 @@ import com.speedment.common.tuple.internal.AbstractTuple;
  * 
  * @author Per Minborg
  */
-public final class Tuple12Impl<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> extends AbstractTuple implements Tuple12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> {
+public final class Tuple12Impl<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> 
+extends AbstractTuple 
+implements Tuple12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> {
     
     /**
      * Constructs a {@link Tuple } of type {@link Tuple12 }.

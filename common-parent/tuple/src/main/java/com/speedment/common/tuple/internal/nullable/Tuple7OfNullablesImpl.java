@@ -35,7 +35,9 @@ import java.util.Optional;
  * 
  * @author Per Minborg
  */
-public final class Tuple7OfNullablesImpl<T0, T1, T2, T3, T4, T5, T6> extends AbstractTupleOfNullables implements Tuple7OfNullables<T0, T1, T2, T3, T4, T5, T6> {
+public final class Tuple7OfNullablesImpl<T0, T1, T2, T3, T4, T5, T6> 
+extends AbstractTupleOfNullables 
+implements Tuple7OfNullables<T0, T1, T2, T3, T4, T5, T6> {
     
     /**
      * Constructs a {@link TupleOfNullables } of type {@link Tuple7OfNullables

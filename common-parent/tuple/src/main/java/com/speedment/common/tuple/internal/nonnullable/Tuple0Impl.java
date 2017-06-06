@@ -25,7 +25,9 @@ import com.speedment.common.tuple.internal.AbstractTuple;
  * 
  * @author Per Minborg
  */
-public final class Tuple0Impl extends AbstractTuple implements Tuple0 {
+public final class Tuple0Impl 
+extends AbstractTuple 
+implements Tuple0 {
     
     public final static Tuple0 EMPTY_TUPLE = new Tuple0Impl();
     
