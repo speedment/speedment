@@ -75,4 +75,9 @@ public final class MethodView implements Transform<Method, String>,
     public String throwsSuffix(Method model) {
         return model.getModifiers().contains(ABSTRACT) ? "" : " ";
     }
+
+    @Override
+    public boolean useTripleDot() {
+        return true;
+    }
 }

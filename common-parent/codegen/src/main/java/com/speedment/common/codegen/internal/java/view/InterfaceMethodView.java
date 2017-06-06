@@ -20,12 +20,14 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.internal.java.view.trait.*;
 import com.speedment.common.codegen.model.InterfaceMethod;
+
+import java.util.Optional;
+
 import static com.speedment.common.codegen.model.modifier.Modifier.DEFAULT;
 import static com.speedment.common.codegen.model.modifier.Modifier.STATIC;
 import static com.speedment.common.codegen.util.Formatting.nl;
 import static com.speedment.common.codegen.util.Formatting.tab;
 import static java.util.Objects.requireNonNull;
-import java.util.Optional;
 
 /**
  * Transforms from an {@link InterfaceMethod} to java code.
@@ -80,5 +82,10 @@ implements Transform<InterfaceMethod, String>,
         return (model.getModifiers().contains(DEFAULT)
              || model.getModifiers().contains(STATIC))
             ? " " : "";
+    }
+
+    @Override
+    public boolean useTripleDot() {
+        return true;
     }
 }
