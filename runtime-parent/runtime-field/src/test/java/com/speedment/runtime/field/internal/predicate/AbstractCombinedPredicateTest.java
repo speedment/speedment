@@ -175,17 +175,4 @@ public class AbstractCombinedPredicateTest {
             assertEquals(expected, actual);
         }
     }
-
-    @Test
-    public void testToString() {
-        CombinedPredicate<Integer> p = CombinedPredicate.and(MOD2, MOD4);
-        p = p.and(MOD8).negate();
-        final String toString = p.toString();
-        System.out.println(toString);
-        assertTrue(toString.contains("negated=true"));
-        assertTrue(toString.contains("MOD2"));
-        assertTrue(toString.contains("MOD4"));
-        assertTrue(toString.contains("MOD8"));
-        assertTrue(toString.contains("type=AND"));
-    }
 }
