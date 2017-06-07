@@ -268,11 +268,7 @@ public final class StreamTerminatorUtil {
                     castedInternalPredicate
                 );
             });
-            if (combinedPredicate.isNegated()) {
-                sql.append("(NOT (").append(internalSql).append("))");
-            } else {
-                sql.append("(").append(internalSql).append(")");
-            }
+            sql.append("(").append(internalSql).append(")");
             values.addAll(internalValues);
         } else {
             throw new IllegalArgumentException("A predicate that is not instanceof FieldPredicate was given:" + predicate.toString());

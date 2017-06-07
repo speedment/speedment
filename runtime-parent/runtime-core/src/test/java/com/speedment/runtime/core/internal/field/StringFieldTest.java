@@ -21,6 +21,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static com.speedment.runtime.core.internal.field.Entity.NAME;
+import static com.speedment.runtime.core.internal.util.AssertUtil.assertThrown;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -35,16 +36,18 @@ public class StringFieldTest extends BaseFieldTest {
         final List<Entity> result = collect(NAME.equalIgnoreCase("abcdef"));
 
         assertEquals(expected, result);
-        assertEquals(4, collect(NAME.equalIgnoreCase(null)).size());
+        assertEquals(4, collect(NAME.isNull()).size());
+        assertThrown(() -> collect(NAME.equalIgnoreCase(null)));
     }
 
     @Test
     public void notEqualIgnoreCase() throws Exception {
-        final List<Entity> expected = collect(e -> e.getName() == null || !e.getName().equalsIgnoreCase("abcdef"));
+        final List<Entity> expected = collect(e -> e.getName() != null && !e.getName().equalsIgnoreCase("abcdef"));
         final List<Entity> result = collect(NAME.notEqualIgnoreCase("abcdef"));
 
         assertEquals(expected, result);
-        assertEquals(25, collect(NAME.notEqualIgnoreCase(null)).size());
+        assertEquals(25, collect(NAME.isNotNull()).size());
+        assertThrown(() -> collect(NAME.notEqualIgnoreCase(null)));
     }
 
     @Test
@@ -59,7 +62,7 @@ public class StringFieldTest extends BaseFieldTest {
         printList("startswith result", result);
 
         assertEquals(expected, result);
-        assertEquals(0, collect(NAME.startsWith(null)).size());
+        assertThrown(() -> collect(NAME.startsWith(null)));
     }
 
     @Test
@@ -72,7 +75,7 @@ public class StringFieldTest extends BaseFieldTest {
         printList("endswith result", result);
 
         assertEquals(expected, result);
-        assertEquals(0, collect(NAME.endsWith(null)).size());
+        assertThrown(() -> collect(NAME.endsWith(null)));
     }
 
     @Test
@@ -85,7 +88,7 @@ public class StringFieldTest extends BaseFieldTest {
         printList("contains result", result);
 
         assertEquals(expected, result);
-        assertEquals(0, collect(NAME.contains(null)).size());
+        assertThrown(() -> collect(NAME.contains(null)));
     }
 
     @Test

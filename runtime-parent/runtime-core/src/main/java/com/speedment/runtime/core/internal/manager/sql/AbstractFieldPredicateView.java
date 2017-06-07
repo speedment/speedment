@@ -19,14 +19,16 @@ package com.speedment.runtime.core.internal.manager.sql;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
 import com.speedment.runtime.field.Field;
-import static com.speedment.runtime.field.util.PredicateOperandUtil.*;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
+
 import java.util.Collection;
-import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.function.Function;
+
+import static com.speedment.runtime.field.util.PredicateOperandUtil.*;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -63,11 +65,11 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
     }
 
     protected <ENTITY> SqlPredicateFragment render(
-        final Function<Field<ENTITY>, String> columnNamer,
-        final Function<Field<ENTITY>, Class<?>> columnDbTypeFunction,
-        final FieldPredicate<ENTITY> predicate
-    ) {
-        final PredicateType pt = predicate.getEffectivePredicateType();
+            final Function<Field<ENTITY>, String> columnNamer,
+            final Function<Field<ENTITY>, Class<?>> columnDbTypeFunction,
+            final FieldPredicate<ENTITY> predicate) {
+
+        final PredicateType pt = predicate.getPredicateType();
 
         final Field<ENTITY> f = predicate.getField();
         final String cn = columnNamer.apply(f);
