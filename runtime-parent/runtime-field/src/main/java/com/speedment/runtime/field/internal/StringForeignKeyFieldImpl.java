@@ -61,12 +61,12 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
     private final boolean unique;
 
     public StringForeignKeyFieldImpl(
-        ColumnIdentifier<ENTITY> identifier,
-        ReferenceGetter<ENTITY, String> getter,
-        ReferenceSetter<ENTITY, String> setter,
-        StringField<FK_ENTITY, D> referenced,
-        TypeMapper<D, String> typeMapper,
-        boolean unique) {
+            ColumnIdentifier<ENTITY> identifier,
+            ReferenceGetter<ENTITY, String> getter,
+            ReferenceSetter<ENTITY, String> setter,
+            StringField<FK_ENTITY, D> referenced,
+            TypeMapper<D, String> typeMapper,
+            boolean unique) {
 
         this.identifier = requireNonNull(identifier);
         this.getter = requireNonNull(getter);
@@ -167,71 +167,89 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
 
     @Override
     public FieldPredicate<ENTITY> equal(String value) {
+        requireNonNull(value);
         return new ReferenceEqualPredicate<>(this, value);
     }
 
     @Override
     public Predicate<ENTITY> greaterThan(String value) {
+        requireNonNull(value);
         return new ReferenceGreaterThanPredicate<>(this, value);
     }
 
     @Override
     public Predicate<ENTITY> greaterOrEqual(String value) {
+        requireNonNull(value);
         return new ReferenceGreaterOrEqualPredicate<>(this, value);
     }
 
     @Override
     public Predicate<ENTITY> between(String start, String end, Inclusion inclusion) {
+        requireNonNull(start);
+        requireNonNull(end);
+        requireNonNull(inclusion);
         return new ReferenceBetweenPredicate<>(this, start, end, inclusion);
     }
 
     @Override
     public Predicate<ENTITY> in(Collection<String> values) {
+        requireNonNull(values);
         return new ReferenceInPredicate<>(this, collectionToSet(values));
     }
 
     @Override
     public Predicate<ENTITY> notEqual(String value) {
+        requireNonNull(value);
         return new ReferenceNotEqualPredicate<>(this, value);
     }
 
     @Override
     public Predicate<ENTITY> lessThan(String value) {
+        requireNonNull(value);
         return new ReferenceLessThanPredicate<>(this, value);
     }
 
     @Override
     public Predicate<ENTITY> lessOrEqual(String value) {
+        requireNonNull(value);
         return new ReferenceLessOrEqualPredicate<>(this, value);
     }
 
     @Override
     public Predicate<ENTITY> notBetween(String start, String end, Inclusion inclusion) {
+        requireNonNull(start);
+        requireNonNull(end);
+        requireNonNull(inclusion);
         return new ReferenceNotBetweenPredicate<>(this, start, end, inclusion);
     }
 
     @Override
     public Predicate<ENTITY> notIn(Collection<String> values) {
+        requireNonNull(values);
         return new ReferenceNotInPredicate<>(this, collectionToSet(values));
     }
 
     @Override
     public Predicate<ENTITY> equalIgnoreCase(String value) {
+        requireNonNull(value);
         return new StringEqualIgnoreCasePredicate<>(this, value.toLowerCase());
     }
 
     @Override
     public Predicate<ENTITY> startsWith(String value) {
+        requireNonNull(value);
         return new StringStartsWithPredicate<>(this, value);
     }
 
     @Override
     public Predicate<ENTITY> endsWith(String value) {
+        requireNonNull(value);
         return new StringEndsWithPredicate<>(this, value);
     }
 
     @Override
     public Predicate<ENTITY> contains(String value) {
+        requireNonNull(value);
         return new StringContainsPredicate<>(this, value);
     }
 
@@ -242,16 +260,19 @@ public final class StringForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements
 
     @Override
     public Predicate<ENTITY> startsWithIgnoreCase(String value) {
+        requireNonNull(value);
         return new StringStartsWithIgnoreCasePredicate<>(this, value.toLowerCase());
     }
 
     @Override
     public Predicate<ENTITY> endsWithIgnoreCase(String value) {
+        requireNonNull(value);
         return new StringEndsWithIgnoreCasePredicate<>(this, value.toLowerCase());
     }
 
     @Override
     public Predicate<ENTITY> containsIgnoreCase(String value) {
+        requireNonNull(value);
         return new StringContainsIgnoreCasePredicate<>(this, value.toLowerCase());
     }
 }
