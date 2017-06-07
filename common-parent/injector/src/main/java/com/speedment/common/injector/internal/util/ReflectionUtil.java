@@ -27,30 +27,30 @@ import java.util.stream.Stream;
 
 /**
  * Some common utility methods for analyzing classes with reflection.
- * 
- * @author  Emil Forslund
- * @since   1.0.0
+ *
+ * @author Emil Forslund
+ * @since 1.0.0
  */
 public final class ReflectionUtil {
-    
+
     public static Stream<Field> traverseFields(Class<?> clazz) {
         final Class<?> parent = clazz.getSuperclass();
         final Stream<Field> inherited;
-        
+
         if (parent != null) {
             inherited = traverseFields(parent);
         } else {
             inherited = Stream.empty();
         }
-        
+
         return Stream.concat(inherited, Stream.of(clazz.getDeclaredFields()));
     }
-    
+
     public static Stream<Method> traverseMethods(Class<?> clazz) {
         return traverseAncestors(clazz)
             .flatMap(c -> Stream.of(c.getDeclaredMethods()));
     }
-    
+
     public static Stream<Class<?>> traverseAncestors(Class<?> clazz) {
         if (clazz.getSuperclass() == null) { // We have reached Object.class
             return Stream.of(clazz);
@@ -58,15 +58,15 @@ public final class ReflectionUtil {
             return Stream.concat(
                 Stream.of(clazz),
                 Stream.concat(
-                    traverseAncestors(clazz.getSuperclass()), 
+                    traverseAncestors(clazz.getSuperclass()),
                     Stream.of(clazz.getInterfaces())
                 )
             ).distinct();
         }
     }
-    
-    public static <T> T newInstance(Class<T> type, Properties properties) 
-    throws InstantiationException, NoDefaultConstructorException {
+
+    public static <T> T newInstance(Class<T> type, Properties properties)
+        throws InstantiationException, NoDefaultConstructorException {
         try {
             final Constructor<T> constr = type.getDeclaredConstructor();
             constr.setAccessible(true);
@@ -78,17 +78,17 @@ public final class ReflectionUtil {
 
         } catch (final NoSuchMethodException ex) {
             throw new NoDefaultConstructorException(
-                "Could not find any default constructor for class '" + 
-                type.getName() + "'.", ex
+                "Could not find any default constructor for class '"
+                + type.getName() + "'.", ex
             );
 
-        } catch (final IllegalAccessException 
-                     | IllegalArgumentException 
-                     | InvocationTargetException ex) {
+        } catch (final IllegalAccessException
+            | IllegalArgumentException
+            | InvocationTargetException ex) {
 
-            throw new RuntimeException(ex);
+            throw new RuntimeException("Unable to create class '" + type.getName() + "'", ex);
         }
     }
-    
+
     private ReflectionUtil() {}
 }

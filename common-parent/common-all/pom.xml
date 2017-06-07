@@ -46,7 +46,7 @@
         <logger.version>1.0.4</logger.version>
         <codegen.version>2.4.8-SNAPSHOT</codegen.version>
         <codegenxml.version>1.0.2</codegenxml.version>
-        <injector.version>1.2.0</injector.version>
+        <injector.version>1.2.1-SNAPSHOT</injector.version>
         <rest.version>1.0.4</rest.version>
         <lazy.version>1.0.3</lazy.version>
         <mapstream.version>2.3.5</mapstream.version>
