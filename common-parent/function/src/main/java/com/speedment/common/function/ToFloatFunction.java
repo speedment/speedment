@@ -17,7 +17,7 @@
 package com.speedment.common.function;
 
 /**
- * A function that takes an object and returns a primitive {@code boolean}.
+ * A function that takes an object and returns a primitive {@code float}.
  * 
  * @param <T> argument type
  * 
@@ -25,7 +25,7 @@ package com.speedment.common.function;
  * @since  1.0.2
  */
 @FunctionalInterface
-public interface ToBooleanFunction<T> {
+public interface ToFloatFunction<T> {
     
     /**
      * Applies this function to the given argument.
@@ -33,5 +33,5 @@ public interface ToBooleanFunction<T> {
      * @param value the argument
      * @return      the result
      */
-    boolean applyAsBoolean(T value);
+    float applyAsFloat(T value);
 }

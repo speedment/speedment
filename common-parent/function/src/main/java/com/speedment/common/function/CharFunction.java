@@ -17,15 +17,15 @@
 package com.speedment.common.function;
 
 /**
- * A function that takes an object and returns a primitive {@code boolean}.
+ * A function that takes a primitive {@code char} and returns an object.
  * 
- * @param <T> argument type
+ * @param <T> return type
  * 
  * @author Emil Forslund
  * @since  1.0.2
  */
 @FunctionalInterface
-public interface ToBooleanFunction<T> {
+public interface CharFunction<T> {
     
     /**
      * Applies this function to the given argument.
@@ -33,5 +33,5 @@ public interface ToBooleanFunction<T> {
      * @param value the argument
      * @return      the result
      */
-    boolean applyAsBoolean(T value);
+    T apply(char value);
 }
