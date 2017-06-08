@@ -1,5 +1,6 @@
 package com.speedment.runtime.core.internal.stream;
 
+import com.speedment.runtime.core.db.SqlFunction;
 import org.junit.Test;
 
 import java.io.InputStream;
@@ -15,16 +16,19 @@ import static org.junit.Assert.*;
 
 /**
  * @author Emil Forslund
- * @since  3.0.11
+ * @since 3.0.11
  */
 public class ResultSetIteratorTest {
+
+    private static final SqlFunction<ResultSet, Integer> RS_MAPPER = rs -> rs.getInt(1);
+    private static final int SIZE = 33;
 
     @Test
     public void testZero() {
         final AtomicInteger counter = new AtomicInteger(0);
         final ResultSet rs = new MockResultSet(0);
-        final StreamUtil.ResultSetIterator<?> it =
-            new StreamUtil.ResultSetIterator<>(rs, $ -> counter.incrementAndGet());
+        final StreamUtil.ResultSetIterator<?> it
+            = new StreamUtil.ResultSetIterator<>(rs, $ -> counter.incrementAndGet());
 
         assertFalse(it.hasNext());
         assertEquals(0, counter.get());
@@ -36,8 +40,8 @@ public class ResultSetIteratorTest {
     public void testOne() {
         final AtomicInteger counter = new AtomicInteger(0);
         final ResultSet rs = new MockResultSet(1);
-        final StreamUtil.ResultSetIterator<?> it =
-            new StreamUtil.ResultSetIterator<>(rs, $ -> counter.incrementAndGet());
+        final StreamUtil.ResultSetIterator<?> it
+            = new StreamUtil.ResultSetIterator<>(rs, $ -> counter.incrementAndGet());
 
         assertTrue(it.hasNext());
         assertEquals(0, counter.get());
@@ -50,8 +54,8 @@ public class ResultSetIteratorTest {
     public void testTwo() {
         final AtomicInteger counter = new AtomicInteger(0);
         final ResultSet rs = new MockResultSet(2);
-        final StreamUtil.ResultSetIterator<?> it =
-            new StreamUtil.ResultSetIterator<>(rs, $ -> counter.incrementAndGet());
+        final StreamUtil.ResultSetIterator<?> it
+            = new StreamUtil.ResultSetIterator<>(rs, $ -> counter.incrementAndGet());
 
         assertTrue(it.hasNext());
         assertEquals(0, counter.get());
@@ -63,9 +67,46 @@ public class ResultSetIteratorTest {
         assertEquals(2, counter.get());
     }
 
+    @Test
+    public void testIterate() {
+        final ResultSet rs = new MockResultSet(SIZE);
+        final StreamUtil.ResultSetIterator<Integer> it
+            = new StreamUtil.ResultSetIterator<>(rs, RS_MAPPER);
+
+        for (int i = 0; i < SIZE; i++) {
+            assertTrue(it.hasNext());
+            assertEquals((Integer) (i + 1), it.next());
+        }
+        assertFalse(it.hasNext());
+    }
+
+    @Test
+    public void testForEachRemaining() {
+        for (int initialNext = 0; initialNext < SIZE; initialNext++) {
+            final ResultSet rs = new MockResultSet(SIZE);
+            final StreamUtil.ResultSetIterator<Integer> it
+                = new StreamUtil.ResultSetIterator<>(rs, RS_MAPPER);
+
+            AtomicInteger expected = new AtomicInteger(0);
+            for (int i = 0; i < initialNext; i++) {
+                assertTrue(it.hasNext());
+                assertEquals((Integer) expected.incrementAndGet(), it.next());
+            }
+
+            it.forEachRemaining(rsInt -> {
+                assertEquals((Integer) expected.incrementAndGet(), rsInt);
+            });
+
+            assertFalse(it.hasNext());
+
+        }
+    }
+
     private static final class MockResultSet implements ResultSet {
 
         private int itemsLeft;
+        private int itemsConsumed;
+        private boolean closed;
 
         MockResultSet(int itemsLeft) {
             this.itemsLeft = itemsLeft;
@@ -75,6 +116,7 @@ public class ResultSetIteratorTest {
         public boolean next() throws SQLException {
             if (itemsLeft > 0) {
                 itemsLeft--;
+                itemsConsumed++;
                 return true;
             } else if (itemsLeft == 0) {
                 itemsLeft--;
@@ -102,32 +144,32 @@ public class ResultSetIteratorTest {
 
         @Override
         public byte getByte(int columnIndex) throws SQLException {
-            return 0;
+            return (byte) itemsConsumed;
         }
 
         @Override
         public short getShort(int columnIndex) throws SQLException {
-            return 0;
+            return (short) itemsConsumed;
         }
 
         @Override
         public int getInt(int columnIndex) throws SQLException {
-            return 0;
+            return itemsConsumed;
         }
 
         @Override
         public long getLong(int columnIndex) throws SQLException {
-            return 0;
+            return itemsConsumed;
         }
 
         @Override
         public float getFloat(int columnIndex) throws SQLException {
-            return 0;
+            return (float) itemsConsumed;
         }
 
         @Override
         public double getDouble(int columnIndex) throws SQLException {
-            return 0;
+            return (double) itemsConsumed;
         }
 
         @Override
@@ -172,7 +214,7 @@ public class ResultSetIteratorTest {
 
         @Override
         public String getString(String columnLabel) throws SQLException {
-            return null;
+            return Integer.toString(itemsConsumed);
         }
 
         @Override
@@ -307,7 +349,7 @@ public class ResultSetIteratorTest {
 
         @Override
         public boolean isBeforeFirst() throws SQLException {
-            return false;
+            return itemsConsumed == 0;
         }
 
         @Override
@@ -317,7 +359,7 @@ public class ResultSetIteratorTest {
 
         @Override
         public boolean isFirst() throws SQLException {
-            return false;
+            return itemsConsumed == 1;
         }
 
         @Override
@@ -327,22 +369,22 @@ public class ResultSetIteratorTest {
 
         @Override
         public void beforeFirst() throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void afterLast() throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public boolean first() throws SQLException {
-            return false;
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public boolean last() throws SQLException {
-            return false;
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -362,7 +404,7 @@ public class ResultSetIteratorTest {
 
         @Override
         public boolean previous() throws SQLException {
-            return false;
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -412,227 +454,227 @@ public class ResultSetIteratorTest {
 
         @Override
         public void updateNull(int columnIndex) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateBoolean(int columnIndex, boolean x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateByte(int columnIndex, byte x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateShort(int columnIndex, short x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateInt(int columnIndex, int x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateLong(int columnIndex, long x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateFloat(int columnIndex, float x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateDouble(int columnIndex, double x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateBigDecimal(int columnIndex, BigDecimal x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateString(int columnIndex, String x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateBytes(int columnIndex, byte[] x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateDate(int columnIndex, Date x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateTime(int columnIndex, Time x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateTimestamp(int columnIndex, Timestamp x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateAsciiStream(int columnIndex, InputStream x, int length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateBinaryStream(int columnIndex, InputStream x, int length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateCharacterStream(int columnIndex, Reader x, int length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateObject(int columnIndex, Object x, int scaleOrLength) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateObject(int columnIndex, Object x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateNull(String columnLabel) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateBoolean(String columnLabel, boolean x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateByte(String columnLabel, byte x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateShort(String columnLabel, short x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateInt(String columnLabel, int x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateLong(String columnLabel, long x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateFloat(String columnLabel, float x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateDouble(String columnLabel, double x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateBigDecimal(String columnLabel, BigDecimal x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateString(String columnLabel, String x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateBytes(String columnLabel, byte[] x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateDate(String columnLabel, Date x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateTime(String columnLabel, Time x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateTimestamp(String columnLabel, Timestamp x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateAsciiStream(String columnLabel, InputStream x, int length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateBinaryStream(String columnLabel, InputStream x, int length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateCharacterStream(String columnLabel, Reader reader, int length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateObject(String columnLabel, Object x, int scaleOrLength) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateObject(String columnLabel, Object x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void insertRow() throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateRow() throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void deleteRow() throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void refreshRow() throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void cancelRowUpdates() throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void moveToInsertRow() throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void moveToCurrentRow() throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -642,7 +684,7 @@ public class ResultSetIteratorTest {
 
         @Override
         public Object getObject(int columnIndex, Map<String, Class<?>> map) throws SQLException {
-            return null;
+            return itemsConsumed;
         }
 
         @Override
@@ -732,42 +774,42 @@ public class ResultSetIteratorTest {
 
         @Override
         public void updateRef(int columnIndex, Ref x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateRef(String columnLabel, Ref x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateBlob(int columnIndex, Blob x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateBlob(String columnLabel, Blob x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateClob(int columnIndex, Clob x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateClob(String columnLabel, Clob x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateArray(int columnIndex, Array x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateArray(String columnLabel, Array x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -782,12 +824,12 @@ public class ResultSetIteratorTest {
 
         @Override
         public void updateRowId(int columnIndex, RowId x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateRowId(String columnLabel, RowId x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -797,7 +839,7 @@ public class ResultSetIteratorTest {
 
         @Override
         public boolean isClosed() throws SQLException {
-            return false;
+            return closed;
         }
 
         @Override
@@ -872,142 +914,142 @@ public class ResultSetIteratorTest {
 
         @Override
         public void updateNCharacterStream(int columnIndex, Reader x, long length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateNCharacterStream(String columnLabel, Reader reader, long length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateAsciiStream(int columnIndex, InputStream x, long length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateBinaryStream(int columnIndex, InputStream x, long length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateCharacterStream(int columnIndex, Reader x, long length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateAsciiStream(String columnLabel, InputStream x, long length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateBinaryStream(String columnLabel, InputStream x, long length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateCharacterStream(String columnLabel, Reader reader, long length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateBlob(int columnIndex, InputStream inputStream, long length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateBlob(String columnLabel, InputStream inputStream, long length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateClob(int columnIndex, Reader reader, long length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateClob(String columnLabel, Reader reader, long length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateNClob(int columnIndex, Reader reader, long length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateNClob(String columnLabel, Reader reader, long length) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateNCharacterStream(int columnIndex, Reader x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateNCharacterStream(String columnLabel, Reader reader) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateAsciiStream(int columnIndex, InputStream x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateBinaryStream(int columnIndex, InputStream x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateCharacterStream(int columnIndex, Reader x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateAsciiStream(String columnLabel, InputStream x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateBinaryStream(String columnLabel, InputStream x) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateCharacterStream(String columnLabel, Reader reader) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateBlob(int columnIndex, InputStream inputStream) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateBlob(String columnLabel, InputStream inputStream) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateClob(int columnIndex, Reader reader) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateClob(String columnLabel, Reader reader) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateNClob(int columnIndex, Reader reader) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
         public void updateNClob(String columnLabel, Reader reader) throws SQLException {
-
+            throw new UnsupportedOperationException();
         }
 
         @Override
@@ -1032,7 +1074,7 @@ public class ResultSetIteratorTest {
 
         @Override
         public void close() throws SQLException {
-
+            this.closed = true;
         }
     }
 
