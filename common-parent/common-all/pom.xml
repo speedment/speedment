@@ -40,7 +40,7 @@
     
     <properties>
         <invariant.version>1.0.1</invariant.version>
-        <function.version>1.0.1</function.version>
+        <function.version>1.0.2-SNAPSHOT</function.version>
         <json.version>1.0.3</json.version>
         <tuple.version>1.0.4</tuple.version>
         <logger.version>1.0.4</logger.version>
