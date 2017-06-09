@@ -34,7 +34,7 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment-parent</artifactId>
-    <version>3.0.11-SNAPSHOT</version>
+    <version>3.0.11</version>
     <packaging>pom</packaging>
     
     <!-- Project Metadata -->
@@ -429,6 +429,7 @@
                                 <exclude>nbproject/**</exclude>
                                 <exclude>src/main/java/com/company/sakila/db0/**</exclude>
                                 <exclude>/Users/pemi/Documents/orm/speedment/example-parent/basic-example/src/main/java/com/company/sakila/db0</exclude>
+                                <exclude>build.gradle</exclude>
                             </excludes>
                         </configuration>
 
