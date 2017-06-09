@@ -43,16 +43,19 @@ import static java.util.stream.Collectors.toSet;
 public final class MariaDbDbmsType extends AbstractDbmsType {
 
     public static InjectBundle include() {
-        return of(MySqlDbmsMetadataHandler.class, MariaDbDbmsOperationHandler.class);
+        return of(
+            MySqlDbmsMetadataHandler.class, 
+            MariaDbDbmsOperationHandler.class,
+            MySqlSpeedmentPredicateView.class
+        );
     }
 
-    private final static FieldPredicateView PREDICATE_VIEW = new MySqlSpeedmentPredicateView();
-    
     private final MariaDbNamingConvention namingConvention;
     private final MariaDbConnectionUrlGenerator connectionUrlGenerator;
 
-    private @Inject MySqlDbmsMetadataHandler metadataHandler;
-    private @Inject MariaDbDbmsOperationHandler operationHandler;
+    @Inject private MySqlDbmsMetadataHandler metadataHandler;
+    @Inject private MariaDbDbmsOperationHandler operationHandler;
+    @Inject private MySqlSpeedmentPredicateView fieldPredicateView;
 
     private MariaDbDbmsType() {
         namingConvention = new MariaDbNamingConvention();
@@ -106,7 +109,7 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
 
     @Override
     public FieldPredicateView getFieldPredicateView() {
-        return PREDICATE_VIEW;
+        return fieldPredicateView;
     }
 
     @Override
