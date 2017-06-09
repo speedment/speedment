@@ -22,6 +22,7 @@ import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.field.trait.HasFinder;
+import com.speedment.runtime.field.trait.HasNullableFinder;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 /**
@@ -41,8 +42,8 @@ import com.speedment.runtime.typemapper.TypeMapper;
  * @see  HasFinder
  */
 public interface ComparableForeignKeyField<ENTITY, D, V extends Comparable<? super V>, FK> 
-extends ComparableField<ENTITY, D, V>, 
-        HasFinder<ENTITY, FK> {
+extends ComparableField<ENTITY, D, V>,
+        HasNullableFinder<ENTITY, FK> {
 
     /**
      * Creates a new {@link ComparableField} using the default implementation. 

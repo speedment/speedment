@@ -35,18 +35,20 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class CharBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Character, HasCharValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Character, Character> {
+public final class CharBetweenPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasCharValue<ENTITY, D>> 
+implements BetweenPredicate,
+          Tuple2<Character, Character> {
     
     private final char start;
     private final char end;
     private final Inclusion inclusion;
     
-    CharBetweenPredicate(
+    public CharBetweenPredicate(
             HasCharValue<ENTITY, D> field,
             char start,
             char end,
-            Inclusion inclusion,
-            boolean negated) {
+            Inclusion inclusion) {
         super(PredicateType.BETWEEN, field, entity -> {
             final char fieldValue = field.getAsChar(entity);
             
@@ -65,19 +67,11 @@ public final class CharBetweenPredicate<ENTITY, D> extends AbstractFieldPredicat
                 
                 default : throw new IllegalStateException("Inclusion unknown: " + inclusion);
             }
-        }, negated);
+        });
         
         this.start     = start;
         this.end       = end;
         this.inclusion = requireNonNull(inclusion);
-    }
-    
-    public CharBetweenPredicate(
-            HasCharValue<ENTITY, D> field,
-            char start,
-            char end,
-            Inclusion inclusion) {
-        this(field, start, end, inclusion, false);
     }
     
     @Override
@@ -96,7 +90,7 @@ public final class CharBetweenPredicate<ENTITY, D> extends AbstractFieldPredicat
     }
     
     @Override
-    public CharBetweenPredicate<ENTITY, D> negate() {
-        return new CharBetweenPredicate<>(getField(), start, end, inclusion, !isNegated());
+    public CharNotBetweenPredicate<ENTITY, D> negate() {
+        return new CharNotBetweenPredicate<>(getField(), start, end, inclusion);
     }
 }

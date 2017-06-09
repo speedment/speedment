@@ -22,14 +22,18 @@
 package com.speedment.runtime.field.internal.predicate;
 
 import com.speedment.runtime.field.predicate.CombinedPredicate;
+import org.junit.Test;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
-import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
-import static org.junit.Assert.*;
-import org.junit.Test;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  *
@@ -102,10 +106,10 @@ public class AbstractCombinedPredicateTest {
 
     @Test
     public void testGetPredicates() {
-        AbstractCombinedPredicate.AndCombinedBasePredicate<Integer> p = new AbstractCombinedPredicate.AndCombinedBasePredicate<>(Arrays.asList(MOD2, MOD4), false);
+        CombinedPredicate<Integer> p = new AbstractCombinedPredicate.AndCombinedBasePredicate<>(Arrays.asList(MOD2, MOD4));
         p = p.and(MOD8);
         final List<Predicate<Integer>> expected = Arrays.asList(MOD2, MOD4, MOD8);
-        final List<Predicate<? super Integer>> actual = p.getPredicates();
+        final List<Predicate<? super Integer>> actual = p.stream().collect(toList());
         assertEquals(expected, actual);
     }
 
@@ -171,25 +175,4 @@ public class AbstractCombinedPredicateTest {
             assertEquals(expected, actual);
         }
     }
-
-    @Test
-    public void testToString() {
-        CombinedPredicate<Integer> p = CombinedPredicate.and(MOD2, MOD4);
-        p = p.and(MOD8).negate();
-        final String toString = p.toString();
-        System.out.println(toString);
-        assertTrue(toString.contains("negated=true"));
-        assertTrue(toString.contains("MOD2"));
-        assertTrue(toString.contains("MOD4"));
-        assertTrue(toString.contains("MOD8"));
-        assertTrue(toString.contains("type=AND"));
-    }
-
-    @Test
-    public void testIsNegated() {
-        CombinedPredicate<Integer> p = new AbstractCombinedPredicate.AndCombinedBasePredicate<>(Arrays.asList(MOD2, MOD4), false);
-        p = p.negate();
-        assertTrue(p.isNegated());
-    }
-
 }

@@ -30,16 +30,14 @@ import com.speedment.runtime.field.trait.HasDoubleValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class DoubleEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Double, HasDoubleValue<ENTITY, D>> implements Tuple1<Double> {
+public final class DoubleEqualPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasDoubleValue<ENTITY, D>> 
+implements Tuple1<Double> {
     
     private final double value;
     
     public DoubleEqualPredicate(HasDoubleValue<ENTITY, D> field, double value) {
-        this(field, value, false);
-    }
-    
-    DoubleEqualPredicate(HasDoubleValue<ENTITY, D> field, double value, boolean negated) {
-        super(PredicateType.EQUAL, field, entity -> field.getAsDouble(entity) == value, negated);
+        super(PredicateType.EQUAL, field, entity -> field.getAsDouble(entity) == value);
         this.value = value;
     }
     
@@ -49,7 +47,7 @@ public final class DoubleEqualPredicate<ENTITY, D> extends AbstractFieldPredicat
     }
     
     @Override
-    public DoubleEqualPredicate<ENTITY, D> negate() {
-        return new DoubleEqualPredicate<>(getField(), value, !isNegated());
+    public DoubleNotEqualPredicate<ENTITY, D> negate() {
+        return new DoubleNotEqualPredicate<>(getField(), value);
     }
 }

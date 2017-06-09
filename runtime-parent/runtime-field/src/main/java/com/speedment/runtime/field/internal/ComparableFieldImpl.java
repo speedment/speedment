@@ -28,9 +28,10 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
 
-import java.util.Set;
+import java.util.Collection;
 import java.util.function.Predicate;
 
+import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -100,23 +101,23 @@ implements ComparableField<ENTITY, D, V> {
     ////////////////////////////////////////////////////////////////////////////
     
     @Override
-    public FieldComparator<ENTITY, V> comparator() {
+    public FieldComparator<ENTITY> comparator() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.LAST);
     }
 
     @Override
-    public FieldComparator<ENTITY, V> comparatorNullFieldsFirst() {
+    public FieldComparator<ENTITY> comparatorNullFieldsFirst() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.FIRST);
     }
 
     @Override
-    public FieldComparator<ENTITY, V> comparatorNullFieldsLast() {
+    public FieldComparator<ENTITY> comparatorNullFieldsLast() {
         return comparator();
     }
-    
-    /*****************************************************************/
-    /*                           Operators                           */
-    /*****************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                               Operators                                //
+    ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public FieldPredicate<ENTITY> isNull() {
@@ -164,12 +165,12 @@ implements ComparableField<ENTITY, D, V> {
     }
 
     @Override
-    public Predicate<ENTITY> in(Set<V> values) {
-        return new ReferenceInPredicate<>(this, values);
+    public Predicate<ENTITY> in(Collection<V> values) {
+        return new ReferenceInPredicate<>(this, collectionToSet(values));
     }
 
     @Override
-    public Predicate<ENTITY> notIn(Set<V> values) {
-        return new ReferenceNotInPredicate<>(this, values);
+    public Predicate<ENTITY> notIn(Collection<V> values) {
+        return new ReferenceNotInPredicate<>(this, collectionToSet(values));
     }
 }

@@ -66,23 +66,18 @@ import static java.util.stream.Collectors.toSet;
 /**
  *
  * @author Emil Forslund
- * @since 3.0.1
+ * @since  3.0.1
  */
-public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManagerTranslator<Class> {
+public final class GeneratedSqlAdapterTranslator
+extends AbstractEntityAndManagerTranslator<Class> {
 
-    public final static String CREATE_HELPERS_METHOD_NAME = "createHelpers",
-        INSTALL_METHOD_NAME = "installMethodName",
-        ENTITY_COPY_METHOD_NAME = "entityCopy",
-        ENTITY_CREATE_METHOD_NAME = "entityCreate",
-        FIELDS_METHOD = "fields",
-        PRIMARY_KEYS_FIELDS_METHOD = "primaryKeyFields";
+    public final static String
+        CREATE_HELPERS_METHOD_NAME = "createHelpers",
+        INSTALL_METHOD_NAME        = "installMethodName";
 
-    private @Inject
-    ResultSetMapperComponent resultSetMapperComponent;
-    private @Inject
-    DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject
-    TypeMapperComponent typeMapperComponent;
+    private @Inject ResultSetMapperComponent resultSetMapperComponent;
+    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
+    private @Inject TypeMapperComponent typeMapperComponent;
 
     public GeneratedSqlAdapterTranslator(Table table) {
         super(table, Class::of);
@@ -101,7 +96,10 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
                     .add("final Project project = projectComponent.getProject();");
 
                 clazz.public_().abstract_()
-                    // Generate constructor
+
+                    ////////////////////////////////////////////////////////////
+                    // Generate constructor                                   //
+                    ////////////////////////////////////////////////////////////
                     .add(Constructor.of().protected_()
                         .add("this.tableIdentifier = "
                             + TableIdentifier.class.getSimpleName() + ".of("
@@ -112,9 +110,15 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
                             ).map(s -> "\"" + s + "\"").collect(joining(", "))
                             + ");")
                     )
-                    // Generate member fields
+
+                    ////////////////////////////////////////////////////////////
+                    // Generate members fields                                //
+                    ////////////////////////////////////////////////////////////
                     .add(Field.of("tableIdentifier", tableIdentifierType).private_().final_())
-                    // Generate methods
+
+                    ////////////////////////////////////////////////////////////
+                    // Generate methods                                       //
+                    ////////////////////////////////////////////////////////////
                     .add(Method.of(INSTALL_METHOD_NAME, void.class).add(withExecuteBefore(file))
                         .add(Field.of("streamSupplierComponent", SqlStreamSupplierComponent.class)
                             .add(AnnotationUsage.of(WithState.class).set(Value.ofReference("RESOLVED")))
@@ -204,16 +208,18 @@ public final class GeneratedSqlAdapterTranslator extends AbstractEntityAndManage
         return true;
     }
 
-    public Type getImplType() {
-        return getSupport().managerImplType();
-    }
+    private Method generateApplyResultSet(
+            TranslatorSupport<Table> support,
+            File file,
+            Supplier<Stream<? extends Column>> columnsSupplier) {
 
-    private Method generateApplyResultSet(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
         return Method.of("apply", support.entityType())
             .protected_()
             .add(SpeedmentException.class)
             .add(Field.of("resultSet", ResultSet.class))
-            .add(generateApplyResultSetBody(this::readFromResultSet, support, file, columnsSupplier));
+            .add(generateApplyResultSetBody(
+                this::readFromResultSet, support, file, columnsSupplier
+            ));
     }
 
     private static Set<java.lang.Class<?>> NULL_AWARE_GETTERS = Stream.of(

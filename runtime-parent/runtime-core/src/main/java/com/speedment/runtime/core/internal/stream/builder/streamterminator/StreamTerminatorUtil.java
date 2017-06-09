@@ -27,6 +27,7 @@ import com.speedment.runtime.core.internal.util.Cast;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
 import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.comparator.CombinedComparator;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.internal.predicate.AbstractCombinedPredicate;
 import com.speedment.runtime.field.predicate.CombinedPredicate;
@@ -34,16 +35,13 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.TypeMapper.Ordering;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.List;
-import static java.util.Objects.requireNonNull;
-import java.util.Optional;
-import java.util.Set;
+
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.function.Predicate;
+
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
@@ -125,9 +123,18 @@ public final class StreamTerminatorUtil {
             final SortedComparatorAction<?> sortedComparatorAction = (SortedComparatorAction) action;
             final Comparator<?> comparator = sortedComparatorAction.getComparator();
             if (comparator instanceof FieldComparator) {
-                final FieldComparator<?, ?> fieldComparator = (FieldComparator<?, ?>) comparator;
+                final FieldComparator<?> fieldComparator = (FieldComparator<?>) comparator;
                 // We can only optimize filters if the ordering is retained.. Bar equal, isNull, isNotNull etc.
                 return fieldComparator.getField().typeMapper().getOrdering() == Ordering.RETAIN;
+            }
+            if (comparator instanceof CombinedComparator) {
+                final CombinedComparator<?> combinedComparator = (CombinedComparator<?>) comparator;
+                // We can only optimize filters if the ordering is retained.. Bar equal, isNull, isNotNull etc.                
+                return combinedComparator.stream()
+                    .map(FieldComparator::getField)
+                    .map(Field::typeMapper)
+                    .map(TypeMapper::getOrdering)
+                    .allMatch(o -> o == Ordering.RETAIN);
             }
         }
         return false;
@@ -261,11 +268,7 @@ public final class StreamTerminatorUtil {
                     castedInternalPredicate
                 );
             });
-            if (combinedPredicate.isNegated()) {
-                sql.append("(NOT (").append(internalSql).append("))");
-            } else {
-                sql.append("(").append(internalSql).append(")");
-            }
+            sql.append("(").append(internalSql).append(")");
             values.addAll(internalValues);
         } else {
             throw new IllegalArgumentException("A predicate that is not instanceof FieldPredicate was given:" + predicate.toString());

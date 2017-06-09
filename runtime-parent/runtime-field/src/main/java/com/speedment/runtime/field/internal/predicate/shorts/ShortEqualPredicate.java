@@ -30,16 +30,14 @@ import com.speedment.runtime.field.trait.HasShortValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class ShortEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Short, HasShortValue<ENTITY, D>> implements Tuple1<Short> {
+public final class ShortEqualPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasShortValue<ENTITY, D>> 
+implements Tuple1<Short> {
     
     private final short value;
     
     public ShortEqualPredicate(HasShortValue<ENTITY, D> field, short value) {
-        this(field, value, false);
-    }
-    
-    ShortEqualPredicate(HasShortValue<ENTITY, D> field, short value, boolean negated) {
-        super(PredicateType.EQUAL, field, entity -> field.getAsShort(entity) == value, negated);
+        super(PredicateType.EQUAL, field, entity -> field.getAsShort(entity) == value);
         this.value = value;
     }
     
@@ -49,7 +47,7 @@ public final class ShortEqualPredicate<ENTITY, D> extends AbstractFieldPredicate
     }
     
     @Override
-    public ShortEqualPredicate<ENTITY, D> negate() {
-        return new ShortEqualPredicate<>(getField(), value, !isNegated());
+    public ShortNotEqualPredicate<ENTITY, D> negate() {
+        return new ShortNotEqualPredicate<>(getField(), value);
     }
 }

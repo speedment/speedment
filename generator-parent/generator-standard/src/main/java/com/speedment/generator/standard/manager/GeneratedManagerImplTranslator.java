@@ -16,36 +16,36 @@
  */
 package com.speedment.generator.standard.manager;
 
-import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Constructor;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Method;
-import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateFields;
+import com.speedment.common.codegen.model.*;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.config.trait.HasColumn;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.manager.AbstractManager;
-import java.lang.reflect.Type;
+import com.speedment.runtime.core.manager.AbstractViewManager;
+
 import java.util.Comparator;
-import static java.util.stream.Collectors.joining;
+import java.util.Optional;
 import java.util.stream.Stream;
+
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateFields;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
  * @author Emil Forslund
- * @since 2.3.0
+ * @since  2.3.0
  */
 public final class GeneratedManagerImplTranslator
     extends AbstractEntityAndManagerTranslator<Class> {
 
-    public final static String ENTITY_COPY_METHOD_NAME = "entityCopy",
-        ENTITY_CREATE_METHOD_NAME = "entityCreate",
-        FIELDS_METHOD = "fields",
+    public final static String
+        FIELDS_METHOD              = "fields",
         PRIMARY_KEYS_FIELDS_METHOD = "primaryKeyFields";
 
     public GeneratedManagerImplTranslator(Table table) {
@@ -56,15 +56,17 @@ public final class GeneratedManagerImplTranslator
     protected Class makeCodeGenModel(File file) {
 
         return newBuilder(file, getSupport().generatedManagerImplName())
-            /**
-             * The table specific methods.
-             */
+            ////////////////////////////////////////////////////////////////////
+            // The table specific methods.                                    //
+            ////////////////////////////////////////////////////////////////////
             .forEveryTable((clazz, table) -> {
                 clazz
                     .public_()
                     .abstract_()
                     .setSupertype(SimpleParameterizedType.create(
-                        AbstractManager.class,
+                        table.isView()
+                            ? AbstractViewManager.class
+                            : AbstractManager.class,
                         getSupport().entityType()
                     ))
                     .add(getSupport().generatedManagerType())
@@ -83,9 +85,9 @@ public final class GeneratedManagerImplTranslator
                     .add(generateFields(getSupport(), file, PRIMARY_KEYS_FIELDS_METHOD,
                         () -> table.primaryKeyColumns()
                             .filter(HasEnabled::test)
-                            .map(pk -> pk.findColumn())
-                            .filter(o -> o.isPresent())
-                            .map(o -> o.get())
+                            .map(HasColumn::findColumn)
+                            .filter(Optional::isPresent)
+                            .map(Optional::get)
                     ));
             })
             .build();
@@ -105,13 +107,5 @@ public final class GeneratedManagerImplTranslator
     @Override
     public boolean isInGeneratedPackage() {
         return true;
-    }
-
-    public Type getImplType() {
-        return getSupport().managerImplType();
-    }
-
-    private static boolean isPrimaryKey(Column column) {
-        return column.getParentOrThrow().findPrimaryKeyColumn(column.getId()).isPresent();
     }
 }

@@ -23,23 +23,19 @@ import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.controller.AutoImports;
 import com.speedment.common.codegen.internal.java.JavaGenerator;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.codegen.model.Constructor;
-import com.speedment.common.codegen.model.Field;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Generic;
-import com.speedment.common.codegen.model.Import;
-import com.speedment.common.codegen.model.Method;
-import com.speedment.common.codegen.model.Value;
+import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.util.Formatting;
-import static com.speedment.common.codegen.util.Formatting.indent;
 import com.speedment.example.Person;
 import com.speedment.example.PersonImpl;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+import static com.speedment.common.codegen.util.Formatting.indent;
 
 /**
  *
@@ -79,7 +75,7 @@ public class TypeViewTest {
             "    \n" +
             "    public final static String MESSAGE = \"Hello, World!\";\n" +
             "    \n" +
-            "    public static void main(String[] params) {\n" +
+            "    public static void main(String... params) {\n" +
             "        System.out.println(MESSAGE);\n" +
             "    }\n" +
             "}";

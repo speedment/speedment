@@ -26,12 +26,13 @@ import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.typemapper.TypeMapper;
-import java.util.Objects;
-import java.util.Random;
-import java.util.stream.IntStream;
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Objects;
+import java.util.stream.IntStream;
+
+import static org.junit.Assert.*;
 
 /**
  *
@@ -49,7 +50,8 @@ public class ByteFieldComparatorImplTest {
     @Test
     public void testGetField() {
         final ByteField<ByteValue, Byte> expResult = ByteValue.BYTE;
-        final ByteField<ByteValue, Byte> result = instance.getField();
+        final ByteField<ByteValue, Byte> result =
+            (ByteField<ByteValue, Byte>) instance.getField();
         assertEquals(expResult, result);
     }
 
@@ -69,8 +71,8 @@ public class ByteFieldComparatorImplTest {
 
     @Test
     public void testReversed() {
-        final FieldComparator<ByteValue, Byte> expResult = new ByteFieldComparatorImpl<>(ByteValue.BYTE, true);
-        final FieldComparator<ByteValue, Byte> result = instance.reversed();
+        final FieldComparator<ByteValue> expResult = new ByteFieldComparatorImpl<>(ByteValue.BYTE, true);
+        final FieldComparator<ByteValue> result = instance.reversed();
         assertEquals(expResult, result);
         assertTrue(result.isReversed());
     }

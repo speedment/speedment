@@ -30,16 +30,14 @@ import com.speedment.runtime.field.trait.HasFloatValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class FloatEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Float, HasFloatValue<ENTITY, D>> implements Tuple1<Float> {
+public final class FloatEqualPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasFloatValue<ENTITY, D>> 
+implements Tuple1<Float> {
     
     private final float value;
     
     public FloatEqualPredicate(HasFloatValue<ENTITY, D> field, float value) {
-        this(field, value, false);
-    }
-    
-    FloatEqualPredicate(HasFloatValue<ENTITY, D> field, float value, boolean negated) {
-        super(PredicateType.EQUAL, field, entity -> field.getAsFloat(entity) == value, negated);
+        super(PredicateType.EQUAL, field, entity -> field.getAsFloat(entity) == value);
         this.value = value;
     }
     
@@ -49,7 +47,7 @@ public final class FloatEqualPredicate<ENTITY, D> extends AbstractFieldPredicate
     }
     
     @Override
-    public FloatEqualPredicate<ENTITY, D> negate() {
-        return new FloatEqualPredicate<>(getField(), value, !isNegated());
+    public FloatNotEqualPredicate<ENTITY, D> negate() {
+        return new FloatNotEqualPredicate<>(getField(), value);
     }
 }

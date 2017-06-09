@@ -17,7 +17,6 @@
 package com.speedment.generator.standard.entity;
 
 import com.speedment.common.codegen.constant.DefaultJavadocTag;
-import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.*;
@@ -42,7 +41,6 @@ import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
 
 import java.lang.reflect.Type;
-import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
@@ -51,6 +49,7 @@ import java.util.stream.Stream;
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.PARAM;
 import static com.speedment.common.codegen.constant.DefaultJavadocTag.RETURN;
+import static com.speedment.common.codegen.constant.DefaultType.*;
 import static com.speedment.common.codegen.util.Formatting.*;
 import static com.speedment.generator.standard.internal.util.ColumnUtil.usesOptional;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
@@ -171,7 +170,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
 
                     intrf.add(Method.of(FINDER_METHOD_PREFIX + getSupport().typeName(col),
                         col.isNullable()
-                            ? DefaultType.optional(fuSupport.entityType())
+                            ? optional(fuSupport.entityType())
                             : fuSupport.entityType()
                     )
                         .set(Javadoc.of(
@@ -293,16 +292,30 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
         final Type type = typeMappers.get(col).getJavaType(col);
 
         if (usesOptional(col)) {
-            if (type.equals(Integer.class)) {
-                retType = OptionalInt.class;
-            } else if (type.equals(Long.class)) {
-                retType = OptionalLong.class;
-            } else if (type.equals(Double.class)) {
-                retType = OptionalDouble.class;
-            } else if (type.equals(Boolean.class)) {
-                retType = OptionalBoolean.class;
+            if (isPrimitive(type)) {
+                if (type.equals(int.class)) {
+                    retType = OptionalInt.class;
+                } else if (type.equals(long.class)) {
+                    retType = OptionalLong.class;
+                } else if (type.equals(double.class)) {
+                    retType = OptionalDouble.class;
+                } else if (type.equals(boolean.class)) {
+                    retType = OptionalBoolean.class;
+                } else {
+                    retType = optional(wrapperFor(type)); // Optional<Float>
+                }
             } else {
-                retType = SimpleParameterizedType.create(Optional.class, type);
+                if (type.equals(Integer.class)) {
+                    retType = OptionalInt.class;
+                } else if (type.equals(Long.class)) {
+                    retType = OptionalLong.class;
+                } else if (type.equals(Double.class)) {
+                    retType = OptionalDouble.class;
+                } else if (type.equals(Boolean.class)) {
+                    retType = OptionalBoolean.class;
+                } else {
+                    retType = optional(type);
+                }
             }
         } else {
             retType = type;

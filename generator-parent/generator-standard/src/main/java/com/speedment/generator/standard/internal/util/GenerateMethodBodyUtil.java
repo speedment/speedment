@@ -45,7 +45,12 @@ import static java.util.stream.Collectors.joining;
  */
 public final class GenerateMethodBodyUtil {
 
-    public static Method generateFields(TranslatorSupport<Table> support, File file, String methodName, Supplier<Stream<? extends Column>> columnsSupplier) {
+    public static Method generateFields(
+            TranslatorSupport<Table> support,
+            File file,
+            String methodName,
+            Supplier<Stream<? extends Column>> columnsSupplier) {
+
         return Method.of(methodName, 
                 DefaultType.stream(
                     SimpleParameterizedType.create(
@@ -58,21 +63,31 @@ public final class GenerateMethodBodyUtil {
             .add(generateFieldsBody(support, file, columnsSupplier));
     }
 
-    public static String[] generateFieldsBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+    public static String[] generateFieldsBody(
+            TranslatorSupport<Table> support,
+            File file,
+            Supplier<Stream<? extends Column>> columnsSupplier) {
+
         file.add(Import.of(Stream.class));
-        final List<String> rows = new LinkedList<>();
 
-        rows.add("return Stream.of(");
-        rows.add(indent(columnsSupplier.get()
-            .filter(HasEnabled::isEnabled)
-            .map(Column::getJavaName)
-            .map(support.namer()::javaStaticFieldName)
-            .map(field -> support.typeName() + "." + field)
-            .collect(joining("," + nl()))
-        ));
-        rows.add(");");
+        // If there are no matching columns:
+        if (columnsSupplier.get().noneMatch($ -> true)) {
+            return new String[] {"return Stream.empty();"};
+        } else {
+            final List<String> rows = new LinkedList<>();
 
-        return rows.toArray(new String[rows.size()]);
+            rows.add("return Stream.of(");
+            rows.add(indent(columnsSupplier.get()
+                .filter(HasEnabled::isEnabled)
+                .map(Column::getJavaName)
+                .map(support.namer()::javaStaticFieldName)
+                .map(field -> support.typeName() + "." + field)
+                .collect(joining("," + nl()))
+            ));
+            rows.add(");");
+
+            return rows.toArray(new String[rows.size()]);
+        }
     }
     
     @FunctionalInterface

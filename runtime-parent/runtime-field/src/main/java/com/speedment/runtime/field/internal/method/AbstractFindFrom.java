@@ -37,12 +37,12 @@ import static java.util.Objects.requireNonNull;
  * @since   3.0.0
  */
 abstract class AbstractFindFrom<
-        ENTITY, 
-        FK_ENTITY,
-        V extends Comparable<? super V>,
-        SOURCE extends Field<ENTITY> & HasComparableOperators<ENTITY, V> & HasFinder<ENTITY, FK_ENTITY>,
-        TARGET extends Field<FK_ENTITY> & HasComparableOperators<FK_ENTITY, V>
-    > implements FindFrom<ENTITY, FK_ENTITY> {
+    ENTITY,
+    FK_ENTITY,
+    V extends Comparable<? super V>,
+    SOURCE extends Field<ENTITY> & HasComparableOperators<ENTITY, V> & HasFinder<ENTITY, FK_ENTITY>,
+    TARGET extends Field<FK_ENTITY> & HasComparableOperators<FK_ENTITY, V>
+> implements FindFrom<ENTITY, FK_ENTITY> {
     
     private final SOURCE source;
     private final TARGET target;

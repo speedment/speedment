@@ -16,11 +16,14 @@
  */
 package com.speedment.common.combinatorics.internal;
 
-import com.speedment.common.combinatorics.*;
 import java.util.*;
 import java.util.function.Consumer;
-import static java.util.stream.Collectors.toList;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static java.util.function.Function.identity;
 
 /**
  * General Combination support. The class eagerly calculates all combinations.
@@ -41,19 +44,62 @@ public final class CombinationUtil {
     @SafeVarargs
     @SuppressWarnings("varargs") // Creating a List from an array is safe
     public static <T> Stream<List<T>> of(final T... items) {
-        final Stream.Builder<List<T>> builder = Stream.builder();
-        final List<T> database = Arrays.asList(items);
-        final List<T> buffer = new ArrayList<>();
-        database.stream().map(c -> (T) null).forEach(buffer::add);
-        int k = database.size();
-        for (int i = 1; i <= k; i++) {
-            generateCombinations(database, 0, i, buffer, l -> builder.add(
-                l.stream()
-                    .filter(Objects::nonNull)
-                    .collect(toList())
-            ));
+        return IntStream.rangeClosed(1, items.length)
+            .mapToObj(r -> {
+                @SuppressWarnings("unchecked")
+                final T[] data = (T[]) new Object[r];
+                return combinationHelper(items, data, 0, items.length - 1, 0, r);
+            }).flatMap(identity());
+    }
+
+    /**
+     *
+     * @param <T>    the element type
+     *
+     * @param arr    input array
+     * @param data   temporary array to store current combination
+     * @param start  starting index in arr[]
+     * @param end    ending index in arr[]
+     * @param index  current index in data[]
+     * @param r      size of a combination to be printed
+     *
+     * @return       stream of possible combinations
+     */
+    private static <T> Stream<List<T>> combinationHelper(
+            T[] arr, T[] data,
+            int start, int end,
+            int index, int r) {
+
+        // Current combination is ready to be printed, print it
+        if (index == r) {
+            return Stream.of(asList(data, r));
         }
-        return builder.build();
+
+        // replace index with all possible elements. The condition
+        // "end-i+1 >= r-index" makes sure that including one element
+        // at index will make a combination with remaining elements
+        // at remaining positions
+        return IntStream.rangeClosed(start, end)
+            .filter(i -> end - i + 1 >= r - index)
+            .mapToObj(i -> {
+                data[index] = arr[i];
+                return combinationHelper(arr, data, i + 1, end, index + 1, r);
+            }).flatMap(identity());
+    }
+
+    private static <T> List<T> asList(T[] array, int newSize) {
+        final int limit = Math.min(newSize, array.length);
+        switch (limit) {
+            case 0 : return emptyList();
+            case 1 : return singletonList(array[0]);
+            default : {
+                final List<T> list = new ArrayList<>(limit);
+                for (int i = 0; i < limit; i++) {
+                    list.add(array[i]);
+                }
+                return list;
+            }
+        }
     }
 
     /**

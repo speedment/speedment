@@ -34,7 +34,7 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment-parent</artifactId>
-    <version>3.0.10</version>
+    <version>3.0.11-SNAPSHOT</version>
     <packaging>pom</packaging>
     
     <!-- Project Metadata -->
@@ -178,7 +178,7 @@
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
-                    <version>3.2.0</version>
+                    <version>3.3.0</version>
                     
                     <extensions>true</extensions>
                     <inherited>true</inherited>
@@ -230,7 +230,7 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.6.1</version>
-                
+
                 <configuration>
                     <compilerArgument>-Xlint:all</compilerArgument>
                     <showWarnings>true</showWarnings>
@@ -242,6 +242,8 @@
                     <showWarnings>true</showWarnings>
                     <meminitial>256m</meminitial>
                     <maxmem>1024m</maxmem>
+                    <source>1.8</source>
+                    <target>1.8</target>
                     <excludes>
                         <exclude>**/package-info.java</exclude>
                     </excludes>

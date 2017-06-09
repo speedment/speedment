@@ -27,24 +27,22 @@ import com.speedment.runtime.field.trait.HasReferenceValue;
  * @author Per Minborg
  * @since 2.2.0
  */
-public final class StringStartsWithIgnoreCasePredicate<ENTITY, D> extends AbstractStringPredicate<ENTITY, D> {
+public final class StringStartsWithIgnoreCasePredicate<ENTITY, D>
+extends AbstractStringPredicate<ENTITY, D> {
 
-    public StringStartsWithIgnoreCasePredicate(HasReferenceValue<ENTITY, D, String> field, String str) {
-        this(field, str, false);
-    }
-    
-    StringStartsWithIgnoreCasePredicate(HasReferenceValue<ENTITY, D, String> field, String str, boolean negated) {
-        super(PredicateType.STARTS_WITH_IGNORE_CASE, field, str, entity -> {
+    public StringStartsWithIgnoreCasePredicate(
+            final HasReferenceValue<ENTITY, D, String> field,
+            final String lowerCase) {
+
+        super(PredicateType.STARTS_WITH_IGNORE_CASE, field, lowerCase, entity -> {
             final String fieldValue = field.get(entity);
             return fieldValue != null
-                && str != null
-                && fieldValue.toLowerCase().startsWith(str.toLowerCase()); // Todo: Optimize so that str.toLower() is just done once
-        }, negated);
+                && fieldValue.toLowerCase().startsWith(lowerCase);
+        });
     }
 
     @Override
-    public StringStartsWithIgnoreCasePredicate<ENTITY, D> negate() {
-        return new StringStartsWithIgnoreCasePredicate<>(getField(), get0(), !isNegated());
+    public StringNotStartsWithIgnoreCasePredicate<ENTITY, D> negate() {
+        return new StringNotStartsWithIgnoreCasePredicate<>(getField(), get0());
     }
-    
 }

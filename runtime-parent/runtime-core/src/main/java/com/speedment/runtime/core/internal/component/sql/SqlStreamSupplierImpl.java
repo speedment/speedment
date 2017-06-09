@@ -128,7 +128,7 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
 
         this.columnNameMap = manager.fields()
             .filter(f -> f.findColumn(project)
-                .map(HasParent::getParentOrThrow)
+                .map(HasParent<Table>::getParentOrThrow)
                 .map(t -> isSame(table, t))
                 .orElse(false)
             )

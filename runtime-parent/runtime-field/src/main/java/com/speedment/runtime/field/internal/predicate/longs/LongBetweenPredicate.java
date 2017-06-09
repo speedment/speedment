@@ -35,18 +35,20 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class LongBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Long, HasLongValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Long, Long> {
+public final class LongBetweenPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasLongValue<ENTITY, D>> 
+implements BetweenPredicate,
+          Tuple2<Long, Long> {
     
     private final long start;
     private final long end;
     private final Inclusion inclusion;
     
-    LongBetweenPredicate(
+    public LongBetweenPredicate(
             HasLongValue<ENTITY, D> field,
             long start,
             long end,
-            Inclusion inclusion,
-            boolean negated) {
+            Inclusion inclusion) {
         super(PredicateType.BETWEEN, field, entity -> {
             final long fieldValue = field.getAsLong(entity);
             
@@ -65,19 +67,11 @@ public final class LongBetweenPredicate<ENTITY, D> extends AbstractFieldPredicat
                 
                 default : throw new IllegalStateException("Inclusion unknown: " + inclusion);
             }
-        }, negated);
+        });
         
         this.start     = start;
         this.end       = end;
         this.inclusion = requireNonNull(inclusion);
-    }
-    
-    public LongBetweenPredicate(
-            HasLongValue<ENTITY, D> field,
-            long start,
-            long end,
-            Inclusion inclusion) {
-        this(field, start, end, inclusion, false);
     }
     
     @Override
@@ -96,7 +90,7 @@ public final class LongBetweenPredicate<ENTITY, D> extends AbstractFieldPredicat
     }
     
     @Override
-    public LongBetweenPredicate<ENTITY, D> negate() {
-        return new LongBetweenPredicate<>(getField(), start, end, inclusion, !isNegated());
+    public LongNotBetweenPredicate<ENTITY, D> negate() {
+        return new LongNotBetweenPredicate<>(getField(), start, end, inclusion);
     }
 }

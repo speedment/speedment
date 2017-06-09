@@ -35,18 +35,20 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class ShortBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Short, HasShortValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Short, Short> {
+public final class ShortBetweenPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasShortValue<ENTITY, D>> 
+implements BetweenPredicate,
+          Tuple2<Short, Short> {
     
     private final short start;
     private final short end;
     private final Inclusion inclusion;
     
-    ShortBetweenPredicate(
+    public ShortBetweenPredicate(
             HasShortValue<ENTITY, D> field,
             short start,
             short end,
-            Inclusion inclusion,
-            boolean negated) {
+            Inclusion inclusion) {
         super(PredicateType.BETWEEN, field, entity -> {
             final short fieldValue = field.getAsShort(entity);
             
@@ -65,19 +67,11 @@ public final class ShortBetweenPredicate<ENTITY, D> extends AbstractFieldPredica
                 
                 default : throw new IllegalStateException("Inclusion unknown: " + inclusion);
             }
-        }, negated);
+        });
         
         this.start     = start;
         this.end       = end;
         this.inclusion = requireNonNull(inclusion);
-    }
-    
-    public ShortBetweenPredicate(
-            HasShortValue<ENTITY, D> field,
-            short start,
-            short end,
-            Inclusion inclusion) {
-        this(field, start, end, inclusion, false);
     }
     
     @Override
@@ -96,7 +90,7 @@ public final class ShortBetweenPredicate<ENTITY, D> extends AbstractFieldPredica
     }
     
     @Override
-    public ShortBetweenPredicate<ENTITY, D> negate() {
-        return new ShortBetweenPredicate<>(getField(), start, end, inclusion, !isNegated());
+    public ShortNotBetweenPredicate<ENTITY, D> negate() {
+        return new ShortNotBetweenPredicate<>(getField(), start, end, inclusion);
     }
 }

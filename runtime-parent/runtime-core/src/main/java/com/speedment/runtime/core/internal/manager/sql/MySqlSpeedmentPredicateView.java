@@ -16,15 +16,16 @@
  */
 package com.speedment.runtime.core.internal.manager.sql;
 
+import com.speedment.common.injector.annotation.Config;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
 import static com.speedment.runtime.core.internal.manager.sql.AbstractFieldPredicateView.of;
-import static com.speedment.runtime.field.internal.predicate.PredicateUtil.getFirstOperandAsRaw;
-import static com.speedment.runtime.field.internal.predicate.PredicateUtil.getFirstOperandAsRawSet;
-import static com.speedment.runtime.field.internal.predicate.PredicateUtil.getInclusionOperand;
-import static com.speedment.runtime.field.internal.predicate.PredicateUtil.getSecondOperand;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
+import static com.speedment.runtime.field.util.PredicateOperandUtil.getFirstOperandAsRaw;
+import static com.speedment.runtime.field.util.PredicateOperandUtil.getFirstOperandAsRawSet;
+import static com.speedment.runtime.field.util.PredicateOperandUtil.getInclusionOperand;
+import static com.speedment.runtime.field.util.PredicateOperandUtil.getSecondOperand;
 import java.util.Set;
 import static java.util.stream.Collectors.joining;
 
@@ -48,24 +49,15 @@ public final class MySqlSpeedmentPredicateView extends AbstractFieldPredicateVie
     select * from colltest where name in ('Olle', 'tryggve' collate utf8_bin) ;
     
      */
-    private enum Collation {
-
-        UTF8_BIN, UTF8_GENERAL_CI;
-
-        private final String collateCommand;
-
-        private Collation() {
-            this.collateCommand = "COLLATE " + name().toLowerCase();
-        }
-
-        String getCollateCommand() {
-            return collateCommand;
-        }
-    }
-
+    
+    @Config(name = "db.mysql.binaryCollationName", value = "utf8_bin")
+    private String binaryCollationName;
+    @Config(name = "db.mysql.collationName", value = "utf8_general_ci")
+    private String collationName;    
+    
     @Override
     protected SqlPredicateFragment equalIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of(compare(cn, " = ?", Collation.UTF8_GENERAL_CI), negated).add(getFirstOperandAsRaw(model));
+        return of(compare(cn, " = ?", collationName), negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
@@ -112,12 +104,12 @@ public final class MySqlSpeedmentPredicateView extends AbstractFieldPredicateVie
 
     @Override
     protected SqlPredicateFragment equalString(String cn, FieldPredicate<?> model) {
-        return of(compare(cn, " = ?", Collation.UTF8_BIN)).add(getFirstOperandAsRaw(model));
+        return of(compare(cn, " = ?", binaryCollationName)).add(getFirstOperandAsRaw(model));
     }
 
     @Override
     protected SqlPredicateFragment notEqualString(String cn, FieldPredicate<?> model) {
-        return of("(NOT " + compare(cn, " = ?", Collation.UTF8_BIN) + ")").add(getFirstOperandAsRaw(model));
+        return of("(NOT " + compare(cn, " = ?", binaryCollationName) + ")").add(getFirstOperandAsRaw(model));
     }
 
     @Override
@@ -132,7 +124,7 @@ public final class MySqlSpeedmentPredicateView extends AbstractFieldPredicateVie
 
     private SqlPredicateFragment inStringHelper(String cn, FieldPredicate<?> model, boolean negated) {
         final Set<?> set = getFirstOperandAsRawSet(model);
-        return of("(" + cn + " IN (" + set.stream().map($ -> "?").collect(joining(",")) + " "+ Collation.UTF8_BIN.getCollateCommand() +"))", negated).addAll(set);
+        return of("(" + cn + " IN (" + set.stream().map($ -> "?").collect(joining(",")) + " COLLATE "+ binaryCollationName +"))", negated).addAll(set);
     }
 
     @Override
@@ -198,29 +190,29 @@ public final class MySqlSpeedmentPredicateView extends AbstractFieldPredicateVie
     }
 
     private String lessOrEqualString(String cn) {
-        return compare(cn, "<= ?", Collation.UTF8_BIN);
+        return compare(cn, "<= ?", binaryCollationName);
     }
 
     private String lessThanString(String cn) {
-        return compare(cn, "< ?", Collation.UTF8_BIN);
+        return compare(cn, "< ?", binaryCollationName);
     }
 
     private String greaterOrEqualString(String cn) {
-        return compare(cn, ">= ?", Collation.UTF8_BIN);
+        return compare(cn, ">= ?", binaryCollationName);
     }
 
     private String greaterThanString(String cn) {
-        return compare(cn, "> ?", Collation.UTF8_BIN);
+        return compare(cn, "> ?", binaryCollationName);
     }
 
-    private String compare(String cn, String operator, Collation collation) {
+    private String compare(String cn, String operator, String collation) {
         return new StringBuilder()
             .append('(')
             .append(cn)
             .append(' ')
             .append(operator)
-            .append(' ')
-            .append(collation.getCollateCommand())
+            .append(" COLLATE ")
+            .append(collation)
             .append(')')
             .toString();
     }

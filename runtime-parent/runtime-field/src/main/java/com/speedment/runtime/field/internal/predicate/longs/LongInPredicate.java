@@ -34,16 +34,14 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class LongInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Long, HasLongValue<ENTITY, D>> implements Tuple1<Set<Long>> {
+public final class LongInPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasLongValue<ENTITY, D>> 
+implements Tuple1<Set<Long>> {
     
     private final Set<Long> set;
     
     public LongInPredicate(HasLongValue<ENTITY, D> field, Set<Long> set) {
-        this(field, set, false);
-    }
-    
-    LongInPredicate(HasLongValue<ENTITY, D> field, Set<Long> set, boolean negated) {
-        super(PredicateType.IN, field, entity -> set.contains(field.getAsLong(entity)), negated);
+        super(PredicateType.IN, field, entity -> set.contains(field.getAsLong(entity)));
         this.set = requireNonNull(set);
     }
     
@@ -53,7 +51,7 @@ public final class LongInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENT
     }
     
     @Override
-    public LongInPredicate<ENTITY, D> negate() {
-        return new LongInPredicate<>(getField(), set, !isNegated());
+    public LongNotInPredicate<ENTITY, D> negate() {
+        return new LongNotInPredicate<>(getField(), set);
     }
 }

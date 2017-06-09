@@ -34,16 +34,14 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class IntInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Integer, HasIntValue<ENTITY, D>> implements Tuple1<Set<Integer>> {
+public final class IntInPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasIntValue<ENTITY, D>> 
+implements Tuple1<Set<Integer>> {
     
     private final Set<Integer> set;
     
     public IntInPredicate(HasIntValue<ENTITY, D> field, Set<Integer> set) {
-        this(field, set, false);
-    }
-    
-    IntInPredicate(HasIntValue<ENTITY, D> field, Set<Integer> set, boolean negated) {
-        super(PredicateType.IN, field, entity -> set.contains(field.getAsInt(entity)), negated);
+        super(PredicateType.IN, field, entity -> set.contains(field.getAsInt(entity)));
         this.set = requireNonNull(set);
     }
     
@@ -53,7 +51,7 @@ public final class IntInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTI
     }
     
     @Override
-    public IntInPredicate<ENTITY, D> negate() {
-        return new IntInPredicate<>(getField(), set, !isNegated());
+    public IntNotInPredicate<ENTITY, D> negate() {
+        return new IntNotInPredicate<>(getField(), set);
     }
 }

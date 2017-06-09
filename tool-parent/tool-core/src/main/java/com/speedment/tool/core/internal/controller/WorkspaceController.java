@@ -18,6 +18,7 @@ package com.speedment.tool.core.internal.controller;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.core.component.EventComponent;
+import com.speedment.runtime.config.Table;
 import com.speedment.runtime.core.internal.util.Cast;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.config.DocumentProperty;
@@ -27,9 +28,6 @@ import com.speedment.tool.core.event.TreeSelectionChange;
 import com.speedment.tool.propertyeditor.PropertyEditor;
 import com.speedment.tool.propertyeditor.PropertySheet;
 import com.speedment.tool.propertyeditor.component.PropertyEditorComponent;
-import java.net.URL;
-import java.util.Optional;
-import java.util.ResourceBundle;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -38,6 +36,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.TreeItem;
+
+import java.net.URL;
+import java.util.Optional;
+import java.util.ResourceBundle;
 
 /**
  *
@@ -84,7 +86,10 @@ public final class WorkspaceController implements Initializable {
                         workspace.textProperty().bind(
                             Bindings.createStringBinding(() -> String.format(
                                 "Editing %s '%s' %s",
-                                withName.mainInterface().getSimpleName(),
+                                withName instanceof Table
+                                    ? ((Table) withName).isView()
+                                        ? "View" : "Table"
+                                    : withName.mainInterface().getSimpleName(),
                                 withName.getName(),
                                 extraInfo.orElse("")
                             ), withName.nameProperty())

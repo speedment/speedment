@@ -27,24 +27,22 @@ import com.speedment.runtime.field.trait.HasReferenceValue;
  * @author Per Minborg
  * @since 2.2.0
  */
-public final class StringEndsWithPredicate<ENTITY, D> extends AbstractStringPredicate<ENTITY, D> {
+public final class StringEndsWithPredicate<ENTITY, D>
+extends AbstractStringPredicate<ENTITY, D> {
 
-    public StringEndsWithPredicate(HasReferenceValue<ENTITY, D, String> field, String str) {
-        this(field, str, false);
-    }
+    public StringEndsWithPredicate(
+            final HasReferenceValue<ENTITY, D, String> field,
+            final String str) {
 
-    StringEndsWithPredicate(HasReferenceValue<ENTITY, D, String> field, String str, boolean negated) {
         super(PredicateType.ENDS_WITH, field, str, entity -> {
             final String fieldValue = field.get(entity);
             return fieldValue != null
-                && str != null
                 && fieldValue.endsWith(str);
-        }, negated);
+        });
     }
 
     @Override
-    public StringEndsWithPredicate<ENTITY, D> negate() {
-        return new StringEndsWithPredicate<>(getField(), get0(), !isNegated());
+    public StringNotEndsWithPredicate<ENTITY, D> negate() {
+        return new StringNotEndsWithPredicate<>(getField(), get0());
     }
-
 }

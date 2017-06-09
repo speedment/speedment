@@ -27,7 +27,4 @@ import com.speedment.common.annotation.GeneratedCode;
  * @see CharField
  */
 @GeneratedCode(value = "Speedment")
-public final class CharFieldTest {
-    
-    
-}
+public final class CharFieldTest {}

@@ -51,7 +51,7 @@ public class ComparableFieldTest extends BaseFieldTest {
 
     @Test
     public void testReferenceFieldComparatorNullFieldsLast() throws Exception {
-        final List<Entity> result = entities.stream().sorted(NAME.comparatorNullFieldsLast().thenComparing(ID.comparator())).collect(toList());
+        final List<Entity> result = entities.stream().sorted(NAME.comparator().thenComparing(ID.comparator())).collect(toList());
         final List<Entity> expected = entities.stream()
             .sorted(
                 comparing(Entity::getName, nullsLast(String::compareTo))
@@ -65,13 +65,13 @@ public class ComparableFieldTest extends BaseFieldTest {
     @Test
     public void testEqual() throws Exception {
         assertEquals(collect(e -> "a".equals(e.getName())).size(), collect(NAME.equal("a")).size());
-        assertEquals(collect(e -> e.getName() == null).size(), collect(NAME.equal(null)).size());
+        assertEquals(collect(e -> e.getName() == null).size(), collect(NAME.isNull()).size());
     }
 
     @Test
     public void testNotEqual() throws Exception {
         assertEquals(collect(e -> !"a".equals(e.getName())).size(), collect(NAME.notEqual("a")).size());
-        assertEquals(collect(e -> e.getName() != null).size(), collect(NAME.notEqual(null)).size());
+        assertEquals(collect(e -> e.getName() != null).size(), collect(NAME.isNotNull()).size());
     }
 
     @Test
@@ -80,7 +80,6 @@ public class ComparableFieldTest extends BaseFieldTest {
             collect(e -> e.getName() != null && "f".compareTo(e.getName()) > 0),
             collect(NAME.lessThan("f"))
         );
-        assertEquals(0, collect(NAME.lessThan(null)).size());
     }
 
     @Test
@@ -89,7 +88,6 @@ public class ComparableFieldTest extends BaseFieldTest {
             collect(e -> e.getName() != null && "f".compareTo(e.getName()) >= 0),
             collect(NAME.lessOrEqual("f"))
         );
-        assertEquals(collect(e -> e.getName() == null).size(), collect(NAME.lessOrEqual(null)).size());
     }
 
     @Test
@@ -98,7 +96,6 @@ public class ComparableFieldTest extends BaseFieldTest {
             collect(e -> e.getName() != null && "f".compareTo(e.getName()) < 0),
             collect(NAME.greaterThan("f"))
         );
-        assertEquals(0, collect(NAME.lessThan(null)).size());
     }
 
     @Test
@@ -107,7 +104,6 @@ public class ComparableFieldTest extends BaseFieldTest {
             collect(e -> e.getName() != null && "f".compareTo(e.getName()) <= 0),
             collect(NAME.greaterOrEqual("f"))
         );
-        assertEquals(collect(e -> e.getName() == null).size(), collect(NAME.greaterOrEqual(null)).size());
     }
 
     @Test
@@ -142,11 +138,9 @@ public class ComparableFieldTest extends BaseFieldTest {
             expected,
             result
         );
-//        assertEquals(0, collect(ID.between(2, null, START_INCLUSIVE_END_INCLUSIVE)).size());
-//        assertEquals(0, collect(ID.between(null, 6, START_INCLUSIVE_END_INCLUSIVE)).size());
+
         assertEquals(0, collect(ID.between(6, 2, START_INCLUSIVE_END_INCLUSIVE)).size());
         assertEquals(1, collect(ID.between(2, 2, START_INCLUSIVE_END_INCLUSIVE)).size());
-
     }
 
     @Test
@@ -159,11 +153,9 @@ public class ComparableFieldTest extends BaseFieldTest {
             expected,
             result
         );
-//        assertEquals(0, collect(ID.between(2, null, START_EXCLUSIVE_END_INCLUSIVE)).size());
-//        assertEquals(0, collect(ID.between(null, 6, START_EXCLUSIVE_END_INCLUSIVE)).size());
+
         assertEquals(0, collect(ID.between(6, 2, START_EXCLUSIVE_END_INCLUSIVE)).size());
         assertEquals(0, collect(ID.between(2, 2, START_EXCLUSIVE_END_INCLUSIVE)).size());
-
     }
 
     @Test
@@ -172,17 +164,11 @@ public class ComparableFieldTest extends BaseFieldTest {
         final List<Entity> expected = collect(e -> e.getId() != null && e.getId() > 2 && e.getId() < 6);
         final List<Entity> result = collect(ID.between(2, 6, START_EXCLUSIVE_END_EXCLUSIVE));
 
-        //System.out.println("Expected");
-        //expected.forEach(System.out::println);
-        //System.out.println("Result");
-        //result.forEach(System.out::println);
-
         assertEquals(
             expected,
             result
         );
-//        assertEquals(0, collect(ID.between(2, null, START_EXCLUSIVE_END_EXCLUSIVE)).size());
-//        assertEquals(0, collect(ID.between(null, 6, START_EXCLUSIVE_END_EXCLUSIVE)).size());
+
         assertEquals(0, collect(ID.between(6, 2, START_EXCLUSIVE_END_EXCLUSIVE)).size());
         assertEquals(0, collect(ID.between(2, 2, START_EXCLUSIVE_END_EXCLUSIVE)).size());
     }

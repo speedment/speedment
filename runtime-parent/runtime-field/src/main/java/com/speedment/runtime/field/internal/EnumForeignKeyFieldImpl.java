@@ -23,22 +23,20 @@ import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
 import com.speedment.runtime.field.internal.comparator.ReferenceFieldComparatorImpl;
 import com.speedment.runtime.field.internal.method.BackwardFinderImpl;
+import com.speedment.runtime.field.internal.method.FindFromNullableReference;
 import com.speedment.runtime.field.internal.method.FindFromReference;
 import com.speedment.runtime.field.internal.predicate.AlwaysFalsePredicate;
 import com.speedment.runtime.field.internal.predicate.reference.ReferenceEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.reference.ReferenceInPredicate;
 import com.speedment.runtime.field.internal.predicate.reference.ReferenceIsNotNullPredicate;
 import com.speedment.runtime.field.internal.predicate.reference.ReferenceIsNullPredicate;
-import com.speedment.runtime.field.method.BackwardFinder;
-import com.speedment.runtime.field.method.FindFrom;
-import com.speedment.runtime.field.method.ReferenceGetter;
-import com.speedment.runtime.field.method.ReferenceSetter;
+import com.speedment.runtime.field.method.*;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.typemapper.TypeMapper;
 
+import java.util.Collection;
 import java.util.EnumSet;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -147,22 +145,32 @@ implements EnumForeignKeyField<ENTITY, D, E, FK> {
         );
     }
 
+    @Override
+    public FindFromNullable<ENTITY, FK> nullableFinder(
+            TableIdentifier<FK> identifier,
+            Supplier<Stream<FK>> streamSupplier) {
+
+        return new FindFromNullableReference<>(
+            this, referenced, identifier, streamSupplier
+        );
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     //                              Comparators                               //
     ////////////////////////////////////////////////////////////////////////////
 
     @Override
-    public FieldComparator<ENTITY, E> comparator() {
+    public FieldComparator<ENTITY> comparator() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.LAST);
     }
 
     @Override
-    public FieldComparator<ENTITY, E> comparatorNullFieldsFirst() {
+    public FieldComparator<ENTITY> comparatorNullFieldsFirst() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.FIRST);
     }
 
     @Override
-    public FieldComparator<ENTITY, E> comparatorNullFieldsLast() {
+    public FieldComparator<ENTITY> comparatorNullFieldsLast() {
         return comparator();
     }
 
@@ -249,12 +257,12 @@ implements EnumForeignKeyField<ENTITY, D, E, FK> {
     }
 
     @Override
-    public Predicate<ENTITY> in(Set<E> values) {
+    public Predicate<ENTITY> in(Collection<E> values) {
         return toEntityPredicate(values::contains);
     }
 
     @Override
-    public Predicate<ENTITY> notIn(Set<E> values) {
+    public Predicate<ENTITY> notIn(Collection<E> values) {
         return toEntityPredicate(e -> !values.contains(e));
     }
 

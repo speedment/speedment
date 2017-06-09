@@ -30,16 +30,14 @@ import com.speedment.runtime.field.trait.HasCharValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class CharEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Character, HasCharValue<ENTITY, D>> implements Tuple1<Character> {
+public final class CharEqualPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasCharValue<ENTITY, D>> 
+implements Tuple1<Character> {
     
     private final char value;
     
     public CharEqualPredicate(HasCharValue<ENTITY, D> field, char value) {
-        this(field, value, false);
-    }
-    
-    CharEqualPredicate(HasCharValue<ENTITY, D> field, char value, boolean negated) {
-        super(PredicateType.EQUAL, field, entity -> field.getAsChar(entity) == value, negated);
+        super(PredicateType.EQUAL, field, entity -> field.getAsChar(entity) == value);
         this.value = value;
     }
     
@@ -49,7 +47,7 @@ public final class CharEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<
     }
     
     @Override
-    public CharEqualPredicate<ENTITY, D> negate() {
-        return new CharEqualPredicate<>(getField(), value, !isNegated());
+    public CharNotEqualPredicate<ENTITY, D> negate() {
+        return new CharNotEqualPredicate<>(getField(), value);
     }
 }

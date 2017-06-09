@@ -6,6 +6,8 @@
 **/.sonar/
 **/.DS_Store/
 **/.idea/
+**/.gradle/
+**/build/
 
 **/nb-configuration.xml
 **/dependency-reduced-pom.xml

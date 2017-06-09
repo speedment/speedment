@@ -17,9 +17,9 @@
 package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
+import com.speedment.runtime.field.trait.HasByteValue;
 import java.util.Objects;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
@@ -32,22 +32,24 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class ByteFieldComparatorImpl<ENTITY, D> implements ByteFieldComparator<ENTITY, D> {
+public final class ByteFieldComparatorImpl<ENTITY, D> 
+extends AbstractFieldComparator<ENTITY> 
+implements ByteFieldComparator<ENTITY, D> {
     
-    private final ByteField<ENTITY, D> field;
+    private final HasByteValue<ENTITY, D> field;
     private final boolean reversed;
     
-    public ByteFieldComparatorImpl(ByteField<ENTITY, D> field) {
+    public ByteFieldComparatorImpl(HasByteValue<ENTITY, D> field) {
         this(field, false);
     }
     
-    public ByteFieldComparatorImpl(ByteField<ENTITY, D> field, boolean reversed) {
+    ByteFieldComparatorImpl(HasByteValue<ENTITY, D> field, boolean reversed) {
         this.field    = requireNonNull(field);
         this.reversed = reversed;
     }
     
     @Override
-    public ByteField<ENTITY, D> getField() {
+    public HasByteValue<ENTITY, D> getField() {
         return field;
     }
     
@@ -62,7 +64,7 @@ public final class ByteFieldComparatorImpl<ENTITY, D> implements ByteFieldCompar
     }
     
     @Override
-    public FieldComparator<ENTITY, Byte> reversed() {
+    public FieldComparator<ENTITY> reversed() {
         return new ByteFieldComparatorImpl<>(field, !reversed);
     }
     
@@ -71,7 +73,7 @@ public final class ByteFieldComparatorImpl<ENTITY, D> implements ByteFieldCompar
         requireNonNulls(first, second);
         final byte a = field.getAsByte(first);
         final byte b = field.getAsByte(second);
-        return applyReversed(a - b);
+        return applyReversed(Byte.compare(a, b));
     }
     
     @Override
@@ -86,8 +88,8 @@ public final class ByteFieldComparatorImpl<ENTITY, D> implements ByteFieldCompar
         if (!(obj instanceof FieldComparator)) return false;
         
         @SuppressWarnings("unchecked")
-        final FieldComparator<ENTITY, Byte> casted =
-            (FieldComparator<ENTITY, Byte>) obj;
+        final FieldComparator<ENTITY> casted =
+            (FieldComparator<ENTITY>) obj;
         
         return reversed == casted.isReversed()
             && Objects.equals(

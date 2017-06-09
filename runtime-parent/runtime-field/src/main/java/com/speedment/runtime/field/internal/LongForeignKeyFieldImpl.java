@@ -39,10 +39,11 @@ import com.speedment.runtime.field.method.LongSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
-import java.util.Set;
+import java.util.Collection;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -154,8 +155,8 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     }
     
     @Override
-    public FieldPredicate<ENTITY> in(Set<Long> set) {
-        return new LongInPredicate<>(this, set);
+    public FieldPredicate<ENTITY> in(Collection<Long> values) {
+        return new LongInPredicate<>(this, collectionToSet(values));
     }
     
     @Override
@@ -179,7 +180,7 @@ public final class LongForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Long
     }
     
     @Override
-    public Predicate<ENTITY> notIn(Set<Long> set) {
-        return new LongInPredicate<>(this, set).negate();
+    public Predicate<ENTITY> notIn(Collection<Long> values) {
+        return new LongInPredicate<>(this, collectionToSet(values)).negate();
     }
 }

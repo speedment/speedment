@@ -18,11 +18,12 @@ package com.speedment.runtime.field.internal.predicate.reference;
 
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
-import com.speedment.runtime.field.predicate.FieldPredicate;
-import static com.speedment.runtime.field.predicate.PredicateType.NOT_IN;
 import com.speedment.runtime.field.trait.HasReferenceValue;
-import static java.util.Objects.requireNonNull;
+
 import java.util.Set;
+
+import static com.speedment.runtime.field.predicate.PredicateType.NOT_IN;
+import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -34,20 +35,16 @@ import java.util.Set;
  * @since   2.2.0
  */
 public final class ReferenceNotInPredicate<ENTITY, D, V extends Comparable<? super V>>
-        extends AbstractFieldPredicate<ENTITY, V, HasReferenceValue<ENTITY, D, V>>
-        implements Tuple1<Set<V>> {
+extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
+implements Tuple1<Set<V>> {
 
     private final Set<V> set;
 
     public ReferenceNotInPredicate(HasReferenceValue<ENTITY, D, V> field, Set<V> values) {
-        this(field, values, false);
-    }
-    
-    ReferenceNotInPredicate(HasReferenceValue<ENTITY, D, V> field, Set<V> values, boolean negated) {
         super(NOT_IN, field, entity -> {
             final V value = field.get(entity);
             return value != null && !values.contains(field.get(entity));
-        }, negated);
+        });
         this.set = requireNonNull(values);
     }
 
@@ -57,8 +54,7 @@ public final class ReferenceNotInPredicate<ENTITY, D, V extends Comparable<? sup
     }
 
     @Override
-    public FieldPredicate<ENTITY> negate() {
-        return new ReferenceNotInPredicate<>(getField(), set, !isNegated());
+    public ReferenceInPredicate<ENTITY, D, V> negate() {
+        return new ReferenceInPredicate<>(getField(), set);
     }
-    
 }

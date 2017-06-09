@@ -27,7 +27,6 @@ import com.speedment.runtime.field.Field;
  * @author  Per Minborg
  * @since   2.2.0
  */
-
 public interface HasField<ENTITY> {
 
     /**

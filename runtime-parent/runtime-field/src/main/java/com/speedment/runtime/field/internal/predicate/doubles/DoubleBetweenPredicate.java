@@ -35,18 +35,20 @@ import static java.util.Objects.requireNonNull;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class DoubleBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Double, HasDoubleValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Double, Double> {
+public final class DoubleBetweenPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasDoubleValue<ENTITY, D>> 
+implements BetweenPredicate,
+          Tuple2<Double, Double> {
     
     private final double start;
     private final double end;
     private final Inclusion inclusion;
     
-    DoubleBetweenPredicate(
+    public DoubleBetweenPredicate(
             HasDoubleValue<ENTITY, D> field,
             double start,
             double end,
-            Inclusion inclusion,
-            boolean negated) {
+            Inclusion inclusion) {
         super(PredicateType.BETWEEN, field, entity -> {
             final double fieldValue = field.getAsDouble(entity);
             
@@ -65,19 +67,11 @@ public final class DoubleBetweenPredicate<ENTITY, D> extends AbstractFieldPredic
                 
                 default : throw new IllegalStateException("Inclusion unknown: " + inclusion);
             }
-        }, negated);
+        });
         
         this.start     = start;
         this.end       = end;
         this.inclusion = requireNonNull(inclusion);
-    }
-    
-    public DoubleBetweenPredicate(
-            HasDoubleValue<ENTITY, D> field,
-            double start,
-            double end,
-            Inclusion inclusion) {
-        this(field, start, end, inclusion, false);
     }
     
     @Override
@@ -96,7 +90,7 @@ public final class DoubleBetweenPredicate<ENTITY, D> extends AbstractFieldPredic
     }
     
     @Override
-    public DoubleBetweenPredicate<ENTITY, D> negate() {
-        return new DoubleBetweenPredicate<>(getField(), start, end, inclusion, !isNegated());
+    public DoubleNotBetweenPredicate<ENTITY, D> negate() {
+        return new DoubleNotBetweenPredicate<>(getField(), start, end, inclusion);
     }
 }

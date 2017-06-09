@@ -1,0 +1,8 @@
+group = 'com.speedment.runtime'
+description = 'Speedment - Runtime - Runtime All'
+dependencies {
+    compile project(':runtime-parent:runtime-config')
+    compile project(':runtime-parent:runtime-typemapper')
+    compile project(':runtime-parent:runtime-field')
+    compile project(':runtime-parent:runtime-core')
+}

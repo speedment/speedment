@@ -19,11 +19,13 @@ package com.speedment.runtime.field.trait;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.predicate.Inclusion;
+
+import java.util.Collection;
 import java.util.Comparator;
-import java.util.Set;
 import java.util.function.Predicate;
-import static java.util.stream.Collectors.toSet;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toSet;
 
 /**
  * A representation of an Entity field that is a reference type (e.g.
@@ -37,7 +39,7 @@ import java.util.stream.Stream;
  * @since 2.2.0
  */
 public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
-    extends Field<ENTITY> {
+extends Field<ENTITY> {
 
     /**
      * Returns a {@link Comparator} that will compare to this field using this
@@ -47,7 +49,7 @@ public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
      * fields natural order
      * @throws NullPointerException if a field is null
      */
-    FieldComparator<ENTITY, V> comparator();
+    FieldComparator<ENTITY> comparator();
 
     /**
      * Returns a {@link Comparator} that will compare to this field using this
@@ -56,7 +58,7 @@ public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
      * @return a {@link Comparator} that will compare to this field using this
      * fields natural order, null fields are sorted first
      */
-    FieldComparator<ENTITY, V> comparatorNullFieldsFirst();
+    FieldComparator<ENTITY> comparatorNullFieldsFirst();
 
     /**
      * Returns a {@link Comparator} that will compare to this field using this
@@ -70,7 +72,7 @@ public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
      * instead. This method will be removed in coming API versions.
      */
     @Deprecated
-    FieldComparator<ENTITY, V> comparatorNullFieldsLast();
+    FieldComparator<ENTITY> comparatorNullFieldsLast();
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -245,7 +247,9 @@ public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
-     * {@code true}, if and only if this Field is <em>in</em> the given Set.
+     * {@code true}, if and only if this Field is <em>in</em> the given set. (If
+     * the collection is not a set, then a set will be created temporarily from
+     * the values of the collection).
      * <p>
      * N.B. if the Set is empty, then the returned Predicate will always
      * evaluate to {@code false}
@@ -254,7 +258,7 @@ public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>in</em> the given Set
      */
-    Predicate<ENTITY> in(Set<V> values);
+    Predicate<ENTITY> in(Collection<V> values);
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
@@ -276,6 +280,8 @@ public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
      * {@code true}, if and only if this Field is <em>not in</em> the given Set.
+     * (If the collection is not a set, then a set will be created temporarily
+     * from the values of the collection).
      * <p>
      * N.B. if the Set is empty, then the returned Predicate will always
      * evaluate to {@code true}
@@ -284,5 +290,5 @@ public interface HasComparableOperators<ENTITY, V extends Comparable<? super V>>
      * @return a Predicate that will evaluate to {@code true}, if and only if
      * this Field is <em>not in</em> the given Set
      */
-    Predicate<ENTITY> notIn(Set<V> values);
+    Predicate<ENTITY> notIn(Collection<V> values);
 }

@@ -1,0 +1,12 @@
+group = 'com.speedment.tool'
+description = 'Speedment - Tool - Property Editor'
+dependencies {
+  compile project(':common-parent:injector')
+  compile project(':common-parent:mapstream')
+  compile project(':runtime-parent:runtime-config')
+  compile project(':runtime-parent:runtime-typemapper')
+  compile project(':runtime-parent:runtime-core')
+  compile project(':generator-parent:generator-translator')
+  compile project(':tool-parent:tool-config')
+    testCompile group: 'junit', name: 'junit', version:'4.12'
+}

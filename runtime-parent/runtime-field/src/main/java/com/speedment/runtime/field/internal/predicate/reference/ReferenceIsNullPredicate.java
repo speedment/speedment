@@ -17,7 +17,6 @@
 package com.speedment.runtime.field.internal.predicate.reference;
 
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
-import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.trait.HasReferenceValue;
 
 import static com.speedment.runtime.field.predicate.PredicateType.IS_NULL;
@@ -32,19 +31,14 @@ import static com.speedment.runtime.field.predicate.PredicateType.IS_NULL;
  * @since   2.2.0
  */
 public final class ReferenceIsNullPredicate<ENTITY, D, V>
-        extends AbstractFieldPredicate<ENTITY, V, HasReferenceValue<ENTITY, D, V>> {
-    
+extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>> {
+
     public ReferenceIsNullPredicate(HasReferenceValue<ENTITY, D, V> field) {
-        this(field, false);
-    }
-    
-    ReferenceIsNullPredicate(HasReferenceValue<ENTITY, D, V> field, boolean negated) {
-        super(IS_NULL, field, entity -> entity == null || field.get(entity) == null, negated);
+        super(IS_NULL, field, entity -> entity == null || field.get(entity) == null);
     }
 
     @Override
-    public ReferenceIsNullPredicate<ENTITY, D, V> negate() {
-        return new ReferenceIsNullPredicate<>(getField(), !isNegated());
+    public ReferenceIsNotNullPredicate<ENTITY, D, V> negate() {
+        return new ReferenceIsNotNullPredicate<>(getField());
     }
-    
 }

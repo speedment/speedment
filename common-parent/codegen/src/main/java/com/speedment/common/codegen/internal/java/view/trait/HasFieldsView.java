@@ -21,6 +21,11 @@ import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.Field;
 import com.speedment.common.codegen.model.trait.HasFields;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static java.util.stream.Collectors.toList;
 
@@ -45,10 +50,36 @@ public interface HasFieldsView<M extends HasFields<M>> extends Transform<M, Stri
      * @return       the generated code
      */
     default String renderFields(Generator gen, M model) {
-        return gen.onEach(model.getFields().stream()
+        final List<String> rendered;
+
+        if (useTripleDot() && !model.getFields().isEmpty()) {
+            final String last = gen.on(wrapField(new LinkedList<>(model.getFields()).getLast())).get();
+            if (last.contains("[] ")) {
+                rendered = Stream.concat(
+                    model.getFields().stream()
+                        .limit(model.getFields().size() - 1)
+                        .map(this::wrapField)
+                        .map(gen::on)
+                        .map(Optional::get),
+                    Stream.of(last.replaceFirst("\\[\\] ", "... "))
+                ).collect(toList());
+            } else {
+                rendered = model.getFields().stream()
+                    .map(this::wrapField)
+                    .map(gen::on)
+                    .map(Optional::get)
+                    .collect(toList());
+            }
+        } else {
+            rendered = model.getFields().stream()
                 .map(this::wrapField)
-                .collect(toList())
-            ).collect(joinIfNotEmpty(
+                .map(gen::on)
+                .map(Optional::get)
+                .collect(toList());
+        }
+
+        return rendered.stream()
+            .collect(joinIfNotEmpty(
                 fieldSuffix() + fieldSeparator(model) + fieldPrefix(), 
                 fieldPrefix(), 
                 fieldSuffix()
@@ -79,6 +110,20 @@ public interface HasFieldsView<M extends HasFields<M>> extends Transform<M, Stri
      */
     default String fieldSuffix() {
         return "";
+    }
+
+    /**
+     * If this method returns {@code true}, then the last field in the list
+     * should be rendered with triple dot style {@code ...} if it is an array.
+     * If this method returns {@code false}, then all fields are rendered as
+     * usual.
+     * <p>
+     * The default value for this method is {@code false}.
+     *
+     * @return  if triple dots should be used or not
+     */
+    default boolean useTripleDot() {
+        return false;
     }
 
     /**

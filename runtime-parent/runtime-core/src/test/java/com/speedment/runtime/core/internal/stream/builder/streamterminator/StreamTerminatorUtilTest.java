@@ -25,8 +25,6 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.RenderResult;
-import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isContainingOnlyFieldPredicate;
-import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.renderSqlWhere;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.field.internal.predicate.ints.IntBetweenPredicate;
@@ -36,17 +34,18 @@ import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.test_support.MockDbmsType;
 import com.speedment.runtime.typemapper.TypeMapper;
+import org.junit.Test;
+
 import java.util.Arrays;
-import static java.util.Collections.singletonList;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import org.junit.Test;
+
+import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isContainingOnlyFieldPredicate;
+import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.renderSqlWhere;
+import static java.util.Collections.singletonList;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -121,7 +120,7 @@ public class StreamTerminatorUtilTest {
     public void testRenderSqlWhereNot() {
         testRender(singletonList(ID_GT_0_AND_AGE_EQ_2.negate()), rr -> {
             System.out.println(rr);
-            assertEquals("(NOT ((id > ?) AND (age = ?)))", rr.getSql());
+            assertEquals("((id <= ?) OR (NOT (age = ?)))", rr.getSql());
             assertEquals(Arrays.asList(0, 2), rr.getValues());
         });
     }

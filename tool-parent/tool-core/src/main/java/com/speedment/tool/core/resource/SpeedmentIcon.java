@@ -63,6 +63,7 @@ public enum SpeedmentIcon implements Icon {
     PROJECT("/pics/vectors_rendered/project.png"),
     SCHEMA("/pics/vectors_rendered/schema.png"),
     TABLE("/pics/vectors_rendered/table.png"),
+    TABLE_LINK("/pics/vectors_rendered/tableLink.png"),
     PLUGIN_DATA("/pics/vectors_rendered/plugin.png"),
     // Menu icons
     ADD_DBMS_TRANS("/pics/dialog/add_dbms_trans.png"),
@@ -166,13 +167,19 @@ public enum SpeedmentIcon implements Icon {
             }
         }
 
-        final SpeedmentIcon icon = NODE_ICONS.get(
-            Optional.of(node)
-                .filter(HasMainInterface.class::isInstance)
-                .map(HasMainInterface.class::cast)
-                .map(HasMainInterface::mainInterface)
-                .orElse(node.getClass())
-        );
+        final SpeedmentIcon icon;
+        if (node instanceof Table) {
+            icon = ((Table) node).isView()
+                ? TABLE_LINK : TABLE;
+        } else {
+            icon = NODE_ICONS.get(
+                Optional.of(node)
+                    .filter(HasMainInterface.class::isInstance)
+                    .map(HasMainInterface.class::cast)
+                    .map(HasMainInterface::mainInterface)
+                    .orElse(node.getClass())
+            );
+        }
 
         if (icon != null) {
             return icon.view();

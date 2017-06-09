@@ -28,13 +28,14 @@ import java.util.stream.Stream;
  * @param <ENTITY> the entity type
  *
  * @author Per Minborg
+ * @author Emil Forslund
  */
 public interface CombinedPredicate<ENTITY> extends Predicate<ENTITY> {
 
     /**
      * This enum list all the different types of combinations
      */
-    public enum Type {
+    enum Type {
         AND, OR
     }
 
@@ -61,21 +62,14 @@ public interface CombinedPredicate<ENTITY> extends Predicate<ENTITY> {
      */
     Type getType();
 
-    /**
-     * Returns if this CombinedPredicate is negated.
-     *
-     * @return if this CombinedPredicate is negated
-     */
-    boolean isNegated();
+    @Override
+    CombinedPredicate<ENTITY> and(Predicate<? super ENTITY> other);
 
     @Override
-    public CombinedPredicate<ENTITY> and(Predicate<? super ENTITY> other);
-
-    @Override
-    public CombinedPredicate<ENTITY> or(Predicate<? super ENTITY> other);
+    CombinedPredicate<ENTITY> or(Predicate<? super ENTITY> other);
     
     @Override
-    public CombinedPredicate<ENTITY> negate();
+    CombinedPredicate<ENTITY> negate();
 
     /**
      * Creates and returns a new CombinedPredicate that is the logical AND
@@ -88,7 +82,11 @@ public interface CombinedPredicate<ENTITY> extends Predicate<ENTITY> {
      * the given predicates
      */
     static <ENTITY> CombinedPredicate<ENTITY> and(Predicate<ENTITY> first, Predicate<? super ENTITY> second) {
-        return new AbstractCombinedPredicate.AndCombinedBasePredicate<>(Arrays.asList(first, second), false);
+        @SuppressWarnings("unchecked")
+        final Predicate<ENTITY> secondCasted = (Predicate<ENTITY>) second;
+        return new AbstractCombinedPredicate.AndCombinedBasePredicate<>(
+            Arrays.asList(first, secondCasted)
+        );
     }
 
     /**
@@ -102,7 +100,11 @@ public interface CombinedPredicate<ENTITY> extends Predicate<ENTITY> {
      * given predicates
      */
     static <ENTITY> CombinedPredicate<ENTITY> or(Predicate<ENTITY> first, Predicate<? super ENTITY> second) {
-        return new AbstractCombinedPredicate.OrCombinedBasePredicate<>(Arrays.asList(first, second), false);
+        @SuppressWarnings("unchecked")
+        final Predicate<ENTITY> secondCasted = (Predicate<ENTITY>) second;
+        return new AbstractCombinedPredicate.OrCombinedBasePredicate<>(
+            Arrays.asList(first, secondCasted)
+        );
     }
 
 }

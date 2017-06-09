@@ -88,7 +88,7 @@ public final class StreamUtil {
      *
      * @param <T>  the type of the entity
      */
-    private static class ResultSetIterator<T> implements Iterator<T> {
+    static class ResultSetIterator<T> implements Iterator<T> {
 
         /**
          * The current state of the {@code ResultSetIterator}.
@@ -116,8 +116,8 @@ public final class StreamUtil {
 
         private State state = State.NOT_DETERMINED;
 
-        private ResultSetIterator(final ResultSet resultSet,
-                                 final SqlFunction<ResultSet, T> mapper) {
+        ResultSetIterator(final ResultSet resultSet,
+                          final SqlFunction<ResultSet, T> mapper) {
 
             this.resultSet = requireNonNull(resultSet);
             this.mapper    = requireNonNull(mapper);

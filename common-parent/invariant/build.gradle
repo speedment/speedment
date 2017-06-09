@@ -1,0 +1,6 @@
+group = 'com.speedment.common'
+description = 'Speedment - Common - Invariant'
+dependencies {
+    testCompile group: 'junit', name: 'junit', version:'4.12'
+    testCompile group: 'org.hamcrest', name: 'hamcrest-core', version:'1.3'
+}

@@ -17,8 +17,8 @@
 package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.CharField;
 import com.speedment.runtime.field.comparator.FieldComparator;
+import com.speedment.runtime.field.trait.HasCharValue;
 
 /**
  * A predicate that evaluates if a value is between two chars.
@@ -30,7 +30,7 @@ import com.speedment.runtime.field.comparator.FieldComparator;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public interface CharFieldComparator<ENTITY, D> extends FieldComparator<ENTITY, Character> {
+public interface CharFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> {
     
     /**
      * Gets the field that is being compared.
@@ -38,5 +38,5 @@ public interface CharFieldComparator<ENTITY, D> extends FieldComparator<ENTITY, 
      * @return the compared field
      */
     @Override
-    CharField<ENTITY, D> getField();
+    HasCharValue<ENTITY, D> getField();
 }

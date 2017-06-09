@@ -17,8 +17,8 @@
 package com.speedment.runtime.field.internal.comparator;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.field.comparator.FieldComparator;
+import com.speedment.runtime.field.trait.HasIntValue;
 
 /**
  * A predicate that evaluates if a value is between two ints.
@@ -30,7 +30,7 @@ import com.speedment.runtime.field.comparator.FieldComparator;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public interface IntFieldComparator<ENTITY, D> extends FieldComparator<ENTITY, Integer> {
+public interface IntFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> {
     
     /**
      * Gets the field that is being compared.
@@ -38,5 +38,5 @@ public interface IntFieldComparator<ENTITY, D> extends FieldComparator<ENTITY, I
      * @return the compared field
      */
     @Override
-    IntField<ENTITY, D> getField();
+    HasIntValue<ENTITY, D> getField();
 }

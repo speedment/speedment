@@ -22,39 +22,38 @@ import com.speedment.runtime.core.component.sql.SqlStreamOptimizer;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsType;
-import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.NONE;
-import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.ONLY_AFTER_SORTED;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.LimitAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.SkipAction;
 import com.speedment.runtime.core.internal.stream.builder.action.reference.SortedComparatorAction;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.RenderResult;
-import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isContainingOnlyFieldPredicate;
-import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isSortedActionWithFieldPredicate;
 import com.speedment.runtime.core.stream.Pipeline;
 import com.speedment.runtime.core.stream.action.Action;
+import com.speedment.runtime.field.comparator.CombinedComparator;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import static java.util.Objects.requireNonNull;
-import java.util.Set;
+
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
+import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.NONE;
+import static com.speedment.runtime.core.db.DbmsType.SkipLimitSupport.ONLY_AFTER_SORTED;
+import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isContainingOnlyFieldPredicate;
+import static com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil.isSortedActionWithFieldPredicate;
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 
 /**
  * This Optimizer takes care of the following case:
- * <br>
  * <ul>
- * <li> a) Zero or more filter() operations
- * <li> b) Zero or more sorted() operations
- * <li> c) Zero or more skip() operations
- * <li> d) Zero or more limit() operations
+ *   <li> a) Zero or more filter() operations
+ *   <li> b) Zero or more sorted() operations
+ *   <li> c) Zero or more skip() operations
+ *   <li> d) Zero or more limit() operations
+ * </ul>
  *
  * <em>No other operations</em> must be in the sequence a-d or within the
  * individual items a-d. <em>All</em> parameters in a and b must be obtained via
@@ -64,7 +63,6 @@ import static java.util.stream.Collectors.toList;
  * Thus, this optimizer can handle a (FILTER*, SORTED*, SKIP*, LIMIT*) or
  * (SORTED*, LIMIT*, SKIP*, LIMIT*) pattern where all non-primitive parameters
  * are all Field derived
- *
  *
  * @author Per Minborg
  * @param <ENTITY> entity type
@@ -76,13 +74,13 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
     private final SkipOperation SKIP_OPERATION = new SkipOperation();
     private final LimitOperation LIMIT_OPERATION = new LimitOperation();
 
-    private final List<Operation<ENTITY>> FILTER_SORTED_SKIP_PATH = Arrays.asList(
+    private final List<Operation<ENTITY>> FILTER_SORTED_SKIP_LIMIT_PATH = Arrays.asList(
         FILTER_OPERATION,
         SORTED_OPERATION,
         SKIP_OPERATION,
         LIMIT_OPERATION
     );
-    private final List<Operation<ENTITY>> SORTED_FILTER_SKIP_PATH = Arrays.asList(
+    private final List<Operation<ENTITY>> SORTED_FILTER_SKIP_LIMIT_PATH = Arrays.asList(
         SORTED_OPERATION,
         FILTER_OPERATION,
         SKIP_OPERATION,
@@ -126,6 +124,7 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <P extends Pipeline> P optimize(
         final P initialPipeline,
         final SqlStreamOptimizerInfo<ENTITY> info,
@@ -167,50 +166,71 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         }
 
         if (!sorteds.isEmpty()) {
-            sql.append(" ORDER BY ");
-            // Iterate backwards
-            final Set<ColumnIdentifier<ENTITY>> columns = new HashSet<>();
+
+            final List<FieldComparator<ENTITY>> fieldComparators = new ArrayList<>();
             for (int i = sorteds.size() - 1; i >= 0; i--) {
                 final SortedComparatorAction<ENTITY> sortedAction = sorteds.get(i);
                 @SuppressWarnings("unchecked")
-                final FieldComparator<ENTITY, ?> fieldComparator = (FieldComparator<ENTITY, ?>) sortedAction.getComparator();
-                final ColumnIdentifier<ENTITY> columnIdentifier = fieldComparator.getField().identifier();
+                final Comparator<? super ENTITY> comparator = sortedAction.getComparator();
+                if (comparator instanceof FieldComparator) {
+                    @SuppressWarnings("unchecked")
+                    final FieldComparator<ENTITY> fieldComparator = (FieldComparator<ENTITY>) sortedAction.getComparator();
+                    fieldComparators.add(fieldComparator);
+                }
+                if (comparator instanceof CombinedComparator) {
+                    @SuppressWarnings("unchecked")
+                    final CombinedComparator<ENTITY> combinedComparator = (CombinedComparator<ENTITY>) sortedAction.getComparator();
+                    combinedComparator.stream()
+                        .map(c -> (FieldComparator<ENTITY>) c)
+                        .forEachOrdered(fieldComparators::add);
+                }
+            }
 
-                // Some databases (e.g. SQL Server) only allows distinct columns in ORDER BY 
-                if (columns.add(columnIdentifier)) {
-                    if (!(i == (sorteds.size() - 1))) {
-                        sql.append(", ");
-                    }
+            if (!fieldComparators.isEmpty()) {
 
-                    boolean isReversed = fieldComparator.isReversed();
-                    String fieldName = info.getSqlColumnNamer().apply(fieldComparator.getField());
+                sql.append(" ORDER BY ");
+                // Iterate backwards
+                final Set<ColumnIdentifier<ENTITY>> columns = new HashSet<>();
+                int cnt = 0;
+                for (FieldComparator<ENTITY> fieldComparator : fieldComparators) {
+                    final ColumnIdentifier<ENTITY> columnIdentifier = fieldComparator.getField().identifier();
 
-                    final NullOrder effectiveNullOrder = isReversed
-                        ? fieldComparator.getNullOrder().reversed()
-                        : fieldComparator.getNullOrder();
-
-                    // Specify NullOrder pre column if nulls are first
-                    if (effectiveNullOrder == NullOrder.FIRST) {
-                        if (dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.PRE) {
-                            sql.append(fieldName).append("IS NOT NULL, ");
+                    // Some databases (e.g. SQL Server) only allows distinct columns in ORDER BY 
+                    if (columns.add(columnIdentifier)) {
+                        if (cnt++ != 0) {
+                            sql.append(", ");
                         }
-                        if (dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.PRE_WITH_CASE) {
-                            sql.append("CASE WHEN ").append(fieldName).append(" IS NULL THEN 0 ELSE 1 END, ");
+
+                        boolean isReversed = fieldComparator.isReversed();
+                        String fieldName = info.getSqlColumnNamer().apply(fieldComparator.getField());
+
+                        final NullOrder effectiveNullOrder = isReversed
+                            ? fieldComparator.getNullOrder().reversed()
+                            : fieldComparator.getNullOrder();
+
+                        // Specify NullOrder pre column if nulls are first
+                        if (effectiveNullOrder == NullOrder.FIRST) {
+                            if (dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.PRE) {
+                                sql.append(fieldName).append("IS NOT NULL, ");
+                            }
+                            if (dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.PRE_WITH_CASE) {
+                                sql.append("CASE WHEN ").append(fieldName).append(" IS NULL THEN 0 ELSE 1 END, ");
+                            }
                         }
-                    }
 
-                    sql.append(fieldName);
-                    if (isReversed) {
-                        sql.append(" DESC");
-                    } else {
-                        sql.append(" ASC");
-                    }
+                        sql.append(fieldName);
+                        if (isReversed) {
+                            sql.append(" DESC");
+                        } else {
+                            sql.append(" ASC");
+                        }
 
-                    // Specify NullOrder post column
-                    if (effectiveNullOrder == NullOrder.FIRST && dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.POST) {
-                        sql.append(" NULLS FIRST");
-                    }
+                        // Specify NullOrder post column
+                        if (effectiveNullOrder == NullOrder.FIRST && dbmsType.getSortByNullOrderInsertion() == DbmsType.SortByNullOrderInsertion.POST) {
+                            sql.append(" NULLS FIRST");
+                        }
 
+                    }
                 }
             }
         }
@@ -246,22 +266,37 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
         final Consumers<ENTITY> consumers = new Consumers<>(filterConsumer, sortedConsumer, skipConsumer, limitConsumer);
 
         final Action<?, ?> firstAction = pipeline.getFirst();
+
+        // The path is the way we can walk the stream pipeline
+        // and still satisfy the requirement on this optimizer
+        // There are two paths:
+        //   Sorted*,Filter*,Skip*,Limit*
+        //   Filter*,Sorted*,Skip*,Limit*
+        // If there are other operations types in between, the optimizer will not kick in
         final List<Operation<ENTITY>> path;
         if (firstAction instanceof SortedComparatorAction) {
-            path = SORTED_FILTER_SKIP_PATH;
+            path = SORTED_FILTER_SKIP_LIMIT_PATH;
         } else {
-            path = FILTER_SORTED_SKIP_PATH;
+            path = FILTER_SORTED_SKIP_LIMIT_PATH;
         }
 
+        // Keeps track on where we are in the path
+        // Start with the first operation type (i.e. either SORTED or FILTER)
         Operation<ENTITY> operation = path.get(0);
 
         for (Action<?, ?> action : pipeline) {
 
+            // Are we on the first operation type in the path
             if (operation == path.get(0)) {
+                // Check if the current stream action is of the first operational type (e.g. SORTED)
                 if (operation.is(action)) {
+                    // If so, consume the stream action (e.g. increase a counter or put it in a list)
                     operation.consume(action, consumers);
+                    continue;
                 } else {
+                    // Check if the current stream action is of the second operational type (e.g. FILTER)
                     if (path.get(1).is(action)) {
+                        // Move the operation state to the second operational type
                         operation = path.get(1);
                     } else {
                         if (path.get(2).is(action)) {
@@ -277,9 +312,11 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
                 }
             }
 
+            // The same principle as above but starting at the second operation type in the path
             if (operation == path.get(1)) {
                 if (operation.is(action)) {
                     operation.consume(action, consumers);
+                    continue;
                 } else {
                     if (path.get(2).is(action)) {
                         operation = path.get(2);
@@ -296,6 +333,7 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
             if (operation == path.get(2)) {
                 if (operation.is(action)) {
                     operation.consume(action, consumers);
+                    continue;
                 } else {
                     if (path.get(3).is(action)) {
                         operation = path.get(3);
@@ -308,6 +346,7 @@ public final class FilterSortedSkipOptimizer<ENTITY> implements SqlStreamOptimiz
             if (operation == path.get(3)) {
                 if (operation.is(action)) {
                     operation.consume(action, consumers);
+                    continue;
                 } else {
                     return;
                 }

@@ -39,10 +39,11 @@ import com.speedment.runtime.field.method.GetByte;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
-import java.util.Set;
+import java.util.Collection;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
+import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -154,8 +155,8 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Byte
     }
     
     @Override
-    public FieldPredicate<ENTITY> in(Set<Byte> set) {
-        return new ByteInPredicate<>(this, set);
+    public FieldPredicate<ENTITY> in(Collection<Byte> values) {
+        return new ByteInPredicate<>(this, collectionToSet(values));
     }
     
     @Override
@@ -179,7 +180,7 @@ public final class ByteForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Byte
     }
     
     @Override
-    public Predicate<ENTITY> notIn(Set<Byte> set) {
-        return new ByteInPredicate<>(this, set).negate();
+    public Predicate<ENTITY> notIn(Collection<Byte> values) {
+        return new ByteInPredicate<>(this, collectionToSet(values)).negate();
     }
 }

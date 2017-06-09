@@ -35,8 +35,12 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   3.0.0
  */
-public class FindFromReference<ENTITY, FK_ENTITY, V extends Comparable<? super V>, SOURCE extends Field<ENTITY> & HasComparableOperators<ENTITY, V> & HasFinder<ENTITY, FK_ENTITY>>
-    extends AbstractFindFrom<ENTITY, FK_ENTITY, V, SOURCE, HasComparableOperators<FK_ENTITY, V>> {
+public class FindFromReference<
+    ENTITY,
+    FK_ENTITY,
+    V extends Comparable<? super V>,
+    SOURCE extends Field<ENTITY> & HasComparableOperators<ENTITY, V> & HasFinder<ENTITY, FK_ENTITY>>
+extends AbstractFindFrom<ENTITY, FK_ENTITY, V, SOURCE, HasComparableOperators<FK_ENTITY, V>> {
 
     public FindFromReference(SOURCE source, HasComparableOperators<FK_ENTITY, V> target, TableIdentifier<FK_ENTITY> identifier, Supplier<Stream<FK_ENTITY>> streamSupplier) {
         super(source, target, identifier, streamSupplier);

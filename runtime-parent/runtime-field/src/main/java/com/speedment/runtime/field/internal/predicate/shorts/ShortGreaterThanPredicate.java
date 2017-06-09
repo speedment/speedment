@@ -30,16 +30,14 @@ import com.speedment.runtime.field.trait.HasShortValue;
  * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class ShortGreaterThanPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Short, HasShortValue<ENTITY, D>> implements Tuple1<Short> {
+public final class ShortGreaterThanPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasShortValue<ENTITY, D>> 
+implements Tuple1<Short> {
     
     private final short value;
     
     public ShortGreaterThanPredicate(HasShortValue<ENTITY, D> field, short value) {
-        this(field, value, false);
-    }
-    
-    ShortGreaterThanPredicate(HasShortValue<ENTITY, D> field, short value, boolean negated) {
-        super(PredicateType.GREATER_THAN, field, entity -> field.getAsShort(entity) > value, negated);
+        super(PredicateType.GREATER_THAN, field, entity -> field.getAsShort(entity) > value);
         this.value = value;
     }
     
@@ -49,7 +47,7 @@ public final class ShortGreaterThanPredicate<ENTITY, D> extends AbstractFieldPre
     }
     
     @Override
-    public ShortGreaterThanPredicate<ENTITY, D> negate() {
-        return new ShortGreaterThanPredicate<>(getField(), value, !isNegated());
+    public ShortLessOrEqualPredicate<ENTITY, D> negate() {
+        return new ShortLessOrEqualPredicate<>(getField(), value);
     }
 }

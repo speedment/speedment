@@ -19,7 +19,6 @@ package com.speedment.runtime.field.internal.predicate.reference;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.internal.predicate.BetweenPredicate;
-import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasReferenceValue;
 
@@ -36,29 +35,18 @@ import static java.util.Objects.requireNonNull;
  * @since   2.2.0
  */
 public final class ReferenceNotBetweenPredicate<ENTITY, D, V extends Comparable<? super V>>
-        extends AbstractFieldPredicate<ENTITY, V, HasReferenceValue<ENTITY, D, V>>
-        implements BetweenPredicate, Tuple2<V, V> {
+extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
+implements BetweenPredicate, Tuple2<V, V> {
 
     private final V start;
     private final V end;
     private final Inclusion inclusion;
 
     public ReferenceNotBetweenPredicate(
-            HasReferenceValue<ENTITY, D, V> referenceField,
-            V start,
-            V end,
-            Inclusion inclusion
-    ) {
-        this(referenceField, start, end, inclusion, false);
-    }
-    
-    ReferenceNotBetweenPredicate(
-        final HasReferenceValue<ENTITY, D, V> referenceField,
-        final V start,
-        final V end,
-        final Inclusion inclusion,
-        final boolean negated
-    ) {
+            final HasReferenceValue<ENTITY, D, V> referenceField,
+            final V start,
+            final V end,
+            final Inclusion inclusion) {
         
         super(NOT_BETWEEN, referenceField, entity -> {
             final V fieldValue = referenceField.get(entity);
@@ -86,7 +74,7 @@ public final class ReferenceNotBetweenPredicate<ENTITY, D, V extends Comparable<
                 
                 default : throw new IllegalStateException("Inclusion unknown: " + inclusion);
             }
-        }, negated);
+        });
         
         this.start     = start;
         this.end       = end;
@@ -109,8 +97,8 @@ public final class ReferenceNotBetweenPredicate<ENTITY, D, V extends Comparable<
     }
 
     @Override
-    public ReferenceNotBetweenPredicate<ENTITY, D, V> negate() {
-        return new ReferenceNotBetweenPredicate<>(getField(), start, end, inclusion, !isNegated());
+    public ReferenceBetweenPredicate<ENTITY, D, V> negate() {
+        return new ReferenceBetweenPredicate<>(getField(), start, end, inclusion);
     }
     
     

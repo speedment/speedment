@@ -1,0 +1,7 @@
+group = 'com.speedment.tool'
+description = 'Speedment - Tool - Tool All'
+dependencies {
+    compile project(':tool-parent:tool-config')
+    compile project(':tool-parent:tool-propertyeditor')
+    compile project(':tool-parent:tool-core')
+}

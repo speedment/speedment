@@ -17,8 +17,9 @@
 package com.speedment.runtime.field.internal.predicate.string;
 
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
-import static com.speedment.runtime.field.predicate.PredicateType.IS_EMPTY;
 import com.speedment.runtime.field.trait.HasReferenceValue;
+
+import static com.speedment.runtime.field.predicate.PredicateType.IS_EMPTY;
 
 /**
  *
@@ -29,22 +30,19 @@ import com.speedment.runtime.field.trait.HasReferenceValue;
  * @since   2.2.0
  */
 public final class StringIsEmptyPredicate<ENTITY, D> 
-extends AbstractFieldPredicate<ENTITY, String, HasReferenceValue<ENTITY, D, String>> {
+extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, String>> {
     
-    public StringIsEmptyPredicate(HasReferenceValue<ENTITY, D, String> field) {
-        this(field, false);
-    }
-    
-    StringIsEmptyPredicate(HasReferenceValue<ENTITY, D, String> field, boolean negated) {
+    public StringIsEmptyPredicate(
+            final HasReferenceValue<ENTITY, D, String> field) {
+
         super(IS_EMPTY, field, entity -> {
             final String result = field.get(entity);
             return result == null || result.isEmpty();
-        }, negated);
+        });
     }
 
     @Override
-    public StringIsEmptyPredicate<ENTITY, D> negate() {
-        return new StringIsEmptyPredicate<>(getField(), !isNegated());
+    public StringIsNotEmptyPredicate<ENTITY, D> negate() {
+        return new StringIsNotEmptyPredicate<>(getField());
     }
-    
 }

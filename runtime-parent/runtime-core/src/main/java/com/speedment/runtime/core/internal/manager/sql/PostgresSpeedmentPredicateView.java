@@ -20,7 +20,7 @@ import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 
-import static com.speedment.runtime.field.internal.predicate.PredicateUtil.getFirstOperandAsRaw;
+import static com.speedment.runtime.field.util.PredicateOperandUtil.getFirstOperandAsRaw;
 
 /**
  * Created by fdirlikl on 11/18/2015.

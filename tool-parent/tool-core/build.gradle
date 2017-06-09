@@ -1,0 +1,18 @@
+group = 'com.speedment.tool'
+description = 'Speedment - Tool - Core'
+dependencies {
+  compile project(':common-parent:injector')
+  compile project(':common-parent:rest')
+  compile project(':common-parent:json')
+  compile project(':common-parent:invariant')
+  compile project(':common-parent:mapstream')
+  compile project(':common-parent:logger')
+  compile project(':runtime-parent:runtime-config')
+  compile project(':runtime-parent:runtime-typemapper')
+  compile project(':runtime-parent:runtime-core')
+  compile project(':generator-parent:generator-translator')
+  compile project(':generator-parent:generator-core')
+  compile project(':tool-parent:tool-config')
+  compile project(':tool-parent:tool-propertyeditor')
+    testCompile group: 'junit', name: 'junit', version:'4.12'
+}

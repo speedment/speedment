@@ -42,16 +42,19 @@ import static java.util.stream.Collectors.toSet;
 public final class MySqlDbmsType extends AbstractDbmsType {
 
     public static InjectBundle include() {
-        return of(MySqlDbmsMetadataHandler.class, MySqlDbmsOperationHandler.class);
+        return of(
+            MySqlDbmsMetadataHandler.class, 
+            MySqlDbmsOperationHandler.class, 
+            MySqlSpeedmentPredicateView.class
+        );
     }
-
-    private final static FieldPredicateView PREDICATE_VIEW = new MySqlSpeedmentPredicateView();
 
     private final MySqlNamingConvention namingConvention;
     private final MySqlConnectionUrlGenerator connectionUrlGenerator;
 
-    private @Inject MySqlDbmsMetadataHandler metadataHandler;
-    private @Inject MySqlDbmsOperationHandler operationHandler;
+    @Inject private MySqlDbmsMetadataHandler metadataHandler;
+    @Inject private MySqlDbmsOperationHandler operationHandler;
+    @Inject private MySqlSpeedmentPredicateView fieldPredicateView;
 
     private MySqlDbmsType() {
         namingConvention = new MySqlNamingConvention();
@@ -111,7 +114,7 @@ public final class MySqlDbmsType extends AbstractDbmsType {
 
     @Override
     public FieldPredicateView getFieldPredicateView() {
-        return PREDICATE_VIEW;
+        return fieldPredicateView;
     }
 
     @Override
