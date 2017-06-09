@@ -32,6 +32,10 @@ import java.util.function.Function;
  * another entity.
  *
  * @author Emil Forslund
+ * @param <ENTITY>         the entity type
+ * @param <D>              the database type
+ * @param <E>              the java enum type
+ * @param <FK>             the foreign key entity type
  * @since  3.0.10
  *
  * @see  EnumField
@@ -50,6 +54,7 @@ extends EnumField<ENTITY, D, E>,
      *
      * @return  the string-to-enum mapper
      */
+    @Override
     Function<String, E> stringToEnum();
 
     /**
@@ -60,6 +65,7 @@ extends EnumField<ENTITY, D, E>,
      *
      * @return  the enum-to-string mapper
      */
+    @Override
     Function<E, String> enumToString();
 
     /**
@@ -68,6 +74,7 @@ extends EnumField<ENTITY, D, E>,
      * @param <ENTITY>      the entity type
      * @param <D>           the database type
      * @param <E>           the java enum type
+     * @param <FK>          the foreign key entity type
      * @param identifier    the column that this field represents
      * @param getter        method reference to the getter in the entity
      * @param setter        method reference to the setter in the entity
