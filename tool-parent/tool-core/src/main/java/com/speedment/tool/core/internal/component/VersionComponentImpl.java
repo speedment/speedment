@@ -20,7 +20,6 @@ import com.speedment.common.rest.Rest;
 import com.speedment.tool.core.component.VersionComponent;
 import com.speedment.tool.core.exception.SpeedmentToolException;
 
-import java.util.Comparator;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
@@ -34,22 +33,15 @@ import java.util.concurrent.CompletableFuture;
 public final class VersionComponentImpl implements VersionComponent {
 
     @Override
+    @SuppressWarnings("unchecked")
     public CompletableFuture<String> latestVersion() {
         return Rest.connectHttps("api.github.com")
-            .get("repos/speedment/speedment/releases")
+            .get("repos/speedment/speedment/releases/latest")
             .thenApplyAsync(res -> {
                 if (res.success()) {
-                    return res.decodeJsonArray()
-                        .map(o -> {
-                            @SuppressWarnings("unchecked")
-                            final Map<String, Object> map = (Map<String, Object>) o;
-                            return map;
-                        })
-                        .filter(m -> !((Boolean) m.get("draft")))
+                    return res.decodeJson()
+                        .map(m -> (Map<String, String>) m)
                         .map(m -> m.get("tag_name"))
-                        .map(String.class::cast)
-                        .sorted(Comparator.reverseOrder())
-                        .findFirst()
                         .orElseThrow(() -> new SpeedmentToolException(
                             "Could not establish the latest version."
                         ));
