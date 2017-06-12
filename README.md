@@ -95,17 +95,17 @@ Running the following from a command-line:
 
 ###### MySQL
 ```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mysql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.10 && cd speedment-demo && mvn speedment:tool
+mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mysql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.11 && cd speedment-demo && mvn speedment:tool
 ```
 
 ###### PostgreSQL
 ```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-postgresql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.10 && cd speedment-demo && mvn speedment:tool
+mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-postgresql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.11 && cd speedment-demo && mvn speedment:tool
 ```
 
 ###### MariaDB
 ```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mariadb -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.10 && cd speedment-demo && mvn speedment:tool
+mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mariadb -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.11 && cd speedment-demo && mvn speedment:tool
 ```
 
 A graphical dialog will prompt for database connection details.
@@ -441,7 +441,7 @@ If you do not want to use an archetype, for an example if you already have a pro
     <dependency>
         <groupId>org.mariadb.jdbc</groupId>
         <artifactId>mariadb-java-client</artifactId>
-        <version>1.5.9</version>
+        <version>2.0.1</version>
         <scope>runtime</scope>
     </dependency>
     
