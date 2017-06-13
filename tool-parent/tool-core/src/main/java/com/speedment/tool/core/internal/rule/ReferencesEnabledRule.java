@@ -24,12 +24,12 @@ import com.speedment.runtime.config.trait.HasColumn;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.util.DocumentDbUtil;
-import static com.speedment.runtime.config.util.DocumentDbUtil.isAllAncestorsEnabled;
 import com.speedment.runtime.config.util.DocumentUtil;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.tool.core.component.IssueComponent;
 import com.speedment.tool.core.rule.Issue;
 import com.speedment.tool.core.rule.Rule;
+
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -37,7 +37,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  *
  * @author Simon Jonasson
- * @since 3.0.0
+ * @since  3.0.0
  */
 public final class ReferencesEnabledRule implements Rule {
 
@@ -46,7 +46,7 @@ public final class ReferencesEnabledRule implements Rule {
 
     @Override
     public CompletableFuture<Boolean> verify() {
-        return CompletableFuture.supplyAsync(() -> checkRule());
+        return CompletableFuture.supplyAsync(this::checkRule);
     }
 
     private boolean checkRule() {
@@ -54,7 +54,7 @@ public final class ReferencesEnabledRule implements Rule {
         final Project project = projectComponent.getProject();
         
         DocumentDbUtil.traverseOver(project)
-            .filter(d -> isAllAncestorsEnabled(d))
+            .filter(DocumentDbUtil::isAllAncestorsEnabled)
             .forEach(doc -> check(doc, noIssues));
         
         return noIssues.get();

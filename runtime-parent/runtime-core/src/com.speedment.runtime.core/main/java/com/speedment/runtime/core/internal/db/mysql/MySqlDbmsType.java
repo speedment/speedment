@@ -78,7 +78,12 @@ public final class MySqlDbmsType extends AbstractDbmsType {
 
     @Override
     public String getDbmsNameMeaning() {
-        return "Just a name";
+        return "The name of the MySQL Database.";
+    }
+
+    @Override
+    public boolean hasSchemaNames() {
+        return false;
     }
 
     @Override
@@ -176,16 +181,13 @@ public final class MySqlDbmsType extends AbstractDbmsType {
                 .append(dbms.getIpAddress().orElse(""));
 
             dbms.getPort().ifPresent(p -> result.append(":").append(p));
-            result.append(
-                "/?useUnicode=true"
-                + "&characterEncoding=UTF-8"
-                + "&useServerPrepStmts=true"
-                /* + "&useCursorFetch=true" */ // Fix #190, Needs to be removed for 6.x drivers
-                + "&zeroDateTimeBehavior=convertToNull"
-                + "&useSSL=false"
-                + "&nullNamePatternMatchesAll=true" // Fix #190
-                + "&useLegacyDatetimeCode=true" // Fix #190
-            );
+
+            result.append("/").append(dbms.getName())
+                .append("?useUnicode=true&characterEncoding=UTF-8")
+                .append("&useServerPrepStmts=true&useSSL=false")
+                .append("&zeroDateTimeBehavior=convertToNull")
+                .append("&nullNamePatternMatchesAll=true") // Fix #190
+                .append("&useLegacyDatetimeCode=true");    // Fix #190
 
             return result.toString();
         }

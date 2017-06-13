@@ -83,7 +83,7 @@ public final class PostgresqlDbmsType extends AbstractDbmsType {
 
     @Override
     public String getDbmsNameMeaning() {
-        return "Just a name";
+        return "The name of the PostgreSQL database to connect to.";
     }
 
     @Override

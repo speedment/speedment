@@ -35,9 +35,13 @@ import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.internal.util.InjectionLoader;
 import com.speedment.tool.core.resource.FontAwesome;
 import javafx.collections.FXCollections;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 
 import java.net.URL;
 import java.util.*;
@@ -47,6 +51,7 @@ import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toCollection;
 import static javafx.beans.binding.Bindings.createBooleanBinding;
+import static javafx.scene.layout.Region.USE_COMPUTED_SIZE;
 
 /**
  *
@@ -56,9 +61,7 @@ public final class ConnectController implements Initializable {
     
     private final static String 
         DEFAULT_HOST   = "127.0.0.1",
-        DEFAULT_USER   = "root",
-        DEFAULT_NAME   = "db0",
-        DEFAULT_SCHEMA = "example";
+        DEFAULT_USER   = "root";
     
     @Inject private UserInterfaceComponent userInterfaceComponent;
     @Inject private DbmsHandlerComponent dbmsHandlerComponent;
@@ -78,9 +81,19 @@ public final class ConnectController implements Initializable {
     @FXML private CheckBox enableConnectionUrl;
     @FXML private TextArea areaConnectionUrl;
 
+    @FXML private GridPane grid;
+    @FXML private RowConstraints dbmsRow;
+    @FXML private RowConstraints schemaRow;
+
+    private FilteredList<Node> dbmsRowChildren;
+    private FilteredList<Node> schemaRowChildren;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         buttonConnect.setGraphic(FontAwesome.SIGN_IN.view());
+
+        dbmsRowChildren   = inRow(dbmsRow);
+        schemaRowChildren = inRow(schemaRow);
 
         fieldType.setItems(getDbmsTypes()
             .collect(toCollection(FXCollections::observableArrayList))
@@ -100,6 +113,10 @@ public final class ConnectController implements Initializable {
         final Runnable recalculateFields = () -> {
             final DbmsType item = dbmsType.get();
 
+            // Hide name rows if particular Dbms doesn't support them.
+            toggleVisibility(dbmsRow, dbmsRowChildren, item.hasDatabaseNames());
+            toggleVisibility(schemaRow, schemaRowChildren, item.hasSchemaNames());
+
             // Disable Dbms Name-property for database types that doesn't use it
             if (fieldHost.getText().isEmpty()
             ||  fieldHost.getText().equals(generatedHost.get())) {
@@ -115,20 +132,18 @@ public final class ConnectController implements Initializable {
 
             if (fieldName.getText().isEmpty()
             ||  fieldName.getText().equals(generatedName.get())) {
-                final String name = item.getDefaultDbmsName()
-                    .orElse(DEFAULT_NAME);
-
-                fieldName.textProperty().setValue(name);
-                generatedName.set(name);
+                item.getDefaultDbmsName().ifPresent(name -> {
+                    fieldName.textProperty().setValue(name);
+                    generatedName.set(name);
+                });
             }
 
             if (fieldSchema.getText().isEmpty()
             ||  fieldSchema.getText().equals(generatedSchema.get())) {
-                final String name = item.getDefaultSchemaName()
-                    .orElse(DEFAULT_SCHEMA);
-
-                fieldSchema.textProperty().setValue(name);
-                generatedSchema.set(name);
+                item.getDefaultSchemaName().ifPresent(name -> {
+                    fieldSchema.textProperty().setValue(name);
+                    generatedSchema.set(name);
+                });
             }
 
             fieldName.getTooltip().setText(item.getDbmsNameMeaning());
@@ -186,9 +201,9 @@ public final class ConnectController implements Initializable {
                     .findFirst()
                     .orElseThrow(() -> new SpeedmentToolException(
                         "Could not find any installed JDBC drivers. Make " +
-                            "sure to include at least one JDBC driver as a " +
-                            "dependency in the projects pom.xml-file under the " +
-                            "speedment-maven-plugin <plugin> tag."
+                        "sure to include at least one JDBC driver as a " +
+                        "dependency in the projects pom.xml-file under the " +
+                        "speedment-maven-plugin <plugin> tag."
                     ))
             );
 
@@ -206,7 +221,7 @@ public final class ConnectController implements Initializable {
                 final String host   = Settings.inst().get("last_known_host",   generatedHost.get());
                 final String user   = Settings.inst().get("last_known_user",   generatedUser.get());
                 final String name   = Settings.inst().get("last_known_name",   generatedName.get());
-                final String schema = Settings.inst().get("last_known_schema", generatedName.get());
+                final String schema = Settings.inst().get("last_known_schema", generatedSchema.get());
                 final String url    = Settings.inst().get("last_known_url",    generatedConnUrl.get());
 
                 generatedHost.set(host);
@@ -215,7 +230,7 @@ public final class ConnectController implements Initializable {
                 generatedSchema.set(schema);
                 generatedConnUrl.set(url);
 
-                fieldSchema.setText(Settings.inst().get("last_known_schema"));
+                fieldSchema.setText(schema);
                 fieldPort.setText(Integer.toString(port));
                 fieldHost.setText(host);
                 fieldUser.setText(user);
@@ -242,14 +257,12 @@ public final class ConnectController implements Initializable {
             ||    fieldPort.textProperty().isEmpty().get()
             ||    fieldType.getSelectionModel().isEmpty()
             ||    fieldName.textProperty().isEmpty().get()
-            ||    fieldSchema.textProperty().isEmpty().get()
             ||    fieldUser.textProperty().isEmpty().get(),
 
             fieldHost.textProperty(),
             fieldPort.textProperty(),
             fieldType.selectionModelProperty(),
             fieldName.textProperty(),
-            fieldSchema.textProperty(),
             fieldUser.textProperty()
         ));
 
@@ -262,10 +275,6 @@ public final class ConnectController implements Initializable {
                 fieldPass.getText().toCharArray()
             );
 
-            // Set the default project name to the name of the schema.
-            userInterfaceComponent.projectProperty().nameProperty()
-                .setValue(fieldSchema.getText());
-
             // Create a new Dbms using the settings configured.
             final DbmsProperty dbms = userInterfaceComponent.projectProperty()
                 .mutator().addNewDbms();
@@ -277,12 +286,20 @@ public final class ConnectController implements Initializable {
             dbms.nameProperty().set(fieldName.getText());
 
             if (!areaConnectionUrl.getText().isEmpty()
-            &&  !areaConnectionUrl.getText().equals(generatedConnUrl.get())) {
+                &&  !areaConnectionUrl.getText().equals(generatedConnUrl.get())) {
                 Settings.inst().set("last_known_url", areaConnectionUrl.getText());
                 dbms.connectionUrlProperty().setValue(
                     areaConnectionUrl.getText()
                 );
             }
+
+            final String schema = Optional.of(fieldSchema.getText())
+                .filter(s -> !s.isEmpty())
+                .orElseGet(dbms::getName);
+
+            // Set the default project name to the name of the schema.
+            userInterfaceComponent.projectProperty().nameProperty()
+                .setValue(schema);
 
             // Store the settings so that they can be reused in the next session
             Settings.inst().set("last_known_schema", fieldSchema.getText());
@@ -293,7 +310,7 @@ public final class ConnectController implements Initializable {
             Settings.inst().set("last_known_name", fieldName.getText());
 
             // Connect to database
-            if (configFileHelper.loadFromDatabase(dbms, fieldSchema.getText())) {
+            if (configFileHelper.loadFromDatabase(dbms, schema)) {
                 Settings.inst().set("hide_open_option", false);
                 loader.loadAndShow("Scene");
                 eventComponent.notify(UIEvent.OPEN_MAIN_WINDOW);
@@ -313,6 +330,32 @@ public final class ConnectController implements Initializable {
                 "Could not find any DbmsType with name '" +
                     dbmsTypeName + "'."
             ));
+    }
+
+    private FilteredList<Node> inRow(RowConstraints row) {
+        final int index = grid.getRowConstraints().indexOf(row);
+        return grid.getChildren()
+            .filtered(node -> {
+                final Integer rowIndex = GridPane.getRowIndex(node);
+                return rowIndex != null && index == GridPane.getRowIndex(node);
+            });
+    }
+
+    private void toggleVisibility(RowConstraints row,
+                                  FilteredList<Node> children,
+                                  boolean show) {
+        if (show) {
+            row.setMaxHeight(USE_COMPUTED_SIZE);
+            row.setMinHeight(10);
+        } else {
+            row.setMaxHeight(0);
+            row.setMinHeight(0);
+        }
+
+        children.forEach(n -> {
+            n.setVisible(show);
+            n.setManaged(show);
+        });
     }
 
     private static final class TemporaryDbms implements Dbms {
