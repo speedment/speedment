@@ -16,12 +16,16 @@
  */
 package com.speedment.runtime.core.db;
 
-import static com.speedment.common.mapstream.MapStream.comparing;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.Schema;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import static com.speedment.common.mapstream.MapStream.comparing;
 
 /**
  * The {@code DbmsType} interface defines unique properties for different Dbms
@@ -85,6 +89,44 @@ public interface DbmsType {
      * @return the default dbms name
      */
     Optional<String> getDefaultDbmsName();
+
+    /**
+     * Returns the default name for the {@link Schema} when this
+     * {@code DbmsType} is used.
+     *
+     * @return  the default schema name
+     */
+    default Optional<String> getDefaultSchemaName() {
+        return Optional.empty();
+    }
+
+    /**
+     * Returns {@code true} if this {@link DbmsType} uses named schemas as part
+     * of the database structure. If {@code false}, then the Speedment Config
+     * model doesn't expect the {@link Schema#getName()} to have any meaning
+     * when referring to tables.
+     * <p>
+     * By default, this method returns {@code true}.
+     *
+     * @return  {@code true} if schema names are meaningful, else {@code false}
+     */
+    default boolean hasSchemaNames() {
+        return true;
+    }
+
+    /**
+     * Returns {@code true} if this {@link DbmsType} uses named databases as
+     * part of the database structure. If {@code false}, then the Speedment
+     * Config model doesn't expect the {@link Dbms#getName()} to have any
+     * meaning when referring to tables.
+     * <p>
+     * By default, this method returns {@code true}.
+     *
+     * @return  {@code true} if dbms names are meaningful, else {@code false}
+     */
+    default boolean hasDatabaseNames() {
+        return true;
+    }
 
     /**
      * Returns if this {@code DbmsType} is supported by Speedment in the current
