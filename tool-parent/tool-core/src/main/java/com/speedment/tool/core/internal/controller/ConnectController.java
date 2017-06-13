@@ -61,9 +61,7 @@ public final class ConnectController implements Initializable {
     
     private final static String 
         DEFAULT_HOST   = "127.0.0.1",
-        DEFAULT_USER   = "root",
-        DEFAULT_NAME   = "",
-        DEFAULT_SCHEMA = "";
+        DEFAULT_USER   = "root";
     
     @Inject private UserInterfaceComponent userInterfaceComponent;
     @Inject private DbmsHandlerComponent dbmsHandlerComponent;
@@ -134,20 +132,18 @@ public final class ConnectController implements Initializable {
 
             if (fieldName.getText().isEmpty()
             ||  fieldName.getText().equals(generatedName.get())) {
-                final String name = item.getDefaultDbmsName()
-                    .orElse(DEFAULT_NAME);
-
-                fieldName.textProperty().setValue(name);
-                generatedName.set(name);
+                item.getDefaultDbmsName().ifPresent(name -> {
+                    fieldName.textProperty().setValue(name);
+                    generatedName.set(name);
+                });
             }
 
             if (fieldSchema.getText().isEmpty()
             ||  fieldSchema.getText().equals(generatedSchema.get())) {
-                final String name = item.getDefaultSchemaName()
-                    .orElse(DEFAULT_SCHEMA);
-
-                fieldSchema.textProperty().setValue(name);
-                generatedSchema.set(name);
+                item.getDefaultSchemaName().ifPresent(name -> {
+                    fieldSchema.textProperty().setValue(name);
+                    generatedSchema.set(name);
+                });
             }
 
             fieldName.getTooltip().setText(item.getDbmsNameMeaning());
