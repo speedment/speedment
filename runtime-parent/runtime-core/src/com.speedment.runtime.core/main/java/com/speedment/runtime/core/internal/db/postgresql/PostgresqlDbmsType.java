@@ -17,20 +17,23 @@
 package com.speedment.runtime.core.internal.db.postgresql;
 
 import com.speedment.common.injector.InjectBundle;
-import static com.speedment.common.injector.InjectBundle.of;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
-import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
 import com.speedment.runtime.core.internal.db.AbstractDatabaseNamingConvention;
 import com.speedment.runtime.core.internal.db.AbstractDbmsType;
 import com.speedment.runtime.core.internal.manager.sql.PostgresSpeedmentPredicateView;
+
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
+
+import static com.speedment.common.injector.InjectBundle.of;
+import static com.speedment.runtime.core.db.metadata.TypeInfoMetaData.of;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
-import java.util.stream.Stream;
 
 /**
  * Created by fdirlikl on 11/13/2015.
@@ -71,6 +74,11 @@ public final class PostgresqlDbmsType extends AbstractDbmsType {
     @Override
     public int getDefaultPort() {
         return 5432;
+    }
+
+    @Override
+    public Optional<String> getDefaultSchemaName() {
+        return Optional.of("public");
     }
 
     @Override
