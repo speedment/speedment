@@ -1,44 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<VBox maxWidth="1.7976931348623157E308"
-      prefWidth="557.0" prefHeight="419.0"
-      spacing="16.0"
+<VBox spacing="16.0"
+      prefWidth="400.0"
+      prefHeight="400.0"
+      maxWidth="1.7976931348623157E308"
+      maxHeight="1.7976931348623157E308"
       style="-fx-background-color: #f5f5f5;"
-      xmlns:fx="http://javafx.com/fxml/1"
       xmlns="http://javafx.com/javafx/8.0.65"
+      xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.speedment.tool.core.internal.controller.ConnectController">
     <children>
-        <Label fx:id="rightTitle" styleClass="header"
-               alignment="CENTER" textFill="#3f6291"
-               maxWidth="1.7976931348623157E308"
-               text="Connect to Database" />
+        <Label fx:id="rightTitle" alignment="CENTER"
+               maxWidth="1.7976931348623157E308" styleClass="header"
+               text="Connect to Database" textFill="#3f6291"/>
 
-        <GridPane hgap="8" vgap="8" prefWidth="400" prefHeight="400">
+        <GridPane hgap="8" vgap="8"
+                  maxWidth="1.7976931348623157E308"
+                  maxHeight="1.7976931348623157E308"
+                  minHeight="320.0"
+                  VBox.vgrow="ALWAYS">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="203.0"
-                                   minWidth="10.0" prefWidth="203.0"/>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="320.0"
-                                   minWidth="10.0" prefWidth="263.0"/>
+                <ColumnConstraints hgrow="NEVER" minWidth="180.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0"/>
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
                 <ChoiceBox fx:id="fieldType" maxWidth="1.7976931348623157E308"
                            prefWidth="150.0" GridPane.columnIndex="1"/>
-                <Label text="Type"/>
-                <Label text="Host" GridPane.rowIndex="1"/>
+                <Label text="Database Type"/>
+                <Label text="Database Host" GridPane.rowIndex="1"/>
                 <HBox alignment="CENTER_LEFT" prefHeight="12.0"
                       prefWidth="240.0" spacing="8.0" GridPane.columnIndex="1"
                       GridPane.rowIndex="1" GridPane.valignment="CENTER">
@@ -106,16 +108,19 @@
                         <Tooltip text="If a custom connection URL should be specified or if it should be generated automatically."/>
                     </tooltip>
                 </CheckBox>
-                <TextArea fx:id="areaConnectionUrl" prefHeight="120"
-                          prefWidth="320.0" promptText="Connection URL"
+                <TextArea fx:id="areaConnectionUrl" prefRowCount="3"
+                          prefWidth="240.0" promptText="Connection URL"
                           GridPane.columnIndex="1" GridPane.rowIndex="6">
                     <tooltip>
                         <Tooltip text="Connection URL to use when connecting to the database."/>
                     </tooltip>
+                    <GridPane.margin>
+                        <Insets/>
+                    </GridPane.margin>
                 </TextArea>
             </children>
             <VBox.margin>
-                <Insets />
+                <Insets/>
             </VBox.margin>
         </GridPane>
     </children>

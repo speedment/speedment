@@ -55,9 +55,10 @@ import static javafx.beans.binding.Bindings.createBooleanBinding;
 public final class ConnectController implements Initializable {
     
     private final static String 
-        DEFAULT_HOST = "127.0.0.1",
-        DEFAULT_USER = "root",
-        DEFAULT_NAME = "db0";
+        DEFAULT_HOST   = "127.0.0.1",
+        DEFAULT_USER   = "root",
+        DEFAULT_NAME   = "db0",
+        DEFAULT_SCHEMA = "example";
     
     @Inject private UserInterfaceComponent userInterfaceComponent;
     @Inject private DbmsHandlerComponent dbmsHandlerComponent;
@@ -89,8 +90,10 @@ public final class ConnectController implements Initializable {
         // changes with automatic ones.
         final AtomicReference<DbmsType> dbmsType       = new AtomicReference<>();
         final AtomicReference<String> generatedHost    = new AtomicReference<>("");
+        final AtomicReference<String> generatedPort    = new AtomicReference<>("");
         final AtomicReference<String> generatedUser    = new AtomicReference<>("");
         final AtomicReference<String> generatedName    = new AtomicReference<>("");
+        final AtomicReference<String> generatedSchema  = new AtomicReference<>("");
         final AtomicReference<String> generatedConnUrl = new AtomicReference<>("");
 
         // Use this method reference to recalculate any default values.
@@ -98,8 +101,6 @@ public final class ConnectController implements Initializable {
             final DbmsType item = dbmsType.get();
 
             // Disable Dbms Name-property for database types that doesn't use it
-            fieldName.setDisable(!item.getDefaultDbmsName().isPresent());
-
             if (fieldHost.getText().isEmpty()
             ||  fieldHost.getText().equals(generatedHost.get())) {
                 fieldHost.textProperty().setValue(DEFAULT_HOST);
@@ -121,23 +122,37 @@ public final class ConnectController implements Initializable {
                 generatedName.set(name);
             }
 
+            if (fieldSchema.getText().isEmpty()
+            ||  fieldSchema.getText().equals(generatedSchema.get())) {
+                final String name = item.getDefaultSchemaName()
+                    .orElse(DEFAULT_SCHEMA);
+
+                fieldSchema.textProperty().setValue(name);
+                generatedSchema.set(name);
+            }
+
             fieldName.getTooltip().setText(item.getDbmsNameMeaning());
-            fieldPort.textProperty().setValue(
-                Integer.toString(item.getDefaultPort())
-            );
+
+            if (fieldPort.getText().isEmpty()
+            ||  fieldPort.getText().equals(generatedPort.get())) {
+                final String port = Integer.toString(item.getDefaultPort());
+                fieldPort.textProperty().setValue(port);
+                generatedPort.set(port);
+            }
 
             if (areaConnectionUrl.getText().isEmpty()
             ||  areaConnectionUrl.getText().equals(generatedConnUrl.get())) {
-                generatedConnUrl.set(
-                    item.getConnectionUrlGenerator().from(
-                        TemporaryDbms.create(
-                            userInterfaceComponent.projectProperty(),
-                            fieldName.getText(),
-                            fieldHost.getText(),
-                            Integer.parseInt(fieldPort.getText())
-                        )
+                final String url = item.getConnectionUrlGenerator().from(
+                    TemporaryDbms.create(
+                        userInterfaceComponent.projectProperty(),
+                        fieldName.getText(),
+                        fieldHost.getText(),
+                        Integer.parseInt(fieldPort.getText())
                     )
                 );
+
+                generatedConnUrl.set(url);
+                areaConnectionUrl.setText(url);
             }
         };
 
@@ -188,14 +203,16 @@ public final class ConnectController implements Initializable {
                     )
                 );
 
-                final String host = Settings.inst().get("last_known_host", generatedHost.get());
-                final String user = Settings.inst().get("last_known_user", generatedUser.get());
-                final String name = Settings.inst().get("last_known_name", generatedName.get());
-                final String url  = Settings.inst().get("last_known_url", generatedConnUrl.get());
+                final String host   = Settings.inst().get("last_known_host",   generatedHost.get());
+                final String user   = Settings.inst().get("last_known_user",   generatedUser.get());
+                final String name   = Settings.inst().get("last_known_name",   generatedName.get());
+                final String schema = Settings.inst().get("last_known_schema", generatedName.get());
+                final String url    = Settings.inst().get("last_known_url",    generatedConnUrl.get());
 
                 generatedHost.set(host);
                 generatedUser.set(user);
                 generatedName.set(name);
+                generatedSchema.set(schema);
                 generatedConnUrl.set(url);
 
                 fieldSchema.setText(Settings.inst().get("last_known_schema"));
@@ -203,6 +220,7 @@ public final class ConnectController implements Initializable {
                 fieldHost.setText(host);
                 fieldUser.setText(user);
                 fieldName.setText(name);
+                fieldSchema.setText(schema);
                 areaConnectionUrl.setText(url);
             } else {
                 fieldType.getSelectionModel().select(
@@ -221,11 +239,11 @@ public final class ConnectController implements Initializable {
         // Disable the Connect-button if all fields have not been entered.
         buttonConnect.disableProperty().bind(createBooleanBinding(
             () -> fieldHost.textProperty().isEmpty().get()
-                ||    fieldPort.textProperty().isEmpty().get()
-                ||    fieldType.getSelectionModel().isEmpty()
-                ||    fieldName.textProperty().isEmpty().get()
-                ||    fieldSchema.textProperty().isEmpty().get()
-                ||    fieldUser.textProperty().isEmpty().get(),
+            ||    fieldPort.textProperty().isEmpty().get()
+            ||    fieldType.getSelectionModel().isEmpty()
+            ||    fieldName.textProperty().isEmpty().get()
+            ||    fieldSchema.textProperty().isEmpty().get()
+            ||    fieldUser.textProperty().isEmpty().get(),
 
             fieldHost.textProperty(),
             fieldPort.textProperty(),
