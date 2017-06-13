@@ -60,8 +60,8 @@
     <!-- Properties -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>9</maven.compiler.source>
+        <maven.compiler.target>9</maven.compiler.target>
         
         <speedment.version>${project.version}</speedment.version>
         <common.version>${project.version}</common.version>
@@ -242,11 +242,8 @@
                     <showWarnings>true</showWarnings>
                     <meminitial>256m</meminitial>
                     <maxmem>1024m</maxmem>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <excludes>
-                        <exclude>**/package-info.java</exclude>
-                    </excludes>
+                    <source>9</source>
+                    <target>9</target>
                 </configuration>
             </plugin>
 
@@ -577,22 +574,9 @@
             </build>
         </profile>
         <profile>
-            <id>java9</id>
-            <properties>
-                <maven.compiler.source>9</maven.compiler.source>
-                <maven.compiler.target>9</maven.compiler.target>
-            </properties>
+            <id>jdeps</id>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration combine.children="override">
-                            <source>9</source>
-                            <target>9</target>
-                            <excludes combine.self="override" />
-                        </configuration>
-                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jdeps-plugin</artifactId>
