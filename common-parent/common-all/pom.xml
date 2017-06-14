@@ -40,22 +40,22 @@
     
     <properties>
         <invariant.version>1.0.2-SNAPSHOT</invariant.version>
-        <function.version>1.0.2</function.version>
-        <json.version>1.0.3</json.version>
+        <function.version>1.0.3-SNAPSHOT</function.version>
+        <json.version>1.0.4-SNAPSHOT</json.version>
         <tuple.version>1.0.5-SNAPSHOT</tuple.version>
-        <logger.version>1.0.4</logger.version>
-        <codegen.version>2.4.8</codegen.version>
-        <codegenxml.version>1.0.2</codegenxml.version>
-        <injector.version>1.2.1</injector.version>
-        <rest.version>1.0.4</rest.version>
-        <lazy.version>1.0.3</lazy.version>
-        <mapstream.version>2.3.5</mapstream.version>
-        <mutablestream.version>1.0.0</mutablestream.version>
-        <singletonstream.version>1.0.0</singletonstream.version>
-        <annotation.version>1.0.0</annotation.version>
-        <combinatorics.version>1.0.1</combinatorics.version>
-        <benchmark.version>1.0.0</benchmark.version>
-        <collection.version>1.0.0</collection.version>
+        <logger.version>1.0.5-SNAPSHOT</logger.version>
+        <codegen.version>2.4.9-SNAPSHOT</codegen.version>
+        <codegenxml.version>1.0.3-SNAPSHOT</codegenxml.version>
+        <injector.version>1.2.2-SNAPSHOT</injector.version>
+        <rest.version>1.0.5-SNAPSHOT</rest.version>
+        <lazy.version>1.0.4-SNAPSHOT</lazy.version>
+        <mapstream.version>2.3.6-SNAPSHOT</mapstream.version>
+        <mutablestream.version>1.0.1-SNAPSHOT</mutablestream.version>
+        <singletonstream.version>1.0.1-SNAPSHOT</singletonstream.version>
+        <annotation.version>1.0.1-SNAPSHOT</annotation.version>
+        <combinatorics.version>1.0.2-SNAPSHOT</combinatorics.version>
+        <benchmark.version>1.0.1-SNAPSHOT</benchmark.version>
+        <collection.version>1.0.1-SNAPSHOT</collection.version>
     </properties>
     
     <dependencyManagement>

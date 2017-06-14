@@ -25,11 +25,11 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.0.11</version>
+        <version>3.0.12-SNAPSHOT</version>
     </parent>
     
     <artifactId>function</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - Function</name>
@@ -39,6 +39,11 @@
     </description>
     <url>https://www.github.com/speedment/speedment/wiki/Function/</url>
     
+
+    <properties>
+        <speedment.module>com.speedment.common.function</speedment.module>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
