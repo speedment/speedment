@@ -65,6 +65,7 @@
         
         <speedment.version>${project.version}</speedment.version>
         <common.version>${project.version}</common.version>
+        <speedment.package>${project.groupId}.${project.artifactId}</speedment.package>
     </properties>
     
     <organization>
@@ -173,6 +174,21 @@
 	
     <!-- Plugins -->
     <build>
+
+        <sourceDirectory>src/${speedment.package}/main/java</sourceDirectory>
+        <testSourceDirectory>src/${speedment.package}/test/java</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/${speedment.package}/main/resources</directory>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/${speedment.package}/test/resources</directory>
+            </testResource>
+        </testResources>
+
+
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -229,7 +245,7 @@
             
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
+                <version>3.6.2-SNAPSHOT</version>
 
                 <configuration>
                     <compilerArgument>-Xlint:all</compilerArgument>
@@ -576,8 +592,56 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>java9</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <maven.compiler.source>9</maven.compiler.source>
+                <maven.compiler.target>9</maven.compiler.target>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration combine.children="override">
+                            <source>9</source>
+                            <target>9</target>
+                            <excludes combine.self="override" />
+                        </configuration>
+                    </plugin>
+                    <!-- <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jdeps-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>jdkinternals</goal>
+                                    <goal>test-jdkinternals</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin> -->
+                </plugins>
+            </build>
+        </profile>
+
     </profiles>
-    
+
+    <pluginRepositories>
+        <pluginRepository>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>Maven Snapshots</id>
+            <url>https://repository.apache.org/content/repositories/snapshots/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+
     <dependencyManagement>
         <dependencies>
             <!-- Test Dependencies -->
