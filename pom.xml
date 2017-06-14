@@ -173,6 +173,9 @@
 	
     <!-- Plugins -->
     <build>
+        <sourceDirectory>src/${project.groupId}.${project.artifactId}/main/java</sourceDirectory>
+        <testSourceDirectory>src/${project.groupId}.${project.artifactId}/test/java</testSourceDirectory>
+
         <pluginManagement>
             <plugins>
                 <plugin>
