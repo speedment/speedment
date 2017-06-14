@@ -31,7 +31,7 @@
     
     <artifactId>logger</artifactId>
     <version>1.0.5-SNAPSHOT</version>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
     
     <name>Speedment - Common - Logger</name>
     <description>A lightweight logging tool inspired by Tengil.</description>

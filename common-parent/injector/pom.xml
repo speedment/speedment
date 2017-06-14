@@ -31,7 +31,7 @@
     
     <artifactId>injector</artifactId>
     <version>1.2.2-SNAPSHOT</version>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
     
     <name>Speedment - Common - Injector</name>
     <description>

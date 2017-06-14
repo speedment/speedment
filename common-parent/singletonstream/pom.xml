@@ -31,7 +31,7 @@
     
     <artifactId>singleton-stream</artifactId>
     <version>1.0.1-SNAPSHOT</version>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
     
     <name>Speedment - Common - SingletonStream</name>
     <description>

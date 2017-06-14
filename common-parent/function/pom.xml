@@ -30,7 +30,7 @@
     
     <artifactId>function</artifactId>
     <version>1.0.3-SNAPSHOT</version>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
     
     <name>Speedment - Common - Function</name>
     <description>
@@ -44,7 +44,7 @@
         <speedment.module>com.speedment.common.function</speedment.module>
     </properties>
 
-    <build>
+    <!-- <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -58,7 +58,7 @@
                 </configuration>
             </plugin>                            
         </plugins>
-    </build>
+    </build> -->
     
     <profiles>
         <profile>

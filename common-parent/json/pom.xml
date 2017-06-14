@@ -31,7 +31,7 @@
     
     <artifactId>json</artifactId>
     <version>1.0.4-SNAPSHOT</version>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
     
     <name>Speedment - Common - JSON</name>
     <description>

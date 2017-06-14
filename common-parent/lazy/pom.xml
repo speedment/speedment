@@ -31,7 +31,7 @@
     
     <artifactId>lazy</artifactId>
     <version>1.0.4-SNAPSHOT</version>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
     
     <name>Speedment - Common - Lazy</name>
     <description>
