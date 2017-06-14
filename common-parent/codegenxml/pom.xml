@@ -39,6 +39,7 @@
     </description>
     
     <properties>
+        <speedment.module>com.speedment.common.codegenxml</speedment.module>
         <codegen.version>2.4.3</codegen.version>
     </properties>
     

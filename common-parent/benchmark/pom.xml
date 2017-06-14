@@ -82,4 +82,7 @@
             <artifactId>hamcrest-core</artifactId>
         </dependency>
     </dependencies>
+    <properties>
+        <speedment.module>com.speedment.common.benchmark</speedment.module>
+    </properties>
 </project>

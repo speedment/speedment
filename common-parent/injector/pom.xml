@@ -39,6 +39,7 @@
     </description>
     
     <properties>
+        <speedment.module>com.speedment.common.injector</speedment.module>
         <logger.version>1.0.4</logger.version>
     </properties>
     

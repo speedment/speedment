@@ -94,4 +94,7 @@
             <artifactId>hamcrest-core</artifactId>
         </dependency>
     </dependencies>
+    <properties>
+        <speedment.module>com.speedment.common.codegen</speedment.module>
+    </properties>
 </project>

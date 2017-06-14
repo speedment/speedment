@@ -40,6 +40,7 @@
     </description>
     
     <properties>
+        <speedment.module>com.speedment.common.rest</speedment.module>
         <json.version>1.0.3</json.version>
     </properties>
     

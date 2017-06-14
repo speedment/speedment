@@ -74,4 +74,7 @@
             </build>
         </profile>
     </profiles>
+    <properties>
+        <speedment.module>com.speedment.common.mapstream</speedment.module>
+    </properties>
 </project>

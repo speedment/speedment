@@ -40,10 +40,6 @@
     <url>https://www.github.com/speedment/speedment/wiki/Function/</url>
     
 
-    <properties>
-        <speedment.module>com.speedment.common.function</speedment.module>
-    </properties>
-
     <!-- <build>
         <plugins>
             <plugin>
@@ -78,4 +74,7 @@
             </build>
         </profile>
     </profiles>
+    <properties>
+        <speedment.module>com.speedment.common.function</speedment.module>
+    </properties>
 </project>

@@ -88,4 +88,7 @@
             </build>
         </profile>
     </profiles>
+    <properties>
+        <speedment.module>com.speedment.common.singletonstream</speedment.module>
+    </properties>
 </project>

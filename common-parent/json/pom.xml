@@ -85,4 +85,7 @@
             <artifactId>hamcrest-core</artifactId>
         </dependency>
     </dependencies>
+    <properties>
+        <speedment.module>com.speedment.common.json</speedment.module>
+    </properties>
 </project>
