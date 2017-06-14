@@ -39,6 +39,11 @@
         where every element has a specific type.
     </description>
     <url>https://github.com/speedment/speedment/wiki/Tuple</url>
+
+    <properties>
+        <speedment.package>com.speedment.common.tuple</speedment.package>
+    </properties>
+
     
     <!-- <build>
         <plugins>
