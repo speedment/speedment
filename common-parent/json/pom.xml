@@ -57,7 +57,7 @@
     <profiles>
         <profile>
             <id>release</id>
-            <!-- <build>
+            <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -69,7 +69,7 @@
                         <artifactId>maven-source-plugin</artifactId>
                     </plugin>
                 </plugins>
-            </build> -->
+            </build>
         </profile>
     </profiles>
     
