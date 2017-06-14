@@ -39,6 +39,11 @@
     </description>
     <url>https://www.github.com/speedment/speedment/wiki/Invariant/</url>
     
+
+    <properties>
+        <speedment.package>com.speedment.common.invariant</speedment.package>
+    </properties>
+
     <!-- <build>
         <plugins>
             <plugin>
