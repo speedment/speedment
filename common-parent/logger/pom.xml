@@ -37,7 +37,7 @@
     <description>A lightweight logging tool inspired by Tengil.</description>
     <url>https://github.com/speedment/speedment/wiki/Logger</url>
     
-    <build>
+    <!-- <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -49,12 +49,12 @@
                 </configuration>
             </plugin>                            
         </plugins>
-    </build>
+    </build> -->
     
     <profiles>
         <profile>
             <id>release</id>
-            <build>
+            <!-- <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
@@ -66,7 +66,7 @@
                         <artifactId>maven-source-plugin</artifactId>
                     </plugin>
                 </plugins>
-            </build>
+            </build> -->
         </profile>
     </profiles>
     <dependencies>
