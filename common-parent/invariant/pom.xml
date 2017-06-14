@@ -25,12 +25,12 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>1.0.2</version>        
+        <version>3.0.12-SNAPSHOT</version>
     </parent>
     
     <artifactId>invariant</artifactId>
-    <version>1.0.1</version>
-    <packaging>bundle</packaging>
+    <version>1.0.2-SNAPSHOT</version>
+    <packaging>jar</packaging>
     
     <name>Speedment - Common - Invariant</name>
     <description>
@@ -39,7 +39,7 @@
     </description>
     <url>https://www.github.com/speedment/speedment/wiki/Invariant/</url>
     
-    <build>
+    <!-- <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -53,7 +53,7 @@
                 </configuration>
             </plugin>                            
         </plugins>
-    </build>
+    </build> -->
     
     <profiles>
         <profile>

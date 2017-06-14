@@ -39,10 +39,10 @@
     </description>
     
     <properties>
-        <invariant.version>1.0.1</invariant.version>
+        <invariant.version>1.0.2-SNAPSHOT</invariant.version>
         <function.version>1.0.2</function.version>
         <json.version>1.0.3</json.version>
-        <tuple.version>1.0.4</tuple.version>
+        <tuple.version>1.0.5-SNAPSHOT</tuple.version>
         <logger.version>1.0.4</logger.version>
         <codegen.version>2.4.8</codegen.version>
         <codegenxml.version>1.0.2</codegenxml.version>
