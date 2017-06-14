@@ -41,7 +41,7 @@
     <url>https://github.com/speedment/speedment/wiki/Tuple</url>
 
     <properties>
-        <speedment.package>com.speedment.common.tuple</speedment.package>
+        <speedment.module>com.speedment.common.tuple</speedment.module>
     </properties>
 
     

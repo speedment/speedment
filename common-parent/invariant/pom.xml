@@ -41,7 +41,7 @@
     
 
     <properties>
-        <speedment.package>com.speedment.common.invariant</speedment.package>
+        <speedment.module>com.speedment.common.invariant</speedment.module>
     </properties>
 
     <!-- <build>

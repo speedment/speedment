@@ -65,7 +65,7 @@
         
         <speedment.version>${project.version}</speedment.version>
         <common.version>${project.version}</common.version>
-        <speedment.package>${project.groupId}.${project.artifactId}</speedment.package>
+        <speedment.module>${project.groupId}.${project.artifactId}</speedment.module>
     </properties>
     
     <organization>
@@ -175,16 +175,16 @@
     <!-- Plugins -->
     <build>
 
-        <sourceDirectory>src/${speedment.package}/main/java</sourceDirectory>
-        <testSourceDirectory>src/${speedment.package}/test/java</testSourceDirectory>
+        <sourceDirectory>src/${speedment.module}/main/java</sourceDirectory>
+        <testSourceDirectory>src/${speedment.module}/test/java</testSourceDirectory>
         <resources>
             <resource>
-                <directory>src/${speedment.package}/main/resources</directory>
+                <directory>src/${speedment.module}/main/resources</directory>
             </resource>
         </resources>
         <testResources>
             <testResource>
-                <directory>src/${speedment.package}/test/resources</directory>
+                <directory>src/${speedment.module}/test/resources</directory>
             </testResource>
         </testResources>
 
