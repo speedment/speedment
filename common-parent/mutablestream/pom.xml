@@ -40,7 +40,7 @@
     </description>
     <url>https://www.github.com/speedment/speedment/wiki/MutableStream/</url>
     
-    <build>
+    <!-- <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -57,7 +57,7 @@
                 </configuration>
             </plugin>                            
         </plugins>
-    </build>
+    </build> -->
     <properties>
         <speedment.module>com.speedment.common.mutablestream</speedment.module>
     </properties>
