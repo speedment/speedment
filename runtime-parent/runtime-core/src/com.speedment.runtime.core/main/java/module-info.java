@@ -1,4 +1,5 @@
 module com.speedment.runtime.core {
+    exports com.speedment.runtime.core.internal.util;
     exports com.speedment.runtime.core.component.sql;
     exports com.speedment.runtime.core.component.resultset;
     exports com.speedment.runtime.core.manager;
