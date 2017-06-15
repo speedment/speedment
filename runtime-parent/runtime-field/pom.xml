@@ -30,7 +30,7 @@
     </parent>
     
     <artifactId>runtime-field</artifactId>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
     
     <name>Speedment - Runtime - Field</name>
     <description>
@@ -39,7 +39,7 @@
         that contain metadata that Speedment can analyze runtime.
     </description>
     
-    <build>
+    <!-- <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -59,7 +59,7 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+    </build> -->
     
     <profiles>
         <profile>
