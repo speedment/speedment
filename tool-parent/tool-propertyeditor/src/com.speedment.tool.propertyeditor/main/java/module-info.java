@@ -1,4 +1,5 @@
 module com.speedment.tool.propertyeditor {
+    requires com.speedment.runtime.core;
     requires com.speedment.runtime.config;
     requires com.speedment.common.mapstream;
     requires com.speedment.common.injector;
