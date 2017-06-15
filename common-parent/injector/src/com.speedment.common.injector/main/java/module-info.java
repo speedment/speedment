@@ -1,7 +1,7 @@
 module com.speedment.common.injector {
+    requires com.speedment.common.logger;
     exports com.speedment.common.injector.execution;
     exports com.speedment.common.injector.exception;
     exports com.speedment.common.injector.annotation;
     exports com.speedment.common.injector;
-    requires logger;
 }
