@@ -1,4 +1,5 @@
 module com.speedment.runtime.core {
+    exports com.speedment.runtime.core.component;
     exports com.speedment.runtime.core.internal.util.sql;
     exports com.speedment.runtime.core.exception;
     requires java.prefs;
