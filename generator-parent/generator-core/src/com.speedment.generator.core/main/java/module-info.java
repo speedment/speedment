@@ -1,4 +1,5 @@
 module com.speedment.generator.core {
+    requires com.speedment.generator.standard;
     requires com.speedment.runtime.core;
     requires com.speedment.common.logger;
     requires com.speedment.generator.translator;
