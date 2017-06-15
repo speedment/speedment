@@ -1,4 +1,5 @@
 module com.speedment.tool.core {
+    requires java.prefs;
     requires com.speedment.generator.core;
     requires com.speedment.generator.translator;
     requires com.speedment.common.logger;
