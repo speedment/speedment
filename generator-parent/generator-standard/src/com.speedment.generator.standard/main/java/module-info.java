@@ -1,4 +1,5 @@
 module com.speedment.generator.standard {
+    requires com.speedment.common.invariant;
     requires com.speedment.runtime.field;
     requires com.speedment.runtime.typemapper;
     requires java.sql;
