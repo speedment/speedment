@@ -1,4 +1,5 @@
 module com.speedment.runtime.config {
+    exports com.speedment.runtime.config.mutator;
     exports com.speedment.runtime.config.internal;
     exports com.speedment.runtime.config.trait;
     exports com.speedment.runtime.config.identifier.trait;
