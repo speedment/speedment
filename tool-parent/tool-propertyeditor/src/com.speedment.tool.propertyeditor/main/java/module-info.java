@@ -1,4 +1,5 @@
 module com.speedment.tool.propertyeditor {
+    requires com.speedment.runtime.typemapper;
     requires com.speedment.generator.translator;
     requires com.speedment.runtime.core;
     requires com.speedment.runtime.config;
