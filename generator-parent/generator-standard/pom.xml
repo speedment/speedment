@@ -30,14 +30,14 @@
     </parent>
     
     <artifactId>generator-standard</artifactId>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
     
     <name>Speedment - Generator - Standard Translator</name>
     <description>
         Standard Translators used by the Speedment ORM.
     </description>
     
-    <build>
+    <!-- <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -54,7 +54,7 @@
                 </configuration>
             </plugin>                            
         </plugins>
-    </build>
+    </build> -->
     
     <profiles>
         <profile>
