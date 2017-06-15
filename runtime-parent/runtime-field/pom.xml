@@ -127,4 +127,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <properties>
+        <speedment.module>com.speedment.runtime.field</speedment.module>
+    </properties>
 </project>

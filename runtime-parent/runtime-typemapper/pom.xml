@@ -91,4 +91,7 @@
             <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
+    <properties>
+        <speedment.module>com.speedment.runtime.typemapper</speedment.module>
+    </properties>
 </project>

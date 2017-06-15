@@ -187,4 +187,7 @@
             </exclusions>
         </dependency>
     </dependencies>
+    <properties>
+        <speedment.module>com.speedment.runtime.core</speedment.module>
+    </properties>
 </project>

@@ -110,4 +110,7 @@
             <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
+    <properties>
+        <speedment.module>com.speedment.runtime.config</speedment.module>
+    </properties>
 </project>
