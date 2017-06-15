@@ -1,4 +1,5 @@
 module com.speedment.tool.core {
+    requires com.speedment.common.invariant;
     requires com.speedment.runtime.typemapper;
     requires com.speedment.common.rest;
     requires com.speedment.common.function;
