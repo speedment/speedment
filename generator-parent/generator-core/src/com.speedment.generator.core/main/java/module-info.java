@@ -1,4 +1,5 @@
 module com.speedment.generator.core {
+    exports com.speedment.generator.core.component;
     exports com.speedment.generator.core.event;
     requires com.speedment.common.codegen;
     requires com.speedment.common.injector;
