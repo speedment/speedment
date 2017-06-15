@@ -40,7 +40,7 @@
     </description>
     <url>https://www.github.com/speedment/speedment/wiki/MapStream/</url>
     
-    <build>
+    <!-- <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -54,7 +54,7 @@
                 </configuration>
             </plugin>                            
         </plugins>
-    </build>
+    </build> -->
     
     <profiles>
         <profile>
