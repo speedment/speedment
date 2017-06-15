@@ -1,4 +1,5 @@
 module com.speedment.tool.propertyeditor {
+    exports com.speedment.tool.propertyeditor;
     requires com.speedment.common.injector;
     requires com.speedment.common.mapstream;
     requires com.speedment.generator.translator;
