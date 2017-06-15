@@ -1,4 +1,5 @@
 module com.speedment.runtime.config {
+    exports com.speedment.runtime.config.exception;
     exports com.speedment.runtime.config.mutator.trait;
     exports com.speedment.runtime.config.parameter;
     exports com.speedment.runtime.config.mutator;
