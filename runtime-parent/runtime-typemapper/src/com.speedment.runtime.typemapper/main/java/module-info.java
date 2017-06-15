@@ -1,4 +1,5 @@
 module com.speedment.runtime.typemapper {
+    exports com.speedment.runtime.typemapper.largeobject;
     exports com.speedment.runtime.typemapper.doubles;
     exports com.speedment.runtime.typemapper.bigdecimal;
     exports com.speedment.runtime.typemapper.string;
