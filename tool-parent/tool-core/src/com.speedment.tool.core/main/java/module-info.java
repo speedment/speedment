@@ -1,4 +1,5 @@
 module com.speedment.tool.core {
+    requires javafx.base;
     requires com.speedment.tool.propertyeditor;
     requires com.speedment.tool.config;
     requires com.speedment.runtime.core;
