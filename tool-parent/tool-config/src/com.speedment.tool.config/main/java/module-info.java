@@ -1,4 +1,5 @@
 module com.speedment.tool.config {
+    exports com.speedment.tool.config;
     exports com.speedment.tool.config.trait;
     requires com.speedment.generator.translator;
     requires com.speedment.common.injector;
