@@ -1,4 +1,5 @@
 module com.speedment.tool.core {
+    requires com.speedment.common.mapstream;
     requires java.prefs;
     requires com.speedment.generator.core;
     requires com.speedment.generator.translator;
