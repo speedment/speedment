@@ -1,4 +1,5 @@
 module com.speedment.generator.translator {
+    exports com.speedment.generator.translator;
     requires java.sql;
     requires com.speedment.runtime.typemapper;
     requires com.speedment.common.mapstream;
