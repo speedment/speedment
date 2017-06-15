@@ -1,4 +1,5 @@
 module com.speedment.generator.translator {
+    requires com.speedment.common.annotation;
     requires com.speedment.common.injector;
     requires com.speedment.runtime.core;
     requires com.speedment.runtime.config;
