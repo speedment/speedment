@@ -30,7 +30,7 @@
     </parent>
     
     <artifactId>runtime-config</artifactId>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
     
     <name>Speedment - Runtime - Config</name>
     <description>
@@ -39,7 +39,7 @@
     </description>
     <url>https://www.github.com/speedment/speedment/wiki/DBModel/</url>
     
-    <build>
+    <!-- <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -61,7 +61,7 @@
                 </configuration>
             </plugin>                            
         </plugins>
-    </build>
+    </build> -->
     
     <profiles>
         <profile>
