@@ -30,7 +30,7 @@
     </parent>
     
     <artifactId>tool-config</artifactId>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
     
     <name>Speedment - Tool - Config</name>
     <description>
@@ -38,7 +38,7 @@
         relational database in a JavaFX observable fassion.
     </description>
     
-    <build>
+    <!-- <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -54,7 +54,7 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+    </build> -->
     
     <profiles>
         <profile>
