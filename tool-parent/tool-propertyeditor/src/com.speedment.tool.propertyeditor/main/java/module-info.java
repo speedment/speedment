@@ -1,4 +1,5 @@
 module com.speedment.tool.propertyeditor {
+    requires com.speedment.common.mapstream;
     requires com.speedment.common.injector;
     requires com.speedment.tool.config;
     requires javafx.graphics;
