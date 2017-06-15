@@ -1,4 +1,5 @@
 module com.speedment.runtime.field {
+    exports com.speedment.runtime.field;
     requires com.speedment.common.invariant;
     requires com.speedment.common.function;
     requires com.speedment.common.annotation;
