@@ -30,6 +30,7 @@
     </parent>
     
     <properties>
+        <speedment.module>com.speedment.maven</speedment.module>
         <mysql-jdbc-version>5.1.41</mysql-jdbc-version>
         <postgres-jdbc-version>42.0.0</postgres-jdbc-version>
         <mariadb-jdbc-version>1.5.9</mariadb-jdbc-version>
