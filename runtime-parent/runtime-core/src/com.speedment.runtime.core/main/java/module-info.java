@@ -1,4 +1,5 @@
 module com.speedment.runtime.core {
+    requires com.speedment.common.logger;
     requires com.speedment.common.injector;
     requires com.speedment.common.mapstream;
     requires com.speedment.runtime.config;
