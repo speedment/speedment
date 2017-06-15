@@ -595,6 +595,7 @@
         <profile>
             <id>java9</id>
             <activation>
+                <!-- just a development time convenience to avoid having to supply the profile all the time -->
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
