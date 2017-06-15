@@ -129,4 +129,7 @@
             <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
+    <properties>
+        <speedment.module>com.speedment.tool.propertyeditor</speedment.module>
+    </properties>
 </project>

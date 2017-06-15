@@ -164,4 +164,7 @@
             <artifactId>junit</artifactId>
         </dependency>
     </dependencies>
+    <properties>
+        <speedment.module>com.speedment.tool.core</speedment.module>
+    </properties>
 </project>

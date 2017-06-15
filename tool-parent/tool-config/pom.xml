@@ -118,4 +118,7 @@
             <artifactId>generator-translator</artifactId>
         </dependency>
     </dependencies>
+    <properties>
+        <speedment.module>com.speedment.tool.config</speedment.module>
+    </properties>
 </project>
