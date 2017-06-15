@@ -1,4 +1,5 @@
 module com.speedment.generator.translator {
+    exports com.speedment.generator.translator.namer;
     exports com.speedment.generator.translator.exception;
     exports com.speedment.generator.translator.component;
     exports com.speedment.generator.translator;
