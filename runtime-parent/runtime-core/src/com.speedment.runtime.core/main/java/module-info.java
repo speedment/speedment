@@ -1,4 +1,5 @@
 module com.speedment.runtime.core {
+    requires com.speedment.common.lazy;
     requires com.speedment.common.function;
     requires com.speedment.common.json;
     requires com.speedment.common.tuple;
