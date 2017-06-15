@@ -30,7 +30,7 @@
     </parent>
     
     <artifactId>tool-core</artifactId>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
     
     <name>Speedment - Tool - Core</name>
     <description>
@@ -38,7 +38,7 @@
         configuration file without writing .json-code.
     </description>
     
-    <build>
+    <!-- <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -60,7 +60,7 @@
                 </configuration>
             </plugin> 
         </plugins>
-    </build>
+    </build> -->
     
     <profiles>
         <profile>
