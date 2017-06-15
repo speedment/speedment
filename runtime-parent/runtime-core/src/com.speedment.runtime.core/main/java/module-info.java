@@ -1,4 +1,5 @@
 module com.speedment.runtime.core {
+    exports com.speedment.runtime.core.exception;
     requires java.prefs;
     requires com.speedment.common.lazy;
     requires com.speedment.common.function;
