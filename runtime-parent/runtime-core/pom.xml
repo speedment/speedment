@@ -30,7 +30,7 @@
     </parent>
 
     <artifactId>runtime-core</artifactId>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
 
     <name>Speedment - Runtime - Core</name>
     <description>
@@ -38,7 +38,7 @@
         the framework.
     </description>
     
-    <build>
+    <!-- <build>
         <plugins>                        
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -67,7 +67,7 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+    </build> -->
     
     <profiles>
         <profile>
