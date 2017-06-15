@@ -30,14 +30,14 @@
     </parent>
     
     <artifactId>runtime-typemapper</artifactId>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
     
     <name>Speedment - Runtime - TypeMapper</name>
     <description>
         Converts between the standard JDBC types and the java types.
     </description>
     
-    <build>
+    <!-- <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -58,7 +58,7 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+    </build> -->
     
     <profiles>
         <profile>
