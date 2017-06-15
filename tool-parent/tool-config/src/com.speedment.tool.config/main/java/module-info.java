@@ -1,4 +1,5 @@
 module com.speedment.tool.config {
+    exports com.speedment.tool.config.mutator;
     exports com.speedment.tool.config.internal.component;
     exports com.speedment.tool.config.component;
     exports com.speedment.tool.config.trait;
