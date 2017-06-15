@@ -1,4 +1,5 @@
 module com.speedment.runtime.core {
+    requires com.speedment.common.tuple;
     requires com.speedment.runtime.typemapper;
     requires com.speedment.common.logger;
     requires com.speedment.common.injector;
