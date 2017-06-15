@@ -1,4 +1,5 @@
 module com.speedment.runtime.field {
+    requires com.speedment.common.function;
     requires com.speedment.common.annotation;
     requires com.speedment.runtime.typemapper;
     requires com.speedment.runtime.config;
