@@ -1,4 +1,5 @@
 module com.speedment.runtime.field {
+    exports com.speedment.runtime.field.internal.predicate.ints;
     exports com.speedment.runtime.field.internal;
     exports com.speedment.runtime.field.internal.predicate;
     exports com.speedment.runtime.field.comparator;
