@@ -1,4 +1,5 @@
 module com.speedment.tool.config {
+    exports com.speedment.tool.config.component;
     exports com.speedment.tool.config.trait;
     exports com.speedment.tool.config;
     requires com.speedment.common.function;
