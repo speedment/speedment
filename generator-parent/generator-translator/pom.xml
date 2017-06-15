@@ -114,4 +114,7 @@
             <artifactId>annotation</artifactId>
         </dependency>
     </dependencies>
+    <properties>
+        <speedment.module>com.speedment.generator.translator</speedment.module>
+    </properties>
 </project>

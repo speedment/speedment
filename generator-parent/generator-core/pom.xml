@@ -157,4 +157,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <properties>
+        <speedment.module>com.speedment.generator.core</speedment.module>
+    </properties>
 </project>

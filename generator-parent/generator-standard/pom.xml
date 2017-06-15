@@ -132,4 +132,7 @@
             <version>${speedment.version}</version>
         </dependency>
     </dependencies>
+    <properties>
+        <speedment.module>com.speedment.generator.standard</speedment.module>
+    </properties>
 </project>
