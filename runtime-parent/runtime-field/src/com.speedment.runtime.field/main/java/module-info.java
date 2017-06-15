@@ -1,4 +1,5 @@
 module com.speedment.runtime.field {
+    exports com.speedment.runtime.field.util;
     exports com.speedment.runtime.field.trait;
     exports com.speedment.runtime.field.method;
     exports com.speedment.runtime.field.predicate;
