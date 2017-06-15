@@ -1,4 +1,5 @@
 module com.speedment.runtime.typemapper {
+    exports com.speedment.runtime.typemapper.time;
     exports com.speedment.runtime.typemapper.shorts;
     exports com.speedment.runtime.typemapper.primitive;
     exports com.speedment.runtime.typemapper.other;
