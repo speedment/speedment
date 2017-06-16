@@ -1,4 +1,5 @@
 module com.speedment.plugins.spring {
+    requires spring.core;
     requires spring.beans;
     requires spring.context;
     requires com.speedment.runtime.config;
