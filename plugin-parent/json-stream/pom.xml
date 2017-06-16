@@ -130,4 +130,7 @@
             <artifactId>hamcrest-core</artifactId>
         </dependency>
     </dependencies>
+    <properties>
+        <speedment.module>com.speedment.plugins.json</speedment.module>
+    </properties>
 </project>
