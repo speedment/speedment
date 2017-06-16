@@ -1,4 +1,5 @@
 module com.speedment.plugins.enums {
+    requires javafx.base;
     requires com.speedment.tool.core;
     requires com.speedment.common.singletonstream;
     requires com.speedment.common.logger;
