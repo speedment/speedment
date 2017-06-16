@@ -1,4 +1,5 @@
 module com.speedment.plugins.enums {
+    requires java.sql;
     requires javafx.controls;
     requires javafx.graphics;
     requires javafx.base;
