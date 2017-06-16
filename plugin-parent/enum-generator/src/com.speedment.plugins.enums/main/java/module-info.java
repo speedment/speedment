@@ -1,4 +1,5 @@
 module com.speedment.plugins.enums {
+    requires com.speedment.runtime.core;
     requires com.speedment.generator.translator;
     requires com.speedment.generator.standard;
     requires com.speedment.generator.core;
