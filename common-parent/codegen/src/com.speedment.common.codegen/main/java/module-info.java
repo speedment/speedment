@@ -1,4 +1,5 @@
 module com.speedment.common.codegen {
+    exports com.speedment.common.codegen.model.value;
     exports com.speedment.common.codegen.constant;
     exports com.speedment.common.codegen.controller;
     exports com.speedment.common.codegen.internal.java;
