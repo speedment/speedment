@@ -98,4 +98,7 @@
         </dependency>        
         
     </dependencies>
+    <properties>
+        <speedment.module>com.speedment.connector.h2</speedment.module>
+    </properties>
 </project>
