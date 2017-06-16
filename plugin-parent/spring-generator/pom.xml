@@ -30,7 +30,7 @@
     </parent>
     
     <artifactId>spring-generator</artifactId>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
     
     <name>Speedment - Plugins - Spring Generator</name>
     <description>
@@ -45,7 +45,7 @@
         <spring.version>4.3.6.RELEASE</spring.version>
     </properties>
     
-    <build>
+    <!-- <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -59,7 +59,7 @@
                 </configuration>
             </plugin>                            
         </plugins>
-    </build>
+    </build> -->
     
     <profiles>
         <profile>
