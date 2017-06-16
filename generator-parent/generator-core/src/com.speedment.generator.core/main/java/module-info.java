@@ -1,4 +1,5 @@
 module com.speedment.generator.core {
+    exports com.speedment.generator.core.exception;
     exports com.speedment.generator.core;
     exports com.speedment.generator.core.component;
     exports com.speedment.generator.core.event;
