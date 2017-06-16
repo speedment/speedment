@@ -31,7 +31,7 @@
     
     <artifactId>json-stream</artifactId>
 	
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
     
     <name>Speedment - Plugins - JSON Stream</name>
     <description>
@@ -39,7 +39,7 @@
     </description>
     <url>https://www.github.com/speedment/speedment-plugins/wiki/JSON-Stream/</url>
     
-    <build>
+    <!-- <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -53,7 +53,7 @@
                 </configuration>
             </plugin>                            
         </plugins>
-    </build>
+    </build> -->
     
     <profiles>
         <profile>
