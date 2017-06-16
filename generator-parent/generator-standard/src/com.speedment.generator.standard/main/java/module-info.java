@@ -1,4 +1,5 @@
 module com.speedment.generator.standard {
+    exports com.speedment.generator.standard.internal.util;
     exports com.speedment.generator.standard;
     requires com.speedment.common.codegen;
     requires com.speedment.common.function;
