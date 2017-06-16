@@ -1,4 +1,5 @@
 module com.speedment.plugins.enums {
+    requires com.speedment.common.json;
     requires com.speedment.tool.propertyeditor;
     requires com.speedment.tool.config;
     requires com.speedment.runtime.field;
