@@ -34,7 +34,7 @@ import static org.mockito.Mockito.when;
 
 // Since ConfigFileHelper is final we need to use Powermock so it is possible to actually mock it.
 @RunWith(MockitoJUnitRunner.class)
-public class AbstractReloadMojoTest {
+public abstract class AbstractReloadMojoTest {
 
     private AbstractReloadMojoTestImpl mojo;
 

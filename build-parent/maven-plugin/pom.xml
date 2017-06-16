@@ -34,6 +34,8 @@
         <mysql-jdbc-version>5.1.41</mysql-jdbc-version>
         <postgres-jdbc-version>42.0.0</postgres-jdbc-version>
         <mariadb-jdbc-version>1.5.9</mariadb-jdbc-version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
     
     <groupId>com.speedment</groupId>
@@ -44,7 +46,7 @@
     <description>
         A neat plugin for using Speedment as a maven target.
     </description>
-    
+
     <dependencies>
         <dependency>
             <groupId>com.speedment</groupId>
@@ -127,7 +129,31 @@
     </dependencies>
 
     <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
+
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <excludes>
+                        <exclude>**/package-info.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
             <plugin>
                 <artifactId>maven-plugin-plugin</artifactId>
                 <version>3.5</version>
