@@ -30,14 +30,14 @@
     </parent>
     
     <artifactId>h2</artifactId>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
  
     <name>Speedment - Connector - H2</name>
     <description>
         A connector for the H2 database.
     </description>
     
-    <build>
+    <!-- <build>
         <plugins>
             <plugin>
                 <groupId>com.speedment</groupId>
@@ -57,7 +57,7 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+    </build> -->
     
     <dependencies>
         <!-- Common dependencies -->
