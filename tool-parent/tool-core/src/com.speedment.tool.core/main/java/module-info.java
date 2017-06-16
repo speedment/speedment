@@ -1,4 +1,5 @@
 module com.speedment.tool.core {
+    exports com.speedment.tool.core.exception;
     exports com.speedment.tool.core.component;
     requires com.speedment.common.invariant;
     requires com.speedment.runtime.typemapper;
