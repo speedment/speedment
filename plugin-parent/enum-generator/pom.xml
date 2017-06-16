@@ -30,7 +30,7 @@
     </parent>
     
     <artifactId>enum-generator</artifactId>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
     
     <name>Speedment - Plugins - Enum Generator</name>
     <description>
@@ -39,7 +39,7 @@
     </description>
     <url>https://www.github.com/speedment/speedment-plugins/wiki/Enum-Generator/</url>
     
-    <build>
+    <!-- <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -53,7 +53,7 @@
                 </configuration>
             </plugin>
         </plugins>
-    </build>
+    </build> -->
     
     <profiles>
         <profile>
