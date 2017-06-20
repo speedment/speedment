@@ -56,6 +56,7 @@
         <combinatorics.version>1.0.2-SNAPSHOT</combinatorics.version>
         <benchmark.version>1.0.1-SNAPSHOT</benchmark.version>
         <collection.version>1.0.1-SNAPSHOT</collection.version>
+        <annotation.version>1.0.1-SNAPSHOT</annotation.version>
     </properties>
     
     <dependencyManagement>
@@ -160,6 +161,12 @@
                 <groupId>com.speedment.common</groupId>
                 <artifactId>collection</artifactId>
                 <version>${collection.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>annotation</artifactId>
+                <version>${annotation.version}</version>
             </dependency>
             
         </dependencies>
