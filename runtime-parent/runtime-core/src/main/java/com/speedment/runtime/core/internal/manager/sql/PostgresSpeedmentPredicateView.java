@@ -71,24 +71,48 @@ public class PostgresSpeedmentPredicateView extends AbstractFieldPredicateView i
     
     
     @Override
-    protected SqlPredicateFragment lessOrEqualString(String cn, FieldPredicate<?> model) {
-        return of("(" + cn + "::bytea <= ?::bytea)").add(getFirstOperandAsRaw(model));
+    protected SqlPredicateFragment
+    lessOrEqual(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) { // Override string behaviour
+            return of("(" + cn + "::bytea <= ?::bytea)")
+                .add(getFirstOperandAsRaw(model));
+        } else {
+            return super.lessOrEqual(cn, dbType, model);
+        }
     }
 
     @Override
-    protected SqlPredicateFragment lessThanString(String cn, FieldPredicate<?> model) {
-        return of("(" + cn + "::bytea < ?::bytea)").add(getFirstOperandAsRaw(model));
+    protected SqlPredicateFragment
+    lessThan(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) { // Override string behaviour
+            return of("(" + cn + "::bytea < ?::bytea)")
+                .add(getFirstOperandAsRaw(model));
+        } else {
+            return super.lessThan(cn, dbType, model);
+        }
     }
 
     @Override
-    protected SqlPredicateFragment greaterOrEqualString(String cn, FieldPredicate<?> model) {
-        return of("(" + cn + "::bytea >= ?::bytea)").add(getFirstOperandAsRaw(model));
+    protected SqlPredicateFragment
+    greaterOrEqual(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) { // Override string behaviour
+            return of("(" + cn + "::bytea >= ?::bytea)")
+                .add(getFirstOperandAsRaw(model));
+        } else {
+            return super.greaterOrEqual(cn, dbType, model);
+        }
     }
 
     @Override
-    protected SqlPredicateFragment greaterThanString(String cn, FieldPredicate<?> model) {
-        return of("(" + cn + "::bytea > ?::bytea)").add(getFirstOperandAsRaw(model));
+    protected SqlPredicateFragment
+    greaterThan(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) { // Override string behaviour
+            return of("(" + cn + "::bytea > ?::bytea)")
+                .add(getFirstOperandAsRaw(model));
+        } else {
+            return super.greaterOrEqual(cn, dbType, model);
+        }
     }
-    
-    
+
+    // TODO: Maybe override "equal", "between" and "in" as well?
 }
