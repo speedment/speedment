@@ -178,7 +178,7 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
 
             dbms.getPort().ifPresent(p -> result.append(":").append(p));
 
-            result.append("/").append(dbms.getName())
+            result/*.append("/").append(dbms.getName()) */ // MariaDB treats this as default schema name
                 .append("?useUnicode=true&characterEncoding=UTF-8")
                 .append("&useServerPrepStmts=true&useCursorFetch=true")
                 .append("&zeroDateTimeBehavior=convertToNull");

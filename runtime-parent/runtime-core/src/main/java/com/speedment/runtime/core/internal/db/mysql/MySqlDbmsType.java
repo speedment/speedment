@@ -182,7 +182,7 @@ public final class MySqlDbmsType extends AbstractDbmsType {
 
             dbms.getPort().ifPresent(p -> result.append(":").append(p));
 
-            result.append("/").append(dbms.getName())
+            result/*.append("/").append(dbms.getName())*/ // MySQL treats this as default schema name
                 .append("?useUnicode=true&characterEncoding=UTF-8")
                 .append("&useServerPrepStmts=true&useSSL=false")
                 .append("&zeroDateTimeBehavior=convertToNull")
