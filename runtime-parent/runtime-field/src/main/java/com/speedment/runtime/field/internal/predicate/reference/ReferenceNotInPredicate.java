@@ -43,7 +43,7 @@ implements Tuple1<Set<V>> {
     public ReferenceNotInPredicate(HasReferenceValue<ENTITY, D, V> field, Set<V> values) {
         super(NOT_IN, field, entity -> {
             final V value = field.get(entity);
-            return value != null && !values.contains(field.get(entity));
+            return value != null && !values.contains(value);
         });
         this.set = requireNonNull(values);
     }
