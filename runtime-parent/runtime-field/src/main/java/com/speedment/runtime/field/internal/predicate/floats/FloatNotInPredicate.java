@@ -41,7 +41,7 @@ implements Tuple1<Set<Float>> {
     private final Set<Float> set;
     
     FloatNotInPredicate(HasFloatValue<ENTITY, D> field, Set<Float> set) {
-        super(PredicateType.IN, field, entity -> !set.contains(field.getAsFloat(entity)));
+        super(PredicateType.NOT_IN, field, entity -> !set.contains(field.getAsFloat(entity)));
         this.set = requireNonNull(set);
     }
     

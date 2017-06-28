@@ -41,7 +41,7 @@ implements Tuple1<Set<Short>> {
     private final Set<Short> set;
     
     ShortNotInPredicate(HasShortValue<ENTITY, D> field, Set<Short> set) {
-        super(PredicateType.IN, field, entity -> !set.contains(field.getAsShort(entity)));
+        super(PredicateType.NOT_IN, field, entity -> !set.contains(field.getAsShort(entity)));
         this.set = requireNonNull(set);
     }
     

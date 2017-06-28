@@ -41,7 +41,7 @@ implements Tuple1<Set<Character>> {
     private final Set<Character> set;
     
     CharNotInPredicate(HasCharValue<ENTITY, D> field, Set<Character> set) {
-        super(PredicateType.IN, field, entity -> !set.contains(field.getAsChar(entity)));
+        super(PredicateType.NOT_IN, field, entity -> !set.contains(field.getAsChar(entity)));
         this.set = requireNonNull(set);
     }
     
