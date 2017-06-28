@@ -345,7 +345,7 @@ public abstract class AbstractFieldPredicateView implements FieldPredicateView {
 
         final Set<?> set = getFirstOperandAsRawSet(model);
         if (set.isEmpty()) {
-            return negated ? alwaysFalse() : alwaysTrue();
+            return negated ? alwaysTrue() : alwaysFalse();
         } else if (set.size() == 1) {
             final Object arg = set.iterator().next();
             return negated
