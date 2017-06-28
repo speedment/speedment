@@ -113,23 +113,13 @@ implements FieldPredicateView {
     @Override
     protected SqlPredicateFragment
     equal(String cn, Class<?> dbType, FieldPredicate<?> model) {
-        if (dbType.equals(String.class)) { // Use collation for string types
-            return of(compare(cn, " = ?", binaryCollationName))
-                .add(getFirstOperandAsRaw(model));
-        } else {
-            return super.equal(cn, dbType, model);
-        }
+        return equalHelper(cn, dbType, getFirstOperandAsRaw(model));
     }
 
     @Override
     protected SqlPredicateFragment
     notEqual(String cn, Class<?> dbType, FieldPredicate<?> model) {
-        if (dbType.equals(String.class)) { // Use collation for string types
-            return of("(NOT " + compare(cn, " = ?", binaryCollationName) + ")")
-                .add(getFirstOperandAsRaw(model));
-        } else {
-            return super.notEqual(cn, dbType, model);
-        }
+        return notEqualHelper(cn, dbType, getFirstOperandAsRaw(model));
     }
 
     @Override
@@ -228,8 +218,8 @@ implements FieldPredicateView {
         } else if (set.size() == 1) {
             final Object arg = set.iterator().next();
             return negated
-                ? notEqualHelper(cn, arg)
-                : equalHelper(cn, arg);
+                ? notEqualHelper(cn, String.class, arg)
+                : equalHelper(cn, String.class, arg);
         }
 
         return of("(" + cn + " IN (" +
@@ -271,12 +261,24 @@ implements FieldPredicateView {
         throw new IllegalArgumentException("Unknown Inclusion:" + inclusion);
     }
 
-    private SqlPredicateFragment equalHelper(String cn, Object argument) {
-        return of("(" + cn + " = ?)").add(argument);
+    private SqlPredicateFragment
+    equalHelper(String cn, Class<?> dbType, Object argument) {
+        if (dbType.equals(String.class)) { // Use collation for string types
+            return of(compare(cn, " = ?", binaryCollationName))
+                .add(argument);
+        } else {
+            return of("(" + cn + " = ?)").add(argument);
+        }
     }
 
-    private SqlPredicateFragment notEqualHelper(String cn, Object argument) {
-        return of("(NOT (" + cn + " = ?))").add(argument);
+    private SqlPredicateFragment
+    notEqualHelper(String cn, Class<?> dbType, Object argument) {
+        if (dbType.equals(String.class)) { // Use collation for string types
+            return of("(NOT " + compare(cn, " = ?", binaryCollationName) + ")")
+                .add(argument);
+        } else {
+            return of("(NOT (" + cn + " = ?))").add(argument);
+        }
     }
 
     private String lessOrEqualString(String cn) {
