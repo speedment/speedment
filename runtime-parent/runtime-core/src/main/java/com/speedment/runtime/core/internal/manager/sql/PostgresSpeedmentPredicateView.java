@@ -124,7 +124,7 @@ public class PostgresSpeedmentPredicateView extends AbstractFieldPredicateView i
         if (dbType.equals(String.class)) { // Override string behaviour
             return of(greaterThanString(cn)).add(getFirstOperandAsRaw(model));
         } else {
-            return super.greaterOrEqual(cn, dbType, model);
+            return super.greaterThan(cn, dbType, model);
         }
     }
 
