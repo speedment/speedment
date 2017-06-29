@@ -74,10 +74,6 @@ implements FieldPredicate<ENTITY> {
         return field;
     }
 
-    @Override
-    public FieldPredicate<ENTITY> negate() {
-        return (FieldPredicate<ENTITY>) super.negate();
-    }
 
     @Override
     public String toString() {
