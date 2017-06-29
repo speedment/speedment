@@ -41,7 +41,7 @@ implements Tuple1<Set<Byte>> {
     private final Set<Byte> set;
     
     ByteNotInPredicate(HasByteValue<ENTITY, D> field, Set<Byte> set) {
-        super(PredicateType.IN, field, entity -> !set.contains(field.getAsByte(entity)));
+        super(PredicateType.NOT_IN, field, entity -> !set.contains(field.getAsByte(entity)));
         this.set = requireNonNull(set);
     }
     

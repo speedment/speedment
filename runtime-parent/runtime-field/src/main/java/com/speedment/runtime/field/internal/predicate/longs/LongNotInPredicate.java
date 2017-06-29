@@ -41,7 +41,7 @@ implements Tuple1<Set<Long>> {
     private final Set<Long> set;
     
     LongNotInPredicate(HasLongValue<ENTITY, D> field, Set<Long> set) {
-        super(PredicateType.IN, field, entity -> !set.contains(field.getAsLong(entity)));
+        super(PredicateType.NOT_IN, field, entity -> !set.contains(field.getAsLong(entity)));
         this.set = requireNonNull(set);
     }
     

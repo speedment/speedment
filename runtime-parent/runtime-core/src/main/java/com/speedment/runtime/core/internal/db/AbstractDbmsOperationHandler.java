@@ -20,6 +20,7 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.core.ApplicationBuilder.LogType;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
@@ -41,7 +42,6 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import com.speedment.runtime.core.ApplicationBuilder.LogType;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
@@ -268,7 +268,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         sqlStatementList.stream()
             .filter(SqlInsertStatement.class::isInstance)
             .map(SqlInsertStatement.class::cast)
-            .forEach(SqlInsertStatement<?>::acceptGeneratedKeys);
+            .forEach(SqlInsertStatement::acceptGeneratedKeys);
     }
 
     @FunctionalInterface

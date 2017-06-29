@@ -79,7 +79,12 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
 
     @Override
     public String getDbmsNameMeaning() {
-        return "Just a name";
+        return "The name of the MariaDB Database.";
+    }
+
+    @Override
+    public boolean hasSchemaNames() {
+        return false;
     }
 
     @Override
@@ -172,13 +177,11 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
                 .append(dbms.getIpAddress().orElse(""));
 
             dbms.getPort().ifPresent(p -> result.append(":").append(p));
-            result.append(
-                "/?useUnicode=true"
-                + "&characterEncoding=UTF-8"
-                + "&useServerPrepStmts=true"
-                + "&useCursorFetch=true"
-                + "&zeroDateTimeBehavior=convertToNull"
-            );
+
+            result/*.append("/").append(dbms.getName()) */ // MariaDB treats this as default schema name
+                .append("?useUnicode=true&characterEncoding=UTF-8")
+                .append("&useServerPrepStmts=true&useCursorFetch=true")
+                .append("&zeroDateTimeBehavior=convertToNull");
 
             return result.toString();
         }
