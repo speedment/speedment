@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.plugins</groupId>
         <artifactId>plugin-parent</artifactId>
-        <version>3.0.12</version>
+        <version>3.0.13-SNAPSHOT</version>
     </parent>
     
     <artifactId>json-stream</artifactId>
@@ -63,7 +63,6 @@
                     <plugin>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <configuration>
-                            
                             <additionalDependencies>
                                 <additionalDependency>
                                     <groupId>com.speedment.runtime</groupId>

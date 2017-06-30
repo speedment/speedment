@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.runtime</groupId>
         <artifactId>runtime-parent</artifactId>
-        <version>3.0.12</version>
+        <version>3.0.13-SNAPSHOT</version>
     </parent>
     
     <artifactId>runtime-typemapper</artifactId>
