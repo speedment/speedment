@@ -286,7 +286,7 @@ public final class ConnectController implements Initializable {
             dbms.nameProperty().set(fieldName.getText());
 
             if (!areaConnectionUrl.getText().isEmpty()
-                &&  !areaConnectionUrl.getText().equals(generatedConnUrl.get())) {
+            &&  !areaConnectionUrl.getText().equals(generatedConnUrl.get())) {
                 Settings.inst().set("last_known_url", areaConnectionUrl.getText());
                 dbms.connectionUrlProperty().setValue(
                     areaConnectionUrl.getText()
@@ -294,6 +294,7 @@ public final class ConnectController implements Initializable {
             }
 
             final String schema = Optional.of(fieldSchema.getText())
+                .filter(s -> dbmsType.get().hasSchemaNames())
                 .filter(s -> !s.isEmpty())
                 .orElseGet(dbms::getName);
 

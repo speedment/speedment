@@ -216,7 +216,7 @@ public final class ConfigFileHelper {
                     .handleAsync((p, ex) -> {
                         progress.setProgress(ProgressMeasure.DONE);
 
-                        // If the loading was successfull
+                        // If the loading was successful
                         if (ex == null && p != null) {
                             // Make sure any old data is cleared before merging in
                             // the new state from the database.
