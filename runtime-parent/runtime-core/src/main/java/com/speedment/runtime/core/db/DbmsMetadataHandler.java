@@ -36,7 +36,6 @@ import java.util.function.Predicate;
 public interface DbmsMetadataHandler {
 
     /**
-     * /**
      * Reads the schema metadata with populated {@link Schema Schemas} that are
      * available in this database. The schemas are populated by all their
      * sub-items such as tables, columns etc. Schemas that are a part of the
