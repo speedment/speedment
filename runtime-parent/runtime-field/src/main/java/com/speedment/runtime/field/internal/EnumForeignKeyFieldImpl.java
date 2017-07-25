@@ -89,6 +89,16 @@ implements EnumForeignKeyField<ENTITY, D, E, FK> {
     ////////////////////////////////////////////////////////////////////////////
 
     @Override
+    public Class<E> enumClass() {
+        return enumClass;
+    }
+
+    @Override
+    public EnumSet<E> constants() {
+        return EnumSet.allOf(enumClass);
+    }
+
+    @Override
     public ColumnIdentifier<ENTITY> identifier() {
         return identifier;
     }
