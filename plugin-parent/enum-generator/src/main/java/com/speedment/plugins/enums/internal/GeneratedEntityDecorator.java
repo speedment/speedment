@@ -68,7 +68,7 @@ implements TranslatorDecorator<Table, Interface> {
             IntegerToEnumTypeMapper.class.getName()
         )));
 
-    public final static String
+    private final static String
         FROM_DATABASE_METHOD         = "fromDatabase",
         FROM_DATABASE_ORDINAL_METHOD = "fromDatabaseOrdinal",
         TO_DATABASE_METHOD           = "toDatabase",
