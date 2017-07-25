@@ -26,6 +26,7 @@ import com.speedment.generator.translator.JavaClassTranslator;
 import com.speedment.generator.translator.Translator;
 import com.speedment.generator.translator.TranslatorDecorator;
 import com.speedment.generator.translator.namer.JavaLanguageNamer;
+import com.speedment.plugins.enums.IntegerToEnumTypeMapper;
 import com.speedment.plugins.enums.StringToEnumTypeMapper;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
@@ -35,19 +36,21 @@ import com.speedment.runtime.field.EnumField;
 import com.speedment.runtime.field.EnumForeignKeyField;
 import com.speedment.runtime.typemapper.TypeMapper;
 
+import java.lang.Class;
 import java.lang.reflect.Type;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
-import static com.speedment.common.codegen.constant.DefaultType.WILDCARD;
-import static com.speedment.common.codegen.constant.DefaultType.classOf;
+import static com.speedment.common.codegen.constant.DefaultType.*;
 import static com.speedment.common.codegen.model.Value.*;
 import static com.speedment.common.codegen.util.Formatting.indent;
 import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.generator.standard.internal.util.ColumnUtil.usesOptional;
+import static com.speedment.plugins.enums.internal.EnumGeneratorUtil.enumConstantsOf;
+import static com.speedment.plugins.enums.internal.EnumGeneratorUtil.enumNameOf;
+import static java.lang.String.format;
 import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableSet;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -58,11 +61,20 @@ import static java.util.Objects.requireNonNull;
  */
 public final class GeneratedEntityDecorator
 implements TranslatorDecorator<Table, Interface> {
-    
+
+    private final static Set<String> ENUM_TYPE_MAPPERS =
+        unmodifiableSet(new HashSet<>(asList(
+            StringToEnumTypeMapper.class.getName(),
+            IntegerToEnumTypeMapper.class.getName()
+        )));
+
     public final static String
-        FROM_DATABASE_METHOD = "fromDatabase",
-        TO_DATABASE_METHOD   = "toDatabase",
-        DATABASE_NAME_FIELD  = "databaseName";
+        FROM_DATABASE_METHOD         = "fromDatabase",
+        FROM_DATABASE_ORDINAL_METHOD = "fromDatabaseOrdinal",
+        TO_DATABASE_METHOD           = "toDatabase",
+        TO_DATABASE_ORDINAL_METHOD   = "toDatabaseOrdinal",
+        DATABASE_NAME                = "databaseName",
+        DATABASE_ORDINAL             = "databaseOrdinal";
     
     private final Injector injector;
     
@@ -76,55 +88,112 @@ implements TranslatorDecorator<Table, Interface> {
             builder.forEveryTable(Translator.Phase.POST_MAKE, (intrf, table) -> {
 
                 file.getImports().removeIf(i -> i.getType().equals(StringToEnumTypeMapper.class));
+                file.getImports().removeIf(i -> i.getType().equals(IntegerToEnumTypeMapper.class));
 
                 table.columns()
                     .filter(HasEnabled::test)
                     .filter(col -> col.getTypeMapper()
-                        .filter(StringToEnumTypeMapper.class.getName()::equals)
+                        .filter(ENUM_TYPE_MAPPERS::contains)
                         .isPresent()
                     ).forEachOrdered(col -> {
                         final JavaLanguageNamer namer = translator.getSupport().namer();
                         
-                        final String colEnumName = EnumGeneratorUtil.enumNameOf(col, injector);
-                        final List<String> constants = EnumGeneratorUtil.enumConstantsOf(col);
-                        final Type enumType = new GeneratedEnumType(colEnumName, constants);
+                        final String colEnumName     = enumNameOf(col, injector);
+                        final List<String> constants = enumConstantsOf(col);
+
+                        final Type enumType = new GeneratedEnumType(
+                            colEnumName,
+                            constants
+                        );
+
+                        final Type dbType;
+                        if (hasTypeMapper(col, StringToEnumTypeMapper.class)) {
+                            dbType = String.class;
+                        } else if (hasTypeMapper(col, IntegerToEnumTypeMapper.class)) {
+                            dbType = int.class;
+                        } else {
+                            throw new UnsupportedOperationException(format(
+                                "Unknown enum type mapper '%s' in column '%s'.",
+                                col.getTypeMapper().orElse(null), col
+                            ));
+                        }
                         
                         final Enum colEnum = Enum.of(shortName(colEnumName))
-                            .add(Field.of(DATABASE_NAME_FIELD, String.class).private_().final_());
+                            .add(Field.of(DATABASE_NAME, String.class)
+                                .private_().final_()
+                            ).add(Field.of(DATABASE_ORDINAL, int.class)
+                                .private_().final_()
+                            );
 
-                        // Generate enum constants
-                        constants.forEach(constant -> {
-                            final String javaName = namer.javaStaticFieldName(constant);
-                            colEnum.add(EnumConstant.of(javaName).add(Value.ofText(constant)));
-                        });
-                        
-                        // Generate constructor
-                        colEnum.add(Constructor.of()
-                            .add(Field.of(DATABASE_NAME_FIELD, String.class))
-                            .add("this." + DATABASE_NAME_FIELD + " = " + DATABASE_NAME_FIELD + ";")
-                        );
-                        
                         // Generate fromDatabase()-method
                         final Method fromDatabase = Method.of(FROM_DATABASE_METHOD, enumType)
                             .public_().static_()
-                            .add(Field.of(DATABASE_NAME_FIELD, String.class))
-                            .add("switch (" + DATABASE_NAME_FIELD + ") {");
+                            .add(Field.of(DATABASE_NAME, String.class))
+                            .add("if (" + DATABASE_NAME + " == null) return null;")
+                            .add("switch (" + DATABASE_NAME + ") {");
+
+                        final Method fromDatabaseOrdinal = Method.of(FROM_DATABASE_ORDINAL_METHOD, enumType)
+                            .public_().static_()
+                            .add(Field.of(DATABASE_ORDINAL, Integer.class))
+                            .add("if (" + DATABASE_ORDINAL + " == null) return null;")
+                            .add("switch (" + DATABASE_ORDINAL + ") {");
+
+                        // Generate enum constants
+                        final ListIterator<String> constantIt = constants.listIterator();
+                        while (constantIt.hasNext()) {
+                            final int ordinal     = constantIt.nextIndex();
+                            final String constant = constantIt.next();
+                            final String javaName = namer.javaStaticFieldName(constant);
+
+                            final EnumConstant enumConstant =
+                                EnumConstant.of(javaName)
+                                    .add(Value.ofText(constant))
+                                    .add(Value.ofNumber(ordinal));
+
+                            fromDatabase.add(indent(
+                                "case \"" + constant + "\" : return " +
+                                    namer.javaStaticFieldName(constant) + ";"
+                            ));
+
+                            fromDatabaseOrdinal.add(indent(
+                                "case " + ordinal + " : return " +
+                                    namer.javaStaticFieldName(constant) + ";"
+                            ));
+
+                            colEnum.add(enumConstant);
+                        }
                         
-                        constants.stream()
-                            .map(s -> indent("case \"" + s + "\" : return " + namer.javaStaticFieldName(s) + ";"))
-                            .forEachOrdered(fromDatabase::add);
-                        
+                        // Generate constructor
+                        colEnum.add(Constructor.of()
+                            .add(Field.of(DATABASE_NAME, String.class))
+                            .add(Field.of(DATABASE_ORDINAL, int.class))
+                            .add("this." + DATABASE_NAME + "    = " + DATABASE_NAME + ";")
+                            .add("this." + DATABASE_ORDINAL + " = " + DATABASE_ORDINAL + ";")
+                        );
+
                         fromDatabase
                             .add(indent("default : throw new UnsupportedOperationException("))
-                            .add(indent("\"Unknown enum constant '\" + " + DATABASE_NAME_FIELD + " + \"'.\"", 2))
+                            .add(indent("\"Unknown enum constant '\" + " + DATABASE_NAME + " + \"'.\"", 2))
+                            .add(indent(");"))
+                            .add("}");
+
+                        fromDatabaseOrdinal
+                            .add(indent("default : throw new UnsupportedOperationException("))
+                            .add(indent("\"Unknown enum ordinal '\" + " + DATABASE_ORDINAL + " + \"'.\"", 2))
                             .add(indent(");"))
                             .add("}");
                         
                         colEnum.add(fromDatabase);
+                        colEnum.add(fromDatabaseOrdinal);
                         
                         // Generate toDatabase()-method
                         colEnum.add(Method.of(TO_DATABASE_METHOD, String.class)
-                            .public_().add("return " + DATABASE_NAME_FIELD + ";")
+                            .public_().add("return " + DATABASE_NAME + ";")
+                        );
+
+                        // Generate toDatabaseOrdinal()-method
+                        colEnum.add(Method.of(TO_DATABASE_ORDINAL_METHOD, int.class)
+                            .public_().add("return " + DATABASE_ORDINAL + ";")
                         );
                         
                         // Add it to the interface.
@@ -157,14 +226,15 @@ implements TranslatorDecorator<Table, Interface> {
                             ),
                             ofReference(
                                 translator.getSupport().entityName() + "::set" +
-                                    translator.getSupport().typeName(col)
+                                translator.getSupport().typeName(col)
                             ),
                             ofAnonymous(TypeMapper.class)
-                                .add(String.class)
+                                .add(wrapIfPrimitive(dbType))
                                 .add(enumType)
                                 .add(Method.of("getLabel", String.class)
                                     .public_().add(OVERRIDE)
-                                    .add("return \"String to " + enumShortName + " Mapper\";")
+                                    .add("return \"" + shortName(dbType.getTypeName()) +
+                                        " to " + enumShortName + " Mapper\";")
                                 )
                                 .add(Method.of("getJavaTypeCategory", TypeMapper.Category.class)
                                     .public_().add(OVERRIDE)
@@ -181,13 +251,22 @@ implements TranslatorDecorator<Table, Interface> {
                                     .public_().add(OVERRIDE)
                                     .add(Field.of("column", Column.class))
                                     .add(Field.of("clazz", classOf(WILDCARD)))
-                                    .add(Field.of("str", String.class))
-                                    .add("return str == null ? null : " + enumShortName + "." + FROM_DATABASE_METHOD + "(str);")
+                                    .add(Field.of("value", wrapIfPrimitive(dbType)))
+                                    .add("return value == null ? null : " +
+                                        enumShortName + "." + ((dbType == String.class)
+                                            ? FROM_DATABASE_METHOD
+                                            : FROM_DATABASE_ORDINAL_METHOD
+                                        ) + "(value);"
+                                    )
                                 )
-                                .add(Method.of("toDatabaseType", String.class)
+                                .add(Method.of("toDatabaseType", wrapIfPrimitive(dbType))
                                     .public_().add(OVERRIDE)
                                     .add(Field.of(enumVarName, enumType))
-                                    .add("return " + enumVarName + " == null ? null : " + enumVarName + "." + TO_DATABASE_METHOD + "();")
+                                    .add("return " + enumVarName + " == null ? null : " +
+                                        enumVarName + "." + ((dbType == String.class)
+                                            ? TO_DATABASE_METHOD
+                                            : TO_DATABASE_ORDINAL_METHOD
+                                        ) + "();")
                                 )
                         ));
 
@@ -220,5 +299,15 @@ implements TranslatorDecorator<Table, Interface> {
                     });
             });
         });
+    }
+
+    private boolean hasTypeMapper(Column col, Class<?> typeMapperClass) {
+        return col.getTypeMapper()
+            .filter(typeMapperClass.getName()::equals)
+            .isPresent();
+    }
+
+    private Type wrapIfPrimitive(Type type) {
+        return isPrimitive(type) ? wrapperFor(type) : type;
     }
 }

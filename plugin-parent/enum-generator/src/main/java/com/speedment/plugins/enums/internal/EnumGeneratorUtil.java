@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 
 /**
+ * Utility class to assist the type mappers of this plugin.
  *
  * @author  Emil Forslund
  * @author  Simon Jonasson
@@ -70,7 +71,14 @@ public final class EnumGeneratorUtil {
             .split(",")
         ).sorted().collect(toList());
     }
-    
+
+    /**
+     * Returns a stream of classes located inside the specified class. If the
+     * specified class is {@code null}, then an empty stream is returned.
+     *
+     * @param entityClass  the class to look in (can be {code null})
+     * @return             stream of classes
+     */
     public static Stream<Class<?>> classesIn(Class<?> entityClass) {
         if (entityClass == null) {
             return Stream.empty();

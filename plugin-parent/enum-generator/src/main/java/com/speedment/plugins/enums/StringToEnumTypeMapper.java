@@ -93,7 +93,7 @@ public final class StringToEnumTypeMapper<T extends Enum<T>> implements TypeMapp
                     // Include only enums with a method called fromDatabase()
                     // that takes the right parameters
                     .filter(c -> Stream.of(c.getMethods())
-                        .filter(m -> m.getName().equals("fromDatabase"))
+                        .filter(m -> m.getName().equals(FROM_DATABASE_METHOD))
                         .anyMatch(m -> {
                             final Class<?>[] params = m.getParameterTypes();
                             return params.length == 1 
