@@ -29,6 +29,7 @@ import com.speedment.runtime.typemapper.integer.*;
 import com.speedment.runtime.typemapper.largeobject.BlobToByteArrayMapper;
 import com.speedment.runtime.typemapper.largeobject.ClobToStringMapper;
 import com.speedment.runtime.typemapper.longs.*;
+import com.speedment.runtime.typemapper.other.BinaryToByteArrayMapper;
 import com.speedment.runtime.typemapper.other.BinaryToUuidMapper;
 import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
 import com.speedment.runtime.typemapper.shorts.PrimitiveShortToByteMapper;
@@ -123,6 +124,7 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
 
         // Others
         install(Object.class, BinaryToUuidMapper::new);
+        install(Object.class, BinaryToByteArrayMapper::new);
     }
 
     @Override
