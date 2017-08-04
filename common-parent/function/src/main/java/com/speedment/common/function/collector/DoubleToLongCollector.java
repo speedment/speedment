@@ -16,7 +16,7 @@
  */
 package com.speedment.common.function.collector;
 
-import com.speedment.common.function.ObjByteConsumer;
+import com.speedment.common.function.ObjDoubleConsumer;
 import com.speedment.common.function.ToLongFunction;
 import java.util.Set;
 import java.util.function.BinaryOperator;
@@ -25,7 +25,7 @@ import java.util.stream.Collector.Characteristics;
 import java.util.stream.Collector;
 
 /**
- * Primitive collector that operates on {@code byte} values, resulting in a
+ * Primitive collector that operates on {@code double} values, resulting in a
  * single {@code long}.
  * 
  * @param <A> the intermediary accumulating type
@@ -35,7 +35,7 @@ import java.util.stream.Collector;
  * 
  * @see Collector
  */
-public interface ByteToLongCollector<A> {
+public interface DoubleToLongCollector<A> {
     
     /**
      * Returns a supplier that can create an intermediary accumulating object.
@@ -48,13 +48,13 @@ public interface ByteToLongCollector<A> {
     
     /**
      * Stateless function that takes an accumulating object returned by{@link
-     * #supplier()} and adds a single {@code byte} value to it.
+     * #supplier()} and adds a single {@code double} value to it.
      * 
      * @return the accumulator
      * 
      * @see Collector#accumulator()
      */
-    ObjByteConsumer<A> accumulator();
+    ObjDoubleConsumer<A> accumulator();
     
     /**
      * Stateless function that takes two accumulating objects and returns a
