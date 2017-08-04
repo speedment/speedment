@@ -1,5 +1,6 @@
 package com.speedment.common.function.collector;
 
+import com.speedment.common.function.ObjByteConsumer;
 import com.speedment.common.function.ToLongFunction;
 
 import java.util.Set;
