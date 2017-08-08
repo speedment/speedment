@@ -221,7 +221,7 @@ implements TranslatorDecorator<Table, Interface> {
                             ofReference("Identifier." + fieldName),
                             ofReference(
                                 usesOptional(col)
-                                    ? "o -> " + OptionalUtil.class.getSimpleName() + ".unwrap(o.get" + translator.getSupport().typeName(col) + "()),"
+                                    ? "o -> " + OptionalUtil.class.getSimpleName() + ".unwrap(o.get" + translator.getSupport().typeName(col) + "())"
                                     : translator.getSupport().entityName() + "::get" + translator.getSupport().typeName(col)
                             ),
                             ofReference(
