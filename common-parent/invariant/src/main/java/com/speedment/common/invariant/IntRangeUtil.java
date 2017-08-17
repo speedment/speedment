@@ -22,7 +22,7 @@ import java.util.function.Function;
  *
  * @author Per Minborg
  */
-public final class IntRangeUtil1 {
+public final class IntRangeUtil {
 
     /**
      * Returns the given value if it is positive.
@@ -180,7 +180,7 @@ public final class IntRangeUtil1 {
         return val;
     }
 
-    public IntRangeUtil1() {
+    public IntRangeUtil() {
         throw new UnsupportedOperationException();
     }
 }
