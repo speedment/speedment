@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.core.internal.component.sql;
 
-import static com.speedment.common.invariant.IntRangeUtil1.requireNonNegative;
+import static com.speedment.common.invariant.IntRangeUtil.requireNonNegative;
 import com.speedment.runtime.core.component.sql.Metrics;
 
 /**
