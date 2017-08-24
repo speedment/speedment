@@ -91,13 +91,15 @@ public final class ProjectTreeController implements Initializable {
         hierarchy.getSelectionModel().select(root);
     }
 
-    private <P extends DocumentProperty & HasExpandedProperty> TreeItem<DocumentProperty> branch(P doc) {
+    private <P extends DocumentProperty & HasExpandedProperty>
+    TreeItem<DocumentProperty> branch(P doc) {
         requireNonNull(doc);
 
         final TreeItem<DocumentProperty> branch = new TreeItem<>(doc);
         branch.expandedProperty().bindBidirectional(doc.expandedProperty());
 
-        final ListChangeListener<? super DocumentProperty> onListChange = (ListChangeListener.Change<? extends DocumentProperty> change) -> {
+        final ListChangeListener<? super DocumentProperty> onListChange =
+            (ListChangeListener.Change<? extends DocumentProperty> change) -> {
             while (change.next()) {
                 if (change.wasAdded()) {
                     change.getAddedSubList().stream()
@@ -124,7 +126,11 @@ public final class ProjectTreeController implements Initializable {
             .forEachOrdered(branch.getChildren()::add);
 
         //  Listen to changes in the actual map
-        doc.childrenProperty().addListener((MapChangeListener.Change<? extends String, ? extends ObservableList<DocumentProperty>> change) -> {
+        doc.childrenProperty().addListener(
+            (MapChangeListener.Change<
+                ? extends String,
+                ? extends ObservableList<DocumentProperty>> change) -> {
+
             if (change.wasAdded()) {
 
                 // Listen for changes in the added list
@@ -147,9 +153,10 @@ public final class ProjectTreeController implements Initializable {
         return branch;
     }
 
-    private <DOC extends DocumentProperty> Stream<MenuItem> createDefaultContextMenu(TreeCell<DocumentProperty> treeCell, DOC node) {
+    private <DOC extends DocumentProperty> Stream<MenuItem>
+    createDefaultContextMenu(TreeCell<DocumentProperty> treeCell, DOC node) {
 
-        final MenuItem expandAll = new MenuItem("Expand All", SpeedmentIcon.BOOK_OPEN.view());
+        final MenuItem expandAll   = new MenuItem("Expand All", SpeedmentIcon.BOOK_OPEN.view());
         final MenuItem collapseAll = new MenuItem("Collapse All", SpeedmentIcon.BOOK.view());
 
         expandAll.setOnAction(ev -> {
@@ -179,7 +186,7 @@ public final class ProjectTreeController implements Initializable {
 
         private final UserInterfaceComponent ui;
 
-        public DocumentPropertyCell(UserInterfaceComponent ui) {
+        DocumentPropertyCell(UserInterfaceComponent ui) {
             this.ui = requireNonNull(ui);
 
             // Listener should be initiated with a listener attached
@@ -242,10 +249,8 @@ public final class ProjectTreeController implements Initializable {
                     textProperty().setValue(null);
                 }
 
-                if (item instanceof HasMainInterface) {
-                    ui.createContextMenu(this, item)
-                        .ifPresent(this::setContextMenu);
-                }
+                ui.createContextMenu(this, item)
+                    .ifPresent(this::setContextMenu);
 
                 if (HasEnabled.test(item)) {
                     enable();

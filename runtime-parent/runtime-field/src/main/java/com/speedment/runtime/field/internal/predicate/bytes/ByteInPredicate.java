@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.field.internal.predicate.bytes;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasByteValue;
 import java.util.Set;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,8 +33,10 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
-public final class ByteInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Byte, HasByteValue<ENTITY, D>> implements Tuple1<Set<Byte>> {
+@GeneratedCode(value = "Speedment")
+public final class ByteInPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasByteValue<ENTITY, D>> 
+implements Tuple1<Set<Byte>> {
     
     private final Set<Byte> set;
     
@@ -46,5 +48,10 @@ public final class ByteInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENT
     @Override
     public Set<Byte> get0() {
         return set;
+    }
+    
+    @Override
+    public ByteNotInPredicate<ENTITY, D> negate() {
+        return new ByteNotInPredicate<>(getField(), set);
     }
 }

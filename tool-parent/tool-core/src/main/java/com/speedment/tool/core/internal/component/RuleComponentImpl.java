@@ -53,7 +53,7 @@ public class RuleComponentImpl implements RuleComponent {
     
     @Override
     public void install(Supplier<Rule> rule){
-        rules.add( injector.inject(rule.get()) );
+        rules.add(injector.inject(rule.get()));
     }
 
     @Override

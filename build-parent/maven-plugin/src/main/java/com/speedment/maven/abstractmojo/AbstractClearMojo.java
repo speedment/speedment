@@ -23,8 +23,7 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.ProjectComponent;
-import static com.speedment.tool.core.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
-import java.io.File;
+
 import java.util.function.Consumer;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -47,9 +46,9 @@ public abstract class AbstractClearMojo extends AbstractSpeedmentMojo {
     private @Parameter(defaultValue = "${dbms.username}") String dbmsUsername;
     private @Parameter(defaultValue = "${dbms.password}") String dbmsPassword;
     private @Parameter(defaultValue = "${components}") String[] components;
-    private @Parameter(defaultValue = "${typeMappers}") Mapping[] typeMappers;
+    private @Parameter(defaultValue = "${typeMappers}") String[] typeMappers;
     private @Parameter ConfigParam[] parameters;
-    private @Parameter(defaultValue = "${configFile}") File configFile;
+    private @Parameter(defaultValue = "${configFile}") String configFile;
     
     protected AbstractClearMojo() {}
     
@@ -57,7 +56,7 @@ public abstract class AbstractClearMojo extends AbstractSpeedmentMojo {
     
     @Override
     public void execute(Speedment speedment) throws MojoExecutionException, MojoFailureException {
-        getLog().info("Clear any unmodified files generated using configuration file: '" + configLocation().getAbsolutePath() + "'.");
+        getLog().info("Clear any unmodified files generated using configuration file: '" + configLocation().toAbsolutePath() + "'.");
 
         if (hasConfigFile()) {
             try {
@@ -86,7 +85,7 @@ public abstract class AbstractClearMojo extends AbstractSpeedmentMojo {
     }
     
     @Override
-    protected Mapping[] typeMappers() {
+    protected String[] typeMappers() {
         return typeMappers;
     }
 
@@ -95,9 +94,8 @@ public abstract class AbstractClearMojo extends AbstractSpeedmentMojo {
         return parameters;
     }
     
-    @Override
-    protected File configLocation() {
-        return configFile == null ? new File(DEFAULT_CONFIG_LOCATION) : configFile;
+    public String getConfigFile() {
+        return configFile;
     }
     
     @Override

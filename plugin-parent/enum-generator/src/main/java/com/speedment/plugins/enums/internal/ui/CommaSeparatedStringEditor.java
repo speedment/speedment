@@ -16,11 +16,19 @@
  */
 package com.speedment.plugins.enums.internal.ui;
 
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.plugins.enums.StringToEnumTypeMapper;
-import com.speedment.tool.config.ColumnProperty;
+import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.trait.HasParent;
+import com.speedment.runtime.core.exception.SpeedmentException;
+import com.speedment.tool.config.trait.HasEnumConstantsProperty;
+import com.speedment.tool.config.trait.HasTypeMapperProperty;
 import com.speedment.tool.propertyeditor.PropertyEditor;
-import java.util.stream.Stream;
 import javafx.beans.binding.Bindings;
+
+import java.util.stream.Stream;
 
 /**
  * Editor for generating a comma-separated string.
@@ -29,23 +37,46 @@ import javafx.beans.binding.Bindings;
  * each element is separated by a comma. This editor allows the user
  * to easily edit such a string.
  * 
- * @param <T>  the column property type
+ * @param <DOC>  the column property type
  * 
  * @author  Simon Jonasson
  * @since   3.0.0
  */
-public class CommaSeparatedStringEditor<T extends ColumnProperty> 
-        implements PropertyEditor<T> {
+public class CommaSeparatedStringEditor
+    <DOC extends HasEnumConstantsProperty
+               & HasTypeMapperProperty
+               & HasParent<? extends Table>
+               & HasName>
+implements PropertyEditor<HasEnumConstantsProperty> {
+
+    private @Inject Injector injector;
 
     @Override
-    public Stream<Item> fieldsFor(T document) {
+    public Stream<Item> fieldsFor(HasEnumConstantsProperty column) {
+
+        final DOC document;
+        try {
+            @SuppressWarnings("unchecked")
+            final DOC doc = (DOC) column;
+            document = doc;
+        } catch (final ClassCastException ex) {
+            throw new SpeedmentException(
+                "Expected document to be a valid column, but was a '" +
+                column.getClass().getName() + "'."
+            );
+        }
+
         return Stream.of(
-            new AddRemoveStringItem(
+            new AddRemoveStringItem<>(
+                document,
                 "Enum Constants", 
                 document.enumConstantsProperty(),
                 "Used for defining what contants the generated enum can have",
-                Bindings.equal(document.typeMapperProperty(), StringToEnumTypeMapper.class.getName())
+                Bindings.equal(
+                    document.typeMapperProperty(),
+                    StringToEnumTypeMapper.class.getName()
+                )
             )
-        );
+        ).map(injector::inject);
     }
 }

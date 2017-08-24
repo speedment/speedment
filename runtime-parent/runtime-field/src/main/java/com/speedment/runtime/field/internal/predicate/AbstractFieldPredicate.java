@@ -22,38 +22,45 @@ import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.internal.util.Cast;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
-import static java.util.Objects.requireNonNull;
+
 import java.util.function.Predicate;
 
+import static java.util.Objects.requireNonNull;
+
 /**
- * A predicate that contains metadata about the {@link Field} that was used to
+ * A predicate that contains meta-data about the {@link Field} that was used to
  * construct it.
  *
  * @param <ENTITY> the entity type that is being tested
- * @param <V> the wrapper type
- * @param <FIELD> the field in the entity that is operated on
+ * @param <FIELD>  the field in the entity that is operated on
  *
  * @author Emil Forslund
  * @since 3.0.0
  */
-public abstract class AbstractFieldPredicate<ENTITY, V, FIELD extends Field<ENTITY>>
-    extends AbstractPredicate<ENTITY> implements FieldPredicate<ENTITY> {
+public abstract class AbstractFieldPredicate<ENTITY, FIELD extends Field<ENTITY>>
+extends AbstractPredicate<ENTITY>
+implements FieldPredicate<ENTITY> {
 
     private final PredicateType predicateType;
     private final FIELD field;
     private final Predicate<ENTITY> tester;
 
     protected AbstractFieldPredicate(
-        PredicateType predicateType,
-        FIELD field,
-        Predicate<ENTITY> tester) {
+            final PredicateType predicateType,
+            final FIELD field,
+            final Predicate<ENTITY> tester) {
+
         this.predicateType = requireNonNull(predicateType);
-        this.field = requireNonNull(field);
-        this.tester = requireNonNull(tester);
+        this.field         = requireNonNull(field);
+        this.tester        = requireNonNull(tester);
+    }
+
+    protected final Predicate<ENTITY> getTester() {
+        return tester;
     }
 
     @Override
-    protected boolean testWithoutNegation(ENTITY instance) {
+    public boolean test(ENTITY instance) {
         return tester.test(instance);
     }
 
@@ -63,24 +70,16 @@ public abstract class AbstractFieldPredicate<ENTITY, V, FIELD extends Field<ENTI
     }
 
     @Override
-    public final PredicateType getEffectivePredicateType() {
-        return isNegated() ? predicateType.negate() : predicateType;
-    }
-
-    @Override
     public final FIELD getField() {
         return field;
     }
 
-    @Override
-    public FieldPredicate<ENTITY> negate() {
-        return (FieldPredicate<ENTITY>) super.negate();
-    }
 
     @Override
     public String toString() {
         final ColumnIdentifier<ENTITY> cId = field.identifier();
         final StringBuilder sb = new StringBuilder();
+
         sb.append(getClass().getSimpleName())
             .append(" {")
             .append("field: ")
@@ -90,15 +89,13 @@ public abstract class AbstractFieldPredicate<ENTITY, V, FIELD extends Field<ENTI
             .append(cId.getColumnName())
             .append(", type: '").append(predicateType).append("'");
 
-        Cast.cast(this, Tuple.class)
-            .ifPresent(tuple -> {
-                for (int i = 0; i < tuple.length(); i++) {
-                    sb.append(", operand ").append(i).append(": ").append(tuple.get(i));
-                }
-            });
+        Cast.cast(this, Tuple.class).ifPresent(tuple -> {
+            for (int i = 0; i < tuple.degree(); i++) {
+                sb.append(", operand ").append(i)
+                    .append(": ").append(tuple.get(i));
+            }
+        });
 
-        sb.append(", negated: ").append(isNegated())
-            .append("}");
-        return sb.toString();
+        return sb.append("}").toString();
     }
 }

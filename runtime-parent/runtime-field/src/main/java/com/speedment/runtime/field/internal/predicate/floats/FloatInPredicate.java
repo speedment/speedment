@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.field.internal.predicate.floats;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasFloatValue;
 import java.util.Set;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,8 +33,10 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
-public final class FloatInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Float, HasFloatValue<ENTITY, D>> implements Tuple1<Set<Float>> {
+@GeneratedCode(value = "Speedment")
+public final class FloatInPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasFloatValue<ENTITY, D>> 
+implements Tuple1<Set<Float>> {
     
     private final Set<Float> set;
     
@@ -46,5 +48,10 @@ public final class FloatInPredicate<ENTITY, D> extends AbstractFieldPredicate<EN
     @Override
     public Set<Float> get0() {
         return set;
+    }
+    
+    @Override
+    public FloatNotInPredicate<ENTITY, D> negate() {
+        return new FloatNotInPredicate<>(getField(), set);
     }
 }

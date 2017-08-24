@@ -23,16 +23,13 @@ import com.speedment.runtime.core.internal.stream.autoclose.AbstractAutoClosingS
 import com.speedment.runtime.core.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminator;
 import com.speedment.runtime.core.stream.action.Action;
-import com.speedment.runtime.core.util.StreamComposition;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import java.util.function.*;
 import java.util.stream.BaseStream;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -44,22 +41,23 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
 
     private static final Logger LOGGER = LoggerManager.getLogger(AbstractStreamBuilder.class);
 
-    protected final String UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED = "This method has been disabled for this Stream type because improper use will "
-        + "lead to resources not being freed up. "
-        + "We regret any inconvenience caused by this. "
-        + "If you want to concatenate two or more stream, please use the " + StreamComposition.class.getName() + "#concatAndAutoClose() method instead.";
-
+//    protected final String UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED = "This method has been disabled for this Stream type because improper use will "
+//        + "lead to resources not being freed up. "
+//        + "We regret any inconvenience caused by this. "
+//        + "If you want to concatenate two or more stream, please use the " + StreamComposition.class.getName() + "#concatAndAutoClose() method instead.";
     protected final PipelineImpl<?> pipeline;
     protected final StreamTerminator streamTerminator;
     protected final Set<BaseStream<?, ?>> streamSet; // Keeps track of the chain of streams so that we can auto-close them all
     private final List<Runnable> closeHandlers;  // The close handlers for this particular stream
     private boolean closed;
+    private boolean linkedOrConsumed;
 
     AbstractStreamBuilder(PipelineImpl<?> pipeline, StreamTerminator streamTerminator, Set<BaseStream<?, ?>> streamSet) {
         this.pipeline = requireNonNull(pipeline);
         this.streamTerminator = requireNonNull(streamTerminator);
         this.closeHandlers = new ArrayList<>();
         this.streamSet = streamSet;
+        this.linkedOrConsumed = false;
     }
 
     protected T append(Action<?, ?> newAction) {
@@ -110,6 +108,13 @@ public abstract class AbstractStreamBuilder<T extends AbstractStreamBuilder<T, P
                 }
             }
         }
+    }
+    
+    protected void assertNotLinkedOrConsumedAndSet() {
+        if (linkedOrConsumed) {
+            throw new IllegalStateException("stream has already been operated upon or has been consumed");
+        }
+        linkedOrConsumed = true;
     }
 
     protected P pipeline() {

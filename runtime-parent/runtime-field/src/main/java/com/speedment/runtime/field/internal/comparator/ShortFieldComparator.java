@@ -16,9 +16,9 @@
  */
 package com.speedment.runtime.field.internal.comparator;
 
-import com.speedment.runtime.field.ShortField;
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.comparator.FieldComparator;
-import javax.annotation.Generated;
+import com.speedment.runtime.field.trait.HasShortValue;
 
 /**
  * A predicate that evaluates if a value is between two shorts.
@@ -29,8 +29,8 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
-public interface ShortFieldComparator<ENTITY, D> extends FieldComparator<ENTITY, Short> {
+@GeneratedCode(value = "Speedment")
+public interface ShortFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> {
     
     /**
      * Gets the field that is being compared.
@@ -38,5 +38,5 @@ public interface ShortFieldComparator<ENTITY, D> extends FieldComparator<ENTITY,
      * @return the compared field
      */
     @Override
-    ShortField<ENTITY, D> getField();
+    HasShortValue<ENTITY, D> getField();
 }

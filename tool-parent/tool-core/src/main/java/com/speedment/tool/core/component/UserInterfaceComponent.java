@@ -26,17 +26,18 @@ import com.speedment.tool.config.DocumentProperty;
 import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.core.notification.Notification;
+import com.speedment.tool.core.resource.Icon;
 import com.speedment.tool.propertyeditor.PropertyEditor;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.stream.Stream;
 import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 /**
  * The user interface component contains a number of useful methods required to
@@ -274,13 +275,13 @@ public interface UserInterfaceComponent {
      * @param message  short notification message
      * @param icon     custom icon
      */
-    void showNotification(String message, FontAwesomeIcon icon);
+    void showNotification(String message, Icon icon);
 
     /**
-     * Shows a small notification in the user interface, executing 
+     * Shows a small notification in the user interface, executing
      * an action if the user clicks on it. The specified
      * message should be really short and to-the-point.
-     * 
+     *
      * @param message  short notification message
      * @param action   action to be performed on click
      */
@@ -305,7 +306,7 @@ public interface UserInterfaceComponent {
      * @param icon     custom icon
      * @param palette  custom color palette
      */
-    void showNotification(String message, FontAwesomeIcon icon, Palette palette);
+    void showNotification(String message, Icon icon, Palette palette);
 
     /**
      * Shows a small notification with a custom icon and color 
@@ -318,7 +319,7 @@ public interface UserInterfaceComponent {
      * @param palette  custom color palette
      * @param action   action to be performed on click
      */
-    void showNotification(String message, FontAwesomeIcon icon, Palette palette, Runnable action);
+    void showNotification(String message, Icon icon, Palette palette, Runnable action);
     
     /*************************************************************/
     /*                      Context Menues                       */

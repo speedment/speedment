@@ -17,8 +17,11 @@
 package com.speedment.runtime.core.db;
 
 import com.speedment.runtime.core.db.metadata.TypeInfoMetaData;
+import com.speedment.runtime.config.Dbms;
+import com.speedment.runtime.config.Schema;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,8 +33,8 @@ import static com.speedment.common.mapstream.MapStream.comparing;
  * {@code DbmsHandler}, one may easily implement support for new Dbms vendor
  * types.
  *
- * @author  Per Minborg
- * @since   2.0.0
+ * @author Per Minborg
+ * @since 2.0.0
  */
 public interface DbmsType {
 
@@ -88,6 +91,44 @@ public interface DbmsType {
     Optional<String> getDefaultDbmsName();
 
     /**
+     * Returns the default name for the {@link Schema} when this
+     * {@code DbmsType} is used.
+     *
+     * @return  the default schema name
+     */
+    default Optional<String> getDefaultSchemaName() {
+        return Optional.empty();
+    }
+
+    /**
+     * Returns {@code true} if this {@link DbmsType} uses named schemas as part
+     * of the database structure. If {@code false}, then the Speedment Config
+     * model doesn't expect the {@link Schema#getName()} to have any meaning
+     * when referring to tables.
+     * <p>
+     * By default, this method returns {@code true}.
+     *
+     * @return  {@code true} if schema names are meaningful, else {@code false}
+     */
+    default boolean hasSchemaNames() {
+        return true;
+    }
+
+    /**
+     * Returns {@code true} if this {@link DbmsType} uses named databases as
+     * part of the database structure. If {@code false}, then the Speedment
+     * Config model doesn't expect the {@link Dbms#getName()} to have any
+     * meaning when referring to tables.
+     * <p>
+     * By default, this method returns {@code true}.
+     *
+     * @return  {@code true} if dbms names are meaningful, else {@code false}
+     */
+    default boolean hasDatabaseNames() {
+        return true;
+    }
+
+    /**
      * Returns if this {@code DbmsType} is supported by Speedment in the current
      * implementation.
      *
@@ -114,24 +155,24 @@ public interface DbmsType {
     DatabaseNamingConvention getDatabaseNamingConvention();
 
     /**
-     * Returns the handler responsible for loading the metadata when 
-     * running this type of database.
-     * 
+     * Returns the handler responsible for loading the metadata when running
+     * this type of database.
+     *
      * @return the {@link DbmsMetadataHandler}
      */
     DbmsMetadataHandler getMetadataHandler();
-    
+
     /**
-     * Returns the handler responsible for running queries to databases 
-     * of this type.
-     * 
+     * Returns the handler responsible for running queries to databases of this
+     * type.
+     *
      * @return the implementation type of the {@link DbmsOperationHandler}
      */
     DbmsOperationHandler getOperationHandler();
 
     /**
-     * Returns the handler responsible for column inclusion/exclusion in
-     * queries to databases
+     * Returns the handler responsible for column inclusion/exclusion in queries
+     * to databases
      *
      * @return the implementation type of the {@link DbmsColumnHandler}
      */
@@ -139,8 +180,8 @@ public interface DbmsType {
 
     /**
      * Returns the result set table schema.
-     * 
-     * @return  the result set table schema.
+     *
+     * @return the result set table schema.
      */
     String getResultSetTableSchema();
 
@@ -154,8 +195,8 @@ public interface DbmsType {
     ConnectionUrlGenerator getConnectionUrlGenerator();
 
     /**
-     * Returns the FieldPredicateView for this database. A
-     * FieldPredicateView can render a SQL query given a stream pipeline.
+     * Returns the FieldPredicateView for this database. A FieldPredicateView
+     * can render a SQL query given a stream pipeline.
      *
      * @return the FieldPredicateView for this database
      */
@@ -178,4 +219,79 @@ public interface DbmsType {
      * database during speedment startup
      */
     String getInitialQuery();
+
+    enum SkipLimitSupport {
+        STANDARD, ONLY_AFTER_SORTED, NONE;
+    }
+
+    /**
+     * Returns the support for skip and limit (or skip and offset) for this
+     * database type.
+     *
+     * @return the support for skip and limit (or skip and offset) for this
+     * database type
+     */
+    SkipLimitSupport getSkipLimitSupport();
+
+    /**
+     * Returns a new String and modifies the provided parameter list (side
+     * effect) so that the original SQL query will reflect a query that has an
+     * offset (skip) and a limit.
+     *
+     * @param originalSql original SQL query
+     * @param params parameter list
+     * @param skip number of rows to skip (OFFSET) (0 = no skip)
+     * @param limit number of rows to limit (Long.MAX_VALUE = no limit)
+     * @return a new String and modifies the provided list so that the original
+     * SQL query will reflect a query that has an offset (skip) and a limit
+     */
+    String applySkipLimit(String originalSql, List<Object> params, long skip, long limit);
+
+    /**
+     * The sub-select alias mode.
+     */
+    enum SubSelectAlias {
+        /**
+         * select count(*) from (select id from user) AS A
+         */
+        REQUIRED,
+        /**
+         * select count(*) from (select id from user)
+         */
+        PROHIBITED
+    }
+
+    /**
+     * Returns the sub-select alias mode for this database type.
+     *
+     * @return the sub-select alias mode for this database type
+     */
+    SubSelectAlias getSubSelectAlias();
+
+    /**
+     * The sort by null order insertion. E.g. how is null first/last handled
+     */
+    enum SortByNullOrderInsertion {
+        /*
+        * ORDER BY col IS NULL, col DESC
+         */
+        PRE,
+        /*
+        * ORDER BY CASE WHEN col IS NULL THEN 0 ELSE 1 END, col DESC
+         */
+        PRE_WITH_CASE,
+        /*
+        * ORDER BY col DESC NULLS FIRST
+         */
+        POST;
+
+    }
+
+    /**
+     * Returns the SortByNullOrderInsertion mode for this database type.
+     *
+     * @return the SortByNullOrderInsertion mode for this database type
+     */
+    SortByNullOrderInsertion getSortByNullOrderInsertion();
+
 }

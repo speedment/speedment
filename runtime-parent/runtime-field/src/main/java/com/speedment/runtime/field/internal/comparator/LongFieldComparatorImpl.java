@@ -16,11 +16,11 @@
  */
 package com.speedment.runtime.field.internal.comparator;
 
-import com.speedment.runtime.field.LongField;
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
+import com.speedment.runtime.field.trait.HasLongValue;
 import java.util.Objects;
-import javax.annotation.Generated;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -31,23 +31,25 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
-public final class LongFieldComparatorImpl<ENTITY, D> implements LongFieldComparator<ENTITY, D> {
+@GeneratedCode(value = "Speedment")
+public final class LongFieldComparatorImpl<ENTITY, D> 
+extends AbstractFieldComparator<ENTITY> 
+implements LongFieldComparator<ENTITY, D> {
     
-    private final LongField<ENTITY, D> field;
+    private final HasLongValue<ENTITY, D> field;
     private final boolean reversed;
     
-    public LongFieldComparatorImpl(LongField<ENTITY, D> field) {
+    public LongFieldComparatorImpl(HasLongValue<ENTITY, D> field) {
         this(field, false);
     }
     
-    public LongFieldComparatorImpl(LongField<ENTITY, D> field, boolean reversed) {
+    LongFieldComparatorImpl(HasLongValue<ENTITY, D> field, boolean reversed) {
         this.field    = requireNonNull(field);
         this.reversed = reversed;
     }
     
     @Override
-    public LongField<ENTITY, D> getField() {
+    public HasLongValue<ENTITY, D> getField() {
         return field;
     }
     
@@ -62,7 +64,7 @@ public final class LongFieldComparatorImpl<ENTITY, D> implements LongFieldCompar
     }
     
     @Override
-    public FieldComparator<ENTITY, Long> reversed() {
+    public FieldComparator<ENTITY> reversed() {
         return new LongFieldComparatorImpl<>(field, !reversed);
     }
     
@@ -71,7 +73,7 @@ public final class LongFieldComparatorImpl<ENTITY, D> implements LongFieldCompar
         requireNonNulls(first, second);
         final long a = field.getAsLong(first);
         final long b = field.getAsLong(second);
-        return applyReversed(a - b);
+        return applyReversed(Long.compare(a, b));
     }
     
     @Override
@@ -86,8 +88,8 @@ public final class LongFieldComparatorImpl<ENTITY, D> implements LongFieldCompar
         if (!(obj instanceof FieldComparator)) return false;
         
         @SuppressWarnings("unchecked")
-        final FieldComparator<ENTITY, Long> casted =
-            (FieldComparator<ENTITY, Long>) obj;
+        final FieldComparator<ENTITY> casted =
+            (FieldComparator<ENTITY>) obj;
         
         return reversed == casted.isReversed()
             && Objects.equals(

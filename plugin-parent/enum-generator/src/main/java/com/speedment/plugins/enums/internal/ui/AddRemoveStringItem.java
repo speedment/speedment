@@ -16,8 +16,49 @@
  */
 package com.speedment.plugins.enums.internal.ui;
 
+import com.speedment.common.injector.Injector;
+import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.Config;
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.WithState;
+import com.speedment.common.json.Json;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
+import com.speedment.common.singletonstream.SingletonStream;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.config.internal.ProjectImpl;
+import com.speedment.runtime.config.trait.HasName;
+import com.speedment.runtime.config.trait.HasParent;
+import com.speedment.runtime.core.ApplicationMetadata;
+import com.speedment.runtime.core.component.ManagerComponent;
+import com.speedment.runtime.core.component.PasswordComponent;
+import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.runtime.core.component.StreamSupplierComponent;
+import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
+import com.speedment.runtime.core.db.DbmsMetadataHandler;
+import com.speedment.runtime.core.exception.SpeedmentException;
+import com.speedment.runtime.core.internal.component.sql.SqlStreamSupplierComponentImpl;
+import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.core.manager.Persister;
+import com.speedment.runtime.core.manager.Remover;
+import com.speedment.runtime.core.manager.Updater;
+import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
+import com.speedment.runtime.core.util.ProgressMeasure;
+import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.StringField;
+import com.speedment.runtime.typemapper.TypeMapper;
+import com.speedment.tool.config.DbmsProperty;
+import com.speedment.tool.config.trait.HasEnumConstantsProperty;
+import com.speedment.tool.config.trait.HasTypeMapperProperty;
+import com.speedment.tool.core.component.UserInterfaceComponent;
+import com.speedment.tool.core.exception.SpeedmentToolException;
+import com.speedment.tool.core.resource.FontAwesome;
 import com.speedment.tool.propertyeditor.item.AbstractLabelTooltipItem;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
@@ -35,15 +76,17 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.speedment.common.injector.State.RESOLVED;
+import static com.speedment.runtime.config.util.DocumentUtil.ancestor;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toSet;
+import static java.util.concurrent.CompletableFuture.supplyAsync;
+import static java.util.stream.Collectors.joining;
 import static javafx.application.Platform.runLater;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 
@@ -55,15 +98,18 @@ import static javafx.scene.layout.Region.USE_PREF_SIZE;
  * to easily edit such a string.
  * 
  * @author  Simon Jonasson
- * @since   1.0.0
+ * @since   3.0.0
  */
-public final class AddRemoveStringItem extends AbstractLabelTooltipItem {
-    
-    //***********************************************************
-    // 				VARIABLES
-    //***********************************************************   
+public final class AddRemoveStringItem
+    <DOC extends HasEnumConstantsProperty
+               & HasTypeMapperProperty
+               & HasParent<? extends Table>
+               & HasName>
+extends AbstractLabelTooltipItem {
+
     private final static Logger LOGGER = LoggerManager.getLogger(AddRemoveStringItem.class);
 
+    private final DOC column;
     private final ObservableList<String> strings;
     private final ObservableBooleanValue enabled;
     
@@ -71,21 +117,28 @@ public final class AddRemoveStringItem extends AbstractLabelTooltipItem {
     private final StringProperty cache;
     
     private final String DEFAULT_FIELD = "ENUM_CONSTANT_";
-    private final double SPACING = 10.0;
+    private final double SPACING  = 10.0;
     private final int LIST_HEIGHT = 200;
-    
-    //***********************************************************
-    // 				CONSTRUCTOR
-    //***********************************************************
+
+    private @Inject ProjectComponent projects;
+    private @Inject DbmsMetadataHandler metadata;
+    private @Inject PasswordComponent passwords;
+    private @Inject UserInterfaceComponent ui;
+    private @Inject Injector injector;
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                            Constructor                                 //
+    ////////////////////////////////////////////////////////////////////////////
      
-    public AddRemoveStringItem(
-            String label,
-            StringProperty value,
-            String tooltip,
-            ObservableBooleanValue enableThis) {
+    AddRemoveStringItem(
+            final DOC column,
+            final String label,
+            final StringProperty value,
+            final String tooltip,
+            final ObservableBooleanValue enableThis) {
         
         super(label, tooltip, NO_DECORATOR);
-        
+
         final String currentValue = value.get();
         if (currentValue == null) {
             this.strings  = FXCollections.observableArrayList();
@@ -96,7 +149,8 @@ public final class AddRemoveStringItem extends AbstractLabelTooltipItem {
                     .toArray(String[]::new)
             );
         }
-        
+
+        this.column  = requireNonNull(column);
         this.enabled = enableThis;
         this.cache   = new SimpleStringProperty();
         
@@ -106,14 +160,14 @@ public final class AddRemoveStringItem extends AbstractLabelTooltipItem {
             value.setValue(getFormatedString(list));
         });
     }
-    
-    //***********************************************************
-    // 				PUBLIC
-    //***********************************************************  
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                                Public                                  //
+    ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public Node createLabel() {
-        Node node = super.createLabel();
+        final Node node = super.createLabel();
         hideShowBehaviour(node);        
         return node;
     }
@@ -131,7 +185,11 @@ public final class AddRemoveStringItem extends AbstractLabelTooltipItem {
 
         final HBox controls = new HBox(SPACING);
         controls.setAlignment(Pos.CENTER);
-        controls.getChildren().addAll(addButton(listView), removeButton(listView));
+        controls.getChildren().addAll(
+            addButton(listView),
+            removeButton(listView),
+            populateButton(listView)
+        );
 
         container.setSpacing(SPACING);
         container.getChildren().addAll(listView, controls);
@@ -141,9 +199,9 @@ public final class AddRemoveStringItem extends AbstractLabelTooltipItem {
         return container;
     }
     
-    //***********************************************************
-    // 				PRIVATE
-    //***********************************************************
+    ////////////////////////////////////////////////////////////////////////////
+    //                               Private                                  //
+    ////////////////////////////////////////////////////////////////////////////
     
     /**
      * Removes any empty substrings and makes sure the entire string is either
@@ -154,7 +212,7 @@ public final class AddRemoveStringItem extends AbstractLabelTooltipItem {
     private String getFormatedString(List<String> newValue) {
         final String formated = newValue.stream()
             .filter(v -> !v.isEmpty())
-            .collect(Collectors.joining(","));
+            .collect(joining(","));
         
         if (formated == null || formated.isEmpty()) {
             return null;
@@ -162,7 +220,7 @@ public final class AddRemoveStringItem extends AbstractLabelTooltipItem {
             return formated;
         }
     }
-    
+
     private void setValue(String value) {
         if (value == null) {
             strings.clear();
@@ -178,7 +236,7 @@ public final class AddRemoveStringItem extends AbstractLabelTooltipItem {
     }
     
     private Button removeButton(final ListView<String> listView) {
-        final Button button = new Button("Remove Selected");
+        final Button button = new Button("Remove Selected", FontAwesome.TIMES.view());
         
         button.setOnAction(e -> {
             final int selectedIdx = listView.getSelectionModel().getSelectedIndex();
@@ -194,12 +252,12 @@ public final class AddRemoveStringItem extends AbstractLabelTooltipItem {
     }
 
     private Button addButton(final ListView<String> listView) {
-        final Button button = new Button("Add Item");
+        final Button button = new Button("Add Item", FontAwesome.PLUS.view());
         
         button.setOnAction(e -> {
             final int newIndex = listView.getItems().size();
 
-            final Set<String> set = strings.stream().collect(toSet());
+            final Set<String> set = new HashSet<>(strings);
             final AtomicInteger i = new AtomicInteger(0);
             while (!set.add(DEFAULT_FIELD + i.incrementAndGet())) {}
 
@@ -207,21 +265,296 @@ public final class AddRemoveStringItem extends AbstractLabelTooltipItem {
             listView.scrollTo(newIndex);
             listView.getSelectionModel().select(newIndex);
             
-            /* There is a strange behavior in JavaFX if you try to start editing
-			 * a field on the same animation frame as another field lost focus.
-			 * 
-			 * Therefore, we wait one animation cycle before setting the field
-			 * into the editing state 
-             */
+            // There is a strange behavior in JavaFX if you try to start editing
+            // a field on the same animation frame as another field lost focus.
+            // Therefore, we wait one animation cycle before setting the field
+            // into the editing state
             runLater(() -> listView.edit(newIndex));
         });
         
         return button;
     }
 
-    //***********************************************************
-    // 				PRIVATE CLASS : ENUM CELL
-    //***********************************************************    
+    private Button populateButton(final ListView<String> listView) {
+        final Button button = new Button("Populate", FontAwesome.DATABASE.view());
+
+        button.setOnAction(e -> {
+            final Column col = column.getMappedColumn();
+
+            final DbmsProperty dbms = ancestor(col, DbmsProperty.class).get();
+            final String dbmsName   = dbms.getName();
+            final String schemaName = ancestor(col, Schema.class).get().getName();
+            final String tableName  = col.getParentOrThrow().getName();
+            final String columnName = col.getName();
+
+            final ProgressMeasure progress = ProgressMeasure.create();
+
+            if (!passwords.get(dbmsName).isPresent()) {
+                ui.showPasswordDialog(dbms);
+            }
+
+            final char[] password = passwords.get(dbmsName).orElseThrow(() ->
+                new SpeedmentToolException(
+                    "A password is required to populate enum constants field!"
+                )
+            );
+
+            final CompletableFuture<Boolean> task = supplyAsync(() -> {
+                try {
+                    // Hack to create a Manager for reading a single column from
+                    // the database.
+                    LOGGER.info("Creating Temporary Speedment...");
+
+                    progress.setProgress(0.2);
+                    final Injector inj = injector.newBuilder()
+                        .withComponent(TempApplicationMetadata.class)
+                        .withComponent(SqlStreamSupplierComponentImpl.class)
+                        .withParam("temp.json", Json.toJson(dbms.getParentOrThrow().getData()))
+                        .withParam("temp.dbms", dbmsName)
+                        .withParam("temp.schema", schemaName)
+                        .withParam("temp.table", tableName)
+                        .withParam("temp.column", columnName)
+                        .withComponent(SingleColumnManager.class)
+                        .beforeInitialized(PasswordComponent.class, passw -> {
+                            LOGGER.info("Installing Password...");
+                            passw.put(dbmsName, password);
+                        })
+                        .build();
+
+                    LOGGER.info("Temporary Speedment built. Streaming...");
+
+                    progress.setProgress(0.4);
+                    final String constants =
+                        inj.getOrThrow(SingleColumnManager.class).stream()
+                            .distinct().sorted()
+                            .collect(joining(","));
+
+                    LOGGER.info("Streaming complete!");
+
+                    // Run in UI thread:
+                    runLater(() -> {
+                        column.enumConstantsProperty().setValue(constants);
+                        setValue(constants);
+                        progress.setProgress(1.0);
+                    });
+
+                    return true;
+                } catch (final InstantiationException ex) {
+                    LOGGER.error(ex);
+                    return false;
+                }
+            }).handleAsync((res, ex) -> {
+                if (ex != null) {
+                    LOGGER.error(ex);
+                    return false;
+                }
+
+                progress.setProgress(1.0);
+                return true;
+            });
+
+            ui.showProgressDialog("Populating Enum Constants", progress, task);
+        });
+
+        return button;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                            Internal Class                              //
+    ////////////////////////////////////////////////////////////////////////////
+
+    private static class TempApplicationMetadata
+    implements ApplicationMetadata {
+
+        private @Config(name="temp.json", value="") String json;
+
+        @Override
+        public Project makeProject() {
+            try {
+                @SuppressWarnings("unchecked") final Map<String, Object> data =
+                    (Map<String, Object>) Json.fromJson(json);
+                return new ProjectImpl(data);
+            } catch (final ClassCastException ex) {
+                throw new SpeedmentToolException(
+                    "Error deserializing temporary project JSON.", ex
+                );
+            }
+        }
+    }
+
+    private static class TempColumnIdentifier implements ColumnIdentifier<String> {
+        private final String dbms;
+        private final String schema;
+        private final String table;
+        private final String column;
+
+        TempColumnIdentifier(String dbms,
+                             String schema,
+                             String table,
+                             String column) {
+
+            this.dbms   = requireNonNull(dbms);
+            this.schema = requireNonNull(schema);
+            this.table  = requireNonNull(table);
+            this.column = requireNonNull(column);
+        }
+
+        @Override
+        public String getDbmsName() {
+            return dbms;
+        }
+
+        @Override
+        public String getTableName() {
+            return table;
+        }
+
+        @Override
+        public String getColumnName() {
+            return column;
+        }
+
+        @Override
+        public String getSchemaName() {
+            return schema;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ColumnIdentifier)) return false;
+
+            final ColumnIdentifier<?> that = (ColumnIdentifier<?>) o;
+            return dbms.equals(that.getDbmsName())
+                && schema.equals(that.getSchemaName())
+                && table.equals(that.getTableName())
+                && column.equals(that.getColumnName());
+        }
+
+        @Override
+        public int hashCode() {
+            int result = dbms.hashCode();
+            result = 31 * result + schema.hashCode();
+            result = 31 * result + table.hashCode();
+            result = 31 * result + column.hashCode();
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "TempColumnIdentifier{" +
+                "dbms='" + dbms + '\'' +
+                ", schema='" + schema + '\'' +
+                ", table='" + table + '\'' +
+                ", column='" + column + '\'' +
+                '}';
+        }
+    }
+
+    private static class SingleColumnManager implements Manager<String> {
+
+        private StringField<String, String> field;
+        private TableIdentifier<String> tableId;
+
+        private @Inject StreamSupplierComponent streamSupplierComponent;
+        private @Config(name="temp.dbms", value="") String dbms;
+        private @Config(name="temp.schema", value="") String schema;
+        private @Config(name="temp.table", value="") String table;
+        private @Config(name="temp.column", value="") String column;
+
+        SingleColumnManager() {}
+
+        @ExecuteBefore(State.INITIALIZED)
+        void setFieldAndTableId() {
+            this.tableId = TableIdentifier.of(dbms, schema, table);
+            this.field   = StringField.create(
+                new TempColumnIdentifier(dbms, schema, table, column),
+                e -> e, (e, s) -> e,
+                TypeMapper.identity(),
+                false
+            );
+        }
+
+        @ExecuteBefore(State.INITIALIZED)
+        void configureManagerComponent(
+                @WithState(State.INITIALIZED) ManagerComponent managerComponent,
+                @WithState(State.INITIALIZED) ProjectComponent projectComponent) {
+            Objects.requireNonNull(projectComponent);
+            managerComponent.put(this);
+        }
+
+        @ExecuteBefore(RESOLVED)
+        void configureSqlStreamSupplier(
+                @WithState(RESOLVED) SqlStreamSupplierComponent sql) {
+            sql.install(tableId, in -> in.getString(column));
+        }
+
+        @Override
+        public TableIdentifier<String> getTableIdentifier() {
+            return tableId;
+        }
+
+        @Override
+        public Class<String> getEntityClass() {
+            return String.class;
+        }
+
+        @Override
+        public Stream<Field<String>> fields() {
+            return SingletonStream.of(field);
+        }
+
+        @Override
+        public Stream<Field<String>> primaryKeyFields() {
+            return SingletonStream.of(field);
+        }
+
+        @Override
+        public Stream<String> stream() {
+            return streamSupplierComponent.stream(
+                getTableIdentifier(),
+                ParallelStrategy.computeIntensityDefault()
+            );
+        }
+
+        @Override
+        public final String persist(String entity) throws SpeedmentException {
+            throw new UnsupportedOperationException("This manager is read-only.");
+        }
+
+        @Override
+        public Persister<String> persister() {
+            throw new UnsupportedOperationException("This manager is read-only.");
+        }
+
+        @Override
+        public final String update(String entity) throws SpeedmentException {
+            throw new UnsupportedOperationException("This manager is read-only.");
+        }
+
+        @Override
+        public Updater<String> updater() {
+            throw new UnsupportedOperationException("This manager is read-only.");
+        }
+
+        @Override
+        public final String remove(String entity) throws SpeedmentException {
+            throw new UnsupportedOperationException("This manager is read-only.");
+        }
+
+        @Override
+        public Remover<String> remover() {
+            throw new UnsupportedOperationException("This manager is read-only.");
+        }
+
+        @Override
+        public String toString() {
+            return getClass().getSimpleName() + "{tableId: " +
+                TableIdentifier.of(dbms, schema, table).toString()
+                + "}";
+        }
+    }
+
     private final static class EnumCell extends TextFieldListCell<String> {
 
         private final ObservableList<String> strings;
@@ -257,12 +590,12 @@ public final class AddRemoveStringItem extends AbstractLabelTooltipItem {
                         return labelString;
                     }
                     
-                    // Make sure this is not a douplicate entry
-                    final AtomicBoolean douplicate = new AtomicBoolean(false);
+                    // Make sure this is not a duplicate entry
+                    final AtomicBoolean duplicate = new AtomicBoolean(false);
                     strings.stream()
                         .filter(elem -> elem.equalsIgnoreCase(value))
-                        .forEach(elem -> douplicate.set(true));
-                    if (douplicate.get()){
+                        .forEach(elem -> duplicate.set(true));
+                    if (duplicate.get()){
                         LOGGER.info("Enum cannot contain the same constant twice");
                         return labelString;
                         

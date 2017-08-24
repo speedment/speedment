@@ -18,7 +18,7 @@ package com.speedment.tool.core.notification;
 
 
 import com.speedment.tool.core.brand.Palette;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import com.speedment.tool.core.resource.Icon;
 
 /**
  * Container for the fields required to show a notification in the UI.
@@ -33,7 +33,7 @@ public interface Notification {
      * 
      * @return  the icon
      */
-    FontAwesomeIcon icon();
+    Icon icon();
     
     /**
      * The text message to show in the notification.

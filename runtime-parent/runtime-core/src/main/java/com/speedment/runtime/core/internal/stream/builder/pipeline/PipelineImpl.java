@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.*;
 
@@ -129,6 +130,11 @@ public final class PipelineImpl<E> implements Pipeline, ReferencePipeline<E>, In
     @Override
     public Action<?, ?> removeLast() {
         return list.removeLast();
+    }
+    
+    @Override
+    public boolean removeIf(Predicate<? super Action<?, ?>> filter) {
+        return list.removeIf(filter);
     }
 
     @Override

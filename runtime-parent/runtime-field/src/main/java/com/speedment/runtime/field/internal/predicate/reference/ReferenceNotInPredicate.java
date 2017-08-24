@@ -35,15 +35,15 @@ import static java.util.Objects.requireNonNull;
  * @since   2.2.0
  */
 public final class ReferenceNotInPredicate<ENTITY, D, V extends Comparable<? super V>>
-        extends AbstractFieldPredicate<ENTITY, V, HasReferenceValue<ENTITY, D, V>>
-        implements Tuple1<Set<V>> {
+extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
+implements Tuple1<Set<V>> {
 
     private final Set<V> set;
 
     public ReferenceNotInPredicate(HasReferenceValue<ENTITY, D, V> field, Set<V> values) {
         super(NOT_IN, field, entity -> {
             final V value = field.get(entity);
-            return value != null && !values.contains(field.get(entity));
+            return value != null && !values.contains(value);
         });
         this.set = requireNonNull(values);
     }
@@ -51,5 +51,10 @@ public final class ReferenceNotInPredicate<ENTITY, D, V extends Comparable<? sup
     @Override
     public Set<V> get0() {
         return set;
+    }
+
+    @Override
+    public ReferenceInPredicate<ENTITY, D, V> negate() {
+        return new ReferenceInPredicate<>(getField(), set);
     }
 }

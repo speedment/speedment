@@ -35,18 +35,18 @@ import static java.util.Objects.requireNonNull;
  * @since   2.2.0
  */
 public final class ReferenceBetweenPredicate<ENTITY, D, V extends Comparable<? super V>>
-        extends AbstractFieldPredicate<ENTITY, V, HasReferenceValue<ENTITY, D, V>>
-        implements BetweenPredicate, Tuple2<V, V> {
+extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
+implements BetweenPredicate, Tuple2<V, V> {
 
     private final V start;
     private final V end;
     private final Inclusion inclusion;
 
     public ReferenceBetweenPredicate(
-            HasReferenceValue<ENTITY, D, V> referenceField,
-            V start,
-            V end,
-            Inclusion inclusion) {
+            final HasReferenceValue<ENTITY, D, V> referenceField,
+            final V start,
+            final V end,
+            final Inclusion inclusion) {
         
         super(BETWEEN, referenceField, entity -> {
             final V fieldValue = referenceField.get(entity);
@@ -95,4 +95,10 @@ public final class ReferenceBetweenPredicate<ENTITY, D, V extends Comparable<? s
     public Inclusion getInclusion() {
         return inclusion;
     }
+
+    @Override
+    public ReferenceNotBetweenPredicate<ENTITY, D, V> negate() {
+        return new ReferenceNotBetweenPredicate<>(getField(), start, end, inclusion);
+    }
+    
 }

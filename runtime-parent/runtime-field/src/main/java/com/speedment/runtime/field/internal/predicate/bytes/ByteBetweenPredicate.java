@@ -16,13 +16,13 @@
  */
 package com.speedment.runtime.field.internal.predicate.bytes;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.internal.predicate.BetweenPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasByteValue;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -34,8 +34,11 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
-public final class ByteBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Byte, HasByteValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Byte, Byte> {
+@GeneratedCode(value = "Speedment")
+public final class ByteBetweenPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasByteValue<ENTITY, D>> 
+implements BetweenPredicate,
+          Tuple2<Byte, Byte> {
     
     private final byte start;
     private final byte end;
@@ -84,5 +87,10 @@ public final class ByteBetweenPredicate<ENTITY, D> extends AbstractFieldPredicat
     @Override
     public Inclusion getInclusion() {
         return inclusion;
+    }
+    
+    @Override
+    public ByteNotBetweenPredicate<ENTITY, D> negate() {
+        return new ByteNotBetweenPredicate<>(getField(), start, end, inclusion);
     }
 }

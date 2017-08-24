@@ -16,9 +16,9 @@
  */
 package com.speedment.runtime.field.internal.method;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.method.SetToDouble;
 import com.speedment.runtime.field.trait.HasDoubleValue;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,7 +33,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class SetToDoubleImpl<ENTITY, D> implements SetToDouble<ENTITY, D> {
     
     private final HasDoubleValue<ENTITY, D> field;

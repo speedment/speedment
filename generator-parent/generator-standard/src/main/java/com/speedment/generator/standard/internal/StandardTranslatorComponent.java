@@ -29,7 +29,6 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 
 import static com.speedment.common.injector.State.INITIALIZED;
-import static com.speedment.common.injector.State.RESOLVED;
 import static com.speedment.generator.standard.StandardTranslatorKey.*;
 
 /**
@@ -39,7 +38,7 @@ import static com.speedment.generator.standard.StandardTranslatorKey.*;
  */
 public final class StandardTranslatorComponent {
 
-    @ExecuteBefore(RESOLVED)
+    @ExecuteBefore(INITIALIZED)
     void installTranslators(@WithState(INITIALIZED) CodeGenerationComponent codeGen) {
         codeGen.put(Table.class, ENTITY, EntityTranslator::new);
         codeGen.put(Table.class, ENTITY_IMPL, EntityImplTranslator::new);

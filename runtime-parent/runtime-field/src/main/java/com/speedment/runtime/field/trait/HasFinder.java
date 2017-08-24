@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 /**
  * A representation of an Entity field that use a foreign key to 
  * reference some other field.
- * 
+ *
  * @param <ENTITY>     the entity type
  * @param <FK_ENTITY>  the foreign entity type
  * 
@@ -36,7 +36,6 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   2.2.0
  */
-
 public interface HasFinder<ENTITY, FK_ENTITY> {
     
     /**
@@ -47,15 +46,17 @@ public interface HasFinder<ENTITY, FK_ENTITY> {
     Field<FK_ENTITY> getReferencedField();
     
     /**
-     * Returns a function that can be used to find referenced entites using the
+     * Returns a function that can be used to find referenced entities using the
      * specified manager.
      * 
      * @param identifier      the table identifier
      * @param streamSupplier  the stream supplier
      * @return                finder method
      */
-    FindFrom<ENTITY, FK_ENTITY> finder(TableIdentifier<FK_ENTITY> identifier, Supplier<Stream<FK_ENTITY>> streamSupplier);
-    
+    FindFrom<ENTITY, FK_ENTITY> finder(
+        TableIdentifier<FK_ENTITY> identifier,
+        Supplier<Stream<FK_ENTITY>> streamSupplier);
+
     /**
      * Returns a function that can be used to find a stream of entities 
      * referencing this entity using the specified manager.
@@ -64,5 +65,7 @@ public interface HasFinder<ENTITY, FK_ENTITY> {
      * @param streamSupplier  the stream supplier
      * @return                streaming method
      */
-    BackwardFinder<FK_ENTITY, ENTITY> backwardFinder(TableIdentifier<ENTITY> identifier, Supplier<Stream<ENTITY>> streamSupplier);
+    BackwardFinder<FK_ENTITY, ENTITY> backwardFinder(
+        TableIdentifier<ENTITY> identifier,
+        Supplier<Stream<ENTITY>> streamSupplier);
 }

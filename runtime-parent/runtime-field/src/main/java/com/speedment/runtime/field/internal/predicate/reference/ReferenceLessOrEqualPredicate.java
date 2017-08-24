@@ -32,11 +32,11 @@ import static com.speedment.runtime.field.predicate.PredicateType.LESS_OR_EQUAL;
  * @since   2.2.0
  */
 public final class ReferenceLessOrEqualPredicate<ENTITY, D, V extends Comparable<? super V>>
-        extends AbstractFieldPredicate<ENTITY, V, HasReferenceValue<ENTITY, D, V>>
-        implements Tuple1<V> {
+extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
+implements Tuple1<V> {
 
     private final V value;
-    
+
     public ReferenceLessOrEqualPredicate(HasReferenceValue<ENTITY, D, V> field, V value) {
         super(LESS_OR_EQUAL, field, entity -> {
             final V fieldValue = field.get(entity);
@@ -53,5 +53,10 @@ public final class ReferenceLessOrEqualPredicate<ENTITY, D, V extends Comparable
     @Override
     public V get0() {
         return value;
+    }
+
+    @Override
+    public ReferenceGreaterThanPredicate<ENTITY, D, V> negate() {
+        return new ReferenceGreaterThanPredicate<>(getField(), value);
     }
 }

@@ -20,24 +20,16 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.generator.translator.exception.SpeedmentTranslatorException;
-import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.trait.HasTypeMapper;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.bigdecimal.BigDecimalToDouble;
 import com.speedment.runtime.typemapper.doubles.DoubleToFloatMapper;
 import com.speedment.runtime.typemapper.doubles.PrimitiveDoubleToFloatMapper;
-import com.speedment.runtime.typemapper.integer.IntegerToByteMapper;
-import com.speedment.runtime.typemapper.integer.IntegerToShortMapper;
-import com.speedment.runtime.typemapper.integer.IntegerZeroOneToBooleanMapper;
-import com.speedment.runtime.typemapper.integer.PrimitiveIntegerToByteMapper;
-import com.speedment.runtime.typemapper.integer.PrimitiveIntegerToShortMapper;
-import com.speedment.runtime.typemapper.integer.PrimitiveIntegerZeroOneToBooleanMapper;
+import com.speedment.runtime.typemapper.integer.*;
+import com.speedment.runtime.typemapper.largeobject.BlobToByteArrayMapper;
 import com.speedment.runtime.typemapper.largeobject.ClobToStringMapper;
-import com.speedment.runtime.typemapper.longs.LongToByteMapper;
-import com.speedment.runtime.typemapper.longs.LongToIntegerMapper;
-import com.speedment.runtime.typemapper.longs.LongToShortMapper;
-import com.speedment.runtime.typemapper.longs.PrimitiveLongToByteMapper;
-import com.speedment.runtime.typemapper.longs.PrimitiveLongToIntegerMapper;
-import com.speedment.runtime.typemapper.longs.PrimitiveLongToShortMapper;
+import com.speedment.runtime.typemapper.longs.*;
+import com.speedment.runtime.typemapper.other.BinaryToUuidMapper;
 import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
 import com.speedment.runtime.typemapper.shorts.PrimitiveShortToByteMapper;
 import com.speedment.runtime.typemapper.shorts.ShortToByteMapper;
@@ -45,11 +37,10 @@ import com.speedment.runtime.typemapper.string.StringToLocaleMapper;
 import com.speedment.runtime.typemapper.string.TrueFalseStringToBooleanMapper;
 import com.speedment.runtime.typemapper.string.YesNoStringToBooleanMapper;
 import com.speedment.runtime.typemapper.time.*;
+
 import java.math.BigDecimal;
-import java.sql.Clob;
+import java.sql.*;
 import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
@@ -92,6 +83,7 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
 
         // Special Large object mappers
         install(Clob.class, ClobToStringMapper::new);
+        install(Blob.class, BlobToByteArrayMapper::new);
         
         // Special Long mappers
         install(Long.class, LongToIntegerMapper::new);
@@ -108,7 +100,9 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
         install(Integer.class, PrimitiveIntegerZeroOneToBooleanMapper::new);
         install(Integer.class, PrimitiveIntegerToShortMapper::new);
         install(Integer.class, PrimitiveIntegerToByteMapper::new);
-        
+        install(Integer.class, DateIntToShortMapper::new);
+        install(Integer.class, DateIntToPrimitiveShortMapper::new);
+
         // Special Short mappers
         install(Short.class, ShortToByteMapper::new);
         install(Short.class, PrimitiveShortToByteMapper::new);
@@ -126,6 +120,9 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
         install(Double.class,    PrimitiveTypeMapper<Double>::new);
         install(Boolean.class,   PrimitiveTypeMapper<Boolean>::new);
         install(Character.class, PrimitiveTypeMapper<Character>::new);
+
+        // Others
+        install(Object.class, BinaryToUuidMapper::new);
     }
 
     @Override
@@ -166,7 +163,7 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
     }
     
     @Override
-    public TypeMapper<?, ?> get(Column column) {
+    public TypeMapper<?, ?> get(HasTypeMapper column) {
         return injector.inject(
             column.getTypeMapper().map(name -> {
                 try {

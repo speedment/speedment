@@ -18,6 +18,7 @@ package com.speedment.tool.core.internal.util;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
+import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.json.Json;
@@ -32,14 +33,13 @@ import com.speedment.runtime.config.internal.immutable.ImmutableProject;
 import com.speedment.runtime.config.util.DocumentTranscoder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
+import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.internal.DefaultApplicationBuilder;
-import static com.speedment.runtime.core.internal.DefaultApplicationMetadata.METADATA_LOCATION;
 import com.speedment.runtime.core.internal.util.ProgressMeasurerImpl;
 import com.speedment.runtime.core.internal.util.Settings;
-import static com.speedment.runtime.core.internal.util.TextUtil.alignRight;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.ProjectProperty;
@@ -49,10 +49,11 @@ import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.component.UserInterfaceComponent.ReuseStage;
 import com.speedment.tool.core.exception.SpeedmentToolException;
+import com.speedment.tool.core.resource.FontAwesome;
 import com.speedment.tool.core.util.OutputUtil;
-import static com.speedment.tool.core.util.OutputUtil.error;
-import static com.speedment.tool.core.util.OutputUtil.success;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -65,10 +66,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
+
+import static com.speedment.runtime.core.internal.DefaultApplicationMetadata.METADATA_LOCATION;
+import static com.speedment.runtime.core.internal.util.TextUtil.alignRight;
+import static com.speedment.tool.core.util.OutputUtil.error;
+import static com.speedment.tool.core.util.OutputUtil.success;
 import static java.util.stream.Collectors.toSet;
 import static javafx.application.Platform.runLater;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 /**
  *
@@ -91,11 +95,15 @@ public final class ConfigFileHelper {
     @Inject private DocumentPropertyComponent documentPropertyComponent;
     @Inject private UserInterfaceComponent userInterfaceComponent;
     @Inject private DbmsHandlerComponent dbmsHandlerComponenet;
+    @Inject private PasswordComponent passwordComponent;
     @Inject private TranslatorManager translatorManager;
     @Inject private ProjectComponent projectComponent;
     @Inject private Injector injector;
 
-    private File currentlyOpenFile;
+    private @Config(
+        name=METADATA_LOCATION,
+        value=DEFAULT_CONFIG_LOCATION
+    ) File currentlyOpenFile;
 
     public boolean isFileOpen() {
         return currentlyOpenFile != null;
@@ -208,14 +216,17 @@ public final class ConfigFileHelper {
                     .handleAsync((p, ex) -> {
                         progress.setProgress(ProgressMeasure.DONE);
 
-                        // If the loading was successfull
+                        // If the loading was successful
                         if (ex == null && p != null) {
                             // Make sure any old data is cleared before merging in
                             // the new state from the database.
                             dbms.schemasProperty().clear();
-                            userInterfaceComponent.projectProperty().merge(documentPropertyComponent, p);
+                            userInterfaceComponent.projectProperty()
+                                .merge(documentPropertyComponent, p);
+
                             return true;
                         } else {
+                            passwordComponent.put(dbms, null); // Clear password
                             runLater(() -> {
                                 userInterfaceComponent.showError("Error Connecting to Database",
                                     "A problem occured with establishing the database connection.", ex
@@ -232,7 +243,7 @@ public final class ConfigFileHelper {
             if (status) {
                 userInterfaceComponent.showNotification(
                     "Database metadata has been loaded.",
-                    FontAwesomeIcon.DATABASE,
+                    FontAwesome.DATABASE,
                     Palette.INFO
                 );
             }
@@ -240,6 +251,7 @@ public final class ConfigFileHelper {
             return status;
 
         } catch (final InterruptedException | ExecutionException ex) {
+            passwordComponent.put(dbms, null); // Clear password
             userInterfaceComponent.showError("Error Executing Connection Task",
                 "The execution of certain tasks could not be completed.", ex
             );
@@ -370,7 +382,7 @@ public final class ConfigFileHelper {
 
             if (isGraphical) {
                 userInterfaceComponent.log(success("Saved project file to '" + absolute + "'."));
-                userInterfaceComponent.showNotification("Configuration saved.", FontAwesomeIcon.SAVE, Palette.INFO);
+                userInterfaceComponent.showNotification("Configuration saved.", FontAwesome.DOWNLOAD, Palette.INFO);
             }
 
             currentlyOpenFile = file;
@@ -401,7 +413,7 @@ public final class ConfigFileHelper {
                 userInterfaceComponent.showNotification(
                     "Generation completed! " + translatorManager.getFilesCreated()
                     + " files created.",
-                    FontAwesomeIcon.STAR,
+                    FontAwesome.STAR,
                     Palette.SUCCESS
                 );
             });

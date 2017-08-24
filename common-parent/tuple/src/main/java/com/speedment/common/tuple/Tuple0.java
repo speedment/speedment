@@ -1,13 +1,13 @@
 /**
- *
+ * 
  * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
- * the License at:
- *
+ * the License at: 
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -16,31 +16,26 @@
  */
 package com.speedment.common.tuple;
 
-import java.util.stream.Stream;
-
 /**
- * {@inheritDoc}
+ * This interface defines a generic Tuple of any order that can hold null
+ * values. A Tuple is type safe, immutable and thread safe. For pure non-null
+ * value elements see {@link Tuple}
+ * This {@link Tuple } has a degree of 0
  * 
- * This {@link Tuple} with no elements.
- *
- * @author pemi
+ * @author Per Minborg
  */
 public interface Tuple0 extends Tuple {
-
+    
     @Override
-    default Stream<Object> stream() {
-        return Stream.empty();
-    }
-
-    @Override
-    default int length() {
+    default int degree() {
         return 0;
     }
-
-    @Override
+    
     default Object get(int index) {
-        throw new IllegalArgumentException(String.format(
-            "Index %d is outside bounds of tuple of length %s", index, length()
-        ));
+        switch (index) {
+            
+            default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()
+            ));
+        }
     }
 }

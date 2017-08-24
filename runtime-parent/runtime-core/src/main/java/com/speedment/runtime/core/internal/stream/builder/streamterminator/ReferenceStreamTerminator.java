@@ -33,9 +33,6 @@ import static java.util.Objects.requireNonNull;
  */
 public interface ReferenceStreamTerminator extends BaseStreamTerminator {
 
-//    default <T> ReferencePipeline<T> optimize(ReferencePipeline<T> initialPipeline) {
-//        return initialPipeline;
-//    }
     default <T> void forEach(ReferencePipeline<T> pipeline, Consumer<? super T> action) {
         requireNonNull(pipeline);
         requireNonNull(action);

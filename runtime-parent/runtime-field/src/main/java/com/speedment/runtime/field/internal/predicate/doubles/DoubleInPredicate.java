@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.field.internal.predicate.doubles;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasDoubleValue;
 import java.util.Set;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,8 +33,10 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
-public final class DoubleInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Double, HasDoubleValue<ENTITY, D>> implements Tuple1<Set<Double>> {
+@GeneratedCode(value = "Speedment")
+public final class DoubleInPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasDoubleValue<ENTITY, D>> 
+implements Tuple1<Set<Double>> {
     
     private final Set<Double> set;
     
@@ -46,5 +48,10 @@ public final class DoubleInPredicate<ENTITY, D> extends AbstractFieldPredicate<E
     @Override
     public Set<Double> get0() {
         return set;
+    }
+    
+    @Override
+    public DoubleNotInPredicate<ENTITY, D> negate() {
+        return new DoubleNotInPredicate<>(getField(), set);
     }
 }

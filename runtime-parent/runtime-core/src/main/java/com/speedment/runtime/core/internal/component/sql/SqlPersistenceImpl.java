@@ -49,6 +49,7 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
+import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
 import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.joining;
@@ -85,30 +86,6 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
     private final List<Field<ENTITY>> generatedFields;
     private final Map<Field<ENTITY>, Column> columnsByFields;
 
-    private final static class GeneratedFieldSupport<ENTITY, T> {
-        
-        private final Field<ENTITY> field;
-        private final Column column;
-        private final ResultSetMapping<T> mapping;
-
-        public GeneratedFieldSupport(Field<ENTITY> field, Column column, ResultSetMapping<T> mapping) {
-            this.field = field;
-            this.column = column;
-            this.mapping = mapping;
-        }
-
-        public Field<ENTITY> getField() {
-            return field;
-        }
-
-        public Column getColumn() {
-            return column;
-        }
-
-        public ResultSetMapping<T> getMapping() {
-            return mapping;
-        }
-    }
 
     public SqlPersistenceImpl(
             TableIdentifier<ENTITY> tableId,
@@ -195,7 +172,7 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
             fields.get(), 
             primaryKeyFields.get()
         )
-            .map(f -> f.getter().apply(entity))
+            .map(f -> toDatabaseType(f, entity))
             .collect(Collectors.toList());
 
         try {
@@ -257,6 +234,7 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
     private String sqlPrimaryKeyColumnList(Function<String, String> postMapper) {
         requireNonNull(postMapper);
         return table.primaryKeyColumns()
+            .sorted(comparing(PrimaryKeyColumn::getOrdinalPosition))
             .map(this::findColumn)
             .map(Column::getName)
             .map(naming::encloseField)
@@ -266,6 +244,7 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
 
     private String sqlColumnList(Predicate<Column> preFilter, Function<String, String> postMapper) {
         return table.columns()
+            .sorted(comparing(Column::getOrdinalPosition))
             .filter(Column::isEnabled)
             .filter(preFilter)
             .map(Column::getName)
@@ -291,4 +270,35 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
             );
         }
     }
+    
+    private final static class GeneratedFieldSupport<ENTITY, T> {
+
+        private final Field<ENTITY> field;
+        private final Column column;
+        private final ResultSetMapping<T> mapping;
+
+        private GeneratedFieldSupport(
+            final Field<ENTITY> field,
+            final Column column,
+            final ResultSetMapping<T> mapping
+        ) {
+            this.field = field;
+            this.column = column;
+            this.mapping = mapping;
+        }
+
+        public Field<ENTITY> getField() {
+            return field;
+        }
+
+        public Column getColumn() {
+            return column;
+        }
+
+        public ResultSetMapping<T> getMapping() {
+            return mapping;
+        }
+    }
+    
+    
 }

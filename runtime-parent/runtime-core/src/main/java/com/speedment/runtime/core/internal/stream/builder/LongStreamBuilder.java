@@ -20,18 +20,18 @@ import com.speedment.runtime.core.internal.stream.builder.action.longs.*;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.LongPipeline;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.PipelineImpl;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminator;
-
+import com.speedment.runtime.core.internal.util.java9.Java9LongStreamAdditions;
 import java.util.*;
+import static java.util.Objects.requireNonNull;
 import java.util.function.*;
 import java.util.stream.*;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  *
  * @author pemi
  */
-public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBuilder, LongPipeline> implements LongStream {
+public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBuilder, LongPipeline> 
+    implements LongStream, Java9LongStreamAdditions {
 
     LongStreamBuilder(final PipelineImpl<?> pipeline, final StreamTerminator streamTerminator, Set<BaseStream<?, ?>> streamSet) {
         super(pipeline, streamTerminator, streamSet);
@@ -57,18 +57,21 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
     @Override
     public <U> Stream<U> mapToObj(LongFunction<? extends U> mapper) {
         requireNonNull(mapper);
+        assertNotLinkedOrConsumedAndSet();
         return new ReferenceStreamBuilder<U>(pipeline, streamTerminator, streamSet).append(new LongMapToObjAction<>(mapper));
     }
 
     @Override
     public IntStream mapToInt(LongToIntFunction mapper) {
         requireNonNull(mapper);
+        assertNotLinkedOrConsumedAndSet();
         return new IntStreamBuilder(pipeline, streamTerminator, streamSet).append(new LongMapToIntAction(mapper));
     }
 
     @Override
     public DoubleStream mapToDouble(LongToDoubleFunction mapper) {
         requireNonNull(mapper);
+        assertNotLinkedOrConsumedAndSet();
         return new DoubleStreamBuilder(pipeline, streamTerminator, streamSet).append(new LongMapToDoubleAction(mapper));
     }
 
@@ -106,12 +109,24 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
 
     @Override
     public DoubleStream asDoubleStream() {
+        assertNotLinkedOrConsumedAndSet();
         return new DoubleStreamBuilder(pipeline, streamTerminator, streamSet).append(new LongAsDoubleAction());
     }
 
     @Override
     public Stream<Long> boxed() {
+        assertNotLinkedOrConsumedAndSet();
         return new ReferenceStreamBuilder<Long>(pipeline, streamTerminator, streamSet).append(new LongBoxedAction());
+    }
+    
+        @Override
+    public LongStream takeWhile(LongPredicate predicate) {
+        return append(new LongTakeWhileAction(predicate));
+    }
+
+    @Override
+    public LongStream dropWhile(LongPredicate predicate) {
+        return append(new LongDropWhileAction(predicate));
     }
 
     /**
@@ -125,6 +140,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
     @Override
     public void forEach(LongConsumer action) {
         requireNonNull(action);
+        assertNotLinkedOrConsumedAndSet();
         try {
             streamTerminator.forEach(pipeline(), action);
         } finally {
@@ -143,6 +159,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
     @Override
     public void forEachOrdered(LongConsumer action) {
         requireNonNull(action);
+        assertNotLinkedOrConsumedAndSet();
         try {
             streamTerminator.forEachOrdered(pipeline(), action);
         } finally {
@@ -160,6 +177,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
      */
     @Override
     public long[] toArray() {
+        assertNotLinkedOrConsumedAndSet();
         try {
             return streamTerminator.toArray(pipeline());
         } finally {
@@ -178,6 +196,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
     @Override
     public long reduce(long identity, LongBinaryOperator op) {
         requireNonNull(op);
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseLong(() -> streamTerminator.reduce(pipeline(), identity, op));
     }
 
@@ -192,6 +211,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
     @Override
     public OptionalLong reduce(LongBinaryOperator op) {
         requireNonNull(op);
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.reduce(pipeline(), op));
     }
 
@@ -206,6 +226,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
     @Override
     public <R> R collect(Supplier<R> supplier, ObjLongConsumer<R> accumulator, BiConsumer<R, R> combiner) {
         requireNonNull(supplier);
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.collect(pipeline(), supplier, accumulator, combiner));
     }
 
@@ -219,6 +240,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
      */
     @Override
     public long sum() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseLong(() -> streamTerminator.sum(pipeline()));
     }
 
@@ -232,6 +254,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
      */
     @Override
     public OptionalLong min() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.min(pipeline()));
     }
 
@@ -245,6 +268,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
      */
     @Override
     public OptionalLong max() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.max(pipeline()));
     }
 
@@ -258,6 +282,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
      */
     @Override
     public long count() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseLong(() -> streamTerminator.count(pipeline()));
     }
 
@@ -271,6 +296,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
      */
     @Override
     public OptionalDouble average() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.average(pipeline()));
     }
 
@@ -284,6 +310,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
      */
     @Override
     public LongSummaryStatistics summaryStatistics() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.summaryStatistics(pipeline()));
     }
 
@@ -298,6 +325,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
     @Override
     public boolean anyMatch(LongPredicate predicate) {
         requireNonNull(predicate);
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseBoolean(() -> streamTerminator.anyMatch(pipeline(), predicate));
     }
 
@@ -312,6 +340,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
     @Override
     public boolean allMatch(LongPredicate predicate) {
         requireNonNull(predicate);
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseBoolean(() -> streamTerminator.allMatch(pipeline(), predicate));
     }
 
@@ -326,6 +355,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
     @Override
     public boolean noneMatch(LongPredicate predicate) {
         requireNonNull(predicate);
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseBoolean(() -> streamTerminator.noneMatch(pipeline(), predicate));
     }
 
@@ -339,6 +369,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
      */
     @Override
     public OptionalLong findFirst() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.findFirst(pipeline()));
     }
 
@@ -352,6 +383,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
      */
     @Override
     public OptionalLong findAny() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.findAny(pipeline()));
     }
 
@@ -367,6 +399,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
      */
     @Override
     public PrimitiveIterator.OfLong iterator() {
+        assertNotLinkedOrConsumedAndSet();
         return streamTerminator.iterator(pipeline());
     }
 
@@ -382,6 +415,7 @@ public final class LongStreamBuilder extends AbstractStreamBuilder<LongStreamBui
      */
     @Override
     public Spliterator.OfLong spliterator() {
+        assertNotLinkedOrConsumedAndSet();
         return streamTerminator.spliterator(pipeline());
     }
 

@@ -49,4 +49,9 @@ public final class PrimitiveDoubleToFloatMapper implements TypeMapper<Double, Fl
         return value == null ? null : (double) (float) value;
     }
 
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }
+    
 }

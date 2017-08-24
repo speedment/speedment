@@ -17,12 +17,9 @@
 package com.speedment.runtime.core.internal.stream.builder.streamterminator;
 
 import com.speedment.runtime.core.internal.stream.builder.pipeline.LongPipeline;
-
 import java.util.*;
-import java.util.function.*;
-import java.util.stream.Stream;
-
 import static java.util.Objects.requireNonNull;
+import java.util.function.*;
 
 /**
  *
@@ -126,11 +123,6 @@ public interface LongStreamTerminator extends BaseStreamTerminator {
     default OptionalLong findAny(LongPipeline pipeline) {
         requireNonNull(pipeline);
         return optimize(pipeline).getAsLongStream().findAny();
-    }
-
-    default Stream<Long> boxed(LongPipeline pipeline) {
-        requireNonNull(pipeline);
-        return optimize(pipeline).getAsLongStream().boxed();
     }
 
     default PrimitiveIterator.OfLong iterator(LongPipeline pipeline) {

@@ -16,8 +16,9 @@
  */
 package com.speedment.runtime.field.method;
 
+import com.speedment.common.annotation.GeneratedCode;
+import java.util.function.Function;
 import java.util.function.ToIntFunction;
-import javax.annotation.Generated;
 
 /**
  * A short-cut functional reference to the {@code getXXX(value)} method for a
@@ -35,7 +36,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 @FunctionalInterface
 public interface IntGetter<ENTITY> extends Getter<ENTITY>, ToIntFunction<ENTITY> {
     
@@ -51,5 +52,10 @@ public interface IntGetter<ENTITY> extends Getter<ENTITY>, ToIntFunction<ENTITY>
     @Override
     default Integer apply(ENTITY instance) {
         return applyAsInt(instance);
+    }
+    
+    @Override
+    default Function<ENTITY, Integer> asFunction() {
+        return this::apply;
     }
 }

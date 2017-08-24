@@ -26,16 +26,16 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>1.0.4</version>
+        <version>3.0.9</version>
     </parent>
     
     <artifactId>tuple</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - Tuple</name>
     <description>
-        A collection of Tuple classes that represent sets of a fixed length 
+        A collection of Immutable Tuple classes that represent sets of a fixed length 
         where every element has a specific type.
     </description>
     <url>https://github.com/speedment/speedment/wiki/Tuple</url>

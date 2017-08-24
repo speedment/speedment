@@ -18,18 +18,14 @@ package com.speedment.common.codegen.internal.java.view;
 
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
-import com.speedment.common.codegen.internal.java.view.trait.HasClassesView;
-import com.speedment.common.codegen.internal.java.view.trait.HasFieldsView;
-import com.speedment.common.codegen.internal.java.view.trait.HasInitializersView;
-import com.speedment.common.codegen.internal.java.view.trait.HasJavadocView;
-import com.speedment.common.codegen.internal.java.view.trait.HasMethodsView;
+import com.speedment.common.codegen.internal.java.view.trait.*;
+import com.speedment.common.codegen.model.EnumConstant;
+
+import java.util.Optional;
+
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-import com.speedment.common.codegen.model.EnumConstant;
-import static com.speedment.common.codegen.util.Formatting.block;
-import static com.speedment.common.codegen.util.Formatting.nl;
-import static com.speedment.common.codegen.util.Formatting.separate;
-import java.util.Optional;
+import static com.speedment.common.codegen.util.Formatting.*;
 
 /**
  * Transforms from an {@link EnumConstant} to java code.
@@ -40,7 +36,8 @@ public final class EnumConstantView
 implements Transform<EnumConstant, String>,
         HasJavadocView<EnumConstant>,
         HasClassesView<EnumConstant>,
-        HasInitializersView<EnumConstant>, 
+        HasInitializersView<EnumConstant>,
+        HasAnnotationUsageView<EnumConstant>,
         HasMethodsView<EnumConstant>,
         HasFieldsView<EnumConstant> {
 
@@ -52,6 +49,11 @@ implements Transform<EnumConstant, String>,
     @Override
     public String fieldSuffix() {
         return ";";
+    }
+
+    @Override
+    public String annotationSeparator() {
+        return " ";
     }
 
 	@Override
@@ -74,6 +76,7 @@ implements Transform<EnumConstant, String>,
         
 		return Optional.of(
             renderJavadoc(gen, model) +
+            renderAnnotations(gen, model) +
 			model.getName() + 
 			(model.getValues().isEmpty() ? "" : " ") +
 			gen.onEach(model.getValues()).collect(

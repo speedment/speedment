@@ -16,7 +16,8 @@
  */
 package com.speedment.runtime.field.method;
 
-import javax.annotation.Generated;
+import com.speedment.common.annotation.GeneratedCode;
+import java.util.function.Function;
 
 /**
  * A short-cut functional reference to the {@code getXXX(value)} method for a
@@ -34,7 +35,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 @FunctionalInterface
 public interface CharGetter<ENTITY> extends Getter<ENTITY> {
     
@@ -49,5 +50,10 @@ public interface CharGetter<ENTITY> extends Getter<ENTITY> {
     @Override
     default Character apply(ENTITY instance) {
         return applyAsChar(instance);
+    }
+    
+    @Override
+    default Function<ENTITY, Character> asFunction() {
+        return this::apply;
     }
 }

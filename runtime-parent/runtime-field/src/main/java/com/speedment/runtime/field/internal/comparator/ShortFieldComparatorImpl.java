@@ -16,11 +16,11 @@
  */
 package com.speedment.runtime.field.internal.comparator;
 
-import com.speedment.runtime.field.ShortField;
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
+import com.speedment.runtime.field.trait.HasShortValue;
 import java.util.Objects;
-import javax.annotation.Generated;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -31,23 +31,25 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
-public final class ShortFieldComparatorImpl<ENTITY, D> implements ShortFieldComparator<ENTITY, D> {
+@GeneratedCode(value = "Speedment")
+public final class ShortFieldComparatorImpl<ENTITY, D> 
+extends AbstractFieldComparator<ENTITY> 
+implements ShortFieldComparator<ENTITY, D> {
     
-    private final ShortField<ENTITY, D> field;
+    private final HasShortValue<ENTITY, D> field;
     private final boolean reversed;
     
-    public ShortFieldComparatorImpl(ShortField<ENTITY, D> field) {
+    public ShortFieldComparatorImpl(HasShortValue<ENTITY, D> field) {
         this(field, false);
     }
     
-    public ShortFieldComparatorImpl(ShortField<ENTITY, D> field, boolean reversed) {
+    ShortFieldComparatorImpl(HasShortValue<ENTITY, D> field, boolean reversed) {
         this.field    = requireNonNull(field);
         this.reversed = reversed;
     }
     
     @Override
-    public ShortField<ENTITY, D> getField() {
+    public HasShortValue<ENTITY, D> getField() {
         return field;
     }
     
@@ -62,7 +64,7 @@ public final class ShortFieldComparatorImpl<ENTITY, D> implements ShortFieldComp
     }
     
     @Override
-    public FieldComparator<ENTITY, Short> reversed() {
+    public FieldComparator<ENTITY> reversed() {
         return new ShortFieldComparatorImpl<>(field, !reversed);
     }
     
@@ -71,7 +73,7 @@ public final class ShortFieldComparatorImpl<ENTITY, D> implements ShortFieldComp
         requireNonNulls(first, second);
         final short a = field.getAsShort(first);
         final short b = field.getAsShort(second);
-        return applyReversed(a - b);
+        return applyReversed(Short.compare(a, b));
     }
     
     @Override
@@ -86,8 +88,8 @@ public final class ShortFieldComparatorImpl<ENTITY, D> implements ShortFieldComp
         if (!(obj instanceof FieldComparator)) return false;
         
         @SuppressWarnings("unchecked")
-        final FieldComparator<ENTITY, Short> casted =
-            (FieldComparator<ENTITY, Short>) obj;
+        final FieldComparator<ENTITY> casted =
+            (FieldComparator<ENTITY>) obj;
         
         return reversed == casted.isReversed()
             && Objects.equals(

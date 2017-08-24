@@ -57,5 +57,9 @@ public class TimeToLocalTimeMapper implements TypeMapper<Time, LocalTime> {
     public Time toDatabaseType(LocalTime value) {
         return Time.valueOf(value);
     }
-
+    
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }
 }

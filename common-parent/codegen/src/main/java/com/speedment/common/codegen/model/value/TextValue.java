@@ -22,5 +22,4 @@ import com.speedment.common.codegen.model.Value;
  *
  * @author Emil Forslund
  */
-public interface TextValue extends Value<String> {
-}
+public interface TextValue extends Value<String> {}

@@ -49,4 +49,9 @@ public final class ShortToByteMapper implements TypeMapper<Short, Byte> {
         return value == null ? null : ((short) (byte) value);
     }
 
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }
+    
 }

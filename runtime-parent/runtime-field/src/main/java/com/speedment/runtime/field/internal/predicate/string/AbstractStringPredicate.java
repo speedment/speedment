@@ -18,32 +18,36 @@ package com.speedment.runtime.field.internal.predicate.string;
 
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
+import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasReferenceValue;
-
 import java.util.function.Predicate;
 
 /**
+ * Abstract base implementation of a {@link FieldPredicate} for String Fields.
  *
- * @author pemi
  * @param <ENTITY> the entity type
+ *
+ * @author Per Minborg
+ * @since  2.2.0
  */
-abstract class AbstractStringPredicate<ENTITY, D> 
-extends AbstractFieldPredicate<ENTITY, String, HasReferenceValue<ENTITY, D, String>> 
+abstract class AbstractStringPredicate<ENTITY, D>
+extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, String>>
 implements Tuple1<String> {
 
     private final String operand;
 
-    protected AbstractStringPredicate(PredicateType predicateType,
-        HasReferenceValue<ENTITY, D, String> field,
-        String operand,
-        Predicate<ENTITY> tester) {
+    AbstractStringPredicate(PredicateType predicateType,
+            final HasReferenceValue<ENTITY, D, String> field,
+            final String operand,
+            final Predicate<ENTITY> tester) {
+
         super(predicateType, field, tester);
         this.operand = operand;
     }
 
     @Override
-    public String get0() {
+    public final String get0() {
         return operand;
     }
 }

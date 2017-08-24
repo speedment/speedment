@@ -16,13 +16,13 @@
  */
 package com.speedment.runtime.field.internal.predicate.floats;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.internal.predicate.BetweenPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasFloatValue;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -34,8 +34,11 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
-public final class FloatBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Float, HasFloatValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Float, Float> {
+@GeneratedCode(value = "Speedment")
+public final class FloatBetweenPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasFloatValue<ENTITY, D>> 
+implements BetweenPredicate,
+          Tuple2<Float, Float> {
     
     private final float start;
     private final float end;
@@ -84,5 +87,10 @@ public final class FloatBetweenPredicate<ENTITY, D> extends AbstractFieldPredica
     @Override
     public Inclusion getInclusion() {
         return inclusion;
+    }
+    
+    @Override
+    public FloatNotBetweenPredicate<ENTITY, D> negate() {
+        return new FloatNotBetweenPredicate<>(getField(), start, end, inclusion);
     }
 }

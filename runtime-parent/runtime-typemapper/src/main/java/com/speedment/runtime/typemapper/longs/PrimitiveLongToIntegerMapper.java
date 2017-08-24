@@ -48,5 +48,10 @@ public final class PrimitiveLongToIntegerMapper implements TypeMapper<Long, Inte
     public Long toDatabaseType(Integer value) {
         return value == null ? null : ((long) (int) value);
     }
+    
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }
 
 }

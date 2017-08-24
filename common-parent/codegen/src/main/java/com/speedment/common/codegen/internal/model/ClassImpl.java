@@ -110,6 +110,4 @@ public final class ClassImpl extends ClassOrInterfaceImpl<Class> implements Clas
         }
         return Objects.equals(this.constructors, other.constructors);
     }
-
-
 }

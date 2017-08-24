@@ -16,11 +16,11 @@
  */
 package com.speedment.runtime.field.internal.comparator;
 
-import com.speedment.runtime.field.IntField;
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
+import com.speedment.runtime.field.trait.HasIntValue;
 import java.util.Objects;
-import javax.annotation.Generated;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static java.util.Objects.requireNonNull;
 
@@ -31,23 +31,25 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
-public final class IntFieldComparatorImpl<ENTITY, D> implements IntFieldComparator<ENTITY, D> {
+@GeneratedCode(value = "Speedment")
+public final class IntFieldComparatorImpl<ENTITY, D> 
+extends AbstractFieldComparator<ENTITY> 
+implements IntFieldComparator<ENTITY, D> {
     
-    private final IntField<ENTITY, D> field;
+    private final HasIntValue<ENTITY, D> field;
     private final boolean reversed;
     
-    public IntFieldComparatorImpl(IntField<ENTITY, D> field) {
+    public IntFieldComparatorImpl(HasIntValue<ENTITY, D> field) {
         this(field, false);
     }
     
-    public IntFieldComparatorImpl(IntField<ENTITY, D> field, boolean reversed) {
+    IntFieldComparatorImpl(HasIntValue<ENTITY, D> field, boolean reversed) {
         this.field    = requireNonNull(field);
         this.reversed = reversed;
     }
     
     @Override
-    public IntField<ENTITY, D> getField() {
+    public HasIntValue<ENTITY, D> getField() {
         return field;
     }
     
@@ -62,7 +64,7 @@ public final class IntFieldComparatorImpl<ENTITY, D> implements IntFieldComparat
     }
     
     @Override
-    public FieldComparator<ENTITY, Integer> reversed() {
+    public FieldComparator<ENTITY> reversed() {
         return new IntFieldComparatorImpl<>(field, !reversed);
     }
     
@@ -71,7 +73,7 @@ public final class IntFieldComparatorImpl<ENTITY, D> implements IntFieldComparat
         requireNonNulls(first, second);
         final int a = field.getAsInt(first);
         final int b = field.getAsInt(second);
-        return applyReversed(a - b);
+        return applyReversed(Integer.compare(a, b));
     }
     
     @Override
@@ -86,8 +88,8 @@ public final class IntFieldComparatorImpl<ENTITY, D> implements IntFieldComparat
         if (!(obj instanceof FieldComparator)) return false;
         
         @SuppressWarnings("unchecked")
-        final FieldComparator<ENTITY, Integer> casted =
-            (FieldComparator<ENTITY, Integer>) obj;
+        final FieldComparator<ENTITY> casted =
+            (FieldComparator<ENTITY>) obj;
         
         return reversed == casted.isReversed()
             && Objects.equals(

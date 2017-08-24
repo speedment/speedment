@@ -47,7 +47,7 @@ public class JavaGenerator extends DefaultGenerator {
         "^boolean$",
         "^float$",
         "^double$",
-        "^java\\.lang\\."
+        "^java\\.lang\\.[^\\.]+$"
     );
     
     /**

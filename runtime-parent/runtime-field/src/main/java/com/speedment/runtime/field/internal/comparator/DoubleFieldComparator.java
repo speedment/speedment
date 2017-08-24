@@ -16,9 +16,9 @@
  */
 package com.speedment.runtime.field.internal.comparator;
 
-import com.speedment.runtime.field.DoubleField;
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.field.comparator.FieldComparator;
-import javax.annotation.Generated;
+import com.speedment.runtime.field.trait.HasDoubleValue;
 
 /**
  * A predicate that evaluates if a value is between two doubles.
@@ -29,8 +29,8 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
-public interface DoubleFieldComparator<ENTITY, D> extends FieldComparator<ENTITY, Double> {
+@GeneratedCode(value = "Speedment")
+public interface DoubleFieldComparator<ENTITY, D> extends FieldComparator<ENTITY> {
     
     /**
      * Gets the field that is being compared.
@@ -38,5 +38,5 @@ public interface DoubleFieldComparator<ENTITY, D> extends FieldComparator<ENTITY
      * @return the compared field
      */
     @Override
-    DoubleField<ENTITY, D> getField();
+    HasDoubleValue<ENTITY, D> getField();
 }

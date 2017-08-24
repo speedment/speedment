@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.field.internal.predicate.ints;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasIntValue;
 import java.util.Set;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,8 +33,10 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
-public final class IntInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Integer, HasIntValue<ENTITY, D>> implements Tuple1<Set<Integer>> {
+@GeneratedCode(value = "Speedment")
+public final class IntInPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasIntValue<ENTITY, D>> 
+implements Tuple1<Set<Integer>> {
     
     private final Set<Integer> set;
     
@@ -46,5 +48,10 @@ public final class IntInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTI
     @Override
     public Set<Integer> get0() {
         return set;
+    }
+    
+    @Override
+    public IntNotInPredicate<ENTITY, D> negate() {
+        return new IntNotInPredicate<>(getField(), set);
     }
 }

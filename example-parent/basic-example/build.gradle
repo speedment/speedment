@@ -1,0 +1,7 @@
+group = 'com.speedment.example'
+description = 'Speedment - Example - Basic Example'
+dependencies {
+  compile project(':build-parent:runtime')
+  compile project(':plugin-parent:json-stream')
+    runtime group: 'mysql', name: 'mysql-connector-java', version:'5.1.42'
+}

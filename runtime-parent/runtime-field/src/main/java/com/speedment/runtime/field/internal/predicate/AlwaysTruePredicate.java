@@ -17,22 +17,28 @@
 package com.speedment.runtime.field.internal.predicate;
 
 import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 
 /**
  * A special implementation of {@code Predicate} that always returns true.
- * 
- * @param <ENTITY>  the entity type
- * @param <V>       the value type
- * @param <FIELD>   the field type
- * 
- * @author  Per Minborg
- * @since   2.2.0
+ *
+ * @param <ENTITY> the entity type
+ * @param <FIELD> the field type
+ *
+ * @author Per Minborg
+ * @since 2.2.0
  */
-public final class AlwaysTruePredicate<ENTITY, V, FIELD extends Field<ENTITY>> 
-        extends AbstractFieldPredicate<ENTITY, V, FIELD> {
+public final class AlwaysTruePredicate<ENTITY, FIELD extends Field<ENTITY>>
+    extends AbstractFieldPredicate<ENTITY, FIELD> {
 
     public AlwaysTruePredicate(FIELD field) {
         super(PredicateType.ALWAYS_TRUE, field, entity -> true);
     }
+
+    @Override
+    public FieldPredicate<ENTITY> negate() {
+        return new AlwaysFalsePredicate<>(getField());
+    }
+
 }

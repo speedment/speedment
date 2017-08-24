@@ -28,9 +28,12 @@ import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
-import static java.util.Objects.requireNonNull;
-import java.util.Set;
+
+import java.util.Collection;
 import java.util.function.Predicate;
+
+import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
+import static java.util.Objects.requireNonNull;
 
 /**
  * @param <ENTITY> the entity type
@@ -61,10 +64,10 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
         this.typeMapper = requireNonNull(typeMapper);
         this.unique     = unique;
     }
-    
-    /*****************************************************************/
-    /*                           Getters                             */
-    /*****************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                                Getters                                 //
+    ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public ColumnIdentifier<ENTITY> identifier() {
@@ -90,29 +93,29 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
     public boolean isUnique() {
         return unique;
     }
-    
-    /*****************************************************************/
-    /*                         Comparators                           */
-    /*****************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                              Comparators                               //
+    ////////////////////////////////////////////////////////////////////////////
     
     @Override
-    public FieldComparator<ENTITY, String> comparator() {
-        return new ReferenceFieldComparatorImpl<>(this, NullOrder.NONE);
+    public FieldComparator<ENTITY> comparator() {
+        return new ReferenceFieldComparatorImpl<>(this, NullOrder.LAST);
     }
 
     @Override
-    public FieldComparator<ENTITY, String> comparatorNullFieldsFirst() {
+    public FieldComparator<ENTITY> comparatorNullFieldsFirst() {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.FIRST);
     }
 
     @Override
-    public FieldComparator<ENTITY, String> comparatorNullFieldsLast() {
-        return new ReferenceFieldComparatorImpl<>(this, NullOrder.LAST);
+    public FieldComparator<ENTITY> comparatorNullFieldsLast() {
+        return comparator();
     }
-    
-    /*****************************************************************/
-    /*                           Operators                           */
-    /*****************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                               Operators                                //
+    ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public FieldPredicate<ENTITY> isNull() {
@@ -121,71 +124,89 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
 
     @Override
     public FieldPredicate<ENTITY> equal(String value) {
+        requireNonNull(value);
         return new ReferenceEqualPredicate<>(this, value);
     }
 
     @Override
     public Predicate<ENTITY> greaterThan(String value) {
+        requireNonNull(value);
         return new ReferenceGreaterThanPredicate<>(this, value);
     }
 
     @Override
     public Predicate<ENTITY> greaterOrEqual(String value) {
+        requireNonNull(value);
         return new ReferenceGreaterOrEqualPredicate<>(this, value);
     }
 
     @Override
     public Predicate<ENTITY> between(String start, String end, Inclusion inclusion) {
+        requireNonNull(start);
+        requireNonNull(end);
+        requireNonNull(inclusion);
         return new ReferenceBetweenPredicate<>(this, start, end, inclusion);
     }
 
     @Override
-    public Predicate<ENTITY> in(Set<String> values) {
-        return new ReferenceInPredicate<>(this, values);
+    public Predicate<ENTITY> in(Collection<String> values) {
+        requireNonNull(values);
+        return new ReferenceInPredicate<>(this, collectionToSet(values));
     }
     
     @Override
     public Predicate<ENTITY> notEqual(String value) {
+        requireNonNull(value);
         return new ReferenceNotEqualPredicate<>(this, value);
     }
 
     @Override
     public Predicate<ENTITY> lessThan(String value) {
+        requireNonNull(value);
         return new ReferenceLessThanPredicate<>(this, value);
     }
 
     @Override
     public Predicate<ENTITY> lessOrEqual(String value) {
+        requireNonNull(value);
         return new ReferenceLessOrEqualPredicate<>(this, value);
     }
 
     @Override
     public Predicate<ENTITY> notBetween(String start, String end, Inclusion inclusion) {
+        requireNonNull(start);
+        requireNonNull(end);
+        requireNonNull(inclusion);
         return new ReferenceNotBetweenPredicate<>(this, start, end, inclusion);
     }
 
     @Override
-    public Predicate<ENTITY> notIn(Set<String> values) {
-        return new ReferenceNotInPredicate<>(this, values);
+    public Predicate<ENTITY> notIn(Collection<String> values) {
+        requireNonNull(values);
+        return new ReferenceNotInPredicate<>(this, collectionToSet(values));
     }
 
     @Override
     public Predicate<ENTITY> equalIgnoreCase(String value) {
-        return new StringEqualIgnoreCasePredicate<>(this, value);
+        requireNonNull(value);
+        return new StringEqualIgnoreCasePredicate<>(this, value.toLowerCase());
     }
 
     @Override
     public Predicate<ENTITY> startsWith(String value) {
+        requireNonNull(value);
         return new StringStartsWithPredicate<>(this, value);
     }
 
     @Override
     public Predicate<ENTITY> endsWith(String value) {
+        requireNonNull(value);
         return new StringEndsWithPredicate<>(this, value);
     }
 
     @Override
     public Predicate<ENTITY> contains(String value) {
+        requireNonNull(value);
         return new StringContainsPredicate<>(this, value);
     }
 
@@ -196,17 +217,19 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
 
     @Override
     public Predicate<ENTITY> startsWithIgnoreCase(String value) {
-        return new StringStartsWithIgnoreCasePredicate<>(this, value);
+        requireNonNull(value);
+        return new StringStartsWithIgnoreCasePredicate<>(this, value.toLowerCase());
     }
 
     @Override
     public Predicate<ENTITY> endsWithIgnoreCase(String value) {
-        return new StringEndsWithIgnoreCasePredicate<>(this, value);
+        requireNonNull(value);
+        return new StringEndsWithIgnoreCasePredicate<>(this, value.toLowerCase());
     }
 
     @Override
     public Predicate<ENTITY> containsIgnoreCase(String value) {
-        return new StringContainsIgnoreCasePredicate<>(this, value);
+        requireNonNull(value);
+        return new StringContainsIgnoreCasePredicate<>(this, value.toLowerCase());
     }
-    
 }

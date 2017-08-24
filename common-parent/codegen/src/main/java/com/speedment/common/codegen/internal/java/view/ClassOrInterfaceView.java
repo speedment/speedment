@@ -19,13 +19,16 @@ package com.speedment.common.codegen.internal.java.view;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.internal.java.view.trait.*;
+import com.speedment.common.codegen.model.ClassOrInterface;
+
+import java.util.Optional;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
+
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNullElements;
 import static com.speedment.common.codegen.internal.util.NullUtil.requireNonNulls;
-import com.speedment.common.codegen.model.ClassOrInterface;
 import static com.speedment.common.codegen.util.Formatting.*;
-import java.util.Optional;
 import static java.util.stream.Collectors.joining;
-import java.util.stream.Stream;
 
 
 /**
@@ -47,7 +50,10 @@ abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements Tr
         HasClassesView<M>, 
         HasAnnotationUsageView<M>, 
         HasFieldsView<M> {
-    
+
+	private static final Pattern EMPTY_BLOCK =
+		Pattern.compile("^\\s*\\{\\s*}\\s*$");
+
 	protected static final String
 		CLASS_STRING      = "class ",
 		INTERFACE_STRING  = "interface ",
@@ -109,6 +115,19 @@ abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements Tr
 	@Override
 	public Optional<String> transform(Generator gen, M model) {
         requireNonNulls(gen, model);
+
+        String code = block(nl() + separate(
+			onBeforeFields(gen, model), // Enums have constants here.´
+			renderFields(gen, model),
+			renderConstructors(gen, model),
+			renderInitalizers(gen, model),
+			renderMethods(gen, model),
+			renderClasses(gen, model)
+		));
+
+		if (EMPTY_BLOCK.matcher(code).find()) {
+			code = "{}";
+		}
         
 		return Optional.of(renderJavadoc(gen, model) +
             renderAnnotations(gen, model) +
@@ -121,14 +140,7 @@ abstract class ClassOrInterfaceView<M extends ClassOrInterface<M>> implements Tr
 			renderInterfaces(gen, model) +
                 
             // Code
-            block(nl() + separate(
-				onBeforeFields(gen, model), // Enums have constants here.´
-                renderFields(gen, model),
-				renderConstructors(gen, model),
-                renderInitalizers(gen, model),
-				renderMethods(gen, model),
-				renderClasses(gen, model)
-			))
+            code
 		);
 	}
 	

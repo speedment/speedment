@@ -20,6 +20,8 @@ package com.speedment.runtime.core.internal.stream.builder.streamterminator;
  *
  * @author pemi
  */
-public interface StreamTerminator extends ReferenceStreamTerminator, IntStreamTerminator, LongStreamTerminator, DoubleStreamTerminator {
-
-}
+public interface StreamTerminator extends
+    ReferenceStreamTerminator,
+    IntStreamTerminator,
+    LongStreamTerminator,
+    DoubleStreamTerminator {}

@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.core.internal.component;
 
+import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
@@ -51,23 +52,20 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
         ApplicationBuilder.LogType.CONNECTION.getLoggerName()
     );
 
-    private final static long DEFAULT_MAX_AGE = 30_000;
-    private final static int DEFAULT_MIN_POOL_SIZE_PER_DB = 32;
-
+    @Config(name = "connectionpool.maxAge", value = "30000")
     private long maxAge;
+    @Config(name = "connectionpool.maxRetainSize", value = "32")
     private int maxRetainSize;
 
     private final Map<Long, PoolableConnection> leasedConnections;
     private final Map<String, Deque<PoolableConnection>> pools;
 
-    private @Inject
-    DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject
-    PasswordComponent passwordComponent;
+    @Inject
+    private DbmsHandlerComponent dbmsHandlerComponent;
+    @Inject
+    private PasswordComponent passwordComponent;
 
     public ConnectionPoolComponentImpl() {
-        maxAge = DEFAULT_MAX_AGE;
-        maxRetainSize = DEFAULT_MIN_POOL_SIZE_PER_DB;
         pools = new ConcurrentHashMap<>();
         leasedConnections = new ConcurrentHashMap<>();
     }
@@ -235,6 +233,7 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
 
     @Override
     public void setMaxAge(long maxAge) {
+        LOGGER_CONNECTION.warn("Unsafe method called. Use configuration parameters to set this value instead");
         this.maxAge = maxAge;
     }
 
@@ -245,6 +244,7 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
 
     @Override
     public void setMaxRetainSize(int maxRetainSize) {
+        LOGGER_CONNECTION.warn("Unsafe method called. Use configuration parameters to set this value instead");
         this.maxRetainSize = maxRetainSize;
     }
 

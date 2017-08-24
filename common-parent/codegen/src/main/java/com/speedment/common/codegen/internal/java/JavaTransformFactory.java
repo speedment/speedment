@@ -30,7 +30,7 @@ import java.lang.reflect.Type;
 
 /**
  * Implementation of the {@link TransformFactory} interface that comes with
- * all the basic concepts of the Java language preinstalled.
+ * all the basic concepts of the Java language pre-installed.
  * 
  * @author Emil Forslund
  * @see    TransformFactory
@@ -77,5 +77,7 @@ public class JavaTransformFactory extends DefaultTransformFactory {
 		install(Constructor.class, ConstructorView.class);
 		install(File.class, FileView.class);
         install(Initializer.class, InitalizerView.class);
+        install(AnonymousValue.class, AnonymousValueView.class);
+        install(InvocationValue.class, InvocationValueView.class);
     }
 }

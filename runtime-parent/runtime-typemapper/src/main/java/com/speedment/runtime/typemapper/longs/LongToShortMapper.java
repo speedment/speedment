@@ -49,4 +49,9 @@ public final class LongToShortMapper implements TypeMapper<Long, Short> {
         return value == null ? null : ((long) (short) value);
     }
 
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }    
+    
 }

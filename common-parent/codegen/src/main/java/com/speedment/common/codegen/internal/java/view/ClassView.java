@@ -20,6 +20,7 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.model.Class;
 
 import static com.speedment.common.codegen.util.Formatting.dnl;
+import static com.speedment.common.codegen.util.Formatting.nl;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
@@ -44,12 +45,19 @@ public final class ClassView extends ClassOrInterfaceView<Class> {
 	protected String renderSupertype(Generator gen, Class model) {
         requireNonNull(gen);
         requireNonNull(model);
-        
-		if (model.getSupertype().isPresent()) {
-			return EXTENDS_STRING + gen.on(model.getSupertype().get()).orElse("") + " ";
-		} else {
-			return "";
-		}
+
+        return model.getSupertype().map(supertype -> {
+			final StringBuilder result = new StringBuilder();
+
+			if (!model.getInterfaces().isEmpty()) {
+				result.append(nl());
+			}
+
+			return result.append(EXTENDS_STRING)
+				.append(gen.on(supertype).orElse(""))
+				.append(" ")
+				.toString();
+		}).orElse("");
 	}
 
     @Override

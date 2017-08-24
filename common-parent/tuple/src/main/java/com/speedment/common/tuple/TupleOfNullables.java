@@ -17,6 +17,7 @@
 package com.speedment.common.tuple;
 
 import java.util.Optional;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -36,6 +37,16 @@ public interface TupleOfNullables extends BasicTuple<Optional<Object>> {
      *
      * @return a {@link Stream} of all values for this Tuple
      */
-    Stream<Optional<Object>> stream();
+    default Stream<Optional<Object>> stream() {
+        return IntStream.range(0, degree())
+            .mapToObj(this::get);
+    }
+
+    @Override
+    default <T> Stream<T> streamOf(Class<T> clazz) {
+        return stream()
+            .filter(clazz::isInstance)
+            .map(clazz::cast);
+    }
 
 }

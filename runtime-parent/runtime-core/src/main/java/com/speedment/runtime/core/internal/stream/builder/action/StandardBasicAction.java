@@ -27,7 +27,6 @@ import static com.speedment.runtime.core.stream.action.Property.*;
 import static com.speedment.runtime.core.stream.action.Verb.PRESERVE;
 import static com.speedment.runtime.core.stream.action.Verb.SET;
 
-
 /**
  *
  * @author pemi
@@ -99,6 +98,16 @@ public enum StandardBasicAction implements BasicAction {
         Statement.of(PRESERVE, ORDER),
         Statement.of(PRESERVE, SIZE),
         Statement.of(SET, STREAM_TYPE)
+    ),
+    TAKE_WHILE(
+        Statement.of(PRESERVE, ORDER),
+        Statement.of(PRESERVE, TYPE),
+        Statement.of(PRESERVE, STREAM_TYPE)
+    ),
+    DROP_WHILE(
+        Statement.of(PRESERVE, ORDER),
+        Statement.of(PRESERVE, TYPE),
+        Statement.of(PRESERVE, STREAM_TYPE)
     );
 
     private final Statement[] statements;

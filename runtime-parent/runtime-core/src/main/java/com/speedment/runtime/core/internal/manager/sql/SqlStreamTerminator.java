@@ -16,218 +16,258 @@
  */
 package com.speedment.runtime.core.internal.manager.sql;
 
+import com.speedment.runtime.core.component.sql.SqlStreamOptimizer;
+import com.speedment.runtime.core.component.sql.SqlStreamOptimizerComponent;
+import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
+import com.speedment.runtime.core.component.sql.override.SqlStreamTerminatorComponent;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
-import com.speedment.runtime.core.db.DbmsType;
-import com.speedment.runtime.core.db.FieldPredicateView;
-import com.speedment.runtime.core.db.SqlPredicateFragment;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.DoublePipeline;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.IntPipeline;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.LongPipeline;
 import com.speedment.runtime.core.internal.stream.builder.pipeline.ReferencePipeline;
 import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminator;
-import com.speedment.runtime.core.internal.stream.builder.streamterminator.StreamTerminatorUtil;
 import com.speedment.runtime.core.stream.Pipeline;
-import com.speedment.runtime.core.stream.action.Action;
-import com.speedment.runtime.field.Field;
-import com.speedment.runtime.field.predicate.FieldPredicate;
-import com.speedment.runtime.typemapper.TypeMapper;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
-import java.util.function.LongSupplier;
-import java.util.function.Predicate;
-
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
-import com.speedment.runtime.core.internal.stream.builder.action.reference.FilterAction;
-import static com.speedment.runtime.core.stream.action.Property.SIZE;
-import static com.speedment.runtime.core.stream.action.Verb.PRESERVE;
-import java.util.Collections;
+import com.speedment.runtime.core.util.StreamComposition;
+import java.util.Comparator;
+import java.util.Iterator;
 import static java.util.Objects.requireNonNull;
+import java.util.Optional;
+import java.util.PrimitiveIterator;
+import java.util.Spliterator;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toList;
+import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
+import java.util.function.IntFunction;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 
 /**
+ * A class that will terminate ENTITY streams. ENTITY is the original type.
+ *
+ * Type T is the final type after stream mappings.
+ *
  *
  * @author pemi
- * @param <ENTITY> the entity type
+ * @param <ENTITY> the entity type of the original stream, e.g. hares.stream()
+ * is of type Hare
+ *
  */
 public final class SqlStreamTerminator<ENTITY> implements StreamTerminator {
 
-    private final DbmsType dbmsType;
-    private final String sqlSelect;
-    private final String sqlSelectCount;
-    //private final LongSupplier sqlCounter;
-    private final BiFunction<String, List<Object>, Long> counter;
-    private final Function<Field<ENTITY>, String> sqlColumnNamer;
-    private final Function<Field<ENTITY>, Class<?>> sqlDatabaseTypeFunction;
+    protected final String UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED = "This method has been disabled for this Stream type "
+        + "because improper use will lead to resources not being freed up. "
+        + "We regret any inconvenience caused by this. "
+        + "If you want to concatenate two or more stream, please use the " + StreamComposition.class.getName()
+        + "#concatAndAutoClose() method instead."
+        + "Note: If you want to enable this functionality, please use the .withAllowStreamIteratorAndSpliterator() application builder "
+        + "method. Be aware though, you are then responsible for closing the stream implicitly after use, ALWAYS";
+
+    private final SqlStreamTerminatorComponent sqlStreamTerminatorComponent;
+    private final SqlStreamOptimizerComponent sqlStreamOptimizerComponent;
+    private final SqlStreamOptimizerInfo<ENTITY> info;
     private final AsynchronousQueryResult<ENTITY> asynchronousQueryResult;
+    private final boolean allowIteratorAndSpliterator;
 
     public SqlStreamTerminator(
-        final DbmsType dbmsType,
-        final String sqlSelect,
-        final String sqlSelectCount,
-        final BiFunction<String, List<Object>, Long> counter,
-        //LongSupplier sqlCounter,
-        final Function<Field<ENTITY>, String> sqlColumnNamer,
-        final Function<Field<ENTITY>, Class<?>> sqlDatabaseTypeFunction,
-        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult
+        final SqlStreamOptimizerInfo<ENTITY> info,
+        final AsynchronousQueryResult<ENTITY> asynchronousQueryResult,
+        final SqlStreamOptimizerComponent sqlStreamOptimizerComponent,
+        final SqlStreamTerminatorComponent sqlStreamTerminatorComponent,
+        final boolean allowIteratorAndSpliterator
     ) {
-        this.dbmsType = requireNonNull(dbmsType);
-        this.sqlSelect = requireNonNull(sqlSelect);
-        this.sqlSelectCount = requireNonNull(sqlSelectCount);
-        this.counter = requireNonNull(counter);
-        //this.sqlCounter = requireNonNull(sqlCounter);
-        this.sqlColumnNamer = requireNonNull(sqlColumnNamer);
-        this.sqlDatabaseTypeFunction = requireNonNull(sqlDatabaseTypeFunction);
+        this.info = requireNonNull(info);
         this.asynchronousQueryResult = requireNonNull(asynchronousQueryResult);
+        this.sqlStreamOptimizerComponent = requireNonNull(sqlStreamOptimizerComponent);
+        this.sqlStreamTerminatorComponent = requireNonNull(sqlStreamTerminatorComponent);
+        this.allowIteratorAndSpliterator = allowIteratorAndSpliterator;
     }
 
+    //Todo: Remove this and split up responsibility
+    public AsynchronousQueryResult<ENTITY> getAsynchronousQueryResult() {
+        return asynchronousQueryResult;
+    }
+    
     @Override
-    public <P extends Pipeline> P optimize(P initialPipeline) {
+    public <P extends Pipeline> P optimize(final P initialPipeline) {
         requireNonNull(initialPipeline);
-        final List<FieldPredicate<ENTITY>> andPredicateBuilders = StreamTerminatorUtil.topLevelAndPredicates(initialPipeline);
-
-        if (!andPredicateBuilders.isEmpty()) {
-            modifySource(andPredicateBuilders, asynchronousQueryResult);
-        }
-
-        return initialPipeline;
-    }
-
-    public void modifySource(List<FieldPredicate<ENTITY>> predicateBuilders, AsynchronousQueryResult<ENTITY> qr) {
-        requireNonNull(predicateBuilders);
-        requireNonNull(qr);
-
-        if (predicateBuilders.isEmpty()) {
-            // Nothing to do...
-            return;
-        }
-
-        final SqlInfo sqlInfo = sqlInfo(sqlSelect, predicateBuilders);
-        qr.setSql(sqlInfo.sql);
-        qr.setValues(sqlInfo.values);
-    }
-
-    public SqlInfo sqlInfo(String sqlBase, List<FieldPredicate<ENTITY>> predicateBuilders) {
-        requireNonNull(predicateBuilders);
-
-        if (predicateBuilders.isEmpty()) {
-            // Nothing to do...
-            return new SqlInfo(sqlBase, Collections.emptyList());
-        }
-
-        final FieldPredicateView spv = dbmsType.getFieldPredicateView();
-        final List<SqlPredicateFragment> fragments = predicateBuilders.stream()
-            .map(sp -> spv.transform(sqlColumnNamer, sqlDatabaseTypeFunction, sp))
-            .collect(toList());
-
-        final String sql = sqlBase + " WHERE "
-            + fragments.stream()
-                .map(SqlPredicateFragment::getSql)
-                .collect(joining(" AND "));
-
-        final List<Object> values = new ArrayList<>();
-        for (int i = 0; i < fragments.size(); i++) {
-
-            final FieldPredicate<ENTITY> p = predicateBuilders.get(i);
-            final Field<ENTITY> referenceFieldTrait = p.getField();
-
-            @SuppressWarnings("unchecked")
-            final TypeMapper<Object, Object> tm = (TypeMapper<Object, Object>) referenceFieldTrait.typeMapper();
-
-            fragments.get(i).objects()
-                .map(tm::toDatabaseType)
-                .forEach(values::add);
-        }
-        return new SqlInfo(sql, values);
+        final SqlStreamOptimizer<ENTITY> optimizer = sqlStreamOptimizerComponent.get(initialPipeline, info.getDbmsType());
+        return optimizer.optimize(initialPipeline, info, asynchronousQueryResult);
     }
 
     @Override
-    public long count(DoublePipeline pipeline) {
-        requireNonNull(pipeline);
-        return countHelper(pipeline, () -> StreamTerminator.super.count(pipeline));
+    public <T> void forEach(ReferencePipeline<T> pipeline, Consumer<? super T> action) {
+        sqlStreamTerminatorComponent.<ENTITY>getForEachTerminator().apply(info, this, pipeline, action);
     }
 
     @Override
-    public long count(IntPipeline pipeline) {
-        requireNonNull(pipeline);
-        return countHelper(pipeline, () -> StreamTerminator.super.count(pipeline));
+    public <T> void forEachOrdered(ReferencePipeline<T> pipeline, Consumer<? super T> action) {
+        sqlStreamTerminatorComponent.<ENTITY>getForEachOrderedTerminator().apply(info, this, pipeline, action);
     }
 
     @Override
-    public long count(LongPipeline pipeline) {
-        requireNonNull(pipeline);
-        return countHelper(pipeline, () -> StreamTerminator.super.count(pipeline));
+    public <T> Object[] toArray(ReferencePipeline<T> pipeline) {
+        return sqlStreamTerminatorComponent.<ENTITY>getToArrayTerminator().apply(info, this, pipeline);
+    }
+
+    @Override
+    public <T, A> A[] toArray(ReferencePipeline<T> pipeline, IntFunction<A[]> generator) {
+        return sqlStreamTerminatorComponent.<ENTITY>getToArrayGeneratorTerminator().apply(info, this, pipeline, generator);
+    }
+
+    @Override
+    public <T> T reduce(ReferencePipeline<T> pipeline, T identity, BinaryOperator<T> accumulator) {
+        return sqlStreamTerminatorComponent.<ENTITY>getReduceIdentityTerminator().apply(info, this, pipeline, identity, accumulator);
+    }
+
+    @Override
+    public <T, U> U reduce(ReferencePipeline<T> pipeline, U identity, BiFunction<U, ? super T, U> accumulator, BinaryOperator<U> combiner) {
+        return sqlStreamTerminatorComponent.<ENTITY>getReduceIdentityCombinerTerminator().apply(info, this, pipeline, identity, accumulator, combiner);
+    }
+
+    @Override
+    public <T> Optional<T> reduce(ReferencePipeline<T> pipeline, BinaryOperator<T> accumulator) {
+        return sqlStreamTerminatorComponent.<ENTITY>getReduceTerminator().apply(info, this, pipeline, accumulator);
+    }
+
+    @Override
+    public <T, R> R collect(ReferencePipeline<T> pipeline, Supplier<R> supplier, BiConsumer<R, ? super T> accumulator, BiConsumer<R, R> combiner) {
+        return sqlStreamTerminatorComponent.<ENTITY>getCollectSupplierAccumulatorCombinerTerminator().apply(info, this, pipeline, supplier, accumulator, combiner);
+    }
+
+    @Override
+    public <T, R, A> R collect(ReferencePipeline<T> pipeline, Collector<? super T, A, R> collector) {
+        return sqlStreamTerminatorComponent.<ENTITY>getCollectTerminator().apply(info, this, pipeline, collector);
+    }
+
+    @Override
+    public <T> Optional<T> min(ReferencePipeline<T> pipeline, Comparator<? super T> comparator) {
+        return sqlStreamTerminatorComponent.<ENTITY>getMinTerminator().apply(info, this, pipeline, comparator);
+    }
+
+    @Override
+    public <T> Optional<T> max(ReferencePipeline<T> pipeline, Comparator<? super T> comparator) {
+        return sqlStreamTerminatorComponent.<ENTITY>getMaxTerminator().apply(info, this, pipeline, comparator);
     }
 
     @Override
     public <T> long count(ReferencePipeline<T> pipeline) {
-        requireNonNull(pipeline);
-        return countHelper(pipeline, () -> StreamTerminator.super.count(pipeline));
+        return sqlStreamTerminatorComponent.<ENTITY>getCountTerminator().apply(info, this, pipeline);
     }
 
-    private static final Predicate<Action<?, ?>> CHECK_RETAIN_SIZE = action -> action.is(PRESERVE, SIZE);
+    @Override
+    public <T> boolean anyMatch(ReferencePipeline<T> pipeline, Predicate<? super T> predicate) {
+        return sqlStreamTerminatorComponent.<ENTITY>getAnyMatchTerminator().apply(info, this, pipeline, predicate);
+    }
 
-    /**
-     * Optimizer for count operations.
-     *
-     * @param pipeline the pipeline
-     * @param fallbackSupplier a fallback supplier should every item be size
-     * retaining
-     * @return the number of rows
-     */
-    private long countHelper(Pipeline pipeline, LongSupplier fallbackSupplier) {
-        requireNonNulls(pipeline, fallbackSupplier);
-        
-        if (pipeline.stream().allMatch(CHECK_RETAIN_SIZE)) {
-            // select count(*) from 'table'
-            return counter.apply(sqlSelectCount, Collections.emptyList());
-        } else if (allActionsAreOptimizableFilters(pipeline)) {
-            // select count(*) from 'table' where ...
-            final List<FieldPredicate<ENTITY>> andPredicateBuilders = StreamTerminatorUtil.topLevelAndPredicates(pipeline);
-            final SqlInfo sqlInfo = sqlInfo(sqlSelectCount, andPredicateBuilders);
-            return counter.apply(sqlInfo.sql, sqlInfo.values);
-        } else {
-            // Iterate over all materialized ENTITIES....
-            return fallbackSupplier.getAsLong();
+    @Override
+    public <T> boolean allMatch(ReferencePipeline<T> pipeline, Predicate<? super T> predicate) {
+        return sqlStreamTerminatorComponent.<ENTITY>getAllMatchTerminator().apply(info, this, pipeline, predicate);
+    }
+
+    @Override
+    public <T> boolean noneMatch(ReferencePipeline<T> pipeline, Predicate<? super T> predicate) {
+        return sqlStreamTerminatorComponent.<ENTITY>getNoneMatchTerminator().apply(info, this, pipeline, predicate);
+    }
+
+    @Override
+    public <T> Optional<T> findAny(ReferencePipeline<T> pipeline) {
+        return sqlStreamTerminatorComponent.<ENTITY>getFindAnyTerminator().apply(info, this, pipeline);
+
+    }
+
+    @Override
+    public <T> Optional<T> findFirst(ReferencePipeline<T> pipeline) {
+        return sqlStreamTerminatorComponent.<ENTITY>getFindFirstTerminator().apply(info, this, pipeline);
+    }
+
+    @Override
+    public <T> Iterator<T> iterator(ReferencePipeline<T> pipeline) {
+        if (allowIteratorAndSpliterator) {
+            return sqlStreamTerminatorComponent.<ENTITY>getIteratorTerminator().apply(info, this, pipeline);
         }
+        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
     }
 
-    private boolean allActionsAreOptimizableFilters(Pipeline pipeline) {
-        return pipeline.stream().allMatch(action -> {
-            if (action instanceof FilterAction) {
-                if (((FilterAction) action).getPredicate() instanceof FieldPredicate) {
-                    return true;
-                }
-            }
-            return false;
-        });
-    }
-
-    private static class SqlInfo {
-
-        private final String sql;
-        private final List<Object> values;
-//        private static final SqlInfo EMPTY = new SqlInfo("", Collections.emptyList());
-
-        public SqlInfo(String sql, List<Object> values) {
-            this.sql = sql;
-            this.values = values;
+    @Override
+    public <T> Spliterator<T> spliterator(ReferencePipeline<T> pipeline) {
+        if (allowIteratorAndSpliterator) {
+            return sqlStreamTerminatorComponent.<ENTITY>getSpliteratorTerminator().apply(info, this, pipeline);
         }
-
-//        public static SqlInfo empty() {
-//            return EMPTY;
-//        }
+        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
     }
 
-//    
-//        private long sqlCount() {
-//        return dbmsType.getOperationHandler().executeQuery(dbms,
-//            "SELECT COUNT(*) FROM " + sqlTableReference,
-//            Collections.emptyList(),
-//            rs -> rs.getLong(1)
-//        ).findAny().get();
-//    }
+    ///////////// double
+    @Override
+    public long count(DoublePipeline pipeline) {
+        return sqlStreamTerminatorComponent.<ENTITY>getDoubleCountTerminator().apply(info, this, pipeline);
+    }
+
+    // Todo: Introduce delegator
+    @Override
+    public PrimitiveIterator.OfDouble iterator(DoublePipeline pipeline) {
+        if (allowIteratorAndSpliterator) {
+            return StreamTerminator.super.iterator(pipeline);
+        }
+        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+    }
+
+    // Todo: Introduce delegator
+    @Override
+    public Spliterator.OfDouble spliterator(DoublePipeline pipeline) {
+        if (allowIteratorAndSpliterator) {
+            return StreamTerminator.super.spliterator(pipeline);
+        }
+        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+    }
+
+    ///////////// int
+    @Override
+    public long count(IntPipeline pipeline) {
+        return sqlStreamTerminatorComponent.<ENTITY>getIntCountTerminator().apply(info, this, pipeline);
+    }
+
+    // Todo: Introduce delegator
+    @Override
+    public PrimitiveIterator.OfInt iterator(IntPipeline pipeline) {
+        if (allowIteratorAndSpliterator) {
+            return StreamTerminator.super.iterator(pipeline);
+        }
+        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+    }
+
+    // Todo: Introduce delegator
+    @Override
+    public Spliterator.OfInt spliterator(IntPipeline pipeline) {
+        if (allowIteratorAndSpliterator) {
+            return StreamTerminator.super.spliterator(pipeline);
+        }
+        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+    }
+
+    ///////////// long 
+    @Override
+    public long count(LongPipeline pipeline) {
+        return sqlStreamTerminatorComponent.<ENTITY>getLongCountTerminator().apply(info, this, pipeline);
+    }
+
+    // Todo: Introduce delegator
+    @Override
+    public PrimitiveIterator.OfLong iterator(LongPipeline pipeline) {
+        if (allowIteratorAndSpliterator) {
+            return StreamTerminator.super.iterator(pipeline);
+        }
+        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+    }
+
+    // Todo: Introduce delegator
+    @Override
+    public Spliterator.OfLong spliterator(LongPipeline pipeline) {
+        if (allowIteratorAndSpliterator) {
+            return StreamTerminator.super.spliterator(pipeline);
+        }
+        throw new UnsupportedOperationException(UNSUPPORTED_BECAUSE_OF_CLOSE_MAY_NOT_BE_CALLED);
+    }
+
 }

@@ -24,7 +24,6 @@ import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.internal.db.AbstractDatabaseNamingConvention;
 import com.speedment.runtime.core.internal.db.AbstractDbmsType;
 import com.speedment.runtime.core.internal.db.mysql.MySqlDbmsMetadataHandler;
-import com.speedment.runtime.core.internal.db.mysql.MySqlDbmsOperationHandler;
 import com.speedment.runtime.core.internal.manager.sql.MySqlSpeedmentPredicateView;
 
 import java.util.Collections;
@@ -44,16 +43,19 @@ import static java.util.stream.Collectors.toSet;
 public final class MariaDbDbmsType extends AbstractDbmsType {
 
     public static InjectBundle include() {
-        return of(MySqlDbmsMetadataHandler.class, MySqlDbmsOperationHandler.class);
+        return of(
+            MySqlDbmsMetadataHandler.class, 
+            MariaDbDbmsOperationHandler.class,
+            MySqlSpeedmentPredicateView.class
+        );
     }
 
-    private final static FieldPredicateView PREDICATE_VIEW = new MySqlSpeedmentPredicateView();
-    
     private final MariaDbNamingConvention namingConvention;
     private final MariaDbConnectionUrlGenerator connectionUrlGenerator;
 
-    private @Inject MySqlDbmsMetadataHandler metadataHandler;
-    private @Inject MySqlDbmsOperationHandler operationHandler;
+    @Inject private MySqlDbmsMetadataHandler metadataHandler;
+    @Inject private MariaDbDbmsOperationHandler operationHandler;
+    @Inject private MySqlSpeedmentPredicateView fieldPredicateView;
 
     private MariaDbDbmsType() {
         namingConvention = new MariaDbNamingConvention();
@@ -77,7 +79,12 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
 
     @Override
     public String getDbmsNameMeaning() {
-        return "Just a name";
+        return "The name of the MariaDB Database.";
+    }
+
+    @Override
+    public boolean hasSchemaNames() {
+        return false;
     }
 
     @Override
@@ -107,7 +114,7 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
 
     @Override
     public FieldPredicateView getFieldPredicateView() {
-        return PREDICATE_VIEW;
+        return fieldPredicateView;
     }
 
     @Override
@@ -170,13 +177,11 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
                 .append(dbms.getIpAddress().orElse(""));
 
             dbms.getPort().ifPresent(p -> result.append(":").append(p));
-            result.append(
-                "/?useUnicode=true"
-                + "&characterEncoding=UTF-8"
-                + "&useServerPrepStmts=true"
-                + "&useCursorFetch=true"
-                + "&zeroDateTimeBehavior=convertToNull"
-            );
+
+            result/*.append("/").append(dbms.getName()) */ // MariaDB treats this as default schema name
+                .append("?useUnicode=true&characterEncoding=UTF-8")
+                .append("&useServerPrepStmts=true&useCursorFetch=true")
+                .append("&zeroDateTimeBehavior=convertToNull");
 
             return result.toString();
         }

@@ -16,8 +16,9 @@
  */
 package com.speedment.runtime.field.method;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.function.ToBooleanFunction;
-import javax.annotation.Generated;
+import java.util.function.Function;
 
 /**
  * A short-cut functional reference to the {@code getXXX(value)} method for a
@@ -35,7 +36,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 @FunctionalInterface
 public interface BooleanGetter<ENTITY> extends Getter<ENTITY>, ToBooleanFunction<ENTITY> {
     
@@ -51,5 +52,10 @@ public interface BooleanGetter<ENTITY> extends Getter<ENTITY>, ToBooleanFunction
     @Override
     default Boolean apply(ENTITY instance) {
         return applyAsBoolean(instance);
+    }
+    
+    @Override
+    default Function<ENTITY, Boolean> asFunction() {
+        return this::apply;
     }
 }

@@ -24,12 +24,15 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.config.trait.HasParent;
 import com.speedment.runtime.config.util.DocumentDbUtil;
-import static com.speedment.runtime.config.util.DocumentDbUtil.isSame;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.runtime.core.component.sql.SqlStreamOptimizerComponent;
+import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
+import com.speedment.runtime.core.component.sql.override.SqlStreamTerminatorComponent;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
 import com.speedment.runtime.core.db.DbmsType;
@@ -43,19 +46,19 @@ import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.core.util.DatabaseUtil;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.trait.HasComparableOperators;
+
 import java.sql.ResultSet;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import static java.util.Objects.requireNonNull;
-import java.util.Optional;
-import static java.util.function.Function.identity;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
+import java.util.stream.Stream;
+
+import static com.speedment.runtime.config.util.DocumentDbUtil.isSame;
+import static java.lang.String.format;
+import static java.util.Objects.requireNonNull;
+import static java.util.function.Function.identity;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
-import java.util.stream.Stream;
 
 /**
  * Default implementation of the {@link SqlStreamSupplier}-interface.
@@ -75,21 +78,29 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
     private final String sqlSelect;
     private final String sqlSelectCount;
     private final String sqlTableReference;
+    private final SqlStreamOptimizerComponent sqlStreamOptimizerComponent;
+    private final SqlStreamTerminatorComponent sqlStreamTerminatorComponent;
+    private final boolean allowIteratorAndSpliterator;
 
     SqlStreamSupplierImpl(
         final TableIdentifier<ENTITY> tableId,
         final SqlFunction<ResultSet, ENTITY> entityMapper,
         final ProjectComponent projectComponent,
         final DbmsHandlerComponent dbmsHandlerComponent,
-        final ManagerComponent managerComponent
+        final ManagerComponent managerComponent,
+        final SqlStreamOptimizerComponent sqlStreamOptimizerComponent,
+        final SqlStreamTerminatorComponent sqlStreamTerminatorComponent,
+        final boolean allowIteratorAndSpliterator
     ) {
-
         requireNonNull(tableId);
         requireNonNull(projectComponent);
         requireNonNull(dbmsHandlerComponent);
         requireNonNull(managerComponent);
 
         this.entityMapper = requireNonNull(entityMapper);
+        this.sqlStreamOptimizerComponent = requireNonNull(sqlStreamOptimizerComponent);
+        this.sqlStreamTerminatorComponent = requireNonNull(sqlStreamTerminatorComponent);
+        this.allowIteratorAndSpliterator = allowIteratorAndSpliterator;
 
         final Project project = projectComponent.getProject();
         final Table table = DocumentDbUtil.referencedTable(project, tableId);
@@ -117,9 +128,9 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
 
         this.columnNameMap = manager.fields()
             .filter(f -> f.findColumn(project)
-            .map(c -> c.getParent())
-            .map(t -> isSame(table, t.get()))
-            .orElse(false)
+                .map(HasParent<Table>::getParentOrThrow)
+                .map(t -> isSame(table, t))
+                .orElse(false)
             )
             .map(Field::identifier)
             .collect(toMap(identity(), naming::fullNameOf));
@@ -129,8 +140,14 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
         manager.fields()
             .forEach(f -> {
                 final Optional<? extends Column> c = f.findColumn(project);
-                final Class<?> javaClass = c.get().findDatabaseType();
-                //final ResultSetMapping<?> resultSetMapping = resultSetMapperComponent.apply(dbmsType, javaClass);
+                final Class<?> javaClass = c.orElseThrow(() ->
+                    new SpeedmentException(format("Field '%s' in manager '%s'" +
+                        " referred to a column that couldn't be found " +
+                        "in config model.",
+                        f.identifier().toString(),
+                        manager
+                    ))
+                ).findDatabaseType();
                 columnDatabaseTypeMap.put(f.identifier(), javaClass);
             });
     }
@@ -146,14 +163,21 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
                 parallelStrategy
             );
 
-        final SqlStreamTerminator<ENTITY> terminator = new SqlStreamTerminator<>(
+        final SqlStreamOptimizerInfo<ENTITY> info = SqlStreamOptimizerInfo.of(
             dbmsType,
             sqlSelect,
             sqlSelectCount,
             this::executeAndGetLong,
             this::sqlColumnNamer,
-            this::sqlDatabaseTypeFunction,
-            asynchronousQueryResult
+            this::sqlDatabaseTypeFunction
+        );
+
+        final SqlStreamTerminator<ENTITY> terminator = new SqlStreamTerminator<>(
+            info,
+            asynchronousQueryResult,
+            sqlStreamOptimizerComponent,
+            sqlStreamTerminatorComponent,
+            allowIteratorAndSpliterator
         );
 
         final Supplier<BaseStream<?, ?>> initialSupplier
@@ -193,7 +217,7 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
     private String sqlColumnNamer(Field<ENTITY> field) {
         return columnNameMap.get(field.identifier());
     }
-    
+
     private Class<?> sqlDatabaseTypeFunction(Field<ENTITY> field) {
         return columnDatabaseTypeMap.get(field.identifier());
     }

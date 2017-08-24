@@ -34,11 +34,11 @@ import static com.speedment.runtime.field.predicate.PredicateType.EQUAL;
  * @since   2.2.0
  */
 public final class ReferenceEqualPredicate<ENTITY, D, V extends Comparable<? super V>>
-        extends AbstractFieldPredicate<ENTITY, V, HasReferenceValue<ENTITY, D, V>>
-        implements Tuple1<V> {
+extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
+implements Tuple1<V> {
 
     private final V value;
-    
+
     public ReferenceEqualPredicate(HasReferenceValue<ENTITY, D, V> field, V value) {
         super(EQUAL, field, entity -> Objects.equals(field.get(entity), value));
         this.value = value;
@@ -48,4 +48,10 @@ public final class ReferenceEqualPredicate<ENTITY, D, V extends Comparable<? sup
     public V get0() {
         return value;
     }
+
+    @Override
+    public ReferenceNotEqualPredicate<ENTITY, D, V> negate() {
+        return new ReferenceNotEqualPredicate<>(getField(), value);
+    }
+     
 }

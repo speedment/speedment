@@ -48,5 +48,10 @@ public final class DoubleToFloatMapper implements TypeMapper<Double, Float> {
     public Double toDatabaseType(Float value) {
         return value == null ? null : ((double) (float) value);
     }
+    
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }    
 
 }

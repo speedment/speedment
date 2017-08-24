@@ -33,8 +33,8 @@ import static com.speedment.runtime.field.predicate.PredicateType.LESS_THAN;
  * @since   2.2.0
  */
 public final class ReferenceLessThanPredicate<ENTITY, D, V extends Comparable<? super V>>
-        extends AbstractFieldPredicate<ENTITY, V, HasReferenceValue<ENTITY, D, V>>
-        implements Tuple1<V> {
+extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
+implements Tuple1<V> {
     
     private final V value;
 
@@ -53,4 +53,10 @@ public final class ReferenceLessThanPredicate<ENTITY, D, V extends Comparable<? 
     public V get0() {
         return value;
     }
+
+    @Override
+    public ReferenceGreaterOrEqualPredicate<ENTITY, D, V> negate() {
+        return new ReferenceGreaterOrEqualPredicate<>(getField(), value);
+    }
+    
 }

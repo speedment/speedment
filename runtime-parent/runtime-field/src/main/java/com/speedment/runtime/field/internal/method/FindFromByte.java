@@ -16,13 +16,13 @@
  */
 package com.speedment.runtime.field.internal.method;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.ByteField;
 import com.speedment.runtime.field.ByteForeignKeyField;
 import com.speedment.runtime.field.exception.SpeedmentFieldException;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import javax.annotation.Generated;
 
 /**
  * @param <ENTITY>    entity type
@@ -31,7 +31,7 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class FindFromByte<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTITY, FK_ENTITY, Byte, ByteForeignKeyField<ENTITY, ?, FK_ENTITY>, ByteField<FK_ENTITY, ?>> {
     
     public FindFromByte(

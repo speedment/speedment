@@ -17,15 +17,12 @@
 package com.speedment.runtime.core.internal.stream.builder.streamterminator;
 
 import com.speedment.runtime.core.internal.stream.builder.pipeline.DoublePipeline;
-
 import java.util.DoubleSummaryStatistics;
+import static java.util.Objects.requireNonNull;
 import java.util.OptionalDouble;
 import java.util.PrimitiveIterator;
 import java.util.Spliterator;
 import java.util.function.*;
-import java.util.stream.Stream;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  *
@@ -109,11 +106,6 @@ public interface DoubleStreamTerminator extends BaseStreamTerminator {
         return optimize(pipeline).getAsDoubleStream().summaryStatistics();
     }
 
-//    default boolean anyMatch(DoublePipeline pipeline, DoublePredicate predicate) {
-//        return anyMatch(pipeline, (pip, pre) -> pip.getAsDoubleStream().anyMatch(pre), predicate);
-//        //    return optimize(pipeline).getAsReferenceStream().anyMatch(predicate);
-//    }
-//
     default boolean anyMatch(DoublePipeline pipeline, DoublePredicate predicate) {
         requireNonNull(pipeline);
         requireNonNull(predicate);
@@ -141,11 +133,11 @@ public interface DoubleStreamTerminator extends BaseStreamTerminator {
         requireNonNull(pipeline);
         return optimize(pipeline).getAsDoubleStream().findAny();
     }
-
-    default Stream<Double> boxed(DoublePipeline pipeline) {
-        requireNonNull(pipeline);
-        return optimize(pipeline).getAsDoubleStream().boxed();
-    }
+//
+//    default Stream<Double> boxed(DoublePipeline pipeline) {
+//        requireNonNull(pipeline);
+//        return optimize(pipeline).getAsDoubleStream().boxed();
+//    }
 
     default PrimitiveIterator.OfDouble iterator(DoublePipeline pipeline) {
         requireNonNull(pipeline);

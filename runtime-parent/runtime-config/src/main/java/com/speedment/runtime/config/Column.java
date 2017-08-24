@@ -18,19 +18,7 @@ package com.speedment.runtime.config;
 
 import com.speedment.runtime.config.mutator.ColumnMutator;
 import com.speedment.runtime.config.mutator.DocumentMutator;
-import com.speedment.runtime.config.trait.HasAlias;
-import com.speedment.runtime.config.trait.HasColumnSize;
-import com.speedment.runtime.config.trait.HasDecimalDigits;
-import com.speedment.runtime.config.trait.HasEnabled;
-import com.speedment.runtime.config.trait.HasId;
-import com.speedment.runtime.config.trait.HasMainInterface;
-import com.speedment.runtime.config.trait.HasMutator;
-import com.speedment.runtime.config.trait.HasName;
-import com.speedment.runtime.config.trait.HasNullable;
-import com.speedment.runtime.config.trait.HasOrdinalPosition;
-import com.speedment.runtime.config.trait.HasParent;
-import com.speedment.runtime.config.trait.HasTypeMapper;
-import java.util.Optional;
+import com.speedment.runtime.config.trait.*;
 
 /**
  * A typed {@link Document} that represents a column in the database. A
@@ -52,31 +40,19 @@ public interface Column extends
         HasDecimalDigits,
         HasColumnSize,
         HasMainInterface,
+        HasEnumConstants,
         HasMutator<ColumnMutator<? extends Column>> {
 
-    String AUTO_INCREMENT = "autoIncrement",
-           ENUM_CONSTANTS = "enumConstants";
+    String AUTO_INCREMENT = "autoIncrement";
 
     /**
      * Returns whether or not this column will auto increment when new values
      * are added to the table.
      *
-     * @return  <code>true</code> if the column auto increments, else
-     * <code>false</code>
+     * @return  {@code true} if the column auto increments, else {@code false}
      */
     default boolean isAutoIncrement() {
         return getAsBoolean(AUTO_INCREMENT).orElse(false);
-    }
-
-    /**
-     * Returns a comma separated string of the possible values that this column
-     * may have. If the list of potential values are not constrained, an empty
-     * optional is returned.
-     * 
-     * @return  list of constant values separated by commas or empty
-     */
-    default Optional<String> getEnumConstants() {
-        return getAsString(ENUM_CONSTANTS);
     }
 
     @Override

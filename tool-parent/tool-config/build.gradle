@@ -1,0 +1,11 @@
+group = 'com.speedment.tool'
+description = 'Speedment - Tool - Config'
+dependencies {
+  compile project(':common-parent:injector')
+  compile project(':common-parent:function')
+  compile project(':common-parent:mapstream')
+  compile project(':runtime-parent:runtime-core')
+  compile project(':runtime-parent:runtime-config')
+  compile project(':generator-parent:generator-core')
+  compile project(':generator-parent:generator-translator')
+}

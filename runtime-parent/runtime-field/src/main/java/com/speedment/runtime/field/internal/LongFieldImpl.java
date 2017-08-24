@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.field.internal;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.LongField;
 import com.speedment.runtime.field.internal.comparator.LongFieldComparator;
@@ -32,9 +33,9 @@ import com.speedment.runtime.field.method.LongSetter;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
-import java.util.Set;
+import java.util.Collection;
 import java.util.function.Predicate;
-import javax.annotation.Generated;
+import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -44,7 +45,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class LongFieldImpl<ENTITY, D> implements LongField<ENTITY, D> {
     
     private final ColumnIdentifier<ENTITY> identifier;
@@ -127,8 +128,8 @@ public final class LongFieldImpl<ENTITY, D> implements LongField<ENTITY, D> {
     }
     
     @Override
-    public FieldPredicate<ENTITY> in(Set<Long> set) {
-        return new LongInPredicate<>(this, set);
+    public FieldPredicate<ENTITY> in(Collection<Long> values) {
+        return new LongInPredicate<>(this, collectionToSet(values));
     }
     
     @Override
@@ -152,7 +153,7 @@ public final class LongFieldImpl<ENTITY, D> implements LongField<ENTITY, D> {
     }
     
     @Override
-    public Predicate<ENTITY> notIn(Set<Long> set) {
-        return new LongInPredicate<>(this, set).negate();
+    public Predicate<ENTITY> notIn(Collection<Long> values) {
+        return new LongInPredicate<>(this, collectionToSet(values)).negate();
     }
 }

@@ -16,12 +16,12 @@
  */
 package com.speedment.runtime.field.internal.predicate.longs;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasLongValue;
 import java.util.Set;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,8 +33,10 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
-public final class LongInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Long, HasLongValue<ENTITY, D>> implements Tuple1<Set<Long>> {
+@GeneratedCode(value = "Speedment")
+public final class LongInPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasLongValue<ENTITY, D>> 
+implements Tuple1<Set<Long>> {
     
     private final Set<Long> set;
     
@@ -46,5 +48,10 @@ public final class LongInPredicate<ENTITY, D> extends AbstractFieldPredicate<ENT
     @Override
     public Set<Long> get0() {
         return set;
+    }
+    
+    @Override
+    public LongNotInPredicate<ENTITY, D> negate() {
+        return new LongNotInPredicate<>(getField(), set);
     }
 }

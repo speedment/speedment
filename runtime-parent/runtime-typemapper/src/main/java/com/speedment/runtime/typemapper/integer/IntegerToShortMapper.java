@@ -48,5 +48,10 @@ public final class IntegerToShortMapper implements TypeMapper<Integer, Short> {
     public Integer toDatabaseType(Short value) {
         return value == null ? null : ((int) (short) value);
     }
+    
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }    
 
 }

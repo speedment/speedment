@@ -21,19 +21,29 @@ import com.speedment.runtime.field.trait.HasReferenceValue;
 
 /**
  *
- * @param <ENTITY>  the entity type
- * @param <D>       the database type
- * 
- * @author  Per Minborg
- * @since   2.2.0
+ * @param <ENTITY> the entity type
+ * @param <D> the database type
+ *
+ * @author Per Minborg
+ * @since 2.2.0
  */
-public final class StringContainsPredicate<ENTITY, D> extends AbstractStringPredicate<ENTITY, D> {
-    public StringContainsPredicate(HasReferenceValue<ENTITY, D, String> field, String str) {
+public final class StringContainsPredicate<ENTITY, D>
+extends AbstractStringPredicate<ENTITY, D> {
+    
+    public StringContainsPredicate(
+            final HasReferenceValue<ENTITY, D, String> field,
+            final String str) {
+
         super(PredicateType.CONTAINS, field, str, entity -> {
             final String fieldValue = field.get(entity);
-            return fieldValue != null 
-                && str != null 
+            return fieldValue != null
+                && str != null
                 && fieldValue.contains(str);
         });
+    }
+
+    @Override
+    public StringNotContainsPredicate<ENTITY, D> negate() {
+        return new StringNotContainsPredicate<>(getField(), get0());
     }
 }

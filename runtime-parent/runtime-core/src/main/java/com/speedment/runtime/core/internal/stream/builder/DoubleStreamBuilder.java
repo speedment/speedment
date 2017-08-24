@@ -26,12 +26,14 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import static java.util.Objects.requireNonNull;
+import com.speedment.runtime.core.internal.util.java9.Java9DoubleStreamAdditions;
 
 /**
  *
  * @author pemi
  */
-public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStreamBuilder, DoublePipeline> implements DoubleStream {
+public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStreamBuilder, DoublePipeline> 
+    implements DoubleStream, Java9DoubleStreamAdditions {
 
     DoubleStreamBuilder(final PipelineImpl<?> pipeline, final StreamTerminator streamTerminator, Set<BaseStream<?, ?>> streamSet) {
         super(pipeline, streamTerminator, streamSet);
@@ -57,24 +59,28 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
     @Override
     public <U> Stream<U> mapToObj(DoubleFunction<? extends U> mapper) {
         requireNonNull(mapper);
+        assertNotLinkedOrConsumedAndSet();
         return new ReferenceStreamBuilder<U>(pipeline, streamTerminator, streamSet).append(new DoubleMapToObjAction<>(mapper));
     }
 
     @Override
     public IntStream mapToInt(DoubleToIntFunction mapper) {
         requireNonNull(mapper);
+        assertNotLinkedOrConsumedAndSet();
         return new IntStreamBuilder(pipeline, streamTerminator, streamSet).append(new DoubleMapToIntAction(mapper));
     }
 
     @Override
     public LongStream mapToLong(DoubleToLongFunction mapper) {
         requireNonNull(mapper);
+        assertNotLinkedOrConsumedAndSet();
         return new LongStreamBuilder(pipeline, streamTerminator, streamSet).append(new DoubleMapToLongAction(mapper));
     }
 
     @Override
     public DoubleStream flatMap(DoubleFunction<? extends DoubleStream> mapper) {
         requireNonNull(mapper);
+        assertNotLinkedOrConsumedAndSet();
         return append(new DoubleFlatMapAction(mapper));
         //return new DoubleStreamBuilder(pipeline, streamTerminator).append(new DoubleFlatMapAction(mapper));
     }
@@ -107,9 +113,20 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
 
     @Override
     public Stream<Double> boxed() {
+        assertNotLinkedOrConsumedAndSet();
         return new ReferenceStreamBuilder<Double>(pipeline, streamTerminator, streamSet).append(new DoubleBoxedAction());
     }
 
+    @Override
+    public DoubleStream takeWhile(DoublePredicate predicate) {
+        return append(new DoubleTakeWhileAction(predicate));
+    }
+
+    @Override
+    public DoubleStream dropWhile(DoublePredicate predicate) {
+        return append(new DoubleDropWhileAction(predicate));
+    }
+    
     /**
      * {@inheritDoc}
      *
@@ -121,6 +138,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
     @Override
     public void forEach(DoubleConsumer action) {
         requireNonNull(action);
+        assertNotLinkedOrConsumedAndSet();
         try {
             streamTerminator.forEach(pipeline(), action);
         } finally {
@@ -139,6 +157,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
     @Override
     public void forEachOrdered(DoubleConsumer action) {
         requireNonNull(action);
+        assertNotLinkedOrConsumedAndSet();
         try {
             streamTerminator.forEachOrdered(pipeline(), action);
         } finally {
@@ -156,6 +175,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public double[] toArray() {
+        assertNotLinkedOrConsumedAndSet();
         try {
             return streamTerminator.toArray(pipeline());
         } finally {
@@ -174,6 +194,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
     @Override
     public double reduce(double identity, DoubleBinaryOperator op) {
         requireNonNull(op);
+        assertNotLinkedOrConsumedAndSet();
         try {
             return streamTerminator.reduce(pipeline(), identity, op);
         } finally {
@@ -192,6 +213,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
     @Override
     public OptionalDouble reduce(DoubleBinaryOperator op) {
         requireNonNull(op);
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.reduce(pipeline(), op));
     }
 
@@ -208,6 +230,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
         requireNonNull(supplier);
         requireNonNull(accumulator);
         requireNonNull(combiner);
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.collect(pipeline(), supplier, accumulator, combiner));
     }
 
@@ -221,6 +244,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public double sum() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseDouble(() -> streamTerminator.sum(pipeline()));
     }
 
@@ -234,6 +258,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public OptionalDouble min() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.min(pipeline()));
     }
 
@@ -247,6 +272,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public OptionalDouble max() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.max(pipeline()));
     }
 
@@ -260,6 +286,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public long count() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseLong(() -> streamTerminator.count(pipeline()));
     }
 
@@ -273,6 +300,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public OptionalDouble average() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.average(pipeline()));
     }
 
@@ -286,6 +314,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public DoubleSummaryStatistics summaryStatistics() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.summaryStatistics(pipeline()));
     }
 
@@ -300,6 +329,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
     @Override
     public boolean anyMatch(DoublePredicate predicate) {
         requireNonNull(predicate);
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseBoolean(() -> streamTerminator.anyMatch(pipeline(), predicate));
     }
 
@@ -313,6 +343,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public boolean allMatch(DoublePredicate predicate) {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseBoolean(() -> streamTerminator.allMatch(pipeline(), predicate));
     }
 
@@ -326,6 +357,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public boolean noneMatch(DoublePredicate predicate) {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseBoolean(() -> streamTerminator.noneMatch(pipeline(), predicate));
     }
 
@@ -339,6 +371,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public OptionalDouble findFirst() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.findFirst(pipeline()));
     }
 
@@ -352,6 +385,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public OptionalDouble findAny() {
+        assertNotLinkedOrConsumedAndSet();
         return finallyCloseReference(() -> streamTerminator.findAny(pipeline()));
     }
 
@@ -367,6 +401,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public PrimitiveIterator.OfDouble iterator() {
+        assertNotLinkedOrConsumedAndSet();
         return streamTerminator.iterator(pipeline());
     }
 
@@ -382,6 +417,7 @@ public final class DoubleStreamBuilder extends AbstractStreamBuilder<DoubleStrea
      */
     @Override
     public Spliterator.OfDouble spliterator() {
+        assertNotLinkedOrConsumedAndSet();
         return streamTerminator.spliterator(pipeline());
     }
 

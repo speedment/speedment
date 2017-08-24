@@ -16,13 +16,13 @@
  */
 package com.speedment.runtime.field.internal.predicate.ints;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.internal.predicate.BetweenPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasIntValue;
-import javax.annotation.Generated;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -34,8 +34,11 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
-public final class IntBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Integer, HasIntValue<ENTITY, D>> implements BetweenPredicate, Tuple2<Integer, Integer> {
+@GeneratedCode(value = "Speedment")
+public final class IntBetweenPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasIntValue<ENTITY, D>> 
+implements BetweenPredicate,
+          Tuple2<Integer, Integer> {
     
     private final int start;
     private final int end;
@@ -84,5 +87,10 @@ public final class IntBetweenPredicate<ENTITY, D> extends AbstractFieldPredicate
     @Override
     public Inclusion getInclusion() {
         return inclusion;
+    }
+    
+    @Override
+    public IntNotBetweenPredicate<ENTITY, D> negate() {
+        return new IntNotBetweenPredicate<>(getField(), start, end, inclusion);
     }
 }

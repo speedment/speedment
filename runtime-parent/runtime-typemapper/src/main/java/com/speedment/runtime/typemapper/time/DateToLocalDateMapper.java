@@ -58,4 +58,9 @@ public class DateToLocalDateMapper implements TypeMapper<Date, LocalDate>{
         return Date.valueOf(value);
     }
     
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }
+    
 }

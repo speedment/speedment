@@ -17,8 +17,8 @@
 package com.speedment.plugins.json;
 
 import com.speedment.plugins.json.internal.JsonCollectorImpl;
-import java.util.List;
 import static java.util.Objects.requireNonNull;
+import java.util.StringJoiner;
 import java.util.stream.Collector;
 import static java.util.stream.Collectors.joining;
 
@@ -26,8 +26,7 @@ import static java.util.stream.Collectors.joining;
  * A specialized java {@link Collector} that converts streams of Speedment
  * entities into JSON arrays.
  * <p>
- * Example usage:
- * <code>
+ * Example usage:  <code>
  *      app.getOrThrow(EmployeeManager.class).stream()
  *          .filter(Employee.AGE.greaterThan(35))
  *          .filter(Employee.NAME.startsWith("B"))
@@ -35,29 +34,26 @@ import static java.util.stream.Collectors.joining;
  *              jsonComponent.allOf(employees)
  *          ));
  * </code>
- * 
+ *
  * @param <ENTITY> the entity type
- * 
+ *
  * @author Emil Forslund
- * @since  1.0.0
+ * @since 1.0.0
  */
-public interface JsonCollector<ENTITY> extends Collector<ENTITY, List<String>, String> {
+public interface JsonCollector<ENTITY> extends Collector<ENTITY, StringJoiner, String> {
 
     /**
      * Returns a collector that calls the specified encoder for each element in
-     * the stream and joins the resuling stream separated by commas and
-     * surrounded by square brackets. Each element is also formatted using the 
+     * the stream and joins the resulting stream separated by commas and
+     * surrounded by square brackets. Each element is also formatted using the
      * specified {@link JsonEncoder}.
      *
-     * @param <ENTITY>  the type of the stream
-     * @param encoder   the enocder to use
-     * @return          the json string
+     * @param <ENTITY> the type of the stream
+     * @param encoder the enocder to use
+     * @return the json string
      */
     static <ENTITY> JsonCollector<ENTITY> toJson(JsonEncoder<ENTITY> encoder) {
         requireNonNull(encoder);
-        
-        return JsonCollectorImpl.collect(
-            encoder::apply, l -> "[" + l.stream().collect(joining(",")) + "]"
-        );
+        return JsonCollectorImpl.collect(encoder::apply);
     }
 }

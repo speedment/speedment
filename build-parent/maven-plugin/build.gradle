@@ -1,0 +1,16 @@
+description = 'Speedment - Build - Maven Plugin'
+dependencies {
+  compile project(':build-parent:tool')
+  compile(group: 'org.apache.maven', name: 'maven-plugin-api', version:'3.3.9') {
+    exclude(module: 'org.eclipse.sisu.plexus')
+  }
+  compile group: 'org.apache.maven.plugin-tools', name: 'maven-plugin-annotations', version:'3.5'
+  compile group: 'org.apache.maven', name: 'maven-artifact', version:'3.3.9'
+  compile group: 'org.apache.maven', name: 'maven-core', version:'3.0.5'
+  runtime group: 'mysql', name: 'mysql-connector-java', version:'5.1.41'
+  runtime group: 'org.postgresql', name: 'postgresql', version:'42.0.0'
+  runtime group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version:'1.5.9'
+  testCompile group: 'junit', name: 'junit', version:'4.12'
+  testCompile group: 'org.mockito', name: 'mockito-core', version:'2.7.12'
+  testCompile group: 'org.mockito', name: 'mockito-inline', version:'2.7.19'
+}

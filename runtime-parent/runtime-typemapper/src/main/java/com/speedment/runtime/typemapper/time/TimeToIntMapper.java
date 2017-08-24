@@ -50,4 +50,10 @@ public final class TimeToIntMapper implements TypeMapper<Time, Integer> {
     public Time toDatabaseType(Integer value) {
         return value == null ? null : new Time(value * 1000);
     }
+    
+    @Override
+    public Ordering getOrdering() {
+        return Ordering.RETAIN;
+    }
+    
 }

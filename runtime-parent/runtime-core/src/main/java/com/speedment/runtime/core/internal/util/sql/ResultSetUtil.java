@@ -19,12 +19,12 @@ package com.speedment.runtime.core.internal.util.sql;
 import com.speedment.runtime.core.db.SqlFunction;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.net.URL;
 import java.sql.*;
 import java.util.UUID;
 
 import static com.speedment.runtime.core.util.StaticClassUtil.instanceNotAllowed;
-import java.math.BigInteger;
 
 /**
  * Utility methods for retrieving nullable and special values from

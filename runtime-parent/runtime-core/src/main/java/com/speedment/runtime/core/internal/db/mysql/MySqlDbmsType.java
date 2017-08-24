@@ -17,7 +17,6 @@
 package com.speedment.runtime.core.internal.db.mysql;
 
 import com.speedment.common.injector.InjectBundle;
-import static com.speedment.common.injector.InjectBundle.of;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
@@ -25,12 +24,15 @@ import com.speedment.runtime.core.db.*;
 import com.speedment.runtime.core.internal.db.AbstractDatabaseNamingConvention;
 import com.speedment.runtime.core.internal.db.AbstractDbmsType;
 import com.speedment.runtime.core.internal.manager.sql.MySqlSpeedmentPredicateView;
+
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+import static com.speedment.common.injector.InjectBundle.of;
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
-import java.util.stream.Stream;
 
 /**
  *
@@ -40,18 +42,19 @@ import java.util.stream.Stream;
 public final class MySqlDbmsType extends AbstractDbmsType {
 
     public static InjectBundle include() {
-        return of(MySqlDbmsMetadataHandler.class, MySqlDbmsOperationHandler.class);
+        return of(
+            MySqlDbmsMetadataHandler.class, 
+            MySqlDbmsOperationHandler.class, 
+            MySqlSpeedmentPredicateView.class
+        );
     }
-
-    private final static FieldPredicateView PREDICATE_VIEW = new MySqlSpeedmentPredicateView();
 
     private final MySqlNamingConvention namingConvention;
     private final MySqlConnectionUrlGenerator connectionUrlGenerator;
 
-    private @Inject
-    MySqlDbmsMetadataHandler metadataHandler;
-    private @Inject
-    MySqlDbmsOperationHandler operationHandler;
+    @Inject private MySqlDbmsMetadataHandler metadataHandler;
+    @Inject private MySqlDbmsOperationHandler operationHandler;
+    @Inject private MySqlSpeedmentPredicateView fieldPredicateView;
 
     private MySqlDbmsType() {
         namingConvention = new MySqlNamingConvention();
@@ -75,7 +78,12 @@ public final class MySqlDbmsType extends AbstractDbmsType {
 
     @Override
     public String getDbmsNameMeaning() {
-        return "Just a name";
+        return "The name of the MySQL Database.";
+    }
+
+    @Override
+    public boolean hasSchemaNames() {
+        return false;
     }
 
     @Override
@@ -111,7 +119,7 @@ public final class MySqlDbmsType extends AbstractDbmsType {
 
     @Override
     public FieldPredicateView getFieldPredicateView() {
-        return PREDICATE_VIEW;
+        return fieldPredicateView;
     }
 
     @Override
@@ -173,16 +181,13 @@ public final class MySqlDbmsType extends AbstractDbmsType {
                 .append(dbms.getIpAddress().orElse(""));
 
             dbms.getPort().ifPresent(p -> result.append(":").append(p));
-            result.append(
-                "/?useUnicode=true"
-                + "&characterEncoding=UTF-8"
-                + "&useServerPrepStmts=true"
-                /* + "&useCursorFetch=true" */ // Fix #190, Needs to be removed for 6.x drivers
-                + "&zeroDateTimeBehavior=convertToNull"
-                + "&useSSL=false"
-                + "&nullNamePatternMatchesAll=true" // Fix #190
-                + "&useLegacyDatetimeCode=true" // Fix #190
-            );
+
+            result/*.append("/").append(dbms.getName())*/ // MySQL treats this as default schema name
+                .append("?useUnicode=true&characterEncoding=UTF-8")
+                .append("&useServerPrepStmts=true&useSSL=false")
+                .append("&zeroDateTimeBehavior=convertToNull")
+                .append("&nullNamePatternMatchesAll=true") // Fix #190
+                .append("&useLegacyDatetimeCode=true");    // Fix #190
 
             return result.toString();
         }

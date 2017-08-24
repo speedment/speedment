@@ -16,7 +16,8 @@
  */
 package com.speedment.runtime.field.comparator;
 
-import com.speedment.runtime.field.trait.HasComparableOperators;
+import com.speedment.runtime.field.Field;
+
 import java.util.Comparator;
 
 /**
@@ -28,12 +29,11 @@ import java.util.Comparator;
  * {@link #getNullOrder() null strategy} and the {@link #isReversed() order}.
  * 
  * @param <ENTITY>  the entity type
- * @param <V>       the value type
  * 
  * @author Emil Forslund
  * @since  3.0.2
  */
-public interface FieldComparator<ENTITY, V extends Comparable<? super V>> 
+public interface FieldComparator<ENTITY>
 extends Comparator<ENTITY> {
 
     /**
@@ -41,7 +41,7 @@ extends Comparator<ENTITY> {
      * 
      * @return  the field
      */
-    HasComparableOperators<ENTITY, V> getField();
+    Field<ENTITY> getField();
     
     /**
      * Returns the strategy used when {@code null} values are encountered. If
@@ -72,5 +72,5 @@ extends Comparator<ENTITY> {
      * @return  a new reverse comparator
      */
     @Override
-    FieldComparator<ENTITY, V> reversed();
+    FieldComparator<ENTITY> reversed();
 }

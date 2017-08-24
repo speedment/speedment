@@ -25,7 +25,8 @@ import com.speedment.runtime.config.Table;
  *
  * @author Emil Forslund
  */
-public final class SqlAdapterTranslator extends AbstractEntityAndManagerTranslator<Class> {
+public final class SqlAdapterTranslator
+extends AbstractEntityAndManagerTranslator<Class> {
 
     public SqlAdapterTranslator(Table table) {
         super(table, Class::of);
@@ -33,12 +34,11 @@ public final class SqlAdapterTranslator extends AbstractEntityAndManagerTranslat
 
     @Override
     protected Class makeCodeGenModel(File file) {
-
         return newBuilder(file, getClassOrInterfaceName())
-            .forEveryProject((intf, project) -> {
+            .forEveryProject((intf, project) ->
                 intf.public_()
-                    .setSupertype(getSupport().generatedSqlAdapterType());
-            })
+                    .setSupertype(getSupport().generatedSqlAdapterType())
+            )
             .build();
     }
 
@@ -53,5 +53,4 @@ public final class SqlAdapterTranslator extends AbstractEntityAndManagerTranslat
     protected String getClassOrInterfaceName() {
         return getSupport().sqlAdapterName();
     }
-
 }

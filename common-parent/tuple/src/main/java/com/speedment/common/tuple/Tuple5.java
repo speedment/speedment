@@ -1,13 +1,13 @@
 /**
- *
+ * 
  * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
- * the License at:
- *
+ * the License at: 
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -16,26 +16,26 @@
  */
 package com.speedment.common.tuple;
 
-import java.util.stream.Stream;
-
 /**
- * {@inheritDoc}
- *
- * This {@link Tuple} holds four non-null elements.
- *
- * @author pemi
- * @param <T0> Type of 0:th argument
- * @param <T1> Type of 1:st argument
- * @param <T2> Type of 2:nd argument
- * @param <T3> Type of 3:rd argument
- * @param <T4> Type of 4:th argument
+ * This interface defines a generic Tuple of any order that can hold null
+ * values. A Tuple is type safe, immutable and thread safe. For pure non-null
+ * value elements see {@link Tuple}
+ * This {@link Tuple } has a degree of 5
+ * 
+ * @param <T0> type of element 0
+ * @param <T1> type of element 1
+ * @param <T2> type of element 2
+ * @param <T3> type of element 3
+ * @param <T4> type of element 4
+ * 
+ * @author Per Minborg
  */
 public interface Tuple5<T0, T1, T2, T3, T4> extends Tuple {
-
+    
     T0 get0();
-
+    
     T1 get1();
-
+    
     T2 get2();
     
     T3 get3();
@@ -43,16 +43,10 @@ public interface Tuple5<T0, T1, T2, T3, T4> extends Tuple {
     T4 get4();
     
     @Override
-    default Stream<Object> stream() {
-        return Stream.of(get0(), get1(), get2(), get3(), get4());
-    }
-    
-    @Override
-    default int length() {
+    default int degree() {
         return 5;
     }
-
-    @Override
+    
     default Object get(int index) {
         switch (index) {
             case 0 : return get0();
@@ -60,8 +54,7 @@ public interface Tuple5<T0, T1, T2, T3, T4> extends Tuple {
             case 2 : return get2();
             case 3 : return get3();
             case 4 : return get4();
-            default : throw new IllegalArgumentException(String.format(
-                "Index %d is outside bounds of tuple of length %s", index, length()
+            default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()
             ));
         }
     }

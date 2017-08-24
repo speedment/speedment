@@ -1,6 +1,6 @@
 /**
  *
- * Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -15,46 +15,58 @@
  * the License.
  */
 
+/*** Load Custom Fonts ***/
+@font-face { src: url("../fonts/AdventPro-Bold.ttf"); }
+
+@font-face { src: url("../fonts/fontawesome-webfont.ttf"); }
+
+@font-face { src: url("../fonts/Montserrat-Bold.otf"); }
+@font-face { src: url("../fonts/Montserrat-Regular.otf"); }
+
+@font-face { src: url("../fonts/NotoSans-Bold.ttf"); }
+@font-face { src: url("../fonts/NotoSans-Regular.ttf"); }
+@font-face { src: url("../fonts/NotoSans-Italic.ttf"); }
+@font-face { src: url("../fonts/NotoSans-BoldItalic.ttf"); }
+
+@font-face { src: url("../fonts/SourceSansPro-Bold.ttf"); }
+@font-face { src: url("../fonts/SourceSansPro-Regular.ttf"); }
+
 /*** Constants ***/
 * {
-    -fx-speedment-darkgray:    #a9a9a9;
+    -fx-speedment-gray:        #DBDAD9;
+    -fx-speedment-lightgray:   #EDEDED;
+    -fx-speedment-darkgray:    #A1A1A0;
     
-    -fx-speedment-gray:        #cdcdcd;
-    -fx-speedment-blue:        #3267c9;
-    -fx-speedment-green:       #00cc99;
-    -fx-speedment-orange:      #e3ae2d;
-    -fx-speedment-red:         #cc4d4d;
+    -fx-speedment-blue:        #0E8AC5;
+    -fx-speedment-green:       #87BD40;
+    -fx-speedment-orange:      #be9f41;
+    -fx-speedment-red:         #be4141;
     
     -fx-speedment-lightgray:   #f5f5f5;
     -fx-speedment-lightblue:   #45a6fc;
-    -fx-speedment-lightgreen:  #1ce1b0;
-    -fx-speedment-lightred:    #ffb6c1;
-    -fx-speedment-lightorange: #fafad2;
+    -fx-speedment-lightgreen:  #c3dea0;
+    -fx-speedment-lightred:    #dea1a1;
+    -fx-speedment-lightorange: #decfa1;
 
-    -fx-focus-color: -fx-speedment-lightblue;
-    -fx-accent:      -fx-speedment-lightblue;
+    -fx-focus-color: -fx-speedment-blue;
+    -fx-accent:      -fx-speedment-blue;
+    
+    -fx-font-header: 'Montserrat';
+    -fx-font-text:   'Noto Sans';
 }
 
 /*** Titles Pane ***/
 .titled-pane {
-    -fx-background-color: -fx-speedment-lightgray;
+    -fx-background-color: -fx-speedment-gray;
     -fx-text-fill: white;
 }
 
 .titled-pane > .title {
-    -fx-background-color: -fx-speedment-lightblue;
+    -fx-background-color: -fx-speedment-blue;
     -fx-background-radius: 0px;
     -fx-font-size: 1.1em;
     -fx-font-weight: bold;
-}
-
-/*** Terms and Conditions ***/
-.titled-pane.termsContainer {
-    -fx-text-fill: black;
-}
-
-.titled-pane.termsContainer > .title {
-    -fx-background-color: transparent;
+    -fx-font-family: -fx-font-header;
 }
 
 /*** Border Panes ***/
@@ -64,12 +76,13 @@
 
 /*** Tree View ***/
 .tree-view {
+    -fx-font-family: -fx-font-text;
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
 }
 
 .tree-view .tree-cell:selected {
-    -fx-background-color: -fx-speedment-lightblue;
+    -fx-background-color: -fx-speedment-blue;
     -fx-background-radius: 0px;
     -fx-border-width: 0px;
     -fx-text-fill: white;
@@ -85,45 +98,24 @@
 
 .tree-view .gui-disabled,
 .tree-view .gui-disabled .tree-cell {
-    -fx-text-fill: -fx-speedment-darkgray;
+    -fx-text-fill: -fx-speedment-lightgray;
     -fx-font-weight: bold;
     -fx-font-style: italic;
-    /*-fx-strikethrough: true;*/
-}
-
-/*** List View ***/
-.list-view .list-cell{
-    -fx-font-size: 1.1em;
-}
-
-.list-view .list-cell:selected:focused{
-    -fx-text-fill: white;
-    -fx-border-color: -fx-speedment-blue;
-}
-
-/*** Text Flow ***/
-.text-flow{
-    -fx-font-family: 'monospace';
-    -fx-font-size: 1.1em;
-    -fx-padding: 8px;
 }
 
 /*** Label ***/
 .label {
+    -fx-font-family: -fx-font-text;
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
 }
 
-.label :pressed{
-    -fx-font-color: white;
-}
-
 /*** Headers ***/
 .header {
-    -fx-font-family: 'Advent Pro';
+    -fx-font-family: -fx-font-header;
     -fx-font-size: 2em;
     -fx-font-weight: bold;
-    -fx-text-fill: -fx-speedment-blue;
+    -fx-text-fill: -fx-speedment-darkgray;
 }
 
 /*** Text Fields and Areas ***/
@@ -132,10 +124,10 @@
     -fx-background-color: white;
     -fx-border-width: 2px;
     -fx-border-style: solid;
-    -fx-border-color: -fx-speedment-blue;
+    -fx-border-color: -fx-speedment-darkgray;
+    -fx-font-family: -fx-font-text;
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
-    -fx-opacity: 1.0;
 }
 
 .text-field:focused, 
@@ -145,15 +137,22 @@
     -fx-border-color: -fx-speedment-green;
 }
 
-.text-field:disabled,
-.text-area:disabled,
-.text-area:disabled > .content {
-    -fx-text-fill: #000;
-    -fx-opacity: 0.75;
+/*** List Views ***/
+.list-view {
+    -fx-background-color: white;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+    -fx-border-color: -fx-speedment-darkgray;
+    -fx-font-family: -fx-font-text;
+    -fx-font-size: 1.1em;
+    -fx-font-weight: normal;
 }
 
-.text-input > .scroll-pane:disabled { /* JavaFX bug workaround */
-    -fx-opacity: 1;
+.list-view:focused, 
+.list-view:hover,
+.list-view:focused, 
+.list-view:hover {
+    -fx-border-color: -fx-speedment-green;
 }
 
 /*** Buttons ***/
@@ -163,18 +162,20 @@
     -fx-border-width: 0px;
     -fx-text-fill: white;
     -fx-font-weight: bold;
-    -fx-font-family: 'Advent Pro';
-    -fx-font-size: 1.5em;
+    -fx-font-family: -fx-font-header;
+    -fx-font-size: 1.0em;
     -fx-cursor: hand;
     -fx-graphic-text-gap: 0.7em;
 }
 
 .button:hover {
-    -fx-background-color: -fx-speedment-lightgreen;
+    -fx-background-color: -fx-speedment-darkgray;
 }
 
-.button > .glyph-icon {
+.button .glyph-icon {
     -fx-fill: white;
+    -fx-text-fill: white;
+    -fx-font-size: 1.5em;
 }
 
 /*** Choice Box ***/
@@ -182,7 +183,8 @@
     -fx-background-color: white;
     -fx-border-width: 2px;
     -fx-border-style: solid;
-    -fx-border-color: -fx-speedment-blue;
+    -fx-border-color: -fx-speedment-darkgray;
+    -fx-font-family: -fx-font-text;
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
 }
@@ -197,15 +199,16 @@
     -fx-background-color: white;
     -fx-border-width: 2px;
     -fx-border-style: solid;
-    -fx-border-color: -fx-speedment-blue;
+    -fx-border-color: -fx-speedment-darkgray;
     -fx-text-fill: black;
+    -fx-font-family: -fx-font-text;
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
 }
 
 /*** Toolbars ***/
 .tool-bar {
-    -fx-background-color: -fx-speedment-lightgray;
+    -fx-background-color: -fx-speedment-gray;
 }
 
 /*** Checkboxes ***/
@@ -213,7 +216,7 @@
     -fx-background-color: white;
     -fx-border-width: 2px;
     -fx-border-style: solid;
-    -fx-border-color: -fx-speedment-blue;
+    -fx-border-color: -fx-speedment-darkgray;
 }
 
 .check-box *.box:hover,
@@ -228,8 +231,8 @@
 }
 
 .split-pane-divider {
-    -fx-border-color: -fx-speedment-lightgray;
-    -fx-background-color: -fx-speedment-lightgray;
+    -fx-border-color: -fx-speedment-gray;
+    -fx-background-color: -fx-speedment-gray;
 }
 
 .split-pane-divider:hover,
@@ -248,21 +251,21 @@
 .increment-button,
 .decrement-button {
     -fx-background-color: transparent;
-    -fx-border-color: -fx-speedment-gray;
+    -fx-border-color: -fx-speedment-lightgray;
     -fx-border-width: 0px;
 }
 
 .scroll-bar:horizontal .track,
 .scroll-bar:vertical .track {
     -fx-background-color: transparent;
-    -fx-border-color: -fx-speedment-lightgray;
+    -fx-border-color: -fx-speedment-gray;
     -fx-background-radius: 0px;
     -fx-border-width: 0px;
 }
 
 .scroll-bar:horizontal .thumb,
 .scroll-bar:vertical .thumb {
-    -fx-background-color: -fx-speedment-gray;
+    -fx-background-color: -fx-speedment-lightgray;
     -fx-background-insets: 0, 0, 0;
     -fx-background-radius: 0px;
     -fx-border-width: 0px;
@@ -271,8 +274,8 @@
 .scroll-bar:horizontal:hover .track,
 .scroll-bar:horizontal:pressed .track,
 .scroll-bar:vertical:hover .track,
-.scroll-bar:vertical:pressed .track {
-    -fx-background-color: -fx-speedment-lightgray;
+.scroll-bar:vertical:pressed .track{
+    -fx-background-color: -fx-speedment-gray;
 }
 
 .scroll-bar .thumb:hover,
@@ -289,7 +292,7 @@
 .menu-bar,
 .menu-bar .menu,
 .menu-bar .menu .menu-item {
-    -fx-background-color: -fx-speedment-lightgray;
+    -fx-background-color: -fx-speedment-gray;
     -fx-text-fill: black;
 }
 
@@ -301,6 +304,7 @@
     -fx-border-color: -fx-speedment-green;
     -fx-text-fill: black;
     -fx-padding: 0px;
+    -fx-font-family: -fx-font-text;
     -fx-font-size: 1.1em;
     -fx-font-weight: normal;
 }
@@ -327,46 +331,11 @@
 .menu-bar .menu .menu-item:active *,
 .menu-bar .menu .menu-item:focused *,
 .context-menu .menu-item:hover *,
-.context-menu .menu-item:focused *,
-.menu-bar .menu .check-menu-item:hover,
-.menu-bar .menu .check-menu-item:active,
-.menu-bar .menu .check-menu-item:focused,
-.context-menu .menu .check-menu-item:hover,
-.context-menu .menu .check-menu-item:active,
-.context-menu .menu .check-menu-item:focused {
-    -fx-background-color   : -fx-speedment-green;
-    -fx-fill               : white;
-    -fx-stroke             : white;
-    -fx-text-fill          : white;
-    -fx-focus-color        : white;
-    -fx-mark-color         : white;
-    -fx-focused-mark-color : white;
-}
-
-.menu-bar .menu .check-menu-item:hover .check-box *.box,
-.menu-bar .menu .check-menu-item:active .check-box *.box,
-.menu-bar .menu .check-menu-item:focused .check-box *.box,
-.context-menu .menu .check-menu-item:hover .check-box *.box,
-.context-menu .menu .check-menu-item:active .check-box *.box,
-.context-menu .menu .check-menu-item:focused .check-box *.box {
-    -fx-background-color : transparent;
-    -fx-fill               : white;
-    -fx-stroke             : white;
-    -fx-text-fill          : white;
-    -fx-focus-color        : white;
-    -fx-mark-color         : white;
-    -fx-focused-mark-color : white;
-    -fx-border-color       : white;
-}
-
-.menu-bar .menu .check-menu-item:checked > .left-container > .check,
-.context-menu .menu .check-menu-item:checked > .left-container > .check {
-    -fx-background-color : black;
-}
-
-.menu-bar .menu .check-menu-item:focused:checked > .left-container > .check,
-.context-menu .menu .check-menu-item:focused:checked > .left-container > .check {
-    -fx-background-color: white;
+.context-menu .menu-item:focused * {
+    -fx-background-color: -fx-speedment-green;
+    -fx-fill: white;
+    -fx-text-fill: white;
+    -fx-focus-color:white;
 }
 
 .menu-bar .menu:hover:show-mnemonics > .label > .mnemonic-underline,
@@ -415,13 +384,15 @@
 .header-panel > .label,
 .header-panel > .label > .text {
     -fx-text-fill: white;
-    -fx-font-family: 'Advent Pro';
+    -fx-font-family: -fx-font-text;
     -fx-font-size: 2em;
     -fx-font-weight: bold;
     -fx-fill: white;
 }
 
-.header-panel > .graphic-container > .glyph-icon {
+.header-panel > .graphic-container .glyph-icon {
+    -fx-font-size: 2em;
+    -fx-text-fill: white;
     -fx-fill: white;
 }
 
@@ -430,7 +401,7 @@
 }
 
 .warning .header-panel {
-    -fx-background-color: -fx-sencha-orange1;
+    -fx-background-color: -fx-speedment-orange;
 }
 
 .confirmation .header-panel {
@@ -442,17 +413,16 @@
 }
 
 .authentication .header-panel {
-    -fx-background-color: -fx-speedment-blue;
+    -fx-background-color: -fx-speedment-darkgray;
 }
 
 .progress .header-panel {
-    -fx-background-color: -fx-speedment-blue;
+    -fx-background-color: -fx-speedment-green;
 }
 
 /*** Output messages ***/
 .label.msg {
-    -fx-font-family: 'Consolas', 'Monospaced';
-    -fx-text-overrun: center-ellipsis;
+    -fx-font-family: 'Consolas', 'Monospace';
     -fx-font-size: 1.1em;
     -fx-text-fill: black;
 }
@@ -472,27 +442,68 @@
 /*** Notifications ***/
 .notification {
     -fx-border-width: 0px 0px 0px 8px;
-    -fx-background-color: #eee; 
+    -fx-background-color: #eee;
     -fx-padding: 16;
 }
 
-.notification.info { -fx-border-color: -fx-speedment-lightblue; }
-.notification.info .glyph-icon { -fx-fill: -fx-speedment-lightblue; } 
+.notification .glyph-icon {
+    -fx-font-size: 2.0em;
+    -fx-padding: 0em 0.8em 0em 0em;
+}
 
-.notification.success { -fx-border-color: -fx-speedment-lightgreen; }
-.notification.success .glyph-icon { -fx-fill: -fx-speedment-lightgreen; } 
+.notification.info {
+    -fx-border-color: -fx-speedment-lightblue;
+}
 
-.notification.warning { -fx-border-color: -fx-speedment-orange; }
-.notification.warning .glyph-icon { -fx-fill: -fx-speedment-orange; }
+.notification.info .glyph-icon {
+    -fx-fill: -fx-speedment-lightblue;
+    -fx-text-fill: -fx-speedment-lightblue;
+}
 
-.notification.error { -fx-border-color: -fx-speedment-red; }
-.notification.error .glyph-icon { -fx-fill: -fx-speedment-red; }
+.notification.success {
+    -fx-border-color: -fx-speedment-green;
+}
 
-.notification.confirmation { -fx-border-color: -fx-speedment-orange; }
-.notification.confirmation .glyph-icon { -fx-fill: -fx-speedment-orange; }
+.notification.success .glyph-icon {
+    -fx-fill: -fx-speedment-green;
+    -fx-text-fill: -fx-speedment-green;
+}
 
-.notification.authentication { -fx-border-color: -fx-speedment-blue; }
-.notification.authentication .glyph-icon { -fx-fill: -fx-speedment-blue; }
+.notification.warning {
+    -fx-border-color: -fx-speedment-lightorange;
+}
+
+.notification.warning .glyph-icon {
+    -fx-fill: -fx-speedment-lightorange;
+    -fx-text-fill: -fx-speedment-lightorange;
+}
+
+.notification.error {
+    -fx-border-color: -fx-speedment-lightred;
+}
+
+.notification.error .glyph-icon {
+    -fx-fill: -fx-speedment-lightred;
+    -fx-text-fill: -fx-speedment-lightred;
+}
+
+.notification.confirmation {
+    -fx-border-color: -fx-speedment-lightorange;
+}
+
+.notification.confirmation .glyph-icon {
+    -fx-fill: -fx-speedment-lightorange;
+    -fx-text-fill: -fx-speedment-lightorange;
+}
+
+.notification.authentication {
+    -fx-border-color: -fx-speedment-lightgray;
+}
+
+.notification.authentication .glyph-icon {
+    -fx-fill: -fx-speedment-lightgray;
+    -fx-text-fill: -fx-speedment-lightgray;
+}
 
 /*** Properties layout ***/
 .properties-layout {
@@ -511,12 +522,17 @@
 /*** Properties layout : right ***/
 .property-editor {
     -fx-spacing: 10px;
-    -fx-fill-width: true;    
+    -fx-fill-width: true;
     -fx-alignment: center-left;
-    -fx-wrap-text: true;  
+    -fx-wrap-text: true;
 }
 
 /*** Issues ***/
 #issues .button {
     -fx-padding: 6px 8px 6px 8px;
+}
+
+/*** FontAwesome Icons ***/
+.glyph-icon {
+    -fx-font-family: 'FontAwesome';
 }

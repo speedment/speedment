@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.field.internal;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.CharField;
@@ -38,11 +39,11 @@ import com.speedment.runtime.field.method.GetChar;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.typemapper.TypeMapper;
-import java.util.Set;
+import java.util.Collection;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
-import javax.annotation.Generated;
+import static com.speedment.runtime.field.internal.util.CollectionUtil.collectionToSet;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -53,7 +54,7 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements CharField<ENTITY, D>, CharForeignKeyField<ENTITY, D, FK_ENTITY> {
     
     private final ColumnIdentifier<ENTITY> identifier;
@@ -154,8 +155,8 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
     }
     
     @Override
-    public FieldPredicate<ENTITY> in(Set<Character> set) {
-        return new CharInPredicate<>(this, set);
+    public FieldPredicate<ENTITY> in(Collection<Character> values) {
+        return new CharInPredicate<>(this, collectionToSet(values));
     }
     
     @Override
@@ -179,7 +180,7 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
     }
     
     @Override
-    public Predicate<ENTITY> notIn(Set<Character> set) {
-        return new CharInPredicate<>(this, set).negate();
+    public Predicate<ENTITY> notIn(Collection<Character> values) {
+        return new CharInPredicate<>(this, collectionToSet(values)).negate();
     }
 }

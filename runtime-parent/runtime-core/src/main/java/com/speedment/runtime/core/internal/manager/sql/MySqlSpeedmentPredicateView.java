@@ -16,123 +16,220 @@
  */
 package com.speedment.runtime.core.internal.manager.sql;
 
+import com.speedment.common.injector.annotation.Config;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
-import static com.speedment.runtime.core.internal.manager.sql.AbstractFieldPredicateView.of;
-import static com.speedment.runtime.field.internal.predicate.PredicateUtil.getFirstOperandAsRaw;
-import static com.speedment.runtime.field.internal.predicate.PredicateUtil.getFirstOperandAsRawSet;
-import static com.speedment.runtime.field.internal.predicate.PredicateUtil.getInclusionOperand;
-import static com.speedment.runtime.field.internal.predicate.PredicateUtil.getSecondOperand;
 import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.predicate.Inclusion;
+
 import java.util.Set;
+
+import static com.speedment.runtime.field.util.PredicateOperandUtil.*;
 import static java.util.stream.Collectors.joining;
 
 /**
  *
+ * @author Per Minborg
  * @author Emil Forslund
  */
-@SuppressWarnings("rawtypes")
-public final class MySqlSpeedmentPredicateView extends AbstractFieldPredicateView implements FieldPredicateView {
+public final class MySqlSpeedmentPredicateView
+extends AbstractFieldPredicateView
+implements FieldPredicateView {
 
-    private enum Collation {
+    @Config(name = "db.mysql.binaryCollationName", value = "utf8_bin")
+    private String binaryCollationName;
+    @Config(name = "db.mysql.collationName", value = "utf8_general_ci")
+    private String collationName;
 
-        UTF8_BIN, UTF8_GENERAL_CI;
-
-        private final String collateCommand;
-
-        private Collation() {
-            this.collateCommand = "COLLATE " + name().toLowerCase();
-        }
-
-        String getCollateCommand() {
-            return collateCommand;
-        }
+    ////////////////////////////////////////////////////////////////////////////
+    //                         String Operation Helpers                       //
+    ////////////////////////////////////////////////////////////////////////////
+    
+    @Override
+    protected SqlPredicateFragment
+    equalIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
+        return of(compare(cn, " = ?", collationName), negated)
+            .add(getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment equalIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of(compare(cn, " = ?", Collation.UTF8_GENERAL_CI), negated).add(getFirstOperandAsRaw(model));
-    }
-
-    @Override
-    protected SqlPredicateFragment startsWithHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(" + cn + " LIKE BINARY CONCAT(? ,'%'))", negated).add(getFirstOperandAsRaw(model));
+    protected SqlPredicateFragment
+    startsWithHelper(String cn, FieldPredicate<?> model, boolean negated) {
+        return of("(" + cn + " LIKE BINARY CONCAT(? ,'%'))", negated)
+            .add(getFirstOperandAsRaw(model));
         // Todo: Use collation like this:
         // return of("(" + cn + " " + Collation.UTF8_BIN.getCollateCommand() + " LIKE CONCAT(? ,'%'))", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment startsWithIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(LOWER(" + cn + ") LIKE BINARY CONCAT(LOWER(?) ,'%'))", negated).add(getFirstOperandAsRaw(model));
+    protected SqlPredicateFragment
+    startsWithIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
+        return of("(LOWER(" + cn + ") LIKE BINARY CONCAT(LOWER(?) ,'%'))", negated)
+            .add(getFirstOperandAsRaw(model));
         // Todo: Use collation like this:
         // return of("(" + cn + " " + Collation.UTF8_GENERAL_CI.getCollateCommand() + " LIKE BINARY CONCAT(? ,'%'))", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment endsWithHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(" + cn + " LIKE BINARY CONCAT('%', ?))", negated).add(getFirstOperandAsRaw(model));
+    protected SqlPredicateFragment
+    endsWithHelper(String cn, FieldPredicate<?> model, boolean negated) {
+        return of("(" + cn + " LIKE BINARY CONCAT('%', ?))", negated)
+            .add(getFirstOperandAsRaw(model));
         // Todo: Use collation like this:
         // return of("(" + cn + " " + Collation.UTF8_BIN.getCollateCommand() + " LIKE CONCAT('%', ?))", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment endsWithIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(LOWER(" + cn + ") LIKE BINARY CONCAT('%', LOWER(?)))", negated).add(getFirstOperandAsRaw(model));
+    protected SqlPredicateFragment
+    endsWithIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
+        return of("(LOWER(" + cn + ") LIKE BINARY CONCAT('%', LOWER(?)))", negated)
+            .add(getFirstOperandAsRaw(model));
         // Todo: Use collation like this:
         // return of("(" + cn + " " + Collation.UTF8_GENERAL_CI.getCollateCommand() +" LIKE CONCAT('%', ?))", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment containsHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(" + cn + " LIKE BINARY CONCAT('%', ? ,'%'))", negated).add(getFirstOperandAsRaw(model));
+    protected SqlPredicateFragment
+    containsHelper(String cn, FieldPredicate<?> model, boolean negated) {
+        return of("(" + cn + " LIKE BINARY CONCAT('%', ? ,'%'))", negated)
+            .add(getFirstOperandAsRaw(model));
         // Todo: Use collation like this:
         // return of("(" + cn + " " + Collation.UTF8_BIN.getCollateCommand() +" LIKE CONCAT('%', ? ,'%'))", negated).add(getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment containsIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        return of("(LOWER(" + cn + ") LIKE BINARY CONCAT('%', LOWER(?) ,'%'))", negated).add(getFirstOperandAsRaw(model));
+    protected SqlPredicateFragment
+    containsIgnoreCaseHelper(String cn, FieldPredicate<?> model, boolean negated) {
+        return of("(LOWER(" + cn + ") LIKE BINARY CONCAT('%', LOWER(?) ,'%'))", negated)
+            .add(getFirstOperandAsRaw(model));
         // Todo: Use collation like this:
         //return of("(" + cn + " "+Collation.UTF8_GENERAL_CI.getCollateCommand()+" LIKE CONCAT('%', ? ,'%'))", negated).add(getFirstOperandAsRaw(model));        
     }
 
+    ////////////////////////////////////////////////////////////////////////////
+    //                    Check for String Type in Operators                  //
+    ////////////////////////////////////////////////////////////////////////////
+
     @Override
-    protected SqlPredicateFragment equalString(String cn, FieldPredicate<?> model) {
-        return of(compare(cn, " = ?", Collation.UTF8_BIN)).add(getFirstOperandAsRaw(model));
+    protected SqlPredicateFragment
+    equal(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        return equalHelper(cn, dbType, getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment notEqualString(String cn, FieldPredicate<?> model) {
-        return of("(NOT " + compare(cn, " = ?", Collation.UTF8_BIN) + ")").add(getFirstOperandAsRaw(model));
+    protected SqlPredicateFragment
+    notEqual(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        return notEqualHelper(cn, dbType, getFirstOperandAsRaw(model));
     }
 
     @Override
-    protected SqlPredicateFragment inString(String cn, FieldPredicate<?> model) {
-        return inStringHelper(cn, model, false);
+    protected SqlPredicateFragment
+    in(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) { // Use collation for string types
+            return inStringHelper(cn, model, false);
+        } else {
+            return super.in(cn, dbType, model);
+        }
     }
 
     @Override
-    protected SqlPredicateFragment notInString(String cn, FieldPredicate<?> model) {
-        return inStringHelper(cn, model, true);
+    protected SqlPredicateFragment
+    notIn(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) { // Use collation for string types
+            return inStringHelper(cn, model, true);
+        } else {
+            return super.notIn(cn, dbType, model);
+        }
     }
 
-    private SqlPredicateFragment inStringHelper(String cn, FieldPredicate<?> model, boolean negated) {
+    @Override
+    protected SqlPredicateFragment
+    between(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) { // Use collation for string types
+            return betweenStringHelper(cn, model, false);
+        } else {
+            return super.between(cn, dbType, model);
+        }
+    }
+
+    @Override
+    protected SqlPredicateFragment
+    notBetween(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) { // Use collation for string types
+            return betweenStringHelper(cn, model, true);
+        } else {
+            return super.notBetween(cn, dbType, model);
+        }
+    }
+
+    @Override
+    protected SqlPredicateFragment
+    lessOrEqual(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) { // Use collation for string types
+            return of(lessOrEqualString(cn))
+                .add(getFirstOperandAsRaw(model));
+        } else {
+            return super.lessOrEqual(cn, dbType, model);
+        }
+    }
+
+    @Override
+    protected SqlPredicateFragment
+    lessThan(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) { // Use collation for string types
+            return of(lessThanString(cn))
+                .add(getFirstOperandAsRaw(model));
+        } else {
+            return super.lessThan(cn, dbType, model);
+        }
+    }
+
+    @Override
+    protected SqlPredicateFragment
+    greaterOrEqual(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) { // Use collation for string types
+            return of(greaterOrEqualString(cn))
+                .add(getFirstOperandAsRaw(model));
+        } else {
+            return super.greaterOrEqual(cn, dbType, model);
+        }
+    }
+
+    @Override
+    protected SqlPredicateFragment
+    greaterThan(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) { // Use collation for string types
+            return of(greaterThanString(cn))
+                .add(getFirstOperandAsRaw(model));
+        } else {
+            return super.greaterThan(cn, dbType, model);
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                          Private Helper Methods                        //
+    ////////////////////////////////////////////////////////////////////////////
+
+    private SqlPredicateFragment
+    inStringHelper(String cn, FieldPredicate<?> model, boolean negated) {
         final Set<?> set = getFirstOperandAsRawSet(model);
-        return of("(" + cn + " " + Collation.UTF8_BIN.getCollateCommand() + " IN (" + set.stream().map($ -> "?").collect(joining(",")) + "))", negated).addAll(set);
+        if (set.isEmpty()) {
+            return negated ? alwaysTrue() : alwaysFalse();
+        } else if (set.size() == 1) {
+            final Object arg = set.iterator().next();
+            return negated
+                ? notEqualHelper(cn, String.class, arg)
+                : equalHelper(cn, String.class, arg);
+        }
+
+        return of("(" + cn + " IN (" +
+            set.stream().map($ -> "?").collect(joining(",")) +
+            " COLLATE "+ binaryCollationName +"))", negated
+        ).addAll(set);
     }
 
-    @Override
-    protected SqlPredicateFragment betweenString(String cn, FieldPredicate<?> model) {
-        return betweenStringHelper(cn, model, false);
-    }
-
-    @Override
-    protected SqlPredicateFragment notBetweenString(String cn, FieldPredicate<?> model) {
-        return betweenStringHelper(cn, model, true);
-    }
-
-    private SqlPredicateFragment betweenStringHelper(String cn, FieldPredicate<?> model, boolean negated) {
+    private SqlPredicateFragment
+    betweenStringHelper(String cn, FieldPredicate<?> model, boolean negated) {
         final Inclusion inclusion = getInclusionOperand(model);
         switch (inclusion) {
             case START_EXCLUSIVE_END_EXCLUSIVE: {
@@ -164,52 +261,43 @@ public final class MySqlSpeedmentPredicateView extends AbstractFieldPredicateVie
         throw new IllegalArgumentException("Unknown Inclusion:" + inclusion);
     }
 
-    @Override
-    protected SqlPredicateFragment lessOrEqualString(String cn, FieldPredicate<?> model) {
-        return of(lessOrEqualString(cn)).add(getFirstOperandAsRaw(model));
+    private SqlPredicateFragment
+    equalHelper(String cn, Class<?> dbType, Object argument) {
+        if (dbType.equals(String.class)) { // Use collation for string types
+            return of(compare(cn, " = ?", binaryCollationName))
+                .add(argument);
+        } else {
+            return of("(" + cn + " = ?)").add(argument);
+        }
     }
 
-    @Override
-    protected SqlPredicateFragment lessThanString(String cn, FieldPredicate<?> model) {
-        return of(lessThanString(cn)).add(getFirstOperandAsRaw(model));
-    }
-
-    @Override
-    protected SqlPredicateFragment greaterOrEqualString(String cn, FieldPredicate<?> model) {
-        return of(greaterOrEqualString(cn)).add(getFirstOperandAsRaw(model));
-    }
-
-    @Override
-    protected SqlPredicateFragment greaterThanString(String cn, FieldPredicate<?> model) {
-        return of(greaterThanString(cn)).add(getFirstOperandAsRaw(model));
+    private SqlPredicateFragment
+    notEqualHelper(String cn, Class<?> dbType, Object argument) {
+        if (dbType.equals(String.class)) { // Use collation for string types
+            return of("(NOT " + compare(cn, " = ?", binaryCollationName) + ")")
+                .add(argument);
+        } else {
+            return of("(NOT (" + cn + " = ?))").add(argument);
+        }
     }
 
     private String lessOrEqualString(String cn) {
-        return compare(cn, "<= ?", Collation.UTF8_BIN);
+        return compare(cn, "<= ?", binaryCollationName);
     }
 
     private String lessThanString(String cn) {
-        return compare(cn, "< ?", Collation.UTF8_BIN);
+        return compare(cn, "< ?", binaryCollationName);
     }
 
     private String greaterOrEqualString(String cn) {
-        return compare(cn, ">= ?", Collation.UTF8_BIN);
+        return compare(cn, ">= ?", binaryCollationName);
     }
 
     private String greaterThanString(String cn) {
-        return compare(cn, "> ?", Collation.UTF8_BIN);
+        return compare(cn, "> ?", binaryCollationName);
     }
 
-    private String compare(String cn, String operator, Collation collation) {
-        return new StringBuilder()
-            .append('(')
-            .append(cn)
-            .append(' ')
-            .append(operator)
-            .append(' ')
-            .append(collation.getCollateCommand())
-            .append(')')
-            .toString();
+    private String compare(String cn, String operator, String collation) {
+        return "(" + cn + ' ' + operator + " COLLATE " + collation + ')';
     }
-
 }

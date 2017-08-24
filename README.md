@@ -16,19 +16,25 @@ Java applications using **standard Java 8** streams without any
 specific query language or any new API. 
 
 ### One-liner
-Search for an old hare (of age greater than 5):
+Search for a long film (of length greater than 120 minutes):
 ```java
 // Searches are optimized in the background!
-Optional<Hare> oldHare = hares.stream()
-    .filter(Hare.AGE.greaterThan(5))
+Optional<Film> longFilm = films.stream()
+    .filter(Film.LENGTH.greaterThan(120))
     .findAny();
 ``` 
 
 Results in the following SQL query:
 ```sql
-SELECT id, name, color, age FROM hare 
-    WHERE (age > 5)
-    LIMIT 1;
+SELECT 
+    `film_id`,`title`,`description`,`release_year`,
+    `language_id`,`original_language_id`,`rental_duration`,`rental_rate`,
+    `length`,`replacement_cost`,`rating`,`special_features`,
+    `last_update` 
+FROM 
+     FROM `sakila`.`film
+WHERE
+    (`length` > 120)
 ```
 
 No need for manually writing SQL-queies any more. Remain in a pure Java world!
@@ -44,7 +50,7 @@ When we started the open-source project Speedment, the main objective was to rem
 | `HAVING`     | `filter()` (after collecting) |
 | `JOIN`       | `flatMap()`  |
 | `DISTINCT`   | `distinct()` |
-| `UNION`      | `concat().distinct()` |
+| `UNION`      | `concat(s0, s1).distinct()` |
 | `ORDER BY`   | `sorted()`   |
 | `OFFSET`     | `skip()`     |
 | `LIMIT`      | `limit()`    |
@@ -52,38 +58,54 @@ When we started the open-source project Speedment, the main objective was to rem
 | `COUNT`      | `count()`    |
 
 
-Documentation
--------------
-You can read the [API quick start examples here](https://github.com/speedment/speedment#examples)!
+## Documentation 
+You can read the online [Speedment User's Guide here](https://speedment.github.io/speedment-doc/introduction.html)!
 
 ## Tutorials
+
+The tutorials are divided into three sections. The basics are covered in the first section without any expected prior knowledge of Speedment. This builds a foundation of knowledge needed to fully benefit from the following tutorials.
+
+### Basics
 * [Tutorial 1 - Set up the IDE](https://github.com/speedment/speedment/wiki/Tutorial:-Set-up-the-IDE)
 * [Tutorial 2 - Get started with the UI](https://github.com/speedment/speedment/wiki/Tutorial:-Get-started-with-the-UI)
 * [Tutorial 3 - Hello Speedment](https://github.com/speedment/speedment/wiki/Tutorial:-Hello-Speedment)
-* [Tutorial 4 - Build a Social Network](https://github.com/speedment/speedment/wiki/Tutorial:-Build-a-Social-Network)
-* [Tutorial 5 - Log errors in a database](https://github.com/speedment/speedment/wiki/Tutorial:-Log-errors-in-a-database)
-* [Tutorial 6 - Use Speedment with Java EE](https://github.com/speedment/speedment/wiki/Tutorial:-Use-Speedment-with-Java-EE)
-* [Tutorial 7 - Writing your own extensions](https://github.com/speedment/speedment/wiki/Tutorial:-Writing-your-own-extensions)
-* [Tutorial 8 - Plug-in a Custom TypeMapper](https://github.com/speedment/speedment/wiki/Tutorial:-Plug-in-a-Custom-TypeMapper)
-* [Tutorial 9 - Create Event Sourced Systems](https://github.com/speedment/speedment/wiki/Tutorial:-Create-an-Event-Sourced-System)
+* [Tutorial 4 - A First Stream from Speedment](https://github.com/speedment/speedment/wiki/Tutorial:-A-First-Stream-from-Speedment)
+
+### Sample applications
+* [Tutorial 5 - Speedment Spring Boot Integration; REST assured - it is easy](https://github.com/speedment/speedment/wiki/Tutorial:-Speedment-Spring-Boot-Integration)
+* [Tutorial 6 - Speedment filters based on Json Web Tokens](https://github.com/speedment/speedment/wiki/Tutorial:-Speedment-Stream-Filters-Using-JWT-Data)
+* [Tutorial 7 - Build a Social Network](https://github.com/speedment/speedment/wiki/Tutorial:-Build-a-Social-Network)
+* [Tutorial 8 - Log errors in a database](https://github.com/speedment/speedment/wiki/Tutorial:-Log-errors-in-a-database)
+* [Tutorial 9 - Use Speedment with Java EE](https://github.com/speedment/speedment/wiki/Tutorial:-Use-Speedment-with-Java-EE)
+* [Tutorial 10 - Create Event Sourced Systems](https://github.com/speedment/speedment/wiki/Tutorial:-Create-an-Event-Sourced-System)
+
+### Extending Speedment
+* [Tutorial 11 - Writing your own extensions](https://github.com/speedment/speedment/wiki/Tutorial:-Writing-your-own-extensions)
+* [Tutorial 12 - Plug-in a Custom TypeMapper](https://github.com/speedment/speedment/wiki/Tutorial:-Plug-in-a-Custom-TypeMapper)
 
 Quick Start
 -----------
-Assuming you have Maven installed and a relational database available, you can try out Speedment in a minute by running the following from a command-line.
+Assuming you have Maven installed and a relational database available, you can try out Speedment in a minute either by setting up a POM file for your project or launching a Maven archetype template.
+
+#### Setup a POM file
+Use the Speedment [Initializer](https://www.speedment.com/initializer/) to get a POM template for your project.
+
+#### Launch Archtype Directly
+Running the following from a command-line:
 
 ###### MySQL
 ```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mysql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.5 && cd speedment-demo && mvn speedment:tool
+mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mysql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.11 && cd speedment-demo && mvn speedment:tool
 ```
 
 ###### PostgreSQL
 ```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-postgresql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.5 && cd speedment-demo && mvn speedment:tool
+mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-postgresql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.11 && cd speedment-demo && mvn speedment:tool
 ```
 
 ###### MariaDB
 ```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mariadb -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.5 && cd speedment-demo && mvn speedment:tool
+mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mariadb -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.11 && cd speedment-demo && mvn speedment:tool
 ```
 
 A graphical dialog will prompt for database connection details.
@@ -95,143 +117,181 @@ Now you have a demo project set up with generated application code in the direct
 
 Examples
 --------
-Here are a few examples of how you could use Speedment from your code assuming that you have an exemplary MySQL database with the tables "hare", "carrot", "human" and "friends" [See Database Schema here] (https://github.com/speedment/speedment/#database-schema):
+Here are a few examples of how you could use Speedment from your code assuming that you have an exemplary MySQL database called "Sakila" avaiable. Sakila can be downloaded directly form Oracle [here](https://dev.mysql.com/doc/index-other.html) 
 
 
-### Query with optimised Stream predicate short-circuit
-Search for an old hare (of age greater than 5):
+### Query with Optimised Stream Predicate Short-Circuit
+Search for a long film (of length greater than 120 minutes):
 ```java
 // Searches are optimized in the background!
-Optional<Hare> oldHare = hares.stream()
-    .filter(Hare.AGE.greaterThan(5))
+Optional<Film> longFilm = films.stream()
+    .filter(Film.LENGTH.greaterThan(120))
     .findAny();
 ``` 
 
 Results in the following SQL query:
 ```sql
-SELECT id, name, color, age FROM hare 
-    WHERE (age > 5)
-    LIMIT 1;
+SELECT 
+    `film_id`,`title`,`description`,`release_year`,
+    `language_id`,`original_language_id`,`rental_duration`,`rental_rate`,
+    `length`,`replacement_cost`,`rating`,`special_features`,
+    `last_update` 
+FROM 
+     FROM `sakila`.`film
+WHERE
+    (`length` > 120)
 ```
 
-### Join
-Construct a Map with all Hares and their corresponding Carrots
+### Query with Optimised Paging
+Show page 3 of PG-13 rated films sorted by length:
 ```java
-Map<Hare, List<Carrot>> join = carrots.stream()
+private static final long PAGE_SIZE = 50;
+
+// Even complex streams can be optimized!
+long page = 3;
+List<Film> stream = films.stream();
+    .filter(Film.RATING.equal("PG-13"));
+    .sorted(Film.LENGTH.comparator())
+    .skip(page * PAGE_SIZE)
+    .limit(PAGE_SIZE);
+    .collect(toList());
+``` 
+
+Results in the following SQL query:
+```sql
+SELECT 
+    `film_id`,`title`,`description`,`release_year`,
+    `language_id`,`original_language_id`,`rental_duration`,`rental_rate`,
+    `length`,`replacement_cost`,`rating`,`special_features`,
+    `last_update` 
+FROM 
+    `sakila`.`film` 
+WHERE 
+    (`rating`  = 'PG-13' COLLATE utf8_bin) 
+ORDER BY 
+    `sakila`.`film`.`length` ASC 
+LIMIT 50 OFFSET 150;
+```
+
+### Classification
+Create a Map with film ratings and the corresponding films:
+```
+Map<String, List<Film>> map = films.stream()
     .collect(
-        groupingBy(hares.finderBy(Carrot.OWNER)) // Applies the finderBy(Carrot.OWNER) classifier
-    );        
+        Collectors.groupingBy(
+            // Apply this classifier
+            Film.RATING.getter()
+        )
+    );
+```
+This will produce a Map like this:
+```
+Rating PG-13 maps to 223 films 
+Rating R     maps to 195 films 
+Rating NC-17 maps to 210 films 
+Rating G     maps to 178 films 
+Rating PG    maps to 194 films 
+```
+
+### Joins
+Construct a Map with all film languages and the corresponding films:
+```java
+Map<Language, List<Film>> languageFilmMap = films.stream()
+    .collect(
+        // Apply this foreign key classifier
+        groupingBy(languages.finderBy(Film.LANGUAGE_ID))
+    );
 ```
 
 ### Many-to-many
-Construct a Map with all Humans and their corresponding Friend Hares
+Construct a Map with all Actors and the corresponding Films they have acted in:
 ```java
-Map<Human, List<Hare>> humanFriends = friends.stream()
+Map<Actor, List<Film>> filmographies = filmActors.stream()
     .collect(
-        groupingBy(humans.finderBy(Friend.HUMAN), // Applies the Friend to Human classifier
+        groupingBy(actors.finderBy(FilmActor.ACTOR_ID), // Applies the FilmActor to ACTOR classifier
             mapping(
-                hares.finderBy(Friend.HARE),      // Applies the Friend to Hare finder
-                toList()                          // Use a List collector for downstream aggregation.
+                films.finderBy(FilmActor.FILM_ID), // Applies the FilmActor to Film finder
+                toList()                           // Use a List collector for downstream aggregation.
             )
         )
-    );        
+    );
 ```
+Note: FilmActor is an entity with foreign keys to both the Film and the Actor table.
 
-### Entities are linked
+### Entities are Linked
 No need for complicated joins!
 ```java
-// Find the owner of the orange carrot
-Optional<Hare> hare = carrots.stream()
-    .filter(Carrot.NAME.equal("Orange"))
-    .map(hares.finderBy(Carrot.OWNER))
+// Find any film where english is spoken
+Optional<Film> anyFilmInEnglish = languages.stream()
+    .flatMap(films.finderBackwardsBy(Film.LANGUAGE_ID))
     .findAny();
 
-// Find one carrot owned by Harry
-Optional<Carrot> carrot = hares.stream()
-    .filter(Hare.NAME.equal("Harry"))
-    .flatMap(carrots.finderBackwardsBy(Carrot.OWNER)) // Carrot is a foreign key table.
+// Find the language of the film with id 42
+Optional<Language> languageOfFilmWithId42 = films.stream()
+    .filter(Film.FILM_ID.equal(42))
+    .map(languages.finderBy(Film.LANGUAGE_ID))
     .findAny();
 ```
 
-### Easy initialization
-The `HareApplication`, `HareApplicationBuilder` and `HareManager` classes are generated automatically from the database.
+### Easy Initialization
+The `SakilaApplication`, `SakilaApplicationBuilder` and `FilmManager` classes are generated automatically from the database.
 ```java
-final HareApplication app = new HareApplicationBuilder()
+final SakilaApplication app = new SakilaApplicationBuilder()
     .withPassword("myPwd729")
     .build();
     
-final HareManager   hares   = app.getOrThrow(HareManager.class);
-final CarrotManager carrots = app.getOrThrow(CarrotManager.class);
-final HumanManager  humans  = app.getOrThrow(HumanManager.class);
-final FriendManager friends = app.getOrThrow(FriendManager.class);
+final FilmManager      films      = app.getOrThrow(FilmManager.class);
+final LanguageManager  languages  = app.getOrThrow(CarrotManager.class);
+final ActorManager     actors     = app.getOrThrow(ActorManager.class);
+final FilmActorManager filmActors = app.getOrThrow(FilmActorManager.class);
 ```
 
-### Easy persistence
+### Easy Persistence
 Entities can easily be persisted in a database.
 ```java
-Hare newHare = new HareImpl();  // Creates a new empty Hare
-newHare.setName("Harry");
-newHare.setColor("Gray");
-newHare.setAge(3);
+Film newFilm = new FilmImpl();  // Creates a new empty Film
+newFilm.setTitle("Police Academy 13");
+newFilm.setRating("G");
+newFilm.setLength(123);
+...
 
 // Auto-Increment-fields have been set by the database
-Hare persistedHare = hares.persist(newHare); 
+Film persistedFilm = films.persist(newFilm); 
 ```
 
 ### Update
 ```java
-hares.stream()
-    .filter(Hare.ID.equal(42))  // Filters out all Hares with ID = 42 (just one)
-    .map(Hare.AGE.setTo(10))    // Applies a setter that sets the age to 10
-    .forEach(hares.updater());  // Applies the updater function
+films.stream()
+    .filter(Film.ID.equal(42))   // Filters out all Films with ID = 42 (just one)
+    .map(Film.LENGTH.setTo(143)) // Applies a setter that sets the length to 143
+    .forEach(films.updater());   // Applies the updater function
 ```
 or another example
 ```java
-hares.stream()
-    .filter(Hare.ID.between(48, 102))   // Filters out all Hares with ID between 48 and 102
-    .map(h -> h.setAge(h.getAge() + 1)) // Applies a lambda that increases their age by one
-    .forEach(hares.updater());          // Applies the updater function to the selected hares
+films.stream()
+    .filter(Film.ID.between(48, 102))   // Filters out all Films with ID between 48 and 102
+    .map(f -> f.setRentalDuration(f.getRentalDuration() + 1)) // Applies a lambda that increases their rental duration by one
+    .forEach(films.updater());          // Applies the updater function to the selected films
 ```
 
 ### Remove
 ```java
-hares.stream()
-    .filter(Hare.ID.equal(71))  // Filters out all Hares with ID = 71 (just one)
-    .forEach(hares.remover());  // Applies the remover function
+films.stream()
+    .filter(Film.ID.equal(71))  // Filters out all Films with ID = 71 (just one)
+    .forEach(films.remover());  // Applies the remover function
 ```
 
 
 ### Full Transparency
 By appending a logger to the builder, you can follow exactly what happens behind the scenes.
 ```java
-HareApplication app = new HareApplicationBuilder()
+SakilaApplication app = new SakilaApplicationBuilder()
     .withPassword("myPwd729")
     .withLogging(ApplicationBuilder.LogType.STREAM)
     .withLogging(ApplicationBuilder.LogType.PERSIST)
     .withLogging(ApplicationBuilder.LogType.UPDATE)
     .withLogging(ApplicationBuilder.LogType.REMOVE)
     .build();
-```
-
-### Convert to JSON using a standard Plugin
-Using the JSON Stream Plugin, you can easily convert a stream into JSON:
-```java
-// List all hares as a complex JSON object where the ID and AGE
-// is ommitted and a new field 'carrots' list the id's of all
-// carrots associated by a particular hare.
-JsonComponent json = app.getOrThrow(JsonComponent.class);
-String json = hares.stream()
-    .collect(json.toJson(
-        json.allOf(hares)
-            .remove(Hare.ID)
-            .remove(Hare.AGE)
-            .putStreamer(
-                "carrots",                             // Declare a new attribute
-                hares.finderBackwardsBy(Carrot.OWNER), // How it is calculated
-                json.noneOf(carrots)                   // How it is formatted
-                    .put(Carrot.ID)
-            )
-    ));
 ```
 
 ### Integration with Spring Boot
@@ -244,8 +304,8 @@ public class AppConfig {
     private @Value("${dbms.schema}") String schema;
 
     @Bean
-    public SalesinfoApplication getSalesinfoApplication() {
-        return new SalesinfoApplicationBuilder()
+    public SakilaApplication getSakilaApplication() {
+        return new SakilaApplicationBuilder()
             .withUsername(username)
             .withPassword(password)
             .withSchema(schema)
@@ -254,59 +314,15 @@ public class AppConfig {
 
     // Individual managers
     @Bean
-    public SalespersonManager getSalespersonManager(SalesinfoApplication app) {
-        return app.getOrThrow(SalespersonManager.class);
+    public FilmManager getFilmManager(SakilaApplication app) {
+        return app.getOrThrow(FilmManager.class);
     }
 }
 ```
 
 So when we need to use a manager in a SpringMVC Controller, we can now simply autowire it:
 ```java
-    private @Autowired SalespersonManager salespeople;
-```
-
-### Database Schema
-The following database tables were used for the examples above.
-
-```sql
-CREATE TABLE `hares`.`hare` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `color` varchar(45) NOT NULL,
-  `age` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=100;
-
-CREATE TABLE IF NOT EXISTS `hares`.`carrot` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  `owner` int(11) NOT NULL,
-  `rival` int(11),
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=100;
-
-CREATE TABLE IF NOT EXISTS `hares`.`human` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=100;
-
-CREATE TABLE `hares`.`friend` (
-  `hare` int(11) NOT NULL,
-  `human` int(11) NOT NULL,
-  PRIMARY KEY (`hare`, `human`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-ALTER TABLE `hares`.`carrot`
-  ADD CONSTRAINT `carrot_owner_to_hare_id` FOREIGN KEY (`owner`) REFERENCES `hare` (`id`);
-ALTER TABLE `hares`.`carrot`
-  ADD CONSTRAINT `carrot_rival_to_hare_id` FOREIGN KEY (`rival`) REFERENCES `hare` (`id`);
-
-ALTER TABLE `hares`.`friend`
-  ADD CONSTRAINT `friend_hare_to_hare_id` FOREIGN KEY (`hare`) REFERENCES `hare` (`id`);
-ALTER TABLE `hares`.`friend`
-  ADD CONSTRAINT `friend_human_to_human_id` FOREIGN KEY (`human`) REFERENCES `human` (`id`);
-
+    private @Autowired FilmManager films;
 ```
 
 
@@ -314,10 +330,10 @@ Features
 --------
 Here are some of the many features packed into the Speedment framework!
 
-### Database centric
+### Database Centric
 Speedment is using the database as the source-of-truth, both when it comes to the domain model and the actual data itself. Perfect if you are tired of configuring and debuging complex ORMs. After all, your data is more important than programming tools, is it not?
 
-### Code generation
+### Code Generation
 Speedment inspects your database and can automatically generate code that reflects the latest state of your database. Nice if you have changed the data structure (like columns or tables) in your database. Optionally, you can change the way code is generated [using an intuitive UI](https://github.com/speedment/speedment/wiki/Tutorial:-Get-started-with-the-UI) or programatically using your own code.
 
 ### Modular Design
@@ -360,7 +376,7 @@ If you do not want to use an archetype, for an example if you already have a pro
     <dependency>
         <groupId>mysql</groupId>
         <artifactId>mysql-connector-java</artifactId>
-        <version>5.1.40</version>
+        <version>5.1.42</version>
         <scope>runtime</scope>
     </dependency>
     
@@ -425,7 +441,7 @@ If you do not want to use an archetype, for an example if you already have a pro
     <dependency>
         <groupId>org.mariadb.jdbc</groupId>
         <artifactId>mariadb-java-client</artifactId>
-        <version>1.5.7</version>
+        <version>2.0.1</version>
         <scope>runtime</scope>
     </dependency>
     
@@ -459,7 +475,7 @@ Speedment is available under the [Apache 2 License](http://www.apache.org/licens
 #### Copyright
 
 Copyright (c) 2014-2017, Speedment, Inc. All Rights Reserved.
-Visit [www.speedment.org](http://www.speedment.org/) for more info.
+Visit [www.speedment.com](http://www.speedment.com/) for more info.
 
 [![Analytics](https://ga-beacon.appspot.com/UA-64937309-1/speedment/main)](https://github.com/igrigorik/ga-beacon)
 

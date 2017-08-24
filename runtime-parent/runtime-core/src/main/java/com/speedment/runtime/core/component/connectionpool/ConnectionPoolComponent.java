@@ -117,7 +117,11 @@ public interface ConnectionPoolComponent {
      *
      * @param size is the maximum number of connection this pool will retain
      * when connections are returned
+     *
+     * @deprecated This method will be removed in coming APIs. Use configuration
+     * parameters instead.
      */
+    @Deprecated
     void setMaxRetainSize(int size);
 
     /**
@@ -133,7 +137,11 @@ public interface ConnectionPoolComponent {
      * this age will be discarded.
      *
      * @param maxAge the maximum age for recyclable connections
+     *
+     * @deprecated This method will be removed in coming APIs. Use configuration
+     * parameters instead.
      */
+    @Deprecated
     void setMaxAge(long maxAge);
 
 }

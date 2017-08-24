@@ -35,8 +35,8 @@ import static java.util.Objects.requireNonNull;
  * @since   2.2.0
  */
 public final class ReferenceInPredicate<ENTITY, D, V extends Comparable<? super V>>
-        extends AbstractFieldPredicate<ENTITY, V, HasReferenceValue<ENTITY, D, V>>
-        implements Tuple1<Set<V>> {
+extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
+implements Tuple1<Set<V>> {
 
     private final Set<V> set;
 
@@ -48,5 +48,10 @@ public final class ReferenceInPredicate<ENTITY, D, V extends Comparable<? super 
     @Override
     public Set<V> get0() {
         return set;
+    }
+
+    @Override
+    public ReferenceNotInPredicate<ENTITY, D, V> negate() {
+        return new ReferenceNotInPredicate<>(getField(), set);
     }
 }

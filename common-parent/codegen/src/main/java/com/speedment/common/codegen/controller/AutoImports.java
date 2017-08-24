@@ -17,16 +17,20 @@
 package com.speedment.common.codegen.controller;
 
 import com.speedment.common.codegen.DependencyManager;
+import com.speedment.common.codegen.model.Enum;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.trait.*;
+import com.speedment.common.codegen.model.value.AnonymousValue;
 import com.speedment.common.codegen.util.Formatting;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * This control can be applied to a {@link File} to automatically add imports
@@ -94,9 +98,13 @@ public final class AutoImports implements Consumer<File> {
 		}
 		
 		if (HasAnnotationUsage.class.isInstance(model)) {
-			((HasAnnotationUsage<?>) model).getAnnotations().forEach(a -> 
-				addType(a.getType(), types)
-			);
+			((HasAnnotationUsage<?>) model).getAnnotations().forEach(a -> {
+				addType(a.getType(), types);
+				a.getValue().ifPresent(v -> findTypesIn(v, types));
+				a.getValues().stream()
+					.map(Map.Entry::getValue)
+					.forEach(v ->  findTypesIn(v, types));
+			});
 		}
 		
 		if (HasClasses.class.isInstance(model)) {
@@ -147,6 +155,28 @@ public final class AutoImports implements Consumer<File> {
 		
 		if (HasType.class.isInstance(model)) {
 			addType(((HasType<?>) model).getType(), types);
+		}
+
+		if (AnonymousValue.class.isInstance(model)) {
+			((AnonymousValue) model).getTypeParameters().forEach(e ->
+				addType(e, types)
+			);
+		}
+
+        if (HasValues.class.isInstance(model)) {
+            ((HasValues<?>) model).getValues().forEach(v ->
+                findTypesIn(v, types)
+            );
+        }
+
+		if (HasValue.class.isInstance(model)) {
+            ((HasValue<?>) model).getValue()
+                .ifPresent(val -> findTypesIn(val, types));
+        }
+
+        if (Enum.class.isInstance(model)) {
+			((Enum) model).getConstants()
+				.forEach(ec -> findTypesIn(ec, types));
 		}
 	}
 	

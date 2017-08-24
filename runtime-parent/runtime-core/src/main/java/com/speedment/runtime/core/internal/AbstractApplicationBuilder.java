@@ -19,6 +19,7 @@ package com.speedment.runtime.core.internal;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
+import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.exception.CyclicReferenceException;
 import static com.speedment.common.injector.execution.ExecutionBuilder.resolved;
 import static com.speedment.common.injector.execution.ExecutionBuilder.started;
@@ -48,6 +49,7 @@ import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.DatabaseUtil;
+import static java.lang.Boolean.TRUE;
 import java.sql.SQLException;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
@@ -105,15 +107,17 @@ public abstract class AbstractApplicationBuilder<
     }
 
     protected AbstractApplicationBuilder(InjectorBuilder injectorBuilder) {
-        this.injectorBuilder = requireNonNull(injectorBuilder);
-        this.skipCheckDatabaseConnectivity = false;
-        this.skipValidateRuntimeConfig     = false;
+        this.injectorBuilder                   = requireNonNull(injectorBuilder);
+        this.skipCheckDatabaseConnectivity     = false;
+        this.skipValidateRuntimeConfig         = false;
     }
 
     @Override
     public <C extends Document & HasEnabled> BUILDER with(
-            Class<C> type, String name, BiConsumer<Injector, C> consumer) {
-        
+        final Class<C> type,
+        final String name,
+        final BiConsumer<Injector, C> consumer
+    ) {
         requireNonNulls(type, name, consumer);
 
         injectorBuilder.before(resolved(ProjectComponent.class)
@@ -356,6 +360,12 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
+    public BUILDER withAllowStreamIteratorAndSpliterator() {
+        injectorBuilder.withParam("allowStreamIteratorAndSpliterator", TRUE.toString());
+        return self();
+    }
+    
+    @Override
     public final APP build() {
         final Injector inj;
 
@@ -364,7 +374,7 @@ public abstract class AbstractApplicationBuilder<
         } catch (final InstantiationException | CyclicReferenceException ex) {
             throw new SpeedmentException("Error in dependency injection.", ex);
         }
-
+        
         printWelcomeMessage(inj);
 
         if (!skipValidateRuntimeConfig) {

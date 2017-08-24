@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.config;
 
+import com.speedment.runtime.config.exception.SpeedmentConfigException;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.mutator.ProjectMutator;
 import com.speedment.runtime.config.trait.HasChildren;
@@ -50,14 +51,13 @@ public interface Project extends
         HasMainInterface,
         HasMutator<ProjectMutator<? extends Project>> {
 
-    String
-            COMPANY_NAME     = "companyName",
+    String  COMPANY_NAME     = "companyName",
             PACKAGE_LOCATION = "packageLocation",
             CONFIG_PATH      = "configPath",
-            DBMSES           = "dbmses";
+            DBMSES           = "dbmses",
+            APP_ID           = "appId";
     
-    String
-            DEFAULT_COMPANY_NAME     = "company",
+    String  DEFAULT_COMPANY_NAME     = "company",
             DEFAULT_PACKAGE_NAME     = "com.",
             DEFAULT_PACKAGE_LOCATION = "src/main/java/",
             DEFAULT_PROJECT_NAME     = Project.class.getSimpleName();
@@ -78,6 +78,21 @@ public interface Project extends
      */
     default String getPackageLocation() {
         return getAsString(PACKAGE_LOCATION).orElse(DEFAULT_PACKAGE_LOCATION);
+    }
+
+    /**
+     * Returns the unique id for this application. This is usually generated on
+     * application launch. The value should be formatted as a
+     * {@link java.util.UUID}.
+     *
+     * @return  the app id
+     */
+    default String getAppId() {
+        return getAsString(APP_ID).orElseThrow(
+            () -> new SpeedmentConfigException(
+                "All applications must have an 'appId' property."
+            )
+        );
     }
 
     /**

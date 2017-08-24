@@ -30,7 +30,8 @@ public final class ColumnUtil {
     
     public static boolean usesOptional(Column col) {
         return col.isNullable() 
-            && HasNullable.ImplementAs.OPTIONAL == col.getNullableImplementation();
+            && HasNullable.ImplementAs.OPTIONAL
+            == col.getNullableImplementation();
     }
     
     public static Optional<String> optionalGetterName(TypeMapperComponent typeMappers, Column column) {

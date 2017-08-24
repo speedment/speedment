@@ -26,7 +26,6 @@ import com.speedment.runtime.config.Document;
  * @author  Per Minborg
  * @since   2.3.0
  */
-
 public interface HasMainInterface extends Document {
 
     /**

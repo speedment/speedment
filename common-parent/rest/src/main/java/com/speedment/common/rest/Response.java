@@ -58,7 +58,11 @@ public final class Response {
     }
     
     public boolean success() {
-        return status == 200;
+        switch (status) {
+            case 200: case 201: case 202: case 203:
+            case 204: case 205: case 206: return true;
+            default: return false;
+        }
     }
     
     public Optional<Object> decodeJson() {

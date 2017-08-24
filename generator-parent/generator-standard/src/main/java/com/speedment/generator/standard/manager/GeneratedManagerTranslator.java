@@ -16,19 +16,21 @@
  */
 package com.speedment.generator.standard.manager;
 
-import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
-import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
-import com.speedment.common.codegen.model.*;
+import com.speedment.common.codegen.model.File;
+import com.speedment.common.codegen.model.Interface;
+import com.speedment.common.codegen.model.Method;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.core.manager.Manager;
-import java.util.Arrays;
-import java.util.stream.Collectors;
+
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.constant.DefaultType.classOf;
 
 /**
  *
  * @author Emil Forslund
+ * @since  2.3.0
  */
 public final class GeneratedManagerTranslator 
 extends AbstractEntityAndManagerTranslator<Interface> {
@@ -40,30 +42,14 @@ extends AbstractEntityAndManagerTranslator<Interface> {
     @Override
     protected Interface makeCodeGenModel(File file) {
         return newBuilder(file, getSupport().generatedManagerName())
-            .forEveryTable((intf, table) -> {
+            .forEveryTable((intf, table) ->
                 intf.public_()
                     .add(SimpleParameterizedType.create(Manager.class, getSupport().entityType()))
-                    .add(Method.of("getEntityClass", DefaultType.classOf(getSupport().entityType())).default_().add(OVERRIDE)
+                    .add(Method.of("getEntityClass", classOf(getSupport().entityType()))
+                        .default_().add(OVERRIDE)
                         .add("return " + getSupport().entityName() + ".class;")
-                    );
-            }).build();
-    }
-
-    protected Method generatePrimaryKeyFor(File file) {
-        final Method method = Method.of("primaryKeyFor", typeOfPK()).default_().add(OVERRIDE)
-            .add(Field.of("entity", getSupport().entityType()));
-
-        if (primaryKeyColumns().count() == 1) {
-            method.add("return entity.get" + getSupport().typeName(primaryKeyColumns().findAny().get().findColumn().get()) + "();");
-        } else {
-            file.add(Import.of(Arrays.class));
-            method.add(primaryKeyColumns()
-                .map(pkc -> "entity.get" + getSupport().typeName(pkc.findColumn().get()) + "()")
-                .collect(Collectors.joining(", ", "return Arrays.asList(", ");"))
-            );
-        }
-
-        return method;
+                    )
+            ).build();
     }
 
     @Override

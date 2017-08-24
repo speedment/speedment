@@ -16,11 +16,14 @@
  */
 package com.speedment.runtime.core.manager;
 
-import com.speedment.common.singletonstream.SingletonStream;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.field.Field;
+import com.speedment.runtime.field.method.BackwardFinder;
+import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.trait.HasFinder;
+import com.speedment.runtime.field.trait.HasNullableFinder;
+
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -33,9 +36,9 @@ import java.util.stream.Stream;
  *
  * @param <ENTITY> entity type for this Manager
  *
- * @author Per Minborg
- * @author Emil Forslund
- * @since 2.0.0
+ * @author  Per Minborg
+ * @author  Emil Forslund
+ * @since   2.0.0
  */
 public interface Manager<ENTITY> {
 
@@ -155,8 +158,11 @@ public interface Manager<ENTITY> {
      *
      *
      * @return a new stream over all entities in this table
+     *
      * @throws SpeedmentException if an error occurs during a Terminal Operation
-     * (e.g. an SqlException is thrown by the underlying database)
+     *                            (e.g. an SqlException is thrown by the
+     *                            underlying database)
+     *
      * @see java.util.stream
      * @see Stream
      */
@@ -179,11 +185,14 @@ public interface Manager<ENTITY> {
      * entity.
      *
      * @param entity to persist
-     * @return an entity reflecting the result of the persisted entity
+     * @return       an entity reflecting the result of the persisted entity
+     *
      * @throws SpeedmentException if the underlying database throws an exception
-     * (e.g. SQLException)
+     *                            (e.g. SQLException)
      */
-    ENTITY persist(ENTITY entity) throws SpeedmentException;
+    default ENTITY persist(ENTITY entity) throws SpeedmentException {
+        return persister().apply(entity);
+    }
 
     /**
      * Returns a {@link Persister} that when its
@@ -213,16 +222,18 @@ public interface Manager<ENTITY> {
      * Entities are uniquely identified by their primary key(s).
      *
      * @param entity to update
-     * @return an entity reflecting the result of the updated entity
+     * @return       an entity reflecting the result of the updated entity
+     *
      * @throws SpeedmentException if the underlying database throws an exception
-     * (e.g. SQLException)
+     *                            (e.g. SQLException)
      */
-    ENTITY update(ENTITY entity) throws SpeedmentException;
+    default ENTITY update(ENTITY entity) throws SpeedmentException {
+        return updater().apply(entity);
+    }
 
     /**
-     * Returns an {@link Updater} that when its
-     * {@link Persister#apply(java.lang.Object) } method is called, will produce
-     * the same result as {@link #update(java.lang.Object) }
+     * Returns an {@link Updater} that when its {@link Persister#apply(Object)}
+     * method is called, will produce the same result as {@link #update(Object)}
      *
      * @return an Updater
      */
@@ -236,16 +247,18 @@ public interface Manager<ENTITY> {
      * Entities are uniquely identified by their primary key(s).
      *
      * @param entity to remove
-     * @return the provided entity instance
+     * @return       the provided entity instance
+     *
      * @throws SpeedmentException if the underlying database throws an exception
-     * (e.g. SQLException)
+     *                            (e.g. SQLException)
      */
-    ENTITY remove(ENTITY entity) throws SpeedmentException;
+    default ENTITY remove(ENTITY entity) throws SpeedmentException {
+        return remover().apply(entity);
+    }
 
     /**
-     * Returns a {@link Remover} that when its
-     * {@link Persister#apply(java.lang.Object) } method is called, will produce
-     * the same result as {@link #remove(java.lang.Object) }
+     * Returns a {@link Remover} that when its {@link Persister#apply(Object)}
+     * method is called, will produce the same result as {@link #remove(Object)}
      *
      * @return a Remover
      */
@@ -253,16 +266,20 @@ public interface Manager<ENTITY> {
 
     /**
      * Returns a Function that, when it is applied, will produce an equivalent
-     * result as if {@link #finderByNullable(HasFinder)} was called.
+     * result as if {@link #finderByNullable(HasNullableFinder)} was called.
      *
      * @param <FK_ENTITY> the type of the foreign entity
+     *
      * @param fkField the foreign key field
-     * @return an Entity (if any) that matches the given a foreign key relation
-     * (foreign field and entity)
+     * @return        a function that returns an Entity (if any) that matches
+     *                the given a foreign key relation (foreign field and
+     *                entity)
      * 
-     * @see #finderByNullable(HasFinder)
+     * @see #finderByNullable(HasNullableFinder)
      */
-    default <FK_ENTITY> Function<FK_ENTITY, ENTITY> finderBy(HasFinder<FK_ENTITY, ENTITY> fkField) {
+    default <FK_ENTITY> FindFrom<FK_ENTITY, ENTITY> finderBy(
+            HasFinder<FK_ENTITY, ENTITY> fkField) {
+
         return fkField.finder(getTableIdentifier(), this::stream);
     }
 
@@ -274,28 +291,37 @@ public interface Manager<ENTITY> {
      * field is pointing to.
      *
      * @param <FK_ENTITY> the type of the foreign entity
-     * @param fkField the foreign key field
+     *
+     * @param fkField  the foreign key field
      * @param fkEntity the foreign key entity
-     * @return an Entity (if any) that matches the given a foreign key relation
-     * (foreign field and entity)
+     * @return         an Entity (if any) that matches the given a foreign key
+     *                 relation (foreign field and entity)
      */
-    default <FK_ENTITY> ENTITY findBy(HasFinder<FK_ENTITY, ENTITY> fkField, FK_ENTITY fkEntity) {
+    default <FK_ENTITY> ENTITY findBy(
+            HasFinder<FK_ENTITY, ENTITY> fkField,
+            FK_ENTITY fkEntity) {
+
         return finderBy(fkField).apply(fkEntity);
     }
 
     /**
      * Returns a Function that, when it is applied, will produce an equivalent
-     * result as if {@link #findByNullable(HasFinder, Object)} was called.
+     * result as if {@link #findByNullable(HasNullableFinder, Object)} was
+     * called.
      *
      * @param <FK_ENTITY> the type of the foreign entity
+     *
      * @param fkField the foreign key field
-     * @return an Entity (if any) that matches the given a foreign key relation
-     * (foreign field and entity)
+     * @return        a function that returns an Entity (if any) that matches
+     *                the given a foreign key relation (foreign field and
+     *                entity)
      * 
-     * @see #findByNullable(HasFinder, Object)
+     * @see #findByNullable(HasNullableFinder, Object)
      */
-    default <FK_ENTITY> Function<FK_ENTITY, Stream<ENTITY>> finderByNullable(HasFinder<FK_ENTITY, ENTITY> fkField) {
-        return fkEntity -> SingletonStream.ofNullable(finderBy(fkField).apply(fkEntity));
+    default <FK_ENTITY> Function<FK_ENTITY, Stream<ENTITY>> finderByNullable(
+            HasNullableFinder<FK_ENTITY, ENTITY> fkField) {
+
+        return fkField.nullableFinder(getTableIdentifier(), this::stream);
     }
 
     /**
@@ -308,12 +334,16 @@ public interface Manager<ENTITY> {
      * contain either zero or one element.
      *
      * @param <FK_ENTITY> the type of the foreign entity
-     * @param fkField the foreign key field
+     *
+     * @param fkField  the foreign key field
      * @param fkEntity the foreign key entity
-     * @return an Entity (if any) that matches the given a foreign key relation
-     * (foreign field and entity)
+     * @return         an Entity (if any) that matches the given a foreign key
+     *                 relation (foreign field and entity)
      */
-    default <FK_ENTITY> Stream<ENTITY> findByNullable(HasFinder<FK_ENTITY, ENTITY> fkField, FK_ENTITY fkEntity) {
+    default <FK_ENTITY> Stream<ENTITY> findByNullable(
+            HasNullableFinder<FK_ENTITY, ENTITY> fkField,
+            FK_ENTITY fkEntity) {
+
         return finderByNullable(fkField).apply(fkEntity);
     }
 
@@ -322,12 +352,16 @@ public interface Manager<ENTITY> {
      * result as if {@link #findBackwardsBy(HasFinder, Object)} was called.
      *
      * @param <FK_ENTITY> the type of the foreign entity
+     *
      * @param fkField the foreign key field
-     * @return an Entity (if any) that matches the given a foreign key relation
-     * (foreign field and entity)
+     * @return        an Entity (if any) that matches the given a foreign key
+     *                relation (foreign field and entity)
+     *
      * @see #findBackwardsBy(HasFinder, Object)
      */
-    default <FK_ENTITY> Function<FK_ENTITY, Stream<ENTITY>> finderBackwardsBy(HasFinder<ENTITY, FK_ENTITY> fkField) {
+    default <FK_ENTITY> BackwardFinder<FK_ENTITY, ENTITY> finderBackwardsBy(
+            HasFinder<ENTITY, FK_ENTITY> fkField) {
+
         return fkField.backwardFinder(getTableIdentifier(), this::stream);
     }
 
@@ -339,12 +373,16 @@ public interface Manager<ENTITY> {
      * the Carrots that points to the given hare using the Carrot.HARE column.
      *
      * @param <FK_ENTITY> the type of the foreign entity
-     * @param fkField the foreign key field
+     *
+     * @param fkField  the foreign key field
      * @param fkEntity the foreign key entity
-     * @return an Entity (if any) that matches the given a foreign key relation
-     * (foreign field and entity)
+     * @return         an Entity (if any) that matches the given a foreign key
+     *                 relation (foreign field and entity)
      */
-    default <FK_ENTITY> Stream<ENTITY> findBackwardsBy(HasFinder<ENTITY, FK_ENTITY> fkField, FK_ENTITY fkEntity) {
+    default <FK_ENTITY> Stream<ENTITY> findBackwardsBy(
+            HasFinder<ENTITY, FK_ENTITY> fkField,
+            FK_ENTITY fkEntity) {
+
         return finderBackwardsBy(fkField).apply(fkEntity);
     }
 

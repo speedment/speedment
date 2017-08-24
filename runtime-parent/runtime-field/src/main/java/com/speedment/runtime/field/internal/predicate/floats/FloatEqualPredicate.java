@@ -16,11 +16,11 @@
  */
 package com.speedment.runtime.field.internal.predicate.floats;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasFloatValue;
-import javax.annotation.Generated;
 
 /**
  * @param <ENTITY> entity type
@@ -29,8 +29,10 @@ import javax.annotation.Generated;
  * @author Emil Forslund
  * @since  3.0.0
  */
-@Generated(value = "Speedment")
-public final class FloatEqualPredicate<ENTITY, D> extends AbstractFieldPredicate<ENTITY, Float, HasFloatValue<ENTITY, D>> implements Tuple1<Float> {
+@GeneratedCode(value = "Speedment")
+public final class FloatEqualPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasFloatValue<ENTITY, D>> 
+implements Tuple1<Float> {
     
     private final float value;
     
@@ -42,5 +44,10 @@ public final class FloatEqualPredicate<ENTITY, D> extends AbstractFieldPredicate
     @Override
     public Float get0() {
         return value;
+    }
+    
+    @Override
+    public FloatNotEqualPredicate<ENTITY, D> negate() {
+        return new FloatNotEqualPredicate<>(getField(), value);
     }
 }

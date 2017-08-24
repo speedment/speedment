@@ -25,6 +25,7 @@ import com.speedment.runtime.core.ApplicationMetadata;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -50,13 +51,15 @@ public abstract class AbstractApplicationMetadata implements ApplicationMetadata
         return getMetadata().map(json -> DocumentTranscoder.load(json, this::fromJson)).orElseGet(() -> {
             final Map<String, Object> data = new ConcurrentHashMap<>();
             data.put(HasName.NAME, "Project");
+            data.put(Project.APP_ID, UUID.randomUUID().toString());
             return new ProjectImpl(data);
         });
     }
     
     private Map<String, Object> fromJson(String json) {
         @SuppressWarnings("unchecked")
-        final Map<String, Object> parsed = (Map<String, Object>) Json.fromJson(json);
+        final Map<String, Object> parsed =
+            (Map<String, Object>) Json.fromJson(json);
         return parsed;
     }
 }

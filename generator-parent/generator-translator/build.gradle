@@ -1,0 +1,11 @@
+group = 'com.speedment.generator'
+description = 'Speedment - Generator - Translator'
+dependencies {
+  compile project(':common-parent:codegen')
+  compile project(':common-parent:injector')
+  compile project(':common-parent:mapstream')
+  compile project(':runtime-parent:runtime-core')
+  compile project(':runtime-parent:runtime-config')
+  compile project(':runtime-parent:runtime-typemapper')
+  compile project(':common-parent:annotation')
+}

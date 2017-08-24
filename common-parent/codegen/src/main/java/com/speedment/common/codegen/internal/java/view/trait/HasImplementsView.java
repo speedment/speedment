@@ -19,8 +19,11 @@ package com.speedment.common.codegen.internal.java.view.trait;
 import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.trait.HasImplements;
+import com.speedment.common.codegen.model.trait.HasSupertype;
 
 import static com.speedment.common.codegen.internal.util.CollectorUtil.joinIfNotEmpty;
+import static com.speedment.common.codegen.util.Formatting.nl;
+import static com.speedment.common.codegen.util.Formatting.repeat;
 
 /**
  * A trait with the functionality to render models with the trait 
@@ -53,12 +56,25 @@ public interface HasImplementsView<M extends HasImplements<M>> extends
      * @return       the generated code
      */
     default String renderInterfaces(Generator gen, M model) {
-        return gen.onEach(model.getInterfaces()).collect(
-            joinIfNotEmpty(
-                ", ", 
-                extendsOrImplementsInterfaces(), 
-                " "
-            )
-        );
+        if ((model instanceof HasSupertype)
+        && ((HasSupertype<?>) model).getSupertype().isPresent()
+        && !model.getInterfaces().isEmpty()) {
+            final int spaces = extendsOrImplementsInterfaces().length() - 1;
+            return gen.onEach(model.getInterfaces()).collect(
+                joinIfNotEmpty(
+                    "," + nl() + repeat(" ", spaces),
+                    nl() + extendsOrImplementsInterfaces(),
+                    " "
+                )
+            );
+        } else {
+            return gen.onEach(model.getInterfaces()).collect(
+                joinIfNotEmpty(
+                    ", ",
+                    extendsOrImplementsInterfaces(),
+                    " "
+                )
+            );
+        }
     }
 }

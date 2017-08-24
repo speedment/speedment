@@ -17,63 +17,57 @@
 package com.speedment.plugins.json.internal;
 
 import com.speedment.plugins.json.JsonCollector;
-
 import java.util.*;
+import static java.util.Objects.requireNonNull;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
 
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collector.Characteristics.CONCURRENT;
-
 /**
  *
- * @author  Emil Forslund
- * @since   1.0.0
+ * @author Emil Forslund
+ * @param <ENTITY> type of the entity
+ * @since 1.0.0
  */
 public final class JsonCollectorImpl<ENTITY> implements JsonCollector<ENTITY> {
-    
-    public static <ENTITY> JsonCollector<ENTITY> collect(Function<ENTITY, String> converter, Function<List<String>, String> merger) {
-        return new JsonCollectorImpl<>(converter, merger);
-    }
-    
-    @Override
-    public Supplier<List<String>> supplier() {
-        return () -> Collections.synchronizedList(new ArrayList<>());
+
+    public static <ENTITY> JsonCollector<ENTITY> collect(Function<ENTITY, String> converter) {
+        return new JsonCollectorImpl<>(converter);
     }
 
     @Override
-    public BiConsumer<List<String>, ENTITY> accumulator() {
-        return (l, t) -> {
-            l.add(converter.apply(t));
-        };
+    public Supplier<StringJoiner> supplier() {
+        return () -> new StringJoiner(",", "[", "]");
     }
 
     @Override
-    public BinaryOperator<List<String>> combiner() {
-        return (l1, l2) -> {
-            l1.addAll(l2);
-            return l1;
-        };
+    public BiConsumer<StringJoiner, ENTITY> accumulator() {
+        return (sj, t) -> sj.add(converter.apply(t));
     }
 
     @Override
-    public Function<List<String>, String> finisher() {
-        return merger::apply;
+    public BinaryOperator<StringJoiner> combiner() {
+        return StringJoiner::merge;
     }
+
+    @Override
+    public Function<StringJoiner, String> finisher() {
+        return StringJoiner::toString;
+    }
+
+    private static final Set<Collector.Characteristics> CHARACTERISTICS
+        = Collections.unmodifiableSet(EnumSet.noneOf(Characteristics.class));
 
     @Override
     public Set<Collector.Characteristics> characteristics() {
-        return EnumSet.of(CONCURRENT);
+        return CHARACTERISTICS;
     }
-    
-    private JsonCollectorImpl(Function<ENTITY, String> converter, Function<List<String>, String> merger) {
+
+    private JsonCollectorImpl(Function<ENTITY, String> converter) {
         this.converter = requireNonNull(converter);
-        this.merger    = requireNonNull(merger);
     }
-    
+
     private final Function<ENTITY, String> converter;
-    private final Function<List<String>, String> merger;
 }

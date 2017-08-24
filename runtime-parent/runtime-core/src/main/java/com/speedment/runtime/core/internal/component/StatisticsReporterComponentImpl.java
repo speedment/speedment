@@ -16,70 +16,53 @@
  */
 package com.speedment.runtime.core.internal.component;
 
-import com.speedment.common.injector.State;
-import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.core.component.InfoComponent;
+import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.StatisticsReporterComponent;
 import com.speedment.runtime.core.internal.util.Statistics;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+
+import static com.speedment.runtime.core.internal.util.Statistics.Event.NODE_ALIVE;
+import static com.speedment.runtime.core.internal.util.Statistics.Event.NODE_STARTED;
+import static com.speedment.runtime.core.internal.util.Statistics.Event.NODE_STOPPED;
 
 /**
+ * Default implementation of the {@link StatisticsReporterComponent} component.
  *
  * @author Per Minborg
+ * @author Emil Forslund
+ * @since  3.0.8
  */
-public class StatisticsReporterComponentImpl implements StatisticsReporterComponent {
+public class StatisticsReporterComponentImpl
+implements StatisticsReporterComponent {
 
-    private static final Logger LOGGER = LoggerManager.getLogger(StatisticsReporterComponentImpl.class);
+    private static final Logger LOGGER =
+        LoggerManager.getLogger(StatisticsReporterComponentImpl.class);
 
-    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
-        final Thread t = new Thread(r);
-        t.setDaemon(true);
-        return t;
-    }); // Make the threads daemon to allow speedment applications to exit via main method completion Fix #322 
-    
-    private @Inject
-    InfoComponent infoComponent;
+    private @Inject InfoComponent info;
+    private @Inject ProjectComponent projects;
 
-    @ExecuteBefore(State.STARTED)
-    public void start() {
+    @Override
+    public void reportStarted() {
         debug("started");
-        scheduler.submit(this::reportStarted);
-        scheduler.scheduleAtFixedRate(this::alive, 1, 1, TimeUnit.HOURS);
+        Statistics.report(info, projects, NODE_STARTED);
     }
 
-    @ExecuteBefore(State.STOPPED)
-    public void stop() {
+    @Override
+    public void reportStopped() {
         debug("stopped");
-        scheduler.submit(this::reportStopped);
-        try {
-            scheduler.awaitTermination(2, TimeUnit.SECONDS);
-        } catch (InterruptedException ie) {
-
-        } finally {
-            scheduler.shutdownNow();
-        }
+        Statistics.report(info, projects, NODE_STOPPED);
     }
 
-    private void reportStarted() {
-        Statistics.onNodeStarted(infoComponent);
-    }
-
-    private void reportStopped() {
-        Statistics.onNodeStopped(infoComponent);
-    }
-
-    private void alive() {
+    @Override
+    public void alive() {
         debug("alive");
-        Statistics.onNodeAlive(infoComponent);
+        Statistics.report(info, projects, NODE_ALIVE);
     }
 
     private void debug(String action) {
         LOGGER.debug("Report node " + action);
     }
-
 }

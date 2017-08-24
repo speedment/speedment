@@ -17,7 +17,7 @@
 package com.speedment.generator.translator.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.trait.HasTypeMapper;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 import java.util.Optional;
@@ -74,7 +74,7 @@ public interface TypeMapperComponent {
      * @param column  the column to retrieve the type mapper for
      * @return        the mapper class
      */
-    TypeMapper<?, ?> get(Column column);
+    TypeMapper<?, ?> get(HasTypeMapper column);
     
     /**
      * Locates the specified type mapper in the store and returns the database

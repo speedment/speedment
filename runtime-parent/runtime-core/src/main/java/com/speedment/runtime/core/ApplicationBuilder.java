@@ -20,6 +20,7 @@ import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;
@@ -47,8 +48,7 @@ import java.util.function.Consumer;
  * @since 3.0.0
  */
 public interface ApplicationBuilder<
-        APP extends Speedment, 
-        BUILDER extends ApplicationBuilder<APP, BUILDER>> {
+        APP extends Speedment, BUILDER extends ApplicationBuilder<APP, BUILDER>> {
 
     /**
      * Configures a parameter for the identified dbms. The consumer will then be
@@ -552,6 +552,12 @@ public interface ApplicationBuilder<
      * {@link Inject} will be dependency injected. Methods annotated with
      * {@link ExecuteBefore} will also be executed as part of the application
      * configuration phase.
+     * <p>
+     * Note: If a component class is specifying the same {@link InjectKey } as
+     * an existing class previously added to this ApplicationBuilder, then the
+     * last class will be associated with that {@link InjectKey }. Thus, the 
+     * order of calls to {@link #withComponent(java.lang.Class) } and
+     * {@link #withBundle(java.lang.Class) } is significant.
      *
      * @param componentClass the implementation class
      * @return this instance
@@ -564,15 +570,14 @@ public interface ApplicationBuilder<
      * {@link Inject} will be dependency injected. Methods annotated with
      * {@link ExecuteBefore} will also be executed as part of the application
      * configuration phase.
-     * 
-     * @deprecated The parameter {@code key} is not forwarded to the dependency
-     *             injection framework, so this method has exactly the same
-     *             behaviour as {@link #withComponent(java.lang.Class)}, so it
-     *             is redundant.
      *
-     * @param key             the key to store it under
-     * @param componentClass  the implementation class
-     * @return                this instance
+     * @deprecated The parameter {@code key} is not forwarded to the dependency
+     * injection framework, so this method has exactly the same behavior as
+     * {@link #withComponent(java.lang.Class) }, so it is redundant.
+     *
+     * @param key the key to store it under
+     * @param componentClass the implementation class
+     * @return this instance
      */
     @Deprecated
     BUILDER withComponent(String key, Class<?> componentClass);
@@ -584,6 +589,12 @@ public interface ApplicationBuilder<
      * and fields annotated with {@link Inject} will be dependency injected.
      * Methods annotated with {@link ExecuteBefore} will also be executed as
      * part of the application configuration phase.
+     * <p>
+     * Note: If a class in the {@link InjectBundle } is specifying the same 
+     * {@link InjectKey } as an existing class previously added to this
+     * ApplicationBuilder, then the last class will be associated with that 
+     * {@link InjectKey }. Thus, the order of calls to this method is 
+     * significant.
      *
      * @param bundleClass to use when adding injectables
      * @return this instance
@@ -601,6 +612,26 @@ public interface ApplicationBuilder<
      * implementation
      */
     BUILDER withLogging(HasLogglerName namer);
+
+    /**
+     * Allows {@link java.util.stream.Stream#iterator() } and 
+     * {@link java.util.stream.Stream#spliterator() } terminating operations to
+     * be called on Speedment streams.
+     * <p>
+     * Note: if enabled, make sure to close the Stream or else database
+     * connections will be consumed.
+     * <p>
+     * {@code
+     *   try (Stream<User> userStream = users.stream()) {
+     *      Iterator<User> userIterator = userStream();
+     *      // Do something with the Iterator
+     *   }
+     *   // The stream is auto-closed and the connection (if any) is returned.
+     *}
+     * 
+     * @return this instance
+     */
+    BUILDER withAllowStreamIteratorAndSpliterator();
 
     /**
      * Builds this application. This is expected to be the last method called on
@@ -732,7 +763,11 @@ public interface ApplicationBuilder<
         /**
          * Logging related to connection handling.
          */
-        CONNECTION;
+        CONNECTION,
+        /**
+         * Logging related to stream optimization handling.
+         */
+        STREAM_OPTIMIZER;
 
         private final String loggerName;
 

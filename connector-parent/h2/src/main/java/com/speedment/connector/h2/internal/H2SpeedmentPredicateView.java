@@ -19,14 +19,12 @@ package com.speedment.connector.h2.internal;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
 import com.speedment.runtime.core.internal.manager.sql.AbstractFieldPredicateView;
-import static com.speedment.runtime.core.internal.manager.sql.AbstractFieldPredicateView.of;
-import static com.speedment.runtime.field.internal.predicate.PredicateUtil.getFirstOperandAsRaw;
-import static com.speedment.runtime.field.internal.predicate.PredicateUtil.getFirstOperandAsRawSet;
-import static com.speedment.runtime.field.internal.predicate.PredicateUtil.getInclusionOperand;
-import static com.speedment.runtime.field.internal.predicate.PredicateUtil.getSecondOperand;
 import com.speedment.runtime.field.predicate.FieldPredicate;
-import com.speedment.runtime.field.predicate.Inclusion;
+
 import java.util.Set;
+
+import static com.speedment.runtime.field.util.PredicateOperandUtil.getFirstOperandAsRaw;
+import static com.speedment.runtime.field.util.PredicateOperandUtil.getFirstOperandAsRawSet;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -72,77 +70,95 @@ public final class H2SpeedmentPredicateView extends AbstractFieldPredicateView i
     }
 
     @Override
-    protected SqlPredicateFragment equalString(String cn, FieldPredicate<?> model) {
-        return of("(BINARY " + cn + " = ?)").add(getFirstOperandAsRaw(model));
-    }
-
-    @Override
-    protected SqlPredicateFragment notEqualString(String cn, FieldPredicate<?> model) {
-        return of("(NOT (BINARY " + cn + " = ?))").add(getFirstOperandAsRaw(model));
-    }
-
-    @Override
-    protected SqlPredicateFragment inString(String cn, FieldPredicate<?> model) {
-        return inStringHelper(cn, model, false);
-    }
-
-    @Override
-    protected SqlPredicateFragment notInString(String cn, FieldPredicate<?> model) {
-        return inStringHelper(cn, model, true);
-    }
-
-    protected SqlPredicateFragment inStringHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        final Set<?> set = getFirstOperandAsRawSet(model);
-        return of("(BINARY " + cn + " IN (" + set.stream().map($ -> "?").collect(joining(",")) + "))", negated).addAll(set);
-    }
-
-    @Override
-    protected SqlPredicateFragment betweenString(String cn, FieldPredicate<?> model) {
-        return betweenStringHelper(cn, model, false);
-    }
-
-    @Override
-    protected SqlPredicateFragment notBetweenString(String cn, FieldPredicate<?> model) {
-        return betweenStringHelper(cn, model, true);
-    }
-
-    protected SqlPredicateFragment betweenStringHelper(String cn, FieldPredicate<?> model, boolean negated) {
-        final Inclusion inclusion = getInclusionOperand(model);
-        switch (inclusion) {
-            case START_EXCLUSIVE_END_EXCLUSIVE: {
-                return of("(" + cn + " > ? AND " + cn + " < ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
-            }
-            case START_INCLUSIVE_END_EXCLUSIVE: {
-                return of("(" + cn + " >= ? AND " + cn + " < ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
-            }
-            case START_EXCLUSIVE_END_INCLUSIVE: {
-                return of("(" + cn + " > ? AND " + cn + " <= ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
-            }
-            case START_INCLUSIVE_END_INCLUSIVE: {
-                return of("(" + cn + " >= ? AND " + cn + " <= ?)", negated).add(getFirstOperandAsRaw(model)).add(getSecondOperand(model));
-            }
+    protected SqlPredicateFragment equal(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) {
+            return of("(BINARY " + cn + " = ?)")
+                .add(getFirstOperandAsRaw(model));
+        } else {
+            return super.equal(cn, dbType, model);
         }
-        throw new IllegalArgumentException("Unknown Inclusion:" + inclusion);
     }
 
     @Override
-    protected SqlPredicateFragment lessOrEqualString(String cn, FieldPredicate<?> model) {
-        return of("(BINARY " + cn + " <= ?)").add(getFirstOperandAsRaw(model));
+    protected SqlPredicateFragment notEqual(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) {
+            return of("(BINARY " + cn + " <> ?)")
+                .add(getFirstOperandAsRaw(model));
+        } else {
+            return super.notEqual(cn, dbType, model);
+        }
     }
 
     @Override
-    protected SqlPredicateFragment lessThanString(String cn, FieldPredicate<?> model) {
-        return of("(BINARY " + cn + " < ?)").add(getFirstOperandAsRaw(model));
+    protected SqlPredicateFragment
+    in(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) {
+            return inStringHelper(cn, model, false);
+        } else {
+            return super.in(cn, dbType, model);
+        }
     }
 
     @Override
-    protected SqlPredicateFragment greaterOrEqualString(String cn, FieldPredicate<?> model) {
-        return of("(BINARY " + cn + " >= ?)").add(getFirstOperandAsRaw(model));
+    protected SqlPredicateFragment
+    notIn(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) {
+            return inStringHelper(cn, model, true);
+        } else {
+            return super.notIn(cn, dbType, model);
+        }
     }
 
     @Override
-    protected SqlPredicateFragment greaterThanString(String cn, FieldPredicate<?> model) {
-        return of("(BINARY " + cn + " > ?)").add(getFirstOperandAsRaw(model));
+    protected SqlPredicateFragment
+    lessOrEqual(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) {
+            return of("(BINARY " + cn + " <= ?)")
+                .add(getFirstOperandAsRaw(model));
+        } else {
+            return super.lessOrEqual(cn, dbType, model);
+        }
     }
 
+    @Override
+    protected SqlPredicateFragment
+    lessThan(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) {
+            return of("(BINARY " + cn + " < ?)")
+                .add(getFirstOperandAsRaw(model));
+        } else {
+            return super.lessThan(cn, dbType, model);
+        }
+    }
+
+    @Override
+    protected SqlPredicateFragment
+    greaterOrEqual(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) {
+            return of("(BINARY " + cn + " >= ?)")
+                .add(getFirstOperandAsRaw(model));
+        } else {
+            return super.greaterOrEqual(cn, dbType, model);
+        }
+    }
+
+    @Override
+    protected SqlPredicateFragment
+    greaterThan(String cn, Class<?> dbType, FieldPredicate<?> model) {
+        if (dbType.equals(String.class)) {
+            return of("(BINARY " + cn + " > ?)")
+                .add(getFirstOperandAsRaw(model));
+        } else {
+            return super.greaterThan(cn, dbType, model);
+        }
+    }
+
+    private SqlPredicateFragment
+    inStringHelper(String cn, FieldPredicate<?> model, boolean negated) {
+        final Set<?> set = getFirstOperandAsRawSet(model);
+        return of("(BINARY " + cn + " IN (" +
+            set.stream().map($ -> "?").collect(joining(",")) +
+            "))", negated
+        ).addAll(set);
+    }
 }

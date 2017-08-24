@@ -61,7 +61,8 @@ public final class DefaultApplicationMetadata implements ApplicationMetadata {
     
     private Map<String, Object> fromJson(String json) {
         @SuppressWarnings("unchecked")
-        final Map<String, Object> parsed = (Map<String, Object>) Json.fromJson(json);
+        final Map<String, Object> parsed =
+            (Map<String, Object>) Json.fromJson(json);
         return parsed;
     }
 }

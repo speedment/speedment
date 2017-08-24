@@ -16,26 +16,27 @@
  */
 package com.speedment.generator.standard.internal.util;
 
-import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.model.File;
 import com.speedment.common.codegen.model.Import;
 import com.speedment.common.codegen.model.Method;
-import static com.speedment.common.codegen.util.Formatting.*;
-import static com.speedment.generator.standard.manager.GeneratedManagerImplTranslator.ENTITY_CREATE_METHOD_NAME;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.exception.SpeedmentException;
+
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
-import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
+
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
+import static com.speedment.common.codegen.util.Formatting.*;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -44,7 +45,12 @@ import java.util.stream.Stream;
  */
 public final class GenerateMethodBodyUtil {
 
-    public static Method generateFields(TranslatorSupport<Table> support, File file, String methodName, Supplier<Stream<? extends Column>> columnsSupplier) {
+    public static Method generateFields(
+            TranslatorSupport<Table> support,
+            File file,
+            String methodName,
+            Supplier<Stream<? extends Column>> columnsSupplier) {
+
         return Method.of(methodName, 
                 DefaultType.stream(
                     SimpleParameterizedType.create(
@@ -57,35 +63,31 @@ public final class GenerateMethodBodyUtil {
             .add(generateFieldsBody(support, file, columnsSupplier));
     }
 
-    public static String[] generateFieldsBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+    public static String[] generateFieldsBody(
+            TranslatorSupport<Table> support,
+            File file,
+            Supplier<Stream<? extends Column>> columnsSupplier) {
+
         file.add(Import.of(Stream.class));
-        final List<String> rows = new LinkedList<>();
 
-        rows.add("return Stream.of(");
-        rows.add(indent(columnsSupplier.get()
-            .filter(HasEnabled::isEnabled)
-            .map(Column::getJavaName)
-            .map(support.namer()::javaStaticFieldName)
-            .map(field -> support.typeName() + "." + field)
-            .collect(joining("," + nl()))
-        ));
-        rows.add(");");
+        // If there are no matching columns:
+        if (columnsSupplier.get().noneMatch($ -> true)) {
+            return new String[] {"return Stream.empty();"};
+        } else {
+            final List<String> rows = new LinkedList<>();
 
-        return rows.toArray(new String[rows.size()]);
-    }
-    
-    public static Method generateNewEmptyEntity(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        return Method.of(ENTITY_CREATE_METHOD_NAME, support.entityType())
-            .public_().add(OVERRIDE)
-            .add(generateNewEmptyEntityBody(support, file, columnsSupplier));
+            rows.add("return Stream.of(");
+            rows.add(indent(columnsSupplier.get()
+                .filter(HasEnabled::isEnabled)
+                .map(Column::getJavaName)
+                .map(support.namer()::javaStaticFieldName)
+                .map(field -> support.typeName() + "." + field)
+                .collect(joining("," + nl()))
+            ));
+            rows.add(");");
 
-    }
-
-    public static String[] generateNewEmptyEntityBody(TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
-        file.add(Import.of(support.entityImplType()));
-        return new String[] {
-            "return new " + support.entityImplName() + "();"
-        };
+            return rows.toArray(new String[rows.size()]);
+        }
     }
     
     @FunctionalInterface
@@ -93,7 +95,11 @@ public final class GenerateMethodBodyUtil {
         String readFromResultSet(File file, Column c, AtomicInteger position);
     }
 
-    public static String[] generateApplyResultSetBody(ReadFromResultSet readFromResultSet, TranslatorSupport<Table> support, File file, Supplier<Stream<? extends Column>> columnsSupplier) {
+    public static String[] generateApplyResultSetBody(
+            ReadFromResultSet readFromResultSet,
+            TranslatorSupport<Table> support,
+            File file,
+            Supplier<Stream<? extends Column>> columnsSupplier) {
 
         file.add(Import.of(SQLException.class));
         
@@ -106,7 +112,10 @@ public final class GenerateMethodBodyUtil {
         columnsSupplier.get()
             .filter(HasEnabled::isEnabled)
             .forEachOrdered(c -> 
-                streamBuilder.add("entity.set" + support.namer().javaTypeName(c.getJavaName()) + "(\t " + readFromResultSet.readFromResultSet(file, c, position) + " \t);")
+                streamBuilder.add("entity.set" +
+                    support.namer().javaTypeName(c.getJavaName()) + "(\t " +
+                    readFromResultSet.readFromResultSet(file, c, position) +
+                    " \t);")
             );
 
         rows.add(

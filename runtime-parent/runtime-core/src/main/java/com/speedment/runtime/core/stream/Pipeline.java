@@ -19,6 +19,7 @@ package com.speedment.runtime.core.stream;
 import com.speedment.runtime.core.stream.action.Action;
 
 import java.util.NoSuchElementException;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.BaseStream;
 import java.util.stream.Stream;
@@ -64,6 +65,8 @@ public interface Pipeline extends Iterable<Action<?, ?>> {
     void add(int index, Action<?, ?> element);
 
     Action<?, ?> remove(int index);
+   
+    boolean removeIf(Predicate<? super Action<?, ?>> filter);
 
     boolean isEmpty();
 

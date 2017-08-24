@@ -22,6 +22,7 @@ import com.speedment.runtime.field.internal.StringForeignKeyFieldImpl;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.trait.HasFinder;
+import com.speedment.runtime.field.trait.HasNullableFinder;
 import com.speedment.runtime.typemapper.TypeMapper;
 
 /**
@@ -39,10 +40,9 @@ import com.speedment.runtime.typemapper.TypeMapper;
  * @see  StringField
  * @see  HasFinder
  */
-
 public interface StringForeignKeyField<ENTITY, D, FK_ENTITY> 
-extends StringField<ENTITY, D>, 
-        HasFinder<ENTITY, FK_ENTITY> {
+extends StringField<ENTITY, D>,
+        HasNullableFinder<ENTITY, FK_ENTITY> {
 
     /**
      * Creates a new {@link StringForeignKeyField} using the default 

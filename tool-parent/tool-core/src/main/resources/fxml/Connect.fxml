@@ -1,96 +1,177 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--
-
-
-    Copyright (c) 2006-2015, Speedment, Inc. All Rights Reserved.
-
-    Licensed under the Apache License, Version 2.0 (the "License"); You may not
-    use this file except in compliance with the License. You may obtain a copy of
-    the License at:
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-    License for the specific language governing permissions and limitations under
-    the License.
-
--->
-
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<HBox fx:id="container"
-      alignment="TOP_CENTER"
-      maxHeight="1.7976931348623157E308"
+
+<VBox spacing="16.0"
+      prefWidth="400.0"
+      prefHeight="400.0"
       maxWidth="1.7976931348623157E308"
-      spacing="6.0"
-      xmlns="http://javafx.com/javafx/8.0.40"
+      maxHeight="1.7976931348623157E308"
+      style="-fx-background-color: #f5f5f5;"
+      xmlns="http://javafx.com/javafx/8.0.65"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.speedment.tool.core.internal.controller.ConnectController">
     <children>
-        <StackPane fx:id="openContainer" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="320.0" style="-fx-background-color: #f5f5f5;" HBox.hgrow="ALWAYS">
+        <Label fx:id="rightTitle" alignment="CENTER"
+               maxWidth="1.7976931348623157E308" styleClass="header"
+               text="Connect to Database" textFill="#3f6291"/>
+
+        <GridPane fx:id="grid"
+                  hgap="8" vgap="0"
+                  maxWidth="1.7976931348623157E308"
+                  maxHeight="1.7976931348623157E308"
+                  minHeight="320.0"
+                  VBox.vgrow="ALWAYS">
+
+            <columnConstraints>
+                <ColumnConstraints hgrow="NEVER" minWidth="180.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="120.0"/>
+            </columnConstraints>
+
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>                   <!-- Dbms Type -->
+                <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>                   <!-- IP + Port -->
+                <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>                   <!-- Username -->
+                <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>                   <!-- Password -->
+                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" fx:id="dbmsRow"/>   <!-- Dbms Name -->
+                <RowConstraints minHeight="10.0" vgrow="SOMETIMES" fx:id="schemaRow"/> <!-- Schema Name -->
+                <RowConstraints minHeight="10.0" vgrow="ALWAYS" />                     <!-- Connection URL -->
+                <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>                   <!-- Connect Button -->
+            </rowConstraints>
+
             <children>
-                <Label fx:id="leftTitle" styleClass="header" text="Open Existing Project" textFill="#3e6293" StackPane.alignment="TOP_CENTER" />
-                <Button fx:id="buttonOpen" defaultButton="true" mnemonicParsing="false" text="Select JSON-file">
-                    <padding>
-                        <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
-                    </padding>
-                </Button>
-            </children>
-            <padding>
-                <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-            </padding>
-        </StackPane>
-        <VBox alignment="TOP_RIGHT" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="320.0" spacing="16.0" style="-fx-background-color: #f5f5f5;" HBox.hgrow="ALWAYS">
-            <children>
-                <Label fx:id="rightTitle" alignment="CENTER" maxWidth="1.7976931348623157E308" styleClass="header" text="Select Database" textFill="#3f6291" />
-                <ChoiceBox fx:id="fieldType" maxWidth="1.7976931348623157E308" prefWidth="150.0" />
-                <HBox spacing="8.0">
+                <!-- Database Type -->
+                <Label text="Database Type"
+                       GridPane.rowIndex="0"
+                       GridPane.columnIndex="0" />
+                <ChoiceBox fx:id="fieldType"
+                           prefWidth="150.0"
+                           maxWidth="1.7976931348623157E308"
+                           GridPane.rowIndex="0"
+                           GridPane.columnIndex="1">
+                    <GridPane.margin>
+                        <Insets bottom="8"/>
+                    </GridPane.margin>
+                </ChoiceBox>
+
+                <!-- IP-Address and Port -->
+                <Label text="Database Host" GridPane.rowIndex="1"/>
+                <HBox alignment="CENTER_LEFT" prefHeight="12.0"
+                      prefWidth="240.0" spacing="8.0" GridPane.columnIndex="1"
+                      GridPane.rowIndex="1" GridPane.valignment="CENTER">
                     <children>
-                        <TextField fx:id="fieldHost" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="248.0" promptText="Host" HBox.hgrow="ALWAYS">
+                        <TextField fx:id="fieldHost"
+                                   maxWidth="1.7976931348623157E308"
+                                   nodeOrientation="LEFT_TO_RIGHT"
+                                   prefHeight="25.0" prefWidth="248.0"
+                                   promptText="Host" HBox.hgrow="ALWAYS">
                             <tooltip>
-                                <Tooltip text="The database host." />
+                                <Tooltip text="The database host."/>
                             </tooltip>
                         </TextField>
                         <TextField fx:id="fieldPort" promptText="Port">
                             <tooltip>
-                                <Tooltip text="The database port." />
+                                <Tooltip text="The database port."/>
                             </tooltip>
                         </TextField>
                     </children>
+                    <GridPane.margin>
+                        <Insets bottom="8"/>
+                    </GridPane.margin>
                 </HBox>
-                <TextField fx:id="fieldUser" promptText="Username">
+
+                <!-- Username -->
+                <Label text="Username" GridPane.rowIndex="2"/>
+                <TextField fx:id="fieldUser" promptText="Username"
+                           GridPane.columnIndex="1" GridPane.rowIndex="2">
                     <tooltip>
-                        <Tooltip text="The database username." />
+                        <Tooltip text="The database username."/>
                     </tooltip>
+                    <GridPane.margin>
+                        <Insets bottom="8"/>
+                    </GridPane.margin>
                 </TextField>
-                <PasswordField fx:id="fieldPass" promptText="Password">
+
+                <!-- Password -->
+                <Label text="Password" GridPane.rowIndex="3"/>
+                <PasswordField fx:id="fieldPass" promptText="Password"
+                               GridPane.columnIndex="1" GridPane.rowIndex="3">
                     <tooltip>
-                        <Tooltip text="The database password." />
+                        <Tooltip text="The database password."/>
                     </tooltip>
+                    <GridPane.margin>
+                        <Insets bottom="8"/>
+                    </GridPane.margin>
                 </PasswordField>
-                <TextField fx:id="fieldName" promptText="Database name">
+
+                <!-- Database name -->
+                <Label text="Database Name" GridPane.rowIndex="4"/>
+                <TextField fx:id="fieldName" promptText="Database name"
+                           GridPane.columnIndex="1" GridPane.rowIndex="4">
                     <tooltip>
-                        <Tooltip text="The name of the database." />
+                        <Tooltip text="The name of the database."/>
                     </tooltip>
+                    <GridPane.margin>
+                        <Insets bottom="8"/>
+                    </GridPane.margin>
                 </TextField>
-                <TextField fx:id="fieldSchema" promptText="Schema name">
+
+                <!-- Schema name -->
+                <Label text="Schema Name" GridPane.rowIndex="5"/>
+                <TextField fx:id="fieldSchema" promptText="Schema name"
+                           GridPane.columnIndex="1" GridPane.rowIndex="5">
                     <tooltip>
-                        <Tooltip text="The database schema to generate code from." />
+                        <Tooltip text="The database schema to generate code from."/>
                     </tooltip>
+                    <GridPane.margin>
+                        <Insets bottom="8"/>
+                    </GridPane.margin>
                 </TextField>
-                <Button fx:id="buttonConnect" defaultButton="true" disable="true" mnemonicParsing="false" text="Connect">
+
+                <!-- Connection URL -->
+                <CheckBox fx:id="enableConnectionUrl" mnemonicParsing="false"
+                          text="Use Connection URL" GridPane.rowIndex="6"
+                          GridPane.valignment="TOP">
+                    <GridPane.margin>
+                        <Insets top="6.0"/>
+                    </GridPane.margin>
+                    <tooltip>
+                        <Tooltip text="If a custom connection URL should be specified or if it should be generated automatically."/>
+                    </tooltip>
+                </CheckBox>
+                <TextArea fx:id="areaConnectionUrl"
+                          prefWidth="240.0" prefRowCount="3"
+                          promptText="Connection URL"
+                          wrapText="true"
+                          GridPane.rowIndex="6"
+                          GridPane.columnIndex="1">
+                    <tooltip>
+                        <Tooltip text="Connection URL to use when connecting to the database."/>
+                    </tooltip>
+                    <GridPane.margin>
+                        <Insets bottom="8"/>
+                    </GridPane.margin>
+                </TextArea>
+
+                <!-- Connect Button -->
+                <Button fx:id="buttonConnect" defaultButton="true"
+                        disable="true" mnemonicParsing="false" text="Connect"
+                        GridPane.columnIndex="1" GridPane.halignment="RIGHT"
+                        GridPane.rowIndex="7">
                     <padding>
-                        <Insets bottom="8.0" left="16.0" right="16.0" top="8.0" />
+                        <Insets bottom="8.0" left="16.0" right="16.0"
+                                top="8.0"/>
                     </padding>
                 </Button>
             </children>
-            <padding>
-                <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-            </padding>
-        </VBox>
+            <VBox.margin>
+                <Insets/>
+            </VBox.margin>
+        </GridPane>
     </children>
-</HBox>
+    <padding>
+        <Insets bottom="16.0" left="16.0" right="16.0" top="16.0"/>
+    </padding>
+</VBox>

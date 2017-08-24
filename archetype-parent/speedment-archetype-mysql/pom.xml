@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.archetypes</groupId>
         <artifactId>archetypes</artifactId>
-        <version>3.0.6-SNAPSHOT</version>
+        <version>3.0.12</version>
     </parent>
     
     <artifactId>speedment-archetype-mysql</artifactId>
@@ -35,7 +35,7 @@
     <name>Speedment - Archetypes - MySQL</name>
     
     <properties>
-        <mysql.version>5.1.40</mysql.version>
+        <mysql.version>5.1.42</mysql.version>
     </properties>
                                                
     <build>

@@ -21,14 +21,13 @@ import com.speedment.common.codegen.model.File;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.runtime.config.Table;
 
-import java.lang.reflect.Type;
-
 /**
  *
  * @author Emil Forslund
  * @author Per-Åke Minborg
  */
-public final class ManagerImplTranslator extends AbstractEntityAndManagerTranslator<Class> {
+public final class ManagerImplTranslator
+extends AbstractEntityAndManagerTranslator<Class> {
 
     public ManagerImplTranslator(Table table) {
         super(table, Class::of);
@@ -37,11 +36,11 @@ public final class ManagerImplTranslator extends AbstractEntityAndManagerTransla
     @Override
     protected Class makeCodeGenModel(File file) {
         return newBuilder(file, getSupport().managerImplName())
-            .forEveryTable((clazz, table) -> {
+            .forEveryTable((clazz, table) ->
                 clazz.public_().final_()
                     .setSupertype(getSupport().generatedManagerImplType())
-                    .add(getSupport().managerType());
-            }).build();
+                    .add(getSupport().managerType())
+            ).build();
     }
     
     @Override
@@ -53,9 +52,5 @@ public final class ManagerImplTranslator extends AbstractEntityAndManagerTransla
     protected String getJavadocRepresentText() {
         return "The default implementation for the manager of every {@link " + 
             getSupport().entityType().getTypeName() + "} entity.";
-    }
-    
-    public Type getImplType() {
-        return getSupport().managerImplType();
     }
 }

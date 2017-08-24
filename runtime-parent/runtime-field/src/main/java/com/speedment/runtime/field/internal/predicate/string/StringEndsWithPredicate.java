@@ -16,25 +16,33 @@
  */
 package com.speedment.runtime.field.internal.predicate.string;
 
-
 import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasReferenceValue;
 
 /**
  *
- * @param <ENTITY>  the entity type
- * @param <D>       the database type
- * 
- * @author  Per Minborg
- * @since   2.2.0
+ * @param <ENTITY> the entity type
+ * @param <D> the database type
+ *
+ * @author Per Minborg
+ * @since 2.2.0
  */
-public final class StringEndsWithPredicate<ENTITY, D> extends AbstractStringPredicate<ENTITY, D> {
-    public StringEndsWithPredicate(HasReferenceValue<ENTITY, D, String> field, String str) {
+public final class StringEndsWithPredicate<ENTITY, D>
+extends AbstractStringPredicate<ENTITY, D> {
+
+    public StringEndsWithPredicate(
+            final HasReferenceValue<ENTITY, D, String> field,
+            final String str) {
+
         super(PredicateType.ENDS_WITH, field, str, entity -> {
             final String fieldValue = field.get(entity);
-            return fieldValue != null 
-                && str != null 
+            return fieldValue != null
                 && fieldValue.endsWith(str);
         });
+    }
+
+    @Override
+    public StringNotEndsWithPredicate<ENTITY, D> negate() {
+        return new StringNotEndsWithPredicate<>(getField(), get0());
     }
 }

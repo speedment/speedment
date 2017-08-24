@@ -19,7 +19,9 @@ package com.speedment.runtime.field.internal.comparator;
 import com.speedment.runtime.field.ComparableField;
 import com.speedment.runtime.field.comparator.FieldComparator;
 import com.speedment.runtime.field.comparator.NullOrder;
+
 import java.util.Objects;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -34,7 +36,8 @@ import static java.util.Objects.requireNonNull;
  * @since   2.2.0
  */
 public final class ReferenceFieldComparatorImpl
-    <ENTITY, D, V extends Comparable<? super V>> 
+    <ENTITY, D, V extends Comparable<? super V>>
+extends AbstractFieldComparator<ENTITY>
 implements ReferenceFieldComparator<ENTITY, D, V> {
 
     private final ComparableField<ENTITY, D, V> field;
@@ -42,17 +45,17 @@ implements ReferenceFieldComparator<ENTITY, D, V> {
     private final boolean reversed;
     
     public ReferenceFieldComparatorImpl(
-        final ComparableField<ENTITY, D, V> field, 
-        final NullOrder nullOrder
-    ) {
+            final ComparableField<ENTITY, D, V> field,
+            final NullOrder nullOrder) {
+
         this(field, nullOrder, false);
     }
 
-    public ReferenceFieldComparatorImpl(
-        final ComparableField<ENTITY, D, V> field, 
-        final NullOrder nullOrder,
-        final boolean reversed
-    ) {
+    ReferenceFieldComparatorImpl(
+            final ComparableField<ENTITY, D, V> field,
+            final NullOrder nullOrder,
+            final boolean reversed) {
+
         this.field     = requireNonNull(field);
         this.nullOrder = requireNonNull(nullOrder);
         this.reversed  = reversed;
@@ -74,11 +77,9 @@ implements ReferenceFieldComparator<ENTITY, D, V> {
     }
 
     @Override
-    public FieldComparator<ENTITY, V> reversed() {
+    public FieldComparator<ENTITY> reversed() {
         return new ReferenceFieldComparatorImpl<>(field, nullOrder, !reversed);
     }
-    
-    // TODO: Improve performance of chained comparators.
 
     @Override
     public int compare(ENTITY o1, ENTITY o2) {
@@ -114,8 +115,8 @@ implements ReferenceFieldComparator<ENTITY, D, V> {
         if (!(obj instanceof FieldComparator)) return false;
         
         @SuppressWarnings("unchecked")
-        final FieldComparator<ENTITY, V> casted =
-            (FieldComparator<ENTITY, V>) obj;
+        final FieldComparator<ENTITY> casted =
+            (FieldComparator<ENTITY>) obj;
         
         return reversed  == casted.isReversed()
             && nullOrder == casted.getNullOrder()

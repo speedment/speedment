@@ -16,13 +16,13 @@
  */
 package com.speedment.runtime.field;
 
+import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.DoubleForeignKeyFieldImpl;
 import com.speedment.runtime.field.method.DoubleGetter;
 import com.speedment.runtime.field.method.DoubleSetter;
 import com.speedment.runtime.field.trait.HasFinder;
 import com.speedment.runtime.typemapper.TypeMapper;
-import javax.annotation.Generated;
 
 /**
  * A field that represents a primitive {@code double} value that references
@@ -38,7 +38,7 @@ import javax.annotation.Generated;
  * @see ReferenceField
  * @see ComparableForeignKeyField
  */
-@Generated(value = "Speedment")
+@GeneratedCode(value = "Speedment")
 public interface DoubleForeignKeyField<ENTITY, D, FK_ENTITY> extends DoubleField<ENTITY, D>, HasFinder<ENTITY, FK_ENTITY> {
     
     /**

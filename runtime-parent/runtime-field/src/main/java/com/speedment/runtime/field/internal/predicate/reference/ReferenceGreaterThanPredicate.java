@@ -22,7 +22,6 @@ import com.speedment.runtime.field.trait.HasReferenceValue;
 
 import static com.speedment.runtime.field.predicate.PredicateType.GREATER_THAN;
 
-
 /**
  *
  * @param <ENTITY>  the entity type
@@ -33,8 +32,8 @@ import static com.speedment.runtime.field.predicate.PredicateType.GREATER_THAN;
  * @since   2.2.0
  */
 public final class ReferenceGreaterThanPredicate<ENTITY, D, V extends Comparable<? super V>>
-        extends AbstractFieldPredicate<ENTITY, V, HasReferenceValue<ENTITY, D, V>>
-        implements Tuple1<V> {
+extends AbstractFieldPredicate<ENTITY, HasReferenceValue<ENTITY, D, V>>
+implements Tuple1<V> {
     
     private final V value;
 
@@ -52,5 +51,10 @@ public final class ReferenceGreaterThanPredicate<ENTITY, D, V extends Comparable
     @Override
     public V get0() {
         return value;
+    }
+
+    @Override
+    public ReferenceLessOrEqualPredicate<ENTITY, D, V> negate() {
+        return new ReferenceLessOrEqualPredicate<>(getField(), value);
     }
 }
