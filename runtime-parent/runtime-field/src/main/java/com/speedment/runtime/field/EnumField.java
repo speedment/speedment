@@ -24,6 +24,7 @@ import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasStringOperators;
 import com.speedment.runtime.typemapper.TypeMapper;
 
+import java.util.EnumSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -38,6 +39,25 @@ import java.util.function.Predicate;
 public interface EnumField<ENTITY, D, E extends Enum<E>>
 extends ComparableField<ENTITY, D, E>,
         HasStringOperators<ENTITY, D> {
+
+    /**
+     * Returns the enum class of this field.
+     *
+     * @return  the enum class
+     * @since   3.0.13
+     */
+    Class<E> enumClass();
+
+    /**
+     * Returns the set of possible values for this enum. The order will be the
+     * ordinal order of the enum.
+     * <p>
+     * This method creates a copy of the internal storage structure so changes
+     * to the returned collection are allowed.
+     *
+     * @return  the constants
+     */
+    EnumSet<E> constants();
 
     /**
      * A method that takes a {@code String} and converts it into an enum for

@@ -31,11 +31,12 @@ import java.util.function.Function;
  * A field representing an {@code Enum} value in the entity that has a finder to
  * another entity.
  *
- * @author Emil Forslund
  * @param <ENTITY>         the entity type
  * @param <D>              the database type
  * @param <E>              the java enum type
  * @param <FK>             the foreign key entity type
+ *
+ * @author Emil Forslund
  * @since  3.0.10
  *
  * @see  EnumField

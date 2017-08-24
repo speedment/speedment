@@ -17,11 +17,13 @@
 package com.speedment.common.tuple.internal;
 
 import com.speedment.common.tuple.BasicTuple;
+
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Stream;
+
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
-import java.util.stream.Stream;
 
 /**
  * The BasicAbstractTuple implements parts of a generic Tuple of any order.
@@ -43,14 +45,19 @@ public abstract class BasicAbstractTuple<T extends BasicTuple<R>, R> implements 
         this.baseClass = requireNonNull(baseClass);
         if (!isNullable()) {
             if (Stream.of(values).anyMatch(Objects::isNull)) {
-                throw new NullPointerException(getClass().getName() + " cannot hold null values.");
+                throw new NullPointerException(getClass().getName() +
+                    " cannot hold null values.");
             }
         }
-        if (values.length != degree()) {
-            throw new IllegalArgumentException("A Tuple of degree " + degree() + " must contain exactly " + degree() + " elements. Element length was " + values.length);
-        }
+
         // Defensive copying
         this.values = Arrays.copyOf(values, values.length);
+
+        if (values.length != degree()) {
+            throw new IllegalArgumentException(
+                "A Tuple of degree " + degree() + " must contain exactly " +
+                degree() + " elements. Element length was " + values.length);
+        }
     }
 
     /**
