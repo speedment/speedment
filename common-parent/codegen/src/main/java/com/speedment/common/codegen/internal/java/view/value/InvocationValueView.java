@@ -20,6 +20,8 @@ import com.speedment.common.codegen.Generator;
 import com.speedment.common.codegen.Transform;
 import com.speedment.common.codegen.model.value.InvocationValue;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Optional;
 
 import static com.speedment.common.codegen.util.Formatting.indent;
@@ -37,9 +39,16 @@ implements Transform<InvocationValue, String> {
 
     @Override
     public Optional<String> transform(Generator gen, InvocationValue model) {
+        final Type realType;
+        if (model.getType() instanceof ParameterizedType) {
+            realType = ((ParameterizedType) model.getType()).getRawType();
+        } else {
+            realType = model.getType();
+        }
+
         return Optional.of(
             (model.getType() == null ? "" :
-                gen.on(model.getType()).get() + ".") +
+                gen.on(realType).get() + ".") +
             model.getValue() +
             (model.getValues().size() <= 3
                 ? gen.onEach(model.getValues()).collect(joining(", ", "(", ")"))
