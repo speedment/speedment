@@ -16,26 +16,27 @@
  */
 package com.speedment.maven;
 
+import com.speedment.maven.abstractmojo.AbstractClearTablesMojo;
 import com.speedment.maven.abstractmojo.AbstractReloadMojo;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 
 /**
- * A maven goal that reloads the JSON configuration file
- * from the database, overwriting all manual changes.
+ * A maven goal that clears the tables in the JSON configuration file,
+ * overwriting all manual changes.
  * 
- * @author  Emil Forslund
- * @since   3.0.0
+ * @author  Mark Schrijver
+ * @since   3.0.13
  */
-@Mojo(name = "reload", 
-    defaultPhase = LifecyclePhase.INITIALIZE,
-    requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME
+@Mojo(name = "clearTables",
+        defaultPhase = LifecyclePhase.INITIALIZE,
+        requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME
 )
-public class ReloadMojo extends AbstractReloadMojo {
-
+public class ClearTablesMojo extends AbstractClearTablesMojo {
+    
     @Override
     protected String launchMessage() {
-        return "Starting speedment:reload";
+        return "Starting speedment:clearTables";
     }
 }
