@@ -18,6 +18,7 @@ package com.speedment.plugins.enums.internal;
 
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Enum;
+import com.speedment.common.codegen.model.value.InvocationValue;
 import com.speedment.common.injector.Injector;
 import com.speedment.generator.core.exception.SpeedmentGeneratorException;
 import com.speedment.generator.standard.internal.util.EntityTranslatorSupport;
@@ -289,11 +290,19 @@ implements TranslatorDecorator<Table, Interface> {
                         params.add(Value.ofReference(enumShortName + "::" + FROM_DATABASE_METHOD));
                         params.add(Value.ofReference(enumShortName + ".class"));
 
+                        final Optional<InvocationValue> existing =
+                            field.getValue()
+                                .filter(InvocationValue.class::isInstance)
+                                .map(InvocationValue.class::cast);
+
                         field.set(ofInvocation(
-                            fk.isPresent()
-                                ? EnumForeignKeyField.class
-                                : EnumField.class,
-                            "create",
+                            existing.map(InvocationValue::getType).orElseGet(
+                                () -> fk.isPresent()
+                                    ? EnumForeignKeyField.class
+                                    : EnumField.class
+                            ),
+                            existing.map(InvocationValue::getValue)
+                                .orElse("create"),
                             params.toArray(new Value<?>[params.size()])
                         ));
                     });
