@@ -443,24 +443,18 @@ public final class ConfigFileHelper {
         Project project = DocumentTranscoder.load(currentlyOpenFile.toPath(), this::fromJson);
 
         LOGGER.info("clearing tables");
-        if (project.dbmses() != null) {
-            project.dbmses().forEach(dbms -> {
-                if (dbms.schemas() != null) {
-                    dbms.schemas().forEach(schema -> {
-                        if (schema.getData() == null){
-                            throw new SpeedmentToolException("Corrupt configuration file " + currentlyOpenFile.getName() + ". Schema should not be empty.");
-                        } else if (schema.getData().containsKey("tables")) {
-                            LOGGER.info("Removing " + schema.tables().count() + " tables for " + dbms.getName() + "." + schema.getName());
-                            schema.getData().remove("tables");
-                        }
-                    });
+        project.dbmses().forEach(dbms -> {
+            LOGGER.info("dbms: " + dbms.getName());
+            dbms.schemas().forEach(schema -> {
+                LOGGER.info("schema: " + schema.getName());
+                if (schema.getData().containsKey("tables")) {
+                    LOGGER.info("Removing " + schema.tables().count());
+                    schema.getData().remove("tables");
                 } else {
-                    throw new SpeedmentToolException("Corrupt configuration file " + currentlyOpenFile.getName() + ". DBMS should contain at least one schema.");
+                    LOGGER.info("No tables to remove");
                 }
             });
-        } else {
-            throw new SpeedmentToolException("Corrupt configuration file " + currentlyOpenFile.getName() + ". Project should contain at least one DBMS.");
-        }
+        });
 
         DocumentTranscoder.save(project, currentlyOpenFile.toPath(), Json::toJson);
     }
