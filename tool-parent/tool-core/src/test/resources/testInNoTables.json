@@ -1,0 +1,31 @@
+{
+  "config" : {
+    "expanded" : true,
+    "companyName" : "speedment",
+    "appId" : "0ffba5e2-918d-4ef6-b3ac-4995086cadf9",
+    "name" : "tst_speedment",
+    "packageLocation" : "target/generated-sources/java/",
+    "packageName" : "com.speedment.test.db",
+    "id" : "tst_speedment",
+    "dbmses" : [
+      {
+        "expanded" : true,
+        "port" : 3306,
+        "schemas" : [
+          {
+            "expanded" : true,
+            "name" : "tst_speedment",
+            "id" : "tst_speedment",
+            "enabled" : true
+          }
+        ],
+        "name" : "tst_speedment",
+        "typeName" : "MySQL",
+        "id" : "tst_speedment",
+        "enabled" : true,
+        "username" : "speedment"
+      }
+    ],
+    "enabled" : true
+  }
+}

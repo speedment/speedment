@@ -38,18 +38,30 @@ public class ConfigFileHelperTest {
 		helper.clearTablesAndSaveToFile();
 
 		// Then
-		verifyOutputFile();
+		verifyOutputFile("target/testOut.json");
 	}
 
-	private void verifyOutputFile() {
-		Project project = DocumentTranscoder.load(new File("target/testOut.json").toPath(), this::fromJson);
+	@Test
+	public void clearTablesAndSaveToFileNoTables() throws Exception {
+		// Given
+		when(mockedCurrentlyOpenFile.toPath()).thenReturn(new File("src/test/resources/testInNoTables.json").toPath(), new File("target/testOutNoTables.json").toPath());
+
+		// When
+		helper.clearTablesAndSaveToFile();
+
+		// Then
+		verifyOutputFile("target/testOutNoTables.json");
+	}
+
+	private void verifyOutputFile(String fileName) {
+		Project project = DocumentTranscoder.load(new File(fileName).toPath(), this::fromJson);
 		project.dbmses().forEach(dbms -> {
 			dbms.schemas().forEach(schema -> {
 				assertNull(schema.getData().get("tables"));
 			});
 		});
 		// when the file is correct, remove it.
-		new File("target/testOut.json").delete();
+		new File(fileName).delete();
 	}
 
 	private Map<String, Object> fromJson(String json) {
