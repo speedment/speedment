@@ -72,7 +72,9 @@ extends Field<ENTITY> {
      * instead. This method will be removed in coming API versions.
      */
     @Deprecated
-    FieldComparator<ENTITY> comparatorNullFieldsLast();
+    default FieldComparator<ENTITY> comparatorNullFieldsLast() {
+        return comparator();
+    }
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to
