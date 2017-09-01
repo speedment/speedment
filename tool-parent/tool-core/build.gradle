@@ -1,5 +1,10 @@
 group = 'com.speedment.tool'
 description = 'Speedment - Tool - Core'
+sourceSets {
+  test {
+    resources.srcDirs = [ 'src/test/resources/' ]   
+  }
+}
 dependencies {
   compile project(':common-parent:injector')
   compile project(':common-parent:rest')
