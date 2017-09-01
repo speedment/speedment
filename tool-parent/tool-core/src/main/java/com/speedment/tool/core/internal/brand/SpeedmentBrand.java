@@ -33,7 +33,7 @@ public final class SpeedmentBrand implements Brand {
 
     @Override
     public final String website() {
-        return "www.speedment.org";
+        return "www.speedment.com";
     }
 
     @Override
