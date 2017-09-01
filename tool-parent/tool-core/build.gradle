@@ -15,4 +15,5 @@ dependencies {
   compile project(':tool-parent:tool-config')
   compile project(':tool-parent:tool-propertyeditor')
     testCompile group: 'junit', name: 'junit', version:'4.12'
+    testCompile group: 'org.mockito', name: 'mockito-core', version:'2.9.0'
 }
