@@ -142,6 +142,10 @@
             <name>Håkan Saltin (GitHub:HSaltin)</name>
             <timezone>America/Los_Angeles</timezone>
         </contributor>
+        <contributor>
+            <name>Mark Schrijver (GitHub:ractoc)</name>
+            <timezone>Europe/Amsterdam</timezone>
+        </contributor>
     </contributors>
 	
     <!-- Distribution Details -->
