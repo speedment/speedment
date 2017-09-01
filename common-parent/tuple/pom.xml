@@ -47,7 +47,10 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Export-Package>com.speedment.common.tuple</Export-Package>
+                        <Export-Package>
+                            com.speedment.common.tuple,
+                            com.speedment.common.tuple.nullable
+                        </Export-Package>
                     </instructions>
                 </configuration>
             </plugin>                            
