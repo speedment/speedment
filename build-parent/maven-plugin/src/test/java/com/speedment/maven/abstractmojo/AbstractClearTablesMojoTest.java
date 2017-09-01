@@ -7,14 +7,15 @@ import org.apache.maven.project.MavenProject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.File;
 import java.nio.file.Paths;
+import org.mockito.Mock;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AbstractClearTablesMojoTest {
@@ -22,12 +23,9 @@ public class AbstractClearTablesMojoTest {
 	private AbstractClearTablesMojoTestImpl mojo;
 
 	private String mockedConfigLocation = "testFile.txt";
-	@Mock
-	private Speedment mockedSpeedment;
-	@Mock
-	private ConfigFileHelper mockedConfigFileHelper;
-	@Mock
-	private MavenProject mockedMavenProject;
+	@Mock private Speedment mockedSpeedment;
+	@Mock private ConfigFileHelper mockedConfigFileHelper;
+	@Mock private MavenProject mockedMavenProject;
 
 
 	@Before
