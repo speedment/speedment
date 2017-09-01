@@ -121,6 +121,7 @@ public final class ConfigFileHelper {
         final ProjectProperty project = new ProjectProperty();
         final Project loaded = projectComponent.getProject();
 
+
         if (loaded != null) {
             project.merge(documentPropertyComponent, loaded);
         } else {
@@ -438,4 +439,23 @@ public final class ConfigFileHelper {
         }
     }
 
+    public void clearTablesAndSaveToFile() {
+        Project project = DocumentTranscoder.load(currentlyOpenFile.toPath(), this::fromJson);
+
+        LOGGER.info("clearing tables");
+        project.dbmses().forEach(dbms -> {
+            LOGGER.info("dbms: " + dbms.getName());
+            dbms.schemas().forEach(schema -> {
+                LOGGER.info("schema: " + schema.getName());
+                if (schema.getData().containsKey("tables")) {
+                    LOGGER.info("Removing " + schema.tables().count());
+                    schema.getData().remove("tables");
+                } else {
+                    LOGGER.info("No tables to remove");
+                }
+            });
+        });
+
+        DocumentTranscoder.save(project, currentlyOpenFile.toPath(), Json::toJson);
+    }
 }

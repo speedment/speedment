@@ -26,8 +26,8 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
  * @author  Emil Forslund
  * @since   3.0.0
  */
-@Mojo(name = "clear", 
-    defaultPhase = LifecyclePhase.GENERATE_SOURCES,
+@Mojo(name = "clear",
+    defaultPhase = LifecyclePhase.CLEAN,
     requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME
 )
 public class ClearMojo extends AbstractClearMojo {
