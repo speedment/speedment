@@ -1,5 +1,0 @@
-group = 'com.speedment'
-description = 'Speedment - Build - Runtime'
-dependencies {
-    compile project(':runtime-parent:runtime-all')
-}

@@ -1,7 +1,0 @@
-group = 'com.speedment.generator'
-description = 'Speedment - Generator - Generator All'
-dependencies {
-    compile project(':generator-parent:generator-translator')
-    compile project(':generator-parent:generator-standard')
-    compile project(':generator-parent:generator-core')
-}
