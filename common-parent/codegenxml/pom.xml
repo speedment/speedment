@@ -29,7 +29,7 @@
     </parent>
     
     <artifactId>codegenxml</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - CodeGen XML</name>
@@ -39,7 +39,7 @@
     </description>
     
     <properties>
-        <codegen.version>2.4.9-SNAPSHOT</codegen.version>
+        <codegen.version>2.4.9</codegen.version>
     </properties>
     
     <build>
