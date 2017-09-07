@@ -29,11 +29,11 @@ import org.apache.maven.plugins.annotations.ResolutionScope;
  * @since   3.0.0
  */
 @Mojo(name = "reload", 
-    defaultPhase = LifecyclePhase.GENERATE_SOURCES,
+    defaultPhase = LifecyclePhase.INITIALIZE,
     requiresDependencyResolution = ResolutionScope.COMPILE_PLUS_RUNTIME
 )
 public class ReloadMojo extends AbstractReloadMojo {
-    
+
     @Override
     protected String launchMessage() {
         return "Starting speedment:reload";

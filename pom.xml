@@ -34,7 +34,7 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment-parent</artifactId>
-    <version>3.0.12</version>
+    <version>3.0.13-SNAPSHOT</version>
     <packaging>pom</packaging>
     
     <!-- Project Metadata -->
@@ -142,6 +142,10 @@
             <name>Håkan Saltin (GitHub:HSaltin)</name>
             <timezone>America/Los_Angeles</timezone>
         </contributor>
+        <contributor>
+            <name>Mark Schrijver (GitHub:ractoc)</name>
+            <timezone>Europe/Amsterdam</timezone>
+        </contributor>
     </contributors>
 	
     <!-- Distribution Details -->
@@ -229,7 +233,7 @@
             
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
+                <version>3.6.2</version>
 
                 <configuration>
                     <compilerArgument>-Xlint:all</compilerArgument>
@@ -253,13 +257,13 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
-                <version>3.0.4</version>
+                <version>3.0.5</version>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19.1</version>
+                <version>2.20</version>
                 
                 <configuration>
                     <useFile>false</useFile>
@@ -291,7 +295,7 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>findbugs-maven-plugin</artifactId>
-                        <version>3.0.4</version>
+                        <version>3.0.5</version>
                     </plugin>
                 </plugins>
             </reporting>
@@ -500,7 +504,7 @@
                     </plugin>
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.19.1</version>
+                        <version>2.20</version>
                         <executions>
                             <execution>
                                 <id>default-test</id>
@@ -598,7 +602,7 @@
             <dependency>
                 <groupId>org.seleniumhq.selenium</groupId>
                 <artifactId>selenium-java</artifactId>
-                <version>3.2.0</version>
+                <version>3.5.1</version>
                 <scope>test</scope>
             </dependency>
 
@@ -618,7 +622,7 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
-                <version>2.7.12</version>
+                <version>2.9.0</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>

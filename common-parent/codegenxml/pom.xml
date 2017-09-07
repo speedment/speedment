@@ -39,7 +39,7 @@
     </description>
     
     <properties>
-        <codegen.version>2.4.3</codegen.version>
+        <codegen.version>2.4.9-SNAPSHOT</codegen.version>
     </properties>
     
     <build>

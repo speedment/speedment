@@ -64,9 +64,10 @@ public final class EnumGeneratorComponent {
     void installDecorators(Injector injector,
             @WithState(INITIALIZED) TypeMapperComponent typeMappers,
             @WithState(INITIALIZED) CodeGenerationComponent codeGen,
-            @WithState(RESOLVED) PropertyEditorComponent editors){
+            @WithState(RESOLVED) PropertyEditorComponent editors) {
 
         typeMappers.install(String.class, StringToEnumTypeMapper::new);
+        typeMappers.install(Integer.class, IntegerToEnumTypeMapper::new);
 
         codeGen.add(
             Table.class,
@@ -79,6 +80,5 @@ public final class EnumGeneratorComponent {
             Column.ENUM_CONSTANTS,
             CommaSeparatedStringEditor::new
         );
-        
     }
 }

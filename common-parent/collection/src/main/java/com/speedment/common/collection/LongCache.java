@@ -44,6 +44,7 @@ public final class LongCache<K> {
     public LongCache(int maxSize) {
         free  = new AtomicBoolean(true);
         cache = new LinkedHashMap<K, Long>(maxSize, 0.75f, true) {
+            private static final long serialVersionUID = 1L;
             @Override
             protected boolean removeEldestEntry(Map.Entry<K, Long> eldest) {
                 return size() > maxSize;
