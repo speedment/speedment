@@ -24,6 +24,7 @@ import com.speedment.common.injector.exception.CyclicReferenceException;
 import static com.speedment.common.injector.execution.ExecutionBuilder.resolved;
 import static com.speedment.common.injector.execution.ExecutionBuilder.started;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import com.speedment.common.jvm_version.JvmVersion;
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
@@ -487,17 +488,24 @@ public abstract class AbstractApplicationBuilder<
         }
 
         try {
-            final Package package_ = Runtime.class.getPackage();
-            final String javaMsg = package_.getSpecificationTitle()
-                + " " + package_.getSpecificationVersion()
-                + " by " + package_.getSpecificationVendor()
-                + ". Implementation "
-                + package_.getImplementationVendor()
-                + " " + package_.getImplementationVersion()
-                + " by " + package_.getImplementationVendor();
+            
+            final String javaMsg = String.format("%s %s by %s. Implementation %s %s by %s",
+                JvmVersion.getSpecificationTitle(), JvmVersion.getSpecificationVersion(), JvmVersion.getSpecificationVendor(),
+                JvmVersion.getImplementationTitle(), JvmVersion.getImplementationVersion(), JvmVersion.getImplementationVendor()
+            );
+
+            
+//            final Package package_ = Runtime.class.getPackage();
+//            final String javaMsg = package_.getSpecificationTitle()
+//                + " " + package_.getSpecificationVersion()
+//                + " by " + package_.getSpecificationVendor()
+//                + ". Implementation "
+//                + package_.getImplementationVendor()
+//                + " " + package_.getImplementationVersion()
+//                + " by " + package_.getImplementationVendor();
             LOGGER.info(javaMsg);
 
-            final String versionString = package_.getImplementationVersion();
+            final String versionString = JvmVersion.getImplementationVersion();
             final Optional<Boolean> isVersionOk = isVersionOk(versionString);
             if (isVersionOk.isPresent()) {
                 if (!isVersionOk.get()) {

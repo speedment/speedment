@@ -9,8 +9,6 @@ import java.lang.reflect.Method;
  */
 public final class InternalJvmVersion {
 
-    private final Package package_;
-    
     private final String specificationTitle;
     private final String specificationVersion;
     private final String specificationVendor;
@@ -24,7 +22,7 @@ public final class InternalJvmVersion {
     private final int security;
 
     public InternalJvmVersion() {
-        package_ = Package.getPackage("java.lang");
+
         specificationTitle = System.getProperty("java.vm.specification.name");
         specificationVersion = System.getProperty("java.vm.specification.version");
         specificationVendor = System.getProperty("java.vm.specification.vendor");
@@ -107,7 +105,11 @@ public final class InternalJvmVersion {
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | ClassNotFoundException e) {
             // we are pre Java 9
         }
-        return Integer.parseInt(package_.getImplementationVersion().split("([\\._])")[java8Index]);
+        try {
+            return Integer.parseInt(System.getProperty("java.specification.version").split("([\\._])")[java8Index]);
+        } catch (Throwable t) {
+            return 0;
+        }
     }
 
 }
