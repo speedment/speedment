@@ -42,6 +42,7 @@
     <modules>
         <module>invariant</module>
         <module>function</module>
+        <module>jvm-version</module>
         <module>json</module>
         <module>tuple</module>
         <module>logger</module>
