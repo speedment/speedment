@@ -506,7 +506,7 @@ public abstract class AbstractApplicationBuilder<
             LOGGER.info(javaMsg);
 
             final String versionString = JvmVersion.getImplementationVersion();
-            final Optional<Boolean> isVersionOk = isVersionOk(versionString);
+            final Optional<Boolean> isVersionOk = isVersionOk();
             if (isVersionOk.isPresent()) {
                 if (!isVersionOk.get()) {
                     LOGGER.warn("The current Java version (" + versionString + 
@@ -529,22 +529,21 @@ public abstract class AbstractApplicationBuilder<
         return builder;
     }
 
-    Optional<Boolean> isVersionOk(String versionString) {
+    Optional<Boolean> isVersionOk() {
         final int majorVersion = JvmVersion.major();
         final int securityVersion = JvmVersion.security();
-        boolean ok = true;
         if (majorVersion == 0) {
             return Optional.empty(); // Unable to determine
         }
         if (majorVersion < 8) {
-            ok = false;
+            return Optional.of(Boolean.FALSE);
         }
         if (majorVersion == 8) {
             if (securityVersion < 40) {
-                ok = false;
+                return Optional.of(Boolean.FALSE);
             }
         }
-        return Optional.of(ok);
+        return Optional.of(Boolean.TRUE);
     }
 
     private static <T> void withInjectable(

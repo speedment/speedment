@@ -33,7 +33,7 @@ public final class InternalJvmVersion {
         implementationTitle = System.getProperty("java.specification.name");
         major = version("major", 1);
         minor = version("minor", 2);
-        security = version("security", 3);
+        security = version("security", 4);
         implementationVersion = String.format("%d.%d.%d", major, minor, security);
         implementationVendor = System.getProperty("java.specification.vendor");
         //implementationVendor = package_.getImplementationVendor();
@@ -106,7 +106,7 @@ public final class InternalJvmVersion {
             // we are pre Java 9
         }
         try {
-            return Integer.parseInt(System.getProperty("java.specification.version").split("([\\._])")[java8Index]);
+            return Integer.parseInt(System.getProperty("java.runtime.version").split("([\\._-])")[java8Index]);
         } catch (Throwable t) {
             return 0;
         }
