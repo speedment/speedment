@@ -530,45 +530,21 @@ public abstract class AbstractApplicationBuilder<
     }
 
     Optional<Boolean> isVersionOk(String versionString) {
-        final Pattern pattern = Pattern.compile("(\\d+)[\\\\.](\\d+)[\\\\.](\\d+)_(\\d+)");
-        final Matcher matcher = pattern.matcher(versionString);
-
-        if (matcher.find() && matcher.groupCount() >= 4) {
-            final String majorVersionString = matcher.group(1);
-            final String minorVersionString = matcher.group(2);
-            final String patchVersionString = matcher.group(3);
-            final String microVersionString = matcher.group(4);
-            try {
-                final int majorVersion = Integer.parseInt(majorVersionString);
-                final int minorVersion = Integer.parseInt(minorVersionString);
-                final int patchVersion = Integer.parseInt(patchVersionString);
-                final int microVersion = Integer.parseInt(microVersionString);
-                boolean ok = true;
-                if (majorVersion < 1) {
-                    ok = false;
-                }
-                if (majorVersion == 1) {
-                    if (minorVersion < 8) {
-                        ok = false;
-                    }
-                    if (minorVersion == 8) {
-                        if (patchVersion < 0) {
-                            ok = false;
-                        }
-                        if (patchVersion == 0) {
-                            if (microVersion < 40) {
-                                ok = false;
-                            }
-                        }
-                    }
-                }
-                return Optional.of(ok);
-            } catch (NumberFormatException nfe) {
-                return Optional.empty();
-            }
-        } else {
-            return Optional.empty();
+        final int majorVersion = JvmVersion.major();
+        final int securityVersion = JvmVersion.security();
+        boolean ok = true;
+        if (majorVersion == 0) {
+            return Optional.empty(); // Unable to determine
         }
+        if (majorVersion < 8) {
+            ok = false;
+        }
+        if (majorVersion == 8) {
+            if (securityVersion < 40) {
+                ok = false;
+            }
+        }
+        return Optional.of(ok);
     }
 
     private static <T> void withInjectable(
