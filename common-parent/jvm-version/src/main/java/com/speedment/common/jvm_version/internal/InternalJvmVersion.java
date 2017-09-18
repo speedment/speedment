@@ -33,7 +33,7 @@ public final class InternalJvmVersion {
         implementationTitle = System.getProperty("java.specification.name");
         major = version("major", 1);
         minor = version("minor", 2);
-        security = version("security", 4);
+        security = version("security", 3);
         implementationVersion = String.format("%d.%d.%d", major, minor, security);
         implementationVendor = System.getProperty("java.specification.vendor");
         //implementationVendor = package_.getImplementationVendor();
