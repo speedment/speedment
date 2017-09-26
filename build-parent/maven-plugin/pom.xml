@@ -26,13 +26,13 @@
     <parent>
         <groupId>com.speedment.build</groupId>
         <artifactId>build-parent</artifactId>
-        <version>3.0.14-SNAPSHOT</version>
+        <version>3.0.14</version>
     </parent>
     
     <properties>
-        <mysql-jdbc-version>5.1.41</mysql-jdbc-version>
+        <mysql-jdbc-version>5.1.42</mysql-jdbc-version>
         <postgres-jdbc-version>42.0.0</postgres-jdbc-version>
-        <mariadb-jdbc-version>1.5.9</mariadb-jdbc-version>
+        <mariadb-jdbc-version>2.1.1</mariadb-jdbc-version>
     </properties>
     
     <groupId>com.speedment</groupId>
