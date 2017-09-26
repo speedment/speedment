@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.runtime</groupId>
         <artifactId>runtime-parent</artifactId>
-        <version>3.0.13</version>
+        <version>3.0.14-SNAPSHOT</version>
     </parent>
 
     <artifactId>runtime-core</artifactId>
@@ -128,6 +128,11 @@
         <dependency>
             <groupId>com.speedment.common</groupId>
             <artifactId>lazy</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>jvm-version</artifactId>
         </dependency>
         
         <dependency>

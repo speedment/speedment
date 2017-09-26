@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.0.13</version>
+        <version>3.0.14-SNAPSHOT</version>
     </parent>
     
     <artifactId>common-all</artifactId>
@@ -41,6 +41,7 @@
     <properties>
         <invariant.version>1.0.2</invariant.version>
         <function.version>1.0.3</function.version>
+        <jvm-version.version>1.0.0-SNAPSHOT</jvm-version.version> <!-- Yeah, I know... -->
         <json.version>1.0.3</json.version>
         <tuple.version>1.0.5</tuple.version>
         <logger.version>1.0.4</logger.version>
@@ -70,6 +71,12 @@
                 <groupId>com.speedment.common</groupId>
                 <artifactId>function</artifactId>
                 <version>${function.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.speedment.common</groupId>
+                <artifactId>jvm-version</artifactId>
+                <version>${jvm-version.version}</version>
             </dependency>
             
             <dependency>

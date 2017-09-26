@@ -34,7 +34,7 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment-parent</artifactId>
-    <version>3.0.13</version>
+    <version>3.0.14-SNAPSHOT</version>
     <packaging>pom</packaging>
     
     <!-- Project Metadata -->
@@ -233,7 +233,7 @@
             
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.2</version>
+                <version>3.7.0</version>
 
                 <configuration>
                     <compilerArgument>-Xlint:all</compilerArgument>

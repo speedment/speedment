@@ -77,21 +77,22 @@ public class AbstractApplicationBuilderTest {
 
     @Test
     public void checkVersion() {
-        final Map<String, Optional<Boolean>> testVector = new LinkedHashMap<>();
+        assertEquals(Optional.of(Boolean.TRUE), instance.isVersionOk());
 
-        testVector.put("1.8.0_39", Optional.of(Boolean.FALSE));
-        testVector.put("1.8.0_40", Optional.of(Boolean.TRUE));
-        testVector.put("1.8.0_101", Optional.of(Boolean.TRUE));
-        testVector.put("1.7.0_40", Optional.of(Boolean.FALSE));
-        testVector.put("0.8.0_40", Optional.of(Boolean.FALSE));
-        testVector.put("Arne", Optional.empty());
-
-        testVector.entrySet().forEach((e) -> {
-            final Optional<Boolean> expected = e.getValue();
-            final Optional<Boolean> result = instance.isVersionOk(e.getKey());
-            assertEquals(e.getKey(), expected, result);
-        });
-
+//        final Map<String, Optional<Boolean>> testVector = new LinkedHashMap<>();
+//
+//        testVector.put("1.8.0_39", Optional.of(Boolean.FALSE));
+//        testVector.put("1.8.0_40", Optional.of(Boolean.TRUE));
+//        testVector.put("1.8.0_101", Optional.of(Boolean.TRUE));
+//        testVector.put("1.7.0_40", Optional.of(Boolean.FALSE));
+//        testVector.put("0.8.0_40", Optional.of(Boolean.FALSE));
+//        testVector.put("Arne", Optional.empty());
+//
+//        testVector.entrySet().forEach((e) -> {
+//            final Optional<Boolean> expected = e.getValue();
+//            final Optional<Boolean> result = instance.isVersionOk(e.getKey());
+//            assertEquals(e.getKey(), expected, result);
+//        });
     }
 
     @Test

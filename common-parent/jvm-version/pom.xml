@@ -20,24 +20,23 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" 
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    
     <modelVersion>4.0.0</modelVersion>
     
     <parent>
-        <groupId>com.speedment.plugins</groupId>
-        <artifactId>plugin-parent</artifactId>
+        <groupId>com.speedment.common</groupId>
+        <artifactId>common-parent</artifactId>
         <version>3.0.14-SNAPSHOT</version>
     </parent>
     
-    <artifactId>json-stream</artifactId>
-	
+    <artifactId>jvm-version</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
     
-    <name>Speedment - Plugins - JSON Stream</name>
+    <name>Speedment - Common - JVM Version</name>
     <description>
-        This plugin allows you to easily convert Speedment entities into JSON.
+        A module that handle the JVM version in a compatible way across different
+        Java versions.
     </description>
-    <url>https://www.github.com/speedment/speedment-plugins/wiki/JSON-Stream/</url>
     
     <build>
         <plugins>
@@ -47,7 +46,7 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            com.speedment.plugins.json
+                            com.speedment.common.jvm_version
                         </Export-Package>
                     </instructions>
                 </configuration>
@@ -61,72 +60,30 @@
             <build>
                 <plugins>
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <configuration>
-                            <additionalDependencies>
-                                <additionalDependency>
-                                    <groupId>com.speedment.runtime</groupId>
-                                    <artifactId>runtime-typemapper</artifactId>
-                                    <version>${speedment.version}</version>
-                                </additionalDependency>
-                            </additionalDependencies>
-                        </configuration>
                     </plugin>
                     
                     <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
                     </plugin>
                 </plugins>
             </build>
         </profile>
     </profiles>
-
     <dependencies>
-        <!-- Compile Time Dependencies -->
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>injector</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>invariant</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>function</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.runtime</groupId>
-            <artifactId>runtime-config</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.runtime</groupId>
-            <artifactId>runtime-field</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.runtime</groupId>
-            <artifactId>runtime-core</artifactId>
-        </dependency>
-        
-        <!-- Test Dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
         </dependency>
-        
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-        </dependency>
-        
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
+            <version>1.3</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

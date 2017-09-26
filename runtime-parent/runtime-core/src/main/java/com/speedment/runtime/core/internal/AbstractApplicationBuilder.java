@@ -24,6 +24,7 @@ import com.speedment.common.injector.exception.CyclicReferenceException;
 import static com.speedment.common.injector.execution.ExecutionBuilder.resolved;
 import static com.speedment.common.injector.execution.ExecutionBuilder.started;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import com.speedment.common.jvm_version.JvmVersion;
 import com.speedment.common.logger.Level;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
@@ -487,18 +488,25 @@ public abstract class AbstractApplicationBuilder<
         }
 
         try {
-            final Package package_ = Runtime.class.getPackage();
-            final String javaMsg = package_.getSpecificationTitle()
-                + " " + package_.getSpecificationVersion()
-                + " by " + package_.getSpecificationVendor()
-                + ". Implementation "
-                + package_.getImplementationVendor()
-                + " " + package_.getImplementationVersion()
-                + " by " + package_.getImplementationVendor();
+            
+            final String javaMsg = String.format("%s %s by %s. Implementation %s %s by %s",
+                JvmVersion.getSpecificationTitle(), JvmVersion.getSpecificationVersion(), JvmVersion.getSpecificationVendor(),
+                JvmVersion.getImplementationTitle(), JvmVersion.getImplementationVersion(), JvmVersion.getImplementationVendor()
+            );
+
+            
+//            final Package package_ = Runtime.class.getPackage();
+//            final String javaMsg = package_.getSpecificationTitle()
+//                + " " + package_.getSpecificationVersion()
+//                + " by " + package_.getSpecificationVendor()
+//                + ". Implementation "
+//                + package_.getImplementationVendor()
+//                + " " + package_.getImplementationVersion()
+//                + " by " + package_.getImplementationVendor();
             LOGGER.info(javaMsg);
 
-            final String versionString = package_.getImplementationVersion();
-            final Optional<Boolean> isVersionOk = isVersionOk(versionString);
+            final String versionString = JvmVersion.getImplementationVersion();
+            final Optional<Boolean> isVersionOk = isVersionOk();
             if (isVersionOk.isPresent()) {
                 if (!isVersionOk.get()) {
                     LOGGER.warn("The current Java version (" + versionString + 
@@ -521,46 +529,21 @@ public abstract class AbstractApplicationBuilder<
         return builder;
     }
 
-    Optional<Boolean> isVersionOk(String versionString) {
-        final Pattern pattern = Pattern.compile("(\\d+)[\\\\.](\\d+)[\\\\.](\\d+)_(\\d+)");
-        final Matcher matcher = pattern.matcher(versionString);
-
-        if (matcher.find() && matcher.groupCount() >= 4) {
-            final String majorVersionString = matcher.group(1);
-            final String minorVersionString = matcher.group(2);
-            final String patchVersionString = matcher.group(3);
-            final String microVersionString = matcher.group(4);
-            try {
-                final int majorVersion = Integer.parseInt(majorVersionString);
-                final int minorVersion = Integer.parseInt(minorVersionString);
-                final int patchVersion = Integer.parseInt(patchVersionString);
-                final int microVersion = Integer.parseInt(microVersionString);
-                boolean ok = true;
-                if (majorVersion < 1) {
-                    ok = false;
-                }
-                if (majorVersion == 1) {
-                    if (minorVersion < 8) {
-                        ok = false;
-                    }
-                    if (minorVersion == 8) {
-                        if (patchVersion < 0) {
-                            ok = false;
-                        }
-                        if (patchVersion == 0) {
-                            if (microVersion < 40) {
-                                ok = false;
-                            }
-                        }
-                    }
-                }
-                return Optional.of(ok);
-            } catch (NumberFormatException nfe) {
-                return Optional.empty();
-            }
-        } else {
-            return Optional.empty();
+    Optional<Boolean> isVersionOk() {
+        final int majorVersion = JvmVersion.major();
+        final int securityVersion = JvmVersion.security();
+        if (majorVersion == 0) {
+            return Optional.empty(); // Unable to determine
         }
+        if (majorVersion < 8) {
+            return Optional.of(Boolean.FALSE);
+        }
+        if (majorVersion == 8) {
+            if (securityVersion < 40) {
+                return Optional.of(Boolean.FALSE);
+            }
+        }
+        return Optional.of(Boolean.TRUE);
     }
 
     private static <T> void withInjectable(
