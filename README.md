@@ -223,7 +223,7 @@ No need for complicated joins!
 ```java
 // Find any film where english is spoken
 Optional<Film> anyFilmInEnglish = languages.stream()
-    .filter(Language.NAME.equal("English))
+    .filter(Language.NAME.equal("English"))
     .flatMap(films.finderBackwardsBy(Film.LANGUAGE_ID))
     .findAny();
 
