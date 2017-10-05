@@ -44,9 +44,8 @@ public abstract class BasicAbstractTuple<T extends BasicTuple<R>, R> implements 
         requireNonNull(values);
         this.baseClass = requireNonNull(baseClass);
         if (!isNullable()) {
-            if (Stream.of(values).anyMatch(Objects::isNull)) {
-                throw new NullPointerException(getClass().getName() +
-                    " cannot hold null values.");
+            for (Object v : values) {
+                requireNonNull(v, () -> getClass().getName() + " cannot hold null values.");
             }
         }
 
@@ -55,8 +54,8 @@ public abstract class BasicAbstractTuple<T extends BasicTuple<R>, R> implements 
 
         if (values.length != degree()) {
             throw new IllegalArgumentException(
-                "A Tuple of degree " + degree() + " must contain exactly " +
-                degree() + " elements. Element length was " + values.length);
+                "A Tuple of degree " + degree() + " must contain exactly "
+                + degree() + " elements. Element length was " + values.length);
         }
     }
 
