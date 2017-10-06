@@ -29,7 +29,8 @@ public interface LongToIntFunction {
      * Returns the {@code int} value for the specified {@code long}. This method
      * should operate without side-effects.
      * 
-     * @return the resulting value
+     * @param value the input {@code long} value
+     * @return      the resulting value
      */
-    int applyAsInt();
+    int applyAsInt(long value);
 }
