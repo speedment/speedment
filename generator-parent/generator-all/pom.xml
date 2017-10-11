@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.generator</groupId>
         <artifactId>generator-parent</artifactId>
-        <version>3.0.15-SNAPSHOT</version>
+        <version>3.0.15</version>
     </parent>
     
     <artifactId>generator-all</artifactId>
