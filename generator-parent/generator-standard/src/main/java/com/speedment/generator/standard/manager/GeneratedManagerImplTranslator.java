@@ -16,11 +16,11 @@
  */
 package com.speedment.generator.standard.manager;
 
+import com.speedment.common.codegen.constant.DefaultType;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.model.Class;
 import com.speedment.common.codegen.model.*;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
-import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.config.trait.HasColumn;
@@ -28,7 +28,6 @@ import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.manager.AbstractManager;
 import com.speedment.runtime.core.manager.AbstractViewManager;
 
-import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -60,6 +59,8 @@ public final class GeneratedManagerImplTranslator
             // The table specific methods.                                    //
             ////////////////////////////////////////////////////////////////////
             .forEveryTable((clazz, table) -> {
+                file.add(Import.of(getSupport().managerType()));
+
                 clazz
                     .public_()
                     .abstract_()
@@ -81,7 +82,18 @@ public final class GeneratedManagerImplTranslator
                         .public_().add(OVERRIDE)
                         .add("return tableIdentifier;")
                     )
-                    .add(generateFields(getSupport(), file, FIELDS_METHOD, () -> table.columns().sorted(Comparator.comparing(Column::getOrdinalPosition))))
+                    .add(
+                        Method.of(FIELDS_METHOD,
+                            DefaultType.stream(
+                                SimpleParameterizedType.create(
+                                    com.speedment.runtime.field.Field.class,
+                                    getSupport().entityType()
+                                )
+                            )
+                        )
+                        .public_().add(OVERRIDE)
+                        .add("return " + getSupport().managerName() + ".FIELDS.stream();")
+                    )
                     .add(generateFields(getSupport(), file, PRIMARY_KEYS_FIELDS_METHOD,
                         () -> table.primaryKeyColumns()
                             .filter(HasEnabled::test)

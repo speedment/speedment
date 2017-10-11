@@ -26,11 +26,11 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.0.13</version>
+        <version>3.0.15-SNAPSHOT</version>
     </parent>
     
     <artifactId>tuple</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6-SNAPSHOT</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - Tuple</name>

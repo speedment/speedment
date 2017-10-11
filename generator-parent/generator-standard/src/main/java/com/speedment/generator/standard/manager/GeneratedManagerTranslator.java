@@ -17,15 +17,23 @@
 package com.speedment.generator.standard.manager;
 
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
-import com.speedment.common.codegen.model.File;
-import com.speedment.common.codegen.model.Interface;
-import com.speedment.common.codegen.model.Method;
+import com.speedment.common.codegen.model.*;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.manager.Manager;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultType.classOf;
+import static com.speedment.common.codegen.constant.DefaultType.list;
+import static com.speedment.common.codegen.util.Formatting.indent;
+import static com.speedment.common.codegen.util.Formatting.nl;
+import static java.util.Comparator.comparing;
+import static java.util.stream.Collectors.joining;
 
 /**
  *
@@ -42,14 +50,32 @@ extends AbstractEntityAndManagerTranslator<Interface> {
     @Override
     protected Interface makeCodeGenModel(File file) {
         return newBuilder(file, getSupport().generatedManagerName())
-            .forEveryTable((intf, table) ->
+            .forEveryTable((intf, table) -> {
+                file.add(Import.of(getSupport().entityType()));
+                file.add(Import.of(Collections.class).setStaticMember("unmodifiableList").static_());
+                file.add(Import.of(Arrays.class).setStaticMember("asList").static_());
+
                 intf.public_()
                     .add(SimpleParameterizedType.create(Manager.class, getSupport().entityType()))
+
+                    .add(Field.of("FIELDS", list(SimpleParameterizedType.create(
+                        com.speedment.runtime.field.Field.class,
+                        getSupport().entityType())
+                    )).set(Value.ofReference("unmodifiableList(asList(" + nl() + indent(
+                        table.columns()
+                            .sorted(comparing(Column::getOrdinalPosition))
+                            .filter(HasEnabled::isEnabled)
+                            .map(Column::getJavaName)
+                            .map(getSupport().namer()::javaStaticFieldName)
+                            .map(field -> getSupport().typeName() + "." + field)
+                            .collect(joining("," + nl()))
+                    ) + nl() + "))")))
+
                     .add(Method.of("getEntityClass", classOf(getSupport().entityType()))
                         .default_().add(OVERRIDE)
                         .add("return " + getSupport().entityName() + ".class;")
-                    )
-            ).build();
+                    );
+            }).build();
     }
 
     @Override

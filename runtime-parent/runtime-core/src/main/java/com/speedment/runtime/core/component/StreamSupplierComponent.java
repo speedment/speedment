@@ -24,6 +24,8 @@ import com.speedment.runtime.field.trait.HasComparableOperators;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static com.speedment.runtime.core.stream.parallel.ParallelStrategy.computeIntensityDefault;
+
 /**
  * This Component interface is used to obtain streams for different tables.
  *
@@ -32,6 +34,20 @@ import java.util.stream.Stream;
  */
 @InjectKey(StreamSupplierComponent.class)
 public interface StreamSupplierComponent {
+
+    /**
+     * Basic stream over all entities using the default
+     * {@link ParallelStrategy}.
+     *
+     * @param <ENTITY>  entity type
+     * @param tableId   the identifier to use
+     * @return          a stream for the given entity class
+     *
+     * @since 3.0.15
+     */
+    default <ENTITY> Stream<ENTITY> stream(TableIdentifier<ENTITY> tableId) {
+        return stream(tableId, computeIntensityDefault());
+    }
     
     /**
      * Basic stream over all entities.
