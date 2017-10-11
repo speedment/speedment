@@ -41,22 +41,42 @@ import java.util.concurrent.ConcurrentHashMap;
  * @param <ENTITY> the entity type
  *
  * @author Per Minborg
- * @since 3.0.1
+ * @since  3.0.1
  * @see DocumentDbUtil
  */
 public interface TableIdentifier<ENTITY> extends
-    HasDbmsName,
-    HasSchemaName,
-    HasTableName {
+        HasDbmsName,
+        HasSchemaName,
+        HasTableName {
 
+    /**
+     * Returns a {@link SchemaIdentifier} that represents the schema that this
+     * table resides in.
+     *
+     * @return  the schema identifier
+     */
     default SchemaIdentifier<ENTITY> asSchemaIdentifier() {
         return SchemaIdentifier.of(getDbmsName(), getSchemaName());
     }
 
+    /**
+     * Returns a {@link ColumnIdentifier} that represents a particular column in
+     * this table.
+     *
+     * @param columnName  the database name of the column
+     * @return            the column identifier
+     */
+    default ColumnIdentifier<ENTITY> asColumnIdentifier(String columnName) {
+        return ColumnIdentifier.of(
+            getDbmsName(),
+            getSchemaName(),
+            getTableName(),
+            columnName
+        );
+    }
+
     class Hidden {
-
         private static final Map<TableIdentifier<?>, TableIdentifier<?>> INTERNED = new ConcurrentHashMap<>();
-
     }
 
     static <ENTITY> TableIdentifier<ENTITY> of(String dbmsName, String schemaName, String tableName) {
