@@ -74,7 +74,7 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
 
     @Override
     public int getDefaultPort() {
-        return 3305;
+        return 3306;
     }
 
     @Override
