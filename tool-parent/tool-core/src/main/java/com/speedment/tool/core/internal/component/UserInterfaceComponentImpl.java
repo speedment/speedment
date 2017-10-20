@@ -31,7 +31,6 @@ import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.core.internal.util.Settings;
 import com.speedment.runtime.core.internal.util.Statistics;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.tool.config.DbmsProperty;
@@ -264,11 +263,6 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open .json File");
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
-
-        Optional.ofNullable(Settings.inst().get("project_location"))
-            .map(File::new)
-            .filter(OPEN_DIRECTORY_CONDITIONS)
-            .ifPresent(fileChooser::setInitialDirectory);
 
         final File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
