@@ -26,7 +26,6 @@ import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.db.DbmsType;
-import com.speedment.runtime.core.internal.util.Settings;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.event.UIEvent;
@@ -246,7 +245,6 @@ public final class ConnectController implements Initializable {
 
             if (!areaConnectionUrl.getText().isEmpty()
             &&  !areaConnectionUrl.getText().equals(generatedConnUrl.get())) {
-                Settings.inst().set("last_known_url", areaConnectionUrl.getText());
                 dbms.connectionUrlProperty().setValue(
                     areaConnectionUrl.getText()
                 );
@@ -261,17 +259,8 @@ public final class ConnectController implements Initializable {
             userInterfaceComponent.projectProperty().nameProperty()
                 .setValue(schema);
 
-            // Store the settings so that they can be reused in the next session
-            Settings.inst().set("last_known_schema", fieldSchema.getText());
-            Settings.inst().set("last_known_dbtype", dbmsType.get().getName());
-            Settings.inst().set("last_known_host", fieldHost.getText());
-            Settings.inst().set("last_known_port", fieldPort.getText());
-            Settings.inst().set("last_known_user", fieldUser.getText());
-            Settings.inst().set("last_known_name", fieldName.getText());
-
             // Connect to database
             if (configFileHelper.loadFromDatabase(dbms, schema)) {
-                Settings.inst().set("hide_open_option", false);
                 loader.loadAndShow("Scene");
                 eventComponent.notify(UIEvent.OPEN_MAIN_WINDOW);
             }

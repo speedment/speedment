@@ -39,7 +39,6 @@ import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.internal.DefaultApplicationBuilder;
 import com.speedment.runtime.core.internal.util.ProgressMeasurerImpl;
-import com.speedment.runtime.core.internal.util.Settings;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.ProjectProperty;
@@ -378,10 +377,8 @@ public final class ConfigFileHelper {
 
             DocumentTranscoder.save(project, path, Json::toJson);
 
-            final String absolute = file.getAbsolutePath();
-            Settings.inst().set("project_location", absolute);
-
             if (isGraphical) {
+                final String absolute = file.getAbsolutePath();
                 userInterfaceComponent.log(success("Saved project file to '" + absolute + "'."));
                 userInterfaceComponent.showNotification("Configuration saved.", FontAwesome.DOWNLOAD, Palette.INFO);
             }
