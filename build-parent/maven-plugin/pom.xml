@@ -45,6 +45,7 @@
     </description>
     
     <dependencies>
+        <!-- Speedment Compile Dependencies -->
         <dependency>
             <groupId>com.speedment</groupId>
             <artifactId>tool</artifactId>
@@ -52,43 +53,24 @@
             <type>pom</type>
         </dependency>
 
+        <!-- Official Speedment Plugins for convenience -->
         <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-plugin-api</artifactId>
-            <version>3.3.9</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.sisu</groupId>
-                    <artifactId>org.eclipse.sisu.plexus</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.maven.plugin-tools</groupId>
-            <artifactId>maven-plugin-annotations</artifactId>
-            <version>3.5</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-artifact</artifactId>
-            <version>3.3.9</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-core</artifactId>
-            <version>3.0.5</version>
-            <type>jar</type>
-        </dependency>
-        
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql-jdbc-version}</version>
+            <groupId>com.speedment.plugins</groupId>
+            <artifactId>enum-generator</artifactId>
+            <version>${speedment.version}</version>
+            <optional>true</optional>
             <scope>runtime</scope>
         </dependency>
-        
+
+        <dependency>
+            <groupId>com.speedment.plugins</groupId>
+            <artifactId>spring-generator</artifactId>
+            <version>${speedment.version}</version>
+            <optional>true</optional>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- JDBC Connectors for convenience -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -101,6 +83,45 @@
             <artifactId>mariadb-java-client</artifactId>
             <version>${mariadb-jdbc-version}</version>
             <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-jdbc-version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- Maven Plugin Dependencies -->
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>3.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-artifact</artifactId>
+            <version>3.3.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+            <version>3.0.5</version>
+            <type>jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.3.9</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.sisu</groupId>
+                    <artifactId>org.eclipse.sisu.plexus</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Test dependencies -->
