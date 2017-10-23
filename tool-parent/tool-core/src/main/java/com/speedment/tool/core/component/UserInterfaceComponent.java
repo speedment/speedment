@@ -49,9 +49,9 @@ import java.util.stream.Stream;
 @InjectKey(UserInterfaceComponent.class)
 public interface UserInterfaceComponent {
 
-    /*************************************************************/
-    /*                     Global properties                     */
-    /*************************************************************/
+    ////////////////////////////////////////////////////////////////////////////
+    //                            Global Properties                           //
+    ////////////////////////////////////////////////////////////////////////////
     
     /**
      * Returns the {@link ProjectProperty} used in this session.
@@ -104,10 +104,10 @@ public interface UserInterfaceComponent {
      * @return  visible properties
      */
     ObservableList<PropertyEditor.Item> getProperties();
-    
-    /*************************************************************/
-    /*                      Menubar actions                      */
-    /*************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                            Menubar actions                             //
+    ////////////////////////////////////////////////////////////////////////////
     
     /**
      * Opens a new empty project in a new window.
@@ -189,9 +189,9 @@ public interface UserInterfaceComponent {
      */
     void showGithub();
 
-    /*************************************************************/
-    /*                      Dialog messages                      */
-    /*************************************************************/
+    ////////////////////////////////////////////////////////////////////////////
+    //                             Dialog Messages                            //
+    ////////////////////////////////////////////////////////////////////////////
     
     /**
      * Shows an error message in the user interface with the specified
@@ -320,10 +320,10 @@ public interface UserInterfaceComponent {
      * @param action   action to be performed on click
      */
     void showNotification(String message, Icon icon, Palette palette, Runnable action);
-    
-    /*************************************************************/
-    /*                      Context Menues                       */
-    /*************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                              Context Menues                            //
+    ////////////////////////////////////////////////////////////////////////////
     
     /**
      * Installs the specified menu builder for the specified node type.
@@ -363,9 +363,9 @@ public interface UserInterfaceComponent {
         Stream<MenuItem> build(TreeCell<DocumentProperty> tc, DOC doc);
     }
 
-    /*************************************************************/
-    /*                            Other                          */
-    /*************************************************************/
+    ////////////////////////////////////////////////////////////////////////////
+    //                                  Other                                 //
+    ////////////////////////////////////////////////////////////////////////////
     
     /**
      * Clears the output log in the user interface.

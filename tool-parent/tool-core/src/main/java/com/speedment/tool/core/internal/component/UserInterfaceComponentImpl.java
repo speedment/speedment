@@ -87,6 +87,7 @@ import java.util.function.Predicate;
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.runtime.core.internal.util.Statistics.Event.GUI_PROJECT_LOADED;
 import static com.speedment.runtime.core.internal.util.Statistics.Event.GUI_STARTED;
+import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 import static javafx.application.Platform.runLater;
@@ -101,12 +102,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
 
     private static final String GITHUB_URI = "https://github.com/speedment/speedment/";
     private static final String GITTER_URI = "https://gitter.im/speedment/speedment/";
-    
-    private static final Predicate<File> OPEN_DIRECTORY_CONDITIONS = file
-        -> file != null
-        && file.exists()
-        && file.isDirectory();
-    
+
     private static final Predicate<Optional<char[]>> NO_PASSWORD_SPECIFIED
         = pass -> !pass.isPresent() || pass.get().length == 0;
     
@@ -161,7 +157,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         this.stage       = requireNonNull(stage);
         this.application = requireNonNull(application);
         this.project     = new ProjectProperty();
-        
+
         LoggerManager.getFactory().addListener(ev -> {
             switch (ev.getLevel()) {
                 case DEBUG : case TRACE : case INFO : {
@@ -170,16 +166,18 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
                 }
                 case WARN : {
                     addToOutputMessages(OutputUtil.warning(ev.getMessage()));
-                    showNotification(ev.getMessage(), Palette.WARNING);
+                    showNotification("There are warnings. See output.",
+                            FontAwesome.EXCLAMATION_CIRCLE,
+                            Palette.WARNING, () -> {
+
+                        if (hiddenOutput.get() != null) {
+                            toggleOutput();
+                        }
+                    });
                     break;
                 }
                 case ERROR : case FATAL : {
-                    addToOutputMessages(OutputUtil.error(ev.getMessage()));                   
-                    // Hack to remove stack trace from message.
-                    String msg = ev.getMessage();
-                    if (msg.contains("\tat ")) {
-                        msg = msg.substring(0, msg.indexOf("\tat "));
-                    }
+                    addToOutputMessages(OutputUtil.error(ev.getMessage()));
                     break;
                 }
             }
@@ -196,10 +194,10 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     private void addToOutputMessages(Node node) {
         runLater(() -> outputMessages.add(node));
     }
-    
-    /*************************************************************/
-    /*                     Global properties                     */
-    /*************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                            Global Properties                           //
+    ////////////////////////////////////////////////////////////////////////////
  
     @Override
     public ProjectProperty projectProperty() {
@@ -236,9 +234,9 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         return properties;
     }
     
-    /*************************************************************/
-    /*                      Menubar actions                      */
-    /*************************************************************/
+    ////////////////////////////////////////////////////////////////////////////
+    //                            Menubar actions                             //
+    ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void newProject() {
@@ -376,21 +374,6 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     }
 
     @Override
-    public void prepareToggleProjectTree(BooleanProperty checked) {
-        toggle(checked, "projectTree", hiddenProjectTree, StoredNode.InsertAt.BEGINNING);
-    }
-
-    @Override
-    public void prepareToggleWorkspace(BooleanProperty checked) {
-        toggle(checked, "workspace", hiddenWorkspace, StoredNode.InsertAt.BEGINNING);
-    }
-
-    @Override
-    public void prepareToggleOutput(BooleanProperty checked) {
-        toggle(checked, "output", hiddenOutput, StoredNode.InsertAt.END);
-    }
-
-    @Override
     public void showGitter() {
         browse(GITTER_URI);
     }
@@ -399,74 +382,101 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     public void showGithub() {
         browse(GITHUB_URI);
     }
-    
-    private void toggle(
+
+    @Override
+    public void prepareToggleProjectTree(BooleanProperty checked) {
+        prepareToggle(checked, this::toggleProjectTree);
+    }
+
+    @Override
+    public void prepareToggleWorkspace(BooleanProperty checked) {
+        prepareToggle(checked, this::toggleWorkspace);
+    }
+
+    @Override
+    public void prepareToggleOutput(BooleanProperty checked) {
+        prepareToggle(checked, this::toggleOutput);
+    }
+
+    private void toggleProjectTree() {
+        toggle("projectTree", hiddenProjectTree, StoredNode.InsertAt.BEGINNING);
+    }
+
+    private void toggleWorkspace() {
+        toggle("workspace", hiddenWorkspace, StoredNode.InsertAt.BEGINNING);
+    }
+
+    private void toggleOutput() {
+        toggle("output", hiddenOutput, StoredNode.InsertAt.END);
+    }
+
+    private void prepareToggle(
             BooleanProperty checked,
-            String cssId, 
-            ObjectProperty<StoredNode> hidden, 
-            StoredNode.InsertAt insertAt) {
-        
-        final Runnable toggler = () -> {
-            final SplitPane parent;
-            final Node node;
+            Runnable toggle) {
 
-            if (hidden.get() == null) {
-                node = this.stage.getScene().lookup("#" + cssId);
-
-                if (node != null) {
-                    Node n = node;
-                    while (!((n = n.getParent()) instanceof SplitPane) && n != null) {
-                    }
-                    parent = (SplitPane) n;
-
-                    if (parent != null) {
-                        parent.getItems().remove(node);
-                        hidden.set(new StoredNode(node, parent));
-                    } else {
-                        LOGGER.error("Found no SplitPane ancestor of #" + cssId + ".");
-                    }
-                } else {
-                    LOGGER.error("Non-existing node #" + cssId + " was toggled.");
-                }
-            } else {
-                parent = hidden.get().parent;
-
-                if (parent != null) {
-                    node = hidden.get().node;
-
-                    switch (insertAt) {
-                        case BEGINNING:
-                            parent.getItems().add(0, node);
-                            break;
-                        case END:
-                            parent.getItems().add(node);
-                            break;
-                        default:
-                            throw new UnsupportedOperationException(
-                                "Unknown InsertAt enum constant '" + insertAt + "'."
-                            );
-                    }
-
-                    hidden.set(null);
-                } else {
-                    LOGGER.error("Found no parent to node #" + cssId + " that was toggled.");
-                }
-            }
-        };
-        
         checked.addListener((ob, o, isChecked) -> 
-            toggler.run()
+            toggle.run()
         );
         
         // If the item is unchecked, toggle the component initially.
         if (!checked.get()) {
-            runLater(toggler);
+            toggle.run();
         }
     }
-    
-    /*************************************************************/
-    /*                      Dialog messages                      */
-    /*************************************************************/
+
+    private void toggle(String cssId,
+                        ObjectProperty<StoredNode> hidden,
+                        StoredNode.InsertAt insertAt) {
+
+        final SplitPane parent;
+        final Node node;
+
+        if (hidden.get() == null) {
+            node = this.stage.getScene().lookup("#" + cssId);
+
+            if (node != null) {
+                Node n = node;
+                while (!((n = n.getParent()) instanceof SplitPane) && n != null) {}
+                parent = (SplitPane) n;
+
+                if (parent != null) {
+                    parent.getItems().remove(node);
+                    hidden.set(new StoredNode(node, parent));
+                } else {
+                    LOGGER.error("Found no SplitPane ancestor of #%s.", cssId);
+                }
+            } else {
+                LOGGER.error("Non-existing node #%s was toggled.", cssId);
+            }
+        } else {
+            parent = hidden.get().parent;
+
+            if (parent != null) {
+                node = hidden.get().node;
+
+                switch (insertAt) {
+                    case BEGINNING:
+                        parent.getItems().add(0, node);
+                        break;
+                    case END:
+                        parent.getItems().add(node);
+                        break;
+                    default:
+                        throw new UnsupportedOperationException(format(
+                            "Unknown InsertAt enum constant '%s'.", insertAt
+                        ));
+                }
+
+                hidden.set(null);
+            } else {
+                LOGGER.error("Found no parent to node #%s that was toggled.", cssId);
+            }
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                             Dialog Messages                            //
+    ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void showError(String title, String message) {
@@ -683,10 +693,10 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
             notifications.add(new NotificationImpl(message, icon, palette, action))
         );
     }
-    
-    /*************************************************************/
-    /*                      Context Menues                       */
-    /*************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                              Context Menues                            //
+    ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public <DOC extends DocumentProperty & HasMainInterface> void 
@@ -724,13 +734,13 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         if (menu.getItems().isEmpty()) {
             return Optional.empty();
         } else {
-            return Optional.ofNullable(menu);
+            return Optional.of(menu);
         }
     }
-    
-    /*************************************************************/
-    /*                            Other                          */
-    /*************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                                  Other                                 //
+    ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void clearLog() {
