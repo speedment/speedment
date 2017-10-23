@@ -171,7 +171,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
                             Palette.WARNING, () -> {
 
                         if (hiddenOutput.get() != null) {
-                            toggleOutput();
+                            toggleOutput(); // TODO: Find out why OutputArea is already open sometimes
                         }
                     });
                     break;
