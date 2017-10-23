@@ -73,9 +73,6 @@ public final class PropertyEditorComponentImpl implements PropertyEditorComponen
     
     @Override
     public <DOC extends DocumentProperty> Stream<PropertyEditor.Item> getUiVisibleProperties(DOC document) {
-
-        // @RequestParam(name="sort", required=false) String sSorts,
-
         return MapStream.of(factoryMap)                                         // MapStream<Class, Map<String, Supplier<PropertyEditor>>>
             .filterKey(clazz -> clazz.isAssignableFrom(document.getClass()))    // MapStream<Class, Map<String, Supplier<PropertyEditor>>>
             .flatMapValue(m -> MapStream.of(m))                                 // MapStream<Class, Map.Entry<String, Supplier<PropertyEditor>>>
