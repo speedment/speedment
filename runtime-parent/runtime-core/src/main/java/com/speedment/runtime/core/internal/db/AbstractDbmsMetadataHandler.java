@@ -102,6 +102,9 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         final Dbms dbmsCopy = projectCopy.dbmses()
             .filter(d -> d.getId().equals(dbms.getId()))
             .filter(d -> d.getUsername().equals(dbms.getUsername()))  // Fixes #536
+            .filter(d -> d.getIpAddress().equals(dbms.getIpAddress()))
+            .filter(d -> d.getPort().equals(dbms.getPort()))
+            .filter(d -> d.getTypeName().equals(dbms.getTypeName()))
             .findAny().orElseThrow(() -> new SpeedmentException(
                 "Could not find Dbms document in copy."
             ));
@@ -176,7 +179,6 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
 
         // Task that downloads the schemas from the database
         final CompletableFuture<Void> schemasTask = CompletableFuture.runAsync(() -> {
-            System.out.println("metadata task: " + dbms.getUsername());
             try (final Connection connection = getConnection(dbms)) {
                 try (final ResultSet rs = connection.getMetaData().getSchemas(null, null)) {
                     while (rs.next()) {
