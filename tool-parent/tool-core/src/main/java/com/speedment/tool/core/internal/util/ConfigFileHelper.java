@@ -178,6 +178,14 @@ public final class ConfigFileHelper {
     }
 
     public boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
+        final Runnable restore = () -> {
+            passwordComponent.put(dbms, null); // Clear password
+
+            userInterfaceComponent.projectProperty()
+                .observableListOf(Project.DBMSES)
+                .remove(dbms); // Remove dbms from observable model
+        };
+
         try {
             // Create an immutable copy of the tree and store in the ProjectComponent
             final Project projectCopy = ImmutableProject.wrap(userInterfaceComponent.projectProperty());
@@ -226,7 +234,7 @@ public final class ConfigFileHelper {
 
                             return true;
                         } else {
-                            passwordComponent.put(dbms, null); // Clear password
+                            restore.run();
                             runLater(() ->
                                 userInterfaceComponent.showError("Error Connecting to Database",
                                     "A problem occured with establishing the database connection.", ex
@@ -246,12 +254,14 @@ public final class ConfigFileHelper {
                     FontAwesome.DATABASE,
                     Palette.INFO
                 );
+            } else {
+                restore.run();
             }
 
             return status;
 
         } catch (final InterruptedException | ExecutionException ex) {
-            passwordComponent.put(dbms, null); // Clear password
+            restore.run();
             userInterfaceComponent.showError("Error Executing Connection Task",
                 "The execution of certain tasks could not be completed.", ex
             );
