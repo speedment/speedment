@@ -86,10 +86,9 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     
     @Override
     public CompletableFuture<Project> readSchemaMetadata(
-        final Dbms dbms,
-        final ProgressMeasure progress,
-        final Predicate<String> filterCriteria
-    ) {
+            final Dbms dbms,
+            final ProgressMeasure progress,
+            final Predicate<String> filterCriteria) {
 
         requireNonNulls(filterCriteria, progress);
 
@@ -98,13 +97,29 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
             projectComponent.getProject(), ProjectImpl::new
         );
 
+        // Make sure there are not multiple dbmses with the same id
+        final Set<String> ids = new HashSet<>();
+        if (!projectCopy.dbmses().map(Dbms::getId).allMatch(ids::add)) {
+            final Set<String> duplicates = new HashSet<>();
+            ids.clear();
+
+            projectCopy.dbmses()
+                .map(Dbms::getId)
+                .forEach(s -> {
+                    if (!ids.add(s)) {
+                        duplicates.add(s);
+                    }
+                });
+
+            throw new SpeedmentException(
+                "The following dbmses have duplicates in the config document: "
+                + duplicates
+            );
+        }
+
         // Locate the dbms in the copy.
         final Dbms dbmsCopy = projectCopy.dbmses()
             .filter(d -> d.getId().equals(dbms.getId()))
-            .filter(d -> d.getUsername().equals(dbms.getUsername()))  // Fixes #536
-            .filter(d -> d.getIpAddress().equals(dbms.getIpAddress()))
-            .filter(d -> d.getPort().equals(dbms.getPort()))
-            .filter(d -> d.getTypeName().equals(dbms.getTypeName()))
             .findAny().orElseThrow(() -> new SpeedmentException(
                 "Could not find Dbms document in copy."
             ));
