@@ -63,49 +63,47 @@ public final class SceneController implements Initializable {
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        runLater(() -> {
-            top.getChildren().add(loader.load("Menubar"));
-            top.getChildren().add(loader.load("Toolbar"));
-            horizontal.getItems().add(0, loader.load("ProjectTree"));
-            vertical.getItems().add(loader.load("Workspace"));
-            vertical.getItems().add(loader.load("Output"));
-            
-            horizontal.setDividerPositions(0.2, 0.7);
-            vertical.setDividerPositions(0.7, 0.3);
+        top.getChildren().add(loader.load("Menubar"));
+        top.getChildren().add(loader.load("Toolbar"));
+        horizontal.getItems().add(0, loader.load("ProjectTree"));
+        vertical.getItems().add(loader.load("Workspace"));
+        vertical.getItems().add(loader.load("Output"));
 
-            Statistics.report(info, projects, GUI_PROJECT_LOADED);
-            
-            CompletableFuture.runAsync(() -> {
-                try {
-                    version.latestVersion()
-                        .thenAcceptAsync(release -> runLater(() -> {
-                            final int compare = SEMANTIC_VERSION.compare(
-                                release, info.getImplementationVersion()
+        horizontal.setDividerPositions(0.2, 0.7);
+        vertical.setDividerPositions(0.7, 0.3);
+
+        Statistics.report(info, projects, GUI_PROJECT_LOADED);
+
+        CompletableFuture.runAsync(() -> {
+            try {
+                version.latestVersion()
+                    .thenAcceptAsync(release -> runLater(() -> {
+                        final int compare = SEMANTIC_VERSION.compare(
+                            release, info.getImplementationVersion()
+                        );
+
+                        if (compare == 0) {
+                            ui.showNotification(
+                                "Your version of " + info.getTitle() + " is up to date."
                             );
-
-                            if (compare == 0) {
-                                ui.showNotification(
-                                    "Your version of " + info.getTitle() + " is up to date."
-                                );
-                            } else if (compare > 0) {
-                                ui.showNotification(
-                                    "A new version " + release +
-                                    " of " + info.getTitle() + " is available."
-                                );
-                            } else {
-                                ui.showNotification(
-                                    "Your version " + info.getImplementationVersion() +
-                                    " of " + info.getTitle() + " is newer than the released " +
-                                    release + "."
-                                );
-                            }
-                        })).get(3, TimeUnit.SECONDS);
-                } catch (final InterruptedException | ExecutionException ex) {
-                    LOGGER.debug(ex, "Error loading last released version.");
-                } catch (final TimeoutException ex) {
-                    LOGGER.debug(ex, "Request for latest released version timed out.");
-                }
-            });
+                        } else if (compare > 0) {
+                            ui.showNotification(
+                                "A new version " + release +
+                                " of " + info.getTitle() + " is available."
+                            );
+                        } else {
+                            ui.showNotification(
+                                "Your version " + info.getImplementationVersion() +
+                                " of " + info.getTitle() + " is newer than the released " +
+                                release + "."
+                            );
+                        }
+                    })).get(3, TimeUnit.SECONDS);
+            } catch (final InterruptedException | ExecutionException ex) {
+                LOGGER.debug(ex, "Error loading last released version.");
+            } catch (final TimeoutException ex) {
+                LOGGER.debug(ex, "Request for latest released version timed out.");
+            }
         });
     }
 }
