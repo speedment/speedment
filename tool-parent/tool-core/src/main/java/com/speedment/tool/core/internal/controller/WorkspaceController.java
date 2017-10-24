@@ -63,7 +63,6 @@ public final class WorkspaceController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         
         final PropertySheet sheet = new PropertySheet(properties);
-        
         ui.getSelectedTreeItems()
             .addListener((ListChangeListener.Change<? extends TreeItem<DocumentProperty>> change) -> {
                 properties.clear();

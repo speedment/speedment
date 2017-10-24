@@ -32,14 +32,14 @@ import java.util.ResourceBundle;
  */
 public final class OutputController implements Initializable {
     
-    private @Inject UserInterfaceComponent userInterfaceComponent;
-    private @FXML VBox output;
+    private @Inject UserInterfaceComponent ui;
+    private @FXML VBox log;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Bindings.bindContent(
-            output.getChildren(), 
-            userInterfaceComponent.outputMessages()
+            log.getChildren(),
+            ui.outputMessages()
         );
     }
 }

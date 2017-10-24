@@ -158,26 +158,17 @@ public interface UserInterfaceComponent {
      */
     void generate();
 
-    /**
-     * Shows or hides the "Project Tree" section of the user interface.
-     * 
-     * @param checked  regulates if the toggle is checked or not
-     */
-    void prepareToggleProjectTree(BooleanProperty checked);
+    BooleanProperty projectTreeVisibleProperty();
 
-    /**
-     * Shows or hides the "Workspace" section of the user interface.
-     * 
-     * @param checked  regulates if the toggle is checked or not
-     */
-    void prepareToggleWorkspace(BooleanProperty checked);
+    BooleanProperty workspaceVisibleProperty();
 
-    /**
-     * Shows or hides the "Output" section of the user interface.
-     * 
-     * @param checked  regulates if the toggle is checked or not
-     */
-    void prepareToggleOutput(BooleanProperty checked);
+    BooleanProperty outputVisibleProperty();
+
+    void prepareProjectTree(SplitPane parent, Node projectTree);
+
+    void prepareWorkspace(SplitPane parent, Node workspace);
+
+    void prepareOutput(SplitPane parent, Node output);
     
     /**
      * Opens the default internet browser and shows the Speedment Gitter page.

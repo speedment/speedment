@@ -41,11 +41,10 @@ import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
+
 import static javafx.scene.control.SelectionMode.SINGLE;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 

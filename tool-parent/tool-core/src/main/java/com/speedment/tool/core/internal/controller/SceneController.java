@@ -28,6 +28,7 @@ import com.speedment.tool.core.internal.util.InjectionLoader;
 import com.speedment.tool.core.internal.util.SemanticVersionComparator;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.VBox;
 
@@ -65,9 +66,18 @@ public final class SceneController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         top.getChildren().add(loader.load("Menubar"));
         top.getChildren().add(loader.load("Toolbar"));
-        horizontal.getItems().add(0, loader.load("ProjectTree"));
-        vertical.getItems().add(loader.load("Workspace"));
-        vertical.getItems().add(loader.load("Output"));
+
+        final Node projectTree = loader.load("ProjectTree");
+        final Node workspace   = loader.load("Workspace");
+        final Node output      = loader.load("Output");
+
+        horizontal.getItems().add(0, projectTree);
+        vertical.getItems().add(workspace);
+        vertical.getItems().add(output);
+
+        ui.prepareProjectTree(horizontal, projectTree);
+        ui.prepareWorkspace(vertical, workspace);
+        ui.prepareOutput(vertical, output);
 
         horizontal.setDividerPositions(0.2, 0.7);
         vertical.setDividerPositions(0.7, 0.3);

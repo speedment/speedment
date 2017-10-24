@@ -25,6 +25,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <TitledPane id="output"
+            fx:id="output"
             animated="false"
             collapsible="false"
             maxHeight="1.7976931348623157E308"
@@ -36,7 +37,7 @@
     <content>
         <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
             <content>
-                <VBox fx:id="output" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: white;">
+                <VBox fx:id="log" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: white;">
                     <padding>
                         <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
                     </padding>

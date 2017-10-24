@@ -28,15 +28,13 @@ import javafx.scene.control.MenuItem;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static javafx.application.Platform.runLater;
-
 /**
  *
  * @author Emil Forslund
  */
 public final class MenubarController implements Initializable {
 
-    private @Inject UserInterfaceComponent userInterfaceComponent;
+    private @Inject UserInterfaceComponent ui;
     private @Inject InjectionLoader loader;
 
     private @FXML MenuItem mbNew;
@@ -73,28 +71,20 @@ public final class MenubarController implements Initializable {
         mbComponents.setGraphic(SpeedmentIcon.BRICKS.view());
         mbAbout.setGraphic(SpeedmentIcon.INFORMATION.view());
 
-        mbNew.setOnAction(ev -> userInterfaceComponent.newProject());
-        mbOpen.setOnAction(ev -> userInterfaceComponent.openProject());
-        mbSave.setOnAction(ev -> userInterfaceComponent.saveProject());
-        mbSaveAs.setOnAction(ev -> userInterfaceComponent.saveProjectAs());
-        mbQuit.setOnAction(ev -> userInterfaceComponent.quit());
+        mbNew.setOnAction(ev -> ui.newProject());
+        mbOpen.setOnAction(ev -> ui.openProject());
+        mbSave.setOnAction(ev -> ui.saveProject());
+        mbSaveAs.setOnAction(ev -> ui.saveProjectAs());
+        mbQuit.setOnAction(ev -> ui.quit());
 
-        mbGenerate.setOnAction(ev -> userInterfaceComponent.generate());
+        mbGenerate.setOnAction(ev -> ui.generate());
 
-        mbProjectTree.setSelected(true);
-        mbWorkspace.setSelected(true);
-        mbOutput.setSelected(false);
+        mbProjectTree.selectedProperty().bindBidirectional(ui.projectTreeVisibleProperty());
+        mbWorkspace.selectedProperty().bindBidirectional(ui.workspaceVisibleProperty());
+        mbOutput.selectedProperty().bindBidirectional(ui.outputVisibleProperty());
 
-        // Make sure that all the toggleable panels have been loaded before we
-        // try to prepare them. Otherwise the Output might not get hidden away.
-        runLater(() -> {
-            userInterfaceComponent.prepareToggleProjectTree(mbProjectTree.selectedProperty());
-            userInterfaceComponent.prepareToggleWorkspace(mbWorkspace.selectedProperty());
-            userInterfaceComponent.prepareToggleOutput(mbOutput.selectedProperty());
-        });
-
-        mbGitter.setOnAction(ev -> userInterfaceComponent.showGitter());
-        mbGitHub.setOnAction(ev -> userInterfaceComponent.showGithub());
+        mbGitter.setOnAction(ev -> ui.showGitter());
+        mbGitHub.setOnAction(ev -> ui.showGithub());
         mbComponents.setOnAction(ev -> loader.loadAsModal("Components"));
         mbAbout.setOnAction(ev -> loader.loadAsModal("About"));
     }

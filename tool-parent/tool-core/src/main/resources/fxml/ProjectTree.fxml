@@ -23,6 +23,7 @@
 <?import javafx.scene.control.TreeView?>
 
 <TitledPane id="projectTree"
+            fx:id="projectTree"
             animated="false"
             collapsible="false"
             maxHeight="1.7976931348623157E308"
