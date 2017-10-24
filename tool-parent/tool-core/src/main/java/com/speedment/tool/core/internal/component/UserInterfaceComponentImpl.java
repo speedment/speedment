@@ -46,6 +46,7 @@ import com.speedment.tool.core.internal.brand.SpeedmentBrand;
 import com.speedment.tool.core.internal.notification.NotificationImpl;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.internal.util.InjectionLoader;
+import com.speedment.tool.core.internal.util.Throttler;
 import com.speedment.tool.core.notification.Notification;
 import com.speedment.tool.core.resource.FontAwesome;
 import com.speedment.tool.core.resource.Icon;
@@ -158,6 +159,7 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         this.application = requireNonNull(application);
         this.project     = new ProjectProperty();
 
+        final Throttler throttler = Throttler.limitToOnceEvery(1_000);
         LoggerManager.getFactory().addListener(ev -> {
             switch (ev.getLevel()) {
                 case DEBUG : case TRACE : case INFO : {
@@ -166,13 +168,16 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
                 }
                 case WARN : {
                     addToOutputMessages(OutputUtil.warning(ev.getMessage()));
-                    if (hiddenOutput.get() != null) {
-                        showNotification("There are warnings. See output.",
-                            FontAwesome.EXCLAMATION_CIRCLE,
-                            Palette.WARNING,
-                            this::showOutput
-                        );
-                    }
+                    final String title = "There are warnings. See output.";
+                    throttler.call(title, () -> {
+                        if (hiddenOutput.get() != null) {
+                            showNotification(title,
+                                FontAwesome.EXCLAMATION_CIRCLE,
+                                Palette.WARNING,
+                                this::showOutput
+                            );
+                        }
+                    });
                     break;
                 }
                 case ERROR : case FATAL : {
