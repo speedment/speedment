@@ -20,12 +20,15 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.internal.util.InjectionLoader;
 import com.speedment.tool.core.resource.SpeedmentIcon;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuItem;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import static javafx.application.Platform.runLater;
 
 /**
  *
@@ -81,10 +84,14 @@ public final class MenubarController implements Initializable {
         mbProjectTree.setSelected(true);
         mbWorkspace.setSelected(true);
         mbOutput.setSelected(false);
-        
-        userInterfaceComponent.prepareToggleProjectTree(mbProjectTree.selectedProperty());
-        userInterfaceComponent.prepareToggleWorkspace(mbWorkspace.selectedProperty());
-        userInterfaceComponent.prepareToggleOutput(mbOutput.selectedProperty());
+
+        // Make sure that all the toggleable panels have been loaded before we
+        // try to prepare them. Otherwise the Output might not get hidden away.
+        runLater(() -> {
+            userInterfaceComponent.prepareToggleProjectTree(mbProjectTree.selectedProperty());
+            userInterfaceComponent.prepareToggleWorkspace(mbWorkspace.selectedProperty());
+            userInterfaceComponent.prepareToggleOutput(mbOutput.selectedProperty());
+        });
 
         mbGitter.setOnAction(ev -> userInterfaceComponent.showGitter());
         mbGitHub.setOnAction(ev -> userInterfaceComponent.showGithub());

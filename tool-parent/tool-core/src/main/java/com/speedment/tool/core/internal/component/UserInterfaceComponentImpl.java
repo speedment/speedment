@@ -166,14 +166,13 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
                 }
                 case WARN : {
                     addToOutputMessages(OutputUtil.warning(ev.getMessage()));
-                    showNotification("There are warnings. See output.",
+                    if (hiddenOutput.get() != null) {
+                        showNotification("There are warnings. See output.",
                             FontAwesome.EXCLAMATION_CIRCLE,
-                            Palette.WARNING, () -> {
-
-                        if (hiddenOutput.get() != null) {
-                            toggleOutput(); // TODO: Find out why OutputArea is already open sometimes
-                        }
-                    });
+                            Palette.WARNING,
+                            this::showOutput
+                        );
+                    }
                     break;
                 }
                 case ERROR : case FATAL : {
@@ -385,92 +384,120 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
 
     @Override
     public void prepareToggleProjectTree(BooleanProperty checked) {
-        prepareToggle(checked, this::toggleProjectTree);
+        prepareToggle(checked, this::showProjectTree, this::hideProjectTree);
     }
 
     @Override
     public void prepareToggleWorkspace(BooleanProperty checked) {
-        prepareToggle(checked, this::toggleWorkspace);
+        prepareToggle(checked, this::showWorkspace, this::hideWorkspace);
     }
 
     @Override
     public void prepareToggleOutput(BooleanProperty checked) {
-        prepareToggle(checked, this::toggleOutput);
+        prepareToggle(checked, this::showOutput, this::hideOutput);
     }
 
-    private void toggleProjectTree() {
-        toggle("projectTree", hiddenProjectTree, StoredNode.InsertAt.BEGINNING);
+    private void showProjectTree() {
+        toggleShow("projectTree", hiddenProjectTree, StoredNode.InsertAt.BEGINNING);
     }
 
-    private void toggleWorkspace() {
-        toggle("workspace", hiddenWorkspace, StoredNode.InsertAt.BEGINNING);
+    private void showWorkspace() {
+        toggleShow("workspace", hiddenWorkspace, StoredNode.InsertAt.BEGINNING);
     }
 
-    private void toggleOutput() {
-        toggle("output", hiddenOutput, StoredNode.InsertAt.END);
+    private void showOutput() {
+        toggleShow("output", hiddenOutput, StoredNode.InsertAt.END);
+    }
+
+    private void hideProjectTree() {
+        toggleHide("projectTree", hiddenProjectTree);
+    }
+
+    private void hideWorkspace() {
+        toggleHide("workspace", hiddenWorkspace);
+    }
+
+    private void hideOutput() {
+        toggleHide("output", hiddenOutput);
     }
 
     private void prepareToggle(
             BooleanProperty checked,
-            Runnable toggle) {
+            Runnable show,
+            Runnable hide) {
 
-        checked.addListener((ob, o, isChecked) -> 
-            toggle.run()
-        );
-        
-        // If the item is unchecked, toggle the component initially.
+        checked.addListener((ob, o, isChecked) -> {
+            if (isChecked) {
+                show.run();
+            } else {
+                hide.run();
+            }
+        });
+
+        // If the item is unchecked, hide the component initially.
         if (!checked.get()) {
-            toggle.run();
+            hide.run();
         }
     }
 
-    private void toggle(String cssId,
-                        ObjectProperty<StoredNode> hidden,
-                        StoredNode.InsertAt insertAt) {
-
-        final SplitPane parent;
-        final Node node;
+    private void toggleShow(String cssId,
+                            ObjectProperty<StoredNode> hidden,
+                            StoredNode.InsertAt insertAt) {
 
         if (hidden.get() == null) {
-            node = this.stage.getScene().lookup("#" + cssId);
+            LOGGER.warn("Toggle component '%s' is in wrong state. " +
+                "Expected to be HIDDEN but was SHOWING.", cssId);
+            return;
+        }
 
-            if (node != null) {
-                Node n = node;
-                while (!((n = n.getParent()) instanceof SplitPane) && n != null) {}
-                parent = (SplitPane) n;
+        final SplitPane parent = hidden.get().parent;
+        if (parent != null) {
+            final Node node = hidden.get().node;
 
-                if (parent != null) {
-                    parent.getItems().remove(node);
-                    hidden.set(new StoredNode(node, parent));
-                } else {
-                    LOGGER.error("Found no SplitPane ancestor of #%s.", cssId);
-                }
-            } else {
-                LOGGER.error("Non-existing node #%s was toggled.", cssId);
+            switch (insertAt) {
+                case BEGINNING:
+                    parent.getItems().add(0, node);
+                    break;
+                case END:
+                    parent.getItems().add(node);
+                    break;
+                default:
+                    throw new UnsupportedOperationException(format(
+                        "Unknown InsertAt enum constant '%s'.", insertAt
+                    ));
             }
+
+            hidden.set(null);
         } else {
-            parent = hidden.get().parent;
+            LOGGER.error("Found no parent to node #%s that was toggled.", cssId);
+        }
+    }
+
+    private void toggleHide(String cssId,
+                            ObjectProperty<StoredNode> hidden) {
+
+        if (hidden.get() != null) {
+            LOGGER.warn("Toggle component '%s' is in wrong state. " +
+                "Expected to be SHOWING but was HIDDEN.", cssId);
+            return;
+        }
+
+        final SplitPane parent;
+        final Node node = stage.getScene().lookup("#" + cssId);
+
+        if (node != null) {
+            Node n = node;
+            while (!((n = n.getParent()) instanceof SplitPane) && n != null) {}
+            parent = (SplitPane) n;
 
             if (parent != null) {
-                node = hidden.get().node;
-
-                switch (insertAt) {
-                    case BEGINNING:
-                        parent.getItems().add(0, node);
-                        break;
-                    case END:
-                        parent.getItems().add(node);
-                        break;
-                    default:
-                        throw new UnsupportedOperationException(format(
-                            "Unknown InsertAt enum constant '%s'.", insertAt
-                        ));
-                }
-
-                hidden.set(null);
+                parent.getItems().remove(node);
+                hidden.set(new StoredNode(node, parent));
             } else {
-                LOGGER.error("Found no parent to node #%s that was toggled.", cssId);
+                LOGGER.error("Found no SplitPane ancestor of #%s.", cssId);
             }
+        } else {
+            LOGGER.error("Non-existing node #%s was toggled.", cssId);
         }
     }
 

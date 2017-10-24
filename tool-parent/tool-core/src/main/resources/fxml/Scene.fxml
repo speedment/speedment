@@ -31,7 +31,7 @@
     <children>
         <BorderPane>
             <top>
-                <VBox fx:id="top" BorderPane.alignment="TOP_CENTER"></VBox>
+                <VBox fx:id="top" BorderPane.alignment="TOP_CENTER" />
             </top>
             <center>
                 <SplitPane fx:id="horizontal" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">

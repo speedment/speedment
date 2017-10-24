@@ -191,11 +191,11 @@ public final class ConfigFileHelper {
             // parent instance, meaning that they can mutate the existing tree.
             // It seems to be working for now, mainly because the metadata
             // handler already does a second deep safe-copy of the given tree,
-            // but that is both unnescessary and very bad for load performance.
+            // but that is both unnecessary and very bad for load performance.
             // We should try to limit the method to a maximum of one deep copy.
             // Create a copy of everything in Dbms EXCEPT the schema key. This
             // is a hack to prevent duplication errors that would otherwise
-            // occure if you change name of a node and reload.
+            // occur if you change name of a node and reload.
             final Map<String, Object> dbmsData
                 = new ConcurrentSkipListMap<>(dbms.getData());
 
@@ -227,11 +227,11 @@ public final class ConfigFileHelper {
                             return true;
                         } else {
                             passwordComponent.put(dbms, null); // Clear password
-                            runLater(() -> {
+                            runLater(() ->
                                 userInterfaceComponent.showError("Error Connecting to Database",
                                     "A problem occured with establishing the database connection.", ex
-                                );
-                            });
+                                )
+                            );
                             return false;
                         }
                     });
