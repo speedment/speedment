@@ -169,15 +169,13 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
                 case WARN : {
                     addToOutputMessages(OutputUtil.warning(ev.getMessage()));
                     final String title = "There are warnings. See output.";
-                    throttler.call(title, () -> {
-                        if (hiddenOutput.get() != null) {
-                            showNotification(title,
-                                FontAwesome.EXCLAMATION_CIRCLE,
-                                Palette.WARNING,
-                                this::showOutput
-                            );
-                        }
-                    });
+                    throttler.call(title, () ->
+                        showNotification(title,
+                            FontAwesome.EXCLAMATION_CIRCLE,
+                            Palette.WARNING,
+                            this::showOutput
+                        )
+                    );
                     break;
                 }
                 case ERROR : case FATAL : {
