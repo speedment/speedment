@@ -442,67 +442,6 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
             }
         });
     }
-//
-//    private void toggleShow(String cssId,
-//                            ObjectProperty<StoredNode> hidden,
-//                            StoredNode.InsertAt insertAt) {
-//
-//        if (hidden.get() == null) {
-//            LOGGER.warn("Toggle component '%s' is in wrong state. " +
-//                "Expected to be HIDDEN but was SHOWING.", cssId);
-//            return;
-//        }
-//
-//        final SplitPane parent = hidden.get().parent;
-//        if (parent != null) {
-//            final Node node = hidden.get().node;
-//
-//            switch (insertAt) {
-//                case BEGINNING:
-//                    parent.getItems().add(0, node);
-//                    break;
-//                case END:
-//                    parent.getItems().add(node);
-//                    break;
-//                default:
-//                    throw new UnsupportedOperationException(format(
-//                        "Unknown InsertAt enum constant '%s'.", insertAt
-//                    ));
-//            }
-//
-//            hidden.set(null);
-//        } else {
-//            LOGGER.error("Found no parent to node #%s that was toggled.", cssId);
-//        }
-//    }
-//
-//    private void toggleHide(String cssId,
-//                            ObjectProperty<StoredNode> hidden) {
-//
-//        if (hidden.get() != null) {
-//            LOGGER.warn("Toggle component '%s' is in wrong state. " +
-//                "Expected to be SHOWING but was HIDDEN.", cssId);
-//            return;
-//        }
-//
-//        final SplitPane parent;
-//        final Node node = stage.getScene().lookup("#" + cssId);
-//
-//        if (node != null) {
-//            Node n = node;
-//            while (!((n = n.getParent()) instanceof SplitPane) && n != null) {}
-//            parent = (SplitPane) n;
-//
-//            if (parent != null) {
-//                parent.getItems().remove(node);
-//                hidden.set(new StoredNode(node, parent));
-//            } else {
-//                LOGGER.error("Found no SplitPane ancestor of #%s.", cssId);
-//            }
-//        } else {
-//            LOGGER.error("Non-existing node #%s was toggled.", cssId);
-//        }
-//    }
 
     ////////////////////////////////////////////////////////////////////////////
     //                             Dialog Messages                            //
@@ -785,20 +724,5 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     @Override
     public void browse(String url) {
         application.getHostServices().showDocument(url);
-    }
-    
-    private static final class StoredNode {
-
-        private enum InsertAt {
-            BEGINNING, END
-        }
-
-        private final Node node;
-        private final SplitPane parent;
-
-        private StoredNode(Node node, SplitPane parent) {
-            this.node   = requireNonNull(node);
-            this.parent = requireNonNull(parent);
-        }
     }
 }
