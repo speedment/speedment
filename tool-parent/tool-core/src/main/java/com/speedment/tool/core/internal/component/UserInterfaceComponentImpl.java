@@ -774,12 +774,12 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
 
     @Override
     public void clearLog() {
-        outputMessages.clear();
+        runLater(outputMessages::clear);
     }
 
     @Override
     public void log(Label line) {
-        outputMessages.add(line);
+        runLater(() -> outputMessages.add(line));
     }
 
     @Override
