@@ -14,6 +14,17 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public final class Throttler {
 
+    /**
+     * Returns a {@link Throttler} that never executes the same request more
+     * than once every {@code millis}.
+     *
+     * @param millis  minimum frequency in milliseconds
+     * @return        the created throttler
+     */
+    public static Throttler limitToOnceEvery(long millis) {
+        return new Throttler(millis);
+    }
+
     private final ConcurrentHashMap<String, AtomicLong> timers;
     private final long millis;
 
