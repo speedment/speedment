@@ -26,13 +26,13 @@
     <parent>
         <groupId>com.speedment.build</groupId>
         <artifactId>build-parent</artifactId>
-        <version>3.0.15</version>
+        <version>3.0.16-SNAPSHOT</version>
     </parent>
     
     <properties>
         <mysql-jdbc-version>5.1.42</mysql-jdbc-version>
         <postgres-jdbc-version>42.0.0</postgres-jdbc-version>
-        <mariadb-jdbc-version>2.1.1</mariadb-jdbc-version>
+        <mariadb-jdbc-version>2.1.2</mariadb-jdbc-version>
     </properties>
     
     <groupId>com.speedment</groupId>
@@ -45,6 +45,7 @@
     </description>
     
     <dependencies>
+        <!-- Speedment Compile Dependencies -->
         <dependency>
             <groupId>com.speedment</groupId>
             <artifactId>tool</artifactId>
@@ -52,43 +53,24 @@
             <type>pom</type>
         </dependency>
 
+        <!-- Official Speedment Plugins for convenience -->
         <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-plugin-api</artifactId>
-            <version>3.3.9</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.eclipse.sisu</groupId>
-                    <artifactId>org.eclipse.sisu.plexus</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.maven.plugin-tools</groupId>
-            <artifactId>maven-plugin-annotations</artifactId>
-            <version>3.5</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-artifact</artifactId>
-            <version>3.3.9</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.maven</groupId>
-            <artifactId>maven-core</artifactId>
-            <version>3.0.5</version>
-            <type>jar</type>
-        </dependency>
-        
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql-jdbc-version}</version>
+            <groupId>com.speedment.plugins</groupId>
+            <artifactId>enum-generator</artifactId>
+            <version>${speedment.version}</version>
+            <optional>true</optional>
             <scope>runtime</scope>
         </dependency>
-        
+
+        <dependency>
+            <groupId>com.speedment.plugins</groupId>
+            <artifactId>spring-generator</artifactId>
+            <version>${speedment.version}</version>
+            <optional>true</optional>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- JDBC Connectors for convenience -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -103,26 +85,50 @@
             <scope>runtime</scope>
         </dependency>
 
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-jdbc-version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- Maven Plugin Dependencies -->
+        <dependency>
+            <groupId>org.apache.maven.plugin-tools</groupId>
+            <artifactId>maven-plugin-annotations</artifactId>
+            <version>3.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-artifact</artifactId>
+            <version>3.3.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-core</artifactId>
+            <version>3.0.5</version>
+            <type>jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.3.9</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.sisu</groupId>
+                    <artifactId>org.eclipse.sisu.plexus</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <!-- Test dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
-
-<!--        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <scope>test</scope>
-        </dependency>-->
-        <!-- https://mvnrepository.com/artifact/org.mockito/mockito-inline -->
-<!--        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-inline</artifactId>
-            <version>2.8.47</version>
-            <scope>test</scope>
-        </dependency>-->
-
-
     </dependencies>
 
     <build>

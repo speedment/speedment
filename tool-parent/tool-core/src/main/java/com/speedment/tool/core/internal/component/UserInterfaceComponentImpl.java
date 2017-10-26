@@ -31,7 +31,6 @@ import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.core.internal.util.Settings;
 import com.speedment.runtime.core.internal.util.Statistics;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.tool.config.DbmsProperty;
@@ -47,6 +46,7 @@ import com.speedment.tool.core.internal.brand.SpeedmentBrand;
 import com.speedment.tool.core.internal.notification.NotificationImpl;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
 import com.speedment.tool.core.internal.util.InjectionLoader;
+import com.speedment.tool.core.internal.util.Throttler;
 import com.speedment.tool.core.notification.Notification;
 import com.speedment.tool.core.resource.FontAwesome;
 import com.speedment.tool.core.resource.Icon;
@@ -57,8 +57,7 @@ import com.speedment.tool.propertyeditor.internal.component.PropertyEditorCompon
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -102,19 +101,14 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
 
     private static final String GITHUB_URI = "https://github.com/speedment/speedment/";
     private static final String GITTER_URI = "https://gitter.im/speedment/speedment/";
-    
-    private static final Predicate<File> OPEN_DIRECTORY_CONDITIONS = file
-        -> file != null
-        && file.exists()
-        && file.isDirectory();
-    
+
     private static final Predicate<Optional<char[]>> NO_PASSWORD_SPECIFIED
         = pass -> !pass.isPresent() || pass.get().length == 0;
-    
-    private final ObjectProperty<StoredNode> hiddenProjectTree = new SimpleObjectProperty<>();
-    private final ObjectProperty<StoredNode> hiddenWorkspace   = new SimpleObjectProperty<>();
-    private final ObjectProperty<StoredNode> hiddenOutput      = new SimpleObjectProperty<>();
-    
+
+    private final BooleanProperty projectTreeVisible = new SimpleBooleanProperty(true);
+    private final BooleanProperty workspaceVisible   = new SimpleBooleanProperty(true);
+    private final BooleanProperty outputVisible      = new SimpleBooleanProperty(false);
+
     private final ObservableList<Notification> notifications;
     private final ObservableList<Node> outputMessages;
     private final ObservableList<TreeItem<DocumentProperty>> selectedTreeItems;
@@ -162,7 +156,8 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         this.stage       = requireNonNull(stage);
         this.application = requireNonNull(application);
         this.project     = new ProjectProperty();
-        
+
+        final Throttler throttler = Throttler.limitToOnceEvery(2_000);
         LoggerManager.getFactory().addListener(ev -> {
             switch (ev.getLevel()) {
                 case DEBUG : case TRACE : case INFO : {
@@ -171,16 +166,18 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
                 }
                 case WARN : {
                     addToOutputMessages(OutputUtil.warning(ev.getMessage()));
-                    showNotification(ev.getMessage(), Palette.WARNING);
+                    final String title = "There are warnings. See output.";
+                    throttler.call(title, () ->
+                        showNotification(title,
+                            FontAwesome.EXCLAMATION_CIRCLE,
+                            Palette.WARNING,
+                            () -> outputVisible.set(true)
+                        )
+                    );
                     break;
                 }
                 case ERROR : case FATAL : {
-                    addToOutputMessages(OutputUtil.error(ev.getMessage()));                   
-                    // Hack to remove stack trace from message.
-                    String msg = ev.getMessage();
-                    if (msg.contains("\tat ")) {
-                        msg = msg.substring(0, msg.indexOf("\tat "));
-                    }
+                    addToOutputMessages(OutputUtil.error(ev.getMessage()));
                     break;
                 }
             }
@@ -197,10 +194,10 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     private void addToOutputMessages(Node node) {
         runLater(() -> outputMessages.add(node));
     }
-    
-    /*************************************************************/
-    /*                     Global properties                     */
-    /*************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                            Global Properties                           //
+    ////////////////////////////////////////////////////////////////////////////
  
     @Override
     public ProjectProperty projectProperty() {
@@ -237,9 +234,9 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         return properties;
     }
     
-    /*************************************************************/
-    /*                      Menubar actions                      */
-    /*************************************************************/
+    ////////////////////////////////////////////////////////////////////////////
+    //                            Menubar actions                             //
+    ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void newProject() {
@@ -264,11 +261,6 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open .json File");
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
-
-        Optional.ofNullable(Settings.inst().get("project_location"))
-            .map(File::new)
-            .filter(OPEN_DIRECTORY_CONDITIONS)
-            .ifPresent(fileChooser::setInitialDirectory);
 
         final File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
@@ -382,21 +374,6 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     }
 
     @Override
-    public void prepareToggleProjectTree(BooleanProperty checked) {
-        toggle(checked, "projectTree", hiddenProjectTree, StoredNode.InsertAt.BEGINNING);
-    }
-
-    @Override
-    public void prepareToggleWorkspace(BooleanProperty checked) {
-        toggle(checked, "workspace", hiddenWorkspace, StoredNode.InsertAt.BEGINNING);
-    }
-
-    @Override
-    public void prepareToggleOutput(BooleanProperty checked) {
-        toggle(checked, "output", hiddenOutput, StoredNode.InsertAt.END);
-    }
-
-    @Override
     public void showGitter() {
         browse(GITTER_URI);
     }
@@ -405,74 +382,70 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     public void showGithub() {
         browse(GITHUB_URI);
     }
-    
-    private void toggle(
-            BooleanProperty checked,
-            String cssId, 
-            ObjectProperty<StoredNode> hidden, 
-            StoredNode.InsertAt insertAt) {
-        
-        final Runnable toggler = () -> {
-            final SplitPane parent;
-            final Node node;
 
-            if (hidden.get() == null) {
-                node = this.stage.getScene().lookup("#" + cssId);
-
-                if (node != null) {
-                    Node n = node;
-                    while (!((n = n.getParent()) instanceof SplitPane) && n != null) {
-                    }
-                    parent = (SplitPane) n;
-
-                    if (parent != null) {
-                        parent.getItems().remove(node);
-                        hidden.set(new StoredNode(node, parent));
-                    } else {
-                        LOGGER.error("Found no SplitPane ancestor of #" + cssId + ".");
-                    }
-                } else {
-                    LOGGER.error("Non-existing node #" + cssId + " was toggled.");
-                }
-            } else {
-                parent = hidden.get().parent;
-
-                if (parent != null) {
-                    node = hidden.get().node;
-
-                    switch (insertAt) {
-                        case BEGINNING:
-                            parent.getItems().add(0, node);
-                            break;
-                        case END:
-                            parent.getItems().add(node);
-                            break;
-                        default:
-                            throw new UnsupportedOperationException(
-                                "Unknown InsertAt enum constant '" + insertAt + "'."
-                            );
-                    }
-
-                    hidden.set(null);
-                } else {
-                    LOGGER.error("Found no parent to node #" + cssId + " that was toggled.");
-                }
-            }
-        };
-        
-        checked.addListener((ob, o, isChecked) -> 
-            toggler.run()
-        );
-        
-        // If the item is unchecked, toggle the component initially.
-        if (!checked.get()) {
-            runLater(toggler);
-        }
+    @Override
+    public BooleanProperty projectTreeVisibleProperty() {
+        return projectTreeVisible;
     }
-    
-    /*************************************************************/
-    /*                      Dialog messages                      */
-    /*************************************************************/
+
+    @Override
+    public BooleanProperty workspaceVisibleProperty() {
+        return workspaceVisible;
+    }
+
+    @Override
+    public BooleanProperty outputVisibleProperty() {
+        return outputVisible;
+    }
+
+    @Override
+    public void prepareProjectTree(SplitPane parent, Node projectTree) {
+        if (!projectTreeVisible.get()) {
+            parent.getItems().remove(projectTree);
+        }
+
+        projectTreeVisible.addListener((ob, o, visible) -> {
+            if (visible) {
+                parent.getItems().add(0, projectTree);
+            } else {
+                parent.getItems().remove(projectTree);
+            }
+        });
+    }
+
+    @Override
+    public void prepareWorkspace(SplitPane parent, Node workspace) {
+        if (!workspaceVisible.get()) {
+            parent.getItems().remove(workspace);
+        }
+
+        workspaceVisible.addListener((ob, o, visible) -> {
+            if (visible) {
+                parent.getItems().add(0, workspace);
+            } else {
+                parent.getItems().remove(workspace);
+            }
+        });
+    }
+
+    @Override
+    public void prepareOutput(SplitPane parent, Node output) {
+        if (!outputVisible.get()) {
+            parent.getItems().remove(output);
+        }
+
+        outputVisible.addListener((ob, o, visible) -> {
+            if (visible) {
+                parent.getItems().add(output);
+            } else {
+                parent.getItems().remove(output);
+            }
+        });
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                             Dialog Messages                            //
+    ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void showError(String title, String message) {
@@ -689,10 +662,10 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
             notifications.add(new NotificationImpl(message, icon, palette, action))
         );
     }
-    
-    /*************************************************************/
-    /*                      Context Menues                       */
-    /*************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                              Context Menues                            //
+    ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public <DOC extends DocumentProperty & HasMainInterface> void 
@@ -730,41 +703,26 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         if (menu.getItems().isEmpty()) {
             return Optional.empty();
         } else {
-            return Optional.ofNullable(menu);
+            return Optional.of(menu);
         }
     }
-    
-    /*************************************************************/
-    /*                            Other                          */
-    /*************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                                  Other                                 //
+    ////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void clearLog() {
-        outputMessages.clear();
+        runLater(outputMessages::clear);
     }
 
     @Override
     public void log(Label line) {
-        outputMessages.add(line);
+        runLater(() -> outputMessages.add(line));
     }
 
     @Override
     public void browse(String url) {
         application.getHostServices().showDocument(url);
-    }
-    
-    private static final class StoredNode {
-
-        private enum InsertAt {
-            BEGINNING, END
-        }
-
-        private final Node node;
-        private final SplitPane parent;
-
-        private StoredNode(Node node, SplitPane parent) {
-            this.node   = requireNonNull(node);
-            this.parent = requireNonNull(parent);
-        }
     }
 }

@@ -49,9 +49,9 @@ import java.util.stream.Stream;
 @InjectKey(UserInterfaceComponent.class)
 public interface UserInterfaceComponent {
 
-    /*************************************************************/
-    /*                     Global properties                     */
-    /*************************************************************/
+    ////////////////////////////////////////////////////////////////////////////
+    //                            Global Properties                           //
+    ////////////////////////////////////////////////////////////////////////////
     
     /**
      * Returns the {@link ProjectProperty} used in this session.
@@ -104,10 +104,10 @@ public interface UserInterfaceComponent {
      * @return  visible properties
      */
     ObservableList<PropertyEditor.Item> getProperties();
-    
-    /*************************************************************/
-    /*                      Menubar actions                      */
-    /*************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                            Menubar actions                             //
+    ////////////////////////////////////////////////////////////////////////////
     
     /**
      * Opens a new empty project in a new window.
@@ -158,26 +158,17 @@ public interface UserInterfaceComponent {
      */
     void generate();
 
-    /**
-     * Shows or hides the "Project Tree" section of the user interface.
-     * 
-     * @param checked  regulates if the toggle is checked or not
-     */
-    void prepareToggleProjectTree(BooleanProperty checked);
+    BooleanProperty projectTreeVisibleProperty();
 
-    /**
-     * Shows or hides the "Workspace" section of the user interface.
-     * 
-     * @param checked  regulates if the toggle is checked or not
-     */
-    void prepareToggleWorkspace(BooleanProperty checked);
+    BooleanProperty workspaceVisibleProperty();
 
-    /**
-     * Shows or hides the "Output" section of the user interface.
-     * 
-     * @param checked  regulates if the toggle is checked or not
-     */
-    void prepareToggleOutput(BooleanProperty checked);
+    BooleanProperty outputVisibleProperty();
+
+    void prepareProjectTree(SplitPane parent, Node projectTree);
+
+    void prepareWorkspace(SplitPane parent, Node workspace);
+
+    void prepareOutput(SplitPane parent, Node output);
     
     /**
      * Opens the default internet browser and shows the Speedment Gitter page.
@@ -189,9 +180,9 @@ public interface UserInterfaceComponent {
      */
     void showGithub();
 
-    /*************************************************************/
-    /*                      Dialog messages                      */
-    /*************************************************************/
+    ////////////////////////////////////////////////////////////////////////////
+    //                             Dialog Messages                            //
+    ////////////////////////////////////////////////////////////////////////////
     
     /**
      * Shows an error message in the user interface with the specified
@@ -320,10 +311,10 @@ public interface UserInterfaceComponent {
      * @param action   action to be performed on click
      */
     void showNotification(String message, Icon icon, Palette palette, Runnable action);
-    
-    /*************************************************************/
-    /*                      Context Menues                       */
-    /*************************************************************/
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                              Context Menues                            //
+    ////////////////////////////////////////////////////////////////////////////
     
     /**
      * Installs the specified menu builder for the specified node type.
@@ -363,9 +354,9 @@ public interface UserInterfaceComponent {
         Stream<MenuItem> build(TreeCell<DocumentProperty> tc, DOC doc);
     }
 
-    /*************************************************************/
-    /*                            Other                          */
-    /*************************************************************/
+    ////////////////////////////////////////////////////////////////////////////
+    //                                  Other                                 //
+    ////////////////////////////////////////////////////////////////////////////
     
     /**
      * Clears the output log in the user interface.

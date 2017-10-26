@@ -39,7 +39,6 @@ import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.internal.DefaultApplicationBuilder;
 import com.speedment.runtime.core.internal.util.ProgressMeasurerImpl;
-import com.speedment.runtime.core.internal.util.Settings;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.config.ProjectProperty;
@@ -179,6 +178,14 @@ public final class ConfigFileHelper {
     }
 
     public boolean loadFromDatabase(DbmsProperty dbms, String schemaName) {
+        final Runnable restore = () -> {
+            passwordComponent.put(dbms, null); // Clear password
+
+            userInterfaceComponent.projectProperty()
+                .observableListOf(Project.DBMSES)
+                .remove(dbms); // Remove dbms from observable model
+        };
+
         try {
             // Create an immutable copy of the tree and store in the ProjectComponent
             final Project projectCopy = ImmutableProject.wrap(userInterfaceComponent.projectProperty());
@@ -192,11 +199,11 @@ public final class ConfigFileHelper {
             // parent instance, meaning that they can mutate the existing tree.
             // It seems to be working for now, mainly because the metadata
             // handler already does a second deep safe-copy of the given tree,
-            // but that is both unnescessary and very bad for load performance.
+            // but that is both unnecessary and very bad for load performance.
             // We should try to limit the method to a maximum of one deep copy.
             // Create a copy of everything in Dbms EXCEPT the schema key. This
             // is a hack to prevent duplication errors that would otherwise
-            // occure if you change name of a node and reload.
+            // occur if you change name of a node and reload.
             final Map<String, Object> dbmsData
                 = new ConcurrentSkipListMap<>(dbms.getData());
 
@@ -227,12 +234,12 @@ public final class ConfigFileHelper {
 
                             return true;
                         } else {
-                            passwordComponent.put(dbms, null); // Clear password
-                            runLater(() -> {
+                            restore.run();
+                            runLater(() ->
                                 userInterfaceComponent.showError("Error Connecting to Database",
                                     "A problem occured with establishing the database connection.", ex
-                                );
-                            });
+                                )
+                            );
                             return false;
                         }
                     });
@@ -247,12 +254,14 @@ public final class ConfigFileHelper {
                     FontAwesome.DATABASE,
                     Palette.INFO
                 );
+            } else {
+                restore.run();
             }
 
             return status;
 
         } catch (final InterruptedException | ExecutionException ex) {
-            passwordComponent.put(dbms, null); // Clear password
+            restore.run();
             userInterfaceComponent.showError("Error Executing Connection Task",
                 "The execution of certain tasks could not be completed.", ex
             );
@@ -378,10 +387,8 @@ public final class ConfigFileHelper {
 
             DocumentTranscoder.save(project, path, Json::toJson);
 
-            final String absolute = file.getAbsolutePath();
-            Settings.inst().set("project_location", absolute);
-
             if (isGraphical) {
+                final String absolute = file.getAbsolutePath();
                 userInterfaceComponent.log(success("Saved project file to '" + absolute + "'."));
                 userInterfaceComponent.showNotification("Configuration saved.", FontAwesome.DOWNLOAD, Palette.INFO);
             }

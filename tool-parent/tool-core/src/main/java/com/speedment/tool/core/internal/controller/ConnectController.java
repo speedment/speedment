@@ -26,7 +26,6 @@ import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.db.DbmsType;
-import com.speedment.runtime.core.internal.util.Settings;
 import com.speedment.tool.config.DbmsProperty;
 import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.event.UIEvent;
@@ -192,63 +191,22 @@ public final class ConnectController implements Initializable {
             enableConnectionUrl.selectedProperty().not()
         );
 
-        // Load settings from previous session and overwrite default ones.
-        try {
-            // Find the preferred dbms-type
-            final String preferred = Settings.inst().get(
-                "last_known_dbtype",
-                getDbmsTypes()
-                    .findFirst()
-                    .orElseThrow(() -> new SpeedmentToolException(
-                        "Could not find any installed JDBC drivers. Make " +
-                        "sure to include at least one JDBC driver as a " +
-                        "dependency in the projects pom.xml-file under the " +
-                        "speedment-maven-plugin <plugin> tag."
-                    ))
-            );
+        // Find the preferred dbms-type
+        final Optional<String> preferred = getDbmsTypes().findFirst();
+        if (preferred.isPresent()) {
+            fieldType.getSelectionModel().select(preferred.get());
+        } else {
+            final String msg = "Could not find any installed JDBC " +
+                "drivers. Make sure to include at least one JDBC driver " +
+                "as a dependency in the projects pom.xml-file under the " +
+                "speedment-maven-plugin <plugin> tag.";
 
-            // If the preferred dbms-type isn't loaded, select the first one.
-            if (getDbmsTypes().anyMatch(preferred::equals)) {
-
-                fieldType.getSelectionModel().select(preferred);
-                final int port = Integer.parseInt(
-                    Settings.inst().get(
-                        "last_known_port",
-                        Integer.toString(dbmsType.get().getDefaultPort())
-                    )
-                );
-
-                final String host   = Settings.inst().get("last_known_host",   generatedHost.get());
-                final String user   = Settings.inst().get("last_known_user",   generatedUser.get());
-                final String name   = Settings.inst().get("last_known_name",   generatedName.get());
-                final String schema = Settings.inst().get("last_known_schema", generatedSchema.get());
-                final String url    = Settings.inst().get("last_known_url",    generatedConnUrl.get());
-
-                generatedHost.set(host);
-                generatedUser.set(user);
-                generatedName.set(name);
-                generatedSchema.set(schema);
-                generatedConnUrl.set(url);
-
-                fieldSchema.setText(schema);
-                fieldPort.setText(Integer.toString(port));
-                fieldHost.setText(host);
-                fieldUser.setText(user);
-                fieldName.setText(name);
-                fieldSchema.setText(schema);
-                areaConnectionUrl.setText(url);
-            } else {
-                fieldType.getSelectionModel().select(
-                    getDbmsTypes().findFirst().get()
-                );
-            }
-        } catch (final SpeedmentToolException ex) {
             userInterfaceComponent.showError(
                 "Couldn't find any installed JDBC drivers",
-                ex.getMessage(), ex
+                msg
             );
 
-            throw ex;
+            throw new SpeedmentToolException(msg);
         }
 
         // Disable the Connect-button if all fields have not been entered.
@@ -287,7 +245,6 @@ public final class ConnectController implements Initializable {
 
             if (!areaConnectionUrl.getText().isEmpty()
             &&  !areaConnectionUrl.getText().equals(generatedConnUrl.get())) {
-                Settings.inst().set("last_known_url", areaConnectionUrl.getText());
                 dbms.connectionUrlProperty().setValue(
                     areaConnectionUrl.getText()
                 );
@@ -302,17 +259,8 @@ public final class ConnectController implements Initializable {
             userInterfaceComponent.projectProperty().nameProperty()
                 .setValue(schema);
 
-            // Store the settings so that they can be reused in the next session
-            Settings.inst().set("last_known_schema", fieldSchema.getText());
-            Settings.inst().set("last_known_dbtype", dbmsType.get().getName());
-            Settings.inst().set("last_known_host", fieldHost.getText());
-            Settings.inst().set("last_known_port", fieldPort.getText());
-            Settings.inst().set("last_known_user", fieldUser.getText());
-            Settings.inst().set("last_known_name", fieldName.getText());
-
             // Connect to database
             if (configFileHelper.loadFromDatabase(dbms, schema)) {
-                Settings.inst().set("hide_open_option", false);
                 loader.loadAndShow("Scene");
                 eventComponent.notify(UIEvent.OPEN_MAIN_WINDOW);
             }
@@ -329,7 +277,7 @@ public final class ConnectController implements Initializable {
         return dbmsHandlerComponent.findByName(dbmsTypeName).orElseThrow(() ->
             new SpeedmentToolException(
                 "Could not find any DbmsType with name '" +
-                    dbmsTypeName + "'."
+                dbmsTypeName + "'."
             ));
     }
 

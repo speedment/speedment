@@ -86,10 +86,9 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     
     @Override
     public CompletableFuture<Project> readSchemaMetadata(
-        final Dbms dbms,
-        final ProgressMeasure progress,
-        final Predicate<String> filterCriteria
-    ) {
+            final Dbms dbms,
+            final ProgressMeasure progress,
+            final Predicate<String> filterCriteria) {
 
         requireNonNulls(filterCriteria, progress);
 
@@ -97,6 +96,26 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
         final Project projectCopy = DocumentUtil.deepCopy(
             projectComponent.getProject(), ProjectImpl::new
         );
+
+        // Make sure there are not multiple dbmses with the same id
+        final Set<String> ids = new HashSet<>();
+        if (!projectCopy.dbmses().map(Dbms::getId).allMatch(ids::add)) {
+            final Set<String> duplicates = new HashSet<>();
+            ids.clear();
+
+            projectCopy.dbmses()
+                .map(Dbms::getId)
+                .forEach(s -> {
+                    if (!ids.add(s)) {
+                        duplicates.add(s);
+                    }
+                });
+
+            throw new SpeedmentException(
+                "The following dbmses have duplicates in the config document: "
+                + duplicates
+            );
+        }
 
         // Locate the dbms in the copy.
         final Dbms dbmsCopy = projectCopy.dbmses()
