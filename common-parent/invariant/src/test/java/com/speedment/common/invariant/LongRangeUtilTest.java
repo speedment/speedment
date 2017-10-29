@@ -17,11 +17,7 @@
 package com.speedment.common.invariant;
 
 import java.util.function.LongPredicate;
-import java.util.function.LongPredicate;
-import java.util.function.LongPredicate;
-import java.util.function.LongPredicate;
 import java.util.function.LongUnaryOperator;
-import java.util.function.Predicate;
 import java.util.stream.LongStream;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
