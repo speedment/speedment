@@ -21,7 +21,6 @@ import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.field.Field;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.ToLongBiFunction;
 
