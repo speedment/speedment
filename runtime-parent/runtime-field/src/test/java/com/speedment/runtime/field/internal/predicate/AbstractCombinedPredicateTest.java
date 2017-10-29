@@ -27,6 +27,10 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.function.IntPredicate;
+import java.util.function.IntPredicate;
+import java.util.function.IntPredicate;
+import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -63,9 +67,9 @@ public class AbstractCombinedPredicateTest {
             return "MOD4";
         }
     };
-    private static final Predicate<Integer> MOD8 = new Predicate<Integer>() {
+    private static final IntPredicate MOD8 = new IntPredicate() {
         @Override
-        public boolean test(Integer i) {
+        public boolean test(int i) {
             return i % 8 == 0;
         }
 
@@ -75,9 +79,9 @@ public class AbstractCombinedPredicateTest {
         }
     };
 
-    private static final Predicate<Integer> MOD3 = new Predicate<Integer>() {
+    private static final IntPredicate MOD3 = new IntPredicate() {
         @Override
-        public boolean test(Integer i) {
+        public boolean test(int i) {
             return i % 3 == 0;
         }
 

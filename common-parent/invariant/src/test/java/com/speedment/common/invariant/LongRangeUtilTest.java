@@ -16,6 +16,10 @@
  */
 package com.speedment.common.invariant;
 
+import java.util.function.LongPredicate;
+import java.util.function.LongPredicate;
+import java.util.function.LongPredicate;
+import java.util.function.LongPredicate;
 import java.util.function.LongUnaryOperator;
 import java.util.function.Predicate;
 import java.util.stream.LongStream;
@@ -28,9 +32,9 @@ import org.junit.Test;
  */
 public class LongRangeUtilTest {
 
-    private static final Predicate<Long> IS_POSITIVE = l -> l > 0;
-    private static final Predicate<Long> IS_NEGATIVE = l -> l < 0;
-    private static final Predicate<Long> IS_ZERO = l -> l == 0;
+    private static final LongPredicate IS_POSITIVE = l -> l > 0;
+    private static final LongPredicate IS_NEGATIVE = l -> l < 0;
+    private static final LongPredicate IS_ZERO = l -> l == 0;
 
     @Test
     public void testRequirePositive() {
@@ -98,7 +102,7 @@ public class LongRangeUtilTest {
         testHelper(l -> l >= first && l <= lastInclusive, l -> LongRangeUtil.requireInRangeClosed(l, first, lastInclusive));
     }
 
-    private void testHelper(Predicate<Long> predicate, LongUnaryOperator validator) {
+    private void testHelper(LongPredicate predicate, LongUnaryOperator validator) {
         LongStream.range(-257, 257).forEach(l -> {
             if (predicate.test(l)) {
                 long expected = validator.applyAsLong(l);

@@ -27,6 +27,8 @@ import com.speedment.runtime.field.Field;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.ToLongBiFunction;
+import java.util.function.ToLongBiFunction;
 
 /**
  *
@@ -70,7 +72,7 @@ public interface SqlStreamOptimizerInfo<ENTITY> {
      * @return a BiFunction that will read in the count long value from the
      * database
      */
-    BiFunction<String, List<Object>, Long> getCounter();
+    ToLongBiFunction<String, List<Object>> getCounter();
 
     /**
      * Returns a Function that will map a Field to a column name.
@@ -90,7 +92,7 @@ public interface SqlStreamOptimizerInfo<ENTITY> {
         final DbmsType dbmsType,
         final String sqlSelect,
         final String sqlSelectCount,
-        final BiFunction<String, List<Object>, Long> counter,
+        final ToLongBiFunction<String, List<Object>> counter,
         final Function<Field<ENTITY>, String> sqlColumnNamer,
         final Function<Field<ENTITY>, Class<?>> sqlDatabaseTypeFunction
     ) {
