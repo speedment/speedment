@@ -23,21 +23,26 @@ public final class ConnectionInfo implements AutoCloseable {
         final ConnectionPoolComponent connectionPoolComponent,
         final TransactionComponent transactionComponent
     ) {
-        final Optional<Object> txObject = transactionComponent.get(Thread.currentThread());
-        if (txObject.isPresent()) {
-            final Object o = txObject.get();
-            if (o instanceof Connection) {
-                connection = (Connection) o;
-                inTransaction = true;
+        if (transactionComponent != null) {
+            final Optional<Object> txObject = transactionComponent.get(Thread.currentThread());
+            if (txObject.isPresent()) {
+                final Object o = txObject.get();
+                if (o instanceof Connection) {
+                    connection = (Connection) o;
+                    inTransaction = true;
+                } else {
+                    throw new TransactionException(
+                        String.format(
+                            "A transaction object %s of type %s already exists but comes from antoher transaction domain. Not from %s",
+                            o,
+                            o.getClass(),
+                            dbms
+                        )
+                    );
+                }
             } else {
-                throw new TransactionException(
-                    String.format(
-                        "A transaction object %s of type %s already exists but comes from antoher transaction domain. Not from %s",
-                        o,
-                        o.getClass(),
-                        dbms
-                    )
-                );
+                connection = connectionPoolComponent.getConnection(dbms);
+                inTransaction = false;
             }
         } else {
             connection = connectionPoolComponent.getConnection(dbms);
@@ -83,5 +88,4 @@ public final class ConnectionInfo implements AutoCloseable {
 //            actionNotInTransaction.accept(connection);
 //        }
 //    }
-
 }
