@@ -1,4 +1,4 @@
-package com.speedment.runtime.transaction.internal;
+package com.speedment.runtime.core.internal.component.transaction;
 
 import com.speedment.common.injector.State;
 import static com.speedment.common.injector.State.STARTED;
@@ -9,10 +9,10 @@ import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.connectionpool.ConnectionPoolComponent;
 import com.speedment.runtime.core.component.connectionpool.PoolableConnection;
 import com.speedment.runtime.core.db.SqlConsumer;
-import com.speedment.runtime.transaction.DataSourceHandler;
-import com.speedment.runtime.transaction.TransactionComponent;
-import com.speedment.runtime.transaction.TransactionHandler;
-import com.speedment.runtime.transaction.exception.TransactionException;
+import com.speedment.runtime.core.component.transaction.DataSourceHandler;
+import com.speedment.runtime.core.component.transaction.TransactionComponent;
+import com.speedment.runtime.core.component.transaction.TransactionHandler;
+import com.speedment.runtime.core.exception.TransactionException;
 import java.sql.SQLException;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;

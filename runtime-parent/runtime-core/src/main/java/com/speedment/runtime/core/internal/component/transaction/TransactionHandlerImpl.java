@@ -1,10 +1,10 @@
-package com.speedment.runtime.transaction.internal;
+package com.speedment.runtime.core.internal.component.transaction;
 
-import com.speedment.runtime.transaction.DataSourceHandler;
-import com.speedment.runtime.transaction.Transaction;
-import com.speedment.runtime.transaction.TransactionComponent;
-import com.speedment.runtime.transaction.TransactionHandler;
-import com.speedment.runtime.transaction.exception.TransactionException;
+import com.speedment.runtime.core.component.transaction.DataSourceHandler;
+import com.speedment.runtime.core.component.transaction.Transaction;
+import com.speedment.runtime.core.component.transaction.TransactionComponent;
+import com.speedment.runtime.core.component.transaction.TransactionHandler;
+import com.speedment.runtime.core.exception.TransactionException;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 

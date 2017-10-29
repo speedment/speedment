@@ -1,6 +1,6 @@
-package com.speedment.runtime.transaction;
+package com.speedment.runtime.core.component.transaction;
 
-import com.speedment.runtime.transaction.exception.TransactionException;
+import com.speedment.runtime.core.exception.TransactionException;
 import java.util.function.Consumer;
 
 /**

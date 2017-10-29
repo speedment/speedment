@@ -1,6 +1,6 @@
-package com.speedment.runtime.transaction.internal;
+package com.speedment.runtime.core.internal.component.transaction;
 
-import com.speedment.runtime.transaction.DataSourceHandler;
+import com.speedment.runtime.core.component.transaction.DataSourceHandler;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
 import java.util.function.Function;

@@ -1,7 +1,7 @@
-package com.speedment.runtime.transaction;
+package com.speedment.runtime.core.component.transaction;
 
 import com.speedment.common.injector.InjectBundle;
-import com.speedment.runtime.transaction.internal.TransactionComponentImpl;
+import com.speedment.runtime.core.internal.component.transaction.TransactionComponentImpl;
 import java.util.stream.Stream;
 
 /**

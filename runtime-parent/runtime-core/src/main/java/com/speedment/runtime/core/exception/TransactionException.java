@@ -1,4 +1,4 @@
-package com.speedment.runtime.transaction.exception;
+package com.speedment.runtime.core.exception;
 
 /** 
  * A specialization of {@code RuntimeException} that is thrown when something 

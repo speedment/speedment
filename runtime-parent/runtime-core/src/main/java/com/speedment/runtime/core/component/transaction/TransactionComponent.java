@@ -1,4 +1,4 @@
-package com.speedment.runtime.transaction;
+package com.speedment.runtime.core.component.transaction;
 
 import com.speedment.common.injector.annotation.InjectKey;
 import java.util.Optional;
