@@ -38,6 +38,7 @@ public class TransactionHandlerImpl implements TransactionHandler {
             dataSourceHandler.beginner().accept(txObject); // e.g. con.setAutocommit(false)
             action.accept(tx);
         } catch (Exception e) {
+            dataSourceHandler.rollbacker().accept(txObject); // Automatically rollback if there is an exception
             throw new TransactionException("Error while invoking transaction for object :" + txObject, e);
         } finally {
             dataSourceHandler.closer().accept(txObject); // e.g. con.setAutocommit(true); con.close();

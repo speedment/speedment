@@ -17,7 +17,7 @@ public interface TransactionComponent {
      * in the current Speedment Project.
      *
      * @return a new TransactionHandler
-     * @throws IllegalStateException if there are not exactly one Dbms defined
+     * @throws IllegalStateException if there is not exactly one Dbms defined
      * in the current project.
      */
     TransactionHandler transactionHandler();

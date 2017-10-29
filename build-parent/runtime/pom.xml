@@ -71,6 +71,11 @@
             <artifactId>runtime-config</artifactId>
         </dependency>
         
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-transaction</artifactId>
+        </dependency>
+        
         <!-- Runtime dependencies -->
         <dependency>
             <groupId>com.speedment.common</groupId>
