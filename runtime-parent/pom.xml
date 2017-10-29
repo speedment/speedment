@@ -43,6 +43,7 @@
         <module>runtime-typemapper</module>
         <module>runtime-field</module>
         <module>runtime-core</module>
+        <module>runtime-transaction</module>
         <module>runtime-all</module>
     </modules>
     
