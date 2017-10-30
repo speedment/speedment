@@ -20,7 +20,7 @@ public interface TransactionComponent {
      * @throws IllegalStateException if there is not exactly one Dbms defined
      * in the current project.
      */
-    TransactionHandler transactionHandler();
+    TransactionHandler createTransactionHandler();
 
     /**
      * Creates and returns a new TransactionHandler for the provided transaction
@@ -33,7 +33,7 @@ public interface TransactionComponent {
      * determine that the provided data source can be used with transactions.
      * @throws NullPointerException if the provided data source is null.
      */
-    <T> TransactionHandler transactionHandler(T dataSource); // <T extends TransactionCapable>
+    <T> TransactionHandler creaateTransactionHandler(T dataSource); // <T extends TransactionCapable>
 
     /**
      * Associates a certain data store class (e.g. Dbms) to some way of handling

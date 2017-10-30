@@ -16,12 +16,12 @@ public class TransactionComponentNoOp implements TransactionComponent {
     }
 
     @Override
-    public TransactionHandler transactionHandler() {
+    public TransactionHandler createTransactionHandler() {
         throw createException();
     }
 
     @Override
-    public <T> TransactionHandler transactionHandler(T dataSource) {
+    public <T> TransactionHandler creaateTransactionHandler(T dataSource) {
         throw createException();
     }
 

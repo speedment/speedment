@@ -10,6 +10,7 @@ import com.speedment.runtime.core.component.connectionpool.ConnectionPoolCompone
 import com.speedment.runtime.core.component.connectionpool.PoolableConnection;
 import com.speedment.runtime.core.db.SqlConsumer;
 import com.speedment.runtime.core.component.transaction.DataSourceHandler;
+import com.speedment.runtime.core.component.transaction.Isolation;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.component.transaction.TransactionHandler;
 import com.speedment.runtime.core.exception.TransactionException;
@@ -19,6 +20,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import static java.util.stream.Collectors.joining;
@@ -35,7 +37,7 @@ public class TransactionComponentImpl implements TransactionComponent {
     private Dbms singleDbms;
 
     @ExecuteBefore(STARTED)
-    private void setupSingleDbms(@WithState(State.RESOLVED) ProjectComponent projectComponent) {
+    void setupSingleDbms(@WithState(State.RESOLVED) ProjectComponent projectComponent) {
         final Set<Dbms> dbmses = projectComponent.getProject().dbmses().collect(toSet());
         if (dbmses.size() == 1) {
             singleDbms = dbmses.stream().findAny().get();
@@ -43,16 +45,26 @@ public class TransactionComponentImpl implements TransactionComponent {
     }
 
     @ExecuteBefore(State.STARTED)
-    private void addDbmsDataSourceHandler(ConnectionPoolComponent connectionPoolComponent) {
+    void addDbmsDataSourceHandler(ConnectionPoolComponent connectionPoolComponent) {
         final Function<Dbms, PoolableConnection> extractor = dbms -> connectionPoolComponent.getConnection(dbms);
-        final Consumer<PoolableConnection> starter = wrapSqlException(c -> c.setAutoCommit(false), "commit connection");
+        final Consumer<PoolableConnection> starter = wrapSqlException(c -> c.setAutoCommit(false), "setup connection");
+        final BiFunction<PoolableConnection, Isolation, Isolation> isolationConfigurator = (PoolableConnection c, Isolation newLevel) -> {
+            final int previousLevel;
+            try {
+                previousLevel = c.getTransactionIsolation();
+                c.setTransactionIsolation(newLevel.getSqlIsolationLevel());
+            } catch (SQLException sqle) {
+                throw new TransactionException("Unable to get/set isolation level for a connection " + c, sqle);
+            }
+            return Isolation.fromSqlIsolationLevel(previousLevel);
+        };
         final Consumer<PoolableConnection> committer = wrapSqlException(PoolableConnection::commit, "commit connection");
         final Consumer<PoolableConnection> rollbacker = wrapSqlException(PoolableConnection::rollback, "rollback connection");
         final Consumer<PoolableConnection> closer = wrapSqlException(c -> {
             c.setAutoCommit(true);
             c.close();
         }, "close connection");
-        putDataSourceHandler(Dbms.class, DataSourceHandler.of(extractor, starter, committer, rollbacker, closer));
+        putDataSourceHandler(Dbms.class, DataSourceHandler.of(extractor, isolationConfigurator, starter, committer, rollbacker, closer));
     }
 
     public TransactionComponentImpl() {
@@ -61,15 +73,15 @@ public class TransactionComponentImpl implements TransactionComponent {
     }
 
     @Override
-    public TransactionHandler transactionHandler() {
+    public TransactionHandler createTransactionHandler() {
         if (singleDbms == null) {
             throw new IllegalStateException("This project does not contain exactly one Dbms.");
         }
-        return transactionHandler(singleDbms);
+        return creaateTransactionHandler(singleDbms);
     }
 
     @Override
-    public <T> TransactionHandler transactionHandler(T dataSource) {
+    public <T> TransactionHandler creaateTransactionHandler(T dataSource) {
         return new TransactionHandlerImpl(this, dataSource, findMapping(dataSource));
     }
 

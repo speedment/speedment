@@ -1,7 +1,9 @@
 package com.speedment.runtime.core.internal.component.transaction;
 
 import com.speedment.runtime.core.component.transaction.DataSourceHandler;
+import com.speedment.runtime.core.component.transaction.Isolation;
 import static java.util.Objects.requireNonNull;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -12,6 +14,7 @@ import java.util.function.Function;
 public class DataSourceHandlerImpl<D, T> implements DataSourceHandler<D, T> {
 
     private final Function<? super D, ? extends T> extractor;
+    private final BiFunction<? super T, Isolation, Isolation> isolationConfigurator;
     private final Consumer<? super T> beginner;
     private final Consumer<? super T> committer;
     private final Consumer<? super T> rollbacker;
@@ -19,12 +22,14 @@ public class DataSourceHandlerImpl<D, T> implements DataSourceHandler<D, T> {
 
     public DataSourceHandlerImpl(
         final Function<? super D, ? extends T> extractor,
+        final BiFunction<? super T, Isolation, Isolation> isolationConfigurator,
         final Consumer<? super T> beginner,
         final Consumer<? super T> committer,
         final Consumer<? super T> rollbacker,
         final Consumer<? super T> closer
     ) {
         this.extractor = requireNonNull(extractor);
+        this.isolationConfigurator = requireNonNull(isolationConfigurator);
         this.beginner = requireNonNull(beginner);
         this.committer = requireNonNull(committer);
         this.rollbacker = requireNonNull(rollbacker);
@@ -34,6 +39,11 @@ public class DataSourceHandlerImpl<D, T> implements DataSourceHandler<D, T> {
     @Override
     public Function<? super D, ? extends T> extractor() {
         return extractor;
+    }
+
+    @Override
+    public BiFunction<? super T, Isolation, Isolation> isolationConfigurator() {
+        return isolationConfigurator;
     }
 
     @Override
