@@ -62,7 +62,7 @@ public final class CountUtil {
 
         // Can we count it directly (with no sub-select query)?
         if (pipeline.stream().allMatch(PRESERVE_SIZE)) {
-            return info.getCounter().apply(info.getSqlSelectCount(), emptyList());
+            return info.getCounter().applyAsLong(info.getSqlSelectCount(), emptyList());
         } else {
 
             final Pipeline optimizedPipeline = sqlStreamTerminator.optimize(pipeline);
@@ -79,7 +79,7 @@ public final class CountUtil {
                 }
                 @SuppressWarnings("unchecked")
                 final List<Object> values = (List<Object>) asynchronousQueryResult.getValues();
-                return info.getCounter().apply(sql.toString(), values);
+                return info.getCounter().applyAsLong(sql.toString(), values);
             } else {
                 // Iterate over all materialized ENTITIES....
                 return fallbackSupplier.getAsLong();

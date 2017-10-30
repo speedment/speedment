@@ -21,8 +21,8 @@ import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.field.Field;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
-import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.ToLongBiFunction;
 
 /**
  *
@@ -33,7 +33,7 @@ public final class SqlStreamOptimizerInfoImpl<ENTITY> implements SqlStreamOptimi
     private final DbmsType dbmsType;
     private final String sqlSelect;
     private final String sqlSelectCount;
-    private final BiFunction<String, List<Object>, Long> counter;
+    private final ToLongBiFunction<String, List<Object>> counter;
     private final Function<Field<ENTITY>, String> sqlColumnNamer;
     private final Function<Field<ENTITY>, Class<?>> sqlDatabaseTypeFunction;
 
@@ -41,7 +41,7 @@ public final class SqlStreamOptimizerInfoImpl<ENTITY> implements SqlStreamOptimi
         final DbmsType dbmsType,
         final String sqlSelect,
         final String sqlSelectCount,
-        final BiFunction<String, List<Object>, Long> counter,
+        final ToLongBiFunction<String, List<Object>> counter,
         final Function<Field<ENTITY>, String> sqlColumnNamer,
         final Function<Field<ENTITY>, Class<?>> sqlDatabaseTypeFunction
     ) {
@@ -69,7 +69,7 @@ public final class SqlStreamOptimizerInfoImpl<ENTITY> implements SqlStreamOptimi
     }
 
     @Override
-    public BiFunction<String, List<Object>, Long> getCounter() {
+    public ToLongBiFunction<String, List<Object>> getCounter() {
         return counter;
     }
 
