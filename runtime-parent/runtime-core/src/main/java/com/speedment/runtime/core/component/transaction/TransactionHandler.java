@@ -46,7 +46,7 @@ public interface TransactionHandler {
      * EXAMPLE:
      * <pre>
      * {@code
-     *     // Print out all films and languages in a sigle transaction
+     *     // Print out all films and languages in a single transaction
      *     txHandler.createAndAccept(tx -> {
      *         films.stream().forEach(System.out::println);
      *         languages.stream().forEach(System.out::println);
@@ -83,7 +83,7 @@ public interface TransactionHandler {
      * <pre>
      * {@code
      *     // Retrieve a list of all films in the English language
-     *     // in a sigle transaction.
+     *     // in a single transaction.
      *     List<Film> filmsInEnglish = txHandler.createAndAccept(tx ->
      *         languages.stream()
      *             .filter(Language.NAME.equal("English"))
