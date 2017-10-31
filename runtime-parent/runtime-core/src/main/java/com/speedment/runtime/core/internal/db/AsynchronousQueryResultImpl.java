@@ -47,11 +47,11 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
     private String sql;
     private List<?> values;
     private SqlFunction<ResultSet, T> rsMapper;
-    private final Supplier<Connection> connectionSupplier;
+    private final Supplier<ConnectionInfo> connectionInfoSupplier;
     private final ParallelStrategy parallelStrategy;
     private final SqlConsumer<PreparedStatement> statementConfigurator;
     private final SqlConsumer<ResultSet> resultSetConfigurator;
-    private Connection connection;  // null allowed if the stream() method is not run
+    private ConnectionInfo connectionInfo;  // null allowed if the stream() method is not run
     private PreparedStatement ps;
     private ResultSet rs;
     private State state;
@@ -64,7 +64,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
         final String sql,
         final List<?> values,
         final SqlFunction<ResultSet, T> rsMapper,
-        final Supplier<Connection> connectionSupplier,
+        final Supplier<ConnectionInfo> connectionSupplier,
         final ParallelStrategy parallelStrategy,
         final SqlConsumer<PreparedStatement> statementConfigurator,
         final SqlConsumer<ResultSet> resultSetConfigurator
@@ -72,8 +72,8 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
         setSql(sql); // requireNonNull in setter
         setValues(values); // requireNonNull in setter
         setRsMapper(rsMapper); // requireNonNull in setter
-        this.connectionSupplier = requireNonNull(connectionSupplier);
-        this.parallelStrategy   = requireNonNull(parallelStrategy);
+        this.connectionInfoSupplier = requireNonNull(connectionSupplier);
+        this.parallelStrategy = requireNonNull(parallelStrategy);
         setState(State.INIT);
         this.statementConfigurator = requireNonNull(statementConfigurator);
         this.resultSetConfigurator = requireNonNull(resultSetConfigurator);
@@ -84,9 +84,10 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
         setState(State.ESTABLISH);
         try {
             LOGGER_STREAM.debug("%s, values:%s", getSql(), getValues());
-            connection = connectionSupplier.get();
-            connection.setAutoCommit(false);
-            ps = connection.prepareStatement(getSql(), java.sql.ResultSet.TYPE_FORWARD_ONLY, java.sql.ResultSet.CONCUR_READ_ONLY);
+
+            connectionInfo = connectionInfoSupplier.get();
+            connectionInfo.ifNotInTransaction(c -> c.setAutoCommit(false));
+            ps = connectionInfo.connection().prepareStatement(getSql(), java.sql.ResultSet.TYPE_FORWARD_ONLY, java.sql.ResultSet.CONCUR_READ_ONLY);
             statementConfigurator.accept(ps);
             int i = 1;
             for (final Object o : getValues()) {
@@ -106,15 +107,15 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
     public void close() {
         closeSilently(rs);
         closeSilently(ps);
-        commitSilently(connection);
-        closeSilently(connection);
+        commitSilently(connectionInfo);
+        closeSilently(connectionInfo);
         setState(State.CLOSED);
     }
 
-    private void commitSilently(Connection connection) {
+    private void commitSilently(ConnectionInfo connectionInfo) {
         try {
-            if (connection != null) {
-                connection.commit();
+            if (connectionInfo != null) {
+                connectionInfo.ifNotInTransaction(Connection::commit);
             }
         } catch (SQLException e) {
             LOGGER.error(e, "Failed to commit connection upon close");

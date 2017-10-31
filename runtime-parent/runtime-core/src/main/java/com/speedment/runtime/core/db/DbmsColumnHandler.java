@@ -37,4 +37,16 @@ public interface DbmsColumnHandler {
      * @return a predicate used to determine if a column shall be excluded in generated SQL INSERT statements
      */
     Predicate<Column> excludedInInsertStatement();
+    
+    /**
+     * By default, all columns are included in SQL UPDATE statements, this predicate
+     * allows exclusion from that rule in order to for example exclude auto incremented
+     * fields.
+     *
+     * @return a predicate used to determine if a column shall be excluded in generated SQL UPDATE statements
+     * @since 3.0.17
+     */
+    Predicate<Column> excludedInUpdateStatement();
+    
+        
 }

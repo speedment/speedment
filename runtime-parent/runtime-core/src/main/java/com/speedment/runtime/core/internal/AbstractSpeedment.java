@@ -28,6 +28,7 @@ import com.speedment.runtime.core.internal.component.sql.SqlPersistanceComponent
 import com.speedment.runtime.core.internal.component.sql.SqlStreamOptimizerComponentImpl;
 import com.speedment.runtime.core.internal.component.sql.SqlStreamSupplierComponentImpl;
 import com.speedment.runtime.core.internal.component.sql.override.SqlStreamTerminatorComponentImpl;
+import com.speedment.runtime.core.internal.component.transaction.TransactionComponentImpl;
 import com.speedment.runtime.core.internal.db.StandardDbmsTypes;
 import com.speedment.runtime.core.internal.manager.ManagerConfiguratorImpl;
 import com.speedment.runtime.core.manager.Manager;
@@ -59,7 +60,8 @@ public abstract class AbstractSpeedment implements Speedment {
             StatisticsReporterComponentImpl.class,
             StatisticsReporterSchedulerComponentImpl.class,
             SqlStreamOptimizerComponentImpl.class,
-            SqlStreamTerminatorComponentImpl.class
+            SqlStreamTerminatorComponentImpl.class,
+            TransactionComponentImpl.class
         );
     }
 

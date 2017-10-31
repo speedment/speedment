@@ -146,6 +146,10 @@
             <name>Mark Schrijver (GitHub:ractoc)</name>
             <timezone>Europe/Amsterdam</timezone>
         </contributor>
+        <contributor>
+            <name>Ameya Ketkar (GitHub:ameyaKetkar)</name>
+            <timezone>America/Los_Angeles</timezone>
+        </contributor>
     </contributors>
 	
     <!-- Distribution Details -->
