@@ -126,6 +126,12 @@ public final class H2DbmsType extends AbstractDbmsType {
             public Predicate<Column> excludedInInsertStatement() {
                 return c -> false; // For MySQL, even autoincrement fields are added to insert statements 
             }
+
+            @Override
+            public Predicate<Column> excludedInUpdateStatement() {
+                return c -> false;
+            }
+
         };
     }
 
