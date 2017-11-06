@@ -109,4 +109,18 @@ extends HasDbmsName,
     default TableIdentifier<ENTITY> asTableIdentifier() {
         return TableIdentifier.of(getDbmsName(), getSchemaName(), getTableName());
     }
+
+    /**
+     * Returns a label that can be used as key in a map. Using the ColumnIdentifier itself
+     * does not work since there are generated enums as well as runtime created ColumnIdentifierImpls
+     * that are considered to be equal but have different hashCode.
+     *
+     * All implementations of this interface will, however, have equal
+     * {@code label()} iff they refer to the same column.
+     *
+     * @return a ColumnLabel that is unique for this particular ColumnIdentifier
+     */
+    default ColumnLabel label() {
+        return ColumnLabel.of(this);
+    }
 }
