@@ -17,29 +17,18 @@
 package com.speedment.maven.abstractmojo;
 
 import com.speedment.common.injector.InjectBundle;
-import com.speedment.common.injector.Injector;
-import static com.speedment.common.injector.State.INITIALIZED;
-import static com.speedment.common.injector.State.RESOLVED;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.InjectKey;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.generator.core.GeneratorBundle;
-import com.speedment.generator.translator.component.TypeMapperComponent;
 import com.speedment.generator.translator.internal.component.CodeGenerationComponentImpl;
 import com.speedment.maven.component.MavenPathComponent;
 import static com.speedment.maven.component.MavenPathComponent.MAVEN_BASE_DIR;
 import com.speedment.maven.parameter.ConfigParam;
-import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
 import static com.speedment.runtime.core.internal.DefaultApplicationMetadata.METADATA_LOCATION;
-import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.tool.core.ToolBundle;
 import com.speedment.tool.core.internal.component.UserInterfaceComponentImpl;
 import static com.speedment.tool.core.internal.util.ConfigFileHelper.DEFAULT_CONFIG_LOCATION;
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -50,7 +39,6 @@ import java.util.ArrayList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -245,10 +233,10 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
             .withComponent(UserInterfaceComponentImpl.class)
             .withComponent(MavenPathComponent.class);
 
-        // Add any extra type mappers requested by the user
-        TypeMapperInstaller.mappings = typeMappers(); // <-- Hack to pass type mappers to class with default constructor.
-
-        result.withComponent(TypeMapperInstaller.class);
+//        // Add any extra type mappers requested by the user
+//        TypeMapperInstaller.mappings = typeMappers(); // <-- Hack to pass type mappers to class with default constructor.
+//
+//        result.withComponent(TypeMapperInstaller.class);
 
         // Add extra components requested by the user
         final String[] components = components();
@@ -288,91 +276,91 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
         return result;
     }
 
-    private final static class TypeMapperInstantiationException extends RuntimeException {
+//    private final static class TypeMapperInstantiationException extends RuntimeException {
+//
+//        private static final long serialVersionUID = -8267239306656063289L;
+//
+//        private TypeMapperInstantiationException(Throwable thrw) {
+//            super(thrw);
+//        }
+//    }
 
-        private static final long serialVersionUID = -8267239306656063289L;
-
-        private TypeMapperInstantiationException(Throwable thrw) {
-            super(thrw);
-        }
-    }
-
-    @InjectKey(TypeMapperInstaller.class)
-    private final static class TypeMapperInstaller {
-
-        private static String[] mappings;
-
-        @ExecuteBefore(RESOLVED)
-        void installInTypeMapper(
-            final Injector injector,
-            final @WithState(INITIALIZED) TypeMapperComponent typeMappers
-        ) throws MojoExecutionException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-            if (mappings != null) {
-                for (final String mappingName : mappings) {
-                    Mapping mapping = (Mapping) Class.forName(mappingName).newInstance();
-                    final Class<?> databaseType;
-                    try {
-                        databaseType = injector.classLoader()
-                            .loadClass(mapping.getDatabaseType());
-
-                    } catch (final ClassNotFoundException ex) {
-                        throw new MojoExecutionException(
-                            "Specified database type '" + mapping.getDatabaseType() + "' "
-                            + "could not be found on class path. Make sure it is a "
-                            + "valid JDBC type for the choosen connector.", ex
-                        );
-                    } catch (final ClassCastException ex) {
-                        throw new MojoExecutionException(
-                            "An unexpected ClassCastException occured.", ex
-                        );
-                    }
-
-                    try {
-                        final Class<?> uncasted = injector.classLoader()
-                            .loadClass(mapping.getImplementation());
-
-                        @SuppressWarnings("unchecked")
-                        final Class<TypeMapper<?, ?>> casted
-                            = (Class<TypeMapper<?, ?>>) uncasted;
-                        final Constructor<TypeMapper<?, ?>> constructor
-                            = casted.getConstructor();
-
-                        final Supplier<TypeMapper<?, ?>> supplier = () -> {
-                            try {
-                                return constructor.newInstance();
-                            } catch (final IllegalAccessException
-                                | IllegalArgumentException
-                                | InstantiationException
-                                | InvocationTargetException ex) {
-
-                                throw new TypeMapperInstantiationException(ex);
-                            }
-                        };
-
-                        typeMappers.install(databaseType, supplier);
-                    } catch (final ClassNotFoundException ex) {
-                        throw new MojoExecutionException(
-                            "Specified class '" + mapping.getImplementation()
-                            + "' could not be found on class path. Has the "
-                            + "dependency been configured properly?", ex
-                        );
-                    } catch (final ClassCastException ex) {
-                        throw new MojoExecutionException(
-                            "Specified class '" + mapping.getImplementation()
-                            + "' does not implement the '"
-                            + TypeMapper.class.getSimpleName() + "'-interface.",
-                            ex
-                        );
-                    } catch (final NoSuchMethodException
-                        | TypeMapperInstantiationException ex) {
-                        throw new MojoExecutionException(
-                            "Specified class '" + mapping.getImplementation()
-                            + "' could not be instantiated. Does it have a "
-                            + "default constructor?", ex
-                        );
-                    }
-                }
-            }
-        }
-    }
+//    @InjectKey(TypeMapperInstaller.class)
+//    private final static class TypeMapperInstaller {
+//
+//        private static String[] mappings;
+//
+//        @ExecuteBefore(RESOLVED)
+//        void installInTypeMapper(
+//            final Injector injector,
+//            final @WithState(INITIALIZED) TypeMapperComponent typeMappers
+//        ) throws MojoExecutionException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+//            if (mappings != null) {
+//                for (final String mappingName : mappings) {
+//                    Mapping mapping = (Mapping) Class.forName(mappingName).newInstance();
+//                    final Class<?> databaseType;
+//                    try {
+//                        databaseType = injector.classLoader()
+//                            .loadClass(mapping.getDatabaseType());
+//
+//                    } catch (final ClassNotFoundException ex) {
+//                        throw new MojoExecutionException(
+//                            "Specified database type '" + mapping.getDatabaseType() + "' "
+//                            + "could not be found on class path. Make sure it is a "
+//                            + "valid JDBC type for the choosen connector.", ex
+//                        );
+//                    } catch (final ClassCastException ex) {
+//                        throw new MojoExecutionException(
+//                            "An unexpected ClassCastException occured.", ex
+//                        );
+//                    }
+//
+//                    try {
+//                        final Class<?> uncasted = injector.classLoader()
+//                            .loadClass(mapping.getImplementation());
+//
+//                        @SuppressWarnings("unchecked")
+//                        final Class<TypeMapper<?, ?>> casted
+//                            = (Class<TypeMapper<?, ?>>) uncasted;
+//                        final Constructor<TypeMapper<?, ?>> constructor
+//                            = casted.getConstructor();
+//
+//                        final Supplier<TypeMapper<?, ?>> supplier = () -> {
+//                            try {
+//                                return constructor.newInstance();
+//                            } catch (final IllegalAccessException
+//                                | IllegalArgumentException
+//                                | InstantiationException
+//                                | InvocationTargetException ex) {
+//
+//                                throw new TypeMapperInstantiationException(ex);
+//                            }
+//                        };
+//
+//                        typeMappers.install(databaseType, supplier);
+//                    } catch (final ClassNotFoundException ex) {
+//                        throw new MojoExecutionException(
+//                            "Specified class '" + mapping.getImplementation()
+//                            + "' could not be found on class path. Has the "
+//                            + "dependency been configured properly?", ex
+//                        );
+//                    } catch (final ClassCastException ex) {
+//                        throw new MojoExecutionException(
+//                            "Specified class '" + mapping.getImplementation()
+//                            + "' does not implement the '"
+//                            + TypeMapper.class.getSimpleName() + "'-interface.",
+//                            ex
+//                        );
+//                    } catch (final NoSuchMethodException
+//                        | TypeMapperInstantiationException ex) {
+//                        throw new MojoExecutionException(
+//                            "Specified class '" + mapping.getImplementation()
+//                            + "' could not be instantiated. Does it have a "
+//                            + "default constructor?", ex
+//                        );
+//                    }
+//                }
+//            }
+//        }
+//    }
 }
