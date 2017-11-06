@@ -2,6 +2,7 @@ package com.speedment.runtime.core.component.transaction;
 
 import com.speedment.common.injector.annotation.InjectKey;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * General Transaction Component
@@ -17,8 +18,8 @@ public interface TransactionComponent {
      * in the current Speedment Project.
      *
      * @return a new TransactionHandler
-     * @throws IllegalStateException if there is not exactly one Dbms defined
-     * in the current project.
+     * @throws IllegalStateException if there is not exactly one Dbms defined in
+     * the current project.
      */
     TransactionHandler createTransactionHandler();
 
@@ -90,5 +91,15 @@ public interface TransactionComponent {
      * @throws NullPointerException if thread is null
      */
     void remove(Thread thread);
+
+    /**
+     * Creates and returns a Stream of threads that are associated with the
+     * given transaction aware object.
+     *
+     * @param txObject for which Threads are associated to
+     * @return a Stream of threads that are associated with the given
+     * transaction aware object
+     */
+    Stream<Thread> threads(Object txObject);
 
 }

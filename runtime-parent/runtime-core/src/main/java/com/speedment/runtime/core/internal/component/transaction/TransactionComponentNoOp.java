@@ -5,6 +5,7 @@ import com.speedment.runtime.core.component.transaction.TransactionBundle;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.component.transaction.TransactionHandler;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  *
@@ -43,6 +44,11 @@ public class TransactionComponentNoOp implements TransactionComponent {
 
     @Override
     public void remove(Thread thread) {
+    }
+
+    @Override
+    public Stream<Thread> threads(Object txObject) {
+        return Stream.empty();
     }
 
     private UnsupportedOperationException createException() {

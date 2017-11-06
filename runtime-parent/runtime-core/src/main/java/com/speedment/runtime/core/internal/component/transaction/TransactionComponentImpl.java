@@ -15,6 +15,7 @@ import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.component.transaction.TransactionHandler;
 import com.speedment.runtime.core.exception.TransactionException;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
@@ -25,6 +26,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
+import java.util.stream.Stream;
 
 /**
  *
@@ -34,6 +36,7 @@ public class TransactionComponentImpl implements TransactionComponent {
 
     private final Map<Class<?>, DataSourceHandler<Object, Object>> dataSourceHandlers;
     private final Map<Thread, Object> txObjects;
+    private final Map<Object, Set<Thread>> threadSets;
     private Dbms singleDbms;
 
     @ExecuteBefore(STARTED)
@@ -70,6 +73,7 @@ public class TransactionComponentImpl implements TransactionComponent {
     public TransactionComponentImpl() {
         this.dataSourceHandlers = new ConcurrentHashMap<>();
         this.txObjects = new ConcurrentHashMap<>();
+        this.threadSets = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -97,7 +101,11 @@ public class TransactionComponentImpl implements TransactionComponent {
             throw new IllegalStateException(
                 String.format("There is already a txObject associated with thread %s ", thread)
             );
-        };
+        }
+        threadSets.computeIfAbsent(
+            txObject,
+            (Object k) -> new HashSet<>()
+        ).add(thread);
     }
 
     @Override
@@ -107,7 +115,22 @@ public class TransactionComponentImpl implements TransactionComponent {
 
     @Override
     public void remove(Thread thread) {
-        txObjects.remove(requireNonNull(thread));
+        final Object removedTxObject = txObjects.remove(requireNonNull(thread));
+        if (removedTxObject != null) {
+            final Set<Thread> threadSet = threadSets.get(removedTxObject);
+            threadSet.remove(thread);
+            if (threadSet.isEmpty()) {
+                // Clean up 
+                threadSets.remove(removedTxObject);
+            }
+        }
+    }
+
+    @Override
+    public Stream<Thread> threads(Object txObject) {
+        return Optional.ofNullable(threadSets.get(txObject))
+            .map(Set::stream)
+            .orElse(Stream.empty());
     }
 
     private DataSourceHandler<Object, Object> findMapping(Object dataSource) {

@@ -29,4 +29,32 @@ public interface Transaction {
      */
     void rollback() throws TransactionException;
 
+    /**
+     * Attaches the current thread to this Transaction.
+     * <p>
+     * After this call, data operations executed by the current thread will be
+     * issued within this transaction's scope.
+     * <p>
+     * NB: Not all databases support transaction operations carried out by by a
+     * plurality of threads.
+     *
+     * @throws IllegalStateException if the current thread is already associated
+     * with another Transaction within any transaction domain.
+     */
+    void attachCurrentThread();
+
+    /**
+     * Detaches the current thread from this Transaction. If the current thread
+     * is not attached to this Transaction, then this method is a no-operation.
+     * <p>
+     * After this call, data operations executed by the current thread will be
+     * issued separated from this transaction's scope.
+     */
+    void detachCurrentThread();
+    
+//    /**
+//     * Closes this transaction, rolling back any uncommitted updates, detatching
+//     * all attached threads and relinquishing any underlying resources.
+//     */
+//    void close();
 }

@@ -48,7 +48,7 @@ public class TransactionHandlerImpl implements TransactionHandler {
         final Thread currentThread = Thread.currentThread();
         final Object txObject = dataSourceHandler.extractor().apply(dataSource); // e.g. obtains a Connection
         final Isolation oldIsolation = setAndGetIsolation(txObject, isolation);
-        final Transaction tx = new TransactionImpl(txObject, dataSourceHandler);
+        final Transaction tx = new TransactionImpl(txComponent, txObject, dataSourceHandler);
         txComponent.put(currentThread, txObject);
         try {
             dataSourceHandler.beginner().accept(txObject); // e.g. con.setAutocommit(false)
