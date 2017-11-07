@@ -12,7 +12,7 @@ import java.util.stream.Stream;
  * tool.
  *
  * @author Emil Forslund
- * @since  3.0.16
+ * @since  3.0.17
  */
 public final class ToolActionsBundle implements InjectBundle {
 

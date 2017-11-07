@@ -10,7 +10,7 @@ import java.io.InputStream;
  * might change in future versions!
  *
  * @author Emil Forslund
- * @since  3.0.16
+ * @since  3.0.17
  */
 public enum ProjectTreeIcon {
 

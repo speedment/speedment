@@ -13,7 +13,7 @@ import static com.speedment.common.injector.State.RESOLVED;
  * to standardize the dependency injection phases used in different actions.
  *
  * @author Emil Forslund
- * @since  3.0.16
+ * @since  3.0.17
  */
 abstract class AbstractToolAction {
 

@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  * Default implementation of the {@link ToggleTablesEnabledAction}-interface.
  *
  * @author Emil Forslund
- * @since  3.0.16
+ * @since  3.0.17
  */
 public final class ToggleTablesEnabledActionImpl
 extends AbstractToolAction

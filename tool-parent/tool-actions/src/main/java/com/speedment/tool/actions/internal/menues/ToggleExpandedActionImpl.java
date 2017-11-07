@@ -18,7 +18,7 @@ import java.util.stream.Stream;
  * Default implementation of {@link ToggleExpandedAction}.
  *
  * @author Emil Forslund
- * @since  3.0.16
+ * @since  3.0.17
  */
 public final class ToggleExpandedActionImpl
 extends AbstractToolAction

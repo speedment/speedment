@@ -23,7 +23,7 @@ import static java.util.stream.Collectors.toList;
  * implementation is concurrent.
  *
  * @author Emil Forslund
- * @since  3.0.16
+ * @since  3.0.17
  */
 public final class ProjectTreeComponentImpl implements ProjectTreeComponent {
 

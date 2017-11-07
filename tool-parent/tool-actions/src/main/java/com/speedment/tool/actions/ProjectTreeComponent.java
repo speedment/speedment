@@ -15,7 +15,7 @@ import java.util.stream.Stream;
  * Plugins can install their own context menus in this component.
  *
  * @author Emil Forslund
- * @since  3.0.16
+ * @since  3.0.17
  */
 public interface ProjectTreeComponent {
 

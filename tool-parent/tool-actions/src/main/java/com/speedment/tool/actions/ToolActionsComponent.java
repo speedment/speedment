@@ -6,7 +6,7 @@ import com.speedment.common.injector.annotation.InjectKey;
  * Installs the default actions for each node type.
  *
  * @author Emil Forslund
- * @since  3.0.16
+ * @since  3.0.17
  */
 @InjectKey(ToolActionsComponent.class)
 public interface ToolActionsComponent {}
