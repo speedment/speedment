@@ -136,7 +136,7 @@ public final class TranslatorManagerHelper {
         });
 
         System.out.println();
-        System.out.println("Writing write-once classes:");
+        System.out.println("Writing write-always classes:");
         gen.metaOn(writeAlwaysTranslators.stream()
             .map(Translator::get)
             .collect(Collectors.toList())
