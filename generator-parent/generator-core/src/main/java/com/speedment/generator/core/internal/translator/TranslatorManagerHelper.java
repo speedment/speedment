@@ -104,37 +104,59 @@ public final class TranslatorManagerHelper {
                 }
             });
 
+        System.out.println("Generating code:");
         traverseOver(project, Table.class)
             .filter(HasEnabled::test)
             .forEach(table
-                -> codeGenerationComponent.translators(table).forEachOrdered(t -> {
-                if (t.isInGeneratedPackage()) {
-                    writeAlwaysTranslators.add(t);
-                } else {
-                    writeOnceTranslators.add(t);
-                }
-            })
+                -> {
+                printAndFlush(".");
+                codeGenerationComponent.translators(table).forEachOrdered(t -> {
+                    if (t.isInGeneratedPackage()) {
+                        writeAlwaysTranslators.add(t);
+                    } else {
+                        writeOnceTranslators.add(t);
+                    }
+                });
+            }
             );
-
+        System.out.println();
+        System.out.println("Clearing existing files");
         // Erase any previous unmodified files.
         delegator.clearExistingFiles(project);
 
+        System.out.println("Checking write-once classes:");
         // Write generated code to file.
         gen.metaOn(writeOnceTranslators.stream()
             .map(Translator::get)
             .collect(Collectors.toList())
-        ).forEach(meta -> delegator.writeToFile(project, meta, false));
+        ).forEach(meta -> {
+            printAndFlush(".");
 
+            delegator.writeToFile(project, meta, false);
+        });
+
+        System.out.println();
+        System.out.println("Writing write-once classes:");
         gen.metaOn(writeAlwaysTranslators.stream()
             .map(Translator::get)
             .collect(Collectors.toList())
-        ).forEach(meta -> delegator.writeToFile(project, meta, true));
+        ).forEach(meta -> {
+            printAndFlush(".");
 
+            delegator.writeToFile(project, meta, true);
+        });
+        System.out.println();
+        
         LOGGER.info("Wrote %d files in %s", getFilesCreated(), paths.packageLocation());
 
         events.notify(new AfterGenerate(project, gen, delegator));
     }
 
+    private void printAndFlush(String s) {
+        System.out.print(s);
+        System.out.flush();
+    }
+    
     public void clearExistingFiles(Project project) {
         final Path dir = paths.packageLocation();
 
