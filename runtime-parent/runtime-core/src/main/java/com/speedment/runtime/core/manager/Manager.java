@@ -79,21 +79,21 @@ public interface Manager<ENTITY> {
      * Speedment.
      * <p>
      * The order in which elements are returned when the stream is eventually
-     * consumed is unspecified. The order may even change from one invocation to
-     * another. Thus, it is an error to assume any particular element order even
-     * though is might appear, for some stream sources, that there is a de facto
-     * order.
+     * consumed <em>is unspecified</em>. The order may even change from one
+     * invocation to another. Thus, it is an error to assume any particular
+     * element order even though is might appear, for some stream sources, that
+     * there is a de facto order.
      * <p>
      * If a deterministic order is required, then make sure to invoke the
-     * {@link Stream#sorted(java.util.Comparator)} method on the Stream
+     * {@link Stream#sorted(java.util.Comparator)} method on the {@link Stream}
      * returned.
      * <p>
      * This is <em>an inexpensive O(1) operation</em> that will complete in
      * constant time regardless of the number of entities in the underlying
      * database.
      * <p>
-     * The returned stream is aware of its own pipeline and will <em>optimize
-     * its own pipeline</em> whenever it encounters a <em>Terminal
+     * The returned stream is aware of its own pipeline and will optionally
+     * <em>optimize its own pipeline</em> whenever it encounters a <em>Terminal
      * Operation</em> so that it will only iterate over a minimum set of
      * matching entities.
      * <p>
