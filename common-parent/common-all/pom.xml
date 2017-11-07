@@ -52,7 +52,7 @@
         <lazy.version>1.0.3</lazy.version>
         <mapstream.version>2.3.5</mapstream.version>
         <mutablestream.version>1.0.0</mutablestream.version>
-        <singletonstream.version>1.0.0</singletonstream.version>
+        <singletonstream.version>1.0.1-SNAPSHOT</singletonstream.version>
         <annotation.version>1.0.0</annotation.version>
         <combinatorics.version>1.0.1</combinatorics.version>
         <benchmark.version>1.0.0</benchmark.version>
