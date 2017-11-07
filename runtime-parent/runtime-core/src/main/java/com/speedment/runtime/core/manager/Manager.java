@@ -36,9 +36,9 @@ import java.util.stream.Stream;
  *
  * @param <ENTITY> entity type for this Manager
  *
- * @author  Per Minborg
- * @author  Emil Forslund
- * @since   2.0.0
+ * @author Per Minborg
+ * @author Emil Forslund
+ * @since 2.0.0
  */
 public interface Manager<ENTITY> {
 
@@ -75,7 +75,18 @@ public interface Manager<ENTITY> {
 
     /**
      * Creates and returns a new {@link Stream} over all entities in the
-     * underlying database. This is the main query API for Speedment.
+     * underlying data source (e.g database). This is the main query API for
+     * Speedment.
+     * <p>
+     * The order in which elements are returned when the stream is eventually
+     * consumed is unspecified. The order may even change from one invocation to
+     * another. Thus, it is an error to assume any particular element order even
+     * though is might appear, for some stream sources, that there is a de facto
+     * order.
+     * <p>
+     * If a deterministic order is required, then make sure to invoke the
+     * {@link Stream#sorted(java.util.Comparator)} method on the Stream
+     * returned.
      * <p>
      * This is <em>an inexpensive O(1) operation</em> that will complete in
      * constant time regardless of the number of entities in the underlying
@@ -160,8 +171,7 @@ public interface Manager<ENTITY> {
      * @return a new stream over all entities in this table
      *
      * @throws SpeedmentException if an error occurs during a Terminal Operation
-     *                            (e.g. an SqlException is thrown by the
-     *                            underlying database)
+     * (e.g. an SqlException is thrown by the underlying database)
      *
      * @see java.util.stream
      * @see Stream
@@ -185,10 +195,10 @@ public interface Manager<ENTITY> {
      * entity.
      *
      * @param entity to persist
-     * @return       an entity reflecting the result of the persisted entity
+     * @return an entity reflecting the result of the persisted entity
      *
      * @throws SpeedmentException if the underlying database throws an exception
-     *                            (e.g. SQLException)
+     * (e.g. SQLException)
      */
     default ENTITY persist(ENTITY entity) throws SpeedmentException {
         return persister().apply(entity);
@@ -222,10 +232,10 @@ public interface Manager<ENTITY> {
      * Entities are uniquely identified by their primary key(s).
      *
      * @param entity to update
-     * @return       an entity reflecting the result of the updated entity
+     * @return an entity reflecting the result of the updated entity
      *
      * @throws SpeedmentException if the underlying database throws an exception
-     *                            (e.g. SQLException)
+     * (e.g. SQLException)
      */
     default ENTITY update(ENTITY entity) throws SpeedmentException {
         return updater().apply(entity);
@@ -247,10 +257,10 @@ public interface Manager<ENTITY> {
      * Entities are uniquely identified by their primary key(s).
      *
      * @param entity to remove
-     * @return       the provided entity instance
+     * @return the provided entity instance
      *
      * @throws SpeedmentException if the underlying database throws an exception
-     *                            (e.g. SQLException)
+     * (e.g. SQLException)
      */
     default ENTITY remove(ENTITY entity) throws SpeedmentException {
         return remover().apply(entity);
@@ -271,14 +281,13 @@ public interface Manager<ENTITY> {
      * @param <FK_ENTITY> the type of the foreign entity
      *
      * @param fkField the foreign key field
-     * @return        a function that returns an Entity (if any) that matches
-     *                the given a foreign key relation (foreign field and
-     *                entity)
-     * 
+     * @return a function that returns an Entity (if any) that matches the given
+     * a foreign key relation (foreign field and entity)
+     *
      * @see #finderByNullable(HasNullableFinder)
      */
     default <FK_ENTITY> FindFrom<FK_ENTITY, ENTITY> finderBy(
-            HasFinder<FK_ENTITY, ENTITY> fkField) {
+        HasFinder<FK_ENTITY, ENTITY> fkField) {
 
         return fkField.finder(getTableIdentifier(), this::stream);
     }
@@ -292,14 +301,14 @@ public interface Manager<ENTITY> {
      *
      * @param <FK_ENTITY> the type of the foreign entity
      *
-     * @param fkField  the foreign key field
+     * @param fkField the foreign key field
      * @param fkEntity the foreign key entity
-     * @return         an Entity (if any) that matches the given a foreign key
-     *                 relation (foreign field and entity)
+     * @return an Entity (if any) that matches the given a foreign key relation
+     * (foreign field and entity)
      */
     default <FK_ENTITY> ENTITY findBy(
-            HasFinder<FK_ENTITY, ENTITY> fkField,
-            FK_ENTITY fkEntity) {
+        HasFinder<FK_ENTITY, ENTITY> fkField,
+        FK_ENTITY fkEntity) {
 
         return finderBy(fkField).apply(fkEntity);
     }
@@ -312,14 +321,13 @@ public interface Manager<ENTITY> {
      * @param <FK_ENTITY> the type of the foreign entity
      *
      * @param fkField the foreign key field
-     * @return        a function that returns an Entity (if any) that matches
-     *                the given a foreign key relation (foreign field and
-     *                entity)
-     * 
+     * @return a function that returns an Entity (if any) that matches the given
+     * a foreign key relation (foreign field and entity)
+     *
      * @see #findByNullable(HasNullableFinder, Object)
      */
     default <FK_ENTITY> Function<FK_ENTITY, Stream<ENTITY>> finderByNullable(
-            HasNullableFinder<FK_ENTITY, ENTITY> fkField) {
+        HasNullableFinder<FK_ENTITY, ENTITY> fkField) {
 
         return fkField.nullableFinder(getTableIdentifier(), this::stream);
     }
@@ -335,14 +343,14 @@ public interface Manager<ENTITY> {
      *
      * @param <FK_ENTITY> the type of the foreign entity
      *
-     * @param fkField  the foreign key field
+     * @param fkField the foreign key field
      * @param fkEntity the foreign key entity
-     * @return         an Entity (if any) that matches the given a foreign key
-     *                 relation (foreign field and entity)
+     * @return an Entity (if any) that matches the given a foreign key relation
+     * (foreign field and entity)
      */
     default <FK_ENTITY> Stream<ENTITY> findByNullable(
-            HasNullableFinder<FK_ENTITY, ENTITY> fkField,
-            FK_ENTITY fkEntity) {
+        HasNullableFinder<FK_ENTITY, ENTITY> fkField,
+        FK_ENTITY fkEntity) {
 
         return finderByNullable(fkField).apply(fkEntity);
     }
@@ -354,13 +362,13 @@ public interface Manager<ENTITY> {
      * @param <FK_ENTITY> the type of the foreign entity
      *
      * @param fkField the foreign key field
-     * @return        an Entity (if any) that matches the given a foreign key
-     *                relation (foreign field and entity)
+     * @return an Entity (if any) that matches the given a foreign key relation
+     * (foreign field and entity)
      *
      * @see #findBackwardsBy(HasFinder, Object)
      */
     default <FK_ENTITY> BackwardFinder<FK_ENTITY, ENTITY> finderBackwardsBy(
-            HasFinder<ENTITY, FK_ENTITY> fkField) {
+        HasFinder<ENTITY, FK_ENTITY> fkField) {
 
         return fkField.backwardFinder(getTableIdentifier(), this::stream);
     }
@@ -374,14 +382,14 @@ public interface Manager<ENTITY> {
      *
      * @param <FK_ENTITY> the type of the foreign entity
      *
-     * @param fkField  the foreign key field
+     * @param fkField the foreign key field
      * @param fkEntity the foreign key entity
-     * @return         an Entity (if any) that matches the given a foreign key
-     *                 relation (foreign field and entity)
+     * @return an Entity (if any) that matches the given a foreign key relation
+     * (foreign field and entity)
      */
     default <FK_ENTITY> Stream<ENTITY> findBackwardsBy(
-            HasFinder<ENTITY, FK_ENTITY> fkField,
-            FK_ENTITY fkEntity) {
+        HasFinder<ENTITY, FK_ENTITY> fkField,
+        FK_ENTITY fkEntity) {
 
         return finderBackwardsBy(fkField).apply(fkEntity);
     }
