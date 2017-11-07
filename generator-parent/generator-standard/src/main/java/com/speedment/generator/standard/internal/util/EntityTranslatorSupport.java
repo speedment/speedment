@@ -335,6 +335,7 @@ public final class EntityTranslatorSupport {
         requireNonNulls(table, column);
         return table.foreignKeys()
             .filter(HasEnabled::test)
+            .filter(fk -> fk.foreignKeyColumns().count() == 1) // We can only handle one column FKs...
             .flatMap(ForeignKey::foreignKeyColumns)
             .filter(fkc -> DocumentDbUtil.isSame(column, fkc.findColumn().orElse(null)))
             .findFirst();
