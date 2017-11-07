@@ -19,11 +19,10 @@ package com.speedment.tool.core.internal.controller;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.core.component.EventComponent;
 import com.speedment.generator.core.event.ProjectLoaded;
-import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.trait.HasEnabled;
-import com.speedment.runtime.config.util.DocumentUtil;
 import com.speedment.tool.actions.ProjectTreeComponent;
-import com.speedment.tool.config.*;
+import com.speedment.tool.config.DocumentProperty;
+import com.speedment.tool.config.ProjectProperty;
 import com.speedment.tool.config.trait.HasEnabledProperty;
 import com.speedment.tool.config.trait.HasExpandedProperty;
 import com.speedment.tool.config.trait.HasIconPath;
@@ -37,7 +36,6 @@ import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -45,10 +43,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 import static javafx.application.Platform.runLater;
@@ -103,7 +98,7 @@ public final class ProjectTreeController implements Initializable {
                 if (change.wasAdded()) {
                     change.getAddedSubList().stream()
                         .filter(HasExpandedProperty.class::isInstance)
-                        .map(d -> (DocumentProperty & HasExpandedProperty) d)
+                        .map(d -> (HasExpandedProperty) d)
                         .map(this::branch)
                         .forEachOrdered(branch.getChildren()::add);
                 }
@@ -120,7 +115,7 @@ public final class ProjectTreeController implements Initializable {
         // Create a branch for every child
         doc.children()
             .filter(HasExpandedProperty.class::isInstance)
-            .map(d -> (DocumentProperty & HasExpandedProperty) d)
+            .map(d -> (HasExpandedProperty) d)
             .map(this::branch)
             .forEachOrdered(branch.getChildren()::add);
 
