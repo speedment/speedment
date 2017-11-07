@@ -151,6 +151,12 @@
             <artifactId>tool-config</artifactId>
             <version>${speedment.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.speedment.tool</groupId>
+            <artifactId>tool-actions</artifactId>
+            <version>${speedment.version}</version>
+        </dependency>
         
         <dependency>
             <groupId>com.speedment.tool</groupId>

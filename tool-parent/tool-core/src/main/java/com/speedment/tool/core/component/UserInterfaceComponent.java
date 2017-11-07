@@ -18,7 +18,6 @@ package com.speedment.tool.core.component;
 
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.runtime.config.Dbms;
-import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.tool.config.DbmsProperty;
@@ -32,12 +31,14 @@ import javafx.application.Application;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.*;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Stream;
 
 /**
  * The user interface component contains a number of useful methods required to
@@ -311,48 +312,6 @@ public interface UserInterfaceComponent {
      * @param action   action to be performed on click
      */
     void showNotification(String message, Icon icon, Palette palette, Runnable action);
-
-    ////////////////////////////////////////////////////////////////////////////
-    //                              Context Menues                            //
-    ////////////////////////////////////////////////////////////////////////////
-    
-    /**
-     * Installs the specified menu builder for the specified node type.
-     * This can be used to add additional options to the context menu
-     * when the user right-clicks on various nodes in the Project Tree
-     * section of the user interface.
-     * 
-     * @param <DOC>        the node type
-     * @param nodeType     the node type to attach to items to
-     * @param menuBuilder  menu builder for that type of node
-     */
-    <DOC extends DocumentProperty & HasMainInterface> void installContextMenu(Class<? extends DOC> nodeType, ContextMenuBuilder<DOC> menuBuilder);
-
-    /**
-     * Creates a context menu and fills it with all the appropriate 
-     * menu items for the specified tree cell and document. This will
-     * invoke any previously installed context menu builders.
-     * <p>
-     * If no menu items should be visible for the specified cell and
-     * document, an empty {@code Optional} is returned.
-     * 
-     * @param <DOC>     the document type
-     * @param treeCell  the tree cell
-     * @param doc       the document
-     * @return          the constructed context menu or empty
-     */
-    <DOC extends DocumentProperty & HasMainInterface> Optional<ContextMenu> createContextMenu(TreeCell<DocumentProperty> treeCell, DOC doc);
-    
-    /**
-     * Builder that can construct a Context Menu for a particular 
-     * tree cell and document.
-     * 
-     * @param <DOC>  the document type
-     */
-    @FunctionalInterface
-    interface ContextMenuBuilder<DOC extends DocumentProperty> {
-        Stream<MenuItem> build(TreeCell<DocumentProperty> tc, DOC doc);
-    }
 
     ////////////////////////////////////////////////////////////////////////////
     //                                  Other                                 //

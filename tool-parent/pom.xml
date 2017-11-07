@@ -40,6 +40,7 @@
     
     <modules>
         <module>tool-config</module>
+        <module>tool-actions</module>
         <module>tool-propertyeditor</module>
         <module>tool-core</module>
         <module>tool-all</module>

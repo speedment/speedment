@@ -17,6 +17,7 @@
 package com.speedment.tool.core;
 
 import com.speedment.common.injector.InjectBundle;
+import com.speedment.tool.actions.ToolActionsBundle;
 import com.speedment.tool.core.internal.component.RuleComponentImpl;
 import com.speedment.tool.core.internal.component.UserInterfaceComponentImpl;
 import com.speedment.tool.core.internal.component.VersionComponentImpl;
@@ -35,6 +36,7 @@ public class ToolBundle implements InjectBundle {
     public Stream<Class<?>> injectables() {
         return InjectBundle.of(UserInterfaceComponentImpl.class)
             .withBundle(UserInterfaceComponentImpl.include())
+            .withBundle(new ToolActionsBundle())
             .withComponent(VersionComponentImpl.class)
             .withComponent(RuleComponentImpl.class)
             .withComponent(ConfigFileHelper.class)
