@@ -36,6 +36,7 @@ import com.speedment.runtime.typemapper.shorts.PrimitiveShortToByteMapper;
 import com.speedment.runtime.typemapper.shorts.ShortToByteMapper;
 import com.speedment.runtime.typemapper.string.StringToLocaleMapper;
 import com.speedment.runtime.typemapper.string.TrueFalseStringToBooleanMapper;
+import com.speedment.runtime.typemapper.string.YNStringToBooleanMapper;
 import com.speedment.runtime.typemapper.string.YesNoStringToBooleanMapper;
 import com.speedment.runtime.typemapper.time.*;
 
@@ -78,6 +79,7 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
         install(String.class, StringToLocaleMapper::new);
         install(String.class, TrueFalseStringToBooleanMapper::new);
         install(String.class, YesNoStringToBooleanMapper::new);
+        install(String.class, YNStringToBooleanMapper::new);
 
         // Special BigDecimal object mappers
         install(BigDecimal.class, BigDecimalToDouble::new);
