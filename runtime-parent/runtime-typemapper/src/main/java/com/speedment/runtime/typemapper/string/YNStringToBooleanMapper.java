@@ -36,7 +36,11 @@ public final class YNStringToBooleanMapper implements TypeMapper<String, Boolean
     
     @Override
     public Type getJavaType(Column column) {
-        return Boolean.class;
+        if (column.isNullable()) {
+            return Boolean.class;
+        } else {
+            return boolean.class;
+        }
     }
 
     @Override

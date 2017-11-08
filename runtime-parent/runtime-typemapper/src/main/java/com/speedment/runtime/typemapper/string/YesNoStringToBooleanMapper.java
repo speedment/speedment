@@ -37,7 +37,11 @@ public final class YesNoStringToBooleanMapper implements TypeMapper<String, Bool
     
     @Override
     public Type getJavaType(Column column) {
-        return Boolean.class;
+        if (column.isNullable()) {
+            return Boolean.class;
+        } else {
+            return boolean.class;
+        }
     }
 
     @Override
