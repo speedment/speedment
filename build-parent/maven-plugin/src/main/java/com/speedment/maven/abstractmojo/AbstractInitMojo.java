@@ -1,13 +1,12 @@
 /**
- *
  * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at:
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -20,12 +19,13 @@ import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
-import com.speedment.runtime.config.internal.DbmsImpl;
 import com.speedment.runtime.config.internal.ProjectImpl;
-import com.speedment.runtime.config.internal.SchemaImpl;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
+import com.speedment.tool.config.ProjectProperty;
+import com.speedment.tool.config.internal.component.DocumentPropertyComponentImpl;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
@@ -33,7 +33,6 @@ import org.apache.maven.project.MavenProject;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * A maven goal (re)creates the configuration file with just the provided initialisation parameters.
@@ -43,140 +42,192 @@ import java.util.stream.Collectors;
  */
 public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
 
-	@Parameter(defaultValue = "${project}", required = true, readonly = true)
-	private MavenProject mavenProject;
+    @Parameter(defaultValue = "${project}", required = true, readonly = true)
+    private MavenProject mavenProject;
 
-	private @Parameter(defaultValue = "${debug}") Boolean debug;
-	private @Parameter(defaultValue = "${companyName}") String companyName;
-	private @Parameter(defaultValue = "${appName}") String appName;
-	private @Parameter(defaultValue = "${package.location}") String packageLocation;
-	private @Parameter(defaultValue = "${package.name}") String packageName;
-	private @Parameter(defaultValue = "${dbms.type}") String dbmsType;
-	private @Parameter(defaultValue = "${dbms.host}") String dbmsHost;
-	private @Parameter(defaultValue = "${dbms.port}") int dbmsPort;
-	private @Parameter(defaultValue = "${dbms.schemas}") String dbmsSchemas;
-	private @Parameter(defaultValue = "${dbms.username}") String dbmsUsername;
-	private @Parameter(defaultValue = "${dbms.password}") String dbmsPassword;
-	private @Parameter ConfigParam[] parameters;
-	private @Parameter(defaultValue = "${configFile}") String configFile;
+    private @Parameter(defaultValue = "${debug}")
+    Boolean debug;
+    private @Parameter(defaultValue = "${companyName}")
+    String companyName;
+    private @Parameter(defaultValue = "${appName}")
+    String appName;
+    private @Parameter(defaultValue = "${package.location}")
+    String packageLocation;
+    private @Parameter(defaultValue = "${package.name}")
+    String packageName;
+    private @Parameter(defaultValue = "${dbms.type}")
+    String dbmsType;
+    private @Parameter(defaultValue = "${dbms.host}")
+    String dbmsHost;
+    private @Parameter(defaultValue = "${dbms.port}")
+    Integer dbmsPort;
+    private @Parameter(defaultValue = "${dbms.schemas}")
+    String dbmsSchemas;
+    private @Parameter(defaultValue = "${dbms.username}")
+    String dbmsUsername;
+    private @Parameter(defaultValue = "${dbms.password}")
+    String dbmsPassword;
+    private @Parameter
+    ConfigParam[] parameters;
+    private @Parameter(defaultValue = "${configFile}")
+    String configFile;
 
-	protected AbstractInitMojo() {
-	}
+    protected AbstractInitMojo() {
+    }
 
-	protected AbstractInitMojo(Consumer<ApplicationBuilder<?, ?>> configurer) {
-		super(configurer);
-	}
+    protected AbstractInitMojo(Consumer<ApplicationBuilder<?, ?>> configurer) {
+        super(configurer);
+    }
 
-	@Override
-	protected void execute(Speedment speedment) throws MojoExecutionException, MojoFailureException {
-		getLog().info("Saving default configuration from database to '" + configLocation().toAbsolutePath() + "'.");
+    @Override
+    protected void execute(Speedment speedment) throws MojoExecutionException, MojoFailureException {
+        getLog().info("Saving default configuration from database to '" + configLocation().toAbsolutePath() + "'.");
 
-		final ConfigFileHelper helper = speedment.getOrThrow(ConfigFileHelper.class);
+        final ConfigFileHelper helper = speedment.getOrThrow(ConfigFileHelper.class);
 
-		try {
-			helper.setCurrentlyOpenFile(configLocation().toFile());
-			helper.clearTablesAndSaveToFile();
-		} catch (final Exception ex) {
-			final String err = "An error occured while reloading.";
-			getLog().error(err);
-			throw new MojoExecutionException(err, ex);
-		}
-	}
+        ProjectProperty project = createProject();
 
-	@Override
-	protected MavenProject project() {
-		return mavenProject;
-	}
+        helper.saveProjectToCurrentlyOpenFile(project);
 
-	@Override
-	protected boolean debug() {
-		return debug == null ? false: debug;
-	}
+        try {
+            helper.setCurrentlyOpenFile(configLocation().toFile());
+        } catch (final Exception ex) {
+            final String err = "An error occured while reloading.";
+            getLog().error(err);
+            throw new MojoExecutionException(err, ex);
+        }
+    }
 
-	public String getConfigFile() {
-		return configFile;
-	}
+    @Override
+    protected MavenProject project() {
+        return mavenProject;
+    }
 
-	@Override
-	protected String[] components() {
-		return null;
-	}
+    @Override
+    protected boolean debug() {
+        return debug == null ? false : debug;
+    }
 
-	@Override
-	protected String[] typeMappers() {
-		return null;
-	}
+    public String getConfigFile() {
+        return configFile;
+    }
 
-	@Override
-	protected ConfigParam[] parameters() {
-		return parameters;
-	}
+    @Override
+    protected String[] components() {
+        return null;
+    }
 
-	@Override
-	protected String dbmsHost() {
-		return dbmsHost;
-	}
+    @Override
+    protected String[] typeMappers() {
+        return null;
+    }
 
-	@Override
-	protected int dbmsPort() {
-		return dbmsPort;
-	}
+    @Override
+    protected ConfigParam[] parameters() {
+        return parameters;
+    }
 
-	@Override
-	protected String dbmsUsername() {
-		return dbmsUsername;
-	}
+    @Override
+    protected String dbmsHost() {
+        return dbmsHost;
+    }
 
-	@Override
-	protected String dbmsPassword() {
-		return dbmsPassword;
-	}
+    @Override
+    protected int dbmsPort() {
+        return (dbmsPort == null) ? 0 : dbmsPort;
+    }
 
-	private Project createProject() {
-		Map<String, Object> projectData = new HashMap<>();
-		projectData.put(Project.COMPANY_NAME, companyName);
-		projectData.put(Project.NAME, appName);
-		projectData.put(Project.CONFIG_PATH, UUID.fromString(appName));
-		projectData.put(Project.PACKAGE_LOCATION, packageLocation);
-		projectData.put(Project.PACKAGE_NAME, packageName);
-		projectData.put(Project.ID, appName);
-		projectData.put(Project.ENABLED, true);
-		projectData.put(Project.DBMSES, createDbmses());
-		return new ProjectImpl(projectData);
-	}
+    @Override
+    protected String dbmsUsername() {
+        return dbmsUsername;
+    }
 
-	private List<Dbms> createDbmses() {
-		List<Dbms> dbmses = new ArrayList<>(1);
-		dbmses.add(createDbms());
-		return dbmses;
-	}
+    @Override
+    protected String dbmsPassword() {
+        return dbmsPassword;
+    }
 
-	private Dbms createDbms() {
-		Map<String, Object> dbmsData = new HashMap<>();
-		dbmsData.put(Dbms.NAME, appName);
-		dbmsData.put(Dbms.TYPE_NAME, dbmsType);
-		dbmsData.put(Dbms.ID, appName);
-		dbmsData.put(Dbms.PORT, dbmsPort);
-		dbmsData.put(Dbms.IP_ADDRESS, dbmsHost);
-		dbmsData.put(Dbms.USERNAME, dbmsUsername);
-		dbmsData.put(Dbms.ENABLED, true);
-		dbmsData.put(Dbms.SCHEMAS, createSchemas());
-		return new DbmsImpl(null, dbmsData);
-	}
+    private ProjectProperty createProject() {
+        ProjectProperty projectProperty = new ProjectProperty();
 
-	private List<Schema> createSchemas() {
-		List<Schema> schemas = new ArrayList<>();
+        Map<String, Object> projectData = new HashMap<>();
+        addStringToMap(Project.COMPANY_NAME, companyName, projectData);
+        addStringToMap(Project.NAME, appName, projectData);
+        if (appName != null) {
+            addStringToMap(Project.APP_ID, UUID.fromString(appName).toString(), projectData);
+        } else {
+            addStringToMap(Project.APP_ID, UUID.randomUUID().toString(), projectData);
+        }
+        addStringToMap(Project.PACKAGE_LOCATION, packageLocation, projectData);
+        addStringToMap(Project.PACKAGE_NAME, packageName, projectData);
+        addStringToMap(Project.ID, appName, projectData);
+        addBooleanToMap(Project.ENABLED, Boolean.TRUE, projectData);
+        addListToMap(Project.DBMSES, createDbmses(), projectData);
 
-		Arrays.stream(dbmsSchemas.split(",")).forEach((schema) -> {
-			String schemaName = schema.trim();
-			Map<String, Object> schemaData = new HashMap<>();
-			schemaData.put(Schema.NAME, schemaName);
-			schemaData.put(Schema.ID, schemaName);
-			schemaData.put(Schema.ENABLED, true);
-			schemas.add(new SchemaImpl(null, schemaData));
-		});
+        projectProperty.merge(new DocumentPropertyComponentImpl(), new ProjectImpl(projectData));
 
-		return schemas;
-	}
+        return projectProperty;
+    }
 
+    private List<Map<String, Object>> createDbmses() {
+        List<Map<String, Object>> dbmses = new ArrayList<>(1);
+        dbmses.add(createDbms());
+        return dbmses;
+    }
+
+    private Map<String, Object> createDbms() {
+        Map<String, Object> dbmsData = new HashMap<>();
+        addStringToMap(Dbms.NAME, appName, dbmsData);
+        addStringToMap(Dbms.TYPE_NAME, dbmsType, dbmsData);
+        addStringToMap(Dbms.ID, appName, dbmsData);
+        addIntegerToMap(Dbms.PORT, dbmsPort, dbmsData);
+        addStringToMap(Dbms.IP_ADDRESS, dbmsHost, dbmsData);
+        addStringToMap(Dbms.USERNAME, dbmsUsername, dbmsData);
+        addBooleanToMap(Dbms.ENABLED, Boolean.TRUE, dbmsData);
+        addListToMap(Dbms.SCHEMAS, createSchemas(), dbmsData);
+        return dbmsData;
+    }
+
+    private List<Map<String, Object>> createSchemas() {
+        List<Map<String, Object>> schemas = new ArrayList<>();
+        if (StringUtils.isNotBlank(dbmsSchemas)) {
+            Arrays.stream(dbmsSchemas.split(",")).forEach((schema) -> {
+                schemas.add(createSchema(schema));
+            });
+        }
+        return schemas;
+    }
+
+    private Map<String, Object> createSchema(String schema) {
+        String schemaName = schema.trim();
+        Map<String, Object> schemaData = new HashMap<>();
+        addStringToMap(Schema.NAME, schemaName, schemaData);
+        addStringToMap(Schema.ID, schemaName, schemaData);
+        addBooleanToMap(Schema.ENABLED, Boolean.TRUE, schemaData);
+        return schemaData;
+    }
+
+    private void addStringToMap(String key, String value, Map<String, Object> map) {
+        if (StringUtils.isNotBlank(value)) {
+            map.put(key, value);
+        }
+    }
+
+    private void addIntegerToMap(String key, Integer value, Map<String, Object> map) {
+        if (value != null) {
+            map.put(key, value);
+        }
+    }
+
+    private void addBooleanToMap(String key, Boolean value, Map<String, Object> map) {
+        if (value != null) {
+            map.put(key, value);
+        }
+    }
+
+    private void addListToMap(String key, List<Map<String, Object>> value, Map<String, Object> map) {
+        if (value != null) {
+            map.put(key, value);
+        }
+    }
 }

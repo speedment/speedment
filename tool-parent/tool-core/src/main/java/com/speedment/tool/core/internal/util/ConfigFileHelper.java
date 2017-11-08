@@ -465,4 +465,8 @@ public final class ConfigFileHelper {
 
         DocumentTranscoder.save(project, currentlyOpenFile.toPath(), Json::toJson);
     }
+
+    public void saveProjectToCurrentlyOpenFile(ProjectProperty project) {
+        saveConfigFile(getCurrentlyOpenFile(), project, false);
+    }
 }
