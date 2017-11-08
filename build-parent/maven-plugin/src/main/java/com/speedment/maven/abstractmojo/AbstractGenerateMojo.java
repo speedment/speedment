@@ -20,6 +20,7 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.translator.TranslatorManager;
 import com.speedment.maven.parameter.ConfigParam;
+import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
@@ -49,7 +50,7 @@ public abstract class AbstractGenerateMojo extends AbstractSpeedmentMojo {
     private @Parameter(defaultValue = "${dbms.username}") String dbmsUsername;
     private @Parameter(defaultValue = "${dbms.password}") String dbmsPassword;
     private @Parameter(defaultValue = "${components}") String[] components;
-    private @Parameter(defaultValue = "${typeMappers}") String[] typeMappers;
+    private @Parameter(defaultValue = "${typeMappers}") Mapping[] typeMappers;
     private @Parameter ConfigParam[] parameters;
     private @Parameter(defaultValue = "${configFile}") String configFile;
 
@@ -89,7 +90,7 @@ public abstract class AbstractGenerateMojo extends AbstractSpeedmentMojo {
     }
     
     @Override
-    protected String[] typeMappers() {
+    protected Mapping[] typeMappers() {
         return typeMappers;
     }
     
@@ -127,7 +128,7 @@ public abstract class AbstractGenerateMojo extends AbstractSpeedmentMojo {
         return dbmsPassword;
     }
     
-    public void setTypeMappers(String[] typeMappers) {
+    public void setTypeMappers(Mapping[] typeMappers) {
         this.typeMappers = typeMappers;
     }
 
