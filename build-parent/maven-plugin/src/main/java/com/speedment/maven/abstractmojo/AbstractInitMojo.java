@@ -56,11 +56,11 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
     private @Parameter(defaultValue = "${package.name}")
     String packageName;
     private @Parameter(defaultValue = "${dbms.type}")
-    String dbmsType;
+    String dbmsType = "MySQL"; // default to MySQL
     private @Parameter(defaultValue = "${dbms.host}")
     String dbmsHost;
     private @Parameter(defaultValue = "${dbms.port}")
-    Integer dbmsPort;
+    Integer dbmsPort = Integer.valueOf(3306); // Default port for MySQL
     private @Parameter(defaultValue = "${dbms.schemas}")
     String dbmsSchemas;
     private @Parameter(defaultValue = "${dbms.username}")
@@ -153,11 +153,7 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
         Map<String, Object> projectData = new HashMap<>();
         addStringToMap(Project.COMPANY_NAME, companyName, projectData);
         addStringToMap(Project.NAME, appName, projectData);
-        if (appName != null) {
-            addStringToMap(Project.APP_ID, UUID.fromString(appName).toString(), projectData);
-        } else {
-            addStringToMap(Project.APP_ID, UUID.randomUUID().toString(), projectData);
-        }
+        addStringToMap(Project.APP_ID, UUID.randomUUID().toString(), projectData);
         addStringToMap(Project.PACKAGE_LOCATION, packageLocation, projectData);
         addStringToMap(Project.PACKAGE_NAME, packageName, projectData);
         addStringToMap(Project.ID, appName, projectData);
