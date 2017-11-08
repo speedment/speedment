@@ -24,8 +24,7 @@ import java.lang.reflect.Type;
 
 /**
  *
- * @author  Maria Sparenberg
- * @author  Patrick Hobusch
+ * @author  Per Minborg
  */
 
 public final class YNStringToBooleanMapper implements TypeMapper<String, Boolean> {
@@ -42,11 +41,11 @@ public final class YNStringToBooleanMapper implements TypeMapper<String, Boolean
 
     @Override
     public Boolean toJavaType(Column column, Class<?> entityType, String value) {
-        return value == null ? null : value.equalsIgnoreCase("y");
+        return value == null ? null : value.equalsIgnoreCase("Y");
     }
 
     @Override
     public String toDatabaseType(Boolean value) {
-        return value == null ? null : (value ? "y" : "n");
+        return value == null ? null : (value ? "Y" : "N");
     }
 }
