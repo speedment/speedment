@@ -152,11 +152,11 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
 
         Map<String, Object> projectData = new HashMap<>();
         addStringToMap(Project.COMPANY_NAME, companyName, getCompanyNameFromMavenProject(), projectData);
-        addStringToMap(Project.NAME, appName, mavenProject.getName(), projectData);
+        addStringToMap(Project.NAME, appName, mavenProject.getArtifactId(), projectData);
         addStringToMap(Project.APP_ID, UUID.randomUUID().toString(), null, projectData);
         addStringToMap(Project.PACKAGE_LOCATION, packageLocation, "target/generated-sources/java", projectData);
         addStringToMap(Project.PACKAGE_NAME, packageName, (mavenProject.getGroupId() + "." + mavenProject.getArtifactId() + ".db").toLowerCase(), projectData);
-        addStringToMap(Project.ID, appName, mavenProject.getName(), projectData);
+        addStringToMap(Project.ID, appName, mavenProject.getArtifactId(), projectData);
         addBooleanToMap(Project.ENABLED, Boolean.TRUE, projectData);
         addListToMap(Project.DBMSES, createDbmses(), projectData);
 
@@ -181,12 +181,12 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
 
     private Map<String, Object> createDbms() {
         Map<String, Object> dbmsData = new HashMap<>();
-        addStringToMap(Dbms.NAME, appName, mavenProject.getName(), dbmsData);
+        addStringToMap(Dbms.NAME, appName, mavenProject.getArtifactId(), dbmsData);
         addStringToMap(Dbms.TYPE_NAME, dbmsType, "MySQL", dbmsData);
-        addStringToMap(Dbms.ID, appName, mavenProject.getName(), dbmsData);
+        addStringToMap(Dbms.ID, appName, mavenProject.getArtifactId(), dbmsData);
         addIntegerToMap(Dbms.PORT, dbmsPort, Integer.valueOf(3306), dbmsData);
         addStringToMap(Dbms.IP_ADDRESS, dbmsHost, null, dbmsData);
-        addStringToMap(Dbms.USERNAME, dbmsUsername, mavenProject.getName(), dbmsData);
+        addStringToMap(Dbms.USERNAME, dbmsUsername, mavenProject.getArtifactId(), dbmsData);
         addBooleanToMap(Dbms.ENABLED, Boolean.TRUE, dbmsData);
         addListToMap(Dbms.SCHEMAS, createSchemas(), dbmsData);
         return dbmsData;
@@ -202,7 +202,7 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
             if (StringUtils.isNotBlank(appName)) {
                 schemas.add(createSchema(appName));
             } else {
-                schemas.add(createSchema(mavenProject.getName()));
+                schemas.add(createSchema(mavenProject.getArtifactId()));
             }
         }
         return schemas;
