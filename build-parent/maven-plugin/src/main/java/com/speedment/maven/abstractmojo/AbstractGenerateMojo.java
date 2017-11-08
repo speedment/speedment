@@ -65,6 +65,12 @@ public abstract class AbstractGenerateMojo extends AbstractSpeedmentMojo {
             try {
                 final Project project = speedment.getOrThrow(ProjectComponent.class).getProject();
                 speedment.getOrThrow(TranslatorManager.class).accept(project);
+
+                // after generating the speedment code, the package location needs to be added as a source folder
+                if (!mavenProject.getCompileSourceRoots().contains(mavenProject.getBasedir().getAbsolutePath() + "/" + project.getPackageLocation())) {
+                    System.out.println("adding new source location");
+                    mavenProject.addCompileSourceRoot(mavenProject.getBasedir().getAbsolutePath() + "/" + project.getPackageLocation());
+                }
             } catch (final Exception ex) {
                 final String err = "Error parsing configFile file.";
                 LOGGER.error(ex, err);
