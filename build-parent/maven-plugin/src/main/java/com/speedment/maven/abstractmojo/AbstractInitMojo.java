@@ -155,7 +155,6 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
         addStringToMap(Project.COMPANY_NAME, companyName, getCompanyNameFromMavenProject(), projectData);
         addStringToMap(Project.NAME, appName, mavenProject.getArtifactId(), projectData);
         addStringToMap(Project.APP_ID, UUID.randomUUID().toString(), null, projectData);
-        addStringToMap(Project.PACKAGE_LOCATION, packageLocation, "target/generated-sources/java", projectData);
         addStringToMap(Project.PACKAGE_NAME, packageName, (mavenProject.getGroupId() + "." + mavenProject.getArtifactId() + ".db").toLowerCase(), projectData);
         addStringToMap(Project.ID, appName, mavenProject.getArtifactId(), projectData);
         addBooleanToMap(Project.ENABLED, Boolean.TRUE, projectData);
