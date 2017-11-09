@@ -16,6 +16,7 @@
 package com.speedment.maven.abstractmojo;
 
 import com.speedment.maven.parameter.ConfigParam;
+import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
@@ -118,7 +119,7 @@ public abstract class AbstractInitMojo extends AbstractSpeedmentMojo {
     }
 
     @Override
-    protected String[] typeMappers() {
+    protected Mapping[] typeMappers() {
         return null;
     }
 
