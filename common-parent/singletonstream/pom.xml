@@ -26,11 +26,11 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.0.17-SNAPSHOT</version>
+        <version>3.0.17</version>
     </parent>
     
     <artifactId>singleton-stream</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - SingletonStream</name>
