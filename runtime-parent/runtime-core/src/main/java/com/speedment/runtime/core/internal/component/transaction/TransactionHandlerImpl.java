@@ -1,6 +1,8 @@
 package com.speedment.runtime.core.internal.component.transaction;
 
-import com.speedment.common.logger.Level;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
+import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.component.transaction.DataSourceHandler;
 import com.speedment.runtime.core.component.transaction.Isolation;
 import com.speedment.runtime.core.component.transaction.Transaction;
@@ -15,6 +17,8 @@ import java.util.function.Function;
  * @author Per Minborg
  */
 public class TransactionHandlerImpl implements TransactionHandler {
+
+    private static final Logger TRANSACTION_LOGGER = LoggerManager.getLogger(ApplicationBuilder.LogType.TRANSACTION.getLoggerName());
 
     private final TransactionComponent txComponent;
     private final Object dataSource;
@@ -49,18 +53,20 @@ public class TransactionHandlerImpl implements TransactionHandler {
         final Object txObject = dataSourceHandler.extractor().apply(dataSource); // e.g. obtains a Connection
         final Isolation oldIsolation = setAndGetIsolation(txObject, isolation);
         final Transaction tx = new TransactionImpl(txComponent, txObject, dataSourceHandler);
+        TRANSACTION_LOGGER.debug("Transaction %s created for thread '%s' on tranaction object %s", tx, currentThread.getName(), txObject);
         txComponent.put(currentThread, txObject);
         try {
             dataSourceHandler.beginner().accept(txObject); // e.g. con.setAutocommit(false)
             return mapper.apply(tx);
         } catch (Exception e) {
-            dataSourceHandler.rollbacker().accept(txObject); // Automatically rollback if there is an exception
+            // Executed in the finally block : dataSourceHandler.rollbacker().accept(txObject); // Automatically rollback if there is an exception
             throw new TransactionException("Error while invoking transaction for object :" + txObject, e);
         } finally {
-            dataSourceHandler.committer().accept(txObject); // Always commit() implicitly
+            dataSourceHandler.rollbacker().accept(txObject); // Always rollback() implicitly and discard uncommitted data
             dataSourceHandler.closer().accept(txObject); // e.g. con.setAutocommit(true); con.close();
             setAndGetIsolation(txObject, oldIsolation);
             txComponent.remove(currentThread);
+            TRANSACTION_LOGGER.debug("Transaction %s owned by thread '%s' was discarded", tx, currentThread.getName());
         }
     }
 

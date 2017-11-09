@@ -31,10 +31,9 @@ public interface TransactionHandler {
      * Creates a new {@link Transaction} and invokes the provided action with
      * the new transaction.
      * <p>
-     * If no TransactionException is thrown, the transaction will be
-     * automatically committed after the action has been invoked. Explicitly
-     * invoking {@link Transaction#rollback() } at the end of the action
-     * prevents anything from being automatically committed.
+     * Data that has not been explicitly committed will be automatically rolled
+     * back after the action has been invoked. Explicitly invoking {@link Transaction#rollback()
+     * } at the end of the action is a redundant operation.
      * <p>
      * If a {@link TransactionException } is thrown, parts of the transaction
      * that has not been previously explicitly committed using {@link Transaction#commit()
@@ -69,10 +68,9 @@ public interface TransactionHandler {
      * Creates a new {@link Transaction } and returns the value of applying the
      * given function to the new transaction.
      * <p>
-     * If no {@link TransactionException } is thrown, the transaction will be
-     * automatically committed after the function has been applied. Explicitly
-     * invoking {@link Transaction#rollback() } at the end of the function
-     * prevents anything from being automatically committed.
+     * Data that has not been explicitly committed will be automatically rolled
+     * back after the action has been invoked. Explicitly invoking {@link Transaction#rollback()
+     * } at the end of the action is a redundant operation.
      * <p>
      * If a {@link TransactionException } is thrown, parts of the transaction
      * that has not been previously explicitly committed using {@link Transaction#commit()
@@ -101,10 +99,4 @@ public interface TransactionHandler {
      */
     <R> R createAndApply(Function<? super Transaction, ? extends R> mapper) throws TransactionException;
 
-//    /**
-//     * Creates and returns a new transaction.
-//     * 
-//     * @return 
-//     */
-//    Transaction create();
 }
