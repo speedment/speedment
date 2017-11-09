@@ -43,8 +43,10 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
+import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import static java.util.Collections.singletonList;
 import static java.util.Objects.requireNonNull;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  *
@@ -64,6 +66,8 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     private ConnectionPoolComponent connectionPoolComponent;
     @Inject
     private DbmsHandlerComponent dbmsHandlerComponent;
+    @Inject
+    private TransactionComponent transactionComponent;
 
     protected AbstractDbmsOperationHandler() {
     }
@@ -73,10 +77,10 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         requireNonNulls(sql, values, rsMapper);
 
         try (
-            final Connection connection = connectionPoolComponent.getConnection(dbms);
-            final PreparedStatement ps = connection.prepareStatement(sql, java.sql.ResultSet.TYPE_FORWARD_ONLY, java.sql.ResultSet.CONCUR_READ_ONLY)) {
+            final ConnectionInfo connectionInfo = new ConnectionInfo(dbms, connectionPoolComponent, transactionComponent);
+            final PreparedStatement ps = connectionInfo.connection().prepareStatement(sql, java.sql.ResultSet.TYPE_FORWARD_ONLY, java.sql.ResultSet.CONCUR_READ_ONLY)) {
             configureSelect(ps);
-            connection.setAutoCommit(false);
+            connectionInfo.ifNotInTransaction(c -> c.setAutoCommit(false));
             try {
                 int i = 1;
                 for (final Object o : values) {
@@ -93,7 +97,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
                     return streamBuilder.build();
                 }
             } finally {
-                connection.commit();
+                connectionInfo.ifNotInTransaction(Connection::commit);
             }
         } catch (final SQLException sqle) {
             LOGGER.error(sqle, "Error querying " + sql);
@@ -103,17 +107,17 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
     @Override
     public <T> AsynchronousQueryResult<T> executeQueryAsync(
-        Dbms dbms,
-        String sql,
-        List<?> values,
-        SqlFunction<ResultSet, T> rsMapper,
-        ParallelStrategy parallelStrategy) {
-
+        final Dbms dbms,
+        final String sql,
+        final List<?> values,
+        final SqlFunction<ResultSet, T> rsMapper,
+        final ParallelStrategy parallelStrategy
+    ) {
         return new AsynchronousQueryResultImpl<>(
             Objects.requireNonNull(sql),
             Objects.requireNonNull(values),
             Objects.requireNonNull(rsMapper),
-            () -> connectionPoolComponent.getConnection(dbms),
+            () -> new ConnectionInfo(dbms, connectionPoolComponent, transactionComponent), 
             parallelStrategy,
             this::configureSelect,
             this::configureSelect
@@ -146,44 +150,38 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
     }
 
     protected void execute(Dbms dbms, List<? extends SqlStatement> sqlStatementList) throws SQLException {
+        final ConnectionInfo connectionInfo = new ConnectionInfo(dbms, connectionPoolComponent, transactionComponent);
+        if (connectionInfo.isInTransaction()) {
+            executeInTransaction(dbms, connectionInfo.connection(), sqlStatementList);
+        } else {
+            executeNotInTransaction(dbms, connectionInfo.connection(), sqlStatementList);
+        }
+    }
+
+    protected void executeNotInTransaction(
+        final Dbms dbms,
+        Connection conn,
+        final List<? extends SqlStatement> sqlStatementList
+    ) throws SQLException {
+        requireNonNull(dbms);
+        requireNonNull(conn);
         requireNonNull(sqlStatementList);
+
         int retryCount = 5;
         boolean transactionCompleted = false;
 
         do {
-            SqlStatement lastSqlStatement = null;
-            Connection conn = null;
+            final AtomicReference<SqlStatement> lastSqlStatement = new AtomicReference<>();
             try {
-                conn = connectionPoolComponent.getConnection(dbms);
                 conn.setAutoCommit(false);
-                for (final SqlStatement sqlStatement : sqlStatementList) {
-                    lastSqlStatement = sqlStatement;
-                    switch (sqlStatement.getType()) {
-                        case INSERT: {
-                            final SqlInsertStatement<?> s = (SqlInsertStatement<?>) sqlStatement;
-                            handleSqlStatement(dbms, conn, s);
-                            break;
-                        }
-                        case UPDATE: {
-                            final SqlUpdateStatement s = (SqlUpdateStatement) sqlStatement;
-                            handleSqlStatement(dbms, conn, s);
-                            break;
-                        }
-                        case DELETE: {
-                            final SqlDeleteStatement s = (SqlDeleteStatement) sqlStatement;
-                            handleSqlStatement(dbms, conn, s);
-                            break;
-                        }
-                    }
-
-                }
+                executeSqlStatementList(sqlStatementList, lastSqlStatement, dbms, conn);
                 conn.commit();
                 conn.close();
                 transactionCompleted = true;
                 conn = null;
             } catch (SQLException sqlEx) {
                 LOGGER.error("SqlStatementList: " + sqlStatementList);
-                LOGGER.error("SQL: " + lastSqlStatement);
+                LOGGER.error("SQL: " + lastSqlStatement.get());
                 LOGGER.error(sqlEx, sqlEx.getMessage());
                 final String sqlState = sqlEx.getSQLState();
 
@@ -222,6 +220,51 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
 
         if (transactionCompleted) {
             postSuccessfulTransaction(sqlStatementList);
+        }
+    }
+
+    protected void executeInTransaction(
+        final Dbms dbms,
+        final Connection conn,
+        final List<? extends SqlStatement> sqlStatementList
+    ) throws SQLException {
+        requireNonNull(dbms);
+        requireNonNull(conn);
+        requireNonNull(sqlStatementList);
+
+        final AtomicReference<SqlStatement> lastSqlStatement = new AtomicReference<>();
+        try {
+            executeSqlStatementList(sqlStatementList, lastSqlStatement, dbms, conn);
+            postSuccessfulTransaction(sqlStatementList);
+        } catch (SQLException sqlEx) {
+            LOGGER.error("SqlStatementList: " + sqlStatementList);
+            LOGGER.error("SQL: " + lastSqlStatement);
+            LOGGER.error(sqlEx, sqlEx.getMessage());
+            throw sqlEx;
+        }
+    }
+
+    private void executeSqlStatementList(List<? extends SqlStatement> sqlStatementList, AtomicReference<SqlStatement> lastSqlStatement, Dbms dbms, Connection conn) throws SQLException {
+        for (final SqlStatement sqlStatement : sqlStatementList) {
+            lastSqlStatement.set(sqlStatement);
+            switch (sqlStatement.getType()) {
+                case INSERT: {
+                    final SqlInsertStatement<?> s = (SqlInsertStatement<?>) sqlStatement;
+                    handleSqlStatement(dbms, conn, s);
+                    break;
+                }
+                case UPDATE: {
+                    final SqlUpdateStatement s = (SqlUpdateStatement) sqlStatement;
+                    handleSqlStatement(dbms, conn, s);
+                    break;
+                }
+                case DELETE: {
+                    final SqlDeleteStatement s = (SqlDeleteStatement) sqlStatement;
+                    handleSqlStatement(dbms, conn, s);
+                    break;
+                }
+            }
+
         }
     }
 

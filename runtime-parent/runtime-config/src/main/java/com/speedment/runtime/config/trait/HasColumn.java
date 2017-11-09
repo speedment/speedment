@@ -37,7 +37,7 @@ import static com.speedment.runtime.config.util.TraitUtil.viewOf;
 public interface HasColumn extends Document, HasId, HasName {
 
     /**
-     * Locates and returns the column referenced by the {@link #getName()} 
+     * Locates and returns the column referenced by the {@link #getId()} 
      * method.
      * 
      * @return  the referenced column

@@ -33,16 +33,15 @@
 
 /*** Constants ***/
 * {
-    -fx-speedment-gray:        #DBDAD9;
-    -fx-speedment-lightgray:   #EDEDED;
-    -fx-speedment-darkgray:    #A1A1A0;
+    -fx-speedment-gray:        #CBCAC9;
+    -fx-speedment-darkgray:    #919190;
     
     -fx-speedment-blue:        #0E8AC5;
     -fx-speedment-green:       #87BD40;
     -fx-speedment-orange:      #be9f41;
     -fx-speedment-red:         #be4141;
     
-    -fx-speedment-lightgray:   #f5f5f5;
+    -fx-speedment-lightgray:   #d5d5d5;
     -fx-speedment-lightblue:   #45a6fc;
     -fx-speedment-lightgreen:  #c3dea0;
     -fx-speedment-lightred:    #dea1a1;

@@ -46,7 +46,7 @@ public abstract class AbstractReloadMojo extends AbstractSpeedmentMojo {
     private @Parameter(defaultValue = "${dbms.username}") String dbmsUsername;
     private @Parameter(defaultValue = "${dbms.password}") String dbmsPassword;
     private @Parameter(defaultValue = "${components}") String[] components;
-    private @Parameter(defaultValue = "${typeMappers}") String[] typeMappers;
+    private @Parameter(defaultValue = "${typeMappers}") Mapping[] typeMappers;
     private @Parameter ConfigParam[] parameters;
     private @Parameter(defaultValue = "${configFile}") String configFile;
         
@@ -90,7 +90,7 @@ public abstract class AbstractReloadMojo extends AbstractSpeedmentMojo {
     }
     
     @Override
-    protected String[] typeMappers() {
+    protected Mapping[] typeMappers() {
         return typeMappers;
     }
     

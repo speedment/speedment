@@ -23,6 +23,7 @@ import com.speedment.runtime.core.internal.db.AbstractDbmsMetadataHandler;
 
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Optional;
 
 /**
@@ -38,6 +39,13 @@ public final class PostgresqlDbmsMetadataHandler extends AbstractDbmsMetadataHan
         final JavaTypeMap javaTypeMap = super.newJavaTypeMap();
 
         javaTypeMap.put("bytea", Blob.class);
+
+        // https://www.postgresql.org/docs/9.2/static/infoschema-datatypes.html
+        javaTypeMap.put("cardinal_number", Integer.class);
+        javaTypeMap.put("character_data", String.class);
+        javaTypeMap.put("sql_identifier", String.class);
+        javaTypeMap.put("time_stamp", Timestamp.class);
+        javaTypeMap.put("yes_or_no", String.class);
 
         javaTypeMap.addRule((sqlTypeMapping, md) -> {
             // Map a BIT(1) to boolean

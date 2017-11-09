@@ -21,13 +21,11 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
-import com.speedment.common.mapstream.MapStream;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.internal.immutable.ImmutableProject;
-import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
@@ -75,20 +73,14 @@ import javafx.util.Pair;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 
-import static com.speedment.common.invariant.NullUtil.requireNonNulls;
 import static com.speedment.runtime.core.internal.util.Statistics.Event.GUI_PROJECT_LOADED;
 import static com.speedment.runtime.core.internal.util.Statistics.Event.GUI_STARTED;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
 import static javafx.application.Platform.runLater;
 
 /**
@@ -113,7 +105,6 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     private final ObservableList<Node> outputMessages;
     private final ObservableList<TreeItem<DocumentProperty>> selectedTreeItems;
     private final ObservableList<PropertyEditor.Item> properties;
-    private final Map<Class<?>, List<UserInterfaceComponent.ContextMenuBuilder<?>>> contextMenuBuilders;
     
     private final AtomicBoolean canGenerate;
     
@@ -132,12 +123,11 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
     private ProjectProperty project;
 
     private UserInterfaceComponentImpl() {
-        notifications        = FXCollections.observableArrayList();
-        outputMessages       = FXCollections.observableArrayList();
-        selectedTreeItems    = FXCollections.observableArrayList();
-        properties           = FXCollections.observableArrayList();
-        contextMenuBuilders  = new ConcurrentHashMap<>();
-        canGenerate          = new AtomicBoolean(true);
+        notifications     = FXCollections.observableArrayList();
+        outputMessages    = FXCollections.observableArrayList();
+        selectedTreeItems = FXCollections.observableArrayList();
+        properties        = FXCollections.observableArrayList();
+        canGenerate       = new AtomicBoolean(true);
     }
 
     public static InjectBundle include() {
@@ -661,50 +651,6 @@ public final class UserInterfaceComponentImpl implements UserInterfaceComponent 
         runLater(() -> 
             notifications.add(new NotificationImpl(message, icon, palette, action))
         );
-    }
-
-    ////////////////////////////////////////////////////////////////////////////
-    //                              Context Menues                            //
-    ////////////////////////////////////////////////////////////////////////////
-
-    @Override
-    public <DOC extends DocumentProperty & HasMainInterface> void 
-    installContextMenu(Class<? extends DOC> nodeType, ContextMenuBuilder<DOC> menuBuilder) {
-        contextMenuBuilders.computeIfAbsent(nodeType, k -> new CopyOnWriteArrayList<>()).add(menuBuilder);
-    }
-
-    @Override
-    public <DOC extends DocumentProperty & HasMainInterface> Optional<ContextMenu> 
-    createContextMenu(TreeCell<DocumentProperty> treeCell, DOC doc) {
-        requireNonNulls(treeCell, doc);
-        
-        @SuppressWarnings("unchecked")
-        final List<UserInterfaceComponent.ContextMenuBuilder<DOC>> builders = 
-            MapStream.of(contextMenuBuilders)
-                .filterKey(clazz -> clazz.isAssignableFrom(doc.getClass()))
-                .values()
-                .flatMap(List::stream)
-                .map(builder -> (UserInterfaceComponent.ContextMenuBuilder<DOC>) builder)
-                .collect(toList());
-        
-        final ContextMenu menu = new ContextMenu();
-        for (int i = 0; i < builders.size(); i++) {
-            final List<MenuItem> items = builders.get(i)
-                .build(treeCell, doc)
-                .collect(toList());
-            
-            if (i > 0 && !items.isEmpty()) {
-                menu.getItems().add(new SeparatorMenuItem());
-            }
-            
-            items.forEach(menu.getItems()::add);
-        }
-        
-        if (menu.getItems().isEmpty()) {
-            return Optional.empty();
-        } else {
-            return Optional.of(menu);
-        }
     }
 
     ////////////////////////////////////////////////////////////////////////////

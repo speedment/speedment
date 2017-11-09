@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.connector</groupId>
         <artifactId>connector-parent</artifactId>
-        <version>3.0.16</version>
+        <version>3.0.17-SNAPSHOT</version>
     </parent>
     
     <artifactId>h2</artifactId>

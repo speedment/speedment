@@ -124,13 +124,14 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
         this.sqlTableReference = naming.fullNameOf(table);
         this.hasPrimaryKeyColumns = manager.primaryKeyFields().anyMatch(m -> true);
 
-        final Predicate<Column> included = columnHandler.excludedInInsertStatement().negate();
+        final Predicate<Column> includedInInsert = columnHandler.excludedInInsertStatement().negate();
         this.insertStatement = "INSERT INTO " + sqlTableReference + " (" +
-            sqlColumnList(included, identity()) + ") VALUES (" +
-            sqlColumnList(included, c -> "?") + ")";
+            sqlColumnList(includedInInsert, identity()) + ") VALUES (" +
+            sqlColumnList(includedInInsert, c -> "?") + ")";
 
+        final Predicate<Column> includedInUpdate = columnHandler.excludedInUpdateStatement().negate();
         this.updateStatement = "UPDATE " + sqlTableReference + " SET " +
-            sqlColumnList(c -> true, n -> n + " = ?") + " WHERE " +
+            sqlColumnList(includedInUpdate, n -> n + " = ?") + " WHERE " +
             sqlPrimaryKeyColumnList(pk -> pk + " = ?");
         this.deleteStatement = "DELETE FROM " + sqlTableReference + " WHERE " +
             sqlPrimaryKeyColumnList(pk -> pk + " = ?");
@@ -169,7 +170,7 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
         assertHasPrimaryKeyColumns();
 
         final List<Object> values = Stream.concat(
-            fields.get(), 
+            fields.get().filter(f -> !columnHandler.excludedInUpdateStatement().test(columnsByFields.get(f))), 
             primaryKeyFields.get()
         )
             .map(f -> toDatabaseType(f, entity))

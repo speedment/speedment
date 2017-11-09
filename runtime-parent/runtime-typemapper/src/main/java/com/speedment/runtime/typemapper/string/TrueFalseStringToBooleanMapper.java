@@ -37,7 +37,11 @@ public final class TrueFalseStringToBooleanMapper implements TypeMapper<String, 
     
     @Override
     public Type getJavaType(Column column) {
-        return Boolean.class;
+        if (column.isNullable()) {
+            return Boolean.class;
+        } else {
+            return boolean.class;
+        }
     }
     
     @Override

@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.runtime</groupId>
         <artifactId>runtime-parent</artifactId>
-        <version>3.0.16</version>
+        <version>3.0.17-SNAPSHOT</version>
     </parent>
     
     <artifactId>runtime-all</artifactId>
@@ -63,6 +63,7 @@
                 <artifactId>runtime-core</artifactId>
                 <version>${speedment.version}</version>
             </dependency>
+            
         </dependencies>
     </dependencyManagement>
 </project>

@@ -34,6 +34,7 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  *
@@ -42,7 +43,17 @@ import java.util.Set;
  */
 public abstract class AbstractDbmsType implements DbmsType {
 
-    private static final DbmsColumnHandler DEFAULT_COLUMN_HANDLER = () -> Column::isAutoIncrement;
+    private static final DbmsColumnHandler DEFAULT_COLUMN_HANDLER = new DbmsColumnHandler() {
+        @Override
+        public Predicate<Column> excludedInInsertStatement() {
+            return Column::isAutoIncrement;
+        }
+
+        @Override
+        public Predicate<Column> excludedInUpdateStatement() {
+            return c -> false;
+        }
+    };
 
     @Inject
     private Injector injector;

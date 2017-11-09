@@ -44,7 +44,7 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
 
     public static InjectBundle include() {
         return of(
-            MySqlDbmsMetadataHandler.class, 
+            MySqlDbmsMetadataHandler.class,
             MariaDbDbmsOperationHandler.class,
             MySqlSpeedmentPredicateView.class
         );
@@ -53,9 +53,12 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
     private final MariaDbNamingConvention namingConvention;
     private final MariaDbConnectionUrlGenerator connectionUrlGenerator;
 
-    @Inject private MySqlDbmsMetadataHandler metadataHandler;
-    @Inject private MariaDbDbmsOperationHandler operationHandler;
-    @Inject private MySqlSpeedmentPredicateView fieldPredicateView;
+    @Inject
+    private MySqlDbmsMetadataHandler metadataHandler;
+    @Inject
+    private MariaDbDbmsOperationHandler operationHandler;
+    @Inject
+    private MySqlSpeedmentPredicateView fieldPredicateView;
 
     private MariaDbDbmsType() {
         namingConvention = new MariaDbNamingConvention();
@@ -129,9 +132,14 @@ public final class MariaDbDbmsType extends AbstractDbmsType {
             public Predicate<Column> excludedInInsertStatement() {
                 return c -> false; // For MariaDB, even autoincrement fields are added to insert statements
             }
+
+            @Override
+            public Predicate<Column> excludedInUpdateStatement() {
+                return c -> false;
+            }
+
         };
     }
-
 
     private final static class MariaDbNamingConvention extends AbstractDatabaseNamingConvention {
 

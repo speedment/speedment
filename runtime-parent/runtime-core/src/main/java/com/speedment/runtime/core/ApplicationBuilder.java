@@ -767,7 +767,11 @@ public interface ApplicationBuilder<
         /**
          * Logging related to stream optimization handling.
          */
-        STREAM_OPTIMIZER;
+        STREAM_OPTIMIZER,
+        /**
+         * Logging related to transaction handling.
+         */
+        TRANSACTION;
 
         private final String loggerName;
 

@@ -82,7 +82,7 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
     protected abstract String dbmsUsername();
     protected abstract String dbmsPassword();
     protected abstract String[] components();
-    protected abstract String[] typeMappers();
+    protected abstract Mapping[] typeMappers();
     protected abstract ConfigParam[] parameters();
     protected abstract String launchMessage();
     protected abstract String getConfigFile();
@@ -297,19 +297,18 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
         }
     }
 
-    @InjectKey(TypeMapperInstaller.class)
+     @InjectKey(TypeMapperInstaller.class)
     private final static class TypeMapperInstaller {
 
-        private static String[] mappings;
+        private static Mapping[] mappings;
 
         @ExecuteBefore(RESOLVED)
         void installInTypeMapper(
             final Injector injector,
             final @WithState(INITIALIZED) TypeMapperComponent typeMappers
-        ) throws MojoExecutionException, ClassNotFoundException, IllegalAccessException, InstantiationException {
+        ) throws MojoExecutionException {
             if (mappings != null) {
-                for (final String mappingName : mappings) {
-                    Mapping mapping = (Mapping) Class.forName(mappingName).newInstance();
+                for (final Mapping mapping : mappings) {
                     final Class<?> databaseType;
                     try {
                         databaseType = injector.classLoader()

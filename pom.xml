@@ -34,7 +34,7 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment-parent</artifactId>
-    <version>3.0.16</version>
+    <version>3.0.17-SNAPSHOT</version>
     <packaging>pom</packaging>
     
     <!-- Project Metadata -->
@@ -145,6 +145,10 @@
         <contributor>
             <name>Mark Schrijver (GitHub:ractoc)</name>
             <timezone>Europe/Amsterdam</timezone>
+        </contributor>
+        <contributor>
+            <name>Ameya Ketkar (GitHub:ameyaKetkar)</name>
+            <timezone>America/Los_Angeles</timezone>
         </contributor>
     </contributors>
 	
