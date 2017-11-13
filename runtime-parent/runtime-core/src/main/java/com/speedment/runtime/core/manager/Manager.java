@@ -1,5 +1,5 @@
 /**
-    *
+ *
  * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
@@ -88,12 +88,12 @@ public interface Manager<ENTITY> {
      * {@link Stream#sorted(java.util.Comparator)} method on the {@link Stream}
      * returned.
      * <p>
-     * Elements are not reused within the stream. More formally, there are no
-     * pair of stream elements <code>e1</code> and <code>e2</code> such that
-     * <code>e1 == e2</code>.
+     * Mutable elements are not reused within the stream. More formally, there
+     * are no pair of mutable stream elements <code>e1</code> and
+     * <code>e2</code> such that <code>e1 == e2</code>.
      * <p>
      * The Stream will never contain <code>null</code> elements.
-     * <p>     
+     * <p>
      * This is <em>an inexpensive O(1) operation</em> that will complete in
      * constant time regardless of the number of entities in the underlying
      * database.
@@ -174,7 +174,7 @@ public interface Manager<ENTITY> {
      * </ul>
      *
      *
-     * @return a new stream over all entities in this table
+     * @return a new stream over all entities in this table in unspecified order
      *
      * @throws SpeedmentException if an error occurs during a Terminal Operation
      * (e.g. an SqlException is thrown by the underlying database)
