@@ -64,6 +64,12 @@
                 <version>${speedment.version}</version>
             </dependency>
             
+            <dependency>
+                <groupId>com.speedment.runtime</groupId>
+                <artifactId>runtime-bulk</artifactId>
+                <version>${speedment.version}</version>
+            </dependency>
+            
         </dependencies>
     </dependencyManagement>
 </project>
