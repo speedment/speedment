@@ -93,7 +93,7 @@ public interface BulkOperation {
              * @param mapper to apply when updating entities
              * @return a builder where the given mapper has been applied
              */
-            B map(Function<? super ENTITY, ? extends ENTITY> mapper);
+            B compute(Function<? super ENTITY, ? extends ENTITY> mapper);
 
             /**
              * Specifies an entity consumer for the operation whereby the

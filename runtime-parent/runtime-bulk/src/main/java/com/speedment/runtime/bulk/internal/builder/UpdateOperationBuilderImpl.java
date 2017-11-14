@@ -42,7 +42,7 @@ public final class UpdateOperationBuilderImpl<ENTITY> extends AbstractOperationB
     }
 
     @Override
-    public Update<ENTITY> map(Function<? super ENTITY, ? extends ENTITY> mapper) {
+    public Update<ENTITY> compute(Function<? super ENTITY, ? extends ENTITY> mapper) {
         mappers.add(mapper);
         return this;
     }

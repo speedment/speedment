@@ -62,7 +62,7 @@ public class BuilderTest {
             .remove(mgr).where(Point::isFirstQuadrant).where(Point::isOrigo)
             .update(mgr).set(p -> p.setX(p.getX() + 1)) // Consumer
 
-            .update(mgr).map(
+            .update(mgr).compute(
             p -> {
                 p.setX(0);
                 return p;
