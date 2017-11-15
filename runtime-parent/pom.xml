@@ -40,10 +40,10 @@
     
     <modules>
         <module>runtime-config</module>
+        <module>runtime-bulk</module>
         <module>runtime-typemapper</module>
         <module>runtime-field</module>
         <module>runtime-core</module>
-        <module>runtime-bulk</module>
         <module>runtime-all</module>
     </modules>
     

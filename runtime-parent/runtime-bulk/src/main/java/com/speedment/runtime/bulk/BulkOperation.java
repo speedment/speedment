@@ -1,7 +1,7 @@
 package com.speedment.runtime.bulk;
 
 import com.speedment.runtime.bulk.internal.BulkOperationBuilder;
-import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.config.identifier.HasTableIdentifier;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -30,7 +30,7 @@ public interface BulkOperation {
          * @param manager to use when persisting entities
          * @return Persist builder that can be used to build a Persist Operation
          */
-        <ENTITY> Persist<ENTITY> persist(Manager<ENTITY> manager);
+        <ENTITY> Persist<ENTITY> persist(HasTableIdentifier<ENTITY> manager);
 
         /**
          * Creates and returns a new Update builder that can be used to build an
@@ -40,7 +40,7 @@ public interface BulkOperation {
          * @param manager to use when updating entities
          * @return Update builder that can be used to build an Update Operation
          */
-        <ENTITY> Update<ENTITY> update(Manager<ENTITY> manager);
+        <ENTITY> Update<ENTITY> update(HasTableIdentifier<ENTITY> manager);
 
         /**
          * Creates and returns a new Remove builder that can be used to build a
@@ -53,7 +53,7 @@ public interface BulkOperation {
          * @param manager to use when removing entities
          * @return Remove builder that can be used to build a Remove Operation
          */
-        <ENTITY> Remove<ENTITY> remove(Manager<ENTITY> manager);
+        <ENTITY> Remove<ENTITY> remove(HasTableIdentifier<ENTITY> manager);
 
         /**
          * Creates and returns a new immutable BulkOperation comprising all the

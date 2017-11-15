@@ -159,6 +159,12 @@
             <artifactId>runtime-field</artifactId>
             <version>${speedment.version}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-bulk</artifactId>
+            <version>${speedment.version}</version>
+        </dependency>
                 
         <dependency>
             <groupId>com.speedment.common</groupId>
@@ -176,7 +182,7 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <scope>test</scope>
@@ -191,6 +197,6 @@
                     <artifactId>selenium-remote-driver</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
+        </dependency>-->
     </dependencies>
 </project>

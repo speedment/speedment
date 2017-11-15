@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.core.db;
 
+import com.speedment.runtime.bulk.BulkOperation;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.internal.manager.sql.SqlInsertStatement;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
@@ -29,7 +30,7 @@ import java.util.stream.Stream;
 
 /**
  * A DbmsOperationHandler provides the interface between Speedment and an
- * underlying {@link Dbms} for when running queries.
+ * underlying {@link Dbms} when running queries.
  *
  * @author Per Minborg
  * @author Emil Forslund
@@ -305,4 +306,7 @@ public interface DbmsOperationHandler {
        
     <ENTITY> void handleGeneratedKeys(PreparedStatement ps, SqlInsertStatement<ENTITY> sqlStatement) throws SQLException;
 
+    
+    void executeBulk(BulkOperation bulkOperation) throws SQLException;
+    
 }

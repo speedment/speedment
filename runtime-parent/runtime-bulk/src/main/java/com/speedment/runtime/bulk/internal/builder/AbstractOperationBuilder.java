@@ -4,7 +4,7 @@ import com.speedment.runtime.bulk.BulkOperation;
 import com.speedment.runtime.bulk.BulkOperation.Builder;
 import com.speedment.runtime.bulk.Operation;
 import com.speedment.runtime.bulk.internal.BulkOperationBuilder;
-import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.config.identifier.HasTableIdentifier;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -15,15 +15,15 @@ import static java.util.Objects.requireNonNull;
 public abstract class AbstractOperationBuilder<ENTITY> implements Builder {
 
     private final BulkOperationBuilder parent;
-    private final Manager<ENTITY> manager;
+    private final HasTableIdentifier<ENTITY> identifier;
 
-    protected AbstractOperationBuilder(Manager<ENTITY> manager, BulkOperationBuilder parent) {
-        this.manager = requireNonNull(manager);
+    protected AbstractOperationBuilder(HasTableIdentifier<ENTITY> identifier, BulkOperationBuilder parent) {
+        this.identifier = requireNonNull(identifier);
         this.parent = requireNonNull(parent);
     }
 
-    Manager<ENTITY> manager() {
-        return manager;
+    HasTableIdentifier<ENTITY> identifier() {
+        return identifier;
     }
 
     BulkOperationBuilder parent() {
@@ -31,21 +31,21 @@ public abstract class AbstractOperationBuilder<ENTITY> implements Builder {
     }
 
     @Override
-    public <NEXT_ENTITY> Persist<NEXT_ENTITY> persist(Manager<NEXT_ENTITY> manager) {
+    public <NEXT_ENTITY> Persist<NEXT_ENTITY> persist(HasTableIdentifier<NEXT_ENTITY> manager) {
         requireNonNull(manager);
         parent().add(buildCurrent());
         return new PersistOperationBuilderImpl<>(manager, parent());
     }
 
     @Override
-    public <NEXT_ENTITY> Update<NEXT_ENTITY> update(Manager<NEXT_ENTITY> manager) {
+    public <NEXT_ENTITY> Update<NEXT_ENTITY> update(HasTableIdentifier<NEXT_ENTITY> manager) {
         requireNonNull(manager);
         parent().add(buildCurrent());
         return new UpdateOperationBuilderImpl<>(manager, parent());
     }
 
     @Override
-    public <NEXT_ENTITY> Remove<NEXT_ENTITY> remove(Manager<NEXT_ENTITY> manager) {
+    public <NEXT_ENTITY> Remove<NEXT_ENTITY> remove(HasTableIdentifier<NEXT_ENTITY> manager) {
         requireNonNull(manager);
         parent().add(buildCurrent());
         return new RemoveOperationBuilderImpl<>(manager, parent());

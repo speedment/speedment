@@ -1,7 +1,7 @@
 package com.speedment.runtime.bulk.internal.operation;
 
 import com.speedment.runtime.bulk.Operation.Type;
-import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.config.identifier.HasTableIdentifier;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -12,15 +12,15 @@ import static java.util.Objects.requireNonNull;
 public abstract class AbstractOperation<ENTITY> {
 
     private final Type type;
-    private final Manager<ENTITY> manager;
+    private final HasTableIdentifier<ENTITY> identifier;
 
-    protected AbstractOperation(Type type, Manager<ENTITY> manager) {
+    protected AbstractOperation(Type type, HasTableIdentifier<ENTITY> identifier) {
         this.type = requireNonNull(type);
-        this.manager = requireNonNull(manager);
+        this.identifier = requireNonNull(identifier);
     }
 
-    public Manager<ENTITY> manager() {
-        return manager;
+    public HasTableIdentifier<ENTITY> identifier() {
+        return identifier;
     }
 
     public Type type() {

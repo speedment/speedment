@@ -1,7 +1,7 @@
 package com.speedment.runtime.bulk.internal.operation;
 
 import com.speedment.runtime.bulk.PersistOperation;
-import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.config.identifier.HasTableIdentifier;
 import java.util.ArrayList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
@@ -18,10 +18,10 @@ public final class PersistOperationImpl<ENTITY> extends AbstractOperation<ENTITY
     private final List<Supplier<Stream<? extends ENTITY>>> generatorSuppliers;
 
     public PersistOperationImpl(
-        final Manager<ENTITY> manager,
+        final HasTableIdentifier<ENTITY> identifier,
         final List<Supplier<Stream<? extends ENTITY>>> generatorSuppliers
     ) {
-        super(Type.PERSIST, manager);
+        super(Type.PERSIST, identifier);
         this.generatorSuppliers = new ArrayList<>(requireNonNull(generatorSuppliers));
     }
 

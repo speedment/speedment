@@ -48,6 +48,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import com.speedment.runtime.bulk.PersistOperation;
+import com.speedment.runtime.bulk.UpdateOperation;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.requireNonNull;
@@ -199,6 +201,25 @@ final class SqlPersistenceImpl<ENTITY> implements SqlPersistence<ENTITY> {
             throw new SpeedmentException(ex);
         }
     }
+
+    
+    
+    @Override
+    public void persistBulk(PersistOperation<ENTITY> persistOperation) throws SpeedmentException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void updateBulk(UpdateOperation<ENTITY> udpateOperation) throws SpeedmentException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void removeBulk(UpdateOperation<ENTITY> udpateOperation) throws SpeedmentException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
     
     private Consumer<List<Long>> newGeneratedKeyConsumer(ENTITY entity) {
         return l -> {

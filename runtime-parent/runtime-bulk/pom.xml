@@ -73,30 +73,19 @@
     </profiles>
     
     <dependencies>
-        <!-- Common Dependencies -->
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>invariant</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>function</artifactId>
-        </dependency>
-        
        
         <!-- Runtime Dependencies -->
-<!--        <dependency>
+        <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-config</artifactId>
             <version>${speedment.version}</version>
-        </dependency>-->
+        </dependency>
         
-        <dependency>
+        <!--        <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-core</artifactId>
             <version>${speedment.version}</version>
-        </dependency>
+        </dependency>-->
         
         <dependency>
             <groupId>junit</groupId>

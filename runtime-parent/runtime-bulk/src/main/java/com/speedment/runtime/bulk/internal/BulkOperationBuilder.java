@@ -5,7 +5,7 @@ import com.speedment.runtime.bulk.BulkOperation;
 import com.speedment.runtime.bulk.Operation;
 import com.speedment.runtime.bulk.internal.builder.PersistOperationBuilderImpl;
 import com.speedment.runtime.bulk.internal.builder.UpdateOperationBuilderImpl;
-import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.config.identifier.HasTableIdentifier;
 import java.util.ArrayList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
@@ -23,17 +23,17 @@ public final class BulkOperationBuilder implements BulkOperation.Builder {
     }
 
     @Override
-    public <ENTITY> Persist<ENTITY> persist(Manager<ENTITY> manager) {
+    public <ENTITY> Persist<ENTITY> persist(HasTableIdentifier<ENTITY> manager) {
         return new PersistOperationBuilderImpl<>(requireNonNull(manager), this);
     }
 
     @Override
-    public <ENTITY> Update<ENTITY> update(Manager<ENTITY> manager) {
+    public <ENTITY> Update<ENTITY> update(HasTableIdentifier<ENTITY> manager) {
         return new UpdateOperationBuilderImpl<>(requireNonNull(manager), this);
     }
 
     @Override
-    public <ENTITY> Remove<ENTITY> remove(Manager<ENTITY> manager) {
+    public <ENTITY> Remove<ENTITY> remove(HasTableIdentifier<ENTITY> manager) {
         return new RemoveOperationBuilderImpl<>(requireNonNull(manager), this);
     }
 

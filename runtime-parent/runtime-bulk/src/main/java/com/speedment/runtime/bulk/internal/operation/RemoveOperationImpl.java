@@ -1,7 +1,7 @@
 package com.speedment.runtime.bulk.internal.operation;
 
 import com.speedment.runtime.bulk.RemoveOperation;
-import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.config.identifier.HasTableIdentifier;
 import java.util.ArrayList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
@@ -18,10 +18,10 @@ public final class RemoveOperationImpl<ENTITY> extends AbstractOperation<ENTITY>
     private final List<Predicate<? super ENTITY>> predicates;
 
     public RemoveOperationImpl(
-        final Manager<ENTITY> manager,
+        final HasTableIdentifier<ENTITY> identifier,
         final List<Predicate<? super ENTITY>> predicates
     ) {
-        super(Type.REMOVE, manager);
+        super(Type.REMOVE, identifier);
         this.predicates = new ArrayList<>(requireNonNull(predicates));
     }
 

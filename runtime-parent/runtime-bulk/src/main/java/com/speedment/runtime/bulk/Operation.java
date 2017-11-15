@@ -1,6 +1,6 @@
 package com.speedment.runtime.bulk;
 
-import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.config.identifier.HasTableIdentifier;
 
 /**
  *
@@ -14,11 +14,11 @@ public interface Operation<ENTITY> {
     }
 
     /**
-     * Returns the Manager for this Operation.
+     * Returns the identifier for this Operation.
      *
-     * @return the Manager for this Operation
+     * @return the identifier for this Operation
      */
-    Manager<ENTITY> manager();
+    HasTableIdentifier<ENTITY> identifier();
 
     /**
      * Returns the type of Operation.

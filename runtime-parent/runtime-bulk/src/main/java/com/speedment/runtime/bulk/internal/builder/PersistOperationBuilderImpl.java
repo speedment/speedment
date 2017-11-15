@@ -4,7 +4,7 @@ import com.speedment.runtime.bulk.BulkOperation.Builder;
 import com.speedment.runtime.bulk.Operation;
 import com.speedment.runtime.bulk.internal.BulkOperationBuilder;
 import com.speedment.runtime.bulk.internal.operation.PersistOperationImpl;
-import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.config.identifier.HasTableIdentifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -19,8 +19,8 @@ public final class PersistOperationBuilderImpl<ENTITY> extends AbstractOperation
 
     private final List<Supplier<Stream<? extends ENTITY>>> generatorSuppliers;
 
-    public PersistOperationBuilderImpl(Manager<ENTITY> manager, BulkOperationBuilder parent) {
-        super(manager, parent);
+    public PersistOperationBuilderImpl(HasTableIdentifier<ENTITY> identifier, BulkOperationBuilder parent) {
+        super(identifier, parent);
         this.generatorSuppliers = new ArrayList<>();
     }
 
@@ -32,7 +32,7 @@ public final class PersistOperationBuilderImpl<ENTITY> extends AbstractOperation
 
     @Override
     Operation<ENTITY> buildCurrent() {
-        return new PersistOperationImpl<>(manager(), generatorSuppliers);
+        return new PersistOperationImpl<>(identifier(), generatorSuppliers);
     }
 
 }

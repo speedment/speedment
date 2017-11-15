@@ -1,12 +1,8 @@
 package com.speedment.runtime.bulk;
 
 import com.speedment.runtime.bulk.Operation.Type;
+import com.speedment.runtime.config.identifier.HasTableIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.core.manager.Manager;
-import com.speedment.runtime.core.manager.Persister;
-import com.speedment.runtime.core.manager.Remover;
-import com.speedment.runtime.core.manager.Updater;
-import com.speedment.runtime.field.Field;
 import java.util.stream.Stream;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,18 +13,18 @@ import org.junit.Test;
  */
 public class BuilderTest {
 
-    private Manager<Point> mgr;
+    private HasTableIdentifier<Point> identifier;
 
     @Before
     public void setup() {
-        mgr = new PointManager();
+        identifier = new PointManager();
     }
 
     @Test
     public void testRemoveAll() {
         System.out.println("testRemoveAll");
         BulkOperation bo = BulkOperation.builder()
-            .remove(mgr)
+            .remove(identifier)
             .build();
 
         printInfo(bo);
@@ -38,7 +34,7 @@ public class BuilderTest {
     public void testRemoveOnePredicate() {
         System.out.println("testRemoveOnePredicate");
         BulkOperation bo = BulkOperation.builder()
-            .remove(mgr).where(Point::isOrigo)
+            .remove(identifier).where(Point::isOrigo)
             .build();
         bo.operations().forEachOrdered(System.out::println);
     }
@@ -47,7 +43,7 @@ public class BuilderTest {
     public void testRemoveTwoPredicates() {
         System.out.println("testRemoveTwoPredicates");
         BulkOperation bo = BulkOperation.builder()
-            .remove(mgr).where(Point::isFirstQuadrant).where(Point::isOrigo)
+            .remove(identifier).where(Point::isFirstQuadrant).where(Point::isOrigo)
             .build();
 
         printInfo(bo);
@@ -57,19 +53,19 @@ public class BuilderTest {
     public void testMixed() {
         System.out.println("testMixed");
         BulkOperation bo = BulkOperation.builder()
-            .remove(mgr)
-            .remove(mgr).where(Point::isOrigo)
-            .remove(mgr).where(Point::isFirstQuadrant).where(Point::isOrigo)
-            .update(mgr).set(p -> p.setX(p.getX() + 1)) // Consumer
+            .remove(identifier)
+            .remove(identifier).where(Point::isOrigo)
+            .remove(identifier).where(Point::isFirstQuadrant).where(Point::isOrigo)
+            .update(identifier).set(p -> p.setX(p.getX() + 1)) // Consumer
 
-            .update(mgr).compute(
+            .update(identifier).compute(
             p -> {
                 p.setX(0);
                 return p;
             }) // Function
-            .update(mgr).where(Point::isOrigo).set(s -> s.setX(s.getX()))
-            .update(mgr).where(Point::isOrigo).where(Point::isFirstQuadrant).set(Point::increaseX).set(Point::increaseX)
-            .persist(mgr).values(() -> Stream.of(new Point(1, 1), new Point(2, 2)))
+            .update(identifier).where(Point::isOrigo).set(s -> s.setX(s.getX()))
+            .update(identifier).where(Point::isOrigo).where(Point::isFirstQuadrant).set(Point::increaseX).set(Point::increaseX)
+            .persist(identifier).values(() -> Stream.of(new Point(1, 1), new Point(2, 2)))
             .build();
 
         printInfo(bo);
@@ -167,45 +163,10 @@ public class BuilderTest {
 
     }
 
-    private static class PointManager implements Manager<Point> {
+    private static class PointManager implements HasTableIdentifier<Point> {
 
         @Override
         public TableIdentifier<Point> getTableIdentifier() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        @Override
-        public Class<Point> getEntityClass() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        @Override
-        public Stream<Field<Point>> fields() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        @Override
-        public Stream<Field<Point>> primaryKeyFields() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        @Override
-        public Stream<Point> stream() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        @Override
-        public Persister<Point> persister() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        @Override
-        public Updater<Point> updater() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        @Override
-        public Remover<Point> remover() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 

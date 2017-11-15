@@ -42,6 +42,10 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static com.speedment.common.invariant.NullUtil.requireNonNulls;
+import com.speedment.runtime.bulk.BulkOperation;
+import com.speedment.runtime.bulk.PersistOperation;
+import com.speedment.runtime.bulk.RemoveOperation;
+import com.speedment.runtime.bulk.UpdateOperation;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import static java.util.Collections.singletonList;
@@ -117,7 +121,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
             Objects.requireNonNull(sql),
             Objects.requireNonNull(values),
             Objects.requireNonNull(rsMapper),
-            () -> new ConnectionInfo(dbms, connectionPoolComponent, transactionComponent), 
+            () -> new ConnectionInfo(dbms, connectionPoolComponent, transactionComponent),
             parallelStrategy,
             this::configureSelect,
             this::configureSelect
@@ -358,9 +362,42 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         }
     }
 
+    @Override
+    public void executeBulk(BulkOperation bulkOperation) throws SQLException {
+        bulkOperation.operations().forEachOrdered(o -> {
+            switch (o.type()) {
+                case PERSIST: {
+                    executeBulk((PersistOperation<?>) o);
+                    break;
+                }
+                case UPDATE: {
+                    executeBulk((UpdateOperation<?>) o);
+                    break;
+                }
+                case REMOVE: {
+                    executeBulk((RemoveOperation<?>) o);
+                    break;
+                }
+            }
+        });
+    }
+
+    protected <ENTITY> void executeBulk(PersistOperation<ENTITY> persistOperation) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    protected <ENTITY> void executeBulk(UpdateOperation<ENTITY> updateOperation) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    protected <ENTITY> void executeBulk(RemoveOperation<ENTITY> removeOperation) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     private <T> T applyOnConnection(Dbms dbms, SqlFunction<Connection, T> mapper) throws SQLException {
         try (final Connection c = connectionPoolComponent.getConnection(dbms)) {
             return mapper.apply(c);
         }
     }
+
 }

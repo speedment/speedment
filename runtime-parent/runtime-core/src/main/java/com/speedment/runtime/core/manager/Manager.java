@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.core.manager;
 
-import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.config.identifier.HasTableIdentifier;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.field.Field;
 import com.speedment.runtime.field.method.BackwardFinder;
@@ -40,15 +40,8 @@ import java.util.stream.Stream;
  * @author Emil Forslund
  * @since 2.0.0
  */
-public interface Manager<ENTITY> {
+public interface Manager<ENTITY> extends HasTableIdentifier<ENTITY> {
 
-    /**
-     * Returns an identifier for the table that this {@code Manager} handles
-     * entities for.
-     *
-     * @return the table identifier
-     */
-    TableIdentifier<ENTITY> getTableIdentifier();
 
     /**
      * Returns the entity class for this Manager.

@@ -4,7 +4,7 @@ import com.speedment.runtime.bulk.BulkOperation.Builder;
 import com.speedment.runtime.bulk.Operation;
 import com.speedment.runtime.bulk.internal.BulkOperationBuilder;
 import com.speedment.runtime.bulk.internal.operation.UpdateOperationImpl;
-import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.config.identifier.HasTableIdentifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -22,8 +22,8 @@ public final class UpdateOperationBuilderImpl<ENTITY> extends AbstractOperationB
     private final List<Function<? super ENTITY, ? extends ENTITY>> mappers;
     private final List<Consumer<? super ENTITY>> consumers;
 
-    public UpdateOperationBuilderImpl(Manager<ENTITY> manager, BulkOperationBuilder parent) {
-        super(manager, parent);
+    public UpdateOperationBuilderImpl(HasTableIdentifier<ENTITY> identifier, BulkOperationBuilder parent) {
+        super(identifier, parent);
         this.filters = new ArrayList<>();
         this.mappers = new ArrayList<>();
         this.consumers = new ArrayList<>();
@@ -49,7 +49,7 @@ public final class UpdateOperationBuilderImpl<ENTITY> extends AbstractOperationB
 
     @Override
     Operation<ENTITY> buildCurrent() {
-        return new UpdateOperationImpl<>(manager(), filters, mappers, consumers);
+        return new UpdateOperationImpl<>(identifier(), filters, mappers, consumers);
     }
 
 }

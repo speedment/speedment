@@ -3,9 +3,8 @@ package com.speedment.runtime.bulk.internal.builder;
 import com.speedment.runtime.bulk.BulkOperation.Builder;
 import com.speedment.runtime.bulk.Operation;
 import com.speedment.runtime.bulk.internal.BulkOperationBuilder;
-import com.speedment.runtime.bulk.internal.operation.AbstractOperation;
 import com.speedment.runtime.bulk.internal.operation.RemoveOperationImpl;
-import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.config.identifier.HasTableIdentifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -19,8 +18,8 @@ public final class RemoveOperationBuilderImpl<ENTITY> extends AbstractOperationB
 
     private final List<Predicate<? super ENTITY>> filters;
 
-    public RemoveOperationBuilderImpl(Manager<ENTITY> manager, BulkOperationBuilder parent) {
-        super(manager, parent);
+    public RemoveOperationBuilderImpl(HasTableIdentifier<ENTITY> identifier, BulkOperationBuilder parent) {
+        super(identifier, parent);
         this.filters = new ArrayList<>();
     }
 
@@ -33,7 +32,7 @@ public final class RemoveOperationBuilderImpl<ENTITY> extends AbstractOperationB
 
     @Override
     Operation<ENTITY> buildCurrent() {
-        return new RemoveOperationImpl<>(manager(), filters);
+        return new RemoveOperationImpl<>(identifier(), filters);
     }
 
 }

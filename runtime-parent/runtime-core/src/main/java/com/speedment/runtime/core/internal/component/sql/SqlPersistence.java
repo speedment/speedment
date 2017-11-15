@@ -16,6 +16,8 @@
  */
 package com.speedment.runtime.core.internal.component.sql;
 
+import com.speedment.runtime.bulk.PersistOperation;
+import com.speedment.runtime.bulk.UpdateOperation;
 import com.speedment.runtime.core.component.sql.SqlPersistenceComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
 
@@ -59,5 +61,15 @@ interface SqlPersistence<ENTITY> {
      * @throws SpeedmentException  if the entity could not be removed
      */
     ENTITY remove(ENTITY entity) throws SpeedmentException;
+    
+    
+    void persistBulk(PersistOperation<ENTITY> persistOperation) throws SpeedmentException;
+    
+    
+    void updateBulk(UpdateOperation<ENTITY> udpateOperation) throws SpeedmentException;
+    
+    
+    void removeBulk(UpdateOperation<ENTITY> udpateOperation) throws SpeedmentException;
+    
     
 }

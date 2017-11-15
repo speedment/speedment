@@ -1,7 +1,7 @@
 package com.speedment.runtime.bulk.internal.operation;
 
 import com.speedment.runtime.bulk.UpdateOperation;
-import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.config.identifier.HasTableIdentifier;
 import java.util.ArrayList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
@@ -22,12 +22,12 @@ public final class UpdateOperationImpl<ENTITY> extends AbstractOperation<ENTITY>
     private final List<Consumer<? super ENTITY>> consumers;
 
     public UpdateOperationImpl(
-        final Manager<ENTITY> manager,
+        final HasTableIdentifier<ENTITY> identifier,
         final List<Predicate<? super ENTITY>> predicates,
         final List<Function<? super ENTITY, ? extends ENTITY>> mappers,
         final List<Consumer<? super ENTITY>> consumers
     ) {
-        super(Type.UPDATE, manager);
+        super(Type.UPDATE, identifier);
         this.predicates = new ArrayList<>(requireNonNull(predicates));
         this.mappers = new ArrayList<>(requireNonNull(mappers));
         this.consumers = new ArrayList<>(requireNonNull(consumers));
