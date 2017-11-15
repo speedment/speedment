@@ -34,6 +34,8 @@ import java.util.List;
  */
 public final class PostgresqlDbmsOperationHandler extends AbstractDbmsOperationHandler {
 
+    private static final int FETCH_SIZE = 4096;
+    
     // Five elements - list is surely more efficient than hash set
     private static List<Integer> LONG_GETTABLE_TYPES = Arrays.asList(
         Types.TINYINT,
@@ -65,4 +67,10 @@ public final class PostgresqlDbmsOperationHandler extends AbstractDbmsOperationH
             }
         }
     }
+
+    @Override
+    public void configureSelect(PreparedStatement statement) throws SQLException {
+        statement.setFetchSize(FETCH_SIZE);
+    }
+
 }
