@@ -19,7 +19,6 @@ package com.speedment.runtime.core.internal;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
-import com.speedment.common.injector.annotation.Config;
 import com.speedment.common.injector.exception.CyclicReferenceException;
 import static com.speedment.common.injector.execution.ExecutionBuilder.resolved;
 import static com.speedment.common.injector.execution.ExecutionBuilder.started;
@@ -48,6 +47,7 @@ import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.exception.SpeedmentException;
+import com.speedment.runtime.core.internal.component.InfoComponentImpl;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.DatabaseUtil;
 import static java.lang.Boolean.TRUE;
@@ -56,8 +56,6 @@ import static java.util.Objects.requireNonNull;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This abstract class is implemented by classes that can build a
@@ -459,10 +457,11 @@ public abstract class AbstractApplicationBuilder<
      */
     protected void printWelcomeMessage(Injector injector) {
 
-        final InfoComponent info = injector.getOrThrow(InfoComponent.class);
+        final InfoComponent     info = injector.getOrThrow(InfoComponent.class);
+        final InfoComponentImpl upstreamInfo = injector.getOrThrow(InfoComponentImpl.class);
         final String title = info.getTitle();
         final String version = info.getImplementationVersion();
-
+        
         if (!skipLogoPrintout) {
             final String speedmentMsg = "\n"
                 + "   ____                   _                     _     \n"
@@ -482,6 +481,12 @@ public abstract class AbstractApplicationBuilder<
             + " Specification version "
             + info.getSpecificationVersion();
         LOGGER.info(msg);
+        if (info != upstreamInfo) {
+            LOGGER.info("Upstream version is "+upstreamInfo.getImplementationVersion());
+            if (!upstreamInfo.isProductionMode()) {
+                LOGGER.warn("Upstream version is NOT INTENDED FOR PRODUCTION USE!");
+            }
+        }
 
         if (!info.isProductionMode()) {
             LOGGER.warn("This version is NOT INTENDED FOR PRODUCTION USE!");
