@@ -479,17 +479,18 @@ public abstract class AbstractApplicationBuilder<
             + ") version " + version
             + " by " + info.getVendor()
             + " Specification version "
-            + info.getSpecificationVersion();
+            + info.getSpecificationVersion()
+            + ",  \""+info.getLicenseName()+"\"";
         LOGGER.info(msg);
+        if (!info.isProductionMode()) {
+            LOGGER.warn("This version is NOT INTENDED FOR PRODUCTION USE!");
+        }
+
         if (info != upstreamInfo) {
             LOGGER.info("Upstream version is "+upstreamInfo.getImplementationVersion());
             if (!upstreamInfo.isProductionMode()) {
                 LOGGER.warn("Upstream version is NOT INTENDED FOR PRODUCTION USE!");
             }
-        }
-
-        if (!info.isProductionMode()) {
-            LOGGER.warn("This version is NOT INTENDED FOR PRODUCTION USE!");
         }
 
         try {

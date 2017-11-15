@@ -82,5 +82,9 @@ public interface InfoComponent  {
      * @return if this version is intended for production use
      */
     boolean isProductionMode();
+    
+    default String getLicenseName() {
+        return "Apache-2.0";
+    }
 
 }

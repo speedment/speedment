@@ -44,6 +44,7 @@ public final class AboutController implements Initializable {
     private @FXML Button close;
     private @FXML Label version;
     private @FXML Label license;
+    private @FXML Label external;
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -51,6 +52,7 @@ public final class AboutController implements Initializable {
         brand.logoLarge().map(Image::new).ifPresent(titleImage::setImage);
         license.setText(license.getText().replace("{title}", infoComponent.getTitle()));
         version.setText(infoComponent.getImplementationVersion());
+        external.setText(infoComponent.getLicenseName());
         
         close.setOnAction(newCloseHandler());
     }
