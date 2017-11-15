@@ -487,6 +487,10 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
     protected void indexes(Connection connection, Table table, ProgressMeasure progressListener) {
         requireNonNulls(connection, table);
 
+        // Fix #566: Some connectors throw an exception if getIndexInfo() is
+        // invoked for a database VIEW.
+        if (table.isView()) return;
+
         final Schema schema = table.getParentOrThrow();
         final SqlSupplier<ResultSet> supplier = ()
             -> connection.getMetaData().getIndexInfo(
