@@ -74,7 +74,9 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
         install(Time.class,      TimeToLongMapper::new);
         install(Time.class,      TimeToIntMapper::new);
         install(Time.class,      TimeToLocalTimeMapper::new);
-        
+        install(Short.class,     ShortEpochDaysToLocalDateMapper::new);
+        install(Integer.class,   IntEpochDaysToLocalDateMapper::new);
+
         // Special string mappers
         install(String.class, StringToLocaleMapper::new);
         install(String.class, TrueFalseStringToBooleanMapper::new);
