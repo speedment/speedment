@@ -463,6 +463,18 @@ public final class ConfigFileHelper {
             });
         });
 
-        DocumentTranscoder.save(project, currentlyOpenFile.toPath(), Json::toJson);
+        // always start with a new file.
+        if (currentlyOpenFile.isFile()) {
+            if (currentlyOpenFile.exists()) {
+                currentlyOpenFile.delete();
+            }
+            DocumentTranscoder.save(project, currentlyOpenFile.toPath(), Json::toJson);
+        } else {
+            throw new SpeedmentToolException(currentlyOpenFile.toPath() + " is not a file");
+        }
+    }
+
+    public void saveProjectToCurrentlyOpenFile(ProjectProperty project) {
+        saveConfigFile(getCurrentlyOpenFile(), project, false);
     }
 }

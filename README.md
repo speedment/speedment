@@ -283,6 +283,27 @@ films.stream()
 ```
 
 
+### Transactions
+```java
+txHandler().createAndAccept(tx -> {
+    final List<Film> filmsToUpdate = films.stream()
+        .filter(Film.LENGTH.greaterThan(75))
+        .collect(toList()); // Collect all Films with length > 75
+    filmsToUpdate.stream()
+        .map(f -> f.setRentalDuration(f.getRentalDuration() + 1)) // Applies a lambda that increases their rental duration by one
+        .forEach(films.updater());   // Applies the updater function to the selected films
+    tx.commit(); // Atomically commits all updates 
+})
+```
+Values can also be returned form a transaction as shown hereunder:
+```java
+long rowCount = txHandler().createAndApply(tx -> 
+    films.stream().count() + actors.stream().count()
+    // Computes and returns the sum of rows in the two tables atomically   
+)
+```
+
+
 ### Full Transparency
 By appending a logger to the builder, you can follow exactly what happens behind the scenes.
 ```java

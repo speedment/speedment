@@ -82,11 +82,17 @@ public interface Manager<ENTITY> {
      * consumed <em>is unspecified</em>. The order may even change from one
      * invocation to another. Thus, it is an error to assume any particular
      * element order even though is might appear, for some stream sources, that
-     * there is a de facto order.
+     * there is a de-facto order.
      * <p>
      * If a deterministic order is required, then make sure to invoke the
      * {@link Stream#sorted(java.util.Comparator)} method on the {@link Stream}
      * returned.
+     * <p>
+     * Mutable elements are not reused within the stream. More formally, there
+     * are no pair of mutable stream elements <code>e1</code> and
+     * <code>e2</code> such that <code>e1 == e2</code>.
+     * <p>
+     * The Stream will never contain <code>null</code> elements.
      * <p>
      * This is <em>an inexpensive O(1) operation</em> that will complete in
      * constant time regardless of the number of entities in the underlying
@@ -168,7 +174,7 @@ public interface Manager<ENTITY> {
      * </ul>
      *
      *
-     * @return a new stream over all entities in this table
+     * @return a new stream over all entities in this table in unspecified order
      *
      * @throws SpeedmentException if an error occurs during a Terminal Operation
      * (e.g. an SqlException is thrown by the underlying database)

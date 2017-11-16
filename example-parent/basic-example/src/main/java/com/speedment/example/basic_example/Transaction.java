@@ -17,6 +17,7 @@
 package com.speedment.example.basic_example;
 
 import com.company.sakila.SakilaApplication;
+import com.company.sakila.db0.sakila.actor.ActorManager;
 import com.company.sakila.db0.sakila.film.Film;
 import com.company.sakila.db0.sakila.film.FilmManager;
 import com.company.sakila.db0.sakila.language.Language;
@@ -29,6 +30,8 @@ import com.speedment.runtime.core.component.transaction.Isolation;
 import com.speedment.runtime.core.component.transaction.TransactionComponent;
 import com.speedment.runtime.core.component.transaction.TransactionHandler;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 
@@ -41,6 +44,7 @@ public class Transaction {
     private final SakilaApplication app;
     private final FilmManager films;
     private final LanguageManager languages;
+    private final ActorManager actors;
     private final TransactionComponent transactionComponent;
     private final TransactionHandler txHandler;
 
@@ -53,6 +57,7 @@ public class Transaction {
         );
         films = app.getOrThrow(FilmManager.class);
         languages = app.getOrThrow(LanguageManager.class);
+        actors = app.getOrThrow(ActorManager.class);
         transactionComponent = app.getOrThrow(TransactionComponent.class);
         txHandler = transactionComponent.createTransactionHandler();
     }
@@ -83,10 +88,12 @@ public class Transaction {
     private void selectTransaction2() {
         ExampleUtil.log("selectTransaction2");
         long sumCount = txHandler.createAndApply(
-            tx -> films.stream().filter(Film.LENGTH.greaterThan(75)).count() + languages.stream().count()
+            tx
+            -> films.stream().filter(Film.LENGTH.greaterThan(75)).count()
+            + actors.stream().count()
         );
         System.out.println(sumCount);
-
+        
     }
 
     private void createLanguagesUncommitted() {
@@ -144,7 +151,7 @@ public class Transaction {
 
                 // Do the actual actions
                 toDelete.forEach(languages.remover());
-                
+
                 tx.commit();
             }
         );
