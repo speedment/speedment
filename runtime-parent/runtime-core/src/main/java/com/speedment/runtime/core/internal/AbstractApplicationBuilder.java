@@ -480,7 +480,7 @@ public abstract class AbstractApplicationBuilder<
             + " by " + info.getVendor()
             + " Specification version "
             + info.getSpecificationVersion()
-            + ",  \""+info.getLicenseName()+"\"";
+            + ", License: "+info.getLicenseName();
         LOGGER.info(msg);
         if (!info.isProductionMode()) {
             LOGGER.warn("This version is NOT INTENDED FOR PRODUCTION USE!");
