@@ -35,7 +35,7 @@
     <name>Speedment - Archetypes - PostgreSQL</name>
     
     <properties>
-        <postgresql.version>42.0.0</postgresql.version>
+        <postgresql.version>42.1.4</postgresql.version>
     </properties>
                                                
     <build>
