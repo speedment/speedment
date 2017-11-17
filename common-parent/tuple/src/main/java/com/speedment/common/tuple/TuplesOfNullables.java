@@ -2489,7 +2489,7 @@ public final class TuplesOfNullables {
      * 
      * @see TupleOfNullables
      */
-    public static TupleOfNullables ofNullables(Object... elements) {
+    public static TupleOfNullables ofNullablesArray(Object... elements) {
         return new TupleInfiniteDegreeOfNullablesImpl(elements);
     }
 }

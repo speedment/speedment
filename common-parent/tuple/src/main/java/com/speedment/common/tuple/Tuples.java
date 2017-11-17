@@ -2417,7 +2417,7 @@ public final class Tuples {
      * 
      * @see Tuple
      */
-    public static Tuple of(Object... elements) {
+    public static Tuple ofArray(Object... elements) {
         return new TupleInfiniteDegreeImpl(elements);
     }
 }
