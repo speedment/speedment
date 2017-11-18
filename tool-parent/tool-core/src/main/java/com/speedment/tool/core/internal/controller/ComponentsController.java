@@ -82,7 +82,7 @@ public final class ComponentsController implements Initializable {
     
     private class RootItem extends TreeItem<String> {
 
-        public RootItem(Speedment speedment) {
+        private RootItem(Speedment speedment) {
             super(
                 infoComponent.getTitle() + " (0x" + Integer.toHexString(System.identityHashCode(speedment)) + ")"
             );
@@ -95,8 +95,8 @@ public final class ComponentsController implements Initializable {
 
     private static class ComponentItem extends TreeItem<String> {
 
-        public ComponentItem(Class<?> comp) {
-            super(injectorKeyValue(comp).map(Class::getSimpleName).orElse(comp.getSimpleName()) + " ("
+        private ComponentItem(Class<?> comp) {
+            super(injectorKeyValue(comp).map(c -> c.getSimpleName()).orElse(comp.getSimpleName()) + " ("
                 + comp.getSimpleName()
                 + ")"
             );
@@ -126,7 +126,7 @@ public final class ComponentsController implements Initializable {
 
     private static class TranslatorsItem extends TreeItem<String> {
 
-        public TranslatorsItem() {
+        private TranslatorsItem() {
             super("Code Generators");
             setExpanded(true);
             setGraphic(SpeedmentIcon.BOOK_OPEN.view());
@@ -135,7 +135,7 @@ public final class ComponentsController implements Initializable {
 
     private static class TranslatorItem extends TreeItem<String> {
 
-        public TranslatorItem(String translatorKey) {
+        private TranslatorItem(String translatorKey) {
             super(translatorKey);
             setExpanded(true);
             setGraphic(SpeedmentIcon.BOOK_NEXT.view());
@@ -144,7 +144,7 @@ public final class ComponentsController implements Initializable {
 
     private static class DbmsTypesItem extends TreeItem<String> {
 
-        public DbmsTypesItem() {
+        private DbmsTypesItem() {
             super("Supported Databases");
             setExpanded(true);
             setGraphic(SpeedmentIcon.DATABASE_CONNECT.view());
@@ -153,7 +153,7 @@ public final class ComponentsController implements Initializable {
 
     private static class DbmsTypeItem extends TreeItem<String> {
 
-        public DbmsTypeItem(DbmsType dbmsType) {
+        private DbmsTypeItem(DbmsType dbmsType) {
             super(dbmsType.getName());
             setExpanded(true);
             setGraphic(SpeedmentIcon.DATABASE.view());
@@ -162,7 +162,7 @@ public final class ComponentsController implements Initializable {
 
     private static class TypeMappersItem extends TreeItem<String> {
 
-        public TypeMappersItem() {
+        private TypeMappersItem() {
             super("Installed Type Mappings");
             setExpanded(true);
             setGraphic(SpeedmentIcon.PAGE_WHITE_CUP.view());
@@ -171,7 +171,7 @@ public final class ComponentsController implements Initializable {
 
     private static class TypeMapperItem extends TreeItem<String> {
 
-        public TypeMapperItem(TypeMapper<?, ?> typeMapper) {
+        private TypeMapperItem(TypeMapper<?, ?> typeMapper) {
             super(typeMapper.getLabel());
             setExpanded(true);
             setGraphic(SpeedmentIcon.CUP.view());
