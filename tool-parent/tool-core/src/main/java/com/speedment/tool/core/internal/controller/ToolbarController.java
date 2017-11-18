@@ -28,6 +28,7 @@ import javafx.scene.image.ImageView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.scene.control.Tooltip;
 
 /**
  *
@@ -49,6 +50,9 @@ public final class ToolbarController implements Initializable {
         
         buttonReload.setGraphic(FontAwesome.REFRESH.view());
         buttonGenerate.setGraphic(FontAwesome.PLAY_CIRCLE.view());
+        
+        buttonReload.setTooltip(new Tooltip("Reload the metadata from the database and merge any changes with the existing configuration."));
+        buttonGenerate.setTooltip(new Tooltip("Generate code using the current configuration. Automatically save the configuration before generation."));
 
         uiBrand.logoLarge()
             .map(Image::new)
