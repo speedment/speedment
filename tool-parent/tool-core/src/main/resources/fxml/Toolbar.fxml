@@ -25,7 +25,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<HBox alignment="CENTER"
+<HBox fx:id="hBox"
+      alignment="CENTER"
       prefHeight="38.0"
       prefWidth="900.0"
       spacing="8.0"
@@ -42,7 +43,7 @@
             <padding>
                 <Insets bottom="8.0" left="12.0" right="12.0" top="8.0" />
             </padding>
-        </Button>
+        </Button>        
         <Pane prefHeight="200.0" HBox.hgrow="ALWAYS" />
         <ImageView fx:id="brand" fitHeight="48.0" preserveRatio="true" smooth="true" >
             <HBox.margin>
