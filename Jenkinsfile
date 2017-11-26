@@ -4,13 +4,15 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                mvn '-Prelease clean install -DskipTests'
+                //mvn '-Prelease clean install -DskipTests'
+                mvn 'clean install -DskipTests'
             }
         }
 
         stage('Unit Test') {
             steps {
-                mvn '-Prelease test'
+                //mvn '-Prelease test'
+                mvn 'test'
             }
         }
 
