@@ -86,15 +86,21 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
             LOGGER_STREAM.debug("%s, values:%s", getSql(), getValues());
 
             connectionInfo = connectionInfoSupplier.get();
-            connectionInfo.ifNotInTransaction(c -> c.setAutoCommit(false));
+            connectionInfo.ifNotInTransaction(c -> c.setAutoCommit(false)); // Streaming results must be autocommit false for PostgreSQL
             ps = connectionInfo.connection().prepareStatement(getSql(), java.sql.ResultSet.TYPE_FORWARD_ONLY, java.sql.ResultSet.CONCUR_READ_ONLY);
             statementConfigurator.accept(ps);
+
+            //System.out.format("*** PreparedStatement: fetchDirection %d, fetchSize %d%n", ps.getFetchDirection(), ps.getFetchSize());
+
             int i = 1;
             for (final Object o : getValues()) {
                 ps.setObject(i++, o);
             }
             rs = ps.executeQuery();
             resultSetConfigurator.accept(rs);
+
+            //System.out.format("*** ResultSet: fetchDirection %d, fetchSize %d%n", rs.getFetchDirection(), rs.getFetchSize());
+
         } catch (SQLException sqle) {
             LOGGER.error(sqle, "Error executing " + getSql() + ", values=" + getValues());
             throw new SpeedmentException(sqle);
@@ -115,7 +121,7 @@ public final class AsynchronousQueryResultImpl<T> implements AsynchronousQueryRe
     private void commitSilently(ConnectionInfo connectionInfo) {
         try {
             if (connectionInfo != null) {
-                connectionInfo.ifNotInTransaction(Connection::commit);
+                connectionInfo.ifNotInTransaction(c -> c.setAutoCommit(true));
             }
         } catch (SQLException e) {
             LOGGER.error(e, "Failed to commit connection upon close");
