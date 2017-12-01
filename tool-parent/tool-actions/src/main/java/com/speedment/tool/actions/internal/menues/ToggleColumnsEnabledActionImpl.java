@@ -18,6 +18,7 @@ package com.speedment.tool.actions.internal.menues;
 
 import com.speedment.runtime.config.util.DocumentUtil;
 import com.speedment.tool.actions.ProjectTreeComponent;
+import com.speedment.tool.actions.menues.ToggleColumnsEnabledAction;
 import com.speedment.tool.actions.menues.ToggleTablesEnabledAction;
 import com.speedment.tool.config.ColumnProperty;
 import com.speedment.tool.config.TableProperty;
@@ -33,7 +34,7 @@ import java.util.stream.Stream;
  */
 public final class ToggleColumnsEnabledActionImpl
 extends AbstractToolAction
-implements ToggleTablesEnabledAction {
+implements ToggleColumnsEnabledAction {
 
     @Override
     void installMenuItems(ProjectTreeComponent projectTree) {
