@@ -23,6 +23,8 @@ import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasLongValue;
 
 /**
+ * A predicate that evaluates if a value is {@code >} a specified {@code long}.
+ * 
  * @param <ENTITY> entity type
  * @param <D>      database type
  * 

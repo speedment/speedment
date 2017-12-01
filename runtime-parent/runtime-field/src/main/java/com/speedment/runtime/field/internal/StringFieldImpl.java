@@ -232,4 +232,14 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
         requireNonNull(value);
         return new StringContainsIgnoreCasePredicate<>(this, value.toLowerCase());
     }
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                               Operators                                //
+    ////////////////////////////////////////////////////////////////////////////
+
+
+    @Override
+    public String toString() {
+        return StringFieldImpl.class.getSimpleName() + "{" + identifier.getColumnName() + "}";
+    }
 }

@@ -27,6 +27,11 @@ import com.speedment.runtime.field.internal.predicate.floats.FloatEqualPredicate
 import com.speedment.runtime.field.internal.predicate.floats.FloatGreaterOrEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.floats.FloatGreaterThanPredicate;
 import com.speedment.runtime.field.internal.predicate.floats.FloatInPredicate;
+import com.speedment.runtime.field.internal.predicate.floats.FloatLessOrEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.floats.FloatLessThanPredicate;
+import com.speedment.runtime.field.internal.predicate.floats.FloatNotBetweenPredicate;
+import com.speedment.runtime.field.internal.predicate.floats.FloatNotEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.floats.FloatNotInPredicate;
 import com.speedment.runtime.field.method.FloatGetter;
 import com.speedment.runtime.field.method.FloatSetter;
 import com.speedment.runtime.field.method.GetFloat;
@@ -39,6 +44,8 @@ import static com.speedment.runtime.field.internal.util.CollectionUtil.collectio
 import static java.util.Objects.requireNonNull;
 
 /**
+ * Default implementation of the {@link FloatField}-interface.
+ * 
  * @param <ENTITY> entity type
  * @param <D>      database type
  * 
@@ -134,26 +141,26 @@ public final class FloatFieldImpl<ENTITY, D> implements FloatField<ENTITY, D> {
     
     @Override
     public Predicate<ENTITY> notEqual(Float value) {
-        return new FloatEqualPredicate<>(this, value).negate();
+        return new FloatNotEqualPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> lessOrEqual(Float value) {
-        return new FloatGreaterThanPredicate<>(this, value).negate();
+        return new FloatLessOrEqualPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> lessThan(Float value) {
-        return new FloatGreaterOrEqualPredicate<>(this, value).negate();
+        return new FloatLessThanPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> notBetween(Float start, Float end, Inclusion inclusion) {
-        return new FloatBetweenPredicate<>(this, start, end, inclusion).negate();
+        return new FloatNotBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
     public Predicate<ENTITY> notIn(Collection<Float> values) {
-        return new FloatInPredicate<>(this, collectionToSet(values)).negate();
+        return new FloatNotInPredicate<>(this, collectionToSet(values));
     }
 }

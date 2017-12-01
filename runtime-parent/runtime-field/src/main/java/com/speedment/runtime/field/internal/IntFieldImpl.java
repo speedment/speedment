@@ -27,6 +27,11 @@ import com.speedment.runtime.field.internal.predicate.ints.IntEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.ints.IntGreaterOrEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.ints.IntGreaterThanPredicate;
 import com.speedment.runtime.field.internal.predicate.ints.IntInPredicate;
+import com.speedment.runtime.field.internal.predicate.ints.IntLessOrEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.ints.IntLessThanPredicate;
+import com.speedment.runtime.field.internal.predicate.ints.IntNotBetweenPredicate;
+import com.speedment.runtime.field.internal.predicate.ints.IntNotEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.ints.IntNotInPredicate;
 import com.speedment.runtime.field.method.GetInt;
 import com.speedment.runtime.field.method.IntGetter;
 import com.speedment.runtime.field.method.IntSetter;
@@ -39,6 +44,8 @@ import static com.speedment.runtime.field.internal.util.CollectionUtil.collectio
 import static java.util.Objects.requireNonNull;
 
 /**
+ * Default implementation of the {@link IntField}-interface.
+ * 
  * @param <ENTITY> entity type
  * @param <D>      database type
  * 
@@ -134,26 +141,26 @@ public final class IntFieldImpl<ENTITY, D> implements IntField<ENTITY, D> {
     
     @Override
     public Predicate<ENTITY> notEqual(Integer value) {
-        return new IntEqualPredicate<>(this, value).negate();
+        return new IntNotEqualPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> lessOrEqual(Integer value) {
-        return new IntGreaterThanPredicate<>(this, value).negate();
+        return new IntLessOrEqualPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> lessThan(Integer value) {
-        return new IntGreaterOrEqualPredicate<>(this, value).negate();
+        return new IntLessThanPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> notBetween(Integer start, Integer end, Inclusion inclusion) {
-        return new IntBetweenPredicate<>(this, start, end, inclusion).negate();
+        return new IntNotBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
     public Predicate<ENTITY> notIn(Collection<Integer> values) {
-        return new IntInPredicate<>(this, collectionToSet(values)).negate();
+        return new IntNotInPredicate<>(this, collectionToSet(values));
     }
 }

@@ -14,44 +14,43 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.field.internal.predicate.chars;
+package com.speedment.runtime.field.internal.predicate.booleans;
 
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.common.tuple.Tuple1;
 import com.speedment.runtime.field.internal.predicate.AbstractFieldPredicate;
 import com.speedment.runtime.field.predicate.PredicateType;
-import com.speedment.runtime.field.trait.HasCharValue;
-import java.util.Set;
-import static java.util.Objects.requireNonNull;
+import com.speedment.runtime.field.trait.HasBooleanValue;
 
 /**
- * A predicate that evaluates if a value is not included in a set of chars.
+ * A predicate that evaluates if a value is {@code ==} a specified {@code
+ * boolean}.
  * 
  * @param <ENTITY> entity type
  * @param <D>      database type
  * 
  * @author Emil Forslund
- * @since  3.0.11
+ * @since  3.0.0
  */
 @GeneratedCode(value = "Speedment")
-public final class CharNotInPredicate<ENTITY, D> 
-extends AbstractFieldPredicate<ENTITY, HasCharValue<ENTITY, D>> 
-implements Tuple1<Set<Character>> {
+public final class BooleanEqualPredicate<ENTITY, D> 
+extends AbstractFieldPredicate<ENTITY, HasBooleanValue<ENTITY, D>> 
+implements Tuple1<Boolean> {
     
-    private final Set<Character> set;
+    private final boolean value;
     
-    public CharNotInPredicate(HasCharValue<ENTITY, D> field, Set<Character> set) {
-        super(PredicateType.NOT_IN, field, entity -> !set.contains(field.getAsChar(entity)));
-        this.set = requireNonNull(set);
+    public BooleanEqualPredicate(HasBooleanValue<ENTITY, D> field, boolean value) {
+        super(PredicateType.EQUAL, field, entity -> field.getAsBoolean(entity) == value);
+        this.value = value;
     }
     
     @Override
-    public Set<Character> get0() {
-        return set;
+    public Boolean get0() {
+        return value;
     }
     
     @Override
-    public CharInPredicate<ENTITY, D> negate() {
-        return new CharInPredicate<>(getField(), set);
+    public BooleanNotEqualPredicate<ENTITY, D> negate() {
+        return new BooleanNotEqualPredicate<>(getField(), value);
     }
 }

@@ -27,6 +27,11 @@ import com.speedment.runtime.field.internal.predicate.longs.LongEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.longs.LongGreaterOrEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.longs.LongGreaterThanPredicate;
 import com.speedment.runtime.field.internal.predicate.longs.LongInPredicate;
+import com.speedment.runtime.field.internal.predicate.longs.LongLessOrEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.longs.LongLessThanPredicate;
+import com.speedment.runtime.field.internal.predicate.longs.LongNotBetweenPredicate;
+import com.speedment.runtime.field.internal.predicate.longs.LongNotEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.longs.LongNotInPredicate;
 import com.speedment.runtime.field.method.GetLong;
 import com.speedment.runtime.field.method.LongGetter;
 import com.speedment.runtime.field.method.LongSetter;
@@ -39,6 +44,8 @@ import static com.speedment.runtime.field.internal.util.CollectionUtil.collectio
 import static java.util.Objects.requireNonNull;
 
 /**
+ * Default implementation of the {@link LongField}-interface.
+ * 
  * @param <ENTITY> entity type
  * @param <D>      database type
  * 
@@ -134,26 +141,26 @@ public final class LongFieldImpl<ENTITY, D> implements LongField<ENTITY, D> {
     
     @Override
     public Predicate<ENTITY> notEqual(Long value) {
-        return new LongEqualPredicate<>(this, value).negate();
+        return new LongNotEqualPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> lessOrEqual(Long value) {
-        return new LongGreaterThanPredicate<>(this, value).negate();
+        return new LongLessOrEqualPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> lessThan(Long value) {
-        return new LongGreaterOrEqualPredicate<>(this, value).negate();
+        return new LongLessThanPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> notBetween(Long start, Long end, Inclusion inclusion) {
-        return new LongBetweenPredicate<>(this, start, end, inclusion).negate();
+        return new LongNotBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
     public Predicate<ENTITY> notIn(Collection<Long> values) {
-        return new LongInPredicate<>(this, collectionToSet(values)).negate();
+        return new LongNotInPredicate<>(this, collectionToSet(values));
     }
 }

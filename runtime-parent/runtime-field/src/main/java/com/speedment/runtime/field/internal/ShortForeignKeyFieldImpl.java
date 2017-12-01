@@ -31,6 +31,11 @@ import com.speedment.runtime.field.internal.predicate.shorts.ShortEqualPredicate
 import com.speedment.runtime.field.internal.predicate.shorts.ShortGreaterOrEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.shorts.ShortGreaterThanPredicate;
 import com.speedment.runtime.field.internal.predicate.shorts.ShortInPredicate;
+import com.speedment.runtime.field.internal.predicate.shorts.ShortLessOrEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.shorts.ShortLessThanPredicate;
+import com.speedment.runtime.field.internal.predicate.shorts.ShortNotBetweenPredicate;
+import com.speedment.runtime.field.internal.predicate.shorts.ShortNotEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.shorts.ShortNotInPredicate;
 import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.FindFrom;
 import com.speedment.runtime.field.method.GetShort;
@@ -47,6 +52,8 @@ import static com.speedment.runtime.field.internal.util.CollectionUtil.collectio
 import static java.util.Objects.requireNonNull;
 
 /**
+ * Default implementation of the {@link ShortField}-interface.
+ * 
  * @param <ENTITY>    entity type
  * @param <D>         database type
  * @param <FK_ENTITY> foreign entity type
@@ -161,26 +168,26 @@ public final class ShortForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Sho
     
     @Override
     public Predicate<ENTITY> notEqual(Short value) {
-        return new ShortEqualPredicate<>(this, value).negate();
+        return new ShortNotEqualPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> lessOrEqual(Short value) {
-        return new ShortGreaterThanPredicate<>(this, value).negate();
+        return new ShortLessOrEqualPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> lessThan(Short value) {
-        return new ShortGreaterOrEqualPredicate<>(this, value).negate();
+        return new ShortLessThanPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> notBetween(Short start, Short end, Inclusion inclusion) {
-        return new ShortBetweenPredicate<>(this, start, end, inclusion).negate();
+        return new ShortNotBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
     public Predicate<ENTITY> notIn(Collection<Short> values) {
-        return new ShortInPredicate<>(this, collectionToSet(values)).negate();
+        return new ShortNotInPredicate<>(this, collectionToSet(values));
     }
 }

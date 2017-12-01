@@ -40,7 +40,7 @@ implements Tuple1<Set<Integer>> {
     
     private final Set<Integer> set;
     
-    IntNotInPredicate(HasIntValue<ENTITY, D> field, Set<Integer> set) {
+    public IntNotInPredicate(HasIntValue<ENTITY, D> field, Set<Integer> set) {
         super(PredicateType.NOT_IN, field, entity -> !set.contains(field.getAsInt(entity)));
         this.set = requireNonNull(set);
     }

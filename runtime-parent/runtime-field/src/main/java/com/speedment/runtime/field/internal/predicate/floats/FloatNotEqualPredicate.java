@@ -23,6 +23,9 @@ import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasFloatValue;
 
 /**
+ * A predicate that evaluates if a value is {@code !=} a specified {@code
+ * float}.
+ * 
  * @param <ENTITY> entity type
  * @param <D>      database type
  * 

@@ -23,6 +23,9 @@ import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasDoubleValue;
 
 /**
+ * A predicate that evaluates if a value is {@code <=} a specified {@code
+ * double}.
+ * 
  * @param <ENTITY> entity type
  * @param <D>      database type
  * 

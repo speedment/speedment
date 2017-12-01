@@ -21,6 +21,7 @@ import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.BooleanFieldImpl;
 import com.speedment.runtime.field.method.BooleanGetter;
 import com.speedment.runtime.field.method.BooleanSetter;
+import com.speedment.runtime.field.trait.HasBooleanOperators;
 import com.speedment.runtime.field.trait.HasBooleanValue;
 import com.speedment.runtime.typemapper.TypeMapper;
 
@@ -36,7 +37,7 @@ import com.speedment.runtime.typemapper.TypeMapper;
  * @see ReferenceField
  */
 @GeneratedCode(value = "Speedment")
-public interface BooleanField<ENTITY, D> extends Field<ENTITY>, HasBooleanValue<ENTITY, D> {
+public interface BooleanField<ENTITY, D> extends Field<ENTITY>, HasBooleanValue<ENTITY, D>, HasBooleanOperators<ENTITY> {
     
     /**
      * Creates a new {@link BooleanField} using the default implementation.

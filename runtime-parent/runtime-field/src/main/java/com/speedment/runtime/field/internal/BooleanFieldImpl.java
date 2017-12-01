@@ -20,13 +20,19 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.BooleanField;
 import com.speedment.runtime.field.internal.method.GetBooleanImpl;
+import com.speedment.runtime.field.internal.predicate.booleans.BooleanEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.booleans.BooleanNotEqualPredicate;
 import com.speedment.runtime.field.method.BooleanGetter;
 import com.speedment.runtime.field.method.BooleanSetter;
 import com.speedment.runtime.field.method.GetBoolean;
+import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.typemapper.TypeMapper;
+import java.util.function.Predicate;
 import static java.util.Objects.requireNonNull;
 
 /**
+ * Default implementation of the {@link BooleanField}-interface.
+ * 
  * @param <ENTITY> entity type
  * @param <D>      database type
  * 
@@ -78,5 +84,15 @@ public final class BooleanFieldImpl<ENTITY, D> implements BooleanField<ENTITY, D
     @Override
     public boolean isUnique() {
         return unique;
+    }
+    
+    @Override
+    public FieldPredicate<ENTITY> equal(boolean value) {
+        return new BooleanEqualPredicate<>(this, value);
+    }
+    
+    @Override
+    public Predicate<ENTITY> notEqual(boolean value) {
+        return new BooleanNotEqualPredicate<>(this, value);
     }
 }

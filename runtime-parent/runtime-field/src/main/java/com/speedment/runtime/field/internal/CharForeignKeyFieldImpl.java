@@ -31,6 +31,11 @@ import com.speedment.runtime.field.internal.predicate.chars.CharEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.chars.CharGreaterOrEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.chars.CharGreaterThanPredicate;
 import com.speedment.runtime.field.internal.predicate.chars.CharInPredicate;
+import com.speedment.runtime.field.internal.predicate.chars.CharLessOrEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.chars.CharLessThanPredicate;
+import com.speedment.runtime.field.internal.predicate.chars.CharNotBetweenPredicate;
+import com.speedment.runtime.field.internal.predicate.chars.CharNotEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.chars.CharNotInPredicate;
 import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.CharGetter;
 import com.speedment.runtime.field.method.CharSetter;
@@ -47,6 +52,8 @@ import static com.speedment.runtime.field.internal.util.CollectionUtil.collectio
 import static java.util.Objects.requireNonNull;
 
 /**
+ * Default implementation of the {@link CharField}-interface.
+ * 
  * @param <ENTITY>    entity type
  * @param <D>         database type
  * @param <FK_ENTITY> foreign entity type
@@ -161,26 +168,26 @@ public final class CharForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Char
     
     @Override
     public Predicate<ENTITY> notEqual(Character value) {
-        return new CharEqualPredicate<>(this, value).negate();
+        return new CharNotEqualPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> lessOrEqual(Character value) {
-        return new CharGreaterThanPredicate<>(this, value).negate();
+        return new CharLessOrEqualPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> lessThan(Character value) {
-        return new CharGreaterOrEqualPredicate<>(this, value).negate();
+        return new CharLessThanPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> notBetween(Character start, Character end, Inclusion inclusion) {
-        return new CharBetweenPredicate<>(this, start, end, inclusion).negate();
+        return new CharNotBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
     public Predicate<ENTITY> notIn(Collection<Character> values) {
-        return new CharInPredicate<>(this, collectionToSet(values)).negate();
+        return new CharNotInPredicate<>(this, collectionToSet(values));
     }
 }

@@ -23,6 +23,8 @@ import com.speedment.runtime.field.predicate.PredicateType;
 import com.speedment.runtime.field.trait.HasCharValue;
 
 /**
+ * A predicate that evaluates if a value is {@code >} a specified {@code char}.
+ * 
  * @param <ENTITY> entity type
  * @param <D>      database type
  * 
