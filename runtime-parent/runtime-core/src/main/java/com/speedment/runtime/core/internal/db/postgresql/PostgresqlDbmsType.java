@@ -180,6 +180,7 @@ public final class PostgresqlDbmsType extends AbstractDbmsType {
 
             dbms.getPort().ifPresent(p -> result.append(":").append(p));
             result.append("/").append(dbms.getName());
+            result.append("?stringtype=unspecified");  // to allow database JSON types to be written
             return result.toString();
         }
     }
