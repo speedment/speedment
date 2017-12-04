@@ -25,7 +25,7 @@ import java.util.function.Predicate;
  * @param <ENTITY> the entity type
  *
  * @author Per Minborg
- * @since 3.0.17
+ * @since  3.0.17
  */
 public interface HasBooleanOperators<ENTITY> extends Field<ENTITY> {
 
@@ -70,7 +70,7 @@ public interface HasBooleanOperators<ENTITY> extends Field<ENTITY> {
      * this Field is <em>false</em>.
      */
     default Predicate<ENTITY> isFalse() {
-        return equal(true);
+        return equal(false);
     }
 
 }

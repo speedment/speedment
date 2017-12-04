@@ -23,7 +23,12 @@ import com.speedment.runtime.core.manager.Persister;
 import com.speedment.runtime.core.manager.Remover;
 import com.speedment.runtime.core.manager.Updater;
 import com.speedment.runtime.field.Field;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import static java.util.stream.Collectors.toMap;
 import java.util.stream.Stream;
+import static jdk.nashorn.internal.runtime.Debug.id;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -69,6 +74,53 @@ public class BuilderTest {
         printInfo(bo);
     }
 
+    /*
+    void update(long id) {
+        
+        // Read the updates entity
+        Point newPoint = sqlMgr.stream()
+            .filter(Point.ID.equal(id)
+            .findFirst()
+            .get());
+        
+        // Refresh the in-JVM-memory store
+        BulkOperation bo = BulkOperation.builder()
+            .update(mgr)
+            .where(Point.ID.equals(id))
+            .compute(op -> newPoint);
+            .build();
+        
+        dataStore.createJob(bo);
+        
+        // Batch update from database
+        
+    }
+
+    void update(List<Long> ids) {
+        
+        // Read all updates entities using a single select and collect them to a Map
+        Map<Long, Point> updates = sqlMgr.stream()
+            .filter(Point.ID.in(ids))
+            .collect(
+                toMap(
+                    Point::getId, 
+                    Function.identity()
+                )
+            );
+        
+        // Refresh the in-JVM-memory store
+        BulkOperation bo = BulkOperation.builder()
+            .update(memMgr)
+            .where(Point.ID.in(updates.keySet()))
+            .compute(op -> updates.get(op.getId()));
+            .build();
+        
+        dataStore.createJob(bo);
+        
+    }
+    
+    */
+    
     @Test
     public void testMixed() {
         System.out.println("testMixed");

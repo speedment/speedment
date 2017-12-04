@@ -27,6 +27,11 @@ import com.speedment.runtime.field.internal.predicate.bytes.ByteEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.bytes.ByteGreaterOrEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.bytes.ByteGreaterThanPredicate;
 import com.speedment.runtime.field.internal.predicate.bytes.ByteInPredicate;
+import com.speedment.runtime.field.internal.predicate.bytes.ByteLessOrEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.bytes.ByteLessThanPredicate;
+import com.speedment.runtime.field.internal.predicate.bytes.ByteNotBetweenPredicate;
+import com.speedment.runtime.field.internal.predicate.bytes.ByteNotEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.bytes.ByteNotInPredicate;
 import com.speedment.runtime.field.method.ByteGetter;
 import com.speedment.runtime.field.method.ByteSetter;
 import com.speedment.runtime.field.method.GetByte;
@@ -39,6 +44,8 @@ import static com.speedment.runtime.field.internal.util.CollectionUtil.collectio
 import static java.util.Objects.requireNonNull;
 
 /**
+ * Default implementation of the {@link ByteField}-interface.
+ * 
  * @param <ENTITY> entity type
  * @param <D>      database type
  * 
@@ -134,26 +141,26 @@ public final class ByteFieldImpl<ENTITY, D> implements ByteField<ENTITY, D> {
     
     @Override
     public Predicate<ENTITY> notEqual(Byte value) {
-        return new ByteEqualPredicate<>(this, value).negate();
+        return new ByteNotEqualPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> lessOrEqual(Byte value) {
-        return new ByteGreaterThanPredicate<>(this, value).negate();
+        return new ByteLessOrEqualPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> lessThan(Byte value) {
-        return new ByteGreaterOrEqualPredicate<>(this, value).negate();
+        return new ByteLessThanPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> notBetween(Byte start, Byte end, Inclusion inclusion) {
-        return new ByteBetweenPredicate<>(this, start, end, inclusion).negate();
+        return new ByteNotBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
     public Predicate<ENTITY> notIn(Collection<Byte> values) {
-        return new ByteInPredicate<>(this, collectionToSet(values)).negate();
+        return new ByteNotInPredicate<>(this, collectionToSet(values));
     }
 }

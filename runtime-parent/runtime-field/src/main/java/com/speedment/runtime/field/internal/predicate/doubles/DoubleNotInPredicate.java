@@ -40,7 +40,7 @@ implements Tuple1<Set<Double>> {
     
     private final Set<Double> set;
     
-    DoubleNotInPredicate(HasDoubleValue<ENTITY, D> field, Set<Double> set) {
+    public DoubleNotInPredicate(HasDoubleValue<ENTITY, D> field, Set<Double> set) {
         super(PredicateType.NOT_IN, field, entity -> !set.contains(field.getAsDouble(entity)));
         this.set = requireNonNull(set);
     }

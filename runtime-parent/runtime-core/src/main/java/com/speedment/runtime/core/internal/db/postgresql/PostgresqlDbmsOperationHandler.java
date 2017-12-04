@@ -73,4 +73,9 @@ public final class PostgresqlDbmsOperationHandler extends AbstractDbmsOperationH
         statement.setFetchSize(FETCH_SIZE);
     }
 
+    @Override
+    public void configureSelect(ResultSet resultSet) throws SQLException {
+        resultSet.setFetchSize(FETCH_SIZE);
+    }
+    
 }

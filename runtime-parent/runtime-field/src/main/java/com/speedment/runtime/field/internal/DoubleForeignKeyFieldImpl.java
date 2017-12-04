@@ -31,6 +31,11 @@ import com.speedment.runtime.field.internal.predicate.doubles.DoubleEqualPredica
 import com.speedment.runtime.field.internal.predicate.doubles.DoubleGreaterOrEqualPredicate;
 import com.speedment.runtime.field.internal.predicate.doubles.DoubleGreaterThanPredicate;
 import com.speedment.runtime.field.internal.predicate.doubles.DoubleInPredicate;
+import com.speedment.runtime.field.internal.predicate.doubles.DoubleLessOrEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.doubles.DoubleLessThanPredicate;
+import com.speedment.runtime.field.internal.predicate.doubles.DoubleNotBetweenPredicate;
+import com.speedment.runtime.field.internal.predicate.doubles.DoubleNotEqualPredicate;
+import com.speedment.runtime.field.internal.predicate.doubles.DoubleNotInPredicate;
 import com.speedment.runtime.field.method.BackwardFinder;
 import com.speedment.runtime.field.method.DoubleGetter;
 import com.speedment.runtime.field.method.DoubleSetter;
@@ -47,6 +52,8 @@ import static com.speedment.runtime.field.internal.util.CollectionUtil.collectio
 import static java.util.Objects.requireNonNull;
 
 /**
+ * Default implementation of the {@link DoubleField}-interface.
+ * 
  * @param <ENTITY>    entity type
  * @param <D>         database type
  * @param <FK_ENTITY> foreign entity type
@@ -161,26 +168,26 @@ public final class DoubleForeignKeyFieldImpl<ENTITY, D, FK_ENTITY> implements Do
     
     @Override
     public Predicate<ENTITY> notEqual(Double value) {
-        return new DoubleEqualPredicate<>(this, value).negate();
+        return new DoubleNotEqualPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> lessOrEqual(Double value) {
-        return new DoubleGreaterThanPredicate<>(this, value).negate();
+        return new DoubleLessOrEqualPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> lessThan(Double value) {
-        return new DoubleGreaterOrEqualPredicate<>(this, value).negate();
+        return new DoubleLessThanPredicate<>(this, value);
     }
     
     @Override
     public Predicate<ENTITY> notBetween(Double start, Double end, Inclusion inclusion) {
-        return new DoubleBetweenPredicate<>(this, start, end, inclusion).negate();
+        return new DoubleNotBetweenPredicate<>(this, start, end, inclusion);
     }
     
     @Override
     public Predicate<ENTITY> notIn(Collection<Double> values) {
-        return new DoubleInPredicate<>(this, collectionToSet(values)).negate();
+        return new DoubleNotInPredicate<>(this, collectionToSet(values));
     }
 }

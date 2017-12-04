@@ -17,6 +17,10 @@
 package com.speedment.tool.core.internal.controller;
 
 import com.speedment.common.injector.annotation.Inject;
+import com.speedment.generator.core.component.EventComponent;
+import com.speedment.generator.core.event.AfterGenerate;
+import com.speedment.generator.core.event.BeforeGenerate;
+import com.speedment.generator.core.event.FileGenerated;
 import com.speedment.tool.core.brand.Brand;
 import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.resource.FontAwesome;
@@ -28,6 +32,10 @@ import javafx.scene.image.ImageView;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import static javafx.application.Platform.runLater;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.layout.HBox;
 
 /**
  *
@@ -35,12 +43,14 @@ import java.util.ResourceBundle;
  */
 public final class ToolbarController implements Initializable {
 
-    private @Inject UserInterfaceComponent ui;
-    private @Inject Brand uiBrand;
+    @Inject private UserInterfaceComponent ui;
+    @Inject private Brand uiBrand;
+    @Inject private EventComponent eventComponent;
     
     private @FXML Button buttonReload;
     private @FXML Button buttonGenerate;
     private @FXML ImageView brand;
+    private @FXML HBox hBox;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -49,7 +59,18 @@ public final class ToolbarController implements Initializable {
         
         buttonReload.setGraphic(FontAwesome.REFRESH.view());
         buttonGenerate.setGraphic(FontAwesome.PLAY_CIRCLE.view());
+        
+        buttonReload.setTooltip(new Tooltip("Reload the metadata from the database and merge any changes with the existing configuration."));
+        buttonGenerate.setTooltip(new Tooltip("Generate code using the current configuration. Automatically save the configuration before generation."));
 
+        
+        final Label progressLabel = new Label("");
+        hBox.getChildren().add(2, progressLabel);
+               
+        eventComponent.on(BeforeGenerate.class, bg -> runLater(() -> progressLabel.setText("Generating...")));
+        eventComponent.on(FileGenerated.class, fg -> runLater(() -> progressLabel.setText(fg.meta().getModel().getName())));
+        eventComponent.on(AfterGenerate.class, ag -> runLater(() -> progressLabel.setText("")));
+        
         uiBrand.logoLarge()
             .map(Image::new)
             .ifPresent(brand::setImage);

@@ -84,11 +84,11 @@ public final class WorkspaceController implements Initializable {
                         
                         workspace.textProperty().bind(
                             Bindings.createStringBinding(() -> String.format(
-                                "Editing %s '%s' %s",
+                                "Speedment settings for %s '%s' %s",
                                 withName instanceof Table
                                     ? ((Table) withName).isView()
-                                        ? "View" : "Table"
-                                    : withName.mainInterface().getSimpleName(),
+                                        ? "view" : "table"
+                                    : withName.mainInterface().getSimpleName().toLowerCase(),
                                 withName.getName(),
                                 extraInfo.orElse("")
                             ), withName.nameProperty())

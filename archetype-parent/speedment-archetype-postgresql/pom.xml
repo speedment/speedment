@@ -26,7 +26,7 @@
     <parent>
         <groupId>com.speedment.archetypes</groupId>
         <artifactId>archetypes</artifactId>
-        <version>3.0.18</version>
+        <version>3.0.19-SNAPSHOT</version>
     </parent>
             
     <artifactId>speedment-archetype-postgresql</artifactId>
@@ -35,7 +35,7 @@
     <name>Speedment - Archetypes - PostgreSQL</name>
     
     <properties>
-        <postgresql.version>42.0.0</postgresql.version>
+        <postgresql.version>42.1.4</postgresql.version>
     </properties>
                                                
     <build>
