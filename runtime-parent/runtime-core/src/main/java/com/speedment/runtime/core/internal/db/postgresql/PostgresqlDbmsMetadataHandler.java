@@ -47,7 +47,8 @@ public final class PostgresqlDbmsMetadataHandler extends AbstractDbmsMetadataHan
         javaTypeMap.put("time_stamp", Timestamp.class);
         javaTypeMap.put("yes_or_no", String.class);
 
-        javaTypeMap.put("JSON", String.class);
+        javaTypeMap.put("json", String.class);
+        javaTypeMap.put("jsonb", String.class);
 
         javaTypeMap.addRule((sqlTypeMapping, md) -> {
             // Map a BIT(1) to boolean
