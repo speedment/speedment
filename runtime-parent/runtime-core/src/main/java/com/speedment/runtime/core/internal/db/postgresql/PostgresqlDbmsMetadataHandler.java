@@ -63,6 +63,18 @@ public final class PostgresqlDbmsMetadataHandler extends AbstractDbmsMetadataHan
             } else return Optional.empty();
         });
 
+        javaTypeMap.addRule((sqlTypeMapping, md) -> {
+            if ("_text".equalsIgnoreCase(md.getTypeName()) && md.getDataType() == 2003) {
+                return Optional.of(String.class);
+            } else return Optional.empty();
+        });
+
+        javaTypeMap.addRule((sqlTypeMapping, md) -> {
+            if ("tsvector".equalsIgnoreCase(md.getTypeName()) && md.getDataType() == 1111) {
+                return Optional.of(String.class);
+            } else return Optional.empty();
+        });
+
         return javaTypeMap;
     }
     
