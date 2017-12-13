@@ -17,25 +17,22 @@
 package com.speedment.maven.abstractmojo;
 
 import com.speedment.runtime.core.Speedment;
+import com.speedment.tool.core.exception.SpeedmentToolException;
 import com.speedment.tool.core.internal.util.ConfigFileHelper;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.project.MavenProject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.File;
 import java.nio.file.Paths;
-import org.apache.maven.project.MavenProject;
-import org.powermock.core.classloader.annotations.PrepareEverythingForTest;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-import static org.mockito.Mockito.mock;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-// Since ConfigFileHelper is final we need to use Powermock so it is possible to actually mock it.
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ConfigFileHelper.class})
 public class AbstractReloadMojoTest {
@@ -68,6 +65,36 @@ public class AbstractReloadMojoTest {
         // Given
         when(mockedSpeedment.getOrThrow(ConfigFileHelper.class)).thenReturn(mockedConfigFileHelper);
         mojo.setConfigFile(mockedConfigLocation);
+
+        // When
+        mojo.execute(mockedSpeedment);
+
+        // Then
+        verify(mockedConfigFileHelper).setCurrentlyOpenFile(Paths.get("baseDir", mockedConfigLocation).toFile());
+        verify(mockedConfigFileHelper).loadFromDatabaseAndSaveToFile();
+    }
+
+    @Test(expected = MojoExecutionException.class)
+    public void executeSetCurrentlyOpenFileSpeedmentToolException() throws Exception {
+        // Given
+        when(mockedSpeedment.getOrThrow(ConfigFileHelper.class)).thenReturn(mockedConfigFileHelper);
+        mojo.setConfigFile(mockedConfigLocation);
+        doThrow(new SpeedmentToolException("test exception")).when(mockedConfigFileHelper).setCurrentlyOpenFile(any(File.class));
+
+        // When
+        mojo.execute(mockedSpeedment);
+
+        // Then
+        verify(mockedConfigFileHelper).setCurrentlyOpenFile(Paths.get("baseDir", mockedConfigLocation).toFile());
+        verify(mockedConfigFileHelper).loadFromDatabaseAndSaveToFile();
+    }
+
+    @Test(expected = MojoExecutionException.class)
+    public void executeLoadFromDatabaseAndSaveToFileSpeedmentToolException() throws Exception {
+        // Given
+        when(mockedSpeedment.getOrThrow(ConfigFileHelper.class)).thenReturn(mockedConfigFileHelper);
+        mojo.setConfigFile(mockedConfigLocation);
+        doThrow(new SpeedmentToolException("test exception")).when(mockedConfigFileHelper).loadFromDatabaseAndSaveToFile();
 
         // When
         mojo.execute(mockedSpeedment);
