@@ -56,8 +56,10 @@ public abstract class AbstractReloadMojo extends AbstractSpeedmentMojo {
     
     @Override
     protected void execute(Speedment speedment) throws MojoExecutionException, MojoFailureException {
-        getLog().info("Saving default configuration from database to '" + configLocation().toAbsolutePath() + "'.");
-        
+        if (getLog().isInfoEnabled()) {
+            getLog().info("Saving default configuration from database to '" + configLocation().toAbsolutePath() + "'.");
+        }
+
         final ConfigFileHelper helper = speedment.getOrThrow(ConfigFileHelper.class);
         
         try {
