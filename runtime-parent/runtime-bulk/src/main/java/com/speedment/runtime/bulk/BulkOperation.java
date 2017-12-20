@@ -97,7 +97,7 @@ public interface BulkOperation {
              * @param filter to apply
              * @return a builder where the given filter has been applied
              */
-            B where(Predicate<? super ENTITY> filter);
+            B where(Predicate<ENTITY> filter);
         }
 
         interface HasSet<ENTITY, B> {

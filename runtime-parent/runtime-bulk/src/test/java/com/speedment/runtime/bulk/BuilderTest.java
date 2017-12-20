@@ -156,21 +156,21 @@ public class BuilderTest {
                     break;
                 }
                 case UPDATE: {
-                    final UpdateOperation<?> po = (UpdateOperation) o;
-                    po.predicates().forEachOrdered(p -> {
+                    final UpdateOperation<?> uo = (UpdateOperation) o;
+                    uo.predicates().forEachOrdered(p -> {
                         System.out.println("     peredicate:" + p);
                     });
-                    po.consumers().forEachOrdered(c -> {
+                    uo.consumers().forEachOrdered(c -> {
                         System.out.println("     consumer  :" + c);
                     });
-                    po.mappers().forEachOrdered(m -> {
+                    uo.mappers().forEachOrdered(m -> {
                         System.out.println("     mapper    :" + m);
                     });
                     break;
                 }
                 case REMOVE: {
-                    final RemoveOperation<?> po = (RemoveOperation) o;
-                    po.predicates().forEachOrdered(p -> {
+                    final RemoveOperation<?> ro = (RemoveOperation) o;
+                    ro.predicates().forEachOrdered(p -> {
                         System.out.println("     peredicate:" + p);
                     });
                     break;

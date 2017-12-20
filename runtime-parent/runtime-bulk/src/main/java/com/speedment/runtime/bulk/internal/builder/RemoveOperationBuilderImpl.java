@@ -33,7 +33,7 @@ import java.util.function.Predicate;
  */
 public final class RemoveOperationBuilderImpl<ENTITY> extends AbstractOperationBuilder<ENTITY> implements Builder.Remove<ENTITY> {
 
-    private final List<Predicate<? super ENTITY>> filters;
+    private final List<Predicate<ENTITY>> filters;
 
     public RemoveOperationBuilderImpl(Manager<ENTITY> manager, BulkOperationBuilder parent) {
         super(manager, parent);
@@ -42,8 +42,8 @@ public final class RemoveOperationBuilderImpl<ENTITY> extends AbstractOperationB
 
     @Override
     @SuppressWarnings("unchecked")
-    public Remove<ENTITY> where(Predicate<? super ENTITY> filter) {
-        filters.add((Predicate<Object>) filter);
+    public Remove<ENTITY> where(Predicate<ENTITY> filter) {
+        filters.add(filter);
         return this;
     }
 

@@ -33,13 +33,13 @@ import java.util.stream.Stream;
  */
 public final class UpdateOperationImpl<ENTITY> extends AbstractOperation<ENTITY> implements UpdateOperation<ENTITY> {
 
-    private final List<Predicate<? super ENTITY>> predicates;
+    private final List<Predicate<ENTITY>> predicates;
     private final List<Function<? super ENTITY, ? extends ENTITY>> mappers;
     private final List<Consumer<? super ENTITY>> consumers;
 
     public UpdateOperationImpl(
         final Manager<ENTITY> manager,
-        final List<Predicate<? super ENTITY>> predicates,
+        final List<Predicate<ENTITY>> predicates,
         final List<Function<? super ENTITY, ? extends ENTITY>> mappers,
         final List<Consumer<? super ENTITY>> consumers
     ) {
@@ -50,7 +50,7 @@ public final class UpdateOperationImpl<ENTITY> extends AbstractOperation<ENTITY>
     }
 
     @Override
-    public Stream<Predicate<? super ENTITY>> predicates() {
+    public Stream<Predicate<ENTITY>> predicates() {
         return predicates.stream();
     }
 

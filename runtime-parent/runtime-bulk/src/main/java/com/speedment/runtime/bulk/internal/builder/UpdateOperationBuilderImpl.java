@@ -34,7 +34,7 @@ import java.util.function.Predicate;
  */
 public final class UpdateOperationBuilderImpl<ENTITY> extends AbstractOperationBuilder<ENTITY> implements Builder.Update<ENTITY> {
 
-    private final List<Predicate<? super ENTITY>> filters;
+    private final List<Predicate<ENTITY>> filters;
     private final List<Function<? super ENTITY, ? extends ENTITY>> mappers;
     private final List<Consumer<? super ENTITY>> consumers;
 
@@ -46,7 +46,7 @@ public final class UpdateOperationBuilderImpl<ENTITY> extends AbstractOperationB
     }
 
     @Override
-    public Update<ENTITY> where(Predicate<? super ENTITY> filter) {
+    public Update<ENTITY> where(Predicate<ENTITY> filter) {
         filters.add(filter);
         return this;
     }

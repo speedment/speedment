@@ -26,5 +26,5 @@ import java.util.stream.Stream;
  */
 public interface HasPredicates<ENTITY> {
 
-    Stream<Predicate<? super ENTITY>> predicates();
+    Stream<Predicate<ENTITY>> predicates();
 }

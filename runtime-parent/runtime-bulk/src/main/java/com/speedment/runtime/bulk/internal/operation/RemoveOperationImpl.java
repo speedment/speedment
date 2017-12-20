@@ -31,18 +31,18 @@ import java.util.stream.Stream;
  */
 public final class RemoveOperationImpl<ENTITY> extends AbstractOperation<ENTITY> implements RemoveOperation<ENTITY> {
 
-    private final List<Predicate<? super ENTITY>> predicates;
+    private final List<Predicate<ENTITY>> predicates;
 
     public RemoveOperationImpl(
         final Manager<ENTITY> manager,
-        final List<Predicate<? super ENTITY>> predicates
+        final List<Predicate<ENTITY>> predicates
     ) {
         super(Type.REMOVE, manager);
         this.predicates = new ArrayList<>(requireNonNull(predicates));
     }
 
     @Override
-    public Stream<Predicate<? super ENTITY>> predicates() {
+    public Stream<Predicate<ENTITY>> predicates() {
         return predicates.stream();
     }
 
