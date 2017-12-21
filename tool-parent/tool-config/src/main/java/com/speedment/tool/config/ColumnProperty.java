@@ -37,15 +37,16 @@ import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
 public final class ColumnProperty 
 extends AbstractChildDocumentProperty<Table, ColumnProperty> 
 implements Column,
-        HasEnabledProperty,
-        HasExpandedProperty,
-        HasIdProperty,
-        HasNameProperty,
-        HasAliasProperty,
-        HasNullableProperty,
-        HasTypeMapperProperty,
-        HasOrdinalPositionProperty,
-        HasEnumConstantsProperty {
+           HasEnabledProperty,
+           HasExpandedProperty,
+           HasIdProperty,
+           HasNameProperty,
+           HasAliasProperty,
+           HasNullableProperty,
+           HasTypeMapperProperty,
+           HasOrdinalPositionProperty,
+           HasEnumConstantsProperty,
+           HasNameProtectedProperty {
 
     public ColumnProperty(Table parent) {
         super(parent);
@@ -53,7 +54,7 @@ implements Column,
 
     @Override
     public StringProperty nameProperty() {
-        return HasNameProperty.super.nameProperty();
+        return HasNameProtectedProperty.super.nameProperty();
     }
 
     public BooleanProperty autoIncrementProperty() {
