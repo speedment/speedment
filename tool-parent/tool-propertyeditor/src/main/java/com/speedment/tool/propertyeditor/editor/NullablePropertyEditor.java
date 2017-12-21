@@ -34,6 +34,7 @@ public class NullablePropertyEditor<T extends HasNullableProperty> implements Pr
     @Override
     public Stream<Item> fieldsFor(T document) {
         return Stream.of(new NullableItem(
+            document,
             document.nullableProperty(),
             document.nullableImplementationProperty()
         ));

@@ -17,7 +17,9 @@
 package com.speedment.tool.propertyeditor.item;
 
 
+import com.speedment.runtime.config.Document;
 import com.speedment.runtime.core.util.StaticClassUtil;
+import com.speedment.tool.config.trait.HasNameProtectedProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -38,6 +40,8 @@ public class ItemUtil {
     public static final String DATABASE_RELATION_TOOLTIP = 
         "This field should ONLY be changed to reflect changes made in the underlying database.\nEnable editing by by right clicking on the field.";
 
+
+
     /**
      * Makes a node disabled by default, and requires that the user right-clicks
      * the node to enable it.
@@ -46,11 +50,15 @@ public class ItemUtil {
      * should only be edited under certain conditions, such as the Table.Name
      * field
      *
-     * @param node          the node to decorate
-     * @param tooltipText   the tooltip text displayed while the node is disabled
-     * @return              the decorated node, which will be wrapped in a StackPane
+     * @param node         the node to decorate
+     * @param doc          the document
+     * @param tooltipText  the tooltip text displayed while the node is disabled
+     * @return             the decorated node, which will be wrapped in a StackPane
      */
-    public static Node lockDecorator(Node node, String tooltipText) {
+    public static Node lockDecorator(Node node, Document doc, String tooltipText) {
+        if (doc instanceof HasNameProtectedProperty
+        && !((HasNameProtectedProperty) doc).isNameProtected()) return node;
+
         node.setDisable(true);
 
         final StackPane pane = new StackPane();
@@ -73,7 +81,12 @@ public class ItemUtil {
             Tooltip.uninstall(pane, tooltip);
             pane.removeEventHandler(MouseEvent.MOUSE_PRESSED, contextMenuToggle);
             node.setDisable(false);
+            if (doc instanceof HasNameProtectedProperty) {
+                ((HasNameProtectedProperty) doc)
+                    .nameProtectedProperty().set(false);
+            }
         };
+
         item.setOnAction(menuItemClicked);
 
         pane.setOnMousePressed(contextMenuToggle);

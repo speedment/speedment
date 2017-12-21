@@ -37,7 +37,7 @@ public class AutoIncrementPropertyEditor<T extends ColumnProperty> implements Pr
                 document.autoIncrementProperty(),
                 "If this column will increment automatically for each new entity.",
                 (editor) -> 
-                    ItemUtil.lockDecorator(editor, ItemUtil.DATABASE_RELATION_TOOLTIP))            
+                    ItemUtil.lockDecorator(editor, document, ItemUtil.DATABASE_RELATION_TOOLTIP))
         );
     }
 }

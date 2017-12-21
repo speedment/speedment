@@ -17,13 +17,14 @@
 package com.speedment.tool.propertyeditor.editor;
 
 
-import com.speedment.runtime.config.Project;
 import com.speedment.tool.config.trait.HasNameProperty;
+import com.speedment.tool.config.trait.HasNameProtectedProperty;
 import com.speedment.tool.propertyeditor.PropertyEditor;
-import com.speedment.tool.propertyeditor.item.ItemUtil;
 import com.speedment.tool.propertyeditor.item.SimpleTextFieldItem;
 
 import java.util.stream.Stream;
+
+import static com.speedment.tool.propertyeditor.item.ItemUtil.lockDecorator;
 
 /**
  *
@@ -36,17 +37,15 @@ public class NamePropertyEditor<T extends HasNameProperty> implements PropertyEd
     @Override
     public Stream<PropertyEditor.Item> fieldsFor(T document) {
         return Stream.of(new SimpleTextFieldItem(
-                document.mainInterface().getSimpleName() + " Name",
-                document.nameProperty(),
-                "The name of the persisted entity in the database. This should only be modified if the database has been changed!",
-                (document instanceof Project) 
-                    ? (editor) -> {return editor;} 
-                    : (editor) -> ItemUtil.lockDecorator(
-                        editor, 
-                        "This field should ONLY be changed to reflect changes made in the underlying database. "
-                      + "If you want to change the name of this entity in Java, consider editing the Alias field instead."
-                      + "\nEnable editing by by right clicking on the field.") 
-            )
-        );
+            document.mainInterface().getSimpleName() + " Name",
+            document.nameProperty(),
+            "The name of the persisted entity in the database. This should only be modified if the database has been changed!",
+            editor -> document instanceof HasNameProtectedProperty ?
+                lockDecorator(editor, (HasNameProtectedProperty) document,
+                "This field should ONLY be changed to reflect changes made in the underlying database. "
+                + "If you want to change the name of this entity in Java, consider editing the Alias field instead."
+                + "\nEnable editing by by right clicking on the field."
+            ) : editor
+        ));
     }
 }

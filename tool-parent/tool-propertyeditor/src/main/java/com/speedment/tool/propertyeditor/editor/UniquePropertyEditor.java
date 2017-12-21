@@ -38,7 +38,7 @@ public class UniquePropertyEditor<T extends IndexProperty> implements PropertyEd
                 "Is Unique", 
                 document.uniqueProperty(), 
                 "True if elements in this index are unique.",
-                (editor) -> ItemUtil.lockDecorator(editor, ItemUtil.DATABASE_RELATION_TOOLTIP)
+                (editor) -> ItemUtil.lockDecorator(editor, document, ItemUtil.DATABASE_RELATION_TOOLTIP)
             )
         );
     }
