@@ -34,6 +34,7 @@ public interface PrimaryKeyColumn extends
     HasParent<Table>,
     HasId,    
     HasName,
+    HasEnabled,
     HasOrdinalPosition,
     HasColumn,
     HasMainInterface,
