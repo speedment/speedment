@@ -22,20 +22,18 @@ import com.speedment.runtime.config.internal.util.Trees;
 import com.speedment.runtime.config.trait.HasAlias;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasParent;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import static java.util.Objects.requireNonNull;
-import java.util.Optional;
-import java.util.StringJoiner;
+
+import java.util.*;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
-import java.util.stream.Stream;
 
 /**
  * Common utility methods for working with instances of the {@code Document}
@@ -347,7 +345,7 @@ public final class DocumentUtil {
             + " {"
             + MapStream.of(document.getData())
             .mapValue(VALUE_MAPPER)
-            .map((k, v) -> "\"" + k + "\": " + v.toString())
+            .map((k, v) -> "\"" + k + "\": " + (v == null ? "null" : (v instanceof String ? ("\"" + v + "\"") : v.toString())))
             .collect(joining(", "))
             + "}";
     }
