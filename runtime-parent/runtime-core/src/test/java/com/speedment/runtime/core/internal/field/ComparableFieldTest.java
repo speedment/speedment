@@ -63,15 +63,35 @@ public class ComparableFieldTest extends BaseFieldTest {
     }
 
     @Test
+    public void testIsNull() throws Exception {
+        assertEquals(
+            collect(e -> e.getName() == null).size(),
+            collect(NAME.isNull()).size()
+        );
+    }
+
+    @Test
+    public void testIsNotNull() throws Exception {
+        assertEquals(
+            collect(e -> e.getName() != null).size(),
+            collect(NAME.isNotNull()).size()
+        );
+    }
+
+    @Test
     public void testEqual() throws Exception {
-        assertEquals(collect(e -> "a".equals(e.getName())).size(), collect(NAME.equal("a")).size());
-        assertEquals(collect(e -> e.getName() == null).size(), collect(NAME.isNull()).size());
+        assertEquals(
+            collect(e -> "a".equals(e.getName())).size(),
+            collect(NAME.equal("a")).size()
+        );
     }
 
     @Test
     public void testNotEqual() throws Exception {
-        assertEquals(collect(e -> !"a".equals(e.getName())).size(), collect(NAME.notEqual("a")).size());
-        assertEquals(collect(e -> e.getName() != null).size(), collect(NAME.isNotNull()).size());
+        assertEquals(
+            collect(e -> e.getName() != null && !"a".equals(e.getName())).size(),
+            collect(NAME.notEqual("a")).size()
+        );
     }
 
     @Test
