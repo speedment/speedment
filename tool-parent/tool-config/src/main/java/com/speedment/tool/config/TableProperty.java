@@ -36,14 +36,15 @@ import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
  * @since   2.3.0
  */
 public final class TableProperty
-    extends AbstractChildDocumentProperty<Schema, TableProperty>
-    implements Table,
-        HasEnabledProperty,
-        HasExpandedProperty,
-        HasIdProperty,        
-        HasNameProperty,
-        HasAliasProperty,
-        HasPackageNameProperty {
+extends AbstractChildDocumentProperty<Schema, TableProperty>
+implements Table,
+    HasEnabledProperty,
+    HasExpandedProperty,
+    HasIdProperty,
+    HasNameProperty,
+    HasAliasProperty,
+    HasPackageNameProperty,
+    HasNameProtectedProperty {
 
     public TableProperty(Schema parent) {
         super(parent);

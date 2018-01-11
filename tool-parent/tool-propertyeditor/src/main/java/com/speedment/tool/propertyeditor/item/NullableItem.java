@@ -16,6 +16,7 @@
  */
 package com.speedment.tool.propertyeditor.item;
 
+import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.trait.HasNullable.ImplementAs;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -45,17 +46,19 @@ public final class NullableItem extends AbstractLabelTooltipItem {
             "How the nullable column should be implemented, either by " + 
             "using an Optional or by using a wrapper class that can have " + 
             "a null value.";
-    
+
+    private final Document document;
     private final BooleanProperty nullable;
     private final ObjectProperty<ImplementAs> implementation;
     
-    public NullableItem(BooleanProperty nullable, ObjectProperty<ImplementAs> implementation) {
+    public NullableItem(Document document, BooleanProperty nullable, ObjectProperty<ImplementAs> implementation) {
         super(
             NULLABLE_TITLE, 
             NULLABLE_TOOLTIP, 
             NO_DECORATOR
         );
-        
+
+        this.document       = requireNonNull(document);
         this.nullable       = requireNonNull(nullable);
         this.implementation = requireNonNull(implementation);
     }
@@ -64,7 +67,7 @@ public final class NullableItem extends AbstractLabelTooltipItem {
     protected Node createUndecoratedEditor() {
         
         final CheckBox cbNull               = new CheckBox();
-        final Node wrappedCb                = ItemUtil.lockDecorator(cbNull, ItemUtil.DATABASE_RELATION_TOOLTIP);
+        final Node wrappedCb                = ItemUtil.lockDecorator(cbNull, document, ItemUtil.DATABASE_RELATION_TOOLTIP);
         final Label label                   = new Label(IMPLEMENTATION_TITLE);
         final ChoiceBox<ImplementAs> cbImpl = new ChoiceBox<>(
             observableArrayList(ImplementAs.values())

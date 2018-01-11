@@ -40,7 +40,10 @@ implements Tuple1<V> {
     private final V value;
 
     public ReferenceNotEqualPredicate(HasReferenceValue<ENTITY, D, V> field, V value) {
-        super(NOT_EQUAL, field, entity -> !Objects.equals(field.get(entity), value));
+        super(NOT_EQUAL, field, entity -> {
+            final V v = field.get(entity);
+            return v != null && !Objects.equals(v, value);
+        });
         this.value = value;
     }
 

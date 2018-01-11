@@ -21,11 +21,7 @@ import com.speedment.runtime.core.internal.util.ImmutableListUtil;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.ProjectPropertyMutator;
-import com.speedment.tool.config.trait.HasEnabledProperty;
-import com.speedment.tool.config.trait.HasExpandedProperty;
-import com.speedment.tool.config.trait.HasIdProperty;
-import com.speedment.tool.config.trait.HasNameProperty;
-import com.speedment.tool.config.trait.HasPackageNameProperty;
+import com.speedment.tool.config.trait.*;
 import com.speedment.tool.config.util.DocumentMerger;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
@@ -46,13 +42,14 @@ import java.util.stream.Stream;
  * @since   2.3.0
  */
 public final class ProjectProperty 
-    extends AbstractRootDocumentProperty<ProjectProperty>
-    implements Project, 
-        HasEnabledProperty, 
-        HasExpandedProperty, 
-        HasIdProperty,        
-        HasNameProperty, 
-        HasPackageNameProperty {
+extends AbstractRootDocumentProperty<ProjectProperty>
+implements Project,
+    HasEnabledProperty,
+    HasExpandedProperty,
+    HasIdProperty,
+    HasNameProperty,
+    HasPackageNameProperty,
+    HasNameProtectedProperty {
 
     public void merge(DocumentPropertyComponent documentPropertyComponent, Project project) {
         DocumentMerger.merge(this, project, (parent, key)
@@ -65,6 +62,11 @@ public final class ProjectProperty
         // Must implement getName because Project does not have any parent.
         return getAsString(NAME)
             .orElse(DEFAULT_PROJECT_NAME);
+    }
+
+    @Override
+    public boolean isNameProtectedByDefault() {
+        return false;
     }
 
     public StringProperty companyNameProperty() {

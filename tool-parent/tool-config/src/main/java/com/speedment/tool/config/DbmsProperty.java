@@ -45,12 +45,13 @@ import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
  * @since   2.3.0
  */
 public final class DbmsProperty extends AbstractChildDocumentProperty<Project, DbmsProperty> 
-    implements Dbms, 
-    HasEnabledProperty, 
-    HasExpandedProperty, 
-    HasIdProperty,
-    HasNameProperty, 
-    HasAliasProperty {
+implements Dbms,
+            HasEnabledProperty,
+            HasExpandedProperty,
+            HasIdProperty,
+            HasNameProperty,
+            HasAliasProperty,
+           HasNameProtectedProperty {
 
     public DbmsProperty(Project parent) {
         super(parent);
@@ -139,7 +140,7 @@ public final class DbmsProperty extends AbstractChildDocumentProperty<Project, D
 
     @Override
     public StringProperty nameProperty() {
-        return HasNameProperty.super.nameProperty();
+        return HasNameProtectedProperty.super.nameProperty();
     }
     
 }

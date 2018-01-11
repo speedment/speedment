@@ -37,7 +37,7 @@ import static org.junit.Assert.assertEquals;
 public class ComparableFieldTest extends BaseFieldTest {
 
     @Test
-    public void testReferenceFieldComparatorNullFieldsFirst() throws Exception {
+    public void testReferenceFieldComparatorNullFieldsFirst() {
         final List<Entity> result = entities.stream().sorted(NAME.comparatorNullFieldsFirst().thenComparing(ID.comparator())).collect(toList());
         final List<Entity> expected = entities.stream()
             .sorted(
@@ -50,7 +50,7 @@ public class ComparableFieldTest extends BaseFieldTest {
     }
 
     @Test
-    public void testReferenceFieldComparatorNullFieldsLast() throws Exception {
+    public void testReferenceFieldComparatorNullFieldsLast() {
         final List<Entity> result = entities.stream().sorted(NAME.comparator().thenComparing(ID.comparator())).collect(toList());
         final List<Entity> expected = entities.stream()
             .sorted(
@@ -63,19 +63,39 @@ public class ComparableFieldTest extends BaseFieldTest {
     }
 
     @Test
-    public void testEqual() throws Exception {
-        assertEquals(collect(e -> "a".equals(e.getName())).size(), collect(NAME.equal("a")).size());
-        assertEquals(collect(e -> e.getName() == null).size(), collect(NAME.isNull()).size());
+    public void testIsNull() {
+        assertEquals(
+            collect(e -> e.getName() == null).size(),
+            collect(NAME.isNull()).size()
+        );
     }
 
     @Test
-    public void testNotEqual() throws Exception {
-        assertEquals(collect(e -> !"a".equals(e.getName())).size(), collect(NAME.notEqual("a")).size());
-        assertEquals(collect(e -> e.getName() != null).size(), collect(NAME.isNotNull()).size());
+    public void testIsNotNull() {
+        assertEquals(
+            collect(e -> e.getName() != null).size(),
+            collect(NAME.isNotNull()).size()
+        );
     }
 
     @Test
-    public void lessThan() throws Exception {
+    public void testEqual() {
+        assertEquals(
+            collect(e -> "a".equals(e.getName())).size(),
+            collect(NAME.equal("a")).size()
+        );
+    }
+
+    @Test
+    public void testNotEqual() {
+        assertEquals(
+            collect(e -> e.getName() != null && !"a".equals(e.getName())).size(),
+            collect(NAME.notEqual("a")).size()
+        );
+    }
+
+    @Test
+    public void lessThan() {
         assertEquals(
             collect(e -> e.getName() != null && "f".compareTo(e.getName()) > 0),
             collect(NAME.lessThan("f"))
@@ -83,7 +103,7 @@ public class ComparableFieldTest extends BaseFieldTest {
     }
 
     @Test
-    public void lessOrEqual() throws Exception {
+    public void lessOrEqual() {
         assertEquals(
             collect(e -> e.getName() != null && "f".compareTo(e.getName()) >= 0),
             collect(NAME.lessOrEqual("f"))
@@ -91,7 +111,7 @@ public class ComparableFieldTest extends BaseFieldTest {
     }
 
     @Test
-    public void greaterThan() throws Exception {
+    public void greaterThan() {
         assertEquals(
             collect(e -> e.getName() != null && "f".compareTo(e.getName()) < 0),
             collect(NAME.greaterThan("f"))
@@ -99,7 +119,7 @@ public class ComparableFieldTest extends BaseFieldTest {
     }
 
     @Test
-    public void greaterOrEqual() throws Exception {
+    public void greaterOrEqual() {
         assertEquals(
             collect(e -> e.getName() != null && "f".compareTo(e.getName()) <= 0),
             collect(NAME.greaterOrEqual("f"))
@@ -107,7 +127,7 @@ public class ComparableFieldTest extends BaseFieldTest {
     }
 
     @Test
-    public void between2Arg() throws Exception {
+    public void between2Arg() {
 
         final List<Entity> expected = collect(e -> e.getId() != null && e.getId() >= 2 && e.getId() < 6);
         final List<Entity> result = collect(ID.between(2, 6));
@@ -129,7 +149,7 @@ public class ComparableFieldTest extends BaseFieldTest {
     }
 
     @Test
-    public void between3ArgInclIncl() throws Exception {
+    public void between3ArgInclIncl() {
 
         final List<Entity> expected = collect(e -> e.getId() != null && e.getId() >= 2 && e.getId() <= 6);
         final List<Entity> result = collect(ID.between(2, 6, START_INCLUSIVE_END_INCLUSIVE));
@@ -144,7 +164,7 @@ public class ComparableFieldTest extends BaseFieldTest {
     }
 
     @Test
-    public void between3ArgExclIncl() throws Exception {
+    public void between3ArgExclIncl() {
 
         final List<Entity> expected = collect(e -> e.getId() != null && e.getId() > 2 && e.getId() <= 6);
         final List<Entity> result = collect(ID.between(2, 6, START_EXCLUSIVE_END_INCLUSIVE));
@@ -159,7 +179,7 @@ public class ComparableFieldTest extends BaseFieldTest {
     }
 
     @Test
-    public void between3ArgExclExcl() throws Exception {
+    public void between3ArgExclExcl() {
 
         final List<Entity> expected = collect(e -> e.getId() != null && e.getId() > 2 && e.getId() < 6);
         final List<Entity> result = collect(ID.between(2, 6, START_EXCLUSIVE_END_EXCLUSIVE));
@@ -174,7 +194,7 @@ public class ComparableFieldTest extends BaseFieldTest {
     }
 
     @Test
-    public void in() throws Exception {
+    public void in() {
 
         final Integer[] ints = {2, 3, 5, 7, 11, 13, 16};
         final Set<Integer> intSet = Stream.of(ints).collect(toSet());

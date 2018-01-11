@@ -47,7 +47,8 @@ public final class PostgresqlDbmsMetadataHandler extends AbstractDbmsMetadataHan
         javaTypeMap.put("time_stamp", Timestamp.class);
         javaTypeMap.put("yes_or_no", String.class);
 
-        javaTypeMap.put("JSON", String.class);
+        javaTypeMap.put("json", String.class);
+        javaTypeMap.put("jsonb", String.class);
 
         javaTypeMap.addRule((sqlTypeMapping, md) -> {
             // Map a BIT(1) to boolean
@@ -59,6 +60,18 @@ public final class PostgresqlDbmsMetadataHandler extends AbstractDbmsMetadataHan
         javaTypeMap.addRule((sqlTypeMapping, md) -> {
             if ("year".equalsIgnoreCase(md.getTypeName()) && md.getDataType() == 2001) {
                 return Optional.of(Integer.class);
+            } else return Optional.empty();
+        });
+
+        javaTypeMap.addRule((sqlTypeMapping, md) -> {
+            if ("_text".equalsIgnoreCase(md.getTypeName()) && md.getDataType() == 2003) {
+                return Optional.of(String.class);
+            } else return Optional.empty();
+        });
+
+        javaTypeMap.addRule((sqlTypeMapping, md) -> {
+            if ("tsvector".equalsIgnoreCase(md.getTypeName()) && md.getDataType() == 1111) {
+                return Optional.of(String.class);
             } else return Optional.empty();
         });
 

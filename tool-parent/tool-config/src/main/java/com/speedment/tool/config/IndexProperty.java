@@ -21,9 +21,7 @@ import com.speedment.runtime.config.Table;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.IndexPropertyMutator;
-import com.speedment.tool.config.trait.HasEnabledProperty;
-import com.speedment.tool.config.trait.HasExpandedProperty;
-import com.speedment.tool.config.trait.HasNameProperty;
+import com.speedment.tool.config.trait.*;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
 
@@ -31,7 +29,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
-import com.speedment.tool.config.trait.HasIdProperty;
 
 /**
  *
@@ -39,12 +36,13 @@ import com.speedment.tool.config.trait.HasIdProperty;
  * @since   2.3.0
  */
 public final class IndexProperty 
-    extends AbstractChildDocumentProperty<Table, IndexProperty>
-    implements Index, 
-        HasEnabledProperty, 
-        HasExpandedProperty, 
-        HasIdProperty,        
-        HasNameProperty {
+extends AbstractChildDocumentProperty<Table, IndexProperty>
+implements Index,
+    HasEnabledProperty,
+    HasExpandedProperty,
+    HasIdProperty,
+    HasNameProperty,
+    HasNameProtectedProperty {
 
     public IndexProperty(Table parent) {
         super(parent);

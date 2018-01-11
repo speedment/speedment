@@ -93,11 +93,16 @@ public interface BulkOperation {
 
             /**
              * Specifies for what entities the operation should be carried out.
+             * <p>
+             * Specifying several
+             * {@link #where(java.util.function.Predicate) where} filters will
+             * be equivalent to performing a logical AND on the provided
+             * filters.
              *
              * @param filter to apply
              * @return a builder where the given filter has been applied
              */
-            B where(Predicate<? super ENTITY> filter);
+            B where(Predicate<ENTITY> filter);
         }
 
         interface HasSet<ENTITY, B> {
@@ -105,6 +110,12 @@ public interface BulkOperation {
             /**
              * Specifies an entity mapper for the operation whereby the mapper
              * will mutate the entity in some way when applied.
+             * <p>
+             * Specifying several
+             * {@link #compute(java.util.function.Function) compute()} and/or
+             * several {@link #set(java.util.function.Consumer) set()}
+             * operations will be equivalent to applying all those operations
+             * on entities (e.g. a functional reduction)
              *
              * @param mapper to apply when updating entities
              * @return a builder where the given mapper has been applied
@@ -114,7 +125,13 @@ public interface BulkOperation {
             /**
              * Specifies an entity consumer for the operation whereby the
              * consumer will mutate the entity in some way when applied.
-             *
+             * <p>
+             * Specifying several
+             * {@link #compute(java.util.function.Function) compute()} and/or
+             * several {@link #set(java.util.function.Consumer) set()}
+             * operations will be equivalent to applying all those operations
+             * on entities (e.g. a functional reduction)
+             * 
              * @param consumer to apply when updating entities
              * @return a builder where the given consumer has been applied
              */

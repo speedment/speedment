@@ -21,10 +21,7 @@ import com.speedment.runtime.config.Schema;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.SchemaPropertyMutator;
-import com.speedment.tool.config.trait.HasAliasProperty;
-import com.speedment.tool.config.trait.HasEnabledProperty;
-import com.speedment.tool.config.trait.HasExpandedProperty;
-import com.speedment.tool.config.trait.HasNameProperty;
+import com.speedment.tool.config.trait.*;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
@@ -33,7 +30,6 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
-import com.speedment.tool.config.trait.HasIdProperty;
 
 /**
  *
@@ -41,13 +37,14 @@ import com.speedment.tool.config.trait.HasIdProperty;
  * @since   2.3.0
  */
 public final class SchemaProperty 
-    extends AbstractChildDocumentProperty<Dbms, SchemaProperty>
-    implements Schema, 
-        HasEnabledProperty, 
-        HasExpandedProperty, 
-        HasIdProperty,        
-        HasNameProperty, 
-        HasAliasProperty {
+extends AbstractChildDocumentProperty<Dbms, SchemaProperty>
+implements Schema,
+    HasEnabledProperty,
+    HasExpandedProperty,
+    HasIdProperty,
+    HasNameProperty,
+    HasAliasProperty,
+    HasNameProtectedProperty {
 
     public SchemaProperty(Dbms parent) {
         super(parent);
@@ -55,7 +52,7 @@ public final class SchemaProperty
 
     @Override
     public StringProperty nameProperty() {
-        return HasNameProperty.super.nameProperty();
+        return HasNameProtectedProperty.super.nameProperty();
     }
 
     public final BooleanProperty defaultSchemaProperty() {

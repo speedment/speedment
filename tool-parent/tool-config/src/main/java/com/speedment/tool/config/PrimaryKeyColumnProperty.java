@@ -21,15 +21,11 @@ import com.speedment.runtime.config.Table;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.PrimaryKeyColumnPropertyMutator;
-import com.speedment.tool.config.trait.HasColumnProperty;
-import com.speedment.tool.config.trait.HasExpandedProperty;
-import com.speedment.tool.config.trait.HasNameProperty;
-import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
+import com.speedment.tool.config.trait.*;
 
 import java.util.List;
 
 import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
-import com.speedment.tool.config.trait.HasIdProperty;
 
 /**
  *
@@ -37,16 +33,23 @@ import com.speedment.tool.config.trait.HasIdProperty;
  * @since   2.3.0
  */
 public final class PrimaryKeyColumnProperty
-    extends AbstractChildDocumentProperty<Table, PrimaryKeyColumnProperty>
-    implements PrimaryKeyColumn,
+extends AbstractChildDocumentProperty<Table, PrimaryKeyColumnProperty>
+implements PrimaryKeyColumn,
         HasExpandedProperty,
         HasIdProperty,        
         HasNameProperty,
+        HasEnabledProperty,
         HasOrdinalPositionProperty,
-        HasColumnProperty {
+        HasColumnProperty,
+        HasNameProtectedProperty {
 
     public PrimaryKeyColumnProperty(Table parent) {
         super(parent);
+    }
+
+    @Override
+    public boolean isNameProtectedByDefault() {
+        return false;
     }
 
     @Override

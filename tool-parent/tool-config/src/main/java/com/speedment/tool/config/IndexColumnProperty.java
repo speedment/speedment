@@ -33,14 +33,15 @@ import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
  * @since   2.3.0
  */
 public final class IndexColumnProperty 
-    extends AbstractChildDocumentProperty<Index, IndexColumnProperty>
-    implements IndexColumn, 
-        HasExpandedProperty, 
-        HasIdProperty,        
-        HasNameProperty, 
-        HasOrdinalPositionProperty,
-        HasOrderTypeProperty, 
-        HasColumnProperty {
+extends AbstractChildDocumentProperty<Index, IndexColumnProperty>
+implements IndexColumn,
+    HasExpandedProperty,
+    HasIdProperty,
+    HasNameProperty,
+    HasNameProtectedProperty,
+    HasOrdinalPositionProperty,
+    HasOrderTypeProperty,
+    HasColumnProperty {
 
     public IndexColumnProperty(Index parent) {
         super(parent);

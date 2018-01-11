@@ -21,10 +21,7 @@ import com.speedment.runtime.config.ForeignKeyColumn;
 import com.speedment.tool.config.component.DocumentPropertyComponent;
 import com.speedment.tool.config.mutator.DocumentPropertyMutator;
 import com.speedment.tool.config.mutator.ForeignKeyColumnPropertyMutator;
-import com.speedment.tool.config.trait.HasColumnProperty;
-import com.speedment.tool.config.trait.HasExpandedProperty;
-import com.speedment.tool.config.trait.HasNameProperty;
-import com.speedment.tool.config.trait.HasOrdinalPositionProperty;
+import com.speedment.tool.config.trait.*;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.StringProperty;
 
@@ -32,7 +29,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.speedment.runtime.core.internal.util.ImmutableListUtil.concat;
-import com.speedment.tool.config.trait.HasIdProperty;
 import static javafx.beans.binding.Bindings.createObjectBinding;
 
 /**
@@ -41,12 +37,13 @@ import static javafx.beans.binding.Bindings.createObjectBinding;
  * @since   2.3.0
  */
 public final class ForeignKeyColumnProperty extends AbstractChildDocumentProperty<ForeignKey, ForeignKeyColumnProperty> 
-    implements ForeignKeyColumn, 
-    HasExpandedProperty, 
-    HasIdProperty,
-    HasNameProperty,
-    HasOrdinalPositionProperty, 
-    HasColumnProperty {
+implements ForeignKeyColumn,
+           HasExpandedProperty,
+           HasIdProperty,
+           HasNameProperty,
+           HasOrdinalPositionProperty,
+           HasColumnProperty,
+           HasNameProtectedProperty {
 	
     public final StringProperty foreignDatabaseNameProperty() {
     	return stringPropertyOf(FOREIGN_DATABASE_NAME, ForeignKeyColumn.super::getForeignDatabaseName);
