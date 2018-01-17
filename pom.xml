@@ -84,18 +84,21 @@
         <developer>
             <id>Minborg</id>
             <name>Per Ake Minborg</name>
+            <url>https://github.com/minborg</url>
             <email>minborg@speedment.com</email>
             <timezone>America/Los_Angeles</timezone>
         </developer>
         <developer>
             <id>Pyknic</id>
             <name>Emil Forslund</name>
+            <url>https://github.com/pyknic</url>
             <email>emil@speedment.com</email>
             <timezone>America/Los_Angeles</timezone>
         </developer>
         <developer>
             <id>lawesson</id>
             <name>Dan Lawesson</name>
+            <url>https://github.com/lawesson</url>
             <email>dan@speedment.com</email>
             <timezone>America/Los_Angeles</timezone>
         </developer>
