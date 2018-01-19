@@ -465,8 +465,12 @@ public final class JsonDeserializer implements AutoCloseable {
                     final int n = next();
                     switch (n) {
                         case 0x22: builder.append('"'); break;  // \"
+                        case 0x62: builder.append('\b'); break; // \b
+                        case 0x66: builder.append('\f'); break; // \f
                         case 0x6E: builder.append('\n'); break; // \n
+                        case 0x72: builder.append('\r'); break; // \r
                         case 0x74: builder.append('\t'); break; // \t
+                        case 0x5C: builder.append('\\'); break; // \\
                         default: builder.append('\\').appendCodePoint(n);
                     }
                     continue;
