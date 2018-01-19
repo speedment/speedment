@@ -150,4 +150,13 @@ public class JsonTest {
         assertEquals("Check one: ", -2L, list.get(1).get("two"));
         assertEquals("Check one: ", -3L, list.get(2).get("three"));
     }
+
+    @Test
+    public void testParse_EscapedString() {
+        final String json = "{\"message\":\"Hello, \\\"World\\\"!\\n\"}";
+        @SuppressWarnings("unchecked")
+        final Map<String, Object> map = (Map<String, Object>) Json.fromJson(json);
+        assertNotNull(map);
+        assertEquals("Check value: ", "Hello, \"World\"!\n", map.get("message"));
+    }
 }

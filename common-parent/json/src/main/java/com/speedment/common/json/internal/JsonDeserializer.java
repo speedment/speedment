@@ -462,7 +462,13 @@ public final class JsonDeserializer implements AutoCloseable {
                 // If this is an escape character, add the following character
                 // without parsing it.
                 case 0x5C: // backslash
-                    builder.append(Character.toChars(next()));
+                    final int n = next();
+                    switch (n) {
+                        case 0x22: builder.append('"'); break;  // \"
+                        case 0x6E: builder.append('\n'); break; // \n
+                        case 0x74: builder.append('\t'); break; // \t
+                        default: builder.append('\\').appendCodePoint(n);
+                    }
                     continue;
 
                     // If this terminates the string, break the loop.
