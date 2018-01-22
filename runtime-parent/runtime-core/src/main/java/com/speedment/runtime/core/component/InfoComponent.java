@@ -87,4 +87,7 @@ public interface InfoComponent  {
         return "Apache-2.0";
     }
 
+    default String getEditionAndVersionString() {
+        return getTitle() + ":" + getImplementationVersion();
+    }
 }
