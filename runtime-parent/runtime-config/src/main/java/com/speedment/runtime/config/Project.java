@@ -40,9 +40,8 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   2.0.0
  */
-
-public interface Project extends
-        Document,
+public interface Project
+extends Document,
         HasEnabled,
         HasId,        
         HasName,
@@ -51,11 +50,12 @@ public interface Project extends
         HasMainInterface,
         HasMutator<ProjectMutator<? extends Project>> {
 
-    String  COMPANY_NAME     = "companyName",
-            PACKAGE_LOCATION = "packageLocation",
-            CONFIG_PATH      = "configPath",
-            DBMSES           = "dbmses",
-            APP_ID           = "appId";
+    String  COMPANY_NAME      = "companyName",
+            PACKAGE_LOCATION  = "packageLocation",
+            SPEEDMENT_VERSION = "speedmentVersion",
+            CONFIG_PATH       = "configPath",
+            DBMSES            = "dbmses",
+            APP_ID            = "appId";
     
     String  DEFAULT_COMPANY_NAME     = "company",
             DEFAULT_PACKAGE_NAME     = "com.",
@@ -78,6 +78,28 @@ public interface Project extends
      */
     default String getPackageLocation() {
         return getAsString(PACKAGE_LOCATION).orElse(DEFAULT_PACKAGE_LOCATION);
+    }
+
+    /**
+     * Returns the version of Speedment that was used to generate the code. If
+     * this does not correspond with the version of the runtime, then a warning
+     * will be shown when Speedment is started.
+     * <p>
+     * The version has the following structure:
+     * <pre>{@code speedment:3.0.21-SNAPSHOT}</pre>
+     * First comes the name of the edition (simply {@code speedment} for the
+     * open-source edition) followed by a comma and the Maven version.
+     * <p>
+     * If this value is not present, it should be read as the generated version
+     * being unknown. This probably means that it was generated with an older
+     * version of Speedment than {@code 3.0.21} in the case of the open-source
+     * edition.
+     *
+     * @return the speedment version
+     * @since  3.0.21
+     */
+    default Optional<String> getSpeedmentVersion() {
+        return getAsString(SPEEDMENT_VERSION);
     }
 
     /**
