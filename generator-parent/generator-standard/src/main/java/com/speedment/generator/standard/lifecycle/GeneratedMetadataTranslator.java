@@ -74,7 +74,9 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
 
         final Method initializer = Method.of("init", String.class).static_().private_();
 
-        final List<String> lines = Stream.of(DocumentTranscoder.save(getSupport().projectOrThrow(), Json::toJson).split("\\R")).collect(toList());
+        final Project project = getSupport().projectOrThrow();
+        project.getData().put(Project.SPEEDMENT_VERSION, infoComponent.getEditionAndVersionString());
+        final List<String> lines = Stream.of(DocumentTranscoder.save(project, Json::toJson).split("\\R")).collect(toList());
         final List<List<String>> segments = new ArrayList<>();
         List<String> segment = new ArrayList<>();
         segments.add(segment);
@@ -117,7 +119,7 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
         getMetadata.add("return Optional.of(METADATA);");
 
         return newBuilder(file, getClassOrInterfaceName())
-            .forEveryProject((clazz, project) -> {
+            .forEveryProject((clazz, p) -> {
                 clazz.public_()
                     .setSupertype(AbstractApplicationMetadata.class)
                     .add(metadataField)
