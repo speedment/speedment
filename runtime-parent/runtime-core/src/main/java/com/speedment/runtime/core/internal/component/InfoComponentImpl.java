@@ -37,6 +37,11 @@ public final class InfoComponentImpl implements InfoComponent {
     }
 
     @Override
+    public String getRepository() {
+        return "speedment";
+    }
+
+    @Override
     public String getImplementationVersion() {
         return "3.0.21-SNAPSHOT";
     }
