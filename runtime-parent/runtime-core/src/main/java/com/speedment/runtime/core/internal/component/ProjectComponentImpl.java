@@ -18,11 +18,16 @@ package com.speedment.runtime.core.internal.component;
 
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
+import com.speedment.common.logger.Logger;
+import com.speedment.common.logger.LoggerManager;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.core.ApplicationMetadata;
+import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 
 import static com.speedment.common.injector.State.INITIALIZED;
+import static com.speedment.common.injector.State.STARTED;
+import static java.lang.String.format;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -33,11 +38,24 @@ import static java.util.Objects.requireNonNull;
  */
 public final class ProjectComponentImpl implements ProjectComponent {
 
+    private final static Logger LOGGER = LoggerManager.getLogger(ProjectComponentImpl.class);
     private Project project;
     
     @ExecuteBefore(INITIALIZED)
     void loadProjectFromMetadata(@WithState(INITIALIZED) ApplicationMetadata metadata) {
         project = metadata.makeProject();
+    }
+
+    @ExecuteBefore(STARTED)
+    void checkSpeedmentVersion(InfoComponent info) {
+        final String expected = info.getEditionAndVersionString();
+        final String actual = project.getSpeedmentVersion().orElse(null);
+        if (!expected.equals(actual)) {
+            LOGGER.warn(format(
+                "Code generated using '%s' and running with '%s'. Make sure " +
+                "versions and editions match to avoid performance and " +
+                "stability issues.", actual, expected));
+        }
     }
 
     @Override
