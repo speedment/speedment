@@ -1,6 +1,7 @@
 package com.company.sakila.db0.sakila.inventory.generated;
 
 import com.company.sakila.db0.sakila.inventory.Inventory;
+import com.company.sakila.db0.sakila.inventory.InventoryManager;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.AbstractManager;
@@ -17,7 +18,9 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedInventoryManagerImpl extends AbstractManager<Inventory> implements GeneratedInventoryManager {
+public abstract class GeneratedInventoryManagerImpl 
+extends AbstractManager<Inventory> 
+implements GeneratedInventoryManager {
     
     private final TableIdentifier<Inventory> tableIdentifier;
     
@@ -32,12 +35,7 @@ public abstract class GeneratedInventoryManagerImpl extends AbstractManager<Inve
     
     @Override
     public Stream<Field<Inventory>> fields() {
-        return Stream.of(
-            Inventory.INVENTORY_ID,
-            Inventory.FILM_ID,
-            Inventory.STORE_ID,
-            Inventory.LAST_UPDATE
-        );
+        return InventoryManager.FIELDS.stream();
     }
     
     @Override

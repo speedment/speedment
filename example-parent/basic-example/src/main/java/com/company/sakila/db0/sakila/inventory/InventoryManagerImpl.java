@@ -10,4 +10,6 @@ import com.company.sakila.db0.sakila.inventory.generated.GeneratedInventoryManag
  * 
  * @author company
  */
-public final class InventoryManagerImpl extends GeneratedInventoryManagerImpl implements InventoryManager {}
+public final class InventoryManagerImpl 
+extends GeneratedInventoryManagerImpl 
+implements InventoryManager {}

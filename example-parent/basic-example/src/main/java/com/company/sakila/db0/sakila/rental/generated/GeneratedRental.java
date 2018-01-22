@@ -38,7 +38,7 @@ public interface GeneratedRental {
         Identifier.RENTAL_ID,
         Rental::getRentalId,
         Rental::setRentalId,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         true
     );
     /**
@@ -49,7 +49,7 @@ public interface GeneratedRental {
         Identifier.RENTAL_DATE,
         Rental::getRentalDate,
         Rental::setRentalDate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -61,7 +61,7 @@ public interface GeneratedRental {
         Rental::getInventoryId,
         Rental::setInventoryId,
         Inventory.INVENTORY_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -73,7 +73,7 @@ public interface GeneratedRental {
         Rental::getCustomerId,
         Rental::setCustomerId,
         Customer.CUSTOMER_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -84,7 +84,7 @@ public interface GeneratedRental {
         Identifier.RETURN_DATE,
         o -> OptionalUtil.unwrap(o.getReturnDate()),
         Rental::setReturnDate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -96,7 +96,7 @@ public interface GeneratedRental {
         Rental::getStaffId,
         Rental::setStaffId,
         Staff.STAFF_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -107,7 +107,7 @@ public interface GeneratedRental {
         Identifier.LAST_UPDATE,
         Rental::getLastUpdate,
         Rental::setLastUpdate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     

@@ -38,7 +38,7 @@ public interface GeneratedAddress {
         Identifier.ADDRESS_ID,
         Address::getAddressId,
         Address::setAddressId,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         true
     );
     /**
@@ -49,7 +49,7 @@ public interface GeneratedAddress {
         Identifier.ADDRESS,
         Address::getAddress,
         Address::setAddress,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -60,7 +60,7 @@ public interface GeneratedAddress {
         Identifier.ADDRESS2,
         o -> OptionalUtil.unwrap(o.getAddress2()),
         Address::setAddress2,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -71,7 +71,7 @@ public interface GeneratedAddress {
         Identifier.DISTRICT,
         Address::getDistrict,
         Address::setDistrict,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -83,7 +83,7 @@ public interface GeneratedAddress {
         Address::getCityId,
         Address::setCityId,
         City.CITY_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -94,7 +94,7 @@ public interface GeneratedAddress {
         Identifier.POSTAL_CODE,
         o -> OptionalUtil.unwrap(o.getPostalCode()),
         Address::setPostalCode,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -105,7 +105,7 @@ public interface GeneratedAddress {
         Identifier.PHONE,
         Address::getPhone,
         Address::setPhone,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -116,7 +116,7 @@ public interface GeneratedAddress {
         Identifier.LOCATION,
         Address::getLocation,
         Address::setLocation,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -127,7 +127,7 @@ public interface GeneratedAddress {
         Identifier.LAST_UPDATE,
         Address::getLastUpdate,
         Address::setLastUpdate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     

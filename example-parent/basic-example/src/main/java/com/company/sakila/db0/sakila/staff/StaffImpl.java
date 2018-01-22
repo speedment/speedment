@@ -10,4 +10,6 @@ import com.company.sakila.db0.sakila.staff.generated.GeneratedStaffImpl;
  * 
  * @author company
  */
-public final class StaffImpl extends GeneratedStaffImpl implements Staff {}
+public final class StaffImpl 
+extends GeneratedStaffImpl 
+implements Staff {}

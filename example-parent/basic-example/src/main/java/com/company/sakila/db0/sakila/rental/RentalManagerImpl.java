@@ -10,4 +10,6 @@ import com.company.sakila.db0.sakila.rental.generated.GeneratedRentalManagerImpl
  * 
  * @author company
  */
-public final class RentalManagerImpl extends GeneratedRentalManagerImpl implements RentalManager {}
+public final class RentalManagerImpl 
+extends GeneratedRentalManagerImpl 
+implements RentalManager {}

@@ -31,7 +31,7 @@ public interface GeneratedCountry {
         Identifier.COUNTRY_ID,
         Country::getCountryId,
         Country::setCountryId,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         true
     );
     /**
@@ -42,7 +42,7 @@ public interface GeneratedCountry {
         Identifier.COUNTRY,
         Country::getCountry,
         Country::setCountry,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -53,7 +53,7 @@ public interface GeneratedCountry {
         Identifier.LAST_UPDATE,
         Country::getLastUpdate,
         Country::setLastUpdate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     

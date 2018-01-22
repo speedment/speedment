@@ -10,4 +10,6 @@ import com.company.sakila.db0.sakila.actor.generated.GeneratedActorManagerImpl;
  * 
  * @author company
  */
-public final class ActorManagerImpl extends GeneratedActorManagerImpl implements ActorManager {}
+public final class ActorManagerImpl 
+extends GeneratedActorManagerImpl 
+implements ActorManager {}

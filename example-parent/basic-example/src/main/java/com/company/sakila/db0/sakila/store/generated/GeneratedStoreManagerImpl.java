@@ -1,6 +1,7 @@
 package com.company.sakila.db0.sakila.store.generated;
 
 import com.company.sakila.db0.sakila.store.Store;
+import com.company.sakila.db0.sakila.store.StoreManager;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.AbstractManager;
@@ -17,7 +18,9 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedStoreManagerImpl extends AbstractManager<Store> implements GeneratedStoreManager {
+public abstract class GeneratedStoreManagerImpl 
+extends AbstractManager<Store> 
+implements GeneratedStoreManager {
     
     private final TableIdentifier<Store> tableIdentifier;
     
@@ -32,12 +35,7 @@ public abstract class GeneratedStoreManagerImpl extends AbstractManager<Store> i
     
     @Override
     public Stream<Field<Store>> fields() {
-        return Stream.of(
-            Store.STORE_ID,
-            Store.MANAGER_STAFF_ID,
-            Store.ADDRESS_ID,
-            Store.LAST_UPDATE
-        );
+        return StoreManager.FIELDS.stream();
     }
     
     @Override

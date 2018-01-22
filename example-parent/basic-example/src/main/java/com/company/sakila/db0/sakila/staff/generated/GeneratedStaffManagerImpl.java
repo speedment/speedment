@@ -1,6 +1,7 @@
 package com.company.sakila.db0.sakila.staff.generated;
 
 import com.company.sakila.db0.sakila.staff.Staff;
+import com.company.sakila.db0.sakila.staff.StaffManager;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.AbstractManager;
@@ -17,7 +18,9 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedStaffManagerImpl extends AbstractManager<Staff> implements GeneratedStaffManager {
+public abstract class GeneratedStaffManagerImpl 
+extends AbstractManager<Staff> 
+implements GeneratedStaffManager {
     
     private final TableIdentifier<Staff> tableIdentifier;
     
@@ -32,19 +35,7 @@ public abstract class GeneratedStaffManagerImpl extends AbstractManager<Staff> i
     
     @Override
     public Stream<Field<Staff>> fields() {
-        return Stream.of(
-            Staff.STAFF_ID,
-            Staff.FIRST_NAME,
-            Staff.LAST_NAME,
-            Staff.ADDRESS_ID,
-            Staff.PICTURE,
-            Staff.EMAIL,
-            Staff.STORE_ID,
-            Staff.ACTIVE,
-            Staff.USERNAME,
-            Staff.PASSWORD,
-            Staff.LAST_UPDATE
-        );
+        return StaffManager.FIELDS.stream();
     }
     
     @Override

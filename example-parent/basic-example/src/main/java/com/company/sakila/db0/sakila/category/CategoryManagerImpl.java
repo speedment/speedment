@@ -10,4 +10,6 @@ import com.company.sakila.db0.sakila.category.generated.GeneratedCategoryManager
  * 
  * @author company
  */
-public final class CategoryManagerImpl extends GeneratedCategoryManagerImpl implements CategoryManager {}
+public final class CategoryManagerImpl 
+extends GeneratedCategoryManagerImpl 
+implements CategoryManager {}

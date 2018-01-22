@@ -41,7 +41,7 @@ public interface GeneratedFilm {
         Identifier.FILM_ID,
         Film::getFilmId,
         Film::setFilmId,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         true
     );
     /**
@@ -52,7 +52,7 @@ public interface GeneratedFilm {
         Identifier.TITLE,
         Film::getTitle,
         Film::setTitle,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -63,7 +63,7 @@ public interface GeneratedFilm {
         Identifier.DESCRIPTION,
         o -> OptionalUtil.unwrap(o.getDescription()),
         Film::setDescription,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -74,7 +74,7 @@ public interface GeneratedFilm {
         Identifier.RELEASE_YEAR,
         o -> OptionalUtil.unwrap(o.getReleaseYear()),
         Film::setReleaseYear,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -86,7 +86,7 @@ public interface GeneratedFilm {
         Film::getLanguageId,
         Film::setLanguageId,
         Language.LANGUAGE_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -98,7 +98,7 @@ public interface GeneratedFilm {
         o -> OptionalUtil.unwrap(o.getOriginalLanguageId()),
         Film::setOriginalLanguageId,
         Language.LANGUAGE_ID,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -109,7 +109,7 @@ public interface GeneratedFilm {
         Identifier.RENTAL_DURATION,
         Film::getRentalDuration,
         Film::setRentalDuration,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -120,7 +120,7 @@ public interface GeneratedFilm {
         Identifier.RENTAL_RATE,
         Film::getRentalRate,
         Film::setRentalRate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -131,7 +131,7 @@ public interface GeneratedFilm {
         Identifier.LENGTH,
         o -> OptionalUtil.unwrap(o.getLength()),
         Film::setLength,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -142,7 +142,7 @@ public interface GeneratedFilm {
         Identifier.REPLACEMENT_COST,
         Film::getReplacementCost,
         Film::setReplacementCost,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -153,7 +153,7 @@ public interface GeneratedFilm {
         Identifier.RATING,
         o -> OptionalUtil.unwrap(o.getRating()),
         Film::setRating,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -164,7 +164,7 @@ public interface GeneratedFilm {
         Identifier.SPECIAL_FEATURES,
         o -> OptionalUtil.unwrap(o.getSpecialFeatures()),
         Film::setSpecialFeatures,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -175,7 +175,7 @@ public interface GeneratedFilm {
         Identifier.LAST_UPDATE,
         Film::getLastUpdate,
         Film::setLastUpdate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     

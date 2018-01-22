@@ -1,6 +1,7 @@
 package com.company.sakila.db0.sakila.country.generated;
 
 import com.company.sakila.db0.sakila.country.Country;
+import com.company.sakila.db0.sakila.country.CountryManager;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.AbstractManager;
@@ -17,7 +18,9 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedCountryManagerImpl extends AbstractManager<Country> implements GeneratedCountryManager {
+public abstract class GeneratedCountryManagerImpl 
+extends AbstractManager<Country> 
+implements GeneratedCountryManager {
     
     private final TableIdentifier<Country> tableIdentifier;
     
@@ -32,11 +35,7 @@ public abstract class GeneratedCountryManagerImpl extends AbstractManager<Countr
     
     @Override
     public Stream<Field<Country>> fields() {
-        return Stream.of(
-            Country.COUNTRY_ID,
-            Country.COUNTRY,
-            Country.LAST_UPDATE
-        );
+        return CountryManager.FIELDS.stream();
     }
     
     @Override

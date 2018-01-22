@@ -3,6 +3,10 @@ package com.company.sakila.db0.sakila.rental.generated;
 import com.company.sakila.db0.sakila.rental.Rental;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.field.Field;
+import java.util.List;
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
 
 /**
  * The generated base interface for the manager of every {@link
@@ -15,6 +19,16 @@ import com.speedment.runtime.core.manager.Manager;
  */
 @GeneratedCode("Speedment")
 public interface GeneratedRentalManager extends Manager<Rental> {
+    
+    List<Field<Rental>> FIELDS = unmodifiableList(asList(
+        Rental.RENTAL_ID,
+        Rental.RENTAL_DATE,
+        Rental.INVENTORY_ID,
+        Rental.CUSTOMER_ID,
+        Rental.RETURN_DATE,
+        Rental.STAFF_ID,
+        Rental.LAST_UPDATE
+    ));
     
     @Override
     default Class<Rental> getEntityClass() {

@@ -3,6 +3,10 @@ package com.company.sakila.db0.sakila.inventory.generated;
 import com.company.sakila.db0.sakila.inventory.Inventory;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.field.Field;
+import java.util.List;
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
 
 /**
  * The generated base interface for the manager of every {@link
@@ -15,6 +19,13 @@ import com.speedment.runtime.core.manager.Manager;
  */
 @GeneratedCode("Speedment")
 public interface GeneratedInventoryManager extends Manager<Inventory> {
+    
+    List<Field<Inventory>> FIELDS = unmodifiableList(asList(
+        Inventory.INVENTORY_ID,
+        Inventory.FILM_ID,
+        Inventory.STORE_ID,
+        Inventory.LAST_UPDATE
+    ));
     
     @Override
     default Class<Inventory> getEntityClass() {

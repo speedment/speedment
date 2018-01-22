@@ -1,6 +1,7 @@
 package com.company.sakila.db0.sakila.customer.generated;
 
 import com.company.sakila.db0.sakila.customer.Customer;
+import com.company.sakila.db0.sakila.customer.CustomerManager;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.AbstractManager;
@@ -17,7 +18,9 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedCustomerManagerImpl extends AbstractManager<Customer> implements GeneratedCustomerManager {
+public abstract class GeneratedCustomerManagerImpl 
+extends AbstractManager<Customer> 
+implements GeneratedCustomerManager {
     
     private final TableIdentifier<Customer> tableIdentifier;
     
@@ -32,17 +35,7 @@ public abstract class GeneratedCustomerManagerImpl extends AbstractManager<Custo
     
     @Override
     public Stream<Field<Customer>> fields() {
-        return Stream.of(
-            Customer.CUSTOMER_ID,
-            Customer.STORE_ID,
-            Customer.FIRST_NAME,
-            Customer.LAST_NAME,
-            Customer.EMAIL,
-            Customer.ADDRESS_ID,
-            Customer.ACTIVE,
-            Customer.CREATE_DATE,
-            Customer.LAST_UPDATE
-        );
+        return CustomerManager.FIELDS.stream();
     }
     
     @Override

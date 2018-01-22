@@ -3,6 +3,10 @@ package com.company.sakila.db0.sakila.film_text.generated;
 import com.company.sakila.db0.sakila.film_text.FilmText;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.field.Field;
+import java.util.List;
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
 
 /**
  * The generated base interface for the manager of every {@link
@@ -15,6 +19,12 @@ import com.speedment.runtime.core.manager.Manager;
  */
 @GeneratedCode("Speedment")
 public interface GeneratedFilmTextManager extends Manager<FilmText> {
+    
+    List<Field<FilmText>> FIELDS = unmodifiableList(asList(
+        FilmText.FILM_ID,
+        FilmText.TITLE,
+        FilmText.DESCRIPTION
+    ));
     
     @Override
     default Class<FilmText> getEntityClass() {

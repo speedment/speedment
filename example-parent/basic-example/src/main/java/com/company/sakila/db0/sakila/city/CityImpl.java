@@ -10,4 +10,6 @@ import com.company.sakila.db0.sakila.city.generated.GeneratedCityImpl;
  * 
  * @author company
  */
-public final class CityImpl extends GeneratedCityImpl implements City {}
+public final class CityImpl 
+extends GeneratedCityImpl 
+implements City {}

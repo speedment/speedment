@@ -34,7 +34,7 @@ public interface GeneratedCity {
         Identifier.CITY_ID,
         City::getCityId,
         City::setCityId,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         true
     );
     /**
@@ -45,7 +45,7 @@ public interface GeneratedCity {
         Identifier.CITY,
         City::getCity,
         City::setCity,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -57,7 +57,7 @@ public interface GeneratedCity {
         City::getCountryId,
         City::setCountryId,
         Country.COUNTRY_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -68,7 +68,7 @@ public interface GeneratedCity {
         Identifier.LAST_UPDATE,
         City::getLastUpdate,
         City::setLastUpdate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     

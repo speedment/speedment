@@ -35,7 +35,7 @@ public interface GeneratedInventory {
         Identifier.INVENTORY_ID,
         Inventory::getInventoryId,
         Inventory::setInventoryId,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         true
     );
     /**
@@ -47,7 +47,7 @@ public interface GeneratedInventory {
         Inventory::getFilmId,
         Inventory::setFilmId,
         Film.FILM_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -59,7 +59,7 @@ public interface GeneratedInventory {
         Inventory::getStoreId,
         Inventory::setStoreId,
         Store.STORE_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -70,7 +70,7 @@ public interface GeneratedInventory {
         Identifier.LAST_UPDATE,
         Inventory::getLastUpdate,
         Inventory::setLastUpdate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     

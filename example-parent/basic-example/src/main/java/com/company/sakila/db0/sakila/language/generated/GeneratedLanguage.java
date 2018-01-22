@@ -31,7 +31,7 @@ public interface GeneratedLanguage {
         Identifier.LANGUAGE_ID,
         Language::getLanguageId,
         Language::setLanguageId,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         true
     );
     /**
@@ -42,7 +42,7 @@ public interface GeneratedLanguage {
         Identifier.NAME,
         Language::getName,
         Language::setName,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -53,7 +53,7 @@ public interface GeneratedLanguage {
         Identifier.LAST_UPDATE,
         Language::getLastUpdate,
         Language::setLastUpdate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     

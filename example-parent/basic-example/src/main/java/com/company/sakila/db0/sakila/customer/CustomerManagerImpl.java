@@ -10,4 +10,6 @@ import com.company.sakila.db0.sakila.customer.generated.GeneratedCustomerManager
  * 
  * @author company
  */
-public final class CustomerManagerImpl extends GeneratedCustomerManagerImpl implements CustomerManager {}
+public final class CustomerManagerImpl 
+extends GeneratedCustomerManagerImpl 
+implements CustomerManager {}

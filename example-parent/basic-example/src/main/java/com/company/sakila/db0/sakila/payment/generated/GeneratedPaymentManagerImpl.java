@@ -1,6 +1,7 @@
 package com.company.sakila.db0.sakila.payment.generated;
 
 import com.company.sakila.db0.sakila.payment.Payment;
+import com.company.sakila.db0.sakila.payment.PaymentManager;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.AbstractManager;
@@ -17,7 +18,9 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedPaymentManagerImpl extends AbstractManager<Payment> implements GeneratedPaymentManager {
+public abstract class GeneratedPaymentManagerImpl 
+extends AbstractManager<Payment> 
+implements GeneratedPaymentManager {
     
     private final TableIdentifier<Payment> tableIdentifier;
     
@@ -32,15 +35,7 @@ public abstract class GeneratedPaymentManagerImpl extends AbstractManager<Paymen
     
     @Override
     public Stream<Field<Payment>> fields() {
-        return Stream.of(
-            Payment.PAYMENT_ID,
-            Payment.CUSTOMER_ID,
-            Payment.STAFF_ID,
-            Payment.RENTAL_ID,
-            Payment.AMOUNT,
-            Payment.PAYMENT_DATE,
-            Payment.LAST_UPDATE
-        );
+        return PaymentManager.FIELDS.stream();
     }
     
     @Override
