@@ -33,6 +33,7 @@ import com.speedment.runtime.config.internal.immutable.ImmutableProject;
 import com.speedment.runtime.config.util.DocumentTranscoder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
+import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
@@ -97,6 +98,7 @@ public final class ConfigFileHelper {
     @Inject private PasswordComponent passwordComponent;
     @Inject private TranslatorManager translatorManager;
     @Inject private ProjectComponent projectComponent;
+    @Inject private InfoComponent infoComponent;
     @Inject private Injector injector;
 
     private @Config(
@@ -385,6 +387,10 @@ public final class ConfigFileHelper {
                 Files.createDirectories(parent);
             }
 
+            // Set the Speedment version used to generate the code
+            project.stringPropertyOf(Project.SPEEDMENT_VERSION, () -> null)
+                .setValue(infoComponent.getEditionAndVersionString());
+
             DocumentTranscoder.save(project, path, Json::toJson);
 
             if (isGraphical) {
@@ -447,7 +453,8 @@ public final class ConfigFileHelper {
     }
 
     public void clearTablesAndSaveToFile() {
-        Project project = DocumentTranscoder.load(currentlyOpenFile.toPath(), this::fromJson);
+        final Project project = DocumentTranscoder.load(currentlyOpenFile.toPath(), this::fromJson);
+        project.getData().put(Project.SPEEDMENT_VERSION, infoComponent.getEditionAndVersionString());
 
         LOGGER.info("clearing tables");
         project.dbmses().forEach(dbms -> {
