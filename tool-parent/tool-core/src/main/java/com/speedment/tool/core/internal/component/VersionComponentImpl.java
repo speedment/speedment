@@ -16,12 +16,16 @@
  */
 package com.speedment.tool.core.internal.component;
 
+import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.rest.Rest;
+import com.speedment.runtime.core.component.InfoComponent;
 import com.speedment.tool.core.component.VersionComponent;
 import com.speedment.tool.core.exception.SpeedmentToolException;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+
+import static java.lang.String.format;
 
 /**
  * The default implementation of the {@link VersionComponent} interface that 
@@ -32,16 +36,18 @@ import java.util.concurrent.CompletableFuture;
  */
 public final class VersionComponentImpl implements VersionComponent {
 
+    private @Inject InfoComponent info;
+
     @Override
     @SuppressWarnings("unchecked")
     public CompletableFuture<String> latestVersion() {
-        return Rest.connectHttps("api.github.com")
-            .get("repos/speedment/speedment/releases/latest")
+        return Rest.connectHttps("service.speedment.com")
+            .get(format("version/%s/latest", info.getRepository()))
             .thenApplyAsync(res -> {
                 if (res.success()) {
                     return res.decodeJson()
                         .map(m -> (Map<String, String>) m)
-                        .map(m -> m.get("tag_name"))
+                        .map(m -> m.get("tag"))
                         .orElseThrow(() -> new SpeedmentToolException(
                             "Could not establish the latest version."
                         ));
