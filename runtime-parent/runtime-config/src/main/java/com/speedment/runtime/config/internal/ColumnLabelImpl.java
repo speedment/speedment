@@ -22,7 +22,7 @@ import com.speedment.runtime.config.identifier.ColumnLabel;
 public class ColumnLabelImpl implements ColumnLabel {
     private final String label;
 
-    public ColumnLabelImpl(ColumnIdentifier identifier) {
+    public ColumnLabelImpl(ColumnIdentifier<?> identifier) {
         label = identifier.getDbmsName() + "." +
             identifier.getSchemaName() + "." +
             identifier.getTableName() + "." +
@@ -31,11 +31,13 @@ public class ColumnLabelImpl implements ColumnLabel {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        ColumnLabelImpl that = (ColumnLabelImpl) o;
-
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final ColumnLabelImpl that = (ColumnLabelImpl) o;
         return label.equals(that.label);
     }
 
