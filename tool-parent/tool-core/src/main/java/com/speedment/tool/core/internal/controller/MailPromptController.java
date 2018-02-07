@@ -18,7 +18,9 @@ package com.speedment.tool.core.internal.controller;
 
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.core.component.EventComponent;
-import com.speedment.runtime.core.internal.util.InternalEmailUtil;
+import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.runtime.core.util.EmailUtil;
+import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.core.component.UserInterfaceComponent;
 import com.speedment.tool.core.event.UIEvent;
 import com.speedment.tool.core.internal.util.InjectionLoader;
@@ -51,9 +53,10 @@ public final class MailPromptController implements Initializable {
     private final static Predicate<String> IS_INVALID_MAIL = 
         mail -> !INVALID_MAIL.matcher(mail).find();
     
-    private @Inject UserInterfaceComponent userInterfaceComponent;
-    private @Inject InjectionLoader injectionLoader;
-    private @Inject EventComponent eventComponent;
+    private @Inject ProjectComponent projects;
+    private @Inject UserInterfaceComponent ui;
+    private @Inject InjectionLoader loader;
+    private @Inject EventComponent events;
     
     private @FXML TextField email;
     private @FXML TextArea terms;
@@ -69,9 +72,27 @@ public final class MailPromptController implements Initializable {
         ));
 
         okey.setOnAction(ev -> {
-            injectionLoader.loadAndShow("Connect");
-            InternalEmailUtil.setEmail(email.getText());
-            eventComponent.notify(UIEvent.OPEN_CONNECT_WINDOW);
+            loader.loadAndShow("Connect");
+
+            if (EmailUtil.hasEmail()) {
+                if (projects.getProject().dbmses().noneMatch(dbms -> true)) {
+                    loader.loadAndShow("Connect");
+                } else {
+                    loader.loadAndShow("Scene");
+                    ui.showNotification(
+                        "Metadata has been loaded from an offline file. " +
+                        "Click here to reload from database.",
+                        FontAwesome.REFRESH,
+                        Palette.INFO,
+                        ui::reload
+                    );
+                }
+            } else {
+                loader.loadAndShow("MailPrompt");
+            }
+
+            EmailUtil.setEmail(email.getText());
+            events.notify(UIEvent.OPEN_CONNECT_WINDOW);
         });
         
         try {
@@ -79,13 +100,12 @@ public final class MailPromptController implements Initializable {
             final String str = inputToString(in);
             terms.setText(str);
         } catch (final IOException ex) {
-            userInterfaceComponent.showError(
+            ui.showError(
                 "Failed to load file", 
                 "The terms and conditions of this software couldn't be loaded.", 
                 ex
             );
         }
-        
     }
     
     private static String inputToString(InputStream in) throws IOException {

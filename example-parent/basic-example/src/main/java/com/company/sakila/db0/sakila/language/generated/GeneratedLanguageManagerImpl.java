@@ -1,6 +1,7 @@
 package com.company.sakila.db0.sakila.language.generated;
 
 import com.company.sakila.db0.sakila.language.Language;
+import com.company.sakila.db0.sakila.language.LanguageManager;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.AbstractManager;
@@ -17,7 +18,9 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedLanguageManagerImpl extends AbstractManager<Language> implements GeneratedLanguageManager {
+public abstract class GeneratedLanguageManagerImpl 
+extends AbstractManager<Language> 
+implements GeneratedLanguageManager {
     
     private final TableIdentifier<Language> tableIdentifier;
     
@@ -32,11 +35,7 @@ public abstract class GeneratedLanguageManagerImpl extends AbstractManager<Langu
     
     @Override
     public Stream<Field<Language>> fields() {
-        return Stream.of(
-            Language.LANGUAGE_ID,
-            Language.NAME,
-            Language.LAST_UPDATE
-        );
+        return LanguageManager.FIELDS.stream();
     }
     
     @Override

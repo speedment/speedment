@@ -20,11 +20,11 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
-import com.speedment.generator.translator.internal.component.CodeGenerationComponentImpl;
+import com.speedment.generator.core.GeneratorBundle;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.internal.DefaultApplicationBuilder;
 import com.speedment.runtime.core.internal.DefaultApplicationMetadata;
-import com.speedment.runtime.core.internal.util.InternalEmailUtil;
+import com.speedment.runtime.core.util.EmailUtil;
 import com.speedment.tool.core.brand.Palette;
 import com.speedment.tool.core.internal.component.UserInterfaceComponentImpl;
 import com.speedment.tool.core.internal.util.InjectionLoader;
@@ -60,8 +60,8 @@ public final class MainApp extends Application {
                     getClass().getClassLoader(),
                     DefaultApplicationMetadata.class
                 )
-                .withComponent(CodeGenerationComponentImpl.class)
-                .withComponent(UserInterfaceComponentImpl.class)
+                .withBundle(GeneratorBundle.class)
+                .withComponent(ToolBundle.class)
                 .build().getOrThrow(Injector.class);
         }
         
@@ -70,21 +70,22 @@ public final class MainApp extends Application {
         final InjectionLoader loader        = INJECTOR.getOrThrow(InjectionLoader.class);
         
         ui.start(this, stage);
-        
-        if (projects.getProject().dbmses().noneMatch(dbms -> true)) {
-            if (InternalEmailUtil.hasEmail()) {
+
+        if (EmailUtil.hasEmail()) {
+            if (projects.getProject().dbmses().noneMatch(dbms -> true)) {
                 loader.loadAndShow("Connect");
             } else {
-                loader.loadAndShow("MailPrompt");
+                loader.loadAndShow("Scene");
+                ui.showNotification(
+                    "Metadata has been loaded from an offline file. Click " +
+                    "here to reload from database.",
+                    FontAwesome.REFRESH,
+                    Palette.INFO,
+                    ui::reload
+                );
             }
         } else {
-            loader.loadAndShow("Scene");
-            ui.showNotification(
-                "Metadata has been loaded from an offline file. Click here to reload from database.",
-                FontAwesome.REFRESH,
-                Palette.INFO,
-                ui::reload
-            );
+            loader.loadAndShow("MailPrompt");
         }
     }
     

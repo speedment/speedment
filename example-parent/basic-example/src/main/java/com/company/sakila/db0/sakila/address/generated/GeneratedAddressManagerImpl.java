@@ -1,6 +1,7 @@
 package com.company.sakila.db0.sakila.address.generated;
 
 import com.company.sakila.db0.sakila.address.Address;
+import com.company.sakila.db0.sakila.address.AddressManager;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.AbstractManager;
@@ -17,7 +18,9 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedAddressManagerImpl extends AbstractManager<Address> implements GeneratedAddressManager {
+public abstract class GeneratedAddressManagerImpl 
+extends AbstractManager<Address> 
+implements GeneratedAddressManager {
     
     private final TableIdentifier<Address> tableIdentifier;
     
@@ -32,17 +35,7 @@ public abstract class GeneratedAddressManagerImpl extends AbstractManager<Addres
     
     @Override
     public Stream<Field<Address>> fields() {
-        return Stream.of(
-            Address.ADDRESS_ID,
-            Address.ADDRESS,
-            Address.ADDRESS2,
-            Address.DISTRICT,
-            Address.CITY_ID,
-            Address.POSTAL_CODE,
-            Address.PHONE,
-            Address.LOCATION,
-            Address.LAST_UPDATE
-        );
+        return AddressManager.FIELDS.stream();
     }
     
     @Override

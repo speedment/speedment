@@ -10,4 +10,6 @@ import com.company.sakila.db0.sakila.store.generated.GeneratedStoreManagerImpl;
  * 
  * @author company
  */
-public final class StoreManagerImpl extends GeneratedStoreManagerImpl implements StoreManager {}
+public final class StoreManagerImpl 
+extends GeneratedStoreManagerImpl 
+implements StoreManager {}

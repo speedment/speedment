@@ -1,6 +1,7 @@
 package com.company.sakila.db0.sakila.category.generated;
 
 import com.company.sakila.db0.sakila.category.Category;
+import com.company.sakila.db0.sakila.category.CategoryManager;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.AbstractManager;
@@ -17,7 +18,9 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedCategoryManagerImpl extends AbstractManager<Category> implements GeneratedCategoryManager {
+public abstract class GeneratedCategoryManagerImpl 
+extends AbstractManager<Category> 
+implements GeneratedCategoryManager {
     
     private final TableIdentifier<Category> tableIdentifier;
     
@@ -32,11 +35,7 @@ public abstract class GeneratedCategoryManagerImpl extends AbstractManager<Categ
     
     @Override
     public Stream<Field<Category>> fields() {
-        return Stream.of(
-            Category.CATEGORY_ID,
-            Category.NAME,
-            Category.LAST_UPDATE
-        );
+        return CategoryManager.FIELDS.stream();
     }
     
     @Override

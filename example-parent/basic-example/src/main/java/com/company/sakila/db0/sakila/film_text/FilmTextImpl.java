@@ -10,4 +10,6 @@ import com.company.sakila.db0.sakila.film_text.generated.GeneratedFilmTextImpl;
  * 
  * @author company
  */
-public final class FilmTextImpl extends GeneratedFilmTextImpl implements FilmText {}
+public final class FilmTextImpl 
+extends GeneratedFilmTextImpl 
+implements FilmText {}

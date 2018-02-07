@@ -31,7 +31,7 @@ public interface GeneratedFilmText {
         Identifier.FILM_ID,
         FilmText::getFilmId,
         FilmText::setFilmId,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         true
     );
     /**
@@ -42,7 +42,7 @@ public interface GeneratedFilmText {
         Identifier.TITLE,
         FilmText::getTitle,
         FilmText::setTitle,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -53,7 +53,7 @@ public interface GeneratedFilmText {
         Identifier.DESCRIPTION,
         o -> OptionalUtil.unwrap(o.getDescription()),
         FilmText::setDescription,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     

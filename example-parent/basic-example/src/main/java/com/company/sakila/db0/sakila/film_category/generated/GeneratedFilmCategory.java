@@ -35,7 +35,7 @@ public interface GeneratedFilmCategory {
         FilmCategory::getFilmId,
         FilmCategory::setFilmId,
         Film.FILM_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -47,7 +47,7 @@ public interface GeneratedFilmCategory {
         FilmCategory::getCategoryId,
         FilmCategory::setCategoryId,
         Category.CATEGORY_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -58,7 +58,7 @@ public interface GeneratedFilmCategory {
         Identifier.LAST_UPDATE,
         FilmCategory::getLastUpdate,
         FilmCategory::setLastUpdate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     

@@ -48,7 +48,8 @@ public abstract class AbstractApplicationMetadata implements ApplicationMetadata
     
     @Override
     public Project makeProject() {
-        return getMetadata().map(json -> DocumentTranscoder.load(json, this::fromJson)).orElseGet(() -> {
+        return getMetadata()
+            .map(json -> DocumentTranscoder.load(json, this::fromJson)).orElseGet(() -> {
             final Map<String, Object> data = new ConcurrentHashMap<>();
             data.put(HasName.NAME, "Project");
             data.put(Project.APP_ID, UUID.randomUUID().toString());

@@ -3,6 +3,10 @@ package com.company.sakila.db0.sakila.city.generated;
 import com.company.sakila.db0.sakila.city.City;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.field.Field;
+import java.util.List;
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
 
 /**
  * The generated base interface for the manager of every {@link
@@ -15,6 +19,13 @@ import com.speedment.runtime.core.manager.Manager;
  */
 @GeneratedCode("Speedment")
 public interface GeneratedCityManager extends Manager<City> {
+    
+    List<Field<City>> FIELDS = unmodifiableList(asList(
+        City.CITY_ID,
+        City.CITY,
+        City.COUNTRY_ID,
+        City.LAST_UPDATE
+    ));
     
     @Override
     default Class<City> getEntityClass() {

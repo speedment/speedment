@@ -3,6 +3,10 @@ package com.company.sakila.db0.sakila.address.generated;
 import com.company.sakila.db0.sakila.address.Address;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.field.Field;
+import java.util.List;
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
 
 /**
  * The generated base interface for the manager of every {@link
@@ -15,6 +19,18 @@ import com.speedment.runtime.core.manager.Manager;
  */
 @GeneratedCode("Speedment")
 public interface GeneratedAddressManager extends Manager<Address> {
+    
+    List<Field<Address>> FIELDS = unmodifiableList(asList(
+        Address.ADDRESS_ID,
+        Address.ADDRESS,
+        Address.ADDRESS2,
+        Address.DISTRICT,
+        Address.CITY_ID,
+        Address.POSTAL_CODE,
+        Address.PHONE,
+        Address.LOCATION,
+        Address.LAST_UPDATE
+    ));
     
     @Override
     default Class<Address> getEntityClass() {

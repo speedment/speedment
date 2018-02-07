@@ -1,6 +1,7 @@
 package com.company.sakila.db0.sakila.city.generated;
 
 import com.company.sakila.db0.sakila.city.City;
+import com.company.sakila.db0.sakila.city.CityManager;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.AbstractManager;
@@ -17,7 +18,9 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedCityManagerImpl extends AbstractManager<City> implements GeneratedCityManager {
+public abstract class GeneratedCityManagerImpl 
+extends AbstractManager<City> 
+implements GeneratedCityManager {
     
     private final TableIdentifier<City> tableIdentifier;
     
@@ -32,12 +35,7 @@ public abstract class GeneratedCityManagerImpl extends AbstractManager<City> imp
     
     @Override
     public Stream<Field<City>> fields() {
-        return Stream.of(
-            City.CITY_ID,
-            City.CITY,
-            City.COUNTRY_ID,
-            City.LAST_UPDATE
-        );
+        return CityManager.FIELDS.stream();
     }
     
     @Override

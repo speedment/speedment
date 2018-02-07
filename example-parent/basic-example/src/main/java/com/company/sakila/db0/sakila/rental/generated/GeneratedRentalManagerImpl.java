@@ -1,6 +1,7 @@
 package com.company.sakila.db0.sakila.rental.generated;
 
 import com.company.sakila.db0.sakila.rental.Rental;
+import com.company.sakila.db0.sakila.rental.RentalManager;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.AbstractManager;
@@ -17,7 +18,9 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedRentalManagerImpl extends AbstractManager<Rental> implements GeneratedRentalManager {
+public abstract class GeneratedRentalManagerImpl 
+extends AbstractManager<Rental> 
+implements GeneratedRentalManager {
     
     private final TableIdentifier<Rental> tableIdentifier;
     
@@ -32,15 +35,7 @@ public abstract class GeneratedRentalManagerImpl extends AbstractManager<Rental>
     
     @Override
     public Stream<Field<Rental>> fields() {
-        return Stream.of(
-            Rental.RENTAL_ID,
-            Rental.RENTAL_DATE,
-            Rental.INVENTORY_ID,
-            Rental.CUSTOMER_ID,
-            Rental.RETURN_DATE,
-            Rental.STAFF_ID,
-            Rental.LAST_UPDATE
-        );
+        return RentalManager.FIELDS.stream();
     }
     
     @Override

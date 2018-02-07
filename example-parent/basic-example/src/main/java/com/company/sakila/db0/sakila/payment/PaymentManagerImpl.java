@@ -10,4 +10,6 @@ import com.company.sakila.db0.sakila.payment.generated.GeneratedPaymentManagerIm
  * 
  * @author company
  */
-public final class PaymentManagerImpl extends GeneratedPaymentManagerImpl implements PaymentManager {}
+public final class PaymentManagerImpl 
+extends GeneratedPaymentManagerImpl 
+implements PaymentManager {}

@@ -3,6 +3,10 @@ package com.company.sakila.db0.sakila.language.generated;
 import com.company.sakila.db0.sakila.language.Language;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.field.Field;
+import java.util.List;
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
 
 /**
  * The generated base interface for the manager of every {@link
@@ -15,6 +19,12 @@ import com.speedment.runtime.core.manager.Manager;
  */
 @GeneratedCode("Speedment")
 public interface GeneratedLanguageManager extends Manager<Language> {
+    
+    List<Field<Language>> FIELDS = unmodifiableList(asList(
+        Language.LANGUAGE_ID,
+        Language.NAME,
+        Language.LAST_UPDATE
+    ));
     
     @Override
     default Class<Language> getEntityClass() {

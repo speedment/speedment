@@ -54,6 +54,14 @@ public interface InfoComponent  {
     String getSubtitle();
 
     /**
+     * The name of the official repository of the Speedment product. This is
+     * used to lookup the latest version.
+     *
+     * @return  the name of the official repository
+     */
+    String getRepository();
+
+    /**
      * Return the non-null version of this Speedment implementation. It consists
      * of any string assigned by the vendor of this implementation and does not
      * have any particular syntax specified or expected by the Java runtime. It
@@ -87,4 +95,7 @@ public interface InfoComponent  {
         return "Apache-2.0";
     }
 
+    default String getEditionAndVersionString() {
+        return getTitle() + ":" + getImplementationVersion();
+    }
 }

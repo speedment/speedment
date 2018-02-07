@@ -35,7 +35,7 @@ public interface GeneratedStore {
         Identifier.STORE_ID,
         Store::getStoreId,
         Store::setStoreId,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         true
     );
     /**
@@ -47,7 +47,7 @@ public interface GeneratedStore {
         Store::getManagerStaffId,
         Store::setManagerStaffId,
         Staff.STAFF_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         true
     );
     /**
@@ -59,7 +59,7 @@ public interface GeneratedStore {
         Store::getAddressId,
         Store::setAddressId,
         Address.ADDRESS_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -70,7 +70,7 @@ public interface GeneratedStore {
         Identifier.LAST_UPDATE,
         Store::getLastUpdate,
         Store::setLastUpdate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     

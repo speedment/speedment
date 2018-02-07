@@ -10,4 +10,6 @@ import com.company.sakila.db0.sakila.address.generated.GeneratedAddressManagerIm
  * 
  * @author company
  */
-public final class AddressManagerImpl extends GeneratedAddressManagerImpl implements AddressManager {}
+public final class AddressManagerImpl 
+extends GeneratedAddressManagerImpl 
+implements AddressManager {}

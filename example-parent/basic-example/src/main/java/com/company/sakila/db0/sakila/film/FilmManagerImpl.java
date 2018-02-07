@@ -10,4 +10,6 @@ import com.company.sakila.db0.sakila.film.generated.GeneratedFilmManagerImpl;
  * 
  * @author company
  */
-public final class FilmManagerImpl extends GeneratedFilmManagerImpl implements FilmManager {}
+public final class FilmManagerImpl 
+extends GeneratedFilmManagerImpl 
+implements FilmManager {}

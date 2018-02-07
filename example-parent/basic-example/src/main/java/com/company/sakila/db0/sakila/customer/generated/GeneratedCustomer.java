@@ -38,7 +38,7 @@ public interface GeneratedCustomer {
         Identifier.CUSTOMER_ID,
         Customer::getCustomerId,
         Customer::setCustomerId,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         true
     );
     /**
@@ -50,7 +50,7 @@ public interface GeneratedCustomer {
         Customer::getStoreId,
         Customer::setStoreId,
         Store.STORE_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -61,7 +61,7 @@ public interface GeneratedCustomer {
         Identifier.FIRST_NAME,
         Customer::getFirstName,
         Customer::setFirstName,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -72,7 +72,7 @@ public interface GeneratedCustomer {
         Identifier.LAST_NAME,
         Customer::getLastName,
         Customer::setLastName,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -83,7 +83,7 @@ public interface GeneratedCustomer {
         Identifier.EMAIL,
         o -> OptionalUtil.unwrap(o.getEmail()),
         Customer::setEmail,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -95,7 +95,7 @@ public interface GeneratedCustomer {
         Customer::getAddressId,
         Customer::setAddressId,
         Address.ADDRESS_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -106,7 +106,7 @@ public interface GeneratedCustomer {
         Identifier.ACTIVE,
         Customer::getActive,
         Customer::setActive,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -117,7 +117,7 @@ public interface GeneratedCustomer {
         Identifier.CREATE_DATE,
         Customer::getCreateDate,
         Customer::setCreateDate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -128,7 +128,7 @@ public interface GeneratedCustomer {
         Identifier.LAST_UPDATE,
         Customer::getLastUpdate,
         Customer::setLastUpdate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     

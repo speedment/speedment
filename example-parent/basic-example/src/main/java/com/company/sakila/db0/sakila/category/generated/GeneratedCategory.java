@@ -31,7 +31,7 @@ public interface GeneratedCategory {
         Identifier.CATEGORY_ID,
         Category::getCategoryId,
         Category::setCategoryId,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         true
     );
     /**
@@ -42,7 +42,7 @@ public interface GeneratedCategory {
         Identifier.NAME,
         Category::getName,
         Category::setName,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -53,7 +53,7 @@ public interface GeneratedCategory {
         Identifier.LAST_UPDATE,
         Category::getLastUpdate,
         Category::setLastUpdate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     

@@ -10,4 +10,6 @@ import com.company.sakila.db0.sakila.store.generated.GeneratedStoreImpl;
  * 
  * @author company
  */
-public final class StoreImpl extends GeneratedStoreImpl implements Store {}
+public final class StoreImpl 
+extends GeneratedStoreImpl 
+implements Store {}

@@ -34,7 +34,7 @@ public interface GeneratedFilmActor {
         FilmActor::getActorId,
         FilmActor::setActorId,
         Actor.ACTOR_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -46,7 +46,7 @@ public interface GeneratedFilmActor {
         FilmActor::getFilmId,
         FilmActor::setFilmId,
         Film.FILM_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -57,7 +57,7 @@ public interface GeneratedFilmActor {
         Identifier.LAST_UPDATE,
         FilmActor::getLastUpdate,
         FilmActor::setLastUpdate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     

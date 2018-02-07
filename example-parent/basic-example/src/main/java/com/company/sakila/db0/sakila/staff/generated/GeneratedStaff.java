@@ -41,7 +41,7 @@ public interface GeneratedStaff {
         Identifier.STAFF_ID,
         Staff::getStaffId,
         Staff::setStaffId,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         true
     );
     /**
@@ -52,7 +52,7 @@ public interface GeneratedStaff {
         Identifier.FIRST_NAME,
         Staff::getFirstName,
         Staff::setFirstName,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -63,7 +63,7 @@ public interface GeneratedStaff {
         Identifier.LAST_NAME,
         Staff::getLastName,
         Staff::setLastName,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -75,7 +75,7 @@ public interface GeneratedStaff {
         Staff::getAddressId,
         Staff::setAddressId,
         Address.ADDRESS_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -86,7 +86,7 @@ public interface GeneratedStaff {
         Identifier.PICTURE,
         o -> OptionalUtil.unwrap(o.getPicture()),
         Staff::setPicture,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -97,7 +97,7 @@ public interface GeneratedStaff {
         Identifier.EMAIL,
         o -> OptionalUtil.unwrap(o.getEmail()),
         Staff::setEmail,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -109,7 +109,7 @@ public interface GeneratedStaff {
         Staff::getStoreId,
         Staff::setStoreId,
         Store.STORE_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -120,7 +120,7 @@ public interface GeneratedStaff {
         Identifier.ACTIVE,
         Staff::getActive,
         Staff::setActive,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -131,7 +131,7 @@ public interface GeneratedStaff {
         Identifier.USERNAME,
         Staff::getUsername,
         Staff::setUsername,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -142,7 +142,7 @@ public interface GeneratedStaff {
         Identifier.PASSWORD,
         o -> OptionalUtil.unwrap(o.getPassword()),
         Staff::setPassword,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -153,7 +153,7 @@ public interface GeneratedStaff {
         Identifier.LAST_UPDATE,
         Staff::getLastUpdate,
         Staff::setLastUpdate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     

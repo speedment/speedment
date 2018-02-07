@@ -1,6 +1,7 @@
 package com.company.sakila.db0.sakila.film.generated;
 
 import com.company.sakila.db0.sakila.film.Film;
+import com.company.sakila.db0.sakila.film.FilmManager;
 import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.AbstractManager;
@@ -17,7 +18,9 @@ import java.util.stream.Stream;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedFilmManagerImpl extends AbstractManager<Film> implements GeneratedFilmManager {
+public abstract class GeneratedFilmManagerImpl 
+extends AbstractManager<Film> 
+implements GeneratedFilmManager {
     
     private final TableIdentifier<Film> tableIdentifier;
     
@@ -32,21 +35,7 @@ public abstract class GeneratedFilmManagerImpl extends AbstractManager<Film> imp
     
     @Override
     public Stream<Field<Film>> fields() {
-        return Stream.of(
-            Film.FILM_ID,
-            Film.TITLE,
-            Film.DESCRIPTION,
-            Film.RELEASE_YEAR,
-            Film.LANGUAGE_ID,
-            Film.ORIGINAL_LANGUAGE_ID,
-            Film.RENTAL_DURATION,
-            Film.RENTAL_RATE,
-            Film.LENGTH,
-            Film.REPLACEMENT_COST,
-            Film.RATING,
-            Film.SPECIAL_FEATURES,
-            Film.LAST_UPDATE
-        );
+        return FilmManager.FIELDS.stream();
     }
     
     @Override

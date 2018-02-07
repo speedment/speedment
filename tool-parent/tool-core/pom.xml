@@ -26,9 +26,9 @@
     <parent>
         <groupId>com.speedment.tool</groupId>
         <artifactId>tool-parent</artifactId>
-        <version>3.0.20</version>
+        <version>3.0.21-SNAPSHOT</version>
     </parent>
-    
+        
     <artifactId>tool-core</artifactId>
     <packaging>bundle</packaging>
     

@@ -31,7 +31,7 @@ public interface GeneratedActor {
         Identifier.ACTOR_ID,
         Actor::getActorId,
         Actor::setActorId,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         true
     );
     /**
@@ -42,7 +42,7 @@ public interface GeneratedActor {
         Identifier.FIRST_NAME,
         Actor::getFirstName,
         Actor::setFirstName,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -53,7 +53,7 @@ public interface GeneratedActor {
         Identifier.LAST_NAME,
         Actor::getLastName,
         Actor::setLastName,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -64,7 +64,7 @@ public interface GeneratedActor {
         Identifier.LAST_UPDATE,
         Actor::getLastUpdate,
         Actor::setLastUpdate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     

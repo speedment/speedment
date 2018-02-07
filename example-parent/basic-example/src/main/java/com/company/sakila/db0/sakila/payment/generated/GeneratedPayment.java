@@ -41,7 +41,7 @@ public interface GeneratedPayment {
         Identifier.PAYMENT_ID,
         Payment::getPaymentId,
         Payment::setPaymentId,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         true
     );
     /**
@@ -53,7 +53,7 @@ public interface GeneratedPayment {
         Payment::getCustomerId,
         Payment::setCustomerId,
         Customer.CUSTOMER_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -65,7 +65,7 @@ public interface GeneratedPayment {
         Payment::getStaffId,
         Payment::setStaffId,
         Staff.STAFF_ID,
-        TypeMapper.primitive(), 
+        TypeMapper.primitive(),
         false
     );
     /**
@@ -77,7 +77,7 @@ public interface GeneratedPayment {
         o -> OptionalUtil.unwrap(o.getRentalId()),
         Payment::setRentalId,
         Rental.RENTAL_ID,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -88,7 +88,7 @@ public interface GeneratedPayment {
         Identifier.AMOUNT,
         Payment::getAmount,
         Payment::setAmount,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -99,7 +99,7 @@ public interface GeneratedPayment {
         Identifier.PAYMENT_DATE,
         Payment::getPaymentDate,
         Payment::setPaymentDate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     /**
@@ -110,7 +110,7 @@ public interface GeneratedPayment {
         Identifier.LAST_UPDATE,
         Payment::getLastUpdate,
         Payment::setLastUpdate,
-        TypeMapper.identity(), 
+        TypeMapper.identity(),
         false
     );
     

@@ -23,14 +23,10 @@ import com.speedment.runtime.core.manager.Persister;
 import com.speedment.runtime.core.manager.Remover;
 import com.speedment.runtime.core.manager.Updater;
 import com.speedment.runtime.field.Field;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import static java.util.stream.Collectors.toMap;
-import java.util.stream.Stream;
-import static jdk.nashorn.internal.runtime.Debug.id;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.stream.Stream;
 
 /**
  *
