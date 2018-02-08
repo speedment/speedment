@@ -34,7 +34,7 @@
     
     <groupId>com.speedment</groupId>
     <artifactId>speedment-parent</artifactId>
-    <version>3.0.21-SNAPSHOT</version>
+    <version>3.0.21</version>
     <packaging>pom</packaging>
     
     <!-- Project Metadata -->
