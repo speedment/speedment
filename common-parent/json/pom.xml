@@ -26,11 +26,11 @@
     <parent>
         <groupId>com.speedment.common</groupId>
         <artifactId>common-parent</artifactId>
-        <version>3.0.21-SNAPSHOT</version>
+        <version>3.0.21</version>
     </parent>
     
     <artifactId>json</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.4</version>
     <packaging>bundle</packaging>
     
     <name>Speedment - Common - JSON</name>
@@ -46,7 +46,7 @@
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
                 <configuration>
-                    <skipStaging>true</skipStaging>
+<!--                    <skipStaging>true</skipStaging>-->
                 </configuration>
             </plugin>
             <plugin>
