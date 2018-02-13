@@ -74,8 +74,9 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
             .private_().final_().static_();
 
         final Method initializer = Method.of("init", String.class).static_().private_();
+        final ProjectMutator<? extends Project> project =
+            Project.deepCopy(getSupport().projectOrThrow()).mutator();
 
-        final ProjectMutator<? extends Project> project = getSupport().projectOrThrow().mutator();
         project.setSpeedmentVersion(infoComponent.getEditionAndVersionString());
 
         final List<String> lines = Stream.of(
