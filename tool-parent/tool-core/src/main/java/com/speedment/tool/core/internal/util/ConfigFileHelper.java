@@ -30,6 +30,7 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.internal.DbmsImpl;
 import com.speedment.runtime.config.internal.immutable.ImmutableProject;
+import com.speedment.runtime.config.mutator.ProjectMutator;
 import com.speedment.runtime.config.util.DocumentTranscoder;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
@@ -453,8 +454,13 @@ public final class ConfigFileHelper {
     }
 
     public void clearTablesAndSaveToFile() {
-        final Project project = DocumentTranscoder.load(currentlyOpenFile.toPath(), this::fromJson);
-        project.getData().put(Project.SPEEDMENT_VERSION, infoComponent.getEditionAndVersionString());
+        //final Project project = DocumentTranscoder.load(currentlyOpenFile.toPath(), this::fromJson);
+        //project.getData().put(Project.SPEEDMENT_VERSION, infoComponent.getEditionAndVersionString());
+
+        final ProjectMutator<? extends Project> projectMutator = DocumentTranscoder
+            .load(currentlyOpenFile.toPath(), this::fromJson).mutator();
+        projectMutator.setSpeedmentVersion(infoComponent.getEditionAndVersionString());
+        final Project project = projectMutator.document();
 
         LOGGER.info("clearing tables");
         project.dbmses().forEach(dbms -> {
