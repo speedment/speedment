@@ -454,11 +454,13 @@ public final class ConfigFileHelper {
     }
 
     public void clearTablesAndSaveToFile() {
-        //final Project project = DocumentTranscoder.load(currentlyOpenFile.toPath(), this::fromJson);
-        //project.getData().put(Project.SPEEDMENT_VERSION, infoComponent.getEditionAndVersionString());
+        final ProjectMutator<? extends Project> projectMutator =
+            Project.deepCopy(DocumentTranscoder.load(
+                currentlyOpenFile.toPath(),
+                this::fromJson
+            )
+        ).mutator();
 
-        final ProjectMutator<? extends Project> projectMutator = DocumentTranscoder
-            .load(currentlyOpenFile.toPath(), this::fromJson).mutator();
         projectMutator.setSpeedmentVersion(infoComponent.getEditionAndVersionString());
         final Project project = projectMutator.document();
 
