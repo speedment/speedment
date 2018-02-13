@@ -17,6 +17,7 @@
 package com.speedment.runtime.config;
 
 import com.speedment.runtime.config.exception.SpeedmentConfigException;
+import com.speedment.runtime.config.internal.ProjectImpl;
 import com.speedment.runtime.config.mutator.DocumentMutator;
 import com.speedment.runtime.config.mutator.ProjectMutator;
 import com.speedment.runtime.config.trait.HasChildren;
@@ -26,6 +27,8 @@ import com.speedment.runtime.config.trait.HasMainInterface;
 import com.speedment.runtime.config.trait.HasMutator;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.config.trait.HasPackageName;
+import com.speedment.runtime.config.util.DocumentUtil;
+
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
@@ -61,6 +64,17 @@ extends Document,
             DEFAULT_PACKAGE_NAME     = "com.",
             DEFAULT_PACKAGE_LOCATION = "src/main/java/",
             DEFAULT_PROJECT_NAME     = Project.class.getSimpleName();
+
+    /**
+     * Creates and returns a mutable deep-copy of the specified project.
+     *
+     * @param existing  the existing project
+     * @return  the created copy
+     * @since 3.0.22
+     */
+    static Project deepCopy(Project existing) {
+        return DocumentUtil.deepCopy(existing, ProjectImpl::new);
+    }
     
     /**
      * Returns the name of the company that should be used in generated code.
