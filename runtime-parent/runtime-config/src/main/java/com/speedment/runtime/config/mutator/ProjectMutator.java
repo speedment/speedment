@@ -41,7 +41,11 @@ public class ProjectMutator<DOC extends Project> extends DocumentMutatorImpl<DOC
     public ProjectMutator(DOC project) {
         super(project);
     }
-    
+
+    public void setSpeedmentVersion(String speedmentVersion) {
+        put(SPEEDMENT_VERSION, speedmentVersion);
+    }
+
     public void setCompanyName(String companyName) {
         put(COMPANY_NAME, companyName);
     }

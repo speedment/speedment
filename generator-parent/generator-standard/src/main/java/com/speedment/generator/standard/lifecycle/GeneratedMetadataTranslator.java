@@ -24,6 +24,7 @@ import com.speedment.common.injector.annotation.Inject;
 import com.speedment.common.json.Json;
 import com.speedment.generator.translator.AbstractJavaClassTranslator;
 import com.speedment.runtime.config.Project;
+import com.speedment.runtime.config.mutator.ProjectMutator;
 import com.speedment.runtime.config.util.DocumentTranscoder;
 import com.speedment.runtime.core.ApplicationMetadata;
 import com.speedment.runtime.core.component.InfoComponent;
@@ -73,10 +74,15 @@ public final class GeneratedMetadataTranslator extends AbstractJavaClassTranslat
             .private_().final_().static_();
 
         final Method initializer = Method.of("init", String.class).static_().private_();
+        final ProjectMutator<? extends Project> project =
+            Project.deepCopy(getSupport().projectOrThrow()).mutator();
 
-        final Project project = getSupport().projectOrThrow();
-        project.getData().put(Project.SPEEDMENT_VERSION, infoComponent.getEditionAndVersionString());
-        final List<String> lines = Stream.of(DocumentTranscoder.save(project, Json::toJson).split("\\R")).collect(toList());
+        project.setSpeedmentVersion(infoComponent.getEditionAndVersionString());
+
+        final List<String> lines = Stream.of(
+            DocumentTranscoder.save(project.document(), Json::toJson)
+                .split("\\R")).collect(toList());
+
         final List<List<String>> segments = new ArrayList<>();
         List<String> segment = new ArrayList<>();
         segments.add(segment);
