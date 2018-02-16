@@ -70,6 +70,12 @@
                 <version>${speedment.version}</version>
             </dependency>
             
+            <dependency>
+                <groupId>com.speedment.runtime</groupId>
+                <artifactId>runtime-join</artifactId>
+                <version>${speedment.version}</version>
+            </dependency>
+            
         </dependencies>
     </dependencyManagement>
 </project>
