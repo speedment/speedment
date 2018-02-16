@@ -18,7 +18,7 @@ public interface HasOnPredicates<V extends Comparable<? super V>, ENTITY, R> {
      *
      * @param <FIELD> type for the joined field
      * @param joinedField to use by the operation
-     * @return a builder
+     * @return a builder with the added operation
      *
      * @throws NullPointerException if the provided {@code joinedField} is
      * {@code null}.
@@ -33,7 +33,7 @@ public interface HasOnPredicates<V extends Comparable<? super V>, ENTITY, R> {
      *
      * @param <FIELD> type for the joined field
      * @param joinedField to use by the operation
-     * @return a builder
+     * @return a builder with the added operation
      *
      * @throws NullPointerException if the provided {@code joinedField} is
      * {@code null}.
@@ -47,7 +47,7 @@ public interface HasOnPredicates<V extends Comparable<? super V>, ENTITY, R> {
      *
      * @param <FIELD> type for the joined field
      * @param joinedField to use by the operation
-     * @return a builder
+     * @return a builder with the added operation
      *
      * @throws NullPointerException if the provided {@code joinedField} is
      * {@code null}.
@@ -62,7 +62,7 @@ public interface HasOnPredicates<V extends Comparable<? super V>, ENTITY, R> {
      *
      * @param <FIELD> type for the joined field
      * @param joinedField to use by the operation
-     * @return a builder
+     * @return a builder with the added operation
      *
      * @throws NullPointerException if the provided {@code joinedField} is
      * {@code null}.
@@ -77,7 +77,7 @@ public interface HasOnPredicates<V extends Comparable<? super V>, ENTITY, R> {
      *
      * @param <FIELD> type for the joined field
      * @param joinedField to use by the operation
-     * @return a builder
+     * @return a builder with the added operation
      *
      * @throws NullPointerException if the provided {@code joinedField} is
      * {@code null}.
@@ -92,7 +92,7 @@ public interface HasOnPredicates<V extends Comparable<? super V>, ENTITY, R> {
      *
      * @param <FIELD> type for the joined field
      * @param joinedField to use by the operation
-     * @return a builder
+     * @return a builder with the added operation
      *
      * @throws NullPointerException if the provided {@code joinedField} is
      * {@code null}.
@@ -110,7 +110,7 @@ public interface HasOnPredicates<V extends Comparable<? super V>, ENTITY, R> {
      * @param <FIELD2> type for the second joined field
      * @param joinedFieldFrom to use by the operation
      * @param joinedFieldTo to use by the operation
-     * @return a builder
+     * @return a builder with the added operation
      *
      * @throws NullPointerException if either the provided
      * {@code joinedFieldFrom} or the provided {@code joinedFieldTo } is
@@ -130,7 +130,7 @@ public interface HasOnPredicates<V extends Comparable<? super V>, ENTITY, R> {
      * @param <FIELD2> type for the second joined field
      * @param joinedFieldFrom to use by the operation
      * @param joinedFieldTo to use by the operation
-     * @return a builder
+     * @return a builder with the added operation
      *
      * @throws NullPointerException if either the provided
      * {@code joinedFieldFrom} or the provided {@code joinedFieldTo } is

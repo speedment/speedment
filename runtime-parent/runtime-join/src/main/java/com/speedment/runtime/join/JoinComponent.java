@@ -61,7 +61,7 @@ public interface JoinComponent {
             HasOn<A> {
 
             @Override
-            <V extends Comparable<? super V>, FIELD extends HasComparableOperators<A, V>> AfterOn<A, B, V> on(FIELD originalField); // Enforce dynamic type later in operation parameter
+            <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends A, V>> AfterOn<A, B, V> on(FIELD originalField); // Enforce dynamic type later in operation parameter
 
             interface AfterOn<A, B, V extends Comparable<? super V>> extends
                 HasOnPredicates<V, B, AfterFirstJoin<A, B>> {
@@ -104,7 +104,7 @@ public interface JoinComponent {
          *
          * @param <T> the type of element in the Join object's stream method.
          * @param constructor to use to create stream elements.
-         * @return new Join object where elements in the Join object's stream
+         * @return a new Join object where elements in the Join object's stream
          * method is of a default {@link Tuple} type
          *
          * @throws NullPointerException if the provided {@code constructor } is
@@ -116,7 +116,7 @@ public interface JoinComponent {
             HasOn<Object> /* AfterSecondJoin<A, B, C>*/ {
 
             @Override
-            <V extends Comparable<? super V>, FIELD extends HasComparableOperators<Object, V>> AfterOn<A, B, C, V> on(FIELD originalField);
+            <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<A, B, C, V> on(FIELD originalField);
 
             interface AfterOn<A, B, C, V extends Comparable<? super V>> extends
                 HasOnPredicates<V, C, AfterSecondJoin<A, B, C>> {
@@ -158,7 +158,7 @@ public interface JoinComponent {
          *
          * @param <T> the type of element in the Join object's stream method.
          * @param constructor to use to create stream elements.
-         * @return new Join object where elements in the Join object's stream
+         * @return a new Join object where elements in the Join object's stream
          * method is of a default {@link Tuple} type
          *
          * @throws NullPointerException if the provided {@code constructor } is
@@ -170,7 +170,7 @@ public interface JoinComponent {
             HasOn<Object> {
 
             @Override
-            <V extends Comparable<? super V>, FIELD extends HasComparableOperators<Object, V>> AfterOn<A, B, C, D, V> on(FIELD originalField);
+            <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<A, B, C, D, V> on(FIELD originalField);
 
             interface AfterOn<A, B, C, D, V extends Comparable<? super V>> extends
                 HasOnPredicates<V, C, AfterThirdJoin<A, B, C, D>> {
@@ -197,7 +197,7 @@ public interface JoinComponent {
          *
          * @param <T> the type of element in the Join object's stream method.
          * @param constructor to use to create stream elements.
-         * @return new Join object where elements in the Join object's stream
+         * @return a new Join object where elements in the Join object's stream
          * method is of a default {@link Tuple} type
          *
          * @throws NullPointerException if the provided {@code constructor } is

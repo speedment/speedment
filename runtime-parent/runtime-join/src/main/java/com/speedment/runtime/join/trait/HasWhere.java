@@ -13,11 +13,12 @@ public interface HasWhere<ENTITY, R> {
 
     /**
      * Adds the provided {@code  predicate} to the collection of predicates that
-     * shall be applied to the data source before entities are accepted in the
-     * join.
+     * shall be applied to entities from the previous Manager before entities
+     * are accepted in the join.
      *
      * @param predicate to apply
      * @return a builder where the provided {@code predicate} is added
+     *
      * @throws NullPointerException if the provided {@code predicate } is
      * {@code null}
      */

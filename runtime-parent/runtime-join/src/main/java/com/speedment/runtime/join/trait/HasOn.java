@@ -17,13 +17,13 @@ public interface HasOn<ENTITY> {
      * @param <V> type that the field can cold
      * @param <FIELD> type of the field
      * @param originalField
-     * @return
+     * @return a builder with the modified operation
      *
      * @throws NullPointerException if the provided {@code originalField } is
      * {@code null}
      * @throws IllegalArgumentException if the provided {@code originalField}
      * does not belong to a manager that is previously entered into the builder.
      */
-    <V extends Comparable<? super V>, FIELD extends HasComparableOperators<ENTITY, V>> Object on(FIELD originalField);
+    <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends ENTITY, V>> Object on(FIELD originalField);
 
 }

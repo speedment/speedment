@@ -166,12 +166,11 @@ public class JoinSketchTest {
 
     private void test3Inner() {
         
-        
-//        final Join<Tuple3<User, Picture, FrameType>> join = jc
-//            .from(users)
-//            .innerJoin(pictures).on(User.USER_ID).equal(Picture.USER_ID)
-//            .innerJoin(frameTypes).on(Picture.FRAME_ID).equal(FrameType.FRAME_ID) // Note that on() can be either on Picture or User
-//            .build();
+        final Join<Tuple3<User, Picture, FrameType>> join = jc
+            .from(users)
+            .innerJoin(pictures).on(User.USER_ID).equal(Picture.USER_ID)
+            .innerJoin(frameTypes).on(Picture.FRAME_ID).equal(FrameType.FRAME_ID) // Note that on() can be either on Picture or User
+            .build();
 
        // SELECT * from USER AS A 
        //  INNER JOIN PICTURES AS B ON A.USER_ID = B.USER_ID
