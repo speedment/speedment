@@ -32,16 +32,19 @@ import static com.speedment.common.codegen.constant.DefaultType.classOf;
 import static com.speedment.common.codegen.constant.DefaultType.list;
 import static com.speedment.common.codegen.util.Formatting.indent;
 import static com.speedment.common.codegen.util.Formatting.nl;
+import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.config.trait.HasAlias;
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.joining;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Emil Forslund
- * @since  2.3.0
+ * @since 2.3.0
  */
-public final class GeneratedManagerTranslator 
-extends AbstractEntityAndManagerTranslator<Interface> {
+public final class GeneratedManagerTranslator
+    extends AbstractEntityAndManagerTranslator<Interface> {
 
     public GeneratedManagerTranslator(Table table) {
         super(table, Interface::of);
@@ -57,7 +60,23 @@ extends AbstractEntityAndManagerTranslator<Interface> {
 
                 intf.public_()
                     .add(SimpleParameterizedType.create(Manager.class, getSupport().entityType()))
-
+                    .add(
+                        Field.of(
+                            "IDENTIFIER",
+                            SimpleParameterizedType.create(TableIdentifier.class, getSupport().entityType())
+                        ).set(Value.ofReference("TableIdentifier.of(" + nl()
+                            + indent(
+                                Stream.of(
+                                    table.getParentOrThrow().getParentOrThrow(),
+                                    table.getParentOrThrow(),
+                                    table
+                                )
+                                    .map(HasAlias::getJavaName)
+                                    .map(s -> "\"" + s + "\"")
+                                    .collect(joining("," + nl()))
+                            ) + nl() + ")" + nl()
+                        ))
+                    )
                     .add(Field.of("FIELDS", list(SimpleParameterizedType.create(
                         com.speedment.runtime.field.Field.class,
                         getSupport().entityType())
@@ -70,7 +89,6 @@ extends AbstractEntityAndManagerTranslator<Interface> {
                             .map(field -> getSupport().typeName() + "." + field)
                             .collect(joining("," + nl()))
                     ) + nl() + "))")))
-
                     .add(Method.of("getEntityClass", classOf(getSupport().entityType()))
                         .default_().add(OVERRIDE)
                         .add("return " + getSupport().entityName() + ".class;")
@@ -80,8 +98,8 @@ extends AbstractEntityAndManagerTranslator<Interface> {
 
     @Override
     protected String getJavadocRepresentText() {
-        return "The generated base interface for the manager of every {@link " + 
-            getSupport().entityType().getTypeName() + "} entity.";
+        return "The generated base interface for the manager of every {@link "
+            + getSupport().entityType().getTypeName() + "} entity.";
     }
 
     @Override
