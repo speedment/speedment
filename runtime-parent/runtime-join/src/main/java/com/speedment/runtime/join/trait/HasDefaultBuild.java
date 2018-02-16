@@ -6,10 +6,10 @@ import com.speedment.runtime.join.Join;
 /**
  *
  * @author Per Minborg
- * @param <T> RETURN TYPE
+ * @param <R> RETURN TYPE
  *
  */
-public interface HasDefaultBuild<T extends Tuple> {
+public interface HasDefaultBuild<R extends Tuple> {
 
     /**
      * Creates and returns a new Join object where elements in the Join object's
@@ -18,6 +18,6 @@ public interface HasDefaultBuild<T extends Tuple> {
      * @return a new Join object where elements in the Join object's stream
      * method is of a default {@link Tuple} type
      */
-    Join<T> build();
+    Join<R> build();
 
 }

@@ -1,14 +1,15 @@
 package com.speedment.runtime.join;
 
+import com.speedment.common.function.QuadFunction;
 import com.speedment.common.function.TriFunction;
+import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.common.tuple.Tuple3;
 import com.speedment.common.tuple.Tuple4;
 import com.speedment.common.tuple.Tuples;
-import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.trait.HasComparableOperators;
-import com.speedment.runtime.join.old.JoinComponent2.QuadFunction;
 import com.speedment.runtime.join.trait.HasOnPredicates;
 import com.speedment.runtime.join.trait.HasWhere;
 import java.util.function.BiFunction;
@@ -22,6 +23,7 @@ import com.speedment.runtime.join.trait.HasOn;
  *
  * @author Per Minborg
  */
+@InjectKey(JoinComponent.class)
 public interface JoinComponent {
 
     /**
@@ -29,42 +31,42 @@ public interface JoinComponent {
      * managers. Rows are joined from the provided {@code firstManager}
      * depending on how subsequent managers are added to the builder.
      *
-     * @param <A> type of entities for the first manager
+     * @param <T1> type of entities for the first manager
      * @param firstManager to use
      * @return a builder where the provided {@code firstManager} is added
      *
      * @throws NullPointerException if the provided {@code firstManager} is
      * {@code null}
      */
-    <A> AfterFrom<A> from(Manager<? extends A> firstManager);
+    <T1> AfterFrom<T1> from(TableIdentifier<T1> firstManager);
 
-    interface AfterFrom<A> extends
-        HasJoins<AfterFrom.AfterJoin<A, ?>, AfterFirstJoin<A, ?>>,
-        HasWhere<A, AfterFrom<A>> {
-
-        @Override
-        <B> AfterJoin<A, B> innerJoin(Manager<? extends B> joinedManager);
+    interface AfterFrom<T1> extends
+        HasJoins<AfterFrom.AfterJoin<T1, ?>, AfterFirstJoin<T1, ?>>,
+        HasWhere<T1, AfterFrom<T1>> {
 
         @Override
-        <B> AfterJoin<A, B> leftJoin(Manager<? extends B> joinedManager);
+        <T2> AfterJoin<T1, T2> innerJoin(TableIdentifier<T2> joinedTable);
 
         @Override
-        <B> AfterJoin<A, B> rightJoin(Manager<? extends B> joinedManager);
+        <T2> AfterJoin<T1, T2> leftJoin(TableIdentifier<T2> joinedTable);
 
         @Override
-        <B> AfterJoin<A, B> fullOuterJoin(Manager<? extends B> joinedManager);
+        <T2> AfterJoin<T1, T2> rightJoin(TableIdentifier<T2> joinedTable);
 
         @Override
-        <B> AfterFirstJoin<A, B> crossJoin(Manager<? extends B> joinedManager);
+        <T2> AfterJoin<T1, T2> fullOuterJoin(TableIdentifier<T2> joinedTable);
 
-        interface AfterJoin<A, B> extends
-            HasOn<A> {
+        @Override
+        <T2> AfterFirstJoin<T1, T2> crossJoin(TableIdentifier<T2> joinedTable);
+
+        interface AfterJoin<T1, T2> extends
+            HasOn<T1> {
 
             @Override
-            <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends A, V>> AfterOn<A, B, V> on(FIELD originalField); // Enforce dynamic type later in operation parameter
+            <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends T1, V>> AfterOn<T1, T2, V> on(FIELD originalField); // Enforce dynamic type later in operation parameter
 
-            interface AfterOn<A, B, V extends Comparable<? super V>> extends
-                HasOnPredicates<V, B, AfterFirstJoin<A, B>> {
+            interface AfterOn<T1, T2, V extends Comparable<? super V>> extends
+                HasOnPredicates<V, T2, AfterFirstJoin<T1, T2>> {
             }
 
         }
@@ -72,28 +74,28 @@ public interface JoinComponent {
     }
 
     // Merge these in to appropriate scope above
-    interface AfterFirstJoin<A, B> extends
-        HasJoins<AfterFirstJoin.AfterJoin<A, B, ?>, AfterSecondJoin<A, B, ?>>,
-        HasWhere<B, AfterFirstJoin<A, B>>,
-        HasDefaultBuild<Tuple2<A, B>> {
+    interface AfterFirstJoin<T1, T2> extends
+        HasJoins<AfterFirstJoin.AfterJoin<T1, T2, ?>, AfterSecondJoin<T1, T2, ?>>,
+        HasWhere<T2, AfterFirstJoin<T1, T2>>,
+        HasDefaultBuild<Tuple2<T1, T2>> {
 
         @Override
-        <C> AfterJoin<A, B, C> innerJoin(Manager<? extends C> joinedManager);
+        <T3> AfterJoin<T1, T2, T3> innerJoin(TableIdentifier<T3> joinedTable);
 
         @Override
-        <C> AfterJoin<A, B, C> leftJoin(Manager<? extends C> joinedManager);
+        <T3> AfterJoin<T1, T2, T3> leftJoin(TableIdentifier<T3> joinedTable);
 
         @Override
-        <C> AfterJoin<A, B, C> rightJoin(Manager<? extends C> joinedManager);
+        <T3> AfterJoin<T1, T2, T3> rightJoin(TableIdentifier<T3> joinedTable);
 
         @Override
-        <C> AfterJoin<A, B, C> fullOuterJoin(Manager<? extends C> joinedManager);
+        <T4> AfterJoin<T1, T2, T4> fullOuterJoin(TableIdentifier<T4> joinedTable);
 
         @Override
-        <C> AfterSecondJoin<A, B, C> crossJoin(Manager<? extends C> joinedManager);
+        <T4> AfterSecondJoin<T1, T2, T4> crossJoin(TableIdentifier<T4> joinedTable);
 
         @Override
-        default Join<Tuple2<A, B>> build() {
+        default Join<Tuple2<T1, T2>> build() {
             return build(Tuples::of);
         }
 
@@ -110,83 +112,44 @@ public interface JoinComponent {
          * @throws NullPointerException if the provided {@code constructor } is
          * {@code null}
          */
-        <T> Join<T> build(BiFunction<A, B, T> constructor);
+        <T> Join<T> build(BiFunction<T1, T2, T> constructor);
 
-        interface AfterJoin<A, B, C> extends
-            HasOn<Object> /* AfterSecondJoin<A, B, C>*/ {
-
-            @Override
-            <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<A, B, C, V> on(FIELD originalField);
-
-            interface AfterOn<A, B, C, V extends Comparable<? super V>> extends
-                HasOnPredicates<V, C, AfterSecondJoin<A, B, C>> {
-            }
-
-        }
-
-    }
-
-    interface AfterSecondJoin<A, B, C> extends
-        HasJoins<AfterSecondJoin.AfterJoin<A, B, C, ?>, AfterThirdJoin<A, B, C, ?>>,
-        HasWhere<C, AfterSecondJoin<A, B, C>>,
-        HasDefaultBuild<Tuple3<A, B, C>> {
-
-        @Override
-        <D> AfterJoin<A, B, C, D> innerJoin(Manager<? extends D> joinedManager);
-
-        @Override
-        <D> AfterJoin<A, B, C, D> leftJoin(Manager<? extends D> joinedManager);
-
-        @Override
-        <D> AfterJoin<A, B, C, D> rightJoin(Manager<? extends D> joinedManager);
-
-        @Override
-        <D> AfterJoin<A, B, C, D> fullOuterJoin(Manager<? extends D> joinedManager);
-
-        @Override
-        <D> AfterThirdJoin<A, B, C, D> crossJoin(Manager<? extends D> joinedManager);
-
-        @Override
-        default Join<Tuple3<A, B, C>> build() {
-            return build(Tuples::of);
-        }
-
-        /**
-         * Creates and returns a new Join object where elements in the Join
-         * object's stream method is created using the provided
-         * {@code constructor}.
-         *
-         * @param <T> the type of element in the Join object's stream method.
-         * @param constructor to use to create stream elements.
-         * @return a new Join object where elements in the Join object's stream
-         * method is of a default {@link Tuple} type
-         *
-         * @throws NullPointerException if the provided {@code constructor } is
-         * {@code null}
-         */
-        <T> Join<T> build(TriFunction<A, B, C, T> constructor);
-
-        interface AfterJoin<A, B, C, D> extends
+        interface AfterJoin<T1, T2, T3> extends
             HasOn<Object> {
 
             @Override
-            <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<A, B, C, D, V> on(FIELD originalField);
+            <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<T1, T2, T3, V> on(FIELD originalField);
 
-            interface AfterOn<A, B, C, D, V extends Comparable<? super V>> extends
-                HasOnPredicates<V, C, AfterThirdJoin<A, B, C, D>> {
-
+            interface AfterOn<T1, T2, T3, V extends Comparable<? super V>> extends
+                HasOnPredicates<V, T3, AfterSecondJoin<T1, T2, T3>> {
             }
 
         }
 
     }
 
-    interface AfterThirdJoin<A, B, C, D> extends
-        HasWhere<D, AfterThirdJoin<A, B, C, D>>,
-        HasDefaultBuild<Tuple4<A, B, C, D>> {
+    interface AfterSecondJoin<T1, T2, T3> extends
+        HasJoins<AfterSecondJoin.AfterJoin<T1, T2, T3, ?>, AfterThirdJoin<T1, T2, T3, ?>>,
+        HasWhere<T3, AfterSecondJoin<T1, T2, T3>>,
+        HasDefaultBuild<Tuple3<T1, T2, T3>> {
 
         @Override
-        default Join<Tuple4<A, B, C, D>> build() {
+        <T4> AfterJoin<T1, T2, T3, T4> innerJoin(TableIdentifier<T4> joinedTable);
+
+        @Override
+        <T4> AfterJoin<T1, T2, T3, T4> leftJoin(TableIdentifier<T4> joinedTable);
+
+        @Override
+        <T4> AfterJoin<T1, T2, T3, T4> rightJoin(TableIdentifier<T4> joinedTable);
+
+        @Override
+        <T4> AfterJoin<T1, T2, T3, T4> fullOuterJoin(TableIdentifier<T4> joinedTable);
+
+        @Override
+        <T4> AfterThirdJoin<T1, T2, T3, T4> crossJoin(TableIdentifier<T4> joinedTable);
+
+        @Override
+        default Join<Tuple3<T1, T2, T3>> build() {
             return build(Tuples::of);
         }
 
@@ -203,7 +166,46 @@ public interface JoinComponent {
          * @throws NullPointerException if the provided {@code constructor } is
          * {@code null}
          */
-        <T> Join<T> build(QuadFunction<A, B, C, D, T> constructor);
+        <T> Join<T> build(TriFunction<T1, T2, T3, T> constructor);
+
+        interface AfterJoin<T1, T2, T3, T4> extends
+            HasOn<Object> {
+
+            @Override
+            <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<T1, T2, T3, T4, V> on(FIELD originalField);
+
+            interface AfterOn<T1, T2, T3, T4, V extends Comparable<? super V>> extends
+                HasOnPredicates<V, T3, AfterThirdJoin<T1, T2, T3, T4>> {
+
+            }
+
+        }
+
+    }
+
+    interface AfterThirdJoin<T1, T2, T3, T4> extends
+        HasWhere<T4, AfterThirdJoin<T1, T2, T3, T4>>,
+        HasDefaultBuild<Tuple4<T1, T2, T3, T4>> {
+
+        @Override
+        default Join<Tuple4<T1, T2, T3, T4>> build() {
+            return build(Tuples::of);
+        }
+
+        /**
+         * Creates and returns a new Join object where elements in the Join
+         * object's stream method is created using the provided
+         * {@code constructor}.
+         *
+         * @param <T> the type of element in the Join object's stream method.
+         * @param constructor to use to create stream elements.
+         * @return a new Join object where elements in the Join object's stream
+         * method is of a default {@link Tuple} type
+         *
+         * @throws NullPointerException if the provided {@code constructor } is
+         * {@code null}
+         */
+        <T> Join<T> build(QuadFunction<T1, T2, T3, T4, T> constructor);
 
     }
 

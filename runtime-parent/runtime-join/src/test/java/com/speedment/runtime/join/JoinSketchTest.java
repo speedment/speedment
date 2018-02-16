@@ -16,17 +16,13 @@
  */
 package com.speedment.runtime.join;
 
-import com.speedment.runtime.join.old.JoinSketch;
-import com.speedment.runtime.join.old.JoinComponent2;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.common.tuple.Tuple3;
 import com.speedment.common.tuple.Tuples;
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.field.StringField;
-import com.speedment.runtime.join.old.JoinComponent2.Builder2Context;
-import com.speedment.runtime.join.old.JoinComponent2.Builder3Context;
-import com.speedment.runtime.join.old.JoinSketch.Join3;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
@@ -40,74 +36,23 @@ import static java.util.stream.Collectors.toList;
 public class JoinSketchTest {
 
     JoinComponent jc = null;
-    JoinComponent2 jc2 = null;
 
     Manager<User> users = null;
     Manager<Picture> pictures = null;
     Manager<FrameType> frameTypes = null;
 
-    private void test() {
-
-        Manager<Integer> ints = null;
-        Manager<String> strings = null;
-
-        final Builder2Context<Integer, String> context = jc2.createContext(ints, strings);
-
-        Join<IntStringHolder> join = context.builder()
-            .withLeftJoin(context.second()) // Can never be the first...
-            .addWhere(context.first(), i -> i == 0)
-            .addWhere(context.second(), String::isEmpty)
-            .build(IntStringHolder::new);
-
-        Join<Tuple2<Integer, String>> joinTuple = context.builder()
-            .addWhere(context.first(), i -> i == 0)
-            .addWhere(context.second(), String::isEmpty)
-            .build();
-
-    }
-
-    private void test2() {
-
-        final Builder2Context<User, Picture> context = jc2.createContext(users, pictures);
-
-        Join<Tuple2<User, Picture>> join = context.builder()
-            .withLeftJoin(context.second()) // Can never be the first...
-            .onEquals(context.first(), User.USER_ID, context.second(), Picture.USER_ID) // Here we only have 2...
-            .addWhere(context.first(), User.NAME.startsWith("A"))
-            .addWhere(context.second(), Picture.SIZE.greaterOrEqual(27))
-            .build();
-
-        join.stream().forEach(System.out::println);
-
-    }
-
-    private void test3() {
-
-        final Builder3Context<User, Picture, FrameType> context = jc2.createContext(users, pictures, frameTypes);
-
-        Join<Tuple3<User, Picture, FrameType>> join = context.builder()
-            .withLeftJoin(context.second()) // Can never be the first...
-            .onEquals(context.first(), User.USER_ID, context.second(), Picture.USER_ID)
-            .withRightJoin(context.third())
-            .onEquals(context.second(), Picture.FRAME_ID, context.third(), FrameType.FRAME_ID)
-            .addWhere(context.first(), User.NAME.startsWith("A"))
-            .addWhere(context.second(), Picture.SIZE.greaterOrEqual(27))
-            .build();
-
-    }
-
     private void test2Cartesian() {
         final Join<Tuple2<User, Picture>> join = jc
-            .from(users)
-            .crossJoin(pictures)
+            .from(UserManager.IDENTIFIER)
+            .crossJoin(PictureManager.IDENTIFIER)
             .build();
         // SELECT * from USER, PICTURE
     }
 
     private void test2InnerCustomObject() {
         final Join<UserPictureHolder> join = jc
-            .from(users)
-            .innerJoin(pictures).on(User.USER_ID).equal(Picture.USER_ID)
+            .from(UserManager.IDENTIFIER)
+            .innerJoin(PictureManager.IDENTIFIER).on(User.USER_ID).equal(Picture.USER_ID)
             .build(UserPictureHolder::new);
         // SELECT * from USER INNER JOIN PICTURES ON USER.USER_ID = PICTURE.USER_ID
         // SELECT * from USER AS A INNER JOIN PICTURES AS B ON A.USER_ID = B.USER_ID
@@ -115,8 +60,8 @@ public class JoinSketchTest {
 
     private void test2LeftJoin() {
         final Join<UserPictureHolder> join = jc
-            .from(users)
-            .leftJoin(pictures).on(User.USER_ID).equal(Picture.USER_ID)
+            .from(UserManager.IDENTIFIER)
+            .leftJoin(PictureManager.IDENTIFIER).on(User.USER_ID).equal(Picture.USER_ID)
             .build(UserPictureHolder::new);
         // SELECT * from USER LEFT JOIN PICTURES ON USER.USER_ID = PICTURE.USER_ID
         //
@@ -125,8 +70,8 @@ public class JoinSketchTest {
 
     private void test2FullOuterJoin() {
         final Join<UserPictureHolder> join = jc
-            .from(users)
-            .fullOuterJoin(pictures).on(User.USER_ID).equal(Picture.USER_ID)
+            .from(UserManager.IDENTIFIER)
+            .fullOuterJoin(PictureManager.IDENTIFIER).on(User.USER_ID).equal(Picture.USER_ID)
             .build(UserPictureHolder::new);
 
         // SELECT * from USER FULL OUTER JOIN PICTURES ON USER.USER_ID = PICTURE.USER_ID
@@ -134,8 +79,8 @@ public class JoinSketchTest {
 
     private void test2WithWheresOnTables() {
         Join<UserPictureHolder> join = jc
-            .from(users).where(User.USER_ID.greaterOrEqual(100))
-            .innerJoin(pictures).on(User.USER_ID).equal(Picture.USER_ID).where(Picture.SIZE.greaterThan(10))
+            .from(UserManager.IDENTIFIER).where(User.USER_ID.greaterOrEqual(100))
+            .innerJoin(PictureManager.IDENTIFIER).on(User.USER_ID).equal(Picture.USER_ID).where(Picture.SIZE.greaterThan(10))
             .build(UserPictureHolder::new);
 
         // SELECT * from USER 
@@ -146,8 +91,8 @@ public class JoinSketchTest {
 
     private void test2SelfJoin() {
         Join<Tuple2<User, User>> join = jc
-            .from(users).where(User.USER_ID.greaterOrEqual(100))
-            .innerJoin(users).on(User.NAME).equal(User.NAME)
+            .from(UserManager.IDENTIFIER).where(User.USER_ID.greaterOrEqual(100))
+            .innerJoin(UserManager.IDENTIFIER).on(User.NAME).equal(User.NAME)
             .build();
         // SELECT * from USER as A
         // INNER JOIN USER as B ON A.USER_NAME = B.USER_NAME
@@ -156,25 +101,55 @@ public class JoinSketchTest {
 
     private void test3Cartesian() {
         final Join<Tuple3<User, Picture, FrameType>> join = jc
-            .from(users)
-            .crossJoin(pictures)
-            .crossJoin(frameTypes)
+            .from(UserManager.IDENTIFIER)
+            .crossJoin(PictureManager.IDENTIFIER)
+            .crossJoin(FrameTypeManager.IDENTIFIER)
             .build();
 
         // SELECT * from USER, PICTURE, FRAME_TYPE
     }
 
     private void test3Inner() {
-        
+
         final Join<Tuple3<User, Picture, FrameType>> join = jc
-            .from(users)
-            .innerJoin(pictures).on(User.USER_ID).equal(Picture.USER_ID)
-            .innerJoin(frameTypes).on(Picture.FRAME_ID).equal(FrameType.FRAME_ID) // Note that on() can be either on Picture or User
+            .from(UserManager.IDENTIFIER)
+            .innerJoin(PictureManager.IDENTIFIER).on(User.USER_ID).equal(Picture.USER_ID)
+            .innerJoin(FrameTypeManager.IDENTIFIER).on(Picture.FRAME_ID).equal(FrameType.FRAME_ID) // Note that on() can be either on Picture or User
             .build();
 
-       // SELECT * from USER AS A 
-       //  INNER JOIN PICTURES AS B ON A.USER_ID = B.USER_ID
-       //  INNER JOIN FRAME_TYPES AS C on B.FRAME_ID = C.FRANE_ID
+        // SELECT * from USER AS A 
+        //  INNER JOIN PICTURES AS B ON A.USER_ID = B.USER_ID
+        //  INNER JOIN FRAME_TYPES AS C on B.FRAME_ID = C.FRANE_ID
+    }
+
+    interface UserManager {
+
+        TableIdentifier<User> IDENTIFIER = TableIdentifier.of(
+            "sakila",
+            "sakila",
+            "user"
+        );
+
+    }
+
+    interface PictureManager {
+
+        TableIdentifier<Picture> IDENTIFIER = TableIdentifier.of(
+            "sakila",
+            "sakila",
+            "picture"
+        );
+
+    }
+
+    interface FrameTypeManager {
+
+        TableIdentifier<FrameType> IDENTIFIER = TableIdentifier.of(
+            "sakila",
+            "sakila",
+            "frame_type"
+        );
+
     }
 
     interface User {
@@ -199,12 +174,9 @@ public class JoinSketchTest {
         StringField<FrameType, String> NAME = null;
     };
 
-    JoinSketch.Builder builder = null;
-
-    Join3<User, Picture, FrameType> join3 = builder
-        .from(users)
-        .join(pictures).on(User.USER_ID).equal(Picture.USER_ID)
-        .join(frameTypes).on(FrameType.FRAME_ID).equal(Picture.FRAME_ID)
+    Join<Tuple3<User, Picture, FrameType>> join3 = jc.from(UserManager.IDENTIFIER)
+        .leftJoin(PictureManager.IDENTIFIER).on(User.USER_ID).equal(Picture.USER_ID)
+        .leftJoin(FrameTypeManager.IDENTIFIER).on(Picture.FRAME_ID).equal(FrameType.FRAME_ID)
         .build();
 
     // Using Utility methods to map entity operations into Tuple3 operations
