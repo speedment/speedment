@@ -45,7 +45,8 @@
                 <configuration>
                     <instructions>
                         <Export-Package>
-                            com.speedment.runtime.join
+                            com.speedment.runtime.join,
+                            com.speedment.runtime.join.trait
                         </Export-Package>
                     </instructions>
                 </configuration>

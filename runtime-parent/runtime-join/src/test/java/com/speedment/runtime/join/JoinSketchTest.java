@@ -122,6 +122,21 @@ public class JoinSketchTest {
         //  INNER JOIN FRAME_TYPES AS C on B.FRAME_ID = C.FRANE_ID
     }
 
+    
+    private void problem() {
+
+        final Join<Tuple3<User, Picture, FrameType>> join = jc
+            .from(UserManager.IDENTIFIER)
+            .innerJoin(PictureManager.IDENTIFIER).on(User.USER_ID).equal(Picture.USER_ID)
+            .innerJoin(FrameTypeManager.IDENTIFIER).on(Picture.FRAME_ID).equal(FrameType.FRAME_ID) // Note that on() can be either on Picture or User
+            .build();
+
+        // SELECT * from USER AS A 
+        //  INNER JOIN PICTURES AS B ON A.USER_ID = B.USER_ID
+        //  INNER JOIN FRAME_TYPES AS C on B.FRAME_ID = C.FRANE_ID
+    }
+    
+    
     interface UserManager {
 
         TableIdentifier<User> IDENTIFIER = TableIdentifier.of(

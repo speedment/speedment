@@ -75,6 +75,11 @@
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-bulk</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-join</artifactId>
+        </dependency>
                                                 
         <!-- Runtime dependencies -->
         <dependency>
