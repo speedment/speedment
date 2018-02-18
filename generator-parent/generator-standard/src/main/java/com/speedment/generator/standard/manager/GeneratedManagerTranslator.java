@@ -66,12 +66,12 @@ public final class GeneratedManagerTranslator
                             SimpleParameterizedType.create(TableIdentifier.class, getSupport().entityType())
                         ).set(Value.ofReference("TableIdentifier.of(" + nl()
                             + indent(
-                                Stream.of(
+                                Stream.<HasAlias>of(
                                     table.getParentOrThrow().getParentOrThrow(),
                                     table.getParentOrThrow(),
                                     table
                                 )
-                                    .map(HasAlias::getJavaName)
+                                    .map((HasAlias hasAlias) -> hasAlias.getJavaName())
                                     .map(s -> "\"" + s + "\"")
                                     .collect(joining("," + nl()))
                             ) + nl() + ")" + nl()
