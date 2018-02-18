@@ -2,7 +2,8 @@ package com.speedment.runtime.join.trait;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.join.Join;
-import com.speedment.runtime.join.pipeline.Pipeline;
+import com.speedment.runtime.join.stage.Stage;
+import java.util.List;
 import java.util.function.BiFunction;
 
 /**
@@ -19,7 +20,7 @@ public interface HasCreateJoin2 {
      * @param <T1> entity type of the first table
      * @param <T2> entity type of the second table
      * @param <T> stream type in returned Join object's stream method
-     * @param p pipeline with information on the joined tables
+     * @param stages pipeline with information on the joined tables
      * @param constructor to be applied by the returned Join objects stream
      * method
      * @param t1 identifier of the first table
@@ -30,7 +31,7 @@ public interface HasCreateJoin2 {
      * {@code null}
      */
     <T1, T2, T> Join<T> createJoin(
-        Pipeline p,
+        List<Stage<?>> stages,
         BiFunction<T1, T2, T> constructor,
         TableIdentifier<T1> t1,
         TableIdentifier<T2> t2

@@ -1,10 +1,10 @@
-package com.speedment.runtime.join.internal.pipeline;
+package com.speedment.runtime.join.internal.stage;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.trait.HasComparableOperators;
-import com.speedment.runtime.join.pipeline.JoinType;
-import com.speedment.runtime.join.pipeline.OperatorType;
-import com.speedment.runtime.join.pipeline.Stage;
+import com.speedment.runtime.join.stage.JoinType;
+import com.speedment.runtime.join.stage.OperatorType;
+import com.speedment.runtime.join.stage.Stage;
 import java.util.Collections;
 import java.util.List;
 import static java.util.Objects.requireNonNull;

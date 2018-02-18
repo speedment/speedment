@@ -3,7 +3,8 @@ package com.speedment.runtime.join.trait;
 import com.speedment.common.function.Function6;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.join.Join;
-import com.speedment.runtime.join.pipeline.Pipeline;
+import com.speedment.runtime.join.stage.Stage;
+import java.util.List;
 
 /**
  *
@@ -23,7 +24,7 @@ public interface HasCreateJoin6 {
      * @param <T5> entity type of the fifth table
      * @param <T6> entity type of the sixth table
      * @param <T> stream type in returned Join object's stream method
-     * @param p pipeline with information on the joined tables
+     * @param stages pipeline with information on the joined tables
      * @param constructor to be applied by the returned Join objects stream
      * method
      * @param t1 identifier of the first table
@@ -38,7 +39,7 @@ public interface HasCreateJoin6 {
      * {@code null}
      */
     <T1, T2, T3, T4, T5, T6, T> Join<T> createJoin(
-        Pipeline p,
+        List<Stage<?>> stages,
         Function6<T1, T2, T3, T4, T5, T6, T> constructor,
         TableIdentifier<T1> t1,
         TableIdentifier<T2> t2,

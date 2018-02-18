@@ -13,8 +13,9 @@ import com.speedment.runtime.join.internal.component.stream.exhaustive.Exhaustiv
 import static java.util.Objects.requireNonNull;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
-import com.speedment.runtime.join.pipeline.Pipeline;
+import com.speedment.runtime.join.stage.Stage;
 import com.speedment.runtime.join.trait.HasCreateJoin2;
+import java.util.List;
 
 /**
  *
@@ -31,7 +32,7 @@ public class DebugJoinStreamSupplierComponent implements JoinStreamSupplierCompo
 
     @Override
     public <T1, T2, T> Join<T> createJoin(
-        final Pipeline p,
+        final List<Stage<?>> p,
         final BiFunction<T1, T2, T> constructor,
         final TableIdentifier<T1> t1,
         final TableIdentifier<T2> t2
@@ -42,7 +43,7 @@ public class DebugJoinStreamSupplierComponent implements JoinStreamSupplierCompo
     @Override
     @SuppressWarnings("unchecked")
     public <T1, T2, T3, T> Join<T> createJoin(
-        final Pipeline p,
+        final List<Stage<?>> p,
         final TriFunction<T1, T2, T3, T> constructor,
         final TableIdentifier<T1> t1,
         final TableIdentifier<T2> t2,
@@ -54,7 +55,7 @@ public class DebugJoinStreamSupplierComponent implements JoinStreamSupplierCompo
     @Override
     @SuppressWarnings("unchecked")
     public <T1, T2, T3, T4, T> Join<T> createJoin(
-        final Pipeline p,
+        final List<Stage<?>> p,
         final QuadFunction<T1, T2, T3, T4, T> constructor,
         final TableIdentifier<T1> t1,
         final TableIdentifier<T2> t2,
@@ -67,7 +68,7 @@ public class DebugJoinStreamSupplierComponent implements JoinStreamSupplierCompo
     @Override
     @SuppressWarnings("unchecked")
     public <T1, T2, T3, T4, T5, T> Join<T> createJoin(
-        final Pipeline p,
+        final List<Stage<?>> p,
         final Function5<T1, T2, T3, T4, T5, T> constructor,
         final TableIdentifier<T1> t1,
         final TableIdentifier<T2> t2,
@@ -81,7 +82,7 @@ public class DebugJoinStreamSupplierComponent implements JoinStreamSupplierCompo
     @Override
     @SuppressWarnings("unchecked")
     public <T1, T2, T3, T4, T5, T6, T> Join<T> createJoin(
-        final Pipeline p,
+        final List<Stage<?>> p,
         final Function6<T1, T2, T3, T4, T5, T6, T> constructor,
         final TableIdentifier<T1> t1,
         final TableIdentifier<T2> t2,
@@ -93,7 +94,7 @@ public class DebugJoinStreamSupplierComponent implements JoinStreamSupplierCompo
         return (Join<T>) emptyJoin(p, constructor, t1, t2, t3, t4, t5, t6);
     }
 
-    private Join<?> emptyJoin(Pipeline p, Object unusedConstructor, TableIdentifier<?>... unusedIdentifiers) {
+    private Join<?> emptyJoin(List<Stage<?>> p, Object unusedConstructor, TableIdentifier<?>... unusedIdentifiers) {
         requireNonNull(p);
         requireNonNull(unusedConstructor);
         Stream.of(unusedConstructor).forEach(id -> requireNonNull(id));
@@ -101,21 +102,21 @@ public class DebugJoinStreamSupplierComponent implements JoinStreamSupplierCompo
         return new EmptyJoin<>();
     }
 
-    private void printPipeline(Pipeline p) {
+    private void printPipeline(List<Stage<?>> p) {
         System.out.println("Pipeline:");
-        p.stages()
+        p.stream()
             .map(Object::toString)
             .forEachOrdered(System.out::println);
     }
 
     private class ExhaustiveJoin2<T1, T2, T> implements Join<T> {
 
-        final Pipeline p;
+        final List<Stage<?>> p;
         final BiFunction<T1, T2, T> constructor;
         final TableIdentifier<T1> t1;
         final TableIdentifier<T2> t2;
 
-        ExhaustiveJoin2(Pipeline p, BiFunction<T1, T2, T> constructor, TableIdentifier<T1> t1, TableIdentifier<T2> t2) {
+        ExhaustiveJoin2(List<Stage<?>> p, BiFunction<T1, T2, T> constructor, TableIdentifier<T1> t1, TableIdentifier<T2> t2) {
             this.p = requireNonNull(p);
             this.constructor = requireNonNull(constructor);
             this.t1 = requireNonNull(t1);

@@ -1,4 +1,4 @@
-package com.speedment.runtime.join.pipeline;
+package com.speedment.runtime.join.stage;
 
 /**
  *

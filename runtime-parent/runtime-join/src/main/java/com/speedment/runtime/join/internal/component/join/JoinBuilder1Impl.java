@@ -4,8 +4,8 @@ import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.JoinComponent.JoinBuilder1;
 import com.speedment.runtime.join.JoinStreamSupplierComponent;
-import com.speedment.runtime.join.pipeline.JoinType;
-import com.speedment.runtime.join.pipeline.OperatorType;
+import com.speedment.runtime.join.stage.JoinType;
+import com.speedment.runtime.join.stage.OperatorType;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Predicate;
 
@@ -24,27 +24,27 @@ final class JoinBuilder1Impl<T1>
 
     @Override
     public <T2> AfterJoin<T1, T2> innerJoin(TableIdentifier<T2> joinedTable) {
-        return new AfterJoinImpl<>(addInfo(joinedTable, JoinType.INNER_JOIN));
+        return new AfterJoinImpl<>(addStageBeanOf(joinedTable, JoinType.INNER_JOIN));
     }
 
     @Override
     public <T2> AfterJoin<T1, T2> leftJoin(TableIdentifier<T2> joinedTable) {
-        return new AfterJoinImpl<>(addInfo(joinedTable, JoinType.LEFT_JOIN));
+        return new AfterJoinImpl<>(addStageBeanOf(joinedTable, JoinType.LEFT_JOIN));
     }
 
     @Override
     public <T2> AfterJoin<T1, T2> rightJoin(TableIdentifier<T2> joinedTable) {
-        return new AfterJoinImpl<>(addInfo(joinedTable, JoinType.RIGHT_JOIN));
+        return new AfterJoinImpl<>(addStageBeanOf(joinedTable, JoinType.RIGHT_JOIN));
     }
 
     @Override
     public <T2> AfterJoin<T1, T2> fullOuterJoin(TableIdentifier<T2> joinedTable) {
-        return new AfterJoinImpl<>(addInfo(joinedTable, JoinType.FULL_OUTER_JOIN));
+        return new AfterJoinImpl<>(addStageBeanOf(joinedTable, JoinType.FULL_OUTER_JOIN));
     }
 
     @Override
     public <T2> JoinBuilder2<T1, T2> crossJoin(TableIdentifier<T2> joinedTable) {
-        return new JoinBuilder2Impl<>(this, addInfo(joinedTable, JoinType.CROSS_JOIN));
+        return new JoinBuilder2Impl<>(this, addStageBeanOf(joinedTable, JoinType.CROSS_JOIN));
     }
 
     @Override

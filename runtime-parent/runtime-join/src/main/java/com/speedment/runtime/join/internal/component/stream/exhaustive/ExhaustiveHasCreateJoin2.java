@@ -4,9 +4,8 @@ import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.internal.JoinImpl;
-import com.speedment.runtime.join.pipeline.JoinType;
-import com.speedment.runtime.join.pipeline.Pipeline;
-import com.speedment.runtime.join.pipeline.Stage;
+import com.speedment.runtime.join.stage.JoinType;
+import com.speedment.runtime.join.stage.Stage;
 import com.speedment.runtime.join.trait.HasCreateJoin2;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
@@ -28,15 +27,15 @@ public class ExhaustiveHasCreateJoin2 implements HasCreateJoin2 {
 
     @Override
     public <T1, T2, T> Join<T> createJoin(
-        final Pipeline p,
+        final List<Stage<?>> stages,
         final BiFunction<T1, T2, T> constructor,
         final TableIdentifier<T1> t1,
         final TableIdentifier<T2> t2
     ) {
         @SuppressWarnings("unchecked")
-        final Stage<T1> firstStage = (Stage<T1>) p.get(0);
+        final Stage<T1> firstStage = (Stage<T1>) stages.get(0);
         @SuppressWarnings("unchecked")
-        final Stage<T2> secondStage = (Stage<T2>) p.get(1);
+        final Stage<T2> secondStage = (Stage<T2>) stages.get(1);
         final JoinType joinType = secondStage.joinType().get();
 
         switch (joinType) {

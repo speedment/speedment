@@ -1,4 +1,4 @@
-package com.speedment.runtime.join.pipeline;
+package com.speedment.runtime.join.stage;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.trait.HasComparableOperators;

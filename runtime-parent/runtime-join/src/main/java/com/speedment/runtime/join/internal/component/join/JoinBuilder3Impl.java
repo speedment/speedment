@@ -5,9 +5,10 @@ import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.JoinComponent.JoinBuilder1.JoinBuilder2.JoinBuilder3;
-import com.speedment.runtime.join.pipeline.JoinType;
-import com.speedment.runtime.join.pipeline.OperatorType;
-import com.speedment.runtime.join.pipeline.Pipeline;
+import com.speedment.runtime.join.stage.JoinType;
+import com.speedment.runtime.join.stage.OperatorType;
+import com.speedment.runtime.join.stage.Stage;
+import java.util.List;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Predicate;
 
@@ -25,26 +26,26 @@ final class JoinBuilder3Impl<T1, T2, T3>
 
     @Override
     public <T4> AfterJoin<T1, T2, T3, T4> innerJoin(TableIdentifier<T4> joinedTable) {
-        return new AfterJoinImpl<>(addInfo(joinedTable, JoinType.INNER_JOIN));    }
+        return new AfterJoinImpl<>(addStageBeanOf(joinedTable, JoinType.INNER_JOIN));    }
 
     @Override
     public <T4> AfterJoin<T1, T2, T3, T4> leftJoin(TableIdentifier<T4> joinedTable) {
-        return new AfterJoinImpl<>(addInfo(joinedTable, JoinType.LEFT_JOIN));
+        return new AfterJoinImpl<>(addStageBeanOf(joinedTable, JoinType.LEFT_JOIN));
     }
 
     @Override
     public <T4> AfterJoin<T1, T2, T3, T4> rightJoin(TableIdentifier<T4> joinedTable) {
-        return new AfterJoinImpl<>(addInfo(joinedTable, JoinType.RIGHT_JOIN));
+        return new AfterJoinImpl<>(addStageBeanOf(joinedTable, JoinType.RIGHT_JOIN));
     }
 
     @Override
     public <T4> AfterJoin<T1, T2, T3, T4> fullOuterJoin(TableIdentifier<T4> joinedTable) {
-        return new AfterJoinImpl<>(addInfo(joinedTable, JoinType.FULL_OUTER_JOIN));
+        return new AfterJoinImpl<>(addStageBeanOf(joinedTable, JoinType.FULL_OUTER_JOIN));
     }
 
     @Override
     public <T4> JoinBuilder4<T1, T2, T3, T4> crossJoin(TableIdentifier<T4> joinedTable) {
-        return new JoinBuilder4Impl<>(this, addInfo(joinedTable, JoinType.CROSS_JOIN));
+        return new JoinBuilder4Impl<>(this, addStageBeanOf(joinedTable, JoinType.CROSS_JOIN));
     }
 
     @Override
@@ -133,13 +134,13 @@ final class JoinBuilder3Impl<T1, T2, T3>
     @SuppressWarnings("unchecked")
     public <T> Join<T> build(TriFunction<T1, T2, T3, T> constructor) {
         requireNonNull(constructor);
-        final Pipeline pipelie = pipeline();
+        final List<Stage<?>> stages = stages();
         return streamSuppler().createJoin(
-            pipelie,
+            stages,
             constructor,
-            (TableIdentifier<T1>) pipelie.get(0).identifier(),
-            (TableIdentifier<T2>) pipelie.get(1).identifier(),
-            (TableIdentifier<T3>) pipelie.get(2).identifier()
+            (TableIdentifier<T1>) stages.get(0).identifier(),
+            (TableIdentifier<T2>) stages.get(1).identifier(),
+            (TableIdentifier<T3>) stages.get(2).identifier()
         );
     }
 

@@ -7,7 +7,8 @@ import com.speedment.common.function.TriFunction;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.JoinStreamSupplierComponent;
-import com.speedment.runtime.join.pipeline.Pipeline;
+import com.speedment.runtime.join.stage.Stage;
+import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import org.junit.Test;
@@ -87,27 +88,27 @@ public class JoinBuilderTest {
     private static class EmptyJoinStreamSupplierComponent implements JoinStreamSupplierComponent {
 
         @Override
-        public <T1, T2, T> Join<T> createJoin(Pipeline p, BiFunction<T1, T2, T> constructor, TableIdentifier<T1> t1, TableIdentifier<T2> t2) {
+        public <T1, T2, T> Join<T> createJoin(List<Stage<?>> p, BiFunction<T1, T2, T> constructor, TableIdentifier<T1> t1, TableIdentifier<T2> t2) {
             return empty();
         }
 
         @Override
-        public <T1, T2, T3, T> Join<T> createJoin(Pipeline p, TriFunction<T1, T2, T3, T> constructor, TableIdentifier<T1> t1, TableIdentifier<T2> t2, TableIdentifier<T3> t3) {
+        public <T1, T2, T3, T> Join<T> createJoin(List<Stage<?>> p, TriFunction<T1, T2, T3, T> constructor, TableIdentifier<T1> t1, TableIdentifier<T2> t2, TableIdentifier<T3> t3) {
             return empty();
         }
 
         @Override
-        public <T1, T2, T3, T4, T> Join<T> createJoin(Pipeline p, QuadFunction<T1, T2, T3, T4, T> constructor, TableIdentifier<T1> t1, TableIdentifier<T2> t2, TableIdentifier<T3> t3, TableIdentifier<T4> t4) {
+        public <T1, T2, T3, T4, T> Join<T> createJoin(List<Stage<?>> p, QuadFunction<T1, T2, T3, T4, T> constructor, TableIdentifier<T1> t1, TableIdentifier<T2> t2, TableIdentifier<T3> t3, TableIdentifier<T4> t4) {
             return empty();
         }
 
         @Override
-        public <T1, T2, T3, T4, T5, T> Join<T> createJoin(Pipeline p, Function5<T1, T2, T3, T4, T5, T> constructor, TableIdentifier<T1> t1, TableIdentifier<T2> t2, TableIdentifier<T3> t3, TableIdentifier<T4> t4, TableIdentifier<T5> t5) {
+        public <T1, T2, T3, T4, T5, T> Join<T> createJoin(List<Stage<?>> p, Function5<T1, T2, T3, T4, T5, T> constructor, TableIdentifier<T1> t1, TableIdentifier<T2> t2, TableIdentifier<T3> t3, TableIdentifier<T4> t4, TableIdentifier<T5> t5) {
             return empty();
         }
 
         @Override
-        public <T1, T2, T3, T4, T5, T6, T> Join<T> createJoin(Pipeline p, Function6<T1, T2, T3, T4, T5, T6, T> constructor, TableIdentifier<T1> t1, TableIdentifier<T2> t2, TableIdentifier<T3> t3, TableIdentifier<T4> t4, TableIdentifier<T5> t5, TableIdentifier<T6> t6) {
+        public <T1, T2, T3, T4, T5, T6, T> Join<T> createJoin(List<Stage<?>> p, Function6<T1, T2, T3, T4, T5, T6, T> constructor, TableIdentifier<T1> t1, TableIdentifier<T2> t2, TableIdentifier<T3> t3, TableIdentifier<T4> t4, TableIdentifier<T5> t5, TableIdentifier<T6> t6) {
             return empty();
         }
 
