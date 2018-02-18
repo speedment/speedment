@@ -133,13 +133,13 @@ final class JoinBuilder3Impl<T1, T2, T3>
     @SuppressWarnings("unchecked")
     public <T> Join<T> build(TriFunction<T1, T2, T3, T> constructor) {
         requireNonNull(constructor);
-        final Pipeline p = pipeline();
+        final Pipeline pipelie = pipeline();
         return streamSuppler().createJoin(
-            p,
+            pipelie,
             constructor,
-            (TableIdentifier<T1>) p.get(0).identifier(),
-            (TableIdentifier<T2>) p.get(1).identifier(),
-            (TableIdentifier<T3>) p.get(2).identifier()
+            (TableIdentifier<T1>) pipelie.get(0).identifier(),
+            (TableIdentifier<T2>) pipelie.get(1).identifier(),
+            (TableIdentifier<T3>) pipelie.get(2).identifier()
         );
     }
 
