@@ -1,8 +1,6 @@
 package com.speedment.runtime.join;
 
-import com.speedment.common.function.HexFunction;
 import com.speedment.common.function.QuadFunction;
-import com.speedment.common.function.QuinFunction;
 import com.speedment.common.function.TriFunction;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.tuple.Tuple;
@@ -20,6 +18,8 @@ import com.speedment.runtime.join.trait.HasOn;
 import com.speedment.runtime.join.trait.HasOnPredicates;
 import com.speedment.runtime.join.trait.HasWhere;
 import java.util.function.BiFunction;
+import com.speedment.common.function.Function5;
+import com.speedment.common.function.Function6;
 
 /**
  * a JoinComponent can be used to create builders for creating Join objects.
@@ -187,8 +187,7 @@ public interface JoinComponent {
                     <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<T1, T2, T3, T4, V> on(FIELD originalField);
 
                     interface AfterOn<T1, T2, T3, T4, V extends Comparable<? super V>> extends
-                        HasOnPredicates<V, T3, JoinBuilder4<T1, T2, T3, T4>> {
-
+                        HasOnPredicates<V, T4, JoinBuilder4<T1, T2, T3, T4>> {
                     }
 
                 }
@@ -197,6 +196,21 @@ public interface JoinComponent {
                     HasJoins<JoinBuilder4.AfterJoin<T1, T2, T3, T4, ?>, JoinBuilder4.JoinBuilder5<T1, T2, T3, T4, ?>>,
                     HasWhere<T4, JoinBuilder4<T1, T2, T3, T4>>,
                     HasDefaultBuild<Tuple4<T1, T2, T3, T4>> {
+
+                    @Override
+                    <T5> AfterJoin<T1, T2, T3, T4, T5> innerJoin(TableIdentifier<T5> joinedTable);
+
+                    @Override
+                    <T5> AfterJoin<T1, T2, T3, T4, T5> leftJoin(TableIdentifier<T5> joinedTable);
+
+                    @Override
+                    <T5> AfterJoin<T1, T2, T3, T4, T5> rightJoin(TableIdentifier<T5> joinedTable);
+
+                    @Override
+                    <T5> AfterJoin<T1, T2, T3, T4, T5> fullOuterJoin(TableIdentifier<T5> joinedTable);
+
+                    @Override
+                    <T5> JoinBuilder5<T1, T2, T3, T4, T5> crossJoin(TableIdentifier<T5> joinedTable);
 
                     @Override
                     default Join<Tuple4<T1, T2, T3, T4>> build() {
@@ -226,15 +240,30 @@ public interface JoinComponent {
                         <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<T1, T2, T3, T4, T5, V> on(FIELD originalField);
 
                         interface AfterOn<T1, T2, T3, T4, T5, V extends Comparable<? super V>> extends
-                            HasOnPredicates<V, T3, JoinBuilder5<T1, T2, T3, T4, T5>> {
-
+                            HasOnPredicates<V, T5, JoinBuilder5<T1, T2, T3, T4, T5>> {
                         }
 
                     }
 
                     interface JoinBuilder5<T1, T2, T3, T4, T5> extends
+                        HasJoins<JoinBuilder5.AfterJoin<T1, T2, T3, T4, T5, ?>, JoinBuilder5.JoinBuilder6<T1, T2, T3, T4, T5, ?>>,
                         HasWhere<T5, JoinBuilder5<T1, T2, T3, T4, T5>>,
                         HasDefaultBuild<Tuple5<T1, T2, T3, T4, T5>> {
+
+                        @Override
+                        <T6> AfterJoin<T1, T2, T3, T4, T5, T6> innerJoin(TableIdentifier<T6> joinedTable);
+
+                        @Override
+                        <T6> AfterJoin<T1, T2, T3, T4, T5, T6> leftJoin(TableIdentifier<T6> joinedTable);
+
+                        @Override
+                        <T6> AfterJoin<T1, T2, T3, T4, T5, T6> rightJoin(TableIdentifier<T6> joinedTable);
+
+                        @Override
+                        <T6> AfterJoin<T1, T2, T3, T4, T5, T6> fullOuterJoin(TableIdentifier<T6> joinedTable);
+
+                        @Override
+                        <T6> JoinBuilder6<T1, T2, T3, T4, T5, T6> crossJoin(TableIdentifier<T6> joinedTable);
 
                         @Override
                         default Join<Tuple5<T1, T2, T3, T4, T5>> build() {
@@ -256,7 +285,19 @@ public interface JoinComponent {
                          * @throws NullPointerException if the provided {@code constructor
                          * } is {@code null}
                          */
-                        <T> Join<T> build(QuinFunction<T1, T2, T3, T4, T5, T> constructor);
+                        <T> Join<T> build(Function5<T1, T2, T3, T4, T5, T> constructor);
+
+                        interface AfterJoin<T1, T2, T3, T4, T5, T6> extends
+                            HasOn<Object> {
+
+                            @Override
+                            <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<T1, T2, T3, T4, T5, T6, V> on(FIELD originalField);
+
+                            interface AfterOn<T1, T2, T3, T4, T5, T6, V extends Comparable<? super V>> extends
+                                HasOnPredicates<V, T6, JoinBuilder6<T1, T2, T3, T4, T5, T6>> {
+                            }
+
+                        }
 
                         interface JoinBuilder6<T1, T2, T3, T4, T5, T6> extends
                             HasWhere<T6, JoinBuilder6<T1, T2, T3, T4, T5, T6>>,
@@ -283,7 +324,7 @@ public interface JoinComponent {
                              * @throws NullPointerException if the provided {@code constructor
                              * } is {@code null}
                              */
-                            <T> Join<T> build(HexFunction<T1, T2, T3, T4, T5, T6, T> constructor);
+                            <T> Join<T> build(Function6<T1, T2, T3, T4, T5, T6, T> constructor);
 
                         }
 

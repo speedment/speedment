@@ -19,8 +19,8 @@ package com.speedment.common.function;
 import java.util.function.Function;
 
 /**
- * Represents a function that accepts three arguments and produces a result.
- * This is the three-arity specialization of
+ * Represents a function that accepts four arguments and produces a result.
+ * This is the four-arity specialization of
  * {@link java.util.function.Function}.
  * 
  * @param <T>  the type of the first argument to the function

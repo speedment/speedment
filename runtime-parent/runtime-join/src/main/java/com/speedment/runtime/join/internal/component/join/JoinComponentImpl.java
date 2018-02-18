@@ -16,7 +16,7 @@ public class JoinComponentImpl implements JoinComponent {
 
     @Override
     public <T1> JoinBuilder1<T1> from(TableIdentifier<T1> firstManager) {
-        return new JoinBuilder1Impl<>(firstManager);
+        return new JoinBuilder1Impl<>(streamSupplier, firstManager);
     }
 
 }

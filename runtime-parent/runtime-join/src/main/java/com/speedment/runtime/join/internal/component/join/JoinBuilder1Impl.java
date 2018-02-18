@@ -1,24 +1,25 @@
 package com.speedment.runtime.join.internal.component.join;
 
-import com.speedment.runtime.join.pipeline.OperatorType;
-import com.speedment.runtime.join.pipeline.JoinType;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.trait.HasComparableOperators;
-import java.util.function.Predicate;
 import com.speedment.runtime.join.JoinComponent.JoinBuilder1;
+import com.speedment.runtime.join.JoinStreamSupplierComponent;
+import com.speedment.runtime.join.pipeline.JoinType;
+import com.speedment.runtime.join.pipeline.OperatorType;
 import static java.util.Objects.requireNonNull;
+import java.util.function.Predicate;
 
 /**
  *
  * @author Per Minborg
  * @param <T1> entity type of the first table
  */
-final class JoinBuilder1Impl<T1> extends AbstractJoinBuilder implements JoinBuilder1<T1> {
+final class JoinBuilder1Impl<T1>
+    extends AbstractJoinBuilder<T1> 
+    implements JoinBuilder1<T1> {
 
-    private final StageBean<T1> current;
-
-    JoinBuilder1Impl(TableIdentifier<T1> initialTable) {
-        this.current = addInfo(initialTable);
+    JoinBuilder1Impl(JoinStreamSupplierComponent streamSupplier, TableIdentifier<T1> initialTable) {
+        super(streamSupplier, initialTable);
     }
 
     @Override
@@ -43,16 +44,17 @@ final class JoinBuilder1Impl<T1> extends AbstractJoinBuilder implements JoinBuil
 
     @Override
     public <T2> JoinBuilder2<T1, T2> crossJoin(TableIdentifier<T2> joinedTable) {
-        return new JoinBuilder2Impl<>(tableInfoList(), addInfo(joinedTable, JoinType.CROSS_JOIN));
+        return new JoinBuilder2Impl<>(this, addInfo(joinedTable, JoinType.CROSS_JOIN));
     }
 
     @Override
     public JoinBuilder1Impl<T1> where(Predicate<? super T1> predicate) {
-        current.getPredicates().add(predicate);
+        addPredicate(predicate);
         return this;
     }
 
-    private class AfterJoinImpl<T2> implements AfterJoin<T1, T2> {
+    private final class AfterJoinImpl<T2> 
+        implements AfterJoin<T1, T2> {
 
         private final StageBean<T2> info;
 
@@ -61,14 +63,15 @@ final class JoinBuilder1Impl<T1> extends AbstractJoinBuilder implements JoinBuil
         }
 
         @Override
-        public <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends T1, V>>
+        public <V extends Comparable<? super V>, FIELD  extends HasComparableOperators<? extends T1, V>>
             AfterOn<T1, T2, V> on(FIELD originalField) {
             requireNonNull(originalField);
             info.setOtherTableField(originalField);
             return new AfterOnImpl<>();
         }
 
-        private class AfterOnImpl<V extends Comparable<? super V>> implements AfterOn<T1, T2, V> {
+        private final class AfterOnImpl<V extends Comparable<? super V>> 
+            implements AfterOn<T1, T2, V> {
 
             @Override
             public <FIELD extends HasComparableOperators<T2, V>> JoinBuilder2<T1, T2> equal(FIELD joinedField) {
@@ -113,14 +116,14 @@ final class JoinBuilder1Impl<T1> extends AbstractJoinBuilder implements JoinBuil
             private <FIELD extends HasComparableOperators<T2, V>> JoinBuilder2<T1, T2> operation(OperatorType operatorType, FIELD joinedField) {
                 info.setOperatorType(operatorType);
                 info.setFirstField(joinedField);
-                return new JoinBuilder2Impl<>(tableInfoList(), info);
+                return new JoinBuilder2Impl<>(JoinBuilder1Impl.this, info);
             }
-            
+
             private <FIELD extends HasComparableOperators<T2, V>, FIELD2 extends HasComparableOperators<T2, V>> JoinBuilder2<T1, T2> operation(OperatorType operatorType, FIELD joinedFieldFrom, FIELD2 joinedFieldTo) {
                 info.setOperatorType(operatorType);
                 info.setFirstField(joinedFieldFrom);
                 info.setSecondField(joinedFieldFrom);
-                return new JoinBuilder2Impl<>(tableInfoList(), info);
+                return new JoinBuilder2Impl<>(JoinBuilder1Impl.this, info);
             }
 
         }
