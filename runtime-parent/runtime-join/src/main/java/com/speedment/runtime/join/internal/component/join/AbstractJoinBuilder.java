@@ -43,10 +43,10 @@ abstract class AbstractJoinBuilder<T> {
         return addStageBeanHelper(new StageBean<>(table, joinType));
     }
 
-    <T> StageBean<T> addStageBeanHelper(final StageBean<T> info) {
-        requireNonNull(info);
-        stageBeans.add((StageBean<?>) info);
-        return info;
+    <T> StageBean<T> addStageBeanHelper(final StageBean<T> stageBean) {
+        requireNonNull(stageBean);
+        stageBeans.add((StageBean<?>) stageBean);
+        return stageBean;
     }
 
     /**

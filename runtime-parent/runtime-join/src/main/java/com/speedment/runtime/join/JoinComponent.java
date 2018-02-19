@@ -78,7 +78,7 @@ public interface JoinComponent {
             HasOn<T1> {
 
             @Override
-            <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends T1, V>> AfterOn<T1, T2, V> on(FIELD originalField); // Enforce dynamic type later in operation parameter
+            <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends T1, V>> AfterOn<T1, T2, V> on(FIELD originalField); // Must be T1
 
             interface AfterOn<T1, T2, V extends Comparable<? super V>> extends
                 HasOnPredicates<V, T2, JoinBuilder2<T1, T2>> {
@@ -131,7 +131,7 @@ public interface JoinComponent {
                 HasOn<Object> {
 
                 @Override
-                <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<T1, T2, T3, V> on(FIELD originalField);
+                <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<T1, T2, T3, V> on(FIELD originalField); // Enforce dynamic type later in operation parameter
 
                 interface AfterOn<T1, T2, T3, V extends Comparable<? super V>> extends
                     HasOnPredicates<V, T3, JoinBuilder3<T1, T2, T3>> {

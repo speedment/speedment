@@ -1,125 +1,212 @@
 package com.speedment.runtime.join.internal.component.join;
 
-import com.speedment.common.function.Function5;
-import com.speedment.common.function.Function6;
-import com.speedment.common.function.QuadFunction;
-import com.speedment.common.function.TriFunction;
+import com.speedment.common.injector.Injector;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.join.Join;
-import com.speedment.runtime.join.JoinStreamSupplierComponent;
+import com.speedment.runtime.field.trait.HasComparableOperators;
+import com.speedment.runtime.join.JoinTestUtil.E1;
+import com.speedment.runtime.join.JoinTestUtil.E1Manager;
+import com.speedment.runtime.join.JoinTestUtil.E2;
+import com.speedment.runtime.join.JoinTestUtil.E2Manager;
+import com.speedment.runtime.join.JoinTestUtil.E3;
+import com.speedment.runtime.join.JoinTestUtil.E3Manager;
+import com.speedment.runtime.join.JoinTestUtil.E4;
+import com.speedment.runtime.join.JoinTestUtil.E4Manager;
+import com.speedment.runtime.join.JoinTestUtil.E5;
+import com.speedment.runtime.join.JoinTestUtil.E5Manager;
+import com.speedment.runtime.join.JoinTestUtil.E6;
+import com.speedment.runtime.join.JoinTestUtil.E6Manager;
+import com.speedment.runtime.join.JoinTestUtil.MockJoinStreamSupplierComponent;
+import com.speedment.runtime.join.JoinTestUtil.MockStreamSupplierComponent;
+import static com.speedment.runtime.join.JoinTestUtil.assertStagesEquals;
+import com.speedment.runtime.join.stage.JoinType;
+import com.speedment.runtime.join.stage.OperatorType;
+import static com.speedment.runtime.join.stage.OperatorType.EQUAL;
 import com.speedment.runtime.join.stage.Stage;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.List;
-import java.util.function.BiFunction;
+import java.util.Map.Entry;
+import java.util.function.Consumer;
+import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
+import static org.junit.Assert.assertEquals;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
  *
  * @author Per Minborg
  */
-public class JoinBuilderTest {
+public final class JoinBuilderTest {
 
-    private static final JoinStreamSupplierComponent EMPTY_STREAM_SUPPLIER = new EmptyJoinStreamSupplierComponent();
+    private MockJoinStreamSupplierComponent ss;
+    private JoinBuilder1Impl<E1> b;
+
+    @Before
+    public void init() throws InstantiationException {
+        final Injector injector = Injector.builder()
+            .withComponent(MockStreamSupplierComponent.class)
+            .withComponent(MockJoinStreamSupplierComponent.class)
+            .build();
+
+        ss = injector.getOrThrow(MockJoinStreamSupplierComponent.class);
+        b = new JoinBuilder1Impl<>(ss, E1Manager.IDENTIFIER);
+    }
 
     @Test
-    public void testJoinBuilder() {
-        final JoinBuilder1Impl<T1> jb1 = new JoinBuilder1Impl<>(EMPTY_STREAM_SUPPLIER, T1Manager.IDENTIFIER);
+    public void testCrossJoin() {
+        b
+            .crossJoin(E2Manager.IDENTIFIER)
+            .crossJoin(E3Manager.IDENTIFIER)
+            .crossJoin(E4Manager.IDENTIFIER)
+            .crossJoin(E5Manager.IDENTIFIER)
+            .crossJoin(E6Manager.IDENTIFIER)
+            .build();
+
+        final List<Stage<?>> expected = expectedOf(
+            entry(E1Manager.IDENTIFIER, noOp()),
+            entry(E2Manager.IDENTIFIER, setJoinTypeTo(JoinType.CROSS_JOIN)),
+            entry(E3Manager.IDENTIFIER, setJoinTypeTo(JoinType.CROSS_JOIN)),
+            entry(E4Manager.IDENTIFIER, setJoinTypeTo(JoinType.CROSS_JOIN)),
+            entry(E5Manager.IDENTIFIER, setJoinTypeTo(JoinType.CROSS_JOIN)),
+            entry(E6Manager.IDENTIFIER, setJoinTypeTo(JoinType.CROSS_JOIN))
+        );
+
+        assertStagesEquals(expected, ss.stages());
+
+        assertIdentifiersInCreateJoinEquals(
+            E1Manager.IDENTIFIER,
+            E2Manager.IDENTIFIER,
+            E3Manager.IDENTIFIER,
+            E4Manager.IDENTIFIER,
+            E5Manager.IDENTIFIER,
+            E6Manager.IDENTIFIER
+        );
 
     }
 
-    interface T1Manager {
+    @Test
+    public void testLeftJoin() {
+        b
+            .leftJoin(E2Manager.IDENTIFIER).on(E1.ID1).equal(E2.ID2)
+            .leftJoin(E3Manager.IDENTIFIER).on(E1.ID1).equal(E3.ID3)
+            .leftJoin(E4Manager.IDENTIFIER).on(E1.ID1).equal(E4.ID4)
+            .leftJoin(E5Manager.IDENTIFIER).on(E1.ID1).equal(E5.ID5)
+            .leftJoin(E6Manager.IDENTIFIER).on(E1.ID1).equal(E6.ID6)
+            .build();
 
-        static TableIdentifier<T1> IDENTIFIER = id("t1");
+        Consumer<StageBean<?>> c = setFirstFieldTo(E2.ID2);
+
+        final List<Stage<?>> expected = expectedOf(
+            entry(E1Manager.IDENTIFIER, noOp()),
+            entry(
+                E2Manager.IDENTIFIER,
+                setJoinTypeTo(JoinType.LEFT_JOIN)
+                    .andThen(setOtherTableFieldTo(E1.ID1))
+                    .andThen(setOperatorTypeTo(EQUAL))
+                    .andThen(this.<E2>setFirstFieldTo(E2.ID2))
+            ),
+            entry(
+                E3Manager.IDENTIFIER,
+                setJoinTypeTo(JoinType.LEFT_JOIN)
+                    .andThen(setOtherTableFieldTo(E1.ID1))
+                    .andThen(setOperatorTypeTo(EQUAL))
+                    .andThen(setFirstFieldTo(E3.ID3))
+            ),
+            entry(
+                E4Manager.IDENTIFIER,
+                setJoinTypeTo(JoinType.LEFT_JOIN)
+                    .andThen(setOtherTableFieldTo(E1.ID1))
+                    .andThen(setOperatorTypeTo(EQUAL))
+                    .andThen(setFirstFieldTo(E4.ID4))
+            ),
+            entry(
+                E5Manager.IDENTIFIER,
+                setJoinTypeTo(JoinType.LEFT_JOIN)
+                    .andThen(setOtherTableFieldTo(E1.ID1))
+                    .andThen(setOperatorTypeTo(EQUAL))
+                    .andThen(setFirstFieldTo(E5.ID5))
+            ),
+            entry(
+                E6Manager.IDENTIFIER,
+                setJoinTypeTo(JoinType.LEFT_JOIN)
+                    .andThen(setOtherTableFieldTo(E1.ID1))
+                    .andThen(setOperatorTypeTo(EQUAL))
+                    .andThen(setFirstFieldTo(E6.ID6))
+            )
+        );
+
+        assertStagesEquals(expected, ss.stages());
+
+        assertIdentifiersInCreateJoinEquals(
+            E1Manager.IDENTIFIER,
+            E2Manager.IDENTIFIER,
+            E3Manager.IDENTIFIER,
+            E4Manager.IDENTIFIER,
+            E5Manager.IDENTIFIER,
+            E6Manager.IDENTIFIER
+        );
+
     }
 
-    interface T2Manager {
-
-        static TableIdentifier<T1> IDENTIFIER = id("t2");
-    }
-
-    interface T3Manager {
-
-        static TableIdentifier<T1> IDENTIFIER = id("t3");
-    }
-
-    interface T4Manager {
-
-        static TableIdentifier<T1> IDENTIFIER = id("t4");
-    }
-
-    interface T5Manager {
-
-        static TableIdentifier<T1> IDENTIFIER = id("t5");
-    }
-
-    interface T6Manager {
-
-        static TableIdentifier<T1> IDENTIFIER = id("t6");
-    }
-
-    interface T1 {
+    @Test
+    public void testOnColumnMustComeFromPreviousTable() {
 
     }
 
-    interface T2 {
-
+    private <T> Consumer<T> noOp() {
+        return (T t) -> {
+        };
     }
 
-    interface T3 {
-
+    private Consumer<StageBean<?>> setJoinTypeTo(JoinType joinType) {
+        return sb -> sb.setJoinType(joinType);
     }
 
-    interface T4 {
-
+    private Consumer<StageBean<?>> setOtherTableFieldTo(HasComparableOperators<?, ?> field) {
+        return sb -> sb.setOtherTableField(field);
     }
 
-    interface T5 {
-
+    private Consumer<StageBean<?>> setOperatorTypeTo(OperatorType operatorType) {
+        return sb -> sb.setOperatorType(operatorType);
     }
 
-    interface T6 {
-
+    private <T> Consumer<StageBean<?>> setFirstFieldTo(HasComparableOperators<T, Integer> field) {
+        return (StageBean<?> sb) -> {
+            @SuppressWarnings("unchecked")
+            final StageBean<T> sb1 = (StageBean<T>) sb;
+            sb1.setFirstField(field);
+        };
     }
 
-    private static <T> TableIdentifier<T> id(String tableName) {
-        return TableIdentifier.of("db", "schema", tableName);
+    private <T> Consumer<StageBean<?>> setSecondFieldTo(HasComparableOperators<T, ?> field) {
+        return (StageBean<?> sb) -> {
+            @SuppressWarnings("unchecked")
+            final StageBean<T> sb1 = (StageBean<T>) sb;
+            sb1.setSecondField(field);
+        };
     }
 
-    private static class EmptyJoinStreamSupplierComponent implements JoinStreamSupplierComponent {
+    private <K, V> Entry<K, V> entry(K k, V v) {
+        return new SimpleImmutableEntry<>(k, v);
+    }
 
-        @Override
-        public <T1, T2, T> Join<T> createJoin(List<Stage<?>> p, BiFunction<T1, T2, T> constructor, TableIdentifier<T1> t1, TableIdentifier<T2> t2) {
-            return empty();
+    private final void assertIdentifiersInCreateJoinEquals(TableIdentifier<?>... identifiers) {
+        for (int i = 0; i < identifiers.length; i++) {
+            assertEquals(Integer.toString(i), identifiers[i], ss.t(i));
         }
+    }
 
-        @Override
-        public <T1, T2, T3, T> Join<T> createJoin(List<Stage<?>> p, TriFunction<T1, T2, T3, T> constructor, TableIdentifier<T1> t1, TableIdentifier<T2> t2, TableIdentifier<T3> t3) {
-            return empty();
-        }
+    @SafeVarargs
+    @SuppressWarnings("varargs")
+    private final List<Stage<?>> expectedOf(Entry<TableIdentifier<?>, Consumer<StageBean<?>>>... operations) {
+        return Stream.of(operations)
+            .map(e -> {
+                final StageBean<?> sb = new StageBean<>(e.getKey());
+                e.getValue().accept(sb);
+                return sb;
+            })
+            .map((StageBean<?> sb) -> sb.asStage())
+            .collect(toList());
 
-        @Override
-        public <T1, T2, T3, T4, T> Join<T> createJoin(List<Stage<?>> p, QuadFunction<T1, T2, T3, T4, T> constructor, TableIdentifier<T1> t1, TableIdentifier<T2> t2, TableIdentifier<T3> t3, TableIdentifier<T4> t4) {
-            return empty();
-        }
-
-        @Override
-        public <T1, T2, T3, T4, T5, T> Join<T> createJoin(List<Stage<?>> p, Function5<T1, T2, T3, T4, T5, T> constructor, TableIdentifier<T1> t1, TableIdentifier<T2> t2, TableIdentifier<T3> t3, TableIdentifier<T4> t4, TableIdentifier<T5> t5) {
-            return empty();
-        }
-
-        @Override
-        public <T1, T2, T3, T4, T5, T6, T> Join<T> createJoin(List<Stage<?>> p, Function6<T1, T2, T3, T4, T5, T6, T> constructor, TableIdentifier<T1> t1, TableIdentifier<T2> t2, TableIdentifier<T3> t3, TableIdentifier<T4> t4, TableIdentifier<T5> t5, TableIdentifier<T6> t6) {
-            return empty();
-        }
-
-        private <T> Join<T> empty() {
-            return new Join<T>() {
-                @Override
-                public Stream<T> stream() {
-                    return Stream.empty();
-                }
-
-            };
-        }
     }
 }

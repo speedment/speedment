@@ -5,6 +5,7 @@ import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.JoinComponent.JoinBuilder1.JoinBuilder2.JoinBuilder3.JoinBuilder4.JoinBuilder5;
+import com.speedment.runtime.join.stage.JoinType;
 import com.speedment.runtime.join.stage.OperatorType;
 import com.speedment.runtime.join.stage.Stage;
 import java.util.List;
@@ -25,27 +26,27 @@ final class JoinBuilder5Impl<T1, T2, T3, T4, T5>
 
     @Override
     public <T6> AfterJoin<T1, T2, T3, T4, T5, T6> innerJoin(TableIdentifier<T6> joinedTable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new AfterJoinImpl<>(addStageBeanOf(joinedTable, JoinType.INNER_JOIN));
     }
 
     @Override
     public <T6> AfterJoin<T1, T2, T3, T4, T5, T6> leftJoin(TableIdentifier<T6> joinedTable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new AfterJoinImpl<>(addStageBeanOf(joinedTable, JoinType.LEFT_JOIN));
     }
 
     @Override
     public <T6> AfterJoin<T1, T2, T3, T4, T5, T6> rightJoin(TableIdentifier<T6> joinedTable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new AfterJoinImpl<>(addStageBeanOf(joinedTable, JoinType.RIGHT_JOIN));
     }
 
     @Override
     public <T6> AfterJoin<T1, T2, T3, T4, T5, T6> fullOuterJoin(TableIdentifier<T6> joinedTable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new AfterJoinImpl<>(addStageBeanOf(joinedTable, JoinType.FULL_OUTER_JOIN));
     }
 
     @Override
     public <T6> JoinBuilder6<T1, T2, T3, T4, T5, T6> crossJoin(TableIdentifier<T6> joinedTable) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return new JoinBuilder6Impl<>(this, addStageBeanOf(joinedTable, JoinType.CROSS_JOIN));
     }
 
     @Override
