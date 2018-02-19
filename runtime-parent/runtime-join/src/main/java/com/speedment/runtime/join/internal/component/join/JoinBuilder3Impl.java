@@ -26,7 +26,8 @@ final class JoinBuilder3Impl<T1, T2, T3>
 
     @Override
     public <T4> AfterJoin<T1, T2, T3, T4> innerJoin(TableIdentifier<T4> joinedTable) {
-        return new AfterJoinImpl<>(addStageBeanOf(joinedTable, JoinType.INNER_JOIN));    }
+        return new AfterJoinImpl<>(addStageBeanOf(joinedTable, JoinType.INNER_JOIN));
+    }
 
     @Override
     public <T4> AfterJoin<T1, T2, T3, T4> leftJoin(TableIdentifier<T4> joinedTable) {
@@ -73,7 +74,6 @@ final class JoinBuilder3Impl<T1, T2, T3>
         private final class AfterOnImpl<V extends Comparable<? super V>>
             implements AfterOn<T1, T2, T3, T4, V> {
 
-            
             @Override
             public <FIELD extends HasComparableOperators<T4, V>> JoinBuilder4<T1, T2, T3, T4> equal(FIELD joinedField) {
                 return operation(OperatorType.EQUAL, joinedField);
@@ -134,6 +134,7 @@ final class JoinBuilder3Impl<T1, T2, T3>
     @SuppressWarnings("unchecked")
     public <T> Join<T> build(TriFunction<T1, T2, T3, T> constructor) {
         requireNonNull(constructor);
+        assertFieldsAreInJoinTables();
         final List<Stage<?>> stages = stages();
         return streamSuppler().createJoin(
             stages,

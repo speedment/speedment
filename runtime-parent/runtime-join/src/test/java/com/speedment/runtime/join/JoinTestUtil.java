@@ -121,7 +121,7 @@ public final class JoinTestUtil {
     
     public interface EX extends HasId<EX> {
 
-        IntField<EX, Integer> IDX = IntField.create(id(E6Manager.IDENTIFIER, "idx"), EX::getId, EX::setId, TypeMapper.primitive(), true);
+        IntField<EX, Integer> IDX = IntField.create(id(EXManager.IDENTIFIER, "idx"), EX::getId, EX::setId, TypeMapper.primitive(), true);
 
     }
 

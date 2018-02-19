@@ -75,10 +75,11 @@ public interface JoinComponent {
         <T2> JoinBuilder2<T1, T2> crossJoin(TableIdentifier<T2> joinedTable);
 
         interface AfterJoin<T1, T2> extends
-            HasOn<T1> {
+            HasOn<Object> /*HasOn<T1> */ {
 
             @Override
-            <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends T1, V>> AfterOn<T1, T2, V> on(FIELD originalField); // Must be T1
+            <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<T1, T2, V>
+                on(FIELD originalField); // Must be T1
 
             interface AfterOn<T1, T2, V extends Comparable<? super V>> extends
                 HasOnPredicates<V, T2, JoinBuilder2<T1, T2>> {
@@ -131,7 +132,8 @@ public interface JoinComponent {
                 HasOn<Object> {
 
                 @Override
-                <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<T1, T2, T3, V> on(FIELD originalField); // Enforce dynamic type later in operation parameter
+                <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<T1, T2, T3, V>
+                    on(FIELD originalField); // Enforce dynamic type later in operation parameter
 
                 interface AfterOn<T1, T2, T3, V extends Comparable<? super V>> extends
                     HasOnPredicates<V, T3, JoinBuilder3<T1, T2, T3>> {
@@ -184,7 +186,8 @@ public interface JoinComponent {
                     HasOn<Object> {
 
                     @Override
-                    <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<T1, T2, T3, T4, V> on(FIELD originalField);
+                    <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<T1, T2, T3, T4, V>
+                        on(FIELD originalField);
 
                     interface AfterOn<T1, T2, T3, T4, V extends Comparable<? super V>> extends
                         HasOnPredicates<V, T4, JoinBuilder4<T1, T2, T3, T4>> {
@@ -230,6 +233,10 @@ public interface JoinComponent {
                      *
                      * @throws NullPointerException if the provided {@code constructor
                      * } is {@code null}
+                     * @throws IllegalStateException if fields that are added
+                     * via the {@code on()
+                     * } method refers to tables that are not a part of the
+                     * join.
                      */
                     <T> Join<T> build(QuadFunction<T1, T2, T3, T4, T> constructor);
 
@@ -237,7 +244,8 @@ public interface JoinComponent {
                         HasOn<Object> {
 
                         @Override
-                        <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<T1, T2, T3, T4, T5, V> on(FIELD originalField);
+                        <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<T1, T2, T3, T4, T5, V>
+                            on(FIELD originalField);
 
                         interface AfterOn<T1, T2, T3, T4, T5, V extends Comparable<? super V>> extends
                             HasOnPredicates<V, T5, JoinBuilder5<T1, T2, T3, T4, T5>> {
@@ -284,6 +292,10 @@ public interface JoinComponent {
                          *
                          * @throws NullPointerException if the provided {@code constructor
                          * } is {@code null}
+                         * @throws IllegalStateException if fields that are
+                         * added via the {@code on()
+                         * } method refers to tables that are not a part of the
+                         * join.
                          */
                         <T> Join<T> build(Function5<T1, T2, T3, T4, T5, T> constructor);
 
@@ -291,7 +303,8 @@ public interface JoinComponent {
                             HasOn<Object> {
 
                             @Override
-                            <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<T1, T2, T3, T4, T5, T6, V> on(FIELD originalField);
+                            <V extends Comparable<? super V>, FIELD extends HasComparableOperators<? extends Object, V>> AfterOn<T1, T2, T3, T4, T5, T6, V>
+                                on(FIELD originalField);
 
                             interface AfterOn<T1, T2, T3, T4, T5, T6, V extends Comparable<? super V>> extends
                                 HasOnPredicates<V, T6, JoinBuilder6<T1, T2, T3, T4, T5, T6>> {
@@ -323,6 +336,10 @@ public interface JoinComponent {
                              *
                              * @throws NullPointerException if the provided {@code constructor
                              * } is {@code null}
+                             * @throws IllegalStateException if fields that are
+                             * added via the {@code on()
+                             * } method refers to tables that are not a part of
+                             * the join.
                              */
                             <T> Join<T> build(Function6<T1, T2, T3, T4, T5, T6, T> constructor);
 

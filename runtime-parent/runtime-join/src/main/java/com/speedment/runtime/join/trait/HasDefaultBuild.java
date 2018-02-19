@@ -17,6 +17,9 @@ public interface HasDefaultBuild<R extends Tuple> {
      *
      * @return a new Join object where elements in the Join object's stream
      * method is of a default {@link Tuple} type
+     *
+     * @throws IllegalStateException if fields that are added via the {@code on()
+     * } method refers to tables that are not a part of the join.
      */
     Join<R> build();
 

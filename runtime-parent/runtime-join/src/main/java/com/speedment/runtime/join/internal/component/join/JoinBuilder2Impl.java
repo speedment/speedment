@@ -134,6 +134,7 @@ final class JoinBuilder2Impl<T1, T2>
     @SuppressWarnings("unchecked")
     public <T> Join<T> build(BiFunction<T1, T2, T> constructor) {
         requireNonNull(constructor);
+        assertFieldsAreInJoinTables();
         final List<Stage<?>> stages = stages();
         return streamSuppler().createJoin(
             stages,

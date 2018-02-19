@@ -63,7 +63,7 @@ final class JoinBuilder1Impl<T1>
         }
 
         @Override
-        public <V extends Comparable<? super V>, FIELD  extends HasComparableOperators<? extends T1, V>>
+        public <V extends Comparable<? super V>, FIELD  extends HasComparableOperators<? extends Object, V>>
             AfterOn<T1, T2, V> on(FIELD originalField) {
             requireNonNull(originalField);
             info.setOtherTableField(originalField);

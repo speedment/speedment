@@ -15,6 +15,7 @@ import com.speedment.runtime.join.JoinTestUtil.E5;
 import com.speedment.runtime.join.JoinTestUtil.E5Manager;
 import com.speedment.runtime.join.JoinTestUtil.E6;
 import com.speedment.runtime.join.JoinTestUtil.E6Manager;
+import com.speedment.runtime.join.JoinTestUtil.EX;
 import com.speedment.runtime.join.JoinTestUtil.MockJoinStreamSupplierComponent;
 import com.speedment.runtime.join.JoinTestUtil.MockStreamSupplierComponent;
 import static com.speedment.runtime.join.JoinTestUtil.assertStagesEquals;
@@ -29,6 +30,7 @@ import java.util.function.Consumer;
 import static java.util.stream.Collectors.toList;
 import java.util.stream.Stream;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,7 +41,7 @@ import org.junit.Test;
 public final class JoinBuilderTest {
 
     private MockJoinStreamSupplierComponent ss;
-    private JoinBuilder1Impl<E1> b;
+    private JoinBuilder1Impl<E1> bldr;
 
     @Before
     public void init() throws InstantiationException {
@@ -49,12 +51,40 @@ public final class JoinBuilderTest {
             .build();
 
         ss = injector.getOrThrow(MockJoinStreamSupplierComponent.class);
-        b = new JoinBuilder1Impl<>(ss, E1Manager.IDENTIFIER);
+        bldr = new JoinBuilder1Impl<>(ss, E1Manager.IDENTIFIER);
+    }
+
+    @Test
+    public void testIllegalField() {
+        try {
+            bldr.leftJoin(E2Manager.IDENTIFIER).on(EX.IDX).equal(E2.ID2)
+                .leftJoin(E3Manager.IDENTIFIER).on(E1.ID1).equal(E3.ID3)
+                .leftJoin(E4Manager.IDENTIFIER).on(E1.ID1).equal(E4.ID4)
+                .leftJoin(E5Manager.IDENTIFIER).on(E1.ID1).equal(E5.ID5)
+                .leftJoin(E6Manager.IDENTIFIER).on(E1.ID1).equal(E6.ID6)
+                .build();
+            fail("Illegal field not detected");
+        } catch (IllegalStateException ignore) {
+        }
+    }
+
+    @Test
+    public void testNullBuildArgument() {
+        try {
+            bldr.leftJoin(E2Manager.IDENTIFIER).on(EX.IDX).equal(E2.ID2)
+                .leftJoin(E3Manager.IDENTIFIER).on(E1.ID1).equal(E3.ID3)
+                .leftJoin(E4Manager.IDENTIFIER).on(E1.ID1).equal(E4.ID4)
+                .leftJoin(E5Manager.IDENTIFIER).on(E1.ID1).equal(E5.ID5)
+                .leftJoin(E6Manager.IDENTIFIER).on(E1.ID1).equal(E6.ID6)
+                .build(null);
+            fail("Builder that was null was not detected");
+        } catch (NullPointerException ignore) {
+        }
     }
 
     @Test
     public void testCrossJoin() {
-        b
+        bldr
             .crossJoin(E2Manager.IDENTIFIER)
             .crossJoin(E3Manager.IDENTIFIER)
             .crossJoin(E4Manager.IDENTIFIER)
@@ -86,16 +116,13 @@ public final class JoinBuilderTest {
 
     @Test
     public void testLeftJoin() {
-        b
-            .leftJoin(E2Manager.IDENTIFIER).on(E1.ID1).equal(E2.ID2)
+        bldr.leftJoin(E2Manager.IDENTIFIER).on(E1.ID1).equal(E2.ID2)
             .leftJoin(E3Manager.IDENTIFIER).on(E1.ID1).equal(E3.ID3)
             .leftJoin(E4Manager.IDENTIFIER).on(E1.ID1).equal(E4.ID4)
             .leftJoin(E5Manager.IDENTIFIER).on(E1.ID1).equal(E5.ID5)
             .leftJoin(E6Manager.IDENTIFIER).on(E1.ID1).equal(E6.ID6)
             .build();
-
-        Consumer<StageBean<?>> c = setFirstFieldTo(E2.ID2);
-
+        
         final List<Stage<?>> expected = expectedOf(
             entry(E1Manager.IDENTIFIER, noOp()),
             entry(

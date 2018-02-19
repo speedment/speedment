@@ -1,6 +1,7 @@
 package com.speedment.runtime.join.internal.component.join;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.JoinStreamSupplierComponent;
 import com.speedment.runtime.join.stage.JoinType;
 import com.speedment.runtime.join.stage.Stage;
@@ -8,9 +9,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
+import java.util.Set;
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
+import java.util.stream.IntStream;
 
 /**
  *
@@ -81,6 +86,32 @@ abstract class AbstractJoinBuilder<T> {
             .map(StageBean::asStage)
             .collect(collectingAndThen(toList(), Collections::unmodifiableList));
 
+    }
+
+    void assertFieldsAreInJoinTables() throws IllegalStateException {
+        final Set<TableIdentifier<?>> tableIdentifiers = stageBeans.stream()
+            .map(StageBean::getIdentifier)
+            .collect(toSet());
+
+        for (int i = 1; i < stageBeans.size(); i++) {
+            final StageBean<?> sb = stageBeans.get(i);
+            assertFieldIn(tableIdentifiers, sb.getOtherTableField(), i);
+            assertFieldIn(tableIdentifiers, sb.getFirstField(), i);
+            assertFieldIn(tableIdentifiers, sb.getSecondField(), i);
+        }
+    }
+
+    private void assertFieldIn(Set<TableIdentifier<?>> tableIdentifiers, HasComparableOperators<?, ?> field, int index) {
+        if (field != null) {
+            if (!tableIdentifiers.contains(field.identifier().asTableIdentifier())) {
+                throw new IllegalStateException(
+                    "The field " + field.identifier().getColumnName()
+                    + " from join stage " + (index + 1)
+                    + " is not associated with any of the tables in the join: "
+                    + tableIdentifiers.stream().map(TableIdentifier::getTableName).collect(joining(", "))
+                );
+            }
+        }
     }
 
 }
