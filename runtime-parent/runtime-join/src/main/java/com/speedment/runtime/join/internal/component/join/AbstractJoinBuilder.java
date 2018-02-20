@@ -5,6 +5,7 @@ import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.JoinStreamSupplierComponent;
 import com.speedment.runtime.join.stage.JoinType;
 import com.speedment.runtime.join.stage.Stage;
+import com.speedment.runtime.join.trait.HasWhere;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,29 +16,41 @@ import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
-import java.util.stream.IntStream;
 
 /**
  *
  * @author Per Minborg
  */
-abstract class AbstractJoinBuilder<T> {
+abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
 
     private final JoinStreamSupplierComponent streamSupplier;
     private final List<StageBean<?>> stageBeans;
     private final StageBean<T> stageBean;
 
-    AbstractJoinBuilder(JoinStreamSupplierComponent streamSupplier, TableIdentifier<T> initialTable) {
+    AbstractJoinBuilder(
+        final JoinStreamSupplierComponent streamSupplier,
+        final TableIdentifier<T> initialTable
+    ) {
         this.streamSupplier = requireNonNull(streamSupplier);
         this.stageBeans = new ArrayList<>();
         this.stageBean = AbstractJoinBuilder.this.addStageBeanOf(requireNonNull(initialTable));
     }
 
-    AbstractJoinBuilder(AbstractJoinBuilder<?> previous, StageBean<T> stageBean) {
+    AbstractJoinBuilder(
+        final AbstractJoinBuilder<?, ?> previous,
+        final StageBean<T> stageBean
+    ) {
         requireNonNull(previous);
         this.streamSupplier = previous.streamSuppler();
         this.stageBeans = previous.stageBeans();
         this.stageBean = requireNonNull(stageBean);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public SELF where(Predicate<? super T> predicate) {
+        addPredicate(predicate);
+        return (SELF) this;
     }
 
     <T> StageBean<T> addStageBeanOf(TableIdentifier<T> table) {
@@ -46,6 +59,10 @@ abstract class AbstractJoinBuilder<T> {
 
     <T> StageBean<T> addStageBeanOf(TableIdentifier<T> table, JoinType joinType) {
         return addStageBeanHelper(new StageBean<>(table, joinType));
+    }
+
+    <T> StageBean<T> addStageBeanOf(JoinType joinType, HasComparableOperators<T, ?> field) {
+        return addStageBeanHelper(new StageBean<>(joinType, field));
     }
 
     <T> StageBean<T> addStageBeanHelper(final StageBean<T> stageBean) {
@@ -95,9 +112,9 @@ abstract class AbstractJoinBuilder<T> {
 
         for (int i = 1; i < stageBeans.size(); i++) {
             final StageBean<?> sb = stageBeans.get(i);
-            assertFieldIn(tableIdentifiers, sb.getOtherTableField(), i);
-            assertFieldIn(tableIdentifiers, sb.getFirstField(), i);
-            assertFieldIn(tableIdentifiers, sb.getSecondField(), i);
+            assertFieldIn(tableIdentifiers, sb.getField(), i);
+            assertFieldIn(tableIdentifiers, sb.getForeignFirstField(), i);
+            assertFieldIn(tableIdentifiers, sb.getForeignSecondField(), i);
         }
     }
 

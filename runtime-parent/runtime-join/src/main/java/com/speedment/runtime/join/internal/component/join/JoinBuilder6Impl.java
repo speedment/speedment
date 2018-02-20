@@ -7,24 +7,17 @@ import com.speedment.runtime.join.JoinComponent.JoinBuilder1.JoinBuilder2.JoinBu
 import com.speedment.runtime.join.stage.Stage;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
-import java.util.function.Predicate;
 
 /**
  *
  * @author Per Minborg
  */
 final class JoinBuilder6Impl<T1, T2, T3, T4, T5, T6>
-    extends AbstractJoinBuilder<T6>
+    extends AbstractJoinBuilder<T6, JoinBuilder6<T1, T2, T3, T4, T5, T6>>
     implements JoinBuilder6<T1, T2, T3, T4, T5, T6> {
 
-    JoinBuilder6Impl(AbstractJoinBuilder<?> previousStage, StageBean<T6> current) {
+    JoinBuilder6Impl(AbstractJoinBuilder<?, ?> previousStage, StageBean<T6> current) {
         super(previousStage, current);
-    }
-
-    @Override
-    public JoinBuilder6<T1, T2, T3, T4, T5, T6> where(Predicate<? super T6> predicate) {
-        addPredicate(predicate);
-        return this;
     }
 
     @Override

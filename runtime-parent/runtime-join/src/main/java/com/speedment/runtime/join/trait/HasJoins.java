@@ -1,7 +1,7 @@
 package com.speedment.runtime.join.trait;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.core.manager.Manager;
+import com.speedment.runtime.field.trait.HasComparableOperators;
 
 /**
  * This interface contains the the supported join operations of Speedment.
@@ -14,89 +14,92 @@ import com.speedment.runtime.core.manager.Manager;
 public interface HasJoins<R, RC> {
 
     /**
-     * Adds the provided {@code joinedTable} to the collection of joined tables.
-     * Elements are joined from the provided {@code joinedTable} using an
-     * <em>INNER JOIN</em> whereby rows from two tables are present only if
-     * there is a match between the joining columns. Thus, records that do not
-     * have matches in the joining columns will not be present in the result.
+     * Adds the provided {@code joinedField} to the collection of joined
+     * column/tables. Elements are joined from the table of the provided
+     * {@code joinedField} using an <em>INNER JOIN</em> whereby rows from two
+     * tables are present only if there is a match between the joining columns.
+     * Thus, rows that do not have matches in the joining columns will not be
+     * present in the result.
      *
-     * @param <ENTITY> entity type for the added table
-     * @param joinedTable to add to the current join builder
-     * @return a builder where the provided {@code joinedTable} is added
+     * @param <ENTITY> entity type
+     * @param joinedField to add to the current join builder
+     * @return a builder where the provided {@code joinedField} is added
      *
-     * @throws NullPointerException if the provided {@code joinedTable} is
+     * @throws NullPointerException if the provided {@code joinedField} is
      * {@code null}
      */
-    <ENTITY> R innerJoin(TableIdentifier<ENTITY> joinedTable);
+    <ENTITY> R innerJoinOn(HasComparableOperators<ENTITY, ?> joinedField);
 
     /**
-     * Adds the provided {@code joinedTable} to the collection of joined tables.
-     * Elements are joined from the provided {@code joinedTable} using a
-     * <em>LEFT JOIN</em> whereby rows from two tables are present either if
-     * there is a match between the joining columns or for each row from
-     * previously existing table(s).
+     * Adds the provided {@code joinedField} to the collection of joined
+     * column/tables. Elements are joined from the table of the provided
+     * {@code joinedField} using an <em>LEFT JOIN</em> whereby rows from two
+     * tables are present either if there is a match between the joining columns
+     * or for each row from previously existing table(s).
      * <p>
-     * Unmatched rows will have entities from this manager set to {@code null}
+     * Unmatched rows will have entities from the table in the given
+     * {@code joinedField} set to {@code null}
      *
-     * @param <ENTITY> entity type for the added table
-     * @param joinedTable to add to the current join builder
-     * @return a builder where the provided {@code joinedTable} is added
+     * @param <ENTITY> entity type
+     * @param joinedField to add to the current join builder
+     * @return a builder where the provided {@code joinedField} is added
      *
-     * @throws NullPointerException if the provided {@code joinedTable} is
+     * @throws NullPointerException if the provided {@code joinedField} is
      * {@code null}
      */
-    <ENTITY> R leftJoin(TableIdentifier<ENTITY> joinedTable);
+    <ENTITY> R leftJoinOn(HasComparableOperators<ENTITY, ?> joinedField);
 
     /**
-     * Adds the provided {@code joinedTable} to the collection of joined tables.
-     * Elements are joined from the provided {@code joinedTable} using a
-     * <em>RIGHT JOIN</em> whereby rows from two tables are present either if
-     * there is a match between the joining columns or for each row from the
-     * provided {@code joinedTable}.
+     * Adds the provided {@code joinedField} to the collection of joined
+     * column/tables. Elements are joined from the table of the provided
+     * {@code joinedField} using an <em>RIGHT JOIN</em> whereby rows from two
+     * tables are present either if there is a match between the joining columns
+     * or for each row from the table for the provided {@code joinedField}.
      * <p>
-     * Unmatched rows will have entities from previously existing table(s) are
-     * set to {@code null}
+     * Unmatched rows will have entities from the table in the given
+     * {@code joinedField} set to {@code null}
      *
-     * @param <ENTITY> entity type for the added table
-     * @param joinedTable to add to the current join builder
-     * @return a builder where the provided {@code joinedTable} is added
+     * @param <ENTITY> entity type
+     * @param joinedField to add to the current join builder
+     * @return a builder where the provided {@code joinedField} is added
      *
-     * @throws NullPointerException if the provided {@code joinedTable} is
+     * @throws NullPointerException if the provided {@code joinedField} is
      * {@code null}
      */
-    <ENTITY> R rightJoin(TableIdentifier<ENTITY> joinedTable);
+    <ENTITY> R rightJoinOn(HasComparableOperators<ENTITY, ?> joinedField);
 
     /**
-     * Adds the provided {@code joinedTable} to the collection of joined tables.
-     * Elements are joined from the provided {@code joinedTable} using a
-     * <em>FULL OUTER JOIN</em> whereby rows from two tables are present either
-     * if there is a match between the joining columns or for each row from the
-     * provided {@code joinedTable} or for each row from previously existing
-     * table(s).
+     * Adds the provided {@code joinedField} to the collection of joined
+     * column/tables. Elements are joined from the table of the provided
+     * {@code joinedField} using an <em>FULL OUTER JOIN</em> whereby rows from
+     * two tables are present either if there is a match between the joining
+     * columns or for each row from the provided {@code joinedField} or for each
+     * row from previously existing table(s).
+     *
      * <p>
-     * Unmatched rows will have entities from relevant tables(s) are set to
-     * {@code null}
+     * Unmatched rows will have entities from the table in the given
+     * {@code joinedField} set to {@code null}
      *
-     * @param <ENTITY> entity type for the added table
-     * @param joinedTable to add to the current join builder
-     * @return a builder where the provided {@code joinedTable} is added
+     * @param <ENTITY> entity type
+     * @param joinedField to add to the current join builder
+     * @return a builder where the provided {@code joinedField} is added
      *
-     * @throws NullPointerException if the provided {@code joinedTable} is
+     * @throws NullPointerException if the provided {@code joinedField} is
      * {@code null}
      */
-    <ENTITY> R fullOuterJoin(TableIdentifier<ENTITY> joinedTable);
+    <ENTITY> R fullOuterJoinOn(HasComparableOperators<ENTITY, ?> joinedField);
 
     /**
      * Adds the provided {@code joinedTable} to the collection of joined tables.
-     * Elements are joined from the provided {@code joinedTable} using a
-     * <em>CARTESIAN JOIN</em> whereby all combination of rows using all
+     * Elements are joined from the table of the provided {@code joinedTable}
+     * using an <em>CROSS JOIN</em> whereby all combination of rows using all
      * tables(s) are produced.
      *
-     * @param <ENTITY> entity type for the added table
+     * @param <ENTITY> entity type
      * @param joinedTable to add to the current join builder
-     * @return a builder where the provided {@code joinedTable} is added
+     * @return a builder where the provided {@code joinedField} is added
      *
-     * @throws NullPointerException if the provided {@code joinedTable} is
+     * @throws NullPointerException if the provided {@code joinedField} is
      * {@code null}
      */
     <ENTITY> RC crossJoin(TableIdentifier<ENTITY> joinedTable);

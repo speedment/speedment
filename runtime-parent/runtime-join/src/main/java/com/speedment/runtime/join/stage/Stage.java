@@ -1,6 +1,7 @@
 package com.speedment.runtime.join.stage;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +44,7 @@ public interface Stage<T> {
      * @return a Field that belongs to a table from a previous stage, or
      * {@code empty()} if no Field is defined
      */
-    Optional<HasComparableOperators<?, ?>> otherTableField();
+    Optional<HasComparableOperators<? extends T, ?>> field();
 
     /**
      * Returns the OperatorType for this Stage or , or {@code empty()} if no
@@ -61,7 +62,7 @@ public interface Stage<T> {
      * @return a Field that belongs to the table of this Stage,
      * or{@code empty()} if no Field is defined
      */
-    Optional<HasComparableOperators<? extends T, ?>> firstField();
+    Optional<HasComparableOperators<?, ?>> firstForeignField();
 
     /**
      * Returns a Field that belongs to the table of this Stage, or
@@ -71,6 +72,16 @@ public interface Stage<T> {
      * @return a Field that belongs to the table of this Stage, or
      * {@code empty()} if no Field is defined
      */
-    Optional<HasComparableOperators<? extends T, ?>> secondField();
+    Optional<HasComparableOperators<?, ?>> secondForeignField();
+
+    /**
+     * Returns the Inclusion type for this Stage or {@code empty()} if no
+     * Inclusion type is defined (i.e. for a CROSS JOIN or for all OperatorTypes
+     * that are not BETWEEN or NOT_BETWEEN).
+     *
+     * @return the Inclusion type for this stage, or {@code empty()} if no
+     * Inclusion type is defined
+     */
+    Optional<Inclusion> foreignInclusion();
 
 }

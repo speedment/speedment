@@ -1,29 +1,27 @@
 package com.speedment.runtime.join.trait;
 
+import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 
 /**
  *
  * @author Per Minborg
- * @param <V> comparable value type
- * @param <ENTITY> entity type
  * @param <R> return type
  */
-public interface HasOnPredicates<V extends Comparable<? super V>, ENTITY, R> {
+public interface HasOnPredicates<R> {
 
     /**
      * Adds an operation where a previous field is compared to the given
      * {@code joinedField} and whereby the operation returns true if and only
      * the previous field is <em>equal</em> to the given {@code joinedField}.
      *
-     * @param <FIELD> type for the joined field
      * @param joinedField to use by the operation
      * @return a builder with the added operation
      *
      * @throws NullPointerException if the provided {@code joinedField} is
      * {@code null}.
      */
-    <FIELD extends HasComparableOperators<ENTITY, V>> R equal(FIELD joinedField);
+    R equal(HasComparableOperators<?, ?> joinedField);
 
     /**
      * Adds an operation where a previous field is compared to the given
@@ -31,28 +29,26 @@ public interface HasOnPredicates<V extends Comparable<? super V>, ENTITY, R> {
      * the previous field is <em>not equal</em> to the given
      * {@code joinedField}.
      *
-     * @param <FIELD> type for the joined field
      * @param joinedField to use by the operation
      * @return a builder with the added operation
      *
      * @throws NullPointerException if the provided {@code joinedField} is
      * {@code null}.
      */
-    <FIELD extends HasComparableOperators<ENTITY, V>> R notEqual(FIELD joinedField);
+    R notEqual(HasComparableOperators<?, ?> joinedField);
 
     /**
      * Adds an operation where a previous field is compared to the given
      * {@code joinedField} and whereby the operation returns true if and only
      * the previous field is <em>less than</em> the given {@code joinedField}.
      *
-     * @param <FIELD> type for the joined field
      * @param joinedField to use by the operation
      * @return a builder with the added operation
      *
      * @throws NullPointerException if the provided {@code joinedField} is
      * {@code null}.
      */
-    <FIELD extends HasComparableOperators<ENTITY, V>> R lessThan(FIELD joinedField);
+    R lessThan(HasComparableOperators<?, ?> joinedField);
 
     /**
      * Adds an operation where a previous field is compared to the given
@@ -60,14 +56,13 @@ public interface HasOnPredicates<V extends Comparable<? super V>, ENTITY, R> {
      * the previous field is <em>less or equal</em> to the given
      * {@code joinedField}.
      *
-     * @param <FIELD> type for the joined field
      * @param joinedField to use by the operation
      * @return a builder with the added operation
      *
      * @throws NullPointerException if the provided {@code joinedField} is
      * {@code null}.
      */
-    <FIELD extends HasComparableOperators<ENTITY, V>> R lessOrEqual(FIELD joinedField);
+    R lessOrEqual(HasComparableOperators<?, ?> joinedField);
 
     /**
      * Adds an operation where a previous field is compared to the given
@@ -75,14 +70,13 @@ public interface HasOnPredicates<V extends Comparable<? super V>, ENTITY, R> {
      * the previous field is <em>greater than</em> the given
      * {@code joinedField}.
      *
-     * @param <FIELD> type for the joined field
      * @param joinedField to use by the operation
      * @return a builder with the added operation
      *
      * @throws NullPointerException if the provided {@code joinedField} is
      * {@code null}.
      */
-    <FIELD extends HasComparableOperators<ENTITY, V>> R greaterThan(FIELD joinedField);
+    R greaterThan(HasComparableOperators<?, ?> joinedField);
 
     /**
      * Adds an operation where a previous field is compared to the given
@@ -90,14 +84,13 @@ public interface HasOnPredicates<V extends Comparable<? super V>, ENTITY, R> {
      * the previous field is <em>greater or equal</em> to the given
      * {@code joinedField}.
      *
-     * @param <FIELD> type for the joined field
      * @param joinedField to use by the operation
      * @return a builder with the added operation
      *
      * @throws NullPointerException if the provided {@code joinedField} is
      * {@code null}.
      */
-    <FIELD extends HasComparableOperators<ENTITY, V>> R greaterOrEqual(FIELD joinedField);
+    R greaterOrEqual(HasComparableOperators<?, ?> joinedField);
 
     /**
      * Adds an operation where a previous field is compared to the given
@@ -106,8 +99,7 @@ public interface HasOnPredicates<V extends Comparable<? super V>, ENTITY, R> {
      * {@code joinedFieldFrom} (inclusive>) and {@code joinedFieldTo}
      * (exclusive).
      *
-     * @param <FIELD> type for the joined field
-     * @param <FIELD2> type for the second joined field
+     * @param <ENTITY> entity type for both fields
      * @param joinedFieldFrom to use by the operation
      * @param joinedFieldTo to use by the operation
      * @return a builder with the added operation
@@ -116,8 +108,46 @@ public interface HasOnPredicates<V extends Comparable<? super V>, ENTITY, R> {
      * {@code joinedFieldFrom} or the provided {@code joinedFieldTo } is
      * {@code null}.
      */
-    <FIELD extends HasComparableOperators<ENTITY, V>, FIELD2 extends HasComparableOperators<ENTITY, V>>
-        R between(FIELD joinedFieldFrom, FIELD2 joinedFieldTo);
+    default <ENTITY> R between(
+        HasComparableOperators<ENTITY, ?> joinedFieldFrom,
+        HasComparableOperators<ENTITY, ?> joinedFieldTo
+    ) {
+        return between(joinedFieldFrom, joinedFieldTo, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
+    }
+
+    /**
+     * Adds an operation where a previous field is compared to the given
+     * {@code joinedFieldFrom} and {@code joinedFieldTo} and whereby the
+     * operation returns true if and only the previous field is <em>between</em>
+     * {@code joinedFieldFrom} and {@code joinedFieldTo} while considering the
+     * provided mode of {@code inclusion}.
+     * <p>
+     * The Inclusion parameter may take the following values:
+     * <p>
+     * <
+     * pre>{@code
+     *    START_INCLUSIVE_END_INCLUSIVE,
+     *    START_INCLUSIVE_END_EXCLUSIVE,
+     *    START_EXCLUSIVE_END_INCLUSIVE,
+     *    START_EXCLUSIVE_END_EXCLUSIVE
+     * }
+     * </pre>
+     *
+     * @param <ENTITY> entity type for both fields
+     * @param joinedFieldFrom to use by the operation
+     * @param joinedFieldTo to use by the operation
+     * @param inclusion type of between (open or closed in both ends)
+     * @return a builder with the added operation
+     *
+     * @throws NullPointerException if either the provided
+     * {@code joinedFieldFrom}, the provided {@code joinedFieldTo } or the
+     * provided {@code inclusion} is {@code null}.
+     */
+    <ENTITY> R between(
+        HasComparableOperators<ENTITY, ?> joinedFieldFrom,
+        HasComparableOperators<ENTITY, ?> joinedFieldTo,
+        Inclusion inclusion
+    );
 
     /**
      * Adds an operation where a previous field is compared to the given
@@ -126,8 +156,7 @@ public interface HasOnPredicates<V extends Comparable<? super V>, ENTITY, R> {
      * between</em> {@code joinedFieldFrom} (inclusive>) and
      * {@code joinedFieldTo} (exclusive).
      *
-     * @param <FIELD> type for the joined field
-     * @param <FIELD2> type for the second joined field
+     * @param <ENTITY> entity type for both fields
      * @param joinedFieldFrom to use by the operation
      * @param joinedFieldTo to use by the operation
      * @return a builder with the added operation
@@ -136,7 +165,45 @@ public interface HasOnPredicates<V extends Comparable<? super V>, ENTITY, R> {
      * {@code joinedFieldFrom} or the provided {@code joinedFieldTo } is
      * {@code null}.
      */
-    <FIELD extends HasComparableOperators<ENTITY, V>, FIELD2 extends HasComparableOperators<ENTITY, V>>
-        R notBetween(FIELD joinedFieldFrom, FIELD2 joinedFieldTo);
+    default <ENTITY> R notBetween(
+        HasComparableOperators<ENTITY, ?> joinedFieldFrom,
+        HasComparableOperators<ENTITY, ?> joinedFieldTo
+    ) {
+        return notBetween(joinedFieldFrom, joinedFieldTo, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
+    }
+
+    /**
+     * Adds an operation where a previous field is compared to the given
+     * {@code joinedFieldFrom} and {@code joinedFieldTo} and whereby the
+     * operation returns true if and only the previous field is <em>not
+     * between</em> {@code joinedFieldFrom} and {@code joinedFieldTo} while
+     * considering the provided mode of {@code inclusion}.
+     * <p>
+     * The Inclusion parameter may take the following values:
+     * <p>
+     * <
+     * pre>{@code
+     *    START_INCLUSIVE_END_INCLUSIVE,
+     *    START_INCLUSIVE_END_EXCLUSIVE,
+     *    START_EXCLUSIVE_END_INCLUSIVE,
+     *    START_EXCLUSIVE_END_EXCLUSIVE
+     * }
+     * </pre>
+     *
+     * @param <ENTITY> entity type for both fields
+     * @param joinedFieldFrom to use by the operation
+     * @param joinedFieldTo to use by the operation
+     * @param inclusion type of between (open or closed in both ends)
+     * @return a builder with the added operation
+     *
+     * @throws NullPointerException if either the provided null
+     * {@code joinedFieldFrom}, the provided {@code joinedFieldTo } or the
+     * provided {@code inclusion} is {@code null}.
+     */
+    <ENTITY> R notBetween(
+        HasComparableOperators<ENTITY, ?> joinedFieldFrom,
+        HasComparableOperators<ENTITY, ?> joinedFieldTo,
+        Inclusion inclusion
+    );
 
 }

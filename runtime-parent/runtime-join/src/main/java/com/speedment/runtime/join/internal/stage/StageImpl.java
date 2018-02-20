@@ -1,6 +1,7 @@
 package com.speedment.runtime.join.internal.stage;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.stage.JoinType;
 import com.speedment.runtime.join.stage.OperatorType;
@@ -21,27 +22,30 @@ public class StageImpl<T> implements Stage<T> {
     private final TableIdentifier<T> identifier;
     private final List<Predicate<? super T>> predicates;
     private final JoinType joinType;
-    private final HasComparableOperators<?, ?> otherTableField;
+    private final HasComparableOperators<? extends T, ?> field;
     private final OperatorType operatorType;
-    private final HasComparableOperators<? extends T, ?> firstField;
-    private final HasComparableOperators<? extends T, ?> secondField;
+    private final HasComparableOperators<?, ?> firstForeignField;
+    private final HasComparableOperators<?, ?> secondForeignField;
+    private final Inclusion foreignInclusion;
 
     public StageImpl(
         final TableIdentifier<T> identifier,
         final List<Predicate<? super T>> predicates,
         final JoinType joinType,
-        final HasComparableOperators<?, ?> otherTableField,
+        final HasComparableOperators<? extends T, ?> field,
         final OperatorType operatorType,
-        final HasComparableOperators<? extends T, ?> firstField,
-        final HasComparableOperators<? extends T, ?> secondField
+        final HasComparableOperators<?, ?> firstForeignField,
+        final HasComparableOperators<?, ?> secondForeignField,
+        final Inclusion foreignInclusion
     ) {
         this.identifier = requireNonNull(identifier);
-        this.predicates = predicates;
-        this.joinType = joinType;
-        this.otherTableField = otherTableField;
-        this.operatorType = operatorType;
-        this.firstField = firstField;
-        this.secondField = secondField;
+        this.predicates = predicates; // Nullable
+        this.joinType = joinType; // Nullable
+        this.field = field; // Nullable
+        this.operatorType = operatorType; // Nullable
+        this.firstForeignField = firstForeignField; // Nullable
+        this.secondForeignField = secondForeignField; // Nullable
+        this.foreignInclusion = foreignInclusion; // Nullable
     }
 
     @Override
@@ -60,8 +64,8 @@ public class StageImpl<T> implements Stage<T> {
     }
 
     @Override
-    public Optional<HasComparableOperators<?, ?>> otherTableField() {
-        return Optional.ofNullable(otherTableField);
+    public Optional<HasComparableOperators<? extends T, ?>> field() {
+        return Optional.ofNullable(field);
     }
 
     @Override
@@ -70,18 +74,23 @@ public class StageImpl<T> implements Stage<T> {
     }
 
     @Override
-    public Optional<HasComparableOperators<? extends T, ?>> firstField() {
-        return Optional.ofNullable(firstField);
+    public Optional<HasComparableOperators<?, ?>> firstForeignField() {
+        return Optional.ofNullable(firstForeignField);
     }
 
     @Override
-    public Optional<HasComparableOperators<? extends T, ?>> secondField() {
-        return Optional.ofNullable(secondField);
+    public Optional<HasComparableOperators<?, ?>> secondForeignField() {
+        return Optional.ofNullable(secondForeignField);
+    }
+
+    @Override
+    public Optional<Inclusion> foreignInclusion() {
+        return Optional.ofNullable(foreignInclusion);
     }
 
     @Override
     public String toString() {
-        return "StageImpl{" + "identifier=" + identifier + ", predicates=" + predicates + ", joinType=" + joinType + ", otherTableField=" + otherTableField + ", operatorType=" + operatorType + ", firstField=" + firstField + ", secondField=" + secondField + '}';
+        return "StageImpl{" + "identifier=" + identifier + ", predicates=" + predicates + ", joinType=" + joinType + ", field=" + field + ", operatorType=" + operatorType + ", firstForeignField=" + firstForeignField + ", secondForeignField=" + secondForeignField + '}';
     }
 
 }

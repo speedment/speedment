@@ -3,6 +3,7 @@ package com.speedment.runtime.join.internal.component.join;
 import com.speedment.runtime.join.stage.OperatorType;
 import com.speedment.runtime.join.stage.JoinType;
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.internal.stage.StageImpl;
 import com.speedment.runtime.join.stage.Stage;
@@ -22,10 +23,11 @@ public final class StageBean<T> {
     private final TableIdentifier<T> identifier;
     private final List<Predicate<? super T>> predicates;
     private JoinType joinType;
-    private HasComparableOperators<?, ?> otherTableField;
+    private HasComparableOperators<? extends T, ?> field;
     private OperatorType operatorType;
-    private HasComparableOperators<? extends T, ?> firstField;
-    private HasComparableOperators<? extends T, ?> secondField;
+    private HasComparableOperators<?, ?> firstForeignField;
+    private HasComparableOperators<?, ?> secondForeignField;
+    private Inclusion foreignInclusion;
 
     public StageBean(TableIdentifier<T> identifier) {
         this.identifier = requireNonNull(identifier);
@@ -38,6 +40,14 @@ public final class StageBean<T> {
         this.joinType = requireNonNull(joinType);
     }
 
+    public StageBean(JoinType joinType, HasComparableOperators<T, ?> field) {
+        requireNonNull(field);
+        this.identifier = requireNonNull(field.identifier().asTableIdentifier());
+        this.predicates = new ArrayList<>();
+        this.joinType = requireNonNull(joinType);
+        this.field = field;
+    }
+
     public JoinType getJoinType() {
         return joinType;
     }
@@ -46,12 +56,12 @@ public final class StageBean<T> {
         this.joinType = requireNonNull(joinType);
     }
 
-    public HasComparableOperators<?, ?> getOtherTableField() {
-        return otherTableField;
+    public HasComparableOperators<? extends T, ?> getField() {
+        return field;
     }
 
-    public void setOtherTableField(HasComparableOperators<?, ?> otherTableField) {
-        this.otherTableField = requireNonNull(otherTableField);
+    public void setField(HasComparableOperators<? extends T, ?> field) {
+        this.field = requireNonNull(field);
     }
 
     public OperatorType getOperatorType() {
@@ -62,20 +72,20 @@ public final class StageBean<T> {
         this.operatorType = requireNonNull(operatorType);
     }
 
-    public HasComparableOperators<? extends T, ?> getFirstField() {
-        return firstField;
+    public HasComparableOperators<?, ?> getForeignFirstField() {
+        return firstForeignField;
     }
 
-    public void setFirstField(HasComparableOperators<? extends T, ?> firstTableField) {
-        this.firstField = requireNonNull(firstTableField);
+    public void setForeignFirstField(HasComparableOperators<?, ?> firstTableField) {
+        this.firstForeignField = requireNonNull(firstTableField);
     }
 
-    public HasComparableOperators<? extends T, ?> getSecondField() {
-        return secondField;
+    public HasComparableOperators<?, ?> getForeignSecondField() {
+        return secondForeignField;
     }
 
-    public void setSecondField(HasComparableOperators<? extends T, ?> secondTableField) {
-        this.secondField = requireNonNull(secondTableField);
+    public void setForeignSecondField(HasComparableOperators<?, ?> secondTableField) {
+        this.secondForeignField = requireNonNull(secondTableField);
     }
 
     public TableIdentifier<T> getIdentifier() {
@@ -91,15 +101,24 @@ public final class StageBean<T> {
         return predicates;
     }
 
+    public Inclusion getForeignInclusion() {
+        return foreignInclusion;
+    }
+
+    public void setForeignInclusion(Inclusion foreignInclusion) {
+        this.foreignInclusion = requireNonNull(foreignInclusion);
+    }
+
     public Stage<T> asStage() {
         return new StageImpl<>(
             identifier,
             predicates,
             joinType,
-            otherTableField,
+            field,
             operatorType,
-            firstField,
-            secondField
+            firstForeignField,
+            secondForeignField,
+            foreignInclusion
         );
     }
 

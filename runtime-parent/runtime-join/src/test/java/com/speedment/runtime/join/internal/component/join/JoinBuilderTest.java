@@ -57,11 +57,11 @@ public final class JoinBuilderTest {
     @Test
     public void testIllegalField() {
         try {
-            bldr.leftJoin(E2Manager.IDENTIFIER).on(EX.IDX).equal(E2.ID2)
-                .leftJoin(E3Manager.IDENTIFIER).on(E1.ID1).equal(E3.ID3)
-                .leftJoin(E4Manager.IDENTIFIER).on(E1.ID1).equal(E4.ID4)
-                .leftJoin(E5Manager.IDENTIFIER).on(E1.ID1).equal(E5.ID5)
-                .leftJoin(E6Manager.IDENTIFIER).on(E1.ID1).equal(E6.ID6)
+            bldr.leftJoinOn(E2.ID2).equal(EX.IDX)
+                .leftJoinOn(E3.ID3).equal(E1.ID1)
+                .leftJoinOn(E4.ID4).equal(E1.ID1)
+                .leftJoinOn(E5.ID5).equal(E1.ID1)
+                .leftJoinOn(E6.ID6).equal(E1.ID1)
                 .build();
             fail("Illegal field not detected");
         } catch (IllegalStateException ignore) {
@@ -71,11 +71,11 @@ public final class JoinBuilderTest {
     @Test
     public void testNullBuildArgument() {
         try {
-            bldr.leftJoin(E2Manager.IDENTIFIER).on(EX.IDX).equal(E2.ID2)
-                .leftJoin(E3Manager.IDENTIFIER).on(E1.ID1).equal(E3.ID3)
-                .leftJoin(E4Manager.IDENTIFIER).on(E1.ID1).equal(E4.ID4)
-                .leftJoin(E5Manager.IDENTIFIER).on(E1.ID1).equal(E5.ID5)
-                .leftJoin(E6Manager.IDENTIFIER).on(E1.ID1).equal(E6.ID6)
+            bldr.leftJoinOn(E2.ID2).equal(E1.ID1)
+                .leftJoinOn(E3.ID3).equal(E1.ID1)
+                .leftJoinOn(E4.ID4).equal(E1.ID1)
+                .leftJoinOn(E5.ID5).equal(E1.ID1)
+                .leftJoinOn(E6.ID6).equal(E1.ID1)
                 .build(null);
             fail("Builder that was null was not detected");
         } catch (NullPointerException ignore) {
@@ -84,8 +84,7 @@ public final class JoinBuilderTest {
 
     @Test
     public void testCrossJoin() {
-        bldr
-            .crossJoin(E2Manager.IDENTIFIER)
+        bldr.crossJoin(E2Manager.IDENTIFIER)
             .crossJoin(E3Manager.IDENTIFIER)
             .crossJoin(E4Manager.IDENTIFIER)
             .crossJoin(E5Manager.IDENTIFIER)
@@ -116,49 +115,49 @@ public final class JoinBuilderTest {
 
     @Test
     public void testLeftJoin() {
-        bldr.leftJoin(E2Manager.IDENTIFIER).on(E1.ID1).equal(E2.ID2)
-            .leftJoin(E3Manager.IDENTIFIER).on(E1.ID1).equal(E3.ID3)
-            .leftJoin(E4Manager.IDENTIFIER).on(E1.ID1).equal(E4.ID4)
-            .leftJoin(E5Manager.IDENTIFIER).on(E1.ID1).equal(E5.ID5)
-            .leftJoin(E6Manager.IDENTIFIER).on(E1.ID1).equal(E6.ID6)
+        bldr.leftJoinOn(E2.ID2).equal(E1.ID1)
+            .leftJoinOn(E3.ID3).equal(E1.ID1)
+            .leftJoinOn(E4.ID4).equal(E1.ID1)
+            .leftJoinOn(E5.ID5).equal(E1.ID1)
+            .leftJoinOn(E6.ID6).equal(E1.ID1)
             .build();
-        
+
         final List<Stage<?>> expected = expectedOf(
             entry(E1Manager.IDENTIFIER, noOp()),
             entry(
                 E2Manager.IDENTIFIER,
                 setJoinTypeTo(JoinType.LEFT_JOIN)
-                    .andThen(setOtherTableFieldTo(E1.ID1))
+                    .andThen(setFieldTo(E2.ID2))
                     .andThen(setOperatorTypeTo(EQUAL))
-                    .andThen(this.<E2>setFirstFieldTo(E2.ID2))
+                    .andThen(setForeignFirstFieldTo(E1.ID1))
             ),
             entry(
                 E3Manager.IDENTIFIER,
                 setJoinTypeTo(JoinType.LEFT_JOIN)
-                    .andThen(setOtherTableFieldTo(E1.ID1))
+                    .andThen(setFieldTo(E3.ID3))
                     .andThen(setOperatorTypeTo(EQUAL))
-                    .andThen(setFirstFieldTo(E3.ID3))
+                    .andThen(setForeignFirstFieldTo(E1.ID1))
             ),
             entry(
                 E4Manager.IDENTIFIER,
                 setJoinTypeTo(JoinType.LEFT_JOIN)
-                    .andThen(setOtherTableFieldTo(E1.ID1))
+                    .andThen(setFieldTo(E4.ID4))
                     .andThen(setOperatorTypeTo(EQUAL))
-                    .andThen(setFirstFieldTo(E4.ID4))
+                    .andThen(setForeignFirstFieldTo(E1.ID1))
             ),
             entry(
                 E5Manager.IDENTIFIER,
                 setJoinTypeTo(JoinType.LEFT_JOIN)
-                    .andThen(setOtherTableFieldTo(E1.ID1))
+                    .andThen(setFieldTo(E5.ID5))
                     .andThen(setOperatorTypeTo(EQUAL))
-                    .andThen(setFirstFieldTo(E5.ID5))
+                    .andThen(setForeignFirstFieldTo(E1.ID1))
             ),
             entry(
                 E6Manager.IDENTIFIER,
                 setJoinTypeTo(JoinType.LEFT_JOIN)
-                    .andThen(setOtherTableFieldTo(E1.ID1))
+                    .andThen(setFieldTo(E6.ID6))
                     .andThen(setOperatorTypeTo(EQUAL))
-                    .andThen(setFirstFieldTo(E6.ID6))
+                    .andThen(setForeignFirstFieldTo(E1.ID1))
             )
         );
 
@@ -176,6 +175,16 @@ public final class JoinBuilderTest {
     }
 
     @Test
+    public void testJoins() {
+        bldr.leftJoinOn(E2.ID2).equal(E1.ID1)
+            .leftJoinOn(E3.ID3).equal(E1.ID1)
+            .leftJoinOn(E4.ID4).equal(E1.ID1)
+            .leftJoinOn(E5.ID5).equal(E1.ID1)
+            .leftJoinOn(E6.ID6).equal(E1.ID1)
+            .build();
+    }
+
+    @Test
     public void testOnColumnMustComeFromPreviousTable() {
 
     }
@@ -189,27 +198,29 @@ public final class JoinBuilderTest {
         return sb -> sb.setJoinType(joinType);
     }
 
-    private Consumer<StageBean<?>> setOtherTableFieldTo(HasComparableOperators<?, ?> field) {
-        return sb -> sb.setOtherTableField(field);
+    @SuppressWarnings("unchecked")
+    private <T> Consumer<StageBean<?>> setFieldTo(HasComparableOperators<? extends T, ?> field) {
+        Consumer<StageBean<T>> consumer = sb -> sb.setField(field);
+        return (Consumer<StageBean<?>>) (Object) consumer; // Ugly..
     }
 
     private Consumer<StageBean<?>> setOperatorTypeTo(OperatorType operatorType) {
         return sb -> sb.setOperatorType(operatorType);
     }
 
-    private <T> Consumer<StageBean<?>> setFirstFieldTo(HasComparableOperators<T, Integer> field) {
+    private <T> Consumer<StageBean<?>> setForeignFirstFieldTo(HasComparableOperators<T, Integer> field) {
         return (StageBean<?> sb) -> {
             @SuppressWarnings("unchecked")
             final StageBean<T> sb1 = (StageBean<T>) sb;
-            sb1.setFirstField(field);
+            sb1.setForeignFirstField(field);
         };
     }
 
-    private <T> Consumer<StageBean<?>> setSecondFieldTo(HasComparableOperators<T, ?> field) {
+    private <T> Consumer<StageBean<?>> setForeignSecondFieldTo(HasComparableOperators<T, ?> field) {
         return (StageBean<?> sb) -> {
             @SuppressWarnings("unchecked")
             final StageBean<T> sb1 = (StageBean<T>) sb;
-            sb1.setSecondField(field);
+            sb1.setForeignSecondField(field);
         };
     }
 
@@ -217,6 +228,8 @@ public final class JoinBuilderTest {
         return new SimpleImmutableEntry<>(k, v);
     }
 
+    @SafeVarargs
+    @SuppressWarnings("varargs")
     private final void assertIdentifiersInCreateJoinEquals(TableIdentifier<?>... identifiers) {
         for (int i = 0; i < identifiers.length; i++) {
             assertEquals(Integer.toString(i), identifiers[i], ss.t(i));

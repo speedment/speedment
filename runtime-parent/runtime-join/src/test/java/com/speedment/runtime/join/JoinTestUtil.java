@@ -91,7 +91,7 @@ public final class JoinTestUtil {
 
     public interface E2 extends HasId<E2> {
 
-        IntField<E2, Integer> ID2 = IntField.create(id(E3Manager.IDENTIFIER, "id2"), E2::getId, E2::setId, TypeMapper.primitive(), true);
+        IntField<E2, Integer> ID2 = IntField.create(id(E2Manager.IDENTIFIER, "id2"), E2::getId, E2::setId, TypeMapper.primitive(), true);
 
     }
 
@@ -419,14 +419,13 @@ public final class JoinTestUtil {
     }
 
     public static boolean equals(Stage<?> s1, Stage<?> s2) {
-        return Stream.<Function<Stage<?>, ?>>of(
-            Stage::firstField,
+        return Stream.<Function<Stage<?>, ?>>of(Stage::firstForeignField,
             Stage::identifier,
             Stage::joinType,
             Stage::operatorType,
-            Stage::otherTableField,
+            Stage::field,
             Stage::predicates,
-            Stage::secondField
+            Stage::secondForeignField
         ).allMatch(keyExtractor -> equals(keyExtractor, s1, s2));
 
     }

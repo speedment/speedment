@@ -52,7 +52,7 @@ public class JoinSketchTest {
     private void test2InnerCustomObject() {
         final Join<UserPictureHolder> join = jc
             .from(UserManager.IDENTIFIER)
-            .innerJoin(PictureManager.IDENTIFIER).on(User.USER_ID).equal(Picture.USER_ID)
+            .innerJoinOn(Picture.USER_ID).equal(User.USER_ID)
             .build(UserPictureHolder::new);
         // SELECT * from USER INNER JOIN PICTURES ON USER.USER_ID = PICTURE.USER_ID
         // SELECT * from USER AS A INNER JOIN PICTURES AS B ON A.USER_ID = B.USER_ID
@@ -61,7 +61,7 @@ public class JoinSketchTest {
     private void test2LeftJoin() {
         final Join<UserPictureHolder> join = jc
             .from(UserManager.IDENTIFIER)
-            .leftJoin(PictureManager.IDENTIFIER).on(User.USER_ID).equal(Picture.USER_ID)
+            .leftJoinOn(Picture.USER_ID).equal(User.USER_ID)
             .build(UserPictureHolder::new);
         // SELECT * from USER LEFT JOIN PICTURES ON USER.USER_ID = PICTURE.USER_ID
         //
@@ -71,7 +71,7 @@ public class JoinSketchTest {
     private void test2FullOuterJoin() {
         final Join<UserPictureHolder> join = jc
             .from(UserManager.IDENTIFIER)
-            .fullOuterJoin(PictureManager.IDENTIFIER).on(User.USER_ID).equal(Picture.USER_ID)
+            .fullOuterJoinOn(Picture.USER_ID).equal(User.USER_ID)
             .build(UserPictureHolder::new);
 
         // SELECT * from USER FULL OUTER JOIN PICTURES ON USER.USER_ID = PICTURE.USER_ID
@@ -80,7 +80,7 @@ public class JoinSketchTest {
     private void test2WithWheresOnTables() {
         Join<UserPictureHolder> join = jc
             .from(UserManager.IDENTIFIER).where(User.USER_ID.greaterOrEqual(100))
-            .innerJoin(PictureManager.IDENTIFIER).on(User.USER_ID).equal(Picture.USER_ID).where(Picture.SIZE.greaterThan(10))
+            .innerJoinOn(Picture.USER_ID).equal(User.USER_ID).where(Picture.SIZE.greaterThan(10))
             .build(UserPictureHolder::new);
 
         // SELECT * from USER 
@@ -92,7 +92,7 @@ public class JoinSketchTest {
     private void test2SelfJoin() {
         Join<Tuple2<User, User>> join = jc
             .from(UserManager.IDENTIFIER).where(User.USER_ID.greaterOrEqual(100))
-            .innerJoin(UserManager.IDENTIFIER).on(User.NAME).equal(User.NAME)
+            .innerJoinOn(User.NAME).equal(User.NAME)
             .build();
         // SELECT * from USER as A
         // INNER JOIN USER as B ON A.USER_NAME = B.USER_NAME
@@ -113,8 +113,8 @@ public class JoinSketchTest {
 
         final Join<Tuple3<User, Picture, FrameType>> join = jc
             .from(UserManager.IDENTIFIER)
-            .innerJoin(PictureManager.IDENTIFIER).on(User.USER_ID).equal(Picture.USER_ID)
-            .innerJoin(FrameTypeManager.IDENTIFIER).on(Picture.FRAME_ID).equal(FrameType.FRAME_ID) // Note that on() can be either on Picture or User
+            .innerJoinOn(Picture.USER_ID).equal(Picture.USER_ID)
+            .innerJoinOn(FrameType.FRAME_ID).equal(Picture.FRAME_ID) // Note that on() can be either on Picture or User
             .build();
 
         // SELECT * from USER AS A 
@@ -127,8 +127,8 @@ public class JoinSketchTest {
 
         final Join<Tuple3<User, Picture, FrameType>> join = jc
             .from(UserManager.IDENTIFIER)
-            .innerJoin(PictureManager.IDENTIFIER).on(User.USER_ID).equal(Picture.USER_ID)
-            .innerJoin(FrameTypeManager.IDENTIFIER).on(Picture.FRAME_ID).equal(FrameType.FRAME_ID) // Note that on() can be either on Picture or User
+            .innerJoinOn(Picture.USER_ID).equal(User.USER_ID)
+            .innerJoinOn(FrameType.FRAME_ID).equal(Picture.FRAME_ID) // Note that on() can be either on Picture or User
             .build();
 
         // SELECT * from USER AS A 
@@ -190,8 +190,8 @@ public class JoinSketchTest {
     };
 
     Join<Tuple3<User, Picture, FrameType>> join3 = jc.from(UserManager.IDENTIFIER)
-        .leftJoin(PictureManager.IDENTIFIER).on(User.USER_ID).equal(Picture.USER_ID)
-        .leftJoin(FrameTypeManager.IDENTIFIER).on(Picture.FRAME_ID).equal(FrameType.FRAME_ID)
+        .leftJoinOn(Picture.USER_ID).equal(User.USER_ID)
+        .leftJoinOn(FrameType.FRAME_ID).equal(Picture.FRAME_ID)
         .build();
 
     // Using Utility methods to map entity operations into Tuple3 operations
