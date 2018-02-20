@@ -7,7 +7,7 @@ package com.speedment.runtime.join.internal.component.join;
 
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
-import com.speedment.runtime.join.stage.OperatorType;
+import com.speedment.runtime.join.stage.JoinPredicateType;
 import com.speedment.runtime.join.trait.HasOnPredicates;
 import static java.util.Objects.requireNonNull;
 import java.util.function.BiFunction;
@@ -34,32 +34,32 @@ class BaseAfterJoin<T, R> implements HasOnPredicates<R> {
 
     @Override
     public R equal(HasComparableOperators<?, ?> joinedField) {
-        return operation(OperatorType.EQUAL, joinedField);
+        return operation(JoinPredicateType.EQUAL, joinedField);
     }
 
     @Override
     public R notEqual(HasComparableOperators<?, ?> joinedField) {
-        return operation(OperatorType.NOT_EQUAL, joinedField);
+        return operation(JoinPredicateType.NOT_EQUAL, joinedField);
     }
 
     @Override
     public R lessThan(HasComparableOperators<?, ?> joinedField) {
-        return operation(OperatorType.LESS_THAN, joinedField);
+        return operation(JoinPredicateType.LESS_THAN, joinedField);
     }
 
     @Override
     public R lessOrEqual(HasComparableOperators<?, ?> joinedField) {
-        return operation(OperatorType.LESS_OR_EQUAL, joinedField);
+        return operation(JoinPredicateType.LESS_OR_EQUAL, joinedField);
     }
 
     @Override
     public R greaterThan(HasComparableOperators<?, ?> joinedField) {
-        return operation(OperatorType.GREATER_THAN, joinedField);
+        return operation(JoinPredicateType.GREATER_THAN, joinedField);
     }
 
     @Override
     public R greaterOrEqual(HasComparableOperators<?, ?> joinedField) {
-        return operation(OperatorType.GREATER_OR_EQUAL, joinedField);
+        return operation(JoinPredicateType.GREATER_OR_EQUAL, joinedField);
     }
 
     @Override
@@ -69,7 +69,7 @@ class BaseAfterJoin<T, R> implements HasOnPredicates<R> {
 
     @Override
     public <ENTITY> R between(HasComparableOperators<ENTITY, ?> joinedFieldFrom, HasComparableOperators<ENTITY, ?> joinedFieldTo, Inclusion inclusion) {
-        return operation(OperatorType.BETWEEN, joinedFieldFrom, joinedFieldTo, inclusion);
+        return operation(JoinPredicateType.BETWEEN, joinedFieldFrom, joinedFieldTo, inclusion);
     }
 
     @Override
@@ -79,22 +79,22 @@ class BaseAfterJoin<T, R> implements HasOnPredicates<R> {
 
     @Override
     public <ENTITY> R notBetween(HasComparableOperators<ENTITY, ?> joinedFieldFrom, HasComparableOperators<ENTITY, ?> joinedFieldTo, Inclusion inclusion) {
-        return operation(OperatorType.NOT_BETWEEN, joinedFieldFrom, joinedFieldTo, inclusion);
+        return operation(JoinPredicateType.NOT_BETWEEN, joinedFieldFrom, joinedFieldTo, inclusion);
     }
 
-    private R operation(OperatorType operatorType, HasComparableOperators<?, ?> joinedField) {
-        stageBean.setOperatorType(operatorType);
+    private R operation(JoinPredicateType operatorType, HasComparableOperators<?, ?> joinedField) {
+        stageBean.setJoinPredicateType(operatorType);
         stageBean.setForeignFirstField(joinedField);
         return constructor.apply(currentBuilderStage, stageBean);
     }
 
     private <ENTITY> R operation(
-        final OperatorType operatorType,
+        final JoinPredicateType operatorType,
         final HasComparableOperators<ENTITY, ?> joinedFieldFrom,
         final HasComparableOperators<ENTITY, ?> joinedFieldTo,
         final Inclusion inclusion
     ) {
-        stageBean.setOperatorType(operatorType);
+        stageBean.setJoinPredicateType(operatorType);
         stageBean.setForeignFirstField(joinedFieldFrom);
         stageBean.setForeignSecondField(joinedFieldTo);
         stageBean.setForeignInclusion(inclusion);

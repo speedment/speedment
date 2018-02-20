@@ -2,26 +2,27 @@ package com.speedment.runtime.join.internal.component.join;
 
 import com.speedment.common.injector.Injector;
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
-import com.speedment.runtime.join.JoinTestUtil.E1;
-import com.speedment.runtime.join.JoinTestUtil.E1Manager;
-import com.speedment.runtime.join.JoinTestUtil.E2;
-import com.speedment.runtime.join.JoinTestUtil.E2Manager;
-import com.speedment.runtime.join.JoinTestUtil.E3;
-import com.speedment.runtime.join.JoinTestUtil.E3Manager;
-import com.speedment.runtime.join.JoinTestUtil.E4;
-import com.speedment.runtime.join.JoinTestUtil.E4Manager;
-import com.speedment.runtime.join.JoinTestUtil.E5;
-import com.speedment.runtime.join.JoinTestUtil.E5Manager;
-import com.speedment.runtime.join.JoinTestUtil.E6;
-import com.speedment.runtime.join.JoinTestUtil.E6Manager;
-import com.speedment.runtime.join.JoinTestUtil.EX;
-import com.speedment.runtime.join.JoinTestUtil.MockJoinStreamSupplierComponent;
-import com.speedment.runtime.join.JoinTestUtil.MockStreamSupplierComponent;
-import static com.speedment.runtime.join.JoinTestUtil.assertStagesEquals;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E1;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E1Manager;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E2;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E2Manager;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E3;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E3Manager;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E4;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E4Manager;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E5;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E5Manager;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E6;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E6Manager;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.EX;
+import static com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.assertStagesEquals;
+import com.speedment.runtime.join.internal.component.join.test_support.MockEmptyJoinStreamSupplierComponent;
+import com.speedment.runtime.join.internal.component.join.test_support.MockStreamSupplierComponent;
+import com.speedment.runtime.join.stage.JoinPredicateType;
+import static com.speedment.runtime.join.stage.JoinPredicateType.EQUAL;
 import com.speedment.runtime.join.stage.JoinType;
-import com.speedment.runtime.join.stage.OperatorType;
-import static com.speedment.runtime.join.stage.OperatorType.EQUAL;
 import com.speedment.runtime.join.stage.Stage;
 import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.List;
@@ -40,17 +41,17 @@ import org.junit.Test;
  */
 public final class JoinBuilderTest {
 
-    private MockJoinStreamSupplierComponent ss;
+    private MockEmptyJoinStreamSupplierComponent ss;
     private JoinBuilder1Impl<E1> bldr;
 
     @Before
     public void init() throws InstantiationException {
         final Injector injector = Injector.builder()
             .withComponent(MockStreamSupplierComponent.class)
-            .withComponent(MockJoinStreamSupplierComponent.class)
+            .withComponent(MockEmptyJoinStreamSupplierComponent.class)
             .build();
 
-        ss = injector.getOrThrow(MockJoinStreamSupplierComponent.class);
+        ss = injector.getOrThrow(MockEmptyJoinStreamSupplierComponent.class);
         bldr = new JoinBuilder1Impl<>(ss, E1Manager.IDENTIFIER);
     }
 
@@ -177,10 +178,10 @@ public final class JoinBuilderTest {
     @Test
     public void testJoins() {
         bldr.leftJoinOn(E2.ID2).equal(E1.ID1)
-            .leftJoinOn(E3.ID3).equal(E1.ID1)
-            .leftJoinOn(E4.ID4).equal(E1.ID1)
-            .leftJoinOn(E5.ID5).equal(E1.ID1)
-            .leftJoinOn(E6.ID6).equal(E1.ID1)
+            .leftJoinOn(E3.ID3).between(E1.ID1, E1.ID1, Inclusion.START_INCLUSIVE_END_INCLUSIVE)
+            .rightJoinOn(E4.ID4).equal(E1.ID1)
+            .fullOuterJoinOn(E5.ID5).equal(E1.ID1)
+            .crossJoin(E6Manager.IDENTIFIER)
             .build();
     }
 
@@ -199,13 +200,13 @@ public final class JoinBuilderTest {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> Consumer<StageBean<?>> setFieldTo(HasComparableOperators<? extends T, ?> field) {
+    private <T> Consumer<StageBean<?>> setFieldTo(HasComparableOperators<T, ?> field) {
         Consumer<StageBean<T>> consumer = sb -> sb.setField(field);
         return (Consumer<StageBean<?>>) (Object) consumer; // Ugly..
     }
 
-    private Consumer<StageBean<?>> setOperatorTypeTo(OperatorType operatorType) {
-        return sb -> sb.setOperatorType(operatorType);
+    private Consumer<StageBean<?>> setOperatorTypeTo(JoinPredicateType operatorType) {
+        return sb -> sb.setJoinPredicateType(operatorType);
     }
 
     private <T> Consumer<StageBean<?>> setForeignFirstFieldTo(HasComparableOperators<T, Integer> field) {

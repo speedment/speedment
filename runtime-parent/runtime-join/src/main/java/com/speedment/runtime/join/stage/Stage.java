@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 /**
  *
  * @author Per Minborg
+ * @param <T> type of entities
  */
 public interface Stage<T> {
 
@@ -44,7 +45,7 @@ public interface Stage<T> {
      * @return a Field that belongs to a table from a previous stage, or
      * {@code empty()} if no Field is defined
      */
-    Optional<HasComparableOperators<? extends T, ?>> field();
+    Optional<HasComparableOperators<T, ?>> field();
 
     /**
      * Returns the OperatorType for this Stage or , or {@code empty()} if no
@@ -53,7 +54,7 @@ public interface Stage<T> {
      * @return the OperatorType for this Stage or , or {@code empty()}if no
      * OperatorType is defined (i.e. for a CROSS JOIN)
      */
-    Optional<OperatorType> operatorType();
+    Optional<JoinPredicateType> joinPredicateType();
 
     /**
      * Returns a Field that belongs to the table of this Stage, or
@@ -62,7 +63,7 @@ public interface Stage<T> {
      * @return a Field that belongs to the table of this Stage,
      * or{@code empty()} if no Field is defined
      */
-    Optional<HasComparableOperators<?, ?>> firstForeignField();
+    Optional<HasComparableOperators<?, ?>> foreignFirstField();
 
     /**
      * Returns a Field that belongs to the table of this Stage, or
@@ -72,7 +73,7 @@ public interface Stage<T> {
      * @return a Field that belongs to the table of this Stage, or
      * {@code empty()} if no Field is defined
      */
-    Optional<HasComparableOperators<?, ?>> secondForeignField();
+    Optional<HasComparableOperators<?, ?>> foreignSecondField();
 
     /**
      * Returns the Inclusion type for this Stage or {@code empty()} if no

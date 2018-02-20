@@ -4,7 +4,7 @@ import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.stage.JoinType;
-import com.speedment.runtime.join.stage.OperatorType;
+import com.speedment.runtime.join.stage.JoinPredicateType;
 import com.speedment.runtime.join.stage.Stage;
 import java.util.Collections;
 import java.util.List;
@@ -22,29 +22,29 @@ public class StageImpl<T> implements Stage<T> {
     private final TableIdentifier<T> identifier;
     private final List<Predicate<? super T>> predicates;
     private final JoinType joinType;
-    private final HasComparableOperators<? extends T, ?> field;
-    private final OperatorType operatorType;
-    private final HasComparableOperators<?, ?> firstForeignField;
-    private final HasComparableOperators<?, ?> secondForeignField;
+    private final HasComparableOperators<T, ?> field;
+    private final JoinPredicateType joinPredicateType;
+    private final HasComparableOperators<?, ?> foreignFirstField;
+    private final HasComparableOperators<?, ?> foreignSecondField;
     private final Inclusion foreignInclusion;
 
     public StageImpl(
         final TableIdentifier<T> identifier,
         final List<Predicate<? super T>> predicates,
         final JoinType joinType,
-        final HasComparableOperators<? extends T, ?> field,
-        final OperatorType operatorType,
-        final HasComparableOperators<?, ?> firstForeignField,
-        final HasComparableOperators<?, ?> secondForeignField,
+        final HasComparableOperators<T, ?> field,
+        final JoinPredicateType joinPredicateType,
+        final HasComparableOperators<?, ?> foreignFirstField,
+        final HasComparableOperators<?, ?> foreignSecondField,
         final Inclusion foreignInclusion
     ) {
         this.identifier = requireNonNull(identifier);
         this.predicates = predicates; // Nullable
         this.joinType = joinType; // Nullable
         this.field = field; // Nullable
-        this.operatorType = operatorType; // Nullable
-        this.firstForeignField = firstForeignField; // Nullable
-        this.secondForeignField = secondForeignField; // Nullable
+        this.joinPredicateType = joinPredicateType; // Nullable
+        this.foreignFirstField = foreignFirstField; // Nullable
+        this.foreignSecondField = foreignSecondField; // Nullable
         this.foreignInclusion = foreignInclusion; // Nullable
     }
 
@@ -64,23 +64,23 @@ public class StageImpl<T> implements Stage<T> {
     }
 
     @Override
-    public Optional<HasComparableOperators<? extends T, ?>> field() {
+    public Optional<HasComparableOperators<T, ?>> field() {
         return Optional.ofNullable(field);
     }
 
     @Override
-    public Optional<OperatorType> operatorType() {
-        return Optional.ofNullable(operatorType);
+    public Optional<JoinPredicateType> joinPredicateType() {
+        return Optional.ofNullable(joinPredicateType);
     }
 
     @Override
-    public Optional<HasComparableOperators<?, ?>> firstForeignField() {
-        return Optional.ofNullable(firstForeignField);
+    public Optional<HasComparableOperators<?, ?>> foreignFirstField() {
+        return Optional.ofNullable(foreignFirstField);
     }
 
     @Override
-    public Optional<HasComparableOperators<?, ?>> secondForeignField() {
-        return Optional.ofNullable(secondForeignField);
+    public Optional<HasComparableOperators<?, ?>> foreignSecondField() {
+        return Optional.ofNullable(foreignSecondField);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class StageImpl<T> implements Stage<T> {
 
     @Override
     public String toString() {
-        return "StageImpl{" + "identifier=" + identifier + ", predicates=" + predicates + ", joinType=" + joinType + ", field=" + field + ", operatorType=" + operatorType + ", firstForeignField=" + firstForeignField + ", secondForeignField=" + secondForeignField + '}';
+        return "StageImpl{" + "identifier=" + identifier + ", predicates=" + predicates + ", joinType=" + joinType + ", field=" + field + ", operatorType=" + joinPredicateType + ", firstForeignField=" + foreignFirstField + ", secondForeignField=" + foreignSecondField + '}';
     }
 
 }

@@ -1,6 +1,6 @@
 package com.speedment.runtime.join.internal.component.join;
 
-import com.speedment.runtime.join.stage.OperatorType;
+import com.speedment.runtime.join.stage.JoinPredicateType;
 import com.speedment.runtime.join.stage.JoinType;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.predicate.Inclusion;
@@ -23,10 +23,10 @@ public final class StageBean<T> {
     private final TableIdentifier<T> identifier;
     private final List<Predicate<? super T>> predicates;
     private JoinType joinType;
-    private HasComparableOperators<? extends T, ?> field;
-    private OperatorType operatorType;
-    private HasComparableOperators<?, ?> firstForeignField;
-    private HasComparableOperators<?, ?> secondForeignField;
+    private HasComparableOperators<T, ?> field;
+    private JoinPredicateType joinPredicateType;
+    private HasComparableOperators<?, ?> foreignFirstField;
+    private HasComparableOperators<?, ?> foreignSecondField;
     private Inclusion foreignInclusion;
 
     public StageBean(TableIdentifier<T> identifier) {
@@ -60,32 +60,32 @@ public final class StageBean<T> {
         return field;
     }
 
-    public void setField(HasComparableOperators<? extends T, ?> field) {
+    public void setField(HasComparableOperators<T, ?> field) {
         this.field = requireNonNull(field);
     }
 
-    public OperatorType getOperatorType() {
-        return operatorType;
+    public JoinPredicateType getJoinPredicateType() {
+        return joinPredicateType;
     }
 
-    public void setOperatorType(OperatorType operatorType) {
-        this.operatorType = requireNonNull(operatorType);
+    public void setJoinPredicateType(JoinPredicateType joinPredicateType) {
+        this.joinPredicateType = requireNonNull(joinPredicateType);
     }
 
     public HasComparableOperators<?, ?> getForeignFirstField() {
-        return firstForeignField;
+        return foreignFirstField;
     }
 
-    public void setForeignFirstField(HasComparableOperators<?, ?> firstTableField) {
-        this.firstForeignField = requireNonNull(firstTableField);
+    public void setForeignFirstField(HasComparableOperators<?, ?> foreignFirstField) {
+        this.foreignFirstField = requireNonNull(foreignFirstField);
     }
 
     public HasComparableOperators<?, ?> getForeignSecondField() {
-        return secondForeignField;
+        return foreignSecondField;
     }
 
-    public void setForeignSecondField(HasComparableOperators<?, ?> secondTableField) {
-        this.secondForeignField = requireNonNull(secondTableField);
+    public void setForeignSecondField(HasComparableOperators<?, ?> foreignSecondField) {
+        this.foreignSecondField = requireNonNull(foreignSecondField);
     }
 
     public TableIdentifier<T> getIdentifier() {
@@ -115,9 +115,9 @@ public final class StageBean<T> {
             predicates,
             joinType,
             field,
-            operatorType,
-            firstForeignField,
-            secondForeignField,
+            joinPredicateType,
+            foreignFirstField,
+            foreignSecondField,
             foreignInclusion
         );
     }

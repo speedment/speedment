@@ -4,7 +4,7 @@ package com.speedment.runtime.join.stage;
  *
  * @author Per Minborg
  */
-public enum OperatorType {
+public enum JoinPredicateType {
     EQUAL,
     NOT_EQUAL,
     LESS_THAN,
