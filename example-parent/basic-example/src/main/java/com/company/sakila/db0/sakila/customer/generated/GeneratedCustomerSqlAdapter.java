@@ -3,11 +3,9 @@ package com.company.sakila.db0.sakila.customer.generated;
 import com.company.sakila.db0.sakila.customer.Customer;
 import com.company.sakila.db0.sakila.customer.CustomerImpl;
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.core.component.sql.SqlPersistenceComponent;
-import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
+import com.speedment.runtime.core.component.SqlAdapter;
+import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,7 +21,7 @@ import static com.speedment.common.injector.State.RESOLVED;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedCustomerSqlAdapter {
+public abstract class GeneratedCustomerSqlAdapter implements SqlAdapter<Customer> {
     
     private final TableIdentifier<Customer> tableIdentifier;
     
@@ -31,25 +29,18 @@ public abstract class GeneratedCustomerSqlAdapter {
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "customer");
     }
     
-    @ExecuteBefore(RESOLVED)
-    void installMethodName(@WithState(RESOLVED) SqlStreamSupplierComponent streamSupplierComponent,
-            @WithState(RESOLVED) SqlPersistenceComponent persistenceComponent) {
-        streamSupplierComponent.install(tableIdentifier, this::apply);
-        persistenceComponent.install(tableIdentifier);
-    }
-    
-    protected Customer apply(ResultSet resultSet) throws SpeedmentException {
+    protected Customer apply(ResultSet resultSet, int offset) throws SpeedmentException {
         final Customer entity = createEntity();
         try {
-            entity.setCustomerId( resultSet.getInt(1)       );
-            entity.setStoreId(    resultSet.getShort(2)     );
-            entity.setFirstName(  resultSet.getString(3)    );
-            entity.setLastName(   resultSet.getString(4)    );
-            entity.setEmail(      resultSet.getString(5)    );
-            entity.setAddressId(  resultSet.getInt(6)       );
-            entity.setActive(     resultSet.getInt(7)       );
-            entity.setCreateDate( resultSet.getTimestamp(8) );
-            entity.setLastUpdate( resultSet.getTimestamp(9) );
+            entity.setCustomerId( resultSet.getInt(1 + offset)       );
+            entity.setStoreId(    resultSet.getShort(2 + offset)     );
+            entity.setFirstName(  resultSet.getString(3 + offset)    );
+            entity.setLastName(   resultSet.getString(4 + offset)    );
+            entity.setEmail(      resultSet.getString(5 + offset)    );
+            entity.setAddressId(  resultSet.getInt(6 + offset)       );
+            entity.setActive(     resultSet.getInt(7 + offset)       );
+            entity.setCreateDate( resultSet.getTimestamp(8 + offset) );
+            entity.setLastUpdate( resultSet.getTimestamp(9 + offset) );
         } catch (final SQLException sqle) {
             throw new SpeedmentException(sqle);
         }
@@ -58,5 +49,20 @@ public abstract class GeneratedCustomerSqlAdapter {
     
     protected CustomerImpl createEntity() {
         return new CustomerImpl();
+    }
+    
+    @Override
+    public TableIdentifier<Customer> identifier() {
+        return tableIdentifier;
+    }
+    
+    @Override
+    public SqlFunction<ResultSet, Customer> entityMapper() {
+        return entityMapper(0);
+    }
+    
+    @Override
+    public SqlFunction<ResultSet, Customer> entityMapper(int offset) {
+        return rs -> apply(rs, offset);
     }
 }

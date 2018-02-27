@@ -1,7 +1,9 @@
 package com.speedment.runtime.join.internal.component.join.test_support;
 
+import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.config.internal.immutable.ImmutableProject;
 import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.join.stage.Stage;
 import com.speedment.runtime.typemapper.TypeMapper;
@@ -41,32 +43,32 @@ public final class JoinTestUtil {
 
     public interface E1Manager {
 
-        static TableIdentifier<E1> IDENTIFIER = id("t1");
+        static TableIdentifier<E1> IDENTIFIER = id(MockMetadata.T1_NAME);
     }
 
     public interface E2Manager {
 
-        static TableIdentifier<E2> IDENTIFIER = id("t2");
+        static TableIdentifier<E2> IDENTIFIER = id(MockMetadata.T2_NAME);
     }
 
     public interface E3Manager {
 
-        static TableIdentifier<E3> IDENTIFIER = id("t3");
+        static TableIdentifier<E3> IDENTIFIER = id(MockMetadata.T3_NAME);
     }
 
     public interface E4Manager {
 
-        static TableIdentifier<E4> IDENTIFIER = id("t4");
+        static TableIdentifier<E4> IDENTIFIER = id(MockMetadata.T4_NAME);
     }
 
     public interface E5Manager {
 
-        static TableIdentifier<E5> IDENTIFIER = id("t5");
+        static TableIdentifier<E5> IDENTIFIER = id(MockMetadata.T5_NAME);
     }
 
     public interface E6Manager {
 
-        static TableIdentifier<E6> IDENTIFIER = id("t6");
+        static TableIdentifier<E6> IDENTIFIER = id(MockMetadata.T6_NAME);
     }
 
     public interface EXManager {
@@ -194,7 +196,7 @@ public final class JoinTestUtil {
     }
 
     public static <T> TableIdentifier<T> id(String tableName) {
-        return TableIdentifier.of("db", "schema", tableName);
+        return TableIdentifier.of(MockMetadata.DBMS_NAME, MockMetadata.SCHEMA_NAME, tableName);
     }
 
     public static <T> ColumnIdentifier<T> id(TableIdentifier<?> table, String columnName) {
@@ -221,7 +223,7 @@ public final class JoinTestUtil {
         return Stream.<Function<Stage<?>, ?>>of(Stage::foreignFirstField,
             Stage::identifier,
             Stage::joinType,
-            Stage::joinPredicateType,
+            Stage::joinOperator,
             Stage::field,
             Stage::predicates,
             Stage::foreignSecondField
@@ -232,5 +234,5 @@ public final class JoinTestUtil {
     private static boolean equals(Function<Stage<?>, ?> keyExtractor, Stage<?> s1, Stage<?> s2) {
         return Objects.equals(keyExtractor.apply(s1), keyExtractor.apply(s2));
     }
-
+       
 }

@@ -3,11 +3,9 @@ package com.company.sakila.db0.sakila.film.generated;
 import com.company.sakila.db0.sakila.film.Film;
 import com.company.sakila.db0.sakila.film.FilmImpl;
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.core.component.sql.SqlPersistenceComponent;
-import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
+import com.speedment.runtime.core.component.SqlAdapter;
+import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +22,7 @@ import static com.speedment.runtime.core.internal.util.sql.ResultSetUtil.*;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedFilmSqlAdapter {
+public abstract class GeneratedFilmSqlAdapter implements SqlAdapter<Film> {
     
     private final TableIdentifier<Film> tableIdentifier;
     
@@ -32,29 +30,22 @@ public abstract class GeneratedFilmSqlAdapter {
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "film");
     }
     
-    @ExecuteBefore(RESOLVED)
-    void installMethodName(@WithState(RESOLVED) SqlStreamSupplierComponent streamSupplierComponent,
-            @WithState(RESOLVED) SqlPersistenceComponent persistenceComponent) {
-        streamSupplierComponent.install(tableIdentifier, this::apply);
-        persistenceComponent.install(tableIdentifier);
-    }
-    
-    protected Film apply(ResultSet resultSet) throws SpeedmentException {
+    protected Film apply(ResultSet resultSet, int offset) throws SpeedmentException {
         final Film entity = createEntity();
         try {
-            entity.setFilmId(             resultSet.getInt(1)         );
-            entity.setTitle(              resultSet.getString(2)      );
-            entity.setDescription(        resultSet.getString(3)      );
-            entity.setReleaseYear(        resultSet.getDate(4)        );
-            entity.setLanguageId(         resultSet.getShort(5)       );
-            entity.setOriginalLanguageId( getShort(resultSet, 6)      );
-            entity.setRentalDuration(     resultSet.getShort(7)       );
-            entity.setRentalRate(         resultSet.getBigDecimal(8)  );
-            entity.setLength(             getInt(resultSet, 9)        );
-            entity.setReplacementCost(    resultSet.getBigDecimal(10) );
-            entity.setRating(             resultSet.getString(11)     );
-            entity.setSpecialFeatures(    resultSet.getString(12)     );
-            entity.setLastUpdate(         resultSet.getTimestamp(13)  );
+            entity.setFilmId(             resultSet.getInt(1 + offset)         );
+            entity.setTitle(              resultSet.getString(2 + offset)      );
+            entity.setDescription(        resultSet.getString(3 + offset)      );
+            entity.setReleaseYear(        resultSet.getDate(4 + offset)        );
+            entity.setLanguageId(         resultSet.getShort(5 + offset)       );
+            entity.setOriginalLanguageId( getShort(resultSet, 6 + offset)      );
+            entity.setRentalDuration(     resultSet.getShort(7 + offset)       );
+            entity.setRentalRate(         resultSet.getBigDecimal(8 + offset)  );
+            entity.setLength(             getInt(resultSet, 9 + offset)        );
+            entity.setReplacementCost(    resultSet.getBigDecimal(10 + offset) );
+            entity.setRating(             resultSet.getString(11 + offset)     );
+            entity.setSpecialFeatures(    resultSet.getString(12 + offset)     );
+            entity.setLastUpdate(         resultSet.getTimestamp(13 + offset)  );
         } catch (final SQLException sqle) {
             throw new SpeedmentException(sqle);
         }
@@ -63,5 +54,20 @@ public abstract class GeneratedFilmSqlAdapter {
     
     protected FilmImpl createEntity() {
         return new FilmImpl();
+    }
+    
+    @Override
+    public TableIdentifier<Film> identifier() {
+        return tableIdentifier;
+    }
+    
+    @Override
+    public SqlFunction<ResultSet, Film> entityMapper() {
+        return entityMapper(0);
+    }
+    
+    @Override
+    public SqlFunction<ResultSet, Film> entityMapper(int offset) {
+        return rs -> apply(rs, offset);
     }
 }

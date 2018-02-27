@@ -20,8 +20,8 @@ import com.speedment.runtime.join.internal.component.join.test_support.JoinTestU
 import static com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.assertStagesEquals;
 import com.speedment.runtime.join.internal.component.join.test_support.MockEmptyJoinStreamSupplierComponent;
 import com.speedment.runtime.join.internal.component.join.test_support.MockStreamSupplierComponent;
-import com.speedment.runtime.join.stage.JoinPredicateType;
-import static com.speedment.runtime.join.stage.JoinPredicateType.EQUAL;
+import com.speedment.runtime.join.stage.JoinOperator;
+import static com.speedment.runtime.join.stage.JoinOperator.EQUAL;
 import com.speedment.runtime.join.stage.JoinType;
 import com.speedment.runtime.join.stage.Stage;
 import java.util.AbstractMap.SimpleImmutableEntry;
@@ -205,8 +205,8 @@ public final class JoinBuilderTest {
         return (Consumer<StageBean<?>>) (Object) consumer; // Ugly..
     }
 
-    private Consumer<StageBean<?>> setOperatorTypeTo(JoinPredicateType operatorType) {
-        return sb -> sb.setJoinPredicateType(operatorType);
+    private Consumer<StageBean<?>> setOperatorTypeTo(JoinOperator operatorType) {
+        return sb -> sb.setJoinOperator(operatorType);
     }
 
     private <T> Consumer<StageBean<?>> setForeignFirstFieldTo(HasComparableOperators<T, Integer> field) {

@@ -84,6 +84,9 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.injector.State.RESOLVED;
 import static com.speedment.runtime.config.util.DocumentUtil.ancestor;
+import com.speedment.runtime.core.component.SqlAdapter;
+import com.speedment.runtime.core.db.SqlFunction;
+import java.sql.ResultSet;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static java.util.stream.Collectors.joining;
@@ -315,6 +318,7 @@ extends AbstractLabelTooltipItem {
                         .withParam("temp.table", tableName)
                         .withParam("temp.column", columnName)
                         .withComponent(SingleColumnManager.class)
+                        .withComponent(SingleColumnSqlAdapter.class)
                         .beforeInitialized(PasswordComponent.class, passw -> {
                             LOGGER.info("Installing Password...");
                             passw.put(dbmsName, password);
@@ -451,6 +455,41 @@ extends AbstractLabelTooltipItem {
         }
     }
 
+    private static class SingleColumnSqlAdapter implements SqlAdapter<String> {
+        
+        private TableIdentifier<String> tableId;
+        
+        @Config(name = "temp.dbms", value = "")
+        private String dbms;
+        @Config(name = "temp.schema", value = "")
+        private String schema;
+        @Config(name = "temp.table", value = "")
+        private String table;
+        @Config(name = "temp.column", value = "")
+        private String column;
+
+        @ExecuteBefore(State.INITIALIZED)
+        void setFieldAndTableId() {
+            this.tableId = TableIdentifier.of(dbms, schema, table);
+        }
+                
+        @Override
+        public TableIdentifier<String> identifier() {
+            return tableId;
+        }
+
+        @Override
+        public SqlFunction<ResultSet, String> entityMapper() {
+            return in -> in.getString(column);
+        }
+
+        @Override
+        public SqlFunction<ResultSet, String> entityMapper(int offset) {
+            return entityMapper(); // We do not use index and offset
+        }
+        
+    }
+    
     private static class SingleColumnManager implements Manager<String> {
 
         private StringField<String, String> field;
@@ -481,12 +520,6 @@ extends AbstractLabelTooltipItem {
                 @WithState(State.INITIALIZED) ProjectComponent projectComponent) {
             Objects.requireNonNull(projectComponent);
             managerComponent.put(this);
-        }
-
-        @ExecuteBefore(RESOLVED)
-        void configureSqlStreamSupplier(
-                @WithState(RESOLVED) SqlStreamSupplierComponent sql) {
-            sql.install(tableId, in -> in.getString(column));
         }
 
         @Override

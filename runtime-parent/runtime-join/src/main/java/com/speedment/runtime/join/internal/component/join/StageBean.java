@@ -1,6 +1,6 @@
 package com.speedment.runtime.join.internal.component.join;
 
-import com.speedment.runtime.join.stage.JoinPredicateType;
+import com.speedment.runtime.join.stage.JoinOperator;
 import com.speedment.runtime.join.stage.JoinType;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.predicate.Inclusion;
@@ -24,7 +24,7 @@ public final class StageBean<T> {
     private final List<Predicate<? super T>> predicates;
     private JoinType joinType;
     private HasComparableOperators<T, ?> field;
-    private JoinPredicateType joinPredicateType;
+    private JoinOperator joinOperator;
     private HasComparableOperators<?, ?> foreignFirstField;
     private HasComparableOperators<?, ?> foreignSecondField;
     private Inclusion foreignInclusion;
@@ -64,12 +64,12 @@ public final class StageBean<T> {
         this.field = requireNonNull(field);
     }
 
-    public JoinPredicateType getJoinPredicateType() {
-        return joinPredicateType;
+    public JoinOperator getJoinOperator() {
+        return joinOperator;
     }
 
-    public void setJoinPredicateType(JoinPredicateType joinPredicateType) {
-        this.joinPredicateType = requireNonNull(joinPredicateType);
+    public void setJoinOperator(JoinOperator joinOperator) {
+        this.joinOperator = requireNonNull(joinOperator);
     }
 
     public HasComparableOperators<?, ?> getForeignFirstField() {
@@ -115,7 +115,7 @@ public final class StageBean<T> {
             predicates,
             joinType,
             field,
-            joinPredicateType,
+            joinOperator,
             foreignFirstField,
             foreignSecondField,
             foreignInclusion

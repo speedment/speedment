@@ -1,6 +1,7 @@
 package com.speedment.runtime.join.internal.component.join;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.field.predicate.FieldPredicate;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.JoinStreamSupplierComponent;
 import com.speedment.runtime.join.stage.JoinType;
@@ -86,6 +87,15 @@ abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
 
     void addPredicate(Predicate<? super T> predicate) {
         requireNonNull(predicate);
+        if (!(predicate instanceof FieldPredicate)) {
+            throw new IllegalArgumentException(
+                "The predicate " + predicate + " for join stage "
+                + stageBeans.size() + " does not implement "
+                + FieldPredicate.class.getName()
+                + ". Only Speedment predicates can be used for join operations"
+                + " (and thus no anonymous lambdas)."
+            );
+        }
         stageBean.getPredicates().add(predicate);
     }
 

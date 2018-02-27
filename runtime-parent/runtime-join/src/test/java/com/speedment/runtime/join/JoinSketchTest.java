@@ -19,6 +19,8 @@ package com.speedment.runtime.join;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.common.tuple.Tuple3;
 import com.speedment.common.tuple.Tuples;
+import com.speedment.common.tuple.nullable.Tuple2OfNullables;
+import com.speedment.common.tuple.nullable.Tuple3OfNullables;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.field.IntField;
@@ -28,6 +30,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.toList;
+import org.junit.Before;
 
 /**
  *
@@ -40,12 +43,12 @@ public class JoinSketchTest {
     Manager<User> users = null;
     Manager<Picture> pictures = null;
     Manager<FrameType> frameTypes = null;
-
+    
     private void test2Cartesian() {
         final Join<Tuple2<User, Picture>> join = jc
             .from(UserManager.IDENTIFIER)
             .crossJoin(PictureManager.IDENTIFIER)
-            .build();
+            .build(Tuples::of); // They are never null
         // SELECT * from USER, PICTURE
     }
 
@@ -90,7 +93,7 @@ public class JoinSketchTest {
     }
 
     private void test2SelfJoin() {
-        Join<Tuple2<User, User>> join = jc
+        Join<Tuple2OfNullables<User, User>> join = jc
             .from(UserManager.IDENTIFIER).where(User.USER_ID.greaterOrEqual(100))
             .innerJoinOn(User.NAME).equal(User.NAME)
             .build();
@@ -100,18 +103,25 @@ public class JoinSketchTest {
     }
 
     private void test3Cartesian() {
-        final Join<Tuple3<User, Picture, FrameType>> join = jc
+        final Join<Tuple3OfNullables<User, Picture, FrameType>> join = jc
             .from(UserManager.IDENTIFIER)
             .crossJoin(PictureManager.IDENTIFIER)
             .crossJoin(FrameTypeManager.IDENTIFIER)
             .build();
-
+        
         // SELECT * from USER, PICTURE, FRAME_TYPE
+        
+        join.stream()
+            .forEachOrdered(e -> {
+                e.get0().isPresent();
+            });
+            
+        
     }
 
     private void test3Inner() {
 
-        final Join<Tuple3<User, Picture, FrameType>> join = jc
+        final Join<Tuple3OfNullables<User, Picture, FrameType>> join = jc
             .from(UserManager.IDENTIFIER)
             .innerJoinOn(Picture.USER_ID).equal(Picture.USER_ID)
             .innerJoinOn(FrameType.FRAME_ID).equal(Picture.FRAME_ID) // Note that on() can be either on Picture or User
@@ -125,10 +135,23 @@ public class JoinSketchTest {
     
     private void problem() {
 
-        final Join<Tuple3<User, Picture, FrameType>> join = jc
+        final Join<Tuple3OfNullables<User, Picture, FrameType>> join = jc
             .from(UserManager.IDENTIFIER)
             .innerJoinOn(Picture.USER_ID).equal(User.USER_ID)
             .innerJoinOn(FrameType.FRAME_ID).equal(Picture.FRAME_ID) // Note that on() can be either on Picture or User
+            .build();
+
+        // SELECT * from USER AS A 
+        //  INNER JOIN PICTURES AS B ON A.USER_ID = B.USER_ID
+        //  INNER JOIN FRAME_TYPES AS C on B.FRAME_ID = C.FRANE_ID
+    }
+    
+        private void problem2() {
+
+        final Join<Tuple3OfNullables<User, User, User>> join = jc
+            .from(UserManager.IDENTIFIER)
+            .innerJoinOn(User.NAME).equal(User.NAME) // Referes to the first name (ok!)
+            .innerJoinOn(User.NAME).equal(User.NAME) // Which version of User does this equal() reference? first or second? .equal(User.NAME, 2) ???
             .build();
 
         // SELECT * from USER AS A 
@@ -189,18 +212,18 @@ public class JoinSketchTest {
         StringField<FrameType, String> NAME = null;
     };
 
-    Join<Tuple3<User, Picture, FrameType>> join3 = jc.from(UserManager.IDENTIFIER)
+    Join<Tuple3OfNullables<User, Picture, FrameType>> join3 = jc.from(UserManager.IDENTIFIER)
         .leftJoinOn(Picture.USER_ID).equal(User.USER_ID)
         .leftJoinOn(FrameType.FRAME_ID).equal(Picture.FRAME_ID)
         .build();
 
     // Using Utility methods to map entity operations into Tuple3 operations
     List<Tuple2<String, String>> result = join3.stream()
-        .filter(Joins.Tuple3Util.testing0((User.NAME.between("A", "C"))))
-        .sorted(Joins.Tuple3Util.comparing0(User.NAME.comparator()))
+        .filter(Joins.Tuple3OfNullablesUtil.testing0((User.NAME.between("A", "C"))))
+        .sorted(Joins.Tuple3OfNullablesUtil.comparing0(User.NAME.comparator()))
         .map(Tuples.toTuple(
-            Joins.Tuple3Util.applying0(User.NAME.getter()),
-            Joins.Tuple3Util.applying2(FrameType.NAME.getter()))
+            Joins.Tuple3OfNullablesUtil.applying0(User.NAME.getter()),
+            Joins.Tuple3OfNullablesUtil.applying2(FrameType.NAME.getter()))
         )
         .collect(toList());
 
@@ -212,41 +235,41 @@ public class JoinSketchTest {
 
         }
 
-        public static final class Tuple3Util {
+        public static final class Tuple3OfNullablesUtil {
 
-            public static <T0, T1, T2> Predicate<Tuple3<T0, T1, T2>> testing0(Predicate<T0> predicate) {
+            public static <T0, T1, T2> Predicate<Tuple3OfNullables<T0, T1, T2>> testing0(Predicate<T0> predicate) {
                 return null;
             }
 
-            public static <T0, T1, T2> Predicate<Tuple3<T0, T1, T2>> testing1(Predicate<T1> predicate) {
+            public static <T0, T1, T2> Predicate<Tuple3OfNullables<T0, T1, T2>> testing1(Predicate<T1> predicate) {
                 return null;
             }
 
-            public static <T0, T1, T2> Predicate<Tuple3<T0, T1, T2>> testing2(Predicate<T2> predicate) {
+            public static <T0, T1, T2> Predicate<Tuple3OfNullables<T0, T1, T2>> testing2(Predicate<T2> predicate) {
                 return null;
             }
 
-            public static <T0, T1, T2> Comparator<Tuple3<T0, T1, T2>> comparing0(Comparator<T0> comparator) {
+            public static <T0, T1, T2> Comparator<Tuple3OfNullables<T0, T1, T2>> comparing0(Comparator<T0> comparator) {
                 return null;
             }
 
-            public static <T0, T1, T2> Comparator<Tuple3<T0, T1, T2>> comparing1(Comparator<T1> comparator) {
+            public static <T0, T1, T2> Comparator<Tuple3OfNullables<T0, T1, T2>> comparing1(Comparator<T1> comparator) {
                 return null;
             }
 
-            public static <T0, T1, T2> Comparator<Tuple3<T0, T1, T2>> comparing2(Comparator<T2> comparator) {
+            public static <T0, T1, T2> Comparator<Tuple3OfNullables<T0, T1, T2>> comparing2(Comparator<T2> comparator) {
                 return null;
             }
 
-            public static <T0, T1, T2, R> Function<Tuple3<T0, T1, T2>, R> applying0(Function<T0, R> extractor) {
+            public static <T0, T1, T2, R> Function<Tuple3OfNullables<T0, T1, T2>, R> applying0(Function<T0, R> extractor) {
                 return null;
             }
 
-            public static <T0, T1, T2, R> Function<Tuple3<T0, T1, T2>, R> applying1(Function<T1, R> extractor) {
+            public static <T0, T1, T2, R> Function<Tuple3OfNullables<T0, T1, T2>, R> applying1(Function<T1, R> extractor) {
                 return null;
             }
 
-            public static <T0, T1, T2, R> Function<Tuple3<T0, T1, T2>, R> applying2(Function<T2, R> extractor) {
+            public static <T0, T1, T2, R> Function<Tuple3OfNullables<T0, T1, T2>, R> applying2(Function<T2, R> extractor) {
                 return null;
             }
 

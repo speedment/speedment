@@ -4,12 +4,6 @@ import com.speedment.common.function.QuadFunction;
 import com.speedment.common.function.TriFunction;
 import com.speedment.common.injector.annotation.InjectKey;
 import com.speedment.common.tuple.Tuple;
-import com.speedment.common.tuple.Tuple2;
-import com.speedment.common.tuple.Tuple3;
-import com.speedment.common.tuple.Tuple4;
-import com.speedment.common.tuple.Tuple5;
-import com.speedment.common.tuple.Tuple6;
-import com.speedment.common.tuple.Tuples;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.trait.HasDefaultBuild;
@@ -19,6 +13,12 @@ import com.speedment.runtime.join.trait.HasWhere;
 import java.util.function.BiFunction;
 import com.speedment.common.function.Function5;
 import com.speedment.common.function.Function6;
+import com.speedment.common.tuple.TuplesOfNullables;
+import com.speedment.common.tuple.nullable.Tuple2OfNullables;
+import com.speedment.common.tuple.nullable.Tuple3OfNullables;
+import com.speedment.common.tuple.nullable.Tuple4OfNullables;
+import com.speedment.common.tuple.nullable.Tuple5OfNullables;
+import com.speedment.common.tuple.nullable.Tuple6OfNullables;
 
 /**
  * a JoinComponent can be used to create builders for creating Join objects.
@@ -81,7 +81,7 @@ public interface JoinComponent {
         interface JoinBuilder2<T1, T2> extends
             HasJoins<JoinBuilder2.AfterJoin<T1, T2, ?>, JoinBuilder2.JoinBuilder3<T1, T2, ?>>,
             HasWhere<T2, JoinBuilder2<T1, T2>>,
-            HasDefaultBuild<Tuple2<T1, T2>> {
+            HasDefaultBuild<Tuple2OfNullables<T1, T2>> {
 
             @Override
             <T3> AfterJoin<T1, T2, T3> innerJoinOn(HasComparableOperators<T3, ?> joinedField);
@@ -99,8 +99,8 @@ public interface JoinComponent {
             <T3> JoinBuilder3<T1, T2, T3> crossJoin(TableIdentifier<T3> joinedTable);
 
             @Override
-            default Join<Tuple2<T1, T2>> build() {
-                return build(Tuples::of);
+            default Join<Tuple2OfNullables<T1, T2>> build() {
+                return build(TuplesOfNullables::ofNullables);
             }
 
             /**
@@ -127,7 +127,7 @@ public interface JoinComponent {
             interface JoinBuilder3<T1, T2, T3> extends
                 HasJoins<JoinBuilder3.AfterJoin<T1, T2, T3, ?>, JoinBuilder3.JoinBuilder4<T1, T2, T3, ?>>,
                 HasWhere<T3, JoinBuilder3<T1, T2, T3>>,
-                HasDefaultBuild<Tuple3<T1, T2, T3>> {
+                HasDefaultBuild<Tuple3OfNullables<T1, T2, T3>> {
 
                 @Override
                 <T4> AfterJoin<T1, T2, T3, T4> innerJoinOn(HasComparableOperators<T4, ?> joinedField);
@@ -145,8 +145,8 @@ public interface JoinComponent {
                 <T4> JoinBuilder4<T1, T2, T3, T4> crossJoin(TableIdentifier<T4> joinedTable);
 
                 @Override
-                default Join<Tuple3<T1, T2, T3>> build() {
-                    return build(Tuples::of);
+                default Join<Tuple3OfNullables<T1, T2, T3>> build() {
+                    return build(TuplesOfNullables::ofNullables);
                 }
 
                 /**
@@ -173,7 +173,7 @@ public interface JoinComponent {
                 interface JoinBuilder4<T1, T2, T3, T4> extends
                     HasJoins<JoinBuilder4.AfterJoin<T1, T2, T3, T4, ?>, JoinBuilder4.JoinBuilder5<T1, T2, T3, T4, ?>>,
                     HasWhere<T4, JoinBuilder4<T1, T2, T3, T4>>,
-                    HasDefaultBuild<Tuple4<T1, T2, T3, T4>> {
+                    HasDefaultBuild<Tuple4OfNullables<T1, T2, T3, T4>> {
 
                     @Override
                     <T5> AfterJoin<T1, T2, T3, T4, T5> innerJoinOn(HasComparableOperators<T5, ?> joinedField);
@@ -191,8 +191,8 @@ public interface JoinComponent {
                     <T5> JoinBuilder5<T1, T2, T3, T4, T5> crossJoin(TableIdentifier<T5> joinedTable);
 
                     @Override
-                    default Join<Tuple4<T1, T2, T3, T4>> build() {
-                        return build(Tuples::of);
+                    default Join<Tuple4OfNullables<T1, T2, T3, T4>> build() {
+                        return build(TuplesOfNullables::ofNullables);
                     }
 
                     /**
@@ -223,7 +223,7 @@ public interface JoinComponent {
                     interface JoinBuilder5<T1, T2, T3, T4, T5> extends
                         HasJoins<JoinBuilder5.AfterJoin<T1, T2, T3, T4, T5, ?>, JoinBuilder5.JoinBuilder6<T1, T2, T3, T4, T5, ?>>,
                         HasWhere<T5, JoinBuilder5<T1, T2, T3, T4, T5>>,
-                        HasDefaultBuild<Tuple5<T1, T2, T3, T4, T5>> {
+                        HasDefaultBuild<Tuple5OfNullables<T1, T2, T3, T4, T5>> {
 
                         @Override
                         <T6> AfterJoin<T1, T2, T3, T4, T5, T6> innerJoinOn(HasComparableOperators<T6, ?> joinedField);
@@ -241,8 +241,8 @@ public interface JoinComponent {
                         <T6> JoinBuilder6<T1, T2, T3, T4, T5, T6> crossJoin(TableIdentifier<T6> joinedTable);
 
                         @Override
-                        default Join<Tuple5<T1, T2, T3, T4, T5>> build() {
-                            return build(Tuples::of);
+                        default Join<Tuple5OfNullables<T1, T2, T3, T4, T5>> build() {
+                            return build(TuplesOfNullables::ofNullables);
                         }
 
                         /**
@@ -273,11 +273,11 @@ public interface JoinComponent {
 
                         interface JoinBuilder6<T1, T2, T3, T4, T5, T6> extends
                             HasWhere<T6, JoinBuilder6<T1, T2, T3, T4, T5, T6>>,
-                            HasDefaultBuild<Tuple6<T1, T2, T3, T4, T5, T6>> {
+                            HasDefaultBuild<Tuple6OfNullables<T1, T2, T3, T4, T5, T6>> {
 
                             @Override
-                            default Join<Tuple6<T1, T2, T3, T4, T5, T6>> build() {
-                                return build(Tuples::of);
+                            default Join<Tuple6OfNullables<T1, T2, T3, T4, T5, T6>> build() {
+                                return build(TuplesOfNullables::ofNullables);
                             }
 
                             /**

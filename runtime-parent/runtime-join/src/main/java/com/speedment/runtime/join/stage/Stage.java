@@ -54,7 +54,7 @@ public interface Stage<T> {
      * @return the OperatorType for this Stage or , or {@code empty()}if no
      * OperatorType is defined (i.e. for a CROSS JOIN)
      */
-    Optional<JoinPredicateType> joinPredicateType();
+    Optional<JoinOperator> joinOperator();
 
     /**
      * Returns a Field that belongs to the table of this Stage, or

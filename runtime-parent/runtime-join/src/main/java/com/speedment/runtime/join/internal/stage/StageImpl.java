@@ -4,7 +4,7 @@ import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.stage.JoinType;
-import com.speedment.runtime.join.stage.JoinPredicateType;
+import com.speedment.runtime.join.stage.JoinOperator;
 import com.speedment.runtime.join.stage.Stage;
 import java.util.Collections;
 import java.util.List;
@@ -23,7 +23,7 @@ public class StageImpl<T> implements Stage<T> {
     private final List<Predicate<? super T>> predicates;
     private final JoinType joinType;
     private final HasComparableOperators<T, ?> field;
-    private final JoinPredicateType joinPredicateType;
+    private final JoinOperator joinOperator;
     private final HasComparableOperators<?, ?> foreignFirstField;
     private final HasComparableOperators<?, ?> foreignSecondField;
     private final Inclusion foreignInclusion;
@@ -33,7 +33,7 @@ public class StageImpl<T> implements Stage<T> {
         final List<Predicate<? super T>> predicates,
         final JoinType joinType,
         final HasComparableOperators<T, ?> field,
-        final JoinPredicateType joinPredicateType,
+        final JoinOperator joinOperator,
         final HasComparableOperators<?, ?> foreignFirstField,
         final HasComparableOperators<?, ?> foreignSecondField,
         final Inclusion foreignInclusion
@@ -42,7 +42,7 @@ public class StageImpl<T> implements Stage<T> {
         this.predicates = predicates; // Nullable
         this.joinType = joinType; // Nullable
         this.field = field; // Nullable
-        this.joinPredicateType = joinPredicateType; // Nullable
+        this.joinOperator = joinOperator; // Nullable
         this.foreignFirstField = foreignFirstField; // Nullable
         this.foreignSecondField = foreignSecondField; // Nullable
         this.foreignInclusion = foreignInclusion; // Nullable
@@ -69,8 +69,8 @@ public class StageImpl<T> implements Stage<T> {
     }
 
     @Override
-    public Optional<JoinPredicateType> joinPredicateType() {
-        return Optional.ofNullable(joinPredicateType);
+    public Optional<JoinOperator> joinOperator() {
+        return Optional.ofNullable(joinOperator);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class StageImpl<T> implements Stage<T> {
 
     @Override
     public String toString() {
-        return "StageImpl{" + "identifier=" + identifier + ", predicates=" + predicates + ", joinType=" + joinType + ", field=" + field + ", operatorType=" + joinPredicateType + ", firstForeignField=" + foreignFirstField + ", secondForeignField=" + foreignSecondField + '}';
+        return "StageImpl{" + "identifier=" + identifier + ", predicates=" + predicates + ", joinType=" + joinType + ", field=" + field + ", operatorType=" + joinOperator + ", firstForeignField=" + foreignFirstField + ", secondForeignField=" + foreignSecondField + '}';
     }
 
 }

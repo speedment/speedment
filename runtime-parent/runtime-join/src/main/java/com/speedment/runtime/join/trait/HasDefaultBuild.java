@@ -1,6 +1,7 @@
 package com.speedment.runtime.join.trait;
 
 import com.speedment.common.tuple.Tuple;
+import com.speedment.common.tuple.TupleOfNullables;
 import com.speedment.runtime.join.Join;
 
 /**
@@ -9,7 +10,7 @@ import com.speedment.runtime.join.Join;
  * @param <R> RETURN TYPE
  *
  */
-public interface HasDefaultBuild<R extends Tuple> {
+public interface HasDefaultBuild<R extends TupleOfNullables> {
 
     /**
      * Creates and returns a new Join object where elements in the Join object's
