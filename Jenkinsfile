@@ -32,7 +32,7 @@ pipeline {
         
         failure {
             // Send Slack-notification if build fails
-            slackSend (color: "warning", message: "Build Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}")
+            slackSend (color: "danger", message: "BUILD FAILED \nBuild: ${env.JOB_NAME}, Number: ${env.BUILD_NUMBER} \nCommit: ${env.CHANGE_TITLE} by ${env.CHANGE_AUTHOR}")
         }
     }
 }
