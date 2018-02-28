@@ -27,12 +27,12 @@ public final class MockMetadata extends AbstractApplicationMetadata {
     public static final String T5_NAME = "t5";
     public static final String T6_NAME = "t6";
 
-    public static final String T1_ID_NAME = "id_t1";
-    public static final String T2_ID_NAME = "id_t2";
-    public static final String T3_ID_NAME = "id_t3";
-    public static final String T4_ID_NAME = "id_t4";
-    public static final String T5_ID_NAME = "id_t5";
-    public static final String T6_ID_NAME = "id_t6";
+    public static final String T1_ID_NAME = "t1_id";
+    public static final String T2_ID_NAME = "t2_id";
+    public static final String T3_ID_NAME = "t3_id";
+    public static final String T4_ID_NAME = "t4_id";
+    public static final String T5_ID_NAME = "t5_id";
+    public static final String T6_ID_NAME = "t6_id";
 
     private String quote(String s) {
         return "\"" + s + "\"";

@@ -8,7 +8,6 @@ import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
-import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
@@ -29,7 +28,6 @@ import java.util.ArrayList;
 import static java.util.Collections.emptyList;
 import java.util.List;
 import static java.util.Objects.requireNonNull;
-import java.util.Optional;
 import java.util.function.Predicate;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
@@ -79,9 +77,8 @@ public final class JoinSqlUtil {
         requireNonNull(sqlAdapterMapper);
         @SuppressWarnings("unchecked")
         final Stage<T> stage = (Stage<T>) stages.get(stageIndex);
-        final Optional<HasComparableOperators<T, ?>> field = stage.field();
         int offset = 0;
-        int onOffset = -1;
+
         for (int i = 0; i < stageIndex; i++) {
             final Stage<?> otherStage = stages.get(i);
             final Table table = DocumentDbUtil.referencedTable(project, otherStage.identifier());
@@ -89,8 +86,67 @@ public final class JoinSqlUtil {
                 .filter(Column::isEnabled)
                 .count();
         }
-        final SqlAdapter<T> sqlAdapter = sqlAdapterMapper.apply(identifier);
-        return sqlAdapter.entityMapper(offset);
+
+        if (stage.joinType().isPresent() && stage.joinType().get().isNullable()) {
+            final String onColumnId = stage
+                .field()
+                .get()
+                .identifier()
+                .getColumnName();
+            final Table table = DocumentDbUtil.referencedTable(project, stage.identifier());
+            final List<Column> columns = table.columns()
+                .filter(Column::isEnabled)
+                .collect(toList());
+            for (int i = 0; i < columns.size(); i++) {
+                final String columnId = columns.get(i).getId();
+                if (columnId.equals(onColumnId)) {
+                    // Compose a null detecting entity mapper
+                    return new NullAwareSqlAdapter<>(sqlAdapterMapper.apply(identifier), i).entityMapper(offset);
+                }
+            }
+            throw new IllegalStateException(
+                "Unable to locate column " + onColumnId + " in table " + table.getId()
+                + " for stage " + stage.toString()
+                + " Columns: " + columns.stream().map(Column::getId).collect(joining(", "))
+            );
+        }
+        return sqlAdapterMapper.apply(identifier).entityMapper(offset);
+    }
+
+    private static class NullAwareSqlAdapter<ENTITY> implements SqlAdapter<ENTITY> {
+
+        private final SqlAdapter<ENTITY> inner;
+        private final int nullableColumnOffset;
+
+        private NullAwareSqlAdapter(SqlAdapter<ENTITY> inner, int nullableColumnOffset) {
+            this.inner = requireNonNull(inner);
+            this.nullableColumnOffset = requireNonNegative(nullableColumnOffset);
+        }
+
+        @Override
+        public TableIdentifier<ENTITY> identifier() {
+            return inner.identifier();
+        }
+
+        @Override
+        public SqlFunction<ResultSet, ENTITY> entityMapper() {
+            return entityMapper(0);
+        }
+
+        @Override
+        public SqlFunction<ResultSet, ENTITY> entityMapper(int offset) {
+            return rs -> {
+                final Object value = rs.getObject(1 + offset + nullableColumnOffset);
+                // We must check rs.wasNull() becaues the joined field might be null
+                // even though it is non-nullable like int, long etc.
+                if (value == null || rs.wasNull()) {
+                    return null;
+                } else {
+                    return inner.entityMapper(offset).apply(rs);
+                }
+            };
+        }
+
     }
 
     public static <T> Stream<T> stream(
@@ -212,18 +268,19 @@ public final class JoinSqlUtil {
         if (JoinType.CROSS_JOIN.equals(joinType)) {
             sb.append(", ").append(sqlStage.sqlTableReference()).append(" ");
         } else {
-            sb.append(stage.joinType().get().sql());
+            sb.append(stage.joinType().get().sql()).append(" ");
             sb.append(sqlStage.sqlTableReference()).append(" ");
             stage.field().ifPresent(field -> {
                 final HasComparableOperators<?, ?> foreignFirstField = stage.foreignFirstField().get();
                 final int foreignStageIndex = stageIndexOf(stages, foreignFirstField);
                 final Stage<?> foreignStage = stages.get(foreignStageIndex);
-                sb.append(" ON (");
+                sb.append("ON (");
                 final JoinOperator joinOperator = stage.joinOperator().get();
                 switch (joinOperator) {
                     case BETWEEN:
                     case NOT_BETWEEN: {
-                        sb.append(renderBetweenOnPredicate(
+                        renderBetweenOnPredicate(
+                            sb,
                             naming,
                             joinOperator,
                             stageIndex,
@@ -232,11 +289,11 @@ public final class JoinSqlUtil {
                             foreignFirstField,
                             stage.foreignSecondField().get(),
                             foreignStage.foreignInclusion().get()
-                        ));
+                        );
                         break;
                     }
                     default: {
-                        renderPredicate(sb, naming, stageIndex, foreignStageIndex, foreignFirstField, foreignFirstField, joinOperator.sqlOperator());
+                        renderPredicate(sb, naming, stageIndex, foreignStageIndex, field, foreignFirstField, joinOperator.sqlOperator());
                     }
                 }
                 sb.append(")");
@@ -245,7 +302,8 @@ public final class JoinSqlUtil {
         return sb.toString();
     }
 
-    private static String renderBetweenOnPredicate(
+    private static void renderBetweenOnPredicate(
+        final StringBuilder sb,
         final DatabaseNamingConvention naming,
         final JoinOperator joinOperator,
         final int stageIndex,
@@ -256,7 +314,6 @@ public final class JoinSqlUtil {
         final Inclusion inclusion
     ) {
         // Use compisition of >, >=, < and <= to implement inclusion variants
-        final StringBuilder sb = new StringBuilder();
         if (JoinOperator.NOT_BETWEEN.equals(joinOperator)) {
             sb.append(" NOT ");
         }
@@ -267,7 +324,6 @@ public final class JoinSqlUtil {
         sb.append(" AND ");
         renderPredicate(sb, naming, stageIndex, foreignStageIndex, field, foreignSecondField, secondOperator);
         sb.append(")");
-        return sb.toString();
     }
 
     private static void renderPredicate(

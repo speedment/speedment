@@ -1,9 +1,12 @@
 package com.speedment.runtime.join.internal.component.join.test_support;
 
-import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.config.internal.immutable.ImmutableProject;
+import com.speedment.runtime.core.component.PersistenceComponent;
+import com.speedment.runtime.core.exception.SpeedmentException;
+import com.speedment.runtime.core.manager.Persister;
+import com.speedment.runtime.core.manager.Remover;
+import com.speedment.runtime.core.manager.Updater;
 import com.speedment.runtime.field.IntField;
 import com.speedment.runtime.join.stage.Stage;
 import com.speedment.runtime.typemapper.TypeMapper;
@@ -78,37 +81,37 @@ public final class JoinTestUtil {
 
     public interface E1 extends HasId<E1> {
 
-        IntField<E1, Integer> ID1 = IntField.create(id(E1Manager.IDENTIFIER, "id1"), E1::getId, E1::setId, TypeMapper.primitive(), true);
+        IntField<E1, Integer> ID1 = IntField.create(id(E1Manager.IDENTIFIER, MockMetadata.T1_ID_NAME), E1::getId, E1::setId, TypeMapper.primitive(), true);
 
     }
 
     public interface E2 extends HasId<E2> {
 
-        IntField<E2, Integer> ID2 = IntField.create(id(E2Manager.IDENTIFIER, "id2"), E2::getId, E2::setId, TypeMapper.primitive(), true);
+        IntField<E2, Integer> ID2 = IntField.create(id(E2Manager.IDENTIFIER, MockMetadata.T2_ID_NAME), E2::getId, E2::setId, TypeMapper.primitive(), true);
 
     }
 
     public interface E3 extends HasId<E3> {
 
-        IntField<E3, Integer> ID3 = IntField.create(id(E3Manager.IDENTIFIER, "id3"), E3::getId, E3::setId, TypeMapper.primitive(), true);
+        IntField<E3, Integer> ID3 = IntField.create(id(E3Manager.IDENTIFIER, MockMetadata.T3_ID_NAME), E3::getId, E3::setId, TypeMapper.primitive(), true);
 
     }
 
     public interface E4 extends HasId<E4> {
 
-        IntField<E4, Integer> ID4 = IntField.create(id(E4Manager.IDENTIFIER, "id3"), E4::getId, E4::setId, TypeMapper.primitive(), true);
+        IntField<E4, Integer> ID4 = IntField.create(id(E4Manager.IDENTIFIER, MockMetadata.T4_ID_NAME), E4::getId, E4::setId, TypeMapper.primitive(), true);
 
     }
 
     public interface E5 extends HasId<E5> {
 
-        IntField<E5, Integer> ID5 = IntField.create(id(E5Manager.IDENTIFIER, "id5"), E5::getId, E5::setId, TypeMapper.primitive(), true);
+        IntField<E5, Integer> ID5 = IntField.create(id(E5Manager.IDENTIFIER, MockMetadata.T5_ID_NAME), E5::getId, E5::setId, TypeMapper.primitive(), true);
 
     }
 
     public interface E6 extends HasId<E6> {
 
-        IntField<E6, Integer> ID6 = IntField.create(id(E6Manager.IDENTIFIER, "id6"), E6::getId, E6::setId, TypeMapper.primitive(), true);
+        IntField<E6, Integer> ID6 = IntField.create(id(E6Manager.IDENTIFIER, MockMetadata.T6_ID_NAME), E6::getId, E6::setId, TypeMapper.primitive(), true);
 
     }
 
@@ -203,7 +206,6 @@ public final class JoinTestUtil {
         return ColumnIdentifier.of(table.getDbmsName(), table.getSchemaName(), table.getTableName(), columnName);
     }
 
-
     public static void assertStagesEquals(List<Stage<?>> expected, List<Stage<?>> actual) {
         if (expected.size() != actual.size()) {
             fail("Expected size " + expected.size() + " but actual size " + actual.size());
@@ -234,5 +236,53 @@ public final class JoinTestUtil {
     private static boolean equals(Function<Stage<?>, ?> keyExtractor, Stage<?> s1, Stage<?> s2) {
         return Objects.equals(keyExtractor.apply(s1), keyExtractor.apply(s2));
     }
-       
+
+    public static class E1MangerImpl implements E1Manager {
+
+    }
+
+    public static class E2MangerImpl implements E2Manager {
+
+    }
+
+    public static class E3MangerImpl implements E3Manager {
+
+    }
+
+    public static class E4MangerImpl implements E4Manager {
+
+    }
+
+    public static class E5MangerImpl implements E5Manager {
+
+    }
+
+    public static class E6MangerImpl implements E6Manager {
+
+    }
+
+    public static class MockPersistanceComponent implements PersistenceComponent {
+
+        @Override
+        public <ENTITY> Persister<ENTITY> persister(TableIdentifier<ENTITY> tableIdentifier) throws SpeedmentException {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public <ENTITY> Updater<ENTITY> updater(TableIdentifier<ENTITY> tableIdentifier) throws SpeedmentException {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public <ENTITY> Remover<ENTITY> remover(TableIdentifier<ENTITY> tableIdentifier) throws SpeedmentException {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+    }
+    
+//    public static class MockSqlPersistence implements SqlPersistence {
+//        
+//    }
+    
+
 }

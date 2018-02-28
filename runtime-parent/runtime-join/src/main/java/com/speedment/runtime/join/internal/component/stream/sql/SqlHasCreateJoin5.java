@@ -1,5 +1,6 @@
 package com.speedment.runtime.join.internal.component.stream.sql;
 
+import com.speedment.common.function.Function5;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
@@ -7,20 +8,19 @@ import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.internal.component.stream.SqlAdapterMapper;
 import com.speedment.runtime.join.stage.Stage;
-import com.speedment.runtime.join.trait.HasCreateJoin2;
+import com.speedment.runtime.join.trait.HasCreateJoin5;
 import java.sql.ResultSet;
 import java.util.List;
-import java.util.function.BiFunction;
 
 /**
  *
  * @author Per Minborg
  */
-public final class SqlHasCreateJoin2
+public final class SqlHasCreateJoin5
     extends AbstractSqlHasCreateJoin
-    implements HasCreateJoin2 {
+    implements HasCreateJoin5 {
 
-    public SqlHasCreateJoin2(
+    public SqlHasCreateJoin5(
         final DbmsHandlerComponent dbmsHandlerComponent,
         final Project project,
         final SqlAdapterMapper sqlAdapterMapper
@@ -29,17 +29,26 @@ public final class SqlHasCreateJoin2
     }
 
     @Override
-    public <T1, T2, T> Join<T> createJoin(
+    public <T1, T2, T3, T4, T5, T> Join<T> createJoin(
         final List<Stage<?>> stages,
-        final BiFunction<T1, T2, T> constructor,
+        final Function5<T1, T2, T3, T4, T5, T> constructor,
         final TableIdentifier<T1> t1,
-        final TableIdentifier<T2> t2
+        final TableIdentifier<T2> t2,
+        final TableIdentifier<T3> t3,
+        final TableIdentifier<T4> t4,
+        final TableIdentifier<T5> t5
     ) {
         final SqlFunction<ResultSet, T1> rsMapper1 = rsMapper(stages, 0, t1);
         final SqlFunction<ResultSet, T2> rsMapper2 = rsMapper(stages, 1, t2);
+        final SqlFunction<ResultSet, T3> rsMapper3 = rsMapper(stages, 2, t3);
+        final SqlFunction<ResultSet, T4> rsMapper4 = rsMapper(stages, 3, t4);
+        final SqlFunction<ResultSet, T5> rsMapper5 = rsMapper(stages, 4, t5);
         final SqlFunction<ResultSet, T> rsMapper = rs -> constructor.apply(
             rsMapper1.apply(rs),
-            rsMapper2.apply(rs)
+            rsMapper2.apply(rs),
+            rsMapper3.apply(rs),
+            rsMapper4.apply(rs),
+            rsMapper5.apply(rs)
         );
         return newJoin(stages, rsMapper);
     }

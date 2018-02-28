@@ -14,14 +14,21 @@ import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.join.Join;
 import com.speedment.runtime.join.JoinStreamSupplierComponent;
 import com.speedment.runtime.join.internal.component.stream.sql.SqlHasCreateJoin2;
+import com.speedment.runtime.join.internal.component.stream.sql.SqlHasCreateJoin3;
+import com.speedment.runtime.join.internal.component.stream.sql.SqlHasCreateJoin4;
+import com.speedment.runtime.join.internal.component.stream.sql.SqlHasCreateJoin5;
+import com.speedment.runtime.join.internal.component.stream.sql.SqlHasCreateJoin6;
 import com.speedment.runtime.join.stage.Stage;
 import com.speedment.runtime.join.trait.HasCreateJoin2;
+import com.speedment.runtime.join.trait.HasCreateJoin3;
+import com.speedment.runtime.join.trait.HasCreateJoin4;
+import com.speedment.runtime.join.trait.HasCreateJoin5;
+import com.speedment.runtime.join.trait.HasCreateJoin6;
 import java.util.List;
 import java.util.Map;
-import static java.util.Objects.requireNonNull;
 import java.util.function.BiFunction;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
-import java.util.stream.Stream;
 
 /**
  *
@@ -31,6 +38,10 @@ public class SqlJoinStreamSupplierComponent implements JoinStreamSupplierCompone
 
     private Map<TableIdentifier<?>, SqlAdapter<?>> sqlAdapterMap;
     private HasCreateJoin2 join2Creator;
+    private HasCreateJoin3 join3Creator;
+    private HasCreateJoin4 join4Creator;
+    private HasCreateJoin5 join5Creator;
+    private HasCreateJoin6 join6Creator;
 
     @Execute
     void init(
@@ -49,6 +60,10 @@ public class SqlJoinStreamSupplierComponent implements JoinStreamSupplierCompone
             );
 
         join2Creator = new SqlHasCreateJoin2(dbmsHandlerComponent, project, this::sqlAdapterMapper);
+        join3Creator = new SqlHasCreateJoin3(dbmsHandlerComponent, project, this::sqlAdapterMapper);
+        join4Creator = new SqlHasCreateJoin4(dbmsHandlerComponent, project, this::sqlAdapterMapper);
+        join5Creator = new SqlHasCreateJoin5(dbmsHandlerComponent, project, this::sqlAdapterMapper);
+        join6Creator = new SqlHasCreateJoin6(dbmsHandlerComponent, project, this::sqlAdapterMapper);
     }
 
     @Override
@@ -70,7 +85,7 @@ public class SqlJoinStreamSupplierComponent implements JoinStreamSupplierCompone
         final TableIdentifier<T2> t2,
         final TableIdentifier<T3> t3
     ) {
-        return (Join<T>) emptyJoin(stages, constructor, t1, t2, t3);
+        return join3Creator.createJoin(stages, constructor, t1, t2, t3);
     }
 
     @Override
@@ -83,7 +98,7 @@ public class SqlJoinStreamSupplierComponent implements JoinStreamSupplierCompone
         final TableIdentifier<T3> t3,
         final TableIdentifier<T4> t4
     ) {
-        return (Join<T>) emptyJoin(stages, constructor, t1, t2, t3, t4);
+        return join4Creator.createJoin(stages, constructor, t1, t2, t3, t4);
     }
 
     @Override
@@ -97,7 +112,7 @@ public class SqlJoinStreamSupplierComponent implements JoinStreamSupplierCompone
         final TableIdentifier<T4> t4,
         final TableIdentifier<T5> t5
     ) {
-        return (Join<T>) emptyJoin(stages, constructor, t1, t2, t3, t4, t5);
+        return join5Creator.createJoin(stages, constructor, t1, t2, t3, t4, t5);
     }
 
     @Override
@@ -112,39 +127,20 @@ public class SqlJoinStreamSupplierComponent implements JoinStreamSupplierCompone
         final TableIdentifier<T5> t5,
         final TableIdentifier<T6> t6
     ) {
-        return (Join<T>) emptyJoin(stages, constructor, t1, t2, t3, t4, t5, t6);
+        return join6Creator.createJoin(stages, constructor, t1, t2, t3, t4, t5, t6);
     }
 
     private <ENTITY> SqlAdapter<ENTITY> sqlAdapterMapper(TableIdentifier<ENTITY> identifier) {
         @SuppressWarnings("unchecked")
         final SqlAdapter<ENTITY> result = (SqlAdapter<ENTITY>) sqlAdapterMap.get(identifier);
         if (result == null) {
-            throw new IllegalArgumentException("There is no mapping for " + identifier);
+            throw new IllegalArgumentException(
+                "There is no mapping for " + identifier + " "
+                + "The following " + sqlAdapterMap.size() + " mappings are available: "
+                + sqlAdapterMap.keySet().stream().map(Object::toString).collect(joining(", "))
+            );
         }
         return result;
     }
 
-    private Join<?> emptyJoin(List<Stage<?>> p, Object unusedConstructor, TableIdentifier<?>... unusedIdentifiers) {
-        requireNonNull(p);
-        requireNonNull(unusedConstructor);
-        Stream.of(unusedConstructor).forEach(id -> requireNonNull(id));
-        printPipeline(p);
-        return new EmptyJoin<>();
-    }
-
-    private void printPipeline(List<Stage<?>> p) {
-        System.out.println("Pipeline:");
-        p.stream()
-            .map(Object::toString)
-            .forEachOrdered(System.out::println);
-    }
-
-    private class EmptyJoin<T> implements Join<T> {
-
-        @Override
-        public Stream<T> stream() {
-            return Stream.empty();
-        }
-
-    }
 }

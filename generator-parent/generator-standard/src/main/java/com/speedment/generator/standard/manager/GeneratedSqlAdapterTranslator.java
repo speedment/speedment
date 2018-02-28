@@ -21,8 +21,6 @@ import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Class;
-import com.speedment.common.injector.State;
-import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
@@ -39,7 +37,6 @@ import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.core.component.resultset.ResultSetMapping;
 import com.speedment.runtime.core.component.sql.SqlTypeMapperHelper;
-import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.util.sql.ResultSetUtil;
 import com.speedment.runtime.typemapper.TypeMapper;
 
@@ -60,6 +57,7 @@ import static com.speedment.generator.standard.internal.util.GenerateMethodBodyU
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
+import java.sql.SQLException;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
 
@@ -75,12 +73,12 @@ public final class GeneratedSqlAdapterTranslator
     public final static String INSTALL_METHOD_NAME = "installMethodName";
     public final static String OFFSET_PARAMETER_NAME = "offset";
 
-    private @Inject
-    ResultSetMapperComponent resultSetMapperComponent;
-    private @Inject
-    DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject
-    TypeMapperComponent typeMapperComponent;
+    @Inject
+    private ResultSetMapperComponent resultSetMapperComponent;
+    @Inject
+    private DbmsHandlerComponent dbmsHandlerComponent;
+    @Inject
+    private TypeMapperComponent typeMapperComponent;
 
     public GeneratedSqlAdapterTranslator(Table table) {
         super(table, Class::of);
@@ -124,16 +122,16 @@ public final class GeneratedSqlAdapterTranslator
                     ////////////////////////////////////////////////////////////
                     // Generate methods                                       //
                     ////////////////////////////////////////////////////////////
-//                    .add(Method.of(INSTALL_METHOD_NAME, void.class).add(withExecuteBefore(file))
-//                        .add(Field.of("streamSupplierComponent", SqlStreamSupplierComponent.class)
-//                            .add(AnnotationUsage.of(WithState.class).set(Value.ofReference("RESOLVED")))
-//                        )
-//                        .add(Field.of("persistenceComponent", SqlPersistenceComponent.class)
-//                            .add(AnnotationUsage.of(WithState.class).set(Value.ofReference("RESOLVED")))
-//                        )
-//                        .add("streamSupplierComponent.install(tableIdentifier, this::apply);")
-//                        .add("persistenceComponent.install(tableIdentifier);")
-//                    )
+                    //                    .add(Method.of(INSTALL_METHOD_NAME, void.class).add(withExecuteBefore(file))
+                    //                        .add(Field.of("streamSupplierComponent", SqlStreamSupplierComponent.class)
+                    //                            .add(AnnotationUsage.of(WithState.class).set(Value.ofReference("RESOLVED")))
+                    //                        )
+                    //                        .add(Field.of("persistenceComponent", SqlPersistenceComponent.class)
+                    //                            .add(AnnotationUsage.of(WithState.class).set(Value.ofReference("RESOLVED")))
+                    //                        )
+                    //                        .add("streamSupplierComponent.install(tableIdentifier, this::apply);")
+                    //                        .add("persistenceComponent.install(tableIdentifier);")
+                    //                    )
                     .add(generateApplyResultSet(getSupport(), file, table::columns))
                     .add(generateCreateEntity(file))
                     .add(
@@ -156,7 +154,7 @@ public final class GeneratedSqlAdapterTranslator
                             .add("return rs -> apply(rs, offset);")
                     )
                     .call(() -> {
-                        file.add(Import.of(State.class).setStaticMember("RESOLVED").static_());
+                        //file.add(Import.of(State.class).setStaticMember("RESOLVED").static_());
 
                         // Operate on enabled columns that has a type mapper
                         // that is not either empty, an identity mapper or a
@@ -239,7 +237,7 @@ public final class GeneratedSqlAdapterTranslator
 
         return Method.of("apply", support.entityType())
             .protected_()
-            .add(SpeedmentException.class)
+            .add(SQLException.class)
             .add(Field.of("resultSet", ResultSet.class))
             .add(Field.of(OFFSET_PARAMETER_NAME, int.class))
             .add(generateApplyResultSetBody(
