@@ -1,7 +1,17 @@
+#!/usr/bin/env groovy
+
+import groovy.json.JsonOutput
+
+def slackNotificationChannel = 'development'     // ex: = "builds"
+
 pipeline {
     agent any
 
     stages {
+        stage("Post to Slack") {
+            notifySlack("Success!", slackNotificationChannel, [])
+        }
+        
         stage('Build') {
             steps {
                 //mvn '-Prelease clean install -DskipTests'
@@ -35,6 +45,20 @@ pipeline {
             slackSend (color: "danger", message: "BUILD FAILED \nBuild: ${env.JOB_NAME}, Number: ${env.BUILD_NUMBER} \nCommit: ${env.CHANGE_TITLE} by ${env.CHANGE_AUTHOR}")
         }
     }
+}
+
+def notifySlack(text, channel, attachments) {
+    def slackURL = 'https://hooks.slack.com/services/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'
+    def jenkinsIcon = 'https://wiki.jenkins-ci.org/download/attachments/2916393/logo.png'
+
+    def payload = JsonOutput.toJson([text: text,
+        channel: channel,
+        username: "Jenkins",
+        icon_url: jenkinsIcon,
+        attachments: attachments
+    ])
+
+    sh "curl -X POST --data-urlencode \'payload=${payload}\' ${slackURL}"
 }
 
 def mailIfStatusChanged(String recipients) {
