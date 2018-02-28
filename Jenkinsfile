@@ -4,13 +4,16 @@ import groovy.json.JsonOutput
 
 def slackNotificationChannel = 'development'     // ex: = "builds"
 
+node {
+    stage("Post to Slack") {
+            notifySlack("Success!", slackNotificationChannel, [])
+        }
+}
+
 pipeline {
     agent any
 
     stages {
-        stage("Post to Slack") {
-            notifySlack("Success!", slackNotificationChannel, [])
-        }
         
         stage('Build') {
             steps {
