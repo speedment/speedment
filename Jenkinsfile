@@ -29,6 +29,11 @@ pipeline {
                     testResults: '**/target/surefire-reports/TEST-*.xml, **/target/failsafe-reports/*.xml'
             mailIfStatusChanged env.EMAIL_RECIPIENTS
         }
+        
+        failure {
+            // Send Slack-notification if build fails
+            slackSend (color: "warning", message: "Build Failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}")
+        }
     }
 }
 
