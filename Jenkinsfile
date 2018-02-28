@@ -1,4 +1,4 @@
-#!/usr/bin/env groovy
+#!groovy
 
 import groovy.json.JsonOutput
 import java.util.Optional
