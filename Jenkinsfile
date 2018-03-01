@@ -1,6 +1,3 @@
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
 pipeline {
     agent any
 
@@ -36,18 +33,8 @@ pipeline {
         }
         
         failure {
-            
-            JSONArray attachments = new JSONArray();
-            JSONObject attachment = new JSONObject();
-
-            attachment.put('text','Testing 1..2..3!');
-            attachment.put('fallback','Testing attachments for Slack notifications');
-            attachment.put('color','#ff0000');
-
-            attachments.add(attachment);
-            slackSend(color: 'danger', attachments: attachments.toString())
             // Send Slack-notification if build fails
-            //slackSend (color: "danger", message: "", attachments: "")
+            slackSend (color: "danger", message: "Test 1...2...3", attachments: "")
         }
     }
 }
