@@ -1,6 +1,3 @@
-def author = ""
-def message = ""
-
 pipeline {
     agent any
 
@@ -25,7 +22,9 @@ pipeline {
         //    }
         //}
     }
+    
     post {
+        
         always {
             // Archive Unit and integration test results, if any
             junit allowEmptyResults: true,
@@ -38,8 +37,10 @@ pipeline {
             def jobName = "${env.JOB_NAME}"
             // Strip the branch name out of the job name (ex: "Job Name/branch1" -> "Job Name")
             jobName = jobName.getAt(0..(jobName.indexOf('/') - 1))
-
-            populateGlobalVariables() 
+         
+            def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
+            def author = sh(returnStdout: true, script: "git --no-pager show -s --format='%an' ${commit}").trim()
+            def message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
 
             // Send Slack-notification if build fails
             slackSend (color: "danger", message: "", attachments: [
@@ -63,21 +64,6 @@ pipeline {
                     ])
         }
     }
-}
-
-
-def getGitAuthor = {
-    def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
-    author = sh(returnStdout: true, script: "git --no-pager show -s --format='%an' ${commit}").trim()
-}
-
-def getLastCommitMessage = {
-    message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
-}
-
-def populateGlobalVariables = {
-    getLastCommitMessage()
-    getGitAuthor()
 }
 
 def mailIfStatusChanged(String recipients) {
