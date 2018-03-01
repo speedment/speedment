@@ -43,25 +43,7 @@ pipeline {
             def message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
 
             // Send Slack-notification if build fails
-            slackSend (color: "danger", message: "", attachments: [
-                        title: "${jobName}, build #${env.BUILD_NUMBER}",
-                        title_link: "${env.BUILD_URL}",
-                        color: "danger",
-                        text: "Build failed:\n${author}",
-                        "mrkdwn_in": ["fields"],
-                        fields: [
-                            [
-                                title: "Branch",
-                                value: "${env.GIT_BRANCH}",
-                                short: true
-                            ],
-                            [
-                                title: "Last Commit",
-                                value: "${message}",
-                                short: false
-                            ]
-                        ]
-                    ])
+            slackSend (color: "danger", message: "")
         }
     }
 }
