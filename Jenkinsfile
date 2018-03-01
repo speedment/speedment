@@ -36,14 +36,35 @@ pipeline {
             
             def jobName = "${env.JOB_NAME}"
             // Strip the branch name out of the job name (ex: "Job Name/branch1" -> "Job Name")
-            jobName = jobName.getAt(0..(jobName.indexOf('/') - 1))
+            //jobName = jobName.getAt(0..(jobName.indexOf('/') - 1))
          
-            def commit = sh(returnStdout: true, script: 'git rev-parse HEAD')
-            def author = sh(returnStdout: true, script: "git --no-pager show -s --format='%an' ${commit}").trim()
-            def message = sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
+            def commit = "Test commit"
+                //sh(returnStdout: true, script: 'git rev-parse HEAD')
+            def author = "julgus"
+                // sh(returnStdout: true, script: "git --no-pager show -s --format='%an' ${commit}").trim()
+            def message = "Test 1, 2, 3"
+                // sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
 
             // Send Slack-notification if build fails
-            slackSend (color: "danger", message: "")
+            slackSend (color: "danger", message: "attachments: [
+                        title: "${jobName}, build #${env.BUILD_NUMBER}",
+                        title_link: "${env.BUILD_URL}",
+                        color: "danger",
+                        text: "Build failed:\n${author}",
+                        "mrkdwn_in": ["fields"],
+                        fields: [
+                            [
+                                title: "Branch",
+                                value: "${env.GIT_BRANCH}",
+                                short: true
+                            ],
+                            [
+                                title: "Last Commit",
+                                value: "${message}",
+                                short: false
+                            ]
+                        ]
+                    ]")
         }
     }
 }
