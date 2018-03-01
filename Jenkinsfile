@@ -1,3 +1,6 @@
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 pipeline {
     agent any
 
@@ -34,37 +37,17 @@ pipeline {
         
         failure {
             
-            def jobName = "${env.JOB_NAME}"
-            // Strip the branch name out of the job name (ex: "Job Name/branch1" -> "Job Name")
-            //jobName = jobName.getAt(0..(jobName.indexOf('/') - 1))
-         
-            def commit = "Test commit"
-                //sh(returnStdout: true, script: 'git rev-parse HEAD')
-            def author = "julgus"
-                // sh(returnStdout: true, script: "git --no-pager show -s --format='%an' ${commit}").trim()
-            def message = "Test 1, 2, 3"
-                // sh(returnStdout: true, script: 'git log -1 --pretty=%B').trim()
+            JSONArray attachments = new JSONArray();
+            JSONObject attachment = new JSONObject();
 
+            attachment.put('text','Testing 1..2..3!');
+            attachment.put('fallback','Testing attachments for Slack notifications');
+            attachment.put('color','#ff0000');
+
+            attachments.add(attachment);
+            slackSend(color: 'danger', attachments: attachments.toString())
             // Send Slack-notification if build fails
-            slackSend (color: "danger", message: "attachments: [
-                        title: "${jobName}, build #${env.BUILD_NUMBER}",
-                        title_link: "${env.BUILD_URL}",
-                        color: "danger",
-                        text: "Build failed:\n${author}",
-                        "mrkdwn_in": ["fields"],
-                        fields: [
-                            [
-                                title: "Branch",
-                                value: "${env.GIT_BRANCH}",
-                                short: true
-                            ],
-                            [
-                                title: "Last Commit",
-                                value: "${message}",
-                                short: false
-                            ]
-                        ]
-                    ]")
+            //slackSend (color: "danger", message: "", attachments: "")
         }
     }
 }
