@@ -34,7 +34,7 @@ pipeline {
         
         failure {
             // Send Slack-notification if build fails
-            slackSend (color: "danger", message: "Test 1...2...3", attachments: "")
+            slackSend (color: "danger", message: "Test 1...2...3")
         }
     }
 }
