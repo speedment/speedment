@@ -71,14 +71,14 @@ public class JoinSketchTest {
         // Left type relations will have User = user and Picture = null ????
     }
 
-    private void test2FullOuterJoin() {
-        final Join<UserPictureHolder> join = jc
-            .from(UserManager.IDENTIFIER)
-            .fullOuterJoinOn(Picture.USER_ID).equal(User.USER_ID)
-            .build(UserPictureHolder::new);
-
-        // SELECT * from USER FULL OUTER JOIN PICTURES ON USER.USER_ID = PICTURE.USER_ID
-    }
+//    private void test2FullOuterJoin() {
+//        final Join<UserPictureHolder> join = jc
+//            .from(UserManager.IDENTIFIER)
+//            .fullOuterJoinOn(Picture.USER_ID).equal(User.USER_ID)
+//            .build(UserPictureHolder::new);
+//
+//        // SELECT * from USER FULL OUTER JOIN PICTURES ON USER.USER_ID = PICTURE.USER_ID
+//    }
 
     private void test2WithWheresOnTables() {
         Join<UserPictureHolder> join = jc

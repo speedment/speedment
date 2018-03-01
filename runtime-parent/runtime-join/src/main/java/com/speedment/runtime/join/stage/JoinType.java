@@ -7,18 +7,20 @@ import static java.util.Objects.requireNonNull;
  * @author Per Minborg
  */
 public enum JoinType {
-    INNER_JOIN("INNER JOIN", false),
-    LEFT_JOIN("LEFT JOIN", true),
-    RIGHT_JOIN("RIGHT JOIN", true),
-    FULL_OUTER_JOIN("FULL OUTER JOIN", true),
-    CROSS_JOIN("CROSS JOIN", false);
+    INNER_JOIN("INNER JOIN", false, false),
+    LEFT_JOIN("LEFT JOIN", true, false),
+    RIGHT_JOIN("RIGHT JOIN", false, true),
+    FULL_OUTER_JOIN("FULL OUTER JOIN", true, true),
+    CROSS_JOIN("CROSS JOIN", false, false);
 
     private final String sql;
-    private final boolean nullable;
+    private final boolean nullableSelf;
+    private final boolean nullableOther;
 
-    private JoinType(String sql, boolean nullable) {
+    private JoinType(String sql, boolean nullableSelf, boolean nullableOther) {
         this.sql = requireNonNull(sql);
-        this.nullable = nullable;
+        this.nullableSelf = nullableSelf;
+        this.nullableOther = nullableOther;
     }
 
     /**
@@ -31,12 +33,25 @@ public enum JoinType {
     }
 
     /**
-     * Returns if this JoinType can produce results that are null.
+     * Returns if this JoinType can produce results that are {@code null} for
+     * entities belonging to the same Stage where this JoinType is present.
      *
-     * @return if this JoinType can produce results that are null
+     * @return if this JoinType can produce results that are {@code null} for
+     * entities belonging to the same Stage where this JoinType is present
      */
-    public boolean isNullable() {
-        return nullable;
+    public boolean isNullableSelf() {
+        return nullableSelf;
+    }
+
+    /**
+     * Returns if this JoinType can produce results that are {@code null} for
+     * entities belonging to another Stage.
+     *
+     * @return if this JoinType can produce results that are {@code null} for
+     * entities belonging to another Stage
+     */
+    public boolean isNullableOther() {
+        return nullableOther;
     }
 
 }

@@ -87,30 +87,74 @@ public final class JoinSqlUtil {
                 .count();
         }
 
-        if (stage.joinType().isPresent() && stage.joinType().get().isNullable()) {
-            final String onColumnId = stage
-                .field()
-                .get()
-                .identifier()
-                .getColumnName();
-            final Table table = DocumentDbUtil.referencedTable(project, stage.identifier());
-            final List<Column> columns = table.columns()
-                .filter(Column::isEnabled)
-                .collect(toList());
-            for (int i = 0; i < columns.size(); i++) {
-                final String columnId = columns.get(i).getId();
-                if (columnId.equals(onColumnId)) {
-                    // Compose a null detecting entity mapper
-                    return new NullAwareSqlAdapter<>(sqlAdapterMapper.apply(identifier), i).entityMapper(offset);
+        final Table table = DocumentDbUtil.referencedTable(project, stage.identifier());
+        int nullOffset = -1;
+
+        // Check if this stage renders an on-field to be nullable
+        if (stage.joinType().isPresent() && stage.joinType().get().isNullableSelf()) {
+            nullOffset = findNullOffset(table, stage, stage.field().get());
+        }
+
+        // Check if another (RIGHT JOIN) stage renders an on-field in this stage to be nullable
+        // No use to check if we already know
+        if (nullOffset == -1) {
+            final TableIdentifier<?> thisId = stage.identifier();
+            for (int i = 0; i < stages.size(); i++) {
+                if (stageIndex == i) {
+                    // Ignore this stage
+                    continue;
+                }
+                final Stage<?> otherStage = stages.get(i);
+                if (otherStage.joinType().isPresent() && otherStage.joinType().get().isNullableOther()) {
+                    final TableIdentifier<?> referencedId = otherStage.foreignFirstField().get().identifier().asTableIdentifier();
+                    if (thisId.equals(referencedId)) {
+                        nullOffset = findNullOffset(table, otherStage, otherStage.foreignFirstField().get());
+                        // If we have a between operation where there is another field pointed, my
+                        // belief is that we can safely ignore that because both fields will be null and we
+                        // only need to detect one
+                    }
                 }
             }
+        }
+
+        if (nullOffset >= 0) {
+            return new NullAwareSqlAdapter<>(sqlAdapterMapper.apply(identifier), nullOffset).entityMapper(offset);
+        } else {
+            return sqlAdapterMapper.apply(identifier).entityMapper(offset);
+        }
+
+    }
+
+    private static int findNullOffset(
+        final Table table,
+        final Stage<?> stage,
+        final HasComparableOperators<?, ?> field
+    ) {
+        int result = -1;
+        final String onColumnId = field
+            .identifier()
+            .getColumnName();
+
+        final List<Column> columns = table.columns()
+            .filter(Column::isEnabled)
+            .collect(toList());
+
+        for (int j = 0; j < columns.size(); j++) {
+            final String columnId = columns.get(j).getId();
+            if (columnId.equals(onColumnId)) {
+                // Compose a null detecting entity mapper
+                result = j;
+                break;
+            }
+        }
+        if (result == -1) {
             throw new IllegalStateException(
                 "Unable to locate column " + onColumnId + " in table " + table.getId()
                 + " for stage " + stage.toString()
                 + " Columns: " + columns.stream().map(Column::getId).collect(joining(", "))
             );
         }
-        return sqlAdapterMapper.apply(identifier).entityMapper(offset);
+        return result;
     }
 
     private static class NullAwareSqlAdapter<ENTITY> implements SqlAdapter<ENTITY> {
@@ -260,44 +304,69 @@ public final class JoinSqlUtil {
         requireNonNull(naming);
         requireNonNull(sqlStages);
         requireNonNegative(stageIndex);
+        return renderJoin(naming, sqlStages, stages, stageIndex, stages.get(stageIndex).joinType().get());
+    }
+
+    private static String renderJoin(
+        final DatabaseNamingConvention naming,
+        final List<SqlStage> sqlStages,
+        final List<Stage<?>> stages,
+        final int stageIndex,
+        final JoinType joinType
+    ) {
+        requireNonNull(naming);
+        requireNonNull(sqlStages);
+        requireNonNegative(stageIndex);
         final SqlStage sqlStage = sqlStages.get(stageIndex);
         final Stage<?> stage = sqlStage.stage();
         // This might be different for different databse types...
         final StringBuilder sb = new StringBuilder();
-        final JoinType joinType = stage.joinType().get();
-        if (JoinType.CROSS_JOIN.equals(joinType)) {
-            sb.append(", ").append(sqlStage.sqlTableReference()).append(" ");
-        } else {
-            sb.append(stage.joinType().get().sql()).append(" ");
-            sb.append(sqlStage.sqlTableReference()).append(" ");
-            stage.field().ifPresent(field -> {
-                final HasComparableOperators<?, ?> foreignFirstField = stage.foreignFirstField().get();
-                final int foreignStageIndex = stageIndexOf(stages, foreignFirstField);
-                final Stage<?> foreignStage = stages.get(foreignStageIndex);
-                sb.append("ON (");
-                final JoinOperator joinOperator = stage.joinOperator().get();
-                switch (joinOperator) {
-                    case BETWEEN:
-                    case NOT_BETWEEN: {
-                        renderBetweenOnPredicate(
-                            sb,
-                            naming,
-                            joinOperator,
-                            stageIndex,
-                            foreignStageIndex,
-                            field,
-                            foreignFirstField,
-                            stage.foreignSecondField().get(),
-                            foreignStage.foreignInclusion().get()
-                        );
-                        break;
+        switch (joinType) {
+            case CROSS_JOIN:
+                sb.append(", ").append(sqlStage.sqlTableReference()).append(" ");
+                break;
+            case FULL_OUTER_JOIN:
+                // Most databases do not support this natively so we create a 
+                // UNION between a LEFT JOIN and a RIGHT JOIN instead.
+                sb
+                    .append("(")
+                    .append(renderJoin(naming, sqlStages, stages, stageIndex, JoinType.LEFT_JOIN))
+                    .append(" UNION ")
+                    .append(renderJoin(naming, sqlStages, stages, stageIndex, JoinType.RIGHT_JOIN))
+                    .append(")");
+                break;
+            default:
+                sb.append(joinType.sql()).append(" ");
+                sb.append(sqlStage.sqlTableReference()).append(" ");
+                stage.field().ifPresent(field -> {
+                    final HasComparableOperators<?, ?> foreignFirstField = stage.foreignFirstField().get();
+                    final int foreignStageIndex = stageIndexOf(stages, foreignFirstField);
+                    final Stage<?> foreignStage = stages.get(foreignStageIndex);
+                    sb.append("ON (");
+                    final JoinOperator joinOperator = stage.joinOperator().get();
+                    switch (joinOperator) {
+                        case BETWEEN:
+                        case NOT_BETWEEN: {
+                            renderBetweenOnPredicate(
+                                sb,
+                                naming,
+                                joinOperator,
+                                stageIndex,
+                                foreignStageIndex,
+                                field,
+                                foreignFirstField,
+                                stage.foreignSecondField().get(),
+                                stage.foreignInclusion().get()
+                            );
+                            break;
+                        }
+                        default: {
+                            renderPredicate(sb, naming, stageIndex, foreignStageIndex, field, foreignFirstField, joinOperator.sqlOperator());
+                        }
                     }
-                    default: {
-                        renderPredicate(sb, naming, stageIndex, foreignStageIndex, field, foreignFirstField, joinOperator.sqlOperator());
-                    }
-                }
-                sb.append(")");
-            });
+                    sb.append(") ");
+                });
+                break;
         }
         return sb.toString();
     }
@@ -319,7 +388,7 @@ public final class JoinSqlUtil {
         }
         sb.append("(");
         final String firstOperator = inclusion.isStartInclusive() ? ">=" : ">";
-        final String secondOperator = inclusion.isStartInclusive() ? "<=" : "<";
+        final String secondOperator = inclusion.isEndInclusive() ? "<=" : "<";
         renderPredicate(sb, naming, stageIndex, foreignStageIndex, field, foreignFirstField, firstOperator);
         sb.append(" AND ");
         renderPredicate(sb, naming, stageIndex, foreignStageIndex, field, foreignSecondField, secondOperator);

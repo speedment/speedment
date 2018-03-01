@@ -175,15 +175,15 @@ public final class JoinBuilderTest {
 
     }
 
-    @Test
-    public void testJoins() {
-        bldr.leftJoinOn(E2.ID2).equal(E1.ID1)
-            .leftJoinOn(E3.ID3).between(E1.ID1, E1.ID1, Inclusion.START_INCLUSIVE_END_INCLUSIVE)
-            .rightJoinOn(E4.ID4).equal(E1.ID1)
-            .fullOuterJoinOn(E5.ID5).equal(E1.ID1)
-            .crossJoin(E6Manager.IDENTIFIER)
-            .build();
-    }
+//    @Test
+//    public void testJoins() {
+//        bldr.leftJoinOn(E2.ID2).equal(E1.ID1)
+//            .leftJoinOn(E3.ID3).between(E1.ID1, E1.ID1, Inclusion.START_INCLUSIVE_END_INCLUSIVE)
+//            .rightJoinOn(E4.ID4).equal(E1.ID1)
+//            .fullOuterJoinOn(E5.ID5).equal(E1.ID1)
+//            .crossJoin(E6Manager.IDENTIFIER)
+//            .build();
+//    }
 
     @Test
     public void testOnColumnMustComeFromPreviousTable() {

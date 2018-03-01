@@ -67,8 +67,8 @@ public interface JoinComponent {
         @Override
         <T2> AfterJoin<T1, T2> rightJoinOn(HasComparableOperators<T2, ?> joinedField);
 
-        @Override
-        <T2> AfterJoin<T1, T2> fullOuterJoinOn(HasComparableOperators<T2, ?> joinedField);
+//        @Override
+//        <T2> AfterJoin<T1, T2> fullOuterJoinOn(HasComparableOperators<T2, ?> joinedField);
 
         @Override
         <T2> JoinBuilder2<T1, T2> crossJoin(TableIdentifier<T2> joinedTable);
@@ -92,8 +92,8 @@ public interface JoinComponent {
             @Override
             <T3> AfterJoin<T1, T2, T3> rightJoinOn(HasComparableOperators<T3, ?> joinedField);
 
-            @Override
-            <T3> AfterJoin<T1, T2, T3> fullOuterJoinOn(HasComparableOperators<T3, ?> joinedField);
+//            @Override
+//            <T3> AfterJoin<T1, T2, T3> fullOuterJoinOn(HasComparableOperators<T3, ?> joinedField);
 
             @Override
             <T3> JoinBuilder3<T1, T2, T3> crossJoin(TableIdentifier<T3> joinedTable);
@@ -138,8 +138,8 @@ public interface JoinComponent {
                 @Override
                 <T4> AfterJoin<T1, T2, T3, T4> rightJoinOn(HasComparableOperators<T4, ?> joinedField);
 
-                @Override
-                <T4> AfterJoin<T1, T2, T3, T4> fullOuterJoinOn(HasComparableOperators<T4, ?> joinedField);
+//                @Override
+//                <T4> AfterJoin<T1, T2, T3, T4> fullOuterJoinOn(HasComparableOperators<T4, ?> joinedField);
 
                 @Override
                 <T4> JoinBuilder4<T1, T2, T3, T4> crossJoin(TableIdentifier<T4> joinedTable);
@@ -184,8 +184,8 @@ public interface JoinComponent {
                     @Override
                     <T5> AfterJoin<T1, T2, T3, T4, T5> rightJoinOn(HasComparableOperators<T5, ?> joinedField);
 
-                    @Override
-                    <T5> AfterJoin<T1, T2, T3, T4, T5> fullOuterJoinOn(HasComparableOperators<T5, ?> joinedField);
+//                    @Override
+//                    <T5> AfterJoin<T1, T2, T3, T4, T5> fullOuterJoinOn(HasComparableOperators<T5, ?> joinedField);
 
                     @Override
                     <T5> JoinBuilder5<T1, T2, T3, T4, T5> crossJoin(TableIdentifier<T5> joinedTable);
@@ -234,8 +234,8 @@ public interface JoinComponent {
                         @Override
                         <T6> AfterJoin<T1, T2, T3, T4, T5, T6> rightJoinOn(HasComparableOperators<T6, ?> joinedField);
 
-                        @Override
-                        <T6> AfterJoin<T1, T2, T3, T4, T5, T6> fullOuterJoinOn(HasComparableOperators<T6, ?> joinedField);
+//                        @Override
+//                        <T6> AfterJoin<T1, T2, T3, T4, T5, T6> fullOuterJoinOn(HasComparableOperators<T6, ?> joinedField);
 
                         @Override
                         <T6> JoinBuilder6<T1, T2, T3, T4, T5, T6> crossJoin(TableIdentifier<T6> joinedTable);

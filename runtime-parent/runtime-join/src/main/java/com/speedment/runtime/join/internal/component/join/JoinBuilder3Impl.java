@@ -37,10 +37,10 @@ final class JoinBuilder3Impl<T1, T2, T3>
         return new AfterJoinImpl<>(addStageBeanOf(JoinType.RIGHT_JOIN, joinedField));
     }
 
-    @Override
-    public <T4> AfterJoin<T1, T2, T3, T4> fullOuterJoinOn(HasComparableOperators<T4, ?> joinedField) {
-        return new AfterJoinImpl<>(addStageBeanOf(JoinType.FULL_OUTER_JOIN, joinedField));
-    }
+//    @Override
+//    public <T4> AfterJoin<T1, T2, T3, T4> fullOuterJoinOn(HasComparableOperators<T4, ?> joinedField) {
+//        return new AfterJoinImpl<>(addStageBeanOf(JoinType.FULL_OUTER_JOIN, joinedField));
+//    }
 
     @Override
     public <T4> JoinBuilder4<T1, T2, T3, T4> crossJoin(TableIdentifier<T4> joinedTable) {
