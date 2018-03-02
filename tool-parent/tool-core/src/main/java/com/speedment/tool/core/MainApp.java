@@ -22,7 +22,7 @@ import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.core.GeneratorBundle;
 import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.core.internal.DefaultApplicationBuilder;
+import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
 import com.speedment.runtime.core.internal.DefaultApplicationMetadata;
 import com.speedment.runtime.core.util.EmailUtil;
 import com.speedment.tool.core.brand.Palette;

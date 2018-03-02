@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.core.internal;
 
+import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.PasswordComponent;

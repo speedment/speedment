@@ -14,9 +14,22 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal;
+package com.speedment.runtime.test_support;
 
-class SpeedmentImpl extends AbstractSpeedment {
-    
-    public SpeedmentImpl() {}
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+/**
+ *
+ * @author Per Minborg
+ */
+public final class MockEntityUtil {
+
+    public static Stream<MockEntity> stream(int elements) {
+        return IntStream.range(0, elements).mapToObj(MockEntity::new);
+    }
+
+    private MockEntityUtil() {
+    }
+
 }

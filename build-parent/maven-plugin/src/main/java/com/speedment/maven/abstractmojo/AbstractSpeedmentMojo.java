@@ -30,6 +30,7 @@ import com.speedment.maven.component.MavenPathComponent;
 import static com.speedment.maven.component.MavenPathComponent.MAVEN_BASE_DIR;
 import com.speedment.maven.parameter.ConfigParam;
 import com.speedment.maven.typemapper.Mapping;
+import com.speedment.runtime.application.ApplicationBuilders;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
 import static com.speedment.runtime.core.internal.DefaultApplicationMetadata.METADATA_LOCATION;
@@ -204,13 +205,13 @@ public abstract class AbstractSpeedmentMojo extends AbstractMojo {
 
         // Configure config file location
         if (hasConfigFile()) {
-            result = ApplicationBuilder.standard(classLoader)
+            result = ApplicationBuilders.standard(classLoader)
                 .withParam(METADATA_LOCATION, configLocation().toAbsolutePath().toString());
         } else if (hasConfigFile(DEFAULT_CONFIG)) {
-            result = ApplicationBuilder.standard(classLoader)
+            result = ApplicationBuilders.standard(classLoader)
                 .withParam(METADATA_LOCATION, DEFAULT_CONFIG_LOCATION);
         } else {
-            result = ApplicationBuilder.empty(classLoader);
+            result = ApplicationBuilders.empty(classLoader);
         }
 
         //

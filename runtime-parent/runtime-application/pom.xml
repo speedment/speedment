@@ -24,37 +24,36 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.speedment.generator</groupId>
-        <artifactId>generator-parent</artifactId>
+        <groupId>com.speedment.runtime</groupId>
+        <artifactId>runtime-parent</artifactId>
         <version>3.0.23-SNAPSHOT</version>
     </parent>
-    
-    <artifactId>generator-core</artifactId>
+
+    <artifactId>runtime-application</artifactId>
     <packaging>bundle</packaging>
-    
-    <name>Speedment - Generator - Core</name>
+
+    <name>Speedment - Runtime - Application</name>
     <description>
-        A modular code generator that creates entity and manager classes from 
-        database tables.
+        The runtime bundle of Speedment that all projects must depend on to use 
+        the framework.
     </description>
     
     <build>
-        <plugins>
+        <plugins>                        
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
+                        <Bundle-Description>
+                            The runtime environment of Speedment.
+                        </Bundle-Description>
                         <Export-Package>
-                            com.speedment.generator.core.exception,
-                            com.speedment.generator.core.component,
-                            com.speedment.generator.core.event,
-                            com.speedment.generator.core.event.trait,
-                            com.speedment.generator.core
+                            com.speedment.runtime.core
                         </Export-Package>
                     </instructions>
                 </configuration>
-            </plugin>                            
+            </plugin>
         </plugins>
     </build>
     
@@ -78,29 +77,10 @@
     </profiles>
     
     <dependencies>
+<!--         Common Dependencies 
         <dependency>
             <groupId>com.speedment.common</groupId>
-            <artifactId>injector</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>codegen</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>json</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>mapstream</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.speedment.common</groupId>
-            <artifactId>tuple</artifactId>
+            <artifactId>invariant</artifactId>
         </dependency>
         
         <dependency>
@@ -110,59 +90,107 @@
         
         <dependency>
             <groupId>com.speedment.common</groupId>
+            <artifactId>mapstream</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
             <artifactId>logger</artifactId>
         </dependency>
         
         <dependency>
             <groupId>com.speedment.common</groupId>
-            <artifactId>invariant</artifactId>
+            <artifactId>injector</artifactId>
         </dependency>
         
         <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>json</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>tuple</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>lazy</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>jvm-version</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>singleton-stream</artifactId>
+        </dependency>
+        
+         Runtime Dependencies 
+        <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-config</artifactId>
+            <version>${speedment.version}</version>
         </dependency>
         
         <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-typemapper</artifactId>
+            <version>${speedment.version}</version>
         </dependency>
         
         <dependency>
             <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-field</artifactId>
+            <version>${speedment.version}</version>
+        </dependency>-->
+
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.speedment.generator</groupId>
-            <artifactId>generator-translator</artifactId>
             <version>${speedment.version}</version>
         </dependency>
+                                                                
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-join</artifactId>
+            <version>${speedment.version}</version>
+        </dependency>
+                                                                
+        <!--        <dependency>
+            <groupId>com.speedment.common</groupId>
+            <artifactId>combinatorics</artifactId>
+            <scope>test</scope>
+        </dependency>-->
         
-        <dependency>
-            <groupId>com.speedment.generator</groupId>
-            <artifactId>generator-standard</artifactId>
-            <version>${speedment.version}</version>
-        </dependency>
-
-        <!-- Test dependencies -->
+        
+        <!--Test Dependencies-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>com.speedment.runtime</groupId>
-            <artifactId>runtime-field</artifactId>
-            <scope>test</scope>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
         </dependency>
-        
         <dependency>
-            <groupId>com.speedment.runtime</groupId>
-            <artifactId>runtime-application</artifactId>
-            <version>${speedment.version}</version>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
             <scope>test</scope>
         </dependency>
-        
+        <dependency>
+            <groupId>com.opera</groupId>
+            <artifactId>operadriver</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.seleniumhq.selenium</groupId>
+                    <artifactId>selenium-remote-driver</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 </project>

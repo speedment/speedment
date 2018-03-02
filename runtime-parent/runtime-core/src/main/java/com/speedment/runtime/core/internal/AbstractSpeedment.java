@@ -16,20 +16,11 @@
  */
 package com.speedment.runtime.core.internal;
 
-import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
-import com.speedment.runtime.core.internal.component.*;
-import com.speedment.runtime.core.internal.component.resultset.ResultSetMapperComponentImpl;
-import com.speedment.runtime.core.internal.component.sql.SqlPersistanceComponentImpl;
-import com.speedment.runtime.core.internal.component.sql.SqlStreamOptimizerComponentImpl;
-import com.speedment.runtime.core.internal.component.sql.SqlStreamSupplierComponentImpl;
-import com.speedment.runtime.core.internal.component.sql.override.SqlStreamTerminatorComponentImpl;
-import com.speedment.runtime.core.internal.component.transaction.TransactionComponentImpl;
-import com.speedment.runtime.core.internal.db.StandardDbmsTypes;
 import com.speedment.runtime.core.internal.manager.ManagerConfiguratorImpl;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.manager.ManagerConfigurator;
@@ -43,27 +34,6 @@ import java.util.Optional;
  * @since   3.0.0
  */
 public abstract class AbstractSpeedment implements Speedment {
-
-    public static InjectBundle include() {
-        return InjectBundle.of(
-            InfoComponentImpl.class,
-            ConnectionPoolComponentImpl.class,
-            DbmsHandlerComponentImpl.class,
-            EntityManagerImpl.class,
-            ManagerComponentImpl.class,
-            PasswordComponentImpl.class,
-            ProjectComponentImpl.class,
-            ResultSetMapperComponentImpl.class,
-            SqlStreamSupplierComponentImpl.class,
-            SqlPersistanceComponentImpl.class,
-            StandardDbmsTypes.class,
-            StatisticsReporterComponentImpl.class,
-            StatisticsReporterSchedulerComponentImpl.class,
-            SqlStreamOptimizerComponentImpl.class,
-            SqlStreamTerminatorComponentImpl.class,
-            TransactionComponentImpl.class
-        );
-    }
 
     private @Inject Injector injector;
 

@@ -91,7 +91,10 @@
             <artifactId>runtime-core</artifactId>
             <version>${speedment.version}</version>
         </dependency>
+
         
+        <!--Test dependencies-->
+       
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

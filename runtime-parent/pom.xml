@@ -46,6 +46,7 @@
         <module>runtime-bulk</module>
         <module>runtime-join</module>
         <module>runtime-all</module>
+        <module>runtime-application</module>
     </modules>
     
     <dependencyManagement>

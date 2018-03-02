@@ -31,9 +31,6 @@ import com.speedment.runtime.config.identifier.trait.HasDbmsName;
 import com.speedment.runtime.config.identifier.trait.HasSchemaName;
 import com.speedment.runtime.config.identifier.trait.HasTableName;
 import com.speedment.runtime.config.trait.HasEnabled;
-import com.speedment.runtime.core.internal.DefaultApplicationBuilder;
-import com.speedment.runtime.core.internal.DefaultApplicationMetadata;
-import com.speedment.runtime.core.internal.EmptyApplicationMetadata;
 import com.speedment.runtime.core.manager.Manager;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -640,86 +637,6 @@ public interface ApplicationBuilder<
      * @return the built application
      */
     APP build();
-
-    /**
-     * Creates and returns a new empty {@code ApplicationBuilder}.
-     *
-     * @param <BUILDER> {@code ApplicationBuilder} type
-     * @return a new empty ApplicationBuilder
-     */
-    @SuppressWarnings("unchecked")
-    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER
-        empty() {
-        return (BUILDER) new DefaultApplicationBuilder(
-            EmptyApplicationMetadata.class
-        );
-    }
-
-    /**
-     * Creates and returns a new empty {@code ApplicationBuilder}.
-     *
-     * @param <BUILDER> {@code ApplicationBuilder} type
-     * @param classLoader the class loader to use in the injector
-     * @return a new empty ApplicationBuilder
-     */
-    @SuppressWarnings("unchecked")
-    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER
-        empty(ClassLoader classLoader) {
-        return (BUILDER) new DefaultApplicationBuilder(
-            classLoader,
-            EmptyApplicationMetadata.class
-        );
-    }
-
-    /**
-     * Creates and returns a new standard ApplicationBuilder. The configuration
-     * is read from a JSON file.
-     *
-     * @param <BUILDER> {@code ApplicationBuilder} type
-     * @return a new standard ApplicationBuilder
-     */
-    @SuppressWarnings("unchecked")
-    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER
-        standard() {
-        return (BUILDER) new DefaultApplicationBuilder(
-            DefaultApplicationMetadata.class
-        );
-    }
-
-    /**
-     * Creates and returns a new standard ApplicationBuilder. The configuration
-     * is read from a JSON file.
-     *
-     * @param <BUILDER> {@code ApplicationBuilder} type
-     * @param classLoader the class loader to use in the injector
-     * @return a new standard ApplicationBuilder
-     */
-    @SuppressWarnings("unchecked")
-    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER
-        standard(ClassLoader classLoader) {
-        return (BUILDER) new DefaultApplicationBuilder(
-            classLoader,
-            DefaultApplicationMetadata.class
-        );
-    }
-
-    /**
-     * Creates and returns a new ApplicationBuilder configured with the given
-     * ApplicationMetadata class.
-     *
-     * @param <BUILDER> {@code ApplicationBuilder} type
-     * @param applicationMetadataclass with configuration
-     *
-     * @return a new ApplicationBuilder configured with the given
-     * ApplicationMetadata class
-     */
-    @SuppressWarnings("unchecked")
-    static <BUILDER extends ApplicationBuilder<Speedment, BUILDER>> BUILDER
-        create(Class<? extends ApplicationMetadata> applicationMetadataclass) {
-        return (BUILDER) new DefaultApplicationBuilder(
-            applicationMetadataclass
-        );
-    }
 
     /**
      * Interface used for getting logger names. See

@@ -125,6 +125,11 @@
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-core</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-application</artifactId>
+        </dependency>
         
         <dependency>
             <groupId>com.speedment.generator</groupId>

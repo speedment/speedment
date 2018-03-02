@@ -58,6 +58,11 @@
         
         <dependency>
             <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-application</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-typemapper</artifactId>
         </dependency>
         

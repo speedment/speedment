@@ -14,25 +14,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.speedment.runtime.core;
+package com.speedment.runtime.application.internal;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import com.speedment.runtime.core.internal.AbstractSpeedment;
 
-/**
- *
- * @author Per Minborg
- */
-public class RuntimeBundleTest {
-    
-    @Test
-    public void testInjectables() {
-        assertTrue(new RuntimeBundle().injectables().count() > 0);
-    }
-    
+class SpeedmentImpl extends AbstractSpeedment {
+
+    SpeedmentImpl() {}
 }

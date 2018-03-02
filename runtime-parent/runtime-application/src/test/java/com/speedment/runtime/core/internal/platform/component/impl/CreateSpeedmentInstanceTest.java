@@ -16,7 +16,7 @@
  */
 package com.speedment.runtime.core.internal.platform.component.impl;
 
-import com.speedment.runtime.core.ApplicationBuilder;
+import com.speedment.runtime.application.ApplicationBuilders;
 import com.speedment.runtime.core.Speedment;
 import org.junit.Test;
 
@@ -30,7 +30,7 @@ public class CreateSpeedmentInstanceTest {
     
     @Test
     public void createSpeedmentInstance() {
-        final Speedment speedment = ApplicationBuilder.empty()
+        final Speedment speedment = ApplicationBuilders.empty()
             .withSkipCheckDatabaseConnectivity()
             .withSkipValidateRuntimeConfig()
             .build();

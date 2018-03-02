@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal;
+package com.speedment.runtime.application.internal;
 
+import com.speedment.runtime.core.internal.*;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
@@ -38,7 +39,7 @@ import com.speedment.runtime.config.util.DocumentUtil;
 import static com.speedment.runtime.config.util.DocumentUtil.Name.DATABASE_NAME;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.ApplicationMetadata;
-import com.speedment.runtime.core.RuntimeBundle;
+import com.speedment.runtime.application.RuntimeBundle;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.InfoComponent;
@@ -68,9 +69,9 @@ import java.util.function.Consumer;
  * @author Emil Forslund
  * @since 2.0.0
  */
-public abstract class AbstractApplicationBuilder<
+public abstract class ApplicationBuilderSupport<
         APP extends Speedment, 
-        BUILDER extends AbstractApplicationBuilder<APP, BUILDER>
+        BUILDER extends ApplicationBuilderSupport<APP, BUILDER>
 > implements ApplicationBuilder<APP, BUILDER> {
 
     private final static Logger LOGGER = LoggerManager.getLogger(
@@ -82,7 +83,7 @@ public abstract class AbstractApplicationBuilder<
     private boolean skipValidateRuntimeConfig;
     private boolean skipLogoPrintout;
     
-    protected AbstractApplicationBuilder(
+    protected ApplicationBuilderSupport(
         Class<? extends APP> applicationImplClass,
         Class<? extends ApplicationMetadata> metadataClass) {
 
@@ -93,7 +94,7 @@ public abstract class AbstractApplicationBuilder<
         );
     }
     
-    protected AbstractApplicationBuilder(
+    protected ApplicationBuilderSupport(
         ClassLoader classLoader,
         Class<? extends APP> applicationImplClass,
         Class<? extends ApplicationMetadata> metadataClass) {
@@ -105,7 +106,7 @@ public abstract class AbstractApplicationBuilder<
         );
     }
 
-    protected AbstractApplicationBuilder(InjectorBuilder injectorBuilder) {
+    protected ApplicationBuilderSupport(InjectorBuilder injectorBuilder) {
         this.injectorBuilder                   = requireNonNull(injectorBuilder);
         this.skipCheckDatabaseConnectivity     = false;
         this.skipValidateRuntimeConfig         = false;
