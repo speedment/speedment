@@ -25,6 +25,7 @@ import com.speedment.common.json.Json;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.translator.TranslatorManager;
+import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
 import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
@@ -39,7 +40,7 @@ import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.DbmsType;
-import com.speedment.runtime.core.internal.DefaultApplicationBuilder;
+
 import com.speedment.runtime.core.internal.util.ProgressMeasurerImpl;
 import com.speedment.runtime.core.util.ProgressMeasure;
 import com.speedment.tool.config.DbmsProperty;
@@ -68,7 +69,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 
-import static com.speedment.runtime.core.internal.DefaultApplicationMetadata.METADATA_LOCATION;
+import static com.speedment.runtime.application.internal.DefaultApplicationMetadata.METADATA_LOCATION;
 import static com.speedment.runtime.core.internal.util.TextUtil.alignRight;
 import static com.speedment.tool.core.util.OutputUtil.error;
 import static com.speedment.tool.core.util.OutputUtil.success;

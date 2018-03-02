@@ -2,6 +2,7 @@ package com.company.sakila.db0.sakila.film_actor.generated;
 
 import com.company.sakila.db0.sakila.film_actor.FilmActor;
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.field.Field;
 import java.util.List;
@@ -20,6 +21,12 @@ import static java.util.Collections.unmodifiableList;
 @GeneratedCode("Speedment")
 public interface GeneratedFilmActorManager extends Manager<FilmActor> {
     
+    TableIdentifier<FilmActor> IDENTIFIER = TableIdentifier.of(
+        "db0",
+        "sakila",
+        "film_actor"
+    )
+    ;
     List<Field<FilmActor>> FIELDS = unmodifiableList(asList(
         FilmActor.ACTOR_ID,
         FilmActor.FILM_ID,

@@ -3,11 +3,9 @@ package com.company.sakila.db0.sakila.payment.generated;
 import com.company.sakila.db0.sakila.payment.Payment;
 import com.company.sakila.db0.sakila.payment.PaymentImpl;
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.core.component.sql.SqlPersistenceComponent;
-import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
+import com.speedment.runtime.core.component.SqlAdapter;
+import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,7 +22,7 @@ import static com.speedment.runtime.core.internal.util.sql.ResultSetUtil.*;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedPaymentSqlAdapter {
+public abstract class GeneratedPaymentSqlAdapter implements SqlAdapter<Payment> {
     
     private final TableIdentifier<Payment> tableIdentifier;
     
@@ -32,23 +30,16 @@ public abstract class GeneratedPaymentSqlAdapter {
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "payment");
     }
     
-    @ExecuteBefore(RESOLVED)
-    void installMethodName(@WithState(RESOLVED) SqlStreamSupplierComponent streamSupplierComponent,
-            @WithState(RESOLVED) SqlPersistenceComponent persistenceComponent) {
-        streamSupplierComponent.install(tableIdentifier, this::apply);
-        persistenceComponent.install(tableIdentifier);
-    }
-    
-    protected Payment apply(ResultSet resultSet) throws SpeedmentException {
+    protected Payment apply(ResultSet resultSet, int offset) throws SpeedmentException {
         final Payment entity = createEntity();
         try {
-            entity.setPaymentId(   resultSet.getInt(1)        );
-            entity.setCustomerId(  resultSet.getInt(2)        );
-            entity.setStaffId(     resultSet.getShort(3)      );
-            entity.setRentalId(    getInt(resultSet, 4)       );
-            entity.setAmount(      resultSet.getBigDecimal(5) );
-            entity.setPaymentDate( resultSet.getTimestamp(6)  );
-            entity.setLastUpdate(  resultSet.getTimestamp(7)  );
+            entity.setPaymentId(   resultSet.getInt(1 + offset)        );
+            entity.setCustomerId(  resultSet.getInt(2 + offset)        );
+            entity.setStaffId(     resultSet.getShort(3 + offset)      );
+            entity.setRentalId(    getInt(resultSet, 4 + offset)       );
+            entity.setAmount(      resultSet.getBigDecimal(5 + offset) );
+            entity.setPaymentDate( resultSet.getTimestamp(6 + offset)  );
+            entity.setLastUpdate(  resultSet.getTimestamp(7 + offset)  );
         } catch (final SQLException sqle) {
             throw new SpeedmentException(sqle);
         }
@@ -57,5 +48,20 @@ public abstract class GeneratedPaymentSqlAdapter {
     
     protected PaymentImpl createEntity() {
         return new PaymentImpl();
+    }
+    
+    @Override
+    public TableIdentifier<Payment> identifier() {
+        return tableIdentifier;
+    }
+    
+    @Override
+    public SqlFunction<ResultSet, Payment> entityMapper() {
+        return entityMapper(0);
+    }
+    
+    @Override
+    public SqlFunction<ResultSet, Payment> entityMapper(int offset) {
+        return rs -> apply(rs, offset);
     }
 }

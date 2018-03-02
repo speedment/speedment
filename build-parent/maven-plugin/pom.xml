@@ -52,6 +52,11 @@
             <version>${speedment.version}</version>
             <type>pom</type>
         </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-application</artifactId>
+        </dependency>
 
         <!-- Official Speedment Plugins for convenience -->
         <dependency>

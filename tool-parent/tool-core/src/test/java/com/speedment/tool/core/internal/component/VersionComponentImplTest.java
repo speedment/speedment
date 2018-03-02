@@ -19,7 +19,7 @@ package com.speedment.tool.core.internal.component;
 import com.speedment.common.logger.Logger;
 import com.speedment.common.logger.LoggerManager;
 import com.speedment.generator.core.GeneratorBundle;
-import com.speedment.runtime.core.ApplicationBuilder;
+import com.speedment.runtime.application.ApplicationBuilders;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.tool.core.ToolBundle;
 import com.speedment.tool.core.component.VersionComponent;
@@ -47,7 +47,7 @@ public class VersionComponentImplTest {
     @Test
     public void testLatestVersion() {
         LOGGER.info("Determining the latest version of Speedment.");
-        final Speedment speedment = ApplicationBuilder.empty()
+        final Speedment speedment = ApplicationBuilders.empty()
             .withBundle(GeneratorBundle.class)
             .withBundle(ToolBundle.class)
             .withSkipCheckDatabaseConnectivity()

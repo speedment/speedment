@@ -2,6 +2,7 @@ package com.company.sakila.db0.sakila.category.generated;
 
 import com.company.sakila.db0.sakila.category.Category;
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.field.Field;
 import java.util.List;
@@ -20,6 +21,12 @@ import static java.util.Collections.unmodifiableList;
 @GeneratedCode("Speedment")
 public interface GeneratedCategoryManager extends Manager<Category> {
     
+    TableIdentifier<Category> IDENTIFIER = TableIdentifier.of(
+        "db0",
+        "sakila",
+        "category"
+    )
+    ;
     List<Field<Category>> FIELDS = unmodifiableList(asList(
         Category.CATEGORY_ID,
         Category.NAME,
