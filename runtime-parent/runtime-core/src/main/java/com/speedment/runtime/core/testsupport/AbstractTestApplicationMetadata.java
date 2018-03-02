@@ -14,7 +14,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal;
+package com.speedment.runtime.core.testsupport;
 
 import com.speedment.common.json.Json;
 import com.speedment.runtime.config.Project;
@@ -32,10 +32,15 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author  Emil Forslund
  * @since   3.0.0
+ * 
+ * This is a temporary support class that has been replaced in runtime-application.
+ * Once the module system is reworked, this class should go away.
+ * 
  */
-public abstract class AbstractApplicationMetadata implements ApplicationMetadata {
+@Deprecated
+public abstract class AbstractTestApplicationMetadata implements ApplicationMetadata {
 
-    protected AbstractApplicationMetadata() {}
+    protected AbstractTestApplicationMetadata() {}
     
     /**
      * Returns the meta data as a String that shall be used to build up the

@@ -20,7 +20,7 @@ import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
 import com.speedment.runtime.core.ApplicationMetadata;
 import com.speedment.runtime.core.Speedment;
-import com.speedment.runtime.core.internal.AbstractApplicationBuilder;
+import com.speedment.runtime.application.AbstractApplicationBuilder;
 
 /**
  *

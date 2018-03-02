@@ -6,7 +6,8 @@ import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.trait.HasName;
-import com.speedment.runtime.core.internal.AbstractApplicationMetadata;
+import com.speedment.runtime.core.testsupport.AbstractTestApplicationMetadata;
+
 import java.util.Optional;
 import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
@@ -15,7 +16,7 @@ import java.util.stream.Stream;
  *
  * @author Per Minborg
  */
-public final class MockMetadata extends AbstractApplicationMetadata {
+public final class MockMetadata extends AbstractTestApplicationMetadata {
 
     public static final String DBMS_NAME = "dbms";
     public static final String SCHEMA_NAME = "schema";

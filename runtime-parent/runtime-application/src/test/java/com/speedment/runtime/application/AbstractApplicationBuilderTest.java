@@ -14,8 +14,9 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.core.internal;
+package com.speedment.runtime.application;
 
+import com.speedment.runtime.application.AbstractApplicationBuilder;
 import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.core.Speedment;

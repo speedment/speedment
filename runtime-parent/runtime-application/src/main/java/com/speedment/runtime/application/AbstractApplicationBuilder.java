@@ -14,9 +14,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  */
-package com.speedment.runtime.application.internal;
+package com.speedment.runtime.application;
 
-import com.speedment.runtime.core.internal.*;
 import com.speedment.common.injector.InjectBundle;
 import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.InjectorBuilder;
@@ -69,9 +68,9 @@ import java.util.function.Consumer;
  * @author Emil Forslund
  * @since 2.0.0
  */
-public abstract class ApplicationBuilderSupport<
+public abstract class AbstractApplicationBuilder<
         APP extends Speedment, 
-        BUILDER extends ApplicationBuilderSupport<APP, BUILDER>
+        BUILDER extends AbstractApplicationBuilder<APP, BUILDER>
 > implements ApplicationBuilder<APP, BUILDER> {
 
     private final static Logger LOGGER = LoggerManager.getLogger(
@@ -83,7 +82,7 @@ public abstract class ApplicationBuilderSupport<
     private boolean skipValidateRuntimeConfig;
     private boolean skipLogoPrintout;
     
-    protected ApplicationBuilderSupport(
+    protected AbstractApplicationBuilder(
         Class<? extends APP> applicationImplClass,
         Class<? extends ApplicationMetadata> metadataClass) {
 
@@ -94,7 +93,7 @@ public abstract class ApplicationBuilderSupport<
         );
     }
     
-    protected ApplicationBuilderSupport(
+    protected AbstractApplicationBuilder(
         ClassLoader classLoader,
         Class<? extends APP> applicationImplClass,
         Class<? extends ApplicationMetadata> metadataClass) {
@@ -106,7 +105,7 @@ public abstract class ApplicationBuilderSupport<
         );
     }
 
-    protected ApplicationBuilderSupport(InjectorBuilder injectorBuilder) {
+    protected AbstractApplicationBuilder(InjectorBuilder injectorBuilder) {
         this.injectorBuilder                   = requireNonNull(injectorBuilder);
         this.skipCheckDatabaseConnectivity     = false;
         this.skipValidateRuntimeConfig         = false;

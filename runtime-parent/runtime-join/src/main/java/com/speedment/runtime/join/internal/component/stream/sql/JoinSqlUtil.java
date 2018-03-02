@@ -11,6 +11,7 @@ import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
+import com.speedment.runtime.core.db.DbmsType.SubSelectAlias;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.db.SqlPredicateFragment;

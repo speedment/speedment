@@ -4,6 +4,7 @@ import static com.speedment.common.invariant.IntRangeUtil.requireNonNegative;
 import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
 import com.speedment.runtime.config.util.DocumentDbUtil;
+import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.join.stage.Stage;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
@@ -37,7 +38,9 @@ public final class SqlStage {
             .map(n -> tableAlias + "." + info.namingConvention().encloseField(n))
             .collect(joining(","));
 
-        this.sqlTableReference = info.namingConvention().fullNameOf(table) + " AS " + tableAlias;
+        this.sqlTableReference = info.namingConvention().fullNameOf(table)
+            + (DbmsType.SubSelectAlias.PROHIBITED.equals(info.dbmsType().getSubSelectAlias()) ? " " : " AS ")
+            + tableAlias;
     }
 
     public Stage<?> stage() {

@@ -33,7 +33,7 @@ import com.speedment.maven.typemapper.Mapping;
 import com.speedment.runtime.application.ApplicationBuilders;
 import com.speedment.runtime.core.ApplicationBuilder;
 import com.speedment.runtime.core.Speedment;
-import static com.speedment.runtime.core.internal.DefaultApplicationMetadata.METADATA_LOCATION;
+import static com.speedment.runtime.application.internal.DefaultApplicationMetadata.METADATA_LOCATION;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.tool.core.ToolBundle;
 import com.speedment.tool.core.internal.component.UserInterfaceComponentImpl;

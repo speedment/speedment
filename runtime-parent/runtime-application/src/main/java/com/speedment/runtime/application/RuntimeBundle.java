@@ -41,7 +41,7 @@ import com.speedment.runtime.join.JoinBundle;
 import java.util.stream.Stream;
 
 /**
- * The {@link InjectBundle} for the "runtime"-module.
+ * The {@link InjectBundle} for the "application"-module.
  *
  * @author Per Minborg
  * @since 3.0.1

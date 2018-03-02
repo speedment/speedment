@@ -24,7 +24,7 @@ import com.speedment.runtime.config.*;
 import com.speedment.runtime.config.trait.HasName;
 import com.speedment.runtime.core.Speedment;
 import com.speedment.runtime.core.component.ProjectComponent;
-import com.speedment.runtime.core.internal.AbstractApplicationMetadata;
+import com.speedment.runtime.application.AbstractApplicationMetadata;
 import com.speedment.runtime.application.internal.DefaultApplicationBuilder;
 import java.nio.file.Path;
 import java.util.Optional;

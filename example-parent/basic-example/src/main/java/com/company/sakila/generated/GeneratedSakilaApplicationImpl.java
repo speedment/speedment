@@ -1,11 +1,11 @@
 package com.company.sakila.generated;
 
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.runtime.core.internal.AbstractSpeedment;
+import com.speedment.runtime.application.AbstractSpeedment;
 
 /**
  * The generated {@link
- * com.speedment.runtime.core.internal.AbstractApplicationBuilder}
+ * com.speedment.runtime.application.AbstractApplicationBuilder}
  * implementation class for the {@link com.speedment.runtime.config.Project}
  * named sakila.
  * <p>
