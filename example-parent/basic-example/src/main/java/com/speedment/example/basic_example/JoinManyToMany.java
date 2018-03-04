@@ -23,8 +23,12 @@ import com.company.sakila.db0.sakila.film.Film;
 import com.company.sakila.db0.sakila.film.FilmManager;
 import com.company.sakila.db0.sakila.film_actor.FilmActor;
 import com.company.sakila.db0.sakila.film_actor.FilmActorManager;
+import com.speedment.common.tuple.Tuple3;
+import com.speedment.common.tuple.Tuples;
 import com.speedment.example.basic_example.util.ExampleUtil;
 import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
+import com.speedment.runtime.join.Join;
+import com.speedment.runtime.join.JoinComponent;
 import java.util.List;
 import java.util.Map;
 import static java.util.stream.Collectors.groupingBy;
@@ -41,13 +45,14 @@ public class JoinManyToMany {
     private final FilmManager films;
     private final ActorManager actors;
     private final FilmActorManager filmActors;
+    private final JoinComponent joinComponent;
 
     public JoinManyToMany() {
         app = buildApplication();
         films = app.getOrThrow(FilmManager.class);
         actors = app.getOrThrow(ActorManager.class);
         filmActors = app.getOrThrow(FilmActorManager.class);
-
+        joinComponent = app.getOrThrow(JoinComponent.class);
     }
 
     public static void main(String[] args) {
@@ -61,18 +66,35 @@ public class JoinManyToMany {
     private void manyToMany() {
         ExampleUtil.log("manyToMany");
 
-        Map<Actor, List<Film>> filmographies = filmActors.stream()
+        Join<Tuple3<FilmActor, Film, Actor>> join = joinComponent
+            .from(FilmActorManager.IDENTIFIER)
+            .innerJoinOn(Film.FILM_ID).equal(FilmActor.FILM_ID)
+            .innerJoinOn(Actor.ACTOR_ID).equal(FilmActor.ACTOR_ID)
+            .build(Tuples::of);
+
+        
+        Map<Actor, List<Film>> filmographies = join.stream()
             .collect(
-                groupingBy(actors.finderBy(FilmActor.ACTOR_ID), // Applies the FilmActor to ACTOR classifier
+                groupingBy(Tuple3::get2, // Applies Actor as classifier
                     mapping(
-                        films.finderBy(FilmActor.FILM_ID), // Applies the FilmActor to Film finder
-                        toList()                           // Use a List collector for downstream aggregation.
+                        Tuple3::get1, // Extracts Film from the Tuple
+                        toList() // Use a List collector for downstream aggregation.
                     )
                 )
             );
+        
+//        
+//        
+//        Map<Actor, List<Film>> filmographies = filmActors.stream()
+//            .collect(
+//                groupingBy(actors.finderBy(FilmActor.ACTOR_ID), // Applies the FilmActor to ACTOR classifier
+//                    mapping(
+//                        films.finderBy(FilmActor.FILM_ID), // Applies the FilmActor to Film finder
+//                        toList() // Use a List collector for downstream aggregation.
+//                    )
+//                )
+//            );
 
-        
-        
         filmographies.forEach((a, fl) -> {
             System.out.format("%s -> %s %n",
                 a.getFirstName() + " " + a.getLastName(),
