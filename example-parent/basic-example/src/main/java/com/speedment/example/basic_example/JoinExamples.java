@@ -131,7 +131,7 @@ public class JoinExamples {
         ExampleUtil.log("manyToOne");
 
         Join<Tuple2<Film, Language>> join = joinComponent
-            .from(FilmManager.IDENTIFIER)
+            .from(FilmManager.IDENTIFIER).where(Film.RATING.equal("PG-13"))
             .innerJoinOn(Language.LANGUAGE_ID).equal(Film.LANGUAGE_ID)
             .build(Tuples::of);
 
@@ -156,13 +156,13 @@ public class JoinExamples {
 
     
     private void manyToManySkipLinkTable() {
-        ExampleUtil.log("manyToMany");
+        ExampleUtil.log("manyToManySkipLinkTable");
 
         Join<Tuple2<Film, Actor>> join = joinComponent
             .from(FilmActorManager.IDENTIFIER)
             .innerJoinOn(Film.FILM_ID).equal(FilmActor.FILM_ID)
             .innerJoinOn(Actor.ACTOR_ID).equal(FilmActor.ACTOR_ID)
-            .build((fa, f, a) -> Tuples.of(f, a));
+            .build((fa, f, a) -> Tuples.of(f, a)); // Apply a custom constructor, discarding FilmActor
 
         join.stream()
             .forEach(System.out::println);
