@@ -502,7 +502,9 @@ public abstract class AbstractDbmsMetadataHandler implements DbmsMetadataHandler
                 jdbcSchemaLookupName(schema),
                 metaDataTableNameForIndexes(table), // Todo: break out in protected method
                 false,
-                false
+                // 'true' below might speed up metadata retrieval since approximations can be used
+                // See https://github.com/speedment/speedment-enterprise/issues/168
+                true 
             );
 
         final AbstractDbmsOperationHandler.TableChildMutator<Index, ResultSet> mutator = (index, rs) -> {
