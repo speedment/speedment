@@ -19,15 +19,21 @@ package com.speedment.example.basic_example;
 import com.company.sakila.SakilaApplication;
 import com.company.sakila.db0.sakila.actor.Actor;
 import com.company.sakila.db0.sakila.actor.ActorManager;
+import com.company.sakila.db0.sakila.category.Category;
+import com.company.sakila.db0.sakila.city.City;
+import com.company.sakila.db0.sakila.city.CityManager;
+import com.company.sakila.db0.sakila.country.Country;
 import com.company.sakila.db0.sakila.film.Film;
 import com.company.sakila.db0.sakila.film.FilmManager;
 import com.company.sakila.db0.sakila.film_actor.FilmActor;
 import com.company.sakila.db0.sakila.film_actor.FilmActorManager;
+import com.company.sakila.db0.sakila.film_category.FilmCategory;
 import com.company.sakila.db0.sakila.language.Language;
 import com.company.sakila.db0.sakila.language.LanguageManager;
 import com.speedment.common.tuple.Tuple2;
 import com.speedment.common.tuple.Tuple3;
 import com.speedment.common.tuple.Tuples;
+import com.speedment.common.tuple.nullable.Tuple2OfNullables;
 import com.speedment.example.basic_example.util.ExampleUtil;
 import static com.speedment.example.basic_example.util.ExampleUtil.buildApplication;
 import com.speedment.runtime.join.Join;
@@ -65,14 +71,66 @@ public class JoinExamples {
     }
 
     private void run() {
+
+        crossJoin();
+        crossJoinWithFiltering();
+        leftJoin();
         joinInMap();
         joinInMapEntity();
         oneToMany();
+        oneToManyDefaultConstructor();
+        oneToManyCustomConstructor();
         manyToOne();
         manyToMany();
         manyToManySkipLinkTable();
         join();
         linked();
+
+        selfJoin();
+
+    }
+
+    private void crossJoin() {
+        ExampleUtil.log("crossJoin");
+
+        Join<Tuple2<Film, Language>> join = joinComponent
+            .from(FilmManager.IDENTIFIER)
+            .crossJoin(LanguageManager.IDENTIFIER)
+            .build(Tuples::of);
+
+        join.stream()
+            .forEach(System.out::println);
+
+    }
+
+    private void crossJoinWithFiltering() {
+        ExampleUtil.log("crossJoinWithFiltering");
+
+        Join<Tuple2<Film, Language>> join = joinComponent
+            .from(FilmManager.IDENTIFIER)
+            // Restrict films so that only PG-13 rated films appear            
+            .where(Film.RATING.equal("PG-13"))
+            .crossJoin(LanguageManager.IDENTIFIER)
+            // Restrict languages so that only films where English is spoken appear
+            .where(Language.NAME.equal("English"))
+            .build(Tuples::of);
+
+        join.stream()
+            .forEach(System.out::println);
+
+    }
+
+    private void leftJoin() {
+        ExampleUtil.log("leftJoin");
+
+        Join<Tuple2OfNullables<City, Country>> join = joinComponent
+            .from(CityManager.IDENTIFIER)
+            .leftJoinOn(Country.COUNTRY_ID).equal(City.COUNTRY_ID).where(Country.COUNTRY.startsWith("A"))
+            .build();
+
+        join.stream()
+            .forEach(System.out::println);
+
     }
 
     private void joinInMap() {
@@ -87,8 +145,8 @@ public class JoinExamples {
             .collect(
                 // Apply this classifier
                 groupingBy(Tuple2::get1)
-            ); 
-        
+            );
+
     }
 
     private void joinInMapEntity() {
@@ -109,8 +167,44 @@ public class JoinExamples {
             );
 
         languageFilmMap2.forEach((l, fl)
-            -> System.out.format("%s: %s%n", l.getName(), fl.stream().map(Film::getTitle).collect(joining(", ")))
+            -> System.out.format("%s: %s %n", l.getName(), fl.stream().map(Film::getTitle).collect(joining(", ")))
         );
+
+    }
+
+    private void oneToManyDefaultConstructor() {
+        ExampleUtil.log("oneToManyDefaultConstructor");
+
+        Join<Tuple2OfNullables<Language, Film>> join = joinComponent
+            // Start with the Language table
+            .from(LanguageManager.IDENTIFIER)
+            // Join with the Film table where the column
+            // 'film,language_id` is equal to the column
+            // `language.language.id'.
+            .innerJoinOn(Film.LANGUAGE_ID).equal(Language.LANGUAGE_ID)
+            // Create elements in the stream using the JoinComponents 
+            // default element constructor (that creates
+            // Tuple2OfNullables<Language, Film>
+            .build();
+
+        // Use the Join object to create Tuples of matching entities
+        join.stream()
+            .forEach(System.out::println);
+
+    }
+
+    private void oneToManyCustomConstructor() {
+        ExampleUtil.log("oneToManyCustomConstructor");
+
+        Join<TitleLanguageName> join = joinComponent
+            .from(LanguageManager.IDENTIFIER)
+            .innerJoinOn(Film.LANGUAGE_ID).equal(Language.LANGUAGE_ID)
+            // Use a custom constructor that takes a Language entity and
+            // a Film entity as input.
+            .build(TitleLanguageName::new);
+
+        join.stream()
+            .forEach(System.out::println);
 
     }
 
@@ -120,6 +214,8 @@ public class JoinExamples {
         Join<Tuple2<Language, Film>> join = joinComponent
             .from(LanguageManager.IDENTIFIER)
             .innerJoinOn(Film.LANGUAGE_ID).equal(Language.LANGUAGE_ID)
+            // Use a custom Tuple constructor that takes a Language and
+            // Film as input.
             .build(Tuples::of);
 
         join.stream()
@@ -154,7 +250,6 @@ public class JoinExamples {
 
     }
 
-    
     private void manyToManySkipLinkTable() {
         ExampleUtil.log("manyToManySkipLinkTable");
 
@@ -169,20 +264,31 @@ public class JoinExamples {
 
     }
 
-    
     private void join() {
         ExampleUtil.log("join");
 
-        
         Join<Tuple2<Film, Language>> join = joinComponent
             .from(FilmManager.IDENTIFIER)
             .innerJoinOn(Language.LANGUAGE_ID).equal(Film.LANGUAGE_ID)
             .build(Tuples::of);
-        
+
         join.stream()
             .map(t2 -> String.format("The film '%s' is in %s", t2.get0().getTitle(), t2.get1().getName()))
             .forEach(System.out::println);
-        
+
+    }
+
+    private void selfJoin() {
+        ExampleUtil.log("selfJoin");
+
+        Join<Tuple2<Actor, Actor>> join = joinComponent
+            .from(ActorManager.IDENTIFIER)
+            .innerJoinOn(Actor.FIRST_NAME).equal(Actor.FIRST_NAME)
+            .build(Tuples::of);
+
+        join.stream()
+            .forEach(System.out::println);
+
     }
 
     private void linked() {
@@ -199,8 +305,8 @@ public class JoinExamples {
             .findAny();
 
     }
-    
-        private void joinInMapOld() {
+
+    private void joinInMapOld() {
         ExampleUtil.log("joinInMap");
 
         Map<Language, List<Film>> languageFilmMap = films.stream()
@@ -212,6 +318,31 @@ public class JoinExamples {
         languageFilmMap.forEach((l, fl)
             -> System.out.format("%s: %s%n", l.getName(), fl.stream().map(Film::getTitle).collect(joining(", ")))
         );
+
+    }
+
+    private final class TitleLanguageName {
+
+        private final String title;
+        private final String languageName;
+
+        private TitleLanguageName(Language language, Film film) {
+            this.title = film.getTitle();
+            this.languageName = language.getName();
+        }
+
+        public String title() {
+            return title;
+        }
+
+        public String languageName() {
+            return languageName;
+        }
+
+        @Override
+        public String toString() {
+            return "TitleLanguageName{" + "title=" + title + ", languageName=" + languageName + '}';
+        }
 
     }
 
