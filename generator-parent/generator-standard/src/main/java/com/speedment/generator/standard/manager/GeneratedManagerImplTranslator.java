@@ -33,6 +33,8 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateFields;
+import com.speedment.runtime.config.Column;
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -95,8 +97,9 @@ public final class GeneratedManagerImplTranslator
                         .add("return " + getSupport().managerName() + ".FIELDS.stream();")
                     )
                     .add(generateFields(getSupport(), file, PRIMARY_KEYS_FIELDS_METHOD,
-                        () -> table.primaryKeyColumns()
+                        () -> table.primaryKeyColumns()                            
                             .filter(HasEnabled::test)
+                            .sorted(comparing(Column::getOrdinalPosition))
                             .map(HasColumn::findColumn)
                             .filter(Optional::isPresent)
                             .map(Optional::get)
