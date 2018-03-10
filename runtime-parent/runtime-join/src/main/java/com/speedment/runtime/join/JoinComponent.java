@@ -41,6 +41,11 @@ import com.speedment.common.tuple.nullable.Tuple6OfNullables;
 public interface JoinComponent {
 
     /**
+     * The maximum number of tables than can be joined.
+     */
+    static int MAX_DEGREE = 6;
+    
+    /**
      * Adds a provided {@code firstManager} to the collection of joined
      * managers. Rows are joined from the provided {@code firstManager}
      * depending on how subsequent managers are added to the builder.
