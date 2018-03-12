@@ -10,16 +10,16 @@ import java.util.function.Predicate;
 /**
  *
  * @author Per Minborg
- * @param <T> type of entities
+ * @param <ENTITY> type of entities
  */
-public interface Stage<T> {
+public interface Stage<ENTITY> {
 
     /**
      * Returns the TableIdentifier for this Stage.
      *
      * @return the TableIdentifier for this Stage
      */
-    TableIdentifier<T> identifier();
+    TableIdentifier<ENTITY> identifier();
 
     /**
      * Returns an unmodifiable list of predicates that shall be applied for this
@@ -27,7 +27,7 @@ public interface Stage<T> {
      *
      * @return a list of predicates that shall be applied for this Stage
      */
-    List<Predicate<? super T>> predicates();
+    List<Predicate<? super ENTITY>> predicates();
 
     /**
      * Returns the JoinType for this Stage, or {@code empty()} if no JoinType is
@@ -45,7 +45,7 @@ public interface Stage<T> {
      * @return a Field that belongs to a table from a previous stage, or
      * {@code empty()} if no Field is defined
      */
-    Optional<HasComparableOperators<T, ?>> field();
+    Optional<HasComparableOperators<ENTITY, ?>> field();
 
     /**
      * Returns the OperatorType for this Stage or , or {@code empty()} if no
