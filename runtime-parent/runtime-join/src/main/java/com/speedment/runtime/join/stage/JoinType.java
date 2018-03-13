@@ -54,4 +54,15 @@ public enum JoinType {
         return nullableOther;
     }
 
+    /**
+     * Returns if this JoinType always produce results that are <em>NEVER</em>
+     * {@code null} for entities belonging to another Stage.
+     *
+     * @return if this JoinType always produce results that are <em>NEVER</em>
+     * {@code null} for entities belonging to another Stage.
+     */
+    public boolean isNeverNullable() {
+        return !nullableSelf && !nullableOther;
+    }
+
 }
