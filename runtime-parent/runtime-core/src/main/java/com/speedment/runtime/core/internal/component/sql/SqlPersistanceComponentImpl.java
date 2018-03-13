@@ -16,11 +16,15 @@
  */
 package com.speedment.runtime.core.internal.component.sql;
 
+import com.speedment.common.injector.Injector;
+import static com.speedment.common.injector.State.STARTED;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.core.component.sql.SqlPersistenceComponent;
 import com.speedment.runtime.core.exception.SpeedmentException;
@@ -29,37 +33,45 @@ import com.speedment.runtime.core.manager.Remover;
 import com.speedment.runtime.core.manager.Updater;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static java.util.Objects.requireNonNull;
+import java.util.function.Function;
+import static java.util.stream.Collectors.toMap;
 
 /**
  *
- * @author  Emil Forslund
- * @since   3.0.1
+ * @author Emil Forslund
+ * @since 3.0.1
  */
 public final class SqlPersistanceComponentImpl implements SqlPersistenceComponent {
-    
-    private final Map<TableIdentifier<?>, SqlPersistence<?>> supportMap;
-    
-    private @Inject ProjectComponent projectComponent;
-    private @Inject DbmsHandlerComponent dbmsHandlerComponent;
-    private @Inject ManagerComponent managerComponent;
-    private @Inject ResultSetMapperComponent resultSetMapperComponent;
-    
-    public SqlPersistanceComponentImpl() {
-        this.supportMap = new ConcurrentHashMap<>();
-    }
 
-    @Override
-    public <ENTITY> void install(TableIdentifier<ENTITY> tableIdentifier) {
-        supportMap.put(tableIdentifier, new SqlPersistenceImpl<>(
-            requireNonNull(tableIdentifier), 
-            requireNonNull(projectComponent), 
-            requireNonNull(dbmsHandlerComponent),
-            requireNonNull(managerComponent),
-            requireNonNull(resultSetMapperComponent)
-        ));
+    private Map<TableIdentifier<?>, SqlPersistence<?>> supportMap;
+
+    @Inject
+    private ProjectComponent projectComponent;
+    @Inject
+    private DbmsHandlerComponent dbmsHandlerComponent;
+    @Inject
+    private ManagerComponent managerComponent;
+    @Inject
+    private ResultSetMapperComponent resultSetMapperComponent;
+
+    @ExecuteBefore(STARTED)
+    void startStreamSuppliers(final Injector injector) {
+        supportMap = injector.stream(SqlAdapter.class)
+            .map(SqlAdapter<?>::identifier)
+            .collect(
+                toMap(
+                    Function.identity(),
+                    id -> new SqlPersistenceImpl<>(
+                        id,
+                        projectComponent,
+                        dbmsHandlerComponent,
+                        managerComponent,
+                        resultSetMapperComponent
+                    )
+                )
+            );
     }
 
     @Override
@@ -80,9 +92,9 @@ public final class SqlPersistanceComponentImpl implements SqlPersistenceComponen
     private <ENTITY> SqlPersistence<ENTITY> getPersistence(TableIdentifier<ENTITY> tableIdentifier) {
         @SuppressWarnings("unchecked")
         final SqlPersistence<ENTITY> persistence = (SqlPersistence<ENTITY>) supportMap.get(tableIdentifier);
-        return requireNonNull(persistence, 
-            "No Persistence installed for table identifier " + 
-            tableIdentifier
+        return requireNonNull(persistence,
+            "No Persistence installed for table identifier "
+            + tableIdentifier
         );
     }
 }

@@ -3,11 +3,9 @@ package com.company.sakila.db0.sakila.actor.generated;
 import com.company.sakila.db0.sakila.actor.Actor;
 import com.company.sakila.db0.sakila.actor.ActorImpl;
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.core.component.sql.SqlPersistenceComponent;
-import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
+import com.speedment.runtime.core.component.SqlAdapter;
+import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,7 +21,7 @@ import static com.speedment.common.injector.State.RESOLVED;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedActorSqlAdapter {
+public abstract class GeneratedActorSqlAdapter implements SqlAdapter<Actor> {
     
     private final TableIdentifier<Actor> tableIdentifier;
     
@@ -31,20 +29,13 @@ public abstract class GeneratedActorSqlAdapter {
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "actor");
     }
     
-    @ExecuteBefore(RESOLVED)
-    void installMethodName(@WithState(RESOLVED) SqlStreamSupplierComponent streamSupplierComponent,
-            @WithState(RESOLVED) SqlPersistenceComponent persistenceComponent) {
-        streamSupplierComponent.install(tableIdentifier, this::apply);
-        persistenceComponent.install(tableIdentifier);
-    }
-    
-    protected Actor apply(ResultSet resultSet) throws SpeedmentException {
+    protected Actor apply(ResultSet resultSet, int offset) throws SpeedmentException {
         final Actor entity = createEntity();
         try {
-            entity.setActorId(    resultSet.getInt(1)       );
-            entity.setFirstName(  resultSet.getString(2)    );
-            entity.setLastName(   resultSet.getString(3)    );
-            entity.setLastUpdate( resultSet.getTimestamp(4) );
+            entity.setActorId(    resultSet.getInt(1 + offset)       );
+            entity.setFirstName(  resultSet.getString(2 + offset)    );
+            entity.setLastName(   resultSet.getString(3 + offset)    );
+            entity.setLastUpdate( resultSet.getTimestamp(4 + offset) );
         } catch (final SQLException sqle) {
             throw new SpeedmentException(sqle);
         }
@@ -53,5 +44,20 @@ public abstract class GeneratedActorSqlAdapter {
     
     protected ActorImpl createEntity() {
         return new ActorImpl();
+    }
+    
+    @Override
+    public TableIdentifier<Actor> identifier() {
+        return tableIdentifier;
+    }
+    
+    @Override
+    public SqlFunction<ResultSet, Actor> entityMapper() {
+        return entityMapper(0);
+    }
+    
+    @Override
+    public SqlFunction<ResultSet, Actor> entityMapper(int offset) {
+        return rs -> apply(rs, offset);
     }
 }

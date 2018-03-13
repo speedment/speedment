@@ -156,5 +156,13 @@
             <artifactId>runtime-field</artifactId>
             <scope>test</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-application</artifactId>
+            <version>${speedment.version}</version>
+            <scope>test</scope>
+        </dependency>
+        
     </dependencies>
 </project>

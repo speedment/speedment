@@ -194,32 +194,75 @@ Rating PG    maps to 194 films
 ```
 
 ### Joins
-Construct a Map with all film languages and the corresponding films:
-```java
-Map<Language, List<Film>> languageFilmMap = films.stream()
-    .collect(
-        // Apply this foreign key classifier
-        groupingBy(languages.finderBy(Film.LANGUAGE_ID))
-    );
+Define a Join relation:
 ```
+Join<Tuple2<Film, Language>> join = joinComponent
+    .from(FilmManager.IDENTIFIER)
+    .innerJoinOn(Language.LANGUAGE_ID).equal(Film.LANGUAGE_ID)
+    .build(Tuples::of);
+```
+
+Apply that join relation and print all films and their corresponding language:
+```java
+join.stream()
+    .map(t2 -> String.format("The film '%s' is in %s", t2.get0().getTitle(), t2.get1().getName()))
+    .forEach(System.out::println);
+```
+
+Apply that join relation and construct a Map with all languages and their corresponding films:
+```java
+Map<Language, List<Tuple2<Film, Language>>> languageFilmMap = join.stream()
+    .collect(
+        // Apply this classifier
+        groupingBy(Tuple2::get1)
+    ); 
+```
+### One-to-many
+Print all Languages and their corresponding Films (A specific language can be spoken in many films):
+```Java
+Join<Tuple2<Language, Film>> join = joinComponent
+    .from(LanguageManager.IDENTIFIER)
+    .innerJoinOn(Film.LANGUAGE_ID).equal(Language.LANGUAGE_ID)
+    .build(Tuples::of);
+
+join.stream()
+    .forEach(System.out::println);
+```
+### Many-to-one
+Print all Films and their corresponding Languages (A Film can only have one language):
+```Java
+Join<Tuple2<Film, Language>> join = joinComponent
+    .from(FilmManager.IDENTIFIER)
+    .innerJoinOn(Language.LANGUAGE_ID).equal(Film.LANGUAGE_ID)
+    .build(Tuples::of);
+
+join.stream()
+    .forEach(System.out::println);
+````
 
 ### Many-to-many
 Construct a Map with all Actors and the corresponding Films they have acted in:
 ```java
-Map<Actor, List<Film>> filmographies = filmActors.stream()
+Join<Tuple3<FilmActor, Film, Actor>> join = joinComponent
+    .from(FilmActorManager.IDENTIFIER)
+    .innerJoinOn(Film.FILM_ID).equal(FilmActor.FILM_ID)
+    .innerJoinOn(Actor.ACTOR_ID).equal(FilmActor.ACTOR_ID)
+    .build(Tuples::of);
+    
+Map<Actor, List<Film>> filmographies = join.stream()
     .collect(
-        groupingBy(actors.finderBy(FilmActor.ACTOR_ID), // Applies the FilmActor to ACTOR classifier
+        groupingBy(Tuple3::get2, // Applies Actor as classifier
             mapping(
-                films.finderBy(FilmActor.FILM_ID), // Applies the FilmActor to Film finder
-                toList()                           // Use a List collector for downstream aggregation.
+                Tuple3::get1, // Extracts Film from the Tuple
+                 toList() // Use a List collector for downstream aggregation.
             )
         )
     );
 ```
-Note: FilmActor is an entity with foreign keys to both the Film and the Actor table.
+
 
 ### Entities are Linked
-No need for complicated joins!
+No need for joins when there is a foreign key!
 ```java
 // Find any film where english is spoken
 Optional<Film> anyFilmInEnglish = languages.stream()

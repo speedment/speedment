@@ -33,18 +33,20 @@ import java.util.stream.Stream;
 
 import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateFields;
+import com.speedment.runtime.config.Column;
+import com.speedment.runtime.config.PrimaryKeyColumn;
+import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.joining;
 
 /**
  *
  * @author Emil Forslund
- * @since  2.3.0
+ * @since 2.3.0
  */
 public final class GeneratedManagerImplTranslator
     extends AbstractEntityAndManagerTranslator<Class> {
 
-    public final static String
-        FIELDS_METHOD              = "fields",
+    public final static String FIELDS_METHOD = "fields",
         PRIMARY_KEYS_FIELDS_METHOD = "primaryKeyFields";
 
     public GeneratedManagerImplTranslator(Table table) {
@@ -66,8 +68,8 @@ public final class GeneratedManagerImplTranslator
                     .abstract_()
                     .setSupertype(SimpleParameterizedType.create(
                         table.isView()
-                            ? AbstractViewManager.class
-                            : AbstractManager.class,
+                        ? AbstractViewManager.class
+                        : AbstractManager.class,
                         getSupport().entityType()
                     ))
                     .add(getSupport().generatedManagerType())
@@ -91,11 +93,12 @@ public final class GeneratedManagerImplTranslator
                                 )
                             )
                         )
-                        .public_().add(OVERRIDE)
-                        .add("return " + getSupport().managerName() + ".FIELDS.stream();")
+                            .public_().add(OVERRIDE)
+                            .add("return " + getSupport().managerName() + ".FIELDS.stream();")
                     )
                     .add(generateFields(getSupport(), file, PRIMARY_KEYS_FIELDS_METHOD,
                         () -> table.primaryKeyColumns()
+                            .sorted(comparing(PrimaryKeyColumn::getOrdinalPosition))
                             .filter(HasEnabled::test)
                             .map(HasColumn::findColumn)
                             .filter(Optional::isPresent)

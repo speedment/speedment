@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.core.internal.component;
 
+import com.speedment.common.injector.Injector;
 import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.WithState;
 import com.speedment.common.logger.Logger;
@@ -32,39 +33,42 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * The default implementation of the {@link ProjectComponent}-interface.
- * 
- * @author  Emil Forslund
- * @since   2.0.0
+ *
+ * @author Emil Forslund
+ * @since 2.0.0
  */
 public final class ProjectComponentImpl implements ProjectComponent {
 
     private final static Logger LOGGER = LoggerManager.getLogger(ProjectComponentImpl.class);
     private Project project;
-    
+
     @ExecuteBefore(INITIALIZED)
     void loadProjectFromMetadata(@WithState(INITIALIZED) ApplicationMetadata metadata) {
         project = metadata.makeProject();
     }
 
     @ExecuteBefore(STARTED)
-    void checkSpeedmentVersion(InfoComponent info) {
-        final String expected = info.getEditionAndVersionString();
-        final String actual = project.getSpeedmentVersion().orElse(null);
-        if (!expected.equals(actual)) {
-            LOGGER.warn(format(
-                "Code generated using '%s' and running with '%s'. Make sure " +
-                "versions and editions match to avoid performance and " +
-                "stability issues.", actual, expected));
+    void checkSpeedmentVersion(Injector injector) {
+        injector.get(InfoComponent.class).ifPresent(ic -> {
+            final String expected = ic.getEditionAndVersionString();
+            final String actual = project.getSpeedmentVersion().orElse(null);
+            if (!expected.equals(actual)) {
+                LOGGER.warn(format(
+                    "Code generated using '%s' and running with '%s'. Make sure "
+                    + "versions and editions match to avoid performance and "
+                    + "stability issues.", actual, expected));
+            }
         }
+        );
     }
 
     @Override
     public Project getProject() {
-        requireNonNull(project, 
-            "Metadata has not yet been loaded! This is probably due to an " + 
-            "incorrect initialization order."
+        requireNonNull(project,
+            "Metadata has not yet been loaded! This is probably due to an "
+            + "incorrect initialization order."
         );
-        
+
         return project;
     }
 

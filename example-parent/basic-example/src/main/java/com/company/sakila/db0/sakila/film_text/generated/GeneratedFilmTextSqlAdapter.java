@@ -3,11 +3,9 @@ package com.company.sakila.db0.sakila.film_text.generated;
 import com.company.sakila.db0.sakila.film_text.FilmText;
 import com.company.sakila.db0.sakila.film_text.FilmTextImpl;
 import com.speedment.common.annotation.GeneratedCode;
-import com.speedment.common.injector.annotation.ExecuteBefore;
-import com.speedment.common.injector.annotation.WithState;
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.core.component.sql.SqlPersistenceComponent;
-import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
+import com.speedment.runtime.core.component.SqlAdapter;
+import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,7 +21,7 @@ import static com.speedment.common.injector.State.RESOLVED;
  * @author Speedment
  */
 @GeneratedCode("Speedment")
-public abstract class GeneratedFilmTextSqlAdapter {
+public abstract class GeneratedFilmTextSqlAdapter implements SqlAdapter<FilmText> {
     
     private final TableIdentifier<FilmText> tableIdentifier;
     
@@ -31,19 +29,12 @@ public abstract class GeneratedFilmTextSqlAdapter {
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "film_text");
     }
     
-    @ExecuteBefore(RESOLVED)
-    void installMethodName(@WithState(RESOLVED) SqlStreamSupplierComponent streamSupplierComponent,
-            @WithState(RESOLVED) SqlPersistenceComponent persistenceComponent) {
-        streamSupplierComponent.install(tableIdentifier, this::apply);
-        persistenceComponent.install(tableIdentifier);
-    }
-    
-    protected FilmText apply(ResultSet resultSet) throws SpeedmentException {
+    protected FilmText apply(ResultSet resultSet, int offset) throws SpeedmentException {
         final FilmText entity = createEntity();
         try {
-            entity.setFilmId(      resultSet.getShort(1)  );
-            entity.setTitle(       resultSet.getString(2) );
-            entity.setDescription( resultSet.getString(3) );
+            entity.setFilmId(      resultSet.getShort(1 + offset)  );
+            entity.setTitle(       resultSet.getString(2 + offset) );
+            entity.setDescription( resultSet.getString(3 + offset) );
         } catch (final SQLException sqle) {
             throw new SpeedmentException(sqle);
         }
@@ -52,5 +43,20 @@ public abstract class GeneratedFilmTextSqlAdapter {
     
     protected FilmTextImpl createEntity() {
         return new FilmTextImpl();
+    }
+    
+    @Override
+    public TableIdentifier<FilmText> identifier() {
+        return tableIdentifier;
+    }
+    
+    @Override
+    public SqlFunction<ResultSet, FilmText> entityMapper() {
+        return entityMapper(0);
+    }
+    
+    @Override
+    public SqlFunction<ResultSet, FilmText> entityMapper(int offset) {
+        return rs -> apply(rs, offset);
     }
 }

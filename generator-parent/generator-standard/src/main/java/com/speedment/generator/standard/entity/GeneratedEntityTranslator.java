@@ -265,7 +265,7 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
                     .set(Value.ofInvocation(
                         ref.getType(),
                         "create",
-                        fieldParams.toArray(new Value[0])
+                        fieldParams.toArray(new Value<?>[0])
                     ))
                     .set(Javadoc.of(
                         "This Field corresponds to the {@link " + shortEntityName + "} field that can be obtained using the "
