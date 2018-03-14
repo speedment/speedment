@@ -81,6 +81,12 @@
                 <artifactId>runtime-join</artifactId>
                 <version>${speedment.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.speedment.runtime</groupId>
+                <artifactId>runtime-application</artifactId>
+                <version>${speedment.version}</version>
+            </dependency>
             
         </dependencies>
     </dependencyManagement>
