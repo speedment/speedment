@@ -16,11 +16,12 @@
  */
 package com.speedment.generator.standard.manager;
 
-import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import com.speedment.common.codegen.constant.SimpleParameterizedType;
 import com.speedment.common.codegen.constant.SimpleType;
 import com.speedment.common.codegen.model.*;
 import com.speedment.common.codegen.model.Class;
+import com.speedment.common.injector.State;
+import com.speedment.common.injector.annotation.ExecuteBefore;
 import com.speedment.common.injector.annotation.Inject;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
@@ -34,9 +35,11 @@ import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
+import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.component.resultset.ResultSetMapperComponent;
 import com.speedment.runtime.core.component.resultset.ResultSetMapping;
 import com.speedment.runtime.core.component.sql.SqlTypeMapperHelper;
+import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.internal.util.sql.ResultSetUtil;
 import com.speedment.runtime.typemapper.TypeMapper;
 
@@ -45,19 +48,18 @@ import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
+import static com.speedment.common.codegen.constant.DefaultAnnotationUsage.OVERRIDE;
 import static com.speedment.common.codegen.constant.DefaultType.isPrimitive;
 import static com.speedment.common.codegen.constant.DefaultType.wrapperFor;
 import static com.speedment.common.codegen.util.Formatting.shortName;
 import static com.speedment.generator.standard.internal.util.GenerateMethodBodyUtil.generateApplyResultSetBody;
-import com.speedment.runtime.core.component.SqlAdapter;
-import com.speedment.runtime.core.db.SqlFunction;
 import static com.speedment.runtime.core.util.DatabaseUtil.dbmsTypeOf;
-import java.sql.SQLException;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
 
@@ -92,6 +94,7 @@ public final class GeneratedSqlAdapterTranslator
         return newBuilder(file, getClassOrInterfaceName())
             .forEveryTable((clazz, table) -> {
                 final Method createHelpers = Method.of(CREATE_HELPERS_METHOD_NAME, void.class)
+                    .add(withExecuteBefore(file))
                     .add(Field.of("projectComponent", ProjectComponent.class))
                     .add("final Project project = projectComponent.getProject();");
 
@@ -308,6 +311,11 @@ public final class GeneratedSqlAdapterTranslator
     private boolean isCastingRequired(Column column, String getterName) {
         return ("getObject".equals(getterName)
             && !Object.class.getName().equals(column.getDatabaseType()));
+    }
+
+    private AnnotationUsage withExecuteBefore(File file) {
+        file.add(Import.of(State.class).static_().setStaticMember("RESOLVED"));
+        return AnnotationUsage.of(ExecuteBefore.class).set(Value.ofReference("RESOLVED"));
     }
 
     private String helperName(Column column) {
