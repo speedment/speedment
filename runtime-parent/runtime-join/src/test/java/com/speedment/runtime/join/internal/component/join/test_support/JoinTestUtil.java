@@ -26,22 +26,27 @@ public final class JoinTestUtil {
     private JoinTestUtil() {
     }
 
-    public static final Predicate<E1> E1_PREDICATE = e1 -> e1.getId() % 1 == 0;
-    public static final Predicate<E2> E2_PREDICATE = e2 -> e2.getId() % 2 == 0;
-    public static final Predicate<E3> E3_PREDICATE = e3 -> e3.getId() % 3 == 0;
-    public static final Predicate<E4> E4_PREDICATE = e4 -> e4.getId() % 4 == 0;
-    public static final Predicate<E5> E5_PREDICATE = e5 -> e5.getId() % 5 == 0;
-    public static final Predicate<E6> E6_PREDICATE = e6 -> e6.getId() % 6 == 0;
+    public static final Predicate<E0> E0_PREDICATE = e0 -> e0.getId() % 1 == 0;
+    public static final Predicate<E1> E1_PREDICATE = e1 -> e1.getId() % 2 == 0;
+    public static final Predicate<E2> E2_PREDICATE = e2 -> e2.getId() % 3 == 0;
+    public static final Predicate<E3> E3_PREDICATE = e3 -> e3.getId() % 4 == 0;
+    public static final Predicate<E4> E4_PREDICATE = e4 -> e4.getId() % 5 == 0;
+    public static final Predicate<E5> E5_PREDICATE = e5 -> e5.getId() % 6 == 0;
 
     public static Stream<TableIdentifier<?>> identifiers() {
         return Stream.of(
+            E0Manager.IDENTIFIER,
             E1Manager.IDENTIFIER,
             E2Manager.IDENTIFIER,
             E3Manager.IDENTIFIER,
             E4Manager.IDENTIFIER,
-            E5Manager.IDENTIFIER,
-            E6Manager.IDENTIFIER
+            E5Manager.IDENTIFIER
         );
+    }
+
+    public interface E0Manager {
+
+        static TableIdentifier<E0> IDENTIFIER = id(MockMetadata.T0_NAME);
     }
 
     public interface E1Manager {
@@ -69,14 +74,15 @@ public final class JoinTestUtil {
         static TableIdentifier<E5> IDENTIFIER = id(MockMetadata.T5_NAME);
     }
 
-    public interface E6Manager {
-
-        static TableIdentifier<E6> IDENTIFIER = id(MockMetadata.T6_NAME);
-    }
-
     public interface EXManager {
 
-        static TableIdentifier<E6> IDENTIFIER = id("tx");
+        static TableIdentifier<E5> IDENTIFIER = id("tx");
+    }
+
+    public interface E0 extends HasId<E0> {
+
+        IntField<E0, Integer> ID0 = IntField.create(id(E0Manager.IDENTIFIER, MockMetadata.T0_ID_NAME), E0::getId, E0::setId, TypeMapper.primitive(), true);
+
     }
 
     public interface E1 extends HasId<E1> {
@@ -109,12 +115,6 @@ public final class JoinTestUtil {
 
     }
 
-    public interface E6 extends HasId<E6> {
-
-        IntField<E6, Integer> ID6 = IntField.create(id(E6Manager.IDENTIFIER, MockMetadata.T6_ID_NAME), E6::getId, E6::setId, TypeMapper.primitive(), true);
-
-    }
-
     public interface EX extends HasId<EX> {
 
         IntField<EX, Integer> IDX = IntField.create(id(EXManager.IDENTIFIER, "idx"), EX::getId, EX::setId, TypeMapper.primitive(), true);
@@ -127,6 +127,9 @@ public final class JoinTestUtil {
 
         int getId();
     }
+
+    public static class E0Impl extends HasIdImpl<E0> implements E0 {
+    };
 
     public static class E1Impl extends HasIdImpl<E1> implements E1 {
     };
@@ -141,9 +144,6 @@ public final class JoinTestUtil {
     };
 
     public static class E5Impl extends HasIdImpl<E5> implements E5 {
-    };
-
-    public static class E6Impl extends HasIdImpl<E6> implements E6 {
     };
 
     static class HasIdImpl<T extends HasId<T>> implements HasId<T> {
@@ -237,6 +237,10 @@ public final class JoinTestUtil {
         return Objects.equals(keyExtractor.apply(s1), keyExtractor.apply(s2));
     }
 
+    public static class E0MangerImpl implements E0Manager {
+
+    }
+
     public static class E1MangerImpl implements E1Manager {
 
     }
@@ -254,10 +258,6 @@ public final class JoinTestUtil {
     }
 
     public static class E5MangerImpl implements E5Manager {
-
-    }
-
-    public static class E6MangerImpl implements E6Manager {
 
     }
 

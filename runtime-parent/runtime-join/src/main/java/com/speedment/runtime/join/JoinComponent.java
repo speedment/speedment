@@ -50,61 +50,61 @@ public interface JoinComponent {
      * managers. Rows are joined from the provided {@code firstManager}
      * depending on how subsequent managers are added to the builder.
      *
-     * @param <T1> type of entities for the first manager
+     * @param <T0> type of entities for the first manager
      * @param firstManager to use
      * @return a builder where the provided {@code firstManager} is added
      *
      * @throws NullPointerException if the provided {@code firstManager} is
      * {@code null}
      */
-    <T1> JoinBuilder1<T1> from(TableIdentifier<T1> firstManager);
+    <T0> JoinBuilder1<T0> from(TableIdentifier<T0> firstManager);
 
-    interface JoinBuilder1<T1> extends
-        HasJoins<JoinBuilder1.AfterJoin<T1, ?>, JoinBuilder1.JoinBuilder2<T1, ?>>,
-        HasWhere<T1, JoinBuilder1<T1>> {
-
-        @Override
-        <T2> AfterJoin<T1, T2> innerJoinOn(HasComparableOperators<T2, ?> joinedField);
+    interface JoinBuilder1<T0> extends
+        HasJoins<JoinBuilder1.AfterJoin<T0, ?>, JoinBuilder1.JoinBuilder2<T0, ?>>,
+        HasWhere<T0, JoinBuilder1<T0>> {
 
         @Override
-        <T2> AfterJoin<T1, T2> leftJoinOn(HasComparableOperators<T2, ?> joinedField);
+        <T1> AfterJoin<T0, T1> innerJoinOn(HasComparableOperators<T1, ?> joinedField);
 
         @Override
-        <T2> AfterJoin<T1, T2> rightJoinOn(HasComparableOperators<T2, ?> joinedField);
+        <T1> AfterJoin<T0, T1> leftJoinOn(HasComparableOperators<T1, ?> joinedField);
+
+        @Override
+        <T1> AfterJoin<T0, T1> rightJoinOn(HasComparableOperators<T1, ?> joinedField);
 
 //        @Override
-//        <T2> AfterJoin<T1, T2> fullOuterJoinOn(HasComparableOperators<T2, ?> joinedField);
+//        <T1> AfterJoin<T0, T1> fullOuterJoinOn(HasComparableOperators<T1, ?> joinedField);
 
         @Override
-        <T2> JoinBuilder2<T1, T2> crossJoin(TableIdentifier<T2> joinedTable);
+        <T1> JoinBuilder2<T0, T1> crossJoin(TableIdentifier<T1> joinedTable);
 
-        interface AfterJoin<T1, T2> extends
-            HasOnPredicates<JoinBuilder2<T1, T2>> {
+        interface AfterJoin<T0, T1> extends
+            HasOnPredicates<JoinBuilder2<T0, T1>> {
 
         }
 
-        interface JoinBuilder2<T1, T2> extends
-            HasJoins<JoinBuilder2.AfterJoin<T1, T2, ?>, JoinBuilder2.JoinBuilder3<T1, T2, ?>>,
-            HasWhere<T2, JoinBuilder2<T1, T2>>,
-            HasDefaultBuild<Tuple2OfNullables<T1, T2>> {
+        interface JoinBuilder2<T0, T1> extends
+            HasJoins<JoinBuilder2.AfterJoin<T0, T1, ?>, JoinBuilder2.JoinBuilder3<T0, T1, ?>>,
+            HasWhere<T1, JoinBuilder2<T0, T1>>,
+            HasDefaultBuild<Tuple2OfNullables<T0, T1>> {
 
             @Override
-            <T3> AfterJoin<T1, T2, T3> innerJoinOn(HasComparableOperators<T3, ?> joinedField);
+            <T2> AfterJoin<T0, T1, T2> innerJoinOn(HasComparableOperators<T2, ?> joinedField);
 
             @Override
-            <T3> AfterJoin<T1, T2, T3> leftJoinOn(HasComparableOperators<T3, ?> joinedField);
+            <T2> AfterJoin<T0, T1, T2> leftJoinOn(HasComparableOperators<T2, ?> joinedField);
 
             @Override
-            <T3> AfterJoin<T1, T2, T3> rightJoinOn(HasComparableOperators<T3, ?> joinedField);
+            <T2> AfterJoin<T0, T1, T2> rightJoinOn(HasComparableOperators<T2, ?> joinedField);
 
 //            @Override
-//            <T3> AfterJoin<T1, T2, T3> fullOuterJoinOn(HasComparableOperators<T3, ?> joinedField);
+//            <T2> AfterJoin<T0, T1, T2> fullOuterJoinOn(HasComparableOperators<T2, ?> joinedField);
 
             @Override
-            <T3> JoinBuilder3<T1, T2, T3> crossJoin(TableIdentifier<T3> joinedTable);
+            <T2> JoinBuilder3<T0, T1, T2> crossJoin(TableIdentifier<T2> joinedTable);
 
             @Override
-            default Join<Tuple2OfNullables<T1, T2>> build() {
+            default Join<Tuple2OfNullables<T0, T1>> build() {
                 return build(TuplesOfNullables::ofNullables);
             }
 
@@ -122,35 +122,35 @@ public interface JoinComponent {
              * @throws NullPointerException if the provided {@code constructor }
              * is {@code null}
              */
-            <T> Join<T> build(BiFunction<T1, T2, T> constructor);
+            <T> Join<T> build(BiFunction<T0, T1, T> constructor);
 
-            interface AfterJoin<T1, T2, T3> extends
-                HasOnPredicates<JoinBuilder3<T1, T2, T3>> {
+            interface AfterJoin<T0, T1, T2> extends
+                HasOnPredicates<JoinBuilder3<T0, T1, T2>> {
 
             }
 
-            interface JoinBuilder3<T1, T2, T3> extends
-                HasJoins<JoinBuilder3.AfterJoin<T1, T2, T3, ?>, JoinBuilder3.JoinBuilder4<T1, T2, T3, ?>>,
-                HasWhere<T3, JoinBuilder3<T1, T2, T3>>,
-                HasDefaultBuild<Tuple3OfNullables<T1, T2, T3>> {
+            interface JoinBuilder3<T0, T1, T2> extends
+                HasJoins<JoinBuilder3.AfterJoin<T0, T1, T2, ?>, JoinBuilder3.JoinBuilder4<T0, T1, T2, ?>>,
+                HasWhere<T2, JoinBuilder3<T0, T1, T2>>,
+                HasDefaultBuild<Tuple3OfNullables<T0, T1, T2>> {
 
                 @Override
-                <T4> AfterJoin<T1, T2, T3, T4> innerJoinOn(HasComparableOperators<T4, ?> joinedField);
+                <T3> AfterJoin<T0, T1, T2, T3> innerJoinOn(HasComparableOperators<T3, ?> joinedField);
 
                 @Override
-                <T4> AfterJoin<T1, T2, T3, T4> leftJoinOn(HasComparableOperators<T4, ?> joinedField);
+                <T3> AfterJoin<T0, T1, T2, T3> leftJoinOn(HasComparableOperators<T3, ?> joinedField);
 
                 @Override
-                <T4> AfterJoin<T1, T2, T3, T4> rightJoinOn(HasComparableOperators<T4, ?> joinedField);
+                <T3> AfterJoin<T0, T1, T2, T3> rightJoinOn(HasComparableOperators<T3, ?> joinedField);
 
 //                @Override
-//                <T4> AfterJoin<T1, T2, T3, T4> fullOuterJoinOn(HasComparableOperators<T4, ?> joinedField);
+//                <T3> AfterJoin<T0, T1, T2, T3> fullOuterJoinOn(HasComparableOperators<T3, ?> joinedField);
 
                 @Override
-                <T4> JoinBuilder4<T1, T2, T3, T4> crossJoin(TableIdentifier<T4> joinedTable);
+                <T3> JoinBuilder4<T0, T1, T2, T3> crossJoin(TableIdentifier<T3> joinedTable);
 
                 @Override
-                default Join<Tuple3OfNullables<T1, T2, T3>> build() {
+                default Join<Tuple3OfNullables<T0, T1, T2>> build() {
                     return build(TuplesOfNullables::ofNullables);
                 }
 
@@ -168,35 +168,35 @@ public interface JoinComponent {
                  * @throws NullPointerException if the provided {@code constructor
                  * } is {@code null}
                  */
-                <T> Join<T> build(TriFunction<T1, T2, T3, T> constructor);
+                <T> Join<T> build(TriFunction<T0, T1, T2, T> constructor);
 
-                interface AfterJoin<T1, T2, T3, T4> extends
-                    HasOnPredicates<JoinBuilder4<T1, T2, T3, T4>> {
+                interface AfterJoin<T0, T1, T2, T3> extends
+                    HasOnPredicates<JoinBuilder4<T0, T1, T2, T3>> {
 
                 }
 
-                interface JoinBuilder4<T1, T2, T3, T4> extends
-                    HasJoins<JoinBuilder4.AfterJoin<T1, T2, T3, T4, ?>, JoinBuilder4.JoinBuilder5<T1, T2, T3, T4, ?>>,
-                    HasWhere<T4, JoinBuilder4<T1, T2, T3, T4>>,
-                    HasDefaultBuild<Tuple4OfNullables<T1, T2, T3, T4>> {
+                interface JoinBuilder4<T0, T1, T2, T3> extends
+                    HasJoins<JoinBuilder4.AfterJoin<T0, T1, T2, T3, ?>, JoinBuilder4.JoinBuilder5<T0, T1, T2, T3, ?>>,
+                    HasWhere<T3, JoinBuilder4<T0, T1, T2, T3>>,
+                    HasDefaultBuild<Tuple4OfNullables<T0, T1, T2, T3>> {
 
                     @Override
-                    <T5> AfterJoin<T1, T2, T3, T4, T5> innerJoinOn(HasComparableOperators<T5, ?> joinedField);
+                    <T4> AfterJoin<T0, T1, T2, T3, T4> innerJoinOn(HasComparableOperators<T4, ?> joinedField);
 
                     @Override
-                    <T5> AfterJoin<T1, T2, T3, T4, T5> leftJoinOn(HasComparableOperators<T5, ?> joinedField);
+                    <T4> AfterJoin<T0, T1, T2, T3, T4> leftJoinOn(HasComparableOperators<T4, ?> joinedField);
 
                     @Override
-                    <T5> AfterJoin<T1, T2, T3, T4, T5> rightJoinOn(HasComparableOperators<T5, ?> joinedField);
+                    <T4> AfterJoin<T0, T1, T2, T3, T4> rightJoinOn(HasComparableOperators<T4, ?> joinedField);
 
 //                    @Override
-//                    <T5> AfterJoin<T1, T2, T3, T4, T5> fullOuterJoinOn(HasComparableOperators<T5, ?> joinedField);
+//                    <T4> AfterJoin<T0, T1, T2, T3, T4> fullOuterJoinOn(HasComparableOperators<T4, ?> joinedField);
 
                     @Override
-                    <T5> JoinBuilder5<T1, T2, T3, T4, T5> crossJoin(TableIdentifier<T5> joinedTable);
+                    <T4> JoinBuilder5<T0, T1, T2, T3, T4> crossJoin(TableIdentifier<T4> joinedTable);
 
                     @Override
-                    default Join<Tuple4OfNullables<T1, T2, T3, T4>> build() {
+                    default Join<Tuple4OfNullables<T0, T1, T2, T3>> build() {
                         return build(TuplesOfNullables::ofNullables);
                     }
 
@@ -218,35 +218,35 @@ public interface JoinComponent {
                      * } method refers to tables that are not a part of the
                      * join.
                      */
-                    <T> Join<T> build(QuadFunction<T1, T2, T3, T4, T> constructor);
+                    <T> Join<T> build(QuadFunction<T0, T1, T2, T3, T> constructor);
 
-                    interface AfterJoin<T1, T2, T3, T4, T5> extends
-                        HasOnPredicates<JoinBuilder5<T1, T2, T3, T4, T5>> {
+                    interface AfterJoin<T0, T1, T2, T3, T4> extends
+                        HasOnPredicates<JoinBuilder5<T0, T1, T2, T3, T4>> {
 
                     }
 
-                    interface JoinBuilder5<T1, T2, T3, T4, T5> extends
-                        HasJoins<JoinBuilder5.AfterJoin<T1, T2, T3, T4, T5, ?>, JoinBuilder5.JoinBuilder6<T1, T2, T3, T4, T5, ?>>,
-                        HasWhere<T5, JoinBuilder5<T1, T2, T3, T4, T5>>,
-                        HasDefaultBuild<Tuple5OfNullables<T1, T2, T3, T4, T5>> {
+                    interface JoinBuilder5<T0, T1, T2, T3, T4> extends
+                        HasJoins<JoinBuilder5.AfterJoin<T0, T1, T2, T3, T4, ?>, JoinBuilder5.JoinBuilder6<T0, T1, T2, T3, T4, ?>>,
+                        HasWhere<T4, JoinBuilder5<T0, T1, T2, T3, T4>>,
+                        HasDefaultBuild<Tuple5OfNullables<T0, T1, T2, T3, T4>> {
 
                         @Override
-                        <T6> AfterJoin<T1, T2, T3, T4, T5, T6> innerJoinOn(HasComparableOperators<T6, ?> joinedField);
+                        <T5> AfterJoin<T0, T1, T2, T3, T4, T5> innerJoinOn(HasComparableOperators<T5, ?> joinedField);
 
                         @Override
-                        <T6> AfterJoin<T1, T2, T3, T4, T5, T6> leftJoinOn(HasComparableOperators<T6, ?> joinedField);
+                        <T5> AfterJoin<T0, T1, T2, T3, T4, T5> leftJoinOn(HasComparableOperators<T5, ?> joinedField);
 
                         @Override
-                        <T6> AfterJoin<T1, T2, T3, T4, T5, T6> rightJoinOn(HasComparableOperators<T6, ?> joinedField);
+                        <T5> AfterJoin<T0, T1, T2, T3, T4, T5> rightJoinOn(HasComparableOperators<T5, ?> joinedField);
 
 //                        @Override
-//                        <T6> AfterJoin<T1, T2, T3, T4, T5, T6> fullOuterJoinOn(HasComparableOperators<T6, ?> joinedField);
+//                        <T5> AfterJoin<T0, T1, T2, T3, T4, T5> fullOuterJoinOn(HasComparableOperators<T5, ?> joinedField);
 
                         @Override
-                        <T6> JoinBuilder6<T1, T2, T3, T4, T5, T6> crossJoin(TableIdentifier<T6> joinedTable);
+                        <T5> JoinBuilder6<T0, T1, T2, T3, T4, T5> crossJoin(TableIdentifier<T5> joinedTable);
 
                         @Override
-                        default Join<Tuple5OfNullables<T1, T2, T3, T4, T5>> build() {
+                        default Join<Tuple5OfNullables<T0, T1, T2, T3, T4>> build() {
                             return build(TuplesOfNullables::ofNullables);
                         }
 
@@ -269,19 +269,19 @@ public interface JoinComponent {
                          * } method refers to tables that are not a part of the
                          * join.
                          */
-                        <T> Join<T> build(Function5<T1, T2, T3, T4, T5, T> constructor);
+                        <T> Join<T> build(Function5<T0, T1, T2, T3, T4, T> constructor);
 
-                        interface AfterJoin<T1, T2, T3, T4, T5, T6> extends
-                            HasOnPredicates<JoinBuilder6<T1, T2, T3, T4, T5, T6>> {
+                        interface AfterJoin<T0, T1, T2, T3, T4, T5> extends
+                            HasOnPredicates<JoinBuilder6<T0, T1, T2, T3, T4, T5>> {
 
                         }
 
-                        interface JoinBuilder6<T1, T2, T3, T4, T5, T6> extends
-                            HasWhere<T6, JoinBuilder6<T1, T2, T3, T4, T5, T6>>,
-                            HasDefaultBuild<Tuple6OfNullables<T1, T2, T3, T4, T5, T6>> {
+                        interface JoinBuilder6<T0, T1, T2, T3, T4, T5> extends
+                            HasWhere<T5, JoinBuilder6<T0, T1, T2, T3, T4, T5>>,
+                            HasDefaultBuild<Tuple6OfNullables<T0, T1, T2, T3, T4, T5>> {
 
                             @Override
-                            default Join<Tuple6OfNullables<T1, T2, T3, T4, T5, T6>> build() {
+                            default Join<Tuple6OfNullables<T0, T1, T2, T3, T4, T5>> build() {
                                 return build(TuplesOfNullables::ofNullables);
                             }
 
@@ -305,7 +305,7 @@ public interface JoinComponent {
                              * } method refers to tables that are not a part of
                              * the join.
                              */
-                            <T> Join<T> build(Function6<T1, T2, T3, T4, T5, T6, T> constructor);
+                            <T> Join<T> build(Function6<T0, T1, T2, T3, T4, T5, T> constructor);
 
                         }
 

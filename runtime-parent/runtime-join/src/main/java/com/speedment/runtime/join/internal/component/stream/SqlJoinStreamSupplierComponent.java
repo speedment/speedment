@@ -67,67 +67,67 @@ public class SqlJoinStreamSupplierComponent implements JoinStreamSupplierCompone
     }
 
     @Override
-    public <T1, T2, T> Join<T> createJoin(
+    public <T0, T1, T> Join<T> createJoin(
         final List<Stage<?>> stages,
-        final BiFunction<T1, T2, T> constructor,
-        final TableIdentifier<T1> t1,
-        final TableIdentifier<T2> t2
+        final BiFunction<T0, T1, T> constructor,
+        final TableIdentifier<T0> t0,
+        final TableIdentifier<T1> t1
     ) {
-        return join2Creator.createJoin(stages, constructor, t1, t2);
+        return join2Creator.createJoin(stages, constructor, t0, t1);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T1, T2, T3, T> Join<T> createJoin(
+    public <T0, T1, T2, T> Join<T> createJoin(
         final List<Stage<?>> stages,
-        final TriFunction<T1, T2, T3, T> constructor,
+        final TriFunction<T0, T1, T2, T> constructor,
+        final TableIdentifier<T0> t0,
+        final TableIdentifier<T1> t1,
+        final TableIdentifier<T2> t2
+    ) {
+        return join3Creator.createJoin(stages, constructor, t0, t1, t2);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T0, T1, T2, T3, T> Join<T> createJoin(
+        final List<Stage<?>> stages,
+        final QuadFunction<T0, T1, T2, T3, T> constructor,
+        final TableIdentifier<T0> t0,
         final TableIdentifier<T1> t1,
         final TableIdentifier<T2> t2,
         final TableIdentifier<T3> t3
     ) {
-        return join3Creator.createJoin(stages, constructor, t1, t2, t3);
+        return join4Creator.createJoin(stages, constructor, t0, t1, t2, t3);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T1, T2, T3, T4, T> Join<T> createJoin(
+    public <T0, T1, T2, T3, T4, T> Join<T> createJoin(
         final List<Stage<?>> stages,
-        final QuadFunction<T1, T2, T3, T4, T> constructor,
+        final Function5<T0, T1, T2, T3, T4, T> constructor,
+        final TableIdentifier<T0> t0,
         final TableIdentifier<T1> t1,
         final TableIdentifier<T2> t2,
         final TableIdentifier<T3> t3,
         final TableIdentifier<T4> t4
     ) {
-        return join4Creator.createJoin(stages, constructor, t1, t2, t3, t4);
+        return join5Creator.createJoin(stages, constructor, t0, t1, t2, t3, t4);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T1, T2, T3, T4, T5, T> Join<T> createJoin(
+    public <T0, T1, T2, T3, T4, T5, T> Join<T> createJoin(
         final List<Stage<?>> stages,
-        final Function5<T1, T2, T3, T4, T5, T> constructor,
+        final Function6<T0, T1, T2, T3, T4, T5, T> constructor,
+        final TableIdentifier<T0> t0,
         final TableIdentifier<T1> t1,
         final TableIdentifier<T2> t2,
         final TableIdentifier<T3> t3,
         final TableIdentifier<T4> t4,
         final TableIdentifier<T5> t5
     ) {
-        return join5Creator.createJoin(stages, constructor, t1, t2, t3, t4, t5);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public <T1, T2, T3, T4, T5, T6, T> Join<T> createJoin(
-        final List<Stage<?>> stages,
-        final Function6<T1, T2, T3, T4, T5, T6, T> constructor,
-        final TableIdentifier<T1> t1,
-        final TableIdentifier<T2> t2,
-        final TableIdentifier<T3> t3,
-        final TableIdentifier<T4> t4,
-        final TableIdentifier<T5> t5,
-        final TableIdentifier<T6> t6
-    ) {
-        return join6Creator.createJoin(stages, constructor, t1, t2, t3, t4, t5, t6);
+        return join6Creator.createJoin(stages, constructor, t0, t1, t2, t3, t4, t5);
     }
 
     private <ENTITY> SqlAdapter<ENTITY> sqlAdapterMapper(TableIdentifier<ENTITY> identifier) {

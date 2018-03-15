@@ -4,6 +4,8 @@ import com.speedment.common.injector.Injector;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E0;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E0Manager;
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E1;
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E1Manager;
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E2;
@@ -14,8 +16,6 @@ import com.speedment.runtime.join.internal.component.join.test_support.JoinTestU
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E4Manager;
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E5;
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E5Manager;
-import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E6;
-import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E6Manager;
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.EX;
 import static com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.assertStagesEquals;
 import com.speedment.runtime.join.internal.component.join.test_support.MockEmptyJoinStreamSupplierComponent;
@@ -42,7 +42,7 @@ import org.junit.Test;
 public final class JoinBuilderTest {
 
     private MockEmptyJoinStreamSupplierComponent ss;
-    private JoinBuilder1Impl<E1> bldr;
+    private JoinBuilder1Impl<E0> bldr;
 
     @Before
     public void init() throws InstantiationException {
@@ -52,17 +52,17 @@ public final class JoinBuilderTest {
             .build();
 
         ss = injector.getOrThrow(MockEmptyJoinStreamSupplierComponent.class);
-        bldr = new JoinBuilder1Impl<>(ss, E1Manager.IDENTIFIER);
+        bldr = new JoinBuilder1Impl<>(ss, E0Manager.IDENTIFIER);
     }
 
     @Test
     public void testIllegalField() {
         try {
-            bldr.leftJoinOn(E2.ID2).equal(EX.IDX)
-                .leftJoinOn(E3.ID3).equal(E1.ID1)
-                .leftJoinOn(E4.ID4).equal(E1.ID1)
-                .leftJoinOn(E5.ID5).equal(E1.ID1)
-                .leftJoinOn(E6.ID6).equal(E1.ID1)
+            bldr.leftJoinOn(E1.ID1).equal(EX.IDX)
+                .leftJoinOn(E2.ID2).equal(E0.ID0)
+                .leftJoinOn(E3.ID3).equal(E0.ID0)
+                .leftJoinOn(E4.ID4).equal(E0.ID0)
+                .leftJoinOn(E5.ID5).equal(E0.ID0)
                 .build();
             fail("Illegal field not detected");
         } catch (IllegalStateException ignore) {
@@ -72,11 +72,11 @@ public final class JoinBuilderTest {
     @Test
     public void testNullBuildArgument() {
         try {
-            bldr.leftJoinOn(E2.ID2).equal(E1.ID1)
-                .leftJoinOn(E3.ID3).equal(E1.ID1)
-                .leftJoinOn(E4.ID4).equal(E1.ID1)
-                .leftJoinOn(E5.ID5).equal(E1.ID1)
-                .leftJoinOn(E6.ID6).equal(E1.ID1)
+            bldr.leftJoinOn(E1.ID1).equal(E0.ID0)
+                .leftJoinOn(E2.ID2).equal(E0.ID0)
+                .leftJoinOn(E3.ID3).equal(E0.ID0)
+                .leftJoinOn(E4.ID4).equal(E0.ID0)
+                .leftJoinOn(E5.ID5).equal(E0.ID0)
                 .build(null);
             fail("Builder that was null was not detected");
         } catch (NullPointerException ignore) {
@@ -85,103 +85,103 @@ public final class JoinBuilderTest {
 
     @Test
     public void testCrossJoin() {
-        bldr.crossJoin(E2Manager.IDENTIFIER)
+        bldr.crossJoin(E1Manager.IDENTIFIER)
+            .crossJoin(E2Manager.IDENTIFIER)
             .crossJoin(E3Manager.IDENTIFIER)
             .crossJoin(E4Manager.IDENTIFIER)
             .crossJoin(E5Manager.IDENTIFIER)
-            .crossJoin(E6Manager.IDENTIFIER)
             .build();
 
         final List<Stage<?>> expected = expectedOf(
-            entry(E1Manager.IDENTIFIER, noOp()),
+            entry(E0Manager.IDENTIFIER, noOp()),
+            entry(E1Manager.IDENTIFIER, setJoinTypeTo(JoinType.CROSS_JOIN)),
             entry(E2Manager.IDENTIFIER, setJoinTypeTo(JoinType.CROSS_JOIN)),
             entry(E3Manager.IDENTIFIER, setJoinTypeTo(JoinType.CROSS_JOIN)),
             entry(E4Manager.IDENTIFIER, setJoinTypeTo(JoinType.CROSS_JOIN)),
-            entry(E5Manager.IDENTIFIER, setJoinTypeTo(JoinType.CROSS_JOIN)),
-            entry(E6Manager.IDENTIFIER, setJoinTypeTo(JoinType.CROSS_JOIN))
+            entry(E5Manager.IDENTIFIER, setJoinTypeTo(JoinType.CROSS_JOIN))
         );
 
         assertStagesEquals(expected, ss.stages());
 
         assertIdentifiersInCreateJoinEquals(
+            E0Manager.IDENTIFIER,
             E1Manager.IDENTIFIER,
             E2Manager.IDENTIFIER,
             E3Manager.IDENTIFIER,
             E4Manager.IDENTIFIER,
-            E5Manager.IDENTIFIER,
-            E6Manager.IDENTIFIER
+            E5Manager.IDENTIFIER
         );
 
     }
 
     @Test
     public void testLeftJoin() {
-        bldr.leftJoinOn(E2.ID2).equal(E1.ID1)
-            .leftJoinOn(E3.ID3).equal(E1.ID1)
-            .leftJoinOn(E4.ID4).equal(E1.ID1)
-            .leftJoinOn(E5.ID5).equal(E1.ID1)
-            .leftJoinOn(E6.ID6).equal(E1.ID1)
+        bldr.leftJoinOn(E1.ID1).equal(E0.ID0)
+            .leftJoinOn(E2.ID2).equal(E0.ID0)
+            .leftJoinOn(E3.ID3).equal(E0.ID0)
+            .leftJoinOn(E4.ID4).equal(E0.ID0)
+            .leftJoinOn(E5.ID5).equal(E0.ID0)
             .build();
 
         final List<Stage<?>> expected = expectedOf(
-            entry(E1Manager.IDENTIFIER, noOp()),
+            entry(E0Manager.IDENTIFIER, noOp()),
+            entry(
+                E1Manager.IDENTIFIER,
+                setJoinTypeTo(JoinType.LEFT_JOIN)
+                    .andThen(setFieldTo(E1.ID1))
+                    .andThen(setOperatorTypeTo(EQUAL))
+                    .andThen(setForeignFirstFieldTo(E0.ID0))
+            ),
             entry(
                 E2Manager.IDENTIFIER,
                 setJoinTypeTo(JoinType.LEFT_JOIN)
                     .andThen(setFieldTo(E2.ID2))
                     .andThen(setOperatorTypeTo(EQUAL))
-                    .andThen(setForeignFirstFieldTo(E1.ID1))
+                    .andThen(setForeignFirstFieldTo(E0.ID0))
             ),
             entry(
                 E3Manager.IDENTIFIER,
                 setJoinTypeTo(JoinType.LEFT_JOIN)
                     .andThen(setFieldTo(E3.ID3))
                     .andThen(setOperatorTypeTo(EQUAL))
-                    .andThen(setForeignFirstFieldTo(E1.ID1))
+                    .andThen(setForeignFirstFieldTo(E0.ID0))
             ),
             entry(
                 E4Manager.IDENTIFIER,
                 setJoinTypeTo(JoinType.LEFT_JOIN)
                     .andThen(setFieldTo(E4.ID4))
                     .andThen(setOperatorTypeTo(EQUAL))
-                    .andThen(setForeignFirstFieldTo(E1.ID1))
+                    .andThen(setForeignFirstFieldTo(E0.ID0))
             ),
             entry(
                 E5Manager.IDENTIFIER,
                 setJoinTypeTo(JoinType.LEFT_JOIN)
                     .andThen(setFieldTo(E5.ID5))
                     .andThen(setOperatorTypeTo(EQUAL))
-                    .andThen(setForeignFirstFieldTo(E1.ID1))
-            ),
-            entry(
-                E6Manager.IDENTIFIER,
-                setJoinTypeTo(JoinType.LEFT_JOIN)
-                    .andThen(setFieldTo(E6.ID6))
-                    .andThen(setOperatorTypeTo(EQUAL))
-                    .andThen(setForeignFirstFieldTo(E1.ID1))
+                    .andThen(setForeignFirstFieldTo(E0.ID0))
             )
         );
 
         assertStagesEquals(expected, ss.stages());
 
         assertIdentifiersInCreateJoinEquals(
+            E0Manager.IDENTIFIER,
             E1Manager.IDENTIFIER,
             E2Manager.IDENTIFIER,
             E3Manager.IDENTIFIER,
             E4Manager.IDENTIFIER,
-            E5Manager.IDENTIFIER,
-            E6Manager.IDENTIFIER
+            E5Manager.IDENTIFIER
         );
 
     }
 
 //    @Test
 //    public void testJoins() {
-//        bldr.leftJoinOn(E2.ID2).equal(E1.ID1)
-//            .leftJoinOn(E3.ID3).between(E1.ID1, E1.ID1, Inclusion.START_INCLUSIVE_END_INCLUSIVE)
-//            .rightJoinOn(E4.ID4).equal(E1.ID1)
-//            .fullOuterJoinOn(E5.ID5).equal(E1.ID1)
-//            .crossJoin(E6Manager.IDENTIFIER)
+//        bldr.leftJoinOn(E1.ID1).equal(E0.ID0)
+//            .leftJoinOn(E2.ID2).between(E0.ID0, E0.ID0, Inclusion.START_INCLUSIVE_END_INCLUSIVE)
+//            .rightJoinOn(E3.ID3).equal(E0.ID0)
+//            .fullOuterJoinOn(E4.ID4).equal(E0.ID0)
+//            .crossJoin(E5Manager.IDENTIFIER)
 //            .build();
 //    }
 

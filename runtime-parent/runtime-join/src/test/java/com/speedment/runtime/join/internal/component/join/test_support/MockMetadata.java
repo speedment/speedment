@@ -21,19 +21,19 @@ public final class MockMetadata extends AbstractTestApplicationMetadata {
     public static final String DBMS_NAME = "dbms";
     public static final String SCHEMA_NAME = "schema";
 
+    public static final String T0_NAME = "t0";
     public static final String T1_NAME = "t1";
     public static final String T2_NAME = "t2";
     public static final String T3_NAME = "t3";
     public static final String T4_NAME = "t4";
     public static final String T5_NAME = "t5";
-    public static final String T6_NAME = "t6";
 
+    public static final String T0_ID_NAME = "t0_id";
     public static final String T1_ID_NAME = "t1_id";
     public static final String T2_ID_NAME = "t2_id";
     public static final String T3_ID_NAME = "t3_id";
     public static final String T4_ID_NAME = "t4_id";
     public static final String T5_ID_NAME = "t5_id";
-    public static final String T6_ID_NAME = "t6_id";
 
     private String quote(String s) {
         return "\"" + s + "\"";
@@ -79,6 +79,17 @@ public final class MockMetadata extends AbstractTestApplicationMetadata {
                         array(Dbms.SCHEMAS,
                             object(name(SCHEMA_NAME),
                                 array(Schema.TABLES,
+                                    object(name(T0_NAME),
+                                        array(Table.COLUMNS,
+                                            object(name(T0_ID_NAME),
+                                                columnDatabaseType(Integer.class.getName())
+                                            )
+                                        ),
+                                        array(Table.PRIMARY_KEY_COLUMNS,
+                                            object(name(T0_ID_NAME)
+                                            )
+                                        )
+                                    ),
                                     object(name(T1_NAME),
                                         array(Table.COLUMNS,
                                             object(name(T1_ID_NAME),
@@ -131,17 +142,6 @@ public final class MockMetadata extends AbstractTestApplicationMetadata {
                                         ),
                                         array(Table.PRIMARY_KEY_COLUMNS,
                                             object(name(T5_ID_NAME)
-                                            )
-                                        )
-                                    ),
-                                    object(name(T6_NAME),
-                                        array(Table.COLUMNS,
-                                            object(name(T6_ID_NAME),
-                                                columnDatabaseType(Integer.class.getName())
-                                            )
-                                        ),
-                                        array(Table.PRIMARY_KEY_COLUMNS,
-                                            object(name(T6_ID_NAME)
                                             )
                                         )
                                     )

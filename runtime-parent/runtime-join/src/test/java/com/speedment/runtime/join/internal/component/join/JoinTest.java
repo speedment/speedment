@@ -18,18 +18,18 @@ public final class JoinTest {
 //            .withBundle(JoinBundle.class)
 //            .withComponent(MockStreamSupplierComponent.class)
 //            .withComponent(SqlJoinStreamSupplierComponent.class)
+//            .withComponent(E0SqlAdapter.class)
 //            .withComponent(E1SqlAdapter.class)
 //            .withComponent(E2SqlAdapter.class)
 //            .withComponent(E3SqlAdapter.class)
 //            .withComponent(E4SqlAdapter.class)
 //            .withComponent(E5SqlAdapter.class)
-//            .withComponent(E6SqlAdapter.class)
+//            .withComponent(E0MangerImpl.class)
 //            .withComponent(E1MangerImpl.class)
 //            .withComponent(E2MangerImpl.class)
 //            .withComponent(E3MangerImpl.class)
 //            .withComponent(E4MangerImpl.class)
 //            .withComponent(E5MangerImpl.class)
-//            .withComponent(E6MangerImpl.class)
 //            .withComponent(MockPersistanceComponent.class)
 //            .withSkipCheckDatabaseConnectivity()
 //            .build();
@@ -45,11 +45,11 @@ public final class JoinTest {
 //    @Test
 //    public void crossJoin2() {
 //
-////        final Join<Tuple2OfNullables<E1, E2>> join = jc.from(E1Manager.IDENTIFIER)
-////            .crossJoin(E2Manager.IDENTIFIER)
+////        final Join<Tuple2OfNullables<E0, E1>> join = jc.from(E0Manager.IDENTIFIER)
+////            .crossJoin(E1Manager.IDENTIFIER)
 ////            .build();
 //
-//        //final Set<Tuple2OfNullables<E1, E2>> set = join.stream().collect(toSet());
+//        //final Set<Tuple2OfNullables<E0, E1>> set = join.stream().collect(toSet());
 //
 //        //System.out.println(set.size());
 //
@@ -58,11 +58,11 @@ public final class JoinTest {
 //    @Test
 //    public void innerJoin2() {
 //
-////        final Join<Tuple2OfNullables<E1, E2>> join = jc.from(E1Manager.IDENTIFIER)
-////            .innerJoinOn(E2.ID2).equal(E1.ID1)
+////        final Join<Tuple2OfNullables<E0, E1>> join = jc.from(E0Manager.IDENTIFIER)
+////            .innerJoinOn(E1.ID2).equal(E0.ID1)
 ////            .build();
 //
-//        //final Set<Tuple2OfNullables<E1, E2>> set = join.stream().collect(toSet());
+//        //final Set<Tuple2OfNullables<E0, E1>> set = join.stream().collect(toSet());
 //
 //        //System.out.println(set.size());
 //

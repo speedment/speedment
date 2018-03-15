@@ -3,12 +3,12 @@ package com.speedment.runtime.join.internal.component.join.test_support;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
+import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E0;
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E1;
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E2;
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E3;
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E4;
 import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E5;
-import com.speedment.runtime.join.internal.component.join.test_support.JoinTestUtil.E6;
 import java.sql.ResultSet;
 import static java.util.Objects.requireNonNull;
 
@@ -21,6 +21,9 @@ public final class SqlAdapterUtil {
     private SqlAdapterUtil() {
     }
 
+    public static class E0SqlAdapter extends AbstractSqlAdapter<E0> implements SqlAdapter<E0> {
+        public E0SqlAdapter() {super(JoinTestUtil.E0Manager.IDENTIFIER);}
+    }
     public static class E1SqlAdapter extends AbstractSqlAdapter<E1> implements SqlAdapter<E1> {
         public E1SqlAdapter() {super(JoinTestUtil.E1Manager.IDENTIFIER);}
     }
@@ -35,9 +38,6 @@ public final class SqlAdapterUtil {
     }
     public static class E5SqlAdapter extends AbstractSqlAdapter<E5> implements SqlAdapter<E5> {
         public E5SqlAdapter() {super(JoinTestUtil.E5Manager.IDENTIFIER);}
-    }
-    public static class E6SqlAdapter extends AbstractSqlAdapter<E6> implements SqlAdapter<E6> {
-        public E6SqlAdapter() {super(JoinTestUtil.E6Manager.IDENTIFIER);}
     }
 
     public static class AbstractSqlAdapter<ENTITY> implements SqlAdapter<ENTITY> {

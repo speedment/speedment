@@ -29,14 +29,14 @@ public final class SqlHasCreateJoin2
     }
 
     @Override
-    public <T1, T2, T> Join<T> createJoin(
+    public <T0, T1, T> Join<T> createJoin(
         final List<Stage<?>> stages,
-        final BiFunction<T1, T2, T> constructor,
-        final TableIdentifier<T1> t1,
-        final TableIdentifier<T2> t2
+        final BiFunction<T0, T1, T> constructor,
+        final TableIdentifier<T0> t0,
+        final TableIdentifier<T1> t1
     ) {
-        final SqlFunction<ResultSet, T1> rsMapper1 = rsMapper(stages, 0, t1);
-        final SqlFunction<ResultSet, T2> rsMapper2 = rsMapper(stages, 1, t2);
+        final SqlFunction<ResultSet, T0> rsMapper1 = rsMapper(stages, 0, t0);
+        final SqlFunction<ResultSet, T1> rsMapper2 = rsMapper(stages, 1, t1);
         final SqlFunction<ResultSet, T> rsMapper = rs -> constructor.apply(
             rsMapper1.apply(rs),
             rsMapper2.apply(rs)

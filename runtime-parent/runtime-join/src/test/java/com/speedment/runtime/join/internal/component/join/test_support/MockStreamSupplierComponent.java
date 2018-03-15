@@ -20,7 +20,10 @@ public class MockStreamSupplierComponent implements StreamSupplierComponent {
     public <ENTITY> Stream<ENTITY> stream(TableIdentifier<ENTITY> tableIdentifier, ParallelStrategy strategy) {
         final int table;
         final Supplier<ENTITY> constructor;
-        if (JoinTestUtil.E1Manager.IDENTIFIER.equals(tableIdentifier)) {
+        if (JoinTestUtil.E0Manager.IDENTIFIER.equals(tableIdentifier)) {
+            table = 0;
+            constructor = () -> (ENTITY) new JoinTestUtil.E0Impl();
+        } else if (JoinTestUtil.E1Manager.IDENTIFIER.equals(tableIdentifier)) {
             table = 1;
             constructor = () -> (ENTITY) new JoinTestUtil.E1Impl();
         } else if (JoinTestUtil.E2Manager.IDENTIFIER.equals(tableIdentifier)) {
@@ -35,13 +38,10 @@ public class MockStreamSupplierComponent implements StreamSupplierComponent {
         } else if (JoinTestUtil.E5Manager.IDENTIFIER.equals(tableIdentifier)) {
             table = 5;
             constructor = () -> (ENTITY) new JoinTestUtil.E5Impl();
-        } else if (JoinTestUtil.E6Manager.IDENTIFIER.equals(tableIdentifier)) {
-            table = 6;
-            constructor = () -> (ENTITY) new JoinTestUtil.E6Impl();
         } else {
             throw new UnsupportedOperationException("The table " + tableIdentifier + " is not known");
         }
-        int mask = 1 << (table - 1);
+        int mask = 1 << (table);
 
         return IntStream.range(0, (1 << 6) * ENTITIES_PER_CARDINALITY)
             .filter(i -> (i & mask) != 0)
