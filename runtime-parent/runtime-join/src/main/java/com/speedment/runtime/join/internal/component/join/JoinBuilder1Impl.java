@@ -11,46 +11,46 @@ import com.speedment.runtime.join.stage.JoinType;
 /**
  *
  * @author Per Minborg
- * @param <T1> entity type of the first table
+ * @param <T0> entity type of the first table
  */
-final class JoinBuilder1Impl<T1>
-    extends AbstractJoinBuilder<T1, JoinBuilder1<T1>>
-    implements JoinBuilder1<T1> {
+final class JoinBuilder1Impl<T0>
+    extends AbstractJoinBuilder<T0, JoinBuilder1<T0>>
+    implements JoinBuilder1<T0> {
 
-    JoinBuilder1Impl(JoinStreamSupplierComponent streamSupplier, TableIdentifier<T1> initialTable) {
+    JoinBuilder1Impl(JoinStreamSupplierComponent streamSupplier, TableIdentifier<T0> initialTable) {
         super(streamSupplier, initialTable);
     }
 
     @Override
-    public <T2> AfterJoin<T1, T2> innerJoinOn(HasComparableOperators<T2, ?> joinedField) {
+    public <T1> AfterJoin<T0, T1> innerJoinOn(HasComparableOperators<T1, ?> joinedField) {
         return new AfterJoinImpl<>(addStageBeanOf(JoinType.INNER_JOIN, joinedField));
     }
 
     @Override
-    public <T2> AfterJoin<T1, T2> leftJoinOn(HasComparableOperators<T2, ?> joinedField) {
+    public <T1> AfterJoin<T0, T1> leftJoinOn(HasComparableOperators<T1, ?> joinedField) {
         return new AfterJoinImpl<>(addStageBeanOf(JoinType.LEFT_JOIN, joinedField));
     }
 
     @Override
-    public <T2> AfterJoin<T1, T2> rightJoinOn(HasComparableOperators<T2, ?> joinedField) {
+    public <T1> AfterJoin<T0, T1> rightJoinOn(HasComparableOperators<T1, ?> joinedField) {
         return new AfterJoinImpl<>(addStageBeanOf(JoinType.RIGHT_JOIN, joinedField));
     }
 
 //    @Override
-//    public <T2> AfterJoin<T1, T2> fullOuterJoinOn(HasComparableOperators<T2, ?> joinedField) {
+//    public <T1> AfterJoin<T0, T1> fullOuterJoinOn(HasComparableOperators<T1, ?> joinedField) {
 //        return new AfterJoinImpl<>(addStageBeanOf(JoinType.FULL_OUTER_JOIN, joinedField));
 //    }
 
     @Override
-    public <T2> JoinBuilder2<T1, T2> crossJoin(TableIdentifier<T2> joinedTable) {
+    public <T1> JoinBuilder2<T0, T1> crossJoin(TableIdentifier<T1> joinedTable) {
         return new JoinBuilder2Impl<>(this, addStageBeanOf(joinedTable, JoinType.CROSS_JOIN));
     }
 
-    private final class AfterJoinImpl<T2>
-        extends BaseAfterJoin<T2, JoinBuilder2<T1, T2>>
-        implements AfterJoin<T1, T2> {
+    private final class AfterJoinImpl<T1>
+        extends BaseAfterJoin<T1, JoinBuilder2<T0, T1>>
+        implements AfterJoin<T0, T1> {
 
-        private AfterJoinImpl(StageBean<T2> stageBen) {
+        private AfterJoinImpl(StageBean<T1> stageBen) {
             super(JoinBuilder1Impl.this, stageBen, JoinBuilder2Impl::new);
         }
     }
