@@ -10,8 +10,8 @@ public enum JoinType {
     INNER_JOIN("INNER JOIN", false, false),
     LEFT_JOIN("LEFT JOIN", true, false),
     RIGHT_JOIN("RIGHT JOIN", false, true),
-    FULL_OUTER_JOIN("FULL OUTER JOIN", true, true),
-    CROSS_JOIN("CROSS JOIN", false, false);
+    //FULL_OUTER_JOIN("FULL OUTER JOIN", true, true),
+     CROSS_JOIN("CROSS JOIN", false, false);
 
     private final String sql;
     private final boolean nullableSelf;

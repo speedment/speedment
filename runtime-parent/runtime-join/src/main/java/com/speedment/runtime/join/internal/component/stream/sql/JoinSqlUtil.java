@@ -11,7 +11,6 @@ import com.speedment.runtime.core.component.DbmsHandlerComponent;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DatabaseNamingConvention;
-import com.speedment.runtime.core.db.DbmsType.SubSelectAlias;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.db.SqlFunction;
 import com.speedment.runtime.core.db.SqlPredicateFragment;
@@ -326,16 +325,16 @@ public final class JoinSqlUtil {
             case CROSS_JOIN:
                 sb.append(", ").append(sqlStage.sqlTableReference()).append(" ");
                 break;
-            case FULL_OUTER_JOIN:
-                // Most databases do not support this natively so we create a 
-                // UNION between a LEFT JOIN and a RIGHT JOIN instead.
-                sb
-                    .append("(")
-                    .append(renderJoin(naming, sqlStages, stages, stageIndex, JoinType.LEFT_JOIN))
-                    .append(" UNION ")
-                    .append(renderJoin(naming, sqlStages, stages, stageIndex, JoinType.RIGHT_JOIN))
-                    .append(")");
-                break;
+//            case FULL_OUTER_JOIN:
+//                // Most databases do not support this natively so we create a 
+//                // UNION between a LEFT JOIN and a RIGHT JOIN instead.
+//                sb
+//                    .append("(")
+//                    .append(renderJoin(naming, sqlStages, stages, stageIndex, JoinType.LEFT_JOIN))
+//                    .append(" UNION ")
+//                    .append(renderJoin(naming, sqlStages, stages, stageIndex, JoinType.RIGHT_JOIN))
+//                    .append(")");
+//                break;
             default:
                 sb.append(joinType.sql()).append(" ");
                 sb.append(sqlStage.sqlTableReference()).append(" ");

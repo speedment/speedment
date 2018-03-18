@@ -14,26 +14,26 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Per Minborg
  */
-final class JoinBuilder5Impl<T1, T2, T3, T4, T5>
-    extends AbstractJoinBuilder<T5, JoinBuilder5<T1, T2, T3, T4, T5>>
-    implements JoinBuilder5<T1, T2, T3, T4, T5> {
+final class JoinBuilder5Impl<T0, T1, T2, T3, T4>
+    extends AbstractJoinBuilder<T4, JoinBuilder5<T0, T1, T2, T3, T4>>
+    implements JoinBuilder5<T0, T1, T2, T3, T4> {
 
-    JoinBuilder5Impl(AbstractJoinBuilder<?, ?> previousStage, StageBean<T5> current) {
+    JoinBuilder5Impl(AbstractJoinBuilder<?, ?> previousStage, StageBean<T4> current) {
         super(previousStage, current);
     }
 
     @Override
-    public <T6> AfterJoin<T1, T2, T3, T4, T5, T6> innerJoinOn(HasComparableOperators<T6, ?> joinedField) {
+    public <T5> AfterJoin<T0, T1, T2, T3, T4, T5> innerJoinOn(HasComparableOperators<T5, ?> joinedField) {
         return new AfterJoinImpl<>(addStageBeanOf(JoinType.INNER_JOIN, joinedField));
     }
 
     @Override
-    public <T6> AfterJoin<T1, T2, T3, T4, T5, T6> leftJoinOn(HasComparableOperators<T6, ?> joinedField) {
+    public <T5> AfterJoin<T0, T1, T2, T3, T4, T5> leftJoinOn(HasComparableOperators<T5, ?> joinedField) {
         return new AfterJoinImpl<>(addStageBeanOf(JoinType.LEFT_JOIN, joinedField));
     }
 
     @Override
-    public <T6> AfterJoin<T1, T2, T3, T4, T5, T6> rightJoinOn(HasComparableOperators<T6, ?> joinedField) {
+    public <T5> AfterJoin<T0, T1, T2, T3, T4, T5> rightJoinOn(HasComparableOperators<T5, ?> joinedField) {
         return new AfterJoinImpl<>(addStageBeanOf(JoinType.RIGHT_JOIN, joinedField));
     }
 
@@ -43,15 +43,15 @@ final class JoinBuilder5Impl<T1, T2, T3, T4, T5>
 //    }
 
     @Override
-    public <T6> JoinBuilder6<T1, T2, T3, T4, T5, T6> crossJoin(TableIdentifier<T6> joinedTable) {
+    public <T5> JoinBuilder6<T0, T1, T2, T3, T4, T5> crossJoin(TableIdentifier<T5> joinedTable) {
         return new JoinBuilder6Impl<>(this, addStageBeanOf(joinedTable, JoinType.CROSS_JOIN));
     }
 
-    private final class AfterJoinImpl<T6>
-        extends BaseAfterJoin<T6, JoinBuilder6<T1, T2, T3, T4, T5, T6>>
-        implements AfterJoin<T1, T2, T3, T4, T5, T6> {
+    private final class AfterJoinImpl<T5>
+        extends BaseAfterJoin<T5, JoinBuilder6<T0, T1, T2, T3, T4, T5>>
+        implements AfterJoin<T0, T1, T2, T3, T4, T5> {
 
-        private AfterJoinImpl(StageBean<T6> stageBean) {
+        private AfterJoinImpl(StageBean<T5> stageBean) {
             super(JoinBuilder5Impl.this, stageBean, JoinBuilder6Impl::new);
         }
 
@@ -59,18 +59,18 @@ final class JoinBuilder5Impl<T1, T2, T3, T4, T5>
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> Join<T> build(Function5<T1, T2, T3, T4, T5, T> constructor) {
+    public <T> Join<T> build(Function5<T0, T1, T2, T3, T4, T> constructor) {
         requireNonNull(constructor);
         assertFieldsAreInJoinTables();
         final List<Stage<?>> stages = stages();
         return streamSuppler().createJoin(
             stages,
             constructor,
-            (TableIdentifier<T1>) stages.get(0).identifier(),
-            (TableIdentifier<T2>) stages.get(1).identifier(),
-            (TableIdentifier<T3>) stages.get(2).identifier(),
-            (TableIdentifier<T4>) stages.get(3).identifier(),
-            (TableIdentifier<T5>) stages.get(4).identifier()
+            (TableIdentifier<T0>) stages.get(0).identifier(),
+            (TableIdentifier<T1>) stages.get(1).identifier(),
+            (TableIdentifier<T2>) stages.get(2).identifier(),
+            (TableIdentifier<T3>) stages.get(3).identifier(),
+            (TableIdentifier<T4>) stages.get(4).identifier()
         );
     }
 
