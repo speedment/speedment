@@ -26,18 +26,17 @@ import com.speedment.runtime.typemapper.bigdecimal.BigDecimalToDouble;
 import com.speedment.runtime.typemapper.doubles.DoubleToFloatMapper;
 import com.speedment.runtime.typemapper.doubles.PrimitiveDoubleToFloatMapper;
 import com.speedment.runtime.typemapper.integer.*;
+import com.speedment.runtime.typemapper.largeobject.BlobToBigIntegerMapper;
 import com.speedment.runtime.typemapper.largeobject.BlobToByteArrayMapper;
 import com.speedment.runtime.typemapper.largeobject.ClobToStringMapper;
 import com.speedment.runtime.typemapper.longs.*;
+import com.speedment.runtime.typemapper.other.BinaryToBigIntegerMapper;
 import com.speedment.runtime.typemapper.other.BinaryToByteArrayMapper;
 import com.speedment.runtime.typemapper.other.BinaryToUuidMapper;
 import com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper;
 import com.speedment.runtime.typemapper.shorts.PrimitiveShortToByteMapper;
 import com.speedment.runtime.typemapper.shorts.ShortToByteMapper;
-import com.speedment.runtime.typemapper.string.StringToLocaleMapper;
-import com.speedment.runtime.typemapper.string.TrueFalseStringToBooleanMapper;
-import com.speedment.runtime.typemapper.string.YNStringToBooleanMapper;
-import com.speedment.runtime.typemapper.string.YesNoStringToBooleanMapper;
+import com.speedment.runtime.typemapper.string.*;
 import com.speedment.runtime.typemapper.time.*;
 
 import java.math.BigDecimal;
@@ -82,6 +81,8 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
         install(String.class, TrueFalseStringToBooleanMapper::new);
         install(String.class, YesNoStringToBooleanMapper::new);
         install(String.class, YNStringToBooleanMapper::new);
+        install(String.class, StringToBigIntegerMapper::new);
+        install(String.class, StringToBigDecimalMapper::new);
 
         // Special BigDecimal object mappers
         install(BigDecimal.class, BigDecimalToDouble::new);
@@ -89,7 +90,8 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
         // Special Large object mappers
         install(Clob.class, ClobToStringMapper::new);
         install(Blob.class, BlobToByteArrayMapper::new);
-        
+        install(Blob.class, BlobToBigIntegerMapper::new);
+
         // Special Long mappers
         install(Long.class, LongToIntegerMapper::new);
         install(Long.class, LongToShortMapper::new);
@@ -129,6 +131,7 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
         // Others
         install(Object.class, BinaryToUuidMapper::new);
         install(Object.class, BinaryToByteArrayMapper::new);
+        install(Object.class, BinaryToBigIntegerMapper::new);
     }
 
     @Override
