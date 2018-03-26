@@ -12,9 +12,9 @@ public enum JoinOperator {
     LESS_THAN("<", false),
     LESS_OR_EQUAL("<=", false),
     GREATER_THAN(">", false),
-    GREATER_OR_EQUAL(">=", false),
-    BETWEEN("BETWEEN", false),
-    NOT_BETWEEN("NOT BETWEEN", false);
+    GREATER_OR_EQUAL(">=", false);
+//    BETWEEN("BETWEEN", false),
+//    NOT_BETWEEN("NOT BETWEEN", false);
 
     private final String operator;
     private final boolean symetric;
@@ -28,6 +28,13 @@ public enum JoinOperator {
         return operator;
     }
 
+    /**
+     * Returns if this operation is symetric with respect to its parameters.
+     * More formally returns true if: A oper B is true if and only if B oper A is
+     * true.
+     *
+     * @return if this operation is symetric with respect to its parameters
+     */
     public boolean isSymetric() {
         return symetric;
     }

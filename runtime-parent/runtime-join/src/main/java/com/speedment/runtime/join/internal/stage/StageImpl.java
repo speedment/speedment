@@ -25,8 +25,8 @@ public class StageImpl<T> implements Stage<T> {
     private final HasComparableOperators<T, ?> field;
     private final JoinOperator joinOperator;
     private final HasComparableOperators<?, ?> foreignFirstField;
-    private final HasComparableOperators<?, ?> foreignSecondField;
-    private final Inclusion foreignInclusion;
+//    private final HasComparableOperators<?, ?> foreignSecondField;
+//    private final Inclusion foreignInclusion;
 
     public StageImpl(
         final TableIdentifier<T> identifier,
@@ -34,18 +34,18 @@ public class StageImpl<T> implements Stage<T> {
         final JoinType joinType,
         final HasComparableOperators<T, ?> field,
         final JoinOperator joinOperator,
-        final HasComparableOperators<?, ?> foreignFirstField,
-        final HasComparableOperators<?, ?> foreignSecondField,
-        final Inclusion foreignInclusion
+        final HasComparableOperators<?, ?> foreignField
+//        final HasComparableOperators<?, ?> foreignSecondField,
+//        final Inclusion foreignInclusion
     ) {
         this.identifier = requireNonNull(identifier);
         this.predicates = predicates; // Nullable
         this.joinType = joinType; // Nullable
         this.field = field; // Nullable
         this.joinOperator = joinOperator; // Nullable
-        this.foreignFirstField = foreignFirstField; // Nullable
-        this.foreignSecondField = foreignSecondField; // Nullable
-        this.foreignInclusion = foreignInclusion; // Nullable
+        this.foreignFirstField = foreignField; // Nullable
+//        this.foreignSecondField = foreignSecondField; // Nullable
+//        this.foreignInclusion = foreignInclusion; // Nullable
     }
 
     @Override
@@ -74,23 +74,25 @@ public class StageImpl<T> implements Stage<T> {
     }
 
     @Override
-    public Optional<HasComparableOperators<?, ?>> foreignFirstField() {
+    public Optional<HasComparableOperators<?, ?>> foreignField() {
         return Optional.ofNullable(foreignFirstField);
     }
 
-    @Override
-    public Optional<HasComparableOperators<?, ?>> foreignSecondField() {
-        return Optional.ofNullable(foreignSecondField);
-    }
-
-    @Override
-    public Optional<Inclusion> foreignInclusion() {
-        return Optional.ofNullable(foreignInclusion);
-    }
+//    @Override
+//    public Optional<HasComparableOperators<?, ?>> foreignSecondField() {
+//        return Optional.ofNullable(foreignSecondField);
+//    }
+//
+//    @Override
+//    public Optional<Inclusion> foreignInclusion() {
+//        return Optional.ofNullable(foreignInclusion);
+//    }
 
     @Override
     public String toString() {
-        return "StageImpl{" + "identifier=" + identifier + ", predicates=" + predicates + ", joinType=" + joinType + ", field=" + field + ", operatorType=" + joinOperator + ", firstForeignField=" + foreignFirstField + ", secondForeignField=" + foreignSecondField + '}';
+        return "StageImpl{" + "identifier=" + identifier + ", predicates=" + predicates + ", joinType=" + joinType + ", field=" + field + ", joinOperator=" + joinOperator + ", foreignFirstField=" + foreignFirstField + '}';
     }
+
+
 
 }

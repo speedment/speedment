@@ -222,13 +222,12 @@ public final class JoinTestUtil {
     }
 
     public static boolean equals(Stage<?> s1, Stage<?> s2) {
-        return Stream.<Function<Stage<?>, ?>>of(Stage::foreignFirstField,
+        return Stream.<Function<Stage<?>, ?>>of(Stage::foreignField,
             Stage::identifier,
             Stage::joinType,
             Stage::joinOperator,
             Stage::field,
-            Stage::predicates,
-            Stage::foreignSecondField
+            Stage::predicates
         ).allMatch(keyExtractor -> equals(keyExtractor, s1, s2));
 
     }

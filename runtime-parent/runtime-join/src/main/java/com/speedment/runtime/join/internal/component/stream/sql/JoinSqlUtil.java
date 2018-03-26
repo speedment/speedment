@@ -106,9 +106,9 @@ public final class JoinSqlUtil {
                 }
                 final Stage<?> otherStage = stages.get(i);
                 if (otherStage.joinType().isPresent() && otherStage.joinType().get().isNullableOther()) {
-                    final TableIdentifier<?> referencedId = otherStage.foreignFirstField().get().identifier().asTableIdentifier();
+                    final TableIdentifier<?> referencedId = otherStage.foreignField().get().identifier().asTableIdentifier();
                     if (thisId.equals(referencedId)) {
-                        nullOffset = findNullOffset(table, otherStage, otherStage.foreignFirstField().get());
+                        nullOffset = findNullOffset(table, otherStage, otherStage.foreignField().get());
                         // If we have a between operation where there is another field pointed, my
                         // belief is that we can safely ignore that because both fields will be null and we
                         // only need to detect one
@@ -339,31 +339,36 @@ public final class JoinSqlUtil {
                 sb.append(joinType.sql()).append(" ");
                 sb.append(sqlStage.sqlTableReference()).append(" ");
                 stage.field().ifPresent(field -> {
-                    final HasComparableOperators<?, ?> foreignFirstField = stage.foreignFirstField().get();
+                    final HasComparableOperators<?, ?> foreignFirstField = stage.foreignField().get();
                     final int foreignStageIndex = stageIndexOf(stages, foreignFirstField);
                     final Stage<?> foreignStage = stages.get(foreignStageIndex);
                     sb.append("ON (");
                     final JoinOperator joinOperator = stage.joinOperator().get();
-                    switch (joinOperator) {
-                        case BETWEEN:
-                        case NOT_BETWEEN: {
-                            renderBetweenOnPredicate(
-                                sb,
-                                naming,
-                                joinOperator,
-                                stageIndex,
-                                foreignStageIndex,
-                                field,
-                                foreignFirstField,
-                                stage.foreignSecondField().get(),
-                                stage.foreignInclusion().get()
-                            );
-                            break;
-                        }
-                        default: {
-                            renderPredicate(sb, naming, stageIndex, foreignStageIndex, field, foreignFirstField, joinOperator.sqlOperator());
-                        }
-                    }
+                     renderPredicate(sb, naming, stageIndex, foreignStageIndex, field, foreignFirstField, joinOperator.sqlOperator());
+                     
+                     
+//                    switch (joinOperator) {
+//                        case BETWEEN:
+//                        case NOT_BETWEEN: {
+//                            renderBetweenOnPredicate(
+//                                sb,
+//                                naming,
+//                                joinOperator,
+//                                stageIndex,
+//                                foreignStageIndex,
+//                                field,
+//                                foreignFirstField,
+//                                stage.foreignSecondField().get(),
+//                                stage.foreignInclusion().get()
+//                            );
+//                            break;
+//                        }
+//                        default: {
+//                            renderPredicate(sb, naming, stageIndex, foreignStageIndex, field, foreignFirstField, joinOperator.sqlOperator());
+//                        }
+//                    }
+
+
                     sb.append(") ");
                 });
                 break;
@@ -371,29 +376,29 @@ public final class JoinSqlUtil {
         return sb.toString();
     }
 
-    private static void renderBetweenOnPredicate(
-        final StringBuilder sb,
-        final DatabaseNamingConvention naming,
-        final JoinOperator joinOperator,
-        final int stageIndex,
-        final int foreignStageIndex,
-        final HasComparableOperators<?, ?> field,
-        final HasComparableOperators<?, ?> foreignFirstField,
-        final HasComparableOperators<?, ?> foreignSecondField,
-        final Inclusion inclusion
-    ) {
-        // Use compisition of >, >=, < and <= to implement inclusion variants
-        if (JoinOperator.NOT_BETWEEN.equals(joinOperator)) {
-            sb.append(" NOT ");
-        }
-        sb.append("(");
-        final String firstOperator = inclusion.isStartInclusive() ? ">=" : ">";
-        final String secondOperator = inclusion.isEndInclusive() ? "<=" : "<";
-        renderPredicate(sb, naming, stageIndex, foreignStageIndex, field, foreignFirstField, firstOperator);
-        sb.append(" AND ");
-        renderPredicate(sb, naming, stageIndex, foreignStageIndex, field, foreignSecondField, secondOperator);
-        sb.append(")");
-    }
+//    private static void renderBetweenOnPredicate(
+//        final StringBuilder sb,
+//        final DatabaseNamingConvention naming,
+//        final JoinOperator joinOperator,
+//        final int stageIndex,
+//        final int foreignStageIndex,
+//        final HasComparableOperators<?, ?> field,
+//        final HasComparableOperators<?, ?> foreignFirstField,
+//        final HasComparableOperators<?, ?> foreignSecondField,
+//        final Inclusion inclusion
+//    ) {
+//        // Use compisition of >, >=, < and <= to implement inclusion variants
+//        if (JoinOperator.NOT_BETWEEN.equals(joinOperator)) {
+//            sb.append(" NOT ");
+//        }
+//        sb.append("(");
+//        final String firstOperator = inclusion.isStartInclusive() ? ">=" : ">";
+//        final String secondOperator = inclusion.isEndInclusive() ? "<=" : "<";
+//        renderPredicate(sb, naming, stageIndex, foreignStageIndex, field, foreignFirstField, firstOperator);
+//        sb.append(" AND ");
+//        renderPredicate(sb, naming, stageIndex, foreignStageIndex, field, foreignSecondField, secondOperator);
+//        sb.append(")");
+//    }
 
     private static void renderPredicate(
         final StringBuilder sb,

@@ -1,8 +1,8 @@
 package com.speedment.runtime.join.stage;
 
 import com.speedment.runtime.config.identifier.TableIdentifier;
-import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
+import com.speedment.runtime.join.internal.stage.StageImpl;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -39,11 +39,11 @@ public interface Stage<ENTITY> {
     Optional<JoinType> joinType();
 
     /**
-     * Returns a Field that belongs to a table from a previous stage, or
+     * Returns a Field that belongs to the table of this Stage, or
      * {@code empty()} if no Field is defined (i.e. for a CROSS JOIN).
      *
-     * @return a Field that belongs to a table from a previous stage, or
-     * {@code empty()} if no Field is defined
+     * @return a Field that belongs to the table of this Stage,
+     * or{@code empty()} if no Field is defined
      */
     Optional<HasComparableOperators<ENTITY, ?>> field();
 
@@ -57,32 +57,54 @@ public interface Stage<ENTITY> {
     Optional<JoinOperator> joinOperator();
 
     /**
-     * Returns a Field that belongs to the table of this Stage, or
+     * Returns a Field that belongs to a table from a previous stage, or
      * {@code empty()} if no Field is defined (i.e. for a CROSS JOIN).
      *
-     * @return a Field that belongs to the table of this Stage,
-     * or{@code empty()} if no Field is defined
-     */
-    Optional<HasComparableOperators<?, ?>> foreignFirstField();
-
-    /**
-     * Returns a Field that belongs to the table of this Stage, or
-     * {@code empty()} if no Field is defined (i.e. for a CROSS JOIN or for all
-     * OperatorTypes that are not BETWEEN or NOT_BETWEEN).
-     *
-     * @return a Field that belongs to the table of this Stage, or
+     * @return a Field that belongs to a table from a previous stage, or
      * {@code empty()} if no Field is defined
      */
-    Optional<HasComparableOperators<?, ?>> foreignSecondField();
+    Optional<HasComparableOperators<?, ?>> foreignField();
 
+//    /**
+//     * Returns a Field that belongs to the table of this Stage, or
+//     * {@code empty()} if no Field is defined (i.e. for a CROSS JOIN or for all
+//     * OperatorTypes that are not BETWEEN or NOT_BETWEEN).
+//     *
+//     * @return a Field that belongs to the table of this Stage, or
+//     * {@code empty()} if no Field is defined
+//     */
+//    Optional<HasComparableOperators<?, ?>> foreignSecondField();
+//
+//    /**
+//     * Returns the Inclusion type for this Stage or {@code empty()} if no
+//     * Inclusion type is defined (i.e. for a CROSS JOIN or for all OperatorTypes
+//     * that are not BETWEEN or NOT_BETWEEN).
+//     *
+//     * @return the Inclusion type for this stage, or {@code empty()} if no
+//     * Inclusion type is defined
+//     */
+//    Optional<Inclusion> foreignInclusion();
+    
     /**
-     * Returns the Inclusion type for this Stage or {@code empty()} if no
-     * Inclusion type is defined (i.e. for a CROSS JOIN or for all OperatorTypes
-     * that are not BETWEEN or NOT_BETWEEN).
-     *
-     * @return the Inclusion type for this stage, or {@code empty()} if no
-     * Inclusion type is defined
+     * Creates and returns a mew default implementation of a Stage.
+     * @param <T> type
+     * @param identifier of the table
+     * @param predicates to apply on entities from this table
+     * @param joinType that shall be applied (nullable)
+     * @param field from the table to use (nullable)
+     * @param joinOperator to use when joining (nullable)
+     * @param foreignField from another table (nullable)
+     * @return a mew default implementation of a Stage
      */
-    Optional<Inclusion> foreignInclusion();
+    static <T> Stage<T> of(
+        final TableIdentifier<T> identifier,
+        final List<Predicate<? super T>> predicates,
+        final JoinType joinType,
+        final HasComparableOperators<T, ?> field,
+        final JoinOperator joinOperator,
+        final HasComparableOperators<?, ?> foreignField
+    ) {
+        return new StageImpl<>(identifier, predicates, joinType, field, joinOperator, foreignField);
+    }
 
 }

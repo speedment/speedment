@@ -123,8 +123,8 @@ abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
         for (int i = 1; i < stageBeans.size(); i++) {
             final StageBean<?> sb = stageBeans.get(i);
             assertFieldIn(tableIdentifiers, sb.getField(), i);
-            assertFieldIn(tableIdentifiers, sb.getForeignFirstField(), i);
-            assertFieldIn(tableIdentifiers, sb.getForeignSecondField(), i);
+            assertFieldIn(tableIdentifiers, sb.getForeignField(), i);
+            //assertFieldIn(tableIdentifiers, sb.getForeignSecondField(), i);
         }
     }
 

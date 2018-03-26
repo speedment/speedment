@@ -213,17 +213,17 @@ public final class JoinBuilderTest {
         return (StageBean<?> sb) -> {
             @SuppressWarnings("unchecked")
             final StageBean<T> sb1 = (StageBean<T>) sb;
-            sb1.setForeignFirstField(field);
+            sb1.setForeignField(field);
         };
     }
 
-    private <T> Consumer<StageBean<?>> setForeignSecondFieldTo(HasComparableOperators<T, ?> field) {
-        return (StageBean<?> sb) -> {
-            @SuppressWarnings("unchecked")
-            final StageBean<T> sb1 = (StageBean<T>) sb;
-            sb1.setForeignSecondField(field);
-        };
-    }
+//    private <T> Consumer<StageBean<?>> setForeignSecondFieldTo(HasComparableOperators<T, ?> field) {
+//        return (StageBean<?> sb) -> {
+//            @SuppressWarnings("unchecked")
+//            final StageBean<T> sb1 = (StageBean<T>) sb;
+//            sb1.setForeignSecondField(field);
+//        };
+//    }
 
     private <K, V> Entry<K, V> entry(K k, V v) {
         return new SimpleImmutableEntry<>(k, v);

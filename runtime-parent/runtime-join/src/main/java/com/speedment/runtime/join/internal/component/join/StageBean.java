@@ -25,9 +25,9 @@ public final class StageBean<T> {
     private JoinType joinType;
     private HasComparableOperators<T, ?> field;
     private JoinOperator joinOperator;
-    private HasComparableOperators<?, ?> foreignFirstField;
-    private HasComparableOperators<?, ?> foreignSecondField;
-    private Inclusion foreignInclusion;
+    private HasComparableOperators<?, ?> foreignField;
+//    private HasComparableOperators<?, ?> foreignSecondField;
+//    private Inclusion foreignInclusion;
 
     public StageBean(TableIdentifier<T> identifier) {
         this.identifier = requireNonNull(identifier);
@@ -72,21 +72,21 @@ public final class StageBean<T> {
         this.joinOperator = requireNonNull(joinOperator);
     }
 
-    public HasComparableOperators<?, ?> getForeignFirstField() {
-        return foreignFirstField;
+    public HasComparableOperators<?, ?> getForeignField() {
+        return foreignField;
     }
 
-    public void setForeignFirstField(HasComparableOperators<?, ?> foreignFirstField) {
-        this.foreignFirstField = requireNonNull(foreignFirstField);
+    public void setForeignField(HasComparableOperators<?, ?> foreignFirstField) {
+        this.foreignField = requireNonNull(foreignFirstField);
     }
 
-    public HasComparableOperators<?, ?> getForeignSecondField() {
-        return foreignSecondField;
-    }
-
-    public void setForeignSecondField(HasComparableOperators<?, ?> foreignSecondField) {
-        this.foreignSecondField = requireNonNull(foreignSecondField);
-    }
+//    public HasComparableOperators<?, ?> getForeignSecondField() {
+//        return foreignSecondField;
+//    }
+//
+//    public void setForeignSecondField(HasComparableOperators<?, ?> foreignSecondField) {
+//        this.foreignSecondField = requireNonNull(foreignSecondField);
+//    }
 
     public TableIdentifier<T> getIdentifier() {
         return identifier;
@@ -101,24 +101,24 @@ public final class StageBean<T> {
         return predicates;
     }
 
-    public Inclusion getForeignInclusion() {
-        return foreignInclusion;
-    }
-
-    public void setForeignInclusion(Inclusion foreignInclusion) {
-        this.foreignInclusion = requireNonNull(foreignInclusion);
-    }
+//    public Inclusion getForeignInclusion() {
+//        return foreignInclusion;
+//    }
+//
+//    public void setForeignInclusion(Inclusion foreignInclusion) {
+//        this.foreignInclusion = requireNonNull(foreignInclusion);
+//    }
 
     public Stage<T> asStage() {
-        return new StageImpl<>(
+        return Stage.of(
             identifier,
             predicates,
             joinType,
             field,
             joinOperator,
-            foreignFirstField,
-            foreignSecondField,
-            foreignInclusion
+            foreignField
+//            foreignSecondField,
+//            foreignInclusion
         );
     }
 

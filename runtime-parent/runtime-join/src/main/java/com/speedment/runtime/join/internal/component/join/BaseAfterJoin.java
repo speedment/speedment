@@ -62,43 +62,43 @@ class BaseAfterJoin<T, R> implements HasOnPredicates<R> {
         return operation(JoinOperator.GREATER_OR_EQUAL, joinedField);
     }
 
-    @Override
-    public <ENTITY> R between(HasComparableOperators<ENTITY, ?> joinedFieldFrom, HasComparableOperators<ENTITY, ?> joinedFieldTo) {
-        return between(joinedFieldFrom, joinedFieldTo, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
-    }
-
-    @Override
-    public <ENTITY> R between(HasComparableOperators<ENTITY, ?> joinedFieldFrom, HasComparableOperators<ENTITY, ?> joinedFieldTo, Inclusion inclusion) {
-        return operation(JoinOperator.BETWEEN, joinedFieldFrom, joinedFieldTo, inclusion);
-    }
-
-    @Override
-    public <ENTITY> R notBetween(HasComparableOperators<ENTITY, ?> joinedFieldFrom, HasComparableOperators<ENTITY, ?> joinedFieldTo) {
-        return notBetween(joinedFieldFrom, joinedFieldTo, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
-    }
-
-    @Override
-    public <ENTITY> R notBetween(HasComparableOperators<ENTITY, ?> joinedFieldFrom, HasComparableOperators<ENTITY, ?> joinedFieldTo, Inclusion inclusion) {
-        return operation(JoinOperator.NOT_BETWEEN, joinedFieldFrom, joinedFieldTo, inclusion);
-    }
+//    @Override
+//    public <ENTITY> R between(HasComparableOperators<ENTITY, ?> joinedFieldFrom, HasComparableOperators<ENTITY, ?> joinedFieldTo) {
+//        return between(joinedFieldFrom, joinedFieldTo, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
+//    }
+//
+//    @Override
+//    public <ENTITY> R between(HasComparableOperators<ENTITY, ?> joinedFieldFrom, HasComparableOperators<ENTITY, ?> joinedFieldTo, Inclusion inclusion) {
+//        return operation(JoinOperator.BETWEEN, joinedFieldFrom, joinedFieldTo, inclusion);
+//    }
+//
+//    @Override
+//    public <ENTITY> R notBetween(HasComparableOperators<ENTITY, ?> joinedFieldFrom, HasComparableOperators<ENTITY, ?> joinedFieldTo) {
+//        return notBetween(joinedFieldFrom, joinedFieldTo, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
+//    }
+//
+//    @Override
+//    public <ENTITY> R notBetween(HasComparableOperators<ENTITY, ?> joinedFieldFrom, HasComparableOperators<ENTITY, ?> joinedFieldTo, Inclusion inclusion) {
+//        return operation(JoinOperator.NOT_BETWEEN, joinedFieldFrom, joinedFieldTo, inclusion);
+//    }
 
     private R operation(JoinOperator operatorType, HasComparableOperators<?, ?> joinedField) {
         stageBean.setJoinOperator(operatorType);
-        stageBean.setForeignFirstField(joinedField);
+        stageBean.setForeignField(joinedField);
         return constructor.apply(currentBuilderStage, stageBean);
     }
 
-    private <ENTITY> R operation(
-        final JoinOperator operatorType,
-        final HasComparableOperators<ENTITY, ?> joinedFieldFrom,
-        final HasComparableOperators<ENTITY, ?> joinedFieldTo,
-        final Inclusion inclusion
-    ) {
-        stageBean.setJoinOperator(operatorType);
-        stageBean.setForeignFirstField(joinedFieldFrom);
-        stageBean.setForeignSecondField(joinedFieldTo);
-        stageBean.setForeignInclusion(inclusion);
-        return constructor.apply(currentBuilderStage, stageBean);
-    }
+//    private <ENTITY> R operation(
+//        final JoinOperator operatorType,
+//        final HasComparableOperators<ENTITY, ?> joinedFieldFrom,
+//        final HasComparableOperators<ENTITY, ?> joinedFieldTo,
+//        final Inclusion inclusion
+//    ) {
+//        stageBean.setJoinOperator(operatorType);
+//        stageBean.setForeignFirstField(joinedFieldFrom);
+//        stageBean.setForeignSecondField(joinedFieldTo);
+//        stageBean.setForeignInclusion(inclusion);
+//        return constructor.apply(currentBuilderStage, stageBean);
+//    }
 
 }

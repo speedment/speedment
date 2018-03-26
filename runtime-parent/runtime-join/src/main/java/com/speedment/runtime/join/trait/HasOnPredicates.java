@@ -1,6 +1,6 @@
 package com.speedment.runtime.join.trait;
 
-import com.speedment.runtime.field.predicate.Inclusion;
+// import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 
 /**
@@ -92,118 +92,118 @@ public interface HasOnPredicates<R> {
      */
     R greaterOrEqual(HasComparableOperators<?, ?> joinedField);
 
-    /**
-     * Adds an operation where a previous field is compared to the given
-     * {@code joinedFieldFrom} and {@code joinedFieldTo} and whereby the
-     * operation returns true if and only the previous field is <em>between</em>
-     * {@code joinedFieldFrom} (inclusive>) and {@code joinedFieldTo}
-     * (exclusive).
-     *
-     * @param <ENTITY> entity type for both fields
-     * @param joinedFieldFrom to use by the operation
-     * @param joinedFieldTo to use by the operation
-     * @return a builder with the added operation
-     *
-     * @throws NullPointerException if either the provided
-     * {@code joinedFieldFrom} or the provided {@code joinedFieldTo } is
-     * {@code null}.
-     */
-    default <ENTITY> R between(
-        HasComparableOperators<ENTITY, ?> joinedFieldFrom,
-        HasComparableOperators<ENTITY, ?> joinedFieldTo
-    ) {
-        return between(joinedFieldFrom, joinedFieldTo, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
-    }
-
-    /**
-     * Adds an operation where a previous field is compared to the given
-     * {@code joinedFieldFrom} and {@code joinedFieldTo} and whereby the
-     * operation returns true if and only the previous field is <em>between</em>
-     * {@code joinedFieldFrom} and {@code joinedFieldTo} while considering the
-     * provided mode of {@code inclusion}.
-     * <p>
-     * The Inclusion parameter may take the following values:
-     * <p>
-     * <
-     * pre>{@code
-     *    START_INCLUSIVE_END_INCLUSIVE,
-     *    START_INCLUSIVE_END_EXCLUSIVE,
-     *    START_EXCLUSIVE_END_INCLUSIVE,
-     *    START_EXCLUSIVE_END_EXCLUSIVE
-     * }
-     * </pre>
-     *
-     * @param <ENTITY> entity type for both fields
-     * @param joinedFieldFrom to use by the operation
-     * @param joinedFieldTo to use by the operation
-     * @param inclusion type of between (open or closed in both ends)
-     * @return a builder with the added operation
-     *
-     * @throws NullPointerException if either the provided
-     * {@code joinedFieldFrom}, the provided {@code joinedFieldTo } or the
-     * provided {@code inclusion} is {@code null}.
-     */
-    <ENTITY> R between(
-        HasComparableOperators<ENTITY, ?> joinedFieldFrom,
-        HasComparableOperators<ENTITY, ?> joinedFieldTo,
-        Inclusion inclusion
-    );
-
-    /**
-     * Adds an operation where a previous field is compared to the given
-     * {@code joinedFieldFrom} and {@code joinedFieldTo} and whereby the
-     * operation returns true if and only the previous field is <em>not
-     * between</em> {@code joinedFieldFrom} (inclusive>) and
-     * {@code joinedFieldTo} (exclusive).
-     *
-     * @param <ENTITY> entity type for both fields
-     * @param joinedFieldFrom to use by the operation
-     * @param joinedFieldTo to use by the operation
-     * @return a builder with the added operation
-     *
-     * @throws NullPointerException if either the provided
-     * {@code joinedFieldFrom} or the provided {@code joinedFieldTo } is
-     * {@code null}.
-     */
-    default <ENTITY> R notBetween(
-        HasComparableOperators<ENTITY, ?> joinedFieldFrom,
-        HasComparableOperators<ENTITY, ?> joinedFieldTo
-    ) {
-        return notBetween(joinedFieldFrom, joinedFieldTo, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
-    }
-
-    /**
-     * Adds an operation where a previous field is compared to the given
-     * {@code joinedFieldFrom} and {@code joinedFieldTo} and whereby the
-     * operation returns true if and only the previous field is <em>not
-     * between</em> {@code joinedFieldFrom} and {@code joinedFieldTo} while
-     * considering the provided mode of {@code inclusion}.
-     * <p>
-     * The Inclusion parameter may take the following values:
-     * <p>
-     * <
-     * pre>{@code
-     *    START_INCLUSIVE_END_INCLUSIVE,
-     *    START_INCLUSIVE_END_EXCLUSIVE,
-     *    START_EXCLUSIVE_END_INCLUSIVE,
-     *    START_EXCLUSIVE_END_EXCLUSIVE
-     * }
-     * </pre>
-     *
-     * @param <ENTITY> entity type for both fields
-     * @param joinedFieldFrom to use by the operation
-     * @param joinedFieldTo to use by the operation
-     * @param inclusion type of between (open or closed in both ends)
-     * @return a builder with the added operation
-     *
-     * @throws NullPointerException if either the provided null
-     * {@code joinedFieldFrom}, the provided {@code joinedFieldTo } or the
-     * provided {@code inclusion} is {@code null}.
-     */
-    <ENTITY> R notBetween(
-        HasComparableOperators<ENTITY, ?> joinedFieldFrom,
-        HasComparableOperators<ENTITY, ?> joinedFieldTo,
-        Inclusion inclusion
-    );
+//    /**
+//     * Adds an operation where a previous field is compared to the given
+//     * {@code joinedFieldFrom} and {@code joinedFieldTo} and whereby the
+//     * operation returns true if and only the previous field is <em>between</em>
+//     * {@code joinedFieldFrom} (inclusive>) and {@code joinedFieldTo}
+//     * (exclusive).
+//     *
+//     * @param <ENTITY> entity type for both fields
+//     * @param joinedFieldFrom to use by the operation
+//     * @param joinedFieldTo to use by the operation
+//     * @return a builder with the added operation
+//     *
+//     * @throws NullPointerException if either the provided
+//     * {@code joinedFieldFrom} or the provided {@code joinedFieldTo } is
+//     * {@code null}.
+//     */
+//    default <ENTITY> R between(
+//        HasComparableOperators<ENTITY, ?> joinedFieldFrom,
+//        HasComparableOperators<ENTITY, ?> joinedFieldTo
+//    ) {
+//        return between(joinedFieldFrom, joinedFieldTo, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
+//    }
+//
+//    /**
+//     * Adds an operation where a previous field is compared to the given
+//     * {@code joinedFieldFrom} and {@code joinedFieldTo} and whereby the
+//     * operation returns true if and only the previous field is <em>between</em>
+//     * {@code joinedFieldFrom} and {@code joinedFieldTo} while considering the
+//     * provided mode of {@code inclusion}.
+//     * <p>
+//     * The Inclusion parameter may take the following values:
+//     * <p>
+//     * <
+//     * pre>{@code
+//     *    START_INCLUSIVE_END_INCLUSIVE,
+//     *    START_INCLUSIVE_END_EXCLUSIVE,
+//     *    START_EXCLUSIVE_END_INCLUSIVE,
+//     *    START_EXCLUSIVE_END_EXCLUSIVE
+//     * }
+//     * </pre>
+//     *
+//     * @param <ENTITY> entity type for both fields
+//     * @param joinedFieldFrom to use by the operation
+//     * @param joinedFieldTo to use by the operation
+//     * @param inclusion type of between (open or closed in both ends)
+//     * @return a builder with the added operation
+//     *
+//     * @throws NullPointerException if either the provided
+//     * {@code joinedFieldFrom}, the provided {@code joinedFieldTo } or the
+//     * provided {@code inclusion} is {@code null}.
+//     */
+//    <ENTITY> R between(
+//        HasComparableOperators<ENTITY, ?> joinedFieldFrom,
+//        HasComparableOperators<ENTITY, ?> joinedFieldTo,
+//        Inclusion inclusion
+//    );
+//
+//    /**
+//     * Adds an operation where a previous field is compared to the given
+//     * {@code joinedFieldFrom} and {@code joinedFieldTo} and whereby the
+//     * operation returns true if and only the previous field is <em>not
+//     * between</em> {@code joinedFieldFrom} (inclusive>) and
+//     * {@code joinedFieldTo} (exclusive).
+//     *
+//     * @param <ENTITY> entity type for both fields
+//     * @param joinedFieldFrom to use by the operation
+//     * @param joinedFieldTo to use by the operation
+//     * @return a builder with the added operation
+//     *
+//     * @throws NullPointerException if either the provided
+//     * {@code joinedFieldFrom} or the provided {@code joinedFieldTo } is
+//     * {@code null}.
+//     */
+//    default <ENTITY> R notBetween(
+//        HasComparableOperators<ENTITY, ?> joinedFieldFrom,
+//        HasComparableOperators<ENTITY, ?> joinedFieldTo
+//    ) {
+//        return notBetween(joinedFieldFrom, joinedFieldTo, Inclusion.START_INCLUSIVE_END_EXCLUSIVE);
+//    }
+//
+//    /**
+//     * Adds an operation where a previous field is compared to the given
+//     * {@code joinedFieldFrom} and {@code joinedFieldTo} and whereby the
+//     * operation returns true if and only the previous field is <em>not
+//     * between</em> {@code joinedFieldFrom} and {@code joinedFieldTo} while
+//     * considering the provided mode of {@code inclusion}.
+//     * <p>
+//     * The Inclusion parameter may take the following values:
+//     * <p>
+//     * <
+//     * pre>{@code
+//     *    START_INCLUSIVE_END_INCLUSIVE,
+//     *    START_INCLUSIVE_END_EXCLUSIVE,
+//     *    START_EXCLUSIVE_END_INCLUSIVE,
+//     *    START_EXCLUSIVE_END_EXCLUSIVE
+//     * }
+//     * </pre>
+//     *
+//     * @param <ENTITY> entity type for both fields
+//     * @param joinedFieldFrom to use by the operation
+//     * @param joinedFieldTo to use by the operation
+//     * @param inclusion type of between (open or closed in both ends)
+//     * @return a builder with the added operation
+//     *
+//     * @throws NullPointerException if either the provided null
+//     * {@code joinedFieldFrom}, the provided {@code joinedFieldTo } or the
+//     * provided {@code inclusion} is {@code null}.
+//     */
+//    <ENTITY> R notBetween(
+//        HasComparableOperators<ENTITY, ?> joinedFieldFrom,
+//        HasComparableOperators<ENTITY, ?> joinedFieldTo,
+//        Inclusion inclusion
+//    );
 
 }
