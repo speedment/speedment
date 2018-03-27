@@ -29,7 +29,14 @@ pipeline {
                     testResults: '**/target/surefire-reports/TEST-*.xml, **/target/failsafe-reports/*.xml'
             mailIfStatusChanged env.EMAIL_RECIPIENTS
         }
-        
+        success {
+             // Send Slack-notification if build succeeds
+            slackSend (color: "good", message: "Build success\nBuild: ${env.JOB_NAME} #${env.BUILD_NUMBER}\nURL: ${env.BUILD_URL}")
+        }
+        unstable {
+             // Send Slack-notification if build succeeds
+            slackSend (color: "warning", message: "Build unstable\nBuild: ${env.JOB_NAME} #${env.BUILD_NUMBER}\nURL: ${env.BUILD_URL}")
+        }
         failure {
             // Send Slack-notification if build fails
             slackSend (color: "danger", message: "Build failed\nBuild: ${env.JOB_NAME} #${env.BUILD_NUMBER}\nURL: ${env.BUILD_URL}") 
