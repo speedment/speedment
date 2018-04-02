@@ -336,14 +336,6 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    @Deprecated
-    public BUILDER withComponent(String key, Class<?> injectableClass) {
-        requireNonNulls(key, injectableClass);
-        injectorBuilder.withComponent(injectableClass);
-        return self();
-    }
-
-    @Override
     public BUILDER withLogging(HasLogglerName namer) {
         LoggerManager.getLogger(namer.getLoggerName()).setLevel(Level.DEBUG);
         
