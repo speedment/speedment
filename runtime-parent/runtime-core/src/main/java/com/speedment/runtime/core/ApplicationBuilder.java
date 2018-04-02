@@ -562,24 +562,6 @@ public interface ApplicationBuilder<
     BUILDER withComponent(Class<?> componentClass);
 
     /**
-     * Adds a custom component implementation class. The specified class will be
-     * instantiated using its default constructor and fields annotated with
-     * {@link Inject} will be dependency injected. Methods annotated with
-     * {@link ExecuteBefore} will also be executed as part of the application
-     * configuration phase.
-     *
-     * @deprecated The parameter {@code key} is not forwarded to the dependency
-     * injection framework, so this method has exactly the same behavior as
-     * {@link #withComponent(java.lang.Class) }, so it is redundant.
-     *
-     * @param key the key to store it under
-     * @param componentClass the implementation class
-     * @return this instance
-     */
-    @Deprecated
-    BUILDER withComponent(String key, Class<?> componentClass);
-
-    /**
      * Adds a custom bundle of dependency injectable implementation classes.
      * <p>
      * The specified classes will be instantiated using its default constructor
