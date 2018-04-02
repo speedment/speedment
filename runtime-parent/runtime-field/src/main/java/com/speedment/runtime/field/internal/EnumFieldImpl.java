@@ -137,11 +137,6 @@ implements EnumField<ENTITY, D, E> {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.FIRST);
     }
 
-    @Override
-    public FieldComparator<ENTITY> comparatorNullFieldsLast() {
-        return comparator();
-    }
-
     ////////////////////////////////////////////////////////////////////////////
     //                              Predicates                                //
     ////////////////////////////////////////////////////////////////////////////

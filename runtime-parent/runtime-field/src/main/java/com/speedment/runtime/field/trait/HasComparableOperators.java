@@ -43,11 +43,10 @@ extends Field<ENTITY> {
 
     /**
      * Returns a {@link Comparator} that will compare to this field using this
-     * fields natural order.
+     * fields natural order, null fields are sorted last.
      *
      * @return a {@link Comparator} that will compare to this field using this
-     * fields natural order
-     * @throws NullPointerException if a field is null
+     * fields natural order, null fields are sorted last.
      */
     FieldComparator<ENTITY> comparator();
 
@@ -59,22 +58,6 @@ extends Field<ENTITY> {
      * fields natural order, null fields are sorted first
      */
     FieldComparator<ENTITY> comparatorNullFieldsFirst();
-
-    /**
-     * Returns a {@link Comparator} that will compare to this field using this
-     * fields natural order, null fields are sorted last.
-     *
-     * @return a {@link Comparator} that will compare to this field using this
-     * fields natural order, null fields are sorted last
-     *
-     *
-     * @deprecated This method is the same as comparator(). Use that method
-     * instead. This method will be removed in coming API versions.
-     */
-    @Deprecated
-    default FieldComparator<ENTITY> comparatorNullFieldsLast() {
-        return comparator();
-    }
 
     /**
      * Returns a {@link java.util.function.Predicate} that will evaluate to

@@ -179,11 +179,6 @@ implements EnumForeignKeyField<ENTITY, D, E, FK> {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.FIRST);
     }
 
-    @Override
-    public FieldComparator<ENTITY> comparatorNullFieldsLast() {
-        return comparator();
-    }
-
     ////////////////////////////////////////////////////////////////////////////
     //                              Predicates                                //
     ////////////////////////////////////////////////////////////////////////////

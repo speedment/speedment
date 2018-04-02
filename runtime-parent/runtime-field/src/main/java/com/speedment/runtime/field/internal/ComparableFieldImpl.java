@@ -110,11 +110,6 @@ implements ComparableField<ENTITY, D, V> {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.FIRST);
     }
 
-    @Override
-    public FieldComparator<ENTITY> comparatorNullFieldsLast() {
-        return comparator();
-    }
-
     ////////////////////////////////////////////////////////////////////////////
     //                               Operators                                //
     ////////////////////////////////////////////////////////////////////////////

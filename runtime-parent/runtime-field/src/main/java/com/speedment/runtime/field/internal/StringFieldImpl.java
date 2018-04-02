@@ -108,10 +108,6 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.FIRST);
     }
 
-    @Override
-    public FieldComparator<ENTITY> comparatorNullFieldsLast() {
-        return comparator();
-    }
 
     ////////////////////////////////////////////////////////////////////////////
     //                               Operators                                //

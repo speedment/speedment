@@ -154,11 +154,6 @@ implements ComparableForeignKeyField<ENTITY, D, V, FK_ENTITY> {
         return new ReferenceFieldComparatorImpl<>(this, NullOrder.FIRST);
     }
 
-    @Override
-    public FieldComparator<ENTITY> comparatorNullFieldsLast() {
-        return comparator();
-    }
-
     ////////////////////////////////////////////////////////////////////////////
     //                               Operators                                //
     ////////////////////////////////////////////////////////////////////////////
