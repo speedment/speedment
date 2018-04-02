@@ -590,7 +590,7 @@ public interface ApplicationBuilder<
      * @see com.speedment.runtime.core.ApplicationBuilder.LogType for standard
      * implementation
      */
-    BUILDER withLogging(HasLogglerName namer);
+    BUILDER withLogging(HasLoggerName namer);
 
     /**
      * Allows {@link java.util.stream.Stream#iterator() } and 
@@ -628,7 +628,7 @@ public interface ApplicationBuilder<
      * @see LogType
      */
     @FunctionalInterface
-    interface HasLogglerName {
+    interface HasLoggerName {
 
         String getLoggerName();
     }
@@ -636,7 +636,7 @@ public interface ApplicationBuilder<
     /**
      * The type of logging to change the settings for.
      */
-    enum LogType implements HasLogglerName {
+    enum LogType implements HasLoggerName {
 
         /**
          * Logging related to querying the data source.

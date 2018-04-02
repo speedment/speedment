@@ -336,7 +336,7 @@ public abstract class AbstractApplicationBuilder<
     }
 
     @Override
-    public BUILDER withLogging(HasLogglerName namer) {
+    public BUILDER withLogging(HasLoggerName namer) {
         LoggerManager.getLogger(namer.getLoggerName()).setLevel(Level.DEBUG);
         
         if (LogType.APPLICATION_BUILDER.getLoggerName()
