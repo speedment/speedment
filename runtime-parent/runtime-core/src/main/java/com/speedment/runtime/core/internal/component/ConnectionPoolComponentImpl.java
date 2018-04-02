@@ -231,8 +231,7 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
         return maxAge;
     }
 
-    @Override
-    public void setMaxAge(long maxAge) {
+    void setMaxAge(long maxAge) {
         LOGGER_CONNECTION.warn("Unsafe method called. Use configuration parameters to set this value instead");
         this.maxAge = maxAge;
     }
@@ -242,10 +241,9 @@ public class ConnectionPoolComponentImpl implements ConnectionPoolComponent {
         return maxRetainSize;
     }
 
-    @Override
-    public void setMaxRetainSize(int maxRetainSize) {
+    
+    void setMaxRetainSize(int maxRetainSize) {
         LOGGER_CONNECTION.warn("Unsafe method called. Use configuration parameters to set this value instead");
         this.maxRetainSize = maxRetainSize;
     }
-
 }

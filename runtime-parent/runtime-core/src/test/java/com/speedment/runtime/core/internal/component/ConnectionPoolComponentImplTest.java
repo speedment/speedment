@@ -19,7 +19,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.speedment.runtime.core.internal.platform.component.impl;
+package com.speedment.runtime.core.internal.component;
+
 
 import com.speedment.runtime.core.component.connectionpool.PoolableConnection;
 import com.speedment.runtime.core.internal.component.ConnectionPoolComponentImpl;
