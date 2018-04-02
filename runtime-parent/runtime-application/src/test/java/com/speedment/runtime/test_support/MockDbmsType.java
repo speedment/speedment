@@ -16,14 +16,14 @@
  */
 package com.speedment.runtime.test_support;
 
+import com.speedment.runtime.connector.mysql.internal.MySqlSpeedmentPredicateView;
 import com.speedment.runtime.core.db.ConnectionUrlGenerator;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.db.DbmsOperationHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.internal.db.AbstractDbmsType;
-import com.speedment.runtime.core.internal.manager.sql.MySqlSpeedmentPredicateView;
-import java.util.List;
+
 
 /**
  *

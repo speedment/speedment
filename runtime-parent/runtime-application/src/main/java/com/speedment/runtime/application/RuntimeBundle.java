@@ -17,6 +17,10 @@
 package com.speedment.runtime.application;
 
 import com.speedment.common.injector.InjectBundle;
+import com.speedment.runtime.connector.mariadb.MariaDbBundle;
+import com.speedment.runtime.connector.mysql.MySqlBundle;
+import com.speedment.runtime.connector.postgres.PostgresBundle;
+
 import com.speedment.runtime.core.internal.component.ConnectionPoolComponentImpl;
 import com.speedment.runtime.core.internal.component.DbmsHandlerComponentImpl;
 import com.speedment.runtime.core.internal.component.EntityManagerImpl;
@@ -32,10 +36,6 @@ import com.speedment.runtime.core.internal.component.sql.SqlStreamOptimizerCompo
 import com.speedment.runtime.core.internal.component.sql.SqlStreamSupplierComponentImpl;
 import com.speedment.runtime.core.internal.component.sql.override.SqlStreamTerminatorComponentImpl;
 import com.speedment.runtime.core.internal.component.transaction.TransactionComponentImpl;
-import com.speedment.runtime.core.internal.db.StandardDbmsTypes;
-import com.speedment.runtime.core.internal.db.mariadb.MariaDbDbmsType;
-import com.speedment.runtime.core.internal.db.mysql.MySqlDbmsType;
-import com.speedment.runtime.core.internal.db.postgresql.PostgresqlDbmsType;
 import com.speedment.runtime.join.JoinBundle;
 
 import java.util.stream.Stream;
@@ -61,17 +61,17 @@ public class RuntimeBundle implements InjectBundle {
             ResultSetMapperComponentImpl.class,
             SqlStreamSupplierComponentImpl.class,
             SqlPersistanceComponentImpl.class,
-            StandardDbmsTypes.class,
+            //StandardDbmsTypes.class,
             StatisticsReporterComponentImpl.class,
             StatisticsReporterSchedulerComponentImpl.class,
             SqlStreamOptimizerComponentImpl.class,
             SqlStreamTerminatorComponentImpl.class,
             TransactionComponentImpl.class
+
         )
-            .withBundle(StandardDbmsTypes.include())
-            .withBundle(MariaDbDbmsType.include())
-            .withBundle(MySqlDbmsType.include())
-            .withBundle(PostgresqlDbmsType.include())
+            .withBundle(new MySqlBundle())
+            .withBundle(new MariaDbBundle())
+            .withBundle(new PostgresBundle())
             .withBundle(new JoinBundle())
             .injectables();
     }

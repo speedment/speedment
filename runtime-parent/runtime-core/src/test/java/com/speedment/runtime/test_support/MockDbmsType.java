@@ -22,8 +22,7 @@ import com.speedment.runtime.core.db.DbmsOperationHandler;
 import com.speedment.runtime.core.db.DbmsType;
 import com.speedment.runtime.core.db.FieldPredicateView;
 import com.speedment.runtime.core.internal.db.AbstractDbmsType;
-import com.speedment.runtime.core.internal.manager.sql.MySqlSpeedmentPredicateView;
-import java.util.List;
+
 
 /**
  *
@@ -73,7 +72,7 @@ public class MockDbmsType extends AbstractDbmsType implements DbmsType {
 
     @Override
     public FieldPredicateView getFieldPredicateView() {
-        return new MySqlSpeedmentPredicateView();
+        return new MockSpeedmentPredicateView();
     }
         
 }

@@ -158,6 +158,24 @@
             <artifactId>runtime-join</artifactId>
             <version>${speedment.version}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>connector-mysql</artifactId>
+            <version>${speedment.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>connector-mariadb</artifactId>
+            <version>${speedment.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>connector-postgres</artifactId>
+            <version>${speedment.version}</version>
+        </dependency>
                                                                 
         <!--        <dependency>
             <groupId>com.speedment.common</groupId>
