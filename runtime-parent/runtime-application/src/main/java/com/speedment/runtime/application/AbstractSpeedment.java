@@ -30,14 +30,15 @@ import java.util.Optional;
 /**
  * An abstract base implementation of the {@link Speedment} interface.
  *
- * @author  Emil Forslund
- * @since   3.0.0
+ * @author Emil Forslund
+ * @since 3.0.0
  */
 public abstract class AbstractSpeedment implements Speedment {
 
-    private @Inject Injector injector;
+    @Inject private  Injector injector;
 
-    protected AbstractSpeedment() {}
+    protected AbstractSpeedment() {
+    }
 
     @Override
     public <T> Optional<T> get(Class<T> type) {
@@ -64,6 +65,12 @@ public abstract class AbstractSpeedment implements Speedment {
 
     @Override
     public void stop() {
+        close();
+    }
+
+    @Override
+    public void close() {
         injector.stop();
     }
+
 }
