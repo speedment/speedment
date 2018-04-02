@@ -6,7 +6,6 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
-import com.speedment.runtime.core.exception.SpeedmentException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static com.speedment.common.injector.State.RESOLVED;
@@ -29,16 +28,12 @@ public abstract class GeneratedFilmCategorySqlAdapter implements SqlAdapter<Film
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "film_category");
     }
     
-    protected FilmCategory apply(ResultSet resultSet, int offset) throws SpeedmentException {
-        final FilmCategory entity = createEntity();
-        try {
-            entity.setFilmId(     resultSet.getInt(1 + offset)       );
-            entity.setCategoryId( resultSet.getShort(2 + offset)     );
-            entity.setLastUpdate( resultSet.getTimestamp(3 + offset) );
-        } catch (final SQLException sqle) {
-            throw new SpeedmentException(sqle);
-        }
-        return entity;
+    protected FilmCategory apply(ResultSet resultSet, int offset) throws SQLException {
+        return createEntity()
+            .setFilmId(     resultSet.getInt(1 + offset))
+            .setCategoryId( resultSet.getShort(2 + offset))
+            .setLastUpdate( resultSet.getTimestamp(3 + offset))
+            ;
     }
     
     protected FilmCategoryImpl createEntity() {

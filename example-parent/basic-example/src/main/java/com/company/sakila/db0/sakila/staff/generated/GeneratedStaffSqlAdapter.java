@@ -6,7 +6,6 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
-import com.speedment.runtime.core.exception.SpeedmentException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static com.speedment.common.injector.State.RESOLVED;
@@ -29,24 +28,20 @@ public abstract class GeneratedStaffSqlAdapter implements SqlAdapter<Staff> {
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "staff");
     }
     
-    protected Staff apply(ResultSet resultSet, int offset) throws SpeedmentException {
-        final Staff entity = createEntity();
-        try {
-            entity.setStaffId(    resultSet.getShort(1 + offset)      );
-            entity.setFirstName(  resultSet.getString(2 + offset)     );
-            entity.setLastName(   resultSet.getString(3 + offset)     );
-            entity.setAddressId(  resultSet.getInt(4 + offset)        );
-            entity.setPicture(    resultSet.getBlob(5 + offset)       );
-            entity.setEmail(      resultSet.getString(6 + offset)     );
-            entity.setStoreId(    resultSet.getShort(7 + offset)      );
-            entity.setActive(     resultSet.getInt(8 + offset)        );
-            entity.setUsername(   resultSet.getString(9 + offset)     );
-            entity.setPassword(   resultSet.getString(10 + offset)    );
-            entity.setLastUpdate( resultSet.getTimestamp(11 + offset) );
-        } catch (final SQLException sqle) {
-            throw new SpeedmentException(sqle);
-        }
-        return entity;
+    protected Staff apply(ResultSet resultSet, int offset) throws SQLException {
+        return createEntity()
+            .setStaffId(    resultSet.getShort(1 + offset))
+            .setFirstName(  resultSet.getString(2 + offset))
+            .setLastName(   resultSet.getString(3 + offset))
+            .setAddressId(  resultSet.getInt(4 + offset))
+            .setPicture(    resultSet.getBlob(5 + offset))
+            .setEmail(      resultSet.getString(6 + offset))
+            .setStoreId(    resultSet.getShort(7 + offset))
+            .setActive(     resultSet.getInt(8 + offset))
+            .setUsername(   resultSet.getString(9 + offset))
+            .setPassword(   resultSet.getString(10 + offset))
+            .setLastUpdate( resultSet.getTimestamp(11 + offset))
+            ;
     }
     
     protected StaffImpl createEntity() {

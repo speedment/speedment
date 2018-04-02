@@ -2366,7 +2366,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "    \"id\" : \"sakila\",",
             "    \"name\" : \"sakila\",",
             "    \"packageLocation\" : \"src/main/java/\",",
-            "    \"speedmentVersion\" : \"Speedment:3.0.23-SNAPSHOT\"",
+            "    \"speedmentVersion\" : \"Speedment:3.1.0-SNAPSHOT\"",
             "  }",
             "}"
         ).forEachOrdered(sb::append);

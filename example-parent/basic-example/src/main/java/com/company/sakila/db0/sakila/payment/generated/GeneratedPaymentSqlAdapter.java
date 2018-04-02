@@ -6,7 +6,6 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
-import com.speedment.runtime.core.exception.SpeedmentException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static com.speedment.common.injector.State.RESOLVED;
@@ -30,20 +29,16 @@ public abstract class GeneratedPaymentSqlAdapter implements SqlAdapter<Payment> 
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "payment");
     }
     
-    protected Payment apply(ResultSet resultSet, int offset) throws SpeedmentException {
-        final Payment entity = createEntity();
-        try {
-            entity.setPaymentId(   resultSet.getInt(1 + offset)        );
-            entity.setCustomerId(  resultSet.getInt(2 + offset)        );
-            entity.setStaffId(     resultSet.getShort(3 + offset)      );
-            entity.setRentalId(    getInt(resultSet, 4 + offset)       );
-            entity.setAmount(      resultSet.getBigDecimal(5 + offset) );
-            entity.setPaymentDate( resultSet.getTimestamp(6 + offset)  );
-            entity.setLastUpdate(  resultSet.getTimestamp(7 + offset)  );
-        } catch (final SQLException sqle) {
-            throw new SpeedmentException(sqle);
-        }
-        return entity;
+    protected Payment apply(ResultSet resultSet, int offset) throws SQLException {
+        return createEntity()
+            .setPaymentId(   resultSet.getInt(1 + offset))
+            .setCustomerId(  resultSet.getInt(2 + offset))
+            .setStaffId(     resultSet.getShort(3 + offset))
+            .setRentalId(    getInt(resultSet, 4 + offset))
+            .setAmount(      resultSet.getBigDecimal(5 + offset))
+            .setPaymentDate( resultSet.getTimestamp(6 + offset))
+            .setLastUpdate(  resultSet.getTimestamp(7 + offset))
+            ;
     }
     
     protected PaymentImpl createEntity() {

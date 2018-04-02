@@ -6,7 +6,6 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
-import com.speedment.runtime.core.exception.SpeedmentException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static com.speedment.common.injector.State.RESOLVED;
@@ -29,17 +28,13 @@ public abstract class GeneratedInventorySqlAdapter implements SqlAdapter<Invento
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "inventory");
     }
     
-    protected Inventory apply(ResultSet resultSet, int offset) throws SpeedmentException {
-        final Inventory entity = createEntity();
-        try {
-            entity.setInventoryId( resultSet.getInt(1 + offset)       );
-            entity.setFilmId(      resultSet.getInt(2 + offset)       );
-            entity.setStoreId(     resultSet.getShort(3 + offset)     );
-            entity.setLastUpdate(  resultSet.getTimestamp(4 + offset) );
-        } catch (final SQLException sqle) {
-            throw new SpeedmentException(sqle);
-        }
-        return entity;
+    protected Inventory apply(ResultSet resultSet, int offset) throws SQLException {
+        return createEntity()
+            .setInventoryId( resultSet.getInt(1 + offset))
+            .setFilmId(      resultSet.getInt(2 + offset))
+            .setStoreId(     resultSet.getShort(3 + offset))
+            .setLastUpdate(  resultSet.getTimestamp(4 + offset))
+            ;
     }
     
     protected InventoryImpl createEntity() {

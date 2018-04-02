@@ -6,7 +6,6 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
-import com.speedment.runtime.core.exception.SpeedmentException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static com.speedment.common.injector.State.RESOLVED;
@@ -29,17 +28,13 @@ public abstract class GeneratedStoreSqlAdapter implements SqlAdapter<Store> {
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "store");
     }
     
-    protected Store apply(ResultSet resultSet, int offset) throws SpeedmentException {
-        final Store entity = createEntity();
-        try {
-            entity.setStoreId(        resultSet.getShort(1 + offset)     );
-            entity.setManagerStaffId( resultSet.getShort(2 + offset)     );
-            entity.setAddressId(      resultSet.getInt(3 + offset)       );
-            entity.setLastUpdate(     resultSet.getTimestamp(4 + offset) );
-        } catch (final SQLException sqle) {
-            throw new SpeedmentException(sqle);
-        }
-        return entity;
+    protected Store apply(ResultSet resultSet, int offset) throws SQLException {
+        return createEntity()
+            .setStoreId(        resultSet.getShort(1 + offset))
+            .setManagerStaffId( resultSet.getShort(2 + offset))
+            .setAddressId(      resultSet.getInt(3 + offset))
+            .setLastUpdate(     resultSet.getTimestamp(4 + offset))
+            ;
     }
     
     protected StoreImpl createEntity() {

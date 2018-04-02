@@ -6,7 +6,6 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
-import com.speedment.runtime.core.exception.SpeedmentException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static com.speedment.common.injector.State.RESOLVED;
@@ -29,20 +28,16 @@ public abstract class GeneratedRentalSqlAdapter implements SqlAdapter<Rental> {
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "rental");
     }
     
-    protected Rental apply(ResultSet resultSet, int offset) throws SpeedmentException {
-        final Rental entity = createEntity();
-        try {
-            entity.setRentalId(    resultSet.getInt(1 + offset)       );
-            entity.setRentalDate(  resultSet.getTimestamp(2 + offset) );
-            entity.setInventoryId( resultSet.getInt(3 + offset)       );
-            entity.setCustomerId(  resultSet.getInt(4 + offset)       );
-            entity.setReturnDate(  resultSet.getTimestamp(5 + offset) );
-            entity.setStaffId(     resultSet.getShort(6 + offset)     );
-            entity.setLastUpdate(  resultSet.getTimestamp(7 + offset) );
-        } catch (final SQLException sqle) {
-            throw new SpeedmentException(sqle);
-        }
-        return entity;
+    protected Rental apply(ResultSet resultSet, int offset) throws SQLException {
+        return createEntity()
+            .setRentalId(    resultSet.getInt(1 + offset))
+            .setRentalDate(  resultSet.getTimestamp(2 + offset))
+            .setInventoryId( resultSet.getInt(3 + offset))
+            .setCustomerId(  resultSet.getInt(4 + offset))
+            .setReturnDate(  resultSet.getTimestamp(5 + offset))
+            .setStaffId(     resultSet.getShort(6 + offset))
+            .setLastUpdate(  resultSet.getTimestamp(7 + offset))
+            ;
     }
     
     protected RentalImpl createEntity() {

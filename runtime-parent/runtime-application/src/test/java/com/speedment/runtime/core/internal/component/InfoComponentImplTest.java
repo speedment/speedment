@@ -79,6 +79,8 @@ public class InfoComponentImplTest {
 
     // This truly sucks...
     private String versionFromPom() {
+        final Pattern pattern = Pattern.compile("<version>(.+)</version>");
+        
         String result = "*unknown*";
         final Path path = Paths.get("..", "pom.xml");
         try {
@@ -89,7 +91,6 @@ public class InfoComponentImplTest {
                     seenGroupId = true;
                 }
                 if (seenGroupId) {
-                    final Pattern pattern = Pattern.compile("<version>(.+)</version>");
                     final Matcher matcher = pattern.matcher(line);
                     if (matcher.find()) {
                         result = matcher.group(1);

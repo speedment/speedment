@@ -6,7 +6,6 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
-import com.speedment.runtime.core.exception.SpeedmentException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static com.speedment.common.injector.State.RESOLVED;
@@ -29,17 +28,13 @@ public abstract class GeneratedCitySqlAdapter implements SqlAdapter<City> {
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "city");
     }
     
-    protected City apply(ResultSet resultSet, int offset) throws SpeedmentException {
-        final City entity = createEntity();
-        try {
-            entity.setCityId(     resultSet.getInt(1 + offset)       );
-            entity.setCity(       resultSet.getString(2 + offset)    );
-            entity.setCountryId(  resultSet.getInt(3 + offset)       );
-            entity.setLastUpdate( resultSet.getTimestamp(4 + offset) );
-        } catch (final SQLException sqle) {
-            throw new SpeedmentException(sqle);
-        }
-        return entity;
+    protected City apply(ResultSet resultSet, int offset) throws SQLException {
+        return createEntity()
+            .setCityId(     resultSet.getInt(1 + offset))
+            .setCity(       resultSet.getString(2 + offset))
+            .setCountryId(  resultSet.getInt(3 + offset))
+            .setLastUpdate( resultSet.getTimestamp(4 + offset))
+            ;
     }
     
     protected CityImpl createEntity() {

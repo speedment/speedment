@@ -6,7 +6,6 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
-import com.speedment.runtime.core.exception.SpeedmentException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static com.speedment.common.injector.State.RESOLVED;
@@ -29,22 +28,18 @@ public abstract class GeneratedAddressSqlAdapter implements SqlAdapter<Address> 
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "address");
     }
     
-    protected Address apply(ResultSet resultSet, int offset) throws SpeedmentException {
-        final Address entity = createEntity();
-        try {
-            entity.setAddressId(  resultSet.getInt(1 + offset)       );
-            entity.setAddress(    resultSet.getString(2 + offset)    );
-            entity.setAddress2(   resultSet.getString(3 + offset)    );
-            entity.setDistrict(   resultSet.getString(4 + offset)    );
-            entity.setCityId(     resultSet.getInt(5 + offset)       );
-            entity.setPostalCode( resultSet.getString(6 + offset)    );
-            entity.setPhone(      resultSet.getString(7 + offset)    );
-            entity.setLocation(   resultSet.getBlob(8 + offset)      );
-            entity.setLastUpdate( resultSet.getTimestamp(9 + offset) );
-        } catch (final SQLException sqle) {
-            throw new SpeedmentException(sqle);
-        }
-        return entity;
+    protected Address apply(ResultSet resultSet, int offset) throws SQLException {
+        return createEntity()
+            .setAddressId(  resultSet.getInt(1 + offset))
+            .setAddress(    resultSet.getString(2 + offset))
+            .setAddress2(   resultSet.getString(3 + offset))
+            .setDistrict(   resultSet.getString(4 + offset))
+            .setCityId(     resultSet.getInt(5 + offset))
+            .setPostalCode( resultSet.getString(6 + offset))
+            .setPhone(      resultSet.getString(7 + offset))
+            .setLocation(   resultSet.getBlob(8 + offset))
+            .setLastUpdate( resultSet.getTimestamp(9 + offset))
+            ;
     }
     
     protected AddressImpl createEntity() {

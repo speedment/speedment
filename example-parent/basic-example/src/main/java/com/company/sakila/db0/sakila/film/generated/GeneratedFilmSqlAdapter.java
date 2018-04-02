@@ -6,7 +6,6 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
-import com.speedment.runtime.core.exception.SpeedmentException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static com.speedment.common.injector.State.RESOLVED;
@@ -30,26 +29,22 @@ public abstract class GeneratedFilmSqlAdapter implements SqlAdapter<Film> {
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "film");
     }
     
-    protected Film apply(ResultSet resultSet, int offset) throws SpeedmentException {
-        final Film entity = createEntity();
-        try {
-            entity.setFilmId(             resultSet.getInt(1 + offset)         );
-            entity.setTitle(              resultSet.getString(2 + offset)      );
-            entity.setDescription(        resultSet.getString(3 + offset)      );
-            entity.setReleaseYear(        resultSet.getDate(4 + offset)        );
-            entity.setLanguageId(         resultSet.getShort(5 + offset)       );
-            entity.setOriginalLanguageId( getShort(resultSet, 6 + offset)      );
-            entity.setRentalDuration(     resultSet.getShort(7 + offset)       );
-            entity.setRentalRate(         resultSet.getBigDecimal(8 + offset)  );
-            entity.setLength(             getInt(resultSet, 9 + offset)        );
-            entity.setReplacementCost(    resultSet.getBigDecimal(10 + offset) );
-            entity.setRating(             resultSet.getString(11 + offset)     );
-            entity.setSpecialFeatures(    resultSet.getString(12 + offset)     );
-            entity.setLastUpdate(         resultSet.getTimestamp(13 + offset)  );
-        } catch (final SQLException sqle) {
-            throw new SpeedmentException(sqle);
-        }
-        return entity;
+    protected Film apply(ResultSet resultSet, int offset) throws SQLException {
+        return createEntity()
+            .setFilmId(             resultSet.getInt(1 + offset))
+            .setTitle(              resultSet.getString(2 + offset))
+            .setDescription(        resultSet.getString(3 + offset))
+            .setReleaseYear(        resultSet.getDate(4 + offset))
+            .setLanguageId(         resultSet.getShort(5 + offset))
+            .setOriginalLanguageId( getShort(resultSet, 6 + offset))
+            .setRentalDuration(     resultSet.getShort(7 + offset))
+            .setRentalRate(         resultSet.getBigDecimal(8 + offset))
+            .setLength(             getInt(resultSet, 9 + offset))
+            .setReplacementCost(    resultSet.getBigDecimal(10 + offset))
+            .setRating(             resultSet.getString(11 + offset))
+            .setSpecialFeatures(    resultSet.getString(12 + offset))
+            .setLastUpdate(         resultSet.getTimestamp(13 + offset))
+            ;
     }
     
     protected FilmImpl createEntity() {

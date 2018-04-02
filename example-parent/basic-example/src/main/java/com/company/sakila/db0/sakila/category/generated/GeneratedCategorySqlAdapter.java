@@ -6,7 +6,6 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
-import com.speedment.runtime.core.exception.SpeedmentException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static com.speedment.common.injector.State.RESOLVED;
@@ -29,16 +28,12 @@ public abstract class GeneratedCategorySqlAdapter implements SqlAdapter<Category
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "category");
     }
     
-    protected Category apply(ResultSet resultSet, int offset) throws SpeedmentException {
-        final Category entity = createEntity();
-        try {
-            entity.setCategoryId( resultSet.getShort(1 + offset)     );
-            entity.setName(       resultSet.getString(2 + offset)    );
-            entity.setLastUpdate( resultSet.getTimestamp(3 + offset) );
-        } catch (final SQLException sqle) {
-            throw new SpeedmentException(sqle);
-        }
-        return entity;
+    protected Category apply(ResultSet resultSet, int offset) throws SQLException {
+        return createEntity()
+            .setCategoryId( resultSet.getShort(1 + offset))
+            .setName(       resultSet.getString(2 + offset))
+            .setLastUpdate( resultSet.getTimestamp(3 + offset))
+            ;
     }
     
     protected CategoryImpl createEntity() {

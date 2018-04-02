@@ -6,7 +6,6 @@ import com.speedment.common.annotation.GeneratedCode;
 import com.speedment.runtime.config.identifier.TableIdentifier;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
-import com.speedment.runtime.core.exception.SpeedmentException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static com.speedment.common.injector.State.RESOLVED;
@@ -29,17 +28,13 @@ public abstract class GeneratedActorSqlAdapter implements SqlAdapter<Actor> {
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "actor");
     }
     
-    protected Actor apply(ResultSet resultSet, int offset) throws SpeedmentException {
-        final Actor entity = createEntity();
-        try {
-            entity.setActorId(    resultSet.getInt(1 + offset)       );
-            entity.setFirstName(  resultSet.getString(2 + offset)    );
-            entity.setLastName(   resultSet.getString(3 + offset)    );
-            entity.setLastUpdate( resultSet.getTimestamp(4 + offset) );
-        } catch (final SQLException sqle) {
-            throw new SpeedmentException(sqle);
-        }
-        return entity;
+    protected Actor apply(ResultSet resultSet, int offset) throws SQLException {
+        return createEntity()
+            .setActorId(    resultSet.getInt(1 + offset))
+            .setFirstName(  resultSet.getString(2 + offset))
+            .setLastName(   resultSet.getString(3 + offset))
+            .setLastUpdate( resultSet.getTimestamp(4 + offset))
+            ;
     }
     
     protected ActorImpl createEntity() {
