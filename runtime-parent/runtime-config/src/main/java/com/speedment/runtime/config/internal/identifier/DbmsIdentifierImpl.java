@@ -34,7 +34,7 @@ public final class DbmsIdentifierImpl<ENTITY> implements DbmsIdentifier<ENTITY> 
     }
 
     @Override
-    public String getDbmsName() {
+    public String getDbmsId() {
         return dbmsName;
     }
 
@@ -50,7 +50,7 @@ public final class DbmsIdentifierImpl<ENTITY> implements DbmsIdentifier<ENTITY> 
         }
         if (obj instanceof DbmsIdentifier) {
             final DbmsIdentifier<?> that = (DbmsIdentifier<?>) obj;
-            return Objects.equals(dbmsName, that.getDbmsName());
+            return Objects.equals(dbmsName, that.getDbmsId());
         }
         return false;
     }

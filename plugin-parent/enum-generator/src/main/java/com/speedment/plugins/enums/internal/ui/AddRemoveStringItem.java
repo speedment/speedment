@@ -40,7 +40,6 @@ import com.speedment.runtime.core.component.ManagerComponent;
 import com.speedment.runtime.core.component.PasswordComponent;
 import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.StreamSupplierComponent;
-import com.speedment.runtime.core.component.sql.SqlStreamSupplierComponent;
 import com.speedment.runtime.core.db.DbmsMetadataHandler;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.component.sql.SqlStreamSupplierComponentImpl;
@@ -82,7 +81,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
-import static com.speedment.common.injector.State.RESOLVED;
 import static com.speedment.runtime.config.util.DocumentUtil.ancestor;
 import com.speedment.runtime.core.component.SqlAdapter;
 import com.speedment.runtime.core.db.SqlFunction;
@@ -404,22 +402,22 @@ extends AbstractLabelTooltipItem {
         }
 
         @Override
-        public String getDbmsName() {
+        public String getDbmsId() {
             return dbms;
         }
 
         @Override
-        public String getTableName() {
+        public String getTableId() {
             return table;
         }
 
         @Override
-        public String getColumnName() {
+        public String getColumnId() {
             return column;
         }
 
         @Override
-        public String getSchemaName() {
+        public String getSchemaId() {
             return schema;
         }
 
@@ -429,10 +427,10 @@ extends AbstractLabelTooltipItem {
             if (!(o instanceof ColumnIdentifier)) return false;
 
             final ColumnIdentifier<?> that = (ColumnIdentifier<?>) o;
-            return dbms.equals(that.getDbmsName())
-                && schema.equals(that.getSchemaName())
-                && table.equals(that.getTableName())
-                && column.equals(that.getColumnName());
+            return dbms.equals(that.getDbmsId())
+                && schema.equals(that.getSchemaId())
+                && table.equals(that.getTableId())
+                && column.equals(that.getColumnId());
         }
 
         @Override

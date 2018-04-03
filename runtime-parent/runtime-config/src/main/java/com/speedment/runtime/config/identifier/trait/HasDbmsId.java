@@ -21,13 +21,13 @@ import com.speedment.runtime.config.Dbms;
  *
  * @author Per Minborg
  */
-public interface HasDbmsName {
+public interface HasDbmsId {
 
     /**
-     * Returns the database name of the {@link Dbms} that this configuration
+     * Returns the database id of the {@link Dbms} that this configuration
      * object is in.
      *
-     * @return the {@link Dbms} name
+     * @return the {@link Dbms} id
      */
-    String getDbmsName();
+    String getDbmsId();
 }

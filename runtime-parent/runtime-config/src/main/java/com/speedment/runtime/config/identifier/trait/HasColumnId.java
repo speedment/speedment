@@ -16,20 +16,20 @@
  */
 package com.speedment.runtime.config.identifier.trait;
 
-import com.speedment.runtime.config.Schema;
+import com.speedment.runtime.config.Column;
 
 /**
  *
  * @author Per Minborg
  */
-public interface HasSchemaName {
+public interface HasColumnId {
 
     /**
-     * Returns the database name of the {@link Schema} that this configuration
+     * Returns the database id of the {@link Column} that this configuration
      * object is in.
      *
-     * @return the {@link Schema} name
+     * @return the {@link Column} id
      */
-    String getSchemaName();
+    String getColumnId();
 
 }

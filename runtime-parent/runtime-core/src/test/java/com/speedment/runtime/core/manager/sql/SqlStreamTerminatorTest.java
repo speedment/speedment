@@ -119,7 +119,7 @@ public class SqlStreamTerminatorTest {
                 lastCountingValues = l;
                 return SQL_COUNT_RESULT;
             },
-            f -> f.identifier().getColumnName(),
+            f -> f.identifier().getColumnId(),
             f -> Object.class
         );
 

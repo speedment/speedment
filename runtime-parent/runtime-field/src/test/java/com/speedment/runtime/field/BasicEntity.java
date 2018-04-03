@@ -44,22 +44,22 @@ public final class BasicEntity {
         }
 
         @Override
-        public String getDbmsName() {
+        public String getDbmsId() {
             return "test_dbms";
         }
 
         @Override
-        public String getSchemaName() {
+        public String getSchemaId() {
             return "test_schema";
         }
 
         @Override
-        public String getTableName() {
+        public String getTableId() {
             return "test_table";
         }
 
         @Override
-        public String getColumnName() {
+        public String getColumnId() {
             return columnName;
         }
     }

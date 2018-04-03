@@ -26,10 +26,10 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.config.Document;
 import com.speedment.runtime.config.Schema;
 import com.speedment.runtime.config.Table;
-import com.speedment.runtime.config.identifier.trait.HasColumnName;
-import com.speedment.runtime.config.identifier.trait.HasDbmsName;
-import com.speedment.runtime.config.identifier.trait.HasSchemaName;
-import com.speedment.runtime.config.identifier.trait.HasTableName;
+import com.speedment.runtime.config.identifier.trait.HasColumnId;
+import com.speedment.runtime.config.identifier.trait.HasDbmsId;
+import com.speedment.runtime.config.identifier.trait.HasSchemaId;
+import com.speedment.runtime.config.identifier.trait.HasTableId;
 import com.speedment.runtime.config.trait.HasEnabled;
 import com.speedment.runtime.core.manager.Manager;
 import java.util.function.BiConsumer;
@@ -58,7 +58,7 @@ public interface ApplicationBuilder<
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsName> BUILDER withDbms(I id, Consumer<Dbms> consumer) {
+    default <ENTITY, I extends HasDbmsId> BUILDER withDbms(I id, Consumer<Dbms> consumer) {
         return withDbms(id, (app, t) -> consumer.accept(t));
     }
 
@@ -73,10 +73,10 @@ public interface ApplicationBuilder<
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsName> BUILDER withDbms(I identifier, BiConsumer<Injector, Dbms> consumer) {
+    default <ENTITY, I extends HasDbmsId> BUILDER withDbms(I identifier, BiConsumer<Injector, Dbms> consumer) {
         return with(
             Dbms.class,
-            identifier.getDbmsName(),
+            identifier.getDbmsId(),
             consumer
         );
     }
@@ -92,7 +92,7 @@ public interface ApplicationBuilder<
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsName & HasSchemaName> BUILDER withSchema(I id, Consumer<Schema> consumer) {
+    default <ENTITY, I extends HasDbmsId & HasSchemaId> BUILDER withSchema(I id, Consumer<Schema> consumer) {
         return withSchema(id, (app, t) -> consumer.accept(t));
     }
 
@@ -107,10 +107,10 @@ public interface ApplicationBuilder<
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsName & HasSchemaName> BUILDER withSchema(I identifier, BiConsumer<Injector, Schema> consumer) {
+    default <ENTITY, I extends HasDbmsId & HasSchemaId> BUILDER withSchema(I identifier, BiConsumer<Injector, Schema> consumer) {
         return with(
             Schema.class,
-            identifier.getDbmsName() + "." + identifier.getSchemaName(),
+            identifier.getDbmsId() + "." + identifier.getSchemaId(),
             consumer
         );
     }
@@ -126,7 +126,7 @@ public interface ApplicationBuilder<
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsName & HasSchemaName & HasTableName> BUILDER withTable(I id, Consumer<Table> consumer) {
+    default <ENTITY, I extends HasDbmsId & HasSchemaId & HasTableId> BUILDER withTable(I id, Consumer<Table> consumer) {
         return withTable(id, (app, t) -> consumer.accept(t));
     }
 
@@ -141,10 +141,10 @@ public interface ApplicationBuilder<
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsName & HasSchemaName & HasTableName> BUILDER withTable(I identifier, BiConsumer<Injector, Table> consumer) {
+    default <ENTITY, I extends HasDbmsId & HasSchemaId & HasTableId> BUILDER withTable(I identifier, BiConsumer<Injector, Table> consumer) {
         return with(
             Table.class,
-            identifier.getDbmsName() + "." + identifier.getSchemaName() + "." + identifier.getTableName(),
+            identifier.getDbmsId() + "." + identifier.getSchemaId() + "." + identifier.getTableId(),
             consumer
         );
     }
@@ -160,7 +160,7 @@ public interface ApplicationBuilder<
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsName & HasSchemaName & HasTableName & HasColumnName> BUILDER withColumn(I id, Consumer<Column> consumer) {
+    default <ENTITY, I extends HasDbmsId & HasSchemaId & HasTableId & HasColumnId> BUILDER withColumn(I id, Consumer<Column> consumer) {
         return withColumn(id, (app, t) -> consumer.accept(t));
     }
 
@@ -175,10 +175,10 @@ public interface ApplicationBuilder<
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsName & HasSchemaName & HasTableName & HasColumnName> BUILDER withColumn(I id, BiConsumer<Injector, Column> consumer) {
+    default <ENTITY, I extends HasDbmsId & HasSchemaId & HasTableId & HasColumnId> BUILDER withColumn(I id, BiConsumer<Injector, Column> consumer) {
         return with(
             Column.class,
-            id.getDbmsName() + "." + id.getSchemaName() + "." + id.getTableName() + "." + id.getColumnName(),
+            id.getDbmsId() + "." + id.getSchemaId() + "." + id.getTableId() + "." + id.getColumnId(),
             consumer
         );
     }
@@ -283,8 +283,8 @@ public interface ApplicationBuilder<
      * @param password to use for the identified dbms
      * @return this instance
      */
-    default <I extends HasDbmsName> BUILDER withPassword(I id, char[] password) {
-        return withPassword(id.getDbmsName(), password);
+    default <I extends HasDbmsId> BUILDER withPassword(I id, char[] password) {
+        return withPassword(id.getDbmsId(), password);
     }
 
     /**
@@ -324,8 +324,8 @@ public interface ApplicationBuilder<
      * @param password to use for the identified dbms
      * @return this instance
      */
-    default <I extends HasDbmsName> BUILDER withPassword(I id, String password) {
-        return withPassword(id.getDbmsName(), password);
+    default <I extends HasDbmsId> BUILDER withPassword(I id, String password) {
+        return withPassword(id.getDbmsId(), password);
     }
 
     /**
@@ -361,8 +361,8 @@ public interface ApplicationBuilder<
      * @param username to use for the identified dbms
      * @return this instance
      */
-    default <I extends HasDbmsName> BUILDER withUsername(I id, String username) {
-        return withUsername(id.getDbmsName(), username);
+    default <I extends HasDbmsId> BUILDER withUsername(I id, String username) {
+        return withUsername(id.getDbmsId(), username);
     }
 
     /**
@@ -398,8 +398,8 @@ public interface ApplicationBuilder<
      * @param ipAddress to use for the identified dbms
      * @return this instance
      */
-    default <I extends HasDbmsName> BUILDER withIpAddress(I id, String ipAddress) {
-        return withIpAddress(id.getDbmsName(), ipAddress);
+    default <I extends HasDbmsId> BUILDER withIpAddress(I id, String ipAddress) {
+        return withIpAddress(id.getDbmsId(), ipAddress);
     }
 
     /**
@@ -435,8 +435,8 @@ public interface ApplicationBuilder<
      * @param port to use for the identified dbms
      * @return this instance
      */
-    default <I extends HasDbmsName> BUILDER withPort(I id, int port) {
-        return withPort(id.getDbmsName(), port);
+    default <I extends HasDbmsId> BUILDER withPort(I id, int port) {
+        return withPort(id.getDbmsId(), port);
     }
 
     /**
@@ -506,8 +506,8 @@ public interface ApplicationBuilder<
      * @param connectionUrl to use for the identified dbms
      * @return this instance
      */
-    default <I extends HasDbmsName> BUILDER withConnectionUrl(I id, String connectionUrl) {
-        return withConnectionUrl(id.getDbmsName(), connectionUrl);
+    default <I extends HasDbmsId> BUILDER withConnectionUrl(I id, String connectionUrl) {
+        return withConnectionUrl(id.getDbmsId(), connectionUrl);
     }
 
     /**

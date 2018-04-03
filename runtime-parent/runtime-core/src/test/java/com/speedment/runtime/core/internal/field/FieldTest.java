@@ -30,8 +30,8 @@ public class FieldTest extends BaseFieldTest {
 
     @Test
     public void testField() throws Exception {
-        assertEquals("id", ID.identifier().getColumnName());
-        assertEquals("name", NAME.identifier().getColumnName());
+        assertEquals("id", ID.identifier().getColumnId());
+        assertEquals("name", NAME.identifier().getColumnId());
     }
 
 }

@@ -84,28 +84,28 @@ public class MockEntity {
 
         Identifier(String columnName) {
             this.columnName = columnName;
-            this.tableIdentifier = TableIdentifier.of(getDbmsName(),
-                getSchemaName(),
-                getTableName());
+            this.tableIdentifier = TableIdentifier.of(this.getDbmsId(),
+                this.getSchemaId(),
+                this.getTableId());
         }
 
         @Override
-        public String getDbmsName() {
+        public String getDbmsId() {
             return "db0";
         }
 
         @Override
-        public String getSchemaName() {
+        public String getSchemaId() {
             return "speedment_test";
         }
 
         @Override
-        public String getTableName() {
+        public String getTableId() {
             return "mock_entity";
         }
 
         @Override
-        public String getColumnName() {
+        public String getColumnId() {
             return this.columnName;
         }
 

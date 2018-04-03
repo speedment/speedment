@@ -236,6 +236,6 @@ public final class StringFieldImpl<ENTITY, D> implements StringField<ENTITY, D> 
 
     @Override
     public String toString() {
-        return StringFieldImpl.class.getSimpleName() + "{" + identifier.getColumnName() + "}";
+        return StringFieldImpl.class.getSimpleName() + "{" + identifier.getColumnId() + "}";
     }
 }

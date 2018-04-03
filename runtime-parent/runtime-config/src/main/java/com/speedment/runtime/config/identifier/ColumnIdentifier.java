@@ -16,10 +16,10 @@
  */
 package com.speedment.runtime.config.identifier;
 
-import com.speedment.runtime.config.identifier.trait.HasColumnName;
-import com.speedment.runtime.config.identifier.trait.HasDbmsName;
-import com.speedment.runtime.config.identifier.trait.HasSchemaName;
-import com.speedment.runtime.config.identifier.trait.HasTableName;
+import com.speedment.runtime.config.identifier.trait.HasColumnId;
+import com.speedment.runtime.config.identifier.trait.HasDbmsId;
+import com.speedment.runtime.config.identifier.trait.HasSchemaId;
+import com.speedment.runtime.config.identifier.trait.HasTableId;
 import com.speedment.runtime.config.internal.identifier.ColumnIdentifierImpl;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 
@@ -47,11 +47,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * 
  * @see DocumentDbUtil
  */
-public interface ColumnIdentifier<ENTITY> 
-extends HasDbmsName,
-        HasSchemaName,
-        HasTableName,
-        HasColumnName {
+public interface ColumnIdentifier<ENTITY>
+extends HasDbmsId,
+        HasSchemaId,
+        HasTableId,
+        HasColumnId {
 
     /**
      * Internal class only used to hide a map of interned instances.
@@ -72,23 +72,23 @@ extends HasDbmsName,
      * {@link Object#equals(Object)} method so it is safe to use as the key of a
      * map.
      *
-     * @param dbmsName    the dbms database name
-     * @param schemaName  the schema database name
-     * @param tableName   the table database name
-     * @param columnName  the column database name
-     * @param <ENTITY>    the entity type
-     * @return            the identifier instance
+     * @param dbmsId    the dbms database id
+     * @param schemaId  the schema database id
+     * @param tableId   the table database id
+     * @param columnId  the column database id
+     * @param <ENTITY>  the entity type
+     * @return          the identifier instance
      *
      * @since 3.0.15
      */
     static <ENTITY> ColumnIdentifier<ENTITY> of(
-            final String dbmsName,
-            final String schemaName,
-            final String tableName,
-            final String columnName) {
+            final String dbmsId,
+            final String schemaId,
+            final String tableId,
+            final String columnId) {
 
         final ColumnIdentifier<ENTITY> newId = new ColumnIdentifierImpl<>(
-            dbmsName, schemaName, tableName, columnName);
+            dbmsId, schemaId, tableId, columnId);
 
         ColumnIdentifier.Hidden.INTERNED.putIfAbsent(newId, newId);
 
@@ -100,14 +100,14 @@ extends HasDbmsName,
     }
 
     /**
-     * Returns a {@link TableIdentifier} that has the same {@code dbmsName},
-     * {@code schemaName} and {@code tableName} as this
+     * Returns a {@link TableIdentifier} that has the same {@code dbmsId},
+     * {@code schemaId} and {@code tableId} as this
      * {@link ColumnIdentifier}.
      *
      * @return  the table identifier
      */
     default TableIdentifier<ENTITY> asTableIdentifier() {
-        return TableIdentifier.of(getDbmsName(), getSchemaName(), getTableName());
+        return TableIdentifier.of(getDbmsId(), getSchemaId(), getTableId());
     }
 
     /**

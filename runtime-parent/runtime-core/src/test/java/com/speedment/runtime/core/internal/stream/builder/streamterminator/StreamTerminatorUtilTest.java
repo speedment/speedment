@@ -54,7 +54,7 @@ import static org.junit.Assert.*;
 public class StreamTerminatorUtilTest {
 
     private static final DbmsType DBMS_TYPE = new MockDbmsType();
-    private static final Function<Field<Person>, String> COLUMN_NAMER = f -> f.identifier().getColumnName();
+    private static final Function<Field<Person>, String> COLUMN_NAMER = f -> f.identifier().getColumnId();
     private static final Function<Field<Person>, Class<?>> COLUMN_TYPE_FUNCTION = f -> Integer.class;
     private static final FieldPredicate<Person> ID_GT_0 = new IntGreaterThanPredicate<>(Person.ID, 0);
     private static final FieldPredicate<Person> ID_GT_1 = new IntGreaterThanPredicate<>(Person.ID, 1);
@@ -226,28 +226,28 @@ public class StreamTerminatorUtilTest {
 
             Identifier(String columnName) {
                 this.columnName = columnName;
-                this.tableIdentifier = TableIdentifier.of(getDbmsName(),
-                    getSchemaName(),
-                    getTableName());
+                this.tableIdentifier = TableIdentifier.of(getDbmsId(),
+                    getSchemaId(),
+                    getTableId());
             }
 
             @Override
-            public String getDbmsName() {
+            public String getDbmsId() {
                 return "db0";
             }
 
             @Override
-            public String getSchemaName() {
+            public String getSchemaId() {
                 return "SPEEDMENT";
             }
 
             @Override
-            public String getTableName() {
+            public String getTableId() {
                 return "PERSON";
             }
 
             @Override
-            public String getColumnName() {
+            public String getColumnId() {
                 return this.columnName;
             }
 

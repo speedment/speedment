@@ -22,14 +22,14 @@ import com.speedment.runtime.config.Table;
  *
  * @author Per Minborg
  */
-public interface HasTableName {
+public interface HasTableId {
 
     /**
-     * Returns the database name of the {@link Table} that this configuration
+     * Returns the database id of the {@link Table} that this configuration
      * object is in.
      *
-     * @return the {@link Table} name
+     * @return the {@link Table} id
      */
-    String getTableName();
+    String getTableId();
 
 }

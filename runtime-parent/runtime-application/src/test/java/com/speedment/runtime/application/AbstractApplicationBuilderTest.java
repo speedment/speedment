@@ -45,22 +45,22 @@ public class AbstractApplicationBuilderTest {
     private static final String DBMS_NAME = "dbms_name";
     private static final ColumnIdentifier<Object> COLUMN_IDENTITY = new ColumnIdentifier<Object>() {
         @Override
-        public String getDbmsName() {
+        public String getDbmsId() {
             return DBMS_NAME;
         }
 
         @Override
-        public String getSchemaName() {
+        public String getSchemaId() {
             return SCHEMA_NAME;
         }
 
         @Override
-        public String getTableName() {
+        public String getTableId() {
             return TABLE_NAME;
         }
 
         @Override
-        public String getColumnName() {
+        public String getColumnId() {
             return COLUMN_NAME;
         }
 

@@ -68,13 +68,13 @@ public class CombinedComparatorImplTest {
 
                 assertThat(format(
                     "Compare %s using %s",
-                    comp.getField().identifier().getColumnName(),
+                    comp.getField().identifier().getColumnId(),
                     comp
                 ), actual, is(expected));
             } catch (final IllegalArgumentException ex) {
                 throw new RuntimeException(format(
                     "Error comparing %s using %s",
-                    comp.getField().identifier().getColumnName(),
+                    comp.getField().identifier().getColumnId(),
                     comp
                 ), ex);
             }
@@ -112,8 +112,8 @@ public class CombinedComparatorImplTest {
                 final List<Entity> actual   = list.stream().sorted(comp).collect(toList());
                 assertThat(
                     format("Compare %s then %s (reversed) using %s",
-                        comp1.getField().identifier().getColumnName(),
-                        comp2.getField().identifier().getColumnName(),
+                        comp1.getField().identifier().getColumnId(),
+                        comp2.getField().identifier().getColumnId(),
                         comp
                     ),
                     actual, is(expected)
@@ -138,8 +138,8 @@ public class CombinedComparatorImplTest {
             final List<Entity> actual   = list.stream().sorted(comp).collect(toList());
             assertThat(
                 format("Compare %s then %s using %s",
-                    comp1.getField().identifier().getColumnName(),
-                    Entity.STRING.identifier().getColumnName(),
+                    comp1.getField().identifier().getColumnId(),
+                    Entity.STRING.identifier().getColumnId(),
                     comp
                 ), actual, is(expected)
             );
@@ -162,8 +162,8 @@ public class CombinedComparatorImplTest {
             final List<Entity> actual   = list.stream().sorted(comp).collect(toList());
             assertThat(
                 format("Compare %s then %s (reversed) using %s",
-                    comp1.getField().identifier().getColumnName(),
-                    Entity.STRING.identifier().getColumnName(),
+                    comp1.getField().identifier().getColumnId(),
+                    Entity.STRING.identifier().getColumnId(),
                     comp
                 ),
                 actual, is(expected)
@@ -187,8 +187,8 @@ public class CombinedComparatorImplTest {
             final List<Entity> actual   = list.stream().sorted(comp).collect(toList());
             assertThat(
                 format("Compare %s then %s using %s",
-                    comp1.getField().identifier().getColumnName(),
-                    Entity.INT.identifier().getColumnName(),
+                    comp1.getField().identifier().getColumnId(),
+                    Entity.INT.identifier().getColumnId(),
                     comp
                 ),
                 actual, is(expected)
@@ -212,8 +212,8 @@ public class CombinedComparatorImplTest {
             final List<Entity> actual   = list.stream().sorted(comp).collect(toList());
             assertThat(
                 format("Compare %s then %s using %s",
-                    comp1.getField().identifier().getColumnName(),
-                    Entity.LONG.identifier().getColumnName(),
+                    comp1.getField().identifier().getColumnId(),
+                    Entity.LONG.identifier().getColumnId(),
                     comp
                 ),
                 actual, is(expected)
@@ -237,8 +237,8 @@ public class CombinedComparatorImplTest {
             final List<Entity> actual   = list.stream().sorted(comp).collect(toList());
             assertThat(
                 format("Compare %s then %s using %s",
-                    comp1.getField().identifier().getColumnName(),
-                    Entity.DOUBLE.identifier().getColumnName(),
+                    comp1.getField().identifier().getColumnId(),
+                    Entity.DOUBLE.identifier().getColumnId(),
                     comp
                 ),
                 actual, is(expected)
@@ -676,22 +676,22 @@ public class CombinedComparatorImplTest {
             BYTE, SHORT, INT, LONG, FLOAT, DOUBLE, BOOLEAN, CHAR, STRING;
 
             @Override
-            public String getDbmsName() {
+            public String getDbmsId() {
                 return "test_dbms";
             }
 
             @Override
-            public String getSchemaName() {
+            public String getSchemaId() {
                 return "test_schema";
             }
 
             @Override
-            public String getTableName() {
+            public String getTableId() {
                 return "test_table";
             }
 
             @Override
-            public String getColumnName() {
+            public String getColumnId() {
                 return name().toLowerCase();
             }
         }

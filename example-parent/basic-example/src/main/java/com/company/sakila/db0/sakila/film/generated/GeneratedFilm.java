@@ -439,28 +439,28 @@ public interface GeneratedFilm {
         
         Identifier(String columnName) {
             this.columnName      = columnName;
-            this.tableIdentifier = TableIdentifier.of(    getDbmsName(), 
-                getSchemaName(), 
-                getTableName());
+            this.tableIdentifier = TableIdentifier.of(    getDbmsId(),
+                getSchemaId(),
+                getTableId());
         }
         
         @Override
-        public String getDbmsName() {
+        public String getDbmsId() {
             return "db0";
         }
         
         @Override
-        public String getSchemaName() {
+        public String getSchemaId() {
             return "sakila";
         }
         
         @Override
-        public String getTableName() {
+        public String getTableId() {
             return "film";
         }
         
         @Override
-        public String getColumnName() {
+        public String getColumnId() {
             return this.columnName;
         }
         

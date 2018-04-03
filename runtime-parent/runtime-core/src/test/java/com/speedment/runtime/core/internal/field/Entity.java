@@ -39,22 +39,22 @@ public interface Entity {
         }
 
         @Override
-        public String getColumnName() {
+        public String getColumnId() {
             return columnName;
         }
 
         @Override
-        public String getDbmsName() {
+        public String getDbmsId() {
             return "my_dbms";
         }
 
         @Override
-        public String getSchemaName() {
+        public String getSchemaId() {
             return "my_schema";
         }
 
         @Override
-        public String getTableName() {
+        public String getTableId() {
             return "my_table";
         }
     }

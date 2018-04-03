@@ -132,10 +132,10 @@ abstract class AbstractJoinBuilder<T, SELF> implements HasWhere<T, SELF> {
         if (field != null) {
             if (!tableIdentifiers.contains(field.identifier().asTableIdentifier())) {
                 throw new IllegalStateException(
-                    "The field " + field.identifier().getColumnName()
+                    "The field " + field.identifier().getColumnId()
                     + " from join stage " + (index + 1)
                     + " is not associated with any of the tables in the join: "
-                    + tableIdentifiers.stream().map(TableIdentifier::getTableName).collect(joining(", "))
+                    + tableIdentifiers.stream().map(TableIdentifier::getTableId).collect(joining(", "))
                 );
             }
         }

@@ -16,9 +16,9 @@
  */
 package com.speedment.runtime.config.identifier;
 
-import com.speedment.runtime.config.identifier.trait.HasDbmsName;
-import com.speedment.runtime.config.identifier.trait.HasSchemaName;
-import com.speedment.runtime.config.identifier.trait.HasTableName;
+import com.speedment.runtime.config.identifier.trait.HasDbmsId;
+import com.speedment.runtime.config.identifier.trait.HasSchemaId;
+import com.speedment.runtime.config.identifier.trait.HasTableId;
 import com.speedment.runtime.config.internal.identifier.TableIdentifierImpl;
 import com.speedment.runtime.config.util.DocumentDbUtil;
 import java.util.Map;
@@ -44,10 +44,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since  3.0.1
  * @see DocumentDbUtil
  */
-public interface TableIdentifier<ENTITY> extends
-        HasDbmsName,
-        HasSchemaName,
-        HasTableName {
+public interface TableIdentifier<ENTITY>
+extends HasDbmsId, HasSchemaId, HasTableId {
 
     /**
      * Returns a {@link SchemaIdentifier} that represents the schema that this
@@ -56,31 +54,33 @@ public interface TableIdentifier<ENTITY> extends
      * @return  the schema identifier
      */
     default SchemaIdentifier<ENTITY> asSchemaIdentifier() {
-        return SchemaIdentifier.of(getDbmsName(), getSchemaName());
+        return SchemaIdentifier.of(getDbmsId(), getSchemaId());
     }
 
     /**
      * Returns a {@link ColumnIdentifier} that represents a particular column in
      * this table.
      *
-     * @param columnName  the database name of the column
-     * @return            the column identifier
+     * @param columnId  the database id of the column
+     * @return          the column identifier
      */
-    default ColumnIdentifier<ENTITY> asColumnIdentifier(String columnName) {
+    default ColumnIdentifier<ENTITY> asColumnIdentifier(String columnId) {
         return ColumnIdentifier.of(
-            getDbmsName(),
-            getSchemaName(),
-            getTableName(),
-            columnName
+            getDbmsId(),
+            getSchemaId(),
+            getTableId(),
+            columnId
         );
     }
 
     class Hidden {
-        private static final Map<TableIdentifier<?>, TableIdentifier<?>> INTERNED = new ConcurrentHashMap<>();
+        private static final Map<TableIdentifier<?>, TableIdentifier<?>>
+            INTERNED = new ConcurrentHashMap<>();
     }
 
-    static <ENTITY> TableIdentifier<ENTITY> of(String dbmsName, String schemaName, String tableName) {
-        final TableIdentifier<ENTITY> newId = new TableIdentifierImpl<>(dbmsName, schemaName, tableName);
+    static <ENTITY> TableIdentifier<ENTITY>
+    of(String dbmsId, String schemaId, String tableId) {
+        final TableIdentifier<ENTITY> newId = new TableIdentifierImpl<>(dbmsId, schemaId, tableId);
         Hidden.INTERNED.putIfAbsent(newId, newId);
 
         @SuppressWarnings("unchecked")

@@ -74,11 +74,11 @@ public final class JsonComponentImpl implements JsonComponent {
 
         final Set<String> fieldNames = Stream.of(fields)
             .map(Field::identifier)
-            .map(ColumnIdentifier::getColumnName)
+            .map(ColumnIdentifier::getColumnId)
             .collect(toSet());
 
         manager.fields()
-            .filter(f -> fieldNames.contains(f.identifier().getColumnName()))
+            .filter(f -> fieldNames.contains(f.identifier().getColumnId()))
             .forEachOrdered(f
                 -> formatter.put(jsonField(projectComponent.getProject(), f.identifier()),
                     f.getter()::apply

@@ -23,10 +23,10 @@ public class ColumnLabelImpl implements ColumnLabel {
     private final String label;
 
     public ColumnLabelImpl(ColumnIdentifier<?> identifier) {
-        label = identifier.getDbmsName() + "." +
-            identifier.getSchemaName() + "." +
-            identifier.getTableName() + "." +
-            identifier.getColumnName();
+        label = identifier.getDbmsId() + "." +
+            identifier.getSchemaId() + "." +
+            identifier.getTableId() + "." +
+            identifier.getColumnId();
     }
 
     @Override

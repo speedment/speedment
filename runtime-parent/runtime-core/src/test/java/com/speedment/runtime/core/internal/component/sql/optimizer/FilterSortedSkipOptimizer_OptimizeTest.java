@@ -16,7 +16,6 @@
  */
 package com.speedment.runtime.core.internal.component.sql.optimizer;
 
-import com.speedment.runtime.core.internal.component.sql.optimizer.FilterSortedSkipOptimizer;
 import com.speedment.runtime.core.component.sql.SqlStreamOptimizerInfo;
 import com.speedment.runtime.core.db.AsynchronousQueryResult;
 import com.speedment.runtime.core.db.DbmsType;
@@ -82,7 +81,7 @@ public class FilterSortedSkipOptimizer_OptimizeTest {
 
                 return 1l;
             },
-            f -> f.identifier().getColumnName(),
+            f -> f.identifier().getColumnId(),
             f -> Object.class
         );
     }

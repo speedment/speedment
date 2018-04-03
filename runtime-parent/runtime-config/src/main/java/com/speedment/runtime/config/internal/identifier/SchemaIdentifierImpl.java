@@ -37,12 +37,12 @@ public final class SchemaIdentifierImpl<ENTITY> implements SchemaIdentifier<ENTI
     }
 
     @Override
-    public String getDbmsName() {
+    public String getDbmsId() {
         return dbmsName;
     }
 
     @Override
-    public String getSchemaName() {
+    public String getSchemaId() {
         return schemaName;
     }
 
@@ -59,8 +59,8 @@ public final class SchemaIdentifierImpl<ENTITY> implements SchemaIdentifier<ENTI
         if (obj instanceof SchemaIdentifier) {
             final SchemaIdentifier<?> that = (SchemaIdentifier<?>) obj;
             return 
-                Objects.equals(dbmsName, that.getDbmsName()) &&
-                Objects.equals(schemaName, that.getSchemaName());
+                Objects.equals(dbmsName, that.getDbmsId()) &&
+                Objects.equals(schemaName, that.getSchemaId());
         }
         return false;
     }

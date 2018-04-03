@@ -83,10 +83,10 @@ implements FieldPredicate<ENTITY> {
         sb.append(getClass().getSimpleName())
             .append(" {")
             .append("field: ")
-            .append(cId.getDbmsName()).append('.')
-            .append(cId.getSchemaName()).append('.')
-            .append(cId.getTableName()).append('.')
-            .append(cId.getColumnName())
+            .append(cId.getDbmsId()).append('.')
+            .append(cId.getSchemaId()).append('.')
+            .append(cId.getTableId()).append('.')
+            .append(cId.getColumnId())
             .append(", type: '").append(predicateType).append("'");
 
         Cast.cast(this, Tuple.class).ifPresent(tuple -> {

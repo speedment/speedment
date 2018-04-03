@@ -59,7 +59,7 @@ extends AbstractFindFrom<ENTITY, FK_ENTITY, V, SOURCE, HasComparableOperators<FK
                 .orElseThrow(() -> new SpeedmentFieldException(
                     "Error! Could not find any entities in table '" + 
                     getTableIdentifier() + 
-                    "' with '" + getTargetField().identifier().getColumnName() + 
+                    "' with '" + getTargetField().identifier().getColumnId() +
                     "' = '" + value + "'."
                 ));
         }

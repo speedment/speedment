@@ -133,7 +133,7 @@ final class SqlStreamSupplierImpl<ENTITY> implements SqlStreamSupplier<ENTITY> {
                 .orElse(false)
             )
             .map(Field::identifier)
-            .collect(toMap(identity(), c -> naming.encloseField(c.getColumnName())));
+            .collect(toMap(identity(), c -> naming.encloseField(c.getColumnId())));
 
         this.columnDatabaseTypeMap = new HashMap<>();
 

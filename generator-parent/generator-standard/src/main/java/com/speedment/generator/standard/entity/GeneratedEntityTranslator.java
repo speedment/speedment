@@ -76,33 +76,33 @@ public final class GeneratedEntityTranslator extends AbstractEntityAndManagerTra
         final Type tableIdentifierType = SimpleParameterizedType.create(TableIdentifier.class, getSupport().entityType());
 
         final Enum identifierEnum = Enum.of(IDENTIFIER_NAME)
-            .add(Field.of("columnName", String.class).private_().final_())
+            .add(Field.of("columnId", String.class).private_().final_())
             .add(Field.of("tableIdentifier", tableIdentifierType).private_().final_())
             .add(SimpleParameterizedType.create(ColumnIdentifier.class, getSupport().entityType()))
             .add(Constructor.of()
-                .add(Field.of("columnName", String.class))
-                .add("this.columnName\t = columnName;")
+                .add(Field.of("columnId", String.class))
+                .add("this.columnId\t = columnId;")
                 .add("this.tableIdentifier\t = TableIdentifier.of(" + indent(
-                    "getDbmsName(), ",
-                    "getSchemaName(), ",
-                    "getTableName()"
+                    "getDbmsId(), ",
+                    "getSchemaId(), ",
+                    "getTableId()"
                 ) + ");")
             )
-            .add(Method.of("getDbmsName", String.class).public_()
+            .add(Method.of("getDbmsId", String.class).public_()
                 .add(OVERRIDE)
                 .add(returnString(getSupport().dbmsOrThrow().getId()))
             )
-            .add(Method.of("getSchemaName", String.class).public_()
+            .add(Method.of("getSchemaId", String.class).public_()
                 .add(OVERRIDE)
                 .add(returnString(getSupport().schemaOrThrow().getId()))
             )
-            .add(Method.of("getTableName", String.class).public_()
+            .add(Method.of("getTableId", String.class).public_()
                 .add(OVERRIDE)
                 .add(returnString(getSupport().tableOrThrow().getId()))
             )
-            .add(Method.of("getColumnName", String.class).public_()
+            .add(Method.of("getColumnId", String.class).public_()
                 .add(OVERRIDE)
-                .add("return this.columnName;")
+                .add("return this.columnId;")
             )
             .add(Method.of("asTableIdentifier", tableIdentifierType).public_()
                 .add(OVERRIDE)

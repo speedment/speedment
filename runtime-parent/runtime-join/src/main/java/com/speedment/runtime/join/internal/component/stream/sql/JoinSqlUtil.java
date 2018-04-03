@@ -17,7 +17,6 @@ import com.speedment.runtime.core.db.SqlPredicateFragment;
 import com.speedment.runtime.core.internal.stream.autoclose.AutoClosingReferenceStream;
 import com.speedment.runtime.core.stream.parallel.ParallelStrategy;
 import com.speedment.runtime.field.predicate.FieldPredicate;
-import com.speedment.runtime.field.predicate.Inclusion;
 import com.speedment.runtime.field.trait.HasComparableOperators;
 import com.speedment.runtime.join.internal.component.stream.SqlAdapterMapper;
 import com.speedment.runtime.join.stage.JoinOperator;
@@ -133,7 +132,7 @@ public final class JoinSqlUtil {
         int result = -1;
         final String onColumnId = field
             .identifier()
-            .getColumnName();
+            .getColumnId();
 
         final List<Column> columns = table.columns()
             .filter(Column::isEnabled)
@@ -283,7 +282,7 @@ public final class JoinSqlUtil {
 
                     result.add(
                         fieldPredicateView.transform(
-                            f -> tableAlias(stageIndex) + "." + naming.encloseField(f.identifier().getColumnName()),
+                            f -> tableAlias(stageIndex) + "." + naming.encloseField(f.identifier().getColumnId()),
                             f -> f.findColumn(project).get().findDatabaseType(),
                             fieldPredicate
                         )
@@ -411,13 +410,13 @@ public final class JoinSqlUtil {
     ) {
         sb.append(tableAlias(stageIndex))
             .append(".")
-            .append(naming.encloseField(field.identifier().getColumnName()))
+            .append(naming.encloseField(field.identifier().getColumnId()))
             .append(" ")
             .append(operator)
             .append(" ")
             .append(tableAlias(foreignStageIndex))
             .append(".")
-            .append(naming.encloseField(foreignField.identifier().getColumnName()));
+            .append(naming.encloseField(foreignField.identifier().getColumnId()));
     }
 
     private static int stageIndexOf(final List<Stage<?>> stages, HasComparableOperators<?, ?> foreignField) {
@@ -429,9 +428,9 @@ public final class JoinSqlUtil {
             }
         }
         throw new IllegalStateException(
-            "There is not table for " + foreignField.identifier().getTableName()
+            "There is not table for " + foreignField.identifier().getTableId()
             + ". These tables are available from prevous join stages:"
-            + stages.stream().map(Stage::identifier).map(TableIdentifier::getTableName).collect(joining(", "))
+            + stages.stream().map(Stage::identifier).map(TableIdentifier::getTableId).collect(joining(", "))
         );
     }
 

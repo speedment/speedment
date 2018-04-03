@@ -203,7 +203,7 @@ public final class JoinTestUtil {
     }
 
     public static <T> ColumnIdentifier<T> id(TableIdentifier<?> table, String columnName) {
-        return ColumnIdentifier.of(table.getDbmsName(), table.getSchemaName(), table.getTableName(), columnName);
+        return ColumnIdentifier.of(table.getDbmsId(), table.getSchemaId(), table.getTableId(), columnName);
     }
 
     public static void assertStagesEquals(List<Stage<?>> expected, List<Stage<?>> actual) {

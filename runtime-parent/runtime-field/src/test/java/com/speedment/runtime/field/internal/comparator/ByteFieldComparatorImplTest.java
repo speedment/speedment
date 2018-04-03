@@ -136,22 +136,22 @@ public class ByteFieldComparatorImplTest {
 
         final ColumnIdentifier<ByteValue> BYTE_IDENTIFIER = new ColumnIdentifier<ByteValue>() {
             @Override
-            public String getDbmsName() {
+            public String getDbmsId() {
                 return "db0";
             }
 
             @Override
-            public String getSchemaName() {
+            public String getSchemaId() {
                 return "schema";
             }
 
             @Override
-            public String getTableName() {
+            public String getTableId() {
                 return "byte_value";
             }
 
             @Override
-            public String getColumnName() {
+            public String getColumnId() {
                 return "byte";
             }
 
