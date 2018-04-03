@@ -36,7 +36,7 @@ import java.util.stream.Stream;
  * @author  Emil Forslund
  * @since   2.2.0
  */
-public interface HasFinder<ENTITY, FK_ENTITY> {
+public interface HasFinder<ENTITY, FK_ENTITY> extends Field<ENTITY> {
     
     /**
      * Returns the field referenced by this finder.
