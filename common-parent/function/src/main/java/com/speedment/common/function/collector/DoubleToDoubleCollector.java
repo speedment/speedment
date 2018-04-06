@@ -16,13 +16,13 @@
  */
 package com.speedment.common.function.collector;
 
-import com.speedment.common.function.ObjDoubleConsumer;
-import com.speedment.common.function.ToDoubleFunction;
 import java.util.Set;
 import java.util.function.BinaryOperator;
+import java.util.function.ObjDoubleConsumer;
 import java.util.function.Supplier;
-import java.util.stream.Collector.Characteristics;
+import java.util.function.ToDoubleFunction;
 import java.util.stream.Collector;
+import java.util.stream.Collector.Characteristics;
 
 /**
  * Primitive collector that operates on {@code double} values, resulting in a

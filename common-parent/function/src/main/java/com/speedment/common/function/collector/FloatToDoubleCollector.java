@@ -17,12 +17,13 @@
 package com.speedment.common.function.collector;
 
 import com.speedment.common.function.ObjFloatConsumer;
-import com.speedment.common.function.ToDoubleFunction;
+
 import java.util.Set;
 import java.util.function.BinaryOperator;
 import java.util.function.Supplier;
-import java.util.stream.Collector.Characteristics;
+import java.util.function.ToDoubleFunction;
 import java.util.stream.Collector;
+import java.util.stream.Collector.Characteristics;
 
 /**
  * Primitive collector that operates on {@code float} values, resulting in a

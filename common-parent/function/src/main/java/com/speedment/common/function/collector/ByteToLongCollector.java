@@ -17,12 +17,13 @@
 package com.speedment.common.function.collector;
 
 import com.speedment.common.function.ObjByteConsumer;
-import com.speedment.common.function.ToLongFunction;
+
 import java.util.Set;
 import java.util.function.BinaryOperator;
 import java.util.function.Supplier;
-import java.util.stream.Collector.Characteristics;
+import java.util.function.ToLongFunction;
 import java.util.stream.Collector;
+import java.util.stream.Collector.Characteristics;
 
 /**
  * Primitive collector that operates on {@code byte} values, resulting in a
