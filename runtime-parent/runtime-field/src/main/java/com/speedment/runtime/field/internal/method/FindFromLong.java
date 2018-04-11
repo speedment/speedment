@@ -51,7 +51,7 @@ public final class FindFromLong<ENTITY, FK_ENTITY> extends AbstractFindFrom<ENTI
             .orElseThrow(() -> new SpeedmentFieldException(
                 "Error! Could not find any entities in table '" + 
                 getTableIdentifier() + 
-                "' with '" + getTargetField().identifier().getColumnId() +
+                "' with '" + getTargetField().identifier().getColumnId() + 
                 "' = '" + value + "'."
             ));
     }

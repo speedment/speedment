@@ -51,7 +51,7 @@ public final class FindFromDouble<ENTITY, FK_ENTITY> extends AbstractFindFrom<EN
             .orElseThrow(() -> new SpeedmentFieldException(
                 "Error! Could not find any entities in table '" + 
                 getTableIdentifier() + 
-                "' with '" + getTargetField().identifier().getColumnId() +
+                "' with '" + getTargetField().identifier().getColumnId() + 
                 "' = '" + value + "'."
             ));
     }

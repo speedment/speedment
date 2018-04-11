@@ -1,6 +1,6 @@
 /**
  * 
- * Copyright (c) 2006-2017, Speedment, Inc. All Rights Reserved.
+ * Copyright (c) 2006-2018, Speedment, Inc. All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); You may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -17,13 +17,12 @@
 package com.speedment.common.function.collector;
 
 import com.speedment.common.function.ObjCharConsumer;
-
 import java.util.Set;
 import java.util.function.BinaryOperator;
 import java.util.function.Supplier;
 import java.util.function.ToLongFunction;
-import java.util.stream.Collector;
 import java.util.stream.Collector.Characteristics;
+import java.util.stream.Collector;
 
 /**
  * Primitive collector that operates on {@code char} values, resulting in a
