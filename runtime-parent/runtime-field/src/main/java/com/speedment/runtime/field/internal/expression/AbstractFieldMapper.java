@@ -1,4 +1,4 @@
-package com.speedment.runtime.field.internal.mapper;
+package com.speedment.runtime.field.internal.expression;
 
 import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.expression.FieldMapper;
