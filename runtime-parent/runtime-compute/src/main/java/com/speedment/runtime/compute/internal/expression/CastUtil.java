@@ -536,7 +536,7 @@ public final class CastUtil {
 
         @Override
         public final Operator getOperator() {
-            return Operator.CAST;
+            return Operator.CAST_TO_DOUBLE;
         }
     }
 
@@ -562,7 +562,7 @@ public final class CastUtil {
 
         @Override
         public final Operator getOperator() {
-            return Operator.CAST;
+            return Operator.CAST_TO_INT;
         }
     }
 
@@ -588,7 +588,7 @@ public final class CastUtil {
 
         @Override
         public final Operator getOperator() {
-            return Operator.CAST;
+            return Operator.CAST_TO_LONG;
         }
     }
 

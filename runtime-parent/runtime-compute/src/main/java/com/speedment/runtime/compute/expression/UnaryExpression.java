@@ -9,6 +9,11 @@ package com.speedment.runtime.compute.expression;
  */
 public interface UnaryExpression<INNER extends Expression> extends Expression {
 
+    /**
+     * The inner expression that this wraps and applies an unary operator to.
+     *
+     * @return  the inner expression
+     */
     INNER getInner();
 
     /**
@@ -22,10 +27,49 @@ public interface UnaryExpression<INNER extends Expression> extends Expression {
      * The unary expression operator type.
      */
     enum Operator {
+
+        /**
+         * This expression is the absolute value of the result from the inner
+         * expression. That is, the negation sign is ignored, returning only
+         * positive values.
+         */
         ABS,
-        CAST,
+
+        /**
+         * This expression is the result of the inner expression casted to a
+         * {@code double}.
+         */
+        CAST_TO_DOUBLE,
+
+        /**
+         * This expression is the result of the inner expression casted to an
+         * {@code int}.
+         */
+        CAST_TO_INT,
+
+        /**
+         * This expression is the result of the inner expression casted to a
+         * {@code long}.
+         */
+        CAST_TO_LONG,
+
+        /**
+         * This expression is the negation of the inner expression. That is, the
+         * negation sign is flipped.
+         */
         NEGATE,
+
+        /**
+         * The result of this expression is {@code 0} if the result of the inner
+         * expression is {@code 0}, {@code 1} of the inner returned something
+         * positive and {@code -1} if the inner returned something negative.
+         */
         SIGN,
+
+        /**
+         * The result of this expression is the positive square root of the
+         * result of the inner expression.
+         */
         SQRT
     }
 }
