@@ -3,7 +3,6 @@ package com.speedment.runtime.compute.expression;
 import com.speedment.runtime.compute.*;
 import com.speedment.runtime.compute.internal.ToByteNullableImpl;
 import com.speedment.runtime.compute.internal.ToDoubleNullableImpl;
-import com.speedment.runtime.compute.internal.ToLongNullableImpl;
 import com.speedment.runtime.compute.internal.expression.*;
 
 /**
@@ -700,21 +699,8 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLong<T> pow(ToByte<T> expression, int power) {
-        switch (power) {
-            case 0 : return object -> 1;
-            case 1 : return expression.asLong();
-            case 2 : return object -> {
-                final byte v = expression.applyAsByte(object);
-                return v * v;
-            };
-            case 3 : return object -> {
-                final byte v = expression.applyAsByte(object);
-                return v * v * v;
-            };
-        }
-
-        return object -> (long) Math.pow(expression.applyAsByte(object), power);
+    public static <T> ToDouble<T> pow(ToByte<T> expression, int power) {
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -727,7 +713,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToByte<T> expression, double power) {
-        return object -> Math.pow(expression.applyAsByte(object), power);
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -740,42 +726,8 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLong<T> pow(ToByte<T> expression, ToByte<T> power) {
-        return object -> {
-            final byte v = expression.applyAsByte(object);
-            final byte p = power.applyAsByte(object);
-            switch (p) {
-                case 0 : return 1;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return (long) Math.pow(v, p);
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of an input
-     * expression and multiplies it with itself as many times as the result of
-     * applying {@code power} to the input.
-     *
-     * @param expression  the input expression
-     * @param power       the power
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToLong<T> pow(ToByte<T> expression, ToInt<T> power) {
-        return object -> {
-            final byte v = expression.applyAsByte(object);
-            final int p = power.applyAsInt(object);
-            switch (p) {
-                case 0 : return 1;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return (long) Math.pow(v, p);
-        };
+    public static <T> ToDouble<T> pow(ToByte<T> expression, ToInt<T> power) {
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -789,10 +741,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToByte<T> expression, ToDouble<T> power) {
-        return object -> Math.pow(
-            expression.applyAsByte(object),
-            power.applyAsDouble(object)
-        );
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -804,27 +753,11 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLongNullable<T>
+    public static <T> ToDoubleNullable<T>
     powOrNull(ToByteNullable<T> expression, int power) {
-        switch (power) {
-            case 0 : return new ToLongNullableImpl<>(
-                object -> 1, object -> false);
-            case 1 : return new ToLongNullableImpl<>(
-                expression::applyAsByte,
-                expression::isNull);
-            case 2 : return new ToLongNullableImpl<>(object -> {
-                final byte v = expression.applyAsByte(object);
-                return v * v;
-            }, expression::isNull);
-            case 3 : return new ToLongNullableImpl<>(object -> {
-                final byte v = expression.applyAsByte(object);
-                return v * v * v;
-            }, expression::isNull);
-        }
-
-        return new ToLongNullableImpl<>(
-            object -> (long) Math.pow(expression.applyAsByte(object), power),
-            expression::isNull
+        return new ToDoubleNullableImpl<>(
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
         );
     }
 
@@ -840,8 +773,8 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToByteNullable<T> expression, double power) {
         return new ToDoubleNullableImpl<>(
-            object -> Math.pow(expression.applyAsByte(object), power),
-            expression::isNull
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
         );
     }
 
@@ -855,44 +788,12 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLongNullable<T>
-    powOrNull(ToByteNullable<T> expression, ToByte<T> power) {
-        return new ToLongNullableImpl<>(object -> {
-            final byte v = expression.applyAsByte(object);
-            final byte p = power.applyAsByte(object);
-            switch (p) {
-                case 0 : return 1;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return (long) Math.pow(v, p);
-        }, expression::isNull);
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of an input
-     * expression and multiplies it with itself as many times as the result of
-     * applying {@code power} to the input.
-     *
-     * @param expression  the input expression
-     * @param power       the power
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToLongNullable<T>
+    public static <T> ToDoubleNullable<T>
     powOrNull(ToByteNullable<T> expression, ToInt<T> power) {
-        return new ToLongNullableImpl<>(object -> {
-            final byte v = expression.applyAsByte(object);
-            final int p = power.applyAsInt(object);
-            switch (p) {
-                case 0 : return 1;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return (long) Math.pow(v, p);
-        }, expression::isNull);
+        return new ToDoubleNullableImpl<>(
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
+        );
     }
 
     /**
@@ -908,12 +809,12 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToByteNullable<T> expression, ToDouble<T> power) {
         return new ToDoubleNullableImpl<>(
-            object -> Math.pow(
-                expression.applyAsByte(object),
-                power.applyAsDouble(object)
-            ), expression::isNull
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
         );
     }
+
+
 
     /**
      * Creates and returns an expression that takes the result of an input
@@ -924,24 +825,8 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLong<T> pow(ToShort<T> expression, int power) {
-        switch (power) {
-            case 0 : return object -> 1;
-            case 1 : return expression.asLong();
-            case 2 : return object -> {
-                final short v = expression.applyAsShort(object);
-                return v * v;
-            };
-            case 3 : return object -> {
-                final short v = expression.applyAsShort(object);
-                return v * v * v;
-            };
-        }
-
-        return object -> (long) Math.pow(
-            expression.applyAsShort(object),
-            power
-        );
+    public static <T> ToDouble<T> pow(ToShort<T> expression, int power) {
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -954,7 +839,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToShort<T> expression, double power) {
-        return object -> Math.pow(expression.applyAsShort(object), power);
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -967,19 +852,8 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLong<T>
-    pow(ToShort<T> expression, ToByte<T> power) {
-        return object -> {
-            final short v = expression.applyAsShort(object);
-            final byte p = power.applyAsByte(object);
-            switch (p) {
-                case 0 : return 1;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return (long) Math.pow(v, p);
-        };
+    public static <T> ToDouble<T> pow(ToShort<T> expression, ToInt<T> power) {
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -992,37 +866,8 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLong<T>
-    pow(ToShort<T> expression, ToInt<T> power) {
-        return object -> {
-            final short v = expression.applyAsShort(object);
-            final int p = power.applyAsInt(object);
-            switch (p) {
-                case 0 : return 1;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return (long) Math.pow(v, p);
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of an input
-     * expression and multiplies it with itself as many times as the result of
-     * applying {@code power} to the input.
-     *
-     * @param expression  the input expression
-     * @param power       the power
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T>
-    pow(ToShort<T> expression, ToDouble<T> power) {
-        return object -> Math.pow(
-            expression.applyAsShort(object),
-            power.applyAsDouble(object)
-        );
+    public static <T> ToDouble<T> pow(ToShort<T> expression, ToDouble<T> power) {
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -1034,27 +879,11 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLongNullable<T>
+    public static <T> ToDoubleNullable<T>
     powOrNull(ToShortNullable<T> expression, int power) {
-        switch (power) {
-            case 0 : return new ToLongNullableImpl<>(
-                object -> 1, object -> false);
-            case 1 : return new ToLongNullableImpl<>(
-                expression::applyAsShort,
-                expression::isNull);
-            case 2 : return new ToLongNullableImpl<>(object -> {
-                final short v = expression.applyAsShort(object);
-                return v * v;
-            }, expression::isNull);
-            case 3 : return new ToLongNullableImpl<>(object -> {
-                final short v = expression.applyAsShort(object);
-                return v * v * v;
-            }, expression::isNull);
-        }
-
-        return new ToLongNullableImpl<>(
-            object -> (long) Math.pow(expression.applyAsShort(object), power),
-            expression::isNull
+        return new ToDoubleNullableImpl<>(
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
         );
     }
 
@@ -1070,8 +899,8 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToShortNullable<T> expression, double power) {
         return new ToDoubleNullableImpl<>(
-            object -> Math.pow(expression.applyAsShort(object), power),
-            expression::isNull
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
         );
     }
 
@@ -1085,44 +914,12 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLongNullable<T>
-    powOrNull(ToShortNullable<T> expression, ToByte<T> power) {
-        return new ToLongNullableImpl<>(object -> {
-            final short v = expression.applyAsShort(object);
-            final byte p = power.applyAsByte(object);
-            switch (p) {
-                case 0 : return 1;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return (long) Math.pow(v, p);
-        }, expression::isNull);
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of an input
-     * expression and multiplies it with itself as many times as the result of
-     * applying {@code power} to the input.
-     *
-     * @param expression  the input expression
-     * @param power       the power
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToLongNullable<T>
+    public static <T> ToDoubleNullable<T>
     powOrNull(ToShortNullable<T> expression, ToInt<T> power) {
-        return new ToLongNullableImpl<>(object -> {
-            final short v = expression.applyAsShort(object);
-            final int p = power.applyAsInt(object);
-            switch (p) {
-                case 0 : return 1;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return (long) Math.pow(v, p);
-        }, expression::isNull);
+        return new ToDoubleNullableImpl<>(
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
+        );
     }
 
     /**
@@ -1138,10 +935,8 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToShortNullable<T> expression, ToDouble<T> power) {
         return new ToDoubleNullableImpl<>(
-            object -> Math.pow(
-                expression.applyAsShort(object),
-                power.applyAsDouble(object)
-            ), expression::isNull
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
         );
     }
 
@@ -1154,21 +949,8 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLong<T> pow(ToInt<T> expression, int power) {
-        switch (power) {
-            case 0 : return object -> 1;
-            case 1 : return expression.asLong();
-            case 2 : return object -> {
-                final int v = expression.applyAsInt(object);
-                return v * v;
-            };
-            case 3 : return object -> {
-                final int v = expression.applyAsInt(object);
-                return v * v * v;
-            };
-        }
-
-        return object -> (long) Math.pow(expression.applyAsInt(object), power);
+    public static <T> ToDouble<T> pow(ToInt<T> expression, int power) {
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -1181,7 +963,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToInt<T> expression, double power) {
-        return object -> Math.pow(expression.applyAsInt(object), power);
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -1194,42 +976,8 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLong<T> pow(ToInt<T> expression, ToByte<T> power) {
-        return object -> {
-            final int v = expression.applyAsInt(object);
-            final byte p = power.applyAsByte(object);
-            switch (p) {
-                case 0 : return 1;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return (long) Math.pow(v, p);
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of an input
-     * expression and multiplies it with itself as many times as the result of
-     * applying {@code power} to the input.
-     *
-     * @param expression  the input expression
-     * @param power       the power
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToLong<T> pow(ToInt<T> expression, ToInt<T> power) {
-        return object -> {
-            final int v = expression.applyAsInt(object);
-            final int p = power.applyAsInt(object);
-            switch (p) {
-                case 0 : return 1;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return (long) Math.pow(v, p);
-        };
+    public static <T> ToDouble<T> pow(ToInt<T> expression, ToInt<T> power) {
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -1243,10 +991,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToInt<T> expression, ToDouble<T> power) {
-        return object -> Math.pow(
-            expression.applyAsInt(object),
-            power.applyAsDouble(object)
-        );
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -1258,27 +1003,11 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLongNullable<T>
+    public static <T> ToDoubleNullable<T>
     powOrNull(ToIntNullable<T> expression, int power) {
-        switch (power) {
-            case 0 : return new ToLongNullableImpl<>(
-                object -> 1, object -> false);
-            case 1 : return new ToLongNullableImpl<>(
-                expression::applyAsInt,
-                expression::isNull);
-            case 2 : return new ToLongNullableImpl<>(object -> {
-                final int v = expression.applyAsInt(object);
-                return v * v;
-            }, expression::isNull);
-            case 3 : return new ToLongNullableImpl<>(object -> {
-                final int v = expression.applyAsInt(object);
-                return v * v * v;
-            }, expression::isNull);
-        }
-
-        return new ToLongNullableImpl<>(
-            object -> (long) Math.pow(expression.applyAsInt(object), power),
-            expression::isNull
+        return new ToDoubleNullableImpl<>(
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
         );
     }
 
@@ -1294,8 +1023,8 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToIntNullable<T> expression, double power) {
         return new ToDoubleNullableImpl<>(
-            object -> Math.pow(expression.applyAsInt(object), power),
-            expression::isNull
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
         );
     }
 
@@ -1309,44 +1038,12 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLongNullable<T>
-    powOrNull(ToIntNullable<T> expression, ToByte<T> power) {
-        return new ToLongNullableImpl<>(object -> {
-            final int v = expression.applyAsInt(object);
-            final byte p = power.applyAsByte(object);
-            switch (p) {
-                case 0 : return 1;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return (long) Math.pow(v, p);
-        }, expression::isNull);
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of an input
-     * expression and multiplies it with itself as many times as the result of
-     * applying {@code power} to the input.
-     *
-     * @param expression  the input expression
-     * @param power       the power
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToLongNullable<T>
+    public static <T> ToDoubleNullable<T>
     powOrNull(ToIntNullable<T> expression, ToInt<T> power) {
-        return new ToLongNullableImpl<>(object -> {
-            final int v = expression.applyAsInt(object);
-            final int p = power.applyAsInt(object);
-            switch (p) {
-                case 0 : return 1;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return (long) Math.pow(v, p);
-        }, expression::isNull);
+        return new ToDoubleNullableImpl<>(
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
+        );
     }
 
     /**
@@ -1362,10 +1059,8 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToIntNullable<T> expression, ToDouble<T> power) {
         return new ToDoubleNullableImpl<>(
-            object -> Math.pow(
-                expression.applyAsInt(object),
-                power.applyAsDouble(object)
-            ), expression::isNull
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
         );
     }
 
@@ -1378,21 +1073,8 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLong<T> pow(ToLong<T> expression, int power) {
-        switch (power) {
-            case 0 : return object -> 1;
-            case 1 : return expression.asLong();
-            case 2 : return object -> {
-                final long v = expression.applyAsLong(object);
-                return v * v;
-            };
-            case 3 : return object -> {
-                final long v = expression.applyAsLong(object);
-                return v * v * v;
-            };
-        }
-
-        return object -> (long) Math.pow(expression.applyAsLong(object), power);
+    public static <T> ToDouble<T> pow(ToLong<T> expression, int power) {
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -1405,7 +1087,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToLong<T> expression, double power) {
-        return object -> Math.pow(expression.applyAsLong(object), power);
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -1418,42 +1100,8 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLong<T> pow(ToLong<T> expression, ToByte<T> power) {
-        return object -> {
-            final long v = expression.applyAsLong(object);
-            final byte p = power.applyAsByte(object);
-            switch (p) {
-                case 0 : return 1;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return (long) Math.pow(v, p);
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of an input
-     * expression and multiplies it with itself as many times as the result of
-     * applying {@code power} to the input.
-     *
-     * @param expression  the input expression
-     * @param power       the power
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToLong<T> pow(ToLong<T> expression, ToInt<T> power) {
-        return object -> {
-            final long v = expression.applyAsLong(object);
-            final int p = power.applyAsInt(object);
-            switch (p) {
-                case 0 : return 1;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return (long) Math.pow(v, p);
-        };
+    public static <T> ToDouble<T> pow(ToLong<T> expression, ToInt<T> power) {
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -1467,10 +1115,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToLong<T> expression, ToDouble<T> power) {
-        return object -> Math.pow(
-            expression.applyAsLong(object),
-            power.applyAsDouble(object)
-        );
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -1482,27 +1127,11 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLongNullable<T>
+    public static <T> ToDoubleNullable<T>
     powOrNull(ToLongNullable<T> expression, int power) {
-        switch (power) {
-            case 0 : return new ToLongNullableImpl<>(
-                object -> 1, object -> false);
-            case 1 : return new ToLongNullableImpl<>(
-                expression::applyAsLong,
-                expression::isNull);
-            case 2 : return new ToLongNullableImpl<>(object -> {
-                final long v = expression.applyAsLong(object);
-                return v * v;
-            }, expression::isNull);
-            case 3 : return new ToLongNullableImpl<>(object -> {
-                final long v = expression.applyAsLong(object);
-                return v * v * v;
-            }, expression::isNull);
-        }
-
-        return new ToLongNullableImpl<>(
-            object -> (long) Math.pow(expression.applyAsLong(object), power),
-            expression::isNull
+        return new ToDoubleNullableImpl<>(
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
         );
     }
 
@@ -1518,8 +1147,8 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToLongNullable<T> expression, double power) {
         return new ToDoubleNullableImpl<>(
-            object -> Math.pow(expression.applyAsLong(object), power),
-            expression::isNull
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
         );
     }
 
@@ -1533,44 +1162,12 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLongNullable<T>
-    powOrNull(ToLongNullable<T> expression, ToByte<T> power) {
-        return new ToLongNullableImpl<>(object -> {
-            final long v = expression.applyAsLong(object);
-            final byte p = power.applyAsByte(object);
-            switch (p) {
-                case 0 : return 1;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return (long) Math.pow(v, p);
-        }, expression::isNull);
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of an input
-     * expression and multiplies it with itself as many times as the result of
-     * applying {@code power} to the input.
-     *
-     * @param expression  the input expression
-     * @param power       the power
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToLongNullable<T>
+    public static <T> ToDoubleNullable<T>
     powOrNull(ToLongNullable<T> expression, ToInt<T> power) {
-        return new ToLongNullableImpl<>(object -> {
-            final long v = expression.applyAsLong(object);
-            final int p = power.applyAsInt(object);
-            switch (p) {
-                case 0 : return 1;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return (long) Math.pow(v, p);
-        }, expression::isNull);
+        return new ToDoubleNullableImpl<>(
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
+        );
     }
 
     /**
@@ -1586,10 +1183,8 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToLongNullable<T> expression, ToDouble<T> power) {
         return new ToDoubleNullableImpl<>(
-            object -> Math.pow(
-                expression.applyAsLong(object),
-                power.applyAsDouble(object)
-            ), expression::isNull
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
         );
     }
 
@@ -1603,20 +1198,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToFloat<T> expression, int power) {
-        switch (power) {
-            case 0 : return object -> 1d;
-            case 1 : return expression.asDouble();
-            case 2 : return object -> {
-                final double v = expression.applyAsFloat(object);
-                return v * v;
-            };
-            case 3 : return object -> {
-                final double v = expression.applyAsFloat(object);
-                return v * v * v;
-            };
-        }
-
-        return object -> Math.pow(expression.applyAsFloat(object), power);
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -1629,31 +1211,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToFloat<T> expression, double power) {
-        return object -> Math.pow(expression.applyAsFloat(object), power);
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of an input
-     * expression and multiplies it with itself as many times as the result of
-     * applying {@code power} to the input.
-     *
-     * @param expression  the input expression
-     * @param power       the power
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> pow(ToFloat<T> expression, ToByte<T> power) {
-        return object -> {
-            final double v = expression.applyAsFloat(object);
-            final byte p = power.applyAsByte(object);
-            switch (p) {
-                case 0 : return 1d;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return Math.pow(v, p);
-        };
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -1667,17 +1225,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToFloat<T> expression, ToInt<T> power) {
-        return object -> {
-            final double v = expression.applyAsFloat(object);
-            final int p = power.applyAsInt(object);
-            switch (p) {
-                case 0 : return 1;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return Math.pow(v, p);
-        };
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -1690,12 +1238,8 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToDouble<T>
-    pow(ToFloat<T> expression, ToDouble<T> power) {
-        return object -> Math.pow(
-            expression.applyAsFloat(object),
-            power.applyAsDouble(object)
-        );
+    public static <T> ToDouble<T> pow(ToFloat<T> expression, ToDouble<T> power) {
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -1709,25 +1253,9 @@ public final class Expressions {
      */
     public static <T> ToDoubleNullable<T>
     powOrNull(ToFloatNullable<T> expression, int power) {
-        switch (power) {
-            case 0 : return new ToDoubleNullableImpl<>(
-                object -> 1d, object -> false);
-            case 1 : return new ToDoubleNullableImpl<>(
-                expression::applyAsFloat,
-                expression::isNull);
-            case 2 : return new ToDoubleNullableImpl<>(object -> {
-                final double v = expression.applyAsFloat(object);
-                return v * v;
-            }, expression::isNull);
-            case 3 : return new ToDoubleNullableImpl<>(object -> {
-                final double v = expression.applyAsFloat(object);
-                return v * v * v;
-            }, expression::isNull);
-        }
-
         return new ToDoubleNullableImpl<>(
-            object -> Math.pow(expression.applyAsFloat(object), power),
-            expression::isNull
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
         );
     }
 
@@ -1743,8 +1271,8 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToFloatNullable<T> expression, double power) {
         return new ToDoubleNullableImpl<>(
-            object -> Math.pow(expression.applyAsFloat(object), power),
-            expression::isNull
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
         );
     }
 
@@ -1760,17 +1288,10 @@ public final class Expressions {
      */
     public static <T> ToDoubleNullable<T>
     powOrNull(ToFloatNullable<T> expression, ToInt<T> power) {
-        return new ToDoubleNullableImpl<>(object -> {
-            final double v = expression.applyAsFloat(object);
-            final int p = power.applyAsInt(object);
-            switch (p) {
-                case 0 : return 1d;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return Math.pow(v, p);
-        }, expression::isNull);
+        return new ToDoubleNullableImpl<>(
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
+        );
     }
 
     /**
@@ -1786,10 +1307,8 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToFloatNullable<T> expression, ToDouble<T> power) {
         return new ToDoubleNullableImpl<>(
-            object -> Math.pow(
-                expression.applyAsFloat(object),
-                power.applyAsDouble(object)
-            ), expression::isNull
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
         );
     }
 
@@ -1803,20 +1322,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToDouble<T> expression, int power) {
-        switch (power) {
-            case 0 : return object -> 1d;
-            case 1 : return expression.asDouble();
-            case 2 : return object -> {
-                final double v = expression.applyAsDouble(object);
-                return v * v;
-            };
-            case 3 : return object -> {
-                final double v = expression.applyAsDouble(object);
-                return v * v * v;
-            };
-        }
-
-        return object -> Math.pow(expression.applyAsDouble(object), power);
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -1829,7 +1335,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToDouble<T> expression, double power) {
-        return object -> Math.pow(expression.applyAsDouble(object), power);
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -1842,19 +1348,8 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToDouble<T>
-    pow(ToDouble<T> expression, ToByte<T> power) {
-        return object -> {
-            final double v = expression.applyAsDouble(object);
-            final byte p = power.applyAsByte(object);
-            switch (p) {
-                case 0 : return 1d;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return Math.pow(v, p);
-        };
+    public static <T> ToDouble<T> pow(ToDouble<T> expression, ToInt<T> power) {
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -1867,37 +1362,8 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToDouble<T>
-    pow(ToDouble<T> expression, ToInt<T> power) {
-        return object -> {
-            final double v = expression.applyAsDouble(object);
-            final int p = power.applyAsInt(object);
-            switch (p) {
-                case 0 : return 1;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return Math.pow(v, p);
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of an input
-     * expression and multiplies it with itself as many times as the result of
-     * applying {@code power} to the input.
-     *
-     * @param expression  the input expression
-     * @param power       the power
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T>
-    pow(ToDouble<T> expression, ToDouble<T> power) {
-        return object -> Math.pow(
-            expression.applyAsDouble(object),
-            power.applyAsDouble(object)
-        );
+    public static <T> ToDouble<T> pow(ToDouble<T> expression, ToDouble<T> power) {
+        return PowUtil.pow(expression, power);
     }
 
     /**
@@ -1911,26 +1377,9 @@ public final class Expressions {
      */
     public static <T> ToDoubleNullable<T>
     powOrNull(ToDoubleNullable<T> expression, int power) {
-        switch (power) {
-            case 0 : return new ToDoubleNullableImpl<>(
-                object -> 1d,
-                object -> false);
-            case 1 : return new ToDoubleNullableImpl<>(
-                expression::applyAsDouble,
-                expression::isNull);
-            case 2 : return new ToDoubleNullableImpl<>(object -> {
-                final double v = expression.applyAsDouble(object);
-                return v * v;
-            }, expression::isNull);
-            case 3 : return new ToDoubleNullableImpl<>(object -> {
-                final double v = expression.applyAsDouble(object);
-                return v * v * v;
-            }, expression::isNull);
-        }
-
         return new ToDoubleNullableImpl<>(
-            object -> Math.pow(expression.applyAsDouble(object), power),
-            expression::isNull
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
         );
     }
 
@@ -1946,8 +1395,8 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToDoubleNullable<T> expression, double power) {
         return new ToDoubleNullableImpl<>(
-            object -> Math.pow(expression.applyAsDouble(object), power),
-            expression::isNull
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
         );
     }
 
@@ -1963,17 +1412,10 @@ public final class Expressions {
      */
     public static <T> ToDoubleNullable<T>
     powOrNull(ToDoubleNullable<T> expression, ToInt<T> power) {
-        return new ToDoubleNullableImpl<>(object -> {
-            final double v = expression.applyAsDouble(object);
-            final int p = power.applyAsInt(object);
-            switch (p) {
-                case 0 : return 1d;
-                case 1 : return v;
-                case 2 : return v * v;
-                case 3 : return v * v * v;
-            }
-            return Math.pow(v, p);
-        }, expression::isNull);
+        return new ToDoubleNullableImpl<>(
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
+        );
     }
 
     /**
@@ -1989,13 +1431,11 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToDoubleNullable<T> expression, ToDouble<T> power) {
         return new ToDoubleNullableImpl<>(
-            object -> Math.pow(
-                expression.applyAsDouble(object),
-                power.applyAsDouble(object)
-            ), expression::isNull
+            PowUtil.pow(expression.orThrow(), power),
+            expression.isNull()
         );
     }
-
+    
     ////////////////////////////////////////////////////////////////////////////
     //                                 Negate                                 //
     ////////////////////////////////////////////////////////////////////////////

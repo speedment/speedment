@@ -30,7 +30,7 @@ extends Expression,
         HasSign<ToByte<T>>,
         HasSqrt<ToDouble<T>>,
         HasNegate<ToFloat<T>>,
-        HasPow<T, ToDouble<T>, ToDouble<T>>,
+        HasPow<T>,
         HasPlus<T, ToFloat<T>, ToFloat<T>, ToDouble<T>>,
         HasMinus<T, ToFloat<T>, ToFloat<T>, ToDouble<T>>,
         HasMultiply<T, ToFloat<T>, ToFloat<T>, ToDouble<T>>,
@@ -89,22 +89,12 @@ extends Expression,
     }
 
     @Override
-    default ToDouble<T> pow(byte power) {
-        return Expressions.pow(this, power);
-    }
-
-    @Override
     default ToDouble<T> pow(int power) {
         return Expressions.pow(this, power);
     }
 
     @Override
     default ToDouble<T> pow(double power) {
-        return Expressions.pow(this, power);
-    }
-
-    @Override
-    default ToDouble<T> pow(ToByte<T> power) {
         return Expressions.pow(this, power);
     }
 

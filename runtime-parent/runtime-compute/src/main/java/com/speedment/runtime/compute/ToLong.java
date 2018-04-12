@@ -31,7 +31,7 @@ extends Expression,
         HasSign<ToByte<T>>,
         HasSqrt<ToDouble<T>>,
         HasNegate<ToLong<T>>,
-        HasPow<T, ToLong<T>, ToDouble<T>>,
+        HasPow<T>,
         HasPlus<T, ToLong<T>, ToLong<T>, ToLong<T>>,
         HasMinus<T, ToLong<T>, ToLong<T>, ToLong<T>>,
         HasMultiply<T, ToLong<T>, ToLong<T>, ToLong<T>>,
@@ -85,12 +85,7 @@ extends Expression,
     }
 
     @Override
-    default ToLong<T> pow(byte power) {
-        return Expressions.pow(this, power);
-    }
-
-    @Override
-    default ToLong<T> pow(int power) {
+    default ToDouble<T> pow(int power) {
         return Expressions.pow(this, power);
     }
 
@@ -100,12 +95,7 @@ extends Expression,
     }
 
     @Override
-    default ToLong<T> pow(ToByte<T> power) {
-        return Expressions.pow(this, power);
-    }
-
-    @Override
-    default ToLong<T> pow(ToInt<T> power) {
+    default ToDouble<T> pow(ToInt<T> power) {
         return Expressions.pow(this, power);
     }
 

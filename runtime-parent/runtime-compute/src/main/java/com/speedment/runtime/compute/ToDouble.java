@@ -3,6 +3,7 @@ package com.speedment.runtime.compute;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
+import com.speedment.runtime.compute.internal.ConstantDoubleImpl;
 import com.speedment.runtime.compute.internal.expression.CastUtil;
 import com.speedment.runtime.compute.trait.*;
 
@@ -30,13 +31,25 @@ extends Expression,
         HasSign<ToByte<T>>,
         HasSqrt<ToDouble<T>>,
         HasNegate<ToDouble<T>>,
-        HasPow<T, ToDouble<T>, ToDouble<T>>,
+        HasPow<T>,
         HasPlus<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
         HasMinus<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
         HasMultiply<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
         HasDivide<T, ToLong<T>>,
         HasHash<T>,
         HasCompare<T> {
+
+    /**
+     * Returns an implementation of this interface that regardless of input,
+     * always returns the value specified.
+     *
+     * @param value  the value to always return
+     * @param <T>    the type of the ignored input
+     * @return       the constant expression
+     */
+    static <T> ToDouble<T> constant(double value) {
+        return new ConstantDoubleImpl<>(value);
+    }
 
     double applyAsDouble(T object);
 
@@ -85,22 +98,12 @@ extends Expression,
     }
 
     @Override
-    default ToDouble<T> pow(byte power) {
-        return Expressions.pow(this, power);
-    }
-
-    @Override
     default ToDouble<T> pow(int power) {
         return Expressions.pow(this, power);
     }
 
     @Override
     default ToDouble<T> pow(double power) {
-        return Expressions.pow(this, power);
-    }
-
-    @Override
-    default ToDouble<T> pow(ToByte<T> power) {
         return Expressions.pow(this, power);
     }
 

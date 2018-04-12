@@ -30,7 +30,7 @@ public interface ToByte<T>
             HasSign<ToByte<T>>,
             HasSqrt<ToDouble<T>>,
             HasNegate<ToByte<T>>,
-            HasPow<T, ToLong<T>, ToDouble<T>>,
+            HasPow<T>,
             HasPlus<T, ToShort<T>, ToInt<T>, ToLong<T>>,
             HasMinus<T, ToShort<T>, ToInt<T>, ToLong<T>>,
             HasMultiply<T, ToInt<T>, ToInt<T>, ToLong<T>>,
@@ -84,12 +84,7 @@ public interface ToByte<T>
     }
 
     @Override
-    default ToLong<T> pow(byte power) {
-        return Expressions.pow(this, power);
-    }
-
-    @Override
-    default ToLong<T> pow(int power) {
+    default ToDouble<T> pow(int power) {
         return Expressions.pow(this, power);
     }
 
@@ -99,12 +94,7 @@ public interface ToByte<T>
     }
 
     @Override
-    default ToLong<T> pow(ToByte<T> power) {
-        return Expressions.pow(this, power);
-    }
-
-    @Override
-    default ToLong<T> pow(ToInt<T> power) {
+    default ToDouble<T> pow(ToInt<T> power) {
         return Expressions.pow(this, power);
     }
 
