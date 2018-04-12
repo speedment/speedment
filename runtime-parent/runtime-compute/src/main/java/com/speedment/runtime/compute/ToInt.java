@@ -23,6 +23,12 @@ import java.util.function.IntUnaryOperator;
 import java.util.function.ToIntFunction;
 
 /**
+ * Expression that given an entity returns an {@code int} value. This
+ * expression can be implemented using a lamda, or it can be a result of another
+ * operation. It has additional methods for operating on it.
+ *
+ * @see ToIntFunction
+ *
  * @author Emil Forslund
  * @since 3.1.0
  */

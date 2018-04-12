@@ -10,6 +10,12 @@ import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasHash;
 
 /**
+ * Expression that given an entity returns a {@code char} value. This
+ * expression can be implemented using a lamda, or it can be a result of another
+ * operation. It has additional methods for operating on it.
+ *
+ * @see ToCharFunction
+ *
  * @author Emil Forslund
  * @since 3.1.0
  */

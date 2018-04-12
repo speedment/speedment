@@ -6,9 +6,17 @@ import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.ToNullable;
 
+import java.util.function.Function;
+
 import static java.util.Objects.requireNonNull;
 
 /**
+ * Expression that given an entity returns a {@code String} value, or
+ * {@code null}. This expression can be implemented using a lamda, or it can be
+ * a result of another operation. It has additional methods for operating on it.
+ *
+ * @see Function
+ *
  * @author Emil Forslund
  * @since 3.1.0
  */

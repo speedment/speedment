@@ -9,6 +9,12 @@ import java.util.function.DoubleUnaryOperator;
 import java.util.function.ToDoubleFunction;
 
 /**
+ * Expression that given an entity returns a {@code double} value. This
+ * expression can be implemented using a lamda, or it can be a result of another
+ * operation. It has additional methods for operating on it.
+ *
+ * @see ToDoubleFunction
+ *
  * @author Emil Forslund
  * @since 3.1.0
  */

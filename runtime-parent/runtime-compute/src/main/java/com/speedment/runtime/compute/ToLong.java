@@ -23,6 +23,12 @@ import java.util.function.LongUnaryOperator;
 import java.util.function.ToLongFunction;
 
 /**
+ * Expression that given an entity returns a {@code long} value. This
+ * expression can be implemented using a lamda, or it can be a result of another
+ * operation. It has additional methods for operating on it.
+ *
+ * @see ToLongFunction
+ *
  * @author Emil Forslund
  * @since 3.1.0
  */

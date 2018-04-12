@@ -12,6 +12,13 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 /**
+ * Expression that given an entity returns an {@code enum} value, or
+ * {@code null}. The expression also knows about the enum class and can
+ * therefore not be implemented as a lambda like the other expressions in this
+ * module.
+ *
+ * @see Function
+ *
  * @author Emil Forslund
  * @since 3.1.0
  */
