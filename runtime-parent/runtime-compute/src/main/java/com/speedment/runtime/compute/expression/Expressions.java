@@ -522,7 +522,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> sqrt(ToByte<T> expression) {
-        return object -> Math.sqrt(expression.applyAsByte(object));
+        return SqrtUtil.sqrt(expression);
     }
 
     /**
@@ -534,7 +534,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> sqrt(ToShort<T> expression) {
-        return object -> Math.sqrt(expression.applyAsShort(object));
+        return SqrtUtil.sqrt(expression);
     }
 
     /**
@@ -546,7 +546,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> sqrt(ToInt<T> expression) {
-        return object -> Math.sqrt(expression.applyAsInt(object));
+        return SqrtUtil.sqrt(expression);
     }
 
     /**
@@ -558,7 +558,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> sqrt(ToLong<T> expression) {
-        return object -> Math.sqrt(expression.applyAsLong(object));
+        return SqrtUtil.sqrt(expression);
     }
 
     /**
@@ -570,7 +570,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> sqrt(ToFloat<T> expression) {
-        return object -> Math.sqrt(expression.applyAsFloat(object));
+        return SqrtUtil.sqrt(expression);
     }
 
     /**
@@ -582,7 +582,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> sqrt(ToDouble<T> expression) {
-        return object -> Math.sqrt(expression.applyAsDouble(object));
+        return SqrtUtil.sqrt(expression);
     }
 
     /**
@@ -597,8 +597,8 @@ public final class Expressions {
      */
     public static <T> ToDoubleNullable<T> sqrtOrNull(ToByteNullable<T> expression) {
         return new ToDoubleNullableImpl<>(
-            object -> Math.sqrt(expression.applyAsByte(object)),
-            expression::isNull
+            SqrtUtil.sqrt(expression.orThrow()),
+            expression.isNull()
         );
     }
 
@@ -614,8 +614,8 @@ public final class Expressions {
      */
     public static <T> ToDoubleNullable<T> sqrtOrNull(ToShortNullable<T> expression) {
         return new ToDoubleNullableImpl<>(
-            object -> Math.sqrt(expression.applyAsShort(object)),
-            expression::isNull
+            SqrtUtil.sqrt(expression.orThrow()),
+            expression.isNull()
         );
     }
 
@@ -631,8 +631,8 @@ public final class Expressions {
      */
     public static <T> ToDoubleNullable<T> sqrtOrNull(ToIntNullable<T> expression) {
         return new ToDoubleNullableImpl<>(
-            object -> Math.sqrt(expression.applyAsInt(object)),
-            expression::isNull
+            SqrtUtil.sqrt(expression.orThrow()),
+            expression.isNull()
         );
     }
 
@@ -648,8 +648,8 @@ public final class Expressions {
      */
     public static <T> ToDoubleNullable<T> sqrtOrNull(ToLongNullable<T> expression) {
         return new ToDoubleNullableImpl<>(
-            object -> Math.sqrt(expression.applyAsLong(object)),
-            expression::isNull
+            SqrtUtil.sqrt(expression.orThrow()),
+            expression.isNull()
         );
     }
 
@@ -665,8 +665,8 @@ public final class Expressions {
      */
     public static <T> ToDoubleNullable<T> sqrtOrNull(ToFloatNullable<T> expression) {
         return new ToDoubleNullableImpl<>(
-            object -> Math.sqrt(expression.applyAsFloat(object)),
-            expression::isNull
+            SqrtUtil.sqrt(expression.orThrow()),
+            expression.isNull()
         );
     }
 
@@ -682,8 +682,8 @@ public final class Expressions {
      */
     public static <T> ToDoubleNullable<T> sqrtOrNull(ToDoubleNullable<T> expression) {
         return new ToDoubleNullableImpl<>(
-            object -> Math.sqrt(expression.applyAsDouble(object)),
-            expression::isNull
+            SqrtUtil.sqrt(expression.orThrow()),
+            expression.isNull()
         );
     }
 
