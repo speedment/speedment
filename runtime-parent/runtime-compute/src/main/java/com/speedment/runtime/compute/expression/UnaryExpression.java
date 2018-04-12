@@ -37,21 +37,9 @@ public interface UnaryExpression<INNER extends Expression> extends Expression {
 
         /**
          * This expression is the result of the inner expression casted to a
-         * {@code double}.
+         * different type
          */
-        CAST_TO_DOUBLE,
-
-        /**
-         * This expression is the result of the inner expression casted to an
-         * {@code int}.
-         */
-        CAST_TO_INT,
-
-        /**
-         * This expression is the result of the inner expression casted to a
-         * {@code long}.
-         */
-        CAST_TO_LONG,
+        CAST,
 
         /**
          * This expression is the negation of the inner expression. That is, the

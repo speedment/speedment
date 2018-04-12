@@ -3,6 +3,9 @@ package com.speedment.runtime.compute.internal.expression;
 import com.speedment.runtime.compute.*;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.UnaryExpression;
+import com.speedment.runtime.compute.trait.HasAsDouble;
+import com.speedment.runtime.compute.trait.HasAsInt;
+import com.speedment.runtime.compute.trait.HasAsLong;
 
 import static java.util.Objects.requireNonNull;
 
@@ -521,22 +524,11 @@ public final class CastUtil {
      * @param <T>      the input type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class CastToDouble<T, INNER extends Expression>
-        implements UnaryExpression<INNER>, ToDouble<T> {
-        final INNER inner;
-
+    private abstract static class CastToDouble
+        <T, INNER extends Expression & HasAsDouble<T> & HasAsInt<T> & HasAsLong<T>>
+        extends AbstractCase<T, INNER> implements ToDouble<T> {
         CastToDouble(INNER inner) {
-            this.inner = requireNonNull(inner);
-        }
-
-        @Override
-        public final INNER getInner() {
-            return inner;
-        }
-
-        @Override
-        public final Operator getOperator() {
-            return Operator.CAST_TO_DOUBLE;
+            super(inner);
         }
     }
 
@@ -547,22 +539,11 @@ public final class CastUtil {
      * @param <T>      the input type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class CastToInt<T, INNER extends Expression>
-        implements UnaryExpression<INNER>, ToInt<T> {
-        final INNER inner;
-
+    private abstract static class CastToInt
+        <T, INNER extends Expression & HasAsDouble<T> & HasAsInt<T> & HasAsLong<T>>
+        extends AbstractCase<T, INNER> implements ToInt<T> {
         CastToInt(INNER inner) {
-            this.inner = requireNonNull(inner);
-        }
-
-        @Override
-        public final INNER getInner() {
-            return inner;
-        }
-
-        @Override
-        public final Operator getOperator() {
-            return Operator.CAST_TO_INT;
+            super(inner);
         }
     }
 
@@ -573,12 +554,43 @@ public final class CastUtil {
      * @param <T>      the input type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class CastToLong<T, INNER extends Expression>
-        implements UnaryExpression<INNER>, ToLong<T> {
+    private abstract static class CastToLong
+        <T, INNER extends Expression & HasAsDouble<T> & HasAsInt<T> & HasAsLong<T>>
+    extends AbstractCase<T, INNER> implements ToLong<T> {
+        CastToLong(INNER inner) {
+            super(inner);
+        }
+    }
+
+    /**
+     * Internal abstract implementation of the cast operation.
+     *
+     * @param <T>      the input type
+     * @param <INNER>  the inner expression type
+     */
+    private abstract static class AbstractCase
+        <T, INNER extends Expression & HasAsDouble<T> & HasAsInt<T> & HasAsLong<T>>
+    implements UnaryExpression<INNER>, HasAsDouble<T>, HasAsInt<T>, HasAsLong<T> {
+
         final INNER inner;
 
-        CastToLong(INNER inner) {
+        AbstractCase(INNER inner) {
             this.inner = requireNonNull(inner);
+        }
+
+        @Override
+        public final ToDouble<T> asDouble() {
+            return inner.asDouble();
+        }
+
+        @Override
+        public final ToInt<T> asInt() {
+            return inner.asInt();
+        }
+
+        @Override
+        public final ToLong<T> asLong() {
+            return inner.asLong();
         }
 
         @Override
@@ -588,7 +600,7 @@ public final class CastUtil {
 
         @Override
         public final Operator getOperator() {
-            return Operator.CAST_TO_LONG;
+            return Operator.CAST;
         }
     }
 
