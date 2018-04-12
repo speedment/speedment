@@ -17,6 +17,7 @@
 package com.speedment.runtime.field;
 
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.compute.ToDouble;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.DoubleFieldImpl;
 import com.speedment.runtime.field.method.DoubleGetter;
@@ -37,7 +38,7 @@ import com.speedment.runtime.typemapper.TypeMapper;
  * @see ReferenceField
  */
 @GeneratedCode(value = "Speedment")
-public interface DoubleField<ENTITY, D> extends Field<ENTITY>, HasDoubleValue<ENTITY, D>, HasComparableOperators<ENTITY, Double> {
+public interface DoubleField<ENTITY, D> extends Field<ENTITY>, HasDoubleValue<ENTITY, D>, HasComparableOperators<ENTITY, Double>, ToDouble<ENTITY> {
     
     /**
      * Creates a new {@link DoubleField} using the default implementation.
@@ -60,5 +61,10 @@ public interface DoubleField<ENTITY, D> extends Field<ENTITY>, HasDoubleValue<EN
         return new DoubleFieldImpl<>(
             identifier, getter, setter, typeMapper, unique
         );
+    }
+    
+    @Override
+    default double applyAsDouble(ENTITY entity) {
+        return getAsDouble(entity);
     }
 }

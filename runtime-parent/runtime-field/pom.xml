@@ -108,13 +108,20 @@
             <artifactId>runtime-config</artifactId>
             <version>${speedment.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.speedment.runtime</groupId>
+            <artifactId>runtime-compute</artifactId>
+            <version>${speedment.version}</version>
+        </dependency>
         
         <dependency>
             <groupId>com.speedment.runtime</groupId>
             <artifactId>runtime-typemapper</artifactId>
             <version>${speedment.version}</version>
         </dependency>
-                
+
+        <!-- Test Dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

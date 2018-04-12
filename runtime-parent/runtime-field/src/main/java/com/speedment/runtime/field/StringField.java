@@ -17,12 +17,15 @@
 package com.speedment.runtime.field;
 
 
+import com.speedment.runtime.compute.ToStringNullable;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.StringFieldImpl;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.trait.HasStringOperators;
 import com.speedment.runtime.typemapper.TypeMapper;
+
+import java.util.function.Predicate;
 
 /**
  * A field that represents a string column.
@@ -39,7 +42,8 @@ import com.speedment.runtime.typemapper.TypeMapper;
  */
 public interface StringField<ENTITY, D> extends
     ComparableField<ENTITY, D, String>, 
-    HasStringOperators<ENTITY, D> {
+    HasStringOperators<ENTITY, D>,
+    ToStringNullable<ENTITY> {
 
     /**
      * Creates a new {@link StringField} using the default implementation. 
@@ -65,5 +69,17 @@ public interface StringField<ENTITY, D> extends
             identifier, getter, setter, typeMapper, unique
         );
     }
-    
+
+    @Override
+    Predicate<ENTITY> isNull();
+
+    @Override
+    default Predicate<ENTITY> isNotNull() {
+        return isNull().negate();
+    }
+
+    @Override
+    default String apply(ENTITY object) {
+        return get(object);
+    }
 }

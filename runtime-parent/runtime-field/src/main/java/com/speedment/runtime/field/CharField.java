@@ -17,6 +17,7 @@
 package com.speedment.runtime.field;
 
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.compute.ToChar;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.CharFieldImpl;
 import com.speedment.runtime.field.method.CharGetter;
@@ -37,7 +38,7 @@ import com.speedment.runtime.typemapper.TypeMapper;
  * @see ReferenceField
  */
 @GeneratedCode(value = "Speedment")
-public interface CharField<ENTITY, D> extends Field<ENTITY>, HasCharValue<ENTITY, D>, HasComparableOperators<ENTITY, Character> {
+public interface CharField<ENTITY, D> extends Field<ENTITY>, HasCharValue<ENTITY, D>, HasComparableOperators<ENTITY, Character>, ToChar<ENTITY> {
     
     /**
      * Creates a new {@link CharField} using the default implementation.
@@ -60,5 +61,10 @@ public interface CharField<ENTITY, D> extends Field<ENTITY>, HasCharValue<ENTITY
         return new CharFieldImpl<>(
             identifier, getter, setter, typeMapper, unique
         );
+    }
+    
+    @Override
+    default char applyAsChar(ENTITY entity) {
+        return getAsChar(entity);
     }
 }

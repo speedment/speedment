@@ -16,13 +16,19 @@
  */
 package com.speedment.runtime.field;
 
+import com.speedment.common.function.ToByteFunction;
+import com.speedment.runtime.compute.ToByteNullable;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
+import com.speedment.runtime.field.exception.SpeedmentFieldException;
 import com.speedment.runtime.field.internal.ReferenceFieldImpl;
+import com.speedment.runtime.field.internal.mapper.NullableFieldToByteImpl;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.trait.HasReferenceOperators;
 import com.speedment.runtime.field.trait.HasReferenceValue;
 import com.speedment.runtime.typemapper.TypeMapper;
+
+import static java.lang.String.format;
 
 /**
  * A field that represents an object value.
@@ -69,5 +75,35 @@ extends Field<ENTITY>,
             identifier, getter, setter, typeMapper, unique
         );
     }
-    
+
+    /**
+     * Returns an {@link ToByteNullable} expression that has the value returned
+     * by the specified mapper function if the value for this field is not
+     * {@code null}, and otherwise {@code null}.
+     *
+     * @param mapper  the mapper operation
+     * @return  expression for this value after mapper has been applied
+     */
+    default ToByteNullable<ENTITY> mapToByteIfPresent(ToByteFunction<V> mapper) {
+        return new NullableFieldToByteImpl<>(this, mapper);
+    }
+
+    /**
+     * Returns an {@link ToByteNullable} expression that has the value of this
+     * field, casted to a {@code byte} by first casting it to {@link Number} and
+     * then invoking {@link Number#byteValue()}.
+     *
+     * @return  expression for this value after mapper has been applied
+     */
+    default ToByteNullable<ENTITY> asByte() {
+        return mapToByteIfPresent(val -> {
+            if (val instanceof Number) {
+                final Number number = (Number) val;
+                return number.byteValue();
+            } else throw new SpeedmentFieldException(format(
+                "Expected field %s to be of type byte, but it was not.",
+                identifier()
+            ));
+        });
+    }
 }

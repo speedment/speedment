@@ -17,6 +17,7 @@
 package com.speedment.runtime.field;
 
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.compute.ToBoolean;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.BooleanFieldImpl;
 import com.speedment.runtime.field.method.BooleanGetter;
@@ -37,7 +38,7 @@ import com.speedment.runtime.typemapper.TypeMapper;
  * @see ReferenceField
  */
 @GeneratedCode(value = "Speedment")
-public interface BooleanField<ENTITY, D> extends Field<ENTITY>, HasBooleanValue<ENTITY, D>, HasBooleanOperators<ENTITY> {
+public interface BooleanField<ENTITY, D> extends Field<ENTITY>, HasBooleanValue<ENTITY, D>, ToBoolean<ENTITY>, HasBooleanOperators<ENTITY> {
     
     /**
      * Creates a new {@link BooleanField} using the default implementation.
@@ -60,5 +61,10 @@ public interface BooleanField<ENTITY, D> extends Field<ENTITY>, HasBooleanValue<
         return new BooleanFieldImpl<>(
             identifier, getter, setter, typeMapper, unique
         );
+    }
+    
+    @Override
+    default boolean applyAsBoolean(ENTITY entity) {
+        return getAsBoolean(entity);
     }
 }

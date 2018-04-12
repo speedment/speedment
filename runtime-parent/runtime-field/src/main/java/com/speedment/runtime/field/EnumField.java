@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.field;
 
+import com.speedment.runtime.compute.ToEnumNullable;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.EnumFieldImpl;
 import com.speedment.runtime.field.method.ReferenceGetter;
@@ -38,7 +39,8 @@ import java.util.function.Predicate;
  */
 public interface EnumField<ENTITY, D, E extends Enum<E>>
 extends ComparableField<ENTITY, D, E>,
-        HasStringOperators<ENTITY, D> {
+        HasStringOperators<ENTITY, D>,
+        ToEnumNullable<ENTITY, E> {
 
     /**
      * Returns the enum class of this field.
@@ -198,6 +200,19 @@ extends ComparableField<ENTITY, D, E>,
      * @return           the predicate
      */
     Predicate<ENTITY> notBetween(String start, String end, Inclusion inclusion);
+
+    @Override
+    Predicate<ENTITY> isNull();
+
+    @Override
+    default Predicate<ENTITY> isNotNull() {
+        return isNull().negate();
+    }
+
+    @Override
+    default E apply(ENTITY entity) {
+        return get(entity);
+    }
 
     /**
      * Create a new instance of this interface using the default implementation.

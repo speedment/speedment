@@ -17,6 +17,7 @@
 package com.speedment.runtime.field;
 
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.runtime.compute.ToInt;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.IntFieldImpl;
 import com.speedment.runtime.field.method.IntGetter;
@@ -37,7 +38,7 @@ import com.speedment.runtime.typemapper.TypeMapper;
  * @see ReferenceField
  */
 @GeneratedCode(value = "Speedment")
-public interface IntField<ENTITY, D> extends Field<ENTITY>, HasIntValue<ENTITY, D>, HasComparableOperators<ENTITY, Integer> {
+public interface IntField<ENTITY, D> extends Field<ENTITY>, HasIntValue<ENTITY, D>, HasComparableOperators<ENTITY, Integer>, ToInt<ENTITY> {
     
     /**
      * Creates a new {@link IntField} using the default implementation.
@@ -60,5 +61,10 @@ public interface IntField<ENTITY, D> extends Field<ENTITY>, HasIntValue<ENTITY, 
         return new IntFieldImpl<>(
             identifier, getter, setter, typeMapper, unique
         );
+    }
+    
+    @Override
+    default int applyAsInt(ENTITY entity) {
+        return getAsInt(entity);
     }
 }
