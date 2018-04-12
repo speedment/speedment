@@ -530,6 +530,11 @@ public final class CastUtil {
         CastToDouble(INNER inner) {
             super(inner);
         }
+
+        @Override
+        public final ToDouble<T> asDouble() {
+            return this;
+        }
     }
 
     /**
@@ -545,6 +550,11 @@ public final class CastUtil {
         CastToInt(INNER inner) {
             super(inner);
         }
+
+        @Override
+        public final ToInt<T> asInt() {
+            return this;
+        }
     }
 
     /**
@@ -559,6 +569,11 @@ public final class CastUtil {
     extends AbstractCase<T, INNER> implements ToLong<T> {
         CastToLong(INNER inner) {
             super(inner);
+        }
+
+        @Override
+        public final ToLong<T> asLong() {
+            return this;
         }
     }
 
@@ -579,18 +594,8 @@ public final class CastUtil {
         }
 
         @Override
-        public final ToDouble<T> asDouble() {
+        public ToDouble<T> asDouble() {
             return inner.asDouble();
-        }
-
-        @Override
-        public final ToInt<T> asInt() {
-            return inner.asInt();
-        }
-
-        @Override
-        public final ToLong<T> asLong() {
-            return inner.asLong();
         }
 
         @Override
