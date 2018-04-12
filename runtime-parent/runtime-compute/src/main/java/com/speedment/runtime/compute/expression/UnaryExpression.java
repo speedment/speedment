@@ -10,7 +10,7 @@ package com.speedment.runtime.compute.expression;
 public interface UnaryExpression<INNER extends Expression> extends Expression {
 
     /**
-     * The inner expression that this wraps and applies an unary operator to.
+     * The inner expression that this wraps and applies a unary operator to.
      *
      * @return  the inner expression
      */

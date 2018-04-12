@@ -317,8 +317,6 @@ public final class Expressions {
     //                               Get The Sign                             //
     ////////////////////////////////////////////////////////////////////////////
 
-    private static final byte NEG_ONE = -1, ZERO = 0, ONE = 1;
-
     /**
      * Creates and returns an expression that returns {@code 1} if the result of
      * the input expression is positive, {@code -1} if the result of the input
@@ -330,10 +328,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByte<T> sign(ToByte<T> expression) {
-        return object -> {
-            final byte v = expression.applyAsByte(object);
-            return v < 0 ? NEG_ONE : (v > 0) ? ONE : ZERO;
-        };
+        return SignUtil.sign(expression);
     }
 
     /**
@@ -347,10 +342,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByte<T> sign(ToShort<T> expression) {
-        return object -> {
-            final short v = expression.applyAsShort(object);
-            return v < 0 ? NEG_ONE : (v > 0) ? ONE : ZERO;
-        };
+        return SignUtil.sign(expression);
     }
 
     /**
@@ -364,10 +356,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByte<T> sign(ToInt<T> expression) {
-        return object -> {
-            final int v = expression.applyAsInt(object);
-            return v < 0 ? NEG_ONE : (v > 0) ? ONE : ZERO;
-        };
+        return SignUtil.sign(expression);
     }
 
     /**
@@ -381,10 +370,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByte<T> sign(ToLong<T> expression) {
-        return object -> {
-            final long v = expression.applyAsLong(object);
-            return v < 0 ? NEG_ONE : (v > 0) ? ONE : ZERO;
-        };
+        return SignUtil.sign(expression);
     }
 
     /**
@@ -398,10 +384,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByte<T> sign(ToFloat<T> expression) {
-        return object -> {
-            final int v = Float.compare(0, expression.applyAsFloat(object));
-            return v < 0 ? NEG_ONE : (v > 0) ? ONE : ZERO;
-        };
+        return SignUtil.sign(expression);
     }
 
     /**
@@ -415,10 +398,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByte<T> sign(ToDouble<T> expression) {
-        return object -> {
-            final int v = Double.compare(0, expression.applyAsDouble(object));
-            return v < 0 ? NEG_ONE : (v > 0) ? ONE : ZERO;
-        };
+        return SignUtil.sign(expression);
     }
 
     /**
@@ -434,10 +414,9 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByteNullable<T> signOrNull(ToByteNullable<T> expression) {
-        return new ToByteNullableImpl<>(object -> {
-            final byte v = expression.applyAsByte(object);
-            return v < 0 ? NEG_ONE : (v > 0) ? ONE : ZERO;
-        }, expression::isNull);
+        return new ToByteNullableImpl<>(
+            SignUtil.sign(expression.orThrow()),
+            expression.isNull());
     }
 
     /**
@@ -453,10 +432,9 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByteNullable<T> signOrNull(ToShortNullable<T> expression) {
-        return new ToByteNullableImpl<>(object -> {
-            final short v = expression.applyAsShort(object);
-            return v < 0 ? NEG_ONE : (v > 0) ? ONE : ZERO;
-        }, expression::isNull);
+        return new ToByteNullableImpl<>(
+            SignUtil.sign(expression.orThrow()),
+            expression.isNull());
     }
 
     /**
@@ -472,10 +450,9 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByteNullable<T> signOrNull(ToIntNullable<T> expression) {
-        return new ToByteNullableImpl<>(object -> {
-            final int v = expression.applyAsInt(object);
-            return v < 0 ? NEG_ONE : (v > 0) ? ONE : ZERO;
-        }, expression::isNull);
+        return new ToByteNullableImpl<>(
+            SignUtil.sign(expression.orThrow()),
+            expression.isNull());
     }
 
     /**
@@ -491,10 +468,9 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByteNullable<T> signOrNull(ToLongNullable<T> expression) {
-        return new ToByteNullableImpl<>(object -> {
-            final long v = expression.applyAsLong(object);
-            return v < 0 ? NEG_ONE : (v > 0) ? ONE : ZERO;
-        }, expression::isNull);
+        return new ToByteNullableImpl<>(
+            SignUtil.sign(expression.orThrow()),
+            expression.isNull());
     }
 
     /**
@@ -510,10 +486,9 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByteNullable<T> signOrNull(ToFloatNullable<T> expression) {
-        return new ToByteNullableImpl<>(object -> {
-            final int v = Float.compare(0, expression.applyAsFloat(object));
-            return v < 0 ? NEG_ONE : (v > 0) ? ONE : ZERO;
-        }, expression::isNull);
+        return new ToByteNullableImpl<>(
+            SignUtil.sign(expression.orThrow()),
+            expression.isNull());
     }
 
     /**
@@ -529,10 +504,9 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByteNullable<T> signOrNull(ToDoubleNullable<T> expression) {
-        return new ToByteNullableImpl<>(object -> {
-            final int v = Double.compare(0, expression.applyAsDouble(object));
-            return v < 0 ? NEG_ONE : (v > 0) ? ONE : ZERO;
-        }, expression::isNull);
+        return new ToByteNullableImpl<>(
+            SignUtil.sign(expression.orThrow()),
+            expression.isNull());
     }
 
     ////////////////////////////////////////////////////////////////////////////
