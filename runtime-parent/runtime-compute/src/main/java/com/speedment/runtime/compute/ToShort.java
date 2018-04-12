@@ -1,0 +1,329 @@
+package com.speedment.runtime.compute;
+
+import com.speedment.common.function.ShortToDoubleFunction;
+import com.speedment.common.function.ShortUnaryOperator;
+import com.speedment.common.function.ToShortFunction;
+import com.speedment.runtime.compute.expression.Expression;
+import com.speedment.runtime.compute.expression.ExpressionType;
+import com.speedment.runtime.compute.expression.Expressions;
+import com.speedment.runtime.compute.trait.HasAbs;
+import com.speedment.runtime.compute.trait.HasAsDouble;
+import com.speedment.runtime.compute.trait.HasAsInt;
+import com.speedment.runtime.compute.trait.HasAsLong;
+import com.speedment.runtime.compute.trait.HasCompare;
+import com.speedment.runtime.compute.trait.HasDivide;
+import com.speedment.runtime.compute.trait.HasHash;
+import com.speedment.runtime.compute.trait.HasMinus;
+import com.speedment.runtime.compute.trait.HasMultiply;
+import com.speedment.runtime.compute.trait.HasNegate;
+import com.speedment.runtime.compute.trait.HasPlus;
+import com.speedment.runtime.compute.trait.HasPow;
+import com.speedment.runtime.compute.trait.HasSign;
+import com.speedment.runtime.compute.trait.HasSqrt;
+
+/**
+ * @author Emil Forslund
+ * @since 3.1.0
+ */
+@FunctionalInterface
+public interface ToShort<T>
+extends Expression,
+        ToShortFunction<T>,
+        HasAsDouble<T>,
+        HasAsInt<T>,
+        HasAsLong<T>,
+        HasAbs<ToShort<T>>,
+        HasSign<ToByte<T>>,
+        HasSqrt<ToDouble<T>>,
+        HasNegate<ToShort<T>>,
+        HasPow<T, ToLong<T>, ToDouble<T>>,
+        HasPlus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
+        HasMinus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
+        HasMultiply<T, ToInt<T>, ToInt<T>, ToLong<T>>,
+        HasDivide<T, ToShort<T>>,
+        HasHash<T>,
+        HasCompare<T> {
+
+    short applyAsShort(T object);
+
+    @Override
+    default ExpressionType getExpressionType() {
+        return ExpressionType.SHORT;
+    }
+
+    @Override
+    default ToDouble<T> asDouble() {
+        return this::applyAsShort;
+    }
+
+    @Override
+    default ToInt<T> asInt() {
+        return this::applyAsShort;
+    }
+
+    @Override
+    default ToLong<T> asLong() {
+        return this::applyAsShort;
+    }
+
+    default ToDouble<T> mapToDouble(ShortToDoubleFunction operator) {
+        return object -> operator.applyAsDouble(applyAsShort(object));
+    }
+
+    default ToShort<T> map(ShortUnaryOperator operator) {
+        return object -> operator.applyAsShort(applyAsShort(object));
+    }
+
+    @Override
+    default ToShort<T> abs() {
+        return Expressions.abs(this);
+    }
+
+    @Override
+    default ToByte<T> sign() {
+        return Expressions.sign(this);
+    }
+
+    @Override
+    default ToDouble<T> sqrt() {
+        return Expressions.sqrt(this);
+    }
+
+    @Override
+    default ToLong<T> pow(byte power) {
+        return Expressions.pow(this, power);
+    }
+
+    @Override
+    default ToLong<T> pow(int power) {
+        return Expressions.pow(this, power);
+    }
+
+    @Override
+    default ToDouble<T> pow(double power) {
+        return Expressions.pow(this, power);
+    }
+
+    @Override
+    default ToLong<T> pow(ToByte<T> power) {
+        return Expressions.pow(this, power);
+    }
+
+    @Override
+    default ToLong<T> pow(ToInt<T> power) {
+        return Expressions.pow(this, power);
+    }
+
+    @Override
+    default ToDouble<T> pow(ToDouble<T> power) {
+        return Expressions.pow(this, power);
+    }
+
+    @Override
+    default ToInt<T> plus(byte other) {
+        return Expressions.plus(this, other);
+    }
+
+    @Override
+    default ToInt<T> plus(ToByte<T> other) {
+        return Expressions.plus(this.asInt(), other);
+    }
+
+    @Override
+    default ToInt<T> plus(int other) {
+        return Expressions.plus(this.asInt(), other);
+    }
+
+    @Override
+    default ToInt<T> plus(ToInt<T> other) {
+        return Expressions.plus(this.asInt(), other);
+    }
+
+    @Override
+    default ToLong<T> plus(long other) {
+        return Expressions.plus(this, other);
+    }
+
+    @Override
+    default ToLong<T> plus(ToLong<T> other) {
+        return Expressions.plus(this.asLong(), other);
+    }
+
+    @Override
+    default ToDouble<T> plus(double other) {
+        return Expressions.plus(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> plus(ToDouble<T> other) {
+        return Expressions.plus(this.asDouble(), other);
+    }
+
+    @Override
+    default ToInt<T> minus(byte other) {
+        return Expressions.minus(this, other);
+    }
+
+    @Override
+    default ToInt<T> minus(ToByte<T> other) {
+        return Expressions.minus(this.asInt(), other);
+    }
+
+    @Override
+    default ToInt<T> minus(int other) {
+        return Expressions.minus(this.asInt(), other);
+    }
+
+    @Override
+    default ToInt<T> minus(ToInt<T> other) {
+        return Expressions.minus(this.asInt(), other);
+    }
+
+    @Override
+    default ToLong<T> minus(long other) {
+        return Expressions.minus(this, other);
+    }
+
+    @Override
+    default ToLong<T> minus(ToLong<T> other) {
+        return Expressions.minus(this.asLong(), other);
+    }
+
+    @Override
+    default ToDouble<T> minus(double other) {
+        return Expressions.minus(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> minus(ToDouble<T> other) {
+        return Expressions.minus(this.asDouble(), other);
+    }
+
+    @Override
+    default ToInt<T> multiply(byte other) {
+        return Expressions.multiply(this, other);
+    }
+
+    @Override
+    default ToInt<T> multiply(ToByte<T> other) {
+        return Expressions.multiply(this.asInt(), other);
+    }
+
+    @Override
+    default ToInt<T> multiply(int other) {
+        return Expressions.multiply(this.asInt(), other);
+    }
+
+    @Override
+    default ToInt<T> multiply(ToInt<T> other) {
+        return Expressions.multiply(this.asInt(), other);
+    }
+
+    @Override
+    default ToLong<T> multiply(long other) {
+        return Expressions.multiply(this, other);
+    }
+
+    @Override
+    default ToLong<T> multiply(ToLong<T> other) {
+        return Expressions.multiply(this.asLong(), other);
+    }
+
+    @Override
+    default ToDouble<T> multiply(double other) {
+        return Expressions.multiply(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> multiply(ToDouble<T> other) {
+        return Expressions.multiply(this.asDouble(), other);
+    }
+
+    @Override
+    default ToShort<T> divideFloor(byte divisor) {
+        return Expressions.divideFloor(this, divisor);
+    }
+
+    @Override
+    default ToShort<T> divideFloor(ToByte<T> divisor) {
+        return Expressions.divideFloor(this, divisor);
+    }
+
+    @Override
+    default ToShort<T> divideFloor(int divisor) {
+        return Expressions.divideFloor(this, divisor);
+    }
+
+    @Override
+    default ToShort<T> divideFloor(ToInt<T> divisor) {
+        return Expressions.divideFloor(this, divisor);
+    }
+
+    @Override
+    default ToShort<T> divideFloor(long divisor) {
+        return Expressions.divideFloor(this, divisor);
+    }
+
+    @Override
+    default ToShort<T> divideFloor(ToLong<T> divisor) {
+        return Expressions.divideFloor(this, divisor);
+    }
+
+    @Override
+    default ToDouble<T> divide(byte divisor) {
+        return Expressions.divide(this, divisor);
+    }
+
+    @Override
+    default ToDouble<T> divide(ToByte<T> divisor) {
+        return Expressions.divide(this, divisor);
+    }
+
+    @Override
+    default ToDouble<T> divide(int divisor) {
+        return Expressions.divide(this, divisor);
+    }
+
+    @Override
+    default ToDouble<T> divide(ToInt<T> divisor) {
+        return Expressions.divide(this, divisor);
+    }
+
+    @Override
+    default ToDouble<T> divide(long divisor) {
+        return Expressions.divide(this, divisor);
+    }
+
+    @Override
+    default ToDouble<T> divide(ToLong<T> divisor) {
+        return Expressions.divide(this, divisor);
+    }
+
+    @Override
+    default ToDouble<T> divide(double divisor) {
+        return Expressions.divide(this, divisor);
+    }
+
+    @Override
+    default ToDouble<T> divide(ToDouble<T> divisor) {
+        return Expressions.divide(this, divisor);
+    }
+
+    @Override
+    default ToShort<T> negate() {
+        return Expressions.negate(this);
+    }
+
+    @Override
+    default long hash(T object) {
+        return applyAsShort(object);
+    }
+
+    @Override
+    default int compare(T first, T second) {
+        return Short.compare(
+            applyAsShort(first),
+            applyAsShort(second)
+        );
+    }
+}

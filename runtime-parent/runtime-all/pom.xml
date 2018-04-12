@@ -42,6 +42,12 @@
         <dependencies>
             <dependency>
                 <groupId>com.speedment.runtime</groupId>
+                <artifactId>runtime-compute</artifactId>
+                <version>${speedment.version}</version>
+            </dependency>
+        
+            <dependency>
+                <groupId>com.speedment.runtime</groupId>
                 <artifactId>runtime-config</artifactId>
                 <version>${speedment.version}</version>
             </dependency>

@@ -39,6 +39,7 @@
     </description>
     
     <modules>
+        <module>runtime-compute</module>
         <module>runtime-config</module>
         <module>runtime-typemapper</module>
         <module>runtime-field</module>

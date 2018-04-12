@@ -1,0 +1,28 @@
+package com.speedment.runtime.compute.trait;
+
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+/**
+ * @author Emil Forslund
+ * @since  3.1.0
+ */
+public interface ToNullable<T, R> extends Function<T, R> {
+
+    default Predicate<T> isNull() {
+        return this::isNull;
+    }
+
+    default Predicate<T> isNotNull() {
+        return this::isNotNull;
+    }
+
+    default boolean isNull(T object) {
+        return apply(object) == null;
+    }
+
+    default boolean isNotNull(T object) {
+        return apply(object) != null;
+    }
+
+}
