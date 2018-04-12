@@ -12,8 +12,10 @@ import com.speedment.runtime.compute.trait.*;
 
 /**
  * Expression that given an entity returns a {@code short} value. This
- * expression can be implemented using a lamda, or it can be a result of another
- * operation. It has additional methods for operating on it.
+ * expression can be implemented using a lambda, or it can be a result of
+ * another operation. It has additional methods for operating on it.
+ *
+ * @param <T> type to extract from
  *
  * @see ToShortFunction
  *
@@ -22,23 +24,24 @@ import com.speedment.runtime.compute.trait.*;
  */
 @FunctionalInterface
 public interface ToShort<T>
-extends Expression,
-        ToShortFunction<T>,
-        HasAsDouble<T>,
-        HasAsInt<T>,
-        HasAsLong<T>,
-        HasAbs<ToShort<T>>,
-        HasSign<ToByte<T>>,
-        HasSqrt<ToDouble<T>>,
-        HasNegate<ToShort<T>>,
-        HasPow<T>,
-        HasPlus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
-        HasMinus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
-        HasMultiply<T, ToInt<T>, ToInt<T>, ToLong<T>>,
-        HasDivide<T>,
-        HasHash<T>,
-        HasCompare<T> {
+    extends Expression,
+    ToShortFunction<T>,
+    HasAsDouble<T>,
+    HasAsInt<T>,
+    HasAsLong<T>,
+    HasAbs<ToShort<T>>,
+    HasSign<ToByte<T>>,
+    HasSqrt<ToDouble<T>>,
+    HasNegate<ToShort<T>>,
+    HasPow<T>,
+    HasPlus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
+    HasMinus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
+    HasMultiply<T, ToInt<T>, ToInt<T>, ToLong<T>>,
+    HasDivide<T>,
+    HasHash<T>,
+    HasCompare<T> {
 
+    @Override
     short applyAsShort(T object);
 
     @Override

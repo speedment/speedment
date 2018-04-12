@@ -12,9 +12,11 @@ import java.util.function.LongUnaryOperator;
 import java.util.function.ToLongFunction;
 
 /**
- * Expression that given an entity returns a {@code long} value. This
- * expression can be implemented using a lamda, or it can be a result of another
+ * Expression that given an entity returns a {@code long} value. This expression
+ * can be implemented using a lambda, or it can be a result of another
  * operation. It has additional methods for operating on it.
+ *
+ * @param <T> type to extract from
  *
  * @see ToLongFunction
  *
@@ -23,23 +25,24 @@ import java.util.function.ToLongFunction;
  */
 @FunctionalInterface
 public interface ToLong<T>
-extends Expression,
-        ToLongFunction<T>,
-        HasAsDouble<T>,
-        HasAsInt<T>,
-        HasAsLong<T>,
-        HasAbs<ToLong<T>>,
-        HasSign<ToByte<T>>,
-        HasSqrt<ToDouble<T>>,
-        HasNegate<ToLong<T>>,
-        HasPow<T>,
-        HasPlus<T, ToLong<T>, ToLong<T>, ToLong<T>>,
-        HasMinus<T, ToLong<T>, ToLong<T>, ToLong<T>>,
-        HasMultiply<T, ToLong<T>, ToLong<T>, ToLong<T>>,
-        HasDivide<T>,
-        HasHash<T>,
-        HasCompare<T> {
+    extends Expression,
+    ToLongFunction<T>,
+    HasAsDouble<T>,
+    HasAsInt<T>,
+    HasAsLong<T>,
+    HasAbs<ToLong<T>>,
+    HasSign<ToByte<T>>,
+    HasSqrt<ToDouble<T>>,
+    HasNegate<ToLong<T>>,
+    HasPow<T>,
+    HasPlus<T, ToLong<T>, ToLong<T>, ToLong<T>>,
+    HasMinus<T, ToLong<T>, ToLong<T>, ToLong<T>>,
+    HasMultiply<T, ToLong<T>, ToLong<T>, ToLong<T>>,
+    HasDivide<T>,
+    HasHash<T>,
+    HasCompare<T> {
 
+    @Override
     long applyAsLong(T object);
 
     @Override
@@ -259,7 +262,7 @@ extends Expression,
     default ToLong<T> negate() {
         return Expressions.negate(this);
     }
-    
+
     @Override
     default long hash(T object) {
         final long l = applyAsLong(object);

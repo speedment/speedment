@@ -13,8 +13,10 @@ import java.util.function.ToDoubleFunction;
 
 /**
  * Expression that given an entity returns a {@code double} value. This
- * expression can be implemented using a lamda, or it can be a result of another
- * operation. It has additional methods for operating on it.
+ * expression can be implemented using a lambda, or it can be a result of
+ * another operation. It has additional methods for operating on it.
+ *
+ * @param <T> type to extract from
  *
  * @see ToDoubleFunction
  *
@@ -23,35 +25,36 @@ import java.util.function.ToDoubleFunction;
  */
 @FunctionalInterface
 public interface ToDouble<T>
-extends Expression,
-        ToDoubleFunction<T>,
-        HasAsDouble<T>,
-        HasAsInt<T>,
-        HasAsLong<T>,
-        HasAbs<ToDouble<T>>,
-        HasSign<ToByte<T>>,
-        HasSqrt<ToDouble<T>>,
-        HasNegate<ToDouble<T>>,
-        HasPow<T>,
-        HasPlus<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
-        HasMinus<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
-        HasMultiply<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
-        HasDivide<T>,
-        HasHash<T>,
-        HasCompare<T> {
+    extends Expression,
+    ToDoubleFunction<T>,
+    HasAsDouble<T>,
+    HasAsInt<T>,
+    HasAsLong<T>,
+    HasAbs<ToDouble<T>>,
+    HasSign<ToByte<T>>,
+    HasSqrt<ToDouble<T>>,
+    HasNegate<ToDouble<T>>,
+    HasPow<T>,
+    HasPlus<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
+    HasMinus<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
+    HasMultiply<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
+    HasDivide<T>,
+    HasHash<T>,
+    HasCompare<T> {
 
     /**
      * Returns an implementation of this interface that regardless of input,
      * always returns the value specified.
      *
-     * @param value  the value to always return
-     * @param <T>    the type of the ignored input
-     * @return       the constant expression
+     * @param value the value to always return
+     * @param <T> the type of the ignored input
+     * @return the constant expression
      */
     static <T> ToDouble<T> constant(double value) {
         return new ConstantDoubleImpl<>(value);
     }
 
+    @Override
     double applyAsDouble(T object);
 
     @Override

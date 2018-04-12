@@ -12,9 +12,11 @@ import java.util.function.IntUnaryOperator;
 import java.util.function.ToIntFunction;
 
 /**
- * Expression that given an entity returns an {@code int} value. This
- * expression can be implemented using a lamda, or it can be a result of another
+ * Expression that given an entity returns an {@code int} value. This expression
+ * can be implemented using a lambda, or it can be a result of another
  * operation. It has additional methods for operating on it.
+ *
+ * @param <T> type to extract from
  *
  * @see ToIntFunction
  *
@@ -23,23 +25,24 @@ import java.util.function.ToIntFunction;
  */
 @FunctionalInterface
 public interface ToInt<T>
-extends Expression,
-        ToIntFunction<T>,
-        HasAsDouble<T>,
-        HasAsInt<T>,
-        HasAsLong<T>,
-        HasAbs<ToInt<T>>,
-        HasSign<ToByte<T>>,
-        HasSqrt<ToDouble<T>>,
-        HasNegate<ToInt<T>>,
-        HasPow<T>,
-        HasPlus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
-        HasMinus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
-        HasMultiply<T, ToLong<T>, ToLong<T>, ToLong<T>>,
-        HasDivide<T>,
-        HasHash<T>,
-        HasCompare<T> {
+    extends Expression,
+    ToIntFunction<T>,
+    HasAsDouble<T>,
+    HasAsInt<T>,
+    HasAsLong<T>,
+    HasAbs<ToInt<T>>,
+    HasSign<ToByte<T>>,
+    HasSqrt<ToDouble<T>>,
+    HasNegate<ToInt<T>>,
+    HasPow<T>,
+    HasPlus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
+    HasMinus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
+    HasMultiply<T, ToLong<T>, ToLong<T>, ToLong<T>>,
+    HasDivide<T>,
+    HasHash<T>,
+    HasCompare<T> {
 
+    @Override
     int applyAsInt(T object);
 
     @Override

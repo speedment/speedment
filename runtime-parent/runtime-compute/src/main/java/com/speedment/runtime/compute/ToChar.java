@@ -7,9 +7,11 @@ import com.speedment.runtime.compute.internal.expression.CastUtil;
 import com.speedment.runtime.compute.trait.*;
 
 /**
- * Expression that given an entity returns a {@code char} value. This
- * expression can be implemented using a lamda, or it can be a result of another
+ * Expression that given an entity returns a {@code char} value. This expression
+ * can be implemented using a lambda, or it can be a result of another
  * operation. It has additional methods for operating on it.
+ *
+ * @param <T> type to extract from
  *
  * @see ToCharFunction
  *
@@ -18,13 +20,13 @@ import com.speedment.runtime.compute.trait.*;
  */
 @FunctionalInterface
 public interface ToChar<T>
-extends Expression,
-        ToCharFunction<T>,
-        HasAsDouble<T>,
-        HasAsInt<T>,
-        HasAsLong<T>,
-        HasHash<T>,
-        HasCompare<T> {
+    extends Expression,
+    ToCharFunction<T>,
+    HasAsDouble<T>,
+    HasAsInt<T>,
+    HasAsLong<T>,
+    HasHash<T>,
+    HasCompare<T> {
 
     @Override
     default ExpressionType getExpressionType() {

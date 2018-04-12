@@ -20,6 +20,8 @@ import java.util.function.Function;
  * {@code null}. This expression can be implemented using a lamda, or it can be
  * a result of another operation. It has additional methods for operating on it.
  *
+ * @param <T> type to extract from
+ * 
  * @see Function
  *
  * @author Emil Forslund

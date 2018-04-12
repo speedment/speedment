@@ -11,8 +11,10 @@ import java.util.function.Function;
 
 /**
  * Expression that given an entity returns a {@code byte} value, or
- * {@code null}. This expression can be implemented using a lamda, or it can be
+ * {@code null}. This expression can be implemented using a lambda, or it can be
  * a result of another operation. It has additional methods for operating on it.
+ *
+ * @param <T> type to extract from
  *
  * @see Function
  *
@@ -21,14 +23,14 @@ import java.util.function.Function;
  */
 @FunctionalInterface
 public interface ToByteNullable<T>
-extends Expression,
-        ToNullable<T, Byte>,
-        HasAbs<ToByteNullable<T>>,
-        HasSign<ToByteNullable<T>>,
-        HasSqrt<ToDoubleNullable<T>>,
-        HasNegate<ToByteNullable<T>>,
-        HasHash<T>,
-        HasCompare<T> {
+    extends Expression,
+    ToNullable<T, Byte>,
+    HasAbs<ToByteNullable<T>>,
+    HasSign<ToByteNullable<T>>,
+    HasSqrt<ToDoubleNullable<T>>,
+    HasNegate<ToByteNullable<T>>,
+    HasHash<T>,
+    HasCompare<T> {
 
     @Override
     default ExpressionType getExpressionType() {

@@ -17,8 +17,10 @@ import java.util.function.IntUnaryOperator;
 
 /**
  * Expression that given an entity returns an {@code int} value, or
- * {@code null}. This expression can be implemented using a lamda, or it can be
+ * {@code null}. This expression can be implemented using a lamdda, or it can be
  * a result of another operation. It has additional methods for operating on it.
+ *
+ * @param <T> type to extract from
  *
  * @see Function
  *
@@ -27,14 +29,14 @@ import java.util.function.IntUnaryOperator;
  */
 @FunctionalInterface
 public interface ToIntNullable<T>
-extends Expression,
-        ToNullable<T, Integer>,
-        HasAbs<ToIntNullable<T>>,
-        HasSign<ToByteNullable<T>>,
-        HasSqrt<ToDoubleNullable<T>>,
-        HasNegate<ToIntNullable<T>>,
-        HasHash<T>,
-        HasCompare<T> {
+    extends Expression,
+    ToNullable<T, Integer>,
+    HasAbs<ToIntNullable<T>>,
+    HasSign<ToByteNullable<T>>,
+    HasSqrt<ToDoubleNullable<T>>,
+    HasNegate<ToIntNullable<T>>,
+    HasHash<T>,
+    HasCompare<T> {
 
     @Override
     default ExpressionType getExpressionType() {

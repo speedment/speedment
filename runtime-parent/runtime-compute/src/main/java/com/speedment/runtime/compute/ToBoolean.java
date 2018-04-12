@@ -15,8 +15,10 @@ import com.speedment.runtime.compute.trait.HasHash;
 
 /**
  * Expression that given an entity returns a {@code boolean} value. This
- * expression can be implemented using a lamda, or it can be a result of another
- * operation. It has additional methods for operating on it.
+ * expression can be implemented using a lambda, or it can be a result of
+ * another operation. It has additional methods for operating on it.
+ *
+ * @param <T> type to extract from
  *
  * @see ToBooleanFunction
  *
@@ -25,14 +27,15 @@ import com.speedment.runtime.compute.trait.HasHash;
  */
 @FunctionalInterface
 public interface ToBoolean<T>
-extends Expression,
-        ToBooleanFunction<T>,
-        HasAsDouble<T>,
-        HasAsInt<T>,
-        HasAsLong<T>,
-        HasHash<T>,
-        HasCompare<T> {
+    extends Expression,
+    ToBooleanFunction<T>,
+    HasAsDouble<T>,
+    HasAsInt<T>,
+    HasAsLong<T>,
+    HasHash<T>,
+    HasCompare<T> {
 
+    @Override
     boolean applyAsBoolean(T object);
 
     @Override

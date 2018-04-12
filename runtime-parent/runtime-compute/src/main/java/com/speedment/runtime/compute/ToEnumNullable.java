@@ -17,19 +17,22 @@ import java.util.function.UnaryOperator;
  * therefore not be implemented as a lambda like the other expressions in this
  * module.
  *
+ * @param <T> type to extract from
+ * @param <E> enum type
+ *
  * @see Function
  *
  * @author Emil Forslund
  * @since 3.1.0
  */
 public interface ToEnumNullable<T, E extends Enum<E>>
-extends Expression,
-        ToNullable<T, E>,
-        HasHash<T>,
-        HasCompare<T> {
+    extends Expression,
+    ToNullable<T, E>,
+    HasHash<T>,
+    HasCompare<T> {
 
     static <T, E extends Enum<E>> ToEnumNullable<T, E>
-    toEnumNullable(Class<E> enumClass, Function<T, E> getter) {
+        toEnumNullable(Class<E> enumClass, Function<T, E> getter) {
         return new ToEnumNullableImpl<>(enumClass, getter);
     }
 

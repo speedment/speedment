@@ -12,33 +12,36 @@ import com.speedment.runtime.compute.trait.*;
 
 /**
  * Expression that given an entity returns a {@code float} value. This
- * expression can be implemented using a lamda, or it can be a result of another
- * operation. It has additional methods for operating on it.
+ * expression can be implemented using a lambda, or it can be a result of
+ * another operation. It has additional methods for operating on it.
+ *
+ * @param <T> type to extract from
  *
  * @see ToFloatFunction
  *
  * @author Emil Forslund
- * @since  3.1.0
+ * @since 3.1.0
  */
 @FunctionalInterface
 public interface ToFloat<T>
-extends Expression,
-        ToFloatFunction<T>,
-        HasAsDouble<T>,
-        HasAsInt<T>,
-        HasAsLong<T>,
-        HasAbs<ToFloat<T>>,
-        HasSign<ToByte<T>>,
-        HasSqrt<ToDouble<T>>,
-        HasNegate<ToFloat<T>>,
-        HasPow<T>,
-        HasPlus<T, ToFloat<T>, ToFloat<T>, ToDouble<T>>,
-        HasMinus<T, ToFloat<T>, ToFloat<T>, ToDouble<T>>,
-        HasMultiply<T, ToFloat<T>, ToFloat<T>, ToDouble<T>>,
-        HasDivide<T>,
-        HasHash<T>,
-        HasCompare<T> {
+    extends Expression,
+    ToFloatFunction<T>,
+    HasAsDouble<T>,
+    HasAsInt<T>,
+    HasAsLong<T>,
+    HasAbs<ToFloat<T>>,
+    HasSign<ToByte<T>>,
+    HasSqrt<ToDouble<T>>,
+    HasNegate<ToFloat<T>>,
+    HasPow<T>,
+    HasPlus<T, ToFloat<T>, ToFloat<T>, ToDouble<T>>,
+    HasMinus<T, ToFloat<T>, ToFloat<T>, ToDouble<T>>,
+    HasMultiply<T, ToFloat<T>, ToFloat<T>, ToDouble<T>>,
+    HasDivide<T>,
+    HasHash<T>,
+    HasCompare<T> {
 
+    @Override
     float applyAsFloat(T object);
 
     @Override

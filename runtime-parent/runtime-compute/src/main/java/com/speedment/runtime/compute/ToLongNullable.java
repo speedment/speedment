@@ -20,6 +20,8 @@ import java.util.function.LongUnaryOperator;
  * {@code null}. This expression can be implemented using a lamda, or it can be
  * a result of another operation. It has additional methods for operating on it.
  *
+ * @param <T> type to extract from
+ *
  * @see Function
  *
  * @author Emil Forslund
@@ -27,14 +29,14 @@ import java.util.function.LongUnaryOperator;
  */
 @FunctionalInterface
 public interface ToLongNullable<T>
-extends Expression,
-        ToNullable<T, Long>,
-        HasAbs<ToLongNullable<T>>,
-        HasSign<ToByteNullable<T>>,
-        HasSqrt<ToDoubleNullable<T>>,
-        HasNegate<ToLongNullable<T>>,
-        HasHash<T>,
-        HasCompare<T> {
+    extends Expression,
+    ToNullable<T, Long>,
+    HasAbs<ToLongNullable<T>>,
+    HasSign<ToByteNullable<T>>,
+    HasSqrt<ToDoubleNullable<T>>,
+    HasNegate<ToLongNullable<T>>,
+    HasHash<T>,
+    HasCompare<T> {
 
     @Override
     default ExpressionType getExpressionType() {

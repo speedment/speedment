@@ -5,51 +5,50 @@ import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.ToNullable;
-
-import java.util.function.Function;
-
+import java.math.BigDecimal;
 import static java.util.Objects.requireNonNull;
 
 /**
- * Expression that given an entity returns a {@code String} value, or
- * {@code null}. This expression can be implemented using a lambda, or it can be
- * a result of another operation. It has additional methods for operating on it.
+ * Expression that given an entity returns a non-null {@code String} value. This
+ * expression can be implemented using a lambda, or it can be a result of
+ * another operation. It has additional methods for operating on it.
  *
  * @param <T> type to extract from
+ *
  * @see Function
  *
  * @author Emil Forslund
  * @since 3.1.0
  */
 @FunctionalInterface
-public interface ToStringNullable<T>
+public interface ToBigDecimalNullable<T>
     extends Expression,
-    ToNullable<T, String>,
+    ToNullable<T, BigDecimal>,
     HasHash<T>,
     HasCompare<T> {
 
     @Override
-    String apply(T object);
+    BigDecimal apply(T object);
 
     @Override
     default ExpressionType getExpressionType() {
         return ExpressionType.STRING_NULLABLE;
     }
 
-    default ToString<T> orThrow() throws NullPointerException {
+    default ToBigDecimal<T> orThrow() throws NullPointerException {
         return object -> requireNonNull(apply(object));
     }
 
-    default ToString<T> orElseGet(ToString<T> getter) {
+    default ToBigDecimal<T> orElseGet(ToBigDecimal<T> getter) {
         return object -> {
-            final String v = apply(object);
+            final BigDecimal v = apply(object);
             return v == null ? getter.apply(object) : v;
         };
     }
 
-    default ToString<T> orElse(String value) {
+    default ToBigDecimal<T> orElse(BigDecimal value) {
         return object -> {
-            final String v = apply(object);
+            final BigDecimal v = apply(object);
             return v == null ? value : v;
         };
     }
