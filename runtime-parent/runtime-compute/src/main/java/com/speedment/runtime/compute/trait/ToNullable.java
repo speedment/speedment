@@ -4,6 +4,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
+ * Trait for expressions that result in a nullable value. Those expressions have
+ * additional methods for checking for {@code null}-values.
+ *
  * @author Emil Forslund
  * @since  3.1.0
  */
