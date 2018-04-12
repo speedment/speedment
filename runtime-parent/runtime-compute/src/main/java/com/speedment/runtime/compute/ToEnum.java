@@ -3,6 +3,7 @@ package com.speedment.runtime.compute;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.ToEnumImpl;
+import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasHash;
 
@@ -51,7 +52,7 @@ extends Expression,
     }
 
     default ToEnum<T, E> map(UnaryOperator<E> mapper) {
-        return new ToEnumImpl<>(enumClass(), object -> mapper.apply(apply(object)));
+        return MapperUtil.map(this, mapper);
     }
 
     @Override

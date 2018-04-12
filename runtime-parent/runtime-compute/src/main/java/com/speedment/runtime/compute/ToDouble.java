@@ -5,6 +5,7 @@ import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
 import com.speedment.runtime.compute.internal.ConstantDoubleImpl;
 import com.speedment.runtime.compute.internal.expression.CastUtil;
+import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.*;
 
 import java.util.function.DoubleUnaryOperator;
@@ -74,7 +75,7 @@ extends Expression,
     }
 
     default ToDouble<T> map(DoubleUnaryOperator operator) {
-        return object -> operator.applyAsDouble(applyAsDouble(object));
+        return MapperUtil.map(this, operator);
     }
 
     @Override

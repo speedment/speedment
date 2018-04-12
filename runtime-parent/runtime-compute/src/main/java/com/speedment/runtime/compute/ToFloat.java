@@ -7,6 +7,7 @@ import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
 import com.speedment.runtime.compute.internal.expression.CastUtil;
+import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.*;
 
 /**
@@ -61,11 +62,11 @@ extends Expression,
     }
 
     default ToDouble<T> mapToDouble(FloatToDoubleFunction operator) {
-        return object -> operator.applyAsDouble(applyAsFloat(object));
+        return MapperUtil.mapToDouble(this, operator);
     }
 
     default ToFloat<T> map(FloatUnaryOperator operator) {
-        return object -> operator.applyAsFloat(applyAsFloat(object));
+        return MapperUtil.map(this, operator);
     }
 
     @Override

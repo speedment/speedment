@@ -4,6 +4,7 @@ import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
 import com.speedment.runtime.compute.internal.expression.CastUtil;
+import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.*;
 
 import java.util.function.LongToDoubleFunction;
@@ -62,11 +63,11 @@ extends Expression,
     }
 
     default ToDouble<T> mapToDouble(LongToDoubleFunction operator) {
-        return object -> operator.applyAsDouble(applyAsLong(object));
+        return MapperUtil.mapToDouble(this, operator);
     }
 
     default ToLong<T> map(LongUnaryOperator operator) {
-        return object -> operator.applyAsLong(applyAsLong(object));
+        return MapperUtil.map(this, operator);
     }
 
     @Override

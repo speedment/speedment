@@ -6,6 +6,7 @@ import com.speedment.common.function.ToBooleanFunction;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.expression.CastUtil;
+import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.HasAsDouble;
 import com.speedment.runtime.compute.trait.HasAsInt;
 import com.speedment.runtime.compute.trait.HasAsLong;
@@ -55,11 +56,11 @@ extends Expression,
     }
 
     default ToDouble<T> mapToDouble(BooleanToDoubleFunction operator) {
-        return object -> operator.applyAsDouble(applyAsBoolean(object));
+        return MapperUtil.mapToDouble(this, operator);
     }
 
     default ToBoolean<T> map(BooleanUnaryOperator operator) {
-        return object -> operator.applyAsBoolean(applyAsBoolean(object));
+        return MapperUtil.map(this, operator);
     }
 
     @Override

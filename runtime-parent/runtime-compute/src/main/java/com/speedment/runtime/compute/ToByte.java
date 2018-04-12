@@ -7,6 +7,7 @@ import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
 import com.speedment.runtime.compute.internal.expression.CastUtil;
+import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.*;
 
 /**
@@ -61,11 +62,11 @@ public interface ToByte<T>
     }
 
     default ToDouble<T> mapToDouble(ByteToDoubleFunction operator) {
-        return object -> operator.applyAsDouble(applyAsByte(object));
+        return MapperUtil.mapToDouble(this, operator);
     }
 
     default ToByte<T> map(ByteUnaryOperator operator) {
-        return object -> operator.applyAsByte(applyAsByte(object));
+        return MapperUtil.map(this, operator);
     }
 
     @Override

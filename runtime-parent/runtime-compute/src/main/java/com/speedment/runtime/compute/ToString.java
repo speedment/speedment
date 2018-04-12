@@ -2,10 +2,12 @@ package com.speedment.runtime.compute;
 
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
+import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasHash;
 
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 /**
  * Expression that given an entity returns a non-null {@code String} value. This
@@ -30,6 +32,10 @@ extends Expression,
     @Override
     default ExpressionType getExpressionType() {
         return ExpressionType.STRING;
+    }
+
+    default ToString<T> map(UnaryOperator<String> mapper) {
+        return MapperUtil.map(this, mapper);
     }
 
     @Override
