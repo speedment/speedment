@@ -3,20 +3,8 @@ package com.speedment.runtime.compute;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
-import com.speedment.runtime.compute.trait.HasAbs;
-import com.speedment.runtime.compute.trait.HasAsDouble;
-import com.speedment.runtime.compute.trait.HasAsInt;
-import com.speedment.runtime.compute.trait.HasAsLong;
-import com.speedment.runtime.compute.trait.HasCompare;
-import com.speedment.runtime.compute.trait.HasDivide;
-import com.speedment.runtime.compute.trait.HasHash;
-import com.speedment.runtime.compute.trait.HasMinus;
-import com.speedment.runtime.compute.trait.HasMultiply;
-import com.speedment.runtime.compute.trait.HasNegate;
-import com.speedment.runtime.compute.trait.HasPlus;
-import com.speedment.runtime.compute.trait.HasPow;
-import com.speedment.runtime.compute.trait.HasSign;
-import com.speedment.runtime.compute.trait.HasSqrt;
+import com.speedment.runtime.compute.internal.expression.CastUtil;
+import com.speedment.runtime.compute.trait.*;
 
 import java.util.function.LongToDoubleFunction;
 import java.util.function.LongUnaryOperator;
@@ -60,12 +48,12 @@ extends Expression,
 
     @Override
     default ToDouble<T> asDouble() {
-        return this::applyAsLong;
+        return CastUtil.castToDouble(this);
     }
 
     @Override
     default ToInt<T> asInt() {
-        return object -> (int) applyAsLong(object);
+        return CastUtil.castToInt(this);
     }
 
     @Override

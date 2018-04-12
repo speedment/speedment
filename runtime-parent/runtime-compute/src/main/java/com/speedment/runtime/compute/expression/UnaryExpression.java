@@ -11,10 +11,19 @@ public interface UnaryExpression<INNER extends Expression> extends Expression {
 
     INNER getInner();
 
+    /**
+     * Returns the binary operator that this expression represents.
+     *
+     * @return  the operator
+     */
     Operator getOperator();
 
+    /**
+     * The unary expression operator type.
+     */
     enum Operator {
         ABS,
+        CAST,
         NEGATE,
         SIGN,
         SQRT

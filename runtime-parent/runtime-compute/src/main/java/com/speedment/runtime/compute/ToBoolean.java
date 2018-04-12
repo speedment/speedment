@@ -5,6 +5,7 @@ import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.common.function.ToBooleanFunction;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
+import com.speedment.runtime.compute.internal.expression.CastUtil;
 import com.speedment.runtime.compute.trait.HasAsDouble;
 import com.speedment.runtime.compute.trait.HasAsInt;
 import com.speedment.runtime.compute.trait.HasAsLong;
@@ -40,17 +41,17 @@ extends Expression,
 
     @Override
     default ToDouble<T> asDouble() {
-        return object -> applyAsBoolean(object) ? 1d : 0d;
+        return CastUtil.castToDouble(this);
     }
 
     @Override
     default ToInt<T> asInt() {
-        return object -> applyAsBoolean(object) ? 1 : 0;
+        return CastUtil.castToInt(this);
     }
 
     @Override
     default ToLong<T> asLong() {
-        return object -> applyAsBoolean(object) ? 1L : 0L;
+        return CastUtil.castToLong(this);
     }
 
     default ToDouble<T> mapToDouble(BooleanToDoubleFunction operator) {

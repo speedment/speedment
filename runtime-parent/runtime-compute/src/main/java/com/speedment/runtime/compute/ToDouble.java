@@ -3,6 +3,7 @@ package com.speedment.runtime.compute;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
+import com.speedment.runtime.compute.internal.expression.CastUtil;
 import com.speedment.runtime.compute.trait.*;
 
 import java.util.function.DoubleUnaryOperator;
@@ -51,12 +52,12 @@ extends Expression,
 
     @Override
     default ToInt<T> asInt() {
-        return object -> (int) applyAsDouble(object);
+        return CastUtil.castToInt(this);
     }
 
     @Override
     default ToLong<T> asLong() {
-        return object -> (long) applyAsDouble(object);
+        return CastUtil.castToLong(this);
     }
 
     default ToDouble<T> map(DoubleUnaryOperator operator) {

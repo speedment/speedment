@@ -35,5 +35,4 @@ extends Expression {
      *          result
      */
     Predicate<T> getIsNull();
-
 }

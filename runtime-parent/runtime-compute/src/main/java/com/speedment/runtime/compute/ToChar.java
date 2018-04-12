@@ -3,11 +3,8 @@ package com.speedment.runtime.compute;
 import com.speedment.common.function.ToCharFunction;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
-import com.speedment.runtime.compute.trait.HasAsDouble;
-import com.speedment.runtime.compute.trait.HasAsInt;
-import com.speedment.runtime.compute.trait.HasAsLong;
-import com.speedment.runtime.compute.trait.HasCompare;
-import com.speedment.runtime.compute.trait.HasHash;
+import com.speedment.runtime.compute.internal.expression.CastUtil;
+import com.speedment.runtime.compute.trait.*;
 
 /**
  * Expression that given an entity returns a {@code char} value. This
@@ -36,17 +33,17 @@ extends Expression,
 
     @Override
     default ToDouble<T> asDouble() {
-        return this::applyAsChar;
+        return CastUtil.castToDouble(this);
     }
 
     @Override
     default ToInt<T> asInt() {
-        return this::applyAsChar;
+        return CastUtil.castToInt(this);
     }
 
     @Override
     default ToLong<T> asLong() {
-        return this::applyAsChar;
+        return CastUtil.castToLong(this);
     }
 
     @Override

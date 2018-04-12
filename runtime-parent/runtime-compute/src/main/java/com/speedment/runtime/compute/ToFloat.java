@@ -6,20 +6,8 @@ import com.speedment.common.function.ToFloatFunction;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
-import com.speedment.runtime.compute.trait.HasAbs;
-import com.speedment.runtime.compute.trait.HasAsDouble;
-import com.speedment.runtime.compute.trait.HasAsInt;
-import com.speedment.runtime.compute.trait.HasAsLong;
-import com.speedment.runtime.compute.trait.HasCompare;
-import com.speedment.runtime.compute.trait.HasDivide;
-import com.speedment.runtime.compute.trait.HasHash;
-import com.speedment.runtime.compute.trait.HasMinus;
-import com.speedment.runtime.compute.trait.HasMultiply;
-import com.speedment.runtime.compute.trait.HasNegate;
-import com.speedment.runtime.compute.trait.HasPlus;
-import com.speedment.runtime.compute.trait.HasPow;
-import com.speedment.runtime.compute.trait.HasSign;
-import com.speedment.runtime.compute.trait.HasSqrt;
+import com.speedment.runtime.compute.internal.expression.CastUtil;
+import com.speedment.runtime.compute.trait.*;
 
 /**
  * Expression that given an entity returns a {@code float} value. This
@@ -59,17 +47,17 @@ extends Expression,
 
     @Override
     default ToDouble<T> asDouble() {
-        return this::applyAsFloat;
+        return CastUtil.castToDouble(this);
     }
 
     @Override
     default ToInt<T> asInt() {
-        return object -> (int) applyAsFloat(object);
+        return CastUtil.castToInt(this);
     }
 
     @Override
     default ToLong<T> asLong() {
-        return object -> (long) applyAsFloat(object);
+        return CastUtil.castToLong(this);
     }
 
     default ToDouble<T> mapToDouble(FloatToDoubleFunction operator) {
