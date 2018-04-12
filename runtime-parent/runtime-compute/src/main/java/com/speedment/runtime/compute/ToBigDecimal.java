@@ -30,7 +30,7 @@ public interface ToBigDecimal<T>
 
     @Override
     default ExpressionType getExpressionType() {
-        return ExpressionType.STRING;
+        return ExpressionType.BIG_DECIMAL;
     }
 
     @Override

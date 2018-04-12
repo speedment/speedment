@@ -32,7 +32,7 @@ public interface ToBigDecimalNullable<T>
 
     @Override
     default ExpressionType getExpressionType() {
-        return ExpressionType.STRING_NULLABLE;
+        return ExpressionType.BIG_DECIMAL_NULLABLE;
     }
 
     default ToBigDecimal<T> orThrow() throws NullPointerException {
