@@ -64,12 +64,6 @@ public interface BinaryExpression<
         /**
          * The result of the first operand divided by the second (division).
          */
-        DIVIDE,
-
-        /**
-         * The floored result of the first operand divided by the second. This
-         * will always return some integer type.
-         */
-        DIVIDE_FLOOR
+        DIVIDE
     }
 }

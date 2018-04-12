@@ -814,8 +814,6 @@ public final class Expressions {
         );
     }
 
-
-
     /**
      * Creates and returns an expression that takes the result of an input
      * expression and multiplies it with itself {@code power} times.
@@ -2407,8 +2405,6 @@ public final class Expressions {
     //                               Multiply                                 //
     ////////////////////////////////////////////////////////////////////////////
 
-    // TODO: Some multiplications could be performed with shift operations instead
-
     /**
      * Creates and returns an expression that takes the result of the expression
      * and multiplies a constant to it.
@@ -2804,1644 +2800,510 @@ public final class Expressions {
     ////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToByte<T> divideFloor(ToByte<T> expression, byte divisor) {
-        switch (divisor) {
-            case -1  : return negate(expression);
-            case 0   : throw new IllegalArgumentException("Divisor can't be 0!");
-            case 1   : return expression;
-            case 2   : return expression.map(v -> (byte) (v >> 1));
-            case 4   : return expression.map(v -> (byte) (v >> 2));
-            case 8   : return expression.map(v -> (byte) (v >> 3));
-            case 16  : return expression.map(v -> (byte) (v >> 4));
-            case 32  : return expression.map(v -> (byte) (v >> 5));
-            case 64  : return expression.map(v -> (byte) (v >> 6));
-        }
-        return expression.map(v -> (byte) (v / divisor));
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToByte<T> divideFloor(ToByte<T> expression, int divisor) {
-        switch (divisor) {
-            case -1  : return negate(expression);
-            case 0   : throw new IllegalArgumentException("Divisor can't be 0!");
-            case 1   : return expression;
-            case 2   : return expression.map(v -> (byte) (v >> 1));
-            case 4   : return expression.map(v -> (byte) (v >> 2));
-            case 8   : return expression.map(v -> (byte) (v >> 3));
-            case 16  : return expression.map(v -> (byte) (v >> 4));
-            case 32  : return expression.map(v -> (byte) (v >> 5));
-            case 64  : return expression.map(v -> (byte) (v >> 6));
-            case 128 : return expression.map(v -> (byte) (v >> 7));
-        }
-        return expression.map(v -> (byte) (v / divisor));
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToByte<T> divideFloor(ToByte<T> expression, long divisor) {
-        if (divisor >= -1 && divisor <= Integer.MAX_VALUE) {
-            return divideFloor(expression, (int) divisor);
-        } else {
-            return expression.map(v -> (byte) (v / divisor));
-        }
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor expression
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToByte<T> divideFloor(ToByte<T> expression, ToByte<T> divisor) {
-        return t -> {
-            final byte d = divisor.applyAsByte(t);
-            switch (d) {
-                case -1: return (byte) -expression.applyAsByte(t);
-                case 0:  throw new IllegalArgumentException("Divisor can't be 0!");
-                case 1:  return expression.applyAsByte(t);
-                case 2:  return (byte) (expression.applyAsByte(t) >> 1);
-                case 4:  return (byte) (expression.applyAsByte(t) >> 2);
-                case 8:  return (byte) (expression.applyAsByte(t) >> 3);
-                case 16: return (byte) (expression.applyAsByte(t) >> 4);
-                case 32: return (byte) (expression.applyAsByte(t) >> 5);
-                case 64: return (byte) (expression.applyAsByte(t) >> 6);
-            }
-            return (byte) (expression.applyAsByte(t) / d);
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor expression
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToByte<T> divideFloor(ToByte<T> expression, ToInt<T> divisor) {
-        return t -> {
-            final int d = divisor.applyAsInt(t);
-            switch (d) {
-                case -1:  return (byte) -expression.applyAsByte(t);
-                case 0:   throw new IllegalArgumentException("Divisor can't be 0!");
-                case 1:   return expression.applyAsByte(t);
-                case 2:   return (byte) (expression.applyAsByte(t) >> 1);
-                case 4:   return (byte) (expression.applyAsByte(t) >> 2);
-                case 8:   return (byte) (expression.applyAsByte(t) >> 3);
-                case 16:  return (byte) (expression.applyAsByte(t) >> 4);
-                case 32:  return (byte) (expression.applyAsByte(t) >> 5);
-                case 64:  return (byte) (expression.applyAsByte(t) >> 6);
-                case 128: return (byte) (expression.applyAsByte(t) >> 7);
-            }
-            return (byte) (expression.applyAsByte(t) / d);
-        };
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
+     *
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
+     */
+    public static <T> ToDouble<T> divide(ToByte<T> first, int second) {
+        return DivideUtil.divide(first, second);
+    }
+
+    /**
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
+     *
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
+     */
+    public static <T> ToDouble<T> divide(ToByte<T> first, long second) {
+        return DivideUtil.divide(first, second);
+    }
+
+    /**
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
+     *
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
+     */
+    public static <T> ToDouble<T> divide(ToByte<T> first, double second) {
+        return DivideUtil.divide(first, second);
     }
 
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor expression
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToByte<T> divideFloor(ToByte<T> expression, ToLong<T> divisor) {
-        return t -> {
-            final long d = divisor.applyAsLong(t);
-            if (d <= Byte.MAX_VALUE) {
-                if (d >= -1) {
-                    switch ((int) d) {
-                        case -1:  return (byte) -expression.applyAsByte(t);
-                        case 0:   throw new IllegalArgumentException("Divisor can't be 0!");
-                        case 1:   return expression.applyAsByte(t);
-                        case 2:   return (byte) (expression.applyAsByte(t) >> 1);
-                        case 4:   return (byte) (expression.applyAsByte(t) >> 2);
-                        case 8:   return (byte) (expression.applyAsByte(t) >> 3);
-                        case 16:  return (byte) (expression.applyAsByte(t) >> 4);
-                        case 32:  return (byte) (expression.applyAsByte(t) >> 5);
-                        case 64:  return (byte) (expression.applyAsByte(t) >> 6);
-                        case 128: return (byte) (expression.applyAsByte(t) >> 7);
-                    }
-                }
-
-                return (byte) (expression.applyAsByte(t) / d);
-            } else return (byte) 0;
-        };
-    }
+    /**
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
+     *
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
+     */
+    public static <T> ToDouble<T> divide(ToByte<T> first, ToInt<T> second) {
+        return DivideUtil.divide(first, second);
+    }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToByte<T> expression, byte divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        final double dDivisor = (double) divisor;
-        return expression.mapToDouble(v -> v / dDivisor);
-    }
-
+    public static <T> ToDouble<T> divide(ToByte<T> first, ToLong<T> second) {
+        return DivideUtil.divide(first, second);
+    }
+
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToByte<T> expression, int divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        final double dDivisor = (double) divisor;
-        return expression.mapToDouble(v -> v / dDivisor);
+    public static <T> ToDouble<T> divide(ToByte<T> first, ToDouble<T> second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToByte<T> expression, long divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        final double dDivisor = (double) divisor;
-        return expression.mapToDouble(v -> v / dDivisor);
+    public static <T> ToDouble<T> divide(ToShort<T> first, int second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToByte<T> expression, double divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        return expression.mapToDouble(v -> v / divisor);
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
+     */
+    public static <T> ToDouble<T> divide(ToShort<T> first, long second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToByte<T> expression, ToByte<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsByte(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsByte(t) / d;
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToByte<T> expression, ToInt<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsInt(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsByte(t) / d;
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToByte<T> expression, ToLong<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsLong(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsByte(t) / d;
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToByte<T> expression, ToDouble<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsDouble(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsByte(t) / d;
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToShort<T> divideFloor(ToShort<T> expression, byte divisor) {
-        switch (divisor) {
-            case -1  : return negate(expression);
-            case 0   : throw new IllegalArgumentException("Divisor can't be 0!");
-            case 1   : return expression;
-            case 2   : return expression.map(v -> (short) (v >> 1));
-            case 4   : return expression.map(v -> (short) (v >> 2));
-            case 8   : return expression.map(v -> (short) (v >> 3));
-            case 16  : return expression.map(v -> (short) (v >> 4));
-            case 32  : return expression.map(v -> (short) (v >> 5));
-            case 64  : return expression.map(v -> (short) (v >> 6));
-        }
-        return expression.map(v -> (short) (v / divisor));
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToShort<T> divideFloor(ToShort<T> expression, int divisor) {
-        switch (divisor) {
-            case -1  : return negate(expression);
-            case 0   : throw new IllegalArgumentException("Divisor can't be 0!");
-            case 1   : return expression;
-            case 2   : return expression.map(v -> (short) (v >> 1));
-            case 4   : return expression.map(v -> (short) (v >> 2));
-            case 8   : return expression.map(v -> (short) (v >> 3));
-            case 16  : return expression.map(v -> (short) (v >> 4));
-            case 32  : return expression.map(v -> (short) (v >> 5));
-            case 64  : return expression.map(v -> (short) (v >> 6));
-            case 128 : return expression.map(v -> (short) (v >> 7));
-        }
-        return expression.map(v -> (short) (v / divisor));
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToShort<T> divideFloor(ToShort<T> expression, long divisor) {
-        if (divisor >= -1 && divisor <= Integer.MAX_VALUE) {
-            return divideFloor(expression, (int) divisor);
-        } else {
-            return expression.map(v -> (short) (v / divisor));
-        }
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor expression
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToShort<T> divideFloor(ToShort<T> expression, ToByte<T> divisor) {
-        return t -> {
-            final byte d = divisor.applyAsByte(t);
-            switch (d) {
-                case -1: return (short) -expression.applyAsShort(t);
-                case 0:  throw new IllegalArgumentException("Divisor can't be 0!");
-                case 1:  return expression.applyAsShort(t);
-                case 2:  return (short) (expression.applyAsShort(t) >> 1);
-                case 4:  return (short) (expression.applyAsShort(t) >> 2);
-                case 8:  return (short) (expression.applyAsShort(t) >> 3);
-                case 16: return (short) (expression.applyAsShort(t) >> 4);
-                case 32: return (short) (expression.applyAsShort(t) >> 5);
-                case 64: return (short) (expression.applyAsShort(t) >> 6);
-            }
-            return (short) (expression.applyAsShort(t) / d);
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor expression
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToShort<T> divideFloor(ToShort<T> expression, ToInt<T> divisor) {
-        return t -> {
-            final int d = divisor.applyAsInt(t);
-            switch (d) {
-                case -1:  return (short) -expression.applyAsShort(t);
-                case 0:   throw new IllegalArgumentException("Divisor can't be 0!");
-                case 1:   return expression.applyAsShort(t);
-                case 2:   return (short) (expression.applyAsShort(t) >> 1);
-                case 4:   return (short) (expression.applyAsShort(t) >> 2);
-                case 8:   return (short) (expression.applyAsShort(t) >> 3);
-                case 16:  return (short) (expression.applyAsShort(t) >> 4);
-                case 32:  return (short) (expression.applyAsShort(t) >> 5);
-                case 64:  return (short) (expression.applyAsShort(t) >> 6);
-                case 128: return (short) (expression.applyAsShort(t) >> 7);
-            }
-            return (short) (expression.applyAsShort(t) / d);
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor expression
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToShort<T> divideFloor(ToShort<T> expression, ToLong<T> divisor) {
-        return t -> {
-            final long d = divisor.applyAsLong(t);
-            if (d <= Short.MAX_VALUE) {
-                if (d >= -1) {
-                    switch ((int) d) {
-                        case -1:  return (short) -expression.applyAsShort(t);
-                        case 0:   throw new IllegalArgumentException("Divisor can't be 0!");
-                        case 1:   return expression.applyAsShort(t);
-                        case 2:   return (short) (expression.applyAsShort(t) >> 1);
-                        case 4:   return (short) (expression.applyAsShort(t) >> 2);
-                        case 8:   return (short) (expression.applyAsShort(t) >> 3);
-                        case 16:  return (short) (expression.applyAsShort(t) >> 4);
-                        case 32:  return (short) (expression.applyAsShort(t) >> 5);
-                        case 64:  return (short) (expression.applyAsShort(t) >> 6);
-                        case 128: return (short) (expression.applyAsShort(t) >> 7);
-                    }
-                }
-
-                return (short) (expression.applyAsShort(t) / d);
-            } else return (short) 0;
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToShort<T> expression, byte divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        final double dDivisor = (double) divisor;
-        return expression.mapToDouble(v -> v / dDivisor);
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToShort<T> expression, int divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        final double dDivisor = (double) divisor;
-        return expression.mapToDouble(v -> v / dDivisor);
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToShort<T> expression, long divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        final double dDivisor = (double) divisor;
-        return expression.mapToDouble(v -> v / dDivisor);
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToShort<T> expression, double divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        return expression.mapToDouble(v -> v / divisor);
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToShort<T> expression, ToByte<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsByte(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsShort(t) / d;
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToShort<T> expression, ToInt<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsInt(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsShort(t) / d;
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToShort<T> expression, ToLong<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsLong(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsShort(t) / d;
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToShort<T> expression, ToDouble<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsDouble(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsShort(t) / d;
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToInt<T> divideFloor(ToInt<T> expression, byte divisor) {
-        switch (divisor) {
-            case -1  : return negate(expression);
-            case 0   : throw new IllegalArgumentException("Divisor can't be 0!");
-            case 1   : return expression;
-            case 2   : return expression.map(v -> (v >> 1));
-            case 4   : return expression.map(v -> (v >> 2));
-            case 8   : return expression.map(v -> (v >> 3));
-            case 16  : return expression.map(v -> (v >> 4));
-            case 32  : return expression.map(v -> (v >> 5));
-            case 64  : return expression.map(v -> (v >> 6));
-        }
-        return expression.map(v -> (v / divisor));
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToInt<T> divideFloor(ToInt<T> expression, int divisor) {
-        switch (divisor) {
-            case -1  : return negate(expression);
-            case 0   : throw new IllegalArgumentException("Divisor can't be 0!");
-            case 1   : return expression;
-            case 2   : return expression.map(v -> (v >> 1));
-            case 4   : return expression.map(v -> (v >> 2));
-            case 8   : return expression.map(v -> (v >> 3));
-            case 16  : return expression.map(v -> (v >> 4));
-            case 32  : return expression.map(v -> (v >> 5));
-            case 64  : return expression.map(v -> (v >> 6));
-            case 128 : return expression.map(v -> (v >> 7));
-        }
-        return expression.map(v -> (v / divisor));
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToInt<T> divideFloor(ToInt<T> expression, long divisor) {
-        if (divisor >= -1 && divisor <= Integer.MAX_VALUE) {
-            return divideFloor(expression, divisor);
-        } else {
-            return expression.map(v -> (int) (v / divisor));
-        }
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor expression
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToInt<T> divideFloor(ToInt<T> expression, ToByte<T> divisor) {
-        return t -> {
-            final byte d = divisor.applyAsByte(t);
-            switch (d) {
-                case -1: return -expression.applyAsInt(t);
-                case 0:  throw new IllegalArgumentException("Divisor can't be 0!");
-                case 1:  return expression.applyAsInt(t);
-                case 2:  return (expression.applyAsInt(t) >> 1);
-                case 4:  return (expression.applyAsInt(t) >> 2);
-                case 8:  return (expression.applyAsInt(t) >> 3);
-                case 16: return (expression.applyAsInt(t) >> 4);
-                case 32: return (expression.applyAsInt(t) >> 5);
-                case 64: return (expression.applyAsInt(t) >> 6);
-            }
-            return (expression.applyAsInt(t) / d);
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor expression
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToInt<T> divideFloor(ToInt<T> expression, ToInt<T> divisor) {
-        return t -> {
-            final int d = divisor.applyAsInt(t);
-            switch (d) {
-                case -1:  return -expression.applyAsInt(t);
-                case 0:   throw new IllegalArgumentException("Divisor can't be 0!");
-                case 1:   return expression.applyAsInt(t);
-                case 2:   return (expression.applyAsInt(t) >> 1);
-                case 4:   return (expression.applyAsInt(t) >> 2);
-                case 8:   return (expression.applyAsInt(t) >> 3);
-                case 16:  return (expression.applyAsInt(t) >> 4);
-                case 32:  return (expression.applyAsInt(t) >> 5);
-                case 64:  return (expression.applyAsInt(t) >> 6);
-                case 128: return (expression.applyAsInt(t) >> 7);
-            }
-            return (expression.applyAsInt(t) / d);
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor expression
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToInt<T> divideFloor(ToInt<T> expression, ToLong<T> divisor) {
-        return t -> {
-            final long d = divisor.applyAsLong(t);
-            if (d <= Integer.MAX_VALUE) {
-                if (d >= -1) {
-                    switch ((int) d) {
-                        case -1:  return -expression.applyAsInt(t);
-                        case 0:   throw new IllegalArgumentException("Divisor can't be 0!");
-                        case 1:   return expression.applyAsInt(t);
-                        case 2:   return (expression.applyAsInt(t) >> 1);
-                        case 4:   return (expression.applyAsInt(t) >> 2);
-                        case 8:   return (expression.applyAsInt(t) >> 3);
-                        case 16:  return (expression.applyAsInt(t) >> 4);
-                        case 32:  return (expression.applyAsInt(t) >> 5);
-                        case 64:  return (expression.applyAsInt(t) >> 6);
-                        case 128: return (expression.applyAsInt(t) >> 7);
-                    }
-                }
-
-                return (int) (expression.applyAsInt(t) / d);
-            } else return 0;
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToInt<T> expression, byte divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        final double dDivisor = (double) divisor;
-        return expression.mapToDouble(v -> v / dDivisor);
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToInt<T> expression, int divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        final double dDivisor = (double) divisor;
-        return expression.mapToDouble(v -> v / dDivisor);
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToInt<T> expression, long divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        final double dDivisor = (double) divisor;
-        return expression.mapToDouble(v -> v / dDivisor);
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToInt<T> expression, double divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        return expression.mapToDouble(v -> v / divisor);
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToInt<T> expression, ToByte<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsByte(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsInt(t) / d;
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToInt<T> expression, ToInt<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsInt(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsInt(t) / d;
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToInt<T> expression, ToLong<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsLong(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsInt(t) / d;
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToInt<T> expression, ToDouble<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsDouble(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsInt(t) / d;
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToLong<T> divideFloor(ToLong<T> expression, byte divisor) {
-        switch (divisor) {
-            case -1  : return negate(expression);
-            case 0   : throw new IllegalArgumentException("Divisor can't be 0!");
-            case 1   : return expression;
-            case 2   : return expression.map(v -> (v >> 1));
-            case 4   : return expression.map(v -> (v >> 2));
-            case 8   : return expression.map(v -> (v >> 3));
-            case 16  : return expression.map(v -> (v >> 4));
-            case 32  : return expression.map(v -> (v >> 5));
-            case 64  : return expression.map(v -> (v >> 6));
-        }
-        return expression.map(v -> (v / divisor));
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToLong<T> divideFloor(ToLong<T> expression, int divisor) {
-        switch (divisor) {
-            case -1  : return negate(expression);
-            case 0   : throw new IllegalArgumentException("Divisor can't be 0!");
-            case 1   : return expression;
-            case 2   : return expression.map(v -> (v >> 1));
-            case 4   : return expression.map(v -> (v >> 2));
-            case 8   : return expression.map(v -> (v >> 3));
-            case 16  : return expression.map(v -> (v >> 4));
-            case 32  : return expression.map(v -> (v >> 5));
-            case 64  : return expression.map(v -> (v >> 6));
-            case 128 : return expression.map(v -> (v >> 7));
-        }
-        return expression.map(v -> (v / divisor));
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToLong<T> divideFloor(ToLong<T> expression, long divisor) {
-        if (divisor >= -1 && divisor <= Integer.MAX_VALUE) {
-            return divideFloor(expression, (int) divisor);
-        } else {
-            return expression.map(v -> (v / divisor));
-        }
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor expression
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToLong<T> divideFloor(ToLong<T> expression, ToByte<T> divisor) {
-        return t -> {
-            final byte d = divisor.applyAsByte(t);
-            switch (d) {
-                case -1: return -expression.applyAsLong(t);
-                case 0:  throw new IllegalArgumentException("Divisor can't be 0!");
-                case 1:  return expression.applyAsLong(t);
-                case 2:  return (expression.applyAsLong(t) >> 1);
-                case 4:  return (expression.applyAsLong(t) >> 2);
-                case 8:  return (expression.applyAsLong(t) >> 3);
-                case 16: return (expression.applyAsLong(t) >> 4);
-                case 32: return (expression.applyAsLong(t) >> 5);
-                case 64: return (expression.applyAsLong(t) >> 6);
-            }
-            return (expression.applyAsLong(t) / d);
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor expression
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToLong<T> divideFloor(ToLong<T> expression, ToInt<T> divisor) {
-        return t -> {
-            final int d = divisor.applyAsInt(t);
-            switch (d) {
-                case -1:  return -expression.applyAsLong(t);
-                case 0:   throw new IllegalArgumentException("Divisor can't be 0!");
-                case 1:   return expression.applyAsLong(t);
-                case 2:   return (expression.applyAsLong(t) >> 1);
-                case 4:   return (expression.applyAsLong(t) >> 2);
-                case 8:   return (expression.applyAsLong(t) >> 3);
-                case 16:  return (expression.applyAsLong(t) >> 4);
-                case 32:  return (expression.applyAsLong(t) >> 5);
-                case 64:  return (expression.applyAsLong(t) >> 6);
-                case 128: return (expression.applyAsLong(t) >> 7);
-            }
-            return (expression.applyAsLong(t) / d);
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor expression
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToLong<T> divideFloor(ToLong<T> expression, ToLong<T> divisor) {
-        return t -> {
-            final long d = divisor.applyAsLong(t);
-            if (d <= Long.MAX_VALUE) {
-                if (d >= -1) {
-                    switch ((int) d) {
-                        case -1:  return -expression.applyAsLong(t);
-                        case 0:   throw new IllegalArgumentException("Divisor can't be 0!");
-                        case 1:   return expression.applyAsLong(t);
-                        case 2:   return (expression.applyAsLong(t) >> 1);
-                        case 4:   return (expression.applyAsLong(t) >> 2);
-                        case 8:   return (expression.applyAsLong(t) >> 3);
-                        case 16:  return (expression.applyAsLong(t) >> 4);
-                        case 32:  return (expression.applyAsLong(t) >> 5);
-                        case 64:  return (expression.applyAsLong(t) >> 6);
-                        case 128: return (expression.applyAsLong(t) >> 7);
-                    }
-                }
-
-                return (expression.applyAsLong(t) / d);
-            } else return 0;
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToLong<T> expression, byte divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        final double dDivisor = (double) divisor;
-        return expression.mapToDouble(v -> v / dDivisor);
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToLong<T> expression, int divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        final double dDivisor = (double) divisor;
-        return expression.mapToDouble(v -> v / dDivisor);
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToLong<T> expression, long divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        final double dDivisor = (double) divisor;
-        return expression.mapToDouble(v -> v / dDivisor);
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToLong<T> expression, double divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        return expression.mapToDouble(v -> v / divisor);
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToLong<T> expression, ToByte<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsByte(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsLong(t) / d;
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToLong<T> expression, ToInt<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsInt(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsLong(t) / d;
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToLong<T> expression, ToLong<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsLong(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsLong(t) / d;
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> divide(ToLong<T> expression, ToDouble<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsDouble(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsLong(t) / d;
-        };
-    }
-
-    /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
-     *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToInt<T> divideFloor(ToFloat<T> expression, byte divisor) {
-        return expression.mapToDouble(v -> Math.floor(v / divisor)).asInt();
+    public static <T> ToDouble<T> divide(ToShort<T> first, double second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToInt<T> divideFloor(ToFloat<T> expression, int divisor) {
-        return expression.mapToDouble(v -> Math.floor(v / divisor)).asInt();
-    }
+    public static <T> ToDouble<T> divide(ToShort<T> first, ToInt<T> second) {
+        return DivideUtil.divide(first, second);
+    }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToInt<T> divideFloor(ToFloat<T> expression, long divisor) {
-        return expression.mapToDouble(v -> Math.floor(v / divisor)).asInt();
+    public static <T> ToDouble<T> divide(ToShort<T> first, ToLong<T> second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor expression
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToInt<T> divideFloor(ToFloat<T> expression, ToByte<T> divisor) {
-        return t -> {
-            final byte d = divisor.applyAsByte(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return (int) Math.floor(expression.applyAsFloat(t) / d);
-        };
+    public static <T> ToDouble<T> divide(ToShort<T> first, ToDouble<T> second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor expression
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToInt<T> divideFloor(ToFloat<T> expression, ToInt<T> divisor) {
-        return t -> {
-            final int d = divisor.applyAsInt(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return (int) Math.floor(expression.applyAsFloat(t) / d);
-        };
+    public static <T> ToDouble<T> divide(ToInt<T> first, int second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor expression
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToInt<T> divideFloor(ToFloat<T> expression, ToLong<T> divisor) {
-        return t -> {
-            final long d = divisor.applyAsLong(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return (int) Math.floor(expression.applyAsFloat(t) / d);
-        };
+    public static <T> ToDouble<T> divide(ToInt<T> first, long second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToFloat<T> expression, byte divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        final double dDivisor = (double) divisor;
-        return expression.mapToDouble(v -> v / dDivisor);
+    public static <T> ToDouble<T> divide(ToInt<T> first, double second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToFloat<T> expression, int divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        final double dDivisor = (double) divisor;
-        return expression.mapToDouble(v -> v / dDivisor);
+    public static <T> ToDouble<T> divide(ToInt<T> first, ToInt<T> second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToFloat<T> expression, long divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        final double dDivisor = (double) divisor;
-        return expression.mapToDouble(v -> v / dDivisor);
+    public static <T> ToDouble<T> divide(ToInt<T> first, ToLong<T> second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToFloat<T> expression, double divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        return expression.mapToDouble(v -> v / divisor);
+    public static <T> ToDouble<T> divide(ToInt<T> first, ToDouble<T> second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToFloat<T> expression, ToByte<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsByte(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsFloat(t) / d;
-        };
+    public static <T> ToDouble<T> divide(ToLong<T> first, int second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToFloat<T> expression, ToInt<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsInt(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsFloat(t) / d;
-        };
+    public static <T> ToDouble<T> divide(ToLong<T> first, long second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToFloat<T> expression, ToLong<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsLong(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsFloat(t) / d;
-        };
+    public static <T> ToDouble<T> divide(ToLong<T> first, double second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToFloat<T> expression, ToDouble<T> divisor) {
-        return t -> {
-            final double d = divisor.applyAsDouble(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsFloat(t) / d;
-        };
+    public static <T> ToDouble<T> divide(ToLong<T> first, ToInt<T> second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToLong<T> divideFloor(ToDouble<T> expression, byte divisor) {
-        return expression.map(v -> Math.floor(v / divisor)).asLong();
+    public static <T> ToDouble<T> divide(ToLong<T> first, ToLong<T> second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToLong<T> divideFloor(ToDouble<T> expression, int divisor) {
-        return expression.map(v -> Math.floor(v / divisor)).asLong();
+    public static <T> ToDouble<T> divide(ToLong<T> first, ToDouble<T> second) {
+        return DivideUtil.divide(first, second);
     }
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                                 ToFloat                                //
+    ////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToLong<T> divideFloor(ToDouble<T> expression, long divisor) {
-        return expression.map(v -> Math.floor(v / divisor)).asLong();
+    public static <T> ToDouble<T> divide(ToFloat<T> first, int second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor expression
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToLong<T> divideFloor(ToDouble<T> expression, ToByte<T> divisor) {
-        return t -> {
-            final byte d = divisor.applyAsByte(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return (long) Math.floor(expression.applyAsDouble(t) / d);
-        };
+    public static <T> ToDouble<T> divide(ToFloat<T> first, long second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor expression
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToLong<T> divideFloor(ToDouble<T> expression, ToInt<T> divisor) {
-        return t -> {
-            final int d = divisor.applyAsInt(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return (long) Math.floor(expression.applyAsDouble(t) / d);
-        };
+    public static <T> ToDouble<T> divide(ToFloat<T> first, double second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}. This result from this method will be floored.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor expression
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToLong<T> divideFloor(ToDouble<T> expression, ToLong<T> divisor) {
-        return t -> {
-            final long d = divisor.applyAsLong(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return (long) Math.floor(expression.applyAsDouble(t) / d);
-        };
+    public static <T> ToDouble<T> divide(ToFloat<T> first, ToInt<T> second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToDouble<T> expression, byte divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        final double dDivisor = (double) divisor;
-        return expression.map(v -> v / dDivisor);
+    public static <T> ToDouble<T> divide(ToFloat<T> first, ToLong<T> second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToDouble<T> expression, int divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        final double dDivisor = (double) divisor;
-        return expression.map(v -> v / dDivisor);
+    public static <T> ToDouble<T> divide(ToFloat<T> first, ToDouble<T> second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToDouble<T> expression, long divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        final double dDivisor = (double) divisor;
-        return expression.map(v -> v / dDivisor);
+    public static <T> ToDouble<T> divide(ToDouble<T> first, int second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToDouble<T> expression, double divisor) {
-        if (divisor == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-        return expression.map(v -> v / divisor);
+    public static <T> ToDouble<T> divide(ToDouble<T> first, long second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToDouble<T> expression, ToByte<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsByte(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsDouble(t) / d;
-        };
+    public static <T> ToDouble<T> divide(ToDouble<T> first, double second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToDouble<T> expression, ToInt<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsInt(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsDouble(t) / d;
-        };
+    public static <T> ToDouble<T> divide(ToDouble<T> first, ToInt<T> second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToDouble<T> expression, ToLong<T> divisor) {
-        return t -> {
-            final double d = (double) divisor.applyAsLong(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsDouble(t) / d;
-        };
+    public static <T> ToDouble<T> divide(ToDouble<T> first, ToLong<T> second) {
+        return DivideUtil.divide(first, second);
     }
 
     /**
-     * Creates and returns an expression that takes the result of the specified
-     * expression and divides it with the specified constant. The constant must
-     * not be {@code 0}.
+     * Returns an expression that takes the result from the first expression and
+     * divides it with the result of the second expression. The second
+     * expression must never return {@code 0}!
      *
-     * @param expression  the input expression
-     * @param divisor     the divisor
-     * @param <T>         the input type
-     * @return            the new expression
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToDouble<T> expression, ToDouble<T> divisor) {
-        return t -> {
-            final double d = divisor.applyAsDouble(t);
-            if (d == 0) throw new IllegalArgumentException("Divisor can't be 0!");
-            return expression.applyAsDouble(t) / d;
-        };
+    public static <T> ToDouble<T> divide(ToDouble<T> first, ToDouble<T> second) {
+        return DivideUtil.divide(first, second);
     }
 }

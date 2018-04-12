@@ -34,7 +34,7 @@ public interface ToByte<T>
             HasPlus<T, ToShort<T>, ToInt<T>, ToLong<T>>,
             HasMinus<T, ToShort<T>, ToInt<T>, ToLong<T>>,
             HasMultiply<T, ToInt<T>, ToInt<T>, ToLong<T>>,
-            HasDivide<T, ToByte<T>>,
+            HasDivide<T>,
             HasHash<T>,
             HasCompare<T> {
 
@@ -221,46 +221,6 @@ public interface ToByte<T>
     @Override
     default ToDouble<T> multiply(ToDouble<T> other) {
         return Expressions.multiply(this.asDouble(), other);
-    }
-
-    @Override
-    default ToByte<T> divideFloor(byte divisor) {
-        return Expressions.divideFloor(this, divisor);
-    }
-
-    @Override
-    default ToByte<T> divideFloor(ToByte<T> divisor) {
-        return Expressions.divideFloor(this, divisor);
-    }
-
-    @Override
-    default ToByte<T> divideFloor(int divisor) {
-        return Expressions.divideFloor(this, divisor);
-    }
-
-    @Override
-    default ToByte<T> divideFloor(ToInt<T> divisor) {
-        return Expressions.divideFloor(this, divisor);
-    }
-
-    @Override
-    default ToByte<T> divideFloor(long divisor) {
-        return Expressions.divideFloor(this, divisor);
-    }
-
-    @Override
-    default ToByte<T> divideFloor(ToLong<T> divisor) {
-        return Expressions.divideFloor(this, divisor);
-    }
-
-    @Override
-    default ToDouble<T> divide(byte divisor) {
-        return Expressions.divide(this, divisor);
-    }
-
-    @Override
-    default ToDouble<T> divide(ToByte<T> divisor) {
-        return Expressions.divide(this, divisor);
     }
 
     @Override

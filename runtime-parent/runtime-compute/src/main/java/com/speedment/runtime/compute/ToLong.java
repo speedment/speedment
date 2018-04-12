@@ -35,7 +35,7 @@ extends Expression,
         HasPlus<T, ToLong<T>, ToLong<T>, ToLong<T>>,
         HasMinus<T, ToLong<T>, ToLong<T>, ToLong<T>>,
         HasMultiply<T, ToLong<T>, ToLong<T>, ToLong<T>>,
-        HasDivide<T, ToLong<T>>,
+        HasDivide<T>,
         HasHash<T>,
         HasCompare<T> {
 
@@ -222,46 +222,6 @@ extends Expression,
     @Override
     default ToDouble<T> multiply(ToDouble<T> other) {
         return Expressions.multiply(this.asDouble(), other);
-    }
-
-    @Override
-    default ToLong<T> divideFloor(byte divisor) {
-        return Expressions.divideFloor(this, divisor);
-    }
-
-    @Override
-    default ToLong<T> divideFloor(ToByte<T> divisor) {
-        return Expressions.divideFloor(this, divisor);
-    }
-
-    @Override
-    default ToLong<T> divideFloor(int divisor) {
-        return Expressions.divideFloor(this, divisor);
-    }
-
-    @Override
-    default ToLong<T> divideFloor(ToInt<T> divisor) {
-        return Expressions.divideFloor(this, divisor);
-    }
-
-    @Override
-    default ToLong<T> divideFloor(long divisor) {
-        return Expressions.divideFloor(this, divisor);
-    }
-
-    @Override
-    default ToLong<T> divideFloor(ToLong<T> divisor) {
-        return Expressions.divideFloor(this, divisor);
-    }
-
-    @Override
-    default ToDouble<T> divide(byte divisor) {
-        return Expressions.divide(this, divisor);
-    }
-
-    @Override
-    default ToDouble<T> divide(ToByte<T> divisor) {
-        return Expressions.divide(this, divisor);
     }
 
     @Override
