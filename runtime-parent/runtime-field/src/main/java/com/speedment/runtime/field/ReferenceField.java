@@ -21,7 +21,7 @@ import com.speedment.runtime.compute.ToByteNullable;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.exception.SpeedmentFieldException;
 import com.speedment.runtime.field.internal.ReferenceFieldImpl;
-import com.speedment.runtime.field.internal.expression.NullableFieldToByteImpl;
+import com.speedment.runtime.field.internal.expression.FieldToByteImpl;
 import com.speedment.runtime.field.method.ReferenceGetter;
 import com.speedment.runtime.field.method.ReferenceSetter;
 import com.speedment.runtime.field.trait.HasReferenceOperators;
@@ -85,7 +85,7 @@ extends Field<ENTITY>,
      * @return  expression for this value after mapper has been applied
      */
     default ToByteNullable<ENTITY> mapToByteIfPresent(ToByteFunction<V> mapper) {
-        return new NullableFieldToByteImpl<>(this, mapper);
+        return new FieldToByteImpl<>(this, mapper);
     }
 
     /**

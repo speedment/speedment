@@ -21,18 +21,26 @@ public interface FieldMapper<ENTITY, T, MAPPER> extends Expression {
 
     /**
      * Returns the functional interface implementation that is used when doing
-     * the mapping. This type must correspond with the type that is returned by
-     * {@link #getMapperType()}.
+     * the mapping. The returned object must implement one of the following
+     * interfaces:
+     * <ul>
+     *     <li>{@link com.speedment.common.function.ToByteFunction}
+     *     <li>{@link com.speedment.common.function.ToShortFunction}
+     *     <li>{@link java.util.function.ToIntFunction}
+     *     <li>{@link java.util.function.ToLongFunction}
+     *     <li>{@link java.util.function.ToDoubleFunction}
+     *     <li>{@link com.speedment.common.function.ToFloatFunction}
+     *     <li>{@link com.speedment.common.function.ToCharFunction}
+     *     <li>{@link com.speedment.common.function.ToBooleanFunction}
+     *     <li>{@link java.util.function.Function}
+     * </ul>
+     * The first generic type should be {@code ENTITY}. If the returned object
+     * implements {@link java.util.function.Function}, then the returning type
+     * must be either {@link java.lang.String}, {@link java.lang.Enum} or
+     * {@link java.math.BigDecimal}.
      *
      * @return  the mapper to use
      */
     MAPPER getMapper();
-
-    /**
-     * The type of mapping that is performed.
-     *
-     * @return  the mapping type
-     */
-    MapperType getMapperType();
 
 }

@@ -15,12 +15,19 @@ extends AbstractFieldMapper<ENTITY, V, ToByteFunction<V>>
 implements FieldToByte<ENTITY, V> {
 
     public FieldToByteImpl(ReferenceField<ENTITY, ?, V> field,
-                           ToByteFunction<V> vToByteFunction) {
-        super(field, vToByteFunction);
+                           ToByteFunction<V> mapper) {
+        super(field, mapper);
     }
 
     @Override
-    public byte applyAsByte(ENTITY entity) {
-        return mapper.applyAsByte(field.get(entity));
+    public Byte apply(ENTITY entity) {
+        final V value = field.get(entity);
+        if (value == null) return null;
+        else return mapper.applyAsByte(value);
+    }
+
+    @Override
+    public byte applyAsByte(ENTITY object) throws NullPointerException {
+        return mapper.applyAsByte(field.get(object));
     }
 }
