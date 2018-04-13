@@ -3,14 +3,14 @@ package com.speedment.runtime.compute;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.expression.OrElseGetUtil;
+import com.speedment.runtime.compute.internal.expression.OrElseThrowUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.ToNullable;
+
 import java.math.BigDecimal;
 import java.util.function.Function;
-
-import static java.util.Objects.requireNonNull;
 
 /**
  * Expression that given an entity returns a non-null {@code String} value. This
@@ -40,7 +40,7 @@ extends Expression,
     }
 
     default ToBigDecimal<T> orThrow() throws NullPointerException {
-        return object -> requireNonNull(apply(object));
+        return OrElseThrowUtil.orElseThrow(this);
     }
 
     default ToBigDecimal<T> orElseGet(ToBigDecimal<T> getter) {

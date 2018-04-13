@@ -5,6 +5,7 @@ import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.ToEnumImpl;
 import com.speedment.runtime.compute.internal.ToEnumNullableImpl;
 import com.speedment.runtime.compute.internal.expression.OrElseGetUtil;
+import com.speedment.runtime.compute.internal.expression.OrElseThrowUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasHash;
@@ -28,7 +29,7 @@ import java.util.function.UnaryOperator;
  * @since 3.1.0
  */
 public interface ToEnumNullable<T, E extends Enum<E>>
-    extends Expression,
+extends Expression,
     ToNullable<T, E>,
     HasHash<T>,
     HasCompare<T> {
@@ -55,6 +56,10 @@ public interface ToEnumNullable<T, E extends Enum<E>>
         return t -> isNotNull(t)
             ? apply(t).name()
             : null;
+    }
+
+    default ToEnum<T, E> orElseThrow() {
+        return OrElseThrowUtil.orElseThrow(this);
     }
 
     default ToEnum<T, E> orElseGet(ToEnum<T, E> getter) {

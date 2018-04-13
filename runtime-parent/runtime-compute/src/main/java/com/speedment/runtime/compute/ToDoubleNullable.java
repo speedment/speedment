@@ -4,6 +4,7 @@ import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
 import com.speedment.runtime.compute.internal.expression.OrElseGetUtil;
+import com.speedment.runtime.compute.internal.expression.OrElseThrowUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.*;
 
@@ -43,7 +44,7 @@ public interface ToDoubleNullable<T>
     }
 
     default ToDouble<T> orThrow() throws NullPointerException {
-        return this::apply;
+        return OrElseThrowUtil.orElseThrow(this);
     }
 
     default ToDouble<T> orElseGet(ToDouble<T> getter) {
