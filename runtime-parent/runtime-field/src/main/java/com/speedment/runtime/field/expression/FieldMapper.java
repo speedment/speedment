@@ -34,9 +34,10 @@ public interface FieldMapper<ENTITY, T, MAPPER> extends Expression {
      *     <li>{@link com.speedment.common.function.ToBooleanFunction}
      *     <li>{@link java.util.function.Function}
      * </ul>
-     * The first generic type should be {@code ENTITY}. If the returned object
-     * implements {@link java.util.function.Function}, then the returning type
-     * must be either {@link java.lang.String}, {@link java.lang.Enum} or
+     * The first generic type should be the boxed type returned by the getters
+     * of the {@link #getField() field}. If the mapper implements
+     * {@link java.util.function.Function}, then the returning type must be
+     * either {@link java.lang.String}, {@link java.lang.Enum} or
      * {@link java.math.BigDecimal}.
      *
      * @return  the mapper to use
