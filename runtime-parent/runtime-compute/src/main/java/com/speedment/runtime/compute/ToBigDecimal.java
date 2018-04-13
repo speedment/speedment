@@ -16,14 +16,15 @@ import java.util.function.Function;
  *
  * @see Function
  *
- * @since 3.1.0
+ * @author Per Minborg
+ * @since  3.1.0
  */
 @FunctionalInterface
 public interface ToBigDecimal<T>
-    extends Expression,
-    Function<T, BigDecimal>,
-    HasHash<T>,
-    HasCompare<T> {
+extends Expression,
+        Function<T, BigDecimal>,
+        HasHash<T>,
+        HasCompare<T> {
 
     @Override
     BigDecimal apply(T object);

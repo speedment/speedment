@@ -2,10 +2,13 @@ package com.speedment.runtime.compute;
 
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
+import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.ToNullable;
 import java.math.BigDecimal;
+import java.util.function.Function;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -17,15 +20,15 @@ import static java.util.Objects.requireNonNull;
  *
  * @see Function
  *
- * @author Emil Forslund
- * @since 3.1.0
+ * @author Per Minborg
+ * @since  3.1.0
  */
 @FunctionalInterface
 public interface ToBigDecimalNullable<T>
-    extends Expression,
-    ToNullable<T, BigDecimal>,
-    HasHash<T>,
-    HasCompare<T> {
+extends Expression,
+        ToNullable<T, BigDecimal>,
+        HasHash<T>,
+        HasCompare<T> {
 
     @Override
     BigDecimal apply(T object);
@@ -47,10 +50,7 @@ public interface ToBigDecimalNullable<T>
     }
 
     default ToBigDecimal<T> orElse(BigDecimal value) {
-        return object -> {
-            final BigDecimal v = apply(object);
-            return v == null ? value : v;
-        };
+        return OrElseUtil.orElse(this, value);
     }
 
     @Override

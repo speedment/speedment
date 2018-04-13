@@ -5,6 +5,8 @@ import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.NonNullableExpression;
 import com.speedment.runtime.compute.expression.orelse.*;
 
+import java.math.BigDecimal;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -434,6 +436,48 @@ public final class OrElseUtil {
 
         @Override
         public E apply(T object) {
+            return inner.isNull(object) ? value :
+                inner.apply(object);
+        }
+    }
+
+    /**
+     * Returns an expression that returns the same value as the specified
+     * expression if it is not {@code null}, and if the wrapped expression
+     * returns {@code null}, then the default value is returned instead.
+     *
+     * @param expression    the nullable expression to wrap
+     * @param defaultValue  the default value to use
+     * @param <T>           the input entity type
+     * @return              the non-nullable expression
+     */
+    public static <T> ToBigDecimalOrElse<T>
+    orElse(ToBigDecimalNullable<T> expression, BigDecimal defaultValue) {
+        return new ToBigDecimalOrElseImpl<>(expression, defaultValue);
+    }
+
+    /**
+     * Internal class used when calling {@code ToBigDecimalNullable.orElse(BigDecimal)}.
+     *
+     * @param <T>  the input entity type
+     */
+    private final static class ToBigDecimalOrElseImpl<T>
+    extends AbstractNonNullable<ToBigDecimalNullable<T>>
+    implements ToBigDecimalOrElse<T> {
+        private final BigDecimal value;
+
+        private ToBigDecimalOrElseImpl(ToBigDecimalNullable<T> inner, BigDecimal value) {
+            super(inner);
+            this.value = value;
+        }
+
+        @Override
+        public BigDecimal getDefaultValue() {
+            return value;
+        }
+
+        @Override
+        public BigDecimal apply(T object) {
             return inner.isNull(object) ? value :
                 inner.apply(object);
         }
