@@ -5,6 +5,7 @@ import com.speedment.common.function.ByteUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
+import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.*;
 
 import java.util.function.Function;
@@ -52,9 +53,7 @@ public interface ToByteNullable<T>
     }
 
     default ToByte<T> orElse(byte value) {
-        return object -> isNull(object)
-            ? value
-            : applyAsByte(object);
+        return OrElseUtil.orElse(this, value);
     }
 
     @Override

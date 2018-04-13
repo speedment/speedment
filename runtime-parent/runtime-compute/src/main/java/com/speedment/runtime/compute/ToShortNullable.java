@@ -5,13 +5,8 @@ import com.speedment.common.function.ShortUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
-import com.speedment.runtime.compute.trait.HasAbs;
-import com.speedment.runtime.compute.trait.HasCompare;
-import com.speedment.runtime.compute.trait.HasHash;
-import com.speedment.runtime.compute.trait.HasNegate;
-import com.speedment.runtime.compute.trait.HasSign;
-import com.speedment.runtime.compute.trait.HasSqrt;
-import com.speedment.runtime.compute.trait.ToNullable;
+import com.speedment.runtime.compute.internal.expression.OrElseUtil;
+import com.speedment.runtime.compute.trait.*;
 
 import java.util.function.Function;
 
@@ -58,9 +53,7 @@ extends Expression,
     }
 
     default ToShort<T> orElse(short value) {
-        return object -> isNull(object)
-            ? value
-            : applyAsShort(object);
+        return OrElseUtil.orElse(this, value);
     }
 
     @Override

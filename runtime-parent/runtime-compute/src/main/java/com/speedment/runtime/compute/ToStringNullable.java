@@ -2,6 +2,7 @@ package com.speedment.runtime.compute;
 
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
+import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.ToNullable;
@@ -48,10 +49,7 @@ public interface ToStringNullable<T>
     }
 
     default ToString<T> orElse(String value) {
-        return object -> {
-            final String v = apply(object);
-            return v == null ? value : v;
-        };
+        return OrElseUtil.orElse(this, value);
     }
 
     @Override

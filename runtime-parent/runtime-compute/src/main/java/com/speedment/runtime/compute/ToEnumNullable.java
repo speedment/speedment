@@ -4,6 +4,7 @@ import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.ToEnumImpl;
 import com.speedment.runtime.compute.internal.ToEnumNullableImpl;
+import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.ToNullable;
@@ -63,9 +64,7 @@ public interface ToEnumNullable<T, E extends Enum<E>>
     }
 
     default ToEnum<T, E> orElse(E value) {
-        return new ToEnumImpl<>(enumClass(), object -> isNull(object)
-            ? value : apply(object)
-        );
+        return OrElseUtil.orElse(this, value);
     }
 
     default ToDoubleNullable<T> mapToDoubleIfPresent(ToDouble<E> mapper) {

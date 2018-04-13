@@ -3,13 +3,8 @@ package com.speedment.runtime.compute;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
-import com.speedment.runtime.compute.trait.HasAbs;
-import com.speedment.runtime.compute.trait.HasCompare;
-import com.speedment.runtime.compute.trait.HasHash;
-import com.speedment.runtime.compute.trait.HasNegate;
-import com.speedment.runtime.compute.trait.HasSign;
-import com.speedment.runtime.compute.trait.HasSqrt;
-import com.speedment.runtime.compute.trait.ToNullable;
+import com.speedment.runtime.compute.internal.expression.OrElseUtil;
+import com.speedment.runtime.compute.trait.*;
 
 import java.util.function.DoubleUnaryOperator;
 import java.util.function.Function;
@@ -57,9 +52,7 @@ public interface ToDoubleNullable<T>
     }
 
     default ToDouble<T> orElse(double value) {
-        return object -> isNull(object)
-            ? value
-            : applyAsDouble(object);
+        return OrElseUtil.orElse(this, value);
     }
 
     @Override
