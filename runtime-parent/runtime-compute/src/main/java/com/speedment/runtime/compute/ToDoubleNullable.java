@@ -3,6 +3,7 @@ package com.speedment.runtime.compute;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
+import com.speedment.runtime.compute.internal.expression.OrElseGetUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.*;
 
@@ -46,9 +47,7 @@ public interface ToDoubleNullable<T>
     }
 
     default ToDouble<T> orElseGet(ToDouble<T> getter) {
-        return object -> isNull(object)
-            ? getter.applyAsDouble(object)
-            : applyAsDouble(object);
+        return OrElseGetUtil.orElseGet(this, getter);
     }
 
     default ToDouble<T> orElse(double value) {

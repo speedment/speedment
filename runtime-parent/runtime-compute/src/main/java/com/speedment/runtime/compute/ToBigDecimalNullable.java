@@ -2,6 +2,7 @@ package com.speedment.runtime.compute;
 
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
+import com.speedment.runtime.compute.internal.expression.OrElseGetUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasHash;
@@ -43,10 +44,7 @@ extends Expression,
     }
 
     default ToBigDecimal<T> orElseGet(ToBigDecimal<T> getter) {
-        return object -> {
-            final BigDecimal v = apply(object);
-            return v == null ? getter.apply(object) : v;
-        };
+        return OrElseGetUtil.orElseGet(this, getter);
     }
 
     default ToBigDecimal<T> orElse(BigDecimal value) {

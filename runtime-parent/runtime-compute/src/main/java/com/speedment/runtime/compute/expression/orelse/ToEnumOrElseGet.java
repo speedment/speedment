@@ -1,7 +1,7 @@
 package com.speedment.runtime.compute.expression.orelse;
 
-import com.speedment.runtime.compute.ToDouble;
-import com.speedment.runtime.compute.ToDoubleNullable;
+import com.speedment.runtime.compute.ToEnum;
+import com.speedment.runtime.compute.ToEnumNullable;
 import com.speedment.runtime.compute.expression.NonNullableExpression;
 
 /**
@@ -9,9 +9,10 @@ import com.speedment.runtime.compute.expression.NonNullableExpression;
  * getter function is applied if the original expression returns {@code null}.
  *
  * @param <T> the input entity type
+ * @param <E> the enum type
  *
  * @author Emil Forslund
  * @since  3.1.0
  */
-public interface ToDoubleOrElseGet<T>
-    extends OrElseGetExpression<ToDoubleNullable<T>, ToDouble<T>>, ToDouble<T> {}
+public interface ToEnumOrElseGet<T, E extends Enum<E>>
+    extends OrElseGetExpression<ToEnumNullable<T, E>, ToEnum<T, E>>, ToEnum<T, E> {}

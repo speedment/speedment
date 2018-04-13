@@ -4,6 +4,7 @@ import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.ToEnumImpl;
 import com.speedment.runtime.compute.internal.ToEnumNullableImpl;
+import com.speedment.runtime.compute.internal.expression.OrElseGetUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasHash;
@@ -57,10 +58,7 @@ public interface ToEnumNullable<T, E extends Enum<E>>
     }
 
     default ToEnum<T, E> orElseGet(ToEnum<T, E> getter) {
-        return new ToEnumImpl<>(enumClass(), object -> isNull(object)
-            ? getter.apply(object)
-            : apply(object)
-        );
+        return OrElseGetUtil.orElseGet(this, getter);
     }
 
     default ToEnum<T, E> orElse(E value) {

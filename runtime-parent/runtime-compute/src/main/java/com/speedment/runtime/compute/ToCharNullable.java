@@ -2,6 +2,7 @@ package com.speedment.runtime.compute;
 
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
+import com.speedment.runtime.compute.internal.expression.OrElseGetUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasHash;
@@ -42,10 +43,7 @@ public interface ToCharNullable<T>
     }
 
     default ToChar<T> orElseGet(ToChar<T> getter) {
-        return object -> {
-            final Character v = apply(object);
-            return v == null ? getter.applyAsChar(object) : v;
-        };
+        return OrElseGetUtil.orElseGet(this, getter);
     }
 
     default ToChar<T> orElse(char value) {

@@ -3,6 +3,7 @@ package com.speedment.runtime.compute;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
+import com.speedment.runtime.compute.internal.expression.OrElseGetUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.*;
 
@@ -47,9 +48,7 @@ public interface ToIntNullable<T>
     }
 
     default ToInt<T> orElseGet(ToInt<T> getter) {
-        return object -> isNull(object)
-            ? getter.applyAsInt(object)
-            : applyAsInt(object);
+        return OrElseGetUtil.orElseGet(this, getter);
     }
 
     default ToInt<T> orElse(int value) {

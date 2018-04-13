@@ -4,6 +4,7 @@ import com.speedment.common.function.BooleanToDoubleFunction;
 import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
+import com.speedment.runtime.compute.internal.expression.OrElseGetUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasHash;
@@ -44,10 +45,7 @@ public interface ToBooleanNullable<T>
     }
 
     default ToBoolean<T> orElseGet(ToBoolean<T> getter) {
-        return object -> {
-            final Boolean v = apply(object);
-            return v == null ? getter.applyAsBoolean(object) : v;
-        };
+        return OrElseGetUtil.orElseGet(this, getter);
     }
 
     default ToBoolean<T> orElse(boolean value) {

@@ -5,6 +5,7 @@ import com.speedment.common.function.ShortUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
+import com.speedment.runtime.compute.internal.expression.OrElseGetUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.*;
 
@@ -47,9 +48,7 @@ extends Expression,
     }
 
     default ToShort<T> orElseGet(ToShort<T> getter) {
-        return object -> isNull(object)
-            ? getter.applyAsShort(object)
-            : applyAsShort(object);
+        return OrElseGetUtil.orElseGet(this, getter);
     }
 
     default ToShort<T> orElse(short value) {

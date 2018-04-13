@@ -10,6 +10,9 @@ import java.math.BigDecimal;
 import static java.util.Objects.requireNonNull;
 
 /**
+ * Utility class used to create expressions that wrap a nullable expression and
+ * handles any {@code null}-values by simply returning a default value instead.
+ *
  * @author Emil Forslund
  * @since  3.1.0
  */
