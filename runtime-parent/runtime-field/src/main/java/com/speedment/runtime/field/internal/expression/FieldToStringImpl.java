@@ -12,7 +12,7 @@ import java.util.function.Function;
  * @since  3.1.0
  */
 public final class FieldToStringImpl<ENTITY, V>
-extends AbstractFieldMapper<ENTITY, V, Function<V, String>>
+extends AbstractFieldMapper<ENTITY, V, String, Function<V, String>>
 implements FieldToString<ENTITY, V> {
 
     public FieldToStringImpl(ReferenceField<ENTITY, ?, V> field,

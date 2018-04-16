@@ -11,7 +11,7 @@ import com.speedment.runtime.field.expression.FieldToShort;
  * @since  3.1.0
  */
 public final class FieldToShortImpl<ENTITY, V>
-extends AbstractFieldMapper<ENTITY, V, ToShortFunction<V>>
+extends AbstractFieldMapper<ENTITY, V, Short, ToShortFunction<V>>
 implements FieldToShort<ENTITY, V> {
 
     public FieldToShortImpl(ReferenceField<ENTITY, ?, V> field,

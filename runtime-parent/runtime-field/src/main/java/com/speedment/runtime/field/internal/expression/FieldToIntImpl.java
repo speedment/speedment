@@ -12,7 +12,7 @@ import java.util.function.ToIntFunction;
  * @since  3.1.0
  */
 public final class FieldToIntImpl<ENTITY, V>
-extends AbstractFieldMapper<ENTITY, V, ToIntFunction<V>>
+extends AbstractFieldMapper<ENTITY, V, Integer, ToIntFunction<V>>
 implements FieldToInt<ENTITY, V> {
 
     public FieldToIntImpl(ReferenceField<ENTITY, ?, V> field,

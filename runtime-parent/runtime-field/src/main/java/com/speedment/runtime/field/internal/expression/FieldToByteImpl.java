@@ -11,7 +11,7 @@ import com.speedment.runtime.field.expression.FieldToByte;
  * @since  3.1.0
  */
 public final class FieldToByteImpl<ENTITY, V>
-extends AbstractFieldMapper<ENTITY, V, ToByteFunction<V>>
+extends AbstractFieldMapper<ENTITY, V, Byte, ToByteFunction<V>>
 implements FieldToByte<ENTITY, V> {
 
     public FieldToByteImpl(ReferenceField<ENTITY, ?, V> field,

@@ -11,7 +11,7 @@ import com.speedment.runtime.field.expression.FieldToBoolean;
  * @since  3.1.0
  */
 public final class FieldToBooleanImpl<ENTITY, V>
-extends AbstractFieldMapper<ENTITY, V, ToBooleanFunction<V>>
+extends AbstractFieldMapper<ENTITY, V, Boolean, ToBooleanFunction<V>>
 implements FieldToBoolean<ENTITY, V> {
 
     public FieldToBooleanImpl(ReferenceField<ENTITY, ?, V> field,

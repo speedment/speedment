@@ -12,7 +12,7 @@ import java.util.function.ToLongFunction;
  * @since  3.1.0
  */
 public final class FieldToLongImpl<ENTITY, V>
-extends AbstractFieldMapper<ENTITY, V, ToLongFunction<V>>
+extends AbstractFieldMapper<ENTITY, V, Long, ToLongFunction<V>>
 implements FieldToLong<ENTITY, V> {
 
     public FieldToLongImpl(ReferenceField<ENTITY, ?, V> field,

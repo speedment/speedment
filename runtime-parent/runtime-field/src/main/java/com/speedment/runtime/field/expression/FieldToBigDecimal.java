@@ -13,5 +13,5 @@ import java.util.function.Function;
  * @since  3.1.0
  */
 public interface FieldToBigDecimal<ENTITY, T>
-extends FieldMapper<ENTITY, T, Function<T, BigDecimal>>,
+extends FieldMapper<ENTITY, T, BigDecimal, Function<T, BigDecimal>>,
         ToBigDecimalNullable<ENTITY> {}

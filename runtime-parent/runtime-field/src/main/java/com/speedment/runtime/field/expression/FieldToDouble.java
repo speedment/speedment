@@ -12,5 +12,5 @@ import java.util.function.ToDoubleFunction;
  * @since  3.1.0
  */
 public interface FieldToDouble<ENTITY, T>
-extends FieldMapper<ENTITY, T, ToDoubleFunction<T>>,
+extends FieldMapper<ENTITY, T, Double, ToDoubleFunction<T>>,
         ToDoubleNullable<ENTITY> {}

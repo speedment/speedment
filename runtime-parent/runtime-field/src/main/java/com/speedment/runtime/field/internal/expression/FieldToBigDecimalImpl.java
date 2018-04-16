@@ -13,7 +13,7 @@ import java.util.function.Function;
  * @since  3.1.0
  */
 public final class FieldToBigDecimalImpl<ENTITY, V>
-extends AbstractFieldMapper<ENTITY, V, Function<V, BigDecimal>>
+extends AbstractFieldMapper<ENTITY, V, BigDecimal, Function<V, BigDecimal>>
 implements FieldToBigDecimal<ENTITY, V> {
 
     public FieldToBigDecimalImpl(ReferenceField<ENTITY, ?, V> field,

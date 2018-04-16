@@ -11,5 +11,5 @@ import com.speedment.runtime.compute.ToCharNullable;
  * @since  3.1.0
  */
 public interface FieldToChar<ENTITY, T>
-extends FieldMapper<ENTITY, T, ToCharFunction<T>>,
+extends FieldMapper<ENTITY, T, Character, ToCharFunction<T>>,
         ToCharNullable<ENTITY> {}

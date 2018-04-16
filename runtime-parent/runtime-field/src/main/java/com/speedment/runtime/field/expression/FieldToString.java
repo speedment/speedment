@@ -12,5 +12,5 @@ import java.util.function.Function;
  * @since  3.1.0
  */
 public interface FieldToString<ENTITY, T>
-extends FieldMapper<ENTITY, T, Function<T, String>>,
+extends FieldMapper<ENTITY, T, String, Function<T, String>>,
         ToStringNullable<ENTITY> {}

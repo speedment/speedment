@@ -1,7 +1,10 @@
 package com.speedment.runtime.field.internal.expression;
 
+import com.speedment.runtime.compute.trait.ToNullable;
 import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.expression.FieldMapper;
+
+import java.util.function.Predicate;
 
 import static java.util.Objects.requireNonNull;
 
@@ -11,8 +14,9 @@ import static java.util.Objects.requireNonNull;
  * @author Emil Forslund
  * @since  3.1.0
  */
-abstract class AbstractFieldMapper<ENTITY, V, MAPPER>
-implements FieldMapper<ENTITY, V, MAPPER> {
+abstract class AbstractFieldMapper<ENTITY, V, T, MAPPER>
+implements FieldMapper<ENTITY, V, T, MAPPER>,
+           ToNullable<ENTITY, T> {
 
     final ReferenceField<ENTITY, ?, V> field;
     final MAPPER mapper;
@@ -30,5 +34,15 @@ implements FieldMapper<ENTITY, V, MAPPER> {
     @Override
     public MAPPER getMapper() {
         return mapper;
+    }
+
+    @Override
+    public Predicate<ENTITY> isNull() {
+        return field.isNull();
+    }
+
+    @Override
+    public Predicate<ENTITY> isNotNull() {
+        return field.isNotNull();
     }
 }

@@ -12,7 +12,7 @@ import java.util.function.ToDoubleFunction;
  * @since  3.1.0
  */
 public final class FieldToDoubleImpl<ENTITY, V>
-extends AbstractFieldMapper<ENTITY, V, ToDoubleFunction<V>>
+extends AbstractFieldMapper<ENTITY, V, Double, ToDoubleFunction<V>>
 implements FieldToDouble<ENTITY, V> {
 
     public FieldToDoubleImpl(ReferenceField<ENTITY, ?, V> field,

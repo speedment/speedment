@@ -12,5 +12,5 @@ import java.util.function.ToIntFunction;
  * @since  3.1.0
  */
 public interface FieldToInt<ENTITY, T>
-extends FieldMapper<ENTITY, T, ToIntFunction<T>>,
+extends FieldMapper<ENTITY, T, Integer, ToIntFunction<T>>,
         ToIntNullable<ENTITY> {}

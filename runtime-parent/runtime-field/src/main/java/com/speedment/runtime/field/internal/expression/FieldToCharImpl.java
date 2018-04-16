@@ -11,7 +11,7 @@ import com.speedment.runtime.field.expression.FieldToChar;
  * @since  3.1.0
  */
 public final class FieldToCharImpl<ENTITY, V>
-extends AbstractFieldMapper<ENTITY, V, ToCharFunction<V>>
+extends AbstractFieldMapper<ENTITY, V, Character, ToCharFunction<V>>
 implements FieldToChar<ENTITY, V> {
 
     public FieldToCharImpl(ReferenceField<ENTITY, ?, V> field,

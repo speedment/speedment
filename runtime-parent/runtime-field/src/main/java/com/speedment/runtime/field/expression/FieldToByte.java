@@ -11,5 +11,5 @@ import com.speedment.runtime.compute.ToByteNullable;
  * @since  3.1.0
  */
 public interface FieldToByte<ENTITY, T>
-extends FieldMapper<ENTITY, T, ToByteFunction<T>>,
+extends FieldMapper<ENTITY, T, Byte, ToByteFunction<T>>,
         ToByteNullable<ENTITY> {}

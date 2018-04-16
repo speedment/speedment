@@ -12,5 +12,5 @@ import java.util.function.ToLongFunction;
  * @since  3.1.0
  */
 public interface FieldToLong<ENTITY, T>
-extends FieldMapper<ENTITY, T, ToLongFunction<T>>,
+extends FieldMapper<ENTITY, T, Long, ToLongFunction<T>>,
         ToLongNullable<ENTITY> {}
