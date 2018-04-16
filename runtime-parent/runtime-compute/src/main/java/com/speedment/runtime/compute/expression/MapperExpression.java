@@ -3,6 +3,9 @@ package com.speedment.runtime.compute.expression;
 /**
  * Specialized expression that takes the result of an inner expression and
  * applies a mapping function to it.
+ * <p>
+ * Equality is determined by looking at {@link #getInner()},
+ * {@link #getMapper()} and {@link #getMapperType()}.
  *
  * @author Emil Forslund
  * @since  3.1.0

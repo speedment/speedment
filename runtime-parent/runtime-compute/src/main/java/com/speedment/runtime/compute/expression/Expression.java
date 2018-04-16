@@ -1,7 +1,10 @@
 package com.speedment.runtime.compute.expression;
 
 /**
- * The base interface for all expressions.
+ * The base interface for all expressions. Some implementations of this
+ * interface will be lambdas or anonymous classes and in those cases, the
+ * equality is unspecified. However, there are implementations of this interface
+ * that offer a specified equality contract.
  *
  * @author Emil Forslund
  * @since  3.1.0

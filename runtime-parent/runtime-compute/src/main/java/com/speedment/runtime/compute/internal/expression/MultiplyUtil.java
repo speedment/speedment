@@ -5,6 +5,8 @@ import com.speedment.runtime.compute.expression.BinaryExpression;
 import com.speedment.runtime.compute.expression.BinaryObjExpression;
 import com.speedment.runtime.compute.expression.Expression;
 
+import java.util.Objects;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -780,6 +782,22 @@ public final class MultiplyUtil {
         public final Operator getOperator() {
             return Operator.MULTIPLY;
         }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (o == null) return false;
+            else if (this == o) return true;
+            else if (!(o instanceof BinaryExpression)) return false;
+            final BinaryExpression<?, ?> that = (BinaryExpression<?, ?>) o;
+            return Objects.equals(firstInner, that.getFirst()) &&
+                Objects.equals(secondInner, that.getSecond()) &&
+                Objects.equals(getOperator(), that.getOperator());
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(firstInner, secondInner, getOperator());
+        }
     }
 
     /**
@@ -812,6 +830,22 @@ public final class MultiplyUtil {
         @Override
         public final Operator getOperator() {
             return Operator.MULTIPLY;
+        }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (o == null) return false;
+            else if (this == o) return true;
+            else if (!(o instanceof BinaryObjExpression)) return false;
+            final BinaryObjExpression<?, ?> that = (BinaryObjExpression<?, ?>) o;
+            return Objects.equals(firstInner, that.getFirst()) &&
+                Objects.equals(secondInner, that.getSecond()) &&
+                Objects.equals(getOperator(), that.getOperator());
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(firstInner, secondInner, getOperator());
         }
     }
 
@@ -846,6 +880,22 @@ public final class MultiplyUtil {
         public final Operator getOperator() {
             return Operator.MULTIPLY;
         }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (o == null) return false;
+            else if (this == o) return true;
+            else if (!(o instanceof BinaryObjExpression)) return false;
+            final BinaryObjExpression<?, ?> that = (BinaryObjExpression<?, ?>) o;
+            return Objects.equals(firstInner, that.getFirst()) &&
+                Objects.equals(secondInner, that.getSecond()) &&
+                Objects.equals(getOperator(), that.getOperator());
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(firstInner, secondInner, getOperator());
+        }
     }
 
     /**
@@ -878,6 +928,22 @@ public final class MultiplyUtil {
         @Override
         public final Operator getOperator() {
             return Operator.MULTIPLY;
+        }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (o == null) return false;
+            else if (this == o) return true;
+            else if (!(o instanceof BinaryObjExpression)) return false;
+            final BinaryObjExpression<?, ?> that = (BinaryObjExpression<?, ?>) o;
+            return Objects.equals(firstInner, that.getFirst()) &&
+                Objects.equals(secondInner, that.getSecond()) &&
+                Objects.equals(getOperator(), that.getOperator());
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(firstInner, secondInner, getOperator());
         }
     }
 
@@ -912,6 +978,22 @@ public final class MultiplyUtil {
         public final Operator getOperator() {
             return Operator.MULTIPLY;
         }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (o == null) return false;
+            else if (this == o) return true;
+            else if (!(o instanceof BinaryObjExpression)) return false;
+            final BinaryObjExpression<?, ?> that = (BinaryObjExpression<?, ?>) o;
+            return Objects.equals(firstInner, that.getFirst()) &&
+                Objects.equals(secondInner, that.getSecond()) &&
+                Objects.equals(getOperator(), that.getOperator());
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(firstInner, secondInner, getOperator());
+        }
     }
 
     /**
@@ -944,6 +1026,22 @@ public final class MultiplyUtil {
         @Override
         public final Operator getOperator() {
             return Operator.MULTIPLY;
+        }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (o == null) return false;
+            else if (this == o) return true;
+            else if (!(o instanceof BinaryObjExpression)) return false;
+            final BinaryObjExpression<?, ?> that = (BinaryObjExpression<?, ?>) o;
+            return Objects.equals(firstInner, that.getFirst()) &&
+                Objects.equals(secondInner, that.getSecond()) &&
+                Objects.equals(getOperator(), that.getOperator());
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(firstInner, secondInner, getOperator());
         }
     }
 

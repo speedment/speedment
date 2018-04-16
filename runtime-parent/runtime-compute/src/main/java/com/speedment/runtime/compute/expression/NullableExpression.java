@@ -6,6 +6,9 @@ import java.util.function.Predicate;
  * Specific type of {@link Expression} that has an {@link #getInner() inner}
  * expression that is used for elements that does not pass the
  * {@link #getIsNull() isNull} predicate.
+ * <p>
+ * Equality is determined by looking at the {@link #getInner()} and
+ * {@link #getIsNull()}.
  *
  * @author Emil Forslund
  * @since  3.1.0

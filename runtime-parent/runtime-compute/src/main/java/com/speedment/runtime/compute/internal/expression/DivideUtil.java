@@ -5,6 +5,8 @@ import com.speedment.runtime.compute.expression.BinaryExpression;
 import com.speedment.runtime.compute.expression.BinaryObjExpression;
 import com.speedment.runtime.compute.expression.Expression;
 
+import java.util.Objects;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -724,7 +726,7 @@ public final class DivideUtil {
         return new DivideObjToDouble<T, ToDouble<T>, Integer>(first) {
             @Override
             public double applyAsDouble(T object) {
-                return (double) this.first.applyAsDouble(object)
+                return this.first.applyAsDouble(object)
                     / (double) second;
             }
 
@@ -749,7 +751,7 @@ public final class DivideUtil {
         return new DivideObjToDouble<T, ToDouble<T>, Long>(first) {
             @Override
             public double applyAsDouble(T object) {
-                return (double) this.first.applyAsDouble(object)
+                return this.first.applyAsDouble(object)
                     / (double) second;
             }
 
@@ -774,7 +776,7 @@ public final class DivideUtil {
         return new DivideObjToDouble<T, ToDouble<T>, Double>(first) {
             @Override
             public double applyAsDouble(T object) {
-                return (double) this.first.applyAsDouble(object) / second;
+                return this.first.applyAsDouble(object) / second;
             }
 
             @Override
@@ -798,7 +800,7 @@ public final class DivideUtil {
         return new DivideToDouble<T, ToDouble<T>, ToInt<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
-                return (double) this.first.applyAsDouble(object)
+                return this.first.applyAsDouble(object)
                     / (double) this.second.applyAsInt(object);
             }
         };
@@ -818,7 +820,7 @@ public final class DivideUtil {
         return new DivideToDouble<T, ToDouble<T>, ToLong<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
-                return (double) this.first.applyAsDouble(object)
+                return this.first.applyAsDouble(object)
                     / (double) this.second.applyAsLong(object);
             }
         };
@@ -838,7 +840,7 @@ public final class DivideUtil {
         return new DivideToDouble<T, ToDouble<T>, ToDouble<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
-                return (double) this.first.applyAsDouble(object)
+                return this.first.applyAsDouble(object)
                     / this.second.applyAsDouble(object);
             }
         };
@@ -896,6 +898,21 @@ public final class DivideUtil {
         public SECOND getSecond() {
             return second;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof BinaryExpression)) return false;
+            BinaryExpression<?, ?> divide = (BinaryExpression<?, ?>) o;
+            return Objects.equals(getFirst(), divide.getFirst()) &&
+                Objects.equals(getSecond(), divide.getSecond()) &&
+                Objects.equals(getOperator(), divide.getOperator());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getFirst(), getSecond(), getOperator());
+        }
     }
 
     /**
@@ -916,6 +933,22 @@ public final class DivideUtil {
         @Override
         public Operator getOperator() {
             return Operator.DIVIDE;
+        }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (o == null) return false;
+            else if (this == o) return true;
+            else if (!(o instanceof BinaryObjExpression)) return false;
+            final BinaryObjExpression<?, ?> that = (BinaryObjExpression<?, ?>) o;
+            return Objects.equals(first, that.getFirst()) &&
+                Objects.equals(getSecond(), that.getSecond()) &&
+                Objects.equals(getOperator(), that.getOperator());
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(first, getSecond(), getOperator());
         }
     }
 

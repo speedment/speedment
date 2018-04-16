@@ -6,6 +6,7 @@ import com.speedment.runtime.compute.expression.NonNullableExpression;
 import com.speedment.runtime.compute.expression.orelse.*;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
@@ -58,6 +59,20 @@ public final class OrElseUtil {
             return inner.isNull(object) ? value :
                 inner.applyAsDouble(object);
         }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ToDoubleOrElse)) return false;
+            final ToDoubleOrElse<?> that = (ToDoubleOrElse<?>) o;
+            return Objects.equals(inner, that.getInnerNullable()) &&
+                value == that.getDefaultValue();
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(inner, value);
+        }
     }
 
     /**
@@ -99,6 +114,20 @@ public final class OrElseUtil {
         public float applyAsFloat(T object) {
             return inner.isNull(object) ? value :
                 inner.applyAsFloat(object);
+        }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ToFloatOrElse)) return false;
+            final ToFloatOrElse<?> that = (ToFloatOrElse<?>) o;
+            return Objects.equals(inner, that.getInnerNullable()) &&
+                value == that.getDefaultValue();
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(inner, value);
         }
     }
 
@@ -142,6 +171,20 @@ public final class OrElseUtil {
             return inner.isNull(object) ? value :
                 inner.applyAsLong(object);
         }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ToLongOrElse)) return false;
+            final ToLongOrElse<?> that = (ToLongOrElse<?>) o;
+            return Objects.equals(inner, that.getInnerNullable()) &&
+                value == that.getDefaultValue();
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(inner, value);
+        }
     }
 
     /**
@@ -183,6 +226,20 @@ public final class OrElseUtil {
         public int applyAsInt(T object) {
             return inner.isNull(object) ? value :
                 inner.applyAsInt(object);
+        }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ToIntOrElse)) return false;
+            final ToIntOrElse<?> that = (ToIntOrElse<?>) o;
+            return Objects.equals(inner, that.getInnerNullable()) &&
+                value == that.getDefaultValue();
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(inner, value);
         }
     }
 
@@ -226,6 +283,20 @@ public final class OrElseUtil {
             return inner.isNull(object) ? value :
                 inner.applyAsShort(object);
         }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ToShortOrElse)) return false;
+            final ToShortOrElse<?> that = (ToShortOrElse<?>) o;
+            return Objects.equals(inner, that.getInnerNullable()) &&
+                value == that.getDefaultValue();
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(inner, value);
+        }
     }
 
     /**
@@ -267,6 +338,20 @@ public final class OrElseUtil {
         public byte applyAsByte(T object) {
             return inner.isNull(object) ? value :
                 inner.applyAsByte(object);
+        }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ToByteOrElse)) return false;
+            final ToByteOrElse<?> that = (ToByteOrElse<?>) o;
+            return Objects.equals(inner, that.getInnerNullable()) &&
+                value == that.getDefaultValue();
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(inner, value);
         }
     }
 
@@ -310,6 +395,20 @@ public final class OrElseUtil {
             return inner.isNull(object) ? value :
                 inner.applyAsChar(object);
         }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ToCharOrElse)) return false;
+            final ToCharOrElse<?> that = (ToCharOrElse<?>) o;
+            return Objects.equals(inner, that.getInnerNullable()) &&
+                value == that.getDefaultValue();
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(inner, value);
+        }
     }
 
     /**
@@ -352,6 +451,20 @@ public final class OrElseUtil {
             return inner.isNull(object) ? value :
                 inner.applyAsBoolean(object);
         }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ToBooleanOrElse)) return false;
+            final ToBooleanOrElse<?> that = (ToBooleanOrElse<?>) o;
+            return Objects.equals(inner, that.getInnerNullable()) &&
+                value == that.getDefaultValue();
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(inner, value);
+        }
     }
 
     /**
@@ -393,6 +506,20 @@ public final class OrElseUtil {
         public String apply(T object) {
             return inner.isNull(object) ? value :
                 inner.apply(object);
+        }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ToStringOrElse)) return false;
+            final ToStringOrElse<?> that = (ToStringOrElse<?>) o;
+            return Objects.equals(inner, that.getInnerNullable()) &&
+                Objects.equals(value, that.getDefaultValue());
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(inner, value);
         }
     }
 
@@ -442,6 +569,20 @@ public final class OrElseUtil {
             return inner.isNull(object) ? value :
                 inner.apply(object);
         }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ToEnumOrElse)) return false;
+            final ToEnumOrElse<?, ?> that = (ToEnumOrElse<?, ?>) o;
+            return Objects.equals(inner, that.getInnerNullable()) &&
+                Objects.equals(value, that.getDefaultValue());
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(inner, value);
+        }
     }
 
     /**
@@ -483,6 +624,20 @@ public final class OrElseUtil {
         public BigDecimal apply(T object) {
             return inner.isNull(object) ? value :
                 inner.apply(object);
+        }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof ToBigDecimalOrElse)) return false;
+            final ToBigDecimalOrElse<?> that = (ToBigDecimalOrElse<?>) o;
+            return Objects.equals(inner, that.getInnerNullable()) &&
+                Objects.equals(value, that.getDefaultValue());
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(inner, value);
         }
     }
     

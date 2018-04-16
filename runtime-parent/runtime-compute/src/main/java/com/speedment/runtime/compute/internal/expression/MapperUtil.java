@@ -5,6 +5,7 @@ import com.speedment.runtime.compute.*;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.MapperExpression;
 
+import java.util.Objects;
 import java.util.function.*;
 
 import static java.util.Objects.requireNonNull;
@@ -530,7 +531,7 @@ public final class MapperUtil {
      * @param <MAPPER>  the mapping functional interface
      */
     private abstract static class AbstractMapper<INNER extends Expression, MAPPER>
-        implements MapperExpression<INNER, MAPPER> {
+    implements MapperExpression<INNER, MAPPER> {
         final INNER inner;
         final MAPPER mapper;
 
@@ -540,13 +541,28 @@ public final class MapperUtil {
         }
 
         @Override
-        public INNER getInner() {
+        public final INNER getInner() {
             return inner;
         }
 
         @Override
-        public MAPPER getMapper() {
+        public final MAPPER getMapper() {
             return mapper;
+        }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (this == o) return true;
+            else if (!(o instanceof MapperExpression)) return false;
+            final MapperExpression<?, ?> that = (MapperExpression<?, ?>) o;
+            return Objects.equals(getInner(), that.getInner()) &&
+                Objects.equals(getMapper(), that.getMapper()) &&
+                Objects.equals(getMapperType(), that.getMapperType());
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(getInner(), getMapper(), getMapperType());
         }
     }
 

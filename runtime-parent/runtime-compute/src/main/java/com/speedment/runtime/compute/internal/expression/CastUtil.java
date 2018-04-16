@@ -4,6 +4,8 @@ import com.speedment.runtime.compute.*;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.UnaryExpression;
 
+import java.util.Objects;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -522,7 +524,7 @@ public final class CastUtil {
      * @param <INNER>  the inner expression type
      */
     private abstract static class CastToDouble<T, INNER extends Expression>
-        extends AbstractCase<INNER> implements ToDouble<T> {
+    extends AbstractCast<INNER> implements ToDouble<T> {
         CastToDouble(INNER inner) {
             super(inner);
         }
@@ -536,7 +538,7 @@ public final class CastUtil {
      * @param <INNER>  the inner expression type
      */
     private abstract static class CastToInt<T, INNER extends Expression>
-        extends AbstractCase<INNER> implements ToInt<T> {
+    extends AbstractCast<INNER> implements ToInt<T> {
         CastToInt(INNER inner) {
             super(inner);
         }
@@ -550,7 +552,7 @@ public final class CastUtil {
      * @param <INNER>  the inner expression type
      */
     private abstract static class CastToLong<T, INNER extends Expression>
-    extends AbstractCase<INNER> implements ToLong<T> {
+    extends AbstractCast<INNER> implements ToLong<T> {
         CastToLong(INNER inner) {
             super(inner);
         }
@@ -561,12 +563,12 @@ public final class CastUtil {
      *
      * @param <INNER>  the inner expression type
      */
-    private abstract static class AbstractCase<INNER extends Expression>
+    private abstract static class AbstractCast<INNER extends Expression>
     implements UnaryExpression<INNER> {
 
         final INNER inner;
 
-        AbstractCase(INNER inner) {
+        AbstractCast(INNER inner) {
             this.inner = requireNonNull(inner);
         }
 
@@ -578,6 +580,20 @@ public final class CastUtil {
         @Override
         public final Operator getOperator() {
             return Operator.CAST;
+        }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (this == o) return true;
+            else if (!(o instanceof UnaryExpression)) return false;
+            final UnaryExpression<?> that = (UnaryExpression<?>) o;
+            return Objects.equals(getInner(), that.getInner())
+                && getOperator().equals(that.getOperator());
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(getInner(), getOperator());
         }
     }
 

@@ -3,6 +3,9 @@ package com.speedment.runtime.compute.expression;
 /**
  * An {@link Expression} that has a single operand that implements
  * {@link Expression}.
+ * <p>
+ * Equality is determined by looking at {@link #getInner()} and
+ * {@link #getOperator()}.
  *
  * @author Emil Forslund
  * @since  3.1.0

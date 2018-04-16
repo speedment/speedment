@@ -5,6 +5,8 @@ import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.UnaryExpression;
 import com.speedment.runtime.compute.internal.*;
 
+import java.util.Objects;
+
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -318,6 +320,20 @@ public final class NegateUtil {
         @Override
         public final Operator getOperator() {
             return Operator.NEGATE;
+        }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (this == o) return true;
+            else if (!(o instanceof UnaryExpression)) return false;
+            final UnaryExpression<?> that = (UnaryExpression<?>) o;
+            return Objects.equals(getInner(), that.getInner())
+                && getOperator().equals(that.getOperator());
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(getInner(), getOperator());
         }
     }
 

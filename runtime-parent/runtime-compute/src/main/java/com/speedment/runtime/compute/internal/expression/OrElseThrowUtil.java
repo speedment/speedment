@@ -6,6 +6,7 @@ import com.speedment.runtime.compute.expression.NonNullableExpression;
 import com.speedment.runtime.compute.expression.orelse.*;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
@@ -389,6 +390,20 @@ public final class OrElseThrowUtil {
         @Override
         public final INNER getInnerNullable() {
             return inner;
+        }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof NonNullableExpression)) return false;
+            final NonNullableExpression<?> that = (NonNullableExpression<?>) o;
+            return Objects.equals(inner, that.getInnerNullable()) &&
+                Objects.equals(getNullStrategy(), that.getNullStrategy());
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(inner);
         }
     }
 

@@ -3,6 +3,9 @@ package com.speedment.runtime.compute.expression;
 /**
  * An {@link Expression} that has two operands, one is another
  * {@link Expression} and the other is a primitive {@code int}.
+ * <p>
+ * Equality is determined by looking at {@link #getFirst()},
+ * {@link #getSecond()} and {@link #getOperator()}.
  *
  * @param <FIRST>  the type of the first operand, an expression
  * @param <T>      the type of the second operand, a constant value

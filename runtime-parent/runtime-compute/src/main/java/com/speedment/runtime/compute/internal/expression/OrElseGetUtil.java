@@ -6,6 +6,7 @@ import com.speedment.runtime.compute.expression.NonNullableExpression;
 import com.speedment.runtime.compute.expression.orelse.*;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
@@ -437,6 +438,20 @@ public final class OrElseGetUtil {
         @Override
         public final DEFAULT getDefaultValueGetter() {
             return getter;
+        }
+
+        @Override
+        public final boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof OrElseGetExpression)) return false;
+            final OrElseGetExpression<?, ?> that = (OrElseGetExpression<?, ?>) o;
+            return Objects.equals(inner, that.getInnerNullable()) &&
+                Objects.equals(getter, that.getDefaultValueGetter());
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(inner, getter);
         }
     }
 
