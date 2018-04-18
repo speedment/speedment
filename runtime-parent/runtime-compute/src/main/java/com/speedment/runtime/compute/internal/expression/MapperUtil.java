@@ -76,6 +76,30 @@ public final class MapperUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
+    public static <T> ToChar<T> map(ToChar<T> expression, CharUnaryOperator mapper) {
+        return new ToCharMapper<T, ToChar<T>, CharUnaryOperator>(expression, mapper) {
+            @Override
+            public char applyAsChar(T object) {
+                return this.mapper.applyAsChar(this.inner.applyAsChar(object));
+            }
+
+            @Override
+            public MapperType getMapperType() {
+                return MapperType.CHAR_TO_CHAR;
+            }
+        };
+    }
+
+    /**
+     * Returns an expression that first applies the specified expression to get
+     * a value, then applies the specified mapping operation to that value to
+     * get the final result.
+     *
+     * @param expression  the expression to apply to the input
+     * @param mapper      the mapper to apply to the result
+     * @param <T>         the input type
+     * @return            the new expression
+     */
     public static <T> ToByte<T> map(ToByte<T> expression, ByteUnaryOperator mapper) {
         return new ToByteMapper<T, ToByte<T>, ByteUnaryOperator>(expression, mapper) {
             @Override

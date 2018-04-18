@@ -1,9 +1,12 @@
 package com.speedment.runtime.compute;
 
+import com.speedment.common.function.ByteUnaryOperator;
+import com.speedment.common.function.CharUnaryOperator;
 import com.speedment.common.function.ToCharFunction;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.expression.CastUtil;
+import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.*;
 
 /**
@@ -46,6 +49,10 @@ public interface ToChar<T>
     @Override
     default ToLong<T> asLong() {
         return CastUtil.castToLong(this);
+    }
+
+    default ToChar<T> map(CharUnaryOperator operator) {
+        return MapperUtil.map(this, operator);
     }
 
     @Override

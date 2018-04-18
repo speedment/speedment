@@ -53,6 +53,11 @@ extends Expression {
         BOOLEAN_TO_DOUBLE,
 
         /**
+         * Implemented as a {@link com.speedment.common.function.CharUnaryOperator}.
+         */
+        CHAR_TO_CHAR,
+
+        /**
          * Implemented as a {@link com.speedment.common.function.ByteUnaryOperator}.
          */
         BYTE_TO_BYTE,
