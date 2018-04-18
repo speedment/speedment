@@ -5,6 +5,7 @@ import com.speedment.runtime.compute.ToInt;
 import com.speedment.runtime.compute.ToIntNullable;
 import com.speedment.runtime.compute.expression.NullableExpression;
 
+import java.util.Objects;
 import java.util.function.IntToDoubleFunction;
 import java.util.function.IntUnaryOperator;
 import java.util.function.Predicate;
@@ -103,5 +104,19 @@ public final class ToIntNullableImpl<T>
     @Override
     public boolean isNotNull(T object) {
         return !isNull.test(object);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        else if (!(o instanceof NullableExpression)) return false;
+        final NullableExpression<?, ?> that = (NullableExpression<?, ?>) o;
+        return Objects.equals(original, that.getInner()) &&
+            Objects.equals(isNull, that.getIsNull());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(original, isNull);
     }
 }

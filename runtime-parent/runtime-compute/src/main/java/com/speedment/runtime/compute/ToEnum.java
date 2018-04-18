@@ -42,9 +42,7 @@ public interface ToEnum<T, E extends Enum<E>>
     }
 
     @Override
-    default E apply(T t) {
-        return null;
-    }
+    E apply(T t);
 
     default ToInt<T> asOrdinal() {
         return t -> apply(t).ordinal();

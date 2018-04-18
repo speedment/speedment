@@ -4,6 +4,7 @@ import com.speedment.runtime.compute.ToDouble;
 import com.speedment.runtime.compute.ToDoubleNullable;
 import com.speedment.runtime.compute.expression.NullableExpression;
 
+import java.util.Objects;
 import java.util.function.DoubleUnaryOperator;
 import java.util.function.Predicate;
 
@@ -97,5 +98,19 @@ public final class ToDoubleNullableImpl<T>
     @Override
     public boolean isNotNull(T object) {
         return !isNull.test(object);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        else if (!(o instanceof NullableExpression)) return false;
+        final NullableExpression<?, ?> that = (NullableExpression<?, ?>) o;
+        return Objects.equals(original, that.getInner()) &&
+            Objects.equals(isNull, that.getIsNull());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(original, isNull);
     }
 }

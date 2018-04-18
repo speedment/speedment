@@ -5,6 +5,7 @@ import com.speedment.runtime.compute.ToLong;
 import com.speedment.runtime.compute.ToLongNullable;
 import com.speedment.runtime.compute.expression.NullableExpression;
 
+import java.util.Objects;
 import java.util.function.LongToDoubleFunction;
 import java.util.function.LongUnaryOperator;
 import java.util.function.Predicate;
@@ -103,5 +104,19 @@ public final class ToLongNullableImpl<T>
     @Override
     public boolean isNotNull(T object) {
         return !isNull.test(object);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        else if (!(o instanceof NullableExpression)) return false;
+        final NullableExpression<?, ?> that = (NullableExpression<?, ?>) o;
+        return Objects.equals(original, that.getInner()) &&
+            Objects.equals(isNull, that.getIsNull());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(original, isNull);
     }
 }

@@ -3,7 +3,9 @@ package com.speedment.runtime.compute.internal;
 import com.speedment.runtime.compute.ToEnum;
 import com.speedment.runtime.compute.ToInt;
 import com.speedment.runtime.compute.ToString;
+import com.speedment.runtime.compute.expression.NullableExpression;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 import static java.util.Objects.requireNonNull;

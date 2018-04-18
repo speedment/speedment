@@ -7,6 +7,7 @@ import com.speedment.runtime.compute.ToBooleanNullable;
 import com.speedment.runtime.compute.ToDoubleNullable;
 import com.speedment.runtime.compute.expression.NullableExpression;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 
 import static java.util.Objects.requireNonNull;
@@ -16,7 +17,7 @@ import static java.util.Objects.requireNonNull;
  * @since  3.1.0
  */
 public final class ToBooleanNullableImpl<T>
-    implements NullableExpression<T, ToBoolean<T>>, ToBooleanNullable<T> {
+implements NullableExpression<T, ToBoolean<T>>, ToBooleanNullable<T> {
 
     private final ToBoolean<T> original;
     private final Predicate<T> isNull;
@@ -102,5 +103,19 @@ public final class ToBooleanNullableImpl<T>
     @Override
     public boolean isNotNull(T object) {
         return !isNull.test(object);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        else if (!(o instanceof NullableExpression)) return false;
+        final NullableExpression<?, ?> that = (NullableExpression<?, ?>) o;
+        return Objects.equals(original, that.getInner()) &&
+            Objects.equals(isNull, that.getIsNull());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(original, isNull);
     }
 }
