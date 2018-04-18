@@ -55,6 +55,14 @@ public interface ToChar<T>
         return MapperUtil.map(this, operator);
     }
 
+    default ToChar<T> toUpperCase() {
+        return map(Character::toUpperCase);
+    }
+
+    default ToChar<T> toLowerCase() {
+        return map(Character::toUpperCase);
+    }
+
     @Override
     default long hash(T object) {
         return applyAsChar(object);
