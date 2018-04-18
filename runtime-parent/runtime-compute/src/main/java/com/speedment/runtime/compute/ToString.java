@@ -40,6 +40,14 @@ public interface ToString<T>
         return MapperUtil.map(this, mapper);
     }
 
+    default ToString<T> toUpperCase() {
+        return map(String::toUpperCase);
+    }
+
+    default ToString<T> toLowerCase() {
+        return map(String::toLowerCase);
+    }
+
     @Override
     default long hash(T object) {
         return apply(object).hashCode();
