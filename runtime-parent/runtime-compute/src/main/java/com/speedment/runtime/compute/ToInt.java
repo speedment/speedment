@@ -1,5 +1,6 @@
 package com.speedment.runtime.compute;
 
+import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
@@ -39,6 +40,7 @@ public interface ToInt<T>
     HasMinus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
     HasMultiply<T, ToLong<T>, ToLong<T>, ToLong<T>>,
     HasDivide<T>,
+    HasMap<T, IntUnaryOperator, ToInt<T>>,
     HasHash<T>,
     HasCompare<T> {
 
@@ -69,6 +71,7 @@ public interface ToInt<T>
         return MapperUtil.mapToDouble(this, operator);
     }
 
+    @Override
     default ToInt<T> map(IntUnaryOperator operator) {
         return MapperUtil.map(this, operator);
     }

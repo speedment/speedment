@@ -1,5 +1,6 @@
 package com.speedment.runtime.compute;
 
+import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
@@ -25,22 +26,23 @@ import java.util.function.ToDoubleFunction;
  */
 @FunctionalInterface
 public interface ToDouble<T>
-    extends Expression,
-    ToDoubleFunction<T>,
-    HasAsDouble<T>,
-    HasAsInt<T>,
-    HasAsLong<T>,
-    HasAbs<ToDouble<T>>,
-    HasSign<ToByte<T>>,
-    HasSqrt<ToDouble<T>>,
-    HasNegate<ToDouble<T>>,
-    HasPow<T>,
-    HasPlus<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
-    HasMinus<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
-    HasMultiply<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
-    HasDivide<T>,
-    HasHash<T>,
-    HasCompare<T> {
+extends Expression,
+        ToDoubleFunction<T>,
+        HasAsDouble<T>,
+        HasAsInt<T>,
+        HasAsLong<T>,
+        HasAbs<ToDouble<T>>,
+        HasSign<ToByte<T>>,
+        HasSqrt<ToDouble<T>>,
+        HasNegate<ToDouble<T>>,
+        HasPow<T>,
+        HasPlus<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
+        HasMinus<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
+        HasMultiply<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
+        HasDivide<T>,
+        HasMap<T, DoubleUnaryOperator, ToDouble<T>>,
+        HasHash<T>,
+        HasCompare<T> {
 
     /**
      * Returns an implementation of this interface that regardless of input,
@@ -77,6 +79,7 @@ public interface ToDouble<T>
         return CastUtil.castToLong(this);
     }
 
+    @Override
     default ToDouble<T> map(DoubleUnaryOperator operator) {
         return MapperUtil.map(this, operator);
     }

@@ -1,5 +1,6 @@
 package com.speedment.runtime.compute;
 
+import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.common.function.ShortToDoubleFunction;
 import com.speedment.common.function.ShortUnaryOperator;
 import com.speedment.common.function.ToShortFunction;
@@ -24,22 +25,23 @@ import com.speedment.runtime.compute.trait.*;
  */
 @FunctionalInterface
 public interface ToShort<T>
-    extends Expression,
-    ToShortFunction<T>,
-    HasAsDouble<T>,
-    HasAsInt<T>,
-    HasAsLong<T>,
-    HasAbs<ToShort<T>>,
-    HasSign<ToByte<T>>,
-    HasSqrt<ToDouble<T>>,
-    HasNegate<ToShort<T>>,
-    HasPow<T>,
-    HasPlus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
-    HasMinus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
-    HasMultiply<T, ToInt<T>, ToInt<T>, ToLong<T>>,
-    HasDivide<T>,
-    HasHash<T>,
-    HasCompare<T> {
+extends Expression,
+        ToShortFunction<T>,
+        HasAsDouble<T>,
+        HasAsInt<T>,
+        HasAsLong<T>,
+        HasAbs<ToShort<T>>,
+        HasSign<ToByte<T>>,
+        HasSqrt<ToDouble<T>>,
+        HasNegate<ToShort<T>>,
+        HasPow<T>,
+        HasPlus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
+        HasMinus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
+        HasMultiply<T, ToInt<T>, ToInt<T>, ToLong<T>>,
+        HasDivide<T>,
+        HasMap<T, ShortUnaryOperator, ToShort<T>>,
+        HasHash<T>,
+        HasCompare<T> {
 
     @Override
     short applyAsShort(T object);
@@ -68,6 +70,7 @@ public interface ToShort<T>
         return MapperUtil.mapToDouble(this, operator);
     }
 
+    @Override
     default ToShort<T> map(ShortUnaryOperator operator) {
         return MapperUtil.map(this, operator);
     }

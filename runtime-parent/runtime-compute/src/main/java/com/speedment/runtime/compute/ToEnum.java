@@ -1,11 +1,13 @@
 package com.speedment.runtime.compute;
 
+import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.ToEnumImpl;
 import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasHash;
+import com.speedment.runtime.compute.trait.HasMap;
 
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -24,10 +26,11 @@ import java.util.function.UnaryOperator;
  * @since 3.1.0
  */
 public interface ToEnum<T, E extends Enum<E>>
-    extends Expression,
-    Function<T, E>,
-    HasHash<T>,
-    HasCompare<T> {
+extends Expression,
+        Function<T, E>,
+        HasMap<T, UnaryOperator<E>, ToEnum<T, E>>,
+        HasHash<T>,
+        HasCompare<T> {
 
     static <T, E extends Enum<E>> ToEnum<T, E>
         toEnum(Class<E> enumClass, Function<T, E> getter) {
@@ -52,6 +55,7 @@ public interface ToEnum<T, E extends Enum<E>>
         return t -> apply(t).name();
     }
 
+    @Override
     default ToEnum<T, E> map(UnaryOperator<E> mapper) {
         return MapperUtil.map(this, mapper);
     }

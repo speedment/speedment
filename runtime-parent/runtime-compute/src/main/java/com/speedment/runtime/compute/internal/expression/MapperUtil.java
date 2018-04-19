@@ -5,6 +5,7 @@ import com.speedment.runtime.compute.*;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.MapperExpression;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.function.*;
 
@@ -408,6 +409,30 @@ public final class MapperUtil {
     }
 
     /**
+     * Returns an expression that first applies the specified expression to get
+     * a value, then applies the specified mapping operation to that value to
+     * get the final result.
+     *
+     * @param expression  the expression to apply to the input
+     * @param mapper      the mapper to apply to the result
+     * @param <T>         the input type
+     * @return            the new expression
+     */
+    public static <T> ToBigDecimal<T> map(ToBigDecimal<T> expression, UnaryOperator<BigDecimal> mapper) {
+        return new ToBigDecimalMapper<T, ToBigDecimal<T>, UnaryOperator<BigDecimal>>(expression, mapper) {
+            @Override
+            public BigDecimal apply(T object) {
+                return this.mapper.apply(this.inner.apply(object));
+            }
+
+            @Override
+            public MapperType getMapperType() {
+                return MapperType.BIG_DECIMAL_TO_BIG_DECIMAL;
+            }
+        };
+    }
+
+    /**
      * Abstract base for a mapping operation that results in a {@code byte}.
      *
      * @param <T>       the input type
@@ -544,6 +569,20 @@ public final class MapperUtil {
     private abstract static class ToStringMapper<T, INNER extends Expression, MAPPER>
     extends AbstractMapper<INNER, MAPPER> implements ToString<T> {
         ToStringMapper(INNER inner, MAPPER mapper) {
+            super(inner, mapper);
+        }
+    }
+
+    /**
+     * Abstract base for a mapping operation that results in a {@code bigDecimal}.
+     *
+     * @param <T>       the input type
+     * @param <INNER>   the inner expression type
+     * @param <MAPPER>  the mapping functional interface
+     */
+    private abstract static class ToBigDecimalMapper<T, INNER extends Expression, MAPPER>
+        extends AbstractMapper<INNER, MAPPER> implements ToBigDecimal<T> {
+        ToBigDecimalMapper(INNER inner, MAPPER mapper) {
             super(inner, mapper);
         }
     }

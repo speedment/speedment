@@ -120,6 +120,11 @@ extends Expression {
         /**
          * Implemented as a {@link java.util.function.UnaryOperator}.
          */
-        STRING_TO_STRING
+        STRING_TO_STRING,
+
+        /**
+         * Implemented as a {@link java.util.function.UnaryOperator}.
+         */
+        BIG_DECIMAL_TO_BIG_DECIMAL
     }
 }

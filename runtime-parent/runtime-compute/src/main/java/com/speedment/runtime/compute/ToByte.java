@@ -1,5 +1,6 @@
 package com.speedment.runtime.compute;
 
+import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.common.function.ByteToDoubleFunction;
 import com.speedment.common.function.ByteUnaryOperator;
 import com.speedment.common.function.ToByteFunction;
@@ -24,22 +25,23 @@ import com.speedment.runtime.compute.trait.*;
  */
 @FunctionalInterface
 public interface ToByte<T>
-    extends Expression,
-    ToByteFunction<T>,
-    HasAsDouble<T>,
-    HasAsInt<T>,
-    HasAsLong<T>,
-    HasAbs<ToByte<T>>,
-    HasSign<ToByte<T>>,
-    HasSqrt<ToDouble<T>>,
-    HasNegate<ToByte<T>>,
-    HasPow<T>,
-    HasPlus<T, ToShort<T>, ToInt<T>, ToLong<T>>,
-    HasMinus<T, ToShort<T>, ToInt<T>, ToLong<T>>,
-    HasMultiply<T, ToInt<T>, ToInt<T>, ToLong<T>>,
-    HasDivide<T>,
-    HasHash<T>,
-    HasCompare<T> {
+extends Expression,
+        ToByteFunction<T>,
+        HasAsDouble<T>,
+        HasAsInt<T>,
+        HasAsLong<T>,
+        HasAbs<ToByte<T>>,
+        HasSign<ToByte<T>>,
+        HasSqrt<ToDouble<T>>,
+        HasNegate<ToByte<T>>,
+        HasPow<T>,
+        HasPlus<T, ToShort<T>, ToInt<T>, ToLong<T>>,
+        HasMinus<T, ToShort<T>, ToInt<T>, ToLong<T>>,
+        HasMultiply<T, ToInt<T>, ToInt<T>, ToLong<T>>,
+        HasDivide<T>,
+        HasMap<T, ByteUnaryOperator, ToByte<T>>,
+        HasHash<T>,
+        HasCompare<T> {
 
     @Override
     byte applyAsByte(T object);
@@ -68,6 +70,7 @@ public interface ToByte<T>
         return MapperUtil.mapToDouble(this, operator);
     }
 
+    @Override
     default ToByte<T> map(ByteUnaryOperator operator) {
         return MapperUtil.map(this, operator);
     }

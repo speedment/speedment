@@ -12,6 +12,10 @@ import com.speedment.runtime.compute.trait.HasAsInt;
 import com.speedment.runtime.compute.trait.HasAsLong;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasHash;
+import com.speedment.runtime.compute.trait.HasMap;
+
+import java.math.BigDecimal;
+import java.util.function.UnaryOperator;
 
 /**
  * Expression that given an entity returns a {@code boolean} value. This
@@ -27,13 +31,14 @@ import com.speedment.runtime.compute.trait.HasHash;
  */
 @FunctionalInterface
 public interface ToBoolean<T>
-    extends Expression,
-    ToBooleanFunction<T>,
-    HasAsDouble<T>,
-    HasAsInt<T>,
-    HasAsLong<T>,
-    HasHash<T>,
-    HasCompare<T> {
+extends Expression,
+        ToBooleanFunction<T>,
+        HasAsDouble<T>,
+        HasAsInt<T>,
+        HasAsLong<T>,
+        HasMap<T, BooleanUnaryOperator, ToBoolean<T>>,
+        HasHash<T>,
+        HasCompare<T> {
 
     @Override
     boolean applyAsBoolean(T object);
@@ -62,6 +67,7 @@ public interface ToBoolean<T>
         return MapperUtil.mapToDouble(this, operator);
     }
 
+    @Override
     default ToBoolean<T> map(BooleanUnaryOperator operator) {
         return MapperUtil.map(this, operator);
     }

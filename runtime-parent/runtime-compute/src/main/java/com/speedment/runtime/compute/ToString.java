@@ -1,10 +1,12 @@
 package com.speedment.runtime.compute;
 
+import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasHash;
+import com.speedment.runtime.compute.trait.HasMap;
 
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -23,10 +25,11 @@ import java.util.function.UnaryOperator;
  */
 @FunctionalInterface
 public interface ToString<T>
-    extends Expression,
-    Function<T, String>,
-    HasHash<T>,
-    HasCompare<T> {
+extends Expression,
+        Function<T, String>,
+        HasMap<T, UnaryOperator<String>, ToString<T>>,
+        HasHash<T>,
+        HasCompare<T> {
 
     @Override
     String apply(T object);
@@ -36,6 +39,7 @@ public interface ToString<T>
         return ExpressionType.STRING;
     }
 
+    @Override
     default ToString<T> map(UnaryOperator<String> mapper) {
         return MapperUtil.map(this, mapper);
     }

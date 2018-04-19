@@ -2,10 +2,14 @@ package com.speedment.runtime.compute;
 
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
+import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasHash;
+import com.speedment.runtime.compute.trait.HasMap;
+
 import java.math.BigDecimal;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 /**
  * Expression that given an entity returns a non-null {@code String} value. This
@@ -23,6 +27,7 @@ import java.util.function.Function;
 public interface ToBigDecimal<T>
 extends Expression,
         Function<T, BigDecimal>,
+        HasMap<T, UnaryOperator<BigDecimal>, ToBigDecimal<T>>,
         HasHash<T>,
         HasCompare<T> {
 
@@ -32,6 +37,11 @@ extends Expression,
     @Override
     default ExpressionType getExpressionType() {
         return ExpressionType.BIG_DECIMAL;
+    }
+
+    @Override
+    default ToBigDecimal<T> map(UnaryOperator<BigDecimal> mapper) {
+        return MapperUtil.map(this, mapper);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.speedment.runtime.compute;
 
+import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.common.function.FloatToDoubleFunction;
 import com.speedment.common.function.FloatUnaryOperator;
 import com.speedment.common.function.ToFloatFunction;
@@ -24,22 +25,23 @@ import com.speedment.runtime.compute.trait.*;
  */
 @FunctionalInterface
 public interface ToFloat<T>
-    extends Expression,
-    ToFloatFunction<T>,
-    HasAsDouble<T>,
-    HasAsInt<T>,
-    HasAsLong<T>,
-    HasAbs<ToFloat<T>>,
-    HasSign<ToByte<T>>,
-    HasSqrt<ToDouble<T>>,
-    HasNegate<ToFloat<T>>,
-    HasPow<T>,
-    HasPlus<T, ToFloat<T>, ToFloat<T>, ToDouble<T>>,
-    HasMinus<T, ToFloat<T>, ToFloat<T>, ToDouble<T>>,
-    HasMultiply<T, ToFloat<T>, ToFloat<T>, ToDouble<T>>,
-    HasDivide<T>,
-    HasHash<T>,
-    HasCompare<T> {
+extends Expression,
+        ToFloatFunction<T>,
+        HasAsDouble<T>,
+        HasAsInt<T>,
+        HasAsLong<T>,
+        HasAbs<ToFloat<T>>,
+        HasSign<ToByte<T>>,
+        HasSqrt<ToDouble<T>>,
+        HasNegate<ToFloat<T>>,
+        HasPow<T>,
+        HasPlus<T, ToFloat<T>, ToFloat<T>, ToDouble<T>>,
+        HasMinus<T, ToFloat<T>, ToFloat<T>, ToDouble<T>>,
+        HasMultiply<T, ToFloat<T>, ToFloat<T>, ToDouble<T>>,
+        HasDivide<T>,
+        HasMap<T, FloatUnaryOperator, ToFloat<T>>,
+        HasHash<T>,
+        HasCompare<T> {
 
     @Override
     float applyAsFloat(T object);
@@ -68,6 +70,7 @@ public interface ToFloat<T>
         return MapperUtil.mapToDouble(this, operator);
     }
 
+    @Override
     default ToFloat<T> map(FloatUnaryOperator operator) {
         return MapperUtil.map(this, operator);
     }

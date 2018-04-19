@@ -1,5 +1,6 @@
 package com.speedment.runtime.compute;
 
+import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
@@ -25,22 +26,23 @@ import java.util.function.ToLongFunction;
  */
 @FunctionalInterface
 public interface ToLong<T>
-    extends Expression,
-    ToLongFunction<T>,
-    HasAsDouble<T>,
-    HasAsInt<T>,
-    HasAsLong<T>,
-    HasAbs<ToLong<T>>,
-    HasSign<ToByte<T>>,
-    HasSqrt<ToDouble<T>>,
-    HasNegate<ToLong<T>>,
-    HasPow<T>,
-    HasPlus<T, ToLong<T>, ToLong<T>, ToLong<T>>,
-    HasMinus<T, ToLong<T>, ToLong<T>, ToLong<T>>,
-    HasMultiply<T, ToLong<T>, ToLong<T>, ToLong<T>>,
-    HasDivide<T>,
-    HasHash<T>,
-    HasCompare<T> {
+extends Expression,
+        ToLongFunction<T>,
+        HasAsDouble<T>,
+        HasAsInt<T>,
+        HasAsLong<T>,
+        HasAbs<ToLong<T>>,
+        HasSign<ToByte<T>>,
+        HasSqrt<ToDouble<T>>,
+        HasNegate<ToLong<T>>,
+        HasPow<T>,
+        HasPlus<T, ToLong<T>, ToLong<T>, ToLong<T>>,
+        HasMinus<T, ToLong<T>, ToLong<T>, ToLong<T>>,
+        HasMultiply<T, ToLong<T>, ToLong<T>, ToLong<T>>,
+        HasDivide<T>,
+        HasMap<T, LongUnaryOperator, ToLong<T>>,
+        HasHash<T>,
+        HasCompare<T> {
 
     @Override
     long applyAsLong(T object);
@@ -69,6 +71,7 @@ public interface ToLong<T>
         return MapperUtil.mapToDouble(this, operator);
     }
 
+    @Override
     default ToLong<T> map(LongUnaryOperator operator) {
         return MapperUtil.map(this, operator);
     }

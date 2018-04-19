@@ -1,5 +1,6 @@
 package com.speedment.runtime.compute;
 
+import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.common.function.ByteUnaryOperator;
 import com.speedment.common.function.CharUnaryOperator;
 import com.speedment.common.function.ToCharFunction;
@@ -23,13 +24,14 @@ import com.speedment.runtime.compute.trait.*;
  */
 @FunctionalInterface
 public interface ToChar<T>
-    extends Expression,
-    ToCharFunction<T>,
-    HasAsDouble<T>,
-    HasAsInt<T>,
-    HasAsLong<T>,
-    HasHash<T>,
-    HasCompare<T> {
+extends Expression,
+        ToCharFunction<T>,
+        HasAsDouble<T>,
+        HasAsInt<T>,
+        HasAsLong<T>,
+        HasMap<T, CharUnaryOperator, ToChar<T>>,
+        HasHash<T>,
+        HasCompare<T> {
 
     @Override
     default ExpressionType getExpressionType() {
@@ -51,6 +53,7 @@ public interface ToChar<T>
         return CastUtil.castToLong(this);
     }
 
+    @Override
     default ToChar<T> map(CharUnaryOperator operator) {
         return MapperUtil.map(this, operator);
     }
@@ -60,7 +63,7 @@ public interface ToChar<T>
     }
 
     default ToChar<T> toLowerCase() {
-        return map(Character::toUpperCase);
+        return map(Character::toLowerCase);
     }
 
     @Override
