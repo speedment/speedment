@@ -29,10 +29,10 @@ import java.util.function.UnaryOperator;
  * @since 3.1.0
  */
 public interface ToEnumNullable<T, E extends Enum<E>>
-extends Expression,
-    ToNullable<T, E>,
-    HasHash<T>,
-    HasCompare<T> {
+extends Expression<T>,
+        ToNullable<T, E>,
+        HasHash<T>,
+        HasCompare<T> {
 
     static <T, E extends Enum<E>> ToEnumNullable<T, E>
         toEnumNullable(Class<E> enumClass, Function<T, E> getter) {

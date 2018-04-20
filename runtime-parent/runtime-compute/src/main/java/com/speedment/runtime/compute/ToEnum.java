@@ -26,7 +26,7 @@ import java.util.function.UnaryOperator;
  * @since 3.1.0
  */
 public interface ToEnum<T, E extends Enum<E>>
-extends Expression,
+extends Expression<T>,
         Function<T, E>,
         HasMap<T, UnaryOperator<E>, ToEnum<T, E>>,
         HasHash<T>,

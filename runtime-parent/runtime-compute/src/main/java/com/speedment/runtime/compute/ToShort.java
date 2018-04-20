@@ -25,7 +25,7 @@ import com.speedment.runtime.compute.trait.*;
  */
 @FunctionalInterface
 public interface ToShort<T>
-extends Expression,
+extends Expression<T>,
         ToShortFunction<T>,
         HasAsDouble<T>,
         HasAsInt<T>,

@@ -6,10 +6,13 @@ package com.speedment.runtime.compute.expression;
  * <p>
  * Equality is determined by looking at the {@link #getValue()}.
  *
+ * @param <T>  the input entity type
+ * @param <V>  the resulting type
+ *
  * @author Emil Forslund
  * @since  3.1.0
  */
-public interface ConstantExpression<T> extends Expression {
+public interface ConstantExpression<T, V> extends Expression<T> {
 
     /**
      * Returns the constant value of this expression. The constant value is the
@@ -17,6 +20,6 @@ public interface ConstantExpression<T> extends Expression {
      *
      * @return  the constant value
      */
-    T getValue();
+    V getValue();
 
 }

@@ -14,4 +14,4 @@ import com.speedment.runtime.compute.expression.NonNullableExpression;
  * @since  3.1.0
  */
 public interface ToLongOrElseGet<T>
-    extends OrElseGetExpression<ToLongNullable<T>, ToLong<T>>, ToLong<T> {}
+extends OrElseGetExpression<T, ToLongNullable<T>, ToLong<T>>, ToLong<T> {}

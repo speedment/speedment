@@ -859,8 +859,8 @@ public final class DivideUtil {
      * @param <SECOND>  the second expression type
      */
     private static abstract class DivideToDouble
-        <T, FIRST extends Expression, SECOND extends Expression>
-    extends Divide<FIRST, SECOND> implements ToDouble<T> {
+        <T, FIRST extends Expression<T>, SECOND extends Expression<T>>
+    extends Divide<T, FIRST, SECOND> implements ToDouble<T> {
         DivideToDouble(FIRST first, SECOND second) {
             super(first, second);
         }
@@ -874,12 +874,13 @@ public final class DivideUtil {
     /**
      * Abstract base for a division operation that takes two other expressions.
      *
+     * @param <T>       the input type
      * @param <FIRST>   the first expression type
      * @param <SECOND>  the second expression type
      */
     private static abstract class Divide
-        <FIRST extends Expression, SECOND extends Expression>
-    implements BinaryExpression<FIRST, SECOND> {
+        <T, FIRST extends Expression<T>, SECOND extends Expression<T>>
+    implements BinaryExpression<T, FIRST, SECOND> {
 
         final FIRST first;
         final SECOND second;
@@ -903,7 +904,7 @@ public final class DivideUtil {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (!(o instanceof BinaryExpression)) return false;
-            BinaryExpression<?, ?> divide = (BinaryExpression<?, ?>) o;
+            final BinaryExpression<?, ?, ?> divide = (BinaryExpression<?, ?, ?>) o;
             return Objects.equals(getFirst(), divide.getFirst()) &&
                 Objects.equals(getSecond(), divide.getSecond()) &&
                 Objects.equals(getOperator(), divide.getOperator());
@@ -924,8 +925,9 @@ public final class DivideUtil {
      * @param <N>      the second expression type
      */
     private static abstract class DivideObjToDouble
-        <T, INNER extends Expression, N>
-    extends DivideObj<INNER, N> implements ToDouble<T> {
+        <T, INNER extends Expression<T>, N>
+    extends DivideObj<T, INNER, N> implements ToDouble<T> {
+
         DivideObjToDouble(INNER first) {
             super(first);
         }
@@ -940,7 +942,7 @@ public final class DivideUtil {
             if (o == null) return false;
             else if (this == o) return true;
             else if (!(o instanceof BinaryObjExpression)) return false;
-            final BinaryObjExpression<?, ?> that = (BinaryObjExpression<?, ?>) o;
+            final BinaryObjExpression<?, ?, ?> that = (BinaryObjExpression<?, ?, ?>) o;
             return Objects.equals(first, that.getFirst()) &&
                 Objects.equals(getSecond(), that.getSecond()) &&
                 Objects.equals(getOperator(), that.getOperator());
@@ -955,12 +957,13 @@ public final class DivideUtil {
     /**
      * Abstract base for a division operation that takes two other expressions.
      *
+     * @param <T>     the input type
      * @param <INNER> the type of the expression to divide
      * @param <N>     the value to divide with
      */
     private static abstract class DivideObj
-        <INNER extends Expression, N>
-    implements BinaryObjExpression<INNER, N> {
+        <T, INNER extends Expression<T>, N>
+    implements BinaryObjExpression<T, INNER, N> {
 
         final INNER first;
 
@@ -969,7 +972,7 @@ public final class DivideUtil {
         }
 
         @Override
-        public INNER getFirst() {
+        public final INNER getFirst() {
             return first;
         }
     }

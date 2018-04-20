@@ -25,7 +25,7 @@ import com.speedment.runtime.compute.trait.*;
  */
 @FunctionalInterface
 public interface ToByte<T>
-extends Expression,
+extends Expression<T>,
         ToByteFunction<T>,
         HasAsDouble<T>,
         HasAsInt<T>,

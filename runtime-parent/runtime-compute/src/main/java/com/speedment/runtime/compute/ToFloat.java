@@ -25,7 +25,7 @@ import com.speedment.runtime.compute.trait.*;
  */
 @FunctionalInterface
 public interface ToFloat<T>
-extends Expression,
+extends Expression<T>,
         ToFloatFunction<T>,
         HasAsDouble<T>,
         HasAsInt<T>,

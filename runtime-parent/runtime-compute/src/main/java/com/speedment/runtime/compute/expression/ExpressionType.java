@@ -6,7 +6,7 @@ package com.speedment.runtime.compute.expression;
  * used to tell which type an expression has.
  *
  * @author Emil Forslund
- * @since 3.1.0
+ * @since  3.1.0
  */
 public enum ExpressionType {
 
@@ -24,11 +24,11 @@ public enum ExpressionType {
 
     private final boolean isNullable;
 
-    private ExpressionType() {
+    ExpressionType() {
         this(false);
     }
 
-    private ExpressionType(boolean isNullable) {
+    ExpressionType(boolean isNullable) {
         this.isNullable = isNullable;
     }
 

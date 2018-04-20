@@ -523,8 +523,8 @@ public final class CastUtil {
      * @param <T>      the input type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class CastToDouble<T, INNER extends Expression>
-    extends AbstractCast<INNER> implements ToDouble<T> {
+    private abstract static class CastToDouble<T, INNER extends Expression<T>>
+    extends AbstractCast<T, INNER> implements ToDouble<T> {
         CastToDouble(INNER inner) {
             super(inner);
         }
@@ -537,8 +537,8 @@ public final class CastUtil {
      * @param <T>      the input type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class CastToInt<T, INNER extends Expression>
-    extends AbstractCast<INNER> implements ToInt<T> {
+    private abstract static class CastToInt<T, INNER extends Expression<T>>
+    extends AbstractCast<T, INNER> implements ToInt<T> {
         CastToInt(INNER inner) {
             super(inner);
         }
@@ -551,8 +551,8 @@ public final class CastUtil {
      * @param <T>      the input type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class CastToLong<T, INNER extends Expression>
-    extends AbstractCast<INNER> implements ToLong<T> {
+    private abstract static class CastToLong<T, INNER extends Expression<T>>
+    extends AbstractCast<T, INNER> implements ToLong<T> {
         CastToLong(INNER inner) {
             super(inner);
         }
@@ -561,10 +561,11 @@ public final class CastUtil {
     /**
      * Internal abstract implementation of the cast operation.
      *
+     * @param <T>      the input entity type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class AbstractCast<INNER extends Expression>
-    implements UnaryExpression<INNER> {
+    private abstract static class AbstractCast<T, INNER extends Expression<T>>
+    implements UnaryExpression<T, INNER> {
 
         final INNER inner;
 
@@ -586,7 +587,7 @@ public final class CastUtil {
         public final boolean equals(Object o) {
             if (this == o) return true;
             else if (!(o instanceof UnaryExpression)) return false;
-            final UnaryExpression<?> that = (UnaryExpression<?>) o;
+            final UnaryExpression<?, ?> that = (UnaryExpression<?, ?>) o;
             return Objects.equals(getInner(), that.getInner())
                 && getOperator().equals(that.getOperator());
         }

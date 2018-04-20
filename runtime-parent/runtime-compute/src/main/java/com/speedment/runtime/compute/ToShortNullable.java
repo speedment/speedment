@@ -26,7 +26,7 @@ import java.util.function.Function;
  */
 @FunctionalInterface
 public interface ToShortNullable<T>
-extends Expression,
+extends Expression<T>,
         ToNullable<T, Short>,
         HasAbs<ToShortNullable<T>>,
         HasSign<ToByteNullable<T>>,

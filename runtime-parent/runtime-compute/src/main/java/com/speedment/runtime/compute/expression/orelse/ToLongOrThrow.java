@@ -15,4 +15,4 @@ import com.speedment.runtime.compute.expression.NonNullableExpression;
  * @since  3.1.0
  */
 public interface ToLongOrThrow<T>
-extends OrElseThrowExpression<ToLongNullable<T>>, ToLong<T> {}
+extends OrElseThrowExpression<T, ToLongNullable<T>>, ToLong<T> {}

@@ -27,7 +27,7 @@ public final class AbsUtil {
      * @return            the new expression
      */
     public static <T> ToByte<T> abs(ToByte<T> expression) {
-        class AbsByte extends AbstractAbs<ToByte<T>> implements ToByte<T> {
+        class AbsByte extends AbstractAbs<T, ToByte<T>> implements ToByte<T> {
             private AbsByte(ToByte<T> inner) {
                 super(inner);
             }
@@ -51,7 +51,7 @@ public final class AbsUtil {
      * @return            the new expression
      */
     public static <T> ToShort<T> abs(ToShort<T> expression) {
-        class AbsShort extends AbstractAbs<ToShort<T>> implements ToShort<T> {
+        class AbsShort extends AbstractAbs<T, ToShort<T>> implements ToShort<T> {
             private AbsShort(ToShort<T> inner) {
                 super(inner);
             }
@@ -75,7 +75,7 @@ public final class AbsUtil {
      * @return            the new expression
      */
     public static <T> ToInt<T> abs(ToInt<T> expression) {
-        class AbsInt extends AbstractAbs<ToInt<T>> implements ToInt<T> {
+        class AbsInt extends AbstractAbs<T, ToInt<T>> implements ToInt<T> {
             private AbsInt(ToInt<T> inner) {
                 super(inner);
             }
@@ -99,7 +99,7 @@ public final class AbsUtil {
      * @return            the new expression
      */
     public static <T> ToLong<T> abs(ToLong<T> expression) {
-        class AbsLong extends AbstractAbs<ToLong<T>> implements ToLong<T> {
+        class AbsLong extends AbstractAbs<T, ToLong<T>> implements ToLong<T> {
             private AbsLong(ToLong<T> inner) {
                 super(inner);
             }
@@ -123,7 +123,7 @@ public final class AbsUtil {
      * @return            the new expression
      */
     public static <T> ToFloat<T> abs(ToFloat<T> expression) {
-        class AbsFloat extends AbstractAbs<ToFloat<T>> implements ToFloat<T> {
+        class AbsFloat extends AbstractAbs<T, ToFloat<T>> implements ToFloat<T> {
             private AbsFloat(ToFloat<T> inner) {
                 super(inner);
             }
@@ -147,7 +147,7 @@ public final class AbsUtil {
      * @return            the new expression
      */
     public static <T> ToDouble<T> abs(ToDouble<T> expression) {
-        class AbsDouble extends AbstractAbs<ToDouble<T>> implements ToDouble<T> {
+        class AbsDouble extends AbstractAbs<T, ToDouble<T>> implements ToDouble<T> {
             private AbsDouble(ToDouble<T> inner) {
                 super(inner);
             }
@@ -267,10 +267,11 @@ public final class AbsUtil {
     /**
      * The abstract base for an absolute expression.
      *
+     * @param <T>      the input entity type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class AbstractAbs<INNER extends Expression>
-    implements UnaryExpression<INNER> {
+    private abstract static class AbstractAbs<T, INNER extends Expression<T>>
+    implements UnaryExpression<T, INNER> {
 
         final INNER inner;
 
@@ -292,7 +293,7 @@ public final class AbsUtil {
         public final boolean equals(Object o) {
             if (this == o) return true;
             else if (!(o instanceof UnaryExpression)) return false;
-            final UnaryExpression<?> that = (UnaryExpression<?>) o;
+            final UnaryExpression<?, ?> that = (UnaryExpression<?, ?>) o;
             return Objects.equals(getInner(), that.getInner())
                 && getOperator().equals(that.getOperator());
         }

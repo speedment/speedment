@@ -25,14 +25,14 @@ import java.util.function.Function;
  */
 @FunctionalInterface
 public interface ToDoubleNullable<T>
-    extends Expression,
-    ToNullable<T, Double>,
-    HasAbs<ToDoubleNullable<T>>,
-    HasSign<ToByteNullable<T>>,
-    HasSqrt<ToDoubleNullable<T>>,
-    HasNegate<ToDoubleNullable<T>>,
-    HasHash<T>,
-    HasCompare<T> {
+extends Expression<T>,
+        ToNullable<T, Double>,
+        HasAbs<ToDoubleNullable<T>>,
+        HasSign<ToByteNullable<T>>,
+        HasSqrt<ToDoubleNullable<T>>,
+        HasNegate<ToDoubleNullable<T>>,
+        HasHash<T>,
+        HasCompare<T> {
 
     @Override
     default ExpressionType getExpressionType() {

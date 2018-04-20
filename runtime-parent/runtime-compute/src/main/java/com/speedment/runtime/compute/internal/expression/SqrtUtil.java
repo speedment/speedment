@@ -155,8 +155,16 @@ public final class SqrtUtil {
         return new DoubleSqrt(other);
     }
 
-    private abstract static class AbstractSqrt<T, INNER extends Expression>
-    implements UnaryExpression<INNER>, ToDouble<T> {
+    /**
+     * Abstract base implementation of a {@link UnaryExpression} for a
+     * square root-operation.
+     *
+     * @param <T>      the input entity type
+     * @param <INNER>  the inner expression type to take the square root of
+     */
+    private abstract static class AbstractSqrt<T, INNER extends Expression<T>>
+    implements UnaryExpression<T, INNER>, ToDouble<T> {
+
         final INNER inner;
 
         AbstractSqrt(INNER inner) {
@@ -177,7 +185,7 @@ public final class SqrtUtil {
         public final boolean equals(Object o) {
             if (this == o) return true;
             if (!(o instanceof UnaryExpression)) return false;
-            final UnaryExpression<?> that = (UnaryExpression<?>) o;
+            final UnaryExpression<?, ?> that = (UnaryExpression<?, ?>) o;
             return Objects.equals(getInner(), that.getInner())
                 && Objects.equals(getOperator(), that.getOperator());
         }

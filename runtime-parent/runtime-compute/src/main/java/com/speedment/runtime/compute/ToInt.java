@@ -26,23 +26,23 @@ import java.util.function.ToIntFunction;
  */
 @FunctionalInterface
 public interface ToInt<T>
-    extends Expression,
-    ToIntFunction<T>,
-    HasAsDouble<T>,
-    HasAsInt<T>,
-    HasAsLong<T>,
-    HasAbs<ToInt<T>>,
-    HasSign<ToByte<T>>,
-    HasSqrt<ToDouble<T>>,
-    HasNegate<ToInt<T>>,
-    HasPow<T>,
-    HasPlus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
-    HasMinus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
-    HasMultiply<T, ToLong<T>, ToLong<T>, ToLong<T>>,
-    HasDivide<T>,
-    HasMap<T, IntUnaryOperator, ToInt<T>>,
-    HasHash<T>,
-    HasCompare<T> {
+extends Expression<T>,
+        ToIntFunction<T>,
+        HasAsDouble<T>,
+        HasAsInt<T>,
+        HasAsLong<T>,
+        HasAbs<ToInt<T>>,
+        HasSign<ToByte<T>>,
+        HasSqrt<ToDouble<T>>,
+        HasNegate<ToInt<T>>,
+        HasPow<T>,
+        HasPlus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
+        HasMinus<T, ToInt<T>, ToInt<T>, ToLong<T>>,
+        HasMultiply<T, ToLong<T>, ToLong<T>, ToLong<T>>,
+        HasDivide<T>,
+        HasMap<T, IntUnaryOperator, ToInt<T>>,
+        HasHash<T>,
+        HasCompare<T> {
 
     @Override
     int applyAsInt(T object);

@@ -26,14 +26,14 @@ import java.util.function.IntUnaryOperator;
  */
 @FunctionalInterface
 public interface ToIntNullable<T>
-    extends Expression,
-    ToNullable<T, Integer>,
-    HasAbs<ToIntNullable<T>>,
-    HasSign<ToByteNullable<T>>,
-    HasSqrt<ToDoubleNullable<T>>,
-    HasNegate<ToIntNullable<T>>,
-    HasHash<T>,
-    HasCompare<T> {
+extends Expression<T>,
+        ToNullable<T, Integer>,
+        HasAbs<ToIntNullable<T>>,
+        HasSign<ToByteNullable<T>>,
+        HasSqrt<ToDoubleNullable<T>>,
+        HasNegate<ToIntNullable<T>>,
+        HasHash<T>,
+        HasCompare<T> {
 
     @Override
     default ExpressionType getExpressionType() {

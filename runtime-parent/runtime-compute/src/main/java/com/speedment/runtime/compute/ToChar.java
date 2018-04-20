@@ -24,7 +24,7 @@ import com.speedment.runtime.compute.trait.*;
  */
 @FunctionalInterface
 public interface ToChar<T>
-extends Expression,
+extends Expression<T>,
         ToCharFunction<T>,
         HasAsDouble<T>,
         HasAsInt<T>,

@@ -7,14 +7,15 @@ package com.speedment.runtime.compute.expression;
  * Equality is determined by looking at {@link #getFirst()},
  * {@link #getSecond()} and {@link #getOperator()}.
  *
+ * @param <T>      the input entity type
  * @param <FIRST>  the type of the first operand, an expression
- * @param <T>      the type of the second operand, a constant value
+ * @param <V>      the type of the second operand, a constant value
  *
  * @author Emil Forslund
  * @since  3.1.0
  */
-public interface BinaryObjExpression<FIRST extends Expression, T>
-extends Expression {
+public interface BinaryObjExpression<T, FIRST extends Expression<T>, V>
+extends Expression<T> {
 
     /**
      * Returns the first operand, an inner expression.
@@ -28,7 +29,7 @@ extends Expression {
      *
      * @return  the second operand
      */
-    T getSecond();
+    V getSecond();
 
     /**
      * Returns the binary operator that this expression represents.

@@ -10,11 +10,14 @@ import java.util.function.Predicate;
  * Equality is determined by looking at the {@link #getInner()} and
  * {@link #getIsNull()}.
  *
+ * @param <T>      the input entity type
+ * @param <INNER>  type of the inner expression
+ *
  * @author Emil Forslund
  * @since  3.1.0
  */
-public interface NullableExpression<T, INNER extends Expression>
-extends Expression {
+public interface NullableExpression<T, INNER extends Expression<T>>
+extends Expression<T> {
 
     /**
      * The inner predicate that is used to determine the result after the

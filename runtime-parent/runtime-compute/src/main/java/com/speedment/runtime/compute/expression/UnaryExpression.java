@@ -7,10 +7,14 @@ package com.speedment.runtime.compute.expression;
  * Equality is determined by looking at {@link #getInner()} and
  * {@link #getOperator()}.
  *
+ * @param <T>      the input entity type
+ * @param <INNER>  the type of the inner expression
+ *
  * @author Emil Forslund
  * @since  3.1.0
  */
-public interface UnaryExpression<INNER extends Expression> extends Expression {
+public interface UnaryExpression<T, INNER extends Expression<T>>
+extends Expression<T> {
 
     /**
      * The inner expression that this wraps and applies a unary operator to.

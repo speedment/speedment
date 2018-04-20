@@ -15,7 +15,7 @@ import com.speedment.runtime.compute.expression.NonNullableExpression;
  * @since  3.1.0
  */
 public interface ToEnumOrElse<T, E extends Enum<E>>
-extends NonNullableExpression<ToEnumNullable<T, E>>, ToEnum<T, E> {
+extends NonNullableExpression<T, ToEnumNullable<T, E>>, ToEnum<T, E> {
 
     /**
      * Returns the default value used when {@link #getInnerNullable()} would

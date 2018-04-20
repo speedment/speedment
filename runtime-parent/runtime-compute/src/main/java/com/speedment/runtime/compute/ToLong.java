@@ -26,7 +26,7 @@ import java.util.function.ToLongFunction;
  */
 @FunctionalInterface
 public interface ToLong<T>
-extends Expression,
+extends Expression<T>,
         ToLongFunction<T>,
         HasAsDouble<T>,
         HasAsInt<T>,

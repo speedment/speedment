@@ -26,14 +26,14 @@ import java.util.function.LongUnaryOperator;
  */
 @FunctionalInterface
 public interface ToLongNullable<T>
-    extends Expression,
-    ToNullable<T, Long>,
-    HasAbs<ToLongNullable<T>>,
-    HasSign<ToByteNullable<T>>,
-    HasSqrt<ToDoubleNullable<T>>,
-    HasNegate<ToLongNullable<T>>,
-    HasHash<T>,
-    HasCompare<T> {
+extends Expression<T>,
+        ToNullable<T, Long>,
+        HasAbs<ToLongNullable<T>>,
+        HasSign<ToByteNullable<T>>,
+        HasSqrt<ToDoubleNullable<T>>,
+        HasNegate<ToLongNullable<T>>,
+        HasHash<T>,
+        HasCompare<T> {
 
     @Override
     default ExpressionType getExpressionType() {

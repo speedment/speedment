@@ -176,8 +176,8 @@ public final class SignUtil {
      * @param <T>      the input entity type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class AbstractSign<T, INNER extends Expression>
-    implements UnaryExpression<INNER>, ToByte<T> {
+    private abstract static class AbstractSign<T, INNER extends Expression<T>>
+    implements UnaryExpression<T, INNER>, ToByte<T> {
         final INNER inner;
 
         AbstractSign(INNER inner) {
@@ -198,7 +198,7 @@ public final class SignUtil {
         public final boolean equals(Object o) {
             if (this == o) return true;
             if (!(o instanceof UnaryExpression)) return false;
-            final UnaryExpression<?> that = (UnaryExpression<?>) o;
+            final UnaryExpression<?, ?> that = (UnaryExpression<?, ?>) o;
             return Objects.equals(getInner(), that.getInner())
                 && Objects.equals(getOperator(), that.getOperator());
         }

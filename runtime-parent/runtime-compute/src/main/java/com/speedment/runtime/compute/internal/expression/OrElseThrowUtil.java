@@ -39,7 +39,7 @@ public final class OrElseThrowUtil {
      * @param <T>  the input entity type
      */
     private final static class ToDoubleOrElseThrowImpl<T>
-    extends AbstractNonNullable<ToDoubleNullable<T>>
+    extends AbstractNonNullable<T, ToDoubleNullable<T>>
     implements ToDoubleOrThrow<T> {
         private ToDoubleOrElseThrowImpl(ToDoubleNullable<T> inner) {
             super(inner);
@@ -71,7 +71,7 @@ public final class OrElseThrowUtil {
      * @param <T>  the input entity type
      */
     private final static class ToFloatOrElseThrowImpl<T>
-        extends AbstractNonNullable<ToFloatNullable<T>>
+        extends AbstractNonNullable<T, ToFloatNullable<T>>
         implements ToFloatOrThrow<T> {
         private ToFloatOrElseThrowImpl(ToFloatNullable<T> inner) {
             super(inner);
@@ -103,7 +103,7 @@ public final class OrElseThrowUtil {
      * @param <T>  the input entity type
      */
     private final static class ToLongOrElseThrowImpl<T>
-        extends AbstractNonNullable<ToLongNullable<T>>
+        extends AbstractNonNullable<T, ToLongNullable<T>>
         implements ToLongOrThrow<T> {
         private ToLongOrElseThrowImpl(ToLongNullable<T> inner) {
             super(inner);
@@ -135,7 +135,7 @@ public final class OrElseThrowUtil {
      * @param <T>  the input entity type
      */
     private final static class ToIntOrElseThrowImpl<T>
-        extends AbstractNonNullable<ToIntNullable<T>>
+        extends AbstractNonNullable<T, ToIntNullable<T>>
         implements ToIntOrThrow<T> {
         private ToIntOrElseThrowImpl(ToIntNullable<T> inner) {
             super(inner);
@@ -167,7 +167,7 @@ public final class OrElseThrowUtil {
      * @param <T>  the input entity type
      */
     private final static class ToShortOrElseThrowImpl<T>
-        extends AbstractNonNullable<ToShortNullable<T>>
+        extends AbstractNonNullable<T, ToShortNullable<T>>
         implements ToShortOrThrow<T> {
         private ToShortOrElseThrowImpl(ToShortNullable<T> inner) {
             super(inner);
@@ -199,7 +199,7 @@ public final class OrElseThrowUtil {
      * @param <T>  the input entity type
      */
     private final static class ToByteOrElseThrowImpl<T>
-        extends AbstractNonNullable<ToByteNullable<T>>
+        extends AbstractNonNullable<T, ToByteNullable<T>>
         implements ToByteOrThrow<T> {
         private ToByteOrElseThrowImpl(ToByteNullable<T> inner) {
             super(inner);
@@ -231,7 +231,7 @@ public final class OrElseThrowUtil {
      * @param <T>  the input entity type
      */
     private final static class ToCharOrElseThrowImpl<T>
-        extends AbstractNonNullable<ToCharNullable<T>>
+        extends AbstractNonNullable<T, ToCharNullable<T>>
         implements ToCharOrThrow<T> {
         private ToCharOrElseThrowImpl(ToCharNullable<T> inner) {
             super(inner);
@@ -263,7 +263,7 @@ public final class OrElseThrowUtil {
      * @param <T>  the input entity type
      */
     private final static class ToBooleanOrElseThrowImpl<T>
-        extends AbstractNonNullable<ToBooleanNullable<T>>
+        extends AbstractNonNullable<T, ToBooleanNullable<T>>
         implements ToBooleanOrThrow<T> {
         private ToBooleanOrElseThrowImpl(ToBooleanNullable<T> inner) {
             super(inner);
@@ -295,7 +295,7 @@ public final class OrElseThrowUtil {
      * @param <T>  the input entity type
      */
     private final static class ToStringOrElseThrowImpl<T>
-        extends AbstractNonNullable<ToStringNullable<T>>
+        extends AbstractNonNullable<T, ToStringNullable<T>>
         implements ToStringOrThrow<T> {
         private ToStringOrElseThrowImpl(ToStringNullable<T> inner) {
             super(inner);
@@ -328,7 +328,7 @@ public final class OrElseThrowUtil {
      * @param <T>  the input entity type
      */
     private final static class ToBigDecimalOrElseThrowImpl<T>
-        extends AbstractNonNullable<ToBigDecimalNullable<T>>
+        extends AbstractNonNullable<T, ToBigDecimalNullable<T>>
         implements ToBigDecimalOrThrow<T> {
         private ToBigDecimalOrElseThrowImpl(ToBigDecimalNullable<T> inner) {
             super(inner);
@@ -362,8 +362,9 @@ public final class OrElseThrowUtil {
      * @param <E>  the enum type
      */
     private final static class ToEnumOrElseThrowImpl<T, E extends Enum<E>>
-        extends AbstractNonNullable<ToEnumNullable<T, E>>
-        implements ToEnumOrThrow<T, E> {
+    extends AbstractNonNullable<T, ToEnumNullable<T, E>>
+    implements ToEnumOrThrow<T, E> {
+
         private ToEnumOrElseThrowImpl(ToEnumNullable<T, E> inner) {
             super(inner);
         }
@@ -377,10 +378,11 @@ public final class OrElseThrowUtil {
     /**
      * Abstract base for a {@link NonNullableExpression}.
      *
+     * @param <T>     the input type
      * @param <INNER> the wrapped nullable expression type
      */
-    private static abstract class AbstractNonNullable<INNER extends Expression>
-    implements OrElseThrowExpression<INNER> {
+    private static abstract class AbstractNonNullable<T, INNER extends Expression<T>>
+    implements OrElseThrowExpression<T, INNER> {
         final INNER inner;
 
         AbstractNonNullable(INNER inner) {
@@ -396,7 +398,7 @@ public final class OrElseThrowUtil {
         public final boolean equals(Object o) {
             if (this == o) return true;
             if (!(o instanceof NonNullableExpression)) return false;
-            final NonNullableExpression<?> that = (NonNullableExpression<?>) o;
+            final NonNullableExpression<?, ?> that = (NonNullableExpression<?, ?>) o;
             return Objects.equals(inner, that.getInnerNullable()) &&
                 Objects.equals(getNullStrategy(), that.getNullStrategy());
         }

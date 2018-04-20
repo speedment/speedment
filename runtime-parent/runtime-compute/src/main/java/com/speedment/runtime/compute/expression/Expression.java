@@ -6,10 +6,12 @@ package com.speedment.runtime.compute.expression;
  * equality is unspecified. However, there are implementations of this interface
  * that offer a specified equality contract.
  *
+ * @param <T> the input entity type of this expression
+ *
  * @author Emil Forslund
  * @since  3.1.0
  */
-public interface Expression {
+public interface Expression<T> {
 
     /**
      * Returns the expression type of this expression. It should be safe to cast

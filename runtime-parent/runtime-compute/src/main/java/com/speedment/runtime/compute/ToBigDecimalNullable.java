@@ -26,7 +26,7 @@ import java.util.function.Function;
  */
 @FunctionalInterface
 public interface ToBigDecimalNullable<T>
-extends Expression,
+extends Expression<T>,
         ToNullable<T, BigDecimal>,
         HasHash<T>,
         HasCompare<T> {

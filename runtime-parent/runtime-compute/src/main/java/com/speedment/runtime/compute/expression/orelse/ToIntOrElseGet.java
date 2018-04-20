@@ -14,4 +14,4 @@ import com.speedment.runtime.compute.expression.NonNullableExpression;
  * @since  3.1.0
  */
 public interface ToIntOrElseGet<T>
-    extends OrElseGetExpression<ToIntNullable<T>, ToInt<T>>, ToInt<T> {}
+extends OrElseGetExpression<T, ToIntNullable<T>, ToInt<T>>, ToInt<T> {}

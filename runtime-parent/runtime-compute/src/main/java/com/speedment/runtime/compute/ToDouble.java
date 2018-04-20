@@ -26,7 +26,7 @@ import java.util.function.ToDoubleFunction;
  */
 @FunctionalInterface
 public interface ToDouble<T>
-extends Expression,
+extends Expression<T>,
         ToDoubleFunction<T>,
         HasAsDouble<T>,
         HasAsInt<T>,

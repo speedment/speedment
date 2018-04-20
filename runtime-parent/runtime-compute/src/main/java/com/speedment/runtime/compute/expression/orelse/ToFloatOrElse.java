@@ -14,7 +14,7 @@ import com.speedment.runtime.compute.expression.NonNullableExpression;
  * @since  3.1.0
  */
 public interface ToFloatOrElse<T>
-extends NonNullableExpression<ToFloatNullable<T>>, ToFloat<T> {
+extends NonNullableExpression<T, ToFloatNullable<T>>, ToFloat<T> {
 
     /**
      * Returns the default value used when {@link #getInnerNullable()} would

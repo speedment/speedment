@@ -15,4 +15,4 @@ import com.speedment.runtime.compute.expression.NonNullableExpression;
  * @since  3.1.0
  */
 public interface ToByteOrThrow<T>
-extends OrElseThrowExpression<ToByteNullable<T>>, ToByte<T> {}
+extends OrElseThrowExpression<T, ToByteNullable<T>>, ToByte<T> {}

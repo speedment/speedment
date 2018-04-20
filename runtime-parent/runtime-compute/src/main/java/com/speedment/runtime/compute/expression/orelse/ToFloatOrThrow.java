@@ -15,4 +15,4 @@ import com.speedment.runtime.compute.expression.NonNullableExpression;
  * @since  3.1.0
  */
 public interface ToFloatOrThrow<T>
-extends OrElseThrowExpression<ToFloatNullable<T>>, ToFloat<T> {}
+extends OrElseThrowExpression<T, ToFloatNullable<T>>, ToFloat<T> {}

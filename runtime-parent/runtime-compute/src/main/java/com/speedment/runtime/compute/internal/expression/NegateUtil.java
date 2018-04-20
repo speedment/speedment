@@ -27,7 +27,7 @@ public final class NegateUtil {
      * @return            the new expression
      */
     public static <T> ToByte<T> negate(ToByte<T> expression) {
-        class NegateByte extends AbstractNegate<ToByte<T>> implements ToByte<T> {
+        class NegateByte extends AbstractNegate<T, ToByte<T>> implements ToByte<T> {
             private NegateByte(ToByte<T> inner) {
                 super(inner);
             }
@@ -50,7 +50,7 @@ public final class NegateUtil {
      * @return            the new expression
      */
     public static <T> ToShort<T> negate(ToShort<T> expression) {
-        class NegateShort extends AbstractNegate<ToShort<T>> implements ToShort<T> {
+        class NegateShort extends AbstractNegate<T, ToShort<T>> implements ToShort<T> {
             private NegateShort(ToShort<T> inner) {
                 super(inner);
             }
@@ -73,7 +73,7 @@ public final class NegateUtil {
      * @return            the new expression
      */
     public static <T> ToInt<T> negate(ToInt<T> expression) {
-        class NegateInt extends AbstractNegate<ToInt<T>> implements ToInt<T> {
+        class NegateInt extends AbstractNegate<T, ToInt<T>> implements ToInt<T> {
             private NegateInt(ToInt<T> inner) {
                 super(inner);
             }
@@ -96,7 +96,7 @@ public final class NegateUtil {
      * @return            the new expression
      */
     public static <T> ToLong<T> negate(ToLong<T> expression) {
-        class NegateLong extends AbstractNegate<ToLong<T>> implements ToLong<T> {
+        class NegateLong extends AbstractNegate<T, ToLong<T>> implements ToLong<T> {
             private NegateLong(ToLong<T> inner) {
                 super(inner);
             }
@@ -119,7 +119,7 @@ public final class NegateUtil {
      * @return            the new expression
      */
     public static <T> ToFloat<T> negate(ToFloat<T> expression) {
-        class NegateFloat extends AbstractNegate<ToFloat<T>> implements ToFloat<T> {
+        class NegateFloat extends AbstractNegate<T, ToFloat<T>> implements ToFloat<T> {
             private NegateFloat(ToFloat<T> inner) {
                 super(inner);
             }
@@ -142,7 +142,7 @@ public final class NegateUtil {
      * @return            the new expression
      */
     public static <T> ToDouble<T> negate(ToDouble<T> expression) {
-        class NegateDouble extends AbstractNegate<ToDouble<T>> implements ToDouble<T> {
+        class NegateDouble extends AbstractNegate<T, ToDouble<T>> implements ToDouble<T> {
             private NegateDouble(ToDouble<T> inner) {
                 super(inner);
             }
@@ -165,7 +165,7 @@ public final class NegateUtil {
      * @return            the new expression
      */
     public static <T> ToBoolean<T> negate(ToBoolean<T> expression) {
-        class NegateBoolean extends AbstractNegate<ToBoolean<T>> implements ToBoolean<T> {
+        class NegateBoolean extends AbstractNegate<T, ToBoolean<T>> implements ToBoolean<T> {
             private NegateBoolean(ToBoolean<T> inner) {
                 super(inner);
             }
@@ -301,10 +301,11 @@ public final class NegateUtil {
     /**
      * The abstract base for a negate expression.
      *
+     * @param <T>      the input type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class AbstractNegate<INNER extends Expression>
-    implements UnaryExpression<INNER> {
+    private abstract static class AbstractNegate<T, INNER extends Expression<T>>
+    implements UnaryExpression<T, INNER> {
 
         final INNER inner;
 
@@ -326,7 +327,7 @@ public final class NegateUtil {
         public final boolean equals(Object o) {
             if (this == o) return true;
             else if (!(o instanceof UnaryExpression)) return false;
-            final UnaryExpression<?> that = (UnaryExpression<?>) o;
+            final UnaryExpression<?, ?> that = (UnaryExpression<?, ?>) o;
             return Objects.equals(getInner(), that.getInner())
                 && getOperator().equals(that.getOperator());
         }

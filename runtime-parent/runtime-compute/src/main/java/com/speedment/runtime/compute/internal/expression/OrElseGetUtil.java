@@ -41,7 +41,7 @@ public final class OrElseGetUtil {
      * @param <T>  the input entity type
      */
     private final static class ToDoubleOrElseGetImpl<T>
-    extends AbstractNonNullable<ToDoubleNullable<T>, ToDouble<T>>
+    extends AbstractNonNullable<T, ToDoubleNullable<T>, ToDouble<T>>
     implements ToDoubleOrElseGet<T> {
         private ToDoubleOrElseGetImpl(ToDoubleNullable<T> inner, ToDouble<T> getter) {
             super(inner, getter);
@@ -76,7 +76,7 @@ public final class OrElseGetUtil {
      * @param <T>  the input entity type
      */
     private final static class ToFloatOrElseGetImpl<T>
-        extends AbstractNonNullable<ToFloatNullable<T>, ToFloat<T>>
+        extends AbstractNonNullable<T, ToFloatNullable<T>, ToFloat<T>>
         implements ToFloatOrElseGet<T> {
         private ToFloatOrElseGetImpl(ToFloatNullable<T> inner, ToFloat<T> getter) {
             super(inner, getter);
@@ -111,7 +111,7 @@ public final class OrElseGetUtil {
      * @param <T>  the input entity type
      */
     private final static class ToLongOrElseGetImpl<T>
-        extends AbstractNonNullable<ToLongNullable<T>, ToLong<T>>
+        extends AbstractNonNullable<T, ToLongNullable<T>, ToLong<T>>
         implements ToLongOrElseGet<T> {
         private ToLongOrElseGetImpl(ToLongNullable<T> inner, ToLong<T> getter) {
             super(inner, getter);
@@ -146,7 +146,7 @@ public final class OrElseGetUtil {
      * @param <T>  the input entity type
      */
     private final static class ToIntOrElseGetImpl<T>
-        extends AbstractNonNullable<ToIntNullable<T>, ToInt<T>>
+        extends AbstractNonNullable<T, ToIntNullable<T>, ToInt<T>>
         implements ToIntOrElseGet<T> {
         private ToIntOrElseGetImpl(ToIntNullable<T> inner, ToInt<T> getter) {
             super(inner, getter);
@@ -181,7 +181,7 @@ public final class OrElseGetUtil {
      * @param <T>  the input entity type
      */
     private final static class ToShortOrElseGetImpl<T>
-        extends AbstractNonNullable<ToShortNullable<T>, ToShort<T>>
+        extends AbstractNonNullable<T, ToShortNullable<T>, ToShort<T>>
         implements ToShortOrElseGet<T> {
         private ToShortOrElseGetImpl(ToShortNullable<T> inner, ToShort<T> getter) {
             super(inner, getter);
@@ -216,7 +216,7 @@ public final class OrElseGetUtil {
      * @param <T>  the input entity type
      */
     private final static class ToByteOrElseGetImpl<T>
-        extends AbstractNonNullable<ToByteNullable<T>, ToByte<T>>
+        extends AbstractNonNullable<T, ToByteNullable<T>, ToByte<T>>
         implements ToByteOrElseGet<T> {
         private ToByteOrElseGetImpl(ToByteNullable<T> inner, ToByte<T> getter) {
             super(inner, getter);
@@ -251,7 +251,7 @@ public final class OrElseGetUtil {
      * @param <T>  the input entity type
      */
     private final static class ToCharOrElseGetImpl<T>
-        extends AbstractNonNullable<ToCharNullable<T>, ToChar<T>>
+        extends AbstractNonNullable<T, ToCharNullable<T>, ToChar<T>>
         implements ToCharOrElseGet<T> {
         private ToCharOrElseGetImpl(ToCharNullable<T> inner, ToChar<T> getter) {
             super(inner, getter);
@@ -286,7 +286,7 @@ public final class OrElseGetUtil {
      * @param <T>  the input entity type
      */
     private final static class ToBooleanOrElseGetImpl<T>
-        extends AbstractNonNullable<ToBooleanNullable<T>, ToBoolean<T>>
+        extends AbstractNonNullable<T, ToBooleanNullable<T>, ToBoolean<T>>
         implements ToBooleanOrElseGet<T> {
         private ToBooleanOrElseGetImpl(ToBooleanNullable<T> inner, ToBoolean<T> getter) {
             super(inner, getter);
@@ -321,7 +321,7 @@ public final class OrElseGetUtil {
      * @param <T>  the input entity type
      */
     private final static class ToStringOrElseGetImpl<T>
-    extends AbstractNonNullable<ToStringNullable<T>, ToString<T>>
+    extends AbstractNonNullable<T, ToStringNullable<T>, ToString<T>>
     implements ToStringOrElseGet<T> {
         private ToStringOrElseGetImpl(ToStringNullable<T> inner, ToString<T> getter) {
             super(inner, getter);
@@ -357,7 +357,7 @@ public final class OrElseGetUtil {
      * @param <T>  the input entity type
      */
     private final static class ToBigDecimalOrElseGetImpl<T>
-        extends AbstractNonNullable<ToBigDecimalNullable<T>, ToBigDecimal<T>>
+        extends AbstractNonNullable<T, ToBigDecimalNullable<T>, ToBigDecimal<T>>
         implements ToBigDecimalOrElseGet<T> {
         private ToBigDecimalOrElseGetImpl(ToBigDecimalNullable<T> inner, ToBigDecimal<T> getter) {
             super(inner, getter);
@@ -394,7 +394,7 @@ public final class OrElseGetUtil {
      * @param <E>  the enum type
      */
     private final static class ToEnumOrElseGetImpl<T, E extends Enum<E>>
-    extends AbstractNonNullable<ToEnumNullable<T, E>, ToEnum<T, E>>
+    extends AbstractNonNullable<T, ToEnumNullable<T, E>, ToEnum<T, E>>
     implements ToEnumOrElseGet<T, E> {
         private ToEnumOrElseGetImpl(ToEnumNullable<T, E> inner, ToEnum<T, E> getter) {
             super(inner, getter);
@@ -416,12 +416,14 @@ public final class OrElseGetUtil {
     /**
      * Abstract base for a {@link NonNullableExpression}.
      *
+     * @param <T>        the input type
      * @param <INNER>    the wrapped nullable expression type
      * @param <DEFAULT>  the default value expression type
      */
     private static abstract class AbstractNonNullable
-        <INNER extends Expression, DEFAULT extends Expression>
-    implements OrElseGetExpression<INNER, DEFAULT> {
+        <T, INNER extends Expression<T>, DEFAULT extends Expression<T>>
+    implements OrElseGetExpression<T, INNER, DEFAULT> {
+
         final INNER inner;
         final DEFAULT getter;
 
@@ -444,7 +446,7 @@ public final class OrElseGetUtil {
         public final boolean equals(Object o) {
             if (this == o) return true;
             if (!(o instanceof OrElseGetExpression)) return false;
-            final OrElseGetExpression<?, ?> that = (OrElseGetExpression<?, ?>) o;
+            final OrElseGetExpression<?, ?, ?> that = (OrElseGetExpression<?, ?, ?>) o;
             return Objects.equals(inner, that.getInnerNullable()) &&
                 Objects.equals(getter, that.getDefaultValueGetter());
         }

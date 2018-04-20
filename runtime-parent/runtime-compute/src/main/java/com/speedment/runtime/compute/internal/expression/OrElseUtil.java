@@ -40,7 +40,7 @@ public final class OrElseUtil {
      * @param <T>  the input entity type
      */
     private final static class ToDoubleOrElseImpl<T>
-    extends AbstractNonNullable<ToDoubleNullable<T>>
+    extends AbstractNonNullable<T, ToDoubleNullable<T>>
     implements ToDoubleOrElse<T> {
         private final double value;
 
@@ -96,7 +96,7 @@ public final class OrElseUtil {
      * @param <T>  the input entity type
      */
     private final static class ToFloatOrElseImpl<T>
-        extends AbstractNonNullable<ToFloatNullable<T>>
+        extends AbstractNonNullable<T, ToFloatNullable<T>>
         implements ToFloatOrElse<T> {
         private final float value;
 
@@ -152,7 +152,7 @@ public final class OrElseUtil {
      * @param <T>  the input entity type
      */
     private final static class ToLongOrElseImpl<T>
-        extends AbstractNonNullable<ToLongNullable<T>>
+        extends AbstractNonNullable<T, ToLongNullable<T>>
         implements ToLongOrElse<T> {
         private final long value;
 
@@ -208,7 +208,7 @@ public final class OrElseUtil {
      * @param <T>  the input entity type
      */
     private final static class ToIntOrElseImpl<T>
-        extends AbstractNonNullable<ToIntNullable<T>>
+        extends AbstractNonNullable<T, ToIntNullable<T>>
         implements ToIntOrElse<T> {
         private final int value;
 
@@ -264,7 +264,7 @@ public final class OrElseUtil {
      * @param <T>  the input entity type
      */
     private final static class ToShortOrElseImpl<T>
-        extends AbstractNonNullable<ToShortNullable<T>>
+        extends AbstractNonNullable<T, ToShortNullable<T>>
         implements ToShortOrElse<T> {
         private final short value;
 
@@ -320,7 +320,7 @@ public final class OrElseUtil {
      * @param <T>  the input entity type
      */
     private final static class ToByteOrElseImpl<T>
-        extends AbstractNonNullable<ToByteNullable<T>>
+        extends AbstractNonNullable<T, ToByteNullable<T>>
         implements ToByteOrElse<T> {
         private final byte value;
 
@@ -376,7 +376,7 @@ public final class OrElseUtil {
      * @param <T>  the input entity type
      */
     private final static class ToCharOrElseImpl<T>
-        extends AbstractNonNullable<ToCharNullable<T>>
+        extends AbstractNonNullable<T, ToCharNullable<T>>
         implements ToCharOrElse<T> {
         private final char value;
 
@@ -432,7 +432,7 @@ public final class OrElseUtil {
      * @param <T>  the input entity type
      */
     private final static class ToBooleanOrElseImpl<T>
-        extends AbstractNonNullable<ToBooleanNullable<T>>
+        extends AbstractNonNullable<T, ToBooleanNullable<T>>
         implements ToBooleanOrElse<T> {
         private final boolean value;
 
@@ -488,7 +488,7 @@ public final class OrElseUtil {
      * @param <T>  the input entity type
      */
     private final static class ToStringOrElseImpl<T>
-    extends AbstractNonNullable<ToStringNullable<T>>
+    extends AbstractNonNullable<T, ToStringNullable<T>>
     implements ToStringOrElse<T> {
         private final String value;
 
@@ -545,7 +545,7 @@ public final class OrElseUtil {
      * @param <T>  the input entity type
      */
     private final static class ToEnumOrElseImpl<T, E extends Enum<E>>
-    extends AbstractNonNullable<ToEnumNullable<T, E>>
+    extends AbstractNonNullable<T, ToEnumNullable<T, E>>
     implements ToEnumOrElse<T, E> {
         private final E value;
 
@@ -606,8 +606,9 @@ public final class OrElseUtil {
      * @param <T>  the input entity type
      */
     private final static class ToBigDecimalOrElseImpl<T>
-    extends AbstractNonNullable<ToBigDecimalNullable<T>>
+    extends AbstractNonNullable<T, ToBigDecimalNullable<T>>
     implements ToBigDecimalOrElse<T> {
+
         private final BigDecimal value;
 
         private ToBigDecimalOrElseImpl(ToBigDecimalNullable<T> inner, BigDecimal value) {
@@ -644,10 +645,11 @@ public final class OrElseUtil {
     /**
      * Abstract base for a {@link NonNullableExpression}.
      *
+     * @param <T>      the input type
      * @param <INNER>  the wrapped nullable expression type
      */
-    private static abstract class AbstractNonNullable<INNER extends Expression>
-    implements NonNullableExpression<INNER> {
+    private static abstract class AbstractNonNullable<T, INNER extends Expression<T>>
+    implements NonNullableExpression<T, INNER> {
         final INNER inner;
 
         AbstractNonNullable(INNER inner) {

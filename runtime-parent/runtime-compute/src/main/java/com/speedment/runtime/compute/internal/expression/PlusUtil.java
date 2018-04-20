@@ -28,7 +28,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToShort<T> plus(ToByte<T> first, byte second) {
-        class BytePlusByte extends AbstractPlusByte<ToByte<T>> implements ToShort<T> {
+        class BytePlusByte extends AbstractPlusByte<T, ToByte<T>> implements ToShort<T> {
             private BytePlusByte(ToByte<T> first, byte second) {
                 super(first, second);
             }
@@ -52,7 +52,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToInt<T> plus(ToByte<T> first, int second) {
-        class BytePlusInt extends AbstractPlusInt<ToByte<T>> implements ToInt<T> {
+        class BytePlusInt extends AbstractPlusInt<T, ToByte<T>> implements ToInt<T> {
             private BytePlusInt(ToByte<T> first, int second) {
                 super(first, second);
             }
@@ -76,7 +76,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToLong<T> plus(ToByte<T> first, long second) {
-        class BytePlusLong extends AbstractPlusLong<ToByte<T>> implements ToLong<T> {
+        class BytePlusLong extends AbstractPlusLong<T, ToByte<T>> implements ToLong<T> {
             private BytePlusLong(ToByte<T> first, long second) {
                 super(first, second);
             }
@@ -100,7 +100,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToShort<T> plus(ToByte<T> first, ToByte<T> second) {
-        class BytePlusByte extends AbstractPlus<ToByte<T>, ToByte<T>> implements ToShort<T> {
+        class BytePlusByte extends AbstractPlus<T, ToByte<T>, ToByte<T>> implements ToShort<T> {
             private BytePlusByte(ToByte<T> first, ToByte<T> second) {
                 super(first, second);
             }
@@ -125,7 +125,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToInt<T> plus(ToShort<T> first, byte second) {
-        class ShortPlusShort extends AbstractPlusByte<ToShort<T>> implements ToInt<T> {
+        class ShortPlusShort extends AbstractPlusByte<T, ToShort<T>> implements ToInt<T> {
             private ShortPlusShort(ToShort<T> first, byte second) {
                 super(first, second);
             }
@@ -149,7 +149,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToInt<T> plus(ToShort<T> first, int second) {
-        class ShortPlusInt extends AbstractPlusInt<ToShort<T>> implements ToInt<T> {
+        class ShortPlusInt extends AbstractPlusInt<T, ToShort<T>> implements ToInt<T> {
             private ShortPlusInt(ToShort<T> first, int second) {
                 super(first, second);
             }
@@ -173,7 +173,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToLong<T> plus(ToShort<T> first, long second) {
-        class ShortPlusLong extends AbstractPlusLong<ToShort<T>> implements ToLong<T> {
+        class ShortPlusLong extends AbstractPlusLong<T, ToShort<T>> implements ToLong<T> {
             private ShortPlusLong(ToShort<T> first, long second) {
                 super(first, second);
             }
@@ -197,7 +197,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToShort<T> plus(ToShort<T> first, ToShort<T> second) {
-        class ShortPlusShort extends AbstractPlus<ToShort<T>, ToShort<T>> implements ToShort<T> {
+        class ShortPlusShort extends AbstractPlus<T, ToShort<T>, ToShort<T>> implements ToShort<T> {
             private ShortPlusShort(ToShort<T> first, ToShort<T> second) {
                 super(first, second);
             }
@@ -222,7 +222,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToInt<T> plus(ToInt<T> first, byte second) {
-        class IntPlusByte extends AbstractPlusByte<ToInt<T>> implements ToInt<T> {
+        class IntPlusByte extends AbstractPlusByte<T, ToInt<T>> implements ToInt<T> {
             private IntPlusByte(ToInt<T> first, byte second) {
                 super(first, second);
             }
@@ -246,7 +246,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToInt<T> plus(ToInt<T> first, int second) {
-        class IntPlusInt extends AbstractPlusInt<ToInt<T>> implements ToInt<T> {
+        class IntPlusInt extends AbstractPlusInt<T, ToInt<T>> implements ToInt<T> {
             private IntPlusInt(ToInt<T> first, int second) {
                 super(first, second);
             }
@@ -270,7 +270,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToLong<T> plus(ToInt<T> first, long second) {
-        class IntPlusLong extends AbstractPlusLong<ToInt<T>> implements ToLong<T> {
+        class IntPlusLong extends AbstractPlusLong<T, ToInt<T>> implements ToLong<T> {
             private IntPlusLong(ToInt<T> first, long second) {
                 super(first, second);
             }
@@ -294,7 +294,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToInt<T> plus(ToInt<T> first, ToByte<T> second) {
-        class IntPlusByte extends AbstractPlus<ToInt<T>, ToByte<T>> implements ToInt<T> {
+        class IntPlusByte extends AbstractPlus<T, ToInt<T>, ToByte<T>> implements ToInt<T> {
             private IntPlusByte(ToInt<T> first, ToByte<T> second) {
                 super(first, second);
             }
@@ -320,7 +320,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToInt<T> plus(ToInt<T> first, ToInt<T> second) {
-        class IntPlusInt extends AbstractPlus<ToInt<T>, ToInt<T>> implements ToInt<T> {
+        class IntPlusInt extends AbstractPlus<T, ToInt<T>, ToInt<T>> implements ToInt<T> {
             private IntPlusInt(ToInt<T> first, ToInt<T> second) {
                 super(first, second);
             }
@@ -345,7 +345,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToLong<T> plus(ToLong<T> first, byte second) {
-        class LongPlusLong extends AbstractPlusByte<ToLong<T>> implements ToLong<T> {
+        class LongPlusLong extends AbstractPlusByte<T, ToLong<T>> implements ToLong<T> {
             private LongPlusLong(ToLong<T> first, byte second) {
                 super(first, second);
             }
@@ -369,7 +369,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToLong<T> plus(ToLong<T> first, int second) {
-        class LongPlusInt extends AbstractPlusInt<ToLong<T>> implements ToLong<T> {
+        class LongPlusInt extends AbstractPlusInt<T, ToLong<T>> implements ToLong<T> {
             private LongPlusInt(ToLong<T> first, int second) {
                 super(first, second);
             }
@@ -393,7 +393,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToLong<T> plus(ToLong<T> first, long second) {
-        class LongPlusLong extends AbstractPlusLong<ToLong<T>> implements ToLong<T> {
+        class LongPlusLong extends AbstractPlusLong<T, ToLong<T>> implements ToLong<T> {
             private LongPlusLong(ToLong<T> first, long second) {
                 super(first, second);
             }
@@ -417,7 +417,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToLong<T> plus(ToLong<T> first, ToInt<T> second) {
-        class LongPlusInt extends AbstractPlus<ToLong<T>, ToInt<T>> implements ToLong<T> {
+        class LongPlusInt extends AbstractPlus<T, ToLong<T>, ToInt<T>> implements ToLong<T> {
             private LongPlusInt(ToLong<T> first, ToInt<T> second) {
                 super(first, second);
             }
@@ -442,7 +442,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToLong<T> plus(ToLong<T> first, ToLong<T> second) {
-        class LongPlusLong extends AbstractPlus<ToLong<T>, ToLong<T>> implements ToLong<T> {
+        class LongPlusLong extends AbstractPlus<T, ToLong<T>, ToLong<T>> implements ToLong<T> {
             private LongPlusLong(ToLong<T> first, ToLong<T> second) {
                 super(first, second);
             }
@@ -467,7 +467,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToFloat<T> plus(ToFloat<T> first, int second) {
-        class FloatPlusInt extends AbstractPlusInt<ToFloat<T>> implements ToFloat<T> {
+        class FloatPlusInt extends AbstractPlusInt<T, ToFloat<T>> implements ToFloat<T> {
             private FloatPlusInt(ToFloat<T> first, int second) {
                 super(first, second);
             }
@@ -491,7 +491,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToDouble<T> plus(ToFloat<T> first, long second) {
-        class FloatPlusLong extends AbstractPlusLong<ToFloat<T>> implements ToDouble<T> {
+        class FloatPlusLong extends AbstractPlusLong<T, ToFloat<T>> implements ToDouble<T> {
             private FloatPlusLong(ToFloat<T> first, long second) {
                 super(first, second);
             }
@@ -515,7 +515,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToFloat<T> plus(ToFloat<T> first, float second) {
-        class FloatPlusFloat extends AbstractPlusFloat<ToFloat<T>> implements ToFloat<T> {
+        class FloatPlusFloat extends AbstractPlusFloat<T, ToFloat<T>> implements ToFloat<T> {
             private FloatPlusFloat(ToFloat<T> first, float second) {
                 super(first, second);
             }
@@ -539,7 +539,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToFloat<T> plus(ToFloat<T> first, ToInt<T> second) {
-        class FloatPlusInt extends AbstractPlus<ToFloat<T>, ToInt<T>> implements ToFloat<T> {
+        class FloatPlusInt extends AbstractPlus<T, ToFloat<T>, ToInt<T>> implements ToFloat<T> {
             private FloatPlusInt(ToFloat<T> first, ToInt<T> second) {
                 super(first, second);
             }
@@ -564,7 +564,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToDouble<T> plus(ToFloat<T> first, ToLong<T> second) {
-        class FloatPlusLong extends AbstractPlus<ToFloat<T>, ToLong<T>> implements ToDouble<T> {
+        class FloatPlusLong extends AbstractPlus<T, ToFloat<T>, ToLong<T>> implements ToDouble<T> {
             private FloatPlusLong(ToFloat<T> first, ToLong<T> second) {
                 super(first, second);
             }
@@ -589,7 +589,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToFloat<T> plus(ToFloat<T> first, ToFloat<T> second) {
-        class FloatPlusFloat extends AbstractPlus<ToFloat<T>, ToFloat<T>> implements ToFloat<T> {
+        class FloatPlusFloat extends AbstractPlus<T, ToFloat<T>, ToFloat<T>> implements ToFloat<T> {
             private FloatPlusFloat(ToFloat<T> first, ToFloat<T> second) {
                 super(first, second);
             }
@@ -614,7 +614,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToDouble<T> plus(ToDouble<T> first, int second) {
-        class DoublePlusInt extends AbstractPlusInt<ToDouble<T>> implements ToDouble<T> {
+        class DoublePlusInt extends AbstractPlusInt<T, ToDouble<T>> implements ToDouble<T> {
             private DoublePlusInt(ToDouble<T> first, int second) {
                 super(first, second);
             }
@@ -638,7 +638,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToDouble<T> plus(ToDouble<T> first, long second) {
-        class DoublePlusLong extends AbstractPlusLong<ToDouble<T>> implements ToDouble<T> {
+        class DoublePlusLong extends AbstractPlusLong<T, ToDouble<T>> implements ToDouble<T> {
             private DoublePlusLong(ToDouble<T> first, long second) {
                 super(first, second);
             }
@@ -662,7 +662,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToDouble<T> plus(ToDouble<T> first, double second) {
-        class DoublePlusDouble extends AbstractPlusDouble<ToDouble<T>> implements ToDouble<T> {
+        class DoublePlusDouble extends AbstractPlusDouble<T, ToDouble<T>> implements ToDouble<T> {
             private DoublePlusDouble(ToDouble<T> first, double second) {
                 super(first, second);
             }
@@ -686,7 +686,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToDouble<T> plus(ToDouble<T> first, ToInt<T> second) {
-        class DoublePlusInt extends AbstractPlus<ToDouble<T>, ToInt<T>> implements ToDouble<T> {
+        class DoublePlusInt extends AbstractPlus<T, ToDouble<T>, ToInt<T>> implements ToDouble<T> {
             private DoublePlusInt(ToDouble<T> first, ToInt<T> second) {
                 super(first, second);
             }
@@ -711,7 +711,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToDouble<T> plus(ToDouble<T> first, ToLong<T> second) {
-        class DoublePlusLong extends AbstractPlus<ToDouble<T>, ToLong<T>> implements ToDouble<T> {
+        class DoublePlusLong extends AbstractPlus<T, ToDouble<T>, ToLong<T>> implements ToDouble<T> {
             private DoublePlusLong(ToDouble<T> first, ToLong<T> second) {
                 super(first, second);
             }
@@ -736,7 +736,7 @@ public final class PlusUtil {
      * @return        the new expression
      */
     public static <T> ToDouble<T> plus(ToDouble<T> first, ToDouble<T> second) {
-        class DoublePlusDouble extends AbstractPlus<ToDouble<T>, ToDouble<T>> implements ToDouble<T> {
+        class DoublePlusDouble extends AbstractPlus<T, ToDouble<T>, ToDouble<T>> implements ToDouble<T> {
             private DoublePlusDouble(ToDouble<T> first, ToDouble<T> second) {
                 super(first, second);
             }
@@ -754,11 +754,12 @@ public final class PlusUtil {
     /**
      * Abstract base for a plus operation.
      *
+     * @param <T>       the input entity type
      * @param <FIRST>   the first operand expression type
      * @param <SECOND>  the second operand expression type
      */
-    private static abstract class AbstractPlus<FIRST extends Expression, SECOND extends Expression>
-        implements BinaryExpression<FIRST, SECOND> {
+    private static abstract class AbstractPlus<T, FIRST extends Expression<T>, SECOND extends Expression<T>>
+    implements BinaryExpression<T, FIRST, SECOND> {
 
         final FIRST firstInner;
         final SECOND secondInner;
@@ -788,7 +789,7 @@ public final class PlusUtil {
             if (o == null) return false;
             else if (this == o) return true;
             else if (!(o instanceof BinaryExpression)) return false;
-            final BinaryExpression<?, ?> that = (BinaryExpression<?, ?>) o;
+            final BinaryExpression<?, ?, ?> that = (BinaryExpression<?, ?, ?>) o;
             return Objects.equals(firstInner, that.getFirst()) &&
                 Objects.equals(secondInner, that.getSecond()) &&
                 Objects.equals(getOperator(), that.getOperator());
@@ -804,10 +805,11 @@ public final class PlusUtil {
      * Abstract base for a plus operation that takes a {@code byte} as the
      * second operand.
      *
+     * @param <T>      the input entity type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractPlusByte<INNER extends Expression>
-        implements BinaryObjExpression<INNER, Byte> {
+    private static abstract class AbstractPlusByte<T, INNER extends Expression<T>>
+    implements BinaryObjExpression<T, INNER, Byte> {
 
         final INNER firstInner;
         final byte secondInner;
@@ -837,7 +839,7 @@ public final class PlusUtil {
             if (o == null) return false;
             else if (this == o) return true;
             else if (!(o instanceof BinaryObjExpression)) return false;
-            final BinaryObjExpression<?, ?> that = (BinaryObjExpression<?, ?>) o;
+            final BinaryObjExpression<?, ?, ?> that = (BinaryObjExpression<?, ?, ?>) o;
             return Objects.equals(firstInner, that.getFirst()) &&
                 Objects.equals(secondInner, that.getSecond()) &&
                 Objects.equals(getOperator(), that.getOperator());
@@ -853,10 +855,11 @@ public final class PlusUtil {
      * Abstract base for a plus operation that takes an {@code int} as the
      * second operand.
      *
+     * @param <T>      the input entity type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractPlusInt<INNER extends Expression>
-        implements BinaryObjExpression<INNER, Integer> {
+    private static abstract class AbstractPlusInt<T, INNER extends Expression<T>>
+    implements BinaryObjExpression<T, INNER, Integer> {
 
         final INNER firstInner;
         final int secondInner;
@@ -886,7 +889,7 @@ public final class PlusUtil {
             if (o == null) return false;
             else if (this == o) return true;
             else if (!(o instanceof BinaryObjExpression)) return false;
-            final BinaryObjExpression<?, ?> that = (BinaryObjExpression<?, ?>) o;
+            final BinaryObjExpression<?, ?, ?> that = (BinaryObjExpression<?, ?, ?>) o;
             return Objects.equals(firstInner, that.getFirst()) &&
                 Objects.equals(secondInner, that.getSecond()) &&
                 Objects.equals(getOperator(), that.getOperator());
@@ -902,10 +905,11 @@ public final class PlusUtil {
      * Abstract base for a plus operation that takes a {@code long} as the
      * second operand.
      *
+     * @param <T>      the input entity type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractPlusLong<INNER extends Expression>
-        implements BinaryObjExpression<INNER, Long> {
+    private static abstract class AbstractPlusLong<T, INNER extends Expression<T>>
+    implements BinaryObjExpression<T, INNER, Long> {
 
         final INNER firstInner;
         final long secondInner;
@@ -935,7 +939,7 @@ public final class PlusUtil {
             if (o == null) return false;
             else if (this == o) return true;
             else if (!(o instanceof BinaryObjExpression)) return false;
-            final BinaryObjExpression<?, ?> that = (BinaryObjExpression<?, ?>) o;
+            final BinaryObjExpression<?, ?, ?> that = (BinaryObjExpression<?, ?, ?>) o;
             return Objects.equals(firstInner, that.getFirst()) &&
                 Objects.equals(secondInner, that.getSecond()) &&
                 Objects.equals(getOperator(), that.getOperator());
@@ -951,10 +955,11 @@ public final class PlusUtil {
      * Abstract base for a plus operation that takes a {@code float} as the
      * second operand.
      *
+     * @param <T>      the input entity type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractPlusFloat<INNER extends Expression>
-        implements BinaryObjExpression<INNER, Float> {
+    private static abstract class AbstractPlusFloat<T, INNER extends Expression<T>>
+    implements BinaryObjExpression<T, INNER, Float> {
 
         final INNER firstInner;
         final float secondInner;
@@ -984,7 +989,7 @@ public final class PlusUtil {
             if (o == null) return false;
             else if (this == o) return true;
             else if (!(o instanceof BinaryObjExpression)) return false;
-            final BinaryObjExpression<?, ?> that = (BinaryObjExpression<?, ?>) o;
+            final BinaryObjExpression<?, ?, ?> that = (BinaryObjExpression<?, ?, ?>) o;
             return Objects.equals(firstInner, that.getFirst()) &&
                 Objects.equals(secondInner, that.getSecond()) &&
                 Objects.equals(getOperator(), that.getOperator());
@@ -1000,10 +1005,11 @@ public final class PlusUtil {
      * Abstract base for a plus operation that takes a {@code double} as the
      * second operand.
      *
+     * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractPlusDouble<INNER extends Expression>
-        implements BinaryObjExpression<INNER, Double> {
+    private static abstract class AbstractPlusDouble<T, INNER extends Expression<T>>
+    implements BinaryObjExpression<T, INNER, Double> {
 
         final INNER firstInner;
         final double secondInner;
@@ -1033,7 +1039,7 @@ public final class PlusUtil {
             if (o == null) return false;
             else if (this == o) return true;
             else if (!(o instanceof BinaryObjExpression)) return false;
-            final BinaryObjExpression<?, ?> that = (BinaryObjExpression<?, ?>) o;
+            final BinaryObjExpression<?, ?, ?> that = (BinaryObjExpression<?, ?, ?>) o;
             return Objects.equals(firstInner, that.getFirst()) &&
                 Objects.equals(secondInner, that.getSecond()) &&
                 Objects.equals(getOperator(), that.getOperator());

@@ -11,7 +11,7 @@ import com.speedment.runtime.compute.expression.ConstantExpression;
  * @since  3.1.0
  */
 public final class ConstantDoubleImpl<T>
-implements ToDouble<T>, ConstantExpression<Double> {
+implements ToDouble<T>, ConstantExpression<T, Double> {
 
     private final double constant;
 

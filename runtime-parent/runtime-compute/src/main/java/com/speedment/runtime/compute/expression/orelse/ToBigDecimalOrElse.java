@@ -16,7 +16,7 @@ import java.math.BigDecimal;
  * @since  3.1.0
  */
 public interface ToBigDecimalOrElse<T>
-extends NonNullableExpression<ToBigDecimalNullable<T>>, ToBigDecimal<T> {
+extends NonNullableExpression<T, ToBigDecimalNullable<T>>, ToBigDecimal<T> {
 
     /**
      * Returns the default value used when {@link #getInnerNullable()} would

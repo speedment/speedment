@@ -14,7 +14,7 @@ import com.speedment.runtime.compute.expression.NonNullableExpression;
  * @since  3.1.0
  */
 public interface ToIntOrElse<T>
-extends NonNullableExpression<ToIntNullable<T>>, ToInt<T> {
+extends NonNullableExpression<T, ToIntNullable<T>>, ToInt<T> {
 
     /**
      * Returns the default value used when {@link #getInnerNullable()} would

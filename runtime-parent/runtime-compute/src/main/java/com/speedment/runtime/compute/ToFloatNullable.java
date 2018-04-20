@@ -26,14 +26,14 @@ import java.util.function.Function;
  */
 @FunctionalInterface
 public interface ToFloatNullable<T>
-    extends Expression,
-    ToNullable<T, Float>,
-    HasAbs<ToFloatNullable<T>>,
-    HasSign<ToByteNullable<T>>,
-    HasSqrt<ToDoubleNullable<T>>,
-    HasNegate<ToFloatNullable<T>>,
-    HasHash<T>,
-    HasCompare<T> {
+extends Expression<T>,
+        ToNullable<T, Float>,
+        HasAbs<ToFloatNullable<T>>,
+        HasSign<ToByteNullable<T>>,
+        HasSqrt<ToDoubleNullable<T>>,
+        HasNegate<ToFloatNullable<T>>,
+        HasHash<T>,
+        HasCompare<T> {
 
     @Override
     default ExpressionType getExpressionType() {

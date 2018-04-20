@@ -14,4 +14,4 @@ import com.speedment.runtime.compute.expression.NonNullableExpression;
  * @since  3.1.0
  */
 public interface ToFloatOrElseGet<T>
-    extends OrElseGetExpression<ToFloatNullable<T>, ToFloat<T>>, ToFloat<T> {}
+extends OrElseGetExpression<T, ToFloatNullable<T>, ToFloat<T>>, ToFloat<T> {}

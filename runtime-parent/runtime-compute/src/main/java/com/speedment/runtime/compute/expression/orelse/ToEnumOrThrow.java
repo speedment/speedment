@@ -16,7 +16,7 @@ import com.speedment.runtime.compute.expression.NonNullableExpression;
  * @since  3.1.0
  */
 public interface ToEnumOrThrow<T, E extends Enum<E>>
-extends OrElseThrowExpression<ToEnumNullable<T, E>>, ToEnum<T, E> {
+extends OrElseThrowExpression<T, ToEnumNullable<T, E>>, ToEnum<T, E> {
 
     @Override
     default Class<E> enumClass() {

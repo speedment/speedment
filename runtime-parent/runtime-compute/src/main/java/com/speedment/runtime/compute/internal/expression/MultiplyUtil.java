@@ -28,7 +28,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToByte<T> first, byte second) {
-        class ByteMultiplyByte extends AbstractMultiplyByte<ToByte<T>> implements ToInt<T> {
+        class ByteMultiplyByte extends AbstractMultiplyByte<T, ToByte<T>> implements ToInt<T> {
             private ByteMultiplyByte(ToByte<T> first, byte second) {
                 super(first, second);
             }
@@ -52,7 +52,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToByte<T> first, int second) {
-        class ByteMultiplyInt extends AbstractMultiplyInt<ToByte<T>> implements ToInt<T> {
+        class ByteMultiplyInt extends AbstractMultiplyInt<T, ToByte<T>> implements ToInt<T> {
             private ByteMultiplyInt(ToByte<T> first, int second) {
                 super(first, second);
             }
@@ -76,7 +76,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToLong<T> multiply(ToByte<T> first, long second) {
-        class ByteMultiplyLong extends AbstractMultiplyLong<ToByte<T>> implements ToLong<T> {
+        class ByteMultiplyLong extends AbstractMultiplyLong<T, ToByte<T>> implements ToLong<T> {
             private ByteMultiplyLong(ToByte<T> first, long second) {
                 super(first, second);
             }
@@ -100,7 +100,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToByte<T> first, ToByte<T> second) {
-        class ByteMultiplyByte extends AbstractMultiply<ToByte<T>, ToByte<T>> implements ToInt<T> {
+        class ByteMultiplyByte extends AbstractMultiply<T, ToByte<T>, ToByte<T>> implements ToInt<T> {
             private ByteMultiplyByte(ToByte<T> first, ToByte<T> second) {
                 super(first, second);
             }
@@ -125,7 +125,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToShort<T> first, byte second) {
-        class ShortMultiplyShort extends AbstractMultiplyByte<ToShort<T>> implements ToInt<T> {
+        class ShortMultiplyShort extends AbstractMultiplyByte<T, ToShort<T>> implements ToInt<T> {
             private ShortMultiplyShort(ToShort<T> first, byte second) {
                 super(first, second);
             }
@@ -149,7 +149,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToShort<T> first, int second) {
-        class ShortMultiplyInt extends AbstractMultiplyInt<ToShort<T>> implements ToInt<T> {
+        class ShortMultiplyInt extends AbstractMultiplyInt<T, ToShort<T>> implements ToInt<T> {
             private ShortMultiplyInt(ToShort<T> first, int second) {
                 super(first, second);
             }
@@ -173,7 +173,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToLong<T> multiply(ToShort<T> first, long second) {
-        class ShortMultiplyLong extends AbstractMultiplyLong<ToShort<T>> implements ToLong<T> {
+        class ShortMultiplyLong extends AbstractMultiplyLong<T, ToShort<T>> implements ToLong<T> {
             private ShortMultiplyLong(ToShort<T> first, long second) {
                 super(first, second);
             }
@@ -197,7 +197,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToShort<T> first, ToShort<T> second) {
-        class ShortMultiplyShort extends AbstractMultiply<ToShort<T>, ToShort<T>> implements ToInt<T> {
+        class ShortMultiplyShort extends AbstractMultiply<T, ToShort<T>, ToShort<T>> implements ToInt<T> {
             private ShortMultiplyShort(ToShort<T> first, ToShort<T> second) {
                 super(first, second);
             }
@@ -222,7 +222,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToInt<T> first, byte second) {
-        class IntMultiplyByte extends AbstractMultiplyByte<ToInt<T>> implements ToInt<T> {
+        class IntMultiplyByte extends AbstractMultiplyByte<T, ToInt<T>> implements ToInt<T> {
             private IntMultiplyByte(ToInt<T> first, byte second) {
                 super(first, second);
             }
@@ -246,7 +246,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToInt<T> first, int second) {
-        class IntMultiplyInt extends AbstractMultiplyInt<ToInt<T>> implements ToInt<T> {
+        class IntMultiplyInt extends AbstractMultiplyInt<T, ToInt<T>> implements ToInt<T> {
             private IntMultiplyInt(ToInt<T> first, int second) {
                 super(first, second);
             }
@@ -270,7 +270,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToLong<T> multiply(ToInt<T> first, long second) {
-        class IntMultiplyLong extends AbstractMultiplyLong<ToInt<T>> implements ToLong<T> {
+        class IntMultiplyLong extends AbstractMultiplyLong<T, ToInt<T>> implements ToLong<T> {
             private IntMultiplyLong(ToInt<T> first, long second) {
                 super(first, second);
             }
@@ -294,7 +294,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToInt<T> first, ToByte<T> second) {
-        class IntMultiplyByte extends AbstractMultiply<ToInt<T>, ToByte<T>> implements ToInt<T> {
+        class IntMultiplyByte extends AbstractMultiply<T, ToInt<T>, ToByte<T>> implements ToInt<T> {
             private IntMultiplyByte(ToInt<T> first, ToByte<T> second) {
                 super(first, second);
             }
@@ -320,7 +320,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToInt<T> first, ToInt<T> second) {
-        class IntMultiplyInt extends AbstractMultiply<ToInt<T>, ToInt<T>> implements ToInt<T> {
+        class IntMultiplyInt extends AbstractMultiply<T, ToInt<T>, ToInt<T>> implements ToInt<T> {
             private IntMultiplyInt(ToInt<T> first, ToInt<T> second) {
                 super(first, second);
             }
@@ -345,7 +345,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToLong<T> multiply(ToLong<T> first, byte second) {
-        class LongMultiplyLong extends AbstractMultiplyByte<ToLong<T>> implements ToLong<T> {
+        class LongMultiplyLong extends AbstractMultiplyByte<T, ToLong<T>> implements ToLong<T> {
             private LongMultiplyLong(ToLong<T> first, byte second) {
                 super(first, second);
             }
@@ -369,7 +369,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToLong<T> multiply(ToLong<T> first, int second) {
-        class LongMultiplyInt extends AbstractMultiplyInt<ToLong<T>> implements ToLong<T> {
+        class LongMultiplyInt extends AbstractMultiplyInt<T, ToLong<T>> implements ToLong<T> {
             private LongMultiplyInt(ToLong<T> first, int second) {
                 super(first, second);
             }
@@ -393,7 +393,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToLong<T> multiply(ToLong<T> first, long second) {
-        class LongMultiplyLong extends AbstractMultiplyLong<ToLong<T>> implements ToLong<T> {
+        class LongMultiplyLong extends AbstractMultiplyLong<T, ToLong<T>> implements ToLong<T> {
             private LongMultiplyLong(ToLong<T> first, long second) {
                 super(first, second);
             }
@@ -417,7 +417,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToLong<T> multiply(ToLong<T> first, ToInt<T> second) {
-        class LongMultiplyInt extends AbstractMultiply<ToLong<T>, ToInt<T>> implements ToLong<T> {
+        class LongMultiplyInt extends AbstractMultiply<T, ToLong<T>, ToInt<T>> implements ToLong<T> {
             private LongMultiplyInt(ToLong<T> first, ToInt<T> second) {
                 super(first, second);
             }
@@ -442,7 +442,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToLong<T> multiply(ToLong<T> first, ToLong<T> second) {
-        class LongMultiplyLong extends AbstractMultiply<ToLong<T>, ToLong<T>> implements ToLong<T> {
+        class LongMultiplyLong extends AbstractMultiply<T, ToLong<T>, ToLong<T>> implements ToLong<T> {
             private LongMultiplyLong(ToLong<T> first, ToLong<T> second) {
                 super(first, second);
             }
@@ -467,7 +467,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToFloat<T> multiply(ToFloat<T> first, int second) {
-        class FloatMultiplyInt extends AbstractMultiplyInt<ToFloat<T>> implements ToFloat<T> {
+        class FloatMultiplyInt extends AbstractMultiplyInt<T, ToFloat<T>> implements ToFloat<T> {
             private FloatMultiplyInt(ToFloat<T> first, int second) {
                 super(first, second);
             }
@@ -491,7 +491,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToDouble<T> multiply(ToFloat<T> first, long second) {
-        class FloatMultiplyLong extends AbstractMultiplyLong<ToFloat<T>> implements ToDouble<T> {
+        class FloatMultiplyLong extends AbstractMultiplyLong<T, ToFloat<T>> implements ToDouble<T> {
             private FloatMultiplyLong(ToFloat<T> first, long second) {
                 super(first, second);
             }
@@ -515,7 +515,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToFloat<T> multiply(ToFloat<T> first, float second) {
-        class FloatMultiplyFloat extends AbstractMultiplyFloat<ToFloat<T>> implements ToFloat<T> {
+        class FloatMultiplyFloat extends AbstractMultiplyFloat<T, ToFloat<T>> implements ToFloat<T> {
             private FloatMultiplyFloat(ToFloat<T> first, float second) {
                 super(first, second);
             }
@@ -539,7 +539,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToFloat<T> multiply(ToFloat<T> first, ToInt<T> second) {
-        class FloatMultiplyInt extends AbstractMultiply<ToFloat<T>, ToInt<T>> implements ToFloat<T> {
+        class FloatMultiplyInt extends AbstractMultiply<T, ToFloat<T>, ToInt<T>> implements ToFloat<T> {
             private FloatMultiplyInt(ToFloat<T> first, ToInt<T> second) {
                 super(first, second);
             }
@@ -564,7 +564,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToDouble<T> multiply(ToFloat<T> first, ToLong<T> second) {
-        class FloatMultiplyLong extends AbstractMultiply<ToFloat<T>, ToLong<T>> implements ToDouble<T> {
+        class FloatMultiplyLong extends AbstractMultiply<T, ToFloat<T>, ToLong<T>> implements ToDouble<T> {
             private FloatMultiplyLong(ToFloat<T> first, ToLong<T> second) {
                 super(first, second);
             }
@@ -589,7 +589,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToFloat<T> multiply(ToFloat<T> first, ToFloat<T> second) {
-        class FloatMultiplyFloat extends AbstractMultiply<ToFloat<T>, ToFloat<T>> implements ToFloat<T> {
+        class FloatMultiplyFloat extends AbstractMultiply<T, ToFloat<T>, ToFloat<T>> implements ToFloat<T> {
             private FloatMultiplyFloat(ToFloat<T> first, ToFloat<T> second) {
                 super(first, second);
             }
@@ -614,7 +614,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToDouble<T> multiply(ToDouble<T> first, int second) {
-        class DoubleMultiplyInt extends AbstractMultiplyInt<ToDouble<T>> implements ToDouble<T> {
+        class DoubleMultiplyInt extends AbstractMultiplyInt<T, ToDouble<T>> implements ToDouble<T> {
             private DoubleMultiplyInt(ToDouble<T> first, int second) {
                 super(first, second);
             }
@@ -638,7 +638,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToDouble<T> multiply(ToDouble<T> first, long second) {
-        class DoubleMultiplyLong extends AbstractMultiplyLong<ToDouble<T>> implements ToDouble<T> {
+        class DoubleMultiplyLong extends AbstractMultiplyLong<T, ToDouble<T>> implements ToDouble<T> {
             private DoubleMultiplyLong(ToDouble<T> first, long second) {
                 super(first, second);
             }
@@ -662,7 +662,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToDouble<T> multiply(ToDouble<T> first, double second) {
-        class DoubleMultiplyDouble extends AbstractMultiplyDouble<ToDouble<T>> implements ToDouble<T> {
+        class DoubleMultiplyDouble extends AbstractMultiplyDouble<T, ToDouble<T>> implements ToDouble<T> {
             private DoubleMultiplyDouble(ToDouble<T> first, double second) {
                 super(first, second);
             }
@@ -686,7 +686,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToDouble<T> multiply(ToDouble<T> first, ToInt<T> second) {
-        class DoubleMultiplyInt extends AbstractMultiply<ToDouble<T>, ToInt<T>> implements ToDouble<T> {
+        class DoubleMultiplyInt extends AbstractMultiply<T, ToDouble<T>, ToInt<T>> implements ToDouble<T> {
             private DoubleMultiplyInt(ToDouble<T> first, ToInt<T> second) {
                 super(first, second);
             }
@@ -711,7 +711,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToDouble<T> multiply(ToDouble<T> first, ToLong<T> second) {
-        class DoubleMultiplyLong extends AbstractMultiply<ToDouble<T>, ToLong<T>> implements ToDouble<T> {
+        class DoubleMultiplyLong extends AbstractMultiply<T, ToDouble<T>, ToLong<T>> implements ToDouble<T> {
             private DoubleMultiplyLong(ToDouble<T> first, ToLong<T> second) {
                 super(first, second);
             }
@@ -736,7 +736,7 @@ public final class MultiplyUtil {
      * @return        the new expression
      */
     public static <T> ToDouble<T> multiply(ToDouble<T> first, ToDouble<T> second) {
-        class DoubleMultiplyDouble extends AbstractMultiply<ToDouble<T>, ToDouble<T>> implements ToDouble<T> {
+        class DoubleMultiplyDouble extends AbstractMultiply<T, ToDouble<T>, ToDouble<T>> implements ToDouble<T> {
             private DoubleMultiplyDouble(ToDouble<T> first, ToDouble<T> second) {
                 super(first, second);
             }
@@ -754,11 +754,12 @@ public final class MultiplyUtil {
     /**
      * Abstract base for a multiply operation.
      *
+     * @param <T>       the input type
      * @param <FIRST>   the first operand expression type
      * @param <SECOND>  the second operand expression type
      */
-    private static abstract class AbstractMultiply<FIRST extends Expression, SECOND extends Expression>
-    implements BinaryExpression<FIRST, SECOND> {
+    private static abstract class AbstractMultiply<T, FIRST extends Expression<T>, SECOND extends Expression<T>>
+    implements BinaryExpression<T, FIRST, SECOND> {
 
         final FIRST firstInner;
         final SECOND secondInner;
@@ -788,7 +789,7 @@ public final class MultiplyUtil {
             if (o == null) return false;
             else if (this == o) return true;
             else if (!(o instanceof BinaryExpression)) return false;
-            final BinaryExpression<?, ?> that = (BinaryExpression<?, ?>) o;
+            final BinaryExpression<?, ?, ?> that = (BinaryExpression<?, ?, ?>) o;
             return Objects.equals(firstInner, that.getFirst()) &&
                 Objects.equals(secondInner, that.getSecond()) &&
                 Objects.equals(getOperator(), that.getOperator());
@@ -806,8 +807,8 @@ public final class MultiplyUtil {
      *
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractMultiplyByte<INNER extends Expression>
-        implements BinaryObjExpression<INNER, Byte> {
+    private static abstract class AbstractMultiplyByte<T, INNER extends Expression<T>>
+    implements BinaryObjExpression<T, INNER, Byte> {
 
         final INNER firstInner;
         final byte secondInner;
@@ -837,7 +838,7 @@ public final class MultiplyUtil {
             if (o == null) return false;
             else if (this == o) return true;
             else if (!(o instanceof BinaryObjExpression)) return false;
-            final BinaryObjExpression<?, ?> that = (BinaryObjExpression<?, ?>) o;
+            final BinaryObjExpression<?, ?, ?> that = (BinaryObjExpression<?, ?, ?>) o;
             return Objects.equals(firstInner, that.getFirst()) &&
                 Objects.equals(secondInner, that.getSecond()) &&
                 Objects.equals(getOperator(), that.getOperator());
@@ -853,10 +854,11 @@ public final class MultiplyUtil {
      * Abstract base for a multiply operation that takes an {@code int} as the
      * second operand.
      *
+     * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractMultiplyInt<INNER extends Expression>
-        implements BinaryObjExpression<INNER, Integer> {
+    private static abstract class AbstractMultiplyInt<T, INNER extends Expression<T>>
+    implements BinaryObjExpression<T, INNER, Integer> {
 
         final INNER firstInner;
         final int secondInner;
@@ -886,7 +888,7 @@ public final class MultiplyUtil {
             if (o == null) return false;
             else if (this == o) return true;
             else if (!(o instanceof BinaryObjExpression)) return false;
-            final BinaryObjExpression<?, ?> that = (BinaryObjExpression<?, ?>) o;
+            final BinaryObjExpression<?, ?, ?> that = (BinaryObjExpression<?, ?, ?>) o;
             return Objects.equals(firstInner, that.getFirst()) &&
                 Objects.equals(secondInner, that.getSecond()) &&
                 Objects.equals(getOperator(), that.getOperator());
@@ -902,10 +904,11 @@ public final class MultiplyUtil {
      * Abstract base for a multiply operation that takes a {@code long} as the
      * second operand.
      *
+     * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractMultiplyLong<INNER extends Expression>
-        implements BinaryObjExpression<INNER, Long> {
+    private static abstract class AbstractMultiplyLong<T, INNER extends Expression<T>>
+    implements BinaryObjExpression<T, INNER, Long> {
 
         final INNER firstInner;
         final long secondInner;
@@ -935,7 +938,7 @@ public final class MultiplyUtil {
             if (o == null) return false;
             else if (this == o) return true;
             else if (!(o instanceof BinaryObjExpression)) return false;
-            final BinaryObjExpression<?, ?> that = (BinaryObjExpression<?, ?>) o;
+            final BinaryObjExpression<?, ?, ?> that = (BinaryObjExpression<?, ?, ?>) o;
             return Objects.equals(firstInner, that.getFirst()) &&
                 Objects.equals(secondInner, that.getSecond()) &&
                 Objects.equals(getOperator(), that.getOperator());
@@ -951,10 +954,11 @@ public final class MultiplyUtil {
      * Abstract base for a multiply operation that takes a {@code float} as the
      * second operand.
      *
+     * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractMultiplyFloat<INNER extends Expression>
-        implements BinaryObjExpression<INNER, Float> {
+    private static abstract class AbstractMultiplyFloat<T, INNER extends Expression<T>>
+    implements BinaryObjExpression<T, INNER, Float> {
 
         final INNER firstInner;
         final float secondInner;
@@ -984,7 +988,7 @@ public final class MultiplyUtil {
             if (o == null) return false;
             else if (this == o) return true;
             else if (!(o instanceof BinaryObjExpression)) return false;
-            final BinaryObjExpression<?, ?> that = (BinaryObjExpression<?, ?>) o;
+            final BinaryObjExpression<?, ?, ?> that = (BinaryObjExpression<?, ?, ?>) o;
             return Objects.equals(firstInner, that.getFirst()) &&
                 Objects.equals(secondInner, that.getSecond()) &&
                 Objects.equals(getOperator(), that.getOperator());
@@ -1000,10 +1004,11 @@ public final class MultiplyUtil {
      * Abstract base for a multiply operation that takes a {@code double} as the
      * second operand.
      *
+     * @param <T>      the input type
      * @param <INNER>  the first operand expression type
      */
-    private static abstract class AbstractMultiplyDouble<INNER extends Expression>
-        implements BinaryObjExpression<INNER, Double> {
+    private static abstract class AbstractMultiplyDouble<T, INNER extends Expression<T>>
+    implements BinaryObjExpression<T, INNER, Double> {
 
         final INNER firstInner;
         final double secondInner;
@@ -1033,7 +1038,7 @@ public final class MultiplyUtil {
             if (o == null) return false;
             else if (this == o) return true;
             else if (!(o instanceof BinaryObjExpression)) return false;
-            final BinaryObjExpression<?, ?> that = (BinaryObjExpression<?, ?>) o;
+            final BinaryObjExpression<?, ?, ?> that = (BinaryObjExpression<?, ?, ?>) o;
             return Objects.equals(firstInner, that.getFirst()) &&
                 Objects.equals(secondInner, that.getSecond()) &&
                 Objects.equals(getOperator(), that.getOperator());

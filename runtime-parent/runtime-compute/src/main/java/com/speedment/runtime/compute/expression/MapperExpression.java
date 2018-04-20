@@ -7,11 +7,17 @@ package com.speedment.runtime.compute.expression;
  * Equality is determined by looking at {@link #getInner()},
  * {@link #getMapper()} and {@link #getMapperType()}.
  *
+ * @param <T>       the input entity type
+ * @param <INNER>   the type of the inner expression
+ * @param <MAPPER>  the functional interface used to map from the type returned
+ *                  by the inner expression and the resulting type of this
+ *                  expression
+ *
  * @author Emil Forslund
  * @since  3.1.0
  */
-public interface MapperExpression<INNER extends Expression, MAPPER>
-extends Expression {
+public interface MapperExpression<T, INNER extends Expression<T>, MAPPER>
+extends Expression<T> {
 
     /**
      * Returns the inner expression used in this.

@@ -25,7 +25,7 @@ import java.util.function.UnaryOperator;
  */
 @FunctionalInterface
 public interface ToBigDecimal<T>
-extends Expression,
+extends Expression<T>,
         Function<T, BigDecimal>,
         HasMap<T, UnaryOperator<BigDecimal>, ToBigDecimal<T>>,
         HasHash<T>,

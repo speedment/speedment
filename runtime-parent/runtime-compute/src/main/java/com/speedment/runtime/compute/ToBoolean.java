@@ -31,7 +31,7 @@ import java.util.function.UnaryOperator;
  */
 @FunctionalInterface
 public interface ToBoolean<T>
-extends Expression,
+extends Expression<T>,
         ToBooleanFunction<T>,
         HasAsDouble<T>,
         HasAsInt<T>,

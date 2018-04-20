@@ -14,4 +14,5 @@ import com.speedment.runtime.compute.expression.NonNullableExpression;
  * @since  3.1.0
  */
 public interface ToBigDecimalOrElseGet<T>
-    extends OrElseGetExpression<ToBigDecimalNullable<T>, ToBigDecimal<T>>, ToBigDecimal<T> {}
+extends OrElseGetExpression<T, ToBigDecimalNullable<T>, ToBigDecimal<T>>,
+        ToBigDecimal<T> {}

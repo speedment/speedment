@@ -15,4 +15,4 @@ import com.speedment.runtime.compute.expression.NonNullableExpression;
  * @since  3.1.0
  */
 public interface ToBigDecimalOrThrow<T>
-extends OrElseThrowExpression<ToBigDecimalNullable<T>>, ToBigDecimal<T> {}
+extends OrElseThrowExpression<T, ToBigDecimalNullable<T>>, ToBigDecimal<T> {}

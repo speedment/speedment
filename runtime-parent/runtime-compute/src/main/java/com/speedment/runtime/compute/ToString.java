@@ -25,7 +25,7 @@ import java.util.function.UnaryOperator;
  */
 @FunctionalInterface
 public interface ToString<T>
-extends Expression,
+extends Expression<T>,
         Function<T, String>,
         HasMap<T, UnaryOperator<String>, ToString<T>>,
         HasHash<T>,

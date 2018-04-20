@@ -27,10 +27,10 @@ import java.util.function.Function;
  */
 @FunctionalInterface
 public interface ToBooleanNullable<T>
-    extends Expression,
-    ToNullable<T, Boolean>,
-    HasHash<T>,
-    HasCompare<T> {
+extends Expression<T>,
+        ToNullable<T, Boolean>,
+        HasHash<T>,
+        HasCompare<T> {
 
     @Override
     default ExpressionType getExpressionType() {

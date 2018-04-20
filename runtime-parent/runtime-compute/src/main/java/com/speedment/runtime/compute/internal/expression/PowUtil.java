@@ -712,8 +712,8 @@ public final class PowUtil {
      * @param <T>      the input type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class IntPower<T, INNER extends Expression>
-    implements BinaryObjExpression<INNER, Integer>, ToDouble<T> {
+    private abstract static class IntPower<T, INNER extends Expression<T>>
+    implements BinaryObjExpression<T, INNER, Integer>, ToDouble<T> {
 
         final INNER inner;
         final int power;
@@ -743,7 +743,7 @@ public final class PowUtil {
             if (o == null) return false;
             else if (this == o) return true;
             else if (!(o instanceof BinaryObjExpression)) return false;
-            final BinaryObjExpression<?, ?> that = (BinaryObjExpression<?, ?>) o;
+            final BinaryObjExpression<?, ?, ?> that = (BinaryObjExpression<?, ?, ?>) o;
             return Objects.equals(inner, that.getFirst()) &&
                 Objects.equals(power, that.getSecond()) &&
                 Objects.equals(getOperator(), that.getOperator());
@@ -761,8 +761,8 @@ public final class PowUtil {
      * @param <T>      the input type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class DoublePower<T, INNER extends Expression>
-        implements BinaryObjExpression<INNER, Double>, ToDouble<T> {
+    private abstract static class DoublePower<T, INNER extends Expression<T>>
+        implements BinaryObjExpression<T, INNER, Double>, ToDouble<T> {
 
         final INNER inner;
         final double power;
@@ -792,7 +792,7 @@ public final class PowUtil {
             if (o == null) return false;
             else if (this == o) return true;
             else if (!(o instanceof BinaryObjExpression)) return false;
-            final BinaryObjExpression<?, ?> that = (BinaryObjExpression<?, ?>) o;
+            final BinaryObjExpression<?, ?, ?> that = (BinaryObjExpression<?, ?, ?>) o;
             return Objects.equals(inner, that.getFirst()) &&
                 Objects.equals(power, that.getSecond()) &&
                 Objects.equals(getOperator(), that.getOperator());
@@ -810,8 +810,8 @@ public final class PowUtil {
      * @param <T>      the input type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class ToIntPower<T, INNER extends Expression>
-    implements BinaryExpression<INNER, ToInt<T>>, ToDouble<T> {
+    private abstract static class ToIntPower<T, INNER extends Expression<T>>
+    implements BinaryExpression<T, INNER, ToInt<T>>, ToDouble<T> {
 
         final INNER inner;
         final ToInt<T> power;
@@ -841,7 +841,7 @@ public final class PowUtil {
             if (o == null) return false;
             else if (this == o) return true;
             else if (!(o instanceof BinaryExpression)) return false;
-            final BinaryExpression<?, ?> that = (BinaryExpression<?, ?>) o;
+            final BinaryExpression<?, ?, ?> that = (BinaryExpression<?, ?, ?>) o;
             return Objects.equals(inner, that.getFirst()) &&
                 Objects.equals(power, that.getSecond()) &&
                 Objects.equals(getOperator(), that.getOperator());
@@ -859,8 +859,8 @@ public final class PowUtil {
      * @param <T>      the input type
      * @param <INNER>  the inner expression type
      */
-    private abstract static class ToDoublePower<T, INNER extends Expression>
-    implements BinaryExpression<INNER, ToDouble<T>>, ToDouble<T> {
+    private abstract static class ToDoublePower<T, INNER extends Expression<T>>
+    implements BinaryExpression<T, INNER, ToDouble<T>>, ToDouble<T> {
 
         final INNER inner;
         final ToDouble<T> power;
@@ -890,7 +890,7 @@ public final class PowUtil {
             if (o == null) return false;
             else if (this == o) return true;
             else if (!(o instanceof BinaryExpression)) return false;
-            final BinaryExpression<?, ?> that = (BinaryExpression<?, ?>) o;
+            final BinaryExpression<?, ?, ?> that = (BinaryExpression<?, ?, ?>) o;
             return Objects.equals(inner, that.getFirst()) &&
                 Objects.equals(power, that.getSecond()) &&
                 Objects.equals(getOperator(), that.getOperator());

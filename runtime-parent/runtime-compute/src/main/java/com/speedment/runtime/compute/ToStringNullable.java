@@ -24,10 +24,10 @@ import java.util.function.Function;
  */
 @FunctionalInterface
 public interface ToStringNullable<T>
-    extends Expression,
-    ToNullable<T, String>,
-    HasHash<T>,
-    HasCompare<T> {
+extends Expression<T>,
+        ToNullable<T, String>,
+        HasHash<T>,
+        HasCompare<T> {
 
     @Override
     String apply(T object);

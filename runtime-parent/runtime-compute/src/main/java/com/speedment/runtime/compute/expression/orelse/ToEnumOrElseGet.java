@@ -15,4 +15,5 @@ import com.speedment.runtime.compute.expression.NonNullableExpression;
  * @since  3.1.0
  */
 public interface ToEnumOrElseGet<T, E extends Enum<E>>
-    extends OrElseGetExpression<ToEnumNullable<T, E>, ToEnum<T, E>>, ToEnum<T, E> {}
+extends OrElseGetExpression<T, ToEnumNullable<T, E>, ToEnum<T, E>>,
+        ToEnum<T, E> {}
