@@ -7,6 +7,9 @@ import com.speedment.runtime.compute.ToFloatNullable;
  * Specific {@link FieldMapper} implementation that also implements
  * {@link ToFloatNullable}.
  *
+ * @param <ENTITY>  the entity type
+ * @param <T>       the column type before mapped
+ *
  * @author Emil Forslund
  * @since  3.1.0
  */

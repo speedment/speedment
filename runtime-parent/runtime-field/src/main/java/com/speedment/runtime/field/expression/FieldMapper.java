@@ -8,13 +8,16 @@ import com.speedment.runtime.field.ReferenceField;
  * Specialized expression that takes the value of a particular Speedment field
  * and maps it to a specific type.
  *
- * @param <T>  the type mapped from
- * @param <R>  the type mapped to
+ * @param <ENTITY>  the entity type
+ * @param <T>       the column type mapped from
+ * @param <R>       the type mapped to
+ * @param <MAPPER>  functional interface type returned by {@link #getMapper()}
  *
  * @author Emil Forslund
  * @since  3.1.0
  */
-public interface FieldMapper<ENTITY, T, R, MAPPER> extends Expression, ToNullable<ENTITY, R> {
+public interface FieldMapper<ENTITY, T, R, MAPPER>
+extends Expression<ENTITY>, ToNullable<ENTITY, R> {
 
     /**
      * The field that is being mapped.
