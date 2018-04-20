@@ -202,7 +202,10 @@ public class TypeViewTest {
             "        this.builder = new PersonImpl.Builder();\n" +
             "    }\n" +
             "    \n" +
-            "    public Person create(long id, String firstname, String lastname) {\n" +
+            "    public Person create(\n" +
+            "            long id,\n" +
+            "            String firstname,\n" +
+            "            String lastname) {\n" +
             "        return builder\n" +
             "            .withId(id)\n" +
             "            .withFirstname(firstname)\n" +
