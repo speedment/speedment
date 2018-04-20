@@ -10,6 +10,26 @@ import java.util.function.Function;
  */
 public interface HasAndThen<TUPLE, R> extends Function<TUPLE, R> {
 
+
+    /*
+    Tuple2<Employee, Salary> tuple;
+
+
+    tuple.getter0().andThen(Employee.EMP_NO) // ToLong<Tuple2<Employee, Salary>>
+    tuple.getter1().andThen(Employee.SALARY) // ToDouble<Tuple2<Employee, Salary>>
+
+
+
+    tuple.getter0() // TupleFunction<Tuple2<Employee, Salary>, Employee>
+    tuple.getter1() // TupleFunction<Tuple2<Employee, Salary>, Salary>
+
+    tuple.getter0().andThen(Employee.EMP_NO) // ToDouble<Tuple2<Employee, Salary>>
+
+
+
+     */
+
+
     ToDouble<TUPLE> andThen(ToDouble<R> after);
 
     ToFloat<TUPLE> andThen(ToFloat<R> after);
