@@ -379,8 +379,16 @@
                                         <packages>com.speedment.common.codegen:com.speedment.common.codegen.*</packages>
                                     </group>
                                     <group>
+                                        <title>Runtime Application</title>
+                                        <packages>com.speedment.runtime.application:com.speedment.runtime.application.*</packages>
+                                    </group>
+                                    <group>
                                         <title>Runtime Database Model</title>
                                         <packages>com.speedment.runtime.config:com.speedment.runtime.config.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Runtime Expressions</title>
+                                        <packages>com.speedment.runtime.compute:com.speedment.runtime.compute.*</packages>
                                     </group>
                                     <group>
                                         <title>Runtime Type Mappers</title>
@@ -389,6 +397,14 @@
                                     <group>
                                         <title>Runtime Fields and Predicates</title>
                                         <packages>com.speedment.runtime.field:com.speedment.runtime.field.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Runtime Bulk Updates</title>
+                                        <packages>com.speedment.runtime.bulk:com.speedment.runtime.bulk.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Runtime Join</title>
+                                        <packages>com.speedment.runtime.join:com.speedment.runtime.join.*</packages>
                                     </group>
                                     <group>
                                         <title>Runtime Core</title>
@@ -405,6 +421,10 @@
                                     <group>
                                         <title>Generator Core</title>
                                         <packages>com.speedment.generator.core:com.speedment.generator.core.*</packages>
+                                    </group>
+                                    <group>
+                                        <title>Tool Actions</title>
+                                        <packages>com.speedment.tool.actions:com.speedment.tool.actions.*</packages>
                                     </group>
                                     <group>
                                         <title>Tool Configuration</title>
