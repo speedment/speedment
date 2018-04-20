@@ -26,7 +26,8 @@ import com.speedment.common.codegen.model.trait.*;
  * @author Emil Forslund
  * @since  2.0
  */
-public interface Constructor extends HasCopy<Constructor>, HasCall<Constructor>, 
+public interface Constructor extends HasCopy<Constructor>, HasCall<Constructor>,
+    HasGenerics<Constructor>,
     HasThrows<Constructor>, HasJavadoc<Constructor>, HasAnnotationUsage<Constructor>, 
     HasFields<Constructor>, HasCode<Constructor>, ConstructorModifier<Constructor> {
 
