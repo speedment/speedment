@@ -52,13 +52,12 @@ public interface ApplicationBuilder<
      * applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param <ENTITY> entity type
      * @param <I> the identifier type
      * @param id of the dbms
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsId> BUILDER withDbms(I id, Consumer<Dbms> consumer) {
+    default <I extends HasDbmsId> BUILDER withDbms(I id, Consumer<Dbms> consumer) {
         return withDbms(id, (app, t) -> consumer.accept(t));
     }
 
@@ -67,13 +66,12 @@ public interface ApplicationBuilder<
      * applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param <ENTITY> entity type
      * @param <I> the identifier type
      * @param identifier of the dbms
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsId> BUILDER withDbms(I identifier, BiConsumer<Injector, Dbms> consumer) {
+    default <I extends HasDbmsId> BUILDER withDbms(I identifier, BiConsumer<Injector, Dbms> consumer) {
         return with(
             Dbms.class,
             identifier.getDbmsId(),
@@ -86,13 +84,12 @@ public interface ApplicationBuilder<
      * be applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param <ENTITY> entity type
      * @param <I> the identifier type
      * @param id of the schema
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsId & HasSchemaId> BUILDER withSchema(I id, Consumer<Schema> consumer) {
+    default <I extends HasDbmsId & HasSchemaId> BUILDER withSchema(I id, Consumer<Schema> consumer) {
         return withSchema(id, (app, t) -> consumer.accept(t));
     }
 
@@ -101,13 +98,12 @@ public interface ApplicationBuilder<
      * be applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param <ENTITY> entity type
      * @param <I> the identifier type
      * @param identifier of the schema
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsId & HasSchemaId> BUILDER withSchema(I identifier, BiConsumer<Injector, Schema> consumer) {
+    default <I extends HasDbmsId & HasSchemaId> BUILDER withSchema(I identifier, BiConsumer<Injector, Schema> consumer) {
         return with(
             Schema.class,
             identifier.getDbmsId() + "." + identifier.getSchemaId(),
@@ -120,13 +116,12 @@ public interface ApplicationBuilder<
      * be applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param <ENTITY> entity type
      * @param <I> the identifier type
      * @param id of the table
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsId & HasSchemaId & HasTableId> BUILDER withTable(I id, Consumer<Table> consumer) {
+    default <I extends HasDbmsId & HasSchemaId & HasTableId> BUILDER withTable(I id, Consumer<Table> consumer) {
         return withTable(id, (app, t) -> consumer.accept(t));
     }
 
@@ -135,13 +130,12 @@ public interface ApplicationBuilder<
      * be applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param <ENTITY> entity type
      * @param <I> the identifier type
      * @param identifier of the table
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsId & HasSchemaId & HasTableId> BUILDER withTable(I identifier, BiConsumer<Injector, Table> consumer) {
+    default <I extends HasDbmsId & HasSchemaId & HasTableId> BUILDER withTable(I identifier, BiConsumer<Injector, Table> consumer) {
         return with(
             Table.class,
             identifier.getDbmsId() + "." + identifier.getSchemaId() + "." + identifier.getTableId(),
@@ -154,13 +148,12 @@ public interface ApplicationBuilder<
      * be applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param <ENTITY> entity type
      * @param <I> the identifier type
      * @param id of the column
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsId & HasSchemaId & HasTableId & HasColumnId> BUILDER withColumn(I id, Consumer<Column> consumer) {
+    default <I extends HasDbmsId & HasSchemaId & HasTableId & HasColumnId> BUILDER withColumn(I id, Consumer<Column> consumer) {
         return withColumn(id, (app, t) -> consumer.accept(t));
     }
 
@@ -169,13 +162,12 @@ public interface ApplicationBuilder<
      * be applied after the configuration has been read and after the System
      * properties have been applied.
      *
-     * @param <ENTITY> entity type
      * @param <I> the identifier type
      * @param id of the column
      * @param consumer the consumer to apply
      * @return this instance
      */
-    default <ENTITY, I extends HasDbmsId & HasSchemaId & HasTableId & HasColumnId> BUILDER withColumn(I id, BiConsumer<Injector, Column> consumer) {
+    default <I extends HasDbmsId & HasSchemaId & HasTableId & HasColumnId> BUILDER withColumn(I id, BiConsumer<Injector, Column> consumer) {
         return with(
             Column.class,
             id.getDbmsId() + "." + id.getSchemaId() + "." + id.getTableId() + "." + id.getColumnId(),
