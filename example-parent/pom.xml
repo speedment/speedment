@@ -39,6 +39,7 @@
     </description>
     
     <modules>
+        <module>custom-typemapper</module>
         <module>basic-example</module>
     </modules>
 </project>

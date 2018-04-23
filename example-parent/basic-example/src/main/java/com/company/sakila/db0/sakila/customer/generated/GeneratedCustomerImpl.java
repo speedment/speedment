@@ -33,9 +33,7 @@ public abstract class GeneratedCustomerImpl implements Customer {
     private Timestamp createDate;
     private Timestamp lastUpdate;
     
-    protected GeneratedCustomerImpl() {
-        
-    }
+    protected GeneratedCustomerImpl() {}
     
     @Override
     public int getCustomerId() {

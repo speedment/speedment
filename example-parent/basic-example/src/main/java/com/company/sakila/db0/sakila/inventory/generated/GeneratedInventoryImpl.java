@@ -26,9 +26,7 @@ public abstract class GeneratedInventoryImpl implements Inventory {
     private short storeId;
     private Timestamp lastUpdate;
     
-    protected GeneratedInventoryImpl() {
-        
-    }
+    protected GeneratedInventoryImpl() {}
     
     @Override
     public int getInventoryId() {

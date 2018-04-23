@@ -32,9 +32,7 @@ public abstract class GeneratedRentalImpl implements Rental {
     private short staffId;
     private Timestamp lastUpdate;
     
-    protected GeneratedRentalImpl() {
-        
-    }
+    protected GeneratedRentalImpl() {}
     
     @Override
     public int getRentalId() {

@@ -305,13 +305,13 @@ public interface GeneratedAddress {
         LOCATION    ("location"),
         LAST_UPDATE ("last_update");
         
-        private final String columnName;
+        private final String columnId;
         private final TableIdentifier<Address> tableIdentifier;
         
-        Identifier(String columnName) {
-            this.columnName      = columnName;
-            this.tableIdentifier = TableIdentifier.of(    getDbmsId(),
-                getSchemaId(),
+        Identifier(String columnId) {
+            this.columnId        = columnId;
+            this.tableIdentifier = TableIdentifier.of(    getDbmsId(), 
+                getSchemaId(), 
                 getTableId());
         }
         
@@ -332,7 +332,7 @@ public interface GeneratedAddress {
         
         @Override
         public String getColumnId() {
-            return this.columnName;
+            return this.columnId;
         }
         
         @Override

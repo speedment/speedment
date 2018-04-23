@@ -114,13 +114,13 @@ public interface GeneratedFilmText {
         TITLE       ("title"),
         DESCRIPTION ("description");
         
-        private final String columnName;
+        private final String columnId;
         private final TableIdentifier<FilmText> tableIdentifier;
         
-        Identifier(String columnName) {
-            this.columnName      = columnName;
-            this.tableIdentifier = TableIdentifier.of(    getDbmsId(),
-                getSchemaId(),
+        Identifier(String columnId) {
+            this.columnId        = columnId;
+            this.tableIdentifier = TableIdentifier.of(    getDbmsId(), 
+                getSchemaId(), 
                 getTableId());
         }
         
@@ -141,7 +141,7 @@ public interface GeneratedFilmText {
         
         @Override
         public String getColumnId() {
-            return this.columnName;
+            return this.columnId;
         }
         
         @Override

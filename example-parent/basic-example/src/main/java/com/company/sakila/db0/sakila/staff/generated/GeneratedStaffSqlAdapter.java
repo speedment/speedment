@@ -3,8 +3,12 @@ package com.company.sakila.db0.sakila.staff.generated;
 import com.company.sakila.db0.sakila.staff.Staff;
 import com.company.sakila.db0.sakila.staff.StaffImpl;
 import com.speedment.common.annotation.GeneratedCode;
+import com.speedment.common.injector.annotation.ExecuteBefore;
+import com.speedment.runtime.config.Project;
 import com.speedment.runtime.config.identifier.TableIdentifier;
+import com.speedment.runtime.core.component.ProjectComponent;
 import com.speedment.runtime.core.component.SqlAdapter;
+import com.speedment.runtime.core.component.sql.SqlTypeMapperHelper;
 import com.speedment.runtime.core.db.SqlFunction;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,6 +27,7 @@ import static com.speedment.common.injector.State.RESOLVED;
 public abstract class GeneratedStaffSqlAdapter implements SqlAdapter<Staff> {
     
     private final TableIdentifier<Staff> tableIdentifier;
+    private SqlTypeMapperHelper<Integer, String> activeHelper;
     
     protected GeneratedStaffSqlAdapter() {
         this.tableIdentifier = TableIdentifier.of("db0", "sakila", "staff");
@@ -37,7 +42,7 @@ public abstract class GeneratedStaffSqlAdapter implements SqlAdapter<Staff> {
             .setPicture(    resultSet.getBlob(5 + offset))
             .setEmail(      resultSet.getString(6 + offset))
             .setStoreId(    resultSet.getShort(7 + offset))
-            .setActive(     resultSet.getInt(8 + offset))
+            .setActive(     activeHelper.apply(resultSet.getInt(8 + offset)))
             .setUsername(   resultSet.getString(9 + offset))
             .setPassword(   resultSet.getString(10 + offset))
             .setLastUpdate( resultSet.getTimestamp(11 + offset))
@@ -61,5 +66,11 @@ public abstract class GeneratedStaffSqlAdapter implements SqlAdapter<Staff> {
     @Override
     public SqlFunction<ResultSet, Staff> entityMapper(int offset) {
         return rs -> apply(rs, offset);
+    }
+    
+    @ExecuteBefore(RESOLVED)
+    void createHelpers(ProjectComponent projectComponent) {
+        final Project project = projectComponent.getProject();
+        activeHelper = SqlTypeMapperHelper.create(project, Staff.ACTIVE, Staff.class);
     }
 }

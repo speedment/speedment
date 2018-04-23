@@ -25,9 +25,7 @@ public abstract class GeneratedFilmCategoryImpl implements FilmCategory {
     private short categoryId;
     private Timestamp lastUpdate;
     
-    protected GeneratedFilmCategoryImpl() {
-        
-    }
+    protected GeneratedFilmCategoryImpl() {}
     
     @Override
     public int getFilmId() {

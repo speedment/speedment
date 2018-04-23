@@ -44,6 +44,8 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
         initPart19(sb);
         initPart20(sb);
         initPart21(sb);
+        initPart22(sb);
+        initPart23(sb);
         return sb.toString();
     }
     
@@ -154,12 +156,13 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"name\" : \"actor\",",
             "                \"primaryKeyColumns\" : [",
             "                  {",
-            "                    \"expanded\" : true,"
+            "                    \"enabled\" : true,"
         ).forEachOrdered(sb::append);
     }
     
     private static void initPart1(StringBuilder sb) {
         Stream.of(
+            "                    \"expanded\" : true,",
             "                    \"id\" : \"actor_id\",",
             "                    \"name\" : \"actor_id\",",
             "                    \"ordinalPosition\" : 1",
@@ -259,13 +262,13 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"expanded\" : true,",
             "                \"foreignKeys\" : [",
             "                  {",
-            "                    \"enabled\" : true,",
-            "                    \"expanded\" : false,"
+            "                    \"enabled\" : true,"
         ).forEachOrdered(sb::append);
     }
     
     private static void initPart2(StringBuilder sb) {
         Stream.of(
+            "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
             "                        \"expanded\" : true,",
@@ -336,6 +339,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"name\" : \"address\",",
             "                \"primaryKeyColumns\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"address_id\",",
             "                    \"name\" : \"address_id\",",
@@ -364,14 +368,14 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"name\" : \"name\",",
             "                    \"nullable\" : false,",
             "                    \"ordinalPosition\" : 2",
-            "                  },",
-            "                  {",
-            "                    \"databaseType\" : \"java.sql.Timestamp\","
+            "                  },"
         ).forEachOrdered(sb::append);
     }
     
     private static void initPart3(StringBuilder sb) {
         Stream.of(
+            "                  {",
+            "                    \"databaseType\" : \"java.sql.Timestamp\",",
             "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"last_update\",",
@@ -404,6 +408,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"name\" : \"category\",",
             "                \"primaryKeyColumns\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"category_id\",",
             "                    \"name\" : \"category_id\",",
@@ -469,15 +474,15 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                        \"id\" : \"country_id\",",
             "                        \"name\" : \"country_id\",",
             "                        \"ordinalPosition\" : 1",
-            "                      }",
-            "                    ],",
-            "                    \"id\" : \"fk_city_country\",",
-            "                    \"name\" : \"fk_city_country\""
+            "                      }"
         ).forEachOrdered(sb::append);
     }
     
     private static void initPart4(StringBuilder sb) {
         Stream.of(
+            "                    ],",
+            "                    \"id\" : \"fk_city_country\",",
+            "                    \"name\" : \"fk_city_country\"",
             "                  }",
             "                ],",
             "                \"id\" : \"city\",",
@@ -518,6 +523,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"name\" : \"city\",",
             "                \"primaryKeyColumns\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"city_id\",",
             "                    \"name\" : \"city_id\",",
@@ -540,6 +546,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.String\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"country\",",
             "                    \"name\" : \"country\",",
@@ -548,6 +555,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.sql.Timestamp\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"last_update\",",
             "                    \"name\" : \"last_update\",",
@@ -560,6 +568,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"id\" : \"country\",",
             "                \"indexes\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"PRIMARY\",",
             "                    \"indexColumns\" : [",
@@ -571,19 +580,20 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                        \"ordinalPosition\" : 1",
             "                      }",
             "                    ],",
-            "                    \"name\" : \"PRIMARY\",",
+            "                    \"name\" : \"PRIMARY\","
+        ).forEachOrdered(sb::append);
+    }
+    
+    private static void initPart5(StringBuilder sb) {
+        Stream.of(
             "                    \"unique\" : true",
             "                  }",
             "                ],",
             "                \"name\" : \"country\",",
             "                \"primaryKeyColumns\" : [",
             "                  {",
-            "                    \"expanded\" : true,"
-        ).forEachOrdered(sb::append);
-    }
-    
-    private static void initPart5(StringBuilder sb) {
-        Stream.of(
+            "                    \"enabled\" : true,",
+            "                    \"expanded\" : true,",
             "                    \"id\" : \"country_id\",",
             "                    \"name\" : \"country_id\",",
             "                    \"ordinalPosition\" : 1",
@@ -595,6 +605,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  {",
             "                    \"autoIncrement\" : true,",
             "                    \"databaseType\" : \"java.lang.Integer\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"customer_id\",",
             "                    \"name\" : \"customer_id\",",
@@ -604,6 +615,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Short\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"store_id\",",
             "                    \"name\" : \"store_id\",",
@@ -613,6 +625,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.String\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"first_name\",",
             "                    \"name\" : \"first_name\",",
@@ -621,6 +634,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.String\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"last_name\",",
             "                    \"name\" : \"last_name\",",
@@ -629,6 +643,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.String\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"email\",",
             "                    \"name\" : \"email\",",
@@ -637,6 +652,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Integer\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"address_id\",",
             "                    \"name\" : \"address_id\",",
@@ -646,6 +662,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Integer\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"active\",",
             "                    \"name\" : \"active\",",
@@ -655,6 +672,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.sql.Timestamp\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"create_date\",",
             "                    \"name\" : \"create_date\",",
@@ -663,16 +681,24 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.sql.Timestamp\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"last_update\",",
             "                    \"name\" : \"last_update\",",
             "                    \"nullable\" : false,",
-            "                    \"ordinalPosition\" : 9",
+            "                    \"ordinalPosition\" : 9"
+        ).forEachOrdered(sb::append);
+    }
+    
+    private static void initPart6(StringBuilder sb) {
+        Stream.of(
             "                  }",
             "                ],",
+            "                \"enabled\" : true,",
             "                \"expanded\" : true,",
             "                \"foreignKeys\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
@@ -684,17 +710,13 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                        \"id\" : \"address_id\",",
             "                        \"name\" : \"address_id\",",
             "                        \"ordinalPosition\" : 1",
-            "                      }"
-        ).forEachOrdered(sb::append);
-    }
-    
-    private static void initPart6(StringBuilder sb) {
-        Stream.of(
+            "                      }",
             "                    ],",
             "                    \"id\" : \"fk_customer_address\",",
             "                    \"name\" : \"fk_customer_address\"",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
@@ -715,6 +737,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"id\" : \"customer\",",
             "                \"indexes\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"PRIMARY\",",
             "                    \"indexColumns\" : [",
@@ -730,6 +753,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"unique\" : true",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"idx_fk_address_id\",",
             "                    \"indexColumns\" : [",
@@ -745,6 +769,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"unique\" : false",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"idx_fk_store_id\",",
             "                    \"indexColumns\" : [",
@@ -760,13 +785,19 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"unique\" : false",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"idx_last_name\",",
             "                    \"indexColumns\" : [",
             "                      {",
             "                        \"expanded\" : true,",
             "                        \"id\" : \"last_name\",",
-            "                        \"name\" : \"last_name\",",
+            "                        \"name\" : \"last_name\","
+        ).forEachOrdered(sb::append);
+    }
+    
+    private static void initPart7(StringBuilder sb) {
+        Stream.of(
             "                        \"orderType\" : \"ASC\",",
             "                        \"ordinalPosition\" : 1",
             "                      }",
@@ -778,6 +809,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"name\" : \"customer\",",
             "                \"primaryKeyColumns\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"customer_id\",",
             "                    \"name\" : \"customer_id\",",
@@ -790,12 +822,8 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  {",
             "                    \"autoIncrement\" : true,",
             "                    \"databaseType\" : \"java.lang.Integer\",",
-            "                    \"expanded\" : true,"
-        ).forEachOrdered(sb::append);
-    }
-    
-    private static void initPart7(StringBuilder sb) {
-        Stream.of(
+            "                    \"enabled\" : true,",
+            "                    \"expanded\" : true,",
             "                    \"id\" : \"film_id\",",
             "                    \"name\" : \"film_id\",",
             "                    \"nullable\" : false,",
@@ -804,6 +832,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.String\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"title\",",
             "                    \"name\" : \"title\",",
@@ -812,6 +841,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.String\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"description\",",
             "                    \"name\" : \"description\",",
@@ -820,6 +850,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.sql.Date\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"release_year\",",
             "                    \"name\" : \"release_year\",",
@@ -828,6 +859,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Short\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"language_id\",",
             "                    \"name\" : \"language_id\",",
@@ -837,6 +869,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Short\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"original_language_id\",",
             "                    \"name\" : \"original_language_id\",",
@@ -845,6 +878,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Short\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"rental_duration\",",
             "                    \"name\" : \"rental_duration\",",
@@ -854,6 +888,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.math.BigDecimal\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"rental_rate\",",
             "                    \"name\" : \"rental_rate\",",
@@ -862,7 +897,13 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Integer\",",
-            "                    \"expanded\" : true,",
+            "                    \"enabled\" : true,",
+            "                    \"expanded\" : true,"
+        ).forEachOrdered(sb::append);
+    }
+    
+    private static void initPart8(StringBuilder sb) {
+        Stream.of(
             "                    \"id\" : \"length\",",
             "                    \"name\" : \"length\",",
             "                    \"nullable\" : true,",
@@ -870,6 +911,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.math.BigDecimal\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"replacement_cost\",",
             "                    \"name\" : \"replacement_cost\",",
@@ -878,6 +920,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.String\",",
+            "                    \"enabled\" : true,",
             "                    \"enumConstants\" : \"G,PG,PG-13,R,NC-17\",",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"rating\",",
@@ -887,6 +930,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.String\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"special_features\",",
             "                    \"name\" : \"special_features\",",
@@ -895,21 +939,19 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.sql.Timestamp\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
-            "                    \"id\" : \"last_update\","
-        ).forEachOrdered(sb::append);
-    }
-    
-    private static void initPart8(StringBuilder sb) {
-        Stream.of(
+            "                    \"id\" : \"last_update\",",
             "                    \"name\" : \"last_update\",",
             "                    \"nullable\" : false,",
             "                    \"ordinalPosition\" : 13",
             "                  }",
             "                ],",
+            "                \"enabled\" : true,",
             "                \"expanded\" : true,",
             "                \"foreignKeys\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
@@ -927,6 +969,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"name\" : \"fk_film_language\"",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
@@ -947,6 +990,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"id\" : \"film\",",
             "                \"indexes\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"PRIMARY\",",
             "                    \"indexColumns\" : [",
@@ -960,8 +1004,14 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    ],",
             "                    \"name\" : \"PRIMARY\",",
             "                    \"unique\" : true",
-            "                  },",
+            "                  },"
+        ).forEachOrdered(sb::append);
+    }
+    
+    private static void initPart9(StringBuilder sb) {
+        Stream.of(
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"idx_film_rating\",",
             "                    \"indexColumns\" : [",
@@ -977,6 +1027,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"unique\" : false",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"idx_fk_language_id\",",
             "                    \"indexColumns\" : [",
@@ -992,6 +1043,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"unique\" : false",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"idx_fk_original_language_id\",",
             "                    \"indexColumns\" : [",
@@ -1002,16 +1054,12 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                        \"orderType\" : \"ASC\",",
             "                        \"ordinalPosition\" : 1",
             "                      }",
-            "                    ],"
-        ).forEachOrdered(sb::append);
-    }
-    
-    private static void initPart9(StringBuilder sb) {
-        Stream.of(
+            "                    ],",
             "                    \"name\" : \"idx_fk_original_language_id\",",
             "                    \"unique\" : false",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"idx_title\",",
             "                    \"indexColumns\" : [",
@@ -1030,6 +1078,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"name\" : \"film\",",
             "                \"primaryKeyColumns\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"film_id\",",
             "                    \"name\" : \"film_id\",",
@@ -1041,6 +1090,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"columns\" : [",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Integer\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"actor_id\",",
             "                    \"name\" : \"actor_id\",",
@@ -1050,6 +1100,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Integer\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"film_id\",",
             "                    \"name\" : \"film_id\",",
@@ -1059,6 +1110,12 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.sql.Timestamp\",",
+            "                    \"enabled\" : true,"
+        ).forEachOrdered(sb::append);
+    }
+    
+    private static void initPart10(StringBuilder sb) {
+        Stream.of(
             "                    \"expanded\" : true,",
             "                    \"id\" : \"last_update\",",
             "                    \"name\" : \"last_update\",",
@@ -1066,9 +1123,11 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"ordinalPosition\" : 3",
             "                  }",
             "                ],",
+            "                \"enabled\" : true,",
             "                \"expanded\" : true,",
             "                \"foreignKeys\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
@@ -1086,6 +1145,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"name\" : \"fk_film_actor_actor\"",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
@@ -1106,14 +1166,10 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"id\" : \"film_actor\",",
             "                \"indexes\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"PRIMARY\",",
-            "                    \"indexColumns\" : ["
-        ).forEachOrdered(sb::append);
-    }
-    
-    private static void initPart10(StringBuilder sb) {
-        Stream.of(
+            "                    \"indexColumns\" : [",
             "                      {",
             "                        \"expanded\" : true,",
             "                        \"id\" : \"actor_id\",",
@@ -1133,6 +1189,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"unique\" : true",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"idx_fk_film_id\",",
             "                    \"indexColumns\" : [",
@@ -1151,13 +1208,20 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"name\" : \"film_actor\",",
             "                \"primaryKeyColumns\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"actor_id\",",
             "                    \"name\" : \"actor_id\",",
             "                    \"ordinalPosition\" : 1",
             "                  },",
             "                  {",
-            "                    \"expanded\" : true,",
+            "                    \"enabled\" : true,",
+            "                    \"expanded\" : true,"
+        ).forEachOrdered(sb::append);
+    }
+    
+    private static void initPart11(StringBuilder sb) {
+        Stream.of(
             "                    \"id\" : \"film_id\",",
             "                    \"name\" : \"film_id\",",
             "                    \"ordinalPosition\" : 2",
@@ -1168,6 +1232,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"columns\" : [",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Integer\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"film_id\",",
             "                    \"name\" : \"film_id\",",
@@ -1177,6 +1242,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Short\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"category_id\",",
             "                    \"name\" : \"category_id\",",
@@ -1186,6 +1252,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.sql.Timestamp\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"last_update\",",
             "                    \"name\" : \"last_update\",",
@@ -1193,9 +1260,11 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"ordinalPosition\" : 3",
             "                  }",
             "                ],",
+            "                \"enabled\" : true,",
             "                \"expanded\" : true,",
             "                \"foreignKeys\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
@@ -1213,13 +1282,9 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"name\" : \"fk_film_category_category\"",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
-            "                    \"foreignKeyColumns\" : ["
-        ).forEachOrdered(sb::append);
-    }
-    
-    private static void initPart11(StringBuilder sb) {
-        Stream.of(
+            "                    \"foreignKeyColumns\" : [",
             "                      {",
             "                        \"expanded\" : true,",
             "                        \"foreignColumnName\" : \"film_id\",",
@@ -1238,6 +1303,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"id\" : \"film_category\",",
             "                \"indexes\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"PRIMARY\",",
             "                    \"indexColumns\" : [",
@@ -1256,10 +1322,16 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                        \"ordinalPosition\" : 2",
             "                      }",
             "                    ],",
-            "                    \"name\" : \"PRIMARY\",",
+            "                    \"name\" : \"PRIMARY\","
+        ).forEachOrdered(sb::append);
+    }
+    
+    private static void initPart12(StringBuilder sb) {
+        Stream.of(
             "                    \"unique\" : true",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"fk_film_category_category\",",
             "                    \"indexColumns\" : [",
@@ -1278,12 +1350,14 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"name\" : \"film_category\",",
             "                \"primaryKeyColumns\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"category_id\",",
             "                    \"name\" : \"category_id\",",
             "                    \"ordinalPosition\" : 2",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"film_id\",",
             "                    \"name\" : \"film_id\",",
@@ -1295,6 +1369,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"columns\" : [",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Short\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"film_id\",",
             "                    \"name\" : \"film_id\",",
@@ -1304,6 +1379,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.String\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"title\",",
             "                    \"name\" : \"title\",",
@@ -1312,6 +1388,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.String\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"description\",",
             "                    \"name\" : \"description\",",
@@ -1319,15 +1396,12 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"ordinalPosition\" : 3",
             "                  }",
             "                ],",
+            "                \"enabled\" : true,",
             "                \"expanded\" : true,",
-            "                \"id\" : \"film_text\","
-        ).forEachOrdered(sb::append);
-    }
-    
-    private static void initPart12(StringBuilder sb) {
-        Stream.of(
+            "                \"id\" : \"film_text\",",
             "                \"indexes\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"PRIMARY\",",
             "                    \"indexColumns\" : [",
@@ -1343,6 +1417,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"unique\" : true",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"idx_title_description\",",
             "                    \"indexColumns\" : [",
@@ -1353,7 +1428,12 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                        \"orderType\" : \"NONE\",",
             "                        \"ordinalPosition\" : 1",
             "                      },",
-            "                      {",
+            "                      {"
+        ).forEachOrdered(sb::append);
+    }
+    
+    private static void initPart13(StringBuilder sb) {
+        Stream.of(
             "                        \"expanded\" : true,",
             "                        \"id\" : \"description\",",
             "                        \"name\" : \"description\",",
@@ -1368,6 +1448,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"name\" : \"film_text\",",
             "                \"primaryKeyColumns\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"film_id\",",
             "                    \"name\" : \"film_id\",",
@@ -1380,6 +1461,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  {",
             "                    \"autoIncrement\" : true,",
             "                    \"databaseType\" : \"java.lang.Integer\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"inventory_id\",",
             "                    \"name\" : \"inventory_id\",",
@@ -1389,6 +1471,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Integer\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"film_id\",",
             "                    \"name\" : \"film_id\",",
@@ -1398,6 +1481,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Short\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"store_id\",",
             "                    \"name\" : \"store_id\",",
@@ -1407,6 +1491,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.sql.Timestamp\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"last_update\",",
             "                    \"name\" : \"last_update\",",
@@ -1414,9 +1499,11 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"ordinalPosition\" : 4",
             "                  }",
             "                ],",
+            "                \"enabled\" : true,",
             "                \"expanded\" : true,",
             "                \"foreignKeys\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
@@ -1426,12 +1513,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                        \"foreignSchemaName\" : \"sakila\",",
             "                        \"foreignTableName\" : \"film\",",
             "                        \"id\" : \"film_id\",",
-            "                        \"name\" : \"film_id\","
-        ).forEachOrdered(sb::append);
-    }
-    
-    private static void initPart13(StringBuilder sb) {
-        Stream.of(
+            "                        \"name\" : \"film_id\",",
             "                        \"ordinalPosition\" : 1",
             "                      }",
             "                    ],",
@@ -1439,6 +1521,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"name\" : \"fk_inventory_film\"",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
@@ -1451,7 +1534,12 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                        \"name\" : \"store_id\",",
             "                        \"ordinalPosition\" : 1",
             "                      }",
-            "                    ],",
+            "                    ],"
+        ).forEachOrdered(sb::append);
+    }
+    
+    private static void initPart14(StringBuilder sb) {
+        Stream.of(
             "                    \"id\" : \"fk_inventory_store\",",
             "                    \"name\" : \"fk_inventory_store\"",
             "                  }",
@@ -1459,6 +1547,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"id\" : \"inventory\",",
             "                \"indexes\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"PRIMARY\",",
             "                    \"indexColumns\" : [",
@@ -1474,6 +1563,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"unique\" : true",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"idx_fk_film_id\",",
             "                    \"indexColumns\" : [",
@@ -1489,6 +1579,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"unique\" : false",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"idx_store_id_film_id\",",
             "                    \"indexColumns\" : [",
@@ -1514,6 +1605,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"name\" : \"inventory\",",
             "                \"primaryKeyColumns\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"inventory_id\",",
             "                    \"name\" : \"inventory_id\",",
@@ -1526,20 +1618,17 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  {",
             "                    \"autoIncrement\" : true,",
             "                    \"databaseType\" : \"java.lang.Short\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"language_id\",",
             "                    \"name\" : \"language_id\",",
             "                    \"nullable\" : false,",
             "                    \"ordinalPosition\" : 1,",
             "                    \"typeMapper\" : \"com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper\"",
-            "                  },"
-        ).forEachOrdered(sb::append);
-    }
-    
-    private static void initPart14(StringBuilder sb) {
-        Stream.of(
+            "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.String\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"name\",",
             "                    \"name\" : \"name\",",
@@ -1548,17 +1637,25 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.sql.Timestamp\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"last_update\",",
-            "                    \"name\" : \"last_update\",",
+            "                    \"name\" : \"last_update\","
+        ).forEachOrdered(sb::append);
+    }
+    
+    private static void initPart15(StringBuilder sb) {
+        Stream.of(
             "                    \"nullable\" : false,",
             "                    \"ordinalPosition\" : 3",
             "                  }",
             "                ],",
+            "                \"enabled\" : true,",
             "                \"expanded\" : true,",
             "                \"id\" : \"language\",",
             "                \"indexes\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"PRIMARY\",",
             "                    \"indexColumns\" : [",
@@ -1577,6 +1674,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"name\" : \"language\",",
             "                \"primaryKeyColumns\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"language_id\",",
             "                    \"name\" : \"language_id\",",
@@ -1589,6 +1687,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  {",
             "                    \"autoIncrement\" : true,",
             "                    \"databaseType\" : \"java.lang.Integer\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"payment_id\",",
             "                    \"name\" : \"payment_id\",",
@@ -1598,6 +1697,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Integer\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"customer_id\",",
             "                    \"name\" : \"customer_id\",",
@@ -1607,6 +1707,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Short\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"staff_id\",",
             "                    \"name\" : \"staff_id\",",
@@ -1616,6 +1717,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Integer\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"rental_id\",",
             "                    \"name\" : \"rental_id\",",
@@ -1624,6 +1726,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.math.BigDecimal\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"amount\",",
             "                    \"name\" : \"amount\",",
@@ -1632,29 +1735,33 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.sql.Timestamp\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"payment_date\",",
             "                    \"name\" : \"payment_date\",",
             "                    \"nullable\" : false,",
             "                    \"ordinalPosition\" : 6",
             "                  },",
-            "                  {"
+            "                  {",
+            "                    \"databaseType\" : \"java.sql.Timestamp\",",
+            "                    \"enabled\" : true,",
+            "                    \"expanded\" : true,",
+            "                    \"id\" : \"last_update\","
         ).forEachOrdered(sb::append);
     }
     
-    private static void initPart15(StringBuilder sb) {
+    private static void initPart16(StringBuilder sb) {
         Stream.of(
-            "                    \"databaseType\" : \"java.sql.Timestamp\",",
-            "                    \"expanded\" : true,",
-            "                    \"id\" : \"last_update\",",
             "                    \"name\" : \"last_update\",",
             "                    \"nullable\" : false,",
             "                    \"ordinalPosition\" : 7",
             "                  }",
             "                ],",
+            "                \"enabled\" : true,",
             "                \"expanded\" : true,",
             "                \"foreignKeys\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
@@ -1672,6 +1779,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"name\" : \"fk_payment_customer\"",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
@@ -1689,6 +1797,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"name\" : \"fk_payment_rental\"",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
@@ -1709,6 +1818,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"id\" : \"payment\",",
             "                \"indexes\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"PRIMARY\",",
             "                    \"indexColumns\" : [",
@@ -1724,6 +1834,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"unique\" : true",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"fk_payment_rental\",",
             "                    \"indexColumns\" : [",
@@ -1739,17 +1850,18 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"unique\" : false",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
-            "                    \"id\" : \"idx_fk_customer_id\",",
-            "                    \"indexColumns\" : [",
-            "                      {",
-            "                        \"expanded\" : true,",
-            "                        \"id\" : \"customer_id\","
+            "                    \"id\" : \"idx_fk_customer_id\","
         ).forEachOrdered(sb::append);
     }
     
-    private static void initPart16(StringBuilder sb) {
+    private static void initPart17(StringBuilder sb) {
         Stream.of(
+            "                    \"indexColumns\" : [",
+            "                      {",
+            "                        \"expanded\" : true,",
+            "                        \"id\" : \"customer_id\",",
             "                        \"name\" : \"customer_id\",",
             "                        \"orderType\" : \"ASC\",",
             "                        \"ordinalPosition\" : 1",
@@ -1759,6 +1871,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"unique\" : false",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"idx_fk_staff_id\",",
             "                    \"indexColumns\" : [",
@@ -1777,6 +1890,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"name\" : \"payment\",",
             "                \"primaryKeyColumns\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"payment_id\",",
             "                    \"name\" : \"payment_id\",",
@@ -1789,6 +1903,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  {",
             "                    \"autoIncrement\" : true,",
             "                    \"databaseType\" : \"java.lang.Integer\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"rental_id\",",
             "                    \"name\" : \"rental_id\",",
@@ -1798,6 +1913,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.sql.Timestamp\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"rental_date\",",
             "                    \"name\" : \"rental_date\",",
@@ -1806,6 +1922,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Integer\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"inventory_id\",",
             "                    \"name\" : \"inventory_id\",",
@@ -1815,6 +1932,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Integer\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"customer_id\",",
             "                    \"name\" : \"customer_id\",",
@@ -1824,6 +1942,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.sql.Timestamp\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"return_date\",",
             "                    \"name\" : \"return_date\",",
@@ -1832,15 +1951,22 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Short\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"staff_id\",",
             "                    \"name\" : \"staff_id\",",
             "                    \"nullable\" : false,",
             "                    \"ordinalPosition\" : 6,",
             "                    \"typeMapper\" : \"com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper\"",
-            "                  },",
+            "                  },"
+        ).forEachOrdered(sb::append);
+    }
+    
+    private static void initPart18(StringBuilder sb) {
+        Stream.of(
             "                  {",
             "                    \"databaseType\" : \"java.sql.Timestamp\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"last_update\",",
             "                    \"name\" : \"last_update\",",
@@ -1848,14 +1974,11 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"ordinalPosition\" : 7",
             "                  }",
             "                ],",
+            "                \"enabled\" : true,",
             "                \"expanded\" : true,",
             "                \"foreignKeys\" : [",
-            "                  {"
-        ).forEachOrdered(sb::append);
-    }
-    
-    private static void initPart17(StringBuilder sb) {
-        Stream.of(
+            "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
@@ -1873,6 +1996,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"name\" : \"fk_rental_customer\"",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
@@ -1890,6 +2014,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"name\" : \"fk_rental_inventory\"",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
@@ -1910,6 +2035,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"id\" : \"rental\",",
             "                \"indexes\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"PRIMARY\",",
             "                    \"indexColumns\" : [",
@@ -1925,6 +2051,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"unique\" : true",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"rental_date\",",
             "                    \"indexColumns\" : [",
@@ -1937,7 +2064,12 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                      },",
             "                      {",
             "                        \"expanded\" : true,",
-            "                        \"id\" : \"customer_id\",",
+            "                        \"id\" : \"customer_id\","
+        ).forEachOrdered(sb::append);
+    }
+    
+    private static void initPart19(StringBuilder sb) {
+        Stream.of(
             "                        \"name\" : \"customer_id\",",
             "                        \"orderType\" : \"ASC\",",
             "                        \"ordinalPosition\" : 3",
@@ -1954,14 +2086,10 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"unique\" : true",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"idx_fk_customer_id\",",
-            "                    \"indexColumns\" : ["
-        ).forEachOrdered(sb::append);
-    }
-    
-    private static void initPart18(StringBuilder sb) {
-        Stream.of(
+            "                    \"indexColumns\" : [",
             "                      {",
             "                        \"expanded\" : true,",
             "                        \"id\" : \"customer_id\",",
@@ -1974,6 +2102,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"unique\" : false",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"idx_fk_inventory_id\",",
             "                    \"indexColumns\" : [",
@@ -1989,6 +2118,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"unique\" : false",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"idx_fk_staff_id\",",
             "                    \"indexColumns\" : [",
@@ -2007,6 +2137,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"name\" : \"rental\",",
             "                \"primaryKeyColumns\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"rental_id\",",
             "                    \"name\" : \"rental_id\",",
@@ -2019,6 +2150,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  {",
             "                    \"autoIncrement\" : true,",
             "                    \"databaseType\" : \"java.lang.Short\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"staff_id\",",
             "                    \"name\" : \"staff_id\",",
@@ -2028,6 +2160,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.String\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"first_name\",",
             "                    \"name\" : \"first_name\",",
@@ -2036,7 +2169,13 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.String\",",
-            "                    \"expanded\" : true,",
+            "                    \"enabled\" : true,",
+            "                    \"expanded\" : true,"
+        ).forEachOrdered(sb::append);
+    }
+    
+    private static void initPart20(StringBuilder sb) {
+        Stream.of(
             "                    \"id\" : \"last_name\",",
             "                    \"name\" : \"last_name\",",
             "                    \"nullable\" : false,",
@@ -2044,6 +2183,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Integer\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"address_id\",",
             "                    \"name\" : \"address_id\",",
@@ -2053,6 +2193,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.sql.Blob\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"picture\",",
             "                    \"name\" : \"picture\",",
@@ -2061,19 +2202,16 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.String\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
-            "                    \"id\" : \"email\","
-        ).forEachOrdered(sb::append);
-    }
-    
-    private static void initPart19(StringBuilder sb) {
-        Stream.of(
+            "                    \"id\" : \"email\",",
             "                    \"name\" : \"email\",",
             "                    \"nullable\" : true,",
             "                    \"ordinalPosition\" : 6",
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Short\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"store_id\",",
             "                    \"name\" : \"store_id\",",
@@ -2082,16 +2220,21 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"typeMapper\" : \"com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper\"",
             "                  },",
             "                  {",
+            "                    \"autoIncrement\" : false,",
             "                    \"databaseType\" : \"java.lang.Integer\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"active\",",
             "                    \"name\" : \"active\",",
+            "                    \"nameProtected\" : true,",
             "                    \"nullable\" : false,",
+            "                    \"nullableImplementation\" : \"OPTIONAL\",",
             "                    \"ordinalPosition\" : 8,",
-            "                    \"typeMapper\" : \"com.speedment.runtime.typemapper.primitive.PrimitiveTypeMapper\"",
+            "                    \"typeMapper\" : \"com.speedment.example.typemapper.IntegerZeroOneToYesNoTypeMapper\"",
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.String\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"username\",",
             "                    \"name\" : \"username\",",
@@ -2100,6 +2243,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.String\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"password\",",
             "                    \"name\" : \"password\",",
@@ -2108,6 +2252,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.sql.Timestamp\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"last_update\",",
             "                    \"name\" : \"last_update\",",
@@ -2115,9 +2260,11 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"ordinalPosition\" : 11",
             "                  }",
             "                ],",
+            "                \"enabled\" : true,",
             "                \"expanded\" : true,",
             "                \"foreignKeys\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
@@ -2129,12 +2276,18 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                        \"id\" : \"address_id\",",
             "                        \"name\" : \"address_id\",",
             "                        \"ordinalPosition\" : 1",
-            "                      }",
+            "                      }"
+        ).forEachOrdered(sb::append);
+    }
+    
+    private static void initPart21(StringBuilder sb) {
+        Stream.of(
             "                    ],",
             "                    \"id\" : \"fk_staff_address\",",
             "                    \"name\" : \"fk_staff_address\"",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
@@ -2155,6 +2308,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"id\" : \"staff\",",
             "                \"indexes\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"PRIMARY\",",
             "                    \"indexColumns\" : [",
@@ -2168,13 +2322,9 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    ],",
             "                    \"name\" : \"PRIMARY\",",
             "                    \"unique\" : true",
-            "                  },"
-        ).forEachOrdered(sb::append);
-    }
-    
-    private static void initPart20(StringBuilder sb) {
-        Stream.of(
+            "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"idx_fk_address_id\",",
             "                    \"indexColumns\" : [",
@@ -2190,6 +2340,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"unique\" : false",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"idx_fk_store_id\",",
             "                    \"indexColumns\" : [",
@@ -2208,6 +2359,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"name\" : \"staff\",",
             "                \"primaryKeyColumns\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"staff_id\",",
             "                    \"name\" : \"staff_id\",",
@@ -2220,6 +2372,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  {",
             "                    \"autoIncrement\" : true,",
             "                    \"databaseType\" : \"java.lang.Short\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"store_id\",",
             "                    \"name\" : \"store_id\",",
@@ -2229,6 +2382,12 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Short\",",
+            "                    \"enabled\" : true,"
+        ).forEachOrdered(sb::append);
+    }
+    
+    private static void initPart22(StringBuilder sb) {
+        Stream.of(
             "                    \"expanded\" : true,",
             "                    \"id\" : \"manager_staff_id\",",
             "                    \"name\" : \"manager_staff_id\",",
@@ -2238,6 +2397,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.lang.Integer\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"address_id\",",
             "                    \"name\" : \"address_id\",",
@@ -2247,6 +2407,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                  },",
             "                  {",
             "                    \"databaseType\" : \"java.sql.Timestamp\",",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"last_update\",",
             "                    \"name\" : \"last_update\",",
@@ -2254,9 +2415,11 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"ordinalPosition\" : 4",
             "                  }",
             "                ],",
+            "                \"enabled\" : true,",
             "                \"expanded\" : true,",
             "                \"foreignKeys\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
@@ -2274,12 +2437,8 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"name\" : \"fk_store_address\"",
             "                  },",
             "                  {",
-            "                    \"expanded\" : false,"
-        ).forEachOrdered(sb::append);
-    }
-    
-    private static void initPart21(StringBuilder sb) {
-        Stream.of(
+            "                    \"enabled\" : true,",
+            "                    \"expanded\" : false,",
             "                    \"foreignKeyColumns\" : [",
             "                      {",
             "                        \"expanded\" : true,",
@@ -2299,6 +2458,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"id\" : \"store\",",
             "                \"indexes\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"idx_unique_manager\",",
             "                    \"indexColumns\" : [",
@@ -2314,6 +2474,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    \"unique\" : true",
             "                  },",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"PRIMARY\",",
             "                    \"indexColumns\" : [",
@@ -2327,8 +2488,14 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                    ],",
             "                    \"name\" : \"PRIMARY\",",
             "                    \"unique\" : true",
-            "                  },",
+            "                  },"
+        ).forEachOrdered(sb::append);
+    }
+    
+    private static void initPart23(StringBuilder sb) {
+        Stream.of(
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : false,",
             "                    \"id\" : \"idx_fk_address_id\",",
             "                    \"indexColumns\" : [",
@@ -2347,6 +2514,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "                \"name\" : \"store\",",
             "                \"primaryKeyColumns\" : [",
             "                  {",
+            "                    \"enabled\" : true,",
             "                    \"expanded\" : true,",
             "                    \"id\" : \"store_id\",",
             "                    \"name\" : \"store_id\",",
@@ -2365,6 +2533,7 @@ public class GeneratedSakilaMetadata extends AbstractApplicationMetadata {
             "    \"expanded\" : true,",
             "    \"id\" : \"sakila\",",
             "    \"name\" : \"sakila\",",
+            "    \"nameProtected\" : false,",
             "    \"packageLocation\" : \"src/main/java/\",",
             "    \"speedmentVersion\" : \"Speedment:3.1.0-SNAPSHOT\"",
             "  }",

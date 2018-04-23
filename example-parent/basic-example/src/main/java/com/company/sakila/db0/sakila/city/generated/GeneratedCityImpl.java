@@ -25,9 +25,7 @@ public abstract class GeneratedCityImpl implements City {
     private int countryId;
     private Timestamp lastUpdate;
     
-    protected GeneratedCityImpl() {
-        
-    }
+    protected GeneratedCityImpl() {}
     
     @Override
     public int getCityId() {

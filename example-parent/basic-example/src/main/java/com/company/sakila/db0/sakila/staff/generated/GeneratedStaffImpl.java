@@ -31,14 +31,12 @@ public abstract class GeneratedStaffImpl implements Staff {
     private Blob picture;
     private String email;
     private short storeId;
-    private int active;
+    private String active;
     private String username;
     private String password;
     private Timestamp lastUpdate;
     
-    protected GeneratedStaffImpl() {
-        
-    }
+    protected GeneratedStaffImpl() {}
     
     @Override
     public short getStaffId() {
@@ -76,7 +74,7 @@ public abstract class GeneratedStaffImpl implements Staff {
     }
     
     @Override
-    public int getActive() {
+    public String getActive() {
         return active;
     }
     
@@ -138,7 +136,7 @@ public abstract class GeneratedStaffImpl implements Staff {
     }
     
     @Override
-    public Staff setActive(int active) {
+    public Staff setActive(String active) {
         this.active = active;
         return this;
     }
@@ -200,7 +198,7 @@ public abstract class GeneratedStaffImpl implements Staff {
         if (!Objects.equals(this.getPicture(), thatStaff.getPicture())) {return false; }
         if (!Objects.equals(this.getEmail(), thatStaff.getEmail())) {return false; }
         if (this.getStoreId() != thatStaff.getStoreId()) {return false; }
-        if (this.getActive() != thatStaff.getActive()) {return false; }
+        if (!Objects.equals(this.getActive(), thatStaff.getActive())) {return false; }
         if (!Objects.equals(this.getUsername(), thatStaff.getUsername())) {return false; }
         if (!Objects.equals(this.getPassword(), thatStaff.getPassword())) {return false; }
         if (!Objects.equals(this.getLastUpdate(), thatStaff.getLastUpdate())) {return false; }
@@ -217,7 +215,7 @@ public abstract class GeneratedStaffImpl implements Staff {
         hash = 31 * hash + Objects.hashCode(getPicture());
         hash = 31 * hash + Objects.hashCode(getEmail());
         hash = 31 * hash + Short.hashCode(getStoreId());
-        hash = 31 * hash + Integer.hashCode(getActive());
+        hash = 31 * hash + Objects.hashCode(getActive());
         hash = 31 * hash + Objects.hashCode(getUsername());
         hash = 31 * hash + Objects.hashCode(getPassword());
         hash = 31 * hash + Objects.hashCode(getLastUpdate());

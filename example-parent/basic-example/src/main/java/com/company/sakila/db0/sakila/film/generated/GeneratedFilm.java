@@ -434,13 +434,13 @@ public interface GeneratedFilm {
         SPECIAL_FEATURES     ("special_features"),
         LAST_UPDATE          ("last_update");
         
-        private final String columnName;
+        private final String columnId;
         private final TableIdentifier<Film> tableIdentifier;
         
-        Identifier(String columnName) {
-            this.columnName      = columnName;
-            this.tableIdentifier = TableIdentifier.of(    getDbmsId(),
-                getSchemaId(),
+        Identifier(String columnId) {
+            this.columnId        = columnId;
+            this.tableIdentifier = TableIdentifier.of(    getDbmsId(), 
+                getSchemaId(), 
                 getTableId());
         }
         
@@ -461,7 +461,7 @@ public interface GeneratedFilm {
         
         @Override
         public String getColumnId() {
-            return this.columnName;
+            return this.columnId;
         }
         
         @Override
