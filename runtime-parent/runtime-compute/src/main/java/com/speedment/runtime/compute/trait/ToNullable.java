@@ -1,5 +1,7 @@
 package com.speedment.runtime.compute.trait;
 
+import com.speedment.runtime.compute.expression.Expression;
+
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -10,7 +12,7 @@ import java.util.function.Predicate;
  * @author Emil Forslund
  * @since  3.1.0
  */
-public interface ToNullable<T, R> extends Function<T, R> {
+public interface ToNullable<T, R> extends Function<T, R>, Expression<T> {
 
     default Predicate<T> isNull() {
         return this::isNull;
