@@ -37,6 +37,32 @@ import java.util.stream.Collector.Characteristics;
 public interface LongCollector<A, R> {
 
     /**
+     * Creates and returns a new instance of this interface that simply holds
+     * the specified {@code supplier}, {@code accumulator}, {@code combiner},
+     * {@code finisher} and {@code characteristics}.
+     *
+     * @param <A>  the type of the intermediary collector object
+     * @param <R>  the type of the result
+     *
+     * @param supplier         how new intermediary objects are created
+     * @param accumulator      how to add a {@code long} to an intermediary
+     * @param combiner         how to combine two intermediaries into one
+     * @param finisher         how to turn an intermediary into a result
+     * @param characteristics  defining characteristics of this collector
+     *
+     * @return  the new collector
+     */
+    static <A, R> LongCollector<A, R> create(
+            final Supplier<A> supplier,
+            final ObjLongConsumer<A> accumulator,
+            final BinaryOperator<A> combiner,
+            final Function<A, R> finisher,
+            final Set<Collector.Characteristics> characteristics) {
+        return new LongCollectorImpl<>(
+            supplier, accumulator, combiner, finisher, characteristics);
+    }
+
+    /**
      * Returns a supplier that can create an intermediary accumulating object.
      *
      * @return the supplier for the accumulating object
