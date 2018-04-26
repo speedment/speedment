@@ -5,6 +5,7 @@ import com.speedment.common.function.FloatUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
+import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseGetUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseThrowUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseUtil;
@@ -178,5 +179,11 @@ extends Expression<T>,
                 applyAsFloat(second)
             );
         }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    default <V> ToFloatNullable<V> compose(Function<? super V, ? extends T> before) {
+        return ComposedUtil.composeNullable((Function<V, T>) before, this);
     }
 }

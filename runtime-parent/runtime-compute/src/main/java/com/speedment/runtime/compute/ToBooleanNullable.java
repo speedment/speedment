@@ -4,6 +4,7 @@ import com.speedment.common.function.BooleanToDoubleFunction;
 import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
+import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseGetUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseThrowUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseUtil;
@@ -150,5 +151,11 @@ extends Expression<T>,
                 applyAsBoolean(second)
             );
         }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    default <V> ToBooleanNullable<V> compose(Function<? super V, ? extends T> before) {
+        return ComposedUtil.composeNullable((Function<V, T>) before, this);
     }
 }

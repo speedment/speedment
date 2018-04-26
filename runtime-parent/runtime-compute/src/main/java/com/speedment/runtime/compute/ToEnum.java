@@ -4,6 +4,7 @@ import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.ToEnumImpl;
+import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasHash;
@@ -68,5 +69,11 @@ extends Expression<T>,
     @Override
     default int compare(T first, T second) {
         return apply(first).compareTo(apply(second));
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    default <V> ToEnum<V, E> compose(Function<? super V, ? extends T> before) {
+        return ComposedUtil.compose((Function<V, T>) before, this);
     }
 }

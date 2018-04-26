@@ -5,9 +5,11 @@ import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
 import com.speedment.runtime.compute.internal.expression.CastUtil;
+import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.*;
 
+import java.util.function.Function;
 import java.util.function.LongToDoubleFunction;
 import java.util.function.LongUnaryOperator;
 import java.util.function.ToLongFunction;
@@ -278,5 +280,10 @@ extends Expression<T>,
             applyAsLong(first),
             applyAsLong(second)
         );
+    }
+
+    @SuppressWarnings("unchecked")
+    default <V> ToLong<V> compose(Function<? super V, ? extends T> before) {
+        return ComposedUtil.compose((Function<V, T>) before, this);
     }
 }

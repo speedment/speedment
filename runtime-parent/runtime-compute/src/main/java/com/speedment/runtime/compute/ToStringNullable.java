@@ -2,6 +2,7 @@ package com.speedment.runtime.compute;
 
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
+import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseGetUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseThrowUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseUtil;
@@ -63,5 +64,11 @@ extends Expression<T>,
         } else {
             return apply(first).compareTo(apply(second));
         }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    default <V> ToStringNullable<V> compose(Function<? super V, ? extends T> before) {
+        return ComposedUtil.composeNullable((Function<V, T>) before, this);
     }
 }

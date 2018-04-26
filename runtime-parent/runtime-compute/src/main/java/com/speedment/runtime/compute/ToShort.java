@@ -8,8 +8,11 @@ import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
 import com.speedment.runtime.compute.internal.expression.CastUtil;
+import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.*;
+
+import java.util.function.Function;
 
 /**
  * Expression that given an entity returns a {@code short} value. This
@@ -276,5 +279,10 @@ extends Expression<T>,
             applyAsShort(first),
             applyAsShort(second)
         );
+    }
+
+    @SuppressWarnings("unchecked")
+    default <V> ToShort<V> compose(Function<? super V, ? extends T> before) {
+        return ComposedUtil.compose((Function<V, T>) before, this);
     }
 }

@@ -6,6 +6,7 @@ import com.speedment.common.function.ToBooleanFunction;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.expression.CastUtil;
+import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.HasAsDouble;
 import com.speedment.runtime.compute.trait.HasAsInt;
@@ -15,6 +16,7 @@ import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.HasMap;
 
 import java.math.BigDecimal;
+import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
 /**
@@ -82,5 +84,10 @@ extends Expression<T>,
         final boolean f = applyAsBoolean(first);
         final boolean s = applyAsBoolean(second);
         return Boolean.compare(f, s);
+    }
+
+    @SuppressWarnings("unchecked")
+    default <V> ToBoolean<V> compose(Function<? super V, ? extends T> before) {
+        return ComposedUtil.compose((Function<V, T>) before, this);
     }
 }

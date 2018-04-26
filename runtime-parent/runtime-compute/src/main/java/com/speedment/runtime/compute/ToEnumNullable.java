@@ -4,6 +4,7 @@ import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.ToEnumImpl;
 import com.speedment.runtime.compute.internal.ToEnumNullableImpl;
+import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseGetUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseThrowUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseUtil;
@@ -173,5 +174,11 @@ extends Expression<T>,
         } else {
             return a.compareTo(b);
         }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    default <V> ToEnumNullable<V, E> compose(Function<? super V, ? extends T> before) {
+        return ComposedUtil.composeNullable((Function<V, T>) before, this);
     }
 }

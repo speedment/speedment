@@ -6,10 +6,12 @@ import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
 import com.speedment.runtime.compute.internal.ConstantDoubleImpl;
 import com.speedment.runtime.compute.internal.expression.CastUtil;
+import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.*;
 
 import java.util.function.DoubleUnaryOperator;
+import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 
 /**
@@ -286,5 +288,10 @@ extends Expression<T>,
             applyAsDouble(first),
             applyAsDouble(second)
         );
+    }
+
+    @SuppressWarnings("unchecked")
+    default <V> ToDouble<V> compose(Function<? super V, ? extends T> before) {
+        return ComposedUtil.compose((Function<V, T>) before, this);
     }
 }

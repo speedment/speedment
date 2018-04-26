@@ -8,8 +8,11 @@ import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
 import com.speedment.runtime.compute.internal.expression.CastUtil;
+import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.*;
+
+import java.util.function.Function;
 
 /**
  * Expression that given an entity returns a {@code byte} value. This expression
@@ -276,5 +279,10 @@ extends Expression<T>,
             applyAsByte(first),
             applyAsByte(second)
         );
+    }
+
+    @SuppressWarnings("unchecked")
+    default <V> ToByte<V> compose(Function<? super V, ? extends T> before) {
+        return ComposedUtil.compose((Function<V, T>) before, this);
     }
 }
