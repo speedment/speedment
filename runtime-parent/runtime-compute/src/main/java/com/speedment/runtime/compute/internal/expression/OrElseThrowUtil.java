@@ -390,7 +390,7 @@ public final class OrElseThrowUtil {
         }
 
         @Override
-        public final INNER getInnerNullable() {
+        public final INNER innerNullable() {
             return inner;
         }
 
@@ -399,8 +399,8 @@ public final class OrElseThrowUtil {
             if (this == o) return true;
             if (!(o instanceof NonNullableExpression)) return false;
             final NonNullableExpression<?, ?> that = (NonNullableExpression<?, ?>) o;
-            return Objects.equals(inner, that.getInnerNullable()) &&
-                Objects.equals(getNullStrategy(), that.getNullStrategy());
+            return Objects.equals(inner, that.innerNullable()) &&
+                Objects.equals(nullStrategy(), that.nullStrategy());
         }
 
         @Override

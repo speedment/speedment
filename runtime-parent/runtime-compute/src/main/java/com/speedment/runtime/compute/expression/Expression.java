@@ -19,6 +19,6 @@ public interface Expression<T> {
      *
      * @return  the expression type
      */
-    ExpressionType getExpressionType();
+    ExpressionType expressionType();
 
 }

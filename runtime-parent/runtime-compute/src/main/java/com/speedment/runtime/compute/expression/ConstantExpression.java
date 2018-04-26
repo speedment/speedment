@@ -4,7 +4,7 @@ package com.speedment.runtime.compute.expression;
  * Specialized {@link Expression} that always returns the same value, regardless
  * of the input.
  * <p>
- * Equality is determined by looking at the {@link #getValue()}.
+ * Equality is determined by looking at the {@link #value()}.
  *
  * @param <T>  the input entity type
  * @param <V>  the resulting type
@@ -20,6 +20,6 @@ public interface ConstantExpression<T, V> extends Expression<T> {
      *
      * @return  the constant value
      */
-    V getValue();
+    V value();
 
 }

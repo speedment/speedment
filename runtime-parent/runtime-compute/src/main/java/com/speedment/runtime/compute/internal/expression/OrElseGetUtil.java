@@ -433,7 +433,7 @@ public final class OrElseGetUtil {
         }
 
         @Override
-        public final INNER getInnerNullable() {
+        public final INNER innerNullable() {
             return inner;
         }
 
@@ -447,7 +447,7 @@ public final class OrElseGetUtil {
             if (this == o) return true;
             if (!(o instanceof OrElseGetExpression)) return false;
             final OrElseGetExpression<?, ?, ?> that = (OrElseGetExpression<?, ?, ?>) o;
-            return Objects.equals(inner, that.getInnerNullable()) &&
+            return Objects.equals(inner, that.innerNullable()) &&
                 Objects.equals(getter, that.getDefaultValueGetter());
         }
 

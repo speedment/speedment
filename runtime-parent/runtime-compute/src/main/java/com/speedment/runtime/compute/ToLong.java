@@ -48,7 +48,7 @@ extends Expression<T>,
     long applyAsLong(T object);
 
     @Override
-    default ExpressionType getExpressionType() {
+    default ExpressionType expressionType() {
         return ExpressionType.LONG;
     }
 

@@ -26,7 +26,7 @@ extends NonNullableExpression<T, ToEnumNullable<T, E>>, ToEnum<T, E> {
     E getDefaultValue();
 
     @Override
-    default NullStrategy getNullStrategy() {
+    default NullStrategy nullStrategy() {
         return NullStrategy.USE_DEFAULT_VALUE;
     }
 }

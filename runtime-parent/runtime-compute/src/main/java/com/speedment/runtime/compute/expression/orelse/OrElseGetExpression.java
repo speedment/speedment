@@ -27,7 +27,7 @@ extends NonNullableExpression<T, INNER> {
     DEFAULT getDefaultValueGetter();
 
     @Override
-    default NullStrategy getNullStrategy() {
+    default NullStrategy nullStrategy() {
         return NullStrategy.APPLY_DEFAULT_METHOD;
     }
 }

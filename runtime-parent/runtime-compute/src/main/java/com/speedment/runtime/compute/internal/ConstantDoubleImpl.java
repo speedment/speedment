@@ -25,7 +25,7 @@ implements ToDouble<T>, ConstantExpression<T, Double> {
     }
 
     @Override
-    public Double getValue() {
+    public Double value() {
         return constant;
     }
 }

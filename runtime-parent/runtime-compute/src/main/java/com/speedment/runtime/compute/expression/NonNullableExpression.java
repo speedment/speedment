@@ -6,10 +6,10 @@ import com.speedment.runtime.compute.expression.orelse.OrElseThrowExpression;
 /**
  * Specialized {@link Expression} that is not nullable, but that wraps an
  * expression that is and that has some routine for dealing with {@code null}
- * values determined by {@link #getNullStrategy()}.
+ * values determined by {@link #nullStrategy()}.
  * <p>
- * Equality is determined by looking at {@link #getInnerNullable()} and
- * {@link #getNullStrategy()}, and additionally by the
+ * Equality is determined by looking at {@link #innerNullable()} and
+ * {@link #nullStrategy()}, and additionally by the
  * {@link OrElseGetExpression#getDefaultValueGetter()} or the
  * {@code getDefaultValue()} if the strategy is
  * {@link NullStrategy#APPLY_DEFAULT_METHOD} or
@@ -29,15 +29,15 @@ extends Expression<T> {
      *
      * @return  the inner nullable expression
      */
-    INNER getInnerNullable();
+    INNER innerNullable();
 
     /**
      * Returns the strategy used by this expression to deal with the case when
-     * {@link #getInnerNullable()} would have returned {@code null}.
+     * {@link #innerNullable()} would have returned {@code null}.
      *
      * @return  the null-strategy used
      */
-    NullStrategy getNullStrategy();
+    NullStrategy nullStrategy();
 
     /**
      * The strategies possible when dealing with {@code null}-values.
@@ -45,7 +45,7 @@ extends Expression<T> {
     enum NullStrategy {
 
         /**
-         * Whenever the {@link #getInnerNullable() inner} expression returns a
+         * Whenever the {@link #innerNullable() inner} expression returns a
          * {@code null} value, a specific constant value will be returned by
          * this expression. If this strategy is used, then the class should also
          * implement the corresponding {@code To__OrElseExpression} depending on
@@ -54,7 +54,7 @@ extends Expression<T> {
         USE_DEFAULT_VALUE,
 
         /**
-         * Whenever the {@link #getInnerNullable() inner} expression returns a
+         * Whenever the {@link #innerNullable() inner} expression returns a
          * {@code null} value, the
          * {@link OrElseGetExpression#getDefaultValueGetter() other} expression
          * will be invoked to determine the value instead. If this strategy is
@@ -64,7 +64,7 @@ extends Expression<T> {
         APPLY_DEFAULT_METHOD,
 
         /**
-         * Whenever the {@link #getInnerNullable() inner} expression returns a
+         * Whenever the {@link #innerNullable() inner} expression returns a
          * {@code null} value, a {@code NullPointerException} is thrown. If this
          * strategy is used, then the class should also implement
          * {@link OrElseThrowExpression}.

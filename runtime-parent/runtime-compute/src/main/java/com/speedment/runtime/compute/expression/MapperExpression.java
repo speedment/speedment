@@ -4,8 +4,8 @@ package com.speedment.runtime.compute.expression;
  * Specialized expression that takes the result of an inner expression and
  * applies a mapping function to it.
  * <p>
- * Equality is determined by looking at {@link #getInner()},
- * {@link #getMapper()} and {@link #getMapperType()}.
+ * Equality is determined by looking at {@link #inner()},
+ * {@link #mapper()} and {@link #mapperType()}.
  *
  * @param <T>       the input entity type
  * @param <INNER>   the type of the inner expression
@@ -24,7 +24,7 @@ extends Expression<T> {
      *
      * @return  the inner expression
      */
-    INNER getInner();
+    INNER inner();
 
     /**
      * Returns the mapping operation applied to the result from the inner
@@ -32,20 +32,20 @@ extends Expression<T> {
      *
      * @return  the mapping operation
      */
-    MAPPER getMapper();
+    MAPPER mapper();
 
     /**
-     * Returns the type of mapper that the {@link #getMapper()}-method returns
+     * Returns the type of mapper that the {@link #mapper()}-method returns
      * an instance of.
      *
      * @return  the type of mapper
      */
-    MapperType getMapperType();
+    MapperType mapperType();
 
     /**
      * Enumeration of all possible mapping types. Every mapping type has a
      * corresponding functional interface, and it should be safe to assume the
-     * {@link #getMapper()}-method to return the correct one.
+     * {@link #mapper()}-method to return the correct one.
      */
     enum MapperType {
         /**

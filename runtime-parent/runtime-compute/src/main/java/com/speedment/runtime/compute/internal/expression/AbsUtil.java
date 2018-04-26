@@ -280,12 +280,12 @@ public final class AbsUtil {
         }
 
         @Override
-        public final INNER getInner() {
+        public final INNER inner() {
             return inner;
         }
 
         @Override
-        public final Operator getOperator() {
+        public final Operator operator() {
             return Operator.ABS;
         }
 
@@ -294,13 +294,13 @@ public final class AbsUtil {
             if (this == o) return true;
             else if (!(o instanceof UnaryExpression)) return false;
             final UnaryExpression<?, ?> that = (UnaryExpression<?, ?>) o;
-            return Objects.equals(getInner(), that.getInner())
-                && getOperator().equals(that.getOperator());
+            return Objects.equals(inner(), that.inner())
+                && operator().equals(that.operator());
         }
 
         @Override
         public final int hashCode() {
-            return Objects.hash(getInner(), getOperator());
+            return Objects.hash(inner(), operator());
         }
     }
 

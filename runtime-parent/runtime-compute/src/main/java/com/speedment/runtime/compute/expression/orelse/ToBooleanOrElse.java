@@ -25,7 +25,7 @@ extends NonNullableExpression<T, ToBooleanNullable<T>>, ToBoolean<T> {
     boolean getDefaultValue();
 
     @Override
-    default NullStrategy getNullStrategy() {
+    default NullStrategy nullStrategy() {
         return NullStrategy.USE_DEFAULT_VALUE;
     }
 }

@@ -47,7 +47,7 @@ extends Expression<T>,
     float applyAsFloat(T object);
 
     @Override
-    default ExpressionType getExpressionType() {
+    default ExpressionType expressionType() {
         return ExpressionType.FLOAT;
     }
 

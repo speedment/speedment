@@ -28,12 +28,12 @@ implements NullableExpression<T, ToByte<T>>, ToByteNullable<T> {
     }
 
     @Override
-    public ToByte<T> getInner() {
+    public ToByte<T> inner() {
         return original;
     }
 
     @Override
-    public Predicate<T> getIsNull() {
+    public Predicate<T> isNullPredicate() {
         return isNull;
     }
 
@@ -111,8 +111,8 @@ implements NullableExpression<T, ToByte<T>>, ToByteNullable<T> {
         if (this == o) return true;
         else if (!(o instanceof NullableExpression)) return false;
         final NullableExpression<?, ?> that = (NullableExpression<?, ?>) o;
-        return Objects.equals(original, that.getInner()) &&
-            Objects.equals(isNull, that.getIsNull());
+        return Objects.equals(original, that.inner()) &&
+            Objects.equals(isNull, that.isNullPredicate());
     }
 
     @Override

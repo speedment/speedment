@@ -36,7 +36,7 @@ extends Expression<T>,
         HasCompare<T> {
 
     @Override
-    default ExpressionType getExpressionType() {
+    default ExpressionType expressionType() {
         return ExpressionType.LONG_NULLABLE;
     }
 

@@ -37,7 +37,7 @@ public final class MapperUtil {
             }
 
             @Override
-            public MapperType getMapperType() {
+            public MapperType mapperType() {
                 return MapperType.BOOLEAN_TO_BOOLEAN;
             }
         };
@@ -61,7 +61,7 @@ public final class MapperUtil {
             }
 
             @Override
-            public MapperType getMapperType() {
+            public MapperType mapperType() {
                 return MapperType.BOOLEAN_TO_DOUBLE;
             }
         };
@@ -85,7 +85,7 @@ public final class MapperUtil {
             }
 
             @Override
-            public MapperType getMapperType() {
+            public MapperType mapperType() {
                 return MapperType.CHAR_TO_CHAR;
             }
         };
@@ -109,7 +109,7 @@ public final class MapperUtil {
             }
 
             @Override
-            public MapperType getMapperType() {
+            public MapperType mapperType() {
                 return MapperType.BYTE_TO_BYTE;
             }
         };
@@ -133,7 +133,7 @@ public final class MapperUtil {
             }
 
             @Override
-            public MapperType getMapperType() {
+            public MapperType mapperType() {
                 return MapperType.BYTE_TO_DOUBLE;
             }
         };
@@ -157,7 +157,7 @@ public final class MapperUtil {
             }
 
             @Override
-            public MapperType getMapperType() {
+            public MapperType mapperType() {
                 return MapperType.SHORT_TO_SHORT;
             }
         };
@@ -181,7 +181,7 @@ public final class MapperUtil {
             }
 
             @Override
-            public MapperType getMapperType() {
+            public MapperType mapperType() {
                 return MapperType.SHORT_TO_DOUBLE;
             }
         };
@@ -205,7 +205,7 @@ public final class MapperUtil {
             }
 
             @Override
-            public MapperType getMapperType() {
+            public MapperType mapperType() {
                 return MapperType.INT_TO_INT;
             }
         };
@@ -229,7 +229,7 @@ public final class MapperUtil {
             }
 
             @Override
-            public MapperType getMapperType() {
+            public MapperType mapperType() {
                 return MapperType.INT_TO_DOUBLE;
             }
         };
@@ -253,7 +253,7 @@ public final class MapperUtil {
             }
 
             @Override
-            public MapperType getMapperType() {
+            public MapperType mapperType() {
                 return MapperType.LONG_TO_LONG;
             }
         };
@@ -277,7 +277,7 @@ public final class MapperUtil {
             }
 
             @Override
-            public MapperType getMapperType() {
+            public MapperType mapperType() {
                 return MapperType.LONG_TO_DOUBLE;
             }
         };
@@ -301,7 +301,7 @@ public final class MapperUtil {
             }
 
             @Override
-            public MapperType getMapperType() {
+            public MapperType mapperType() {
                 return MapperType.FLOAT_TO_FLOAT;
             }
         };
@@ -325,7 +325,7 @@ public final class MapperUtil {
             }
 
             @Override
-            public MapperType getMapperType() {
+            public MapperType mapperType() {
                 return MapperType.FLOAT_TO_DOUBLE;
             }
         };
@@ -349,7 +349,7 @@ public final class MapperUtil {
             }
 
             @Override
-            public MapperType getMapperType() {
+            public MapperType mapperType() {
                 return MapperType.DOUBLE_TO_DOUBLE;
             }
         };
@@ -373,7 +373,7 @@ public final class MapperUtil {
             }
 
             @Override
-            public MapperType getMapperType() {
+            public MapperType mapperType() {
                 return MapperType.STRING_TO_STRING;
             }
         };
@@ -402,7 +402,7 @@ public final class MapperUtil {
             }
 
             @Override
-            public MapperType getMapperType() {
+            public MapperType mapperType() {
                 return MapperType.ENUM_TO_ENUM;
             }
         };
@@ -426,7 +426,7 @@ public final class MapperUtil {
             }
 
             @Override
-            public MapperType getMapperType() {
+            public MapperType mapperType() {
                 return MapperType.BIG_DECIMAL_TO_BIG_DECIMAL;
             }
         };
@@ -605,12 +605,12 @@ public final class MapperUtil {
         }
 
         @Override
-        public final INNER getInner() {
+        public final INNER inner() {
             return inner;
         }
 
         @Override
-        public final MAPPER getMapper() {
+        public final MAPPER mapper() {
             return mapper;
         }
 
@@ -619,14 +619,14 @@ public final class MapperUtil {
             if (this == o) return true;
             else if (!(o instanceof MapperExpression)) return false;
             final MapperExpression<?, ?, ?> that = (MapperExpression<?, ?, ?>) o;
-            return Objects.equals(getInner(), that.getInner()) &&
-                Objects.equals(getMapper(), that.getMapper()) &&
-                Objects.equals(getMapperType(), that.getMapperType());
+            return Objects.equals(inner(), that.inner()) &&
+                Objects.equals(mapper(), that.mapper()) &&
+                Objects.equals(mapperType(), that.mapperType());
         }
 
         @Override
         public final int hashCode() {
-            return Objects.hash(getInner(), getMapper(), getMapperType());
+            return Objects.hash(inner(), mapper(), mapperType());
         }
     }
 

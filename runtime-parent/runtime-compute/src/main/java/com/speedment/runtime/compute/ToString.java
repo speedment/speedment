@@ -35,7 +35,7 @@ extends Expression<T>,
     String apply(T object);
 
     @Override
-    default ExpressionType getExpressionType() {
+    default ExpressionType expressionType() {
         return ExpressionType.STRING;
     }
 

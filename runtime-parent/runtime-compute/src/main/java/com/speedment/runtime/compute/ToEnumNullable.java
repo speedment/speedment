@@ -42,7 +42,7 @@ extends Expression<T>,
     Class<E> enumClass();
 
     @Override
-    default ExpressionType getExpressionType() {
+    default ExpressionType expressionType() {
         return ExpressionType.ENUM_NULLABLE;
     }
 

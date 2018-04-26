@@ -60,7 +60,7 @@ extends Expression<T>,
     double applyAsDouble(T object);
 
     @Override
-    default ExpressionType getExpressionType() {
+    default ExpressionType expressionType() {
         return ExpressionType.DOUBLE;
     }
 

@@ -4,8 +4,8 @@ package com.speedment.runtime.compute.expression;
  * An {@link Expression} that has a single operand that implements
  * {@link Expression}.
  * <p>
- * Equality is determined by looking at {@link #getInner()} and
- * {@link #getOperator()}.
+ * Equality is determined by looking at {@link #inner()} and
+ * {@link #operator()}.
  *
  * @param <T>      the input entity type
  * @param <INNER>  the type of the inner expression
@@ -21,14 +21,14 @@ extends Expression<T> {
      *
      * @return  the inner expression
      */
-    INNER getInner();
+    INNER inner();
 
     /**
      * Returns the binary operator that this expression represents.
      *
      * @return  the operator
      */
-    Operator getOperator();
+    Operator operator();
 
     /**
      * The unary expression operator type.

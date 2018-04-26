@@ -44,7 +44,7 @@ extends Expression<T>,
     boolean applyAsBoolean(T object);
 
     @Override
-    default ExpressionType getExpressionType() {
+    default ExpressionType expressionType() {
         return ExpressionType.BOOLEAN;
     }
 

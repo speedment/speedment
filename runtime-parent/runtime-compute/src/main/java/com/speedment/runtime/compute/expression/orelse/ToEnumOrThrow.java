@@ -20,6 +20,6 @@ extends OrElseThrowExpression<T, ToEnumNullable<T, E>>, ToEnum<T, E> {
 
     @Override
     default Class<E> enumClass() {
-        return getInnerNullable().enumClass();
+        return innerNullable().enumClass();
     }
 }

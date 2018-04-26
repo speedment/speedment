@@ -47,7 +47,7 @@ extends Expression<T>,
     byte applyAsByte(T object);
 
     @Override
-    default ExpressionType getExpressionType() {
+    default ExpressionType expressionType() {
         return ExpressionType.BYTE;
     }
 

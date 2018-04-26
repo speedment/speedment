@@ -27,7 +27,7 @@ extends NonNullableExpression<T, ToBigDecimalNullable<T>>, ToBigDecimal<T> {
     BigDecimal getDefaultValue();
 
     @Override
-    default NullStrategy getNullStrategy() {
+    default NullStrategy nullStrategy() {
         return NullStrategy.USE_DEFAULT_VALUE;
     }
 }

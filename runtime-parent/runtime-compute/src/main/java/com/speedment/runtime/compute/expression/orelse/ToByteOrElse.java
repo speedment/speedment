@@ -25,7 +25,7 @@ extends NonNullableExpression<T, ToByteNullable<T>>, ToByte<T> {
     byte getDefaultValue();
 
     @Override
-    default NullStrategy getNullStrategy() {
+    default NullStrategy nullStrategy() {
         return NullStrategy.USE_DEFAULT_VALUE;
     }
 }

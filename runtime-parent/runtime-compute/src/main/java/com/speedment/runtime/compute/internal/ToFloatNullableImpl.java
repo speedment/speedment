@@ -28,12 +28,12 @@ implements NullableExpression<T, ToFloat<T>>, ToFloatNullable<T> {
     }
 
     @Override
-    public ToFloat<T> getInner() {
+    public ToFloat<T> inner() {
         return original;
     }
 
     @Override
-    public Predicate<T> getIsNull() {
+    public Predicate<T> isNullPredicate() {
         return isNull;
     }
 
@@ -111,8 +111,8 @@ implements NullableExpression<T, ToFloat<T>>, ToFloatNullable<T> {
         if (this == o) return true;
         else if (!(o instanceof NullableExpression)) return false;
         final NullableExpression<?, ?> that = (NullableExpression<?, ?>) o;
-        return Objects.equals(original, that.getInner()) &&
-            Objects.equals(isNull, that.getIsNull());
+        return Objects.equals(original, that.inner()) &&
+            Objects.equals(isNull, that.isNullPredicate());
     }
 
     @Override

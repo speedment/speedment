@@ -25,7 +25,7 @@ extends NonNullableExpression<T, ToCharNullable<T>>, ToChar<T> {
     char getDefaultValue();
 
     @Override
-    default NullStrategy getNullStrategy() {
+    default NullStrategy nullStrategy() {
         return NullStrategy.USE_DEFAULT_VALUE;
     }
 }

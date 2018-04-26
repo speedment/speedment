@@ -41,7 +41,7 @@ public final class DivideUtil {
             }
 
             @Override
-            public Integer getSecond() {
+            public Integer second() {
                 return second;
             }
         };
@@ -66,7 +66,7 @@ public final class DivideUtil {
             }
 
             @Override
-            public Long getSecond() {
+            public Long second() {
                 return second;
             }
         };
@@ -90,7 +90,7 @@ public final class DivideUtil {
             }
 
             @Override
-            public Double getSecond() {
+            public Double second() {
                 return second;
             }
         };
@@ -179,7 +179,7 @@ public final class DivideUtil {
             }
 
             @Override
-            public Integer getSecond() {
+            public Integer second() {
                 return second;
             }
         };
@@ -204,7 +204,7 @@ public final class DivideUtil {
             }
 
             @Override
-            public Long getSecond() {
+            public Long second() {
                 return second;
             }
         };
@@ -228,7 +228,7 @@ public final class DivideUtil {
             }
 
             @Override
-            public Double getSecond() {
+            public Double second() {
                 return second;
             }
         };
@@ -317,7 +317,7 @@ public final class DivideUtil {
             }
 
             @Override
-            public Integer getSecond() {
+            public Integer second() {
                 return second;
             }
         };
@@ -342,7 +342,7 @@ public final class DivideUtil {
             }
 
             @Override
-            public Long getSecond() {
+            public Long second() {
                 return second;
             }
         };
@@ -366,7 +366,7 @@ public final class DivideUtil {
             }
 
             @Override
-            public Double getSecond() {
+            public Double second() {
                 return second;
             }
         };
@@ -455,7 +455,7 @@ public final class DivideUtil {
             }
 
             @Override
-            public Integer getSecond() {
+            public Integer second() {
                 return second;
             }
         };
@@ -480,7 +480,7 @@ public final class DivideUtil {
             }
 
             @Override
-            public Long getSecond() {
+            public Long second() {
                 return second;
             }
         };
@@ -504,7 +504,7 @@ public final class DivideUtil {
             }
 
             @Override
-            public Double getSecond() {
+            public Double second() {
                 return second;
             }
         };
@@ -593,7 +593,7 @@ public final class DivideUtil {
             }
 
             @Override
-            public Integer getSecond() {
+            public Integer second() {
                 return second;
             }
         };
@@ -618,7 +618,7 @@ public final class DivideUtil {
             }
 
             @Override
-            public Long getSecond() {
+            public Long second() {
                 return second;
             }
         };
@@ -642,7 +642,7 @@ public final class DivideUtil {
             }
 
             @Override
-            public Double getSecond() {
+            public Double second() {
                 return second;
             }
         };
@@ -731,7 +731,7 @@ public final class DivideUtil {
             }
 
             @Override
-            public Integer getSecond() {
+            public Integer second() {
                 return second;
             }
         };
@@ -756,7 +756,7 @@ public final class DivideUtil {
             }
 
             @Override
-            public Long getSecond() {
+            public Long second() {
                 return second;
             }
         };
@@ -780,7 +780,7 @@ public final class DivideUtil {
             }
 
             @Override
-            public Double getSecond() {
+            public Double second() {
                 return second;
             }
         };
@@ -866,7 +866,7 @@ public final class DivideUtil {
         }
 
         @Override
-        public Operator getOperator() {
+        public Operator operator() {
             return Operator.DIVIDE;
         }
     }
@@ -891,12 +891,12 @@ public final class DivideUtil {
         }
 
         @Override
-        public FIRST getFirst() {
+        public FIRST first() {
             return first;
         }
 
         @Override
-        public SECOND getSecond() {
+        public SECOND second() {
             return second;
         }
 
@@ -905,14 +905,14 @@ public final class DivideUtil {
             if (this == o) return true;
             if (!(o instanceof BinaryExpression)) return false;
             final BinaryExpression<?, ?, ?> divide = (BinaryExpression<?, ?, ?>) o;
-            return Objects.equals(getFirst(), divide.getFirst()) &&
-                Objects.equals(getSecond(), divide.getSecond()) &&
-                Objects.equals(getOperator(), divide.getOperator());
+            return Objects.equals(first(), divide.first()) &&
+                Objects.equals(second(), divide.second()) &&
+                Objects.equals(operator(), divide.operator());
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(getFirst(), getSecond(), getOperator());
+            return Objects.hash(first(), second(), operator());
         }
     }
 
@@ -933,7 +933,7 @@ public final class DivideUtil {
         }
 
         @Override
-        public Operator getOperator() {
+        public Operator operator() {
             return Operator.DIVIDE;
         }
 
@@ -943,14 +943,14 @@ public final class DivideUtil {
             else if (this == o) return true;
             else if (!(o instanceof BinaryObjExpression)) return false;
             final BinaryObjExpression<?, ?, ?> that = (BinaryObjExpression<?, ?, ?>) o;
-            return Objects.equals(first, that.getFirst()) &&
-                Objects.equals(getSecond(), that.getSecond()) &&
-                Objects.equals(getOperator(), that.getOperator());
+            return Objects.equals(first, that.first()) &&
+                Objects.equals(second(), that.second()) &&
+                Objects.equals(operator(), that.operator());
         }
 
         @Override
         public final int hashCode() {
-            return Objects.hash(first, getSecond(), getOperator());
+            return Objects.hash(first, second(), operator());
         }
     }
 
@@ -972,7 +972,7 @@ public final class DivideUtil {
         }
 
         @Override
-        public final INNER getFirst() {
+        public final INNER first() {
             return first;
         }
     }

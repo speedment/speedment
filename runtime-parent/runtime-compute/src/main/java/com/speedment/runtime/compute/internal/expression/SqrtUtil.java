@@ -172,12 +172,12 @@ public final class SqrtUtil {
         }
 
         @Override
-        public final INNER getInner() {
+        public final INNER inner() {
             return inner;
         }
 
         @Override
-        public final Operator getOperator() {
+        public final Operator operator() {
             return Operator.SQRT;
         }
 
@@ -186,13 +186,13 @@ public final class SqrtUtil {
             if (this == o) return true;
             if (!(o instanceof UnaryExpression)) return false;
             final UnaryExpression<?, ?> that = (UnaryExpression<?, ?>) o;
-            return Objects.equals(getInner(), that.getInner())
-                && Objects.equals(getOperator(), that.getOperator());
+            return Objects.equals(inner(), that.inner())
+                && Objects.equals(operator(), that.operator());
         }
 
         @Override
         public final int hashCode() {
-            return Objects.hash(getInner(), getOperator());
+            return Objects.hash(inner(), operator());
         }
     }
 

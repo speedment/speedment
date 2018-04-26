@@ -25,7 +25,7 @@ extends NonNullableExpression<T, ToFloatNullable<T>>, ToFloat<T> {
     float getDefaultValue();
 
     @Override
-    default NullStrategy getNullStrategy() {
+    default NullStrategy nullStrategy() {
         return NullStrategy.USE_DEFAULT_VALUE;
     }
 }

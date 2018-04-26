@@ -724,17 +724,17 @@ public final class PowUtil {
         }
 
         @Override
-        public final INNER getFirst() {
+        public final INNER first() {
             return inner;
         }
 
         @Override
-        public final Integer getSecond() {
+        public final Integer second() {
             return power;
         }
 
         @Override
-        public final Operator getOperator() {
+        public final Operator operator() {
             return Operator.POW;
         }
 
@@ -744,14 +744,14 @@ public final class PowUtil {
             else if (this == o) return true;
             else if (!(o instanceof BinaryObjExpression)) return false;
             final BinaryObjExpression<?, ?, ?> that = (BinaryObjExpression<?, ?, ?>) o;
-            return Objects.equals(inner, that.getFirst()) &&
-                Objects.equals(power, that.getSecond()) &&
-                Objects.equals(getOperator(), that.getOperator());
+            return Objects.equals(inner, that.first()) &&
+                Objects.equals(power, that.second()) &&
+                Objects.equals(operator(), that.operator());
         }
 
         @Override
         public final int hashCode() {
-            return Objects.hash(inner, power, getOperator());
+            return Objects.hash(inner, power, operator());
         }
     }
 
@@ -773,17 +773,17 @@ public final class PowUtil {
         }
 
         @Override
-        public final INNER getFirst() {
+        public final INNER first() {
             return inner;
         }
 
         @Override
-        public final Double getSecond() {
+        public final Double second() {
             return power;
         }
 
         @Override
-        public final Operator getOperator() {
+        public final Operator operator() {
             return Operator.POW;
         }
 
@@ -793,14 +793,14 @@ public final class PowUtil {
             else if (this == o) return true;
             else if (!(o instanceof BinaryObjExpression)) return false;
             final BinaryObjExpression<?, ?, ?> that = (BinaryObjExpression<?, ?, ?>) o;
-            return Objects.equals(inner, that.getFirst()) &&
-                Objects.equals(power, that.getSecond()) &&
-                Objects.equals(getOperator(), that.getOperator());
+            return Objects.equals(inner, that.first()) &&
+                Objects.equals(power, that.second()) &&
+                Objects.equals(operator(), that.operator());
         }
 
         @Override
         public final int hashCode() {
-            return Objects.hash(inner, power, getOperator());
+            return Objects.hash(inner, power, operator());
         }
     }
 
@@ -822,17 +822,17 @@ public final class PowUtil {
         }
 
         @Override
-        public final INNER getFirst() {
+        public final INNER first() {
             return inner;
         }
 
         @Override
-        public final ToInt<T> getSecond() {
+        public final ToInt<T> second() {
             return power;
         }
 
         @Override
-        public final Operator getOperator() {
+        public final Operator operator() {
             return Operator.POW;
         }
 
@@ -842,14 +842,14 @@ public final class PowUtil {
             else if (this == o) return true;
             else if (!(o instanceof BinaryExpression)) return false;
             final BinaryExpression<?, ?, ?> that = (BinaryExpression<?, ?, ?>) o;
-            return Objects.equals(inner, that.getFirst()) &&
-                Objects.equals(power, that.getSecond()) &&
-                Objects.equals(getOperator(), that.getOperator());
+            return Objects.equals(inner, that.first()) &&
+                Objects.equals(power, that.second()) &&
+                Objects.equals(operator(), that.operator());
         }
 
         @Override
         public final int hashCode() {
-            return Objects.hash(inner, power, getOperator());
+            return Objects.hash(inner, power, operator());
         }
     }
 
@@ -871,17 +871,17 @@ public final class PowUtil {
         }
 
         @Override
-        public final INNER getFirst() {
+        public final INNER first() {
             return inner;
         }
 
         @Override
-        public final ToDouble<T> getSecond() {
+        public final ToDouble<T> second() {
             return power;
         }
 
         @Override
-        public final Operator getOperator() {
+        public final Operator operator() {
             return Operator.POW;
         }
 
@@ -891,14 +891,14 @@ public final class PowUtil {
             else if (this == o) return true;
             else if (!(o instanceof BinaryExpression)) return false;
             final BinaryExpression<?, ?, ?> that = (BinaryExpression<?, ?, ?>) o;
-            return Objects.equals(inner, that.getFirst()) &&
-                Objects.equals(power, that.getSecond()) &&
-                Objects.equals(getOperator(), that.getOperator());
+            return Objects.equals(inner, that.first()) &&
+                Objects.equals(power, that.second()) &&
+                Objects.equals(operator(), that.operator());
         }
 
         @Override
         public final int hashCode() {
-            return Objects.hash(inner, power, getOperator());
+            return Objects.hash(inner, power, operator());
         }
     }
 

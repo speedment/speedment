@@ -65,7 +65,7 @@ public final class OrElseUtil {
             if (this == o) return true;
             if (!(o instanceof ToDoubleOrElse)) return false;
             final ToDoubleOrElse<?> that = (ToDoubleOrElse<?>) o;
-            return Objects.equals(inner, that.getInnerNullable()) &&
+            return Objects.equals(inner, that.innerNullable()) &&
                 value == that.getDefaultValue();
         }
 
@@ -121,7 +121,7 @@ public final class OrElseUtil {
             if (this == o) return true;
             if (!(o instanceof ToFloatOrElse)) return false;
             final ToFloatOrElse<?> that = (ToFloatOrElse<?>) o;
-            return Objects.equals(inner, that.getInnerNullable()) &&
+            return Objects.equals(inner, that.innerNullable()) &&
                 value == that.getDefaultValue();
         }
 
@@ -177,7 +177,7 @@ public final class OrElseUtil {
             if (this == o) return true;
             if (!(o instanceof ToLongOrElse)) return false;
             final ToLongOrElse<?> that = (ToLongOrElse<?>) o;
-            return Objects.equals(inner, that.getInnerNullable()) &&
+            return Objects.equals(inner, that.innerNullable()) &&
                 value == that.getDefaultValue();
         }
 
@@ -233,7 +233,7 @@ public final class OrElseUtil {
             if (this == o) return true;
             if (!(o instanceof ToIntOrElse)) return false;
             final ToIntOrElse<?> that = (ToIntOrElse<?>) o;
-            return Objects.equals(inner, that.getInnerNullable()) &&
+            return Objects.equals(inner, that.innerNullable()) &&
                 value == that.getDefaultValue();
         }
 
@@ -289,7 +289,7 @@ public final class OrElseUtil {
             if (this == o) return true;
             if (!(o instanceof ToShortOrElse)) return false;
             final ToShortOrElse<?> that = (ToShortOrElse<?>) o;
-            return Objects.equals(inner, that.getInnerNullable()) &&
+            return Objects.equals(inner, that.innerNullable()) &&
                 value == that.getDefaultValue();
         }
 
@@ -345,7 +345,7 @@ public final class OrElseUtil {
             if (this == o) return true;
             if (!(o instanceof ToByteOrElse)) return false;
             final ToByteOrElse<?> that = (ToByteOrElse<?>) o;
-            return Objects.equals(inner, that.getInnerNullable()) &&
+            return Objects.equals(inner, that.innerNullable()) &&
                 value == that.getDefaultValue();
         }
 
@@ -401,7 +401,7 @@ public final class OrElseUtil {
             if (this == o) return true;
             if (!(o instanceof ToCharOrElse)) return false;
             final ToCharOrElse<?> that = (ToCharOrElse<?>) o;
-            return Objects.equals(inner, that.getInnerNullable()) &&
+            return Objects.equals(inner, that.innerNullable()) &&
                 value == that.getDefaultValue();
         }
 
@@ -457,7 +457,7 @@ public final class OrElseUtil {
             if (this == o) return true;
             if (!(o instanceof ToBooleanOrElse)) return false;
             final ToBooleanOrElse<?> that = (ToBooleanOrElse<?>) o;
-            return Objects.equals(inner, that.getInnerNullable()) &&
+            return Objects.equals(inner, that.innerNullable()) &&
                 value == that.getDefaultValue();
         }
 
@@ -513,7 +513,7 @@ public final class OrElseUtil {
             if (this == o) return true;
             if (!(o instanceof ToStringOrElse)) return false;
             final ToStringOrElse<?> that = (ToStringOrElse<?>) o;
-            return Objects.equals(inner, that.getInnerNullable()) &&
+            return Objects.equals(inner, that.innerNullable()) &&
                 Objects.equals(value, that.getDefaultValue());
         }
 
@@ -575,7 +575,7 @@ public final class OrElseUtil {
             if (this == o) return true;
             if (!(o instanceof ToEnumOrElse)) return false;
             final ToEnumOrElse<?, ?> that = (ToEnumOrElse<?, ?>) o;
-            return Objects.equals(inner, that.getInnerNullable()) &&
+            return Objects.equals(inner, that.innerNullable()) &&
                 Objects.equals(value, that.getDefaultValue());
         }
 
@@ -632,7 +632,7 @@ public final class OrElseUtil {
             if (this == o) return true;
             if (!(o instanceof ToBigDecimalOrElse)) return false;
             final ToBigDecimalOrElse<?> that = (ToBigDecimalOrElse<?>) o;
-            return Objects.equals(inner, that.getInnerNullable()) &&
+            return Objects.equals(inner, that.innerNullable()) &&
                 Objects.equals(value, that.getDefaultValue());
         }
 
@@ -657,7 +657,7 @@ public final class OrElseUtil {
         }
 
         @Override
-        public final INNER getInnerNullable() {
+        public final INNER innerNullable() {
             return inner;
         }
     }

@@ -35,7 +35,7 @@ extends Expression<T>,
         HasCompare<T> {
 
     @Override
-    default ExpressionType getExpressionType() {
+    default ExpressionType expressionType() {
         return ExpressionType.DOUBLE_NULLABLE;
     }
 

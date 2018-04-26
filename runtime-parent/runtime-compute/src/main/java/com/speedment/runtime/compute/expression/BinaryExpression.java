@@ -4,8 +4,8 @@ package com.speedment.runtime.compute.expression;
  * An {@link Expression} that has two operands, both are implementations of
  * {@link Expression}.
  * <p>
- * Equality is determined by looking at {@link #getFirst()},
- * {@link #getSecond()} and {@link #getOperator()}.
+ * Equality is determined by looking at {@link #first()},
+ * {@link #second()} and {@link #operator()}.
  *
  * @param <T>       the input entity type
  * @param <FIRST>   the type of the first operand, an expression
@@ -25,24 +25,24 @@ public interface BinaryExpression<
      *
      * @return  the first operand
      */
-    FIRST getFirst();
+    FIRST first();
 
     /**
      * Returns the second operand, an inner expression.
      *
      * @return  the second operand
      */
-    SECOND getSecond();
+    SECOND second();
 
     /**
      * Returns the binary operator that this expression represents.
      *
      * @return  the operator
      */
-    Operator getOperator();
+    Operator operator();
 
     /**
-     * Operator types that could be returned by {@link #getOperator()}.
+     * Operator types that could be returned by {@link #operator()}.
      */
     enum Operator {
         /**

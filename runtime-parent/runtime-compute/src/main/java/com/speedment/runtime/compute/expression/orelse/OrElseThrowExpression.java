@@ -16,7 +16,7 @@ import com.speedment.runtime.compute.expression.NonNullableExpression;
 public interface OrElseThrowExpression<T, INNER extends Expression<T>>
 extends NonNullableExpression<T, INNER> {
     @Override
-    default NullStrategy getNullStrategy() {
+    default NullStrategy nullStrategy() {
         return NullStrategy.THROW_EXCEPTION;
     }
 }
