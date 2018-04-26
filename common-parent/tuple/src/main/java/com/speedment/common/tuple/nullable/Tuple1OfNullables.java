@@ -16,8 +16,11 @@
  */
 package com.speedment.common.tuple.nullable;
 
+import com.speedment.common.tuple.Tuple1;
 import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleOfNullables;
+import com.speedment.common.tuple.getter.TupleGetter0;
+import com.speedment.common.tuple.getter.TupleGetter;
 import java.util.Optional;
 
 /**
@@ -48,5 +51,13 @@ public interface Tuple1OfNullables<T0> extends TupleOfNullables {
             default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()
             ));
         }
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 0th element in the {@code
+     * Tuple}.
+     */
+    static <T0> TupleGetter0<Tuple1<T0>, T0> getter0() {
+        return Tuple1::get0;
     }
 }

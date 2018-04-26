@@ -16,6 +16,8 @@
  */
 package com.speedment.common.tuple;
 
+import com.speedment.common.tuple.getter.TupleGetter;
+
 /**
  * This interface defines a generic Tuple of any order that can hold null
  * values. A Tuple is type safe, immutable and thread safe. For pure non-null

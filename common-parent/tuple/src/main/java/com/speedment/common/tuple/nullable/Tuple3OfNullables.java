@@ -16,8 +16,13 @@
  */
 package com.speedment.common.tuple.nullable;
 
+import com.speedment.common.tuple.Tuple3;
 import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleOfNullables;
+import com.speedment.common.tuple.getter.TupleGetter0;
+import com.speedment.common.tuple.getter.TupleGetter1;
+import com.speedment.common.tuple.getter.TupleGetter2;
+import com.speedment.common.tuple.getter.TupleGetter;
 import java.util.Optional;
 
 /**
@@ -56,5 +61,29 @@ public interface Tuple3OfNullables<T0, T1, T2> extends TupleOfNullables {
             default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()
             ));
         }
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 0th element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2> TupleGetter0<Tuple3<T0, T1, T2>, T0> getter0() {
+        return Tuple3::get0;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 1st element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2> TupleGetter1<Tuple3<T0, T1, T2>, T1> getter1() {
+        return Tuple3::get1;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 2nd element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2> TupleGetter2<Tuple3<T0, T1, T2>, T2> getter2() {
+        return Tuple3::get2;
     }
 }

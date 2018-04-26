@@ -16,8 +16,33 @@
  */
 package com.speedment.common.tuple.nullable;
 
+import com.speedment.common.tuple.Tuple23;
 import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleOfNullables;
+import com.speedment.common.tuple.getter.TupleGetter0;
+import com.speedment.common.tuple.getter.TupleGetter10;
+import com.speedment.common.tuple.getter.TupleGetter11;
+import com.speedment.common.tuple.getter.TupleGetter12;
+import com.speedment.common.tuple.getter.TupleGetter13;
+import com.speedment.common.tuple.getter.TupleGetter14;
+import com.speedment.common.tuple.getter.TupleGetter15;
+import com.speedment.common.tuple.getter.TupleGetter16;
+import com.speedment.common.tuple.getter.TupleGetter17;
+import com.speedment.common.tuple.getter.TupleGetter18;
+import com.speedment.common.tuple.getter.TupleGetter19;
+import com.speedment.common.tuple.getter.TupleGetter1;
+import com.speedment.common.tuple.getter.TupleGetter20;
+import com.speedment.common.tuple.getter.TupleGetter21;
+import com.speedment.common.tuple.getter.TupleGetter22;
+import com.speedment.common.tuple.getter.TupleGetter2;
+import com.speedment.common.tuple.getter.TupleGetter3;
+import com.speedment.common.tuple.getter.TupleGetter4;
+import com.speedment.common.tuple.getter.TupleGetter5;
+import com.speedment.common.tuple.getter.TupleGetter6;
+import com.speedment.common.tuple.getter.TupleGetter7;
+import com.speedment.common.tuple.getter.TupleGetter8;
+import com.speedment.common.tuple.getter.TupleGetter9;
+import com.speedment.common.tuple.getter.TupleGetter;
 import java.util.Optional;
 
 /**
@@ -136,5 +161,189 @@ public interface Tuple23OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
             default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()
             ));
         }
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 0th element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter0<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T0> getter0() {
+        return Tuple23::get0;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 1st element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter1<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T1> getter1() {
+        return Tuple23::get1;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 2nd element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter2<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T2> getter2() {
+        return Tuple23::get2;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 3rd element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter3<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T3> getter3() {
+        return Tuple23::get3;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 4th element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter4<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T4> getter4() {
+        return Tuple23::get4;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 5th element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter5<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T5> getter5() {
+        return Tuple23::get5;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 6th element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter6<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T6> getter6() {
+        return Tuple23::get6;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 7th element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter7<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T7> getter7() {
+        return Tuple23::get7;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 8th element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter8<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T8> getter8() {
+        return Tuple23::get8;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 9th element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter9<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T9> getter9() {
+        return Tuple23::get9;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 10th element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter10<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T10> getter10() {
+        return Tuple23::get10;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 11st element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter11<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T11> getter11() {
+        return Tuple23::get11;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 12nd element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter12<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T12> getter12() {
+        return Tuple23::get12;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 13rd element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter13<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T13> getter13() {
+        return Tuple23::get13;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 14th element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter14<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T14> getter14() {
+        return Tuple23::get14;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 15th element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter15<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T15> getter15() {
+        return Tuple23::get15;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 16th element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter16<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T16> getter16() {
+        return Tuple23::get16;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 17th element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter17<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T17> getter17() {
+        return Tuple23::get17;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 18th element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter18<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T18> getter18() {
+        return Tuple23::get18;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 19th element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter19<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T19> getter19() {
+        return Tuple23::get19;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 20th element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter20<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T20> getter20() {
+        return Tuple23::get20;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 21st element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter21<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T21> getter21() {
+        return Tuple23::get21;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 22nd element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22> TupleGetter22<Tuple23<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22>, T22> getter22() {
+        return Tuple23::get22;
     }
 }

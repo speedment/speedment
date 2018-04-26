@@ -16,6 +16,12 @@
  */
 package com.speedment.common.tuple;
 
+import com.speedment.common.tuple.getter.TupleGetter0;
+import com.speedment.common.tuple.getter.TupleGetter1;
+import com.speedment.common.tuple.getter.TupleGetter2;
+import com.speedment.common.tuple.getter.TupleGetter3;
+import com.speedment.common.tuple.getter.TupleGetter;
+
 /**
  * This interface defines a generic Tuple of any order that can hold null
  * values. A Tuple is type safe, immutable and thread safe. For pure non-null
@@ -53,5 +59,37 @@ public interface Tuple4<T0, T1, T2, T3> extends Tuple {
             default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()
             ));
         }
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 0th element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3> TupleGetter0<Tuple4<T0, T1, T2, T3>, T0> getter0() {
+        return Tuple4::get0;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 1st element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3> TupleGetter1<Tuple4<T0, T1, T2, T3>, T1> getter1() {
+        return Tuple4::get1;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 2nd element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3> TupleGetter2<Tuple4<T0, T1, T2, T3>, T2> getter2() {
+        return Tuple4::get2;
+    }
+    
+    /**
+     * Returns a {@link TupleGetter getter} for the 3rd element in the {@code
+     * Tuple}.
+     */
+    static <T0, T1, T2, T3> TupleGetter3<Tuple4<T0, T1, T2, T3>, T3> getter3() {
+        return Tuple4::get3;
     }
 }
