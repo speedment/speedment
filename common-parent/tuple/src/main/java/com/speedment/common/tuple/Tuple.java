@@ -16,6 +16,9 @@
  */
 package com.speedment.common.tuple;
 
+import com.speedment.common.tuple.getter.TupleGetter;
+import com.speedment.common.tuple.getter.TupleGetter0;
+
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -47,4 +50,26 @@ public interface Tuple extends BasicTuple<Object> {
             .map(clazz::cast);
     }
 
+    /**
+     * Returns a getter method for the specified ordinal element.
+     *
+     * @param ordinal  the position of the element to return
+     * @param <TUPLE>  the type of the tuple
+     * @param <R>      the type of the returned element
+     * @return         the created getter
+     */
+    static <TUPLE extends Tuple, R> TupleGetter<TUPLE, R> getter(int ordinal) {
+        return new TupleGetter<TUPLE, R>() {
+            @Override
+            public int getOrdinal() {
+                return ordinal;
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public R apply(TUPLE tuple) {
+                return (R) tuple.get(ordinal);
+            }
+        };
+    }
 }

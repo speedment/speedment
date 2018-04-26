@@ -16,6 +16,10 @@
  */
 package com.speedment.common.tuple;
 
+import com.speedment.common.tuple.getter.TupleGetter0;
+import com.speedment.common.tuple.getter.TupleGetter1;
+import com.speedment.common.tuple.getter.TupleGetter2;
+
 /**
  * This interface defines a generic Tuple of any order that can hold null
  * values. A Tuple is type safe, immutable and thread safe. For pure non-null
@@ -49,5 +53,17 @@ public interface Tuple3<T0, T1, T2> extends Tuple {
             default : throw new IllegalArgumentException(String.format("Index %d is outside bounds of tuple of degree %s", index, degree()
             ));
         }
+    }
+
+    static <T0, T1, T2> TupleGetter0<Tuple3<T0, T1, T2>, T0> getter0() {
+        return Tuple3::get0;
+    }
+
+    static <T0, T1, T2> TupleGetter1<Tuple3<T0, T1, T2>, T1> getter1() {
+        return Tuple3::get1;
+    }
+
+    static <T0, T1, T2> TupleGetter2<Tuple3<T0, T1, T2>, T2> getter2() {
+        return Tuple3::get2;
     }
 }
