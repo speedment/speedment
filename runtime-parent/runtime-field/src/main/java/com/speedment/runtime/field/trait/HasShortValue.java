@@ -63,7 +63,8 @@ public interface HasShortValue<ENTITY, D> extends Field<ENTITY> {
      * @return       the entity itself
      */
     default ENTITY set(ENTITY entity, short value) {
-        return setter().setAsShort(entity, value);
+        setter().setAsShort(entity, value);
+        return entity;
     }
     
     /**

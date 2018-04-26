@@ -27,7 +27,7 @@ import static java.util.Objects.requireNonNull;
  * A {@code ByteSetter<ENTITY>} has the following signature:
  * {@code
  *     interface ENTITY {
- *         ENTITY setXXX(byte value);
+ *         void setXXX(byte value);
  *     }
  * }
  * 
@@ -47,15 +47,14 @@ public interface ByteSetter<ENTITY> extends Setter<ENTITY> {
      * 
      * @param instance the instance to set it in
      * @param value    the new value
-     * @return         a reference to that instance
      */
-    ENTITY setAsByte(ENTITY instance, byte value);
+    void setAsByte(ENTITY instance, byte value);
     
     @Override
-    default ENTITY set(ENTITY instance, Object value) {
+    default void set(ENTITY instance, Object value) {
         requireNonNull(value, "Attempting to set primitive byte field to null.");
         @SuppressWarnings("unchecked")
         final Byte casted = (Byte) value;
-        return setAsByte(instance, casted);
+        setAsByte(instance, casted);
     }
 }

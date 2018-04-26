@@ -56,6 +56,7 @@ public final class SetToByteImpl<ENTITY, D> implements SetToByte<ENTITY, D> {
     
     @Override
     public ENTITY apply(ENTITY entity) {
-        return field.setter().setAsByte(entity, newValue);
+        field.setter().setAsByte(entity, newValue);
+        return entity;
     }
 }

@@ -56,6 +56,7 @@ public final class SetToDoubleImpl<ENTITY, D> implements SetToDouble<ENTITY, D> 
     
     @Override
     public ENTITY apply(ENTITY entity) {
-        return field.setter().setAsDouble(entity, newValue);
+        field.setter().setAsDouble(entity, newValue);
+        return entity;
     }
 }

@@ -63,7 +63,8 @@ public interface HasIntValue<ENTITY, D> extends Field<ENTITY> {
      * @return       the entity itself
      */
     default ENTITY set(ENTITY entity, int value) {
-        return setter().setAsInt(entity, value);
+        setter().setAsInt(entity, value);
+        return entity;
     }
     
     /**

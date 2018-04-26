@@ -56,6 +56,7 @@ public final class SetToFloatImpl<ENTITY, D> implements SetToFloat<ENTITY, D> {
     
     @Override
     public ENTITY apply(ENTITY entity) {
-        return field.setter().setAsFloat(entity, newValue);
+        field.setter().setAsFloat(entity, newValue);
+        return entity;
     }
 }

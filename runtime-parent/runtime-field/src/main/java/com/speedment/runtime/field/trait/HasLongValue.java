@@ -63,7 +63,8 @@ public interface HasLongValue<ENTITY, D> extends Field<ENTITY> {
      * @return       the entity itself
      */
     default ENTITY set(ENTITY entity, long value) {
-        return setter().setAsLong(entity, value);
+        setter().setAsLong(entity, value);
+        return entity;
     }
     
     /**

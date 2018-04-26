@@ -63,7 +63,8 @@ public interface HasCharValue<ENTITY, D> extends Field<ENTITY> {
      * @return       the entity itself
      */
     default ENTITY set(ENTITY entity, char value) {
-        return setter().setAsChar(entity, value);
+        setter().setAsChar(entity, value);
+        return entity;
     }
     
     /**

@@ -27,7 +27,7 @@ import static java.util.Objects.requireNonNull;
  * A {@code DoubleSetter<ENTITY>} has the following signature:
  * {@code
  *     interface ENTITY {
- *         ENTITY setXXX(double value);
+ *         void setXXX(double value);
  *     }
  * }
  * 
@@ -47,15 +47,14 @@ public interface DoubleSetter<ENTITY> extends Setter<ENTITY> {
      * 
      * @param instance the instance to set it in
      * @param value    the new value
-     * @return         a reference to that instance
      */
-    ENTITY setAsDouble(ENTITY instance, double value);
+    void setAsDouble(ENTITY instance, double value);
     
     @Override
-    default ENTITY set(ENTITY instance, Object value) {
+    default void set(ENTITY instance, Object value) {
         requireNonNull(value, "Attempting to set primitive double field to null.");
         @SuppressWarnings("unchecked")
         final Double casted = (Double) value;
-        return setAsDouble(instance, casted);
+        setAsDouble(instance, casted);
     }
 }

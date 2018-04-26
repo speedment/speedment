@@ -56,6 +56,7 @@ public final class SetToShortImpl<ENTITY, D> implements SetToShort<ENTITY, D> {
     
     @Override
     public ENTITY apply(ENTITY entity) {
-        return field.setter().setAsShort(entity, newValue);
+        field.setter().setAsShort(entity, newValue);
+        return entity;
     }
 }

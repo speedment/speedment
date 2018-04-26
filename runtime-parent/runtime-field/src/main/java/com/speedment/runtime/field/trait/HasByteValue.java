@@ -63,7 +63,8 @@ public interface HasByteValue<ENTITY, D> extends Field<ENTITY> {
      * @return       the entity itself
      */
     default ENTITY set(ENTITY entity, byte value) {
-        return setter().setAsByte(entity, value);
+        setter().setAsByte(entity, value);
+        return entity;
     }
     
     /**

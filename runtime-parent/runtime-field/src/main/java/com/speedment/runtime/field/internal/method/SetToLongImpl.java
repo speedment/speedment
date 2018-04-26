@@ -56,6 +56,7 @@ public final class SetToLongImpl<ENTITY, D> implements SetToLong<ENTITY, D> {
     
     @Override
     public ENTITY apply(ENTITY entity) {
-        return field.setter().setAsLong(entity, newValue);
+        field.setter().setAsLong(entity, newValue);
+        return entity;
     }
 }

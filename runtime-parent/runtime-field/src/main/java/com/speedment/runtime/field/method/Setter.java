@@ -31,10 +31,9 @@ public interface Setter<ENTITY> {
      * 
      * @param entity  the entity to set in
      * @param value   the value to set to
-     * @return        a reference to the entity
      * 
      * @throws ClassCastException  if the specified value is of the wrong type
      */
-    ENTITY set(ENTITY entity, Object value) throws ClassCastException;
+    void set(ENTITY entity, Object value) throws ClassCastException;
     
 }

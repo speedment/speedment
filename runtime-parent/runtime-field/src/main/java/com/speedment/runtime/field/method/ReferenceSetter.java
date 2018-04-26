@@ -28,7 +28,7 @@ import java.util.function.BiFunction;
  * A {@code ReferenceSetter<ENTITY, V>} has the following signature:
  * {@code
  *      interface ENTITY {
- *          ENTITY setXXX(V value);
+ *          void setXXX(V value);
  *      }
  * }
  * 
@@ -44,10 +44,10 @@ public interface ReferenceSetter<ENTITY, V>
 extends Setter<ENTITY>, BiFunction<ENTITY, V, ENTITY> {
 
     @Override
-    default ENTITY set(ENTITY entity, Object value) throws ClassCastException {
+    default void set(ENTITY entity, Object value) throws ClassCastException {
         @SuppressWarnings("unchecked")
         final V casted = (V) value;
-        return apply(entity, casted);
+        apply(entity, casted);
     }
     
 }

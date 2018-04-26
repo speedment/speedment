@@ -63,7 +63,8 @@ public interface HasFloatValue<ENTITY, D> extends Field<ENTITY> {
      * @return       the entity itself
      */
     default ENTITY set(ENTITY entity, float value) {
-        return setter().setAsFloat(entity, value);
+        setter().setAsFloat(entity, value);
+        return entity;
     }
     
     /**

@@ -27,7 +27,7 @@ import static java.util.Objects.requireNonNull;
  * A {@code LongSetter<ENTITY>} has the following signature:
  * {@code
  *     interface ENTITY {
- *         ENTITY setXXX(long value);
+ *         void setXXX(long value);
  *     }
  * }
  * 
@@ -47,15 +47,14 @@ public interface LongSetter<ENTITY> extends Setter<ENTITY> {
      * 
      * @param instance the instance to set it in
      * @param value    the new value
-     * @return         a reference to that instance
      */
-    ENTITY setAsLong(ENTITY instance, long value);
+    void setAsLong(ENTITY instance, long value);
     
     @Override
-    default ENTITY set(ENTITY instance, Object value) {
+    default void set(ENTITY instance, Object value) {
         requireNonNull(value, "Attempting to set primitive long field to null.");
         @SuppressWarnings("unchecked")
         final Long casted = (Long) value;
-        return setAsLong(instance, casted);
+        setAsLong(instance, casted);
     }
 }

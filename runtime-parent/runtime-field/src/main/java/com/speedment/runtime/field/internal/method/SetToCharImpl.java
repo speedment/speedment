@@ -56,6 +56,7 @@ public final class SetToCharImpl<ENTITY, D> implements SetToChar<ENTITY, D> {
     
     @Override
     public ENTITY apply(ENTITY entity) {
-        return field.setter().setAsChar(entity, newValue);
+        field.setter().setAsChar(entity, newValue);
+        return entity;
     }
 }

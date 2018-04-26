@@ -63,7 +63,8 @@ public interface HasDoubleValue<ENTITY, D> extends Field<ENTITY> {
      * @return       the entity itself
      */
     default ENTITY set(ENTITY entity, double value) {
-        return setter().setAsDouble(entity, value);
+        setter().setAsDouble(entity, value);
+        return entity;
     }
     
     /**

@@ -56,6 +56,7 @@ public final class SetToBooleanImpl<ENTITY, D> implements SetToBoolean<ENTITY, D
     
     @Override
     public ENTITY apply(ENTITY entity) {
-        return field.setter().setAsBoolean(entity, newValue);
+        field.setter().setAsBoolean(entity, newValue);
+        return entity;
     }
 }

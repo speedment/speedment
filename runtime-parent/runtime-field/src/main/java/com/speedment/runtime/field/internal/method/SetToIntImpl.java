@@ -56,6 +56,7 @@ public final class SetToIntImpl<ENTITY, D> implements SetToInt<ENTITY, D> {
     
     @Override
     public ENTITY apply(ENTITY entity) {
-        return field.setter().setAsInt(entity, newValue);
+        field.setter().setAsInt(entity, newValue);
+        return entity;
     }
 }

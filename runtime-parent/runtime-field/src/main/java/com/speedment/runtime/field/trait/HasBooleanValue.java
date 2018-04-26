@@ -63,7 +63,8 @@ public interface HasBooleanValue<ENTITY, D> extends Field<ENTITY> {
      * @return       the entity itself
      */
     default ENTITY set(ENTITY entity, boolean value) {
-        return setter().setAsBoolean(entity, value);
+        setter().setAsBoolean(entity, value);
+        return entity;
     }
     
     /**
