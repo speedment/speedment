@@ -6,17 +6,19 @@ import java.util.function.Function;
 
 /**
  * Function that given a {@link Tuple} returns the element at the
- * {@link #getOrdinal() ordinal} position.
+ * {@link #index() ordinal} position.
  *
  * @author Emil Forslund
+ * @param <T> Tuple type
+ * @param <R> return type
  * @since  1.0.8
  */
-public interface TupleGetter<TUPLE extends Tuple, R> extends Function<TUPLE, R> {
+public interface TupleGetter<T, R> extends Function<T, R> {
 
     /**
-     * Which of the {@link Tuple} elements that this getter returns.
+     * Returns the index of the tuple element that this getter returns. 
      *
-     * @return  the tuple ordinal
+     * @return  the index of the tuple element that this getter returns
      */
-    int getOrdinal();
+    int index();
 }
