@@ -135,6 +135,29 @@ public final class CastUtil {
 
         return new FloatToDouble(original);
     }
+    /**
+     * Returns an expression that wraps the specified expression and casts the
+     * result from it into a {@code double}.
+     *
+     * @param original  the original expression
+     * @param <T>       the input type
+     * @return          the new {@link ToDouble} expression
+     */
+    public static <T> ToDouble<T> castToDouble(ToBigDecimal<T> original) {
+        class BigDecimalToDouble extends CastToDouble<T, ToBigDecimal<T>> {
+            private BigDecimalToDouble(ToBigDecimal<T> tToBigDecimal) {
+                super(tToBigDecimal);
+            }
+
+            @Override
+            public double applyAsDouble(T object) {
+                return inner.apply(object).doubleValue();
+            }
+        }
+
+        return new BigDecimalToDouble(original);
+    }
+
 
     /**
      * Returns an expression that wraps the specified expression and casts the
@@ -309,6 +332,29 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToInt} expression
      */
+    public static <T> ToInt<T> castToInt(ToBigDecimal<T> original) {
+        class BigDecimalToInt extends CastToInt<T, ToBigDecimal<T>> {
+            private BigDecimalToInt(ToBigDecimal<T> tToBigDecimal) {
+                super(tToBigDecimal);
+            }
+
+            @Override
+            public int applyAsInt(T object) {
+                return inner.apply(object).intValueExact();
+            }
+        }
+
+        return new BigDecimalToInt(original);
+    }
+
+    /**
+     * Returns an expression that wraps the specified expression and casts the
+     * result from it into a {@code int}.
+     *
+     * @param original  the original expression
+     * @param <T>       the input type
+     * @return          the new {@link ToInt} expression
+     */
     public static <T> ToInt<T> castToInt(ToBoolean<T> original) {
         class BooleanToInt extends CastToInt<T, ToBoolean<T>> {
             private BooleanToInt(ToBoolean<T> tToBoolean) {
@@ -464,6 +510,30 @@ public final class CastUtil {
         }
 
         return new DoubleToLong(original);
+    }
+
+
+    /**
+     * Returns an expression that wraps the specified expression and casts the
+     * result from it into a {@code long}.
+     *
+     * @param original  the original expression
+     * @param <T>       the input type
+     * @return          the new {@link ToInt} expression
+     */
+    public static <T> ToLong<T> castToLong(ToBigDecimal<T> original) {
+        class BigDecimalToLong extends CastToLong<T, ToBigDecimal<T>> {
+            private BigDecimalToLong(ToBigDecimal<T> tToBigDecimal) {
+                super(tToBigDecimal);
+            }
+
+            @Override
+            public long applyAsLong(T object) {
+                return inner.apply(object).longValueExact();
+            }
+        }
+
+        return new BigDecimalToLong(original);
     }
 
     /**

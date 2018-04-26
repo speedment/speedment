@@ -2,11 +2,10 @@ package com.speedment.runtime.compute;
 
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
+import com.speedment.runtime.compute.internal.expression.CastUtil;
 import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.MapperUtil;
-import com.speedment.runtime.compute.trait.HasCompare;
-import com.speedment.runtime.compute.trait.HasHash;
-import com.speedment.runtime.compute.trait.HasMap;
+import com.speedment.runtime.compute.trait.*;
 
 import java.math.BigDecimal;
 import java.util.function.Function;
@@ -28,6 +27,18 @@ import java.util.function.UnaryOperator;
 public interface ToBigDecimal<T>
 extends Expression<T>,
         Function<T, BigDecimal>,
+        HasAsInt<T>,
+        HasAsLong<T>,
+        HasAsDouble<T>,
+        //HasAbs<ToDouble<T>>,
+        //HasSign<ToByte<T>>,
+        //HasSqrt<ToDouble<T>>,
+        //HasNegate<ToDouble<T>>,
+        //HasPow<T>,
+        //HasPlus<T, ToShort<T>, ToInt<T>, ToLong<T>>,
+        //HasMinus<T, ToShort<T>, ToInt<T>, ToLong<T>>,
+        //HasMultiply<T, ToInt<T>, ToInt<T>, ToLong<T>>,
+        //HasDivide<T>,
         HasMap<T, UnaryOperator<BigDecimal>, ToBigDecimal<T>>,
         HasHash<T>,
         HasCompare<T> {
@@ -38,6 +49,21 @@ extends Expression<T>,
     @Override
     default ExpressionType expressionType() {
         return ExpressionType.BIG_DECIMAL;
+    }
+
+    @Override
+    default ToDouble<T> asDouble() {
+        return CastUtil.castToDouble(this);
+    }
+
+    @Override
+    default ToInt<T> asInt() {
+        return CastUtil.castToInt(this);
+    }
+
+    @Override
+    default ToLong<T> asLong() {
+        return CastUtil.castToLong(this);
     }
 
     @Override
@@ -60,4 +86,5 @@ extends Expression<T>,
     default <V> ToBigDecimal<V> compose(Function<? super V, ? extends T> before) {
         return ComposedUtil.compose((Function<V, T>) before, this);
     }
+
 }
