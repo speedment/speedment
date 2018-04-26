@@ -506,7 +506,7 @@ extends AbstractLabelTooltipItem {
             this.tableId = TableIdentifier.of(dbms, schema, table);
             this.field   = StringField.create(
                 new TempColumnIdentifier(dbms, schema, table, column),
-                e -> e, (e, s) -> e,
+                e -> e, (e, s) -> {},
                 TypeMapper.identity(),
                 false
             );
