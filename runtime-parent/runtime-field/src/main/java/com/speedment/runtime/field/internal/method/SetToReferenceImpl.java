@@ -57,6 +57,7 @@ public final class SetToReferenceImpl<ENTITY, D, V> implements SetToReference<EN
     @Override
     public ENTITY apply(ENTITY entity) {
         requireNonNull(entity);
-        return field.setter().apply(entity, newValue);
+        field.setter().accept(entity, newValue);
+        return entity;
     }
 }

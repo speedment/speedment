@@ -16,9 +16,7 @@
  */
 package com.speedment.runtime.field.method;
 
-
-
-import java.util.function.BiFunction;
+import java.util.function.BiConsumer;
 
 /**
  * A short-cut functional reference to the {@code setXXX(value)} method for a
@@ -41,13 +39,13 @@ import java.util.function.BiFunction;
 
 @FunctionalInterface
 public interface ReferenceSetter<ENTITY, V> 
-extends Setter<ENTITY>, BiFunction<ENTITY, V, ENTITY> {
+extends Setter<ENTITY>, BiConsumer<ENTITY, V> {
 
     @Override
     default void set(ENTITY entity, Object value) throws ClassCastException {
         @SuppressWarnings("unchecked")
         final V casted = (V) value;
-        apply(entity, casted);
+        accept(entity, casted);
     }
     
 }

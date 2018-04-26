@@ -64,7 +64,8 @@ public interface HasReferenceValue<ENTITY, D, V> extends Field<ENTITY> {
      * @return the entity itself
      */
     default ENTITY set(ENTITY e, V value) {
-        return setter().apply(e, value);
+        setter().accept(e, value);
+        return e;
     }
 
     /**
