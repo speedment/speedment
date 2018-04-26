@@ -43,7 +43,7 @@ public class RerferenceFieldTest extends BaseFieldTest {
     public void testSetter() throws Exception {
         final ReferenceSetter<Entity, String> result = NAME.setter();
         final Entity e = new EntityImpl(45, "Arne");
-        result.apply(e, "Tryggve");
+        result.accept(e, "Tryggve");
         assertEquals("Tryggve", e.getName());
     }
 
