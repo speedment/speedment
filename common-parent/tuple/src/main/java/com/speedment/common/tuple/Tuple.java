@@ -53,22 +53,22 @@ public interface Tuple extends BasicTuple<Object> {
     /**
      * Returns a getter method for the specified ordinal element.
      *
-     * @param ordinal  the position of the element to return
+     * @param index    the position of the element to return
      * @param <TUPLE>  the type of the tuple
      * @param <R>      the type of the returned element
      * @return         the created getter
      */
-    static <TUPLE extends Tuple, R> TupleGetter<TUPLE, R> getter(int ordinal) {
+    static <TUPLE extends Tuple, R> TupleGetter<TUPLE, R> getter(int index) {
         return new TupleGetter<TUPLE, R>() {
             @Override
-            public int getOrdinal() {
-                return ordinal;
+            public int index() {
+                return index;
             }
 
             @Override
             @SuppressWarnings("unchecked")
             public R apply(TUPLE tuple) {
-                return (R) tuple.get(ordinal);
+                return (R) tuple.get(index);
             }
         };
     }
