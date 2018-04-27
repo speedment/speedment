@@ -5,6 +5,7 @@ import com.speedment.runtime.compute.expression.BinaryExpression;
 import com.speedment.runtime.compute.expression.BinaryObjExpression;
 import com.speedment.runtime.compute.expression.Expression;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;

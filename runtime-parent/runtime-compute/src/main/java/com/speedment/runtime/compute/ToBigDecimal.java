@@ -36,11 +36,11 @@ extends Expression<T>,
         HasSign<ToByte<T>>,
         HasSqrt<ToDouble<T>>,
         HasNegate<ToBigDecimal<T>>,
-        //HasPow<T>,
-        //HasPlus<T, ToShort<T>, ToInt<T>, ToLong<T>>,
-        //HasMinus<T, ToShort<T>, ToInt<T>, ToLong<T>>,
-        //HasMultiply<T, ToInt<T>, ToInt<T>, ToLong<T>>,
-        //HasDivide<T>,
+        HasPow<T>,
+        HasPlus<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
+        HasMinus<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
+        HasMultiply<T, ToDouble<T>, ToDouble<T>, ToDouble<T>>,
+        HasDivide<T>,
         HasMap<T, UnaryOperator<BigDecimal>, ToBigDecimal<T>>,
         HasHash<T>,
         HasCompare<T> {
@@ -80,12 +80,182 @@ extends Expression<T>,
 
     @Override
     default ToDouble<T> sqrt() {
-        return Expressions.sqrt(this);
+        return this.asDouble().sqrt();
     }
 
     @Override
     default ToBigDecimal<T> negate() {
         return Expressions.negate(this);
+    }
+
+    @Override
+    default ToDouble<T> pow(int power) {
+        return Expressions.pow(this.asDouble(), power);
+    }
+
+    @Override
+    default ToDouble<T> pow(double power) {
+        return Expressions.pow(this.asDouble(), power);
+    }
+
+    @Override
+    default ToDouble<T> pow(ToInt<T> power) {
+        return Expressions.pow(this.asDouble(), power);
+    }
+
+    @Override
+    default ToDouble<T> pow(ToDouble<T> power) {
+        return Expressions.pow(this.asDouble(), power);
+    }
+
+    @Override
+    default ToDouble<T> plus(byte other) {
+        return Expressions.plus(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> plus(ToByte<T> other) {
+        return Expressions.plus(this.asDouble(), other.asInt());
+    }
+
+    @Override
+    default ToDouble<T> plus(int other) {
+        return Expressions.plus(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> plus(ToInt<T> other) {
+        return Expressions.plus(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> plus(long other) {
+        return Expressions.plus(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> plus(ToLong<T> other) {
+        return Expressions.plus(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> plus(double other) {
+        return Expressions.plus(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> plus(ToDouble<T> other) {
+        return Expressions.plus(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> minus(byte other) {
+        return Expressions.minus(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> minus(ToByte<T> other) {
+        return Expressions.minus(this.asDouble(), other.asInt());
+    }
+
+    @Override
+    default ToDouble<T> minus(int other) {
+        return Expressions.minus(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> minus(ToInt<T> other) {
+        return Expressions.minus(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> minus(long other) {
+        return Expressions.minus(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> minus(ToLong<T> other) {
+        return Expressions.minus(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> minus(double other) {
+        return Expressions.minus(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> minus(ToDouble<T> other) {
+        return Expressions.minus(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> multiply(byte other) {
+        return Expressions.multiply(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> multiply(ToByte<T> other) {
+        return Expressions.multiply(this.asDouble(), other.asInt());
+    }
+
+    @Override
+    default ToDouble<T> multiply(int other) {
+        return Expressions.multiply(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> multiply(ToInt<T> other) {
+        return Expressions.multiply(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> multiply(long other) {
+        return Expressions.multiply(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> multiply(ToLong<T> other) {
+        return Expressions.multiply(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> multiply(double other) {
+        return Expressions.multiply(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> multiply(ToDouble<T> other) {
+        return Expressions.multiply(this.asDouble(), other);
+    }
+
+    @Override
+    default ToDouble<T> divide(int divisor) {
+        return Expressions.divide(this.asDouble(), divisor);
+    }
+
+    @Override
+    default ToDouble<T> divide(ToInt<T> divisor) {
+        return Expressions.divide(this.asDouble(), divisor);
+    }
+
+    @Override
+    default ToDouble<T> divide(long divisor) {
+        return Expressions.divide(this.asDouble(), divisor);
+    }
+
+    @Override
+    default ToDouble<T> divide(ToLong<T> divisor) {
+        return Expressions.divide(this.asDouble(), divisor);
+    }
+
+    @Override
+    default ToDouble<T> divide(double divisor) {
+        return Expressions.divide(this.asDouble(), divisor);
+    }
+
+    @Override
+    default ToDouble<T> divide(ToDouble<T> divisor) {
+        return Expressions.divide(this.asDouble(), divisor);
     }
 
     @Override

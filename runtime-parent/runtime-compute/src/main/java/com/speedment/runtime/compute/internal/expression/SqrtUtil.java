@@ -158,41 +158,6 @@ public final class SqrtUtil {
     }
 
     /**
-     * Returns an expression that takes the result from the specified expression
-     * and returns the positive square root of it.
-     *
-     * @param other  the expression to take the square root of
-     * @param <T>    the input entity type
-     * @return       expression for the square root
-     */
-    public static <T> ToDouble<T> sqrt(ToBigDecimal<T> other) {
-        class DoubleSqrt implements UnaryExpression<T, ToBigDecimal<T>>, ToDouble<T> {
-            private final ToBigDecimal<T> inner;
-
-            private DoubleSqrt(ToBigDecimal<T> inner) {
-                this.inner = requireNonNull(inner);
-            }
-
-            @Override
-            public ToBigDecimal<T> inner() {
-                return inner;
-            }
-
-            @Override
-            public Operator operator() {
-                return Operator.SQRT;
-            }
-
-            @Override
-            public double applyAsDouble(T object) {
-                return Math.sqrt(inner.apply(object).doubleValue());
-            }
-        }
-
-        return new DoubleSqrt(other);
-    }
-
-    /**
      * Abstract base implementation of a {@link UnaryExpression} for a
      * square root-operation.
      *

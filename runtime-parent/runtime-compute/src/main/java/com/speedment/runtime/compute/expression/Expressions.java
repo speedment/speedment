@@ -600,18 +600,6 @@ public final class Expressions {
 
     /**
      * Creates and returns an expression that returns the square root of the
-     * result from the input expression.
-     *
-     * @param expression  the input expression
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> sqrt(ToBigDecimal<T> expression) {
-        return SqrtUtil.sqrt(expression);
-    }
-
-    /**
-     * Creates and returns an expression that returns the square root of the
      * result from the input expression. If the result of the input expression
      * is {@code null}, then the result of the new expression will also be
      * {@code null}.
