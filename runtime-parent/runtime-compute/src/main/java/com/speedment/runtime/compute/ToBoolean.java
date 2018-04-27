@@ -17,6 +17,7 @@ import com.speedment.runtime.compute.trait.HasMap;
 
 import java.math.BigDecimal;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 /**
@@ -40,7 +41,9 @@ extends Expression<T>,
         HasAsLong<T>,
         HasMap<T, BooleanUnaryOperator, ToBoolean<T>>,
         HasHash<T>,
-        HasCompare<T> {
+        HasCompare<T>,
+        Predicate<T>
+{
 
     @Override
     boolean applyAsBoolean(T object);
@@ -72,6 +75,11 @@ extends Expression<T>,
     @Override
     default ToBoolean<T> map(BooleanUnaryOperator operator) {
         return MapperUtil.map(this, operator);
+    }
+
+    @Override
+    default boolean test(T object) {
+        return applyAsBoolean(object);
     }
 
     @Override
