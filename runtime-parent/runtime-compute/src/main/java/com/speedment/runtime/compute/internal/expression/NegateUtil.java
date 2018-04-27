@@ -5,6 +5,7 @@ import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.UnaryExpression;
 import com.speedment.runtime.compute.internal.*;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
@@ -155,6 +156,42 @@ public final class NegateUtil {
 
         return new NegateDouble(expression);
     }
+
+    /**
+     * Creates and returns an expression that will compute the negative result
+     * of the specified expression.
+     *
+     * @param expression  the input expression
+     * @param <T>         the input type
+     * @return            the new expression
+     */
+    public static <T> ToBigDecimal<T> negate(ToBigDecimal<T> expression) {
+        class NegateBigDecimal implements ToBigDecimal<T>, UnaryExpression<T, ToBigDecimal<T>> {
+            private final ToBigDecimal<T> inner;
+
+            private NegateBigDecimal(ToBigDecimal<T> inner) {
+                this.inner = inner;
+            }
+
+            @Override
+            public ToBigDecimal<T> inner() {
+                return inner;
+            }
+
+            @Override
+            public Operator operator() {
+                return Operator.NEGATE;
+            }
+
+            @Override
+            public BigDecimal apply(T object) {
+                return inner.apply(object).negate();
+            }
+        }
+
+        return new NegateBigDecimal(expression);
+    }
+
 
     /**
      * Creates and returns an expression that will compute the negative result

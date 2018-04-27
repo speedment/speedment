@@ -4,6 +4,8 @@ import com.speedment.runtime.compute.*;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.UnaryExpression;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
@@ -154,6 +156,53 @@ public final class SqrtUtil {
 
         return new DoubleSqrt(other);
     }
+
+    /**
+     * Returns an expression that takes the result from the specified expression
+     * and returns the positive square root of it.
+     *
+     * @param other  the expression to take the square root of
+     * @param <T>    the input entity type
+     * @return       expression for the square root
+     */
+    public static <T> ToBigDecimal<T> sqrt(ToBigDecimal<T> other) {
+        class DoubleSqrt implements UnaryExpression<T, ToBigDecimal<T>>, ToBigDecimal<T> {
+            private final ToBigDecimal<T> inner;
+
+            private DoubleSqrt(ToBigDecimal<T> inner) {
+                this.inner = inner;
+            }
+
+            @Override
+            public ToBigDecimal<T> inner() {
+                return inner;
+            }
+
+            @Override
+            public Operator operator() {
+                return Operator.SQRT;
+            }
+
+            @Override
+            public BigDecimal apply(T object) {
+                return SqrtUtil.sqrt(inner.apply(object));
+            }
+        }
+
+        return new DoubleSqrt(other);
+    }
+
+    /**
+     * Compute the square root of the given value. The computation is performed in double precision.
+     * TODO - if this is the precision we want, then of course we should also return a double.
+     *
+     * @param x the value
+     * @return the square root of x
+     */
+    private static BigDecimal sqrt(BigDecimal x) {
+        return BigDecimal.valueOf(Math.sqrt(x.doubleValue()));
+    }
+
 
     /**
      * Abstract base implementation of a {@link UnaryExpression} for a

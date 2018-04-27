@@ -4,6 +4,7 @@ import com.speedment.runtime.compute.*;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.UnaryExpression;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
@@ -19,6 +20,30 @@ import static java.util.Objects.requireNonNull;
 public final class SignUtil {
 
     private final static byte NEGATIVE = -1, POSITIVE = 1, ZERO = 0;
+
+    /**
+     * Returns an expression that wraps another expression and returns
+     * {@code -1} if its result is negative, {@code 1} if its result is positive
+     * and {@code 0} if its result is equal to {@code 0}.
+     *
+     * @param expression  the expression to wrap
+     * @param <T>  the input entity type
+     * @return  sign of the result of the wrapped expression
+     */
+    public static <T> ToByte<T> sign(ToBigDecimal<T> expression) {
+        class BigDecimalSign extends AbstractSign<T, ToBigDecimal<T>> {
+            private BigDecimalSign(ToBigDecimal<T> tToBigDecimal) {
+                super(tToBigDecimal);
+            }
+
+            @Override
+            public byte applyAsByte(T object) {
+                return (byte) inner.apply(object).signum();
+            }
+        }
+
+        return new BigDecimalSign(expression);
+    }
 
     /**
      * Returns an expression that wraps another expression and returns

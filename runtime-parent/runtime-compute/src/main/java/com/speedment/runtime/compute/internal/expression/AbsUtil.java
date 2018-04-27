@@ -5,6 +5,7 @@ import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.UnaryExpression;
 import com.speedment.runtime.compute.internal.*;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
@@ -161,6 +162,23 @@ public final class AbsUtil {
 
         return new AbsDouble(expression);
     }
+
+    public static <T> ToBigDecimal<T> abs(ToBigDecimal<T> expression) {
+        class AbsBigDecimal extends AbstractAbs<T, ToBigDecimal<T>> implements ToBigDecimal<T> {
+            private AbsBigDecimal(ToBigDecimal<T> inner) {
+                super(inner);
+            }
+
+            @Override
+            public BigDecimal apply(T object) {
+                return inner.apply(object).abs();
+            }
+        }
+
+        return new AbsBigDecimal(expression);
+    }
+
+
 
     /**
      * Returns an expression that takes an expression and returns its absolute

@@ -404,6 +404,20 @@ public final class Expressions {
      * Creates and returns an expression that returns {@code 1} if the result of
      * the input expression is positive, {@code -1} if the result of the input
      * expression is negative and {@code 0} if the result of the input
+     * expression is {@code 0}.
+     *
+     * @param expression  the input expression
+     * @param <T>         the input type
+     * @return            the new expression
+     */
+    public static <T> ToByte<T> sign(ToBigDecimal<T> expression) {
+        return SignUtil.sign(expression);
+    }
+
+    /**
+     * Creates and returns an expression that returns {@code 1} if the result of
+     * the input expression is positive, {@code -1} if the result of the input
+     * expression is negative and {@code 0} if the result of the input
      * expression is {@code 0}. If the result of the given expression is
      * {@code null}, then the result of this expression will also be
      * {@code null}.
@@ -581,6 +595,18 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> sqrt(ToDouble<T> expression) {
+        return SqrtUtil.sqrt(expression);
+    }
+
+    /**
+     * Creates and returns an expression that returns the square root of the
+     * result from the input expression.
+     *
+     * @param expression  the input expression
+     * @param <T>         the input type
+     * @return            the new expression
+     */
+    public static <T> ToBigDecimal<T> sqrt(ToBigDecimal<T> expression) {
         return SqrtUtil.sqrt(expression);
     }
 
@@ -1509,6 +1535,19 @@ public final class Expressions {
     public static <T> ToDouble<T> negate(ToDouble<T> expression) {
         return NegateUtil.negate(expression);
     }
+
+    /**
+     * Creates and returns an expression that will compute the negative result
+     * of the specified expression.
+     *
+     * @param expression  the input expression
+     * @param <T>         the input type
+     * @return            the new expression
+     */
+    public static <T> ToBigDecimal<T> negate(ToBigDecimal<T> expression) {
+        return NegateUtil.negate(expression);
+    }
+
 
     /**
      * Creates and returns an expression that will compute the negative result

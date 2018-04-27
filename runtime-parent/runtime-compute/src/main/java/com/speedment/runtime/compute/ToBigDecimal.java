@@ -2,6 +2,8 @@ package com.speedment.runtime.compute;
 
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
+import com.speedment.runtime.compute.expression.Expressions;
+import com.speedment.runtime.compute.internal.expression.AbsUtil;
 import com.speedment.runtime.compute.internal.expression.CastUtil;
 import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.MapperUtil;
@@ -30,10 +32,10 @@ extends Expression<T>,
         HasAsInt<T>,
         HasAsLong<T>,
         HasAsDouble<T>,
-        //HasAbs<ToDouble<T>>,
-        //HasSign<ToByte<T>>,
-        //HasSqrt<ToDouble<T>>,
-        //HasNegate<ToDouble<T>>,
+        HasAbs<ToBigDecimal<T>>,
+        HasSign<ToByte<T>>,
+        HasSqrt<ToBigDecimal<T>>,
+        HasNegate<ToBigDecimal<T>>,
         //HasPow<T>,
         //HasPlus<T, ToShort<T>, ToInt<T>, ToLong<T>>,
         //HasMinus<T, ToShort<T>, ToInt<T>, ToLong<T>>,
@@ -64,6 +66,26 @@ extends Expression<T>,
     @Override
     default ToLong<T> asLong() {
         return CastUtil.castToLong(this);
+    }
+
+    @Override
+    default ToBigDecimal<T> abs() {
+        return AbsUtil.abs(this);
+    }
+
+    @Override
+    default ToByte<T> sign() {
+        return Expressions.sign(this);
+    }
+
+    @Override
+    default ToBigDecimal<T> sqrt() {
+        return Expressions.sqrt(this);
+    }
+
+    @Override
+    default ToBigDecimal<T> negate() {
+        return Expressions.negate(this);
     }
 
     @Override
