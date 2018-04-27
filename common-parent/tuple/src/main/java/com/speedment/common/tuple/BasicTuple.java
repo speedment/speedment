@@ -34,18 +34,6 @@ public interface BasicTuple<R> {
     int degree();
 
     /**
-     * Returns the degree of the BasicTuple.
-     *
-     * @return the degree of the BasicTuple
-     * @deprecated use {@link #degree() } instead. This method will be removed\
-     * in the next major API version
-     */
-    @Deprecated
-    default int length() {
-        return degree();
-    }
-
-    /**
      * Gets the tuple element at the given index. For example, get(0) will
      * return the first element and get(1) will return the second etc.
      *
