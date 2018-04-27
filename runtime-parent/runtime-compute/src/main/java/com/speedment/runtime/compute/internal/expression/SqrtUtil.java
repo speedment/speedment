@@ -165,12 +165,12 @@ public final class SqrtUtil {
      * @param <T>    the input entity type
      * @return       expression for the square root
      */
-    public static <T> ToBigDecimal<T> sqrt(ToBigDecimal<T> other) {
-        class DoubleSqrt implements UnaryExpression<T, ToBigDecimal<T>>, ToBigDecimal<T> {
+    public static <T> ToDouble<T> sqrt(ToBigDecimal<T> other) {
+        class DoubleSqrt implements UnaryExpression<T, ToBigDecimal<T>>, ToDouble<T> {
             private final ToBigDecimal<T> inner;
 
             private DoubleSqrt(ToBigDecimal<T> inner) {
-                this.inner = inner;
+                this.inner = requireNonNull(inner);
             }
 
             @Override
@@ -184,25 +184,13 @@ public final class SqrtUtil {
             }
 
             @Override
-            public BigDecimal apply(T object) {
-                return SqrtUtil.sqrt(inner.apply(object));
+            public double applyAsDouble(T object) {
+                return Math.sqrt(inner.apply(object).doubleValue());
             }
         }
 
         return new DoubleSqrt(other);
     }
-
-    /**
-     * Compute the square root of the given value. The computation is performed in double precision.
-     * TODO - if this is the precision we want, then of course we should also return a double.
-     *
-     * @param x the value
-     * @return the square root of x
-     */
-    private static BigDecimal sqrt(BigDecimal x) {
-        return BigDecimal.valueOf(Math.sqrt(x.doubleValue()));
-    }
-
 
     /**
      * Abstract base implementation of a {@link UnaryExpression} for a

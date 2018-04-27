@@ -606,7 +606,7 @@ public final class Expressions {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToBigDecimal<T> sqrt(ToBigDecimal<T> expression) {
+    public static <T> ToDouble<T> sqrt(ToBigDecimal<T> expression) {
         return SqrtUtil.sqrt(expression);
     }
 

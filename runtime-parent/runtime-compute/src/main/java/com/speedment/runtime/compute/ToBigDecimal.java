@@ -34,7 +34,7 @@ extends Expression<T>,
         HasAsDouble<T>,
         HasAbs<ToBigDecimal<T>>,
         HasSign<ToByte<T>>,
-        HasSqrt<ToBigDecimal<T>>,
+        HasSqrt<ToDouble<T>>,
         HasNegate<ToBigDecimal<T>>,
         //HasPow<T>,
         //HasPlus<T, ToShort<T>, ToInt<T>, ToLong<T>>,
@@ -79,7 +79,7 @@ extends Expression<T>,
     }
 
     @Override
-    default ToBigDecimal<T> sqrt() {
+    default ToDouble<T> sqrt() {
         return Expressions.sqrt(this);
     }
 
