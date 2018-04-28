@@ -57,7 +57,8 @@
                         <Export-Package>
                             com.speedment.common.tuple,
                             com.speedment.common.tuple.getter,
-                            com.speedment.common.tuple.nullable
+                            com.speedment.common.tuple.nullable,
+                            com.speedment.common.tuple.mutable
                         </Export-Package>
                     </instructions>
                 </configuration>
