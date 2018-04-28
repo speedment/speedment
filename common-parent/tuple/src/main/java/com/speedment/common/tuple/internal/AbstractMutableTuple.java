@@ -16,7 +16,7 @@
  */
 package com.speedment.common.tuple.internal;
 
-import com.speedment.common.tuple.TupleOfNullables;
+import com.speedment.common.tuple.MutableTuple;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -25,10 +25,10 @@ import java.util.stream.Stream;
  *
  * @author pemi
  */
-public abstract class AbstractTupleOfNullables extends BasicAbstractTuple<AbstractTupleOfNullables, Optional<Object>> implements TupleOfNullables {
+public abstract class AbstractMutableTuple extends BasicAbstractTuple<AbstractMutableTuple, Optional<Object>> implements MutableTuple {
 
-    protected AbstractTupleOfNullables(Class<? extends AbstractTupleOfNullables> baseClass, Object... values) {
-        super(baseClass, values);
+    protected AbstractMutableTuple(Class<? extends AbstractMutableTuple> baseClass, int degree) {
+        super(baseClass, new Object[degree]);
     }
 
     @Override
