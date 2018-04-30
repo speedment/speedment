@@ -1,9 +1,13 @@
 package com.speedment.runtime.compute.expression;
 
 import com.speedment.runtime.compute.*;
+import com.speedment.runtime.compute.internal.BinaryJoiningExpressionImpl;
+import com.speedment.runtime.compute.internal.JoiningExpressionImpl;
 import com.speedment.runtime.compute.internal.ToByteNullableImpl;
 import com.speedment.runtime.compute.internal.ToDoubleNullableImpl;
 import com.speedment.runtime.compute.internal.expression.*;
+
+import static java.util.Arrays.asList;
 
 /**
  * Common mathematical expressions often used on Speedment entities.
@@ -3332,5 +3336,116 @@ public final class Expressions {
      */
     public static <T> ToDouble<T> divide(ToDouble<T> first, ToDouble<T> second) {
         return DivideUtil.divide(first, second);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    //                                ToString                                //
+    ////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Returns an expression that represents the result of the two specified
+     * expressions joined together, forming a single string.
+     *
+     * @param first   the first expression
+     * @param second  the second expression
+     * @param <T>     the input entity type
+     * @return        the joined expression
+     */
+    public static <T> ToString<T> joining(
+            ToString<T> first,
+            ToString<T> second) {
+        return joining("", first, second);
+    }
+
+    /**
+     * Returns an expression that represents the result of the two specified
+     * expressions joined together with a separator between them, forming a
+     * single string.
+     *
+     * @param separator  the separator (may be empty but never {@code null})
+     * @param first      the first expression
+     * @param second     the second expression
+     * @param <T>        the input entity type
+     * @return           the joined expression
+     */
+    public static <T> ToString<T> joining(
+            CharSequence separator,
+            ToString<T> first,
+            ToString<T> second) {
+        return joining(separator, "", "", first, second);
+    }
+
+    /**
+     * Returns an expression that represents the result of the two specified
+     * expressions joined together with a separator between them, with a prefix
+     * before the entire result and a suffix after it, forming a single string.
+     *
+     * @param separator  the separator (may be empty but never {@code null})
+     * @param prefix     the prefix to put before the whole result
+     * @param suffix     the suffix to put after the whole result
+     * @param first      the first expression
+     * @param second     the second expression
+     * @param <T>        the input entity type
+     * @return           the joined expression
+     */
+    public static <T> ToString<T> joining(
+            CharSequence separator,
+            CharSequence prefix,
+            CharSequence suffix,
+            ToString<T> first,
+            ToString<T> second) {
+        return new BinaryJoiningExpressionImpl<>(separator, prefix, suffix, first, second);
+    }
+
+    /**
+     * Returns an expression that represents the result of all the specified
+     * expressions joined together, forming a single string.
+     *
+     * @param expressions  the array of expressions to join
+     * @param <T>          the input entity type
+     * @return             the joined expression
+     */
+    @SafeVarargs
+    public static <T> ToString<T> joining(
+            ToString<T>... expressions) {
+        return joining("", expressions);
+    }
+
+    /**
+     * Returns an expression that represents the result of all the specified
+     * expressions joined together with separators between them, forming a
+     * single string.
+     *
+     * @param separator    the separator (may be empty but never {@code null})
+     * @param expressions  the array of expressions to join
+     * @param <T>          the input entity type
+     * @return             the joined expression
+     */
+    @SafeVarargs
+    public static <T> ToString<T> joining(
+            CharSequence separator,
+            ToString<T>... expressions) {
+        return joining(separator, "", "", expressions);
+    }
+
+    /**
+     * Returns an expression that represents the result of all the specified
+     * expressions joined together with separators between them, with a prefix
+     * before the entire result and a suffix after it, forming a single string.
+     *
+     * @param separator    the separator (may be empty but never {@code null})
+     * @param prefix       the prefix to put before the whole result
+     * @param suffix       the suffix to put after the whole result
+     * @param expressions  the array of expressions to join
+     * @param <T>          the input entity type
+     * @return             the joined expression
+     */
+    @SafeVarargs
+    public static <T> ToString<T> joining(
+            CharSequence separator,
+            CharSequence prefix,
+            CharSequence suffix,
+            ToString<T>... expressions) {
+        return new JoiningExpressionImpl<>(separator, prefix, suffix, asList(expressions));
     }
 }
