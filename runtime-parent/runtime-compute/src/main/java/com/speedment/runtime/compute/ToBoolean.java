@@ -42,9 +42,7 @@ extends Expression<T>,
         HasAsLong<T>,
         HasMap<T, BooleanUnaryOperator, ToBoolean<T>>,
         HasHash<T>,
-        HasCompare<T>,
-        Predicate<T>
-{
+        HasCompare<T> {
 
     @Override
     boolean applyAsBoolean(T object);
@@ -76,11 +74,6 @@ extends Expression<T>,
     @Override
     default ToBoolean<T> map(BooleanUnaryOperator operator) {
         return MapperUtil.map(this, operator);
-    }
-
-    @Override
-    default boolean test(T object) {
-        return applyAsBoolean(object);
     }
 
     @Override
