@@ -28,6 +28,7 @@ import java.util.function.UnaryOperator;
  * @param <T> type to extract from
  *
  * @see ToBooleanFunction
+ * @see Predicate
  *
  * @author Emil Forslund
  * @since 3.1.0
