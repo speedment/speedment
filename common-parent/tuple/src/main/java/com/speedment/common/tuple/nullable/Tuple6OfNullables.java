@@ -17,7 +17,6 @@
 package com.speedment.common.tuple.nullable;
 
 import com.speedment.common.tuple.MutableTuple;
-import com.speedment.common.tuple.Tuple6;
 import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleOfNullables;
 import com.speedment.common.tuple.getter.TupleGetter0;
@@ -126,8 +125,8 @@ public interface Tuple6OfNullables<T0, T1, T2, T3, T4, T5> extends TupleOfNullab
      * @param <T4> the 4th element type
      * @param <T5> the 5th element type
      */
-    static <T0, T1, T2, T3, T4, T5> TupleGetter0<Tuple6<T0, T1, T2, T3, T4, T5>, T0> getter0() {
-        return Tuple6::get0;
+    static <T0, T1, T2, T3, T4, T5> TupleGetter0<Tuple6OfNullables<T0, T1, T2, T3, T4, T5>, Optional<T0>> getter0() {
+        return Tuple6OfNullables::get0;
     }
     
     /**
@@ -142,8 +141,8 @@ public interface Tuple6OfNullables<T0, T1, T2, T3, T4, T5> extends TupleOfNullab
      * @param <T4> the 4th element type
      * @param <T5> the 5th element type
      */
-    static <T0, T1, T2, T3, T4, T5> TupleGetter1<Tuple6<T0, T1, T2, T3, T4, T5>, T1> getter1() {
-        return Tuple6::get1;
+    static <T0, T1, T2, T3, T4, T5> TupleGetter1<Tuple6OfNullables<T0, T1, T2, T3, T4, T5>, Optional<T1>> getter1() {
+        return Tuple6OfNullables::get1;
     }
     
     /**
@@ -158,8 +157,8 @@ public interface Tuple6OfNullables<T0, T1, T2, T3, T4, T5> extends TupleOfNullab
      * @param <T4> the 4th element type
      * @param <T5> the 5th element type
      */
-    static <T0, T1, T2, T3, T4, T5> TupleGetter2<Tuple6<T0, T1, T2, T3, T4, T5>, T2> getter2() {
-        return Tuple6::get2;
+    static <T0, T1, T2, T3, T4, T5> TupleGetter2<Tuple6OfNullables<T0, T1, T2, T3, T4, T5>, Optional<T2>> getter2() {
+        return Tuple6OfNullables::get2;
     }
     
     /**
@@ -174,8 +173,8 @@ public interface Tuple6OfNullables<T0, T1, T2, T3, T4, T5> extends TupleOfNullab
      * @param <T4> the 4th element type
      * @param <T5> the 5th element type
      */
-    static <T0, T1, T2, T3, T4, T5> TupleGetter3<Tuple6<T0, T1, T2, T3, T4, T5>, T3> getter3() {
-        return Tuple6::get3;
+    static <T0, T1, T2, T3, T4, T5> TupleGetter3<Tuple6OfNullables<T0, T1, T2, T3, T4, T5>, Optional<T3>> getter3() {
+        return Tuple6OfNullables::get3;
     }
     
     /**
@@ -190,8 +189,8 @@ public interface Tuple6OfNullables<T0, T1, T2, T3, T4, T5> extends TupleOfNullab
      * @param <T4> the 4th element type
      * @param <T5> the 5th element type
      */
-    static <T0, T1, T2, T3, T4, T5> TupleGetter4<Tuple6<T0, T1, T2, T3, T4, T5>, T4> getter4() {
-        return Tuple6::get4;
+    static <T0, T1, T2, T3, T4, T5> TupleGetter4<Tuple6OfNullables<T0, T1, T2, T3, T4, T5>, Optional<T4>> getter4() {
+        return Tuple6OfNullables::get4;
     }
     
     /**
@@ -206,7 +205,7 @@ public interface Tuple6OfNullables<T0, T1, T2, T3, T4, T5> extends TupleOfNullab
      * @param <T4> the 4th element type
      * @param <T5> the 5th element type
      */
-    static <T0, T1, T2, T3, T4, T5> TupleGetter5<Tuple6<T0, T1, T2, T3, T4, T5>, T5> getter5() {
-        return Tuple6::get5;
+    static <T0, T1, T2, T3, T4, T5> TupleGetter5<Tuple6OfNullables<T0, T1, T2, T3, T4, T5>, Optional<T5>> getter5() {
+        return Tuple6OfNullables::get5;
     }
 }

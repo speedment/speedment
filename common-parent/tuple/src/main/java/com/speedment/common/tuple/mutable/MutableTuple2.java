@@ -17,7 +17,6 @@
 package com.speedment.common.tuple.mutable;
 
 import com.speedment.common.tuple.MutableTuple;
-import com.speedment.common.tuple.Tuple2;
 import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleOfNullables;
 import com.speedment.common.tuple.getter.TupleGetter0;
@@ -96,8 +95,8 @@ public interface MutableTuple2<T0, T1> extends MutableTuple {
      * @param <T0> the 0th element type
      * @param <T1> the 1st element type
      */
-    static <T0, T1> TupleGetter0<Tuple2<T0, T1>, T0> getter0() {
-        return Tuple2::get0;
+    static <T0, T1> TupleGetter0<MutableTuple2<T0, T1>, Optional<T0>> getter0() {
+        return MutableTuple2::get0;
     }
     
     /**
@@ -119,8 +118,8 @@ public interface MutableTuple2<T0, T1> extends MutableTuple {
      * @param <T0> the 0th element type
      * @param <T1> the 1st element type
      */
-    static <T0, T1> TupleGetter1<Tuple2<T0, T1>, T1> getter1() {
-        return Tuple2::get1;
+    static <T0, T1> TupleGetter1<MutableTuple2<T0, T1>, Optional<T1>> getter1() {
+        return MutableTuple2::get1;
     }
     
     /**

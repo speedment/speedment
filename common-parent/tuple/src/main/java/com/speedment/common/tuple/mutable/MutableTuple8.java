@@ -17,7 +17,6 @@
 package com.speedment.common.tuple.mutable;
 
 import com.speedment.common.tuple.MutableTuple;
-import com.speedment.common.tuple.Tuple8;
 import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleOfNullables;
 import com.speedment.common.tuple.getter.TupleGetter0;
@@ -204,8 +203,8 @@ public interface MutableTuple8<T0, T1, T2, T3, T4, T5, T6, T7> extends MutableTu
      * @param <T6> the 6th element type
      * @param <T7> the 7th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7> TupleGetter0<Tuple8<T0, T1, T2, T3, T4, T5, T6, T7>, T0> getter0() {
-        return Tuple8::get0;
+    static <T0, T1, T2, T3, T4, T5, T6, T7> TupleGetter0<MutableTuple8<T0, T1, T2, T3, T4, T5, T6, T7>, Optional<T0>> getter0() {
+        return MutableTuple8::get0;
     }
     
     /**
@@ -239,8 +238,8 @@ public interface MutableTuple8<T0, T1, T2, T3, T4, T5, T6, T7> extends MutableTu
      * @param <T6> the 6th element type
      * @param <T7> the 7th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7> TupleGetter1<Tuple8<T0, T1, T2, T3, T4, T5, T6, T7>, T1> getter1() {
-        return Tuple8::get1;
+    static <T0, T1, T2, T3, T4, T5, T6, T7> TupleGetter1<MutableTuple8<T0, T1, T2, T3, T4, T5, T6, T7>, Optional<T1>> getter1() {
+        return MutableTuple8::get1;
     }
     
     /**
@@ -274,8 +273,8 @@ public interface MutableTuple8<T0, T1, T2, T3, T4, T5, T6, T7> extends MutableTu
      * @param <T6> the 6th element type
      * @param <T7> the 7th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7> TupleGetter2<Tuple8<T0, T1, T2, T3, T4, T5, T6, T7>, T2> getter2() {
-        return Tuple8::get2;
+    static <T0, T1, T2, T3, T4, T5, T6, T7> TupleGetter2<MutableTuple8<T0, T1, T2, T3, T4, T5, T6, T7>, Optional<T2>> getter2() {
+        return MutableTuple8::get2;
     }
     
     /**
@@ -309,8 +308,8 @@ public interface MutableTuple8<T0, T1, T2, T3, T4, T5, T6, T7> extends MutableTu
      * @param <T6> the 6th element type
      * @param <T7> the 7th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7> TupleGetter3<Tuple8<T0, T1, T2, T3, T4, T5, T6, T7>, T3> getter3() {
-        return Tuple8::get3;
+    static <T0, T1, T2, T3, T4, T5, T6, T7> TupleGetter3<MutableTuple8<T0, T1, T2, T3, T4, T5, T6, T7>, Optional<T3>> getter3() {
+        return MutableTuple8::get3;
     }
     
     /**
@@ -344,8 +343,8 @@ public interface MutableTuple8<T0, T1, T2, T3, T4, T5, T6, T7> extends MutableTu
      * @param <T6> the 6th element type
      * @param <T7> the 7th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7> TupleGetter4<Tuple8<T0, T1, T2, T3, T4, T5, T6, T7>, T4> getter4() {
-        return Tuple8::get4;
+    static <T0, T1, T2, T3, T4, T5, T6, T7> TupleGetter4<MutableTuple8<T0, T1, T2, T3, T4, T5, T6, T7>, Optional<T4>> getter4() {
+        return MutableTuple8::get4;
     }
     
     /**
@@ -379,8 +378,8 @@ public interface MutableTuple8<T0, T1, T2, T3, T4, T5, T6, T7> extends MutableTu
      * @param <T6> the 6th element type
      * @param <T7> the 7th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7> TupleGetter5<Tuple8<T0, T1, T2, T3, T4, T5, T6, T7>, T5> getter5() {
-        return Tuple8::get5;
+    static <T0, T1, T2, T3, T4, T5, T6, T7> TupleGetter5<MutableTuple8<T0, T1, T2, T3, T4, T5, T6, T7>, Optional<T5>> getter5() {
+        return MutableTuple8::get5;
     }
     
     /**
@@ -414,8 +413,8 @@ public interface MutableTuple8<T0, T1, T2, T3, T4, T5, T6, T7> extends MutableTu
      * @param <T6> the 6th element type
      * @param <T7> the 7th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7> TupleGetter6<Tuple8<T0, T1, T2, T3, T4, T5, T6, T7>, T6> getter6() {
-        return Tuple8::get6;
+    static <T0, T1, T2, T3, T4, T5, T6, T7> TupleGetter6<MutableTuple8<T0, T1, T2, T3, T4, T5, T6, T7>, Optional<T6>> getter6() {
+        return MutableTuple8::get6;
     }
     
     /**
@@ -449,8 +448,8 @@ public interface MutableTuple8<T0, T1, T2, T3, T4, T5, T6, T7> extends MutableTu
      * @param <T6> the 6th element type
      * @param <T7> the 7th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7> TupleGetter7<Tuple8<T0, T1, T2, T3, T4, T5, T6, T7>, T7> getter7() {
-        return Tuple8::get7;
+    static <T0, T1, T2, T3, T4, T5, T6, T7> TupleGetter7<MutableTuple8<T0, T1, T2, T3, T4, T5, T6, T7>, Optional<T7>> getter7() {
+        return MutableTuple8::get7;
     }
     
     /**

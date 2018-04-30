@@ -17,7 +17,6 @@
 package com.speedment.common.tuple.nullable;
 
 import com.speedment.common.tuple.MutableTuple;
-import com.speedment.common.tuple.Tuple3;
 import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleOfNullables;
 import com.speedment.common.tuple.getter.TupleGetter0;
@@ -93,8 +92,8 @@ public interface Tuple3OfNullables<T0, T1, T2> extends TupleOfNullables {
      * @param <T1> the 1st element type
      * @param <T2> the 2nd element type
      */
-    static <T0, T1, T2> TupleGetter0<Tuple3<T0, T1, T2>, T0> getter0() {
-        return Tuple3::get0;
+    static <T0, T1, T2> TupleGetter0<Tuple3OfNullables<T0, T1, T2>, Optional<T0>> getter0() {
+        return Tuple3OfNullables::get0;
     }
     
     /**
@@ -106,8 +105,8 @@ public interface Tuple3OfNullables<T0, T1, T2> extends TupleOfNullables {
      * @param <T1> the 1st element type
      * @param <T2> the 2nd element type
      */
-    static <T0, T1, T2> TupleGetter1<Tuple3<T0, T1, T2>, T1> getter1() {
-        return Tuple3::get1;
+    static <T0, T1, T2> TupleGetter1<Tuple3OfNullables<T0, T1, T2>, Optional<T1>> getter1() {
+        return Tuple3OfNullables::get1;
     }
     
     /**
@@ -119,7 +118,7 @@ public interface Tuple3OfNullables<T0, T1, T2> extends TupleOfNullables {
      * @param <T1> the 1st element type
      * @param <T2> the 2nd element type
      */
-    static <T0, T1, T2> TupleGetter2<Tuple3<T0, T1, T2>, T2> getter2() {
-        return Tuple3::get2;
+    static <T0, T1, T2> TupleGetter2<Tuple3OfNullables<T0, T1, T2>, Optional<T2>> getter2() {
+        return Tuple3OfNullables::get2;
     }
 }

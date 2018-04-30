@@ -17,7 +17,6 @@
 package com.speedment.common.tuple.nullable;
 
 import com.speedment.common.tuple.MutableTuple;
-import com.speedment.common.tuple.Tuple15;
 import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleOfNullables;
 import com.speedment.common.tuple.getter.TupleGetter0;
@@ -225,8 +224,8 @@ public interface Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      * @param <T13> the 13rd element type
      * @param <T14> the 14th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter0<Tuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T0> getter0() {
-        return Tuple15::get0;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter0<Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, Optional<T0>> getter0() {
+        return Tuple15OfNullables::get0;
     }
     
     /**
@@ -250,8 +249,8 @@ public interface Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      * @param <T13> the 13rd element type
      * @param <T14> the 14th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter1<Tuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T1> getter1() {
-        return Tuple15::get1;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter1<Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, Optional<T1>> getter1() {
+        return Tuple15OfNullables::get1;
     }
     
     /**
@@ -275,8 +274,8 @@ public interface Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      * @param <T13> the 13rd element type
      * @param <T14> the 14th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter2<Tuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T2> getter2() {
-        return Tuple15::get2;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter2<Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, Optional<T2>> getter2() {
+        return Tuple15OfNullables::get2;
     }
     
     /**
@@ -300,8 +299,8 @@ public interface Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      * @param <T13> the 13rd element type
      * @param <T14> the 14th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter3<Tuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T3> getter3() {
-        return Tuple15::get3;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter3<Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, Optional<T3>> getter3() {
+        return Tuple15OfNullables::get3;
     }
     
     /**
@@ -325,8 +324,8 @@ public interface Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      * @param <T13> the 13rd element type
      * @param <T14> the 14th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter4<Tuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T4> getter4() {
-        return Tuple15::get4;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter4<Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, Optional<T4>> getter4() {
+        return Tuple15OfNullables::get4;
     }
     
     /**
@@ -350,8 +349,8 @@ public interface Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      * @param <T13> the 13rd element type
      * @param <T14> the 14th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter5<Tuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T5> getter5() {
-        return Tuple15::get5;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter5<Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, Optional<T5>> getter5() {
+        return Tuple15OfNullables::get5;
     }
     
     /**
@@ -375,8 +374,8 @@ public interface Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      * @param <T13> the 13rd element type
      * @param <T14> the 14th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter6<Tuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T6> getter6() {
-        return Tuple15::get6;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter6<Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, Optional<T6>> getter6() {
+        return Tuple15OfNullables::get6;
     }
     
     /**
@@ -400,8 +399,8 @@ public interface Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      * @param <T13> the 13rd element type
      * @param <T14> the 14th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter7<Tuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T7> getter7() {
-        return Tuple15::get7;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter7<Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, Optional<T7>> getter7() {
+        return Tuple15OfNullables::get7;
     }
     
     /**
@@ -425,8 +424,8 @@ public interface Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      * @param <T13> the 13rd element type
      * @param <T14> the 14th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter8<Tuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T8> getter8() {
-        return Tuple15::get8;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter8<Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, Optional<T8>> getter8() {
+        return Tuple15OfNullables::get8;
     }
     
     /**
@@ -450,8 +449,8 @@ public interface Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      * @param <T13> the 13rd element type
      * @param <T14> the 14th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter9<Tuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T9> getter9() {
-        return Tuple15::get9;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter9<Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, Optional<T9>> getter9() {
+        return Tuple15OfNullables::get9;
     }
     
     /**
@@ -475,8 +474,8 @@ public interface Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      * @param <T13> the 13rd element type
      * @param <T14> the 14th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter10<Tuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T10> getter10() {
-        return Tuple15::get10;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter10<Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, Optional<T10>> getter10() {
+        return Tuple15OfNullables::get10;
     }
     
     /**
@@ -500,8 +499,8 @@ public interface Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      * @param <T13> the 13rd element type
      * @param <T14> the 14th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter11<Tuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T11> getter11() {
-        return Tuple15::get11;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter11<Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, Optional<T11>> getter11() {
+        return Tuple15OfNullables::get11;
     }
     
     /**
@@ -525,8 +524,8 @@ public interface Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      * @param <T13> the 13rd element type
      * @param <T14> the 14th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter12<Tuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T12> getter12() {
-        return Tuple15::get12;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter12<Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, Optional<T12>> getter12() {
+        return Tuple15OfNullables::get12;
     }
     
     /**
@@ -550,8 +549,8 @@ public interface Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      * @param <T13> the 13rd element type
      * @param <T14> the 14th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter13<Tuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T13> getter13() {
-        return Tuple15::get13;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter13<Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, Optional<T13>> getter13() {
+        return Tuple15OfNullables::get13;
     }
     
     /**
@@ -575,7 +574,7 @@ public interface Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
      * @param <T13> the 13rd element type
      * @param <T14> the 14th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter14<Tuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, T14> getter14() {
-        return Tuple15::get14;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> TupleGetter14<Tuple15OfNullables<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>, Optional<T14>> getter14() {
+        return Tuple15OfNullables::get14;
     }
 }

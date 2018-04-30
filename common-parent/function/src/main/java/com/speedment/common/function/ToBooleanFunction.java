@@ -16,19 +16,16 @@
  */
 package com.speedment.common.function;
 
-import java.util.function.Predicate;
-
 /**
  * A function that takes an object and returns a primitive {@code boolean}.
- *
- * @see Predicate
+ * 
  * @param <T> argument type
  * 
  * @author Emil Forslund
  * @since  1.0.2
  */
 @FunctionalInterface
-public interface ToBooleanFunction<T> extends Predicate<T>  {
+public interface ToBooleanFunction<T> {
     
     /**
      * Applies this function to the given argument.
@@ -37,9 +34,4 @@ public interface ToBooleanFunction<T> extends Predicate<T>  {
      * @return      the result
      */
     boolean applyAsBoolean(T value);
-
-    @Override
-    default boolean test(T value) {
-        return applyAsBoolean(value);
-    }
 }

@@ -17,7 +17,6 @@
 package com.speedment.common.tuple.mutable;
 
 import com.speedment.common.tuple.MutableTuple;
-import com.speedment.common.tuple.Tuple4;
 import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleOfNullables;
 import com.speedment.common.tuple.getter.TupleGetter0;
@@ -132,8 +131,8 @@ public interface MutableTuple4<T0, T1, T2, T3> extends MutableTuple {
      * @param <T2> the 2nd element type
      * @param <T3> the 3rd element type
      */
-    static <T0, T1, T2, T3> TupleGetter0<Tuple4<T0, T1, T2, T3>, T0> getter0() {
-        return Tuple4::get0;
+    static <T0, T1, T2, T3> TupleGetter0<MutableTuple4<T0, T1, T2, T3>, Optional<T0>> getter0() {
+        return MutableTuple4::get0;
     }
     
     /**
@@ -159,8 +158,8 @@ public interface MutableTuple4<T0, T1, T2, T3> extends MutableTuple {
      * @param <T2> the 2nd element type
      * @param <T3> the 3rd element type
      */
-    static <T0, T1, T2, T3> TupleGetter1<Tuple4<T0, T1, T2, T3>, T1> getter1() {
-        return Tuple4::get1;
+    static <T0, T1, T2, T3> TupleGetter1<MutableTuple4<T0, T1, T2, T3>, Optional<T1>> getter1() {
+        return MutableTuple4::get1;
     }
     
     /**
@@ -186,8 +185,8 @@ public interface MutableTuple4<T0, T1, T2, T3> extends MutableTuple {
      * @param <T2> the 2nd element type
      * @param <T3> the 3rd element type
      */
-    static <T0, T1, T2, T3> TupleGetter2<Tuple4<T0, T1, T2, T3>, T2> getter2() {
-        return Tuple4::get2;
+    static <T0, T1, T2, T3> TupleGetter2<MutableTuple4<T0, T1, T2, T3>, Optional<T2>> getter2() {
+        return MutableTuple4::get2;
     }
     
     /**
@@ -213,8 +212,8 @@ public interface MutableTuple4<T0, T1, T2, T3> extends MutableTuple {
      * @param <T2> the 2nd element type
      * @param <T3> the 3rd element type
      */
-    static <T0, T1, T2, T3> TupleGetter3<Tuple4<T0, T1, T2, T3>, T3> getter3() {
-        return Tuple4::get3;
+    static <T0, T1, T2, T3> TupleGetter3<MutableTuple4<T0, T1, T2, T3>, Optional<T3>> getter3() {
+        return MutableTuple4::get3;
     }
     
     /**

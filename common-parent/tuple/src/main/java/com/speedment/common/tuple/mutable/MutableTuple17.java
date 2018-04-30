@@ -17,7 +17,6 @@
 package com.speedment.common.tuple.mutable;
 
 import com.speedment.common.tuple.MutableTuple;
-import com.speedment.common.tuple.Tuple17;
 import com.speedment.common.tuple.Tuple;
 import com.speedment.common.tuple.TupleOfNullables;
 import com.speedment.common.tuple.getter.TupleGetter0;
@@ -366,8 +365,8 @@ public interface MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
      * @param <T15> the 15th element type
      * @param <T16> the 16th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter0<Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, T0> getter0() {
-        return Tuple17::get0;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter0<MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, Optional<T0>> getter0() {
+        return MutableTuple17::get0;
     }
     
     /**
@@ -419,8 +418,8 @@ public interface MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
      * @param <T15> the 15th element type
      * @param <T16> the 16th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter1<Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, T1> getter1() {
-        return Tuple17::get1;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter1<MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, Optional<T1>> getter1() {
+        return MutableTuple17::get1;
     }
     
     /**
@@ -472,8 +471,8 @@ public interface MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
      * @param <T15> the 15th element type
      * @param <T16> the 16th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter2<Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, T2> getter2() {
-        return Tuple17::get2;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter2<MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, Optional<T2>> getter2() {
+        return MutableTuple17::get2;
     }
     
     /**
@@ -525,8 +524,8 @@ public interface MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
      * @param <T15> the 15th element type
      * @param <T16> the 16th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter3<Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, T3> getter3() {
-        return Tuple17::get3;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter3<MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, Optional<T3>> getter3() {
+        return MutableTuple17::get3;
     }
     
     /**
@@ -578,8 +577,8 @@ public interface MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
      * @param <T15> the 15th element type
      * @param <T16> the 16th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter4<Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, T4> getter4() {
-        return Tuple17::get4;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter4<MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, Optional<T4>> getter4() {
+        return MutableTuple17::get4;
     }
     
     /**
@@ -631,8 +630,8 @@ public interface MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
      * @param <T15> the 15th element type
      * @param <T16> the 16th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter5<Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, T5> getter5() {
-        return Tuple17::get5;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter5<MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, Optional<T5>> getter5() {
+        return MutableTuple17::get5;
     }
     
     /**
@@ -684,8 +683,8 @@ public interface MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
      * @param <T15> the 15th element type
      * @param <T16> the 16th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter6<Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, T6> getter6() {
-        return Tuple17::get6;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter6<MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, Optional<T6>> getter6() {
+        return MutableTuple17::get6;
     }
     
     /**
@@ -737,8 +736,8 @@ public interface MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
      * @param <T15> the 15th element type
      * @param <T16> the 16th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter7<Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, T7> getter7() {
-        return Tuple17::get7;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter7<MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, Optional<T7>> getter7() {
+        return MutableTuple17::get7;
     }
     
     /**
@@ -790,8 +789,8 @@ public interface MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
      * @param <T15> the 15th element type
      * @param <T16> the 16th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter8<Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, T8> getter8() {
-        return Tuple17::get8;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter8<MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, Optional<T8>> getter8() {
+        return MutableTuple17::get8;
     }
     
     /**
@@ -843,8 +842,8 @@ public interface MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
      * @param <T15> the 15th element type
      * @param <T16> the 16th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter9<Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, T9> getter9() {
-        return Tuple17::get9;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter9<MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, Optional<T9>> getter9() {
+        return MutableTuple17::get9;
     }
     
     /**
@@ -896,8 +895,8 @@ public interface MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
      * @param <T15> the 15th element type
      * @param <T16> the 16th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter10<Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, T10> getter10() {
-        return Tuple17::get10;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter10<MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, Optional<T10>> getter10() {
+        return MutableTuple17::get10;
     }
     
     /**
@@ -949,8 +948,8 @@ public interface MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
      * @param <T15> the 15th element type
      * @param <T16> the 16th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter11<Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, T11> getter11() {
-        return Tuple17::get11;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter11<MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, Optional<T11>> getter11() {
+        return MutableTuple17::get11;
     }
     
     /**
@@ -1002,8 +1001,8 @@ public interface MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
      * @param <T15> the 15th element type
      * @param <T16> the 16th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter12<Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, T12> getter12() {
-        return Tuple17::get12;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter12<MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, Optional<T12>> getter12() {
+        return MutableTuple17::get12;
     }
     
     /**
@@ -1055,8 +1054,8 @@ public interface MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
      * @param <T15> the 15th element type
      * @param <T16> the 16th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter13<Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, T13> getter13() {
-        return Tuple17::get13;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter13<MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, Optional<T13>> getter13() {
+        return MutableTuple17::get13;
     }
     
     /**
@@ -1108,8 +1107,8 @@ public interface MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
      * @param <T15> the 15th element type
      * @param <T16> the 16th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter14<Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, T14> getter14() {
-        return Tuple17::get14;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter14<MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, Optional<T14>> getter14() {
+        return MutableTuple17::get14;
     }
     
     /**
@@ -1161,8 +1160,8 @@ public interface MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
      * @param <T15> the 15th element type
      * @param <T16> the 16th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter15<Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, T15> getter15() {
-        return Tuple17::get15;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter15<MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, Optional<T15>> getter15() {
+        return MutableTuple17::get15;
     }
     
     /**
@@ -1214,8 +1213,8 @@ public interface MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11
      * @param <T15> the 15th element type
      * @param <T16> the 16th element type
      */
-    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter16<Tuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, T16> getter16() {
-        return Tuple17::get16;
+    static <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> TupleGetter16<MutableTuple17<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>, Optional<T16>> getter16() {
+        return MutableTuple17::get16;
     }
     
     /**
