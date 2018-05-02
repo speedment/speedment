@@ -19,12 +19,12 @@ public interface ToBigDecimalOrElse<T>
 extends NonNullableExpression<T, ToBigDecimalNullable<T>>, ToBigDecimal<T> {
 
     /**
-     * Returns the default value used when {@link #getInnerNullable()} would
+     * Returns the default value used when {@link #innerNullable()} would
      * have returned {@code null}.
      *
      * @return  the default value
      */
-    BigDecimal getDefaultValue();
+    BigDecimal defaultValue();
 
     @Override
     default NullStrategy nullStrategy() {

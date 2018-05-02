@@ -10,7 +10,7 @@ import com.speedment.runtime.compute.expression.orelse.OrElseThrowExpression;
  * <p>
  * Equality is determined by looking at {@link #innerNullable()} and
  * {@link #nullStrategy()}, and additionally by the
- * {@link OrElseGetExpression#getDefaultValueGetter()} or the
+ * {@link OrElseGetExpression#defaultValueGetter()} or the
  * {@code getDefaultValue()} if the strategy is
  * {@link NullStrategy#APPLY_DEFAULT_METHOD} or
  * {@link NullStrategy#USE_DEFAULT_VALUE} respectively.
@@ -49,14 +49,14 @@ extends Expression<T> {
          * {@code null} value, a specific constant value will be returned by
          * this expression. If this strategy is used, then the class should also
          * implement the corresponding {@code To__OrElseExpression} depending on
-         * the {@link Expression#getExpressionType() type}.
+         * the {@link Expression#expressionType() type}.
          */
         USE_DEFAULT_VALUE,
 
         /**
          * Whenever the {@link #innerNullable() inner} expression returns a
          * {@code null} value, the
-         * {@link OrElseGetExpression#getDefaultValueGetter() other} expression
+         * {@link OrElseGetExpression#defaultValueGetter() other} expression
          * will be invoked to determine the value instead. If this strategy is
          * used, then the class should also implement
          * {@link OrElseGetExpression}.

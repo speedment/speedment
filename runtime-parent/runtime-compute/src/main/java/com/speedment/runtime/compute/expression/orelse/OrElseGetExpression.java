@@ -5,7 +5,7 @@ import com.speedment.runtime.compute.expression.NonNullableExpression;
 
 /**
  * Specialization of {@link NonNullableExpression} that has a
- * {@link #getDefaultValueGetter()} method.
+ * {@link #defaultValueGetter()} method.
  *
  * @param <T>        the input entity type
  * @param <INNER>    the wrapped nullable expression
@@ -19,12 +19,12 @@ public interface OrElseGetExpression
 extends NonNullableExpression<T, INNER> {
 
     /**
-     * Returns the default value used when {@link #getInnerNullable()} would
+     * Returns the default value used when {@link #innerNullable()} would
      * have returned {@code null}.
      *
      * @return  the default value
      */
-    DEFAULT getDefaultValueGetter();
+    DEFAULT defaultValueGetter();
 
     @Override
     default NullStrategy nullStrategy() {

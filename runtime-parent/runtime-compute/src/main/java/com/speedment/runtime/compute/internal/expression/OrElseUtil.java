@@ -50,7 +50,7 @@ public final class OrElseUtil {
         }
 
         @Override
-        public double getDefaultValue() {
+        public double defaultValue() {
             return value;
         }
 
@@ -66,7 +66,7 @@ public final class OrElseUtil {
             if (!(o instanceof ToDoubleOrElse)) return false;
             final ToDoubleOrElse<?> that = (ToDoubleOrElse<?>) o;
             return Objects.equals(inner, that.innerNullable()) &&
-                value == that.getDefaultValue();
+                value == that.defaultValue();
         }
 
         @Override
@@ -106,7 +106,7 @@ public final class OrElseUtil {
         }
 
         @Override
-        public float getDefaultValue() {
+        public float defaultValue() {
             return value;
         }
 
@@ -122,7 +122,7 @@ public final class OrElseUtil {
             if (!(o instanceof ToFloatOrElse)) return false;
             final ToFloatOrElse<?> that = (ToFloatOrElse<?>) o;
             return Objects.equals(inner, that.innerNullable()) &&
-                value == that.getDefaultValue();
+                value == that.defaultValue();
         }
 
         @Override
@@ -162,7 +162,7 @@ public final class OrElseUtil {
         }
 
         @Override
-        public long getDefaultValue() {
+        public long defaultValue() {
             return value;
         }
 
@@ -178,7 +178,7 @@ public final class OrElseUtil {
             if (!(o instanceof ToLongOrElse)) return false;
             final ToLongOrElse<?> that = (ToLongOrElse<?>) o;
             return Objects.equals(inner, that.innerNullable()) &&
-                value == that.getDefaultValue();
+                value == that.defaultValue();
         }
 
         @Override
@@ -218,7 +218,7 @@ public final class OrElseUtil {
         }
 
         @Override
-        public int getDefaultValue() {
+        public int defaultValue() {
             return value;
         }
 
@@ -234,7 +234,7 @@ public final class OrElseUtil {
             if (!(o instanceof ToIntOrElse)) return false;
             final ToIntOrElse<?> that = (ToIntOrElse<?>) o;
             return Objects.equals(inner, that.innerNullable()) &&
-                value == that.getDefaultValue();
+                value == that.defaultValue();
         }
 
         @Override
@@ -274,7 +274,7 @@ public final class OrElseUtil {
         }
 
         @Override
-        public short getDefaultValue() {
+        public short defaultValue() {
             return value;
         }
 
@@ -290,7 +290,7 @@ public final class OrElseUtil {
             if (!(o instanceof ToShortOrElse)) return false;
             final ToShortOrElse<?> that = (ToShortOrElse<?>) o;
             return Objects.equals(inner, that.innerNullable()) &&
-                value == that.getDefaultValue();
+                value == that.defaultValue();
         }
 
         @Override
@@ -330,7 +330,7 @@ public final class OrElseUtil {
         }
 
         @Override
-        public byte getDefaultValue() {
+        public byte defaultValue() {
             return value;
         }
 
@@ -346,7 +346,7 @@ public final class OrElseUtil {
             if (!(o instanceof ToByteOrElse)) return false;
             final ToByteOrElse<?> that = (ToByteOrElse<?>) o;
             return Objects.equals(inner, that.innerNullable()) &&
-                value == that.getDefaultValue();
+                value == that.defaultValue();
         }
 
         @Override
@@ -386,7 +386,7 @@ public final class OrElseUtil {
         }
 
         @Override
-        public char getDefaultValue() {
+        public char defaultValue() {
             return value;
         }
 
@@ -402,7 +402,7 @@ public final class OrElseUtil {
             if (!(o instanceof ToCharOrElse)) return false;
             final ToCharOrElse<?> that = (ToCharOrElse<?>) o;
             return Objects.equals(inner, that.innerNullable()) &&
-                value == that.getDefaultValue();
+                value == that.defaultValue();
         }
 
         @Override
@@ -442,7 +442,7 @@ public final class OrElseUtil {
         }
 
         @Override
-        public boolean getDefaultValue() {
+        public boolean defaultValue() {
             return value;
         }
 
@@ -458,7 +458,7 @@ public final class OrElseUtil {
             if (!(o instanceof ToBooleanOrElse)) return false;
             final ToBooleanOrElse<?> that = (ToBooleanOrElse<?>) o;
             return Objects.equals(inner, that.innerNullable()) &&
-                value == that.getDefaultValue();
+                value == that.defaultValue();
         }
 
         @Override
@@ -498,7 +498,7 @@ public final class OrElseUtil {
         }
 
         @Override
-        public String getDefaultValue() {
+        public String defaultValue() {
             return value;
         }
 
@@ -514,7 +514,7 @@ public final class OrElseUtil {
             if (!(o instanceof ToStringOrElse)) return false;
             final ToStringOrElse<?> that = (ToStringOrElse<?>) o;
             return Objects.equals(inner, that.innerNullable()) &&
-                Objects.equals(value, that.getDefaultValue());
+                Objects.equals(value, that.defaultValue());
         }
 
         @Override
@@ -560,7 +560,7 @@ public final class OrElseUtil {
         }
 
         @Override
-        public E getDefaultValue() {
+        public E defaultValue() {
             return value;
         }
 
@@ -576,7 +576,7 @@ public final class OrElseUtil {
             if (!(o instanceof ToEnumOrElse)) return false;
             final ToEnumOrElse<?, ?> that = (ToEnumOrElse<?, ?>) o;
             return Objects.equals(inner, that.innerNullable()) &&
-                Objects.equals(value, that.getDefaultValue());
+                Objects.equals(value, that.defaultValue());
         }
 
         @Override
@@ -617,7 +617,7 @@ public final class OrElseUtil {
         }
 
         @Override
-        public BigDecimal getDefaultValue() {
+        public BigDecimal defaultValue() {
             return value;
         }
 
@@ -633,7 +633,7 @@ public final class OrElseUtil {
             if (!(o instanceof ToBigDecimalOrElse)) return false;
             final ToBigDecimalOrElse<?> that = (ToBigDecimalOrElse<?>) o;
             return Objects.equals(inner, that.innerNullable()) &&
-                Objects.equals(value, that.getDefaultValue());
+                Objects.equals(value, that.defaultValue());
         }
 
         @Override

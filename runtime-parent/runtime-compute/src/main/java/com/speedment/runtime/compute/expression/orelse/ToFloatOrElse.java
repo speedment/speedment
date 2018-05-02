@@ -17,12 +17,12 @@ public interface ToFloatOrElse<T>
 extends NonNullableExpression<T, ToFloatNullable<T>>, ToFloat<T> {
 
     /**
-     * Returns the default value used when {@link #getInnerNullable()} would
+     * Returns the default value used when {@link #innerNullable()} would
      * have returned {@code null}.
      *
      * @return  the default value
      */
-    float getDefaultValue();
+    float defaultValue();
 
     @Override
     default NullStrategy nullStrategy() {

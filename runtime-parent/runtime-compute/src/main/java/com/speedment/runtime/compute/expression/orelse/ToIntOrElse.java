@@ -17,12 +17,12 @@ public interface ToIntOrElse<T>
 extends NonNullableExpression<T, ToIntNullable<T>>, ToInt<T> {
 
     /**
-     * Returns the default value used when {@link #getInnerNullable()} would
+     * Returns the default value used when {@link #innerNullable()} would
      * have returned {@code null}.
      *
      * @return  the default value
      */
-    int getDefaultValue();
+    int defaultValue();
 
     @Override
     default NullStrategy nullStrategy() {

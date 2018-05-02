@@ -17,12 +17,12 @@ public interface ToCharOrElse<T>
 extends NonNullableExpression<T, ToCharNullable<T>>, ToChar<T> {
 
     /**
-     * Returns the default value used when {@link #getInnerNullable()} would
+     * Returns the default value used when {@link #innerNullable()} would
      * have returned {@code null}.
      *
      * @return  the default value
      */
-    char getDefaultValue();
+    char defaultValue();
 
     @Override
     default NullStrategy nullStrategy() {

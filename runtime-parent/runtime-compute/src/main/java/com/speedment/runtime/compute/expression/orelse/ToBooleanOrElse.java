@@ -17,12 +17,12 @@ public interface ToBooleanOrElse<T>
 extends NonNullableExpression<T, ToBooleanNullable<T>>, ToBoolean<T> {
 
     /**
-     * Returns the default value used when {@link #getInnerNullable()} would
+     * Returns the default value used when {@link #innerNullable()} would
      * have returned {@code null}.
      *
      * @return  the default value
      */
-    boolean getDefaultValue();
+    boolean defaultValue();
 
     @Override
     default NullStrategy nullStrategy() {

@@ -22,7 +22,7 @@ extends Expression<T> {
     /**
      * The inner predicate that is used to determine the result after the
      * {@link #isNullPredicate()} has returned {@code false}. The inner expression
-     * should have the same {@link Expression#getExpressionType() type} as this
+     * should have the same {@link Expression#expressionType() type} as this
      * one, except that it might not be nullable. It could also be nullable,
      * however.
      *

@@ -17,12 +17,12 @@ public interface ToDoubleOrElse<T>
 extends NonNullableExpression<T, ToDoubleNullable<T>>, ToDouble<T> {
 
     /**
-     * Returns the default value used when {@link #getInnerNullable()} would
+     * Returns the default value used when {@link #innerNullable()} would
      * have returned {@code null}.
      *
      * @return  the default value
      */
-    double getDefaultValue();
+    double defaultValue();
 
     @Override
     default NullStrategy nullStrategy() {

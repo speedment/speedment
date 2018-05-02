@@ -17,12 +17,12 @@ public interface ToLongOrElse<T>
 extends NonNullableExpression<T, ToLongNullable<T>>, ToLong<T> {
 
     /**
-     * Returns the default value used when {@link #getInnerNullable()} would
+     * Returns the default value used when {@link #innerNullable()} would
      * have returned {@code null}.
      *
      * @return  the default value
      */
-    long getDefaultValue();
+    long defaultValue();
 
     @Override
     default NullStrategy nullStrategy() {

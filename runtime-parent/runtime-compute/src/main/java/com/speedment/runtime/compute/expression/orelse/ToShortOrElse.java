@@ -17,12 +17,12 @@ public interface ToShortOrElse<T>
 extends NonNullableExpression<T, ToShortNullable<T>>, ToShort<T> {
 
     /**
-     * Returns the default value used when {@link #getInnerNullable()} would
+     * Returns the default value used when {@link #innerNullable()} would
      * have returned {@code null}.
      *
      * @return  the default value
      */
-    short getDefaultValue();
+    short defaultValue();
 
     @Override
     default NullStrategy nullStrategy() {

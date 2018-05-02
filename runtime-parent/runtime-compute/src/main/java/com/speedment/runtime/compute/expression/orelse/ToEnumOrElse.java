@@ -18,12 +18,12 @@ public interface ToEnumOrElse<T, E extends Enum<E>>
 extends NonNullableExpression<T, ToEnumNullable<T, E>>, ToEnum<T, E> {
 
     /**
-     * Returns the default value used when {@link #getInnerNullable()} would
+     * Returns the default value used when {@link #innerNullable()} would
      * have returned {@code null}.
      *
      * @return  the default value
      */
-    E getDefaultValue();
+    E defaultValue();
 
     @Override
     default NullStrategy nullStrategy() {
