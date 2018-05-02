@@ -8,7 +8,9 @@ import java.util.function.Predicate;
 /**
  * Trait for expressions that result in a nullable value. Those expressions have
  * additional methods for checking for {@code null}-values.
- *
+ * @param <T> type to extract from
+ * @param <R> return type
+ * 
  * @author Emil Forslund
  * @since  3.1.0
  */

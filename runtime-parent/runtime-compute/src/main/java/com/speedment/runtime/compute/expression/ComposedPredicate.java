@@ -8,6 +8,9 @@ import java.util.function.Predicate;
  * returns an instance that is then passed to {@link #innerPredicate()} to
  * determine if the element passes the predicate or not.
  *
+ * @param <T> initial type
+ * @param <A> intermediate type
+ * 
  * @author Emil Forslund
  * @since  3.1.0
  */
