@@ -31,6 +31,7 @@ public final class ExampleUtil {
 
     private static final String DEFAULT_PASSWORD = "sakila-password";
 
+    @SuppressWarnings("varargs")
     @SafeVarargs
     public static SakilaApplication buildApplication(UnaryOperator<SakilaApplicationBuilder>... operators) {
 

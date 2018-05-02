@@ -63,6 +63,7 @@ public final class CollectionUtil {
      * @param element   elements to add
      * @return          the new immutable list
      */
+    @SuppressWarnings("varargs")
     @SafeVarargs
     public static <T> List<T> copyAndAdd(List<T> original, T... element) {
         switch (original.size() + element.length) {

@@ -48,7 +48,7 @@ public class InfoComponentImplTest {
 
     @After
     public void tearDown() {
-        speedment.stop();
+        speedment.close();
     }
 
     @Test

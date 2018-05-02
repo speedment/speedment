@@ -64,11 +64,6 @@ public abstract class AbstractSpeedment implements Speedment {
     }
 
     @Override
-    public void stop() {
-        close();
-    }
-
-    @Override
     public void close() {
         injector.stop();
     }

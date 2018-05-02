@@ -69,21 +69,12 @@ public interface Speedment extends AutoCloseable {
      */
     <ENTITY> ManagerConfigurator<ENTITY> configure(Class<? extends Manager<ENTITY>> manager);
     
-    /**
-     * This method has been depricated and will be removed in the next major API
-     * release. Use {@link #close() } instead.
-     */
-    @Deprecated
-    void stop();
-
-    /**
+   /**
      * Closes the Speedment instance and deallocates any allocated resources.
      * After close() has been called, the Speedment instance can not be called
      * any more.
      */
     @Override
-    default void close() {
-        stop();
-    }
+    void close();
     
 }

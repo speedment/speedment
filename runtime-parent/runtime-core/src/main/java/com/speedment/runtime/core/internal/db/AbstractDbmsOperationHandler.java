@@ -311,7 +311,7 @@ public abstract class AbstractDbmsOperationHandler implements DbmsOperationHandl
         sqlStatementList.stream()
             .filter(SqlInsertStatement.class::isInstance)
             .map(SqlInsertStatement.class::cast)
-            .forEach(SqlInsertStatement::acceptGeneratedKeys);
+            .forEach(SqlInsertStatement<?>::acceptGeneratedKeys);
     }
 
     @FunctionalInterface
