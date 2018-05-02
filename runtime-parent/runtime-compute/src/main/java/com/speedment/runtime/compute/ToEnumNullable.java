@@ -59,7 +59,7 @@ extends Expression<T>,
             : null;
     }
 
-    default ToEnum<T, E> orElseThrow() {
+    default ToEnum<T, E> orThrow() {
         return OrElseThrowUtil.orElseThrow(this);
     }
 
