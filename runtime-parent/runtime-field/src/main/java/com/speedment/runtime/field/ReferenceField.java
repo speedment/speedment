@@ -92,7 +92,8 @@ extends Field<ENTITY>,
      *
      * @since 3.1.0
      */
-    default ToByteNullable<ENTITY> mapToByteIfPresent(ToByteFunction<V> mapper) {
+    default ToByteNullable<ENTITY>
+    mapToByteIfPresent(ToByteFunction<V> mapper) {
         return new FieldToByteImpl<>(this, mapper);
     }
 
@@ -127,7 +128,8 @@ extends Field<ENTITY>,
      *
      * @since 3.1.0
      */
-    default ToShortNullable<ENTITY> mapToShortIfPresent(ToShortFunction<V> mapper) {
+    default ToShortNullable<ENTITY>
+    mapToShortIfPresent(ToShortFunction<V> mapper) {
         return new FieldToShortImpl<>(this, mapper);
     }
 
@@ -162,7 +164,8 @@ extends Field<ENTITY>,
      *
      * @since 3.1.0
      */
-    default ToIntNullable<ENTITY> mapToIntIfPresent(ToIntFunction<V> mapper) {
+    default ToIntNullable<ENTITY>
+    mapToIntIfPresent(ToIntFunction<V> mapper) {
         return new FieldToIntImpl<>(this, mapper);
     }
 
@@ -197,7 +200,8 @@ extends Field<ENTITY>,
      *
      * @since 3.1.0
      */
-    default ToLongNullable<ENTITY> mapToLongIfPresent(ToLongFunction<V> mapper) {
+    default ToLongNullable<ENTITY>
+    mapToLongIfPresent(ToLongFunction<V> mapper) {
         return new FieldToLongImpl<>(this, mapper);
     }
 
@@ -232,7 +236,8 @@ extends Field<ENTITY>,
      *
      * @since 3.1.0
      */
-    default ToFloatNullable<ENTITY> mapToFloatIfPresent(ToFloatFunction<V> mapper) {
+    default ToFloatNullable<ENTITY>
+    mapToFloatIfPresent(ToFloatFunction<V> mapper) {
         return new FieldToFloatImpl<>(this, mapper);
     }
 
@@ -267,7 +272,8 @@ extends Field<ENTITY>,
      *
      * @since 3.1.0
      */
-    default ToDoubleNullable<ENTITY> mapToDoubleIfPresent(ToDoubleFunction<V> mapper) {
+    default ToDoubleNullable<ENTITY>
+    mapToDoubleIfPresent(ToDoubleFunction<V> mapper) {
         return new FieldToDoubleImpl<>(this, mapper);
     }
 
@@ -302,7 +308,8 @@ extends Field<ENTITY>,
      *
      * @since 3.1.0
      */
-    default ToCharNullable<ENTITY> mapToCharIfPresent(ToCharFunction<V> mapper) {
+    default ToCharNullable<ENTITY>
+    mapToCharIfPresent(ToCharFunction<V> mapper) {
         return new FieldToCharImpl<>(this, mapper);
     }
 
@@ -337,7 +344,8 @@ extends Field<ENTITY>,
      *
      * @since 3.1.0
      */
-    default ToBooleanNullable<ENTITY> mapToBooleanIfPresent(ToBooleanFunction<V> mapper) {
+    default ToBooleanNullable<ENTITY>
+    mapToBooleanIfPresent(ToBooleanFunction<V> mapper) {
         return new FieldToBooleanImpl<>(this, mapper);
     }
 
@@ -371,8 +379,29 @@ extends Field<ENTITY>,
      *
      * @since 3.1.0
      */
-    default ToStringNullable<ENTITY> mapToStringIfPresent(Function<V, String> mapper) {
+    default ToStringNullable<ENTITY>
+    mapToStringIfPresent(Function<V, String> mapper) {
         return new FieldToStringImpl<>(this, mapper);
+    }
+
+    /**
+     * Returns an {@link ToBooleanNullable} expression that has the value of
+     * this field, casted to a {@code boolean} by first casting it to
+     * {@link Boolean}.
+     *
+     * @return  expression for this value after mapper has been applied
+     *
+     * @since 3.1.0
+     */
+    default ToStringNullable<ENTITY> asString() {
+        return mapToStringIfPresent(val -> {
+            if (val instanceof String) {
+                return (String) val;
+            } else throw new SpeedmentFieldException(format(
+                "Expected field %s to be of type String, but it was not.",
+                identifier()
+            ));
+        });
     }
 
     /**
@@ -385,7 +414,8 @@ extends Field<ENTITY>,
      *
      * @since 3.1.0
      */
-    default ToBigDecimalNullable<ENTITY> mapToBigDecimalIfPresent(Function<V, BigDecimal> mapper) {
+    default ToBigDecimalNullable<ENTITY>
+    mapToBigDecimalIfPresent(Function<V, BigDecimal> mapper) {
         return new FieldToBigDecimalImpl<>(this, mapper);
     }
 
@@ -406,5 +436,39 @@ extends Field<ENTITY>,
                 identifier()
             ));
         });
+    }
+
+    /**
+     * Returns an {@link ToEnumNullable} expression that has the value
+     * returned by the specified mapper function if the value for this field is
+     * not {@code null}, and otherwise {@code null}.
+     *
+     * @param mapper  the mapper operation
+     * @return  expression for this value after mapper has been applied
+     *
+     * @since 3.1.0
+     */
+    default <E extends Enum<E>> ToEnumNullable<ENTITY, E>
+    mapToEnumIfPresent(Function<V, E> mapper, Class<E> enumClass) {
+        return new FieldToEnumImpl<>(this, mapper, enumClass);
+    }
+
+    /**
+     * Returns an {@link ToBooleanNullable} expression that has the value of
+     * this field, casted to a particular {@code enum} class.
+     *
+     * @return  expression for this value after mapper has been applied
+     *
+     * @since 3.1.0
+     */
+    default <E extends Enum<E>> ToEnumNullable<ENTITY, E> asEnum(Class<E> enumClass) {
+        return mapToEnumIfPresent(val -> {
+            if (enumClass.isInstance(val)) {
+                return enumClass.cast(val);
+            } else throw new SpeedmentFieldException(format(
+                "Expected field %s to be of type %s, but it was not.",
+                enumClass.getName(), identifier()
+            ));
+        }, enumClass);
     }
 }
