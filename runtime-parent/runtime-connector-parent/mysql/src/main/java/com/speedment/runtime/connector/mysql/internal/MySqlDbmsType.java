@@ -22,11 +22,13 @@ import com.speedment.runtime.config.Dbms;
 import com.speedment.runtime.core.db.*;
 
 
+import java.sql.Driver;
 import java.util.Collections;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.db.AbstractDatabaseNamingConvention;
 import com.speedment.runtime.core.internal.db.AbstractDbmsType;
 import static java.util.stream.Collectors.collectingAndThen;
@@ -180,12 +182,31 @@ public final class MySqlDbmsType extends AbstractDbmsType {
 
             result/*.append("/").append(dbms.getName())*/ // MySQL treats this as default schema name
                 .append("?useUnicode=true&characterEncoding=UTF-8")
-                .append("&useServerPrepStmts=true&useSSL=false")
-                .append("&zeroDateTimeBehavior=convertToNull")
+                .append("&useServerPrepStmts=true")
+                .append("&zeroDateTimeBehavior=")
+                .append(driverVersion() >= 8 ? "CONVERT_TO_NULL" : "convertToNull")
                 .append("&nullNamePatternMatchesAll=true") // Fix #190
                 .append("&useLegacyDatetimeCode=true");    // Fix #190
 
+            if (driverVersion() <= 5) {
+                result.append("&useSSL=false");
+            } else {
+                result.append("&serverTimezone=UTC");
+            }
+
             return result.toString();
+        }
+    }
+
+    private static int driverVersion() {
+        try {
+            final Class<?> mySqlDriver = Class.forName("com.mysql.cj.jdbc.Driver");
+            final Driver driver = (Driver) mySqlDriver.newInstance();
+            return driver.getMajorVersion();
+        } catch (final InstantiationException
+                     | IllegalAccessException
+                     | ClassNotFoundException ex) {
+            throw new SpeedmentException("Error using reflection to read driver version.", ex);
         }
     }
 }
