@@ -37,13 +37,16 @@ import com.speedment.generator.standard.internal.util.FkHolder;
 import com.speedment.generator.translator.AbstractEntityAndManagerTranslator;
 import com.speedment.generator.translator.TranslatorSupport;
 import com.speedment.generator.translator.component.TypeMapperComponent;
+import com.speedment.runtime.config.Column;
 import com.speedment.runtime.config.Table;
+import com.speedment.runtime.config.trait.HasNullable;
 import com.speedment.runtime.core.manager.Manager;
 import com.speedment.runtime.core.util.OptionalUtil;
 import java.lang.reflect.Type;
 import java.util.Objects;
 import static java.util.Objects.requireNonNull;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.StringJoiner;
 
 /**
@@ -162,7 +165,7 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
                 clazz
                     .add(toStringMethod(file))
                     .add(equalsMethod())
-                    .add(hashCodeMethod())
+                    .add(hashCodeMethod(file))
             )
             .build();
 
@@ -209,11 +212,10 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
         columns().forEachOrdered(c -> {
             final String getter = "get" + getSupport().typeName(c);
             final Type type = typeMappers.get(c).getJavaType(c);
-            
-            if (DefaultType.isPrimitive(type)) {
-                method.add("if (this." + getter + "() != " + thatCastedName + "." + getter + "()) {return false; }");
+            if (usesOptional(c) || !DefaultType.isPrimitive(type)) {
+                method.add("if (!Objects.equals(this." + getter + "(), " + thatCastedName + "." + getter + "())) { return false; }");
             } else {
-                method.add("if (!Objects.equals(this." + getter + "(), " + thatCastedName + "." + getter + "())) {return false; }");
+                method.add("if (this." + getter + "() != " + thatCastedName + "." + getter + "()) { return false; }");
             }
         });
 
@@ -221,7 +223,7 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
         return method;
     }
 
-    private Method hashCodeMethod() {
+    private Method hashCodeMethod(File file) {
         final Method method = Method.of("hashCode", int.class)
             .public_()
             .add(OVERRIDE)
@@ -232,14 +234,25 @@ public final class GeneratedEntityImplTranslator extends AbstractEntityAndManage
             final StringBuilder str = new StringBuilder();
             str.append("hash = 31 * hash + ");
             final Type type = typeMappers.get(c).getJavaType(c);
-            
-            if (DefaultType.isPrimitive(type)) {
+
+            if (!usesOptional(c) && DefaultType.isPrimitive(type)) {
                 str.append(DefaultType.wrapperFor(type).getSimpleName());
             } else {
                 str.append("Objects");
             }
             
-            str.append(".hashCode(get").append(getSupport().typeName(c)).append("());");
+            str.append(".hashCode(");
+
+            if (usesOptional(c)) {
+                file.add(Import.of(OptionalUtil.class));
+                str.append("OptionalUtil.unwrap(");
+            }
+
+            str.append("get").append(getSupport().typeName(c)).append("()");
+
+            if (usesOptional(c)) str.append(')');
+            str.append(");");
+
             method.add(str.toString());
         });
 
