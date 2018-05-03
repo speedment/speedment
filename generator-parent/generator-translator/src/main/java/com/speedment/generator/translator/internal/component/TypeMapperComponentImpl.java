@@ -67,11 +67,17 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
         install(Date.class,      DateToLocalDateMapper::new);
         install(Date.class,      DateToLongMapper::new);
         install(Date.class,      DateToIntMapper::new);
+        install(Date.class,      DateToPrimitiveIntMapper::new);
+        install(Date.class,      DateToPrimitiveLongMapper::new);
         install(Timestamp.class, TimestampToLongMapper::new);
         install(Timestamp.class, TimestampToIntMapper::new);
+        install(Timestamp.class, TimestampToPrimitiveLongMapper::new);
+        install(Timestamp.class, TimestampToPrimitiveIntMapper::new);
         install(Timestamp.class, TimestampToLocalDateTimeMapper::new);
         install(Time.class,      TimeToLongMapper::new);
         install(Time.class,      TimeToIntMapper::new);
+        install(Time.class,      TimeToPrimitiveLongMapper::new);
+        install(Time.class,      TimeToPrimitiveIntMapper::new);
         install(Time.class,      TimeToLocalTimeMapper::new);
         install(Short.class,     ShortEpochDaysToLocalDateMapper::new);
         install(Integer.class,   IntEpochDaysToLocalDateMapper::new);
