@@ -60,7 +60,7 @@ implements FieldPredicate<ENTITY> {
     }
 
     @Override
-    public boolean test(ENTITY instance) {
+    public boolean applyAsBoolean(ENTITY instance) {
         return tester.test(instance);
     }
 
