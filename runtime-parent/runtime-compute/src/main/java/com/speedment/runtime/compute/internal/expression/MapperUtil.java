@@ -354,21 +354,6 @@ public final class MapperUtil {
             }
         };
     }
-    
-    
-     /**
-     * Returns an expression that first applies the specified expression to get
-     * a value, then applies the specified mapping operation to that value to
-     * get the final result.
-     *
-     * @param expression  the expression to apply to the input
-     * @param mapper      the mapper to apply to the result
-     * @param <T>         the input type
-     * @return            the new expression
-     */
-    public static <T> ToDouble<T> mapToDouble(ToDouble<T> expression, DoubleUnaryOperator mapper) {
-        return map(expression, mapper);
-    }
 
     /**
      * Returns an expression that first applies the specified expression to get
