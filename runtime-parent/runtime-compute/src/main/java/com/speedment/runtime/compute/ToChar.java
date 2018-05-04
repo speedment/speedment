@@ -1,7 +1,5 @@
 package com.speedment.runtime.compute;
 
-import com.speedment.common.function.BooleanUnaryOperator;
-import com.speedment.common.function.ByteUnaryOperator;
 import com.speedment.common.function.CharUnaryOperator;
 import com.speedment.common.function.ToCharFunction;
 import com.speedment.runtime.compute.expression.Expression;
@@ -34,7 +32,8 @@ extends Expression<T>,
         HasAsLong<T>,
         HasMap<T, CharUnaryOperator, ToChar<T>>,
         HasHash<T>,
-        HasCompare<T> {
+        HasCompare<T>,
+        HasCompose<T> {
 
     @Override
     default ExpressionType expressionType() {
@@ -81,8 +80,10 @@ extends Expression<T>,
         return Character.compare(f, s);
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
     default <V> ToChar<V> compose(Function<? super V, ? extends T> before) {
-        return ComposedUtil.compose((Function<V, T>) before, this);
+        @SuppressWarnings("unchecked")
+        final Function<V, T> casted = (Function<V, T>) before;
+        return ComposedUtil.compose(casted, this);
     }
 }

@@ -12,6 +12,7 @@ import com.speedment.runtime.compute.trait.HasAsDouble;
 import com.speedment.runtime.compute.trait.HasAsInt;
 import com.speedment.runtime.compute.trait.HasAsLong;
 import com.speedment.runtime.compute.trait.HasCompare;
+import com.speedment.runtime.compute.trait.HasCompose;
 import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.HasMap;
 
@@ -42,7 +43,8 @@ extends Expression<T>,
         HasAsLong<T>,
         HasMap<T, BooleanUnaryOperator, ToBoolean<T>>,
         HasHash<T>,
-        HasCompare<T> {
+        HasCompare<T>,
+        HasCompose<T> {
 
     @Override
     boolean applyAsBoolean(T object);
@@ -88,8 +90,10 @@ extends Expression<T>,
         return Boolean.compare(f, s);
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
     default <V> ToBoolean<V> compose(Function<? super V, ? extends T> before) {
-        return ComposedUtil.compose((Function<V, T>) before, this);
+        @SuppressWarnings("unchecked")
+        final Function<V, T> casted = (Function<V, T>) before;
+        return ComposedUtil.compose(casted, this);
     }
 }

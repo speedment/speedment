@@ -1,11 +1,11 @@
 package com.speedment.runtime.compute;
 
-import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
+import com.speedment.runtime.compute.trait.HasCompose;
 import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.HasMap;
 
@@ -30,7 +30,8 @@ extends Expression<T>,
         Function<T, String>,
         HasMap<T, UnaryOperator<String>, ToString<T>>,
         HasHash<T>,
-        HasCompare<T> {
+        HasCompare<T>,
+        HasCompose<T> {
 
     @Override
     String apply(T object);
@@ -64,8 +65,9 @@ extends Expression<T>,
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     default <V> ToString<V> compose(Function<? super V, ? extends T> before) {
-        return ComposedUtil.compose((Function<V, T>) before, this);
+        @SuppressWarnings("unchecked")
+        final Function<V, T> casted = (Function<V, T>) before;
+        return ComposedUtil.compose(casted, this);
     }
 }

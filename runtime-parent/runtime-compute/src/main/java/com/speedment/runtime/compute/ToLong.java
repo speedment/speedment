@@ -44,7 +44,8 @@ extends Expression<T>,
         HasDivide<T>,
         HasMap<T, LongUnaryOperator, ToLong<T>>,
         HasHash<T>,
-        HasCompare<T> {
+        HasCompare<T>,
+        HasCompose<T> {
 
     @Override
     long applyAsLong(T object);
@@ -282,8 +283,10 @@ extends Expression<T>,
         );
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
     default <V> ToLong<V> compose(Function<? super V, ? extends T> before) {
-        return ComposedUtil.compose((Function<V, T>) before, this);
+        @SuppressWarnings("unchecked")
+        final Function<V, T> casted = (Function<V, T>) before;
+        return ComposedUtil.compose(casted, this);
     }
 }

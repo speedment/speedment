@@ -9,6 +9,7 @@ import com.speedment.runtime.compute.internal.expression.OrElseGetUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseThrowUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
+import com.speedment.runtime.compute.trait.HasCompose;
 import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.ToNullable;
 
@@ -33,7 +34,8 @@ public interface ToEnumNullable<T, E extends Enum<E>>
 extends Expression<T>,
         ToNullable<T, E>,
         HasHash<T>,
-        HasCompare<T> {
+        HasCompare<T>,
+        HasCompose<T> {
 
     static <T, E extends Enum<E>> ToEnumNullable<T, E>
         toEnumNullable(Class<E> enumClass, Function<T, E> getter) {
@@ -177,8 +179,9 @@ extends Expression<T>,
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     default <V> ToEnumNullable<V, E> compose(Function<? super V, ? extends T> before) {
-        return ComposedUtil.composeNullable((Function<V, T>) before, this);
+        @SuppressWarnings("unchecked")
+        final Function<V, T> casted = (Function<V, T>) before;
+        return ComposedUtil.composeNullable(casted, this);
     }
 }

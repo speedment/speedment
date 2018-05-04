@@ -43,7 +43,8 @@ extends Expression<T>,
         HasDivide<T>,
         HasMap<T, UnaryOperator<BigDecimal>, ToBigDecimal<T>>,
         HasHash<T>,
-        HasCompare<T> {
+        HasCompare<T>,
+        HasCompose<T> {
 
     @Override
     BigDecimal apply(T object);
@@ -274,9 +275,9 @@ extends Expression<T>,
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     default <V> ToBigDecimal<V> compose(Function<? super V, ? extends T> before) {
-        return ComposedUtil.compose((Function<V, T>) before, this);
+        @SuppressWarnings("unchecked")
+        final Function<V, T> casted = (Function<V, T>) before;
+        return ComposedUtil.compose(casted, this);
     }
-
 }

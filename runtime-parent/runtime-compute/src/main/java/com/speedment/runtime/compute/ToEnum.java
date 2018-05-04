@@ -7,6 +7,7 @@ import com.speedment.runtime.compute.internal.ToEnumImpl;
 import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
+import com.speedment.runtime.compute.trait.HasCompose;
 import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.HasMap;
 
@@ -31,7 +32,8 @@ extends Expression<T>,
         Function<T, E>,
         HasMap<T, UnaryOperator<E>, ToEnum<T, E>>,
         HasHash<T>,
-        HasCompare<T> {
+        HasCompare<T>,
+        HasCompose<T> {
 
     static <T, E extends Enum<E>> ToEnum<T, E>
         toEnum(Class<E> enumClass, Function<T, E> getter) {
@@ -72,8 +74,9 @@ extends Expression<T>,
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     default <V> ToEnum<V, E> compose(Function<? super V, ? extends T> before) {
-        return ComposedUtil.compose((Function<V, T>) before, this);
+        @SuppressWarnings("unchecked")
+        final Function<V, T> casted = (Function<V, T>) before;
+        return ComposedUtil.compose(casted, this);
     }
 }

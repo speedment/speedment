@@ -44,7 +44,8 @@ extends Expression<T>,
         HasDivide<T>,
         HasMap<T, IntUnaryOperator, ToInt<T>>,
         HasHash<T>,
-        HasCompare<T> {
+        HasCompare<T>,
+        HasCompose<T> {
 
     @Override
     int applyAsInt(T object);
@@ -281,8 +282,10 @@ extends Expression<T>,
         );
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
     default <V> ToInt<V> compose(Function<? super V, ? extends T> before) {
-        return ComposedUtil.compose((Function<V, T>) before, this);
+        @SuppressWarnings("unchecked")
+        final Function<V, T> casted = (Function<V, T>) before;
+        return ComposedUtil.compose(casted, this);
     }
 }

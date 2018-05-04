@@ -33,7 +33,8 @@ extends Expression<T>,
         HasSqrt<ToDoubleNullable<T>>,
         HasNegate<ToDoubleNullable<T>>,
         HasHash<T>,
-        HasCompare<T> {
+        HasCompare<T>,
+        HasCompose<T> {
 
     @Override
     default ExpressionType expressionType() {
@@ -142,8 +143,9 @@ extends Expression<T>,
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     default <V> ToDoubleNullable<V> compose(Function<? super V, ? extends T> before) {
-        return ComposedUtil.composeNullable((Function<V, T>) before, this);
+        @SuppressWarnings("unchecked")
+        final Function<V, T> casted = (Function<V, T>) before;
+        return ComposedUtil.composeNullable(casted, this);
     }
 }

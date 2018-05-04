@@ -44,7 +44,8 @@ extends Expression<T>,
         HasDivide<T>,
         HasMap<T, DoubleUnaryOperator, ToDouble<T>>,
         HasHash<T>,
-        HasCompare<T> {
+        HasCompare<T>,
+        HasCompose<T> {
 
     /**
      * Returns an implementation of this interface that regardless of input,
@@ -290,8 +291,10 @@ extends Expression<T>,
         );
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
     default <V> ToDouble<V> compose(Function<? super V, ? extends T> before) {
-        return ComposedUtil.compose((Function<V, T>) before, this);
+        @SuppressWarnings("unchecked")
+        final Function<V, T> casted = (Function<V, T>) before;
+        return ComposedUtil.compose(casted, this);
     }
 }
