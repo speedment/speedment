@@ -12,6 +12,7 @@ import com.speedment.runtime.compute.trait.*;
 import java.util.function.Function;
 import java.util.function.IntToDoubleFunction;
 import java.util.function.IntUnaryOperator;
+import java.util.function.ToIntFunction;
 
 /**
  * Expression that given an entity returns an {@code int} value, or
@@ -28,7 +29,8 @@ import java.util.function.IntUnaryOperator;
 @FunctionalInterface
 public interface ToIntNullable<T>
 extends Expression<T>,
-        ToNullable<T, Integer>,
+        ToIntFunction<T>,
+        ToNullable<T, Integer, ToInt<T>>,
         HasAbs<ToIntNullable<T>>,
         HasSign<ToByteNullable<T>>,
         HasSqrt<ToDoubleNullable<T>>,
@@ -42,19 +44,23 @@ extends Expression<T>,
         return ExpressionType.INT_NULLABLE;
     }
 
+    @Override
     default int applyAsInt(T object) throws NullPointerException {
         return apply(object);
     }
 
+    @Override
     default ToInt<T> orThrow() throws NullPointerException {
         return OrElseThrowUtil.orElseThrow(this);
     }
 
+    @Override
     default ToInt<T> orElseGet(ToInt<T> getter) {
         return OrElseGetUtil.orElseGet(this, getter);
     }
 
-    default ToInt<T> orElse(int value) {
+    @Override
+    default ToInt<T> orElse(Integer value) {
         return OrElseUtil.orElse(this, value);
     }
 
@@ -100,7 +106,7 @@ extends Expression<T>,
             }
 
             @Override
-            public ToDouble<T> orElse(double value) {
+            public ToDouble<T> orElse(Double value) {
                 return object -> delegate.isNull(object)
                     ? value
                     : mapper.applyAsDouble(delegate.applyAsInt(object));
@@ -140,7 +146,7 @@ extends Expression<T>,
             }
 
             @Override
-            public ToInt<T> orElse(int value) {
+            public ToInt<T> orElse(Integer value) {
                 return object -> delegate.isNull(object)
                     ? value
                     : mapper.applyAsInt(delegate.applyAsInt(object));

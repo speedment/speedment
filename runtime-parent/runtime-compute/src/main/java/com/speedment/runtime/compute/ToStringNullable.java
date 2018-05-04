@@ -27,7 +27,7 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface ToStringNullable<T>
 extends Expression<T>,
-        ToNullable<T, String>,
+        ToNullable<T, String, ToString<T>>,
         HasHash<T>,
         HasCompare<T>,
         HasCompose<T> {
@@ -40,14 +40,17 @@ extends Expression<T>,
         return ExpressionType.STRING_NULLABLE;
     }
 
+    @Override
     default ToString<T> orThrow() throws NullPointerException {
         return OrElseThrowUtil.orElseThrow(this);
     }
 
+    @Override
     default ToString<T> orElseGet(ToString<T> getter) {
         return OrElseGetUtil.orElseGet(this, getter);
     }
 
+    @Override
     default ToString<T> orElse(String value) {
         return OrElseUtil.orElse(this, value);
     }

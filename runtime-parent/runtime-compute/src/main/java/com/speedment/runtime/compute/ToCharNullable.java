@@ -1,5 +1,6 @@
 package com.speedment.runtime.compute;
 
+import com.speedment.common.function.ToCharFunction;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.expression.ComposedUtil;
@@ -28,7 +29,8 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface ToCharNullable<T>
 extends Expression<T>,
-        ToNullable<T, Character>,
+        ToCharFunction<T>,
+        ToNullable<T, Character, ToChar<T>>,
         HasHash<T>,
         HasCompare<T>,
         HasCompose<T> {
@@ -38,19 +40,23 @@ extends Expression<T>,
         return ExpressionType.CHAR_NULLABLE;
     }
 
+    @Override
     default char applyAsChar(T object) throws NullPointerException {
         return apply(object);
     }
 
+    @Override
     default ToChar<T> orThrow() throws NullPointerException {
         return OrElseThrowUtil.orElseThrow(this);
     }
 
+    @Override
     default ToChar<T> orElseGet(ToChar<T> getter) {
         return OrElseGetUtil.orElseGet(this, getter);
     }
 
-    default ToChar<T> orElse(char value) {
+    @Override
+    default ToChar<T> orElse(Character value) {
         return OrElseUtil.orElse(this, value);
     }
 

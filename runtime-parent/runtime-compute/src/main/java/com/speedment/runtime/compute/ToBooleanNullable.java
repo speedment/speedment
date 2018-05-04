@@ -2,6 +2,7 @@ package com.speedment.runtime.compute;
 
 import com.speedment.common.function.BooleanToDoubleFunction;
 import com.speedment.common.function.BooleanUnaryOperator;
+import com.speedment.common.function.ToBooleanFunction;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.expression.ComposedUtil;
@@ -30,7 +31,8 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface ToBooleanNullable<T>
 extends Expression<T>,
-        ToNullable<T, Boolean>,
+        ToBooleanFunction<T>,
+        ToNullable<T, Boolean, ToBoolean<T>>,
         HasHash<T>,
         HasCompare<T>,
         HasCompose<T> {
@@ -40,19 +42,23 @@ extends Expression<T>,
         return ExpressionType.BOOLEAN_NULLABLE;
     }
 
+    @Override
     default boolean applyAsBoolean(T object) throws NullPointerException {
         return apply(object);
     }
 
+    @Override
     default ToBoolean<T> orThrow() throws NullPointerException {
         return OrElseThrowUtil.orElseThrow(this);
     }
 
+    @Override
     default ToBoolean<T> orElseGet(ToBoolean<T> getter) {
         return OrElseGetUtil.orElseGet(this, getter);
     }
 
-    default ToBoolean<T> orElse(boolean value) {
+    @Override
+    default ToBoolean<T> orElse(Boolean value) {
         return OrElseUtil.orElse(this, value);
     }
 
@@ -78,7 +84,7 @@ extends Expression<T>,
             }
 
             @Override
-            public ToDouble<T> orElse(double value) {
+            public ToDouble<T> orElse(Double value) {
                 return object -> delegate.isNull(object)
                     ? value
                     : mapper.applyAsDouble(delegate.applyAsBoolean(object));
@@ -118,7 +124,7 @@ extends Expression<T>,
             }
 
             @Override
-            public ToBoolean<T> orElse(boolean value) {
+            public ToBoolean<T> orElse(Boolean value) {
                 return object -> delegate.isNull(object)
                     ? value
                     : mapper.applyAsBoolean(delegate.applyAsBoolean(object));

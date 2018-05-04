@@ -32,7 +32,7 @@ import java.util.function.UnaryOperator;
  */
 public interface ToEnumNullable<T, E extends Enum<E>>
 extends Expression<T>,
-        ToNullable<T, E>,
+        ToNullable<T, E, ToEnum<T, E>>,
         HasHash<T>,
         HasCompare<T>,
         HasCompose<T> {
@@ -61,14 +61,17 @@ extends Expression<T>,
             : null;
     }
 
+    @Override
     default ToEnum<T, E> orThrow() {
         return OrElseThrowUtil.orElseThrow(this);
     }
 
+    @Override
     default ToEnum<T, E> orElseGet(ToEnum<T, E> getter) {
         return OrElseGetUtil.orElseGet(this, getter);
     }
 
+    @Override
     default ToEnum<T, E> orElse(E value) {
         return OrElseUtil.orElse(this, value);
     }
@@ -95,7 +98,7 @@ extends Expression<T>,
             }
 
             @Override
-            public ToDouble<T> orElse(double value) {
+            public ToDouble<T> orElse(Double value) {
                 return object -> delegate.isNull(object)
                     ? value
                     : mapper.applyAsDouble(delegate.apply(object));

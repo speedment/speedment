@@ -60,7 +60,7 @@ implements NullableExpression<T, ToBoolean<T>>, ToBooleanNullable<T> {
     }
 
     @Override
-    public ToBoolean<T> orElse(boolean value) {
+    public ToBoolean<T> orElse(Boolean value) {
         return t -> isNull.test(t) ? value : original.applyAsBoolean(t);
     }
 

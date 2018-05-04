@@ -2,6 +2,7 @@ package com.speedment.runtime.compute;
 
 import com.speedment.common.function.ByteToDoubleFunction;
 import com.speedment.common.function.ByteUnaryOperator;
+import com.speedment.common.function.ToByteFunction;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
@@ -28,7 +29,8 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface ToByteNullable<T>
 extends Expression<T>,
-        ToNullable<T, Byte>,
+        ToByteFunction<T>,
+        ToNullable<T, Byte, ToByte<T>>,
         HasAbs<ToByteNullable<T>>,
         HasSign<ToByteNullable<T>>,
         HasSqrt<ToDoubleNullable<T>>,
@@ -42,19 +44,23 @@ extends Expression<T>,
         return ExpressionType.BYTE_NULLABLE;
     }
 
+    @Override
     default byte applyAsByte(T object) throws NullPointerException {
         return apply(object);
     }
 
+    @Override
     default ToByte<T> orThrow() throws NullPointerException {
         return OrElseThrowUtil.orElseThrow(this);
     }
 
+    @Override
     default ToByte<T> orElseGet(ToByte<T> getter) {
         return OrElseGetUtil.orElseGet(this, getter);
     }
 
-    default ToByte<T> orElse(byte value) {
+    @Override
+    default ToByte<T> orElse(Byte value) {
         return OrElseUtil.orElse(this, value);
     }
 
@@ -100,7 +106,7 @@ extends Expression<T>,
             }
 
             @Override
-            public ToDouble<T> orElse(double value) {
+            public ToDouble<T> orElse(Double value) {
                 return object -> delegate.isNull(object)
                     ? value
                     : mapper.applyAsDouble(delegate.applyAsByte(object));
@@ -140,7 +146,7 @@ extends Expression<T>,
             }
 
             @Override
-            public ToByte<T> orElse(byte value) {
+            public ToByte<T> orElse(Byte value) {
                 return object -> delegate.isNull(object)
                     ? value
                     : mapper.applyAsByte(delegate.applyAsByte(object));

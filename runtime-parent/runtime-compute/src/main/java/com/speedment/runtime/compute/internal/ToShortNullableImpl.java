@@ -60,7 +60,7 @@ implements NullableExpression<T, ToShort<T>>, ToShortNullable<T> {
     }
 
     @Override
-    public ToShort<T> orElse(short value) {
+    public ToShort<T> orElse(Short value) {
         return t -> isNull.test(t) ? value : original.applyAsShort(t);
     }
 

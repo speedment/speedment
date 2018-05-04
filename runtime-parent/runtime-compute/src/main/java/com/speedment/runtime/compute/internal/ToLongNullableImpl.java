@@ -60,7 +60,7 @@ public final class ToLongNullableImpl<T>
     }
 
     @Override
-    public ToLong<T> orElse(long value) {
+    public ToLong<T> orElse(Long value) {
         return t -> isNull.test(t) ? value : original.applyAsLong(t);
     }
 

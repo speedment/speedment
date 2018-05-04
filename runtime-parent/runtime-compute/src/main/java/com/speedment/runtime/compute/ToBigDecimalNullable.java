@@ -29,7 +29,7 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface ToBigDecimalNullable<T>
 extends Expression<T>,
-        ToNullable<T, BigDecimal>,
+        ToNullable<T, BigDecimal, ToBigDecimal<T>>,
         HasHash<T>,
         HasCompare<T>,
         HasCompose<T> {
@@ -42,14 +42,17 @@ extends Expression<T>,
         return ExpressionType.BIG_DECIMAL_NULLABLE;
     }
 
+    @Override
     default ToBigDecimal<T> orThrow() throws NullPointerException {
         return OrElseThrowUtil.orElseThrow(this);
     }
 
+    @Override
     default ToBigDecimal<T> orElseGet(ToBigDecimal<T> getter) {
         return OrElseGetUtil.orElseGet(this, getter);
     }
 
+    @Override
     default ToBigDecimal<T> orElse(BigDecimal value) {
         return OrElseUtil.orElse(this, value);
     }

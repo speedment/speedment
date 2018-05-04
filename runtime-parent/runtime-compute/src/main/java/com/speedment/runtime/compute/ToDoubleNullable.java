@@ -11,6 +11,7 @@ import com.speedment.runtime.compute.trait.*;
 
 import java.util.function.DoubleUnaryOperator;
 import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
 
 /**
  * Expression that given an entity returns a {@code double} value, or
@@ -22,12 +23,13 @@ import java.util.function.Function;
  * @see Function
  *
  * @author Emil Forslund
- * @since 3.1.0
+ * @since  3.1.0
  */
 @FunctionalInterface
 public interface ToDoubleNullable<T>
 extends Expression<T>,
-        ToNullable<T, Double>,
+        ToDoubleFunction<T>,
+        ToNullable<T, Double, ToDouble<T>>,
         HasAbs<ToDoubleNullable<T>>,
         HasSign<ToByteNullable<T>>,
         HasSqrt<ToDoubleNullable<T>>,
@@ -41,19 +43,23 @@ extends Expression<T>,
         return ExpressionType.DOUBLE_NULLABLE;
     }
 
+    @Override
     default double applyAsDouble(T object) throws NullPointerException {
         return apply(object);
     }
 
+    @Override
     default ToDouble<T> orThrow() throws NullPointerException {
         return OrElseThrowUtil.orElseThrow(this);
     }
 
+    @Override
     default ToDouble<T> orElseGet(ToDouble<T> getter) {
         return OrElseGetUtil.orElseGet(this, getter);
     }
 
-    default ToDouble<T> orElse(double value) {
+    @Override
+    default ToDouble<T> orElse(Double value) {
         return OrElseUtil.orElse(this, value);
     }
 
@@ -96,7 +102,7 @@ extends Expression<T>,
             }
 
             @Override
-            public ToDouble<T> orElse(double value) {
+            public ToDouble<T> orElse(Double value) {
                 return t -> delegate.isNull(t) ? value
                     : operator.applyAsDouble(delegate.applyAsDouble(t));
             }

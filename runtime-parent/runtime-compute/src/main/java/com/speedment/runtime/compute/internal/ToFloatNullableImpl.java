@@ -60,7 +60,7 @@ implements NullableExpression<T, ToFloat<T>>, ToFloatNullable<T> {
     }
 
     @Override
-    public ToFloat<T> orElse(float value) {
+    public ToFloat<T> orElse(Float value) {
         return t -> isNull.test(t) ? value : original.applyAsFloat(t);
     }
 

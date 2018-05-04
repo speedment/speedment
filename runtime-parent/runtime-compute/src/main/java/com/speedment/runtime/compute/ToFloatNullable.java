@@ -2,6 +2,7 @@ package com.speedment.runtime.compute;
 
 import com.speedment.common.function.FloatToDoubleFunction;
 import com.speedment.common.function.FloatUnaryOperator;
+import com.speedment.common.function.ToFloatFunction;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
@@ -28,7 +29,8 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface ToFloatNullable<T>
 extends Expression<T>,
-        ToNullable<T, Float>,
+        ToFloatFunction<T>,
+        ToNullable<T, Float, ToFloat<T>>,
         HasAbs<ToFloatNullable<T>>,
         HasSign<ToByteNullable<T>>,
         HasSqrt<ToDoubleNullable<T>>,
@@ -42,19 +44,23 @@ extends Expression<T>,
         return ExpressionType.FLOAT_NULLABLE;
     }
 
+    @Override
     default float applyAsFloat(T object) throws NullPointerException {
         return apply(object);
     }
 
+    @Override
     default ToFloat<T> orThrow() throws NullPointerException {
         return OrElseThrowUtil.orElseThrow(this);
     }
 
+    @Override
     default ToFloat<T> orElseGet(ToFloat<T> getter) {
         return OrElseGetUtil.orElseGet(this, getter);
     }
 
-    default ToFloat<T> orElse(float value) {
+    @Override
+    default ToFloat<T> orElse(Float value) {
         return OrElseUtil.orElse(this, value);
     }
 
@@ -100,7 +106,7 @@ extends Expression<T>,
             }
 
             @Override
-            public ToDouble<T> orElse(double value) {
+            public ToDouble<T> orElse(Double value) {
                 return object -> delegate.isNull(object)
                     ? value
                     : mapper.applyAsDouble(delegate.applyAsFloat(object));
@@ -140,7 +146,7 @@ extends Expression<T>,
             }
 
             @Override
-            public ToFloat<T> orElse(float value) {
+            public ToFloat<T> orElse(Float value) {
                 return object -> delegate.isNull(object)
                     ? value
                     : mapper.applyAsFloat(delegate.applyAsFloat(object));

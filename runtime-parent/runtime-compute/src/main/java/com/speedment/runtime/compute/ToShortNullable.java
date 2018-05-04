@@ -2,6 +2,7 @@ package com.speedment.runtime.compute;
 
 import com.speedment.common.function.ShortToDoubleFunction;
 import com.speedment.common.function.ShortUnaryOperator;
+import com.speedment.common.function.ToShortFunction;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
@@ -28,7 +29,8 @@ import java.util.function.Function;
 @FunctionalInterface
 public interface ToShortNullable<T>
 extends Expression<T>,
-        ToNullable<T, Short>,
+        ToShortFunction<T>,
+        ToNullable<T, Short, ToShort<T>>,
         HasAbs<ToShortNullable<T>>,
         HasSign<ToByteNullable<T>>,
         HasSqrt<ToDoubleNullable<T>>,
@@ -42,19 +44,23 @@ extends Expression<T>,
         return ExpressionType.SHORT_NULLABLE;
     }
 
+    @Override
     default short applyAsShort(T object) throws NullPointerException {
         return apply(object);
     }
 
+    @Override
     default ToShort<T> orThrow() throws NullPointerException {
         return OrElseThrowUtil.orElseThrow(this);
     }
 
+    @Override
     default ToShort<T> orElseGet(ToShort<T> getter) {
         return OrElseGetUtil.orElseGet(this, getter);
     }
 
-    default ToShort<T> orElse(short value) {
+    @Override
+    default ToShort<T> orElse(Short value) {
         return OrElseUtil.orElse(this, value);
     }
 
@@ -100,7 +106,7 @@ extends Expression<T>,
             }
 
             @Override
-            public ToDouble<T> orElse(double value) {
+            public ToDouble<T> orElse(Double value) {
                 return object -> delegate.isNull(object)
                     ? value
                     : mapper.applyAsDouble(delegate.applyAsShort(object));
@@ -140,7 +146,7 @@ extends Expression<T>,
             }
 
             @Override
-            public ToShort<T> orElse(short value) {
+            public ToShort<T> orElse(Short value) {
                 return object -> delegate.isNull(object)
                     ? value
                     : mapper.applyAsShort(delegate.applyAsShort(object));

@@ -60,7 +60,7 @@ public final class ToIntNullableImpl<T>
     }
 
     @Override
-    public ToInt<T> orElse(int value) {
+    public ToInt<T> orElse(Integer value) {
         return t -> isNull.test(t) ? value : original.applyAsInt(t);
     }
 

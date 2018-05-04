@@ -351,7 +351,7 @@ public final class ComposedUtil {
     }
 
     private final static class ComposedToByteNullable<T, A>
-    extends AbstractComposedNullableExpression<T, A, Byte, ToByteNullable<A>>
+    extends AbstractComposedNullableExpression<T, A, Byte, ToByte<T>, ToByte<A>, ToByteNullable<A>>
     implements ToByteNullable<T> {
         ComposedToByteNullable(Function<T, A> first, ToByteNullable<A> aToByte) {
             super(first, aToByte);
@@ -374,7 +374,7 @@ public final class ComposedUtil {
     }
 
     private final static class ComposedToShortNullable<T, A>
-    extends AbstractComposedNullableExpression<T, A, Short, ToShortNullable<A>>
+    extends AbstractComposedNullableExpression<T, A, Short, ToShort<T>, ToShort<A>, ToShortNullable<A>>
     implements ToShortNullable<T> {
         ComposedToShortNullable(Function<T, A> first, ToShortNullable<A> aToShort) {
             super(first, aToShort);
@@ -397,7 +397,7 @@ public final class ComposedUtil {
     }
 
     private final static class ComposedToIntNullable<T, A>
-    extends AbstractComposedNullableExpression<T, A, Integer, ToIntNullable<A>>
+    extends AbstractComposedNullableExpression<T, A, Integer, ToInt<T>, ToInt<A>, ToIntNullable<A>>
     implements ToIntNullable<T> {
         ComposedToIntNullable(Function<T, A> first, ToIntNullable<A> aToInt) {
             super(first, aToInt);
@@ -420,7 +420,7 @@ public final class ComposedUtil {
     }
 
     private final static class ComposedToLongNullable<T, A>
-    extends AbstractComposedNullableExpression<T, A, Long, ToLongNullable<A>>
+    extends AbstractComposedNullableExpression<T, A, Long, ToLong<T>, ToLong<A>, ToLongNullable<A>>
     implements ToLongNullable<T> {
         ComposedToLongNullable(Function<T, A> first, ToLongNullable<A> aToLong) {
             super(first, aToLong);
@@ -443,7 +443,7 @@ public final class ComposedUtil {
     }
 
     private final static class ComposedToFloatNullable<T, A>
-    extends AbstractComposedNullableExpression<T, A, Float, ToFloatNullable<A>>
+    extends AbstractComposedNullableExpression<T, A, Float, ToFloat<T>, ToFloat<A>, ToFloatNullable<A>>
     implements ToFloatNullable<T> {
         ComposedToFloatNullable(Function<T, A> first, ToFloatNullable<A> aToFloat) {
             super(first, aToFloat);
@@ -466,7 +466,7 @@ public final class ComposedUtil {
     }
 
     private final static class ComposedToDoubleNullable<T, A>
-    extends AbstractComposedNullableExpression<T, A, Double, ToDoubleNullable<A>>
+    extends AbstractComposedNullableExpression<T, A, Double, ToDouble<T>, ToDouble<A>, ToDoubleNullable<A>>
     implements ToDoubleNullable<T> {
         ComposedToDoubleNullable(Function<T, A> first, ToDoubleNullable<A> aToDouble) {
             super(first, aToDouble);
@@ -489,7 +489,7 @@ public final class ComposedUtil {
     }
 
     private final static class ComposedToCharNullable<T, A>
-        extends AbstractComposedNullableExpression<T, A, Character, ToCharNullable<A>>
+        extends AbstractComposedNullableExpression<T, A, Character, ToChar<T>, ToChar<A>, ToCharNullable<A>>
         implements ToCharNullable<T> {
         ComposedToCharNullable(Function<T, A> first, ToCharNullable<A> aToChar) {
             super(first, aToChar);
@@ -512,7 +512,7 @@ public final class ComposedUtil {
     }
 
     private final static class ComposedToBooleanNullable<T, A>
-    extends AbstractComposedNullableExpression<T, A, Boolean, ToBooleanNullable<A>>
+    extends AbstractComposedNullableExpression<T, A, Boolean, ToBoolean<T>, ToBoolean<A>, ToBooleanNullable<A>>
     implements ToBooleanNullable<T> {
         ComposedToBooleanNullable(Function<T, A> first, ToBooleanNullable<A> aToBoolean) {
             super(first, aToBoolean);
@@ -535,7 +535,7 @@ public final class ComposedUtil {
     }
 
     private final static class ComposedToStringNullable<T, A>
-    extends AbstractComposedNullableExpression<T, A, String, ToStringNullable<A>>
+    extends AbstractComposedNullableExpression<T, A, String, ToString<T>, ToString<A>, ToStringNullable<A>>
     implements ToStringNullable<T> {
         ComposedToStringNullable(Function<T, A> first, ToStringNullable<A> aToString) {
             super(first, aToString);
@@ -558,7 +558,7 @@ public final class ComposedUtil {
     }
 
     private final static class ComposedToBigDecimalNullable<T, A>
-    extends AbstractComposedNullableExpression<T, A, BigDecimal, ToBigDecimalNullable<A>>
+    extends AbstractComposedNullableExpression<T, A, BigDecimal, ToBigDecimal<T>, ToBigDecimal<A>, ToBigDecimalNullable<A>>
     implements ToBigDecimalNullable<T> {
         ComposedToBigDecimalNullable(Function<T, A> first, ToBigDecimalNullable<A> aToBigDecimal) {
             super(first, aToBigDecimal);
@@ -582,7 +582,8 @@ public final class ComposedUtil {
     }
 
     private final static class ComposedToEnumNullable<T, A, E extends Enum<E>>
-    extends AbstractComposedNullableExpression<T, A, E, ToEnumNullable<A, E>>
+    extends AbstractComposedNullableExpression<T, A, E,
+        ToEnum<T, E>, ToEnum<A, E>, ToEnumNullable<A, E>>
     implements ToEnumNullable<T, E> {
         ComposedToEnumNullable(Function<T, A> first, ToEnumNullable<A, E> aToEnum) {
             super(first, aToEnum);
@@ -595,8 +596,11 @@ public final class ComposedUtil {
     }
 
     private abstract static class AbstractComposedNullableExpression
-        <T, A, R, SECOND extends ToNullable<A, R>>
-    implements ComposedExpression<T, A>, ToNullable<T, R> {
+        <T, A, R,
+            T_EXPR extends Expression<T>,
+            A_EXPR extends Expression<A>,
+            SECOND extends ToNullable<A, R, A_EXPR>>
+    implements ComposedExpression<T, A>, ToNullable<T, R, T_EXPR> {
 
         protected final Function<T, A> first;
         protected final SECOND second;

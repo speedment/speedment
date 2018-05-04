@@ -12,6 +12,7 @@ import com.speedment.runtime.compute.trait.*;
 import java.util.function.Function;
 import java.util.function.LongToDoubleFunction;
 import java.util.function.LongUnaryOperator;
+import java.util.function.ToLongFunction;
 
 /**
  * Expression that given an entity returns a {@code long} value, or
@@ -28,7 +29,8 @@ import java.util.function.LongUnaryOperator;
 @FunctionalInterface
 public interface ToLongNullable<T>
 extends Expression<T>,
-        ToNullable<T, Long>,
+        ToNullable<T, Long, ToLong<T>>,
+        ToLongFunction<T>,
         HasAbs<ToLongNullable<T>>,
         HasSign<ToByteNullable<T>>,
         HasSqrt<ToDoubleNullable<T>>,
@@ -42,19 +44,23 @@ extends Expression<T>,
         return ExpressionType.LONG_NULLABLE;
     }
 
+    @Override
     default long applyAsLong(T object) throws NullPointerException {
         return apply(object);
     }
 
+    @Override
     default ToLong<T> orThrow() throws NullPointerException {
         return OrElseThrowUtil.orElseThrow(this);
     }
 
+    @Override
     default ToLong<T> orElseGet(ToLong<T> getter) {
         return OrElseGetUtil.orElseGet(this, getter);
     }
 
-    default ToLong<T> orElse(long value) {
+    @Override
+    default ToLong<T> orElse(Long value) {
         return OrElseUtil.orElse(this, value);
     }
 
@@ -100,7 +106,7 @@ extends Expression<T>,
             }
 
             @Override
-            public ToDouble<T> orElse(double value) {
+            public ToDouble<T> orElse(Double value) {
                 return object -> delegate.isNull(object)
                     ? value
                     : mapper.applyAsDouble(delegate.applyAsLong(object));
@@ -140,7 +146,7 @@ extends Expression<T>,
             }
 
             @Override
-            public ToLong<T> orElse(long value) {
+            public ToLong<T> orElse(Long value) {
                 return object -> delegate.isNull(object)
                     ? value
                     : mapper.applyAsLong(delegate.applyAsLong(object));

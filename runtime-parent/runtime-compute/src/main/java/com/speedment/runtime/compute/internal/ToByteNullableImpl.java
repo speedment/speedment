@@ -60,7 +60,7 @@ implements NullableExpression<T, ToByte<T>>, ToByteNullable<T> {
     }
 
     @Override
-    public ToByte<T> orElse(byte value) {
+    public ToByte<T> orElse(Byte value) {
         return t -> isNull.test(t) ? value : original.applyAsByte(t);
     }
 

@@ -58,7 +58,7 @@ public final class ToDoubleNullableImpl<T>
     }
 
     @Override
-    public ToDouble<T> orElse(double value) {
+    public ToDouble<T> orElse(Double value) {
         return t -> isNull.test(t) ? value : original.applyAsDouble(t);
     }
 
