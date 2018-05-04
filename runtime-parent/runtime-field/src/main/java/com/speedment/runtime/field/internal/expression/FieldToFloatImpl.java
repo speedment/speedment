@@ -1,6 +1,7 @@
 package com.speedment.runtime.field.internal.expression;
 
 import com.speedment.common.function.ToFloatFunction;
+import com.speedment.runtime.compute.ToFloat;
 import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.expression.FieldToFloat;
 
@@ -11,7 +12,7 @@ import com.speedment.runtime.field.expression.FieldToFloat;
  * @since  3.1.0
  */
 public final class FieldToFloatImpl<ENTITY, V>
-extends AbstractFieldMapper<ENTITY, V, Float, ToFloatFunction<V>>
+extends AbstractFieldMapper<ENTITY, V, Float, ToFloat<ENTITY>, ToFloatFunction<V>>
 implements FieldToFloat<ENTITY, V> {
 
     public FieldToFloatImpl(ReferenceField<ENTITY, ?, V> field,

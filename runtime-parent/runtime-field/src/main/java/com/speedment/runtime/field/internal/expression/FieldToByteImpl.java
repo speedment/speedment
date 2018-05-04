@@ -1,6 +1,7 @@
 package com.speedment.runtime.field.internal.expression;
 
 import com.speedment.common.function.ToByteFunction;
+import com.speedment.runtime.compute.ToByte;
 import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.expression.FieldToByte;
 
@@ -11,7 +12,7 @@ import com.speedment.runtime.field.expression.FieldToByte;
  * @since  3.1.0
  */
 public final class FieldToByteImpl<ENTITY, V>
-extends AbstractFieldMapper<ENTITY, V, Byte, ToByteFunction<V>>
+extends AbstractFieldMapper<ENTITY, V, Byte, ToByte<ENTITY>, ToByteFunction<V>>
 implements FieldToByte<ENTITY, V> {
 
     public FieldToByteImpl(ReferenceField<ENTITY, ?, V> field,

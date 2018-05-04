@@ -1,5 +1,6 @@
 package com.speedment.runtime.field.expression;
 
+import com.speedment.runtime.compute.ToDouble;
 import com.speedment.runtime.compute.ToDoubleNullable;
 
 import java.util.function.ToDoubleFunction;
@@ -15,5 +16,5 @@ import java.util.function.ToDoubleFunction;
  * @since  3.1.0
  */
 public interface FieldToDouble<ENTITY, T>
-extends FieldMapper<ENTITY, T, Double, ToDoubleFunction<T>>,
+extends FieldMapper<ENTITY, T, Double, ToDouble<ENTITY>, ToDoubleFunction<T>>,
         ToDoubleNullable<ENTITY> {}

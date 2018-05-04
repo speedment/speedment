@@ -1,6 +1,7 @@
 package com.speedment.runtime.field.expression;
 
 import com.speedment.common.function.ToCharFunction;
+import com.speedment.runtime.compute.ToChar;
 import com.speedment.runtime.compute.ToCharNullable;
 
 /**
@@ -14,5 +15,5 @@ import com.speedment.runtime.compute.ToCharNullable;
  * @since  3.1.0
  */
 public interface FieldToChar<ENTITY, T>
-extends FieldMapper<ENTITY, T, Character, ToCharFunction<T>>,
+extends FieldMapper<ENTITY, T, Character, ToChar<ENTITY>, ToCharFunction<T>>,
         ToCharNullable<ENTITY> {}

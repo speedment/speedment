@@ -1,5 +1,6 @@
 package com.speedment.runtime.field.internal.expression;
 
+import com.speedment.runtime.compute.ToInt;
 import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.expression.FieldToInt;
 
@@ -12,7 +13,7 @@ import java.util.function.ToIntFunction;
  * @since  3.1.0
  */
 public final class FieldToIntImpl<ENTITY, V>
-extends AbstractFieldMapper<ENTITY, V, Integer, ToIntFunction<V>>
+extends AbstractFieldMapper<ENTITY, V, Integer, ToInt<ENTITY>, ToIntFunction<V>>
 implements FieldToInt<ENTITY, V> {
 
     public FieldToIntImpl(ReferenceField<ENTITY, ?, V> field,

@@ -1,5 +1,6 @@
 package com.speedment.runtime.field.expression;
 
+import com.speedment.runtime.compute.ToLong;
 import com.speedment.runtime.compute.ToLongNullable;
 
 import java.util.function.ToLongFunction;
@@ -15,5 +16,5 @@ import java.util.function.ToLongFunction;
  * @since  3.1.0
  */
 public interface FieldToLong<ENTITY, T>
-extends FieldMapper<ENTITY, T, Long, ToLongFunction<T>>,
+extends FieldMapper<ENTITY, T, Long, ToLong<ENTITY>, ToLongFunction<T>>,
         ToLongNullable<ENTITY> {}

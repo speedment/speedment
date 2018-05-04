@@ -1,5 +1,6 @@
 package com.speedment.runtime.field.internal.expression;
 
+import com.speedment.runtime.compute.ToLong;
 import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.expression.FieldToLong;
 
@@ -12,7 +13,7 @@ import java.util.function.ToLongFunction;
  * @since  3.1.0
  */
 public final class FieldToLongImpl<ENTITY, V>
-extends AbstractFieldMapper<ENTITY, V, Long, ToLongFunction<V>>
+extends AbstractFieldMapper<ENTITY, V, Long, ToLong<ENTITY>, ToLongFunction<V>>
 implements FieldToLong<ENTITY, V> {
 
     public FieldToLongImpl(ReferenceField<ENTITY, ?, V> field,

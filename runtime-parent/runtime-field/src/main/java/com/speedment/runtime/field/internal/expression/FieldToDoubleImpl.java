@@ -1,5 +1,6 @@
 package com.speedment.runtime.field.internal.expression;
 
+import com.speedment.runtime.compute.ToDouble;
 import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.expression.FieldToDouble;
 
@@ -12,7 +13,7 @@ import java.util.function.ToDoubleFunction;
  * @since  3.1.0
  */
 public final class FieldToDoubleImpl<ENTITY, V>
-extends AbstractFieldMapper<ENTITY, V, Double, ToDoubleFunction<V>>
+extends AbstractFieldMapper<ENTITY, V, Double, ToDouble<ENTITY>, ToDoubleFunction<V>>
 implements FieldToDouble<ENTITY, V> {
 
     public FieldToDoubleImpl(ReferenceField<ENTITY, ?, V> field,

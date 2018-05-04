@@ -1,5 +1,6 @@
 package com.speedment.runtime.field.expression;
 
+import com.speedment.runtime.compute.ToInt;
 import com.speedment.runtime.compute.ToIntNullable;
 
 import java.util.function.ToIntFunction;
@@ -15,5 +16,5 @@ import java.util.function.ToIntFunction;
  * @since  3.1.0
  */
 public interface FieldToInt<ENTITY, T>
-extends FieldMapper<ENTITY, T, Integer, ToIntFunction<T>>,
+extends FieldMapper<ENTITY, T, Integer, ToInt<ENTITY>, ToIntFunction<T>>,
         ToIntNullable<ENTITY> {}

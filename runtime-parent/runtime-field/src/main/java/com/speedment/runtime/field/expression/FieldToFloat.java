@@ -1,6 +1,7 @@
 package com.speedment.runtime.field.expression;
 
 import com.speedment.common.function.ToFloatFunction;
+import com.speedment.runtime.compute.ToFloat;
 import com.speedment.runtime.compute.ToFloatNullable;
 
 /**
@@ -14,5 +15,5 @@ import com.speedment.runtime.compute.ToFloatNullable;
  * @since  3.1.0
  */
 public interface FieldToFloat<ENTITY, T>
-extends FieldMapper<ENTITY, T, Float, ToFloatFunction<T>>,
+extends FieldMapper<ENTITY, T, Float, ToFloat<ENTITY>, ToFloatFunction<T>>,
         ToFloatNullable<ENTITY> {}

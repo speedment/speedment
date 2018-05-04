@@ -1,5 +1,6 @@
 package com.speedment.runtime.field.internal.expression;
 
+import com.speedment.runtime.compute.ToEnum;
 import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.expression.FieldToEnum;
 
@@ -14,7 +15,7 @@ import static java.util.Objects.requireNonNull;
  * @since  3.1.0
  */
 public final class FieldToEnumImpl<ENTITY, V, E extends Enum<E>>
-extends AbstractFieldMapper<ENTITY, V, E, Function<V, E>>
+extends AbstractFieldMapper<ENTITY, V, E, ToEnum<ENTITY, E>, Function<V, E>>
 implements FieldToEnum<ENTITY, V, E> {
 
     private final Class<E> enumClass;

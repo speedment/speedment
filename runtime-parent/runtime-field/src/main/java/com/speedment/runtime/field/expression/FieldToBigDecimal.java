@@ -1,5 +1,6 @@
 package com.speedment.runtime.field.expression;
 
+import com.speedment.runtime.compute.ToBigDecimal;
 import com.speedment.runtime.compute.ToBigDecimalNullable;
 
 import java.math.BigDecimal;
@@ -16,5 +17,5 @@ import java.util.function.Function;
  * @since  3.1.0
  */
 public interface FieldToBigDecimal<ENTITY, T>
-extends FieldMapper<ENTITY, T, BigDecimal, Function<T, BigDecimal>>,
+extends FieldMapper<ENTITY, T, BigDecimal, ToBigDecimal<ENTITY>, Function<T, BigDecimal>>,
         ToBigDecimalNullable<ENTITY> {}

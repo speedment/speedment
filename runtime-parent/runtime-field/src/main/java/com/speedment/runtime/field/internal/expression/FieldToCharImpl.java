@@ -1,6 +1,7 @@
 package com.speedment.runtime.field.internal.expression;
 
 import com.speedment.common.function.ToCharFunction;
+import com.speedment.runtime.compute.ToChar;
 import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.expression.FieldToChar;
 
@@ -11,7 +12,7 @@ import com.speedment.runtime.field.expression.FieldToChar;
  * @since  3.1.0
  */
 public final class FieldToCharImpl<ENTITY, V>
-extends AbstractFieldMapper<ENTITY, V, Character, ToCharFunction<V>>
+extends AbstractFieldMapper<ENTITY, V, Character, ToChar<ENTITY>, ToCharFunction<V>>
 implements FieldToChar<ENTITY, V> {
 
     public FieldToCharImpl(ReferenceField<ENTITY, ?, V> field,

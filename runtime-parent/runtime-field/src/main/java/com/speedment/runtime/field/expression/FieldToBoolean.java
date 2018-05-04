@@ -1,6 +1,7 @@
 package com.speedment.runtime.field.expression;
 
 import com.speedment.common.function.ToBooleanFunction;
+import com.speedment.runtime.compute.ToBoolean;
 import com.speedment.runtime.compute.ToBooleanNullable;
 
 /**
@@ -14,5 +15,5 @@ import com.speedment.runtime.compute.ToBooleanNullable;
  * @since  3.1.0
  */
 public interface FieldToBoolean<ENTITY, T>
-extends FieldMapper<ENTITY, T, Boolean, ToBooleanFunction<T>>,
+extends FieldMapper<ENTITY, T, Boolean, ToBoolean<ENTITY>, ToBooleanFunction<T>>,
         ToBooleanNullable<ENTITY> {}

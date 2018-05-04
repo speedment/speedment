@@ -1,6 +1,7 @@
 package com.speedment.runtime.field.expression;
 
 import com.speedment.common.function.ToShortFunction;
+import com.speedment.runtime.compute.ToShort;
 import com.speedment.runtime.compute.ToShortNullable;
 
 /**
@@ -14,5 +15,5 @@ import com.speedment.runtime.compute.ToShortNullable;
  * @since  3.1.0
  */
 public interface FieldToShort<ENTITY, T>
-extends FieldMapper<ENTITY, T, Short, ToShortFunction<T>>,
+extends FieldMapper<ENTITY, T, Short, ToShort<ENTITY>, ToShortFunction<T>>,
         ToShortNullable<ENTITY> {}

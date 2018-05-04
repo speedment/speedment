@@ -1,5 +1,6 @@
 package com.speedment.runtime.field.internal.expression;
 
+import com.speedment.runtime.compute.ToBigDecimal;
 import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.expression.FieldToBigDecimal;
 
@@ -13,7 +14,7 @@ import java.util.function.Function;
  * @since  3.1.0
  */
 public final class FieldToBigDecimalImpl<ENTITY, V>
-extends AbstractFieldMapper<ENTITY, V, BigDecimal, Function<V, BigDecimal>>
+extends AbstractFieldMapper<ENTITY, V, BigDecimal, ToBigDecimal<ENTITY>, Function<V, BigDecimal>>
 implements FieldToBigDecimal<ENTITY, V> {
 
     public FieldToBigDecimalImpl(ReferenceField<ENTITY, ?, V> field,

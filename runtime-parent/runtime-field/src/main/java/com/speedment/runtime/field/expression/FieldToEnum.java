@@ -1,5 +1,6 @@
 package com.speedment.runtime.field.expression;
 
+import com.speedment.runtime.compute.ToEnum;
 import com.speedment.runtime.compute.ToEnumNullable;
 import com.speedment.runtime.compute.ToStringNullable;
 
@@ -17,5 +18,5 @@ import java.util.function.Function;
  * @since  3.1.0
  */
 public interface FieldToEnum<ENTITY, T, E extends Enum<E>>
-extends FieldMapper<ENTITY, T, E, Function<T, E>>,
+extends FieldMapper<ENTITY, T, E, ToEnum<ENTITY, E>, Function<T, E>>,
         ToEnumNullable<ENTITY, E> {}

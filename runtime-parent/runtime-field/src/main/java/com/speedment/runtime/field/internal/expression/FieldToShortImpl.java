@@ -1,6 +1,7 @@
 package com.speedment.runtime.field.internal.expression;
 
 import com.speedment.common.function.ToShortFunction;
+import com.speedment.runtime.compute.ToShort;
 import com.speedment.runtime.field.ReferenceField;
 import com.speedment.runtime.field.expression.FieldToShort;
 
@@ -11,7 +12,7 @@ import com.speedment.runtime.field.expression.FieldToShort;
  * @since  3.1.0
  */
 public final class FieldToShortImpl<ENTITY, V>
-extends AbstractFieldMapper<ENTITY, V, Short, ToShortFunction<V>>
+extends AbstractFieldMapper<ENTITY, V, Short, ToShort<ENTITY>, ToShortFunction<V>>
 implements FieldToShort<ENTITY, V> {
 
     public FieldToShortImpl(ReferenceField<ENTITY, ?, V> field,

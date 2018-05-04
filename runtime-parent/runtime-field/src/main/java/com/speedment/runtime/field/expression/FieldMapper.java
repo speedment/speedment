@@ -11,13 +11,15 @@ import com.speedment.runtime.field.ReferenceField;
  * @param <ENTITY>  the entity type
  * @param <T>       the column type mapped from
  * @param <R>       the type mapped to
+ * @param <NON_NULLABLE>  the expression type obtained if the nullability of
+ *                        this expression is handled
  * @param <MAPPER>  functional interface type returned by {@link #getMapper()}
  *
  * @author Emil Forslund
  * @since  3.1.0
  */
-public interface FieldMapper<ENTITY, T, R, MAPPER>
-extends Expression<ENTITY>, ToNullable<ENTITY, R> {
+public interface FieldMapper<ENTITY, T, R, NON_NULLABLE extends Expression<ENTITY>, MAPPER>
+extends Expression<ENTITY>, ToNullable<ENTITY, R, NON_NULLABLE> {
 
     /**
      * The field that is being mapped.
