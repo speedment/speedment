@@ -38,7 +38,7 @@ public final class ToDoubleTest extends AbstractToTest<ToDouble<String>> {
     public void testMapToDouble() {
         strings().forEach(s -> {
             final double expected = mapper.apply(s).doubleValue() + 1.0;
-            final ToDouble<String> toDouble = instance.mapToDouble(l -> l + 1);
+            final ToDouble<String> toDouble = instance.map(l -> l + 1);
             final double actual = toDouble.applyAsDouble(s);
             assertEquals(expected, actual, EPSILON);
         });
