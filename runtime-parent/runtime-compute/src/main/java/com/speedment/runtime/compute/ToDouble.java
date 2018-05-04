@@ -1,6 +1,7 @@
 package com.speedment.runtime.compute;
 
 import com.speedment.common.function.BooleanUnaryOperator;
+import com.speedment.common.function.FloatToDoubleFunction;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
@@ -79,6 +80,10 @@ extends Expression<T>,
     @Override
     default ToLong<T> asLong() {
         return CastUtil.castToLong(this);
+    }
+    
+    default ToDouble<T> mapToDouble(DoubleUnaryOperator operator) {
+        return MapperUtil.mapToDouble(this, operator);
     }
 
     @Override
