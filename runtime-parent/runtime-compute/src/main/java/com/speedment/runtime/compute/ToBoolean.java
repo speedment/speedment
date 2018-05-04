@@ -17,6 +17,7 @@ import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.HasMap;
 
 import java.math.BigDecimal;
+import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
@@ -45,6 +46,20 @@ extends Expression<T>,
         HasHash<T>,
         HasCompare<T>,
         HasCompose<T> {
+
+    /**
+     * Returns a typed {@code ToBoolean<T>} using the provided {@code lambda}.
+     *
+     * @param <T> type to extract from
+     * @param lambda to convert
+     * @return a typed {@code ToBoolean<T>} using the provided {@code lambda}
+     *
+     * @throws NullPointerException if the provided {@code lambda} is
+     * {@code null}
+     */
+    public static <T> ToBoolean<T> of(ToBoolean<T> lambda) {
+        return requireNonNull(lambda);
+    }
 
     @Override
     boolean applyAsBoolean(T object);

@@ -10,6 +10,7 @@ import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.*;
 
 import java.math.BigDecimal;
+import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
@@ -46,6 +47,21 @@ extends Expression<T>,
         HasCompare<T>,
         HasCompose<T> {
 
+    /**
+     * Returns a typed {@code ToBigDecimal<T>} using the provided
+     * {@code lambda}.
+     *
+     * @param <T> type to extract from
+     * @param lambda to convert
+     * @return a typed {@code ToBigDecimal<T>} using the provided {@code lambda}
+     *
+     * @throws NullPointerException if the provided {@code lambda} is
+     * {@code null}
+     */
+    public static <T> ToBigDecimal<T> of(ToBigDecimal<T> lambda) {
+        return requireNonNull(lambda);
+    }
+    
     @Override
     BigDecimal apply(T object);
 

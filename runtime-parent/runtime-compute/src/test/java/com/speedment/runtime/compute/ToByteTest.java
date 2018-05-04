@@ -61,5 +61,13 @@ public final class ToByteTest extends AbstractToTest<ToByte<String>> {
             assertEquals((long) mapper.apply(s + "A"), composed.applyAsByte(s));
         });
     }
+    
+    @Test
+    public void testOf() {
+        strings().forEach(s -> {
+            final ToByte<String> created = ToByte.of(str -> (byte) str.length());
+            assertEquals(s.length(), created.applyAsByte(s));
+        });
+    }
 
 }

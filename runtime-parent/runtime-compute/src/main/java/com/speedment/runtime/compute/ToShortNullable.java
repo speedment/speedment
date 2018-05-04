@@ -11,6 +11,7 @@ import com.speedment.runtime.compute.internal.expression.OrElseGetUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseThrowUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.*;
+import static java.util.Objects.requireNonNull;
 
 import java.util.function.Function;
 
@@ -39,6 +40,22 @@ extends Expression<T>,
         HasCompare<T>,
         HasCompose<T> {
 
+    /**
+     * Returns a typed {@code ToShortNullable<T>} using the provided
+     * {@code lambda}.
+     *
+     * @param <T> type to extract from
+     * @param lambda to convert
+     * @return a typed {@code ToShortNullable<T>} using the provided
+     * {@code lambda}
+     *
+     * @throws NullPointerException if the provided {@code lambda} is
+     * {@code null}
+     */
+    public static <T> ToShortNullable<T> of(ToShortNullable<T> lambda) {
+        return requireNonNull(lambda);
+    }
+    
     @Override
     default ExpressionType expressionType() {
         return ExpressionType.SHORT_NULLABLE;

@@ -62,4 +62,12 @@ public final class ToIntTest extends AbstractToTest<ToInt<String>> {
         });
     }
 
+    @Test
+    public void testOf() {
+        strings().forEach(s -> {
+            final ToInt<String> created = ToInt.of(String::length);
+            assertEquals(s.length(), created.applyAsInt(s));
+        });
+    }
+
 }

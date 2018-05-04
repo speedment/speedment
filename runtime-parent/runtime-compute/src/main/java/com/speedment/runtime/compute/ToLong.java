@@ -1,6 +1,5 @@
 package com.speedment.runtime.compute;
 
-import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
@@ -8,6 +7,7 @@ import com.speedment.runtime.compute.internal.expression.CastUtil;
 import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.*;
+import static java.util.Objects.requireNonNull;
 
 import java.util.function.Function;
 import java.util.function.LongToDoubleFunction;
@@ -47,6 +47,21 @@ extends Expression<T>,
         HasCompare<T>,
         HasCompose<T> {
 
+    
+    /**
+     * Returns a typed {@code ToLong<T>} using the provided {@code lambda}.
+     *
+     * @param <T> type to extract from
+     * @param lambda to convert
+     * @return a typed {@code ToLong<T>} using the provided {@code lambda}
+     *
+     * @throws NullPointerException if the provided {@code lambda} is
+     * {@code null}
+     */
+    public static <T> ToLong<T> of(ToLong<T> lambda) {
+        return requireNonNull(lambda);
+    }
+    
     @Override
     long applyAsLong(T object);
 

@@ -61,5 +61,13 @@ public final class ToLongTest extends AbstractToTest<ToLong<String>> {
             assertEquals((long) mapper.apply(s + "A"), composed.applyAsLong(s));
         });
     }
+    
+    @Test
+    public void testOf() {
+        strings().forEach(s -> {
+            final ToLong<String> created = ToLong.of(String::length);
+            assertEquals(s.length(), created.applyAsLong(s));
+        });
+    }
 
 }

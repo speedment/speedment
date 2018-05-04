@@ -10,6 +10,7 @@ import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasCompose;
 import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.HasMap;
+import static java.util.Objects.requireNonNull;
 
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -35,6 +36,23 @@ extends Expression<T>,
         HasCompare<T>,
         HasCompose<T> {
 
+     /**
+     * Returns a typed {@code ToEnum<T>} using the provided
+     * {@code lambda}.
+     *
+     * @param <T> type to extract from
+     * @param <E> enum type
+     * @param lambda to convert
+     * @return a typed {@code ToEnum<T>} using the provided
+     * {@code lambda}
+     *
+     * @throws NullPointerException if the provided {@code lambda} is
+     * {@code null}
+     */
+    public static <T, E extends Enum<E>> ToEnum<T, E> of(ToEnum<T, E> lambda) {
+        return requireNonNull(lambda);
+    }
+    
     static <T, E extends Enum<E>> ToEnum<T, E>
         toEnum(Class<E> enumClass, Function<T, E> getter) {
         return new ToEnumImpl<>(enumClass, getter);

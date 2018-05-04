@@ -11,6 +11,7 @@ import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasCompose;
 import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.ToNullable;
+import static java.util.Objects.requireNonNull;
 
 import java.util.function.Function;
 
@@ -35,6 +36,22 @@ extends Expression<T>,
         HasCompare<T>,
         HasCompose<T> {
 
+    /**
+     * Returns a typed {@code ToCharNullable<T>} using the provided
+     * {@code lambda}.
+     *
+     * @param <T> type to extract from
+     * @param lambda to convert
+     * @return a typed {@code ToCharNullable<T>} using the provided
+     * {@code lambda}
+     *
+     * @throws NullPointerException if the provided {@code lambda} is
+     * {@code null}
+     */
+    public static <T> ToCharNullable<T> of(ToCharNullable<T> lambda) {
+        return requireNonNull(lambda);
+    }
+    
     @Override
     default ExpressionType expressionType() {
         return ExpressionType.CHAR_NULLABLE;

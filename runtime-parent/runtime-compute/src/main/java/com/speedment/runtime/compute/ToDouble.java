@@ -9,6 +9,7 @@ import com.speedment.runtime.compute.internal.expression.CastUtil;
 import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.*;
+import static java.util.Objects.requireNonNull;
 
 import java.util.function.DoubleUnaryOperator;
 import java.util.function.Function;
@@ -47,6 +48,20 @@ extends Expression<T>,
         HasCompare<T>,
         HasCompose<T> {
 
+    /**
+     * Returns a typed {@code ToDouble<T>} using the provided {@code lambda}.
+     *
+     * @param <T> type to extract from
+     * @param lambda to convert
+     * @return a typed {@code ToDouble<T>} using the provided {@code lambda}
+     *
+     * @throws NullPointerException if the provided {@code lambda} is
+     * {@code null}
+     */
+    public static <T> ToDouble<T> of(ToDouble<T> lambda) {
+        return requireNonNull(lambda);
+    }
+    
     /**
      * Returns an implementation of this interface that regardless of input,
      * always returns the value specified.

@@ -62,4 +62,12 @@ public final class ToFloatTest extends AbstractToTest<ToFloat<String>> {
         });
     }
 
+    @Test
+    public void testOf() {
+        strings().forEach(s -> {
+            final ToFloat<String> created = ToFloat.of(String::length);
+            assertEquals(s.length(), created.applyAsFloat(s), EPSILON);
+        });
+    }
+
 }

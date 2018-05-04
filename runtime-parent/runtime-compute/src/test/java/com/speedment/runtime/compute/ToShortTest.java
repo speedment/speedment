@@ -62,4 +62,12 @@ public final class ToShortTest extends AbstractToTest<ToShort<String>> {
         });
     }
 
+    @Test
+    public void testOf() {
+        strings().forEach(s -> {
+            final ToShort<String> created = ToShort.of(str -> (short) str.length());
+            assertEquals(s.length(), created.applyAsShort(s));
+        });
+    }
+
 }

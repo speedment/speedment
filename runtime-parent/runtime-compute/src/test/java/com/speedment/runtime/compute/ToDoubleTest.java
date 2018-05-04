@@ -62,4 +62,12 @@ public final class ToDoubleTest extends AbstractToTest<ToDouble<String>> {
         });
     }
 
+    @Test
+    public void testOf() {
+        strings().forEach(s -> {
+            final ToDouble<String> created = ToDouble.of(String::length);
+            assertEquals(s.length(), created.applyAsDouble(s), EPSILON);
+        });
+    }
+
 }
