@@ -31,6 +31,8 @@ import java.util.stream.Stream;
 import com.speedment.runtime.core.exception.SpeedmentException;
 import com.speedment.runtime.core.internal.db.AbstractDatabaseNamingConvention;
 import com.speedment.runtime.core.internal.db.AbstractDbmsType;
+import com.sun.corba.se.spi.orb.ORBVersion;
+
 import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toSet;
 
@@ -40,6 +42,9 @@ import static java.util.stream.Collectors.toSet;
  * @author Emil Forslund
  */
 public final class MySqlDbmsType extends AbstractDbmsType {
+
+    private static final String OLD_DRIVER = "com.mysql.jdbc.Driver";
+    private static final String NEW_DRIVER = "com.mysql.cj.jdbc.Driver";
 
     private final MySqlNamingConvention namingConvention;
     private final MySqlConnectionUrlGenerator connectionUrlGenerator;
@@ -80,13 +85,13 @@ public final class MySqlDbmsType extends AbstractDbmsType {
 
     @Override
     public String getDriverName() {
-        return "com.mysql.jdbc.Driver";
+        return isSupported(NEW_DRIVER) ? NEW_DRIVER : OLD_DRIVER;
     }
 
     @Override
     public boolean isSupported() {
         // make sure we touch new new driver first.
-        return isSupported("com.mysql.cj.jdbc.Driver") || isSupported(getDriverName());
+        return isSupported(NEW_DRIVER) || isSupported(OLD_DRIVER);
     }
 
     @Override
@@ -200,13 +205,13 @@ public final class MySqlDbmsType extends AbstractDbmsType {
 
     private static int driverVersion() {
         try {
-            final Class<?> mySqlDriver = Class.forName("com.mysql.cj.jdbc.Driver");
-            final Driver driver = (Driver) mySqlDriver.newInstance();
-            return driver.getMajorVersion();
-        } catch (final InstantiationException
-                     | IllegalAccessException
-                     | ClassNotFoundException ex) {
-            throw new SpeedmentException("Error using reflection to read driver version.", ex);
+            return ((Driver) Class.forName(NEW_DRIVER).newInstance()).getMajorVersion();
+        } catch (ReflectiveOperationException e) {
+            try {
+                return ((Driver) Class.forName(OLD_DRIVER).newInstance()).getMajorVersion();
+            } catch (ReflectiveOperationException e2) {
+                throw new SpeedmentException("Error using reflection to read driver version.", e2);
+            }
         }
     }
 }
