@@ -56,6 +56,8 @@ public final class InfoComponentImpl implements InfoComponent {
         return "3.1";
     }
 
+    public String getSpecificationNickname() { return "Homer"; }
+
     @Override
     public boolean isProductionMode() {
         return !getImplementationVersion().toUpperCase().contains("EA") 

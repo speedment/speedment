@@ -84,6 +84,15 @@ public interface InfoComponent  {
      */
     String getSpecificationVersion();
 
+    /**
+     * Returns the non-null "nick-name" of the specification that this
+     * Speedment implements.
+     *
+     * @return the non-null "nick-name" of the specification that this
+     * Speedment implements
+     */
+    String getSpecificationNickname();
+
      /**
      * Returns if this version is intended for production use.
      *

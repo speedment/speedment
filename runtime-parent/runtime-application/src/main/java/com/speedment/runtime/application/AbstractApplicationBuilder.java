@@ -467,19 +467,20 @@ public abstract class AbstractApplicationBuilder<
 
             LOGGER.info(speedmentMsg);
         }
-        final String msg = title + " (" + info.getSubtitle()
-            + ") version " + version
-            + " by " + info.getVendor()
-            + " Specification version "
-            + info.getSpecificationVersion()
-            + ", License: "+info.getLicenseName();
+        final String msg = title + " (" + info.getSubtitle() +
+                ") version " + version +
+                " by " + info.getVendor() +
+                " Specification version " +
+                info.getSpecificationVersion() +
+                " (" + info.getSpecificationNickname() + ")" +
+                ", License: " + info.getLicenseName();
         LOGGER.info(msg);
         if (!info.isProductionMode()) {
             LOGGER.warn("This version is NOT INTENDED FOR PRODUCTION USE!");
         }
 
         if (info != upstreamInfo) {
-            LOGGER.info("Upstream version is "+upstreamInfo.getImplementationVersion());
+            LOGGER.info("Upstream version is " + upstreamInfo.getImplementationVersion() + " " + upstreamInfo.getSpecificationNickname() + ")");
             if (!upstreamInfo.isProductionMode()) {
                 LOGGER.warn("Upstream version is NOT INTENDED FOR PRODUCTION USE!");
             }
