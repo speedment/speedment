@@ -27,7 +27,7 @@ public final class NegateUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToByte<T> negate(ToByte<T> expression) {
+    public static <T> ToByte<T> negateByte(ToByte<T> expression) {
         class NegateByte extends AbstractNegate<T, ToByte<T>> implements ToByte<T> {
             private NegateByte(ToByte<T> inner) {
                 super(inner);
@@ -50,7 +50,7 @@ public final class NegateUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToShort<T> negate(ToShort<T> expression) {
+    public static <T> ToShort<T> negateShort(ToShort<T> expression) {
         class NegateShort extends AbstractNegate<T, ToShort<T>> implements ToShort<T> {
             private NegateShort(ToShort<T> inner) {
                 super(inner);
@@ -73,7 +73,7 @@ public final class NegateUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToInt<T> negate(ToInt<T> expression) {
+    public static <T> ToInt<T> negateInt(ToInt<T> expression) {
         class NegateInt extends AbstractNegate<T, ToInt<T>> implements ToInt<T> {
             private NegateInt(ToInt<T> inner) {
                 super(inner);
@@ -96,7 +96,7 @@ public final class NegateUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLong<T> negate(ToLong<T> expression) {
+    public static <T> ToLong<T> negateLong(ToLong<T> expression) {
         class NegateLong extends AbstractNegate<T, ToLong<T>> implements ToLong<T> {
             private NegateLong(ToLong<T> inner) {
                 super(inner);
@@ -119,7 +119,7 @@ public final class NegateUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToFloat<T> negate(ToFloat<T> expression) {
+    public static <T> ToFloat<T> negateFloat(ToFloat<T> expression) {
         class NegateFloat extends AbstractNegate<T, ToFloat<T>> implements ToFloat<T> {
             private NegateFloat(ToFloat<T> inner) {
                 super(inner);
@@ -142,7 +142,7 @@ public final class NegateUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToDouble<T> negate(ToDouble<T> expression) {
+    public static <T> ToDouble<T> negateDouble(ToDouble<T> expression) {
         class NegateDouble extends AbstractNegate<T, ToDouble<T>> implements ToDouble<T> {
             private NegateDouble(ToDouble<T> inner) {
                 super(inner);
@@ -165,7 +165,7 @@ public final class NegateUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToBigDecimal<T> negate(ToBigDecimal<T> expression) {
+    public static <T> ToBigDecimal<T> negateBigDecimal(ToBigDecimal<T> expression) {
         class NegateBigDecimal implements ToBigDecimal<T>, UnaryExpression<T, ToBigDecimal<T>> {
             private final ToBigDecimal<T> inner;
 
@@ -201,7 +201,7 @@ public final class NegateUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToBoolean<T> negate(ToBoolean<T> expression) {
+    public static <T> ToBoolean<T> negateBoolean(ToBoolean<T> expression) {
         class NegateBoolean extends AbstractNegate<T, ToBoolean<T>> implements ToBoolean<T> {
             private NegateBoolean(ToBoolean<T> inner) {
                 super(inner);
@@ -226,9 +226,9 @@ public final class NegateUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToByteNullable<T> negateOrNull(ToByteNullable<T> expression) {
+    public static <T> ToByteNullable<T> negateByteOrNull(ToByteNullable<T> expression) {
         return new ToByteNullableImpl<>(
-            negate(expression.orThrow()),
+            negateByte(expression.orThrow()),
             expression.isNull()
         );
     }
@@ -243,9 +243,9 @@ public final class NegateUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToShortNullable<T> negateOrNull(ToShortNullable<T> expression) {
+    public static <T> ToShortNullable<T> negateShortOrNull(ToShortNullable<T> expression) {
         return new ToShortNullableImpl<>(
-            negate(expression.orThrow()),
+            negateShort(expression.orThrow()),
             expression.isNull()
         );
     }
@@ -260,9 +260,9 @@ public final class NegateUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToIntNullable<T> negateOrNull(ToIntNullable<T> expression) {
+    public static <T> ToIntNullable<T> negateIntOrNull(ToIntNullable<T> expression) {
         return new ToIntNullableImpl<>(
-            negate(expression.orThrow()),
+            negateInt(expression.orThrow()),
             expression.isNull()
         );
     }
@@ -277,9 +277,9 @@ public final class NegateUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLongNullable<T> negateOrNull(ToLongNullable<T> expression) {
+    public static <T> ToLongNullable<T> negateLongOrNull(ToLongNullable<T> expression) {
         return new ToLongNullableImpl<>(
-            negate(expression.orThrow()),
+            negateLong(expression.orThrow()),
             expression.isNull()
         );
     }
@@ -294,9 +294,9 @@ public final class NegateUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToFloatNullable<T> negateOrNull(ToFloatNullable<T> expression) {
+    public static <T> ToFloatNullable<T> negateFloatOrNull(ToFloatNullable<T> expression) {
         return new ToFloatNullableImpl<>(
-            negate(expression.orThrow()),
+            negateFloat(expression.orThrow()),
             expression.isNull()
         );
     }
@@ -311,9 +311,9 @@ public final class NegateUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToDoubleNullable<T> negateOrNull(ToDoubleNullable<T> expression) {
+    public static <T> ToDoubleNullable<T> negateDoubleOrNull(ToDoubleNullable<T> expression) {
         return new ToDoubleNullableImpl<>(
-            negate(expression.orThrow()),
+            negateDouble(expression.orThrow()),
             expression.isNull()
         );
     }
@@ -328,9 +328,9 @@ public final class NegateUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToBooleanNullable<T> negateOrNull(ToBooleanNullable<T> expression) {
+    public static <T> ToBooleanNullable<T> negateBooleanOrNull(ToBooleanNullable<T> expression) {
         return new ToBooleanNullableImpl<>(
-            negate(expression.orThrow()),
+            negateBoolean(expression.orThrow()),
             expression.isNull()
         );
     }

@@ -1,7 +1,5 @@
 package com.speedment.runtime.compute;
 
-import com.speedment.common.function.BooleanToDoubleFunction;
-import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.common.function.ByteToDoubleFunction;
 import com.speedment.common.function.ByteUnaryOperator;
 import com.speedment.common.function.ToByteFunction;
@@ -78,27 +76,27 @@ extends Expression<T>,
 
     @Override
     default ToDouble<T> asDouble() {
-        return CastUtil.castToDouble(this);
+        return CastUtil.castByteToDouble(this);
     }
 
     @Override
     default ToInt<T> asInt() {
-        return CastUtil.castToInt(this);
+        return CastUtil.castByteToInt(this);
     }
 
     @Override
     default ToLong<T> asLong() {
-        return CastUtil.castToLong(this);
+        return CastUtil.castByteToLong(this);
     }
 
     @Override
     default ToDouble<T> mapToDouble(ByteToDoubleFunction operator) {
-        return MapperUtil.mapToDouble(this, operator);
+        return MapperUtil.mapByteToDouble(this, operator);
     }
 
     @Override
     default ToByte<T> map(ByteUnaryOperator operator) {
-        return MapperUtil.map(this, operator);
+        return MapperUtil.mapByte(this, operator);
     }
 
     @Override
@@ -308,6 +306,6 @@ extends Expression<T>,
     default <V> ToByte<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
-        return ComposedUtil.compose(casted, this);
+        return ComposedUtil.composeToByte(casted, this);
     }
 }

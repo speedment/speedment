@@ -72,17 +72,17 @@ extends Expression<T>,
 
     @Override
     default ToFloat<T> orThrow() throws NullPointerException {
-        return OrElseThrowUtil.orElseThrow(this);
+        return OrElseThrowUtil.floatOrElseThrow(this);
     }
 
     @Override
     default ToFloat<T> orElseGet(ToFloat<T> getter) {
-        return OrElseGetUtil.orElseGet(this, getter);
+        return OrElseGetUtil.floatOrElseGet(this, getter);
     }
 
     @Override
     default ToFloat<T> orElse(Float value) {
-        return OrElseUtil.orElse(this, value);
+        return OrElseUtil.floatOrElse(this, value);
     }
 
     @Override

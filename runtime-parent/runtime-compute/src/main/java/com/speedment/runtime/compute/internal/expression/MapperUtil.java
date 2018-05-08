@@ -29,7 +29,7 @@ public final class MapperUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToBoolean<T> map(ToBoolean<T> expression, BooleanUnaryOperator mapper) {
+    public static <T> ToBoolean<T> mapBoolean(ToBoolean<T> expression, BooleanUnaryOperator mapper) {
         return new ToBooleanMapper<T, ToBoolean<T>, BooleanUnaryOperator>(expression, mapper) {
             @Override
             public boolean applyAsBoolean(T object) {
@@ -53,7 +53,7 @@ public final class MapperUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToDouble<T> mapToDouble(ToBoolean<T> expression, BooleanToDoubleFunction mapper) {
+    public static <T> ToDouble<T> mapBooleanToDouble(ToBoolean<T> expression, BooleanToDoubleFunction mapper) {
         return new ToDoubleMapper<T, ToBoolean<T>, BooleanToDoubleFunction>(expression, mapper) {
             @Override
             public double applyAsDouble(T object) {
@@ -77,7 +77,7 @@ public final class MapperUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToChar<T> map(ToChar<T> expression, CharUnaryOperator mapper) {
+    public static <T> ToChar<T> mapChar(ToChar<T> expression, CharUnaryOperator mapper) {
         return new ToCharMapper<T, ToChar<T>, CharUnaryOperator>(expression, mapper) {
             @Override
             public char applyAsChar(T object) {
@@ -101,7 +101,7 @@ public final class MapperUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToByte<T> map(ToByte<T> expression, ByteUnaryOperator mapper) {
+    public static <T> ToByte<T> mapByte(ToByte<T> expression, ByteUnaryOperator mapper) {
         return new ToByteMapper<T, ToByte<T>, ByteUnaryOperator>(expression, mapper) {
             @Override
             public byte applyAsByte(T object) {
@@ -125,7 +125,7 @@ public final class MapperUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToDouble<T> mapToDouble(ToByte<T> expression, ByteToDoubleFunction mapper) {
+    public static <T> ToDouble<T> mapByteToDouble(ToByte<T> expression, ByteToDoubleFunction mapper) {
         return new ToDoubleMapper<T, ToByte<T>, ByteToDoubleFunction>(expression, mapper) {
             @Override
             public double applyAsDouble(T object) {
@@ -149,7 +149,7 @@ public final class MapperUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToShort<T> map(ToShort<T> expression, ShortUnaryOperator mapper) {
+    public static <T> ToShort<T> mapShort(ToShort<T> expression, ShortUnaryOperator mapper) {
         return new ToShortMapper<T, ToShort<T>, ShortUnaryOperator>(expression, mapper) {
             @Override
             public short applyAsShort(T object) {
@@ -173,7 +173,7 @@ public final class MapperUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToDouble<T> mapToDouble(ToShort<T> expression, ShortToDoubleFunction mapper) {
+    public static <T> ToDouble<T> mapShortToDouble(ToShort<T> expression, ShortToDoubleFunction mapper) {
         return new ToDoubleMapper<T, ToShort<T>, ShortToDoubleFunction>(expression, mapper) {
             @Override
             public double applyAsDouble(T object) {
@@ -197,7 +197,7 @@ public final class MapperUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToInt<T> map(ToInt<T> expression, IntUnaryOperator mapper) {
+    public static <T> ToInt<T> mapInt(ToInt<T> expression, IntUnaryOperator mapper) {
         return new ToIntMapper<T, ToInt<T>, IntUnaryOperator>(expression, mapper) {
             @Override
             public int applyAsInt(T object) {
@@ -221,7 +221,7 @@ public final class MapperUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToDouble<T> mapToDouble(ToInt<T> expression, IntToDoubleFunction mapper) {
+    public static <T> ToDouble<T> mapIntToDouble(ToInt<T> expression, IntToDoubleFunction mapper) {
         return new ToDoubleMapper<T, ToInt<T>, IntToDoubleFunction>(expression, mapper) {
             @Override
             public double applyAsDouble(T object) {
@@ -245,7 +245,7 @@ public final class MapperUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLong<T> map(ToLong<T> expression, LongUnaryOperator mapper) {
+    public static <T> ToLong<T> mapLong(ToLong<T> expression, LongUnaryOperator mapper) {
         return new ToLongMapper<T, ToLong<T>, LongUnaryOperator>(expression, mapper) {
             @Override
             public long applyAsLong(T object) {
@@ -269,7 +269,7 @@ public final class MapperUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToDouble<T> mapToDouble(ToLong<T> expression, LongToDoubleFunction mapper) {
+    public static <T> ToDouble<T> mapLongToDouble(ToLong<T> expression, LongToDoubleFunction mapper) {
         return new ToDoubleMapper<T, ToLong<T>, LongToDoubleFunction>(expression, mapper) {
             @Override
             public double applyAsDouble(T object) {
@@ -293,7 +293,7 @@ public final class MapperUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToFloat<T> map(ToFloat<T> expression, FloatUnaryOperator mapper) {
+    public static <T> ToFloat<T> mapFloat(ToFloat<T> expression, FloatUnaryOperator mapper) {
         return new ToFloatMapper<T, ToFloat<T>, FloatUnaryOperator>(expression, mapper) {
             @Override
             public float applyAsFloat(T object) {
@@ -317,7 +317,7 @@ public final class MapperUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToDouble<T> mapToDouble(ToFloat<T> expression, FloatToDoubleFunction mapper) {
+    public static <T> ToDouble<T> mapFloatToDouble(ToFloat<T> expression, FloatToDoubleFunction mapper) {
         return new ToDoubleMapper<T, ToFloat<T>, FloatToDoubleFunction>(expression, mapper) {
             @Override
             public double applyAsDouble(T object) {
@@ -341,7 +341,7 @@ public final class MapperUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToDouble<T> map(ToDouble<T> expression, DoubleUnaryOperator mapper) {
+    public static <T> ToDouble<T> mapDouble(ToDouble<T> expression, DoubleUnaryOperator mapper) {
         return new ToDoubleMapper<T, ToDouble<T>, DoubleUnaryOperator>(expression, mapper) {
             @Override
             public double applyAsDouble(T object) {
@@ -365,7 +365,7 @@ public final class MapperUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToString<T> map(ToString<T> expression, UnaryOperator<String> mapper) {
+    public static <T> ToString<T> mapString(ToString<T> expression, UnaryOperator<String> mapper) {
         return new ToStringMapper<T, ToString<T>, UnaryOperator<String>>(expression, mapper) {
             @Override
             public String apply(T object) {
@@ -389,7 +389,7 @@ public final class MapperUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T, E extends Enum<E>> ToEnum<T, E> map(ToEnum<T, E> expression, UnaryOperator<E> mapper) {
+    public static <T, E extends Enum<E>> ToEnum<T, E> mapEnum(ToEnum<T, E> expression, UnaryOperator<E> mapper) {
         return new ToEnumMapper<T, E, ToEnum<T, E>, UnaryOperator<E>>(expression, mapper) {
             @Override
             public E apply(T object) {
@@ -418,7 +418,7 @@ public final class MapperUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToBigDecimal<T> map(ToBigDecimal<T> expression, UnaryOperator<BigDecimal> mapper) {
+    public static <T> ToBigDecimal<T> mapBigDecimal(ToBigDecimal<T> expression, UnaryOperator<BigDecimal> mapper) {
         return new ToBigDecimalMapper<T, ToBigDecimal<T>, UnaryOperator<BigDecimal>>(expression, mapper) {
             @Override
             public BigDecimal apply(T object) {
@@ -442,7 +442,7 @@ public final class MapperUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToDouble<T> mapToDouble(ToBigDecimal<T> expression, ToDoubleFunction<BigDecimal> mapper) {
+    public static <T> ToDouble<T> mapBigDecimalToDouble(ToBigDecimal<T> expression, ToDoubleFunction<BigDecimal> mapper) {
         return new ToDoubleMapper<T, ToBigDecimal<T>, ToDoubleFunction<BigDecimal>>(expression, mapper) {
             @Override
             public double applyAsDouble(T object) {

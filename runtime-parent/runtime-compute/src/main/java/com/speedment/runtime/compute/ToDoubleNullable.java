@@ -71,17 +71,17 @@ extends Expression<T>,
 
     @Override
     default ToDouble<T> orThrow() throws NullPointerException {
-        return OrElseThrowUtil.orElseThrow(this);
+        return OrElseThrowUtil.doubleOrElseThrow(this);
     }
 
     @Override
     default ToDouble<T> orElseGet(ToDouble<T> getter) {
-        return OrElseGetUtil.orElseGet(this, getter);
+        return OrElseGetUtil.doubleOrElseGet(this, getter);
     }
 
     @Override
     default ToDouble<T> orElse(Double value) {
-        return OrElseUtil.orElse(this, value);
+        return OrElseUtil.doubleOrElse(this, value);
     }
 
     @Override

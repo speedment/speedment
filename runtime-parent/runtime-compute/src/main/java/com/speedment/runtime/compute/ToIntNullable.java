@@ -73,17 +73,17 @@ extends Expression<T>,
 
     @Override
     default ToInt<T> orThrow() throws NullPointerException {
-        return OrElseThrowUtil.orElseThrow(this);
+        return OrElseThrowUtil.intOrElseThrow(this);
     }
 
     @Override
     default ToInt<T> orElseGet(ToInt<T> getter) {
-        return OrElseGetUtil.orElseGet(this, getter);
+        return OrElseGetUtil.intOrElseGet(this, getter);
     }
 
     @Override
     default ToInt<T> orElse(Integer value) {
-        return OrElseUtil.orElse(this, value);
+        return OrElseUtil.intOrElse(this, value);
     }
 
     @Override

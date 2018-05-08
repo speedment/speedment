@@ -29,12 +29,12 @@ public final class OrElseThrowUtil {
      * @return            the non-nullable expression
      */
     public static <T> ToDoubleOrThrow<T>
-    orElseThrow(ToDoubleNullable<T> expression) {
+    doubleOrElseThrow(ToDoubleNullable<T> expression) {
         return new ToDoubleOrElseThrowImpl<>(expression);
     }
 
     /**
-     * Internal class used when calling {@code ToDoubleNullable.orElse(double)}.
+     * Internal class used when calling {@code ToDoubleNullable.doubleOrElse(double)}.
      *
      * @param <T>  the input entity type
      */
@@ -61,12 +61,12 @@ public final class OrElseThrowUtil {
      * @return            the non-nullable expression
      */
     public static <T> ToFloatOrThrow<T>
-    orElseThrow(ToFloatNullable<T> expression) {
+    floatOrElseThrow(ToFloatNullable<T> expression) {
         return new ToFloatOrElseThrowImpl<>(expression);
     }
 
     /**
-     * Internal class used when calling {@code ToFloatNullable.orElse(float)}.
+     * Internal class used when calling {@code ToFloatNullable.doubleOrElse(float)}.
      *
      * @param <T>  the input entity type
      */
@@ -93,12 +93,12 @@ public final class OrElseThrowUtil {
      * @return            the non-nullable expression
      */
     public static <T> ToLongOrThrow<T>
-    orElseThrow(ToLongNullable<T> expression) {
+    longOrElseThrow(ToLongNullable<T> expression) {
         return new ToLongOrElseThrowImpl<>(expression);
     }
 
     /**
-     * Internal class used when calling {@code ToLongNullable.orElse(long)}.
+     * Internal class used when calling {@code ToLongNullable.doubleOrElse(long)}.
      *
      * @param <T>  the input entity type
      */
@@ -125,12 +125,12 @@ public final class OrElseThrowUtil {
      * @return            the non-nullable expression
      */
     public static <T> ToIntOrThrow<T>
-    orElseThrow(ToIntNullable<T> expression) {
+    intOrElseThrow(ToIntNullable<T> expression) {
         return new ToIntOrElseThrowImpl<>(expression);
     }
 
     /**
-     * Internal class used when calling {@code ToIntNullable.orElse(int)}.
+     * Internal class used when calling {@code ToIntNullable.doubleOrElse(int)}.
      *
      * @param <T>  the input entity type
      */
@@ -157,12 +157,12 @@ public final class OrElseThrowUtil {
      * @return            the non-nullable expression
      */
     public static <T> ToShortOrThrow<T>
-    orElseThrow(ToShortNullable<T> expression) {
+    shortOrElseThrow(ToShortNullable<T> expression) {
         return new ToShortOrElseThrowImpl<>(expression);
     }
 
     /**
-     * Internal class used when calling {@code ToShortNullable.orElse(short)}.
+     * Internal class used when calling {@code ToShortNullable.doubleOrElse(short)}.
      *
      * @param <T>  the input entity type
      */
@@ -189,12 +189,12 @@ public final class OrElseThrowUtil {
      * @return            the non-nullable expression
      */
     public static <T> ToByteOrThrow<T>
-    orElseThrow(ToByteNullable<T> expression) {
+    byteOrElseThrow(ToByteNullable<T> expression) {
         return new ToByteOrElseThrowImpl<>(expression);
     }
 
     /**
-     * Internal class used when calling {@code ToByteNullable.orElse(byte)}.
+     * Internal class used when calling {@code ToByteNullable.doubleOrElse(byte)}.
      *
      * @param <T>  the input entity type
      */
@@ -221,12 +221,12 @@ public final class OrElseThrowUtil {
      * @return            the non-nullable expression
      */
     public static <T> ToCharOrThrow<T>
-    orElseThrow(ToCharNullable<T> expression) {
+    charOrElseThrow(ToCharNullable<T> expression) {
         return new ToCharOrElseThrowImpl<>(expression);
     }
 
     /**
-     * Internal class used when calling {@code ToCharNullable.orElse(char)}.
+     * Internal class used when calling {@code ToCharNullable.doubleOrElse(char)}.
      *
      * @param <T>  the input entity type
      */
@@ -253,12 +253,12 @@ public final class OrElseThrowUtil {
      * @return            the non-nullable expression
      */
     public static <T> ToBooleanOrThrow<T>
-    orElseThrow(ToBooleanNullable<T> expression) {
+    booleanOrElseThrow(ToBooleanNullable<T> expression) {
         return new ToBooleanOrElseThrowImpl<>(expression);
     }
 
     /**
-     * Internal class used when calling {@code ToBooleanNullable.orElse(boolean)}.
+     * Internal class used when calling {@code ToBooleanNullable.doubleOrElse(boolean)}.
      *
      * @param <T>  the input entity type
      */
@@ -285,12 +285,12 @@ public final class OrElseThrowUtil {
      * @return            the non-nullable expression
      */
     public static <T> ToStringOrThrow<T>
-    orElseThrow(ToStringNullable<T> expression) {
+    stringOrElseThrow(ToStringNullable<T> expression) {
         return new ToStringOrElseThrowImpl<>(expression);
     }
 
     /**
-     * Internal class used when calling {@code ToStringNullable.orElse(String)}.
+     * Internal class used when calling {@code ToStringNullable.doubleOrElse(String)}.
      *
      * @param <T>  the input entity type
      */
@@ -317,13 +317,13 @@ public final class OrElseThrowUtil {
      * @return            the non-nullable expression
      */
     public static <T> ToBigDecimalOrThrow<T>
-    orElseThrow(ToBigDecimalNullable<T> expression) {
+    bigDecimalOrElseThrow(ToBigDecimalNullable<T> expression) {
         return new ToBigDecimalOrElseThrowImpl<>(expression);
     }
 
     /**
      * Internal class used when calling 
-     * {@code ToBigDecimalNullable.orElse(BigDecimal)}.
+     * {@code ToBigDecimalNullable.doubleOrElse(BigDecimal)}.
      *
      * @param <T>  the input entity type
      */
@@ -351,12 +351,12 @@ public final class OrElseThrowUtil {
      * @return            the non-nullable expression
      */
     public static <T, E extends Enum<E>> ToEnumOrThrow<T, E>
-    orElseThrow(ToEnumNullable<T, E> expression) {
+    enumOrElseThrow(ToEnumNullable<T, E> expression) {
         return new ToEnumOrElseThrowImpl<>(expression);
     }
 
     /**
-     * Internal class used when calling {@code ToEnumNullable.orElse(Enum)}.
+     * Internal class used when calling {@code ToEnumNullable.doubleOrElse(Enum)}.
      *
      * @param <T>  the input entity type
      * @param <E>  the enum type

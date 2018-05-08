@@ -30,7 +30,7 @@ public final class SignUtil {
      * @param <T>  the input entity type
      * @return  sign of the result of the wrapped expression
      */
-    public static <T> ToByte<T> sign(ToBigDecimal<T> expression) {
+    public static <T> ToByte<T> signBigDecimal(ToBigDecimal<T> expression) {
         class BigDecimalSign extends AbstractSign<T, ToBigDecimal<T>> {
             private BigDecimalSign(ToBigDecimal<T> tToBigDecimal) {
                 super(tToBigDecimal);
@@ -54,7 +54,7 @@ public final class SignUtil {
      * @param <T>  the input entity type
      * @return  sign of the result of the wrapped expression
      */
-    public static <T> ToByte<T> sign(ToDouble<T> expression) {
+    public static <T> ToByte<T> signDouble(ToDouble<T> expression) {
         class DoubleSign extends AbstractSign<T, ToDouble<T>> {
             private DoubleSign(ToDouble<T> tToDouble) {
                 super(tToDouble);
@@ -79,7 +79,7 @@ public final class SignUtil {
      * @param <T>  the input entity type
      * @return  sign of the result of the wrapped expression
      */
-    public static <T> ToByte<T> sign(ToFloat<T> expression) {
+    public static <T> ToByte<T> signFloat(ToFloat<T> expression) {
         class FloatSign extends AbstractSign<T, ToFloat<T>> {
             private FloatSign(ToFloat<T> tToFloat) {
                 super(tToFloat);
@@ -104,7 +104,7 @@ public final class SignUtil {
      * @param <T>  the input entity type
      * @return  sign of the result of the wrapped expression
      */
-    public static <T> ToByte<T> sign(ToLong<T> expression) {
+    public static <T> ToByte<T> signLong(ToLong<T> expression) {
         class LongSign extends AbstractSign<T, ToLong<T>> {
             private LongSign(ToLong<T> tToLong) {
                 super(tToLong);
@@ -129,7 +129,7 @@ public final class SignUtil {
      * @param <T>  the input entity type
      * @return  sign of the result of the wrapped expression
      */
-    public static <T> ToByte<T> sign(ToInt<T> expression) {
+    public static <T> ToByte<T> signInt(ToInt<T> expression) {
         class IntSign extends AbstractSign<T, ToInt<T>> {
             private IntSign(ToInt<T> tToInt) {
                 super(tToInt);
@@ -154,7 +154,7 @@ public final class SignUtil {
      * @param <T>  the input entity type
      * @return  sign of the result of the wrapped expression
      */
-    public static <T> ToByte<T> sign(ToShort<T> expression) {
+    public static <T> ToByte<T> signShort(ToShort<T> expression) {
         class ShortSign extends AbstractSign<T, ToShort<T>> {
             private ShortSign(ToShort<T> tToShort) {
                 super(tToShort);
@@ -179,7 +179,7 @@ public final class SignUtil {
      * @param <T>  the input entity type
      * @return  sign of the result of the wrapped expression
      */
-    public static <T> ToByte<T> sign(ToByte<T> expression) {
+    public static <T> ToByte<T> signByte(ToByte<T> expression) {
         class ByteSign extends AbstractSign<T, ToByte<T>> {
             private ByteSign(ToByte<T> tToByte) {
                 super(tToByte);

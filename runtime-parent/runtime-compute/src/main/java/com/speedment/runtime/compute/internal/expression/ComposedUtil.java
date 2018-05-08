@@ -32,7 +32,7 @@ public final class ComposedUtil {
      * @return  the composed expression
      */
     public static <T, A> ToByte<T>
-    compose(Function<T, A> first, ToByte<A> second) {
+    composeToByte(Function<T, A> first, ToByte<A> second) {
         return new ComposedToByte<>(first, second);
     }
 
@@ -60,7 +60,7 @@ public final class ComposedUtil {
      * @return  the composed expression
      */
     public static <T, A> ToShort<T>
-    compose(Function<T, A> first, ToShort<A> second) {
+    composeToShort(Function<T, A> first, ToShort<A> second) {
         return new ComposedToShort<>(first, second);
     }
 
@@ -88,7 +88,7 @@ public final class ComposedUtil {
      * @return  the composed expression
      */
     public static <T, A> ToInt<T>
-    compose(Function<T, A> first, ToInt<A> second) {
+    composeToInt(Function<T, A> first, ToInt<A> second) {
         return new ComposedToInt<>(first, second);
     }
 
@@ -116,7 +116,7 @@ public final class ComposedUtil {
      * @return  the composed expression
      */
     public static <T, A> ToLong<T>
-    compose(Function<T, A> first, ToLong<A> second) {
+    composeToLong(Function<T, A> first, ToLong<A> second) {
         return new ComposedToLong<>(first, second);
     }
 
@@ -144,7 +144,7 @@ public final class ComposedUtil {
      * @return  the composed expression
      */
     public static <T, A> ToFloat<T>
-    compose(Function<T, A> first, ToFloat<A> second) {
+    composeToFloat(Function<T, A> first, ToFloat<A> second) {
         return new ComposedToFloat<>(first, second);
     }
 
@@ -172,7 +172,7 @@ public final class ComposedUtil {
      * @return  the composed expression
      */
     public static <T, A> ToDouble<T>
-    compose(Function<T, A> first, ToDouble<A> second) {
+    composeToDouble(Function<T, A> first, ToDouble<A> second) {
         return new ComposedToDouble<>(first, second);
     }
 
@@ -200,7 +200,7 @@ public final class ComposedUtil {
      * @return  the composed expression
      */
     public static <T, A> ToChar<T>
-    compose(Function<T, A> first, ToChar<A> second) {
+    composeToChar(Function<T, A> first, ToChar<A> second) {
         return new ComposedToChar<>(first, second);
     }
 
@@ -228,7 +228,7 @@ public final class ComposedUtil {
      * @return  the composed expression
      */
     public static <T, A> ToBoolean<T>
-    compose(Function<T, A> first, ToBoolean<A> second) {
+    composeToBoolean(Function<T, A> first, ToBoolean<A> second) {
         return new ComposedToBoolean<>(first, second);
     }
 
@@ -256,7 +256,7 @@ public final class ComposedUtil {
      * @return  the composed expression
      */
     public static <T, A> ToString<T>
-    compose(Function<T, A> first, ToString<A> second) {
+    composeToString(Function<T, A> first, ToString<A> second) {
         return new ComposedToString<>(first, second);
     }
 
@@ -284,7 +284,7 @@ public final class ComposedUtil {
      * @return  the composed expression
      */
     public static <T, A> ToBigDecimal<T>
-    compose(Function<T, A> first, ToBigDecimal<A> second) {
+    composeToBigDecimal(Function<T, A> first, ToBigDecimal<A> second) {
         return new ComposedToBigDecimal<>(first, second);
     }
 
@@ -313,7 +313,7 @@ public final class ComposedUtil {
      * @return  the composed expression
      */
     public static <T, A, E extends Enum<E>> ToEnum<T, E>
-    compose(Function<T, A> first, ToEnum<A, E> second) {
+    composeToEnum(Function<T, A> first, ToEnum<A, E> second) {
         return new ComposedToEnum<>(first, second);
     }
 

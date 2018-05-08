@@ -169,7 +169,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByte<T> abs(ToByte<T> expression) {
-        return AbsUtil.abs(expression);
+        return AbsUtil.absByte(expression);
     }
 
     /**
@@ -181,7 +181,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToShort<T> abs(ToShort<T> expression) {
-        return AbsUtil.abs(expression);
+        return AbsUtil.absShort(expression);
     }
 
     /**
@@ -193,7 +193,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToInt<T> abs(ToInt<T> expression) {
-        return AbsUtil.abs(expression);
+        return AbsUtil.absInt(expression);
     }
 
     /**
@@ -205,7 +205,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToLong<T> abs(ToLong<T> expression) {
-        return AbsUtil.abs(expression);
+        return AbsUtil.absLong(expression);
     }
 
     /**
@@ -217,7 +217,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToFloat<T> abs(ToFloat<T> expression) {
-        return AbsUtil.abs(expression);
+        return AbsUtil.absFloat(expression);
     }
 
     /**
@@ -229,7 +229,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> abs(ToDouble<T> expression) {
-        return AbsUtil.abs(expression);
+        return AbsUtil.absDouble(expression);
     }
 
     /**
@@ -243,7 +243,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByteNullable<T> absOrNull(ToByteNullable<T> expression) {
-        return AbsUtil.absOrNull(expression);
+        return AbsUtil.absByteOrNull(expression);
     }
 
     /**
@@ -257,7 +257,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToShortNullable<T> absOrNull(ToShortNullable<T> expression) {
-        return AbsUtil.absOrNull(expression);
+        return AbsUtil.absShortOrNull(expression);
     }
 
     /**
@@ -271,7 +271,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToIntNullable<T> absOrNull(ToIntNullable<T> expression) {
-        return AbsUtil.absOrNull(expression);
+        return AbsUtil.absIntOrNull(expression);
     }
 
     /**
@@ -285,7 +285,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToLongNullable<T> absOrNull(ToLongNullable<T> expression) {
-        return AbsUtil.absOrNull(expression);
+        return AbsUtil.absLongOrNull(expression);
     }
 
     /**
@@ -299,7 +299,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToFloatNullable<T> absOrNull(ToFloatNullable<T> expression) {
-        return AbsUtil.absOrNull(expression);
+        return AbsUtil.absFloatOrNull(expression);
     }
 
     /**
@@ -313,7 +313,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDoubleNullable<T> absOrNull(ToDoubleNullable<T> expression) {
-        return AbsUtil.absOrNull(expression);
+        return AbsUtil.absDoubleOrNull(expression);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -331,7 +331,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByte<T> sign(ToByte<T> expression) {
-        return SignUtil.sign(expression);
+        return SignUtil.signByte(expression);
     }
 
     /**
@@ -345,7 +345,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByte<T> sign(ToShort<T> expression) {
-        return SignUtil.sign(expression);
+        return SignUtil.signShort(expression);
     }
 
     /**
@@ -359,7 +359,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByte<T> sign(ToInt<T> expression) {
-        return SignUtil.sign(expression);
+        return SignUtil.signInt(expression);
     }
 
     /**
@@ -373,7 +373,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByte<T> sign(ToLong<T> expression) {
-        return SignUtil.sign(expression);
+        return SignUtil.signLong(expression);
     }
 
     /**
@@ -387,7 +387,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByte<T> sign(ToFloat<T> expression) {
-        return SignUtil.sign(expression);
+        return SignUtil.signFloat(expression);
     }
 
     /**
@@ -401,7 +401,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByte<T> sign(ToDouble<T> expression) {
-        return SignUtil.sign(expression);
+        return SignUtil.signDouble(expression);
     }
 
     /**
@@ -415,7 +415,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByte<T> sign(ToBigDecimal<T> expression) {
-        return SignUtil.sign(expression);
+        return SignUtil.signBigDecimal(expression);
     }
 
     /**
@@ -432,7 +432,7 @@ public final class Expressions {
      */
     public static <T> ToByteNullable<T> signOrNull(ToByteNullable<T> expression) {
         return new ToByteNullableImpl<>(
-            SignUtil.sign(expression.orThrow()),
+            SignUtil.signByte(expression.orThrow()),
             expression.isNull());
     }
 
@@ -450,7 +450,7 @@ public final class Expressions {
      */
     public static <T> ToByteNullable<T> signOrNull(ToShortNullable<T> expression) {
         return new ToByteNullableImpl<>(
-            SignUtil.sign(expression.orThrow()),
+            SignUtil.signShort(expression.orThrow()),
             expression.isNull());
     }
 
@@ -468,7 +468,7 @@ public final class Expressions {
      */
     public static <T> ToByteNullable<T> signOrNull(ToIntNullable<T> expression) {
         return new ToByteNullableImpl<>(
-            SignUtil.sign(expression.orThrow()),
+            SignUtil.signInt(expression.orThrow()),
             expression.isNull());
     }
 
@@ -486,7 +486,7 @@ public final class Expressions {
      */
     public static <T> ToByteNullable<T> signOrNull(ToLongNullable<T> expression) {
         return new ToByteNullableImpl<>(
-            SignUtil.sign(expression.orThrow()),
+            SignUtil.signLong(expression.orThrow()),
             expression.isNull());
     }
 
@@ -504,7 +504,7 @@ public final class Expressions {
      */
     public static <T> ToByteNullable<T> signOrNull(ToFloatNullable<T> expression) {
         return new ToByteNullableImpl<>(
-            SignUtil.sign(expression.orThrow()),
+            SignUtil.signFloat(expression.orThrow()),
             expression.isNull());
     }
 
@@ -522,7 +522,7 @@ public final class Expressions {
      */
     public static <T> ToByteNullable<T> signOrNull(ToDoubleNullable<T> expression) {
         return new ToByteNullableImpl<>(
-            SignUtil.sign(expression.orThrow()),
+            SignUtil.signDouble(expression.orThrow()),
             expression.isNull());
     }
 
@@ -539,7 +539,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> sqrt(ToByte<T> expression) {
-        return SqrtUtil.sqrt(expression);
+        return SqrtUtil.sqrtByte(expression);
     }
 
     /**
@@ -551,7 +551,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> sqrt(ToShort<T> expression) {
-        return SqrtUtil.sqrt(expression);
+        return SqrtUtil.sqrtShort(expression);
     }
 
     /**
@@ -563,7 +563,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> sqrt(ToInt<T> expression) {
-        return SqrtUtil.sqrt(expression);
+        return SqrtUtil.sqrtInt(expression);
     }
 
     /**
@@ -575,7 +575,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> sqrt(ToLong<T> expression) {
-        return SqrtUtil.sqrt(expression);
+        return SqrtUtil.sqrtLong(expression);
     }
 
     /**
@@ -587,7 +587,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> sqrt(ToFloat<T> expression) {
-        return SqrtUtil.sqrt(expression);
+        return SqrtUtil.sqrtFloat(expression);
     }
 
     /**
@@ -599,7 +599,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> sqrt(ToDouble<T> expression) {
-        return SqrtUtil.sqrt(expression);
+        return SqrtUtil.sqrtDouble(expression);
     }
 
     /**
@@ -614,7 +614,7 @@ public final class Expressions {
      */
     public static <T> ToDoubleNullable<T> sqrtOrNull(ToByteNullable<T> expression) {
         return new ToDoubleNullableImpl<>(
-            SqrtUtil.sqrt(expression.orThrow()),
+            SqrtUtil.sqrtByte(expression.orThrow()),
             expression.isNull()
         );
     }
@@ -631,7 +631,7 @@ public final class Expressions {
      */
     public static <T> ToDoubleNullable<T> sqrtOrNull(ToShortNullable<T> expression) {
         return new ToDoubleNullableImpl<>(
-            SqrtUtil.sqrt(expression.orThrow()),
+            SqrtUtil.sqrtShort(expression.orThrow()),
             expression.isNull()
         );
     }
@@ -648,7 +648,7 @@ public final class Expressions {
      */
     public static <T> ToDoubleNullable<T> sqrtOrNull(ToIntNullable<T> expression) {
         return new ToDoubleNullableImpl<>(
-            SqrtUtil.sqrt(expression.orThrow()),
+            SqrtUtil.sqrtInt(expression.orThrow()),
             expression.isNull()
         );
     }
@@ -665,7 +665,7 @@ public final class Expressions {
      */
     public static <T> ToDoubleNullable<T> sqrtOrNull(ToLongNullable<T> expression) {
         return new ToDoubleNullableImpl<>(
-            SqrtUtil.sqrt(expression.orThrow()),
+            SqrtUtil.sqrtLong(expression.orThrow()),
             expression.isNull()
         );
     }
@@ -682,7 +682,7 @@ public final class Expressions {
      */
     public static <T> ToDoubleNullable<T> sqrtOrNull(ToFloatNullable<T> expression) {
         return new ToDoubleNullableImpl<>(
-            SqrtUtil.sqrt(expression.orThrow()),
+            SqrtUtil.sqrtFloat(expression.orThrow()),
             expression.isNull()
         );
     }
@@ -699,7 +699,7 @@ public final class Expressions {
      */
     public static <T> ToDoubleNullable<T> sqrtOrNull(ToDoubleNullable<T> expression) {
         return new ToDoubleNullableImpl<>(
-            SqrtUtil.sqrt(expression.orThrow()),
+            SqrtUtil.sqrtDouble(expression.orThrow()),
             expression.isNull()
         );
     }
@@ -718,7 +718,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToByte<T> expression, int power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.bytePowInt(expression, power);
     }
 
     /**
@@ -731,7 +731,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToByte<T> expression, double power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.bytePowDouble(expression, power);
     }
 
     /**
@@ -745,7 +745,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToByte<T> expression, ToInt<T> power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.bytePowInt(expression, power);
     }
 
     /**
@@ -759,7 +759,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToByte<T> expression, ToDouble<T> power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.bytePowDouble(expression, power);
     }
 
     /**
@@ -774,7 +774,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToByteNullable<T> expression, int power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.bytePowInt(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -791,7 +791,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToByteNullable<T> expression, double power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.bytePowDouble(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -809,7 +809,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToByteNullable<T> expression, ToInt<T> power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.bytePowInt(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -827,7 +827,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToByteNullable<T> expression, ToDouble<T> power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.bytePowDouble(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -842,7 +842,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToShort<T> expression, int power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.shortPowInt(expression, power);
     }
 
     /**
@@ -855,7 +855,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToShort<T> expression, double power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.shortPowDouble(expression, power);
     }
 
     /**
@@ -869,7 +869,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToShort<T> expression, ToInt<T> power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.shortPowInt(expression, power);
     }
 
     /**
@@ -883,7 +883,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToShort<T> expression, ToDouble<T> power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.shortPowDouble(expression, power);
     }
 
     /**
@@ -898,7 +898,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToShortNullable<T> expression, int power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.shortPowInt(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -915,7 +915,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToShortNullable<T> expression, double power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.shortPowDouble(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -933,7 +933,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToShortNullable<T> expression, ToInt<T> power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.shortPowInt(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -951,7 +951,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToShortNullable<T> expression, ToDouble<T> power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.shortPowDouble(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -966,7 +966,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToInt<T> expression, int power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.intPowInt(expression, power);
     }
 
     /**
@@ -979,7 +979,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToInt<T> expression, double power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.intPowDouble(expression, power);
     }
 
     /**
@@ -993,7 +993,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToInt<T> expression, ToInt<T> power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.intPowInt(expression, power);
     }
 
     /**
@@ -1007,7 +1007,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToInt<T> expression, ToDouble<T> power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.intPowDouble(expression, power);
     }
 
     /**
@@ -1022,7 +1022,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToIntNullable<T> expression, int power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.intPowInt(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -1039,7 +1039,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToIntNullable<T> expression, double power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.intPowDouble(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -1057,7 +1057,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToIntNullable<T> expression, ToInt<T> power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.intPowInt(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -1075,7 +1075,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToIntNullable<T> expression, ToDouble<T> power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.intPowDouble(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -1090,7 +1090,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToLong<T> expression, int power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.longPowInt(expression, power);
     }
 
     /**
@@ -1103,7 +1103,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToLong<T> expression, double power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.longPowDouble(expression, power);
     }
 
     /**
@@ -1117,7 +1117,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToLong<T> expression, ToInt<T> power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.longPowInt(expression, power);
     }
 
     /**
@@ -1131,7 +1131,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToLong<T> expression, ToDouble<T> power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.longPowDouble(expression, power);
     }
 
     /**
@@ -1146,7 +1146,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToLongNullable<T> expression, int power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.longPowInt(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -1163,7 +1163,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToLongNullable<T> expression, double power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.longPowDouble(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -1181,7 +1181,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToLongNullable<T> expression, ToInt<T> power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.longPowInt(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -1199,7 +1199,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToLongNullable<T> expression, ToDouble<T> power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.longPowDouble(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -1214,7 +1214,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToFloat<T> expression, int power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.floatPowInt(expression, power);
     }
 
     /**
@@ -1227,7 +1227,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToFloat<T> expression, double power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.floatPowDouble(expression, power);
     }
 
     /**
@@ -1241,7 +1241,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToFloat<T> expression, ToInt<T> power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.floatPowInt(expression, power);
     }
 
     /**
@@ -1255,7 +1255,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToFloat<T> expression, ToDouble<T> power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.floatPowDouble(expression, power);
     }
 
     /**
@@ -1270,7 +1270,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToFloatNullable<T> expression, int power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.floatPowInt(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -1287,7 +1287,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToFloatNullable<T> expression, double power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.floatPowDouble(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -1305,7 +1305,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToFloatNullable<T> expression, ToInt<T> power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.floatPowInt(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -1323,7 +1323,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToFloatNullable<T> expression, ToDouble<T> power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.floatPowDouble(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -1338,7 +1338,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToDouble<T> expression, int power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.doublePowInt(expression, power);
     }
 
     /**
@@ -1351,7 +1351,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToDouble<T> expression, double power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.doublePowDouble(expression, power);
     }
 
     /**
@@ -1365,7 +1365,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToDouble<T> expression, ToInt<T> power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.doublePowInt(expression, power);
     }
 
     /**
@@ -1379,7 +1379,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> pow(ToDouble<T> expression, ToDouble<T> power) {
-        return PowUtil.pow(expression, power);
+        return PowUtil.doublePowDouble(expression, power);
     }
 
     /**
@@ -1394,7 +1394,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToDoubleNullable<T> expression, int power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.doublePowInt(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -1411,7 +1411,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToDoubleNullable<T> expression, double power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.doublePowDouble(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -1429,7 +1429,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToDoubleNullable<T> expression, ToInt<T> power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.doublePowInt(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -1447,7 +1447,7 @@ public final class Expressions {
     public static <T> ToDoubleNullable<T>
     powOrNull(ToDoubleNullable<T> expression, ToDouble<T> power) {
         return new ToDoubleNullableImpl<>(
-            PowUtil.pow(expression.orThrow(), power),
+            PowUtil.doublePowDouble(expression.orThrow(), power),
             expression.isNull()
         );
     }
@@ -1465,7 +1465,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByte<T> negate(ToByte<T> expression) {
-        return NegateUtil.negate(expression);
+        return NegateUtil.negateByte(expression);
     }
 
     /**
@@ -1477,7 +1477,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToShort<T> negate(ToShort<T> expression) {
-        return NegateUtil.negate(expression);
+        return NegateUtil.negateShort(expression);
     }
 
     /**
@@ -1489,7 +1489,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToInt<T> negate(ToInt<T> expression) {
-        return NegateUtil.negate(expression);
+        return NegateUtil.negateInt(expression);
     }
 
     /**
@@ -1501,7 +1501,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToLong<T> negate(ToLong<T> expression) {
-        return NegateUtil.negate(expression);
+        return NegateUtil.negateLong(expression);
     }
 
     /**
@@ -1513,7 +1513,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToFloat<T> negate(ToFloat<T> expression) {
-        return NegateUtil.negate(expression);
+        return NegateUtil.negateFloat(expression);
     }
 
     /**
@@ -1525,7 +1525,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDouble<T> negate(ToDouble<T> expression) {
-        return NegateUtil.negate(expression);
+        return NegateUtil.negateDouble(expression);
     }
 
     /**
@@ -1537,7 +1537,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToBigDecimal<T> negate(ToBigDecimal<T> expression) {
-        return NegateUtil.negate(expression);
+        return NegateUtil.negateBigDecimal(expression);
     }
 
 
@@ -1550,7 +1550,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToBoolean<T> negate(ToBoolean<T> expression) {
-        return NegateUtil.negate(expression);
+        return NegateUtil.negateBoolean(expression);
     }
 
     /**
@@ -1563,7 +1563,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToByteNullable<T> negateOrNull(ToByteNullable<T> expression) {
-        return NegateUtil.negateOrNull(expression);
+        return NegateUtil.negateByteOrNull(expression);
     }
 
     /**
@@ -1576,7 +1576,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToShortNullable<T> negateOrNull(ToShortNullable<T> expression) {
-        return NegateUtil.negateOrNull(expression);
+        return NegateUtil.negateShortOrNull(expression);
     }
 
     /**
@@ -1589,7 +1589,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToIntNullable<T> negateOrNull(ToIntNullable<T> expression) {
-        return NegateUtil.negateOrNull(expression);
+        return NegateUtil.negateIntOrNull(expression);
     }
 
     /**
@@ -1602,7 +1602,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToLongNullable<T> negateOrNull(ToLongNullable<T> expression) {
-        return NegateUtil.negateOrNull(expression);
+        return NegateUtil.negateLongOrNull(expression);
     }
 
     /**
@@ -1615,7 +1615,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToFloatNullable<T> negateOrNull(ToFloatNullable<T> expression) {
-        return NegateUtil.negateOrNull(expression);
+        return NegateUtil.negateFloatOrNull(expression);
     }
 
     /**
@@ -1628,7 +1628,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToDoubleNullable<T> negateOrNull(ToDoubleNullable<T> expression) {
-        return NegateUtil.negateOrNull(expression);
+        return NegateUtil.negateDoubleOrNull(expression);
     }
 
     /**
@@ -1641,7 +1641,7 @@ public final class Expressions {
      * @return            the new expression
      */
     public static <T> ToBooleanNullable<T> negateOrNull(ToBooleanNullable<T> expression) {
-        return NegateUtil.negateOrNull(expression);
+        return NegateUtil.negateBooleanOrNull(expression);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -1658,7 +1658,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToShort<T> plus(ToByte<T> first, byte second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.bytePlusByte(first, second);
     }
 
     /**
@@ -1671,7 +1671,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> plus(ToByte<T> first, int second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.bytePlusInt(first, second);
     }
 
     /**
@@ -1684,7 +1684,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> plus(ToByte<T> first, long second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.bytePlusLong(first, second);
     }
 
     /**
@@ -1697,7 +1697,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToShort<T> plus(ToByte<T> first, ToByte<T> second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.bytePlusByte(first, second);
     }
 
     /**
@@ -1710,7 +1710,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> plus(ToShort<T> first, byte second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.shortPlusByte(first, second);
     }
 
     /**
@@ -1723,7 +1723,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> plus(ToShort<T> first, int second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.shortPlusInt(first, second);
     }
 
     /**
@@ -1736,7 +1736,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> plus(ToShort<T> first, long second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.shortPlusLong(first, second);
     }
 
     /**
@@ -1749,7 +1749,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToShort<T> plus(ToShort<T> first, ToShort<T> second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.shortPlusShort(first, second);
     }
 
     /**
@@ -1762,7 +1762,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> plus(ToInt<T> first, byte second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.intPlusByte(first, second);
     }
 
     /**
@@ -1775,7 +1775,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> plus(ToInt<T> first, int second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.intPlusInt(first, second);
     }
 
     /**
@@ -1788,7 +1788,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> plus(ToInt<T> first, long second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.intPlusLong(first, second);
     }
 
     /**
@@ -1801,7 +1801,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> plus(ToInt<T> first, ToByte<T> second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.intPlusByte(first, second);
     }
 
     /**
@@ -1814,7 +1814,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> plus(ToInt<T> first, ToInt<T> second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.intPlusInt(first, second);
     }
 
     /**
@@ -1827,7 +1827,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> plus(ToLong<T> first, byte second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.longPlusByte(first, second);
     }
 
     /**
@@ -1840,7 +1840,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> plus(ToLong<T> first, int second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.longPlusInt(first, second);
     }
 
     /**
@@ -1853,7 +1853,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> plus(ToLong<T> first, long second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.longPlusLong(first, second);
     }
 
     /**
@@ -1866,7 +1866,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> plus(ToLong<T> first, ToInt<T> second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.longPlusInt(first, second);
     }
 
     /**
@@ -1879,7 +1879,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> plus(ToLong<T> first, ToLong<T> second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.longPlusLong(first, second);
     }
 
     /**
@@ -1892,7 +1892,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToFloat<T> plus(ToFloat<T> first, int second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.floatPlusInt(first, second);
     }
 
     /**
@@ -1905,7 +1905,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> plus(ToFloat<T> first, long second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.floatPlusLong(first, second);
     }
 
     /**
@@ -1918,7 +1918,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToFloat<T> plus(ToFloat<T> first, float second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.floatPlusFloat(first, second);
     }
 
     /**
@@ -1931,7 +1931,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToFloat<T> plus(ToFloat<T> first, ToInt<T> second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.floatPlusInt(first, second);
     }
 
     /**
@@ -1944,7 +1944,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> plus(ToFloat<T> first, ToLong<T> second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.floatPlusLong(first, second);
     }
 
     /**
@@ -1957,7 +1957,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToFloat<T> plus(ToFloat<T> first, ToFloat<T> second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.floatPlusFloat(first, second);
     }
 
     /**
@@ -1970,7 +1970,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> plus(ToDouble<T> first, int second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.doublePlusInt(first, second);
     }
 
     /**
@@ -1983,7 +1983,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> plus(ToDouble<T> first, long second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.doublePlusLong(first, second);
     }
 
     /**
@@ -1996,7 +1996,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> plus(ToDouble<T> first, double second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.doublePlusDouble(first, second);
     }
 
     /**
@@ -2009,7 +2009,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> plus(ToDouble<T> first, ToInt<T> second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.doublePlusInt(first, second);
     }
 
     /**
@@ -2022,7 +2022,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> plus(ToDouble<T> first, ToLong<T> second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.doublePlusLong(first, second);
     }
 
     /**
@@ -2035,7 +2035,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> plus(ToDouble<T> first, ToDouble<T> second) {
-        return PlusUtil.plus(first, second);
+        return PlusUtil.doublePlusDouble(first, second);
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -2052,7 +2052,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToShort<T> minus(ToByte<T> first, byte second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.byteMinusByte(first, second);
     }
 
     /**
@@ -2065,7 +2065,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> minus(ToByte<T> first, int second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.byteMinusInt(first, second);
     }
 
     /**
@@ -2078,7 +2078,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> minus(ToByte<T> first, long second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.byteMinusLong(first, second);
     }
 
     /**
@@ -2091,7 +2091,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToShort<T> minus(ToByte<T> first, ToByte<T> second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.byteMinusByte(first, second);
     }
 
     /**
@@ -2104,7 +2104,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> minus(ToShort<T> first, byte second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.shortMinusByte(first, second);
     }
 
     /**
@@ -2117,7 +2117,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> minus(ToShort<T> first, int second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.shortMinusInt(first, second);
     }
 
     /**
@@ -2130,7 +2130,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> minus(ToShort<T> first, long second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.shortMinusLong(first, second);
     }
 
     /**
@@ -2143,7 +2143,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToShort<T> minus(ToShort<T> first, ToShort<T> second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.shortMinusShort(first, second);
     }
 
     /**
@@ -2156,7 +2156,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> minus(ToInt<T> first, byte second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.intMinusByte(first, second);
     }
 
     /**
@@ -2169,7 +2169,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> minus(ToInt<T> first, int second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.intMinusInt(first, second);
     }
 
     /**
@@ -2182,7 +2182,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> minus(ToInt<T> first, long second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.intMinusLong(first, second);
     }
 
     /**
@@ -2195,7 +2195,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> minus(ToInt<T> first, ToByte<T> second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.intMinusByte(first, second);
     }
 
     /**
@@ -2208,7 +2208,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> minus(ToInt<T> first, ToInt<T> second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.intMinusInt(first, second);
     }
 
     /**
@@ -2221,7 +2221,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> minus(ToLong<T> first, byte second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.longMinusByte(first, second);
     }
 
     /**
@@ -2234,7 +2234,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> minus(ToLong<T> first, int second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.longMinusInt(first, second);
     }
 
     /**
@@ -2247,7 +2247,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> minus(ToLong<T> first, long second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.longMinusLong(first, second);
     }
 
     /**
@@ -2260,7 +2260,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> minus(ToLong<T> first, ToInt<T> second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.longMinusInt(first, second);
     }
 
     /**
@@ -2273,7 +2273,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> minus(ToLong<T> first, ToLong<T> second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.longMinusLong(first, second);
     }
 
     /**
@@ -2286,7 +2286,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToFloat<T> minus(ToFloat<T> first, int second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.floatMinusInt(first, second);
     }
 
     /**
@@ -2299,7 +2299,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> minus(ToFloat<T> first, long second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.floatMinusLong(first, second);
     }
 
     /**
@@ -2312,7 +2312,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToFloat<T> minus(ToFloat<T> first, float second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.floatMinusFloat(first, second);
     }
 
     /**
@@ -2325,7 +2325,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToFloat<T> minus(ToFloat<T> first, ToInt<T> second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.floatMinusInt(first, second);
     }
 
     /**
@@ -2338,7 +2338,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> minus(ToFloat<T> first, ToLong<T> second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.floatMinusLong(first, second);
     }
 
     /**
@@ -2351,7 +2351,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToFloat<T> minus(ToFloat<T> first, ToFloat<T> second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.floatMinusFloat(first, second);
     }
 
     /**
@@ -2364,7 +2364,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> minus(ToDouble<T> first, int second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.doubleMinusInt(first, second);
     }
 
     /**
@@ -2377,7 +2377,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> minus(ToDouble<T> first, long second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.doubleMinusLong(first, second);
     }
 
     /**
@@ -2390,7 +2390,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> minus(ToDouble<T> first, double second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.doubleMinusDouble(first, second);
     }
 
     /**
@@ -2403,7 +2403,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> minus(ToDouble<T> first, ToInt<T> second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.doubleMinusInt(first, second);
     }
 
     /**
@@ -2416,7 +2416,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> minus(ToDouble<T> first, ToLong<T> second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.doubleMinusLong(first, second);
     }
 
     /**
@@ -2429,7 +2429,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> minus(ToDouble<T> first, ToDouble<T> second) {
-        return MinusUtil.minus(first, second);
+        return MinusUtil.doubleMinusDouble(first, second);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -2446,7 +2446,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToByte<T> first, byte second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.byteMultiplyByte(first, second);
     }
 
     /**
@@ -2459,7 +2459,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToByte<T> first, int second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.byteMultiplyInt(first, second);
     }
 
     /**
@@ -2472,7 +2472,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> multiply(ToByte<T> first, long second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.byteMultiplyLong(first, second);
     }
 
     /**
@@ -2485,7 +2485,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToByte<T> first, ToByte<T> second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.byteMultiplyByte(first, second);
     }
 
     /**
@@ -2498,7 +2498,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToShort<T> first, byte second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.shortMultiplyByte(first, second);
     }
 
     /**
@@ -2511,7 +2511,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToShort<T> first, int second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.shortMultiplyInt(first, second);
     }
 
     /**
@@ -2524,7 +2524,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> multiply(ToShort<T> first, long second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.shortMultiplyLong(first, second);
     }
 
     /**
@@ -2537,7 +2537,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToShort<T> first, ToShort<T> second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.shortMultiplyShort(first, second);
     }
 
     /**
@@ -2550,7 +2550,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToInt<T> first, byte second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.intMultiplyByte(first, second);
     }
 
     /**
@@ -2563,7 +2563,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToInt<T> first, int second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.intMultiplyInt(first, second);
     }
 
     /**
@@ -2576,7 +2576,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> multiply(ToInt<T> first, long second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.intMultiplyLong(first, second);
     }
 
     /**
@@ -2589,7 +2589,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToInt<T> first, ToByte<T> second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.intMultiplyByte(first, second);
     }
 
     /**
@@ -2602,7 +2602,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToInt<T> multiply(ToInt<T> first, ToInt<T> second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.intMultiplyInt(first, second);
     }
 
     /**
@@ -2615,7 +2615,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> multiply(ToLong<T> first, byte second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.longMultiplyByte(first, second);
     }
 
     /**
@@ -2628,7 +2628,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> multiply(ToLong<T> first, int second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.longMultiplyInt(first, second);
     }
 
     /**
@@ -2641,7 +2641,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> multiply(ToLong<T> first, long second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.longMultiplyLong(first, second);
     }
 
     /**
@@ -2654,7 +2654,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> multiply(ToLong<T> first, ToInt<T> second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.longMultiplyInt(first, second);
     }
 
     /**
@@ -2667,7 +2667,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToLong<T> multiply(ToLong<T> first, ToLong<T> second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.longMultiplyLong(first, second);
     }
 
     /**
@@ -2680,7 +2680,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToFloat<T> multiply(ToFloat<T> first, int second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.floatMultiplyInt(first, second);
     }
 
     /**
@@ -2693,7 +2693,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> multiply(ToFloat<T> first, long second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.floatMultiplyLong(first, second);
     }
 
     /**
@@ -2706,7 +2706,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToFloat<T> multiply(ToFloat<T> first, float second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.floatMultiplyFloat(first, second);
     }
 
     /**
@@ -2719,7 +2719,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToFloat<T> multiply(ToFloat<T> first, ToInt<T> second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.floatMultiplyInt(first, second);
     }
 
     /**
@@ -2732,7 +2732,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> multiply(ToFloat<T> first, ToLong<T> second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.floatMultiplyLong(first, second);
     }
 
     /**
@@ -2745,7 +2745,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToFloat<T> multiply(ToFloat<T> first, ToFloat<T> second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.floatMultiplyFloat(first, second);
     }
 
     /**
@@ -2758,7 +2758,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> multiply(ToDouble<T> first, int second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.doubleMultiplyInt(first, second);
     }
 
     /**
@@ -2771,7 +2771,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> multiply(ToDouble<T> first, long second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.doubleMultiplyLong(first, second);
     }
 
     /**
@@ -2784,7 +2784,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> multiply(ToDouble<T> first, double second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.doubleMultiplyDouble(first, second);
     }
 
     /**
@@ -2797,7 +2797,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> multiply(ToDouble<T> first, ToInt<T> second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.doubleMultiplyInt(first, second);
     }
 
     /**
@@ -2810,7 +2810,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> multiply(ToDouble<T> first, ToLong<T> second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.doubleMultiplyLong(first, second);
     }
 
     /**
@@ -2823,7 +2823,7 @@ public final class Expressions {
      * @return        the new expression
      */
     public static <T> ToDouble<T> multiply(ToDouble<T> first, ToDouble<T> second) {
-        return MultiplyUtil.multiply(first, second);
+        return MultiplyUtil.doubleMultiplyDouble(first, second);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -2841,7 +2841,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToByte<T> first, int second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.byteDivideInt(first, second);
     }
 
     /**
@@ -2855,7 +2855,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToByte<T> first, long second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.byteDivideLong(first, second);
     }
 
     /**
@@ -2869,7 +2869,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToByte<T> first, double second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.byteDivideDouble(first, second);
     }
 
     /**
@@ -2883,7 +2883,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToByte<T> first, ToInt<T> second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.byteDivideInt(first, second);
     }
 
     /**
@@ -2897,7 +2897,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToByte<T> first, ToLong<T> second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.byteDivideLong(first, second);
     }
 
     /**
@@ -2911,7 +2911,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToByte<T> first, ToDouble<T> second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.byteDivideDouble(first, second);
     }
 
     /**
@@ -2925,7 +2925,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToShort<T> first, int second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.shortDivideInt(first, second);
     }
 
     /**
@@ -2939,7 +2939,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToShort<T> first, long second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.shortDivideLong(first, second);
     }
 
     /**
@@ -2953,7 +2953,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToShort<T> first, double second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.shortDivideDouble(first, second);
     }
 
     /**
@@ -2967,7 +2967,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToShort<T> first, ToInt<T> second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.shortDivideInt(first, second);
     }
 
     /**
@@ -2981,7 +2981,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToShort<T> first, ToLong<T> second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.shortDivideLong(first, second);
     }
 
     /**
@@ -2995,7 +2995,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToShort<T> first, ToDouble<T> second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.shortDivideDouble(first, second);
     }
 
     /**
@@ -3009,7 +3009,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToInt<T> first, int second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.intDivideInt(first, second);
     }
 
     /**
@@ -3023,7 +3023,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToInt<T> first, long second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.intDivideLong(first, second);
     }
 
     /**
@@ -3037,7 +3037,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToInt<T> first, double second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.intDivideDouble(first, second);
     }
 
     /**
@@ -3051,7 +3051,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToInt<T> first, ToInt<T> second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.intDivideInt(first, second);
     }
 
     /**
@@ -3065,7 +3065,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToInt<T> first, ToLong<T> second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.intDivideLong(first, second);
     }
 
     /**
@@ -3079,7 +3079,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToInt<T> first, ToDouble<T> second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.intDivideDouble(first, second);
     }
 
     /**
@@ -3093,7 +3093,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToLong<T> first, int second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.longDivideInt(first, second);
     }
 
     /**
@@ -3107,7 +3107,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToLong<T> first, long second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.longDivideLong(first, second);
     }
 
     /**
@@ -3121,7 +3121,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToLong<T> first, double second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.longDivideDouble(first, second);
     }
 
     /**
@@ -3135,7 +3135,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToLong<T> first, ToInt<T> second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.longDivideInt(first, second);
     }
 
     /**
@@ -3149,7 +3149,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToLong<T> first, ToLong<T> second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.longDivideLong(first, second);
     }
 
     /**
@@ -3163,7 +3163,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToLong<T> first, ToDouble<T> second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.longDivideDouble(first, second);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -3181,7 +3181,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToFloat<T> first, int second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.floatDivideInt(first, second);
     }
 
     /**
@@ -3195,7 +3195,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToFloat<T> first, long second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.floatDivideLong(first, second);
     }
 
     /**
@@ -3209,7 +3209,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToFloat<T> first, double second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.floatDivideDouble(first, second);
     }
 
     /**
@@ -3223,7 +3223,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToFloat<T> first, ToInt<T> second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.floatDivideInt(first, second);
     }
 
     /**
@@ -3237,7 +3237,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToFloat<T> first, ToLong<T> second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.floatDivideLong(first, second);
     }
 
     /**
@@ -3251,7 +3251,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToFloat<T> first, ToDouble<T> second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.floatDivideDouble(first, second);
     }
 
     /**
@@ -3265,7 +3265,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToDouble<T> first, int second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.doubleDivideInt(first, second);
     }
 
     /**
@@ -3279,7 +3279,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToDouble<T> first, long second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.doubleDivideLong(first, second);
     }
 
     /**
@@ -3293,7 +3293,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToDouble<T> first, double second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.doubleDivideDouble(first, second);
     }
 
     /**
@@ -3307,7 +3307,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToDouble<T> first, ToInt<T> second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.doubleDivideInt(first, second);
     }
 
     /**
@@ -3321,7 +3321,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToDouble<T> first, ToLong<T> second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.doubleDivideLong(first, second);
     }
 
     /**
@@ -3335,7 +3335,7 @@ public final class Expressions {
      * @return        the division expression
      */
     public static <T> ToDouble<T> divide(ToDouble<T> first, ToDouble<T> second) {
-        return DivideUtil.divide(first, second);
+        return DivideUtil.doubleDivideDouble(first, second);
     }
 
     ////////////////////////////////////////////////////////////////////////////

@@ -72,17 +72,17 @@ extends Expression<T>,
 
     @Override
     default ToShort<T> orThrow() throws NullPointerException {
-        return OrElseThrowUtil.orElseThrow(this);
+        return OrElseThrowUtil.shortOrElseThrow(this);
     }
 
     @Override
     default ToShort<T> orElseGet(ToShort<T> getter) {
-        return OrElseGetUtil.orElseGet(this, getter);
+        return OrElseGetUtil.shortOrElseGet(this, getter);
     }
 
     @Override
     default ToShort<T> orElse(Short value) {
-        return OrElseUtil.orElse(this, value);
+        return OrElseUtil.shortOrElse(this, value);
     }
 
     @Override

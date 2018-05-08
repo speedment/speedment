@@ -27,7 +27,7 @@ public final class SqrtUtil {
      * @param <T>    the input entity type
      * @return       expression for the square root
      */
-    public static <T> ToDouble<T> sqrt(ToByte<T> other) {
+    public static <T> ToDouble<T> sqrtByte(ToByte<T> other) {
         class ByteSqrt extends AbstractSqrt<T, ToByte<T>> {
             private ByteSqrt(ToByte<T> tToByte) {
                 super(tToByte);
@@ -50,7 +50,7 @@ public final class SqrtUtil {
      * @param <T>    the input entity type
      * @return       expression for the square root
      */
-    public static <T> ToDouble<T> sqrt(ToShort<T> other) {
+    public static <T> ToDouble<T> sqrtShort(ToShort<T> other) {
         class ShortSqrt extends AbstractSqrt<T, ToShort<T>> {
             private ShortSqrt(ToShort<T> tToShort) {
                 super(tToShort);
@@ -73,7 +73,7 @@ public final class SqrtUtil {
      * @param <T>    the input entity type
      * @return       expression for the square root
      */
-    public static <T> ToDouble<T> sqrt(ToInt<T> other) {
+    public static <T> ToDouble<T> sqrtInt(ToInt<T> other) {
         class IntSqrt extends AbstractSqrt<T, ToInt<T>> {
             private IntSqrt(ToInt<T> tToInt) {
                 super(tToInt);
@@ -96,7 +96,7 @@ public final class SqrtUtil {
      * @param <T>    the input entity type
      * @return       expression for the square root
      */
-    public static <T> ToDouble<T> sqrt(ToLong<T> other) {
+    public static <T> ToDouble<T> sqrtLong(ToLong<T> other) {
         class LongSqrt extends AbstractSqrt<T, ToLong<T>> {
             private LongSqrt(ToLong<T> tToLong) {
                 super(tToLong);
@@ -119,7 +119,7 @@ public final class SqrtUtil {
      * @param <T>    the input entity type
      * @return       expression for the square root
      */
-    public static <T> ToDouble<T> sqrt(ToFloat<T> other) {
+    public static <T> ToDouble<T> sqrtFloat(ToFloat<T> other) {
         class FloatSqrt extends AbstractSqrt<T, ToFloat<T>> {
             private FloatSqrt(ToFloat<T> tToFloat) {
                 super(tToFloat);
@@ -142,7 +142,7 @@ public final class SqrtUtil {
      * @param <T>    the input entity type
      * @return       expression for the square root
      */
-    public static <T> ToDouble<T> sqrt(ToDouble<T> other) {
+    public static <T> ToDouble<T> sqrtDouble(ToDouble<T> other) {
         class DoubleSqrt extends AbstractSqrt<T, ToDouble<T>> {
             private DoubleSqrt(ToDouble<T> tToDouble) {
                 super(tToDouble);

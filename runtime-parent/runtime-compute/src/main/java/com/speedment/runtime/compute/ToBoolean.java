@@ -17,11 +17,9 @@ import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.HasMap;
 import com.speedment.runtime.compute.trait.HasMapToDouble;
 
-import java.math.BigDecimal;
 import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
 
 /**
  * Expression that given an entity returns a {@code boolean} value. This
@@ -77,27 +75,27 @@ extends Expression<T>,
 
     @Override
     default ToDouble<T> asDouble() {
-        return CastUtil.castToDouble(this);
+        return CastUtil.castBooleanToDouble(this);
     }
 
     @Override
     default ToInt<T> asInt() {
-        return CastUtil.castToInt(this);
+        return CastUtil.castBooleanToInt(this);
     }
 
     @Override
     default ToLong<T> asLong() {
-        return CastUtil.castToLong(this);
+        return CastUtil.castBooleanToLong(this);
     }
 
     @Override
     default ToDouble<T> mapToDouble(BooleanToDoubleFunction operator) {
-        return MapperUtil.mapToDouble(this, operator);
+        return MapperUtil.mapBooleanToDouble(this, operator);
     }
 
     @Override
     default ToBoolean<T> map(BooleanUnaryOperator operator) {
-        return MapperUtil.map(this, operator);
+        return MapperUtil.mapBoolean(this, operator);
     }
 
     @Override
@@ -116,6 +114,6 @@ extends Expression<T>,
     default <V> ToBoolean<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
-        return ComposedUtil.compose(casted, this);
+        return ComposedUtil.composeToBoolean(casted, this);
     }
 }

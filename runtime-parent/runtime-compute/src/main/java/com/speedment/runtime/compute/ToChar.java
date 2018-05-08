@@ -1,7 +1,5 @@
 package com.speedment.runtime.compute;
 
-import com.speedment.common.function.BooleanToDoubleFunction;
-import com.speedment.common.function.ByteToDoubleFunction;
 import com.speedment.common.function.CharUnaryOperator;
 import com.speedment.common.function.ToCharFunction;
 import com.speedment.runtime.compute.expression.Expression;
@@ -64,22 +62,22 @@ extends Expression<T>,
 
     @Override
     default ToDouble<T> asDouble() {
-        return CastUtil.castToDouble(this);
+        return CastUtil.castCharToDouble(this);
     }
 
     @Override
     default ToInt<T> asInt() {
-        return CastUtil.castToInt(this);
+        return CastUtil.castCharToInt(this);
     }
 
     @Override
     default ToLong<T> asLong() {
-        return CastUtil.castToLong(this);
+        return CastUtil.castCharToLong(this);
     }
 
     @Override
     default ToChar<T> map(CharUnaryOperator operator) {
-        return MapperUtil.map(this, operator);
+        return MapperUtil.mapChar(this, operator);
     }
 
     @Override
@@ -108,6 +106,6 @@ extends Expression<T>,
     default <V> ToChar<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
-        return ComposedUtil.compose(casted, this);
+        return ComposedUtil.composeToChar(casted, this);
     }
 }

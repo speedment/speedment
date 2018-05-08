@@ -70,17 +70,17 @@ extends Expression<T>,
 
     @Override
     default ToBoolean<T> orThrow() throws NullPointerException {
-        return OrElseThrowUtil.orElseThrow(this);
+        return OrElseThrowUtil.booleanOrElseThrow(this);
     }
 
     @Override
     default ToBoolean<T> orElseGet(ToBoolean<T> getter) {
-        return OrElseGetUtil.orElseGet(this, getter);
+        return OrElseGetUtil.booleanOrElseGet(this, getter);
     }
 
     @Override
     default ToBoolean<T> orElse(Boolean value) {
-        return OrElseUtil.orElse(this, value);
+        return OrElseUtil.booleanOrElse(this, value);
     }
 
     default ToDoubleNullable<T> mapToDoubleIfPresent(BooleanToDoubleFunction mapper) {

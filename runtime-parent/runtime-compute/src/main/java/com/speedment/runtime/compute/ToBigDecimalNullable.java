@@ -65,17 +65,17 @@ extends Expression<T>,
 
     @Override
     default ToBigDecimal<T> orThrow() throws NullPointerException {
-        return OrElseThrowUtil.orElseThrow(this);
+        return OrElseThrowUtil.bigDecimalOrElseThrow(this);
     }
 
     @Override
     default ToBigDecimal<T> orElseGet(ToBigDecimal<T> getter) {
-        return OrElseGetUtil.orElseGet(this, getter);
+        return OrElseGetUtil.bigDecimalOrElseGet(this, getter);
     }
 
     @Override
     default ToBigDecimal<T> orElse(BigDecimal value) {
-        return OrElseUtil.orElse(this, value);
+        return OrElseUtil.bigDecimalOrElse(this, value);
     }
 
     @Override

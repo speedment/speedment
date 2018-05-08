@@ -31,12 +31,12 @@ public final class OrElseGetUtil {
      * @return               the non-nullable expression
      */
     public static <T> ToDoubleOrElseGet<T>
-    orElseGet(ToDoubleNullable<T> expression, ToDouble<T> defaultGetter) {
+    doubleOrElseGet(ToDoubleNullable<T> expression, ToDouble<T> defaultGetter) {
         return new ToDoubleOrElseGetImpl<>(expression, defaultGetter);
     }
 
     /**
-     * Internal class used when calling {@code ToDoubleNullable.orElse(double)}.
+     * Internal class used when calling {@code ToDoubleNullable.doubleOrElse(double)}.
      *
      * @param <T>  the input entity type
      */
@@ -66,12 +66,12 @@ public final class OrElseGetUtil {
      * @return               the non-nullable expression
      */
     public static <T> ToFloatOrElseGet<T>
-    orElseGet(ToFloatNullable<T> expression, ToFloat<T> defaultGetter) {
+    floatOrElseGet(ToFloatNullable<T> expression, ToFloat<T> defaultGetter) {
         return new ToFloatOrElseGetImpl<>(expression, defaultGetter);
     }
 
     /**
-     * Internal class used when calling {@code ToFloatNullable.orElse(float)}.
+     * Internal class used when calling {@code ToFloatNullable.doubleOrElse(float)}.
      *
      * @param <T>  the input entity type
      */
@@ -101,12 +101,12 @@ public final class OrElseGetUtil {
      * @return               the non-nullable expression
      */
     public static <T> ToLongOrElseGet<T>
-    orElseGet(ToLongNullable<T> expression, ToLong<T> defaultGetter) {
+    longOrElseGet(ToLongNullable<T> expression, ToLong<T> defaultGetter) {
         return new ToLongOrElseGetImpl<>(expression, defaultGetter);
     }
 
     /**
-     * Internal class used when calling {@code ToLongNullable.orElse(long)}.
+     * Internal class used when calling {@code ToLongNullable.doubleOrElse(long)}.
      *
      * @param <T>  the input entity type
      */
@@ -136,12 +136,12 @@ public final class OrElseGetUtil {
      * @return               the non-nullable expression
      */
     public static <T> ToIntOrElseGet<T>
-    orElseGet(ToIntNullable<T> expression, ToInt<T> defaultGetter) {
+    intOrElseGet(ToIntNullable<T> expression, ToInt<T> defaultGetter) {
         return new ToIntOrElseGetImpl<>(expression, defaultGetter);
     }
 
     /**
-     * Internal class used when calling {@code ToIntNullable.orElse(int)}.
+     * Internal class used when calling {@code ToIntNullable.doubleOrElse(int)}.
      *
      * @param <T>  the input entity type
      */
@@ -171,12 +171,12 @@ public final class OrElseGetUtil {
      * @return               the non-nullable expression
      */
     public static <T> ToShortOrElseGet<T>
-    orElseGet(ToShortNullable<T> expression, ToShort<T> defaultGetter) {
+    shortOrElseGet(ToShortNullable<T> expression, ToShort<T> defaultGetter) {
         return new ToShortOrElseGetImpl<>(expression, defaultGetter);
     }
 
     /**
-     * Internal class used when calling {@code ToShortNullable.orElse(short)}.
+     * Internal class used when calling {@code ToShortNullable.doubleOrElse(short)}.
      *
      * @param <T>  the input entity type
      */
@@ -206,12 +206,12 @@ public final class OrElseGetUtil {
      * @return               the non-nullable expression
      */
     public static <T> ToByteOrElseGet<T>
-    orElseGet(ToByteNullable<T> expression, ToByte<T> defaultGetter) {
+    byteOrElseGet(ToByteNullable<T> expression, ToByte<T> defaultGetter) {
         return new ToByteOrElseGetImpl<>(expression, defaultGetter);
     }
 
     /**
-     * Internal class used when calling {@code ToByteNullable.orElse(byte)}.
+     * Internal class used when calling {@code ToByteNullable.doubleOrElse(byte)}.
      *
      * @param <T>  the input entity type
      */
@@ -241,12 +241,12 @@ public final class OrElseGetUtil {
      * @return               the non-nullable expression
      */
     public static <T> ToCharOrElseGet<T>
-    orElseGet(ToCharNullable<T> expression, ToChar<T> defaultGetter) {
+    charOrElseGet(ToCharNullable<T> expression, ToChar<T> defaultGetter) {
         return new ToCharOrElseGetImpl<>(expression, defaultGetter);
     }
 
     /**
-     * Internal class used when calling {@code ToCharNullable.orElse(char)}.
+     * Internal class used when calling {@code ToCharNullable.doubleOrElse(char)}.
      *
      * @param <T>  the input entity type
      */
@@ -276,12 +276,12 @@ public final class OrElseGetUtil {
      * @return               the non-nullable expression
      */
     public static <T> ToBooleanOrElseGet<T>
-    orElseGet(ToBooleanNullable<T> expression, ToBoolean<T> defaultGetter) {
+    booleanOrElseGet(ToBooleanNullable<T> expression, ToBoolean<T> defaultGetter) {
         return new ToBooleanOrElseGetImpl<>(expression, defaultGetter);
     }
 
     /**
-     * Internal class used when calling {@code ToBooleanNullable.orElse(boolean)}.
+     * Internal class used when calling {@code ToBooleanNullable.doubleOrElse(boolean)}.
      *
      * @param <T>  the input entity type
      */
@@ -311,12 +311,12 @@ public final class OrElseGetUtil {
      * @return               the non-nullable expression
      */
     public static <T> ToStringOrElseGet<T>
-    orElseGet(ToStringNullable<T> expression, ToString<T> defaultGetter) {
+    stringOrElseGet(ToStringNullable<T> expression, ToString<T> defaultGetter) {
         return new ToStringOrElseGetImpl<>(expression, defaultGetter);
     }
 
     /**
-     * Internal class used when calling {@code ToStringNullable.orElse(string)}.
+     * Internal class used when calling {@code ToStringNullable.doubleOrElse(string)}.
      *
      * @param <T>  the input entity type
      */
@@ -346,13 +346,13 @@ public final class OrElseGetUtil {
      * @return               the non-nullable expression
      */
     public static <T> ToBigDecimalOrElseGet<T>
-    orElseGet(ToBigDecimalNullable<T> expression, ToBigDecimal<T> defaultGetter) {
+    bigDecimalOrElseGet(ToBigDecimalNullable<T> expression, ToBigDecimal<T> defaultGetter) {
         return new ToBigDecimalOrElseGetImpl<>(expression, defaultGetter);
     }
 
     /**
      * Internal class used when calling
-     * {@code ToBigDecimalNullable.orElse(bigDecimal)}.
+     * {@code ToBigDecimalNullable.doubleOrElse(bigDecimal)}.
      *
      * @param <T>  the input entity type
      */
@@ -383,12 +383,12 @@ public final class OrElseGetUtil {
      * @return               the non-nullable expression
      */
     public static <T, E extends Enum<E>> ToEnumOrElseGet<T, E>
-    orElseGet(ToEnumNullable<T, E> expression, ToEnum<T, E> defaultGetter) {
+    enumOrElseGet(ToEnumNullable<T, E> expression, ToEnum<T, E> defaultGetter) {
         return new ToEnumOrElseGetImpl<>(expression, defaultGetter);
     }
 
     /**
-     * Internal class used when calling {@code ToEnumNullable.orElse(enum)}.
+     * Internal class used when calling {@code ToEnumNullable.doubleOrElse(enum)}.
      *
      * @param <T>  the input entity type
      * @param <E>  the enum type

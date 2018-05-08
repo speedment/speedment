@@ -68,17 +68,17 @@ extends Expression<T>,
 
     @Override
     default ToChar<T> orThrow() throws NullPointerException {
-        return OrElseThrowUtil.orElseThrow(this);
+        return OrElseThrowUtil.charOrElseThrow(this);
     }
 
     @Override
     default ToChar<T> orElseGet(ToChar<T> getter) {
-        return OrElseGetUtil.orElseGet(this, getter);
+        return OrElseGetUtil.charOrElseGet(this, getter);
     }
 
     @Override
     default ToChar<T> orElse(Character value) {
-        return OrElseUtil.orElse(this, value);
+        return OrElseUtil.charOrElse(this, value);
     }
 
     @Override

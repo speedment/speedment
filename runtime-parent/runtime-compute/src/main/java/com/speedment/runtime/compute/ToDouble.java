@@ -1,6 +1,5 @@
 package com.speedment.runtime.compute;
 
-import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
@@ -93,17 +92,17 @@ extends Expression<T>,
 
     @Override
     default ToInt<T> asInt() {
-        return CastUtil.castToInt(this);
+        return CastUtil.castDoubleToInt(this);
     }
 
     @Override
     default ToLong<T> asLong() {
-        return CastUtil.castToLong(this);
+        return CastUtil.castDoubleToLong(this);
     }
 
     @Override
     default ToDouble<T> map(DoubleUnaryOperator operator) {
-        return MapperUtil.map(this, operator);
+        return MapperUtil.mapDouble(this, operator);
     }
 
     @Override
@@ -314,6 +313,6 @@ extends Expression<T>,
     default <V> ToDouble<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
-        return ComposedUtil.compose(casted, this);
+        return ComposedUtil.composeToDouble(casted, this);
     }
 }

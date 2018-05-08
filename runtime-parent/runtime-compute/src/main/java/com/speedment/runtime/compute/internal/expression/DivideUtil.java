@@ -32,7 +32,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToByte<T> first, int second) {
+    public static <T> ToDouble<T> byteDivideInt(ToByte<T> first, int second) {
         return new DivideObjToDouble<T, ToByte<T>, Integer>(first) {
             @Override
             public double applyAsDouble(T object) {
@@ -57,7 +57,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToByte<T> first, long second) {
+    public static <T> ToDouble<T> byteDivideLong(ToByte<T> first, long second) {
         return new DivideObjToDouble<T, ToByte<T>, Long>(first) {
             @Override
             public double applyAsDouble(T object) {
@@ -82,7 +82,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToByte<T> first, double second) {
+    public static <T> ToDouble<T> byteDivideDouble(ToByte<T> first, double second) {
         return new DivideObjToDouble<T, ToByte<T>, Double>(first) {
             @Override
             public double applyAsDouble(T object) {
@@ -106,7 +106,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToByte<T> first, ToInt<T> second) {
+    public static <T> ToDouble<T> byteDivideInt(ToByte<T> first, ToInt<T> second) {
         return new DivideToDouble<T, ToByte<T>, ToInt<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
@@ -126,7 +126,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToByte<T> first, ToLong<T> second) {
+    public static <T> ToDouble<T> byteDivideLong(ToByte<T> first, ToLong<T> second) {
         return new DivideToDouble<T, ToByte<T>, ToLong<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
@@ -146,7 +146,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToByte<T> first, ToDouble<T> second) {
+    public static <T> ToDouble<T> byteDivideDouble(ToByte<T> first, ToDouble<T> second) {
         return new DivideToDouble<T, ToByte<T>, ToDouble<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
@@ -170,7 +170,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToShort<T> first, int second) {
+    public static <T> ToDouble<T> shortDivideInt(ToShort<T> first, int second) {
         return new DivideObjToDouble<T, ToShort<T>, Integer>(first) {
             @Override
             public double applyAsDouble(T object) {
@@ -195,7 +195,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToShort<T> first, long second) {
+    public static <T> ToDouble<T> shortDivideLong(ToShort<T> first, long second) {
         return new DivideObjToDouble<T, ToShort<T>, Long>(first) {
             @Override
             public double applyAsDouble(T object) {
@@ -220,7 +220,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToShort<T> first, double second) {
+    public static <T> ToDouble<T> shortDivideDouble(ToShort<T> first, double second) {
         return new DivideObjToDouble<T, ToShort<T>, Double>(first) {
             @Override
             public double applyAsDouble(T object) {
@@ -244,7 +244,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToShort<T> first, ToInt<T> second) {
+    public static <T> ToDouble<T> shortDivideInt(ToShort<T> first, ToInt<T> second) {
         return new DivideToDouble<T, ToShort<T>, ToInt<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
@@ -264,7 +264,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToShort<T> first, ToLong<T> second) {
+    public static <T> ToDouble<T> shortDivideLong(ToShort<T> first, ToLong<T> second) {
         return new DivideToDouble<T, ToShort<T>, ToLong<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
@@ -284,7 +284,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToShort<T> first, ToDouble<T> second) {
+    public static <T> ToDouble<T> shortDivideDouble(ToShort<T> first, ToDouble<T> second) {
         return new DivideToDouble<T, ToShort<T>, ToDouble<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
@@ -308,7 +308,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToInt<T> first, int second) {
+    public static <T> ToDouble<T> intDivideInt(ToInt<T> first, int second) {
         return new DivideObjToDouble<T, ToInt<T>, Integer>(first) {
             @Override
             public double applyAsDouble(T object) {
@@ -333,7 +333,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToInt<T> first, long second) {
+    public static <T> ToDouble<T> intDivideLong(ToInt<T> first, long second) {
         return new DivideObjToDouble<T, ToInt<T>, Long>(first) {
             @Override
             public double applyAsDouble(T object) {
@@ -358,7 +358,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToInt<T> first, double second) {
+    public static <T> ToDouble<T> intDivideDouble(ToInt<T> first, double second) {
         return new DivideObjToDouble<T, ToInt<T>, Double>(first) {
             @Override
             public double applyAsDouble(T object) {
@@ -382,7 +382,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToInt<T> first, ToInt<T> second) {
+    public static <T> ToDouble<T> intDivideInt(ToInt<T> first, ToInt<T> second) {
         return new DivideToDouble<T, ToInt<T>, ToInt<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
@@ -402,7 +402,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToInt<T> first, ToLong<T> second) {
+    public static <T> ToDouble<T> intDivideLong(ToInt<T> first, ToLong<T> second) {
         return new DivideToDouble<T, ToInt<T>, ToLong<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
@@ -422,7 +422,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToInt<T> first, ToDouble<T> second) {
+    public static <T> ToDouble<T> intDivideDouble(ToInt<T> first, ToDouble<T> second) {
         return new DivideToDouble<T, ToInt<T>, ToDouble<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
@@ -446,7 +446,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToLong<T> first, int second) {
+    public static <T> ToDouble<T> longDivideInt(ToLong<T> first, int second) {
         return new DivideObjToDouble<T, ToLong<T>, Integer>(first) {
             @Override
             public double applyAsDouble(T object) {
@@ -471,7 +471,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToLong<T> first, long second) {
+    public static <T> ToDouble<T> longDivideLong(ToLong<T> first, long second) {
         return new DivideObjToDouble<T, ToLong<T>, Long>(first) {
             @Override
             public double applyAsDouble(T object) {
@@ -496,7 +496,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToLong<T> first, double second) {
+    public static <T> ToDouble<T> longDivideDouble(ToLong<T> first, double second) {
         return new DivideObjToDouble<T, ToLong<T>, Double>(first) {
             @Override
             public double applyAsDouble(T object) {
@@ -520,7 +520,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToLong<T> first, ToInt<T> second) {
+    public static <T> ToDouble<T> longDivideInt(ToLong<T> first, ToInt<T> second) {
         return new DivideToDouble<T, ToLong<T>, ToInt<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
@@ -540,7 +540,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToLong<T> first, ToLong<T> second) {
+    public static <T> ToDouble<T> longDivideLong(ToLong<T> first, ToLong<T> second) {
         return new DivideToDouble<T, ToLong<T>, ToLong<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
@@ -560,7 +560,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToLong<T> first, ToDouble<T> second) {
+    public static <T> ToDouble<T> longDivideDouble(ToLong<T> first, ToDouble<T> second) {
         return new DivideToDouble<T, ToLong<T>, ToDouble<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
@@ -584,7 +584,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToFloat<T> first, int second) {
+    public static <T> ToDouble<T> floatDivideInt(ToFloat<T> first, int second) {
         return new DivideObjToDouble<T, ToFloat<T>, Integer>(first) {
             @Override
             public double applyAsDouble(T object) {
@@ -609,7 +609,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToFloat<T> first, long second) {
+    public static <T> ToDouble<T> floatDivideLong(ToFloat<T> first, long second) {
         return new DivideObjToDouble<T, ToFloat<T>, Long>(first) {
             @Override
             public double applyAsDouble(T object) {
@@ -634,7 +634,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToFloat<T> first, double second) {
+    public static <T> ToDouble<T> floatDivideDouble(ToFloat<T> first, double second) {
         return new DivideObjToDouble<T, ToFloat<T>, Double>(first) {
             @Override
             public double applyAsDouble(T object) {
@@ -658,7 +658,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToFloat<T> first, ToInt<T> second) {
+    public static <T> ToDouble<T> floatDivideInt(ToFloat<T> first, ToInt<T> second) {
         return new DivideToDouble<T, ToFloat<T>, ToInt<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
@@ -678,7 +678,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToFloat<T> first, ToLong<T> second) {
+    public static <T> ToDouble<T> floatDivideLong(ToFloat<T> first, ToLong<T> second) {
         return new DivideToDouble<T, ToFloat<T>, ToLong<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
@@ -698,7 +698,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToFloat<T> first, ToDouble<T> second) {
+    public static <T> ToDouble<T> floatDivideDouble(ToFloat<T> first, ToDouble<T> second) {
         return new DivideToDouble<T, ToFloat<T>, ToDouble<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
@@ -722,7 +722,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToDouble<T> first, int second) {
+    public static <T> ToDouble<T> doubleDivideInt(ToDouble<T> first, int second) {
         return new DivideObjToDouble<T, ToDouble<T>, Integer>(first) {
             @Override
             public double applyAsDouble(T object) {
@@ -747,7 +747,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToDouble<T> first, long second) {
+    public static <T> ToDouble<T> doubleDivideLong(ToDouble<T> first, long second) {
         return new DivideObjToDouble<T, ToDouble<T>, Long>(first) {
             @Override
             public double applyAsDouble(T object) {
@@ -772,7 +772,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToDouble<T> first, double second) {
+    public static <T> ToDouble<T> doubleDivideDouble(ToDouble<T> first, double second) {
         return new DivideObjToDouble<T, ToDouble<T>, Double>(first) {
             @Override
             public double applyAsDouble(T object) {
@@ -796,7 +796,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToDouble<T> first, ToInt<T> second) {
+    public static <T> ToDouble<T> doubleDivideInt(ToDouble<T> first, ToInt<T> second) {
         return new DivideToDouble<T, ToDouble<T>, ToInt<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
@@ -816,7 +816,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToDouble<T> first, ToLong<T> second) {
+    public static <T> ToDouble<T> doubleDivideLong(ToDouble<T> first, ToLong<T> second) {
         return new DivideToDouble<T, ToDouble<T>, ToLong<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {
@@ -836,7 +836,7 @@ public final class DivideUtil {
      * @param <T>     the input entity type
      * @return        the division expression
      */
-    public static <T> ToDouble<T> divide(ToDouble<T> first, ToDouble<T> second) {
+    public static <T> ToDouble<T> doubleDivideDouble(ToDouble<T> first, ToDouble<T> second) {
         return new DivideToDouble<T, ToDouble<T>, ToDouble<T>>(first, second) {
             @Override
             public double applyAsDouble(T object) {

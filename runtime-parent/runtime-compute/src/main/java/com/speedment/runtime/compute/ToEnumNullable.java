@@ -101,17 +101,17 @@ extends Expression<T>,
 
     @Override
     default ToEnum<T, E> orThrow() {
-        return OrElseThrowUtil.orElseThrow(this);
+        return OrElseThrowUtil.enumOrElseThrow(this);
     }
 
     @Override
     default ToEnum<T, E> orElseGet(ToEnum<T, E> getter) {
-        return OrElseGetUtil.orElseGet(this, getter);
+        return OrElseGetUtil.enumOrElseGet(this, getter);
     }
 
     @Override
     default ToEnum<T, E> orElse(E value) {
-        return OrElseUtil.orElse(this, value);
+        return OrElseUtil.enumOrElse(this, value);
     }
 
     default ToDoubleNullable<T> mapToDoubleIfPresent(ToDouble<E> mapper) {

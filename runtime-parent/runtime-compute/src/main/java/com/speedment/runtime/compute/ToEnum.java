@@ -90,7 +90,7 @@ extends Expression<T>,
 
     @Override
     default ToEnum<T, E> map(UnaryOperator<E> mapper) {
-        return MapperUtil.map(this, mapper);
+        return MapperUtil.mapEnum(this, mapper);
     }
 
     @Override
@@ -107,6 +107,6 @@ extends Expression<T>,
     default <V> ToEnum<V, E> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
-        return ComposedUtil.compose(casted, this);
+        return ComposedUtil.composeToEnum(casted, this);
     }
 }

@@ -78,22 +78,22 @@ extends Expression<T>,
 
     @Override
     default ToDouble<T> asDouble() {
-        return CastUtil.castToDouble(this);
+        return CastUtil.castBigDecimalToDouble(this);
     }
 
     @Override
     default ToInt<T> asInt() {
-        return CastUtil.castToInt(this);
+        return CastUtil.castBigDecimalToInt(this);
     }
 
     @Override
     default ToLong<T> asLong() {
-        return CastUtil.castToLong(this);
+        return CastUtil.castBigDecimalToLong(this);
     }
 
     @Override
     default ToBigDecimal<T> abs() {
-        return AbsUtil.abs(this);
+        return AbsUtil.absBigDecimal(this);
     }
 
     @Override
@@ -283,12 +283,12 @@ extends Expression<T>,
 
     @Override
     default ToBigDecimal<T> map(UnaryOperator<BigDecimal> mapper) {
-        return MapperUtil.map(this, mapper);
+        return MapperUtil.mapBigDecimal(this, mapper);
     }
 
     @Override
     default ToDouble<T> mapToDouble(ToDoubleFunction<BigDecimal> mapper) {
-        return MapperUtil.mapToDouble(this, mapper);
+        return MapperUtil.mapBigDecimalToDouble(this, mapper);
     }
 
     @Override
@@ -305,6 +305,6 @@ extends Expression<T>,
     default <V> ToBigDecimal<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
-        return ComposedUtil.compose(casted, this);
+        return ComposedUtil.composeToBigDecimal(casted, this);
     }
 }

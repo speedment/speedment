@@ -1,6 +1,5 @@
 package com.speedment.runtime.compute;
 
-import com.speedment.common.function.ByteToDoubleFunction;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
@@ -78,12 +77,12 @@ extends Expression<T>,
 
     @Override
     default ToDouble<T> asDouble() {
-        return CastUtil.castToDouble(this);
+        return CastUtil.castLongToDouble(this);
     }
 
     @Override
     default ToInt<T> asInt() {
-        return CastUtil.castToInt(this);
+        return CastUtil.castLongToInt(this);
     }
 
     @Override
@@ -93,12 +92,12 @@ extends Expression<T>,
 
     @Override
     default ToDouble<T> mapToDouble(LongToDoubleFunction operator) {
-        return MapperUtil.mapToDouble(this, operator);
+        return MapperUtil.mapLongToDouble(this, operator);
     }
 
     @Override
     default ToLong<T> map(LongUnaryOperator operator) {
-        return MapperUtil.map(this, operator);
+        return MapperUtil.mapLong(this, operator);
     }
 
     @Override
@@ -309,6 +308,6 @@ extends Expression<T>,
     default <V> ToLong<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
-        return ComposedUtil.compose(casted, this);
+        return ComposedUtil.composeToLong(casted, this);
     }
 }

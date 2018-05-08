@@ -27,7 +27,7 @@ public final class AbsUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToByte<T> abs(ToByte<T> expression) {
+    public static <T> ToByte<T> absByte(ToByte<T> expression) {
         class AbsByte extends AbstractAbs<T, ToByte<T>> implements ToByte<T> {
             private AbsByte(ToByte<T> inner) {
                 super(inner);
@@ -51,7 +51,7 @@ public final class AbsUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToShort<T> abs(ToShort<T> expression) {
+    public static <T> ToShort<T> absShort(ToShort<T> expression) {
         class AbsShort extends AbstractAbs<T, ToShort<T>> implements ToShort<T> {
             private AbsShort(ToShort<T> inner) {
                 super(inner);
@@ -75,7 +75,7 @@ public final class AbsUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToInt<T> abs(ToInt<T> expression) {
+    public static <T> ToInt<T> absInt(ToInt<T> expression) {
         class AbsInt extends AbstractAbs<T, ToInt<T>> implements ToInt<T> {
             private AbsInt(ToInt<T> inner) {
                 super(inner);
@@ -99,7 +99,7 @@ public final class AbsUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLong<T> abs(ToLong<T> expression) {
+    public static <T> ToLong<T> absLong(ToLong<T> expression) {
         class AbsLong extends AbstractAbs<T, ToLong<T>> implements ToLong<T> {
             private AbsLong(ToLong<T> inner) {
                 super(inner);
@@ -123,7 +123,7 @@ public final class AbsUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToFloat<T> abs(ToFloat<T> expression) {
+    public static <T> ToFloat<T> absFloat(ToFloat<T> expression) {
         class AbsFloat extends AbstractAbs<T, ToFloat<T>> implements ToFloat<T> {
             private AbsFloat(ToFloat<T> inner) {
                 super(inner);
@@ -147,7 +147,7 @@ public final class AbsUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToDouble<T> abs(ToDouble<T> expression) {
+    public static <T> ToDouble<T> absDouble(ToDouble<T> expression) {
         class AbsDouble extends AbstractAbs<T, ToDouble<T>> implements ToDouble<T> {
             private AbsDouble(ToDouble<T> inner) {
                 super(inner);
@@ -163,7 +163,15 @@ public final class AbsUtil {
         return new AbsDouble(expression);
     }
 
-    public static <T> ToBigDecimal<T> abs(ToBigDecimal<T> expression) {
+    /**
+     * Returns an expression that takes an expression and returns its absolute
+     * (removing the negation sign if any).
+     *
+     * @param expression  the input expression
+     * @param <T>         the input type
+     * @return            the new expression
+     */
+    public static <T> ToBigDecimal<T> absBigDecimal(ToBigDecimal<T> expression) {
         class AbsBigDecimal extends AbstractAbs<T, ToBigDecimal<T>> implements ToBigDecimal<T> {
             private AbsBigDecimal(ToBigDecimal<T> inner) {
                 super(inner);
@@ -178,8 +186,6 @@ public final class AbsUtil {
         return new AbsBigDecimal(expression);
     }
 
-
-
     /**
      * Returns an expression that takes an expression and returns its absolute
      * (removing the negation sign if any). If the result of the original
@@ -190,9 +196,9 @@ public final class AbsUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToByteNullable<T> absOrNull(ToByteNullable<T> expression) {
+    public static <T> ToByteNullable<T> absByteOrNull(ToByteNullable<T> expression) {
         return new ToByteNullableImpl<>(
-            abs(expression.orThrow()),
+            absByte(expression.orThrow()),
             expression.isNull()
         );
     }
@@ -207,9 +213,9 @@ public final class AbsUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToShortNullable<T> absOrNull(ToShortNullable<T> expression) {
+    public static <T> ToShortNullable<T> absShortOrNull(ToShortNullable<T> expression) {
         return new ToShortNullableImpl<>(
-            abs(expression.orThrow()),
+            absShort(expression.orThrow()),
             expression.isNull()
         );
     }
@@ -224,9 +230,9 @@ public final class AbsUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToIntNullable<T> absOrNull(ToIntNullable<T> expression) {
+    public static <T> ToIntNullable<T> absIntOrNull(ToIntNullable<T> expression) {
         return new ToIntNullableImpl<>(
-            abs(expression.orThrow()),
+            absInt(expression.orThrow()),
             expression.isNull()
         );
     }
@@ -241,9 +247,9 @@ public final class AbsUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToLongNullable<T> absOrNull(ToLongNullable<T> expression) {
+    public static <T> ToLongNullable<T> absLongOrNull(ToLongNullable<T> expression) {
         return new ToLongNullableImpl<>(
-            abs(expression.orThrow()),
+            absLong(expression.orThrow()),
             expression.isNull()
         );
     }
@@ -258,9 +264,9 @@ public final class AbsUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToFloatNullable<T> absOrNull(ToFloatNullable<T> expression) {
+    public static <T> ToFloatNullable<T> absFloatOrNull(ToFloatNullable<T> expression) {
         return new ToFloatNullableImpl<>(
-            abs(expression.orThrow()),
+            absFloat(expression.orThrow()),
             expression.isNull()
         );
     }
@@ -275,9 +281,9 @@ public final class AbsUtil {
      * @param <T>         the input type
      * @return            the new expression
      */
-    public static <T> ToDoubleNullable<T> absOrNull(ToDoubleNullable<T> expression) {
+    public static <T> ToDoubleNullable<T> absDoubleOrNull(ToDoubleNullable<T> expression) {
         return new ToDoubleNullableImpl<>(
-            abs(expression.orThrow()),
+            absDouble(expression.orThrow()),
             expression.isNull()
         );
     }

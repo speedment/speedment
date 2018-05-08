@@ -30,7 +30,7 @@ public final class OrElseUtil {
      * @return              the non-nullable expression
      */
     public static <T> ToDoubleOrElse<T>
-    orElse(ToDoubleNullable<T> expression, double defaultValue) {
+    doubleOrElse(ToDoubleNullable<T> expression, double defaultValue) {
         return new ToDoubleOrElseImpl<>(expression, defaultValue);
     }
 
@@ -86,7 +86,7 @@ public final class OrElseUtil {
      * @return              the non-nullable expression
      */
     public static <T> ToFloatOrElse<T>
-    orElse(ToFloatNullable<T> expression, float defaultValue) {
+    floatOrElse(ToFloatNullable<T> expression, float defaultValue) {
         return new ToFloatOrElseImpl<>(expression, defaultValue);
     }
 
@@ -142,7 +142,7 @@ public final class OrElseUtil {
      * @return              the non-nullable expression
      */
     public static <T> ToLongOrElse<T>
-    orElse(ToLongNullable<T> expression, long defaultValue) {
+    longOrElse(ToLongNullable<T> expression, long defaultValue) {
         return new ToLongOrElseImpl<>(expression, defaultValue);
     }
 
@@ -198,7 +198,7 @@ public final class OrElseUtil {
      * @return              the non-nullable expression
      */
     public static <T> ToIntOrElse<T>
-    orElse(ToIntNullable<T> expression, int defaultValue) {
+    intOrElse(ToIntNullable<T> expression, int defaultValue) {
         return new ToIntOrElseImpl<>(expression, defaultValue);
     }
 
@@ -254,7 +254,7 @@ public final class OrElseUtil {
      * @return              the non-nullable expression
      */
     public static <T> ToShortOrElse<T>
-    orElse(ToShortNullable<T> expression, short defaultValue) {
+    shortOrElse(ToShortNullable<T> expression, short defaultValue) {
         return new ToShortOrElseImpl<>(expression, defaultValue);
     }
 
@@ -310,7 +310,7 @@ public final class OrElseUtil {
      * @return              the non-nullable expression
      */
     public static <T> ToByteOrElse<T>
-    orElse(ToByteNullable<T> expression, byte defaultValue) {
+    byteOrElse(ToByteNullable<T> expression, byte defaultValue) {
         return new ToByteOrElseImpl<>(expression, defaultValue);
     }
 
@@ -366,7 +366,7 @@ public final class OrElseUtil {
      * @return              the non-nullable expression
      */
     public static <T> ToCharOrElse<T>
-    orElse(ToCharNullable<T> expression, char defaultValue) {
+    charOrElse(ToCharNullable<T> expression, char defaultValue) {
         return new ToCharOrElseImpl<>(expression, defaultValue);
     }
 
@@ -422,7 +422,7 @@ public final class OrElseUtil {
      * @return              the non-nullable expression
      */
     public static <T> ToBooleanOrElse<T>
-    orElse(ToBooleanNullable<T> expression, boolean defaultValue) {
+    booleanOrElse(ToBooleanNullable<T> expression, boolean defaultValue) {
         return new ToBooleanOrElseImpl<>(expression, defaultValue);
     }
 
@@ -478,7 +478,7 @@ public final class OrElseUtil {
      * @return              the non-nullable expression
      */
     public static <T> ToStringOrElse<T>
-    orElse(ToStringNullable<T> expression, String defaultValue) {
+    stringOrElse(ToStringNullable<T> expression, String defaultValue) {
         return new ToStringOrElseImpl<>(expression, defaultValue);
     }
 
@@ -535,7 +535,7 @@ public final class OrElseUtil {
      * @return              the non-nullable expression
      */
     public static <T, E extends Enum<E>> ToEnumOrElse<T, E>
-    orElse(ToEnumNullable<T, E> expression, E defaultValue) {
+    enumOrElse(ToEnumNullable<T, E> expression, E defaultValue) {
         return new ToEnumOrElseImpl<>(expression, defaultValue);
     }
 
@@ -596,7 +596,7 @@ public final class OrElseUtil {
      * @return              the non-nullable expression
      */
     public static <T> ToBigDecimalOrElse<T>
-    orElse(ToBigDecimalNullable<T> expression, BigDecimal defaultValue) {
+    bigDecimalOrElse(ToBigDecimalNullable<T> expression, BigDecimal defaultValue) {
         return new ToBigDecimalOrElseImpl<>(expression, defaultValue);
     }
 

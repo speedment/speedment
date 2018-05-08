@@ -63,17 +63,17 @@ extends Expression<T>,
 
     @Override
     default ToString<T> orThrow() throws NullPointerException {
-        return OrElseThrowUtil.orElseThrow(this);
+        return OrElseThrowUtil.stringOrElseThrow(this);
     }
 
     @Override
     default ToString<T> orElseGet(ToString<T> getter) {
-        return OrElseGetUtil.orElseGet(this, getter);
+        return OrElseGetUtil.stringOrElseGet(this, getter);
     }
 
     @Override
     default ToString<T> orElse(String value) {
-        return OrElseUtil.orElse(this, value);
+        return OrElseUtil.stringOrElse(this, value);
     }
 
     @Override

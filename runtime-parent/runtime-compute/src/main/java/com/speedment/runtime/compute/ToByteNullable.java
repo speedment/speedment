@@ -72,17 +72,17 @@ extends Expression<T>,
 
     @Override
     default ToByte<T> orThrow() throws NullPointerException {
-        return OrElseThrowUtil.orElseThrow(this);
+        return OrElseThrowUtil.byteOrElseThrow(this);
     }
 
     @Override
     default ToByte<T> orElseGet(ToByte<T> getter) {
-        return OrElseGetUtil.orElseGet(this, getter);
+        return OrElseGetUtil.byteOrElseGet(this, getter);
     }
 
     @Override
     default ToByte<T> orElse(Byte value) {
-        return OrElseUtil.orElse(this, value);
+        return OrElseUtil.byteOrElse(this, value);
     }
 
     @Override

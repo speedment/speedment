@@ -29,7 +29,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToDouble} expression
      */
-    public static <T> ToDouble<T> castToDouble(ToByte<T> original) {
+    public static <T> ToDouble<T> castByteToDouble(ToByte<T> original) {
         class ByteToDouble extends CastToDouble<T, ToByte<T>> {
             private ByteToDouble(ToByte<T> tToByte) {
                 super(tToByte);
@@ -52,7 +52,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToDouble} expression
      */
-    public static <T> ToDouble<T> castToDouble(ToShort<T> original) {
+    public static <T> ToDouble<T> castShortToDouble(ToShort<T> original) {
         class ShortToDouble extends CastToDouble<T, ToShort<T>> {
             private ShortToDouble(ToShort<T> tToShort) {
                 super(tToShort);
@@ -75,7 +75,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToDouble} expression
      */
-    public static <T> ToDouble<T> castToDouble(ToInt<T> original) {
+    public static <T> ToDouble<T> castIntToDouble(ToInt<T> original) {
         class IntToDouble extends CastToDouble<T, ToInt<T>> {
             private IntToDouble(ToInt<T> tToInt) {
                 super(tToInt);
@@ -98,7 +98,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToDouble} expression
      */
-    public static <T> ToDouble<T> castToDouble(ToLong<T> original) {
+    public static <T> ToDouble<T> castLongToDouble(ToLong<T> original) {
         class LongToDouble extends CastToDouble<T, ToLong<T>> {
             private LongToDouble(ToLong<T> tToLong) {
                 super(tToLong);
@@ -121,7 +121,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToDouble} expression
      */
-    public static <T> ToDouble<T> castToDouble(ToFloat<T> original) {
+    public static <T> ToDouble<T> castFloatToDouble(ToFloat<T> original) {
         class FloatToDouble extends CastToDouble<T, ToFloat<T>> {
             private FloatToDouble(ToFloat<T> tToFloat) {
                 super(tToFloat);
@@ -143,7 +143,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToDouble} expression
      */
-    public static <T> ToDouble<T> castToDouble(ToBigDecimal<T> original) {
+    public static <T> ToDouble<T> castBigDecimalToDouble(ToBigDecimal<T> original) {
         class BigDecimalToDouble extends CastToDouble<T, ToBigDecimal<T>> {
             private BigDecimalToDouble(ToBigDecimal<T> tToBigDecimal) {
                 super(tToBigDecimal);
@@ -167,7 +167,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToDouble} expression
      */
-    public static <T> ToDouble<T> castToDouble(ToBoolean<T> original) {
+    public static <T> ToDouble<T> castBooleanToDouble(ToBoolean<T> original) {
         class BooleanToDouble extends CastToDouble<T, ToBoolean<T>> {
             private BooleanToDouble(ToBoolean<T> tToBoolean) {
                 super(tToBoolean);
@@ -190,7 +190,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToDouble} expression
      */
-    public static <T> ToDouble<T> castToDouble(ToChar<T> original) {
+    public static <T> ToDouble<T> castCharToDouble(ToChar<T> original) {
         class CharToDouble extends CastToDouble<T, ToChar<T>> {
             private CharToDouble(ToChar<T> tToChar) {
                 super(tToChar);
@@ -217,7 +217,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToInt} expression
      */
-    public static <T> ToInt<T> castToInt(ToByte<T> original) {
+    public static <T> ToInt<T> castByteToInt(ToByte<T> original) {
         class ByteToInt extends CastToInt<T, ToByte<T>> {
             private ByteToInt(ToByte<T> tToByte) {
                 super(tToByte);
@@ -240,7 +240,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToInt} expression
      */
-    public static <T> ToInt<T> castToInt(ToShort<T> original) {
+    public static <T> ToInt<T> castShortToInt(ToShort<T> original) {
         class ShortToInt extends CastToInt<T, ToShort<T>> {
             private ShortToInt(ToShort<T> tToShort) {
                 super(tToShort);
@@ -263,7 +263,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToInt} expression
      */
-    public static <T> ToInt<T> castToInt(ToLong<T> original) {
+    public static <T> ToInt<T> castLongToInt(ToLong<T> original) {
         class LongToInt extends CastToInt<T, ToLong<T>> {
             private LongToInt(ToLong<T> tToLong) {
                 super(tToLong);
@@ -286,7 +286,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToInt} expression
      */
-    public static <T> ToInt<T> castToInt(ToFloat<T> original) {
+    public static <T> ToInt<T> castFloatToInt(ToFloat<T> original) {
         class FloatToInt extends CastToInt<T, ToFloat<T>> {
             private FloatToInt(ToFloat<T> tToFloat) {
                 super(tToFloat);
@@ -309,7 +309,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToInt} expression
      */
-    public static <T> ToInt<T> castToInt(ToDouble<T> original) {
+    public static <T> ToInt<T> castDoubleToInt(ToDouble<T> original) {
         class DoubleToInt extends CastToInt<T, ToDouble<T>> {
             private DoubleToInt(ToDouble<T> tToDouble) {
                 super(tToDouble);
@@ -332,7 +332,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToInt} expression
      */
-    public static <T> ToInt<T> castToInt(ToBigDecimal<T> original) {
+    public static <T> ToInt<T> castBigDecimalToInt(ToBigDecimal<T> original) {
         class BigDecimalToInt extends CastToInt<T, ToBigDecimal<T>> {
             private BigDecimalToInt(ToBigDecimal<T> tToBigDecimal) {
                 super(tToBigDecimal);
@@ -355,7 +355,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToInt} expression
      */
-    public static <T> ToInt<T> castToInt(ToBoolean<T> original) {
+    public static <T> ToInt<T> castBooleanToInt(ToBoolean<T> original) {
         class BooleanToInt extends CastToInt<T, ToBoolean<T>> {
             private BooleanToInt(ToBoolean<T> tToBoolean) {
                 super(tToBoolean);
@@ -378,7 +378,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToInt} expression
      */
-    public static <T> ToInt<T> castToInt(ToChar<T> original) {
+    public static <T> ToInt<T> castCharToInt(ToChar<T> original) {
         class CharToInt extends CastToInt<T, ToChar<T>> {
             private CharToInt(ToChar<T> tToChar) {
                 super(tToChar);
@@ -405,7 +405,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToLong} expression
      */
-    public static <T> ToLong<T> castToLong(ToByte<T> original) {
+    public static <T> ToLong<T> castByteToLong(ToByte<T> original) {
         class ByteToLong extends CastToLong<T, ToByte<T>> {
             private ByteToLong(ToByte<T> tToByte) {
                 super(tToByte);
@@ -428,7 +428,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToLong} expression
      */
-    public static <T> ToLong<T> castToLong(ToShort<T> original) {
+    public static <T> ToLong<T> castShortToLong(ToShort<T> original) {
         class ShortToLong extends CastToLong<T, ToShort<T>> {
             private ShortToLong(ToShort<T> tToShort) {
                 super(tToShort);
@@ -451,7 +451,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToLong} expression
      */
-    public static <T> ToLong<T> castToLong(ToInt<T> original) {
+    public static <T> ToLong<T> castIntToLong(ToInt<T> original) {
         class IntToLong extends CastToLong<T, ToInt<T>> {
             private IntToLong(ToInt<T> tToInt) {
                 super(tToInt);
@@ -474,7 +474,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToLong} expression
      */
-    public static <T> ToLong<T> castToLong(ToFloat<T> original) {
+    public static <T> ToLong<T> castFloatToLong(ToFloat<T> original) {
         class FloatToLong extends CastToLong<T, ToFloat<T>> {
             private FloatToLong(ToFloat<T> tToFloat) {
                 super(tToFloat);
@@ -497,7 +497,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToLong} expression
      */
-    public static <T> ToLong<T> castToLong(ToDouble<T> original) {
+    public static <T> ToLong<T> castDoubleToLong(ToDouble<T> original) {
         class DoubleToLong extends CastToLong<T, ToDouble<T>> {
             private DoubleToLong(ToDouble<T> tToDouble) {
                 super(tToDouble);
@@ -521,7 +521,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToInt} expression
      */
-    public static <T> ToLong<T> castToLong(ToBigDecimal<T> original) {
+    public static <T> ToLong<T> castBigDecimalToLong(ToBigDecimal<T> original) {
         class BigDecimalToLong extends CastToLong<T, ToBigDecimal<T>> {
             private BigDecimalToLong(ToBigDecimal<T> tToBigDecimal) {
                 super(tToBigDecimal);
@@ -544,7 +544,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToLong} expression
      */
-    public static <T> ToLong<T> castToLong(ToBoolean<T> original) {
+    public static <T> ToLong<T> castBooleanToLong(ToBoolean<T> original) {
         class BooleanToLong extends CastToLong<T, ToBoolean<T>> {
             private BooleanToLong(ToBoolean<T> tToBoolean) {
                 super(tToBoolean);
@@ -567,7 +567,7 @@ public final class CastUtil {
      * @param <T>       the input type
      * @return          the new {@link ToLong} expression
      */
-    public static <T> ToLong<T> castToLong(ToChar<T> original) {
+    public static <T> ToLong<T> castCharToLong(ToChar<T> original) {
         class CharToLong extends CastToLong<T, ToChar<T>> {
             private CharToLong(ToChar<T> tToChar) {
                 super(tToChar);

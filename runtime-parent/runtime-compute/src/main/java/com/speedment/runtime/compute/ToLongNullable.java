@@ -72,17 +72,17 @@ extends Expression<T>,
 
     @Override
     default ToLong<T> orThrow() throws NullPointerException {
-        return OrElseThrowUtil.orElseThrow(this);
+        return OrElseThrowUtil.longOrElseThrow(this);
     }
 
     @Override
     default ToLong<T> orElseGet(ToLong<T> getter) {
-        return OrElseGetUtil.orElseGet(this, getter);
+        return OrElseGetUtil.longOrElseGet(this, getter);
     }
 
     @Override
     default ToLong<T> orElse(Long value) {
-        return OrElseUtil.orElse(this, value);
+        return OrElseUtil.longOrElse(this, value);
     }
 
     @Override

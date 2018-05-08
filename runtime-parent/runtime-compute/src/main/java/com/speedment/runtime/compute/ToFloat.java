@@ -1,7 +1,5 @@
 package com.speedment.runtime.compute;
 
-import com.speedment.common.function.BooleanUnaryOperator;
-import com.speedment.common.function.ByteToDoubleFunction;
 import com.speedment.common.function.FloatToDoubleFunction;
 import com.speedment.common.function.FloatUnaryOperator;
 import com.speedment.common.function.ToFloatFunction;
@@ -78,27 +76,27 @@ extends Expression<T>,
 
     @Override
     default ToDouble<T> asDouble() {
-        return CastUtil.castToDouble(this);
+        return CastUtil.castFloatToDouble(this);
     }
 
     @Override
     default ToInt<T> asInt() {
-        return CastUtil.castToInt(this);
+        return CastUtil.castFloatToInt(this);
     }
 
     @Override
     default ToLong<T> asLong() {
-        return CastUtil.castToLong(this);
+        return CastUtil.castFloatToLong(this);
     }
 
     @Override
     default ToDouble<T> mapToDouble(FloatToDoubleFunction operator) {
-        return MapperUtil.mapToDouble(this, operator);
+        return MapperUtil.mapFloatToDouble(this, operator);
     }
 
     @Override
     default ToFloat<T> map(FloatUnaryOperator operator) {
-        return MapperUtil.map(this, operator);
+        return MapperUtil.mapFloat(this, operator);
     }
 
     @Override
@@ -309,6 +307,6 @@ extends Expression<T>,
     default <V> ToFloat<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
-        return ComposedUtil.compose(casted, this);
+        return ComposedUtil.composeToFloat(casted, this);
     }
 }

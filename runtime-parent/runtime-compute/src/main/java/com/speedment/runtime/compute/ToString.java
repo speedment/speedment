@@ -65,7 +65,7 @@ extends Expression<T>,
 
     @Override
     default ToString<T> map(UnaryOperator<String> mapper) {
-        return MapperUtil.map(this, mapper);
+        return MapperUtil.mapString(this, mapper);
     }
 
     @Override
@@ -92,6 +92,6 @@ extends Expression<T>,
     default <V> ToString<V> compose(Function<? super V, ? extends T> before) {
         @SuppressWarnings("unchecked")
         final Function<V, T> casted = (Function<V, T>) before;
-        return ComposedUtil.compose(casted, this);
+        return ComposedUtil.composeToString(casted, this);
     }
 }

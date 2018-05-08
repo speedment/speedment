@@ -32,7 +32,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToByte<T> expression, int power) {
+    public static <T> ToDouble<T> bytePowInt(ToByte<T> expression, int power) {
         switch (power) {
             case 0: return ToDouble.constant(1);
             case 1: return expression.asDouble();
@@ -74,7 +74,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToByte<T> expression, double power) {
+    public static <T> ToDouble<T> bytePowDouble(ToByte<T> expression, double power) {
         return new DoublePower<T, ToByte<T>>(expression, power) {
             @Override
             public double applyAsDouble(T object) {
@@ -92,7 +92,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToByte<T> expression, ToInt<T> power) {
+    public static <T> ToDouble<T> bytePowInt(ToByte<T> expression, ToInt<T> power) {
         return new ToIntPower<T, ToByte<T>>(expression, power) {
             @Override
             public double applyAsDouble(T object) {
@@ -121,7 +121,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToByte<T> expression, ToDouble<T> power) {
+    public static <T> ToDouble<T> bytePowDouble(ToByte<T> expression, ToDouble<T> power) {
         return new ToDoublePower<T, ToByte<T>>(expression, power) {
             @Override
             public double applyAsDouble(T object) {
@@ -146,7 +146,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToShort<T> expression, int power) {
+    public static <T> ToDouble<T> shortPowInt(ToShort<T> expression, int power) {
         switch (power) {
             case 0: return ToDouble.constant(1);
             case 1: return expression.asDouble();
@@ -188,7 +188,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToShort<T> expression, double power) {
+    public static <T> ToDouble<T> shortPowDouble(ToShort<T> expression, double power) {
         return new DoublePower<T, ToShort<T>>(expression, power) {
             @Override
             public double applyAsDouble(T object) {
@@ -206,7 +206,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToShort<T> expression, ToInt<T> power) {
+    public static <T> ToDouble<T> shortPowInt(ToShort<T> expression, ToInt<T> power) {
         return new ToIntPower<T, ToShort<T>>(expression, power) {
             @Override
             public double applyAsDouble(T object) {
@@ -235,7 +235,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToShort<T> expression, ToDouble<T> power) {
+    public static <T> ToDouble<T> shortPowDouble(ToShort<T> expression, ToDouble<T> power) {
         return new ToDoublePower<T, ToShort<T>>(expression, power) {
             @Override
             public double applyAsDouble(T object) {
@@ -260,7 +260,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToInt<T> expression, int power) {
+    public static <T> ToDouble<T> intPowInt(ToInt<T> expression, int power) {
         switch (power) {
             case 0: return ToDouble.constant(1);
             case 1: return expression.asDouble();
@@ -302,7 +302,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToInt<T> expression, double power) {
+    public static <T> ToDouble<T> intPowDouble(ToInt<T> expression, double power) {
         return new DoublePower<T, ToInt<T>>(expression, power) {
             @Override
             public double applyAsDouble(T object) {
@@ -320,7 +320,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToInt<T> expression, ToInt<T> power) {
+    public static <T> ToDouble<T> intPowInt(ToInt<T> expression, ToInt<T> power) {
         return new ToIntPower<T, ToInt<T>>(expression, power) {
             @Override
             public double applyAsDouble(T object) {
@@ -349,7 +349,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToInt<T> expression, ToDouble<T> power) {
+    public static <T> ToDouble<T> intPowDouble(ToInt<T> expression, ToDouble<T> power) {
         return new ToDoublePower<T, ToInt<T>>(expression, power) {
             @Override
             public double applyAsDouble(T object) {
@@ -374,7 +374,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToLong<T> expression, int power) {
+    public static <T> ToDouble<T> longPowInt(ToLong<T> expression, int power) {
         switch (power) {
             case 0: return ToDouble.constant(1);
             case 1: return expression.asDouble();
@@ -416,7 +416,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToLong<T> expression, double power) {
+    public static <T> ToDouble<T> longPowDouble(ToLong<T> expression, double power) {
         return new DoublePower<T, ToLong<T>>(expression, power) {
             @Override
             public double applyAsDouble(T object) {
@@ -434,7 +434,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToLong<T> expression, ToInt<T> power) {
+    public static <T> ToDouble<T> longPowInt(ToLong<T> expression, ToInt<T> power) {
         return new ToIntPower<T, ToLong<T>>(expression, power) {
             @Override
             public double applyAsDouble(T object) {
@@ -463,7 +463,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToLong<T> expression, ToDouble<T> power) {
+    public static <T> ToDouble<T> longPowDouble(ToLong<T> expression, ToDouble<T> power) {
         return new ToDoublePower<T, ToLong<T>>(expression, power) {
             @Override
             public double applyAsDouble(T object) {
@@ -488,7 +488,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToFloat<T> expression, int power) {
+    public static <T> ToDouble<T> floatPowInt(ToFloat<T> expression, int power) {
         switch (power) {
             case 0: return ToDouble.constant(1);
             case 1: return expression.asDouble();
@@ -530,7 +530,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToFloat<T> expression, double power) {
+    public static <T> ToDouble<T> floatPowDouble(ToFloat<T> expression, double power) {
         return new DoublePower<T, ToFloat<T>>(expression, power) {
             @Override
             public double applyAsDouble(T object) {
@@ -548,7 +548,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToFloat<T> expression, ToInt<T> power) {
+    public static <T> ToDouble<T> floatPowInt(ToFloat<T> expression, ToInt<T> power) {
         return new ToIntPower<T, ToFloat<T>>(expression, power) {
             @Override
             public double applyAsDouble(T object) {
@@ -577,7 +577,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToFloat<T> expression, ToDouble<T> power) {
+    public static <T> ToDouble<T> floatPowDouble(ToFloat<T> expression, ToDouble<T> power) {
         return new ToDoublePower<T, ToFloat<T>>(expression, power) {
             @Override
             public double applyAsDouble(T object) {
@@ -602,7 +602,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToDouble<T> expression, int power) {
+    public static <T> ToDouble<T> doublePowInt(ToDouble<T> expression, int power) {
         switch (power) {
             case 0: return ToDouble.constant(1);
             case 1: return expression.asDouble();
@@ -644,7 +644,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToDouble<T> expression, double power) {
+    public static <T> ToDouble<T> doublePowDouble(ToDouble<T> expression, double power) {
         return new DoublePower<T, ToDouble<T>>(expression, power) {
             @Override
             public double applyAsDouble(T object) {
@@ -662,7 +662,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToDouble<T> expression, ToInt<T> power) {
+    public static <T> ToDouble<T> doublePowInt(ToDouble<T> expression, ToInt<T> power) {
         return new ToIntPower<T, ToDouble<T>>(expression, power) {
             @Override
             public double applyAsDouble(T object) {
@@ -691,7 +691,7 @@ public final class PowUtil {
      * @param <T>         the type of the input
      * @return            the new expression
      */
-    public static <T> ToDouble<T> pow(ToDouble<T> expression, ToDouble<T> power) {
+    public static <T> ToDouble<T> doublePowDouble(ToDouble<T> expression, ToDouble<T> power) {
         return new ToDoublePower<T, ToDouble<T>>(expression, power) {
             @Override
             public double applyAsDouble(T object) {

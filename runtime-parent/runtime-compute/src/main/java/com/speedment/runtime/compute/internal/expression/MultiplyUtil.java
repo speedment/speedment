@@ -27,7 +27,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToInt<T> multiply(ToByte<T> first, byte second) {
+    public static <T> ToInt<T> byteMultiplyByte(ToByte<T> first, byte second) {
         class ByteMultiplyByte extends AbstractMultiplyByte<T, ToByte<T>> implements ToInt<T> {
             private ByteMultiplyByte(ToByte<T> first, byte second) {
                 super(first, second);
@@ -51,7 +51,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToInt<T> multiply(ToByte<T> first, int second) {
+    public static <T> ToInt<T> byteMultiplyInt(ToByte<T> first, int second) {
         class ByteMultiplyInt extends AbstractMultiplyInt<T, ToByte<T>> implements ToInt<T> {
             private ByteMultiplyInt(ToByte<T> first, int second) {
                 super(first, second);
@@ -75,7 +75,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToLong<T> multiply(ToByte<T> first, long second) {
+    public static <T> ToLong<T> byteMultiplyLong(ToByte<T> first, long second) {
         class ByteMultiplyLong extends AbstractMultiplyLong<T, ToByte<T>> implements ToLong<T> {
             private ByteMultiplyLong(ToByte<T> first, long second) {
                 super(first, second);
@@ -99,7 +99,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToInt<T> multiply(ToByte<T> first, ToByte<T> second) {
+    public static <T> ToInt<T> byteMultiplyByte(ToByte<T> first, ToByte<T> second) {
         class ByteMultiplyByte extends AbstractMultiply<T, ToByte<T>, ToByte<T>> implements ToInt<T> {
             private ByteMultiplyByte(ToByte<T> first, ToByte<T> second) {
                 super(first, second);
@@ -124,7 +124,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToInt<T> multiply(ToShort<T> first, byte second) {
+    public static <T> ToInt<T> shortMultiplyByte(ToShort<T> first, byte second) {
         class ShortMultiplyShort extends AbstractMultiplyByte<T, ToShort<T>> implements ToInt<T> {
             private ShortMultiplyShort(ToShort<T> first, byte second) {
                 super(first, second);
@@ -148,7 +148,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToInt<T> multiply(ToShort<T> first, int second) {
+    public static <T> ToInt<T> shortMultiplyInt(ToShort<T> first, int second) {
         class ShortMultiplyInt extends AbstractMultiplyInt<T, ToShort<T>> implements ToInt<T> {
             private ShortMultiplyInt(ToShort<T> first, int second) {
                 super(first, second);
@@ -172,7 +172,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToLong<T> multiply(ToShort<T> first, long second) {
+    public static <T> ToLong<T> shortMultiplyLong(ToShort<T> first, long second) {
         class ShortMultiplyLong extends AbstractMultiplyLong<T, ToShort<T>> implements ToLong<T> {
             private ShortMultiplyLong(ToShort<T> first, long second) {
                 super(first, second);
@@ -196,7 +196,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToInt<T> multiply(ToShort<T> first, ToShort<T> second) {
+    public static <T> ToInt<T> shortMultiplyShort(ToShort<T> first, ToShort<T> second) {
         class ShortMultiplyShort extends AbstractMultiply<T, ToShort<T>, ToShort<T>> implements ToInt<T> {
             private ShortMultiplyShort(ToShort<T> first, ToShort<T> second) {
                 super(first, second);
@@ -221,7 +221,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToInt<T> multiply(ToInt<T> first, byte second) {
+    public static <T> ToInt<T> intMultiplyByte(ToInt<T> first, byte second) {
         class IntMultiplyByte extends AbstractMultiplyByte<T, ToInt<T>> implements ToInt<T> {
             private IntMultiplyByte(ToInt<T> first, byte second) {
                 super(first, second);
@@ -245,7 +245,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToInt<T> multiply(ToInt<T> first, int second) {
+    public static <T> ToInt<T> intMultiplyInt(ToInt<T> first, int second) {
         class IntMultiplyInt extends AbstractMultiplyInt<T, ToInt<T>> implements ToInt<T> {
             private IntMultiplyInt(ToInt<T> first, int second) {
                 super(first, second);
@@ -269,7 +269,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToLong<T> multiply(ToInt<T> first, long second) {
+    public static <T> ToLong<T> intMultiplyLong(ToInt<T> first, long second) {
         class IntMultiplyLong extends AbstractMultiplyLong<T, ToInt<T>> implements ToLong<T> {
             private IntMultiplyLong(ToInt<T> first, long second) {
                 super(first, second);
@@ -293,7 +293,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToInt<T> multiply(ToInt<T> first, ToByte<T> second) {
+    public static <T> ToInt<T> intMultiplyByte(ToInt<T> first, ToByte<T> second) {
         class IntMultiplyByte extends AbstractMultiply<T, ToInt<T>, ToByte<T>> implements ToInt<T> {
             private IntMultiplyByte(ToInt<T> first, ToByte<T> second) {
                 super(first, second);
@@ -319,7 +319,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToInt<T> multiply(ToInt<T> first, ToInt<T> second) {
+    public static <T> ToInt<T> intMultiplyInt(ToInt<T> first, ToInt<T> second) {
         class IntMultiplyInt extends AbstractMultiply<T, ToInt<T>, ToInt<T>> implements ToInt<T> {
             private IntMultiplyInt(ToInt<T> first, ToInt<T> second) {
                 super(first, second);
@@ -344,7 +344,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToLong<T> multiply(ToLong<T> first, byte second) {
+    public static <T> ToLong<T> longMultiplyByte(ToLong<T> first, byte second) {
         class LongMultiplyLong extends AbstractMultiplyByte<T, ToLong<T>> implements ToLong<T> {
             private LongMultiplyLong(ToLong<T> first, byte second) {
                 super(first, second);
@@ -368,7 +368,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToLong<T> multiply(ToLong<T> first, int second) {
+    public static <T> ToLong<T> longMultiplyInt(ToLong<T> first, int second) {
         class LongMultiplyInt extends AbstractMultiplyInt<T, ToLong<T>> implements ToLong<T> {
             private LongMultiplyInt(ToLong<T> first, int second) {
                 super(first, second);
@@ -392,7 +392,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToLong<T> multiply(ToLong<T> first, long second) {
+    public static <T> ToLong<T> longMultiplyLong(ToLong<T> first, long second) {
         class LongMultiplyLong extends AbstractMultiplyLong<T, ToLong<T>> implements ToLong<T> {
             private LongMultiplyLong(ToLong<T> first, long second) {
                 super(first, second);
@@ -416,7 +416,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToLong<T> multiply(ToLong<T> first, ToInt<T> second) {
+    public static <T> ToLong<T> longMultiplyInt(ToLong<T> first, ToInt<T> second) {
         class LongMultiplyInt extends AbstractMultiply<T, ToLong<T>, ToInt<T>> implements ToLong<T> {
             private LongMultiplyInt(ToLong<T> first, ToInt<T> second) {
                 super(first, second);
@@ -441,7 +441,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToLong<T> multiply(ToLong<T> first, ToLong<T> second) {
+    public static <T> ToLong<T> longMultiplyLong(ToLong<T> first, ToLong<T> second) {
         class LongMultiplyLong extends AbstractMultiply<T, ToLong<T>, ToLong<T>> implements ToLong<T> {
             private LongMultiplyLong(ToLong<T> first, ToLong<T> second) {
                 super(first, second);
@@ -466,7 +466,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToFloat<T> multiply(ToFloat<T> first, int second) {
+    public static <T> ToFloat<T> floatMultiplyInt(ToFloat<T> first, int second) {
         class FloatMultiplyInt extends AbstractMultiplyInt<T, ToFloat<T>> implements ToFloat<T> {
             private FloatMultiplyInt(ToFloat<T> first, int second) {
                 super(first, second);
@@ -490,7 +490,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToDouble<T> multiply(ToFloat<T> first, long second) {
+    public static <T> ToDouble<T> floatMultiplyLong(ToFloat<T> first, long second) {
         class FloatMultiplyLong extends AbstractMultiplyLong<T, ToFloat<T>> implements ToDouble<T> {
             private FloatMultiplyLong(ToFloat<T> first, long second) {
                 super(first, second);
@@ -514,7 +514,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToFloat<T> multiply(ToFloat<T> first, float second) {
+    public static <T> ToFloat<T> floatMultiplyFloat(ToFloat<T> first, float second) {
         class FloatMultiplyFloat extends AbstractMultiplyFloat<T, ToFloat<T>> implements ToFloat<T> {
             private FloatMultiplyFloat(ToFloat<T> first, float second) {
                 super(first, second);
@@ -538,7 +538,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToFloat<T> multiply(ToFloat<T> first, ToInt<T> second) {
+    public static <T> ToFloat<T> floatMultiplyInt(ToFloat<T> first, ToInt<T> second) {
         class FloatMultiplyInt extends AbstractMultiply<T, ToFloat<T>, ToInt<T>> implements ToFloat<T> {
             private FloatMultiplyInt(ToFloat<T> first, ToInt<T> second) {
                 super(first, second);
@@ -563,7 +563,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToDouble<T> multiply(ToFloat<T> first, ToLong<T> second) {
+    public static <T> ToDouble<T> floatMultiplyLong(ToFloat<T> first, ToLong<T> second) {
         class FloatMultiplyLong extends AbstractMultiply<T, ToFloat<T>, ToLong<T>> implements ToDouble<T> {
             private FloatMultiplyLong(ToFloat<T> first, ToLong<T> second) {
                 super(first, second);
@@ -588,7 +588,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToFloat<T> multiply(ToFloat<T> first, ToFloat<T> second) {
+    public static <T> ToFloat<T> floatMultiplyFloat(ToFloat<T> first, ToFloat<T> second) {
         class FloatMultiplyFloat extends AbstractMultiply<T, ToFloat<T>, ToFloat<T>> implements ToFloat<T> {
             private FloatMultiplyFloat(ToFloat<T> first, ToFloat<T> second) {
                 super(first, second);
@@ -613,7 +613,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToDouble<T> multiply(ToDouble<T> first, int second) {
+    public static <T> ToDouble<T> doubleMultiplyInt(ToDouble<T> first, int second) {
         class DoubleMultiplyInt extends AbstractMultiplyInt<T, ToDouble<T>> implements ToDouble<T> {
             private DoubleMultiplyInt(ToDouble<T> first, int second) {
                 super(first, second);
@@ -637,7 +637,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToDouble<T> multiply(ToDouble<T> first, long second) {
+    public static <T> ToDouble<T> doubleMultiplyLong(ToDouble<T> first, long second) {
         class DoubleMultiplyLong extends AbstractMultiplyLong<T, ToDouble<T>> implements ToDouble<T> {
             private DoubleMultiplyLong(ToDouble<T> first, long second) {
                 super(first, second);
@@ -661,7 +661,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToDouble<T> multiply(ToDouble<T> first, double second) {
+    public static <T> ToDouble<T> doubleMultiplyDouble(ToDouble<T> first, double second) {
         class DoubleMultiplyDouble extends AbstractMultiplyDouble<T, ToDouble<T>> implements ToDouble<T> {
             private DoubleMultiplyDouble(ToDouble<T> first, double second) {
                 super(first, second);
@@ -685,7 +685,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToDouble<T> multiply(ToDouble<T> first, ToInt<T> second) {
+    public static <T> ToDouble<T> doubleMultiplyInt(ToDouble<T> first, ToInt<T> second) {
         class DoubleMultiplyInt extends AbstractMultiply<T, ToDouble<T>, ToInt<T>> implements ToDouble<T> {
             private DoubleMultiplyInt(ToDouble<T> first, ToInt<T> second) {
                 super(first, second);
@@ -710,7 +710,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToDouble<T> multiply(ToDouble<T> first, ToLong<T> second) {
+    public static <T> ToDouble<T> doubleMultiplyLong(ToDouble<T> first, ToLong<T> second) {
         class DoubleMultiplyLong extends AbstractMultiply<T, ToDouble<T>, ToLong<T>> implements ToDouble<T> {
             private DoubleMultiplyLong(ToDouble<T> first, ToLong<T> second) {
                 super(first, second);
@@ -735,7 +735,7 @@ public final class MultiplyUtil {
      * @param <T>     the input type
      * @return        the new expression
      */
-    public static <T> ToDouble<T> multiply(ToDouble<T> first, ToDouble<T> second) {
+    public static <T> ToDouble<T> doubleMultiplyDouble(ToDouble<T> first, ToDouble<T> second) {
         class DoubleMultiplyDouble extends AbstractMultiply<T, ToDouble<T>, ToDouble<T>> implements ToDouble<T> {
             private DoubleMultiplyDouble(ToDouble<T> first, ToDouble<T> second) {
                 super(first, second);
