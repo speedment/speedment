@@ -57,8 +57,12 @@ extends Expression<T>,
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
-    public static <T> ToBoolean<T> of(ToBoolean<T> lambda) {
-        return requireNonNull(lambda);
+    static <T> ToBoolean<T> of(Predicate<T> lambda) {
+        if (lambda instanceof ToBoolean) {
+            return (ToBoolean<T>) lambda;
+        } else {
+            return lambda::test;
+        }
     }
 
     @Override

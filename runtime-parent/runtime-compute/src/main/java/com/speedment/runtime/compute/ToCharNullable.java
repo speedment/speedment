@@ -48,8 +48,12 @@ extends Expression<T>,
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
-    public static <T> ToCharNullable<T> of(ToCharNullable<T> lambda) {
-        return requireNonNull(lambda);
+    static <T> ToCharNullable<T> of(Function<T, Character> lambda) {
+        if (lambda instanceof ToCharNullable) {
+            return (ToCharNullable<T>) lambda;
+        } else {
+            return lambda::apply;
+        }
     }
     
     @Override

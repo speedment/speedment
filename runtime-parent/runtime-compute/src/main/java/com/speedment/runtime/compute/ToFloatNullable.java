@@ -52,8 +52,12 @@ extends Expression<T>,
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
-    public static <T> ToFloatNullable<T> of(ToFloatNullable<T> lambda) {
-        return requireNonNull(lambda);
+    static <T> ToFloatNullable<T> of(Function<T, Float> lambda) {
+        if (lambda instanceof ToFloatNullable) {
+            return (ToFloatNullable<T>) lambda;
+        } else {
+            return lambda::apply;
+        }
     }
     
     @Override

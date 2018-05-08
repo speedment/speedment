@@ -46,8 +46,12 @@ extends Expression<T>,
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
-    public static <T> ToChar<T> of(ToChar<T> lambda) {
-        return requireNonNull(lambda);
+    static <T> ToChar<T> of(ToCharFunction<T> lambda) {
+        if (lambda instanceof ToChar) {
+            return (ToChar<T>) lambda;
+        } else {
+            return lambda::applyAsChar;
+        }
     }
 
     @Override

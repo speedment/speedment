@@ -46,20 +46,21 @@ extends Expression<T>,
      * @param <E> enum type
      * @param lambda to convert
      * @return a typed {@code ToEnumNullable<T>} using the provided
-     * {@code lambda}
+     *         {@code lambda}
      *
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
-    public static <T, E extends Enum<E>> ToEnumNullable<T, E> of(ToEnumNullable<T, E> lambda) {
-        return requireNonNull(lambda);
-    }
-    
     static <T, E extends Enum<E>> ToEnumNullable<T, E>
-        toEnumNullable(Class<E> enumClass, Function<T, E> getter) {
-        return new ToEnumNullableImpl<>(enumClass, getter);
+    of(Class<E> enumClass, Function<T, E> lambda) {
+        return new ToEnumNullableImpl<>(enumClass, lambda);
     }
 
+    /**
+     * Returns the {@code class} of the enum that this expression returns.
+     *
+     * @return  the enum class
+     */
     Class<E> enumClass();
 
     @Override
@@ -67,12 +68,31 @@ extends Expression<T>,
         return ExpressionType.ENUM_NULLABLE;
     }
 
+    /**
+     * Returns an alternative expression that represents the
+     * {@link Enum#ordinal()} of the enum that would otherwise have been
+     * returned by this expression.
+     * <p>
+     * If this expression would have returned {@code null}, then the new
+     * expression will also evaluate to {@code null}.
+     *
+     * @return  the ordinal expression
+     */
     default ToIntNullable<T> asOrdinal() {
         return t -> isNotNull(t)
             ? apply(t).ordinal()
             : null;
     }
 
+    /**
+     * Returns an alternative expression that represents the {@link Enum#name()}
+     * of the enum that would otherwise have been returned by this expression.
+     * <p>
+     * If this expression would have returned {@code null}, then the new
+     * expression will also evaluate to {@code null}.
+     *
+     * @return  the name expression
+     */
     default ToStringNullable<T> asName() {
         return t -> isNotNull(t)
             ? apply(t).name()

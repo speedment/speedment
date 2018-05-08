@@ -59,8 +59,12 @@ extends Expression<T>,
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
-    public static <T> ToShort<T> of(ToShort<T> lambda) {
-        return requireNonNull(lambda);
+    static <T> ToShort<T> of(ToShortFunction<T> lambda) {
+        if (lambda instanceof ToShort) {
+            return (ToShort<T>) lambda;
+        } else {
+            return lambda::applyAsShort;
+        }
     }
     
     @Override

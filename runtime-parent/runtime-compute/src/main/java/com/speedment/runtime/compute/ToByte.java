@@ -58,8 +58,12 @@ extends Expression<T>,
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
-    public static <T> ToByte<T> of(ToByte<T> lambda) {
-        return requireNonNull(lambda);
+    static <T> ToByte<T> of(ToByteFunction<T> lambda) {
+        if (lambda instanceof ToByte) {
+            return (ToByte<T>) lambda;
+        } else {
+            return lambda::applyAsByte;
+        }
     }
     
     @Override

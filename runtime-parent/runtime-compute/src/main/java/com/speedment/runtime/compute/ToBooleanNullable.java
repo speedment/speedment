@@ -50,8 +50,12 @@ extends Expression<T>,
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
-    public static <T> ToBooleanNullable<T> of(ToBooleanNullable<T> lambda) {
-        return requireNonNull(lambda);
+    static <T> ToBooleanNullable<T> of(Function<T, Boolean> lambda) {
+        if (lambda instanceof ToBooleanNullable) {
+            return (ToBooleanNullable<T>) lambda;
+        } else {
+            return lambda::apply;
+        }
     }
     
     @Override

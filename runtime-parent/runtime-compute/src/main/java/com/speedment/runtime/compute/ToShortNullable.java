@@ -52,8 +52,12 @@ extends Expression<T>,
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
-    public static <T> ToShortNullable<T> of(ToShortNullable<T> lambda) {
-        return requireNonNull(lambda);
+    static <T> ToShortNullable<T> of(Function<T, Short> lambda) {
+        if (lambda instanceof ToShortNullable) {
+            return (ToShortNullable<T>) lambda;
+        } else {
+            return lambda::apply;
+        }
     }
     
     @Override

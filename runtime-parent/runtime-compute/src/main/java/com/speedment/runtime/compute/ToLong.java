@@ -58,8 +58,12 @@ extends Expression<T>,
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
-    public static <T> ToLong<T> of(ToLong<T> lambda) {
-        return requireNonNull(lambda);
+    static <T> ToLong<T> of(ToLongFunction<T> lambda) {
+        if (lambda instanceof ToLong) {
+            return (ToLong<T>) lambda;
+        } else {
+            return lambda::applyAsLong;
+        }
     }
     
     @Override

@@ -1,6 +1,5 @@
 package com.speedment.runtime.compute;
 
-import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.ToEnumImpl;
@@ -10,7 +9,6 @@ import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasCompose;
 import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.HasMap;
-import static java.util.Objects.requireNonNull;
 
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -26,7 +24,7 @@ import java.util.function.UnaryOperator;
  * @see Function
  *
  * @author Emil Forslund
- * @since 3.1.0
+ * @since  3.1.0
  */
 public interface ToEnum<T, E extends Enum<E>>
 extends Expression<T>,
@@ -36,7 +34,7 @@ extends Expression<T>,
         HasCompare<T>,
         HasCompose<T> {
 
-     /**
+    /**
      * Returns a typed {@code ToEnum<T>} using the provided
      * {@code lambda}.
      *
@@ -44,20 +42,21 @@ extends Expression<T>,
      * @param <E> enum type
      * @param lambda to convert
      * @return a typed {@code ToEnum<T>} using the provided
-     * {@code lambda}
+     *         {@code lambda}
      *
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
-    public static <T, E extends Enum<E>> ToEnum<T, E> of(ToEnum<T, E> lambda) {
-        return requireNonNull(lambda);
-    }
-    
     static <T, E extends Enum<E>> ToEnum<T, E>
-        toEnum(Class<E> enumClass, Function<T, E> getter) {
-        return new ToEnumImpl<>(enumClass, getter);
+    of(Class<E> enumClass, Function<T, E> lambda) {
+        return new ToEnumImpl<>(enumClass, lambda);
     }
 
+    /**
+     * Returns the {@code class} of the enum that this expression returns.
+     *
+     * @return  the enum class
+     */
     Class<E> enumClass();
 
     @Override
@@ -68,10 +67,23 @@ extends Expression<T>,
     @Override
     E apply(T t);
 
+    /**
+     * Returns an alternative expression that represents the
+     * {@link Enum#ordinal()} of the enum that would otherwise have been
+     * returned by this expression.
+     *
+     * @return  the ordinal expression
+     */
     default ToInt<T> asOrdinal() {
         return t -> apply(t).ordinal();
     }
 
+    /**
+     * Returns an alternative expression that represents the {@link Enum#name()}
+     * of the enum that would otherwise have been returned by this expression.
+     *
+     * @return  the name expression
+     */
     default ToString<T> asName() {
         return t -> apply(t).name();
     }

@@ -45,8 +45,12 @@ extends Expression<T>,
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
-    public static <T> ToString<T> of(ToString<T> lambda) {
-        return requireNonNull(lambda);
+    static <T> ToString<T> of(Function<T, String> lambda) {
+        if (lambda instanceof ToString) {
+            return (ToString<T>) lambda;
+        } else {
+            return lambda::apply;
+        }
     }
     
     @Override

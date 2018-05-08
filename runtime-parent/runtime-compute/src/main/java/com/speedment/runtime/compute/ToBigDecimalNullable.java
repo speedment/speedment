@@ -47,8 +47,12 @@ extends Expression<T>,
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
-    public static <T> ToBigDecimalNullable<T> of(ToBigDecimalNullable<T> lambda) {
-        return requireNonNull(lambda);
+    static <T> ToBigDecimalNullable<T> of(Function<T, BigDecimal> lambda) {
+        if (lambda instanceof ToBigDecimalNullable) {
+            return (ToBigDecimalNullable<T>) lambda;
+        } else {
+            return lambda::apply;
+        }
     }
     
     @Override

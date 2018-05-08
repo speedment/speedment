@@ -58,8 +58,12 @@ extends Expression<T>,
      * @throws NullPointerException if the provided {@code lambda} is
      * {@code null}
      */
-    public static <T> ToDouble<T> of(ToDouble<T> lambda) {
-        return requireNonNull(lambda);
+    static <T> ToDouble<T> of(ToDoubleFunction<T> lambda) {
+        if (lambda instanceof ToDouble) {
+            return (ToDouble<T>) lambda;
+        } else {
+            return lambda::applyAsDouble;
+        }
     }
     
     /**
