@@ -16,8 +16,8 @@ import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 
 /**
- * Expression that given an entity returns a non-null {@code String} value. This
- * expression can be implemented using a lambda, or it can be a result of
+ * Expression that given an entity returns a nullable {@code BigDecimal} value.
+ * This expression can be implemented using a lambda, or it can be a result of
  * another operation. It has additional methods for operating on it.
  *
  * @param <T> type to extract from

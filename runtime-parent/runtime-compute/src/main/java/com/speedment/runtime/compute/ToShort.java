@@ -1,6 +1,7 @@
 package com.speedment.runtime.compute;
 
 import com.speedment.common.function.BooleanUnaryOperator;
+import com.speedment.common.function.ByteToDoubleFunction;
 import com.speedment.common.function.ShortToDoubleFunction;
 import com.speedment.common.function.ShortUnaryOperator;
 import com.speedment.common.function.ToShortFunction;
@@ -44,6 +45,7 @@ extends Expression<T>,
         HasMultiply<T, ToInt<T>, ToInt<T>, ToLong<T>>,
         HasDivide<T>,
         HasMap<T, ShortUnaryOperator, ToShort<T>>,
+        HasMapToDouble<T, ShortToDoubleFunction>,
         HasHash<T>,
         HasCompare<T>,
         HasCompose<T> {
@@ -90,6 +92,7 @@ extends Expression<T>,
         return CastUtil.castToLong(this);
     }
 
+    @Override
     default ToDouble<T> mapToDouble(ShortToDoubleFunction operator) {
         return MapperUtil.mapToDouble(this, operator);
     }

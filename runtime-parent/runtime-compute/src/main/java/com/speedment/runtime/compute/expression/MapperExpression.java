@@ -131,6 +131,11 @@ extends Expression<T> {
         /**
          * Implemented as a {@link java.util.function.UnaryOperator}.
          */
+        BIG_DECIMAL_TO_DOUBLE,
+
+        /**
+         * Implemented as a {@link java.util.function.ToDoubleFunction}.
+         */
         BIG_DECIMAL_TO_BIG_DECIMAL
     }
 }

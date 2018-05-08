@@ -1,5 +1,6 @@
 package com.speedment.runtime.compute;
 
+import com.speedment.common.function.ByteToDoubleFunction;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
@@ -43,6 +44,7 @@ extends Expression<T>,
         HasMultiply<T, ToLong<T>, ToLong<T>, ToLong<T>>,
         HasDivide<T>,
         HasMap<T, IntUnaryOperator, ToInt<T>>,
+        HasMapToDouble<T, IntToDoubleFunction>,
         HasHash<T>,
         HasCompare<T>,
         HasCompose<T> {
@@ -89,6 +91,7 @@ extends Expression<T>,
         return CastUtil.castToLong(this);
     }
 
+    @Override
     default ToDouble<T> mapToDouble(IntToDoubleFunction operator) {
         return MapperUtil.mapToDouble(this, operator);
     }

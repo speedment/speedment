@@ -15,6 +15,7 @@ import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasCompose;
 import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.HasMap;
+import com.speedment.runtime.compute.trait.HasMapToDouble;
 
 import java.math.BigDecimal;
 import static java.util.Objects.requireNonNull;
@@ -43,6 +44,7 @@ extends Expression<T>,
         HasAsInt<T>,
         HasAsLong<T>,
         HasMap<T, BooleanUnaryOperator, ToBoolean<T>>,
+        HasMapToDouble<T, BooleanToDoubleFunction>,
         HasHash<T>,
         HasCompare<T>,
         HasCompose<T> {
@@ -88,6 +90,7 @@ extends Expression<T>,
         return CastUtil.castToLong(this);
     }
 
+    @Override
     default ToDouble<T> mapToDouble(BooleanToDoubleFunction operator) {
         return MapperUtil.mapToDouble(this, operator);
     }

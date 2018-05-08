@@ -433,6 +433,30 @@ public final class MapperUtil {
     }
 
     /**
+     * Returns an expression that first applies the specified expression to get
+     * a value, then applies the specified mapping operation to that value to
+     * get the final result.
+     *
+     * @param expression  the expression to apply to the input
+     * @param mapper      the mapper to apply to the result
+     * @param <T>         the input type
+     * @return            the new expression
+     */
+    public static <T> ToDouble<T> mapToDouble(ToBigDecimal<T> expression, ToDoubleFunction<BigDecimal> mapper) {
+        return new ToDoubleMapper<T, ToBigDecimal<T>, ToDoubleFunction<BigDecimal>>(expression, mapper) {
+            @Override
+            public double applyAsDouble(T object) {
+                return this.mapper.applyAsDouble(this.inner.apply(object));
+            }
+
+            @Override
+            public MapperType mapperType() {
+                return MapperType.BIG_DECIMAL_TO_DOUBLE;
+            }
+        };
+    }
+
+    /**
      * Abstract base for a mapping operation that results in a {@code byte}.
      *
      * @param <T>       the input type

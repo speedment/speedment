@@ -1,5 +1,7 @@
 package com.speedment.runtime.compute;
 
+import com.speedment.common.function.BooleanToDoubleFunction;
+import com.speedment.common.function.ByteToDoubleFunction;
 import com.speedment.common.function.CharUnaryOperator;
 import com.speedment.common.function.ToCharFunction;
 import com.speedment.runtime.compute.expression.Expression;
