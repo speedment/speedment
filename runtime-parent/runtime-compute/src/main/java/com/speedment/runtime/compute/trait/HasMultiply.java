@@ -27,114 +27,122 @@ import com.speedment.runtime.compute.ToLong;
 public interface HasMultiply<T, MULT_BYTE, MULT_INT, MULT_LONG> {
 
     /**
-     * Creates and returns an expression that returns the product of
-     * the result from the current expression and the other factor. For an example, if the result of
-     * the current expression was {@code 9} and the factor was set to {@code 3},
-     * then the result of the returned expression would be {@code 27}.
+     * Creates and returns an expression that returns the product of the result
+     * from the current expression and the other factor. For an example, if the
+     * result of the current expression was {@code 9} and the factor was set to
+     * {@code 3}, then the result of the returned expression would be {@code
+     * 27}.
      * <p>
      * If this expression is nullable and the result was {@code null}, then the
      * result of the returned expression will also be {@code null}.
      *
-     * @param other  the other factor used for the multiplication
-     * @return       the new expression
+     * @param other the other factor used for the multiplication
+     * @return the new expression
      */
     MULT_BYTE multiply(byte other);
 
     /**
-     * Creates and returns an expression that returns the product of
-     * the result from the current expression and the other factor. For an example, if the result of
-     * the current expression was {@code 9} and the factor was set to {@code 3},
-     * then the result of the returned expression would be {@code 27}.
+     * Creates and returns an expression that returns the product of the result
+     * from the current expression and the other factor. For an example, if the
+     * result of the current expression was {@code 9} and the factor was set to
+     * {@code 3}, then the result of the returned expression would be {@code
+     * 27}.
      * <p>
      * If this expression is nullable and the result was {@code null}, then the
      * result of the returned expression will also be {@code null}.
      *
-     * @param other  the other factor used for the multiplication
-     * @return       the new expression
+     * @param other the other factor used for the multiplication
+     * @return the new expression
      */
     MULT_BYTE multiply(ToByte<T> other);
 
     /**
-     * Creates and returns an expression that returns the product of
-     * the result from the current expression and the other factor. For an example, if the result of
-     * the current expression was {@code 9} and the factor was set to {@code 3},
-     * then the result of the returned expression would be {@code 27}.
+     * Creates and returns an expression that returns the product of the result
+     * from the current expression and the other factor. For an example, if the
+     * result of the current expression was {@code 9} and the factor was set to
+     * {@code 3}, then the result of the returned expression would be {@code
+     * 27}.
      * <p>
      * If this expression is nullable and the result was {@code null}, then the
      * result of the returned expression will also be {@code null}.
      *
-     * @param other  the other factor used for the multiplication
-     * @return       the new expression
+     * @param other the other factor used for the multiplication
+     * @return the new expression
      */
     MULT_INT multiply(int other);
 
     /**
-     * Creates and returns an expression that returns the product of
-     * the result from the current expression and the other factor. For an example, if the result of
-     * the current expression was {@code 9} and the factor was set to {@code 3},
-     * then the result of the returned expression would be {@code 27}.
+     * Creates and returns an expression that returns the product of the result
+     * from the current expression and the other factor. For an example, if the
+     * result of the current expression was {@code 9} and the factor was set to
+     * {@code 3}, then the result of the returned expression would be {@code
+     * 27}.
      * <p>
      * If this expression is nullable and the result was {@code null}, then the
      * result of the returned expression will also be {@code null}.
      *
-     * @param other  the other factor used for the multiplication
-     * @return       the new expression
+     * @param other the other factor used for the multiplication
+     * @return the new expression
      */
     MULT_INT multiply(ToInt<T> other);
 
     /**
-     * Creates and returns an expression that returns the product of
-     * the result from the current expression and the other factor. For an example, if the result of
-     * the current expression was {@code 9} and the factor was set to {@code 3},
-     * then the result of the returned expression would be {@code 27}.
+     * Creates and returns an expression that returns the product of the result
+     * from the current expression and the other factor. For an example, if the
+     * result of the current expression was {@code 9} and the factor was set to
+     * {@code 3}, then the result of the returned expression would be {@code
+     * 27}.
      * <p>
      * If this expression is nullable and the result was {@code null}, then the
      * result of the returned expression will also be {@code null}.
      *
-     * @param other  the other factor used for the multiplication
-     * @return       the new expression
+     * @param other the other factor used for the multiplication
+     * @return the new expression
      */
     MULT_LONG multiply(long other);
 
     /**
-     * Creates and returns an expression that returns the product of
-     * the result from the current expression and the other factor. For an example, if the result of
-     * the current expression was {@code 9} and the factor was set to {@code 3},
-     * then the result of the returned expression would be {@code 27}.
+     * Creates and returns an expression that returns the product of the result
+     * from the current expression and the other factor. For an example, if the
+     * result of the current expression was {@code 9} and the factor was set to
+     * {@code 3}, then the result of the returned expression would be {@code
+     * 27}.
      * <p>
      * If this expression is nullable and the result was {@code null}, then the
      * result of the returned expression will also be {@code null}.
      *
-     * @param other  the other factor used for the multiplication
-     * @return       the new expression
+     * @param other the other factor used for the multiplication
+     * @return the new expression
      */
     MULT_LONG multiply(ToLong<T> other);
 
     /**
-     * Creates and returns an expression that returns the product of
-     * the result from the current expression and the other factor. For an example, if the result of
-     * the current expression was {@code 9} and the factor was set to {@code 3},
-     * then the result of the returned expression would be {@code 27}.
+     * Creates and returns an expression that returns the product of the result
+     * from the current expression and the other factor. For an example, if the
+     * result of the current expression was {@code 9} and the factor was set to
+     * {@code 3}, then the result of the returned expression would be {@code
+     * 27}.
      * <p>
      * If this expression is nullable and the result was {@code null}, then the
      * result of the returned expression will also be {@code null}.
      *
-     * @param other  the other factor used for the multiplication
-     * @return       the new expression
+     * @param other the other factor used for the multiplication
+     * @return the new expression
      */
     ToDouble<T> multiply(double other);
 
     /**
-     * Creates and returns an expression that returns the product of
-     * the result from the current expression and the other factor. For an example, if the result of
-     * the current expression was {@code 9} and the factor was set to {@code 3},
-     * then the result of the returned expression would be {@code 27}.
+     * Creates and returns an expression that returns the product of the result
+     * from the current expression and the other factor. For an example, if the
+     * result of the current expression was {@code 9} and the factor was set to
+     * {@code 3}, then the result of the returned expression would be {@code
+     * 27}.
      * <p>
      * If this expression is nullable and the result was {@code null}, then the
      * result of the returned expression will also be {@code null}.
      *
-     * @param other  the other factor used for the multiplication
-     * @return       the new expression
+     * @param other the other factor used for the multiplication
+     * @return the new expression
      */
     ToDouble<T> multiply(ToDouble<T> other);
 
