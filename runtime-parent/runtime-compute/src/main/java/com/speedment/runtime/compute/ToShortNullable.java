@@ -2,6 +2,8 @@ package com.speedment.runtime.compute;
 
 import com.speedment.common.function.ShortToDoubleFunction;
 import com.speedment.common.function.ShortUnaryOperator;
+import com.speedment.common.function.ShortToDoubleFunction;
+import com.speedment.common.function.ShortUnaryOperator;
 import com.speedment.common.function.ToShortFunction;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
@@ -36,6 +38,8 @@ extends Expression<T>,
         HasSign<ToByteNullable<T>>,
         HasSqrt<ToDoubleNullable<T>>,
         HasNegate<ToShortNullable<T>>,
+        HasMapToDoubleIfPresent<T, ShortToDoubleFunction>,
+        HasMapIfPresent<T, ShortUnaryOperator, ToShortNullable<T>>,
         HasHash<T>,
         HasCompare<T>,
         HasCompose<T> {
@@ -105,6 +109,7 @@ extends Expression<T>,
         return Expressions.sqrtOrNull(this);
     }
 
+    @Override
     default ToDoubleNullable<T> mapToDoubleIfPresent(ShortToDoubleFunction mapper) {
         final ToShortNullable<T> delegate = this;
         return new ToDoubleNullable<T>() {
@@ -145,6 +150,7 @@ extends Expression<T>,
         };
     }
 
+    @Override
     default ToShortNullable<T> mapIfPresent(ShortUnaryOperator mapper) {
         final ToShortNullable<T> delegate = this;
         return new ToShortNullable<T>() {

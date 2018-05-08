@@ -12,6 +12,8 @@ import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasCompose;
 import com.speedment.runtime.compute.trait.HasHash;
+import com.speedment.runtime.compute.trait.HasMapIfPresent;
+import com.speedment.runtime.compute.trait.HasMapToDoubleIfPresent;
 import com.speedment.runtime.compute.trait.ToNullable;
 import static java.util.Objects.requireNonNull;
 
@@ -34,6 +36,8 @@ public interface ToBooleanNullable<T>
 extends Expression<T>,
         ToBooleanFunction<T>,
         ToNullable<T, Boolean, ToBoolean<T>>,
+        HasMapToDoubleIfPresent<T, BooleanToDoubleFunction>,
+        HasMapIfPresent<T, BooleanUnaryOperator, ToBooleanNullable<T>>,
         HasHash<T>,
         HasCompare<T>,
         HasCompose<T> {
@@ -83,6 +87,7 @@ extends Expression<T>,
         return OrElseUtil.booleanOrElse(this, value);
     }
 
+    @Override
     default ToDoubleNullable<T> mapToDoubleIfPresent(BooleanToDoubleFunction mapper) {
         final ToBooleanNullable<T> delegate = this;
         return new ToDoubleNullable<T>() {
@@ -123,6 +128,7 @@ extends Expression<T>,
         };
     }
 
+    @Override
     default ToBooleanNullable<T> mapIfPresent(BooleanUnaryOperator mapper) {
         final ToBooleanNullable<T> delegate = this;
         return new ToBooleanNullable<T>() {

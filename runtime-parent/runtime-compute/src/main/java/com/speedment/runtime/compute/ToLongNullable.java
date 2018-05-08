@@ -1,5 +1,7 @@
 package com.speedment.runtime.compute;
 
+import com.speedment.common.function.BooleanToDoubleFunction;
+import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
@@ -36,6 +38,8 @@ extends Expression<T>,
         HasSign<ToByteNullable<T>>,
         HasSqrt<ToDoubleNullable<T>>,
         HasNegate<ToLongNullable<T>>,
+        HasMapToDoubleIfPresent<T, LongToDoubleFunction>,
+        HasMapIfPresent<T, LongUnaryOperator, ToLongNullable<T>>,
         HasHash<T>,
         HasCompare<T>,
         HasCompose<T> {
@@ -105,6 +109,7 @@ extends Expression<T>,
         return Expressions.sqrtOrNull(this);
     }
 
+    @Override
     default ToDoubleNullable<T> mapToDoubleIfPresent(LongToDoubleFunction mapper) {
         final ToLongNullable<T> delegate = this;
         return new ToDoubleNullable<T>() {
@@ -145,6 +150,7 @@ extends Expression<T>,
         };
     }
 
+    @Override
     default ToLongNullable<T> mapIfPresent(LongUnaryOperator mapper) {
         final ToLongNullable<T> delegate = this;
         return new ToLongNullable<T>() {

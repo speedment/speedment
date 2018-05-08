@@ -1,5 +1,7 @@
 package com.speedment.runtime.compute;
 
+import com.speedment.common.function.BooleanToDoubleFunction;
+import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.ToEnumImpl;
@@ -11,10 +13,13 @@ import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasCompose;
 import com.speedment.runtime.compute.trait.HasHash;
+import com.speedment.runtime.compute.trait.HasMapIfPresent;
+import com.speedment.runtime.compute.trait.HasMapToDoubleIfPresent;
 import com.speedment.runtime.compute.trait.ToNullable;
 import static java.util.Objects.requireNonNull;
 
 import java.util.function.Function;
+import java.util.function.ToDoubleFunction;
 import java.util.function.UnaryOperator;
 
 /**
@@ -34,6 +39,8 @@ import java.util.function.UnaryOperator;
 public interface ToEnumNullable<T, E extends Enum<E>>
 extends Expression<T>,
         ToNullable<T, E, ToEnum<T, E>>,
+        HasMapToDoubleIfPresent<T, ToDoubleFunction<E>>,
+        HasMapIfPresent<T, UnaryOperator<E>, ToEnumNullable<T, E>>,
         HasHash<T>,
         HasCompare<T>,
         HasCompose<T> {
@@ -114,7 +121,8 @@ extends Expression<T>,
         return OrElseUtil.enumOrElse(this, value);
     }
 
-    default ToDoubleNullable<T> mapToDoubleIfPresent(ToDouble<E> mapper) {
+    @Override
+    default ToDoubleNullable<T> mapToDoubleIfPresent(ToDoubleFunction<E> mapper) {
         final ToEnumNullable<T, E> delegate = this;
         return new ToDoubleNullable<T>() {
             @Override
@@ -154,6 +162,7 @@ extends Expression<T>,
         };
     }
 
+    @Override
     default ToEnumNullable<T, E> mapIfPresent(UnaryOperator<E> mapper) {
         final ToEnumNullable<T, E> delegate = this;
 
