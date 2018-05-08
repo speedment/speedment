@@ -76,12 +76,26 @@ extends Function<T, R>, Expression<T> {
      * {@code NullPointerException} if given an argument that would cause this
      * expression to return {@code null}.
      *
-     * @return
+     * @return the expression if present
      */
     NON_NULLABLE orThrow();
 
+    /**
+     * Returns an equivalent expression as this, except that it will return
+     * the {@code getter} expression if given an argument that would cause this
+     * expression to return {@code null}.
+     *
+     * @return the expression if present, otherwise return {@code getter}
+     */
     NON_NULLABLE orElseGet(NON_NULLABLE getter);
 
+    /**
+     * Returns an equivalent expression as this, except that it will return
+     * the {@code value} if given an argument that would cause this
+     * expression to return {@code null}.
+     *
+     * @return the expression if present, otherwise return {@code value}
+     */
     NON_NULLABLE orElse(R value);
 
 }
