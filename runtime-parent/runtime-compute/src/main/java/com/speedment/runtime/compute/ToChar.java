@@ -34,6 +34,7 @@ extends Expression<T>,
         HasAsInt<T>,
         HasAsLong<T>,
         HasMap<T, CharUnaryOperator, ToChar<T>>,
+        HasCase<T, ToChar<T>>,
         HasHash<T>,
         HasCompare<T>,
         HasCompose<T> {
@@ -81,10 +82,12 @@ extends Expression<T>,
         return MapperUtil.map(this, operator);
     }
 
+    @Override
     default ToChar<T> toUpperCase() {
         return map(Character::toUpperCase);
     }
 
+    @Override
     default ToChar<T> toLowerCase() {
         return map(Character::toLowerCase);
     }

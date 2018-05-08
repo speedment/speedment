@@ -4,6 +4,7 @@ import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.MapperUtil;
+import com.speedment.runtime.compute.trait.HasCase;
 import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasCompose;
 import com.speedment.runtime.compute.trait.HasHash;
@@ -30,6 +31,7 @@ public interface ToString<T>
 extends Expression<T>,
         Function<T, String>,
         HasMap<T, UnaryOperator<String>, ToString<T>>,
+        HasCase<T, ToString<T>>,
         HasHash<T>,
         HasCompare<T>,
         HasCompose<T> {
@@ -66,10 +68,12 @@ extends Expression<T>,
         return MapperUtil.map(this, mapper);
     }
 
+    @Override
     default ToString<T> toUpperCase() {
         return map(String::toUpperCase);
     }
 
+    @Override
     default ToString<T> toLowerCase() {
         return map(String::toLowerCase);
     }
