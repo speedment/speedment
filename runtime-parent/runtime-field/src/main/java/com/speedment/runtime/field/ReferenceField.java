@@ -18,6 +18,10 @@ package com.speedment.runtime.field;
 
 import com.speedment.common.function.*;
 import com.speedment.runtime.compute.*;
+import com.speedment.runtime.compute.trait.HasAsDouble;
+import com.speedment.runtime.compute.trait.HasAsInt;
+import com.speedment.runtime.compute.trait.HasAsLong;
+import com.speedment.runtime.compute.trait.HasMapToDoubleIfPresent;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.exception.SpeedmentFieldException;
 import com.speedment.runtime.field.internal.ReferenceFieldImpl;
@@ -54,7 +58,8 @@ import static java.lang.String.format;
 public interface ReferenceField<ENTITY, D, V> 
 extends Field<ENTITY>, 
         HasReferenceOperators<ENTITY>,
-        HasReferenceValue<ENTITY, D, V> {
+        HasReferenceValue<ENTITY, D, V>,
+        HasMapToDoubleIfPresent<ENTITY, ToDoubleFunction<V>> {
     
     /**
      * Creates a new {@link ReferenceField} using the default implementation. 
@@ -272,6 +277,7 @@ extends Field<ENTITY>,
      *
      * @since 3.1.0
      */
+    @Override
     default ToDoubleNullable<ENTITY>
     mapToDoubleIfPresent(ToDoubleFunction<V> mapper) {
         return new FieldToDoubleImpl<>(this, mapper);

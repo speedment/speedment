@@ -16,6 +16,7 @@
  */
 package com.speedment.runtime.field;
 
+import com.speedment.runtime.compute.ToDoubleNullable;
 import com.speedment.runtime.compute.ToEnumNullable;
 import com.speedment.runtime.config.identifier.ColumnIdentifier;
 import com.speedment.runtime.field.internal.EnumFieldImpl;
@@ -28,6 +29,7 @@ import com.speedment.runtime.typemapper.TypeMapper;
 import java.util.EnumSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.function.ToDoubleFunction;
 
 /**
  * A field representing an {@code Enum} value in the entity.
@@ -212,6 +214,11 @@ extends ComparableField<ENTITY, D, E>,
     @Override
     default E apply(ENTITY entity) {
         return get(entity);
+    }
+
+    @Override
+    default ToDoubleNullable<ENTITY> mapToDoubleIfPresent(ToDoubleFunction<E> mapper) {
+        return ComparableField.super.mapToDoubleIfPresent(mapper);
     }
 
     /**
