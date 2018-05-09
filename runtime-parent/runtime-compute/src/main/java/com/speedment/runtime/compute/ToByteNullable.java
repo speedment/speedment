@@ -1,7 +1,5 @@
 package com.speedment.runtime.compute;
 
-import com.speedment.common.function.BooleanToDoubleFunction;
-import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.common.function.ByteToDoubleFunction;
 import com.speedment.common.function.ByteUnaryOperator;
 import com.speedment.common.function.ToByteFunction;
@@ -13,7 +11,6 @@ import com.speedment.runtime.compute.internal.expression.OrElseGetUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseThrowUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.*;
-import static java.util.Objects.requireNonNull;
 
 import java.util.function.Function;
 

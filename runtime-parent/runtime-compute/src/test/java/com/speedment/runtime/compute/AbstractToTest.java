@@ -5,28 +5,19 @@
  */
 package com.speedment.runtime.compute;
 
-import static com.speedment.runtime.compute.TestUtil.strings;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
-import com.speedment.runtime.compute.trait.HasAbs;
-import com.speedment.runtime.compute.trait.HasAsDouble;
-import com.speedment.runtime.compute.trait.HasAsInt;
-import com.speedment.runtime.compute.trait.HasAsLong;
-import com.speedment.runtime.compute.trait.HasCompare;
-import com.speedment.runtime.compute.trait.HasDivide;
-import com.speedment.runtime.compute.trait.HasHash;
-import com.speedment.runtime.compute.trait.HasMinus;
-import com.speedment.runtime.compute.trait.HasMultiply;
-import com.speedment.runtime.compute.trait.HasNegate;
-import com.speedment.runtime.compute.trait.HasPlus;
-import com.speedment.runtime.compute.trait.HasPow;
-import com.speedment.runtime.compute.trait.HasSign;
-import com.speedment.runtime.compute.trait.HasSqrt;
-import static java.util.Objects.requireNonNull;
-import java.util.function.Function;
+import com.speedment.runtime.compute.trait.*;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.util.function.Function;
+
+import static com.speedment.runtime.compute.TestUtil.strings;
+import static java.util.Objects.requireNonNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  *

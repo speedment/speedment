@@ -1,6 +1,11 @@
 package com.speedment.runtime.compute.internal.expression;
 
-import com.speedment.runtime.compute.*;
+import com.speedment.runtime.compute.ToByte;
+import com.speedment.runtime.compute.ToDouble;
+import com.speedment.runtime.compute.ToFloat;
+import com.speedment.runtime.compute.ToInt;
+import com.speedment.runtime.compute.ToLong;
+import com.speedment.runtime.compute.ToShort;
 import com.speedment.runtime.compute.expression.BinaryExpression;
 import com.speedment.runtime.compute.expression.BinaryObjExpression;
 import com.speedment.runtime.compute.expression.Expression;

@@ -12,7 +12,6 @@ import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.ToNullable;
 
 import java.math.BigDecimal;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 
 /**

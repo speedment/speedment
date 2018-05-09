@@ -7,8 +7,14 @@ import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.expression.CastUtil;
 import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.MapperUtil;
-import com.speedment.runtime.compute.trait.*;
-import static java.util.Objects.requireNonNull;
+import com.speedment.runtime.compute.trait.HasAsDouble;
+import com.speedment.runtime.compute.trait.HasAsInt;
+import com.speedment.runtime.compute.trait.HasAsLong;
+import com.speedment.runtime.compute.trait.HasCase;
+import com.speedment.runtime.compute.trait.HasCompare;
+import com.speedment.runtime.compute.trait.HasCompose;
+import com.speedment.runtime.compute.trait.HasHash;
+import com.speedment.runtime.compute.trait.HasMap;
 
 import java.util.function.Function;
 

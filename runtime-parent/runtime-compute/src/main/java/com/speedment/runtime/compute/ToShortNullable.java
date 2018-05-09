@@ -2,8 +2,6 @@ package com.speedment.runtime.compute;
 
 import com.speedment.common.function.ShortToDoubleFunction;
 import com.speedment.common.function.ShortUnaryOperator;
-import com.speedment.common.function.ShortToDoubleFunction;
-import com.speedment.common.function.ShortUnaryOperator;
 import com.speedment.common.function.ToShortFunction;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
@@ -13,7 +11,6 @@ import com.speedment.runtime.compute.internal.expression.OrElseGetUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseThrowUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseUtil;
 import com.speedment.runtime.compute.trait.*;
-import static java.util.Objects.requireNonNull;
 
 import java.util.function.Function;
 

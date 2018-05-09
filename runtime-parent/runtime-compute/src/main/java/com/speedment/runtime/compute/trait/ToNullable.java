@@ -1,6 +1,5 @@
 package com.speedment.runtime.compute.trait;
 
-import com.speedment.runtime.compute.ToString;
 import com.speedment.runtime.compute.expression.Expression;
 
 import java.util.function.Function;

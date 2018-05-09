@@ -5,7 +5,15 @@ import com.speedment.runtime.compute.internal.BinaryJoiningExpressionImpl;
 import com.speedment.runtime.compute.internal.JoiningExpressionImpl;
 import com.speedment.runtime.compute.internal.ToByteNullableImpl;
 import com.speedment.runtime.compute.internal.ToDoubleNullableImpl;
-import com.speedment.runtime.compute.internal.expression.*;
+import com.speedment.runtime.compute.internal.expression.AbsUtil;
+import com.speedment.runtime.compute.internal.expression.DivideUtil;
+import com.speedment.runtime.compute.internal.expression.MinusUtil;
+import com.speedment.runtime.compute.internal.expression.MultiplyUtil;
+import com.speedment.runtime.compute.internal.expression.NegateUtil;
+import com.speedment.runtime.compute.internal.expression.PlusUtil;
+import com.speedment.runtime.compute.internal.expression.PowUtil;
+import com.speedment.runtime.compute.internal.expression.SignUtil;
+import com.speedment.runtime.compute.internal.expression.SqrtUtil;
 
 import static java.util.Arrays.asList;
 

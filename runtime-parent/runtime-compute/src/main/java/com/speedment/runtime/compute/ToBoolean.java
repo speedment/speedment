@@ -17,7 +17,6 @@ import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.HasMap;
 import com.speedment.runtime.compute.trait.HasMapToDouble;
 
-import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 import java.util.function.Predicate;
 

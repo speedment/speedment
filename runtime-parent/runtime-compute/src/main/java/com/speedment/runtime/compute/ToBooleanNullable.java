@@ -15,7 +15,6 @@ import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.HasMapIfPresent;
 import com.speedment.runtime.compute.trait.HasMapToDoubleIfPresent;
 import com.speedment.runtime.compute.trait.ToNullable;
-import static java.util.Objects.requireNonNull;
 
 import java.util.function.Function;
 

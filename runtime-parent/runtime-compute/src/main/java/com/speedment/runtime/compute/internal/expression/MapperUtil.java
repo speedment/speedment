@@ -1,13 +1,27 @@
 package com.speedment.runtime.compute.internal.expression;
 
-import com.speedment.common.function.*;
+import com.speedment.common.function.BooleanToDoubleFunction;
+import com.speedment.common.function.BooleanUnaryOperator;
+import com.speedment.common.function.ByteToDoubleFunction;
+import com.speedment.common.function.ByteUnaryOperator;
+import com.speedment.common.function.CharUnaryOperator;
+import com.speedment.common.function.FloatToDoubleFunction;
+import com.speedment.common.function.FloatUnaryOperator;
+import com.speedment.common.function.ShortToDoubleFunction;
+import com.speedment.common.function.ShortUnaryOperator;
 import com.speedment.runtime.compute.*;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.MapperExpression;
 
 import java.math.BigDecimal;
 import java.util.Objects;
-import java.util.function.*;
+import java.util.function.DoubleUnaryOperator;
+import java.util.function.IntToDoubleFunction;
+import java.util.function.IntUnaryOperator;
+import java.util.function.LongToDoubleFunction;
+import java.util.function.LongUnaryOperator;
+import java.util.function.ToDoubleFunction;
+import java.util.function.UnaryOperator;
 
 import static java.util.Objects.requireNonNull;
 

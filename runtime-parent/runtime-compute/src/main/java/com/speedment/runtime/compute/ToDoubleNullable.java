@@ -1,6 +1,5 @@
 package com.speedment.runtime.compute;
 
-import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.expression.Expressions;
@@ -8,8 +7,15 @@ import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseGetUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseThrowUtil;
 import com.speedment.runtime.compute.internal.expression.OrElseUtil;
-import com.speedment.runtime.compute.trait.*;
-import static java.util.Objects.requireNonNull;
+import com.speedment.runtime.compute.trait.HasAbs;
+import com.speedment.runtime.compute.trait.HasCompare;
+import com.speedment.runtime.compute.trait.HasCompose;
+import com.speedment.runtime.compute.trait.HasHash;
+import com.speedment.runtime.compute.trait.HasMapIfPresent;
+import com.speedment.runtime.compute.trait.HasNegate;
+import com.speedment.runtime.compute.trait.HasSign;
+import com.speedment.runtime.compute.trait.HasSqrt;
+import com.speedment.runtime.compute.trait.ToNullable;
 
 import java.util.function.DoubleUnaryOperator;
 import java.util.function.Function;

@@ -9,7 +9,6 @@ import com.speedment.runtime.compute.trait.HasCompare;
 import com.speedment.runtime.compute.trait.HasCompose;
 import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.HasMap;
-import static java.util.Objects.requireNonNull;
 
 import java.util.function.Function;
 import java.util.function.UnaryOperator;

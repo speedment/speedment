@@ -1,7 +1,5 @@
 package com.speedment.runtime.compute;
 
-import com.speedment.common.function.BooleanToDoubleFunction;
-import com.speedment.common.function.BooleanUnaryOperator;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.ExpressionType;
 import com.speedment.runtime.compute.internal.ToEnumImpl;
@@ -16,7 +14,6 @@ import com.speedment.runtime.compute.trait.HasHash;
 import com.speedment.runtime.compute.trait.HasMapIfPresent;
 import com.speedment.runtime.compute.trait.HasMapToDoubleIfPresent;
 import com.speedment.runtime.compute.trait.ToNullable;
-import static java.util.Objects.requireNonNull;
 
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;

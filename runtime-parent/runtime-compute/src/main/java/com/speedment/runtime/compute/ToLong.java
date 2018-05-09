@@ -7,7 +7,6 @@ import com.speedment.runtime.compute.internal.expression.CastUtil;
 import com.speedment.runtime.compute.internal.expression.ComposedUtil;
 import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.*;
-import static java.util.Objects.requireNonNull;
 
 import java.util.function.Function;
 import java.util.function.LongToDoubleFunction;

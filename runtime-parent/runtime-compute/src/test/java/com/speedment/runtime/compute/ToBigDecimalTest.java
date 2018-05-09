@@ -5,11 +5,13 @@
  */
 package com.speedment.runtime.compute;
 
-import static com.speedment.runtime.compute.TestUtil.strings;
 import com.speedment.runtime.compute.expression.ExpressionType;
-import java.math.BigDecimal;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.math.BigDecimal;
+
+import static com.speedment.runtime.compute.TestUtil.strings;
+import static org.junit.Assert.assertEquals;
 
 /**
  *

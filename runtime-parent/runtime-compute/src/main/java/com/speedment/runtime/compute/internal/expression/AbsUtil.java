@@ -3,7 +3,12 @@ package com.speedment.runtime.compute.internal.expression;
 import com.speedment.runtime.compute.*;
 import com.speedment.runtime.compute.expression.Expression;
 import com.speedment.runtime.compute.expression.UnaryExpression;
-import com.speedment.runtime.compute.internal.*;
+import com.speedment.runtime.compute.internal.ToByteNullableImpl;
+import com.speedment.runtime.compute.internal.ToDoubleNullableImpl;
+import com.speedment.runtime.compute.internal.ToFloatNullableImpl;
+import com.speedment.runtime.compute.internal.ToIntNullableImpl;
+import com.speedment.runtime.compute.internal.ToLongNullableImpl;
+import com.speedment.runtime.compute.internal.ToShortNullableImpl;
 
 import java.math.BigDecimal;
 import java.util.Objects;

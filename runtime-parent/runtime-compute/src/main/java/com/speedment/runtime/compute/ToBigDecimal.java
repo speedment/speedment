@@ -10,7 +10,6 @@ import com.speedment.runtime.compute.internal.expression.MapperUtil;
 import com.speedment.runtime.compute.trait.*;
 
 import java.math.BigDecimal;
-import static java.util.Objects.requireNonNull;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 import java.util.function.UnaryOperator;
