@@ -23,6 +23,7 @@ import com.speedment.generator.translator.exception.SpeedmentTranslatorException
 import com.speedment.runtime.config.trait.HasTypeMapper;
 import com.speedment.runtime.typemapper.TypeMapper;
 import com.speedment.runtime.typemapper.bigdecimal.BigDecimalToDouble;
+import com.speedment.runtime.typemapper.bytes.ByteZeroOneToBooleanMapper;
 import com.speedment.runtime.typemapper.doubles.DoubleToFloatMapper;
 import com.speedment.runtime.typemapper.doubles.PrimitiveDoubleToFloatMapper;
 import com.speedment.runtime.typemapper.integer.*;
@@ -115,6 +116,9 @@ public final class TypeMapperComponentImpl implements TypeMapperComponent {
         install(Integer.class, PrimitiveIntegerToByteMapper::new);
         install(Integer.class, DateIntToShortMapper::new);
         install(Integer.class, DateIntToPrimitiveShortMapper::new);
+
+        // Special Byte mappers
+        install(Byte.class, ByteZeroOneToBooleanMapper::new);
 
         // Special Short mappers
         install(Short.class, ShortToByteMapper::new);
