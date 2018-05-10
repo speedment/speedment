@@ -85,35 +85,7 @@ The tutorials are divided into three sections. The basics are covered in the fir
 
 Quick Start
 -----------
-Assuming you have Maven installed and a relational database available, you can try out Speedment in a minute either by setting up a POM file for your project or launching a Maven archetype template.
-
-#### Setup a POM file
-Use the Speedment [Initializer](https://www.speedment.com/initializer/) to get a POM template for your project.
-
-#### Launch Archtype Directly
-Running the following from a command-line:
-
-###### MySQL
-```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mysql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.11 && cd speedment-demo && mvn speedment:tool
-```
-
-###### PostgreSQL
-```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-postgresql -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.11 && cd speedment-demo && mvn speedment:tool
-```
-
-###### MariaDB
-```
-mvn archetype:generate -DgroupId=com.company -DartifactId=speedment-demo -DarchetypeArtifactId=speedment-archetype-mariadb -DarchetypeGroupId=com.speedment.archetypes -DinteractiveMode=false -DarchetypeVersion=3.0.11 && cd speedment-demo && mvn speedment:tool
-```
-
-A graphical dialog will prompt for database connection details.
-
-1. Enter database name and credentials and press **Connect**.
-2. Press the **Generate** button and then quit the tool. 
-
-Now you have a demo project set up with generated application code in the directory `speedment-demo`. To learn more about how to leverage the generated Speedment classes and the Speedment runtime in your project, please see the following tutorials and guides.
+Assuming you have Maven installed and a relational database available, you can start using Speedment in a minute by setting up a POM file for your project by using the [Initializer](https://www.speedment.com/initializer/).
 
 Examples
 --------
