@@ -65,8 +65,8 @@ Quick Start
 -----------
 Assuming you have Maven installed and a relational database available, you can start using Speedment in a minute:
 
-* [Installing Speedment](https://github.com/speedment/speedment/wiki/Tutorial:-Set-up-the-IDE)
-* [Connect to Your Database](https://github.com/speedment/speedment/wiki/Tutorial:-Get-started-with-the-UI)
+* [Installing Speedment](https://github.com/speedment/speedment/wiki/Installing-Speedment)
+* [Connect to Your Database](https://github.com/speedment/speedment/wiki/Connect-to-Your-Database)
 
 ## Tutorials
 The tutorials are divided into three sections. The basics are covered in the first section without any expected prior knowledge of Speedment. This builds a foundation of knowledge needed to fully benefit from the following tutorials.
